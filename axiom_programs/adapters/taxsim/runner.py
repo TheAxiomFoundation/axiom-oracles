@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from importlib import import_module
+from numbers import Integral, Real
 from typing import Any
 
 from ...comparison.mappings import engine_targets_for_concepts
@@ -110,11 +111,11 @@ class TaxsimPackageRunner(EngineAdapter):
     ) -> list[EngineResult]:
         records = _records(output)
         case_ids_by_input_id = {
-            str(row.get(self.id_column)): case.case_id
+            _id_key(row.get(self.id_column)): case.case_id
             for row, case in zip(input_rows, cases, strict=True)
             if row.get(self.id_column) is not None
         }
-        case_ids_by_text = {str(case.case_id): case.case_id for case in cases}
+        case_ids_by_text = {_id_key(case.case_id): case.case_id for case in cases}
         case_ids = [case.case_id for case in cases]
         results = []
         for index, record in enumerate(records):
@@ -122,8 +123,8 @@ class TaxsimPackageRunner(EngineAdapter):
             if household_id is None and index < len(case_ids):
                 household_id = case_ids[index]
             household_id = case_ids_by_input_id.get(
-                str(household_id),
-                case_ids_by_text.get(str(household_id), household_id),
+                _id_key(household_id),
+                case_ids_by_text.get(_id_key(household_id), household_id),
             )
             results.append(
                 EngineResult(
@@ -198,3 +199,15 @@ def _selected_values(
             if key not in excluded_keys
         }
     return {variable: record[variable] for variable in variables if variable in record}
+
+
+def _id_key(value: Any) -> str:
+    if isinstance(value, bool):
+        return str(value)
+    if isinstance(value, Integral):
+        return str(int(value))
+    if isinstance(value, Real):
+        number = float(value)
+        if number.is_integer():
+            return str(int(number))
+    return str(value)

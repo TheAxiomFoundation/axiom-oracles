@@ -34,6 +34,8 @@ NYC_BENEFITS_DATASET_URL = (
     "https://data.cityofnewyork.us/resource/kvhd-5fmu.json?"
     "$select=program_code&$limit=5000"
 )
+DEFAULT_PERIOD = "2026-05"
+TAXSIM_DEFAULT_PERIOD = "2024"
 
 
 @click.group()
@@ -71,13 +73,16 @@ def cli() -> None:
     type=int,
     default=50,
     show_default=True,
-    help="Enhanced CPS household sample size. Use 0 to load the full population.",
+    help="Household sample size. Use 0 to load the full population.",
 )
 @click.option(
     "--period",
-    default="2026-05",
-    show_default=True,
-    help="Period for Enhanced CPS-backed cases.",
+    default=None,
+    show_default="auto",
+    help=(
+        "Validation period. Defaults to 2024 for TAXSIM comparisons and "
+        "2026-05 otherwise."
+    ),
 )
 @click.option(
     "--ecps-dataset",
@@ -132,7 +137,7 @@ def compare(
     suite: str,
     population: str,
     sample_size: int,
-    period: str,
+    period: str | None,
     ecps_dataset: str | None,
     concepts: tuple[str, ...],
     categories: tuple[str, ...],
@@ -148,6 +153,7 @@ def compare(
     if left == right:
         raise click.ClickException("Choose two different systems to compare.")
 
+    period = _resolve_period(period, left, right)
     comparison_scope = comparison_scope_for_targets(left, right)
     suite_name = _resolve_suite_name(suite, left, right)
     cases = _load_population_cases(
@@ -349,7 +355,13 @@ def _load_population_cases(
             dataset=ecps_dataset,
         )
     if population == "synthetic":
-        return _filter_cases_for_scope(load_suite(suite_name), scope)
+        cases = [
+            replace(case, period=period)
+            for case in _filter_cases_for_scope(load_suite(suite_name), scope)
+        ]
+        if sample_size:
+            return cases[:sample_size]
+        return cases
     raise click.ClickException(f"Unknown population '{population}'.")
 
 
@@ -370,6 +382,14 @@ def _prepare_cases_for_engines(cases: list[Case], engines: set[str]) -> list[Cas
     if "taxsim" in engines:
         return attach_taxsim_inputs(cases)
     return cases
+
+
+def _resolve_period(period: str | None, left: str, right: str) -> str:
+    if period:
+        return period
+    if "taxsim" in {left, right}:
+        return TAXSIM_DEFAULT_PERIOD
+    return DEFAULT_PERIOD
 
 
 def _build_runner(

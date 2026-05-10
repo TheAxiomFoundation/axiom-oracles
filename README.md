@@ -163,6 +163,9 @@ axiom-programs compare accessnyc policyengine \
   --suite nyc-synthetic
 ```
 
+`--sample-size` also applies to synthetic suites, which is useful for quick
+oracle smoke tests.
+
 Program concepts are the intersection of the compared engines' mappings after
 target-scope and locale filtering. ACCESS NYC is scoped to the NYC Census place
 GEOID (`{type: census_place, geoid: "3651000"}`), while PolicyEngine and Axiom
@@ -180,12 +183,14 @@ the same report without duplicating comparison logic.
 TAXSIM and PRD are exposed as package adapters rather than separate comparison
 systems. The TAXSIM adapter projects thin `Case` objects to TAXSIM rows from
 period, geography, age, relation, and earned-income facts, while still accepting
-explicit `metadata["taxsim_input"]` rows for hand-authored fixtures. PRD cases
-carry an external PRD household object in `metadata["prd_household"]` or use a
-mapper. The adapters normalize those package outputs to the same `EngineResult`
-shape consumed by the comparator. `compare policyengine taxsim` defaults to the
-explicit tax concept intersection (`fiitax` and `siitax` with a $15 tolerance),
-while
+explicit `metadata["taxsim_input"]` rows for hand-authored fixtures. The bundled
+TAXSIM executable currently supports tax years through 2024, so comparisons
+involving TAXSIM default to tax year 2024 unless `--period` is supplied. PRD
+cases carry an external PRD household object in `metadata["prd_household"]` or
+use a mapper. The adapters normalize those package outputs to the same
+`EngineResult` shape consumed by the comparator. `compare policyengine taxsim`
+defaults to the explicit tax concept intersection (`fiitax` and `siitax` with a
+$15 tolerance), while
 `compare policyengine prd` currently maps the PRD SNAP value output to
 PolicyEngine `snap`.
 

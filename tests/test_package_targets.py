@@ -1,6 +1,11 @@
 from axiom_programs.adapters.prd import PrdPackageRunner
 from axiom_programs.adapters.taxsim import TaxsimPackageRunner
-from axiom_programs.cli import _build_runner, _prepare_cases_for_engines
+from axiom_programs.cli import (
+    _build_runner,
+    _load_population_cases,
+    _prepare_cases_for_engines,
+    _resolve_period,
+)
 from axiom_programs.comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
@@ -55,7 +60,7 @@ def test_cli_builds_package_target_runners() -> None:
 def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     case = Case(
         case_id="case-1",
-        period="2026",
+        period="2024",
         metadata={"scope": {"type": "census_state", "geoid": "36"}},
         entities=(
             Entity(
@@ -75,3 +80,23 @@ def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     assert taxsim_case.metadata["taxsim_input"]["taxsimid"] == 1
     assert taxsim_case.metadata["taxsim_input"]["state"] == 36
     assert "taxsim_input" not in pe_case.metadata
+
+
+def test_cli_defaults_taxsim_comparisons_to_supported_tax_year() -> None:
+    assert _resolve_period(None, "policyengine", "taxsim") == "2024"
+    assert _resolve_period(None, "accessnyc", "policyengine") == "2026-05"
+    assert _resolve_period("2023", "policyengine", "taxsim") == "2023"
+
+
+def test_synthetic_population_honors_requested_period_and_sample_size() -> None:
+    cases = _load_population_cases(
+        population="synthetic",
+        suite_name="nyc-synthetic",
+        scope=GeographyScope(type="country", geoid="US"),
+        period="2024",
+        sample_size=3,
+        ecps_dataset=None,
+    )
+
+    assert len(cases) == 3
+    assert {case.period for case in cases} == {"2024"}

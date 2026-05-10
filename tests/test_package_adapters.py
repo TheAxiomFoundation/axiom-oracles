@@ -18,10 +18,10 @@ def test_taxsim_package_runner_wraps_taxsim_format_rows() -> None:
 
     case = Case(
         case_id="case-1",
-        period="2026",
+        period="2024",
         metadata={
             "taxsim_input": {
-                "year": 2026,
+                "year": 2024,
                 "state": 36,
                 "mstat": 1,
                 "page": 40,
@@ -35,7 +35,7 @@ def test_taxsim_package_runner_wraps_taxsim_format_rows() -> None:
     )
 
     assert captured_inputs[0].iloc[0]["taxsimid"] == "case-1"
-    assert captured_inputs[0].iloc[0]["year"] == 2026
+    assert captured_inputs[0].iloc[0]["year"] == 2024
     assert results[0].engine == "taxsim"
     assert results[0].household_id == "case-1"
     assert results[0].values == {"fiitax": 100, "siitax": 25}
@@ -50,11 +50,11 @@ def test_taxsim_package_runner_projects_cases_and_maps_canonical_concepts() -> N
 
         def run(self, show_progress=False):
             del show_progress
-            return [{"taxsimid": 1, "fiitax": 100, "siitax": 25, "unused": 1}]
+            return [{"taxsimid": 1.0, "fiitax": 100, "siitax": 25, "unused": 1}]
 
     case = Case(
         case_id="case-1",
-        period="2026",
+        period="2024",
         metadata={"scope": {"type": "census_state", "geoid": "36"}},
         entities=(
             Entity(

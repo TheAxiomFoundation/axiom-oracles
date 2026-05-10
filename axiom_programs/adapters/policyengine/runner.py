@@ -62,7 +62,12 @@ class PolicyEngineRunner(EngineAdapter):
         errors = []
         for variable in variables:
             try:
-                calculated = simulation.calculate(variable, str(case.period))
+                period = self._calculation_period(
+                    simulation,
+                    variable,
+                    str(case.period),
+                )
+                calculated = simulation.calculate(variable, period)
                 values[variable] = self._coerce_value(calculated)
             except Exception as exc:  # pragma: no cover - depends on PE variable set
                 errors.append(f"{variable}: {exc}")
@@ -165,6 +170,20 @@ class PolicyEngineRunner(EngineAdapter):
             "spm_units": {"spm_unit": {"members": person_names}},
             "households": {"household": household_inputs},
         }
+
+    @staticmethod
+    def _calculation_period(simulation, variable: str, requested_period: str) -> str:
+        if "-" not in requested_period:
+            return requested_period
+        tax_benefit_system = getattr(simulation, "tax_benefit_system", None)
+        variables = getattr(tax_benefit_system, "variables", {})
+        variable_definition = (
+            variables.get(variable) if hasattr(variables, "get") else None
+        )
+        definition_period = getattr(variable_definition, "definition_period", None)
+        if str(definition_period) == "year":
+            return requested_period.split("-", maxsplit=1)[0]
+        return requested_period
 
     @staticmethod
     def _coerce_value(value) -> float | bool:

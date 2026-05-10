@@ -10,7 +10,7 @@ from axiom_programs.core.case import Case, Concepts, Entity
 def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> None:
     case = Case(
         case_id="nyc-family",
-        period="2026-05",
+        period="2024-05",
         metadata={"scope": {"type": "census_place", "geoid": "3651000"}},
         entities=(
             Entity(
@@ -53,7 +53,7 @@ def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> Non
     row = taxsim_input_for_case(case, taxsimid=7)
 
     assert row["taxsimid"] == 7
-    assert row["year"] == 2026
+    assert row["year"] == 2024
     assert row["state"] == 36
     assert row["mstat"] == 2
     assert row["page"] == 40
@@ -72,7 +72,7 @@ def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> Non
 def test_taxsim_projection_uses_state_code_fact_without_scope() -> None:
     case = Case(
         case_id="ca",
-        period="2026",
+        period="2024",
         facts={Concepts.STATE_CODE: "CA"},
         entities=(
             Entity(
@@ -116,7 +116,7 @@ def test_attach_taxsim_inputs_preserves_existing_projection() -> None:
 def test_taxsim_projection_requires_state() -> None:
     case = Case(
         case_id="missing-state",
-        period="2026",
+        period="2024",
         entities=(
             Entity(
                 "person-1",
@@ -130,4 +130,25 @@ def test_taxsim_projection_requires_state() -> None:
     )
 
     with pytest.raises(RuntimeError, match="state"):
+        taxsim_input_for_case(case)
+
+
+def test_taxsim_projection_rejects_years_after_bundled_taxsim_support() -> None:
+    case = Case(
+        case_id="future-year",
+        period="2026",
+        facts={Concepts.STATE_CODE: "NY"},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 30,
+                },
+            ),
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="through 2024"):
         taxsim_input_for_case(case)

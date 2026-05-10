@@ -7,6 +7,8 @@ from typing import Any
 from ...core.case import Case, Concepts, Entity
 
 
+TAXSIM_MAX_YEAR = 2024
+
 _STATE_FIPS = {
     "AL": 1,
     "AK": 2,
@@ -217,7 +219,13 @@ def _number(value: Any) -> float:
 
 
 def _year(period: str) -> int:
-    return int(str(period).split("-", maxsplit=1)[0])
+    year = int(str(period).split("-", maxsplit=1)[0])
+    if year > TAXSIM_MAX_YEAR:
+        raise RuntimeError(
+            f"The bundled TAXSIM executable supports tax years through "
+            f"{TAXSIM_MAX_YEAR}; got {year}."
+        )
+    return year
 
 
 def _state_fips_for_case(case: Case) -> int:

@@ -251,6 +251,49 @@ def test_policyengine_runner_calculates_case_variables_at_case_period(
     assert calls == [("is_wic_eligible", "2026-05")]
 
 
+def test_policyengine_runner_calculates_annual_case_variables_at_year(
+    monkeypatch,
+) -> None:
+    calls = []
+
+    class StubVariable:
+        definition_period = "year"
+
+    class StubTaxBenefitSystem:
+        variables = {"income_tax": StubVariable()}
+
+    class StubSimulation:
+        tax_benefit_system = StubTaxBenefitSystem()
+
+        def __init__(self, situation):
+            self.situation = situation
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            return [0]
+
+    monkeypatch.setitem(
+        sys.modules,
+        "policyengine_us",
+        SimpleNamespace(Simulation=StubSimulation),
+    )
+    case = Case(
+        case_id="tax-period",
+        period="2026-05",
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 40},
+            ),
+        ),
+    )
+
+    PolicyEngineRunner().run_case(case, ["income_tax"])
+
+    assert calls == [("income_tax", "2026")]
+
+
 def test_policyengine_household_projection_includes_pregnancy_fact() -> None:
     household = Household(
         household_id="pregnant-adult",
