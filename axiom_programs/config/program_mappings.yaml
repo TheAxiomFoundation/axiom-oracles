@@ -1,0 +1,98 @@
+programs:
+  snap:
+    description: Supplemental Nutrition Assistance Program
+    category: food
+    accessnyc_code: S2R007
+    policyengine_variable: snap
+    comparison: eligibility
+    priority: high
+
+  cash_assistance:
+    description: Cash Assistance
+    category: cash
+    accessnyc_code: S2R010
+    policyengine_variable: tanf
+    comparison: eligibility
+    priority: high
+
+  medicaid:
+    description: Medicaid
+    category: health
+    accessnyc_code: S2R038
+    policyengine_variable: medicaid
+    comparison: eligibility
+    priority: high
+
+  child_health_plus:
+    description: Child Health Plus
+    category: health
+    accessnyc_code: S2R057
+    policyengine_variable:
+    comparison: eligibility
+    priority: high
+
+  essential_plan:
+    description: Essential Plan / Basic Health Program
+    category: health
+    accessnyc_code: S2R058
+    policyengine_variable: basic_health_program
+    comparison: eligibility
+    priority: high
+
+  wic:
+    description: Special Supplemental Nutrition Program for Women, Infants, and Children
+    category: food
+    accessnyc_code: S2R022
+    policyengine_variable: wic
+    comparison: eligibility
+    priority: normal
+
+  head_start:
+    description: Head Start and Early Head Start
+    category: child_care
+    accessnyc_code: S2R008
+    policyengine_variable:
+      - head_start
+      - early_head_start
+    comparison: eligibility
+    priority: normal
+
+  child_care_vouchers:
+    description: Child Care Vouchers
+    category: child_care
+    accessnyc_code: S2R040
+    policyengine_variable: ccdf
+    comparison: eligibility
+    priority: normal
+
+  eitc:
+    description: Earned Income Tax Credit
+    category: tax
+    accessnyc_code: S2R006
+    policyengine_variable: eitc
+    comparison: eligibility
+    priority: normal
+
+  child_tax_credit:
+    description: Child Tax Credit
+    category: tax
+    accessnyc_code: S2R004
+    policyengine_variable: ctc
+    comparison: eligibility
+    priority: normal
+
+  cdctc:
+    description: Child and Dependent Care Tax Credit
+    category: tax
+    accessnyc_code: S2R001
+    policyengine_variable: cdcc
+    comparison: eligibility
+    priority: normal
+
+  heap:
+    description: Home Energy Assistance Program
+    category: energy
+    accessnyc_code: S2R019
+    policyengine_variable: liheap
+    comparison: eligibility
+    priority: normal

@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Axiom Programs Architecture</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17202a;
+        --muted: #5c6773;
+        --line: #c9d2dc;
+        --paper: #f7f8f9;
+        --panel: #ffffff;
+        --source: #e7f2ee;
+        --rules: #eef0fb;
+        --programs: #fff3de;
+        --encode: #eaf3ff;
+        --adapter: #f1f4f7;
+        --accent: #1d6f61;
+        --accent-2: #325aa8;
+        --warning: #a76000;
+        --shadow: 0 16px 40px rgba(23, 32, 42, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.45;
+      }
+
+      main {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 56px;
+      }
+
+      header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+        margin-bottom: 24px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(32px, 5vw, 56px);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        font-size: 22px;
+        margin-bottom: 14px;
+      }
+
+      h3 {
+        font-size: 15px;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        max-width: 720px;
+        margin-top: 14px;
+        font-size: 17px;
+      }
+
+      .status {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 12px 14px;
+        min-width: 220px;
+        box-shadow: var(--shadow);
+      }
+
+      .status strong {
+        display: block;
+        font-size: 12px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      .status span {
+        font-size: 15px;
+        font-weight: 650;
+      }
+
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        padding: 22px;
+        margin-top: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .diagram-wrap {
+        overflow-x: auto;
+      }
+
+      svg {
+        display: block;
+        width: 100%;
+        min-width: 980px;
+        height: auto;
+      }
+
+      .node-title {
+        font-weight: 750;
+        font-size: 18px;
+        fill: var(--ink);
+      }
+
+      .node-subtitle {
+        font-size: 12px;
+        fill: var(--muted);
+      }
+
+      .node-text {
+        font-size: 13px;
+        fill: var(--ink);
+      }
+
+      .small-label {
+        font-size: 12px;
+        fill: var(--muted);
+        font-weight: 650;
+      }
+
+      .arrow {
+        stroke: #617080;
+        stroke-width: 2;
+        fill: none;
+        marker-end: url(#arrowhead);
+      }
+
+      .dash {
+        stroke-dasharray: 7 6;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .repo {
+        border: 1px solid var(--line);
+        padding: 16px;
+        min-height: 206px;
+      }
+
+      .repo.source {
+        background: var(--source);
+      }
+
+      .repo.rules {
+        background: var(--rules);
+      }
+
+      .repo.programs {
+        background: var(--programs);
+      }
+
+      .repo.encode {
+        background: var(--encode);
+      }
+
+      ul {
+        margin: 10px 0 0;
+        padding-left: 18px;
+      }
+
+      li {
+        margin: 7px 0;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .plan {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0;
+        border: 1px solid var(--line);
+      }
+
+      .phase {
+        padding: 18px;
+        border-right: 1px solid var(--line);
+        background: #fff;
+        min-height: 230px;
+      }
+
+      .phase:last-child {
+        border-right: 0;
+      }
+
+      .phase-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 12px;
+        border: 1px solid currentColor;
+        color: var(--accent-2);
+        font-weight: 750;
+      }
+
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+        padding: 12px 10px;
+        vertical-align: top;
+      }
+
+      .comparison-table th {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: #f4f6f8;
+      }
+
+      .comparison-table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      code {
+        font-family:
+          "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 0.92em;
+        background: rgba(23, 32, 42, 0.07);
+        padding: 2px 5px;
+      }
+
+      .callout {
+        display: grid;
+        grid-template-columns: 10px 1fr;
+        gap: 14px;
+        align-items: stretch;
+        border: 1px solid var(--line);
+        background: #fff;
+        margin-top: 14px;
+      }
+
+      .callout::before {
+        content: "";
+        background: var(--accent);
+      }
+
+      .callout.warning::before {
+        background: var(--warning);
+      }
+
+      .callout-content {
+        padding: 14px 16px 14px 0;
+      }
+
+      @media (max-width: 920px) {
+        header,
+        .grid,
+        .plan {
+          grid-template-columns: 1fr;
+        }
+
+        .phase {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .phase:last-child {
+          border-bottom: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Axiom Program Validation Architecture</h1>
+          <p class="subtitle">
+            Target split for encoding, runtime execution, and external oracle
+            comparison across Axiom, PolicyEngine, TAXSIM, PRD, and ACCESS NYC.
+          </p>
+        </div>
+        <div class="status">
+          <strong>Design center</strong>
+          <span>Thin concept interface, many engine adapters</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>Target Architecture</h2>
+        <div class="diagram-wrap" aria-label="Architecture diagram">
+          <svg viewBox="0 0 1180 720" role="img">
+            <defs>
+              <marker
+                id="arrowhead"
+                markerWidth="10"
+                markerHeight="8"
+                refX="9"
+                refY="4"
+                orient="auto"
+              >
+                <path d="M0,0 L10,4 L0,8 Z" fill="#617080"></path>
+              </marker>
+            </defs>
+
+            <rect x="22" y="40" width="250" height="145" fill="#e7f2ee" stroke="#9dbcb3"></rect>
+            <text x="44" y="72" class="node-title">axiom-corpus</text>
+            <text x="44" y="94" class="node-subtitle">source text layer</text>
+            <text x="44" y="126" class="node-text">statutes</text>
+            <text x="44" y="148" class="node-text">regulations</text>
+            <text x="44" y="170" class="node-text">manuals and guidance</text>
+
+            <rect x="338" y="40" width="250" height="145" fill="#eef0fb" stroke="#a8add2"></rect>
+            <text x="360" y="72" class="node-title">axiom-rules</text>
+            <text x="360" y="94" class="node-subtitle">RuleSpec compiler and runtime</text>
+            <text x="360" y="126" class="node-text">compile RuleSpec</text>
+            <text x="360" y="148" class="node-text">execute cases</text>
+            <text x="360" y="170" class="node-text">return normalized outputs</text>
+
+            <rect x="654" y="40" width="250" height="145" fill="#fff3de" stroke="#d8b474"></rect>
+            <text x="676" y="72" class="node-title">axiom-programs</text>
+            <text x="676" y="94" class="node-subtitle">program adapters and comparisons</text>
+            <text x="676" y="126" class="node-text">concept-keyed cases</text>
+            <text x="676" y="148" class="node-text">engine adapters</text>
+            <text x="676" y="170" class="node-text">report JSON</text>
+
+            <rect x="970" y="40" width="188" height="145" fill="#eaf3ff" stroke="#9eb9d8"></rect>
+            <text x="992" y="72" class="node-title">axiom-encode</text>
+            <text x="992" y="94" class="node-subtitle">agentic encoding workflow</text>
+            <text x="992" y="126" class="node-text">prompts</text>
+            <text x="992" y="148" class="node-text">eCPS populations</text>
+            <text x="992" y="170" class="node-text">telemetry</text>
+
+            <path class="arrow" d="M272 112 C292 112, 312 112, 338 112"></path>
+            <path class="arrow" d="M588 112 C614 112, 628 112, 654 112"></path>
+            <path class="arrow" d="M970 112 C942 112, 932 112, 904 112"></path>
+            <text x="286" y="96" class="small-label">source-backed RuleSpec</text>
+            <text x="598" y="96" class="small-label">Axiom runtime adapter</text>
+            <text x="906" y="96" class="small-label">calls, does not own</text>
+
+            <rect x="82" y="264" width="1016" height="360" fill="#ffffff" stroke="#c9d2dc"></rect>
+            <text x="112" y="300" class="node-title">axiom-programs internals</text>
+            <text x="112" y="322" class="node-subtitle">
+              Engines are peers. Cases are legal/concept facts, not a fat household model.
+            </text>
+
+            <rect x="116" y="366" width="212" height="86" fill="#f1f4f7" stroke="#c9d2dc"></rect>
+            <text x="138" y="396" class="node-title">thin case</text>
+            <text x="138" y="420" class="node-text">period, scope, entities</text>
+            <text x="138" y="440" class="node-text">concept-keyed facts</text>
+
+            <rect x="408" y="246" width="168" height="72" fill="#f1f4f7" stroke="#c9d2dc"></rect>
+            <text x="428" y="278" class="node-title">PolicyEngine</text>
+            <text x="428" y="300" class="node-subtitle">variables, parameters, eCPS</text>
+
+            <rect x="612" y="246" width="168" height="72" fill="#f1f4f7" stroke="#c9d2dc"></rect>
+            <text x="632" y="278" class="node-title">ACCESS NYC</text>
+            <text x="632" y="300" class="node-subtitle">S2R eligibility oracle</text>
+
+            <rect x="816" y="246" width="168" height="72" fill="#f1f4f7" stroke="#c9d2dc"></rect>
+            <text x="836" y="278" class="node-title">Axiom</text>
+            <text x="836" y="300" class="node-subtitle">RuleSpec runtime</text>
+
+            <rect x="408" y="486" width="168" height="72" fill="#f1f4f7" stroke="#c9d2dc"></rect>
+            <text x="428" y="518" class="node-title">TAXSIM</text>
+            <text x="428" y="540" class="node-subtitle">tax oracle</text>
+
+            <rect x="612" y="486" width="168" height="72" fill="#f1f4f7" stroke="#c9d2dc"></rect>
+            <text x="632" y="518" class="node-title">PRD</text>
+            <text x="632" y="540" class="node-subtitle">benefit oracle</text>
+
+            <rect x="816" y="486" width="168" height="72" fill="#f1f4f7" stroke="#c9d2dc"></rect>
+            <text x="836" y="518" class="node-title">static audits</text>
+            <text x="836" y="540" class="node-subtitle">rules, datasets, drift</text>
+
+            <rect x="420" y="366" width="446" height="86" fill="#fff3de" stroke="#d8b474"></rect>
+            <text x="442" y="396" class="node-title">normalized outputs and comparator</text>
+            <text x="442" y="420" class="node-text">intersection of target scopes and concepts</text>
+            <text x="442" y="440" class="node-text">pairwise and multi-way mismatch reports</text>
+
+            <path class="arrow" d="M328 408 C360 408, 382 408, 420 408"></path>
+            <path class="arrow" d="M492 318 C492 346, 492 348, 492 366"></path>
+            <path class="arrow" d="M696 318 C696 346, 696 348, 696 366"></path>
+            <path class="arrow" d="M900 318 C900 346, 900 360, 866 386"></path>
+            <path class="arrow" d="M492 486 C492 468, 492 466, 492 452"></path>
+            <path class="arrow" d="M696 486 C696 468, 696 466, 696 452"></path>
+            <path class="arrow" d="M816 522 C780 522, 760 468, 744 452"></path>
+
+            <path class="arrow dash" d="M866 408 C928 408, 956 408, 1010 408"></path>
+            <rect x="1010" y="366" width="60" height="86" fill="#ffffff" stroke="#c9d2dc"></rect>
+            <text x="1018" y="400" class="node-title">Apps</text>
+            <text x="1018" y="424" class="node-subtitle">render</text>
+            <text x="1018" y="444" class="node-subtitle">reports</text>
+          </svg>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>What Lives Where</h2>
+        <div class="grid">
+          <article class="repo source">
+            <h3>axiom-corpus</h3>
+            <p class="muted">Legal source material.</p>
+            <ul>
+              <li>Source sections and citations</li>
+              <li>Jurisdiction metadata</li>
+              <li>Versioned source text</li>
+            </ul>
+          </article>
+
+          <article class="repo rules">
+            <h3>axiom-rules</h3>
+            <p class="muted">RuleSpec execution layer.</p>
+            <ul>
+              <li>RuleSpec compiler</li>
+              <li>Runtime execution</li>
+              <li>Compiled artifacts and test runner</li>
+            </ul>
+          </article>
+
+          <article class="repo programs">
+            <h3>axiom-programs</h3>
+            <p class="muted">Executable program validation.</p>
+            <ul>
+              <li>Thin concept-keyed case schema</li>
+              <li>Adapters for PE, ACCESS NYC, PRD, TAXSIM, Axiom</li>
+              <li>eCPS and synthetic sweeps</li>
+              <li>Comparator, tolerances, report JSON</li>
+            </ul>
+          </article>
+
+          <article class="repo encode">
+            <h3>axiom-encode</h3>
+            <p class="muted">Agentic encoding workflow.</p>
+            <ul>
+              <li>Prompts and task orchestration</li>
+              <li>Eval-suite manifests</li>
+              <li>Reviewer gates and telemetry</li>
+              <li>Calls oracle comparisons, but does not own them</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Comparison Modes</h2>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Mode</th>
+              <th>Example</th>
+              <th>Owned By</th>
+              <th>Output</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Encoding-time oracle</td>
+              <td>Axiom RuleSpec companion test vs PolicyEngine variable</td>
+              <td><code>axiom-encode</code> calling <code>axiom-programs</code></td>
+              <td>Pass rate, coverage, reviewer context</td>
+            </tr>
+            <tr>
+              <td>Dataset parity</td>
+              <td>Axiom vs PE over eCPS</td>
+              <td><code>axiom-programs</code></td>
+              <td>Record-level mismatches and aggregate deltas</td>
+            </tr>
+            <tr>
+              <td>External oracle parity</td>
+              <td>PE vs ACCESS NYC for SNAP, Medicaid, Essential Plan</td>
+              <td><code>axiom-programs</code></td>
+              <td>Eligibility disagreements by scenario</td>
+            </tr>
+            <tr>
+              <td>Static rule audit</td>
+              <td>ACCESS NYC Drools thresholds and program-code drift</td>
+              <td><code>axiom-programs</code></td>
+              <td>Findings with file and line references</td>
+            </tr>
+            <tr>
+              <td>Multi-way validation</td>
+              <td>Axiom vs PE vs ACCESS NYC</td>
+              <td><code>axiom-programs</code></td>
+              <td>Consensus, outlier engine, suspected source of drift</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2>Migration Plan</h2>
+        <div class="plan">
+          <article class="phase">
+            <div class="phase-number">1</div>
+            <h3>Stabilize the harness</h3>
+            <ul>
+              <li>Keep the adapter interface small and concept-keyed.</li>
+              <li>Finish ACCESS NYC mapper, API runner, and static audits.</li>
+              <li>Separate case suites from concept/program selection.</li>
+              <li>Preserve JSON and CSV report formats from the start.</li>
+            </ul>
+          </article>
+
+          <article class="phase">
+            <div class="phase-number">2</div>
+            <h3>Move shared PE pieces</h3>
+            <ul>
+              <li>Move PE registry and adapter metadata from <code>axiom-encode</code>.</li>
+              <li>Keep <code>axiom-encode</code> as a caller during the transition.</li>
+              <li>Retain legal-ID based lookup for RuleSpec tests.</li>
+            </ul>
+          </article>
+
+          <article class="phase">
+            <div class="phase-number">3</div>
+            <h3>Wire dataset parity</h3>
+            <ul>
+              <li>Promote the current PE eCPS benchmark into a true comparator.</li>
+              <li>Add Axiom runtime replay over the same cases.</li>
+              <li>Report record-level and weighted aggregate gaps.</li>
+            </ul>
+          </article>
+
+          <article class="phase">
+            <div class="phase-number">4</div>
+            <h3>Unify external oracles</h3>
+            <ul>
+              <li>Wrap TAXSIM and PRD packages as adapters.</li>
+              <li>Add ACCESS NYC credentials and synthetic sweep support.</li>
+              <li>Emit reports for PE vs ACCESS NYC and Axiom vs PE vs ACCESS NYC dashboards.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="callout">
+          <div class="callout-content">
+            <h3>If starting from scratch</h3>
+            <p>
+              Build <code>axiom-programs</code> first as a thin adapter and comparison
+              library, then let <code>axiom-encode</code> depend on it. That avoids
+              encoding workflow code becoming the permanent home for PE, TAXSIM,
+              PRD, ACCESS NYC, and eCPS mechanics.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-content">
+            <h3>Boundary to protect</h3>
+            <p>
+              <code>axiom-encode</code> should answer whether agents can produce
+              good RuleSpec. <code>axiom-programs</code> should answer whether
+              executable policy engines agree.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
