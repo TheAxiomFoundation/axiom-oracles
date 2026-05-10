@@ -22,6 +22,9 @@ dev = [
 policyengine = [
   "policyengine-us>=1.300.0",
 ]
+taxsim = [
+  "policyengine-taxsim>=2.7.1",
+]
 accessnyc-python = [
   "pydantic>=2.11",
 ]

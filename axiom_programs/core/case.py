@@ -77,6 +77,8 @@ class Concepts:
 
     SNAP_BENEFIT = "us:statutes/7/2014/u#snap_benefit"
     SNAP_ELIGIBLE = "us:statutes/7/2014/o#snap_eligible"
+    FEDERAL_INCOME_TAX = "us:tax/federal-income-tax#liability"
+    STATE_INCOME_TAX = "us:tax/state-income-tax#liability"
     MEDICAID_ELIGIBLE = "us:programs/medicaid#eligible"
     MEDICAID_PREGNANT_WOMEN_ELIGIBLE = (
         "us:programs/medicaid-pregnant-women#eligible"

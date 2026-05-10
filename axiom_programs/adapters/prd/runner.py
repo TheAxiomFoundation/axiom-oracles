@@ -4,6 +4,7 @@ from collections.abc import Callable, Mapping
 from importlib import import_module
 from typing import Any
 
+from ...comparison.mappings import engine_targets_for_concepts
 from ...core.case import Case
 from ...core.engine import EngineAdapter
 from ...core.household import Household
@@ -37,18 +38,24 @@ class PrdPackageRunner(EngineAdapter):
         cases: list[Case],
         variables: list[str] | None = None,
     ) -> list[EngineResult]:
+        target_variables = self._target_variables(variables)
         households = [self._case_household(case) for case in cases]
-        output = self._run_households(self._runner(), households, variables)
-        return self._engine_results(output, [case.case_id for case in cases], variables)
+        output = self._run_households(self._runner(), households, target_variables)
+        return self._engine_results(
+            output,
+            [case.case_id for case in cases],
+            target_variables,
+        )
 
     def run_households(
         self,
         households: list[Household],
         variables: list[str] | None = None,
     ) -> list[EngineResult]:
-        output = self._run_households(self._runner(), households, variables)
+        target_variables = self._target_variables(variables)
+        output = self._run_households(self._runner(), households, target_variables)
         household_ids = [household.household_id for household in households]
-        return self._engine_results(output, household_ids, variables)
+        return self._engine_results(output, household_ids, target_variables)
 
     def _runner(self) -> Any:
         if self.runner is not None:
@@ -126,6 +133,15 @@ class PrdPackageRunner(EngineAdapter):
                 )
             )
         return results
+
+    def _target_variables(self, variables: list[str] | None) -> list[str] | None:
+        if variables is None:
+            return None
+        targets: list[str] = []
+        for variable in variables:
+            mapped = engine_targets_for_concepts([variable], self.name)
+            targets.extend(mapped or [variable])
+        return targets
 
 
 def _records(output: Any) -> list[dict[str, Any]]:
