@@ -3,6 +3,7 @@ from axiom_programs.core.geography import GeographyScope
 from axiom_programs.populations.enhanced_cps import (
     NYC_ENHANCED_CPS_DATASET,
     EnhancedCpsCaseLoader,
+    _scope_from_geography,
     dataset_for_scope,
     load_enhanced_cps_cases,
 )
@@ -59,6 +60,22 @@ def test_loader_skips_geographically_unresolvable_records() -> None:
     )
 
     assert [case.case_id for case in cases] == ["ecps-202"]
+
+
+def test_scope_from_geography_combines_state_and_county_components() -> None:
+    assert _scope_from_geography(29, 135, "") == GeographyScope(
+        type="census_county",
+        geoid="29135",
+    )
+    assert _scope_from_geography(36, 36061, "") == GeographyScope(
+        type="census_county",
+        geoid="36061",
+    )
+    assert _scope_from_geography(21, 0, "") == GeographyScope(
+        type="census_state",
+        geoid="21",
+    )
+    assert _scope_from_geography(float("nan"), 0, "") is None
 
 
 class FakeSeries:

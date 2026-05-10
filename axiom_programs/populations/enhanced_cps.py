@@ -320,24 +320,30 @@ def _scope_from_geography(
     county_fips: Any,
     place_fips: Any,
 ) -> GeographyScope | None:
-    state = _clean_code(state_fips, 2)
-    county = _clean_code(county_fips, 5)
-    place = _clean_code(place_fips, 5)
+    state = _clean_code(state_fips, 2, zero_is_missing=True)
+    county = _clean_code(county_fips, 5, zero_is_missing=True)
+    place = _clean_code(place_fips, 5, zero_is_missing=True)
     if state and place:
         return GeographyScope(type="census_place", geoid=f"{state}{place}")
     if county:
+        if state and not county.startswith(state):
+            county = f"{state}{county[-3:]}"
         return GeographyScope(type="census_county", geoid=county)
     if state:
         return GeographyScope(type="census_state", geoid=state)
     return None
 
 
-def _clean_code(value: Any, length: int) -> str:
+def _clean_code(value: Any, length: int, *, zero_is_missing: bool = False) -> str:
     cleaned = _clean_value(value)
     if cleaned in {"", "UNKNOWN", None}:
         return ""
+    if isinstance(cleaned, float) and cleaned != cleaned:
+        return ""
     if isinstance(cleaned, float) and cleaned.is_integer():
         cleaned = int(cleaned)
+    if zero_is_missing and str(cleaned).strip() in {"0", "0.0"}:
+        return ""
     return str(cleaned).zfill(length)
 
 
