@@ -174,6 +174,10 @@ systems. TAXSIM cases carry a TAXSIM-format input row in
 `metadata["taxsim_input"]`; PRD cases carry an external PRD household object in
 `metadata["prd_household"]` or use a mapper. The adapters normalize those package
 outputs to the same `EngineResult` shape consumed by the comparator.
+`compare policyengine taxsim` defaults to the explicit tax concept intersection
+(`fiitax` and `siitax` with a $15 tolerance), while
+`compare policyengine prd` currently maps the PRD SNAP value output to
+PolicyEngine `snap`.
 
 Local Drools execution is not currently available from the public
 `ACCESS-NYC-Rules` repo alone. The repo contains the `.drl` files, but not the
