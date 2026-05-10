@@ -7,6 +7,14 @@ targets:
     scope:
       type: country
       geoid: US
+  taxsim:
+    scope:
+      type: country
+      geoid: US
+  prd:
+    scope:
+      type: country
+      geoid: US
   accessnyc:
     scope:
       type: census_place
@@ -22,6 +30,27 @@ concepts:
     targets:
       axiom: us:statutes/7/2014/u#snap_benefit
       policyengine: snap
+      prd: value.snap
+
+  us:tax/federal-income-tax#liability:
+    description: Federal income tax liability
+    category: tax
+    comparison: amount
+    tolerance: 15
+    priority: high
+    targets:
+      policyengine: income_tax
+      taxsim: fiitax
+
+  us:tax/state-income-tax#liability:
+    description: State income tax liability
+    category: tax
+    comparison: amount
+    tolerance: 15
+    priority: high
+    targets:
+      policyengine: state_income_tax
+      taxsim: siitax
 
   us:statutes/7/2014/o#snap_eligible:
     description: SNAP eligibility

@@ -12,6 +12,8 @@ from .adapters.accessnyc import (
     AccessNycPythonRunner,
 )
 from .adapters.policyengine import PolicyEngineRunner
+from .adapters.prd import PrdPackageRunner
+from .adapters.taxsim import TaxsimPackageRunner
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -40,8 +42,14 @@ def cli() -> None:
 
 
 @cli.command()
-@click.argument("left", type=click.Choice(["accessnyc", "policyengine", "axiom"]))
-@click.argument("right", type=click.Choice(["accessnyc", "policyengine", "axiom"]))
+@click.argument(
+    "left",
+    type=click.Choice(["accessnyc", "policyengine", "axiom", "taxsim", "prd"]),
+)
+@click.argument(
+    "right",
+    type=click.Choice(["accessnyc", "policyengine", "axiom", "taxsim", "prd"]),
+)
 @click.option(
     "--suite",
     default="auto",
@@ -380,6 +388,10 @@ def _build_runner(
         )
     if engine == "policyengine":
         return PolicyEngineRunner()
+    if engine == "taxsim":
+        return TaxsimPackageRunner()
+    if engine == "prd":
+        return PrdPackageRunner()
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
 
 
