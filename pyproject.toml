@@ -7,7 +7,7 @@ name = "axiom-programs"
 version = "0.1.0"
 description = "Executable Axiom program compositions and oracle comparisons"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 dependencies = [
   "click>=8.1",
   "pyyaml>=6.0",
@@ -17,6 +17,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=8.0",
+  "ruff>=0.14",
 ]
 policyengine = [
   "policyengine-us>=1.300.0",
@@ -31,3 +32,6 @@ axiom-programs = "axiom_programs.cli:cli"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py314"

@@ -52,6 +52,8 @@ The current implementation includes:
 
 ## Install
 
+Requires Python 3.14.
+
 ```bash
 uv pip install -e ".[dev]"
 ```
