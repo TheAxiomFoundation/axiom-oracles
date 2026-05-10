@@ -45,8 +45,10 @@ The current implementation includes:
 - ACCESS NYC static Drools audit checks
 - target-scope metadata and locale-aware concept mapping config for ACCESS NYC
   to PolicyEngine overlap
+- stable JSON comparison reports with mismatch taxonomy and weighted aggregates
 - generic `compare <left> <right>` CLI
-- placeholder adapters for TAXSIM, PRD, and Axiom
+- thin package-runner adapters for TAXSIM and PRD
+- placeholder adapter for Axiom
 
 ## Install
 
@@ -163,6 +165,15 @@ Reports include per-case mismatches plus weighted aggregate summaries when the
 population supplies household weights. The JSON report's `summary.weighted`
 block gives weighted match/mismatch totals, and `aggregates` gives per-concept
 weighted match rates, eligibility-rate deltas, or weighted amount differences.
+The report also includes a `schema_version`, left/right engine names, concept
+tolerances and priorities, and `mismatches_by_kind` so downstream apps can render
+the same report without duplicating comparison logic.
+
+TAXSIM and PRD are exposed as package adapters rather than separate comparison
+systems. TAXSIM cases carry a TAXSIM-format input row in
+`metadata["taxsim_input"]`; PRD cases carry an external PRD household object in
+`metadata["prd_household"]` or use a mapper. The adapters normalize those package
+outputs to the same `EngineResult` shape consumed by the comparator.
 
 Local Drools execution is not currently available from the public
 `ACCESS-NYC-Rules` repo alone. The repo contains the `.drl` files, but not the

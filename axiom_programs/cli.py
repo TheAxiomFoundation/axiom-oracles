@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from collections import Counter
-from collections import defaultdict
 from dataclasses import replace
 import json
 from pathlib import Path
@@ -22,10 +20,10 @@ from .comparison.mappings import (
     comparison_scope_for_targets,
     engine_targets_for_concepts,
 )
+from .comparison.report import build_comparison_report
 from .core.case import Case
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
-from .core.results import Value
 from .populations import load_enhanced_cps_cases
 from .suites import available_suites, load_suite
 
@@ -414,250 +412,15 @@ def _comparison_report(
     mappings: list[ProgramMapping],
     comparisons: list[HouseholdComparison],
 ) -> dict:
-    cases_by_id = {case.case_id: case for case in cases}
-    mismatch_rows = _mismatch_rows(comparisons, cases_by_id)
-    aggregate_rows = _aggregate_rows(comparisons, cases_by_id, mappings)
-    return {
-        "suite": suite_name,
-        "population": population,
-        "locales": sorted(locales),
-        "scope": scope.as_dict() if scope is not None else None,
-        "concepts": [
-            {
-                "id": mapping.concept_id,
-                "description": mapping.description,
-                "category": mapping.category,
-                "comparison": mapping.comparison,
-            }
-            for mapping in mappings
-        ],
-        "case_count": len(comparisons),
-        "summary": {
-            "match_count": sum(item.match_count for item in comparisons),
-            "mismatch_count": sum(item.mismatch_count for item in comparisons),
-            "comparison_count": sum(len(item.comparisons) for item in comparisons),
-            "weighted": _weighted_summary(comparisons, cases_by_id),
-            "mismatches_by_concept": _count_rows(mismatch_rows, "concept"),
-            "mismatches_by_scenario": _count_rows(mismatch_rows, "scenario"),
-        },
-        "aggregates": aggregate_rows,
-        "mismatches": mismatch_rows,
-        "cases": [
-            {
-                "case_id": item.household_id,
-                "left_engine": item.left_engine,
-                "right_engine": item.right_engine,
-                "metadata": dict(cases_by_id[item.household_id].metadata)
-                if item.household_id in cases_by_id
-                else {},
-                "match_rate": item.match_rate,
-                "mismatches": [
-                    {
-                        "concept": mismatch.variable,
-                        "description": mismatch.description,
-                        "left": mismatch.left_value,
-                        "right": mismatch.right_value,
-                        "difference": mismatch.difference,
-                        "tolerance": mismatch.tolerance,
-                    }
-                    for mismatch in item.mismatches()
-                ],
-            }
-            for item in comparisons
-        ],
-    }
-
-
-def _mismatch_rows(
-    comparisons: list[HouseholdComparison],
-    cases_by_id: dict[int | str, Case],
-) -> list[dict]:
-    rows = []
-    for item in comparisons:
-        metadata = dict(cases_by_id[item.household_id].metadata)
-        for mismatch in item.mismatches():
-            rows.append(
-                {
-                    "case_id": item.household_id,
-                    "scenario": metadata.get("scenario"),
-                    "yearly_earned_income": metadata.get("yearly_earned_income"),
-                    "ages": metadata.get("ages"),
-                    "pregnant_head": metadata.get("pregnant_head"),
-                    "concept": mismatch.variable,
-                    "description": mismatch.description,
-                    "left": mismatch.left_value,
-                    "right": mismatch.right_value,
-                }
-            )
-    return rows
-
-
-def _aggregate_rows(
-    comparisons: list[HouseholdComparison],
-    cases_by_id: dict[int | str, Case],
-    mappings: list[ProgramMapping],
-) -> list[dict]:
-    buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
-    for item in comparisons:
-        weight = _case_weight(cases_by_id.get(item.household_id))
-        for comparison in item.comparisons:
-            bucket = buckets[comparison.variable]
-            bucket["comparison_count"] += 1
-            bucket["comparison_weight"] += weight
-            if comparison.matches:
-                bucket["match_count"] += 1
-                bucket["match_weight"] += weight
-            else:
-                bucket["mismatch_count"] += 1
-                bucket["mismatch_weight"] += weight
-
-            bucket["left_positive_weight"] += (
-                weight if bool(comparison.left_value) else 0
-            )
-            bucket["right_positive_weight"] += (
-                weight if bool(comparison.right_value) else 0
-            )
-            bucket["left_weighted_sum"] += _to_number(comparison.left_value) * weight
-            bucket["right_weighted_sum"] += _to_number(comparison.right_value) * weight
-
-    rows = []
-    for mapping in mappings:
-        bucket = buckets.get(mapping.concept_id)
-        if bucket is None or not bucket["comparison_count"]:
-            continue
-        row = {
-            "concept": mapping.concept_id,
-            "description": mapping.description,
-            "category": mapping.category,
-            "comparison": mapping.comparison,
-            "comparison_count": bucket["comparison_count"],
-            "mismatch_count": bucket["mismatch_count"],
-            "match_rate": _percentage(
-                bucket["match_count"],
-                bucket["comparison_count"],
-            ),
-            "comparison_weight": _clean_float(bucket["comparison_weight"]),
-            "match_weight": _clean_float(bucket["match_weight"]),
-            "mismatch_weight": _clean_float(bucket["mismatch_weight"]),
-            "weighted_match_rate": _percentage(
-                bucket["match_weight"],
-                bucket["comparison_weight"],
-            ),
-        }
-        if mapping.comparison == "amount":
-            row.update(
-                {
-                    "left_weighted_sum": _clean_float(bucket["left_weighted_sum"]),
-                    "right_weighted_sum": _clean_float(bucket["right_weighted_sum"]),
-                    "weighted_difference": _clean_float(
-                        bucket["left_weighted_sum"]
-                        - bucket["right_weighted_sum"]
-                    ),
-                }
-            )
-        else:
-            row.update(
-                {
-                    "left_positive_weight": _clean_float(
-                        bucket["left_positive_weight"]
-                    ),
-                    "right_positive_weight": _clean_float(
-                        bucket["right_positive_weight"]
-                    ),
-                    "left_positive_rate": _percentage(
-                        bucket["left_positive_weight"],
-                        bucket["comparison_weight"],
-                    ),
-                    "right_positive_rate": _percentage(
-                        bucket["right_positive_weight"],
-                        bucket["comparison_weight"],
-                    ),
-                    "positive_rate_difference": _percentage(
-                        bucket["left_positive_weight"]
-                        - bucket["right_positive_weight"],
-                        bucket["comparison_weight"],
-                    ),
-                }
-            )
-        rows.append(row)
-    return rows
-
-
-def _aggregate_bucket() -> dict[str, float | int]:
-    return {
-        "comparison_count": 0,
-        "match_count": 0,
-        "mismatch_count": 0,
-        "comparison_weight": 0.0,
-        "match_weight": 0.0,
-        "mismatch_weight": 0.0,
-        "left_positive_weight": 0.0,
-        "right_positive_weight": 0.0,
-        "left_weighted_sum": 0.0,
-        "right_weighted_sum": 0.0,
-    }
-
-
-def _weighted_summary(
-    comparisons: list[HouseholdComparison],
-    cases_by_id: dict[int | str, Case],
-) -> dict[str, float]:
-    comparison_weight = 0.0
-    match_weight = 0.0
-    mismatch_weight = 0.0
-    for item in comparisons:
-        weight = _case_weight(cases_by_id.get(item.household_id))
-        for comparison in item.comparisons:
-            comparison_weight += weight
-            if comparison.matches:
-                match_weight += weight
-            else:
-                mismatch_weight += weight
-    return {
-        "comparison_weight": _clean_float(comparison_weight),
-        "match_weight": _clean_float(match_weight),
-        "mismatch_weight": _clean_float(mismatch_weight),
-        "match_rate": _percentage(match_weight, comparison_weight),
-    }
-
-
-def _case_weight(case: Case | None) -> float:
-    if case is None:
-        return 1.0
-    value = case.metadata.get("household_weight", 1)
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return 1.0
-
-
-def _count_rows(rows: list[dict], key: str) -> list[dict]:
-    counts = Counter(row.get(key) for row in rows)
-    return [
-        {"value": value, "count": count}
-        for value, count in sorted(counts.items(), key=lambda item: (-item[1], item[0] or ""))
-    ]
-
-
-def _to_number(value: Value) -> float:
-    if value is None:
-        return 0.0
-    if isinstance(value, bool):
-        return float(value)
-    return float(value)
-
-
-def _percentage(numerator: float, denominator: float) -> float:
-    if denominator == 0:
-        return 0
-    return _clean_float(numerator / denominator * 100)
-
-
-def _clean_float(value: float) -> float:
-    rounded = round(float(value), 6)
-    if rounded.is_integer():
-        return int(rounded)
-    return rounded
+    return build_comparison_report(
+        suite_name=suite_name,
+        population=population,
+        locales=locales,
+        scope=scope,
+        cases=cases,
+        mappings=mappings,
+        comparisons=comparisons,
+    )
 
 
 def _echo_comparison_report(report: dict) -> None:
