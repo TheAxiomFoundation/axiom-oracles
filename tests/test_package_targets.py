@@ -1,10 +1,11 @@
 from axiom_programs.adapters.prd import PrdPackageRunner
 from axiom_programs.adapters.taxsim import TaxsimPackageRunner
-from axiom_programs.cli import _build_runner
+from axiom_programs.cli import _build_runner, _prepare_cases_for_engines
 from axiom_programs.comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
 )
+from axiom_programs.core.case import Case, Concepts, Entity
 from axiom_programs.core.geography import GeographyScope
 
 
@@ -49,3 +50,28 @@ def test_cli_builds_package_target_runners() -> None:
 
     assert isinstance(taxsim, TaxsimPackageRunner)
     assert isinstance(prd, PrdPackageRunner)
+
+
+def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "36"}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                },
+            ),
+        ),
+    )
+
+    [taxsim_case] = _prepare_cases_for_engines([case], {"policyengine", "taxsim"})
+    [pe_case] = _prepare_cases_for_engines([case], {"policyengine", "prd"})
+
+    assert taxsim_case.metadata["taxsim_input"]["taxsimid"] == 1
+    assert taxsim_case.metadata["taxsim_input"]["state"] == 36
+    assert "taxsim_input" not in pe_case.metadata

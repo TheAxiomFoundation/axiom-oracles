@@ -4,18 +4,19 @@ from collections.abc import Callable, Mapping
 from importlib import import_module
 from typing import Any
 
+from ...comparison.mappings import engine_targets_for_concepts
 from ...core.case import Case
 from ...core.engine import EngineAdapter
 from ...core.household import Household
 from ...core.results import EngineResult
+from .projection import taxsim_input_for_case
 
 
 class TaxsimPackageRunner(EngineAdapter):
     """Adapter for PolicyEngine/policyengine-taxsim style runners.
 
-    Cases must carry a TAXSIM-format row in ``metadata["taxsim_input"]``.
-    The adapter keeps that projection outside the comparison core and only
-    standardizes runner inputs and outputs.
+    Cases may carry a TAXSIM-format row in ``metadata["taxsim_input"]``. When
+    absent, the adapter projects the thin Axiom case into a TAXSIM input row.
     """
 
     name = "taxsim"
@@ -34,10 +35,12 @@ class TaxsimPackageRunner(EngineAdapter):
         cases: list[Case],
         variables: list[str] | None = None,
     ) -> list[EngineResult]:
-        input_frame = self._input_frame(cases)
+        input_rows = self._input_rows(cases)
+        input_frame = self._frame_from_rows(input_rows)
         runner = self._runner_factory()(input_frame)
         output = self._run_runner(runner)
-        return self._engine_results(output, cases, variables)
+        target_variables = self._target_variables(variables)
+        return self._engine_results(output, cases, target_variables, input_rows)
 
     def run_households(
         self,
@@ -46,8 +49,8 @@ class TaxsimPackageRunner(EngineAdapter):
     ) -> list[EngineResult]:
         del households, variables
         raise RuntimeError(
-            "TAXSIM comparisons require Case.metadata['taxsim_input'] rows. "
-            "Project Axiom households to TAXSIM rows before running this adapter."
+            "TAXSIM comparisons require Case inputs so the adapter can project "
+            "or read TAXSIM rows."
         )
 
     def _runner_factory(self) -> Callable[[Any], Any]:
@@ -70,23 +73,27 @@ class TaxsimPackageRunner(EngineAdapter):
         )
 
     def _input_frame(self, cases: list[Case]) -> Any:
+        return self._frame_from_rows(self._input_rows(cases))
+
+    def _input_rows(self, cases: list[Case]) -> list[dict[str, Any]]:
         rows = []
-        for case in cases:
+        for index, case in enumerate(cases, start=1):
             row = case.metadata.get("taxsim_input") or case.fact("taxsim_input")
-            if row is None:
-                raise RuntimeError(
-                    "TAXSIM adapter requires each case to include "
-                    "metadata['taxsim_input']."
-                )
-            if not isinstance(row, Mapping):
+            if row is not None and not isinstance(row, Mapping):
                 raise RuntimeError(
                     "Case metadata['taxsim_input'] must be a mapping of TAXSIM "
                     "input columns to values."
                 )
-            normalized = dict(row)
-            normalized.setdefault(self.id_column, case.case_id)
+            if row is None:
+                normalized = taxsim_input_for_case(case, taxsimid=index)
+            else:
+                normalized = dict(row)
+                normalized.setdefault(self.id_column, case.case_id)
             rows.append(normalized)
+        return rows
 
+    @staticmethod
+    def _frame_from_rows(rows: list[dict[str, Any]]) -> Any:
         try:
             import pandas as pd
 
@@ -99,8 +106,14 @@ class TaxsimPackageRunner(EngineAdapter):
         output: Any,
         cases: list[Case],
         variables: list[str] | None,
+        input_rows: list[dict[str, Any]],
     ) -> list[EngineResult]:
         records = _records(output)
+        case_ids_by_input_id = {
+            str(row.get(self.id_column)): case.case_id
+            for row, case in zip(input_rows, cases, strict=True)
+            if row.get(self.id_column) is not None
+        }
         case_ids_by_text = {str(case.case_id): case.case_id for case in cases}
         case_ids = [case.case_id for case in cases]
         results = []
@@ -108,7 +121,10 @@ class TaxsimPackageRunner(EngineAdapter):
             household_id = record.get(self.id_column)
             if household_id is None and index < len(case_ids):
                 household_id = case_ids[index]
-            household_id = case_ids_by_text.get(str(household_id), household_id)
+            household_id = case_ids_by_input_id.get(
+                str(household_id),
+                case_ids_by_text.get(str(household_id), household_id),
+            )
             results.append(
                 EngineResult(
                     engine=self.name,
@@ -122,6 +138,15 @@ class TaxsimPackageRunner(EngineAdapter):
                 )
             )
         return results
+
+    def _target_variables(self, variables: list[str] | None) -> list[str] | None:
+        if variables is None:
+            return None
+        targets: list[str] = []
+        for variable in variables:
+            mapped = engine_targets_for_concepts([variable], self.name)
+            targets.extend(mapped or [variable])
+        return targets
 
     @staticmethod
     def _run_runner(runner: Any) -> Any:

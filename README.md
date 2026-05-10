@@ -64,6 +64,12 @@ Install the PolicyEngine extra only when running PE calculations:
 uv pip install -e ".[policyengine,dev]"
 ```
 
+Install the TAXSIM extra only when running local TAXSIM comparisons:
+
+```bash
+uv pip install -e ".[taxsim,dev]"
+```
+
 Install the ACCESS NYC Python extra only when running the local Python
 replatform:
 
@@ -172,12 +178,14 @@ tolerances and priorities, and `mismatches_by_kind` so downstream apps can rende
 the same report without duplicating comparison logic.
 
 TAXSIM and PRD are exposed as package adapters rather than separate comparison
-systems. TAXSIM cases carry a TAXSIM-format input row in
-`metadata["taxsim_input"]`; PRD cases carry an external PRD household object in
-`metadata["prd_household"]` or use a mapper. The adapters normalize those package
-outputs to the same `EngineResult` shape consumed by the comparator.
-`compare policyengine taxsim` defaults to the explicit tax concept intersection
-(`fiitax` and `siitax` with a $15 tolerance), while
+systems. The TAXSIM adapter projects thin `Case` objects to TAXSIM rows from
+period, geography, age, relation, and earned-income facts, while still accepting
+explicit `metadata["taxsim_input"]` rows for hand-authored fixtures. PRD cases
+carry an external PRD household object in `metadata["prd_household"]` or use a
+mapper. The adapters normalize those package outputs to the same `EngineResult`
+shape consumed by the comparator. `compare policyengine taxsim` defaults to the
+explicit tax concept intersection (`fiitax` and `siitax` with a $15 tolerance),
+while
 `compare policyengine prd` currently maps the PRD SNAP value output to
 PolicyEngine `snap`.
 

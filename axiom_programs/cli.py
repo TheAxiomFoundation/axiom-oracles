@@ -13,7 +13,7 @@ from .adapters.accessnyc import (
 )
 from .adapters.policyengine import PolicyEngineRunner
 from .adapters.prd import PrdPackageRunner
-from .adapters.taxsim import TaxsimPackageRunner
+from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -188,6 +188,10 @@ def compare(
 
     concept_ids = tuple(mapping.concept_id for mapping in mappings)
     cases = [replace(case, outputs=concept_ids) for case in cases]
+    try:
+        cases = _prepare_cases_for_engines(cases, {left, right})
+    except RuntimeError as exc:
+        raise click.ClickException(str(exc)) from exc
 
     left_runner = _build_runner(
         left,
@@ -360,6 +364,12 @@ def _filter_cases_for_scope(
         for case in cases
         if case.scope is not None and scope_contains(scope, case.scope)
     ]
+
+
+def _prepare_cases_for_engines(cases: list[Case], engines: set[str]) -> list[Case]:
+    if "taxsim" in engines:
+        return attach_taxsim_inputs(cases)
+    return cases
 
 
 def _build_runner(
