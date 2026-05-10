@@ -18,6 +18,9 @@ class MismatchKind:
     AMOUNT_DIFFERENCE = "amount_difference"
     ELIGIBILITY_LEFT_ONLY = "eligibility_left_only"
     ELIGIBILITY_RIGHT_ONLY = "eligibility_right_only"
+    MISSING_LEFT = "missing_left"
+    MISSING_RIGHT = "missing_right"
+    MISSING_BOTH = "missing_both"
     VALUE_MISMATCH = "value_mismatch"
 
 
@@ -36,6 +39,7 @@ def build_comparison_report(
     cases_by_id = {case.case_id: case for case in cases}
     mappings_by_id = {mapping.concept_id: mapping for mapping in mappings}
     mismatch_rows = _mismatch_rows(comparisons, cases_by_id, mappings_by_id)
+    error_rows = _error_rows(comparisons)
     aggregate_rows = _aggregate_rows(comparisons, cases_by_id, mappings)
     left_engine, right_engine = _engine_pair(comparisons)
     return {
@@ -65,14 +69,19 @@ def build_comparison_report(
             "mismatches_by_concept": _count_rows(mismatch_rows, "concept"),
             "mismatches_by_kind": _count_rows(mismatch_rows, "kind"),
             "mismatches_by_scenario": _count_rows(mismatch_rows, "scenario"),
+            "error_count": len(error_rows),
+            "errors_by_engine": _count_rows(error_rows, "engine"),
         },
         "aggregates": aggregate_rows,
         "mismatches": mismatch_rows,
+        "errors": error_rows,
         "cases": [
             {
                 "case_id": item.household_id,
                 "left_engine": item.left_engine,
                 "right_engine": item.right_engine,
+                "left_errors": list(item.left_errors),
+                "right_errors": list(item.right_errors),
                 "metadata": dict(cases_by_id[item.household_id].metadata)
                 if item.household_id in cases_by_id
                 else {},
@@ -91,6 +100,13 @@ def classify_mismatch(
     comparison: VariableComparison,
     mapping: ProgramMapping | None = None,
 ) -> str:
+    if comparison.left_value is None and comparison.right_value is None:
+        return MismatchKind.MISSING_BOTH
+    if comparison.left_value is None:
+        return MismatchKind.MISSING_LEFT
+    if comparison.right_value is None:
+        return MismatchKind.MISSING_RIGHT
+
     comparison_type = mapping.comparison if mapping is not None else ""
     if comparison_type == "amount":
         return MismatchKind.AMOUNT_DIFFERENCE
@@ -145,6 +161,30 @@ def _mismatch_rows(
     return rows
 
 
+def _error_rows(comparisons: list[HouseholdComparison]) -> list[dict]:
+    rows = []
+    for item in comparisons:
+        for error in item.left_errors:
+            rows.append(
+                {
+                    "case_id": item.household_id,
+                    "side": "left",
+                    "engine": item.left_engine,
+                    "error": error,
+                }
+            )
+        for error in item.right_errors:
+            rows.append(
+                {
+                    "case_id": item.household_id,
+                    "side": "right",
+                    "engine": item.right_engine,
+                    "error": error,
+                }
+            )
+    return rows
+
+
 def _case_mismatch_row(
     mismatch: VariableComparison,
     mappings_by_id: dict[str, ProgramMapping],
@@ -180,14 +220,26 @@ def _aggregate_rows(
                 bucket["mismatch_count"] += 1
                 bucket["mismatch_weight"] += weight
 
-            bucket["left_positive_weight"] += (
-                weight if bool(comparison.left_value) else 0
-            )
-            bucket["right_positive_weight"] += (
-                weight if bool(comparison.right_value) else 0
-            )
-            bucket["left_weighted_sum"] += _to_number(comparison.left_value) * weight
-            bucket["right_weighted_sum"] += _to_number(comparison.right_value) * weight
+            if comparison.left_value is None:
+                bucket["missing_left_count"] += 1
+            else:
+                bucket["left_positive_weight"] += (
+                    weight if bool(comparison.left_value) else 0
+                )
+                bucket["left_weighted_sum"] += (
+                    _to_number(comparison.left_value) * weight
+                )
+            if comparison.right_value is None:
+                bucket["missing_right_count"] += 1
+            else:
+                bucket["right_positive_weight"] += (
+                    weight if bool(comparison.right_value) else 0
+                )
+                bucket["right_weighted_sum"] += (
+                    _to_number(comparison.right_value) * weight
+                )
+            if comparison.left_value is None and comparison.right_value is None:
+                bucket["missing_both_count"] += 1
 
     rows = []
     for mapping in mappings:
@@ -201,6 +253,9 @@ def _aggregate_rows(
             "comparison": mapping.comparison,
             "comparison_count": bucket["comparison_count"],
             "mismatch_count": bucket["mismatch_count"],
+            "missing_left_count": bucket["missing_left_count"],
+            "missing_right_count": bucket["missing_right_count"],
+            "missing_both_count": bucket["missing_both_count"],
             "match_rate": _percentage(
                 bucket["match_count"],
                 bucket["comparison_count"],
@@ -264,6 +319,9 @@ def _aggregate_bucket() -> dict[str, float | int]:
         "right_positive_weight": 0.0,
         "left_weighted_sum": 0.0,
         "right_weighted_sum": 0.0,
+        "missing_left_count": 0,
+        "missing_right_count": 0,
+        "missing_both_count": 0,
     }
 
 

@@ -24,6 +24,8 @@ class HouseholdComparison:
     left_engine: str
     right_engine: str
     comparisons: list[VariableComparison] = field(default_factory=list)
+    left_errors: tuple[str, ...] = field(default_factory=tuple)
+    right_errors: tuple[str, ...] = field(default_factory=tuple)
 
     @property
     def match_count(self) -> int:
@@ -76,6 +78,8 @@ class Comparator:
                     left_engine=left.engine,
                     right_engine=right.engine,
                     comparisons=variable_comparisons,
+                    left_errors=left.errors,
+                    right_errors=right.errors,
                 )
             )
 
@@ -91,17 +95,25 @@ class Comparator:
         right_value = self._mapped_value(mapping, right)
 
         if mapping.comparison == "amount":
-            left_number = self._to_number(left_value)
-            right_number = self._to_number(right_value)
-            difference = left_number - right_number
-            matches = isclose(
-                left_number,
-                right_number,
-                abs_tol=mapping.tolerance,
-            )
+            if left_value is None or right_value is None:
+                difference = None
+                matches = False
+            else:
+                left_number = self._to_number(left_value)
+                right_number = self._to_number(right_value)
+                difference = left_number - right_number
+                matches = isclose(
+                    left_number,
+                    right_number,
+                    abs_tol=mapping.tolerance,
+                )
         else:
             difference = None
-            matches = bool(left_value) == bool(right_value)
+            matches = (
+                False
+                if left_value is None or right_value is None
+                else bool(left_value) == bool(right_value)
+            )
 
         return VariableComparison(
             variable=mapping.standard,
@@ -124,6 +136,8 @@ class Comparator:
     def _mapped_value(self, mapping: ProgramMapping, result: EngineResult) -> Value:
         key = self._mapping_key(mapping, result.engine)
         if isinstance(key, list):
+            if not any(item in result.values for item in key):
+                return None
             return sum(self._to_number(result.get(item, 0)) for item in key)
         if key is None:
             return None

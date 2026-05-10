@@ -70,3 +70,54 @@ def test_amount_mismatch_kind_is_reported_for_nonmatching_amounts() -> None:
         {"value": MismatchKind.AMOUNT_DIFFERENCE, "count": 1}
     ]
     assert report["mismatches"][0]["difference"] == -25
+
+
+def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
+    mapping = ProgramMapping(
+        standard="us:test#income_tax",
+        description="Federal income tax",
+        category="tax",
+        comparison="amount",
+        tolerance=15,
+        targets={"policyengine": "income_tax", "taxsim": "fiitax"},
+    )
+    comparisons = Comparator([mapping]).compare(
+        [
+            EngineResult(
+                "policyengine",
+                "case-1",
+                {},
+                errors=("income_tax: invalid state",),
+            )
+        ],
+        [EngineResult("taxsim", "case-1", {"fiitax": 0})],
+    )
+
+    report = build_comparison_report(
+        suite_name="taxsim-fixture",
+        population="synthetic",
+        locales=set(),
+        scope=None,
+        cases=[Case(case_id="case-1", period="2026")],
+        mappings=[mapping],
+        comparisons=comparisons,
+    )
+
+    assert report["summary"]["mismatches_by_kind"] == [
+        {"value": MismatchKind.MISSING_LEFT, "count": 1}
+    ]
+    assert report["summary"]["error_count"] == 1
+    assert report["summary"]["errors_by_engine"] == [
+        {"value": "policyengine", "count": 1}
+    ]
+    assert report["mismatches"][0]["difference"] is None
+    assert report["errors"] == [
+        {
+            "case_id": "case-1",
+            "side": "left",
+            "engine": "policyengine",
+            "error": "income_tax: invalid state",
+        }
+    ]
+    assert report["cases"][0]["left_errors"] == ["income_tax: invalid state"]
+    assert report["aggregates"][0]["missing_left_count"] == 1

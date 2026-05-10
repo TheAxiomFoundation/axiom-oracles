@@ -39,3 +39,54 @@ def test_boolean_eligibility_mismatch() -> None:
 
     assert comparison.match_rate == 0
     assert comparison.mismatch_count == 1
+
+
+def test_missing_amount_output_is_not_treated_as_zero_match() -> None:
+    mappings = [
+        ProgramMapping(
+            standard="us:test#income_tax",
+            description="Federal income tax",
+            category="tax",
+            comparison="amount",
+            tolerance=15,
+            targets={"policyengine": "income_tax", "taxsim": "fiitax"},
+        )
+    ]
+    left = [EngineResult("policyengine", 1, {})]
+    right = [EngineResult("taxsim", 1, {"fiitax": 0})]
+
+    comparison = Comparator(mappings).compare(left, right)[0]
+    variable = comparison.comparisons[0]
+
+    assert comparison.mismatch_count == 1
+    assert variable.left_value is None
+    assert variable.right_value == 0
+    assert variable.difference is None
+    assert not variable.matches
+
+
+def test_comparison_carries_engine_errors() -> None:
+    mappings = [
+        ProgramMapping(
+            standard="us:test#income_tax",
+            description="Federal income tax",
+            category="tax",
+            comparison="amount",
+            targets={"policyengine": "income_tax", "taxsim": "fiitax"},
+        )
+    ]
+
+    comparison = Comparator(mappings).compare(
+        [
+            EngineResult(
+                "policyengine",
+                "case-1",
+                {},
+                errors=("income_tax: invalid state",),
+            )
+        ],
+        [EngineResult("taxsim", "case-1", {"fiitax": 0})],
+    )[0]
+
+    assert comparison.left_errors == ("income_tax: invalid state",)
+    assert comparison.right_errors == ()
