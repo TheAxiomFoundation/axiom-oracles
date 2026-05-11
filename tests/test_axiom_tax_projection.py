@@ -161,6 +161,61 @@ def test_axiom_tax_projection_uses_oldest_adults_as_filers() -> None:
     ] is True
 
 
+def test_axiom_tax_projection_treats_18_year_old_as_potential_spouse() -> None:
+    case = Case(
+        case_id="young-adult-tax-unit",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 30_000,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Other",
+                    Concepts.PERSON_AGE: 18,
+                    Concepts.YEARLY_EARNED_INCOME: 0,
+                },
+            ),
+            Entity(
+                "person-3",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 12,
+                    Concepts.YEARLY_EARNED_INCOME: 0,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.filing_status")
+    ] == 1
+    assert by_key[
+        ("person-2", "us:tax/federal-income-tax#input.is_spouse")
+    ] is True
+    assert by_key[
+        ("person-2", "us:tax/federal-income-tax#input.is_tax_unit_dependent")
+    ] is False
+    assert by_key[
+        ("person-3", "us:tax/federal-income-tax#input.is_tax_unit_dependent")
+    ] is True
+
+
 def test_axiom_tax_projection_keeps_zero_earning_second_adult_as_spouse() -> None:
     case = Case(
         case_id="one-earner-couple",

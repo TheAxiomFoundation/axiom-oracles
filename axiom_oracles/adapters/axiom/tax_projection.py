@@ -40,6 +40,7 @@ _ADDITIONAL_SENIOR_DEDUCTION_AGE = 65
 _ADDITIONAL_SENIOR_DEDUCTION_PHASEOUT_RATE = 0.06
 _ADDITIONAL_SENIOR_DEDUCTION_JOINT_THRESHOLD = 150_000
 _ADDITIONAL_SENIOR_DEDUCTION_OTHER_THRESHOLD = 75_000
+_TAX_FILER_ADULT_AGE = 18
 
 _POLICYENGINE_EXTERNAL_TAX_INPUTS = (
     "auto_loan_interest_deduction",
@@ -433,7 +434,9 @@ def _tax_filers(people: list[Entity]) -> tuple[Entity, Entity | None]:
     if explicit_spouse is not None:
         return explicit_head, explicit_spouse
 
-    adult_people = [person for person in people if _age(person) >= 19]
+    adult_people = [
+        person for person in people if _age(person) >= _TAX_FILER_ADULT_AGE
+    ]
     if not adult_people:
         return explicit_head, None
     ranked = sorted(
