@@ -1,6 +1,9 @@
 import pytest
 
-from axiom_oracles.adapters.axiom.tax_projection import attach_axiom_tax_inputs_to_case
+from axiom_oracles.adapters.axiom.tax_projection import (
+    attach_axiom_tax_inputs_to_case,
+    attach_axiom_tax_itemization_choice_to_case,
+)
 from axiom_oracles.core.case import Case, Concepts, Entity
 
 
@@ -73,6 +76,15 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         if record["name"].endswith("#relation.member_of_tax_unit")
     ]
     assert len(member_relations) == 3
+    assert "axiom_input_record_overlays" not in projected.metadata
+    assert "axiom_result_selection" not in projected.metadata
+
+
+def test_axiom_tax_itemization_choice_is_oracle_comparison_metadata() -> None:
+    case = Case(case_id="case-1", period="2026")
+
+    projected = attach_axiom_tax_itemization_choice_to_case(case)
+
     assert projected.metadata["axiom_result_selection"] == {
         "strategy": "min",
         "output": "us:statutes/26/6401#income_tax",
@@ -257,12 +269,7 @@ def test_axiom_tax_projection_uses_external_tax_unit_inputs() -> None:
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.tax_unit_itemizes")
     ] is False
-    itemization_candidates = [
-        overlay[0]["value"]
-        for overlay in projected.metadata["axiom_input_record_overlays"]
-        if overlay[0]["name"] == "us:tax/federal-income-tax#input.tax_unit_itemizes"
-    ]
-    assert itemization_candidates == [False, True]
+    assert "axiom_input_record_overlays" not in projected.metadata
 
 
 def test_axiom_tax_projection_rejects_external_itemization_status() -> None:

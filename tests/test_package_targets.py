@@ -127,7 +127,13 @@ def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program(monkeypatch) ->
     )
 
     assert projected.metadata["axiom_input_records"]
+    assert projected.metadata["axiom_input_record_overlays"]
+    assert projected.metadata["axiom_result_selection"] == {
+        "strategy": "min",
+        "output": "us:statutes/26/6401#income_tax",
+    }
     assert "axiom_input_records" not in explicit.metadata
+    assert "axiom_input_record_overlays" not in explicit.metadata
 
 
 def test_cli_defaults_taxsim_comparisons_to_supported_tax_year() -> None:

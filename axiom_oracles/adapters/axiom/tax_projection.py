@@ -200,6 +200,22 @@ def attach_axiom_tax_inputs(cases: list[Case]) -> list[Case]:
     return [attach_axiom_tax_inputs_to_case(case) for case in cases]
 
 
+def attach_axiom_tax_itemization_choice(cases: list[Case]) -> list[Case]:
+    """Attach oracle-comparison itemization candidates to Axiom tax cases."""
+
+    return [attach_axiom_tax_itemization_choice_to_case(case) for case in cases]
+
+
+def attach_axiom_tax_itemization_choice_to_case(case: Case) -> Case:
+    metadata = dict(case.metadata)
+    metadata[AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY] = _itemization_overlays()
+    metadata[AXIOM_RESULT_SELECTION_METADATA_KEY] = {
+        "strategy": "min",
+        "output": "us:statutes/26/6401#income_tax",
+    }
+    return replace(case, metadata=metadata)
+
+
 def attach_policyengine_tax_unit_inputs(cases: list[Case]) -> list[Case]:
     """Attach external tax inputs calculated by the PolicyEngine projection."""
 
@@ -241,11 +257,6 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
         *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
         *relations,
     ]
-    metadata[AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY] = _itemization_overlays()
-    metadata[AXIOM_RESULT_SELECTION_METADATA_KEY] = {
-        "strategy": "min",
-        "output": "us:statutes/26/6401#income_tax",
-    }
     return replace(case, metadata=metadata)
 
 
