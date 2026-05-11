@@ -92,7 +92,11 @@ def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     assert "taxsim_input" not in pe_case.metadata
 
 
-def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program() -> None:
+def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "axiom_oracles.cli.attach_policyengine_tax_unit_inputs",
+        lambda cases: cases,
+    )
     case = Case(
         case_id="case-1",
         period="2026",

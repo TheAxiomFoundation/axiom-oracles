@@ -1,3 +1,5 @@
+import pytest
+
 from axiom_oracles.adapters.axiom.tax_projection import attach_axiom_tax_inputs_to_case
 from axiom_oracles.core.case import Case, Concepts, Entity
 
@@ -71,6 +73,16 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         if record["name"].endswith("#relation.member_of_tax_unit")
     ]
     assert len(member_relations) == 3
+    assert projected.metadata["axiom_result_selection"] == {
+        "strategy": "min",
+        "output": "us:statutes/26/6401#income_tax",
+    }
+    itemization_candidates = [
+        overlay[0]["value"]
+        for overlay in projected.metadata["axiom_input_record_overlays"]
+        if overlay[0]["name"] == "us:tax/federal-income-tax#input.tax_unit_itemizes"
+    ]
+    assert itemization_candidates == [False, True]
 
 
 def test_axiom_tax_projection_uses_oldest_adults_as_filers() -> None:
@@ -206,3 +218,70 @@ def test_axiom_tax_projection_phases_out_additional_senior_deduction() -> None:
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.additional_senior_deduction")
     ] == 5700
+
+
+def test_axiom_tax_projection_uses_external_tax_unit_inputs() -> None:
+    case = Case(
+        case_id="itemizer",
+        period="2026",
+        metadata={
+            "axiom_tax_unit_inputs": {
+                "itemized_taxable_income_deductions": 20_000,
+            }
+        },
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 100_000,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax#input.itemized_taxable_income_deductions",
+        )
+    ] == 20_000
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.tax_unit_itemizes")
+    ] is False
+    itemization_candidates = [
+        overlay[0]["value"]
+        for overlay in projected.metadata["axiom_input_record_overlays"]
+        if overlay[0]["name"] == "us:tax/federal-income-tax#input.tax_unit_itemizes"
+    ]
+    assert itemization_candidates == [False, True]
+
+
+def test_axiom_tax_projection_rejects_external_itemization_status() -> None:
+    case = Case(
+        case_id="bad-itemization-input",
+        period="2026",
+        metadata={"axiom_tax_unit_inputs": {"tax_unit_itemizes": True}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 100_000,
+                },
+            ),
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="must not include tax_unit_itemizes"):
+        attach_axiom_tax_inputs_to_case(case)

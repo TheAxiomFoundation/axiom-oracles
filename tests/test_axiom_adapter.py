@@ -139,6 +139,99 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     assert result.errors == ()
 
 
+def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> None:
+    calls = []
+
+    def fake_run(args, **kwargs):
+        calls.append((args, kwargs))
+        if args[1] == "compile":
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        request = json.loads(kwargs["input"])
+        itemization_records = [
+            record
+            for record in request["dataset"]["inputs"]
+            if record["name"] == "us:tax/federal-income-tax#input.tax_unit_itemizes"
+        ]
+        assert len(itemization_records) == 1
+        itemizes = itemization_records[0]["value"]["value"]
+        income_tax = 400 if itemizes else 500
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [
+                        {
+                            "outputs": {
+                                "us:statutes/26/6401#income_tax": {
+                                    "kind": "scalar",
+                                    "value": {
+                                        "kind": "decimal",
+                                        "value": str(income_tax),
+                                    },
+                                }
+                            }
+                        }
+                    ]
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        program_path=tmp_path / "program.yaml",
+        binary_path=tmp_path / "axiom-rules",
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        metadata={
+            "axiom_input_records": [
+                {
+                    "name": "us:tax/federal-income-tax#input.tax_unit_itemizes",
+                    "entity": "TaxUnit",
+                    "entity_id": "tax_unit",
+                    "value": False,
+                }
+            ],
+            "axiom_input_record_overlays": [
+                [
+                    {
+                        "name": "us:tax/federal-income-tax#input.tax_unit_itemizes",
+                        "entity": "TaxUnit",
+                        "entity_id": "tax_unit",
+                        "value": False,
+                    }
+                ],
+                [
+                    {
+                        "name": "us:tax/federal-income-tax#input.tax_unit_itemizes",
+                        "entity": "TaxUnit",
+                        "entity_id": "tax_unit",
+                        "value": True,
+                    }
+                ],
+            ],
+            "axiom_result_selection": {
+                "strategy": "min",
+                "output": "us:statutes/26/6401#income_tax",
+            },
+        },
+    )
+
+    [result] = runner.run_cases([case], [Concepts.FEDERAL_INCOME_TAX])
+
+    assert [call[0][1] for call in calls] == [
+        "compile",
+        "run-compiled",
+        "run-compiled",
+    ]
+    assert result.errors == ()
+    assert result.values == {"us:statutes/26/6401#income_tax": 400.0}
+    assert result.raw["selected_candidate"] == 1
+
+
 def test_axiom_runner_records_execution_errors_per_case(tmp_path: Path) -> None:
     def fake_run(args, **kwargs):
         del kwargs

@@ -4,8 +4,15 @@ from dataclasses import replace
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
-from .runner import AXIOM_INPUT_RECORDS_METADATA_KEY, AXIOM_RELATIONS_METADATA_KEY
+from .runner import (
+    AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY,
+    AXIOM_INPUT_RECORDS_METADATA_KEY,
+    AXIOM_RELATIONS_METADATA_KEY,
+    AXIOM_RESULT_SELECTION_METADATA_KEY,
+)
 
+
+AXIOM_TAX_UNIT_INPUTS_METADATA_KEY = "axiom_tax_unit_inputs"
 
 US_FEDERAL_INCOME_TAX_IMPORTS = (
     "us:statutes/26/1/j",
@@ -33,6 +40,15 @@ _ADDITIONAL_SENIOR_DEDUCTION_AGE = 65
 _ADDITIONAL_SENIOR_DEDUCTION_PHASEOUT_RATE = 0.06
 _ADDITIONAL_SENIOR_DEDUCTION_JOINT_THRESHOLD = 150_000
 _ADDITIONAL_SENIOR_DEDUCTION_OTHER_THRESHOLD = 75_000
+
+_POLICYENGINE_EXTERNAL_TAX_INPUTS = (
+    "auto_loan_interest_deduction",
+    "charitable_deduction_for_non_itemizers",
+    "itemized_taxable_income_deductions",
+    "overtime_income_deduction",
+    "qualified_business_income_deduction",
+    "tip_income_deduction",
+)
 
 _RELATION_REFS = (
     "us:statutes/26/21#relation.cdcc_member_of_tax_unit",
@@ -184,6 +200,30 @@ def attach_axiom_tax_inputs(cases: list[Case]) -> list[Case]:
     return [attach_axiom_tax_inputs_to_case(case) for case in cases]
 
 
+def attach_policyengine_tax_unit_inputs(cases: list[Case]) -> list[Case]:
+    """Attach external tax inputs calculated by the PolicyEngine projection."""
+
+    from ..policyengine.runner import PolicyEngineRunner
+
+    runner = PolicyEngineRunner()
+    projected = []
+    for case in cases:
+        metadata = dict(case.metadata)
+        existing = metadata.get(AXIOM_TAX_UNIT_INPUTS_METADATA_KEY)
+        if existing:
+            projected.append(case)
+            continue
+        result = runner.run_case(case, list(_POLICYENGINE_EXTERNAL_TAX_INPUTS))
+        values = {
+            name: result.values[name]
+            for name in _POLICYENGINE_EXTERNAL_TAX_INPUTS
+            if name in result.values
+        }
+        metadata[AXIOM_TAX_UNIT_INPUTS_METADATA_KEY] = values
+        projected.append(replace(case, metadata=metadata))
+    return projected
+
+
 def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
     metadata = dict(case.metadata)
     if metadata.get(AXIOM_INPUT_RECORDS_METADATA_KEY):
@@ -201,6 +241,11 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
         *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
         *relations,
     ]
+    metadata[AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY] = _itemization_overlays()
+    metadata[AXIOM_RESULT_SELECTION_METADATA_KEY] = {
+        "strategy": "min",
+        "output": "us:statutes/26/6401#income_tax",
+    }
     return replace(case, metadata=metadata)
 
 
@@ -235,6 +280,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         inputs.setdefault(name, _boolean_default(name, case))
     for name in _TAX_UNIT_NUMERIC_DEFAULTS:
         inputs.setdefault(name, 0)
+    inputs.update(_case_axiom_tax_unit_inputs(case))
     return [_input_record(name, "TaxUnit", _TAX_UNIT_ID, value) for name, value in inputs.items()]
 
 
@@ -293,6 +339,27 @@ def _input_record(
 
 def _input_ref(name: str) -> str:
     return f"{_AXIOM_TAX_REF_PREFIX}#input.{name}"
+
+
+def _case_axiom_tax_unit_inputs(case: Case) -> dict[str, Any]:
+    raw_inputs = case.metadata.get(AXIOM_TAX_UNIT_INPUTS_METADATA_KEY, {})
+    if not raw_inputs:
+        return {}
+    if not isinstance(raw_inputs, dict):
+        raise RuntimeError("metadata['axiom_tax_unit_inputs'] must be a mapping.")
+    if "tax_unit_itemizes" in raw_inputs:
+        raise RuntimeError(
+            "metadata['axiom_tax_unit_inputs'] must not include tax_unit_itemizes; "
+            "itemization status is resolved by Axiom candidate selection."
+        )
+    return dict(raw_inputs)
+
+
+def _itemization_overlays() -> list[list[dict[str, Any]]]:
+    return [
+        [_input_record("tax_unit_itemizes", "TaxUnit", _TAX_UNIT_ID, False)],
+        [_input_record("tax_unit_itemizes", "TaxUnit", _TAX_UNIT_ID, True)],
+    ]
 
 
 def _filing_status(*, spouse: Entity | None, dependents: list[Entity]) -> int:

@@ -22,6 +22,8 @@ SubprocessRun = Callable[..., subprocess.CompletedProcess[str]]
 
 AXIOM_INPUTS_METADATA_KEY = "axiom_inputs"
 AXIOM_INPUT_RECORDS_METADATA_KEY = "axiom_input_records"
+AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY = "axiom_input_record_overlays"
+AXIOM_RESULT_SELECTION_METADATA_KEY = "axiom_result_selection"
 AXIOM_RELATIONS_METADATA_KEY = "axiom_relations"
 AXIOM_ENTITY_ID_METADATA_KEY = "axiom_entity_id"
 AXIOM_ENTITY_METADATA_KEY = "axiom_entity"
@@ -137,7 +139,34 @@ class AxiomRulesRunner(EngineAdapter):
         output_targets: list[str],
         artifact_path: Path,
     ) -> EngineResult:
-        request = self._execution_request(case, output_targets)
+        period = _period_for_case(case)
+        input_record_overlays = _case_input_record_overlays(case, period)
+        if input_record_overlays:
+            candidate_results = [
+                self._run_case_once(
+                    case,
+                    output_targets,
+                    artifact_path,
+                    input_record_overlay=overlay,
+                )
+                for overlay in input_record_overlays
+            ]
+            return _select_candidate_result(self.name, case, candidate_results)
+        return self._run_case_once(case, output_targets, artifact_path)
+
+    def _run_case_once(
+        self,
+        case: Case,
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        input_record_overlay: list[dict[str, Any]] | None = None,
+    ) -> EngineResult:
+        request = self._execution_request(
+            case,
+            output_targets,
+            input_record_overlay=input_record_overlay,
+        )
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -176,15 +205,27 @@ class AxiomRulesRunner(EngineAdapter):
             raw=payload,
         )
 
-    def _execution_request(self, case: Case, outputs: list[str]) -> dict[str, Any]:
+    def _execution_request(
+        self,
+        case: Case,
+        outputs: list[str],
+        *,
+        input_record_overlay: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
         period = _period_for_case(case)
         entity_id = str(case.metadata.get(AXIOM_ENTITY_ID_METADATA_KEY) or "")
         if not entity_id:
             entity_id = self.default_entity_id
+        input_records = self._input_records(case, period, entity_id)
+        if input_record_overlay:
+            input_records = _apply_input_record_overlay(
+                input_records,
+                input_record_overlay,
+            )
         return {
             "mode": self.mode,
             "dataset": {
-                "inputs": self._input_records(case, period, entity_id),
+                "inputs": input_records,
                 "relations": self._relation_records(case, period),
             },
             "queries": [
@@ -298,21 +339,56 @@ def _explicit_input_records(
     period: dict[str, str],
 ) -> list[dict[str, Any]]:
     raw_records = case.metadata.get(AXIOM_INPUT_RECORDS_METADATA_KEY, [])
-    if raw_records and not isinstance(raw_records, list | tuple):
-        raise RuntimeError("metadata['axiom_input_records'] must be a list.")
+    return _normalize_input_records(
+        raw_records,
+        period,
+        "metadata['axiom_input_records']",
+    )
+
+
+def _case_input_record_overlays(
+    case: Case,
+    period: dict[str, str],
+) -> list[list[dict[str, Any]]]:
+    raw_overlays = case.metadata.get(AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY, [])
+    if raw_overlays is None:
+        return []
+    if not isinstance(raw_overlays, list | tuple):
+        raise RuntimeError(
+            "metadata['axiom_input_record_overlays'] must be a list."
+        )
+    return [
+        _normalize_input_records(
+            raw_overlay,
+            period,
+            f"metadata['axiom_input_record_overlays'][{index}]",
+        )
+        for index, raw_overlay in enumerate(raw_overlays)
+    ]
+
+
+def _normalize_input_records(
+    raw_records: Any,
+    period: dict[str, str],
+    label: str,
+) -> list[dict[str, Any]]:
+    if raw_records is None:
+        return []
+    if not isinstance(raw_records, list | tuple):
+        raise RuntimeError(f"{label} must be a list.")
     records = []
     for raw_record in raw_records:
         if not isinstance(raw_record, Mapping):
-            raise RuntimeError("Axiom input records must be mappings.")
+            raise RuntimeError(f"{label} records must be mappings.")
         record = dict(raw_record)
         if "name" not in record:
-            raise RuntimeError("Axiom input records must include a name.")
+            raise RuntimeError(f"{label} records must include a name.")
         if "entity" not in record:
-            raise RuntimeError("Axiom input records must include an entity.")
+            raise RuntimeError(f"{label} records must include an entity.")
         if "entity_id" not in record:
-            raise RuntimeError("Axiom input records must include an entity_id.")
+            raise RuntimeError(f"{label} records must include an entity_id.")
         if "value" not in record:
-            raise RuntimeError("Axiom input records must include a value.")
+            raise RuntimeError(f"{label} records must include a value.")
         record["name"] = str(record["name"])
         record["entity"] = str(record["entity"])
         record["entity_id"] = str(record["entity_id"])
@@ -322,6 +398,121 @@ def _explicit_input_records(
             record["value"] = _scalar_value(record["value"])
         records.append(record)
     return records
+
+
+def _apply_input_record_overlay(
+    base_records: list[dict[str, Any]],
+    overlay_records: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    by_key: dict[tuple[str, str, str, str], dict[str, Any]] = {}
+    ordered_keys = []
+    for record in [*base_records, *overlay_records]:
+        key = _input_record_key(record)
+        if key not in by_key:
+            ordered_keys.append(key)
+        by_key[key] = dict(record)
+    return [by_key[key] for key in ordered_keys]
+
+
+def _input_record_key(record: Mapping[str, Any]) -> tuple[str, str, str, str]:
+    interval = record.get("interval", {})
+    interval_key = json.dumps(interval, sort_keys=True)
+    return (
+        str(record["name"]),
+        str(record["entity"]),
+        str(record["entity_id"]),
+        interval_key,
+    )
+
+
+def _select_candidate_result(
+    engine_name: str,
+    case: Case,
+    candidates: list[EngineResult],
+) -> EngineResult:
+    raw_selection = case.metadata.get(AXIOM_RESULT_SELECTION_METADATA_KEY)
+    if not isinstance(raw_selection, Mapping):
+        return EngineResult(
+            engine=engine_name,
+            household_id=case.case_id,
+            values={},
+            errors=(
+                "metadata['axiom_result_selection'] is required when "
+                "metadata['axiom_input_record_overlays'] is provided.",
+            ),
+            raw=_candidate_raw(candidates),
+        )
+    strategy = str(raw_selection.get("strategy", ""))
+    output = str(raw_selection.get("output", ""))
+    if strategy not in {"min", "max"}:
+        return EngineResult(
+            engine=engine_name,
+            household_id=case.case_id,
+            values={},
+            errors=("metadata['axiom_result_selection'].strategy must be min or max.",),
+            raw=_candidate_raw(candidates),
+        )
+    if not output:
+        return EngineResult(
+            engine=engine_name,
+            household_id=case.case_id,
+            values={},
+            errors=("metadata['axiom_result_selection'].output is required.",),
+            raw=_candidate_raw(candidates),
+        )
+
+    valid_candidates = [
+        (index, result)
+        for index, result in enumerate(candidates)
+        if not result.errors and _is_numeric_value(result.values.get(output))
+    ]
+    if not valid_candidates:
+        candidate_errors = tuple(
+            error for result in candidates for error in result.errors
+        )
+        return EngineResult(
+            engine=engine_name,
+            household_id=case.case_id,
+            values={},
+            errors=(
+                f"Axiom candidate selection found no numeric '{output}' result.",
+                *candidate_errors,
+            ),
+            raw=_candidate_raw(candidates),
+        )
+
+    selector = min if strategy == "min" else max
+    selected_index, selected = selector(
+        valid_candidates,
+        key=lambda item: item[1].values[output],
+    )
+    return EngineResult(
+        engine=engine_name,
+        household_id=case.case_id,
+        values=selected.values,
+        raw={
+            "selection": dict(raw_selection),
+            "selected_candidate": selected_index,
+            "candidates": _candidate_raw(candidates),
+        },
+        errors=selected.errors,
+    )
+
+
+def _candidate_raw(candidates: list[EngineResult]) -> list[dict[str, Any]]:
+    return [
+        {
+            "index": index,
+            "values": result.values,
+            "errors": list(result.errors),
+            "raw": result.raw,
+        }
+        for index, result in enumerate(candidates)
+    ]
+
+
+def _is_numeric_value(value: Any) -> bool:
+    return isinstance(value, int | float) and not isinstance(value, bool)
 
 
 def _case_axiom_inputs(case: Case) -> dict[str, Any]:
