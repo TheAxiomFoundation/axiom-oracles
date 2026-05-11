@@ -194,6 +194,10 @@ $15 tolerance), while
 `compare policyengine prd` currently maps the PRD SNAP value output to
 PolicyEngine `snap`.
 
+See [docs/policyengine-taxsim.md](docs/policyengine-taxsim.md) for the
+PolicyEngine/TAXSIM comparison path, state-code handling, residual smoke-test
+mismatches, and upstream triage workflow.
+
 Local Drools execution is not currently available from the public
 `ACCESS-NYC-Rules` repo alone. The repo contains the `.drl` files, but not the
 compiled Java request/response/fact classes or a runnable Screening API/KJAR.
