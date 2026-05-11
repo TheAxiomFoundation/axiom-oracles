@@ -216,6 +216,29 @@ def test_policyengine_projection_includes_case_scope_geography() -> None:
     assert household["place_fips"] == {2026: "51000"}
 
 
+def test_policyengine_projection_omits_case_scope_for_federal_tax_only() -> None:
+    case = Case(
+        case_id="county-tax-case",
+        period="2026",
+        metadata={"scope": {"type": "census_county", "geoid": "36061"}},
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 30},
+            ),
+        ),
+    )
+
+    household = PolicyEngineRunner()._build_situation_from_case(
+        case,
+        variables=["income_tax"],
+    )["households"]["household"]
+
+    assert "state_fips" not in household
+    assert "county_fips" not in household
+
+
 def test_policyengine_runner_calculates_case_variables_at_case_period(
     monkeypatch,
 ) -> None:

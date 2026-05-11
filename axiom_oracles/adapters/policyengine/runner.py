@@ -8,6 +8,17 @@ from ...core.results import EngineResult
 from ...comparison.mappings import engine_targets_for_concepts
 
 
+_SCOPE_FREE_FEDERAL_TAX_VARIABLES = {
+    "auto_loan_interest_deduction",
+    "charitable_deduction_for_non_itemizers",
+    "income_tax",
+    "itemized_taxable_income_deductions",
+    "overtime_income_deduction",
+    "qualified_business_income_deduction",
+    "tip_income_deduction",
+}
+
+
 class PolicyEngineRunner(EngineAdapter):
     name = "policyengine"
 
@@ -57,7 +68,9 @@ class PolicyEngineRunner(EngineAdapter):
                 "Install the PolicyEngine extra: uv pip install -e '.[policyengine]'"
             ) from exc
 
-        simulation = Simulation(situation=self._build_situation_from_case(case))
+        simulation = Simulation(
+            situation=self._build_situation_from_case(case, variables=variables)
+        )
         values = {}
         errors = []
         for variable in variables:
@@ -139,7 +152,11 @@ class PolicyEngineRunner(EngineAdapter):
             "households": {"household": household_inputs},
         }
 
-    def _build_situation_from_case(self, case: Case) -> dict:
+    def _build_situation_from_case(
+        self,
+        case: Case,
+        variables: list[str] | None = None,
+    ) -> dict:
         year = int(str(case.period).split("-", 1)[0])
         people = {}
         person_names = []
@@ -157,11 +174,12 @@ class PolicyEngineRunner(EngineAdapter):
             }
 
         household_inputs = {"members": person_names}
-        state_code = case.fact(Concepts.STATE_CODE)
-        if state_code is not None:
-            household_inputs["state_code"] = {year: str(state_code)}
-        for variable, value in pe_inputs_for_scope(case.scope).items():
-            household_inputs[variable] = {year: value}
+        if _include_scope_inputs(variables):
+            state_code = case.fact(Concepts.STATE_CODE)
+            if state_code is not None:
+                household_inputs["state_code"] = {year: str(state_code)}
+            for variable, value in pe_inputs_for_scope(case.scope).items():
+                household_inputs[variable] = {year: value}
 
         return {
             "people": people,
@@ -194,3 +212,9 @@ class PolicyEngineRunner(EngineAdapter):
             return bool(array.any())
         number = float(np.nan_to_num(array, nan=0).sum())
         return number
+
+
+def _include_scope_inputs(variables: list[str] | None) -> bool:
+    if variables is None:
+        return True
+    return any(variable not in _SCOPE_FREE_FEDERAL_TAX_VARIABLES for variable in variables)
