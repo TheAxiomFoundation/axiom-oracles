@@ -47,7 +47,7 @@ wheels = [
 ]
 
 [[package]]
-name = "axiom-programs"
+name = "axiom-oracles"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

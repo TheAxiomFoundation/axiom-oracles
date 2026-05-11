@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from axiom_programs.audit.accessnyc_rules import audit_accessnyc_rules
+from axiom_oracles.audit.accessnyc_rules import audit_accessnyc_rules
 
 
 def write(path: Path, text: str) -> None:

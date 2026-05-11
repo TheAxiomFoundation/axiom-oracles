@@ -1,18 +1,18 @@
-from axiom_programs.adapters.prd import PrdPackageRunner
-from axiom_programs.adapters.policyengine import PolicyEngineTaxsimRunner
-from axiom_programs.adapters.taxsim import TaxsimPackageRunner
-from axiom_programs.cli import (
+from axiom_oracles.adapters.prd import PrdPackageRunner
+from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
+from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
+from axiom_oracles.cli import (
     _build_runner,
     _load_population_cases,
     _prepare_cases_for_engines,
     _resolve_period,
 )
-from axiom_programs.comparison.mappings import (
+from axiom_oracles.comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
 )
-from axiom_programs.core.case import Case, Concepts, Entity
-from axiom_programs.core.geography import GeographyScope
+from axiom_oracles.core.case import Case, Concepts, Entity
+from axiom_oracles.core.geography import GeographyScope
 
 
 def test_unknown_engines_do_not_get_implicit_concept_targets() -> None:

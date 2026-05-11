@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "axiom-programs"
+name = "axiom-oracles"
 version = "0.1.0"
-description = "Executable Axiom program compositions and oracle comparisons"
+description = "Axiom oracle adapters and cross-engine comparison tooling"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
@@ -30,7 +30,7 @@ accessnyc-python = [
 ]
 
 [project.scripts]
-axiom-programs = "axiom_programs.cli:cli"
+axiom-oracles = "axiom_oracles.cli:cli"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,6 +1,6 @@
 # PolicyEngine/TAXSIM Validation
 
-This page documents how `axiom-programs` compares PolicyEngine against TAXSIM,
+This page documents how `axiom-oracles` compares PolicyEngine against TAXSIM,
 how to reproduce the current smoke test, and how to triage residual mismatches.
 
 ## Comparison Path
@@ -46,7 +46,7 @@ different states.
 ## Concept Mapping
 
 The default `policyengine taxsim` comparison uses the mapped tax concept
-intersection from `axiom_programs/config/concept_mappings.yaml`:
+intersection from `axiom_oracles/config/concept_mappings.yaml`:
 
 | Canonical concept | PolicyEngine | TAXSIM | Tolerance |
 | --- | --- | --- | ---: |
@@ -56,7 +56,7 @@ intersection from `axiom_programs/config/concept_mappings.yaml`:
 ## Reproduce The Smoke Test
 
 ```bash
-uv run --extra policyengine --extra taxsim axiom-programs compare \
+uv run --extra policyengine --extra taxsim axiom-oracles compare \
   policyengine taxsim \
   --period 2024 \
   --sample-size 10 \
@@ -131,17 +131,17 @@ PY
 
 ## Code Paths
 
-- `axiom_programs/adapters/taxsim/projection.py`
+- `axiom_oracles/adapters/taxsim/projection.py`
   projects thin Axiom cases into TAXSIM rows.
-- `axiom_programs/adapters/taxsim/runner.py`
+- `axiom_oracles/adapters/taxsim/runner.py`
   wraps policyengine-taxsim's TAXSIM runner.
-- `axiom_programs/adapters/policyengine/taxsim_runner.py`
+- `axiom_oracles/adapters/policyengine/taxsim_runner.py`
   wraps policyengine-taxsim's PolicyEngine runner so PE is driven from the same
   TAXSIM row.
-- `axiom_programs/cli.py`
+- `axiom_oracles/cli.py`
   automatically uses `PolicyEngineTaxsimRunner` for
   `compare policyengine taxsim`.
-- `axiom_programs/config/concept_mappings.yaml`
+- `axiom_oracles/config/concept_mappings.yaml`
   defines the PE/TAXSIM concept mapping and tolerances.
 
 ## Verification
@@ -152,7 +152,7 @@ Before changing this path, run:
 uv run ruff check .
 uv run pytest -q
 uv build
-uv run --extra policyengine --extra taxsim axiom-programs compare \
+uv run --extra policyengine --extra taxsim axiom-oracles compare \
   policyengine taxsim \
   --period 2024 \
   --sample-size 10 \

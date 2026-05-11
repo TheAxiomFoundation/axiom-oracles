@@ -1,8 +1,8 @@
-from axiom_programs.cli import _comparison_report
-from axiom_programs.comparison.comparator import Comparator
-from axiom_programs.comparison.mappings import ProgramMapping
-from axiom_programs.core.case import Case, Concepts
-from axiom_programs.core.results import EngineResult
+from axiom_oracles.cli import _comparison_report
+from axiom_oracles.comparison.comparator import Comparator
+from axiom_oracles.comparison.mappings import ProgramMapping
+from axiom_oracles.core.case import Case, Concepts
+from axiom_oracles.core.results import EngineResult
 
 
 def test_comparison_report_includes_weighted_summary_and_concept_aggregates() -> None:

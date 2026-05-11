@@ -1,7 +1,7 @@
-from axiom_programs.adapters.policyengine import PolicyEngineTaxsimRunner
-from axiom_programs.adapters.prd import PrdPackageRunner
-from axiom_programs.adapters.taxsim import TaxsimPackageRunner
-from axiom_programs.core.case import Case, Concepts, Entity
+from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
+from axiom_oracles.adapters.prd import PrdPackageRunner
+from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
+from axiom_oracles.core.case import Case, Concepts, Entity
 
 
 def test_taxsim_package_runner_wraps_taxsim_format_rows() -> None:

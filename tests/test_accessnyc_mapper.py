@@ -1,5 +1,5 @@
-from axiom_programs.adapters.accessnyc import AccessNycInputMapper
-from axiom_programs.core.household import Household, MoneyAmount, Person
+from axiom_oracles.adapters.accessnyc import AccessNycInputMapper
+from axiom_oracles.core.household import Household, MoneyAmount, Person
 
 
 def test_accessnyc_payload_shape() -> None:

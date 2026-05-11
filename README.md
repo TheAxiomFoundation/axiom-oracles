@@ -84,14 +84,14 @@ rules and can compare active returned `S2R` codes to NYC's public benefits
 dataset.
 
 ```bash
-axiom-programs accessnyc audit \
+axiom-oracles accessnyc audit \
   --rules-dir /tmp/access-nyc-rules-review/accessnyc/rules
 ```
 
 JSON output:
 
 ```bash
-axiom-programs accessnyc audit \
+axiom-oracles accessnyc audit \
   --rules-dir /tmp/access-nyc-rules-review/accessnyc/rules \
   --json
 ```
@@ -123,7 +123,7 @@ export ACCESSNYC_PASSWORD=...
 Then run the generic comparison CLI:
 
 ```bash
-axiom-programs compare accessnyc policyengine
+axiom-oracles compare accessnyc policyengine
 ```
 
 By default this uses the Enhanced CPS population, resolves the target
@@ -137,7 +137,7 @@ hf://policyengine/policyengine-us-data/cities/NYC.h5
 Use a different sample size or period with:
 
 ```bash
-axiom-programs compare accessnyc policyengine \
+axiom-oracles compare accessnyc policyengine \
   --sample-size 250 \
   --period 2026-05
 ```
@@ -146,7 +146,7 @@ To run against NYCOpportunity's local Python replatform instead of the hosted
 API:
 
 ```bash
-axiom-programs compare accessnyc policyengine \
+axiom-oracles compare accessnyc policyengine \
   --sample-size 250 \
   --accessnyc-mode python \
   --accessnyc-python-path /path/to/benefits-screening-api \
@@ -158,7 +158,7 @@ used for `--population synthetic`, which is intended for targeted regression
 and boundary probes:
 
 ```bash
-axiom-programs compare accessnyc policyengine \
+axiom-oracles compare accessnyc policyengine \
   --population synthetic \
   --suite nyc-synthetic
 ```
@@ -213,7 +213,7 @@ just periods, entities, facts, and requested outputs keyed by legal or Axiom
 concept IDs:
 
 ```python
-from axiom_programs import Case, Concepts, Entity
+from axiom_oracles import Case, Concepts, Entity
 
 case = Case(
     case_id="snap-case-1",

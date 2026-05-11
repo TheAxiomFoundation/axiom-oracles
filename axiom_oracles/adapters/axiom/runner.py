@@ -16,4 +16,4 @@ class AxiomRulesRunner(EngineAdapter):
         variables: list[str] | None = None,
     ) -> list[EngineResult]:
         del households, variables
-        raise NotImplementedError("Wire axiom-rules execution here.")
+        raise NotImplementedError("Wire axiom-rules-engine execution here.")

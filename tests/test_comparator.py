@@ -1,6 +1,6 @@
-from axiom_programs.comparison.comparator import Comparator
-from axiom_programs.comparison.mappings import ProgramMapping
-from axiom_programs.core.results import EngineResult
+from axiom_oracles.comparison.comparator import Comparator
+from axiom_oracles.comparison.mappings import ProgramMapping
+from axiom_oracles.core.results import EngineResult
 
 
 def test_boolean_eligibility_comparison() -> None:

@@ -1,10 +1,10 @@
 import pytest
 
-from axiom_programs.adapters.taxsim.projection import (
+from axiom_oracles.adapters.taxsim.projection import (
     attach_taxsim_inputs,
     taxsim_input_for_case,
 )
-from axiom_programs.core.case import Case, Concepts, Entity
+from axiom_oracles.core.case import Case, Concepts, Entity
 
 
 def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> None:

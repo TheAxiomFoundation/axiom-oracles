@@ -340,14 +340,14 @@
             <text x="44" y="170" class="node-text">manuals and guidance</text>
 
             <rect x="338" y="40" width="250" height="145" fill="#eef0fb" stroke="#a8add2"></rect>
-            <text x="360" y="72" class="node-title">axiom-rules</text>
+            <text x="360" y="72" class="node-title">axiom-rules-engine</text>
             <text x="360" y="94" class="node-subtitle">RuleSpec compiler and runtime</text>
             <text x="360" y="126" class="node-text">compile RuleSpec</text>
             <text x="360" y="148" class="node-text">execute cases</text>
             <text x="360" y="170" class="node-text">return normalized outputs</text>
 
             <rect x="654" y="40" width="250" height="145" fill="#fff3de" stroke="#d8b474"></rect>
-            <text x="676" y="72" class="node-title">axiom-programs</text>
+            <text x="676" y="72" class="node-title">axiom-oracles</text>
             <text x="676" y="94" class="node-subtitle">program adapters and comparisons</text>
             <text x="676" y="126" class="node-text">concept-keyed cases</text>
             <text x="676" y="148" class="node-text">engine adapters</text>
@@ -368,7 +368,7 @@
             <text x="906" y="96" class="small-label">calls, does not own</text>
 
             <rect x="82" y="264" width="1016" height="360" fill="#ffffff" stroke="#c9d2dc"></rect>
-            <text x="112" y="300" class="node-title">axiom-programs internals</text>
+            <text x="112" y="300" class="node-title">axiom-oracles internals</text>
             <text x="112" y="322" class="node-subtitle">
               Engines are peers. Cases are legal/concept facts, not a fat household model.
             </text>
@@ -438,7 +438,7 @@
           </article>
 
           <article class="repo rules">
-            <h3>axiom-rules</h3>
+            <h3>axiom-rules-engine</h3>
             <p class="muted">RuleSpec execution layer.</p>
             <ul>
               <li>RuleSpec compiler</li>
@@ -448,7 +448,7 @@
           </article>
 
           <article class="repo programs">
-            <h3>axiom-programs</h3>
+            <h3>axiom-oracles</h3>
             <p class="muted">Executable program validation.</p>
             <ul>
               <li>Thin concept-keyed case schema</li>
@@ -486,31 +486,31 @@
             <tr>
               <td>Encoding-time oracle</td>
               <td>Axiom RuleSpec companion test vs PolicyEngine variable</td>
-              <td><code>axiom-encode</code> calling <code>axiom-programs</code></td>
+              <td><code>axiom-encode</code> calling <code>axiom-oracles</code></td>
               <td>Pass rate, coverage, reviewer context</td>
             </tr>
             <tr>
               <td>Dataset parity</td>
               <td>Axiom vs PE over eCPS</td>
-              <td><code>axiom-programs</code></td>
+              <td><code>axiom-oracles</code></td>
               <td>Record-level mismatches and aggregate deltas</td>
             </tr>
             <tr>
               <td>External oracle parity</td>
               <td>PE vs ACCESS NYC for SNAP, Medicaid, Essential Plan</td>
-              <td><code>axiom-programs</code></td>
+              <td><code>axiom-oracles</code></td>
               <td>Eligibility disagreements by scenario</td>
             </tr>
             <tr>
               <td>Static rule audit</td>
               <td>ACCESS NYC Drools thresholds and program-code drift</td>
-              <td><code>axiom-programs</code></td>
+              <td><code>axiom-oracles</code></td>
               <td>Findings with file and line references</td>
             </tr>
             <tr>
               <td>Multi-way validation</td>
               <td>Axiom vs PE vs ACCESS NYC</td>
-              <td><code>axiom-programs</code></td>
+              <td><code>axiom-oracles</code></td>
               <td>Consensus, outlier engine, suspected source of drift</td>
             </tr>
           </tbody>
@@ -566,7 +566,7 @@
           <div class="callout-content">
             <h3>If starting from scratch</h3>
             <p>
-              Build <code>axiom-programs</code> first as a thin adapter and comparison
+              Build <code>axiom-oracles</code> first as a thin adapter and comparison
               library, then let <code>axiom-encode</code> depend on it. That avoids
               encoding workflow code becoming the permanent home for PE, TAXSIM,
               PRD, ACCESS NYC, and eCPS mechanics.
@@ -579,7 +579,7 @@
             <h3>Boundary to protect</h3>
             <p>
               <code>axiom-encode</code> should answer whether agents can produce
-              good RuleSpec. <code>axiom-programs</code> should answer whether
+              good RuleSpec. <code>axiom-oracles</code> should answer whether
               executable policy engines agree.
             </p>
           </div>

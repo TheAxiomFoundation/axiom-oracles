@@ -1,4 +1,4 @@
-from axiom_programs import Household, Person
+from axiom_oracles import Household, Person
 
 
 single_parent = Household(

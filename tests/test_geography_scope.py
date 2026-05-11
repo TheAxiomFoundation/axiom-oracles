@@ -1,6 +1,6 @@
 import pytest
 
-from axiom_programs.core.geography import (
+from axiom_oracles.core.geography import (
     GeographyScope,
     pe_inputs_for_scope,
     scope_contains,

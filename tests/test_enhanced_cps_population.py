@@ -1,6 +1,6 @@
-from axiom_programs.core.case import Concepts
-from axiom_programs.core.geography import GeographyScope
-from axiom_programs.populations.enhanced_cps import (
+from axiom_oracles.core.case import Concepts
+from axiom_oracles.core.geography import GeographyScope
+from axiom_oracles.populations.enhanced_cps import (
     NYC_ENHANCED_CPS_DATASET,
     EnhancedCpsCaseLoader,
     _scope_from_geography,

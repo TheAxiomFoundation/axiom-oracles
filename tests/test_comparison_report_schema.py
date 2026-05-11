@@ -1,12 +1,12 @@
-from axiom_programs.comparison.comparator import Comparator
-from axiom_programs.comparison.mappings import ProgramMapping
-from axiom_programs.comparison.report import (
+from axiom_oracles.comparison.comparator import Comparator
+from axiom_oracles.comparison.mappings import ProgramMapping
+from axiom_oracles.comparison.report import (
     COMPARISON_REPORT_SCHEMA_VERSION,
     MismatchKind,
     build_comparison_report,
 )
-from axiom_programs.core.case import Case
-from axiom_programs.core.results import EngineResult
+from axiom_oracles.core.case import Case
+from axiom_oracles.core.results import EngineResult
 
 
 def test_report_has_stable_schema_and_eligibility_mismatch_kind() -> None:

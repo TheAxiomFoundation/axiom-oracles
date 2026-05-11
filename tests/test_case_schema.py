@@ -1,19 +1,19 @@
 import sys
 from types import SimpleNamespace
 
-from axiom_programs import Case, Concepts, Entity
-from axiom_programs.adapters.accessnyc import AccessNycInputMapper, AccessNycPythonRunner
-from axiom_programs.adapters.policyengine import PolicyEngineRunner
-from axiom_programs.comparison.comparator import Comparator
-from axiom_programs.comparison.mappings import (
+from axiom_oracles import Case, Concepts, Entity
+from axiom_oracles.adapters.accessnyc import AccessNycInputMapper, AccessNycPythonRunner
+from axiom_oracles.adapters.policyengine import PolicyEngineRunner
+from axiom_oracles.comparison.comparator import Comparator
+from axiom_oracles.comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
     load_program_mappings,
 )
-from axiom_programs.core.geography import GeographyScope
-from axiom_programs.core.household import Household, Person
-from axiom_programs.core.results import EngineResult
-from axiom_programs.suites import load_suite
+from axiom_oracles.core.geography import GeographyScope
+from axiom_oracles.core.household import Household, Person
+from axiom_oracles.core.results import EngineResult
+from axiom_oracles.suites import load_suite
 
 
 def test_case_is_concept_keyed_and_projects_to_accessnyc_payload() -> None:
