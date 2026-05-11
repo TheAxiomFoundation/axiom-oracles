@@ -11,7 +11,7 @@ from .adapters.accessnyc import (
     AccessNycDroolsRunner,
     AccessNycPythonRunner,
 )
-from .adapters.policyengine import PolicyEngineRunner
+from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
 from .audit.accessnyc_rules import audit_accessnyc_rules
@@ -205,6 +205,7 @@ def compare(
         accessnyc_rules_dir,
         accessnyc_python_path,
         concept_ids,
+        paired_engine=right,
     )
     right_runner = _build_runner(
         right,
@@ -212,6 +213,7 @@ def compare(
         accessnyc_rules_dir,
         accessnyc_python_path,
         concept_ids,
+        paired_engine=left,
     )
 
     try:
@@ -398,6 +400,8 @@ def _build_runner(
     accessnyc_rules_dir: Path | None,
     accessnyc_python_path: Path | None,
     concept_ids: tuple[str, ...],
+    *,
+    paired_engine: str | None = None,
 ) -> EngineAdapter:
     if engine == "accessnyc":
         if accessnyc_mode == "drools":
@@ -417,6 +421,8 @@ def _build_runner(
             )
         )
     if engine == "policyengine":
+        if paired_engine == "taxsim":
+            return PolicyEngineTaxsimRunner()
         return PolicyEngineRunner()
     if engine == "taxsim":
         return TaxsimPackageRunner()

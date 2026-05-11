@@ -1,4 +1,5 @@
 from axiom_programs.adapters.prd import PrdPackageRunner
+from axiom_programs.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_programs.adapters.taxsim import TaxsimPackageRunner
 from axiom_programs.cli import (
     _build_runner,
@@ -52,9 +53,18 @@ def test_prd_defaults_to_mapped_policyengine_intersection() -> None:
 def test_cli_builds_package_target_runners() -> None:
     taxsim = _build_runner("taxsim", "api", None, None, ())
     prd = _build_runner("prd", "api", None, None, ())
+    policyengine_for_taxsim = _build_runner(
+        "policyengine",
+        "api",
+        None,
+        None,
+        (),
+        paired_engine="taxsim",
+    )
 
     assert isinstance(taxsim, TaxsimPackageRunner)
     assert isinstance(prd, PrdPackageRunner)
+    assert isinstance(policyengine_for_taxsim, PolicyEngineTaxsimRunner)
 
 
 def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
@@ -78,7 +88,7 @@ def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     [pe_case] = _prepare_cases_for_engines([case], {"policyengine", "prd"})
 
     assert taxsim_case.metadata["taxsim_input"]["taxsimid"] == 1
-    assert taxsim_case.metadata["taxsim_input"]["state"] == 36
+    assert taxsim_case.metadata["taxsim_input"]["state"] == 33
     assert "taxsim_input" not in pe_case.metadata
 
 

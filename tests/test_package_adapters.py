@@ -1,3 +1,4 @@
+from axiom_programs.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_programs.adapters.prd import PrdPackageRunner
 from axiom_programs.adapters.taxsim import TaxsimPackageRunner
 from axiom_programs.core.case import Case, Concepts, Entity
@@ -79,9 +80,50 @@ def test_taxsim_package_runner_projects_cases_and_maps_canonical_concepts() -> N
 
     input_row = captured_inputs[0].to_dict(orient="records")[0]
     assert input_row["taxsimid"] == 1
-    assert input_row["state"] == 36
+    assert input_row["state"] == 33
     assert results[0].household_id == "case-1"
     assert results[0].values == {"fiitax": 100, "siitax": 25}
+
+
+def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets() -> None:
+    captured_inputs = []
+
+    class FakePolicyEngineTaxsimRunner:
+        def __init__(self, input_frame):
+            captured_inputs.append(input_frame)
+
+        def run(self, show_progress=False):
+            del show_progress
+            return [{"taxsimid": "case-1", "fiitax": 100, "siitax": 25, "unused": 1}]
+
+    case = Case(
+        case_id="case-1",
+        period="2024",
+        metadata={
+            "taxsim_input": {
+                "taxsimid": "case-1",
+                "year": 2024,
+                "state": 33,
+                "mstat": 1,
+                "page": 40,
+            }
+        },
+    )
+
+    results = PolicyEngineTaxsimRunner(
+        runner_factory=FakePolicyEngineTaxsimRunner
+    ).run_cases(
+        [case],
+        variables=[
+            Concepts.FEDERAL_INCOME_TAX,
+            Concepts.STATE_INCOME_TAX,
+        ],
+    )
+
+    assert captured_inputs[0].iloc[0]["state"] == 33
+    assert results[0].engine == "policyengine"
+    assert results[0].household_id == "case-1"
+    assert results[0].values == {"income_tax": 100, "state_income_tax": 25}
 
 
 def test_prd_package_runner_wraps_external_prd_households() -> None:

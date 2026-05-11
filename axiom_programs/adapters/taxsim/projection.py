@@ -63,6 +63,62 @@ _STATE_FIPS = {
     "WY": 56,
 }
 
+_TAXSIM_STATE_CODES = {
+    "AL": 1,
+    "AK": 2,
+    "AZ": 3,
+    "AR": 4,
+    "CA": 5,
+    "CO": 6,
+    "CT": 7,
+    "DE": 8,
+    "DC": 9,
+    "FL": 10,
+    "GA": 11,
+    "HI": 12,
+    "ID": 13,
+    "IL": 14,
+    "IN": 15,
+    "IA": 16,
+    "KS": 17,
+    "KY": 18,
+    "LA": 19,
+    "ME": 20,
+    "MD": 21,
+    "MA": 22,
+    "MI": 23,
+    "MN": 24,
+    "MS": 25,
+    "MO": 26,
+    "MT": 27,
+    "NE": 28,
+    "NV": 29,
+    "NH": 30,
+    "NJ": 31,
+    "NM": 32,
+    "NY": 33,
+    "NC": 34,
+    "ND": 35,
+    "OH": 36,
+    "OK": 37,
+    "OR": 38,
+    "PA": 39,
+    "RI": 40,
+    "SC": 41,
+    "SD": 42,
+    "TN": 43,
+    "TX": 44,
+    "UT": 45,
+    "VT": 46,
+    "VA": 47,
+    "WA": 48,
+    "WV": 49,
+    "WI": 50,
+    "WY": 51,
+}
+
+_USPS_BY_FIPS = {fips: usps for usps, fips in _STATE_FIPS.items()}
+
 _STATE_SCOPES = {
     "census_state",
     "census_county",
@@ -154,7 +210,7 @@ def taxsim_input_for_case(
     row: dict[str, Any] = {
         "taxsimid": taxsimid if taxsimid is not None else case.case_id,
         "year": _year(case.period),
-        "state": _state_fips_for_case(case),
+        "state": _taxsim_state_for_case(case),
         "mstat": 2 if spouse is not None else 1,
         "page": _age(head),
         "sage": _age(spouse) if spouse is not None else 0,
@@ -228,31 +284,42 @@ def _year(period: str) -> int:
     return year
 
 
-def _state_fips_for_case(case: Case) -> int:
+def _taxsim_state_for_case(case: Case) -> int:
     scope = case.scope
     if scope is not None and scope.type in _STATE_SCOPES:
-        return int(scope.geoid[:2])
+        return _taxsim_state_from_fips(int(scope.geoid[:2]))
 
+    state_code = case.fact(Concepts.STATE_CODE)
+    if state_code not in (None, ""):
+        return _taxsim_state_from_usps_or_fips(state_code)
+    state_fips = case.metadata.get("state_fips")
+    if state_fips not in (None, ""):
+        return _taxsim_state_from_fips(int(state_fips))
     for value in (
-        case.fact(Concepts.STATE_CODE),
-        case.metadata.get("state_fips"),
         case.metadata.get("state_code"),
         case.metadata.get("state"),
     ):
         if value not in (None, ""):
-            return _state_fips(value)
+            return _taxsim_state_from_usps_or_fips(value)
 
     raise RuntimeError(
         "TAXSIM projection requires a state scope, state FIPS, or state code fact."
     )
 
 
-def _state_fips(value: Any) -> int:
+def _taxsim_state_from_usps_or_fips(value: Any) -> int:
     if isinstance(value, int):
-        return value
+        return _taxsim_state_from_fips(value)
     text = str(value).strip().upper()
     if text.isdigit():
-        return int(text)
+        return _taxsim_state_from_fips(int(text))
     if text in _STATE_FIPS:
-        return _STATE_FIPS[text]
+        return _TAXSIM_STATE_CODES[text]
     raise RuntimeError(f"Unsupported TAXSIM state code: {value!r}")
+
+
+def _taxsim_state_from_fips(value: int) -> int:
+    usps = _USPS_BY_FIPS.get(value)
+    if usps is None:
+        raise RuntimeError(f"Unsupported state FIPS code: {value!r}")
+    return _TAXSIM_STATE_CODES[usps]

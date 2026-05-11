@@ -54,7 +54,7 @@ def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> Non
 
     assert row["taxsimid"] == 7
     assert row["year"] == 2024
-    assert row["state"] == 36
+    assert row["state"] == 33
     assert row["mstat"] == 2
     assert row["page"] == 40
     assert row["sage"] == 38
@@ -89,7 +89,7 @@ def test_taxsim_projection_uses_state_code_fact_without_scope() -> None:
 
     row = taxsim_input_for_case(case)
 
-    assert row["state"] == 6
+    assert row["state"] == 5
     assert row["mstat"] == 1
     assert row["depx"] == 0
 
