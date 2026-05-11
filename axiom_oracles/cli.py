@@ -11,6 +11,7 @@ from .adapters.accessnyc import (
     AccessNycDroolsRunner,
     AccessNycPythonRunner,
 )
+from .adapters.axiom import AxiomRulesRunner
 from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
@@ -125,6 +126,24 @@ def cli() -> None:
     help="Path to NYCOpportunity/benefits-screening-api for local Python mode.",
 )
 @click.option(
+    "--axiom-program",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    envvar="AXIOM_RULESPEC_PROGRAM",
+    help="RuleSpec program YAML to execute for Axiom comparisons.",
+)
+@click.option(
+    "--axiom-engine-binary",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    envvar="AXIOM_RULES_ENGINE_BINARY",
+    help="Path to the axiom-rules executable.",
+)
+@click.option(
+    "--axiom-entity-id",
+    default="tax_unit",
+    show_default=True,
+    help="Default Axiom query entity id when a case does not override it.",
+)
+@click.option(
     "--output",
     "output_path",
     type=click.Path(dir_okay=False, path_type=Path),
@@ -145,6 +164,9 @@ def compare(
     accessnyc_mode: str,
     accessnyc_rules_dir: Path | None,
     accessnyc_python_path: Path | None,
+    axiom_program: Path | None,
+    axiom_engine_binary: Path | None,
+    axiom_entity_id: str,
     output_path: Path | None,
     json_output: bool,
 ) -> None:
@@ -205,6 +227,9 @@ def compare(
         accessnyc_rules_dir,
         accessnyc_python_path,
         concept_ids,
+        axiom_program=axiom_program,
+        axiom_engine_binary=axiom_engine_binary,
+        axiom_entity_id=axiom_entity_id,
         paired_engine=right,
     )
     right_runner = _build_runner(
@@ -213,6 +238,9 @@ def compare(
         accessnyc_rules_dir,
         accessnyc_python_path,
         concept_ids,
+        axiom_program=axiom_program,
+        axiom_engine_binary=axiom_engine_binary,
+        axiom_entity_id=axiom_entity_id,
         paired_engine=left,
     )
 
@@ -401,6 +429,9 @@ def _build_runner(
     accessnyc_python_path: Path | None,
     concept_ids: tuple[str, ...],
     *,
+    axiom_program: Path | None = None,
+    axiom_engine_binary: Path | None = None,
+    axiom_entity_id: str = "tax_unit",
     paired_engine: str | None = None,
 ) -> EngineAdapter:
     if engine == "accessnyc":
@@ -424,6 +455,12 @@ def _build_runner(
         if paired_engine == "taxsim":
             return PolicyEngineTaxsimRunner()
         return PolicyEngineRunner()
+    if engine == "axiom":
+        return AxiomRulesRunner(
+            program_path=axiom_program,
+            binary_path=axiom_engine_binary,
+            default_entity_id=axiom_entity_id,
+        )
     if engine == "taxsim":
         return TaxsimPackageRunner()
     if engine == "prd":

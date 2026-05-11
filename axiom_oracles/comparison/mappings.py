@@ -54,7 +54,7 @@ class ProgramMapping:
         if engine == "policyengine":
             return self.policyengine_variable
         if engine == "axiom":
-            return self.axiom_output or self.standard
+            return self.axiom_output
         return None
 
     def supports_any_locale(self, locales: set[str] | None) -> bool:

@@ -1,4 +1,4 @@
-# Axiom Programs
+# Axiom Oracles
 
 Unified validation and oracle-comparison tooling for policy engines.
 
@@ -48,7 +48,7 @@ The current implementation includes:
 - stable JSON comparison reports with mismatch taxonomy and weighted aggregates
 - generic `compare <left> <right>` CLI
 - thin package-runner adapters for TAXSIM and PRD
-- placeholder adapter for Axiom
+- Axiom RuleSpec adapter backed by `axiom-rules`
 
 ## Install
 
@@ -197,6 +197,24 @@ PolicyEngine `snap`.
 See [docs/policyengine-taxsim.md](docs/policyengine-taxsim.md) for the
 PolicyEngine/TAXSIM comparison path, state-code handling, residual smoke-test
 mismatches, and upstream triage workflow.
+
+## Axiom RuleSpec Oracle
+
+The Axiom adapter executes a RuleSpec program through the local `axiom-rules`
+binary and compares its outputs through the same concept mapping layer:
+
+```bash
+axiom-oracles compare axiom policyengine \
+  --population enhanced-cps \
+  --category tax \
+  --period 2026 \
+  --axiom-program /path/to/rulespec-us/statutes/26/6401.yaml
+```
+
+Cases must carry Axiom runtime inputs in `metadata["axiom_inputs"]` or as
+case facts keyed by absolute `#input.` RuleSpec references. The adapter does not
+invent missing legal inputs; incomplete ECPS projections are reported as Axiom
+execution errors in the comparison report.
 
 Local Drools execution is not currently available from the public
 `ACCESS-NYC-Rules` repo alone. The repo contains the `.drl` files, but not the

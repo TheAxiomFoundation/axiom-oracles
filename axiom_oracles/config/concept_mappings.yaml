@@ -39,6 +39,7 @@ concepts:
     tolerance: 15
     priority: high
     targets:
+      axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
       taxsim: fiitax
 
