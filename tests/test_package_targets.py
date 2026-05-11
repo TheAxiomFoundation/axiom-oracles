@@ -92,6 +92,40 @@ def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     assert "taxsim_input" not in pe_case.metadata
 
 
+def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program() -> None:
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+
+    [projected] = _prepare_cases_for_engines(
+        [case],
+        {"policyengine", "axiom"},
+        (Concepts.FEDERAL_INCOME_TAX,),
+        axiom_program=None,
+    )
+    [explicit] = _prepare_cases_for_engines(
+        [case],
+        {"policyengine", "axiom"},
+        (Concepts.FEDERAL_INCOME_TAX,),
+        axiom_program=__file__,
+    )
+
+    assert projected.metadata["axiom_input_records"]
+    assert "axiom_input_records" not in explicit.metadata
+
+
 def test_cli_defaults_taxsim_comparisons_to_supported_tax_year() -> None:
     assert _resolve_period(None, "policyengine", "taxsim") == "2024"
     assert _resolve_period(None, "accessnyc", "policyengine") == "2026-05"

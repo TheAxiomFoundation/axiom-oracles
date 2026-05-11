@@ -21,9 +21,11 @@ SubprocessRun = Callable[..., subprocess.CompletedProcess[str]]
 
 
 AXIOM_INPUTS_METADATA_KEY = "axiom_inputs"
+AXIOM_INPUT_RECORDS_METADATA_KEY = "axiom_input_records"
 AXIOM_RELATIONS_METADATA_KEY = "axiom_relations"
 AXIOM_ENTITY_ID_METADATA_KEY = "axiom_entity_id"
 AXIOM_ENTITY_METADATA_KEY = "axiom_entity"
+AXIOM_RULESPEC_REPO_ROOTS_ENV = "AXIOM_RULESPEC_REPO_ROOTS"
 
 
 class AxiomRulesRunner(EngineAdapter):
@@ -40,6 +42,8 @@ class AxiomRulesRunner(EngineAdapter):
         default_entity_id: str = "tax_unit",
         default_entity: str = "TaxUnit",
         mode: str = "explain",
+        program_imports: tuple[str, ...] = (),
+        rulespec_repo_roots: tuple[str | Path, ...] = (),
         subprocess_run: SubprocessRun = subprocess.run,
     ) -> None:
         self.program_path = Path(program_path).expanduser() if program_path else None
@@ -52,6 +56,10 @@ class AxiomRulesRunner(EngineAdapter):
         self.default_entity_id = default_entity_id
         self.default_entity = default_entity
         self.mode = mode
+        self.program_imports = tuple(program_imports)
+        self.rulespec_repo_roots = tuple(
+            str(Path(root).expanduser()) for root in rulespec_repo_roots
+        )
         self._subprocess_run = subprocess_run
 
     def run_cases(
@@ -64,7 +72,9 @@ class AxiomRulesRunner(EngineAdapter):
         requested_outputs = variables or list(cases[0].outputs)
         output_targets = _output_targets(requested_outputs)
         with tempfile.TemporaryDirectory(prefix="axiom-oracles-") as temp_dir:
-            artifact_path = self._artifact_path(Path(temp_dir))
+            temp_path = Path(temp_dir)
+            program_path = self._program_path(temp_path)
+            artifact_path = self._artifact_path(temp_path, program_path)
             results = []
             for case in cases:
                 results.append(self._run_case(case, output_targets, artifact_path))
@@ -81,10 +91,22 @@ class AxiomRulesRunner(EngineAdapter):
             "metadata['axiom_inputs']; household projection is not implemented."
         )
 
-    def _artifact_path(self, temp_dir: Path) -> Path:
+    def _program_path(self, temp_dir: Path) -> Path | None:
+        if self.program_path is not None:
+            return self.program_path
+        if not self.program_imports:
+            return None
+        program_path = temp_dir / "generated-program.yaml"
+        imports = "\n".join(f"  - {target}" for target in self.program_imports)
+        program_path.write_text(
+            f"format: rulespec/v1\nimports:\n{imports}\nrules: []\n"
+        )
+        return program_path
+
+    def _artifact_path(self, temp_dir: Path, program_path: Path | None) -> Path:
         if self.compiled_artifact_path is not None:
             return self.compiled_artifact_path
-        if self.program_path is None:
+        if program_path is None:
             raise RuntimeError(
                 "Axiom comparisons require --axiom-program or "
                 "AXIOM_RULESPEC_PROGRAM."
@@ -95,10 +117,11 @@ class AxiomRulesRunner(EngineAdapter):
                 str(self.binary_path),
                 "compile",
                 "--program",
-                str(self.program_path),
+                str(program_path),
                 "--output",
                 str(artifact_path),
             ],
+            env=self._compile_env(),
             text=True,
             capture_output=True,
             check=False,
@@ -179,7 +202,7 @@ class AxiomRulesRunner(EngineAdapter):
         period: dict[str, str],
         default_entity_id: str,
     ) -> list[dict[str, Any]]:
-        records = []
+        records = _explicit_input_records(case, period)
         for name, value in _case_axiom_inputs(case).items():
             records.append(
                 {
@@ -194,6 +217,16 @@ class AxiomRulesRunner(EngineAdapter):
                 }
             )
         return records
+
+    def _compile_env(self) -> dict[str, str]:
+        env = dict(os.environ)
+        if AXIOM_RULESPEC_REPO_ROOTS_ENV not in env:
+            roots = self.rulespec_repo_roots or _default_rulespec_repo_roots()
+            if roots:
+                env[AXIOM_RULESPEC_REPO_ROOTS_ENV] = os.pathsep.join(
+                    str(root) for root in roots
+                )
+        return env
 
     def _relation_records(
         self,
@@ -258,6 +291,37 @@ def _output_targets(variables: list[str] | None) -> list[str]:
         return []
     targets = engine_targets_for_concepts(variables, "axiom")
     return targets or list(variables)
+
+
+def _explicit_input_records(
+    case: Case,
+    period: dict[str, str],
+) -> list[dict[str, Any]]:
+    raw_records = case.metadata.get(AXIOM_INPUT_RECORDS_METADATA_KEY, [])
+    if raw_records and not isinstance(raw_records, list | tuple):
+        raise RuntimeError("metadata['axiom_input_records'] must be a list.")
+    records = []
+    for raw_record in raw_records:
+        if not isinstance(raw_record, Mapping):
+            raise RuntimeError("Axiom input records must be mappings.")
+        record = dict(raw_record)
+        if "name" not in record:
+            raise RuntimeError("Axiom input records must include a name.")
+        if "entity" not in record:
+            raise RuntimeError("Axiom input records must include an entity.")
+        if "entity_id" not in record:
+            raise RuntimeError("Axiom input records must include an entity_id.")
+        if "value" not in record:
+            raise RuntimeError("Axiom input records must include a value.")
+        record["name"] = str(record["name"])
+        record["entity"] = str(record["entity"])
+        record["entity_id"] = str(record["entity_id"])
+        if "interval" not in record:
+            record["interval"] = _interval(period)
+        if not isinstance(record["value"], Mapping) or "kind" not in record["value"]:
+            record["value"] = _scalar_value(record["value"])
+        records.append(record)
+    return records
 
 
 def _case_axiom_inputs(case: Case) -> dict[str, Any]:
@@ -354,3 +418,10 @@ def _output_value(output: Mapping[str, Any]) -> Any:
             return float(raw)
         return raw
     return value
+
+
+def _default_rulespec_repo_roots() -> tuple[Path, ...]:
+    candidate = Path.home() / "TheAxiomFoundation"
+    if candidate.exists():
+        return (candidate,)
+    return ()

@@ -11,7 +11,11 @@ from .adapters.accessnyc import (
     AccessNycDroolsRunner,
     AccessNycPythonRunner,
 )
-from .adapters.axiom import AxiomRulesRunner
+from .adapters.axiom import (
+    AxiomRulesRunner,
+    US_FEDERAL_INCOME_TAX_IMPORTS,
+    attach_axiom_tax_inputs,
+)
 from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
@@ -24,7 +28,7 @@ from .comparison.mappings import (
     engine_targets_for_concepts,
 )
 from .comparison.report import build_comparison_report
-from .core.case import Case
+from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
 from .populations import load_enhanced_cps_cases
@@ -217,7 +221,12 @@ def compare(
     concept_ids = tuple(mapping.concept_id for mapping in mappings)
     cases = [replace(case, outputs=concept_ids) for case in cases]
     try:
-        cases = _prepare_cases_for_engines(cases, {left, right})
+        cases = _prepare_cases_for_engines(
+            cases,
+            {left, right},
+            concept_ids,
+            axiom_program=axiom_program,
+        )
     except RuntimeError as exc:
         raise click.ClickException(str(exc)) from exc
 
@@ -408,10 +417,23 @@ def _filter_cases_for_scope(
     ]
 
 
-def _prepare_cases_for_engines(cases: list[Case], engines: set[str]) -> list[Case]:
+def _prepare_cases_for_engines(
+    cases: list[Case],
+    engines: set[str],
+    concept_ids: tuple[str, ...] = (),
+    *,
+    axiom_program: Path | None = None,
+) -> list[Case]:
+    prepared = cases
     if "taxsim" in engines:
-        return attach_taxsim_inputs(cases)
-    return cases
+        prepared = attach_taxsim_inputs(prepared)
+    if (
+        "axiom" in engines
+        and axiom_program is None
+        and Concepts.FEDERAL_INCOME_TAX in concept_ids
+    ):
+        prepared = attach_axiom_tax_inputs(prepared)
+    return prepared
 
 
 def _resolve_period(period: str | None, left: str, right: str) -> str:
@@ -456,10 +478,16 @@ def _build_runner(
             return PolicyEngineTaxsimRunner()
         return PolicyEngineRunner()
     if engine == "axiom":
+        program_imports = (
+            US_FEDERAL_INCOME_TAX_IMPORTS
+            if axiom_program is None and Concepts.FEDERAL_INCOME_TAX in concept_ids
+            else ()
+        )
         return AxiomRulesRunner(
             program_path=axiom_program,
             binary_path=axiom_engine_binary,
             default_entity_id=axiom_entity_id,
+            program_imports=program_imports,
         )
     if engine == "taxsim":
         return TaxsimPackageRunner()

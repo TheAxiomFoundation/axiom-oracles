@@ -93,6 +93,52 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path)
     assert result.values == {"us:statutes/26/6401#income_tax": 750.0}
 
 
+def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
+    def fake_run(args, **kwargs):
+        if args[1] == "compile":
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        request = json.loads(kwargs["input"])
+        assert request["dataset"]["inputs"] == [
+            {
+                "name": "us:statutes/26/63#input.age",
+                "entity": "Person",
+                "entity_id": "person-1",
+                "value": {"kind": "integer", "value": 70},
+                "interval": {"start": "2026-01-01", "end": "2026-12-31"},
+            }
+        ]
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps({"results": [{"outputs": {}}]}),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        program_path=tmp_path / "program.yaml",
+        binary_path=tmp_path / "axiom-rules",
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        metadata={
+            "axiom_input_records": [
+                {
+                    "name": "us:statutes/26/63#input.age",
+                    "entity": "Person",
+                    "entity_id": "person-1",
+                    "value": 70,
+                }
+            ]
+        },
+    )
+
+    [result] = runner.run_cases([case], [])
+
+    assert result.errors == ()
+
+
 def test_axiom_runner_records_execution_errors_per_case(tmp_path: Path) -> None:
     def fake_run(args, **kwargs):
         del kwargs
@@ -145,3 +191,18 @@ def test_cli_builds_axiom_runner() -> None:
     )
 
     assert isinstance(runner, AxiomRulesRunner)
+
+
+def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
+    runner = _build_runner(
+        "axiom",
+        "api",
+        None,
+        None,
+        (Concepts.FEDERAL_INCOME_TAX,),
+        axiom_program=None,
+        axiom_engine_binary=Path("/tmp/axiom-rules"),
+    )
+
+    assert isinstance(runner, AxiomRulesRunner)
+    assert runner.program_imports
