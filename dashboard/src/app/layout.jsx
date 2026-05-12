@@ -19,6 +19,10 @@ export const metadata = {
   title: "Oracles — Axiom Foundation",
   description:
     "Cross-engine validation of executable rule systems. Every divergence is a question about the law or its encoding.",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({ children }) {

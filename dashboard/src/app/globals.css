@@ -78,10 +78,12 @@
   border-bottom: 1px solid var(--hairline);
 }
 .topbar-inner {
-  padding: 16px 32px;
+  padding: 18px 32px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
+  max-width: 1180px;
+  margin: 0 auto;
 }
 .brand-link {
   display: inline-flex;
@@ -96,7 +98,7 @@
 .brand-group {
   display: inline-flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 18px;
 }
 .brand-axiom {
   display: inline-block;
@@ -106,18 +108,18 @@
 .brand-divider {
   display: inline-block;
   width: 1px;
-  height: 18px;
+  height: 22px;
   background: var(--hairline);
   margin-top: 3px;
 }
 .brand-product {
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 300;
-  font-size: 20px;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -0.025em;
   color: var(--ink);
   line-height: 1;
-  margin-top: 5px;
+  margin-top: 3px;
 }
 
 /* ── Page intro — light Geist headline + mute paragraph ── */
