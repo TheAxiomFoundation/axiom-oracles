@@ -239,6 +239,72 @@ def test_policyengine_projection_omits_case_scope_for_federal_tax_only() -> None
     assert "county_fips" not in household
 
 
+def test_policyengine_projection_includes_state_scope_for_itemized_deductions() -> None:
+    case = Case(
+        case_id="county-tax-case",
+        period="2026",
+        metadata={"scope": {"type": "census_county", "geoid": "36061"}},
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 30},
+            ),
+        ),
+    )
+
+    household = PolicyEngineRunner()._build_situation_from_case(
+        case,
+        variables=["itemized_taxable_income_deductions"],
+    )["households"]["household"]
+
+    assert household["state_fips"] == {2026: 36}
+    assert "county_fips" not in household
+
+
+def test_policyengine_projection_sets_tax_unit_head_and_spouse_roles() -> None:
+    case = Case(
+        case_id="explicit-couple-with-older-adult",
+        period="2026",
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                },
+            ),
+            Entity(
+                entity_id="spouse",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.PERSON_AGE: 38,
+                },
+            ),
+            Entity(
+                entity_id="other",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Other",
+                    Concepts.PERSON_AGE: 70,
+                    Concepts.BLIND: True,
+                },
+            ),
+        ),
+    )
+
+    people = PolicyEngineRunner()._build_situation_from_case(case)["people"]
+
+    assert people["head"]["is_tax_unit_head"] == {2026: True}
+    assert people["head"]["is_tax_unit_spouse"] == {2026: False}
+    assert people["spouse"]["is_tax_unit_head"] == {2026: False}
+    assert people["spouse"]["is_tax_unit_spouse"] == {2026: True}
+    assert people["other"]["is_tax_unit_head"] == {2026: False}
+    assert people["other"]["is_tax_unit_spouse"] == {2026: False}
+
+
 def test_policyengine_runner_calculates_case_variables_at_case_period(
     monkeypatch,
 ) -> None:
