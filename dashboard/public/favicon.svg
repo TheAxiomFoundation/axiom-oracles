@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" rx="16" fill="#faf9f6"/>
+    <!-- ∀ glyph from Geist font paths — same as wordmark -->
+    <g transform="translate(14, 10) scale(0.37)">
+        <g transform="translate(0,290) scale(1,-1)">
+            <path d="M29.45 290L6.51 290L86.80 69.90L114.70 69.90L194.68 290L171.74 290L148.18 223.97L53.01 223.97L29.45 290ZM100.75 88.81L60.14 203.51L141.05 203.51L100.75 88.81Z" fill="#b45309"/>
+        </g>
+    </g>
+</svg>
