@@ -105,6 +105,16 @@ def test_default_compare_concepts_are_engine_intersection_for_suite_locale() -> 
     assert Concepts.BASIC_HEALTH_PROGRAM_ELIGIBLE not in concept_ids
 
 
+def test_component_concepts_can_be_selected_directly() -> None:
+    mappings = comparable_mappings(
+        "axiom",
+        "policyengine",
+        concepts={Concepts.EITC},
+    )
+
+    assert [mapping.concept_id for mapping in mappings] == [Concepts.EITC]
+
+
 def test_accessnyc_targets_are_locale_filtered() -> None:
     mappings = comparable_mappings(
         "accessnyc",
@@ -192,6 +202,28 @@ def test_policyengine_projection_includes_pregnancy_fact() -> None:
     situation = PolicyEngineRunner()._build_situation_from_case(case)
 
     assert situation["people"]["head"]["is_pregnant"][2026] is True
+
+
+def test_policyengine_projection_uses_taxable_interest_income() -> None:
+    case = Case(
+        case_id="interest-income",
+        period="2026",
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.INTEREST_INCOME: 1_000,
+                },
+            ),
+        ),
+    )
+
+    person = PolicyEngineRunner()._build_situation_from_case(case)["people"]["head"]
+
+    assert person["taxable_interest_income"] == {2026: 1_000}
+    assert "interest_income" not in person
 
 
 def test_policyengine_projection_includes_case_scope_geography() -> None:

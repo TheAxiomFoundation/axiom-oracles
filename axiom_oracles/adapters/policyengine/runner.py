@@ -12,7 +12,7 @@ from ...comparison.mappings import engine_targets_for_concepts
 
 _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.DIVIDEND_INCOME: "dividend_income",
-    Concepts.INTEREST_INCOME: "interest_income",
+    Concepts.INTEREST_INCOME: "taxable_interest_income",
     Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
     Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
     Concepts.PENSION_INCOME: "taxable_pension_income",

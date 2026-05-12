@@ -148,8 +148,6 @@ _HEAD_RELATIONS = {
 }
 
 _ZERO_COLUMNS = (
-    "psemp",
-    "ssemp",
     "otherprop",
     "nonprop",
     "transfers",
@@ -216,6 +214,12 @@ def taxsim_input_for_case(
         "pwages": _number(head.fact(Concepts.YEARLY_EARNED_INCOME, 0)),
         "swages": (
             _number(spouse.fact(Concepts.YEARLY_EARNED_INCOME, 0))
+            if spouse is not None
+            else 0
+        ),
+        "psemp": _number(head.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)),
+        "ssemp": (
+            _number(spouse.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0))
             if spouse is not None
             else 0
         ),

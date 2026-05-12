@@ -217,6 +217,7 @@ def comparable_mappings(
     categories: set[str] | None = None,
 ) -> list[ProgramMapping]:
     selected = []
+    selected_ids: set[str] = set()
     source = mappings if mappings is not None else load_program_mappings()
     by_concept = {mapping.concept_id: mapping for mapping in source}
     scopes = target_scopes if target_scopes is not None else load_target_scopes()
@@ -236,8 +237,21 @@ def comparable_mappings(
             return False
         return True
 
+    def _append(mapping: ProgramMapping) -> None:
+        if mapping.concept_id in selected_ids:
+            return
+        selected.append(mapping)
+        selected_ids.add(mapping.concept_id)
+
     for mapping in source:
         if mapping.parent is not None:
+            if not concepts or mapping.concept_id not in concepts:
+                continue
+            if categories and mapping.category not in categories:
+                continue
+            if not _engine_ok(mapping):
+                continue
+            _append(mapping)
             continue
         if concepts and mapping.concept_id not in concepts:
             continue
@@ -245,12 +259,12 @@ def comparable_mappings(
             continue
         if not _engine_ok(mapping):
             continue
-        selected.append(mapping)
+        _append(mapping)
         for component_id in mapping.components:
             component = by_concept.get(component_id)
             if component is None or not _engine_ok(component):
                 continue
-            selected.append(component)
+            _append(component)
     return selected
 
 
