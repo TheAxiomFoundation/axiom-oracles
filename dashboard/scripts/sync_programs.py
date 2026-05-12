@@ -232,6 +232,10 @@ def main() -> int:
         }
         if present and prior.get("encoding_note"):
             program["encoding_note"] = prior["encoding_note"]
+        # Preserve hand-curated grouping fields across re-runs.
+        for grouping_field in ("program_family", "subsection_name"):
+            if prior.get(grouping_field):
+                program[grouping_field] = prior[grouping_field]
         programs.append(program)
 
     out = {

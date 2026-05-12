@@ -60,7 +60,7 @@ function MetricCard({ label, value, type, description }) {
   );
 }
 
-export default function MetricsRow({ summary, programCount, liveProgramCount }) {
+export default function MetricsRow({ summary, programCount }) {
   if (!summary) return null;
 
   return (
@@ -69,29 +69,21 @@ export default function MetricsRow({ summary, programCount, liveProgramCount }) 
         label="Programs encoded"
         value={programCount ?? summary.totalConcepts}
         type="count"
-        description={
-          liveProgramCount != null
-            ? `${liveProgramCount} live · ${(programCount ?? 0) - liveProgramCount} awaiting comparison data`
-            : "Statutes & regulations in the Axiom corpus"
-        }
       />
       <MetricCard
         label="Oracles"
         value={summary.totalOracles}
         type="count"
-        description="Engines actively cross-validating"
+      />
+      <MetricCard
+        label="Households"
+        value={summary.totalCases}
+        type="count"
       />
       <MetricCard
         label="Overall agreement"
         value={summary.overallMatchRate.toFixed(1)}
         type="rate"
-        description="Share of comparisons within tolerance"
-      />
-      <MetricCard
-        label="Divergences"
-        value={summary.mismatchCount}
-        type="count"
-        description="Where oracles disagree"
       />
     </div>
   );

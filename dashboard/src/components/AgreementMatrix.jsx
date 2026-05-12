@@ -33,9 +33,6 @@ export default function AgreementMatrix({
       <div className="section-head">
         <div>
           <div className="section-eyebrow">Agreement matrix</div>
-          <div className="section-title">
-            Pairwise alignment across {oracles.length} oracles
-          </div>
         </div>
         <select
           className="input-pill mono"

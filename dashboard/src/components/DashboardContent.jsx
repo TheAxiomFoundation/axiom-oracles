@@ -32,16 +32,6 @@ function TopBar() {
   );
 }
 
-function countLivePrograms(data) {
-  const conceptsWithData = new Set();
-  for (const report of data.reports) {
-    for (const agg of report.aggregates || []) {
-      if (agg.comparison_count > 0) conceptsWithData.add(agg.concept);
-    }
-  }
-  return data.programs.filter((p) => conceptsWithData.has(p.id)).length;
-}
-
 function PageIntro({ data }) {
   return (
     <div className="page-intro" style={{ marginBottom: 36 }}>
@@ -118,7 +108,6 @@ export default function DashboardContent() {
           <MetricsRow
             summary={data.summary}
             programCount={data.programs.length}
-            liveProgramCount={countLivePrograms(data)}
           />
 
           {hasComparisonData && (

@@ -287,35 +287,6 @@ function ProgramCard({ program, stats, oracles }) {
             >
               {program.name}
             </div>
-            <span
-              className="mono"
-              style={{
-                fontSize: 10.5,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "var(--ink-mute)",
-                padding: "1px 7px",
-                borderRadius: 3,
-                background: "var(--paper-warm)",
-                border: "1px solid var(--hairline)",
-              }}
-            >
-              {CATEGORY_LABEL[program.category] || program.category}
-            </span>
-            <StatusPill status={status} />
-          </div>
-          <div
-            className="mono"
-            style={{
-              fontSize: 11.5,
-              marginTop: 4,
-              color: "var(--ink-mute)",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {program.axiom_ref} · {program.statute_label}
           </div>
 
           <CoverageChips coverage={program.coverage || []} />
@@ -389,39 +360,7 @@ function ProgramCard({ program, stats, oracles }) {
             }}
           >
             <div style={{ flex: 1, minWidth: 280 }}>
-              {(program.coverage || []).length > 0 && (
-                <>
-                  <div
-                    className="section-eyebrow"
-                    style={{ marginBottom: 10 }}
-                  >
-                    Encoded in
-                  </div>
-                  <div style={{ marginBottom: 18 }}>
-                    {program.coverage.map((c, i) => (
-                      <div
-                        key={i}
-                        className="mono"
-                        style={{
-                          fontSize: 11.5,
-                          color: "var(--ink-mute)",
-                          marginBottom: 4,
-                        }}
-                      >
-                        <span style={{ color: "var(--ink-soft)" }}>
-                          {c.label}
-                        </span>{" "}
-                        ·{" "}
-                        <span style={{ color: "var(--ink-mute)" }}>
-                          {c.corpus}/{c.file}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              <div className="section-eyebrow" style={{ marginBottom: 10 }}>
+<div className="section-eyebrow" style={{ marginBottom: 10 }}>
                 Oracle coverage
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -529,6 +468,226 @@ function ProgramCard({ program, stats, oracles }) {
   );
 }
 
+const STATUS_RANK = { live: 3, partial: 2, present: 1, encoded: 1, missing: 0 };
+
+function rollUpStatus(subsections) {
+  let best = "encoded";
+  for (const sub of subsections) {
+    const hasData = sub.stats.comparisons > 0;
+    const subStatus =
+      sub.program.encoding_status ?? (hasData ? "live" : "encoded");
+    if ((STATUS_RANK[subStatus] ?? 0) > (STATUS_RANK[best] ?? 0)) {
+      best = subStatus;
+    }
+  }
+  return best;
+}
+
+function unionCoverage(subsections) {
+  const seen = new Set();
+  const out = [];
+  for (const sub of subsections) {
+    for (const c of sub.program.coverage || []) {
+      const key = `${c.corpus}::${c.label}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(c);
+    }
+  }
+  return out;
+}
+
+function ProgramFamilyCard({ familyName, category, subsections, oracles }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const status = rollUpStatus(subsections);
+  const coverage = unionCoverage(subsections);
+
+  // Aggregate stats across subsections (any matter for the family-level metric)
+  let totalComparisons = 0;
+  let totalMatches = 0;
+  for (const sub of subsections) {
+    totalComparisons += sub.stats.comparisons;
+    totalMatches += sub.stats.comparisons - sub.stats.mismatches;
+  }
+  const overallRate =
+    totalComparisons > 0 ? (totalMatches / totalComparisons) * 100 : null;
+
+  return (
+    <div
+      style={{
+        background: "var(--paper-elevated)",
+        border: "1px solid var(--hairline)",
+        borderRadius: 12,
+        overflow: "hidden",
+      }}
+    >
+      <button
+        type="button"
+        onClick={() => setExpanded(!expanded)}
+        style={{
+          width: "100%",
+          padding: "18px 20px",
+          background: "transparent",
+          border: 0,
+          textAlign: "left",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          fontFamily: "inherit",
+        }}
+      >
+        <span style={{ color: "var(--ink-mute)", flexShrink: 0 }}>
+          {expanded ? (
+            <IconChevronDown size={16} />
+          ) : (
+            <IconChevronRight size={16} />
+          )}
+        </span>
+
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              flexWrap: "wrap",
+            }}
+          >
+            <div
+              style={{ fontSize: 15, fontWeight: 500, color: "var(--ink)" }}
+            >
+              {familyName}
+            </div>
+          </div>
+
+          <CoverageChips coverage={coverage} />
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 24,
+            flexShrink: 0,
+          }}
+        >
+          <div style={{ textAlign: "right" }}>
+            <div
+              className="section-eyebrow"
+              style={{ fontSize: 10, letterSpacing: "0.1em" }}
+            >
+              Subsections
+            </div>
+            <div
+              className="mono"
+              style={{ fontSize: 13, color: "var(--ink)", marginTop: 2 }}
+            >
+              {subsections.length}
+            </div>
+          </div>
+
+          <div style={{ textAlign: "right", minWidth: 70 }}>
+            <div
+              className="section-eyebrow"
+              style={{ fontSize: 10, letterSpacing: "0.1em" }}
+            >
+              Agreement
+            </div>
+            <div
+              className="mono"
+              style={{
+                fontSize: 14,
+                fontWeight: 500,
+                marginTop: 2,
+                color:
+                  overallRate != null
+                    ? rateColor(overallRate)
+                    : "var(--ink-mute)",
+              }}
+            >
+              {overallRate != null ? formatPct(overallRate) : "—"}
+            </div>
+          </div>
+        </div>
+      </button>
+
+      {expanded && (
+        <div
+          style={{
+            borderTop: "1px solid var(--hairline)",
+            background: "var(--paper-warm)",
+          }}
+        >
+          {subsections.map((sub, i) => (
+            <SubsectionRow
+              key={sub.program.id}
+              program={sub.program}
+              stats={sub.stats}
+              oracles={oracles}
+              isFirst={i === 0}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SubsectionRow({ program, stats, oracles, isFirst }) {
+  const hasData = stats.comparisons > 0;
+  const status = program.encoding_status ?? (hasData ? "live" : "encoded");
+
+  return (
+    <div
+      style={{
+        padding: "14px 20px 14px 52px",
+        borderTop: isFirst ? "none" : "1px solid var(--hairline)",
+        display: "flex",
+        alignItems: "center",
+        gap: 16,
+      }}
+    >
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            flexWrap: "wrap",
+          }}
+        >
+          <div style={{ fontSize: 14, color: "var(--ink)", fontWeight: 500 }}>
+            {program.subsection_name || program.name}
+          </div>
+        </div>
+        <CoverageChips coverage={program.coverage || []} />
+      </div>
+
+      <div style={{ textAlign: "right", minWidth: 70 }}>
+        <div className="section-eyebrow" style={{ fontSize: 10 }}>
+          Agreement
+        </div>
+        <div
+          className="mono"
+          style={{
+            fontSize: 13,
+            fontWeight: 500,
+            marginTop: 2,
+            color:
+              stats.overallRate != null
+                ? rateColor(stats.overallRate)
+                : "var(--ink-mute)",
+          }}
+        >
+          {stats.overallRate != null ? formatPct(stats.overallRate) : "—"}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ProgramBreakdown({ programs, reports, oracles }) {
   const [filter, setFilter] = useState("all");
 
@@ -537,26 +696,48 @@ export default function ProgramBreakdown({ programs, reports, oracles }) {
     stats: programStats(p, reports, oracles),
   }));
 
-  const filtered = enrichedPrograms.filter(({ stats }) => {
-    if (filter === "live") return stats.comparisons > 0;
-    if (filter === "encoded") return stats.comparisons === 0;
-    return true;
-  });
+  // Group by program_family; standalones are their own "group".
+  const families = new Map();
+  const standalones = [];
+  for (const entry of enrichedPrograms) {
+    const family = entry.program.program_family;
+    if (family) {
+      if (!families.has(family)) families.set(family, []);
+      families.get(family).push(entry);
+    } else {
+      standalones.push(entry);
+    }
+  }
 
-  const liveCount = enrichedPrograms.filter(
-    (e) => e.stats.comparisons > 0
-  ).length;
-  const totalCount = enrichedPrograms.length;
+  const groups = [
+    ...[...families.entries()].map(([name, subsections]) => ({
+      type: "family",
+      key: `family:${name}`,
+      familyName: name,
+      category: subsections[0].program.category,
+      subsections,
+    })),
+    ...standalones.map((entry) => ({
+      type: "standalone",
+      key: entry.program.id,
+      entry,
+    })),
+  ];
+
+  const filtered = groups.filter((group) => {
+    if (filter === "all") return true;
+    const entries =
+      group.type === "family" ? group.subsections : [group.entry];
+    const anyLive = entries.some((e) => e.stats.comparisons > 0);
+    return filter === "live" ? anyLive : !anyLive;
+  });
 
   return (
     <div className="card-flat">
       <div className="section-head">
         <div>
-          <div className="section-eyebrow">Programs encoded in the Axiom corpus</div>
-          <div className="section-title">
-            <span className="mono">{liveCount}</span> live ·{" "}
-            <span className="mono">{totalCount - liveCount}</span> encoded but
-            not yet wired
+          <div className="section-eyebrow">
+            Programs encoded in the Axiom corpus
           </div>
         </div>
 
@@ -572,15 +753,32 @@ export default function ProgramBreakdown({ programs, reports, oracles }) {
         </select>
       </div>
 
-      <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-        {filtered.map(({ program, stats }) => (
-          <ProgramCard
-            key={program.id}
-            program={program}
-            stats={stats}
-            oracles={oracles}
-          />
-        ))}
+      <div
+        style={{
+          padding: 16,
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+        }}
+      >
+        {filtered.map((group) =>
+          group.type === "family" ? (
+            <ProgramFamilyCard
+              key={group.key}
+              familyName={group.familyName}
+              category={group.category}
+              subsections={group.subsections}
+              oracles={oracles}
+            />
+          ) : (
+            <ProgramCard
+              key={group.key}
+              program={group.entry.program}
+              stats={group.entry.stats}
+              oracles={oracles}
+            />
+          ),
+        )}
         {filtered.length === 0 && (
           <div
             style={{

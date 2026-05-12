@@ -7,7 +7,7 @@
       "category": "food",
       "axiom_ref": "us:statutes/7/2014/u",
       "axiom_target": "us:statutes/7/2014/u#snap_benefit",
-      "statute_label": "7 USC \u00a7 2014(u)",
+      "statute_label": "7 USC § 2014(u)",
       "comparison": "amount",
       "tolerance": 1,
       "oracles": [
@@ -38,7 +38,9 @@
           "country": "US",
           "state": "NY"
         }
-      ]
+      ],
+      "program_family": "SNAP",
+      "subsection_name": "Benefit amount"
     },
     {
       "id": "us:tax/federal-income-tax#liability",
@@ -46,7 +48,7 @@
       "category": "tax",
       "axiom_ref": "us:statutes/26/6401",
       "axiom_target": "us:statutes/26/6401#income_tax",
-      "statute_label": "26 USC \u00a7 6401",
+      "statute_label": "26 USC § 6401",
       "comparison": "amount",
       "tolerance": 15,
       "oracles": [
@@ -74,7 +76,7 @@
       "category": "food",
       "axiom_ref": "us:statutes/7/2014/o",
       "axiom_target": "us:statutes/7/2014/o#snap_eligible",
-      "statute_label": "7 USC \u00a7 2014/o",
+      "statute_label": "7 USC § 2014/o",
       "comparison": "eligibility",
       "tolerance": null,
       "oracles": [
@@ -104,7 +106,9 @@
           "state": "NY"
         }
       ],
-      "encoding_note": "No file at us:statutes/7/2014/o in the provided corpus."
+      "encoding_note": "No file at us:statutes/7/2014/o in the provided corpus.",
+      "program_family": "SNAP",
+      "subsection_name": "Eligibility"
     },
     {
       "id": "us:programs/medicaid-pregnant-women#eligible",
@@ -169,7 +173,7 @@
       "category": "food",
       "axiom_ref": "us:statutes/42/1786",
       "axiom_target": "us:statutes/42/1786#wic_eligible",
-      "statute_label": "42 USC \u00a7 1786",
+      "statute_label": "42 USC § 1786",
       "comparison": "eligibility",
       "tolerance": null,
       "oracles": [
