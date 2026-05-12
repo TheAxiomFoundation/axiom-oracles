@@ -33,12 +33,16 @@ class ProgramMapping:
     comparison: str = "eligibility"
     tolerance: float = 0
     priority: str = "normal"
+    components: tuple[str, ...] = field(default_factory=tuple)
+    parent: str | None = None
 
     def __post_init__(self) -> None:
         if isinstance(self.locales, str):
             object.__setattr__(self, "locales", (self.locales,))
         elif not isinstance(self.locales, tuple):
             object.__setattr__(self, "locales", tuple(self.locales))
+        if isinstance(self.components, list):
+            object.__setattr__(self, "components", tuple(self.components))
         if self.scope is not None:
             object.__setattr__(self, "scope", normalize_scope(self.scope))
 
@@ -214,25 +218,39 @@ def comparable_mappings(
 ) -> list[ProgramMapping]:
     selected = []
     source = mappings if mappings is not None else load_program_mappings()
+    by_concept = {mapping.concept_id: mapping for mapping in source}
     scopes = target_scopes if target_scopes is not None else load_target_scopes()
+
+    def _engine_ok(mapping: ProgramMapping) -> bool:
+        if not mapping.target_for_engine(left_engine):
+            return False
+        if not mapping.target_for_engine(right_engine):
+            return False
+        if not mapping.supports_engine_locale(left_engine, locales):
+            return False
+        if not mapping.supports_engine_locale(right_engine, locales):
+            return False
+        if not mapping.supports_engine_scope(left_engine, scope, scopes):
+            return False
+        if not mapping.supports_engine_scope(right_engine, scope, scopes):
+            return False
+        return True
+
     for mapping in source:
+        if mapping.parent is not None:
+            continue
         if concepts and mapping.concept_id not in concepts:
             continue
         if categories and mapping.category not in categories:
             continue
-        if not mapping.target_for_engine(left_engine):
-            continue
-        if not mapping.target_for_engine(right_engine):
-            continue
-        if not mapping.supports_engine_locale(left_engine, locales):
-            continue
-        if not mapping.supports_engine_locale(right_engine, locales):
-            continue
-        if not mapping.supports_engine_scope(left_engine, scope, scopes):
-            continue
-        if not mapping.supports_engine_scope(right_engine, scope, scopes):
+        if not _engine_ok(mapping):
             continue
         selected.append(mapping)
+        for component_id in mapping.components:
+            component = by_concept.get(component_id)
+            if component is None or not _engine_ok(component):
+                continue
+            selected.append(component)
     return selected
 
 

@@ -150,25 +150,16 @@ _HEAD_RELATIONS = {
 _ZERO_COLUMNS = (
     "psemp",
     "ssemp",
-    "dividends",
-    "intrec",
-    "stcg",
-    "ltcg",
     "otherprop",
     "nonprop",
-    "pensions",
-    "gssi",
-    "pui",
-    "sui",
     "transfers",
-    "rentpaid",
-    "proptax",
-    "otheritem",
-    "childcare",
-    "mortgage",
     "scorp",
-    "idtl",
 )
+
+# Default TAXSIM detail mode. idtl=2 returns the v10..v41 decomposition columns
+# (AGI, standard deduction, taxable income, CTC, EITC, AMT, …) used for
+# component-level comparisons.
+DEFAULT_IDTL = 2
 
 
 def attach_taxsim_inputs(cases: list[Case]) -> list[Case]:
@@ -207,6 +198,10 @@ def taxsim_input_for_case(
     dependent_ages = [_age(dependent) for dependent in dependents]
     reported_dependent_ages = dependent_ages[:11]
 
+    # Household-level inputs are summed across head + spouse for the columns
+    # that TAXSIM models at the tax-unit level rather than per-spouse.
+    earners = [head] + ([spouse] if spouse is not None else [])
+
     row: dict[str, Any] = {
         "taxsimid": taxsimid if taxsimid is not None else case.case_id,
         "year": _year(case.period),
@@ -224,12 +219,34 @@ def taxsim_input_for_case(
             if spouse is not None
             else 0
         ),
+        "dividends": _sum_fact(earners, Concepts.DIVIDEND_INCOME),
+        "intrec": _sum_fact(earners, Concepts.INTEREST_INCOME),
+        "stcg": _sum_fact(earners, Concepts.SHORT_TERM_CAPITAL_GAINS),
+        "ltcg": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS),
+        "pensions": _sum_fact(earners, Concepts.PENSION_INCOME),
+        "gssi": _sum_fact(earners, Concepts.SOCIAL_SECURITY_BENEFITS),
+        "pui": _number(head.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0)),
+        "sui": (
+            _number(spouse.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0))
+            if spouse is not None
+            else 0
+        ),
+        "proptax": _number(case.fact(Concepts.PROPERTY_TAX_PAID, 0)),
+        "mortgage": _number(case.fact(Concepts.MORTGAGE_INTEREST_PAID, 0)),
+        "otheritem": _number(case.fact(Concepts.ITEMIZED_DEDUCTIONS_OTHER, 0)),
+        "rentpaid": _number(case.fact(Concepts.RENT_PAID, 0)),
+        "childcare": _number(case.fact(Concepts.CHILDCARE_EXPENSES, 0)),
+        "idtl": DEFAULT_IDTL,
     }
     for index, age in enumerate(reported_dependent_ages, start=1):
         row[f"age{index}"] = age
     for column in _ZERO_COLUMNS:
         row.setdefault(column, 0)
     return row
+
+
+def _sum_fact(people: list[Entity], concept: str) -> float:
+    return sum(_number(person.fact(concept, 0)) for person in people)
 
 
 def _people(case: Case) -> list[Entity]:

@@ -5,9 +5,38 @@
       "comparison": "amount",
       "comparison_count": 10,
       "comparison_weight": 118416350,
+      "components": [
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#amt"
+      ],
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
-      "left_weighted_sum": 3366034249097.1187,
+      "left_weighted_sum": 3370219824991.4927,
+      "match_rate": 40,
+      "match_weight": 47366540,
+      "mismatch_count": 6,
+      "mismatch_weight": 71049810,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 3302041859085.151,
+      "weighted_difference": 68177965906.3418,
+      "weighted_match_rate": 40
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 118416350,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#standard_deduction",
+      "description": "Federal standard deduction",
+      "left_weighted_sum": 3336380661250,
       "match_rate": 80,
       "match_weight": 94733080,
       "mismatch_count": 2,
@@ -15,9 +44,115 @@
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
-      "right_weighted_sum": 3312862422473.716,
-      "weighted_difference": 53171826623.40283,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 3380194710750,
+      "weighted_difference": -43814049500,
       "weighted_match_rate": 80
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 118416350,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "left_weighted_sum": 14967471546396.193,
+      "match_rate": 60,
+      "match_weight": 71049810,
+      "mismatch_count": 4,
+      "mismatch_weight": 47366540,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 14880170833424.355,
+      "weighted_difference": 87300712971.83789,
+      "weighted_match_rate": 60
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 118416350,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "left_weighted_sum": 3525789730518.8657,
+      "match_rate": 60,
+      "match_weight": 71049810,
+      "mismatch_count": 4,
+      "mismatch_weight": 47366540,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 3511523088233.774,
+      "weighted_difference": 14266642285.091797,
+      "weighted_match_rate": 60
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 118416350,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "left_weighted_sum": 0,
+      "match_rate": 80,
+      "match_weight": 94733080,
+      "mismatch_count": 2,
+      "mismatch_weight": 23683270,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 53171647148.62305,
+      "weighted_difference": -53171647148.62305,
+      "weighted_match_rate": 80
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 118416350,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit (non-refundable)",
+      "left_weighted_sum": 162230399500,
+      "match_rate": 100,
+      "match_weight": 118416350,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 162230399500,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 118416350,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#amt",
+      "description": "Alternative Minimum Tax",
+      "left_weighted_sum": 0,
+      "match_rate": 100,
+      "match_weight": 118416350,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 0,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
     }
   ],
   "case_count": 10,
@@ -26,7 +161,7 @@
       "case_id": "ecps-3716",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 57.14285714285714,
       "metadata": {
         "axiom_input_record_overlays": [
           [
@@ -51,7 +186,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.adjusted_gross_income",
-            "value": 29519.3740234375
+            "value": 33527.51611328125
           },
           {
             "entity": "TaxUnit",
@@ -69,7 +204,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.earned_income",
-            "value": 29519.3740234375
+            "value": 33527.51611328125
           },
           {
             "entity": "TaxUnit",
@@ -87,7 +222,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.filer_adjusted_earnings",
-            "value": 29519.3740234375
+            "value": 33527.51611328125
           },
           {
             "entity": "TaxUnit",
@@ -105,7 +240,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.modified_adjusted_gross_income",
-            "value": 29519.3740234375
+            "value": 33527.51611328125
           },
           {
             "entity": "TaxUnit",
@@ -118,6 +253,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 29519.3740234375
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -386,12 +569,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -465,13 +642,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.itemized_taxable_income_deductions",
-            "value": 1035.96875
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
+            "value": 1222.217529296875
           },
           {
             "entity": "TaxUnit",
@@ -512,20 +683,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
-            "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
+            "value": 400.0
           },
           {
             "entity": "TaxUnit",
@@ -567,12 +726,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -698,18 +851,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -717,12 +858,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -2315,9 +2450,9 @@
         "axiom_tax_unit_inputs": {
           "auto_loan_interest_deduction": 0.0,
           "charitable_deduction_for_non_itemizers": 0.0,
-          "itemized_taxable_income_deductions": 1035.96875,
+          "itemized_taxable_income_deductions": 1222.217529296875,
           "overtime_income_deduction": 0.0,
-          "qualified_business_income_deduction": 0.0,
+          "qualified_business_income_deduction": 400.0,
           "tip_income_deduction": 0.0
         },
         "dataset": "hf://policyengine/policyengine-us-data/enhanced_cps_2024.h5",
@@ -2328,7 +2463,38 @@
           "type": "census_county"
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 28.316842651367182,
+          "kind": "amount_difference",
+          "left": 92.751611328125,
+          "parent": null,
+          "right": 64.43476867675781,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": 283.16845703125,
+          "kind": "amount_difference",
+          "left": 927.51611328125,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 644.34765625,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 28.316842651367182,
+          "kind": "amount_difference",
+          "left": 92.751611328125,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 64.43476867675781,
+          "tolerance": 5
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -2336,7 +2502,7 @@
       "case_id": "ecps-14783",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 57.14285714285714,
       "metadata": {
         "axiom_input_record_overlays": [
           [
@@ -2361,7 +2527,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.adjusted_gross_income",
-            "value": 906534.4609375
+            "value": 908178.2517089844
           },
           {
             "entity": "TaxUnit",
@@ -2415,7 +2581,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.modified_adjusted_gross_income",
-            "value": 906534.4609375
+            "value": 908178.2517089844
           },
           {
             "entity": "TaxUnit",
@@ -2428,6 +2594,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 906534.4609375
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 1643.790771484375
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -2696,12 +2910,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -2780,12 +2988,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.min_head_spouse_earned",
             "value": 0
           },
@@ -2822,20 +3024,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
             "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
           },
           {
             "entity": "TaxUnit",
@@ -2877,12 +3067,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -3008,18 +3192,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -3027,12 +3199,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -8438,7 +8604,38 @@
           "type": "census_county"
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 670.6828066406306,
+          "kind": "amount_difference",
+          "left": 246338.91718164063,
+          "parent": null,
+          "right": 245668.234375,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": 1643.814208984375,
+          "kind": "amount_difference",
+          "left": 875978.2517089844,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 874334.4375,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 608.2187573242409,
+          "kind": "amount_difference",
+          "left": 246276.45313232424,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 245668.234375,
+          "tolerance": 5
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -8446,7 +8643,7 @@
       "case_id": "ecps-21157",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 71.42857142857143,
       "metadata": {
         "axiom_input_record_overlays": [
           [
@@ -8538,6 +8735,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 65598.609375
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -8806,12 +9051,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -8890,12 +9129,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.min_head_spouse_earned",
             "value": 0
           },
@@ -8932,20 +9165,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
             "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
           },
           {
             "entity": "TaxUnit",
@@ -8987,12 +9208,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -9118,18 +9333,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -9137,12 +9340,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -13035,8 +13232,19 @@
           "difference": 63.22863281250011,
           "kind": "amount_difference",
           "left": -1388.166875,
+          "parent": null,
           "right": -1451.3955078125,
           "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit",
+          "difference": -63.228515625,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 63.228515625,
+          "tolerance": 5
         }
       ],
       "right_engine": "policyengine",
@@ -13138,6 +13346,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 27332.75390625
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -13406,12 +13662,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -13490,12 +13740,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.min_head_spouse_earned",
             "value": 0
           },
@@ -13532,20 +13776,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
             "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
           },
           {
             "entity": "TaxUnit",
@@ -13587,12 +13819,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -13718,18 +13944,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -13737,12 +13951,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -14596,7 +14804,7 @@
       "case_id": "ecps-47046",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 42.857142857142854,
       "metadata": {
         "axiom_input_record_overlays": [
           [
@@ -14621,7 +14829,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.adjusted_gross_income",
-            "value": 0.0
+            "value": 26326.937054395676
           },
           {
             "entity": "TaxUnit",
@@ -14675,7 +14883,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.modified_adjusted_gross_income",
-            "value": 0.0
+            "value": 26326.937054395676
           },
           {
             "entity": "TaxUnit",
@@ -14688,6 +14896,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.7827575206756592
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 26326.154296875
           },
           {
             "entity": "TaxUnit",
@@ -14956,12 +15212,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -15040,12 +15290,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.min_head_spouse_earned",
             "value": 0
           },
@@ -15082,20 +15326,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
             "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
           },
           {
             "entity": "TaxUnit",
@@ -15137,12 +15369,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -15268,18 +15494,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -15287,12 +15501,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -16138,7 +16346,48 @@
           "type": "census_county"
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 422.6937054395676,
+          "kind": "amount_difference",
+          "left": 422.6937054395676,
+          "parent": null,
+          "right": 0.0,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "description": "Federal standard deduction",
+          "difference": -2050.0,
+          "kind": "amount_difference",
+          "left": 16100.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 18150.0,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": 4226.937054395676,
+          "kind": "amount_difference",
+          "left": 4226.937054395676,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 422.6937054395676,
+          "kind": "amount_difference",
+          "left": 422.6937054395676,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -16146,7 +16395,7 @@
       "case_id": "ecps-69926",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 71.42857142857143,
       "metadata": {
         "axiom_input_record_overlays": [
           [
@@ -16238,6 +16487,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 21866.203125
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -16506,12 +16803,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -16590,12 +16881,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.min_head_spouse_earned",
             "value": 0
           },
@@ -16632,20 +16917,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
             "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
           },
           {
             "entity": "TaxUnit",
@@ -16687,12 +16960,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -16818,18 +17085,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -16837,12 +17092,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -18455,8 +18704,19 @@
           "difference": 4427.0,
           "kind": "amount_difference",
           "left": -1700.0,
+          "parent": null,
           "right": -6127.0,
           "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit",
+          "difference": -4427.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 4427.0,
+          "tolerance": 5
         }
       ],
       "right_engine": "policyengine",
@@ -18466,7 +18726,7 @@
       "case_id": "ecps-77709",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 85.71428571428571,
       "metadata": {
         "axiom_input_record_overlays": [
           [
@@ -18557,6 +18817,54 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
             "value": 0.0
           },
           {
@@ -18826,12 +19134,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -18910,12 +19212,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.min_head_spouse_earned",
             "value": 0
           },
@@ -18952,20 +19248,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
             "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
           },
           {
             "entity": "TaxUnit",
@@ -19007,12 +19291,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -19138,18 +19416,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -19157,12 +19423,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -20768,7 +21028,18 @@
           "type": "census_county"
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "description": "Federal standard deduction",
+          "difference": -1650.0,
+          "kind": "amount_difference",
+          "left": 32200.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 33850.0,
+          "tolerance": 5
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -20868,6 +21139,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 157436.65625
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -21136,12 +21455,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -21220,12 +21533,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.min_head_spouse_earned",
             "value": 0
           },
@@ -21262,20 +21569,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
             "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
           },
           {
             "entity": "TaxUnit",
@@ -21317,12 +21612,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -21448,18 +21737,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -21467,12 +21744,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -25366,7 +25637,7 @@
       "case_id": "ecps-80720",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 57.14285714285714,
       "metadata": {
         "axiom_input_record_overlays": [
           [
@@ -25391,7 +25662,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.adjusted_gross_income",
-            "value": 84185.9716796875
+            "value": 99378.52675628662
           },
           {
             "entity": "TaxUnit",
@@ -25409,7 +25680,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.earned_income",
-            "value": 84185.9716796875
+            "value": 99216.50390625
           },
           {
             "entity": "TaxUnit",
@@ -25427,7 +25698,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.filer_adjusted_earnings",
-            "value": 84185.9716796875
+            "value": 99216.50390625
           },
           {
             "entity": "TaxUnit",
@@ -25445,7 +25716,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.modified_adjusted_gross_income",
-            "value": 84185.9716796875
+            "value": 99378.52675628662
           },
           {
             "entity": "TaxUnit",
@@ -25458,6 +25729,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 84185.9716796875
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 5.471351623535156
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 5.471351623535156
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 156.55149841308594
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -25726,12 +26045,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -25805,13 +26118,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.itemized_taxable_income_deductions",
-            "value": 3453.208740234375
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
+            "value": 3557.75634765625
           },
           {
             "entity": "TaxUnit",
@@ -25852,20 +26159,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
-            "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
+            "value": 2793.73193359375
           },
           {
             "entity": "TaxUnit",
@@ -25907,12 +26202,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -26038,18 +26327,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -26057,12 +26334,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -27655,9 +27926,9 @@
         "axiom_tax_unit_inputs": {
           "auto_loan_interest_deduction": 0.0,
           "charitable_deduction_for_non_itemizers": 0.0,
-          "itemized_taxable_income_deductions": 3453.208740234375,
+          "itemized_taxable_income_deductions": 3557.75634765625,
           "overtime_income_deduction": 0.0,
-          "qualified_business_income_deduction": 0.0,
+          "qualified_business_income_deduction": 2793.73193359375,
           "tip_income_deduction": 0.0
         },
         "dataset": "hf://policyengine/policyengine-us-data/enhanced_cps_2024.h5",
@@ -27668,7 +27939,38 @@
           "type": "census_county"
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 145.5544610595698,
+          "kind": "amount_difference",
+          "left": 7229.51881652832,
+          "parent": null,
+          "right": 7083.96435546875,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": 1218.423728942871,
+          "kind": "amount_difference",
+          "left": 64384.79482269287,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 63166.37109375,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 145.5544610595698,
+          "kind": "amount_difference",
+          "left": 7229.51881652832,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 7083.96435546875,
+          "tolerance": 5
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -27701,7 +28003,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.adjusted_gross_income",
-            "value": 191329.2734375
+            "value": 181184.49389648438
           },
           {
             "entity": "TaxUnit",
@@ -27755,7 +28057,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.modified_adjusted_gross_income",
-            "value": 191329.2734375
+            "value": 181184.49389648438
           },
           {
             "entity": "TaxUnit",
@@ -27768,6 +28070,54 @@
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.wages_taken_into_account_for_additional_medicare_tax",
             "value": 191329.2734375
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.rental_income",
+            "value": -10144.779541015625
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
+            "value": 0.0
+          },
+          {
+            "entity": "TaxUnit",
+            "entity_id": "tax_unit",
+            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
+            "value": 0.0
           },
           {
             "entity": "TaxUnit",
@@ -28036,12 +28386,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.dividend_income",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
             "value": 0
           },
@@ -28115,13 +28459,7 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.itemized_taxable_income_deductions",
-            "value": 9448.1611328125
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.long_term_capital_gains",
-            "value": 0
+            "value": 8553.001953125
           },
           {
             "entity": "TaxUnit",
@@ -28162,20 +28500,8 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.qualified_business_income_deduction",
-            "value": 0.0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.qualified_dividend_income",
-            "value": 0
+            "value": 400.0
           },
           {
             "entity": "TaxUnit",
@@ -28217,12 +28543,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.refundable_payroll_tax_credit",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.rental_income",
             "value": 0
           },
           {
@@ -28348,18 +28668,6 @@
           {
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.short_term_capital_gains",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.social_security_benefits_received",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.spouse_testing_period_distributions",
             "value": 0
           },
@@ -28367,12 +28675,6 @@
             "entity": "TaxUnit",
             "entity_id": "tax_unit",
             "name": "us:tax/federal-income-tax#input.tax_unit_childcare_expenses",
-            "value": 0
-          },
-          {
-            "entity": "TaxUnit",
-            "entity_id": "tax_unit",
-            "name": "us:tax/federal-income-tax#input.taxable_interest_income",
             "value": 0
           },
           {
@@ -29965,9 +30267,9 @@
         "axiom_tax_unit_inputs": {
           "auto_loan_interest_deduction": 0.0,
           "charitable_deduction_for_non_itemizers": 0.0,
-          "itemized_taxable_income_deductions": 9448.1611328125,
+          "itemized_taxable_income_deductions": 8553.001953125,
           "overtime_income_deduction": 0.0,
-          "qualified_business_income_deduction": 0.0,
+          "qualified_business_income_deduction": 400.0,
           "tip_income_deduction": 0.0
         },
         "dataset": "hf://policyengine/policyengine-us-data/enhanced_cps_2024.h5",
@@ -29987,10 +30289,79 @@
     {
       "category": "tax",
       "comparison": "amount",
+      "components": [
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#amt"
+      ],
       "description": "Federal income tax liability",
       "id": "us:tax/federal-income-tax#liability",
+      "parent": null,
       "priority": "high",
       "tolerance": 15
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal standard deduction",
+      "id": "us:tax/federal-income-tax#standard_deduction",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal taxable income",
+      "id": "us:tax/federal-income-tax#taxable_income",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal tax before credits",
+      "id": "us:tax/federal-income-tax#tax_before_credits",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Earned Income Tax Credit",
+      "id": "us:tax/federal-income-tax#eitc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Child Tax Credit (non-refundable)",
+      "id": "us:tax/federal-income-tax#ctc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Alternative Minimum Tax",
+      "id": "us:tax/federal-income-tax#amt",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "tolerance": 5
     }
   ],
   "engines": {
@@ -30002,16 +30373,182 @@
   "mismatches": [
     {
       "ages": null,
+      "case_id": "ecps-3716",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 28.316842651367182,
+      "kind": "amount_difference",
+      "left": 92.751611328125,
+      "parent": null,
+      "pregnant_head": null,
+      "right": 64.43476867675781,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-3716",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": 283.16845703125,
+      "kind": "amount_difference",
+      "left": 927.51611328125,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 644.34765625,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-3716",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 28.316842651367182,
+      "kind": "amount_difference",
+      "left": 92.751611328125,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 64.43476867675781,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-14783",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 670.6828066406306,
+      "kind": "amount_difference",
+      "left": 246338.91718164063,
+      "parent": null,
+      "pregnant_head": null,
+      "right": 245668.234375,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-14783",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": 1643.814208984375,
+      "kind": "amount_difference",
+      "left": 875978.2517089844,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 874334.4375,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-14783",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 608.2187573242409,
+      "kind": "amount_difference",
+      "left": 246276.45313232424,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 245668.234375,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-21157",
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 63.22863281250011,
       "kind": "amount_difference",
       "left": -1388.166875,
+      "parent": null,
       "pregnant_head": null,
       "right": -1451.3955078125,
       "scenario": null,
       "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-21157",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "difference": -63.228515625,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 63.228515625,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-47046",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 422.6937054395676,
+      "kind": "amount_difference",
+      "left": 422.6937054395676,
+      "parent": null,
+      "pregnant_head": null,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-47046",
+      "concept": "us:tax/federal-income-tax#standard_deduction",
+      "description": "Federal standard deduction",
+      "difference": -2050.0,
+      "kind": "amount_difference",
+      "left": 16100.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 18150.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-47046",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": 4226.937054395676,
+      "kind": "amount_difference",
+      "left": 4226.937054395676,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-47046",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 422.6937054395676,
+      "kind": "amount_difference",
+      "left": 422.6937054395676,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 5,
       "yearly_earned_income": null
     },
     {
@@ -30022,49 +30559,141 @@
       "difference": 4427.0,
       "kind": "amount_difference",
       "left": -1700.0,
+      "parent": null,
       "pregnant_head": null,
       "right": -6127.0,
       "scenario": null,
       "tolerance": 15,
       "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-69926",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "difference": -4427.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 4427.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-77709",
+      "concept": "us:tax/federal-income-tax#standard_deduction",
+      "description": "Federal standard deduction",
+      "difference": -1650.0,
+      "kind": "amount_difference",
+      "left": 32200.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 33850.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-80720",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 145.5544610595698,
+      "kind": "amount_difference",
+      "left": 7229.51881652832,
+      "parent": null,
+      "pregnant_head": null,
+      "right": 7083.96435546875,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-80720",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": 1218.423728942871,
+      "kind": "amount_difference",
+      "left": 64384.79482269287,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 63166.37109375,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-80720",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 145.5544610595698,
+      "kind": "amount_difference",
+      "left": 7229.51881652832,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "right": 7083.96435546875,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
     }
   ],
   "population": "enhanced-cps",
-  "schema_version": "axiom.comparison_report.v1",
+  "schema_version": "axiom.comparison_report.v2",
   "scope": {
     "geoid": "US",
     "type": "country"
   },
   "suite": "nyc-synthetic",
   "summary": {
-    "comparison_count": 10,
+    "comparison_count": 70,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 8,
-    "mismatch_count": 2,
+    "match_count": 52,
+    "mismatch_count": 18,
     "mismatches_by_concept": [
       {
-        "count": 2,
+        "count": 6,
         "value": "us:tax/federal-income-tax#liability"
+      },
+      {
+        "count": 4,
+        "value": "us:tax/federal-income-tax#tax_before_credits"
+      },
+      {
+        "count": 4,
+        "value": "us:tax/federal-income-tax#taxable_income"
+      },
+      {
+        "count": 2,
+        "value": "us:tax/federal-income-tax#eitc"
+      },
+      {
+        "count": 2,
+        "value": "us:tax/federal-income-tax#standard_deduction"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 2,
+        "count": 18,
         "value": "amount_difference"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 2,
+        "count": 18,
         "value": null
       }
     ],
     "weighted": {
-      "comparison_weight": 118416350,
-      "match_rate": 80,
-      "match_weight": 94733080,
-      "mismatch_weight": 23683270
+      "comparison_weight": 828914450,
+      "match_rate": 74.285714,
+      "match_weight": 615765020,
+      "mismatch_weight": 213149430
     }
   }
 }

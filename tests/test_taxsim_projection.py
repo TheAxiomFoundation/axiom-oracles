@@ -66,7 +66,9 @@ def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> Non
     assert row["dep13"] == 1
     assert row["dep17"] == 1
     assert row["dep18"] == 2
-    assert row["idtl"] == 0
+    # idtl=2 requests TAXSIM's decomposed credit columns (v10..v41) used for
+    # component-level comparisons.
+    assert row["idtl"] == 2
 
 
 def test_taxsim_projection_uses_state_code_fact_without_scope() -> None:

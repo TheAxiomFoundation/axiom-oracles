@@ -264,8 +264,30 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     head, spouse = _tax_filers(people)
     dependents = [person for person in people if person not in (head, spouse)]
     wages = _earned_income(head) + (_earned_income(spouse) if spouse else 0)
-    earned_income = wages
-    agi = wages
+
+    # Investment / unearned income pulled from the Case so Axiom matches what
+    # PolicyEngine and TAXSIM see.
+    earners = [person for person in (head, spouse) if person is not None]
+    dividends = _sum_concept(earners, Concepts.DIVIDEND_INCOME)
+    interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
+    short_capital_gains = _sum_concept(earners, Concepts.SHORT_TERM_CAPITAL_GAINS)
+    long_capital_gains = _sum_concept(earners, Concepts.LONG_TERM_CAPITAL_GAINS)
+    pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
+    social_security = _sum_concept(earners, Concepts.SOCIAL_SECURITY_BENEFITS)
+    unemployment = _sum_concept(earners, Concepts.UNEMPLOYMENT_INSURANCE_INCOME)
+    rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
+    self_employment = _sum_concept(earners, Concepts.SELF_EMPLOYMENT_INCOME)
+
+    investment_income = (
+        dividends
+        + interest
+        + short_capital_gains
+        + long_capital_gains
+        + rental
+    )
+    other_income = pensions + social_security + unemployment + self_employment
+    earned_income = wages + self_employment
+    agi = wages + investment_income + other_income
     filing_status = _filing_status(spouse=spouse, dependents=dependents)
 
     inputs: dict[str, Any] = {
@@ -286,6 +308,15 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "modified_adjusted_gross_income": agi,
         "wages": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
+        # Investment / unearned income — projected from Case concepts.
+        "dividend_income": dividends,
+        "qualified_dividend_income": dividends,
+        "taxable_interest_income": interest,
+        "short_term_capital_gains": short_capital_gains,
+        "long_term_capital_gains": long_capital_gains,
+        "rental_income": rental,
+        "pension_annuity_disability_benefits_received": pensions,
+        "social_security_benefits_received": social_security,
     }
     for name in _BOOLEAN_DEFAULTS_FALSE:
         inputs.setdefault(name, _boolean_default(name, case))
@@ -469,6 +500,10 @@ def _age(entity: Entity) -> int:
 
 def _earned_income(entity: Entity) -> float:
     return _number(entity.fact(Concepts.YEARLY_EARNED_INCOME, 0))
+
+
+def _sum_concept(entities: list[Entity], concept: str) -> float:
+    return sum(_number(entity.fact(concept, 0)) for entity in entities)
 
 
 def _number(value: Any) -> float:
