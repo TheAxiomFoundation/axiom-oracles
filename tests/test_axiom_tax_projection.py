@@ -61,6 +61,30 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     assert by_key[
         ("person-1", "us:tax/federal-income-tax#input.is_taxpayer")
     ] is True
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/63/c#input."
+            "married_filing_separately_and_either_spouse_itemizes",
+        )
+    ] is False
+    assert by_key[
+        ("tax_unit", "us:statutes/26/63/c#input.nonresident_alien_individual")
+    ] is False
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/63/c#input."
+            "short_period_return_due_to_accounting_period_change",
+        )
+    ] is False
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/63/c#input."
+            "estate_trust_common_trust_fund_or_partnership",
+        )
+    ] is False
     assert {
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
@@ -70,12 +94,29 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         ("person-2", "tax_unit"),
         ("person-3", "tax_unit"),
     }
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
+        if record["name"] == "us:statutes/26/32#relation.member_of_tax_unit"
+    } == {
+        ("person-1", "tax_unit"),
+        ("person-2", "tax_unit"),
+        ("person-3", "tax_unit"),
+    }
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
+        if record["name"] == "us:statutes/26/63/c#relation.member_of_tax_unit"
+    } == {
+        ("person-1", "tax_unit"),
+        ("person-2", "tax_unit"),
+    }
     member_relations = [
         record
         for record in projected.metadata["axiom_relations"]
         if record["name"].endswith("#relation.member_of_tax_unit")
     ]
-    assert len(member_relations) == 3
+    assert len(member_relations) == 8
     assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_result_selection" not in projected.metadata
 
@@ -257,6 +298,39 @@ def test_axiom_tax_projection_keeps_zero_earning_second_adult_as_spouse() -> Non
     assert by_key[
         ("person-2", "us:tax/federal-income-tax#input.is_spouse")
     ] is True
+
+
+def test_axiom_tax_projection_maps_standard_deduction_blind_fact() -> None:
+    case = Case(
+        case_id="blind-senior",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 65,
+                    Concepts.BLIND: True,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[
+        ("person-1", "us:statutes/26/63/c#input.is_blind")
+    ] is True
+    assert (
+        "person-1",
+        "us:statutes/26/63/c#input.is_aged_65_or_over",
+    ) not in by_key
 
 
 def test_axiom_tax_projection_phases_out_additional_senior_deduction() -> None:

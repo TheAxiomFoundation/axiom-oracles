@@ -56,6 +56,8 @@ _RELATION_REFS = (
     "us:statutes/26/22#relation.elderly_disabled_member_of_tax_unit",
     "us:statutes/26/24/h#relation.member_of_tax_unit",
     "us:statutes/26/25A#relation.education_credit_member_of_tax_unit",
+    "us:statutes/26/32#relation.member_of_tax_unit",
+    "us:statutes/26/63/c#relation.member_of_tax_unit",
 )
 
 _SPOUSE_RELATIONS = {
@@ -87,6 +89,7 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "disability_proof_furnished",
     "education_credit_election_in_effect",
     "education_credit_identification_requirements_met",
+    "estate_trust_common_trust_fund_or_partnership",
     "excludes_foreign_earned_income",
     "expenses_paid_to_allowed_provider",
     "has_felony_drug_conviction",
@@ -97,6 +100,8 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "joint_return_filed_for_spouse_distribution_year",
     "meets_higher_education_act_student_requirements",
     "medically_determinable_impairment",
+    "married_filing_separately_and_either_spouse_itemizes",
+    "nonresident_alien_individual",
     "payee_statement_received",
     "provider_identification_requirements_met",
     "qualifying_individual_identification_requirements_met",
@@ -106,6 +111,7 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "section_151_deduction_allowed_to_another_taxpayer",
     "section_6013_resident_alien_election",
     "spouses_lived_apart_all_year",
+    "short_period_return_due_to_accounting_period_change",
     "tax_unit_itemizes",
     "taxable_year_begins_before_2027",
     "taxpayer_is_section_1_g_child",
@@ -193,6 +199,17 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "voluntary_employee_qualified_plan_contributions",
     "wagering_losses_deduction",
 )
+
+_INPUT_REF_OVERRIDES = {
+    name: f"us:statutes/26/63/c#input.{name}"
+    for name in (
+        "estate_trust_common_trust_fund_or_partnership",
+        "is_blind",
+        "married_filing_separately_and_either_spouse_itemizes",
+        "nonresident_alien_individual",
+        "short_period_return_due_to_accounting_period_change",
+    )
+}
 
 
 def attach_axiom_tax_inputs(cases: list[Case]) -> list[Case]:
@@ -307,6 +324,7 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "age_at_close_of_taxable_year": age,
             "earned_income": _earned_income(person),
             "has_same_principal_place_of_abode_more_than_half_year": is_dependent,
+            "is_blind": bool(person.fact(Concepts.BLIND, False)),
             "is_qualifying_child_dependent": is_dependent and age < 19,
             "is_section_152_a_1_dependent": is_dependent and age < 19,
             "is_spouse": person is spouse,
@@ -325,14 +343,23 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
 
 
 def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
-    return [
-        {
-            "name": relation_ref,
-            "tuple": [person.entity_id, _TAX_UNIT_ID],
-        }
-        for relation_ref in _RELATION_REFS
-        for person in people
-    ]
+    head, spouse = _tax_filers(people)
+    tax_filers = [person for person in (head, spouse) if person is not None]
+    records = []
+    for relation_ref in _RELATION_REFS:
+        relation_people = (
+            tax_filers
+            if relation_ref == "us:statutes/26/63/c#relation.member_of_tax_unit"
+            else people
+        )
+        records.extend(
+            {
+                "name": relation_ref,
+                "tuple": [person.entity_id, _TAX_UNIT_ID],
+            }
+            for person in relation_people
+        )
+    return records
 
 
 def _input_record(
@@ -350,6 +377,8 @@ def _input_record(
 
 
 def _input_ref(name: str) -> str:
+    if name in _INPUT_REF_OVERRIDES:
+        return _INPUT_REF_OVERRIDES[name]
     return f"{_AXIOM_TAX_REF_PREFIX}#input.{name}"
 
 
