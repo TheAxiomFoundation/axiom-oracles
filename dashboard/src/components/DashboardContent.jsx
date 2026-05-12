@@ -5,7 +5,6 @@ import { loadOracleData } from "../utils/data";
 import MetricsRow from "./MetricsRow";
 import ProgramBreakdown from "./ProgramBreakdown";
 import AgreementMatrix from "./AgreementMatrix";
-import CaseInspector from "./CaseInspector";
 
 function TopBar() {
   return (
@@ -136,13 +135,6 @@ export default function DashboardContent() {
             reports={data.reports}
             oracles={data.oracles}
           />
-
-          {hasComparisonData && (
-            <CaseInspector
-              allCases={data.allCases}
-              oracles={data.oracles}
-            />
-          )}
         </div>
 
         <footer
