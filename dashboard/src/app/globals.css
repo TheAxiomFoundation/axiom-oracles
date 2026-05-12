@@ -1,0 +1,267 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --ink: #0b1220;
+  --ink-soft: #1f2937;
+  --ink-mute: #6b7280;
+  --paper: #f7f7f3;
+  --paper-elevated: #ffffff;
+  --paper-warm: #fafaf6;
+  --hairline: #e6e6df;
+  --hairline-strong: #c7c8c0;
+
+  /* Axiom Foundation amber — pulled from the official wordmark gradient */
+  --accent: #b45309;
+  --accent-deep: #8a3d08;
+  --accent-soft: #fef3c7;
+
+  /* Semantic — keep soft, paper-friendly */
+  --good: #065f46;
+  --good-bg: #ecfdf5;
+  --warn: #92400e;
+  --warn-bg: #fef3c7;
+  --bad: #991b1b;
+  --bad-bg: #fee2e2;
+  --info: #075985;
+  --info-bg: #e0f2fe;
+}
+
+@theme {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-paper: var(--paper);
+  --color-paper-elevated: var(--paper-elevated);
+  --color-hairline: var(--hairline);
+  --color-accent: var(--accent);
+}
+
+@layer base {
+  html,
+  body {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  body {
+    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont,
+      system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+}
+
+.mono {
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, Menlo,
+    monospace;
+}
+
+/* ── Topbar — sticky paper backdrop with Axiom + product sub-mark ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(247, 247, 243, 0.85);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--hairline);
+}
+.topbar-inner {
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 120ms ease;
+}
+.brand-link:hover {
+  opacity: 0.75;
+}
+.brand-group {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.brand-axiom {
+  display: inline-block;
+  height: 32px;
+  width: auto;
+}
+.brand-divider {
+  display: inline-block;
+  width: 1px;
+  height: 18px;
+  background: var(--hairline);
+  margin-top: 3px;
+}
+.brand-product {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+  margin-top: 5px;
+}
+
+/* ── Page intro — light Geist headline + mute paragraph ── */
+.page-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  text-align: center;
+}
+.page-intro h1 {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4.6vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+  max-width: 720px;
+}
+.page-intro h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 400;
+}
+.page-intro p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-mute);
+  max-width: 620px;
+  margin: 0;
+}
+.page-intro p strong {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+/* ── Cards / surfaces ── */
+.card {
+  background: var(--paper-elevated);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  padding: 16px;
+}
+.card-flat {
+  background: var(--paper-elevated);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.section-head {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.section-eyebrow {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  font-weight: 500;
+}
+.section-title {
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+/* ── Pills / badges ── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.badge-good {
+  background: var(--good-bg);
+  color: var(--good);
+}
+.badge-warn {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.badge-bad {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+.badge-source {
+  background: var(--info-bg);
+  color: var(--info);
+  font-family: "JetBrains Mono", monospace;
+  text-transform: none;
+}
+
+.oracle-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--paper-elevated);
+  border: 1px solid var(--hairline);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+
+/* ── Inputs ── */
+.input-pill {
+  background: var(--paper-elevated);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 120ms ease;
+}
+.input-pill:focus {
+  border-color: var(--hairline-strong);
+}
+
+/* ── Citation links ── */
+a.cite {
+  color: var(--info);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--info);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12.5px;
+}
+a.cite:hover {
+  color: var(--ink);
+}
