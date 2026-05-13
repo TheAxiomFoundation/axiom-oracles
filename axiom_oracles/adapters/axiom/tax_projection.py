@@ -933,6 +933,7 @@ _HEAD_RELATIONS = {
 _DEPENDENT_RELATIONS = {
     "child",
     "daughter",
+    "dependent",
     "foster_child",
     "grandchild",
     "son",
@@ -1763,9 +1764,13 @@ def _itemization_overlays() -> list[list[dict[str, Any]]]:
 def _filing_status(*, spouse: Entity | None, dependents: list[Entity]) -> int:
     if spouse is not None:
         return 1
-    if dependents:
+    if any(_hoh_qualifying_dependent(dependent) for dependent in dependents):
         return 3
     return 0
+
+
+def _hoh_qualifying_dependent(dependent: Entity) -> bool:
+    return _age(dependent) < 19 or bool(dependent.fact(Concepts.DISABLED, False))
 
 
 def _boolean_default(name: str, case: Case) -> bool:

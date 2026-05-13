@@ -72,6 +72,7 @@ _HEAD_RELATIONS = {
 _DEPENDENT_RELATIONS = {
     "child",
     "daughter",
+    "dependent",
     "foster_child",
     "grandchild",
     "son",

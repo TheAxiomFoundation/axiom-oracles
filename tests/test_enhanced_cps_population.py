@@ -45,6 +45,29 @@ def test_loader_projects_sampled_ecps_households_to_cases() -> None:
     assert cases[0].entities[0].facts[Concepts.BENEFITS_MEDICAID] is True
 
 
+def test_loader_can_project_sampled_ecps_tax_units_to_cases() -> None:
+    cases = load_enhanced_cps_cases(
+        period="2026",
+        sample_size=2,
+        case_unit="tax_unit",
+        microsimulation_factory=lambda dataset: FakeMicrosimulation(dataset),
+    )
+
+    assert [case.case_id for case in cases] == [
+        "ecps-tax-unit-1001",
+        "ecps-tax-unit-2002",
+    ]
+    assert cases[0].metadata["case_unit"] == "tax_unit"
+    assert cases[0].metadata["household_id"] == 101
+    assert cases[0].entities[0].facts[Concepts.HOUSEHOLD_RELATION] == (
+        "HeadOfHousehold"
+    )
+    assert cases[0].entities[1].facts[Concepts.HOUSEHOLD_RELATION] == "Child"
+    assert cases[1].entities[0].facts[Concepts.HOUSEHOLD_RELATION] == (
+        "HeadOfHousehold"
+    )
+
+
 def test_loader_skips_geographically_unresolvable_records() -> None:
     loader = EnhancedCpsCaseLoader(
         dataset="memory://fake",
@@ -97,6 +120,10 @@ class FakeMicrosimulation:
         self.person_data = {
             "household_id": [101, 101, 202],
             "person_id": [1, 2, 3],
+            "tax_unit_id": [1001, 1001, 2002],
+            "is_tax_unit_head": [True, False, True],
+            "is_tax_unit_spouse": [False, False, False],
+            "is_tax_unit_dependent": [False, True, False],
             "age": [30, 5, 67],
             "employment_income": [20_000, 0, 10_000],
             "is_pregnant": [False, False, False],

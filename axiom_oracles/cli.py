@@ -192,6 +192,8 @@ def compare(
         period=period,
         sample_size=sample_size,
         ecps_dataset=ecps_dataset,
+        categories=categories,
+        concepts=concepts,
     )
     if not cases:
         raise click.ClickException(
@@ -388,6 +390,8 @@ def _load_population_cases(
     period: str,
     sample_size: int,
     ecps_dataset: str | None,
+    categories: tuple[str, ...] = (),
+    concepts: tuple[str, ...] = (),
 ) -> list[Case]:
     if population == "enhanced-cps":
         return load_enhanced_cps_cases(
@@ -395,6 +399,7 @@ def _load_population_cases(
             period=period,
             sample_size=sample_size or None,
             dataset=ecps_dataset,
+            case_unit=_enhanced_cps_case_unit(categories, concepts),
         )
     if population == "synthetic":
         cases = [
@@ -405,6 +410,17 @@ def _load_population_cases(
             return cases[:sample_size]
         return cases
     raise click.ClickException(f"Unknown population '{population}'.")
+
+
+def _enhanced_cps_case_unit(
+    categories: tuple[str, ...],
+    concepts: tuple[str, ...],
+) -> str:
+    if categories and set(categories) == {"tax"}:
+        return "tax_unit"
+    if concepts and all(concept.startswith("us:tax/") for concept in concepts):
+        return "tax_unit"
+    return "household"
 
 
 def _filter_cases_for_scope(

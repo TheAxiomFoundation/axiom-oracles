@@ -534,6 +534,73 @@ def test_axiom_tax_projection_matches_pe_childless_eitc_age_proxy() -> None:
     ] is True
 
 
+def test_axiom_tax_projection_limits_head_of_household_to_qualifying_dependents() -> None:
+    case = Case(
+        case_id="dependent-above-qualifying-child-age",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 39,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 19,
+                    Concepts.YEARLY_EARNED_INCOME: 7_653,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 0
+
+
+def test_axiom_tax_projection_infers_head_of_household_for_qualifying_child() -> None:
+    case = Case(
+        case_id="single-parent-with-qualifying-child",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 39,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 5,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 3
+
+
 def test_axiom_tax_projection_does_not_synthesize_qualified_dividends() -> None:
     case = Case(
         case_id="dividends",

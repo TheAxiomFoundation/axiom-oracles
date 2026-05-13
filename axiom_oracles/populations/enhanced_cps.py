@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 
 from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
@@ -14,6 +14,7 @@ NYC_ENHANCED_CPS_DATASET = "hf://policyengine/policyengine-us-data/cities/NYC.h5
 
 
 MicrosimulationFactory = Callable[[str], Any]
+CaseUnit = Literal["household", "tax_unit"]
 
 
 def dataset_for_scope(scope: GeographyScope | dict[str, Any] | None) -> str:
@@ -29,12 +30,18 @@ def load_enhanced_cps_cases(
     period: str = "2026",
     sample_size: int | None = None,
     dataset: str | None = None,
+    case_unit: CaseUnit = "household",
     microsimulation_factory: MicrosimulationFactory | None = None,
 ) -> list[Case]:
     return EnhancedCpsCaseLoader(
         dataset=dataset,
         microsimulation_factory=microsimulation_factory,
-    ).load_cases(scope=scope, period=period, sample_size=sample_size)
+    ).load_cases(
+        scope=scope,
+        period=period,
+        sample_size=sample_size,
+        case_unit=case_unit,
+    )
 
 
 @dataclass
@@ -48,7 +55,10 @@ class EnhancedCpsCaseLoader:
         scope: GeographyScope | dict[str, Any] | None = None,
         period: str = "2026",
         sample_size: int | None = None,
+        case_unit: CaseUnit = "household",
     ) -> list[Case]:
+        if case_unit not in {"household", "tax_unit"}:
+            raise ValueError("case_unit must be 'household' or 'tax_unit'.")
         normalized_scope = normalize_scope(scope)
         dataset = self.dataset or dataset_for_scope(normalized_scope)
         sim = self._build_microsimulation(dataset)
@@ -70,28 +80,49 @@ class EnhancedCpsCaseLoader:
             people = people_by_household.get(household.household_id, [])
             if not people:
                 continue
-            cases.append(
-                Case(
-                    case_id=f"ecps-{household.household_id}",
-                    period=period,
-                    facts={Concepts.CASH_ON_HAND: 0},
-                    entities=tuple(
-                        _person_entity(person, index)
-                        for index, person in enumerate(people)
-                    ),
-                    metadata={
-                        "population": "enhanced-cps",
-                        "dataset": dataset,
-                        "household_weight": household.weight,
-                        **(
-                            {"scope": household_scope.as_dict()}
-                            if household_scope
-                            else {}
+            metadata = {
+                "population": "enhanced-cps",
+                "dataset": dataset,
+                "household_weight": household.weight,
+                **({"scope": household_scope.as_dict()} if household_scope else {}),
+                **_locale_metadata(household_scope),
+            }
+            if case_unit == "household":
+                cases.append(
+                    Case(
+                        case_id=f"ecps-{household.household_id}",
+                        period=period,
+                        facts={Concepts.CASH_ON_HAND: 0},
+                        entities=tuple(
+                            _person_entity(person, index, case_unit=case_unit)
+                            for index, person in enumerate(people)
                         ),
-                        **_locale_metadata(household_scope),
-                    },
+                        metadata=metadata,
+                    )
                 )
-            )
+                continue
+
+            people_by_tax_unit: dict[int | str, list[_PersonRow]] = defaultdict(list)
+            for person in people:
+                people_by_tax_unit[person.tax_unit_id].append(person)
+            for tax_unit_id, tax_unit_people in people_by_tax_unit.items():
+                cases.append(
+                    Case(
+                        case_id=f"ecps-tax-unit-{tax_unit_id}",
+                        period=period,
+                        facts={Concepts.CASH_ON_HAND: 0},
+                        entities=tuple(
+                            _person_entity(person, index, case_unit=case_unit)
+                            for index, person in enumerate(tax_unit_people)
+                        ),
+                        metadata={
+                            **metadata,
+                            "case_unit": "tax_unit",
+                            "household_id": household.household_id,
+                            "tax_unit_id": tax_unit_id,
+                        },
+                    )
+                )
         return cases
 
     def _build_microsimulation(self, dataset: str):
@@ -151,6 +182,38 @@ class EnhancedCpsCaseLoader:
             period,
             map_to="person",
             default=None,
+            size=size,
+        )
+        tax_unit_ids = _calculate_values(
+            sim,
+            "tax_unit_id",
+            period,
+            map_to="person",
+            default=None,
+            size=size,
+        )
+        is_tax_unit_head = _calculate_values(
+            sim,
+            "is_tax_unit_head",
+            period,
+            map_to="person",
+            default=False,
+            size=size,
+        )
+        is_tax_unit_spouse = _calculate_values(
+            sim,
+            "is_tax_unit_spouse",
+            period,
+            map_to="person",
+            default=False,
+            size=size,
+        )
+        is_tax_unit_dependent = _calculate_values(
+            sim,
+            "is_tax_unit_dependent",
+            period,
+            map_to="person",
+            default=False,
             size=size,
         )
         ages = _calculate_values(sim, "age", period, map_to="person", default=0, size=size)
@@ -226,6 +289,14 @@ class EnhancedCpsCaseLoader:
                         if person_id is not None
                         else f"{key}-{len(people_by_household[key])}"
                     ),
+                    tax_unit_id=(
+                        _clean_id(tax_unit_ids[index])
+                        if tax_unit_ids[index] is not None
+                        else key
+                    ),
+                    is_tax_unit_head=bool(is_tax_unit_head[index]),
+                    is_tax_unit_spouse=bool(is_tax_unit_spouse[index]),
+                    is_tax_unit_dependent=bool(is_tax_unit_dependent[index]),
                     age=int(_clean_number(ages[index])),
                     yearly_earned_income=float(_clean_number(employment_income[index])),
                     pregnant=bool(pregnant[index]),
@@ -266,6 +337,10 @@ _PERSON_NON_WAGE_VARIABLES = {
 @dataclass(frozen=True)
 class _PersonRow:
     person_id: int | str
+    tax_unit_id: int | str
+    is_tax_unit_head: bool
+    is_tax_unit_spouse: bool
+    is_tax_unit_dependent: bool
     age: int
     yearly_earned_income: float
     pregnant: bool
@@ -276,10 +351,19 @@ class _PersonRow:
     non_wage_income: dict[str, float]
 
 
-def _person_entity(person: _PersonRow, index: int) -> Entity:
+def _person_entity(
+    person: _PersonRow,
+    index: int,
+    *,
+    case_unit: CaseUnit,
+) -> Entity:
     facts: dict[str, Any] = {
         Concepts.PERSON_AGE: person.age,
-        Concepts.HOUSEHOLD_RELATION: _relation_for_person(person, index),
+        Concepts.HOUSEHOLD_RELATION: _relation_for_person(
+            person,
+            index,
+            case_unit=case_unit,
+        ),
         Concepts.YEARLY_EARNED_INCOME: person.yearly_earned_income,
         Concepts.PREGNANT: person.pregnant,
         Concepts.DISABLED: person.disabled,
@@ -297,7 +381,20 @@ def _person_entity(person: _PersonRow, index: int) -> Entity:
     )
 
 
-def _relation_for_person(person: _PersonRow, index: int) -> str:
+def _relation_for_person(
+    person: _PersonRow,
+    index: int,
+    *,
+    case_unit: CaseUnit,
+) -> str:
+    if case_unit == "tax_unit":
+        if person.is_tax_unit_head:
+            return "HeadOfHousehold"
+        if person.is_tax_unit_spouse:
+            return "Spouse"
+        if person.is_tax_unit_dependent:
+            return "Child" if person.age < 19 else "Dependent"
+        return "Other"
     if index == 0:
         return "HeadOfHousehold"
     if person.age < 18:
