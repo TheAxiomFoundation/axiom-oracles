@@ -1,6 +1,10 @@
 """Axiom RuleSpec adapter."""
 
 from .runner import AxiomRulesRunner
+from .snap_co_projection import (
+    US_SNAP_CO_PROGRAM_PATH,
+    attach_axiom_snap_co_inputs,
+)
 from .tax_projection import (
     US_FEDERAL_INCOME_TAX_IMPORTS,
     US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
@@ -12,6 +16,8 @@ __all__ = [
     "AxiomRulesRunner",
     "US_FEDERAL_INCOME_TAX_IMPORTS",
     "US_FEDERAL_INCOME_TAX_PROGRAM_RULES",
+    "US_SNAP_CO_PROGRAM_PATH",
+    "attach_axiom_snap_co_inputs",
     "attach_axiom_tax_inputs",
     "attach_axiom_tax_itemization_choice",
 ]
