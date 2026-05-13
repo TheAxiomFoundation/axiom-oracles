@@ -58,9 +58,7 @@ def test_concept_mapping_compares_snap_amount_by_legal_id() -> None:
     mappings = load_program_mappings()
     # Axiom's SNAP benefit is encoded for Colorado today; the comparator
     # picks up the CO target rule name rather than the canonical concept ID.
-    co_snap_target = (
-        "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_allotment"
-    )
+    co_snap_target = "snap_allotment"
     left = [
         EngineResult(
             "axiom",

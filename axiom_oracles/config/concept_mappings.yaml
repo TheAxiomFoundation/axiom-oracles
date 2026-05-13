@@ -30,8 +30,9 @@ concepts:
     targets:
       # Colorado SNAP: snap_allotment is the household's monthly SNAP benefit
       # under the FY 2026 composition. Other states will eventually need
-      # state-specific routing.
-      axiom: us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_allotment
+      # state-specific routing. Uses the unqualified rule name because the
+      # precompiled artifact stores rules without their qualified ids.
+      axiom: snap_allotment
       policyengine: snap
       prd: value.snap
 
@@ -135,7 +136,7 @@ concepts:
     comparison: eligibility
     priority: high
     targets:
-      axiom: us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_eligible
+      axiom: snap_eligible
       policyengine: is_snap_eligible
       accessnyc:
         code: S2R007
