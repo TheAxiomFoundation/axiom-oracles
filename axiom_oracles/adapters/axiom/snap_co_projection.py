@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import replace
+from pathlib import Path
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
@@ -35,6 +36,14 @@ _HOUSEHOLD_SIZE_INPUT = (
 
 US_SNAP_CO_PROGRAM_PATH = (
     "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
+)
+
+# Precompiled artifact shipped alongside this projection. Bundling the
+# artifact lets axiom-oracles use `axiom-rules-engine run-compiled` and
+# avoid recompiling the CO SNAP YAML on every case — which would also
+# require an engine binary that supports `kind: reiteration`.
+US_SNAP_CO_COMPILED_ARTIFACT_PATH = (
+    Path(__file__).parent / "artifacts" / "co-snap.compiled.json"
 )
 
 

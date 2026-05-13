@@ -15,7 +15,7 @@ from .adapters.axiom import (
     AxiomRulesRunner,
     US_FEDERAL_INCOME_TAX_IMPORTS,
     US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
-    US_SNAP_CO_PROGRAM_PATH,
+    US_SNAP_CO_COMPILED_ARTIFACT_PATH,
     attach_axiom_snap_co_inputs,
     attach_axiom_tax_inputs,
     attach_axiom_tax_itemization_choice,
@@ -51,23 +51,6 @@ _SNAP_CONCEPTS = frozenset({Concepts.SNAP_BENEFIT, Concepts.SNAP_ELIGIBLE})
 
 def _wants_snap(concept_ids: tuple[str, ...]) -> bool:
     return any(c in _SNAP_CONCEPTS for c in concept_ids)
-
-
-def _resolve_axiom_snap_program(
-    axiom_program: Path | None,
-    concept_ids: tuple[str, ...],
-) -> Path | None:
-    """Resolve the CO SNAP RuleSpec module path from common corpus checkouts."""
-    if axiom_program is not None or not _wants_snap(concept_ids):
-        return axiom_program
-    candidates = [
-        Path.home() / "rules-us-co" / US_SNAP_CO_PROGRAM_PATH,
-        Path.home() / "TheAxiomFoundation/rules-us-co" / US_SNAP_CO_PROGRAM_PATH,
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            return candidate
-    return None
 
 
 @click.group()
@@ -522,16 +505,24 @@ def _build_runner(
             return PolicyEngineTaxsimRunner()
         return PolicyEngineRunner()
     if engine == "axiom":
-        resolved_program = _resolve_axiom_snap_program(axiom_program, concept_ids)
-        wants_snap = _wants_snap(concept_ids) and resolved_program is not None
+        # SNAP runs through a precompiled artifact (avoids re-compiling the
+        # CO RuleSpec module on every case and the engine's `kind: reiteration`
+        # support requirement). FIT and other concepts keep compiling fresh
+        # from the program imports.
+        wants_snap = _wants_snap(concept_ids) and axiom_program is None
+        compiled_artifact = (
+            US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
+        )
         program_imports = (
             US_FEDERAL_INCOME_TAX_IMPORTS
-            if resolved_program is None
+            if axiom_program is None
+            and not wants_snap
             and Concepts.FEDERAL_INCOME_TAX in concept_ids
             else ()
         )
         return AxiomRulesRunner(
-            program_path=resolved_program,
+            program_path=axiom_program,
+            compiled_artifact_path=compiled_artifact,
             binary_path=axiom_engine_binary,
             default_entity_id="household" if wants_snap else axiom_entity_id,
             default_entity="Household" if wants_snap else "TaxUnit",
