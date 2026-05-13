@@ -25,16 +25,6 @@ _STATE_SCOPE_FEDERAL_TAX_VARIABLES = {
     "itemized_taxable_income_deductions",
 }
 
-_HOUSEHOLD_CALCULATOR_TAX_VARIABLES = {
-    "alternative_minimum_tax",
-    "ctc_value",
-    "eitc",
-    "income_tax",
-    "income_tax_main_rates",
-    "standard_deduction",
-    "taxable_income",
-}
-
 _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.DIVIDEND_INCOME: "dividend_income",
     Concepts.INTEREST_INCOME: "taxable_interest_income",
@@ -47,9 +37,12 @@ _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.SELF_EMPLOYMENT_INCOME: "self_employment_income",
 }
 
-_TAX_UNIT_CONCEPT_TO_PE = {
+_PERSON_CASE_CONCEPT_TO_PE = {
     Concepts.PROPERTY_TAX_PAID: "real_estate_taxes",
     Concepts.MORTGAGE_INTEREST_PAID: "deductible_mortgage_interest",
+}
+
+_TAX_UNIT_CONCEPT_TO_PE = {
     Concepts.ITEMIZED_DEDUCTIONS_OTHER: "misc_deduction",
     Concepts.CHILDCARE_EXPENSES: "tax_unit_childcare_expenses",
 }
@@ -143,8 +136,6 @@ class PolicyEngineRunner(EngineAdapter):
                 EngineResult(engine=self.name, household_id=case.case_id, values={})
                 for case in cases
             ]
-        if _requires_household_calculator(pe_variables):
-            return [self.run_case(case, pe_variables) for case in cases]
 
         if variables is None:
             case_outputs = {tuple(case.outputs) for case in cases}
@@ -321,6 +312,11 @@ class PolicyEngineRunner(EngineAdapter):
                 value = entity.fact(concept)
                 if value is not None:
                     person_inputs[pe_variable] = {year: float(value)}
+            if entity is head:
+                for concept, pe_variable in _PERSON_CASE_CONCEPT_TO_PE.items():
+                    value = case.fact(concept)
+                    if value is not None:
+                        person_inputs[pe_variable] = {year: float(value)}
             people[person_name] = person_inputs
 
         household_inputs = {"members": person_names}
@@ -356,19 +352,27 @@ class PolicyEngineRunner(EngineAdapter):
         head, spouse = _tax_filers(person_entities)
         people = []
         for entity in person_entities:
-            people.append(
-                {
-                    "age": int(entity.fact(Concepts.PERSON_AGE, 0) or 0),
-                    "employment_income": float(
-                        entity.fact(Concepts.YEARLY_EARNED_INCOME, 0) or 0
-                    ),
-                    "is_pregnant": bool(entity.fact(Concepts.PREGNANT, False)),
-                    "is_disabled": bool(entity.fact(Concepts.DISABLED, False)),
-                    "is_blind": bool(entity.fact(Concepts.BLIND, False)),
-                    "is_tax_unit_head": entity is head,
-                    "is_tax_unit_spouse": entity is spouse,
-                }
-            )
+            person_inputs = {
+                "age": int(entity.fact(Concepts.PERSON_AGE, 0) or 0),
+                "employment_income": float(
+                    entity.fact(Concepts.YEARLY_EARNED_INCOME, 0) or 0
+                ),
+                "is_pregnant": bool(entity.fact(Concepts.PREGNANT, False)),
+                "is_disabled": bool(entity.fact(Concepts.DISABLED, False)),
+                "is_blind": bool(entity.fact(Concepts.BLIND, False)),
+                "is_tax_unit_head": entity is head,
+                "is_tax_unit_spouse": entity is spouse,
+            }
+            for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items():
+                value = entity.fact(concept)
+                if value is not None:
+                    person_inputs[pe_variable] = float(value)
+            if entity is head:
+                for concept, pe_variable in _PERSON_CASE_CONCEPT_TO_PE.items():
+                    value = case.fact(concept)
+                    if value is not None:
+                        person_inputs[pe_variable] = float(value)
+            people.append(person_inputs)
 
         household_inputs: dict[str, Any] = {}
         state_code = case.fact(Concepts.STATE_CODE)
@@ -377,11 +381,17 @@ class PolicyEngineRunner(EngineAdapter):
         for variable, value in _scope_inputs_for_variables(case, variables).items():
             household_inputs[variable] = value
 
+        tax_unit_inputs: dict[str, Any] = {}
+        for concept, pe_variable in _TAX_UNIT_CONCEPT_TO_PE.items():
+            value = case.fact(concept)
+            if value is not None:
+                tax_unit_inputs[pe_variable] = float(value)
+
         return {
             "people": people,
             "family": {},
             "spm_unit": {},
-            "tax_unit": {},
+            "tax_unit": tax_unit_inputs,
             "household": household_inputs,
             "year": year,
         }
@@ -583,6 +593,8 @@ class PolicyEngineRunner(EngineAdapter):
                 "tax_unit_id": tax_unit_id,
                 "tax_unit_weight": weight,
             }
+            for pe_variable in _TAX_UNIT_CONCEPT_TO_PE.values():
+                tax_unit_row[pe_variable] = 0
             for concept, pe_variable in _TAX_UNIT_CONCEPT_TO_PE.items():
                 value = case.fact(concept)
                 if value is not None:
@@ -616,10 +628,19 @@ class PolicyEngineRunner(EngineAdapter):
                     "is_tax_unit_head": entity is head,
                     "is_tax_unit_spouse": entity is spouse,
                 }
+                for pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.values():
+                    person_row[pe_variable] = 0
                 for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items():
                     value = entity.fact(concept)
                     if value is not None:
                         person_row[pe_variable] = float(value)
+                for pe_variable in _PERSON_CASE_CONCEPT_TO_PE.values():
+                    person_row[pe_variable] = 0
+                if entity is head:
+                    for concept, pe_variable in _PERSON_CASE_CONCEPT_TO_PE.items():
+                        value = case.fact(concept)
+                        if value is not None:
+                            person_row[pe_variable] = float(value)
                 person_rows.append(person_row)
 
             entity_ids_by_case.append(
@@ -789,10 +810,6 @@ def _scope_inputs_for_variables(
             if variable == "state_fips"
         }
     return {}
-
-
-def _requires_household_calculator(variables: Sequence[str]) -> bool:
-    return any(variable in _HOUSEHOLD_CALCULATOR_TAX_VARIABLES for variable in variables)
 
 
 def _tax_filers(people: list[Entity]) -> tuple[Entity | None, Entity | None]:

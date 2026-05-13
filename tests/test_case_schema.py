@@ -434,18 +434,21 @@ def test_policyengine_runner_calculates_annual_case_variables_at_year(
     assert calls == [(("income_tax",), 2026)]
 
 
-def test_policyengine_tax_case_runs_use_household_calculator(monkeypatch) -> None:
+def test_policyengine_tax_case_runs_use_batched_dataset_path(monkeypatch) -> None:
     calls = []
 
-    def fake_run_case(self, case, variables):
-        calls.append((case.case_id, tuple(variables)))
-        return EngineResult("policyengine", case.case_id, {"income_tax": 0})
+    def fail_run_case(*_args, **_kwargs):
+        raise AssertionError("tax cases should use the batched dataset path")
 
-    def fail_batch(*_args, **_kwargs):
-        raise AssertionError("tax cases must not use the batched dataset path")
+    def fake_batch(self, cases, variables):
+        calls.append(([case.case_id for case in cases], tuple(variables)))
+        return [
+            EngineResult("policyengine", case.case_id, {"income_tax": index})
+            for index, case in enumerate(cases)
+        ]
 
-    monkeypatch.setattr(PolicyEngineRunner, "run_case", fake_run_case)
-    monkeypatch.setattr(PolicyEngineRunner, "_run_case_batch", fail_batch)
+    monkeypatch.setattr(PolicyEngineRunner, "run_case", fail_run_case)
+    monkeypatch.setattr(PolicyEngineRunner, "_run_case_batch", fake_batch)
 
     cases = [
         Case(case_id="case-1", period="2026"),
@@ -454,11 +457,131 @@ def test_policyengine_tax_case_runs_use_household_calculator(monkeypatch) -> Non
 
     results = PolicyEngineRunner().run_cases(cases, ["income_tax"])
 
-    assert calls == [
-        ("case-1", ("income_tax",)),
-        ("case-2", ("income_tax",)),
-    ]
+    assert calls == [(["case-1", "case-2"], ("income_tax",))]
     assert [result.household_id for result in results] == ["case-1", "case-2"]
+    assert [result.values["income_tax"] for result in results] == [0, 1]
+
+
+def test_policyengine_dataset_rows_zero_fill_sparse_tax_inputs() -> None:
+    case = Case(
+        case_id="sparse-tax-inputs",
+        period="2026",
+        facts={
+            Concepts.PROPERTY_TAX_PAID: 2_000,
+            Concepts.MORTGAGE_INTEREST_PAID: 5_000,
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 73,
+                    Concepts.SOCIAL_SECURITY_BENEFITS: 32_240.64,
+                },
+            ),
+            Entity(
+                entity_id="spouse",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.PERSON_AGE: 74,
+                    Concepts.YEARLY_EARNED_INCOME: 163_996.50,
+                    Concepts.INTEREST_INCOME: 0.78,
+                },
+            ),
+            Entity(
+                entity_id="adult-child",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Other",
+                    Concepts.PERSON_AGE: 52,
+                    Concepts.YEARLY_EARNED_INCOME: 43_732.40,
+                },
+            ),
+        ),
+    )
+
+    (
+        person_rows,
+        _household_rows,
+        _marital_unit_rows,
+        _family_rows,
+        _spm_unit_rows,
+        tax_unit_rows,
+        _entity_ids_by_case,
+    ) = PolicyEngineRunner()._policyengine_dataset_rows([case], ["income_tax"])
+
+    rows_by_id = {row["person_id"]: row for row in person_rows}
+    for row in person_rows:
+        for pe_variable in policyengine_runner_module._PERSON_INCOME_CONCEPT_TO_PE.values():
+            assert pe_variable in row
+        for pe_variable in policyengine_runner_module._PERSON_CASE_CONCEPT_TO_PE.values():
+            assert pe_variable in row
+
+    assert rows_by_id["case_0__head"]["social_security"] == 32_240.64
+    assert rows_by_id["case_0__head"]["taxable_interest_income"] == 0
+    assert rows_by_id["case_0__head"]["real_estate_taxes"] == 2_000
+    assert rows_by_id["case_0__head"]["deductible_mortgage_interest"] == 5_000
+    assert rows_by_id["case_0__spouse"]["taxable_interest_income"] == 0.78
+    assert rows_by_id["case_0__spouse"]["social_security"] == 0
+    assert rows_by_id["case_0__spouse"]["real_estate_taxes"] == 0
+    assert rows_by_id["case_0__spouse"]["deductible_mortgage_interest"] == 0
+    assert rows_by_id["case_0__adult-child"]["social_security"] == 0
+    assert rows_by_id["case_0__adult-child"]["taxable_interest_income"] == 0
+    assert rows_by_id["case_0__adult-child"]["real_estate_taxes"] == 0
+    assert rows_by_id["case_0__adult-child"]["deductible_mortgage_interest"] == 0
+
+    tax_unit_row = tax_unit_rows[0]
+    for pe_variable in policyengine_runner_module._TAX_UNIT_CONCEPT_TO_PE.values():
+        assert pe_variable in tax_unit_row
+    assert tax_unit_row["misc_deduction"] == 0
+
+
+def test_policyengine_household_calculator_input_includes_tax_leaf_inputs() -> None:
+    case = Case(
+        case_id="household-calculator-tax-inputs",
+        period="2026",
+        facts={
+            Concepts.PROPERTY_TAX_PAID: 2_000,
+            Concepts.MORTGAGE_INTEREST_PAID: 5_000,
+            Concepts.ITEMIZED_DEDUCTIONS_OTHER: 300,
+            Concepts.CHILDCARE_EXPENSES: 400,
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 73,
+                    Concepts.SOCIAL_SECURITY_BENEFITS: 32_240.64,
+                },
+            ),
+            Entity(
+                entity_id="spouse",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.PERSON_AGE: 74,
+                    Concepts.YEARLY_EARNED_INCOME: 163_996.50,
+                    Concepts.INTEREST_INCOME: 0.78,
+                },
+            ),
+        ),
+    )
+
+    household_input = PolicyEngineRunner()._build_household_calculator_input_from_case(
+        case,
+        variables=["income_tax"],
+    )
+
+    assert household_input["people"][0]["social_security"] == 32_240.64
+    assert household_input["people"][0]["real_estate_taxes"] == 2_000
+    assert household_input["people"][0]["deductible_mortgage_interest"] == 5_000
+    assert household_input["people"][1]["taxable_interest_income"] == 0.78
+    assert household_input["tax_unit"]["misc_deduction"] == 300
+    assert household_input["tax_unit"]["tax_unit_childcare_expenses"] == 400
 
 
 def test_policyengine_household_projection_includes_pregnancy_fact() -> None:
