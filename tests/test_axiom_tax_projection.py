@@ -1,6 +1,7 @@
 import pytest
 
 from axiom_oracles.adapters.axiom.tax_projection import (
+    US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
     attach_axiom_tax_inputs_to_case,
     attach_axiom_tax_itemization_choice_to_case,
 )
@@ -230,7 +231,7 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
     }
-    assert len(projected.metadata["axiom_relations"]) == 12
+    assert len(projected.metadata["axiom_relations"]) == 15
     assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_result_selection" not in projected.metadata
 
@@ -420,6 +421,94 @@ def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> 
             "title_II_monthly_benefits_received_during_taxable_year",
         )
     ] == 5_500
+
+
+def test_axiom_tax_projection_uses_tax_unit_wages_for_ctc_payroll_tax() -> None:
+    case = Case(
+        case_id="dependent-worker-ctc",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 10_000,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 16,
+                    Concepts.YEARLY_EARNED_INCOME: 90_000,
+                },
+            ),
+            Entity(
+                "person-3",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 12,
+                },
+            ),
+            Entity(
+                "person-4",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 9,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[("tax_unit", "us:tax/federal-income-tax#input.wages")] == 10_000
+    assert (
+        "tax_unit",
+        "us:tax/federal-income-tax#input.employee_social_security_tax",
+    ) not in by_key
+    assert (
+        "tax_unit",
+        "us:tax/federal-income-tax#input.employee_medicare_tax",
+    ) not in by_key
+    assert (
+        "tax_unit",
+        "us:statutes/26/24/d#input.employee_3101_3201a_taxes",
+    ) not in by_key
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
+        if record["name"]
+        == "us:tax/federal-income-tax/oracle-bridge#relation.payroll_member_of_tax_unit"
+    } == {
+        ("person-1", "tax_unit"),
+        ("person-2", "tax_unit"),
+        ("person-3", "tax_unit"),
+        ("person-4", "tax_unit"),
+    }
+
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+    }
+    assert "sum_where(payroll_member_of_tax_unit" in (
+        generated_rules_by_name["employee_3101_3201a_taxes"]["versions"][0][
+            "formula"
+        ]
+    )
+    assert "employee_has_payroll_wages" in (
+        generated_rules_by_name["employee_3101_3201a_taxes"]["versions"][0][
+            "formula"
+        ]
+    )
 
 
 def test_axiom_tax_projection_routes_qbi_through_person_relation_rows() -> None:

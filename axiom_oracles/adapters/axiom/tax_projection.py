@@ -149,6 +149,13 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         formula="0.50",
     ),
     _generated_parameter_rule(
+        "social_security_wage_base",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine's 2026 SSA contribution and benefit base",
+        formula="186000",
+    ),
+    _generated_parameter_rule(
         "additional_senior_deduction_amount",
         dtype="Money",
         unit="USD",
@@ -263,6 +270,77 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
             "ctc_refundable_phase_in_rate "
             "* max(0, ctc_phase_in_earned_income_base "
             "- ctc_refundable_phase_in_threshold)"
+        ),
+    ),
+    _generated_data_relation_rule(
+        "payroll_member_of_tax_unit",
+        source="Oracle comparison bridge relating tax-unit members to person-level payroll-tax wage leaves",
+    ),
+    _generated_person_rule(
+        "employee_payroll_wages",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge projecting PolicyEngine payroll_tax_gross_wages from ECPS employment-income leaves",
+        formula="max(0, person_payroll_earnings)",
+    ),
+    _generated_person_rule(
+        "employee_has_payroll_wages",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying tax-unit members with payroll wages",
+        formula="employee_payroll_wages > 0",
+    ),
+    _generated_person_rule(
+        "employee_social_security_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 3101(a) with the SSA wage base to person wage leaves",
+        formula=(
+            "oasdi_wage_tax_rate "
+            "* min(employee_payroll_wages, social_security_wage_base)"
+        ),
+    ),
+    _generated_person_rule(
+        "employee_medicare_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 3101(b)(1) to person wage leaves",
+        formula="hospital_insurance_wage_tax_rate * employee_payroll_wages",
+    ),
+    _generated_person_rule(
+        "employee_3101_tax_before_additional_medicare",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge summing 26 USC 3101(a) and 3101(b)(1) employee payroll taxes",
+        formula="employee_social_security_tax + employee_medicare_tax",
+    ),
+    _generated_tax_unit_rule(
+        "employee_additional_medicare_tax_for_ctc",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 3101(b)(2) to tax-unit payroll wages",
+        formula=(
+            "additional_medicare_tax_rate "
+            "* max("
+            "0, "
+            "sum_where("
+            "payroll_member_of_tax_unit, "
+            "employee_payroll_wages, "
+            "employee_has_payroll_wages"
+            ") - additional_medicare_wage_tax_threshold"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "employee_3101_3201a_taxes",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 24(d)(2)(A)(i), resolved from tax-unit member payroll-tax leaves",
+        formula=(
+            "sum_where("
+            "payroll_member_of_tax_unit, "
+            "employee_3101_tax_before_additional_medicare, "
+            "employee_has_payroll_wages"
+            ") + employee_additional_medicare_tax_for_ctc"
         ),
     ),
     _generated_tax_unit_rule(
@@ -527,100 +605,334 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         formula="max(0, long_term_capital_gains + qualified_dividend_income)",
     ),
     _generated_tax_unit_rule(
+        "net_capital_gains",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine net capital gains before loss limitation",
+        formula="long_term_capital_gains + short_term_capital_gains",
+    ),
+    _generated_tax_unit_rule(
+        "loss_limited_net_capital_gains",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying Schedule D capital-loss limits for PolicyEngine alignment",
+        formula=(
+            "if filing_status == 2: "
+            "max(-1500, net_capital_gains) "
+            "else: max(-3000, net_capital_gains)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "non_sch_d_capital_gains",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge default for capital gains not reported on Schedule D",
+        formula="0",
+    ),
+    _generated_tax_unit_rule(
+        "investment_income_form_4952",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge default where ECPS does not provide Form 4952 investment income election inputs",
+        formula="0",
+    ),
+    _generated_tax_unit_rule(
+        "has_qualified_dividends_or_long_term_capital_gains",
+        dtype="Judgment",
+        source="Oracle comparison bridge matching PolicyEngine's qualified-dividend and long-term-gain gate",
+        formula=(
+            "loss_limited_net_capital_gains > 0 "
+            "or net_capital_gains > 0 "
+            "or long_term_capital_gains > 0 "
+            "or non_sch_d_capital_gains > 0 "
+            "or qualified_dividend_income > 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "dividend_income_reduced_by_investment_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet qualified-dividend reduction",
+        formula=(
+            "max("
+            "0, "
+            "qualified_dividend_income - max(0, investment_income_form_4952)"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "capital_gains_worksheet_line_9",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet line 9",
+        formula=(
+            "max("
+            "0, "
+            "(if non_sch_d_capital_gains > 0: "
+            "non_sch_d_capital_gains "
+            "else: "
+            "max("
+            "0, "
+            "min("
+            "long_term_capital_gains + qualified_dividend_income, "
+            "net_capital_gains"
+            ") "
+            ") + non_sch_d_capital_gains"
+            ") - min(0, investment_income_form_4952)"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "capital_gains_worksheet_line_10",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet line 10",
+        formula=(
+            "if has_qualified_dividends_or_long_term_capital_gains: "
+            "dividend_income_reduced_by_investment_income "
+            "+ capital_gains_worksheet_line_9 "
+            "else: "
+            "max("
+            "0, "
+            "min("
+            "long_term_capital_gains + qualified_dividend_income, "
+            "net_capital_gains"
+            ")"
+            ") + non_sch_d_capital_gains"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "capital_gains_worksheet_line_13",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet line 13",
+        formula=(
+            "if has_qualified_dividends_or_long_term_capital_gains: "
+            "capital_gains_worksheet_line_10 "
+            "- min("
+            "capital_gains_worksheet_line_9, "
+            "unrecaptured_section_1250_gain "
+            "+ capital_gains_28_percent_rate_gain"
+            ") "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "capital_gains_worksheet_line_14",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet line 14",
+        formula=(
+            "if has_qualified_dividends_or_long_term_capital_gains: "
+            "max(0, taxable_income - capital_gains_worksheet_line_13) "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "capital_gains_worksheet_line_19",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet line 19",
+        formula=(
+            "if has_qualified_dividends_or_long_term_capital_gains: "
+            "max("
+            "min("
+            "capital_gains_worksheet_line_14, "
+            "min(capital_gains_zero_rate_threshold, taxable_income)"
+            "), "
+            "max(0, taxable_income - capital_gains_worksheet_line_10)"
+            ") "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
         "amt_part_iii_required",
         dtype="Judgment",
-        source="Oracle comparison bridge applying Form 6251 Part III when preferential gains are present",
+        source="Oracle comparison bridge applying Form 6251 Part III when Schedule D worksheet lines are present",
         formula=(
-            "adjusted_net_capital_gain > 0 "
-            "or unrecaptured_section_1250_gain > 0 "
-            "or capital_gains_28_percent_rate_gain > 0"
+            "capital_gains_worksheet_line_10 > 0 "
+            "or capital_gains_worksheet_line_13 > 0 "
+            "or capital_gains_worksheet_line_14 > 0 "
+            "or capital_gains_worksheet_line_19 > 0 "
+            "or unrecaptured_section_1250_gain > 0"
         ),
     ),
     _generated_tax_unit_rule(
-        "amt_adjusted_net_capital_gain_limited",
+        "amt_capital_gain_line_15_capped_gains",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge limiting preferential gains for the AMT capital-gain worksheet",
-        formula="min(adjusted_net_capital_gain, amt_income_less_exemptions)",
-    ),
-    _generated_tax_unit_rule(
-        "amt_income_less_adjusted_net_capital_gain",
-        dtype="Money",
-        unit="USD",
-        source="Oracle comparison bridge computing non-preferential AMT income",
+        source="Oracle comparison bridge matching Form 6251 Part III line 15",
         formula=(
-            "max(0, amt_income_less_exemptions "
-            "- amt_adjusted_net_capital_gain_limited)"
+            "min("
+            "capital_gains_worksheet_line_13 "
+            "+ unrecaptured_section_1250_gain, "
+            "capital_gains_worksheet_line_10"
+            ")"
         ),
     ),
     _generated_tax_unit_rule(
-        "amt_ordinary_income_tax_under_amt_rates",
+        "amt_capital_gain_line_16_capped_income",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge applying 26 USC 55 AMT rates to non-preferential AMT income",
+        source="Oracle comparison bridge matching Form 6251 Part III line 16",
+        formula="min(amt_capital_gain_line_15_capped_gains, amt_income_less_exemptions)",
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_17_excess_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 17",
+        formula="max(0, amt_income_less_exemptions - amt_capital_gain_line_16_capped_income)",
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_18_excess_income_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 55 AMT rates to Form 6251 Part III line 17",
         formula=(
             "amt_lower_rate "
             "* min("
-            "amt_income_less_adjusted_net_capital_gain, "
+            "amt_capital_gain_line_17_excess_income, "
             "amt_twenty_eight_percent_threshold"
             ") "
             "+ amt_higher_rate "
             "* max("
             "0, "
-            "amt_income_less_adjusted_net_capital_gain "
+            "amt_capital_gain_line_17_excess_income "
             "- amt_twenty_eight_percent_threshold"
             ")"
         ),
     ),
     _generated_tax_unit_rule(
-        "amt_capital_gains_in_zero_rate_bracket",
+        "amt_capital_gain_line_21_reduced_zero_rate_bracket",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge applying 26 USC 1(h) preferential brackets inside AMT",
+        source="Oracle comparison bridge matching Form 6251 Part III line 21",
+        formula="max(0, capital_gains_zero_rate_threshold - capital_gains_worksheet_line_14)",
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_22_smaller_income_or_gain",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 22",
+        formula="min(amt_income_less_exemptions, capital_gains_worksheet_line_13)",
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_23_zero_rate_amount",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Form 6251 Part III line 23",
+        formula=(
+            "min("
+            "amt_capital_gain_line_22_smaller_income_or_gain, "
+            "amt_capital_gain_line_21_reduced_zero_rate_bracket"
+            ") * capital_gains_zero_rate"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_24_taxable_gain_after_zero_rate",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 24",
         formula=(
             "max("
             "0, "
-            "min(max(amt_income_less_exemptions, 0), capital_gains_zero_rate_threshold) "
-            "- amt_income_less_adjusted_net_capital_gain"
+            "amt_capital_gain_line_22_smaller_income_or_gain "
+            "- amt_capital_gain_line_23_zero_rate_amount"
             ")"
         ),
     ),
     _generated_tax_unit_rule(
-        "amt_capital_gains_in_fifteen_percent_bracket",
+        "amt_capital_gain_line_29_reduced_fifteen_rate_bracket",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge applying 26 USC 1(h) preferential brackets inside AMT",
+        source="Oracle comparison bridge matching Form 6251 Part III line 29",
         formula=(
-            "min("
             "max("
             "0, "
-            "amt_adjusted_net_capital_gain_limited "
-            "- amt_capital_gains_in_zero_rate_bracket"
-            "), "
-            "max("
-            "0, "
-            "min("
-            "max(amt_income_less_exemptions, 0), "
-            "capital_gains_fifteen_percent_threshold"
-            ") "
-            "- (amt_income_less_adjusted_net_capital_gain "
-            "+ amt_capital_gains_in_zero_rate_bracket)"
-            ")"
+            "capital_gains_fifteen_percent_threshold "
+            "- (loss_limited_net_capital_gains "
+            "+ amt_capital_gain_line_21_reduced_zero_rate_bracket)"
             ")"
         ),
     ),
     _generated_tax_unit_rule(
-        "amt_capital_gains_in_twenty_percent_bracket",
+        "amt_capital_gain_line_30_fifteen_rate_gain",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge applying 26 USC 1(h) preferential brackets inside AMT",
+        source="Oracle comparison bridge matching Form 6251 Part III line 30",
+        formula=(
+            "min("
+            "amt_capital_gain_line_24_taxable_gain_after_zero_rate, "
+            "amt_capital_gain_line_29_reduced_fifteen_rate_bracket"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_31_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 31",
+        formula="amt_capital_gain_line_30_fifteen_rate_gain * capital_gains_fifteen_percent_rate",
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_32_taxed_gains",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 32",
+        formula=(
+            "amt_capital_gain_line_23_zero_rate_amount "
+            "+ amt_capital_gain_line_30_fifteen_rate_gain"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_33_twenty_rate_gain",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 33",
         formula=(
             "max("
             "0, "
-            "amt_adjusted_net_capital_gain_limited "
-            "- amt_capital_gains_in_zero_rate_bracket "
-            "- amt_capital_gains_in_fifteen_percent_bracket"
+            "amt_capital_gain_line_22_smaller_income_or_gain "
+            "- amt_capital_gain_line_32_taxed_gains"
             ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_34_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 34",
+        formula="amt_capital_gain_line_33_twenty_rate_gain * capital_gains_twenty_percent_rate",
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_35_taxed_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 35",
+        formula=(
+            "amt_capital_gain_line_17_excess_income "
+            "+ amt_capital_gain_line_32_taxed_gains "
+            "+ amt_capital_gain_line_33_twenty_rate_gain"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_36_excess",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Form 6251 Part III line 36",
+        formula="max(0, amt_income_less_exemptions - amt_capital_gain_line_35_taxed_income)",
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gain_line_37_excess_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching 26 USC 55(b)(3)(E) excess capital-gain tax",
+        formula=(
+            "if unrecaptured_section_1250_gain == 0: "
+            "0 "
+            "else: amt_capital_gain_line_36_excess "
+            "* unrecaptured_section_1250_gain_rate"
         ),
     ),
     _generated_tax_unit_rule(
@@ -629,17 +941,10 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         unit="USD",
         source="Oracle comparison bridge computing Form 6251 Part III preferential-gain tax",
         formula=(
-            "amt_ordinary_income_tax_under_amt_rates "
-            "+ capital_gains_zero_rate "
-            "* amt_capital_gains_in_zero_rate_bracket "
-            "+ capital_gains_fifteen_percent_rate "
-            "* amt_capital_gains_in_fifteen_percent_bracket "
-            "+ capital_gains_twenty_percent_rate "
-            "* amt_capital_gains_in_twenty_percent_bracket "
-            "+ unrecaptured_section_1250_gain_rate "
-            "* unrecaptured_section_1250_gain "
-            "+ capital_gains_28_percent_rate "
-            "* capital_gains_28_percent_rate_gain"
+            "amt_capital_gain_line_18_excess_income_tax "
+            "+ amt_capital_gain_line_31_tax "
+            "+ amt_capital_gain_line_34_tax "
+            "+ amt_capital_gain_line_37_excess_tax"
         ),
     ),
     _generated_tax_unit_rule(
@@ -904,6 +1209,7 @@ _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT = 15_750
 
 _RELATION_REFS = (
     "us:tax/federal-income-tax/oracle-bridge#relation.business_income_of_tax_unit",
+    "us:tax/federal-income-tax/oracle-bridge#relation.payroll_member_of_tax_unit",
     "us:statutes/26/21#relation.qualifying_individual_of_tax_unit",
     "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
     "us:statutes/26/24/h#relation.dependent_of_tax_unit",
@@ -1051,7 +1357,6 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "eitc_relevant_investment_income",
     "elective_deferrals",
     "eligible_deferred_compensation_deferrals",
-    "employee_3101_3201a_taxes",
     "energy_efficient_home_improvement_credit",
     "employment_related_expenses_paid",
     "excess_payroll_tax_withheld",
@@ -1409,6 +1714,7 @@ _INPUT_REF_OVERRIDES.update(
     {
         name: f"{US_FEDERAL_INCOME_TAX_BRIDGE_TARGET}#input.{name}"
         for name in (
+            "person_payroll_earnings",
             "person_rental_income_for_qbid",
             "person_self_employment_income_for_qbid",
         )
@@ -1495,8 +1801,6 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
             any(_eitc_childless_age_eligible(person) for person in people)
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
-        "employee_medicare_tax": wages * 0.0145,
-        "employee_social_security_tax": wages * 0.062,
         "filer_meets_eitc_identification_requirements": True,
         "filing_status": filing_status,
         "filing_status_is_joint_return": spouse is not None,
@@ -1560,7 +1864,6 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "tax_unit_childcare_expenses",
         0,
     )
-    inputs["employee_3101_3201a_taxes"] = inputs.get("employee_social_security_tax", 0)
     inputs["qualifying_children_count"] = sum(
         1 for dependent in dependents if _age(dependent) < 17
     )
@@ -1610,6 +1913,7 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "meets_ctc_child_identification_requirements": is_dependent,
             "meets_eitc_identification_requirements": is_dependent,
             "noncitizen_exception_to_other_dependent_credit_under_subsection_h": False,
+            "person_payroll_earnings": _earned_income(person),
             "person_rental_income_for_qbid": _number(
                 person.fact(Concepts.RENTAL_INCOME, 0)
             ),
@@ -1707,6 +2011,9 @@ def _case_axiom_tax_unit_inputs(case: Case) -> dict[str, Any]:
         "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933",
         "additional_senior_deduction",
         "earned_income",
+        "employee_3101_3201a_taxes",
+        "employee_medicare_tax",
+        "employee_social_security_tax",
         "filer_adjusted_earnings",
         "gross_income",
         "irs_gross_income",

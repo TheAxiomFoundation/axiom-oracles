@@ -717,10 +717,14 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     )
     assert "amt_part_iii_required" in generated_rule_names
     assert "amt_tax_including_capital_gains" in generated_rule_names
-    assert "adjusted_net_capital_gain > 0" in (
+    assert "capital_gains_worksheet_line_10" in generated_rule_names
+    assert "capital_gains_worksheet_line_13" in generated_rule_names
+    assert "capital_gains_worksheet_line_14" in generated_rule_names
+    assert "capital_gains_worksheet_line_19" in generated_rule_names
+    assert "capital_gains_worksheet_line_10 > 0" in (
         generated_rules_by_name["amt_part_iii_required"]["versions"][0]["formula"]
     )
-    assert "amt_ordinary_income_tax_under_amt_rates" in (
+    assert "amt_capital_gain_line_31_tax" in (
         generated_rules_by_name["amt_tax_including_capital_gains"]["versions"][0][
             "formula"
         ]
