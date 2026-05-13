@@ -11,7 +11,6 @@ from ...comparison.mappings import engine_targets_for_concepts
 _SCOPE_FREE_FEDERAL_TAX_VARIABLES = {
     "auto_loan_interest_deduction",
     "charitable_deduction_for_non_itemizers",
-    "income_tax",
     "overtime_income_deduction",
     "qualified_business_income_deduction",
     "tip_income_deduction",
@@ -40,6 +39,15 @@ _HEAD_RELATIONS = {
     "referenceperson",
     "reference_person",
     "self",
+}
+
+_DEPENDENT_RELATIONS = {
+    "child",
+    "daughter",
+    "foster_child",
+    "grandchild",
+    "son",
+    "stepchild",
 }
 
 
@@ -279,7 +287,12 @@ def _tax_filers(people: list[Entity]) -> tuple[Entity | None, Entity | None]:
     if explicit_spouse is not None:
         return explicit_head, explicit_spouse
 
-    adult_people = [person for person in people if _age(person) >= _TAX_FILER_ADULT_AGE]
+    adult_people = [
+        person
+        for person in people
+        if _age(person) >= _TAX_FILER_ADULT_AGE
+        and _relation(person) not in _DEPENDENT_RELATIONS
+    ]
     if not adult_people:
         return explicit_head, None
     ranked = sorted(

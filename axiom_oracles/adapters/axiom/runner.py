@@ -10,6 +10,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from ...comparison.mappings import engine_targets_for_concepts
 from ...core.engine import EngineAdapter
 from ...core.household import Household
@@ -45,7 +47,9 @@ class AxiomRulesRunner(EngineAdapter):
         default_entity: str = "TaxUnit",
         mode: str = "explain",
         program_imports: tuple[str, ...] = (),
+        program_rules: tuple[Mapping[str, Any], ...] = (),
         rulespec_repo_roots: tuple[str | Path, ...] = (),
+        prune_unsupported_inputs: bool = False,
         subprocess_run: SubprocessRun = subprocess.run,
     ) -> None:
         self.program_path = Path(program_path).expanduser() if program_path else None
@@ -59,9 +63,11 @@ class AxiomRulesRunner(EngineAdapter):
         self.default_entity = default_entity
         self.mode = mode
         self.program_imports = tuple(program_imports)
+        self.program_rules = tuple(program_rules)
         self.rulespec_repo_roots = tuple(
             str(Path(root).expanduser()) for root in rulespec_repo_roots
         )
+        self.prune_unsupported_inputs = prune_unsupported_inputs
         self._subprocess_run = subprocess_run
 
     def run_cases(
@@ -77,9 +83,21 @@ class AxiomRulesRunner(EngineAdapter):
             temp_path = Path(temp_dir)
             program_path = self._program_path(temp_path)
             artifact_path = self._artifact_path(temp_path, program_path)
+            allowed_program_refs = (
+                _allowed_program_refs_from_artifact(artifact_path)
+                if self.prune_unsupported_inputs
+                else None
+            )
             results = []
             for case in cases:
-                results.append(self._run_case(case, output_targets, artifact_path))
+                results.append(
+                    self._run_case(
+                        case,
+                        output_targets,
+                        artifact_path,
+                        allowed_program_refs=allowed_program_refs,
+                    )
+                )
             return results
 
     def run_households(
@@ -99,9 +117,15 @@ class AxiomRulesRunner(EngineAdapter):
         if not self.program_imports:
             return None
         program_path = temp_dir / "generated-program.yaml"
-        imports = "\n".join(f"  - {target}" for target in self.program_imports)
         program_path.write_text(
-            f"format: rulespec/v1\nimports:\n{imports}\nrules: []\n"
+            yaml.safe_dump(
+                {
+                    "format": "rulespec/v1",
+                    "imports": list(self.program_imports),
+                    "rules": [dict(rule) for rule in self.program_rules],
+                },
+                sort_keys=False,
+            )
         )
         return program_path
 
@@ -138,6 +162,8 @@ class AxiomRulesRunner(EngineAdapter):
         case: Case,
         output_targets: list[str],
         artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
     ) -> EngineResult:
         period = _period_for_case(case)
         input_record_overlays = _case_input_record_overlays(case, period)
@@ -147,12 +173,18 @@ class AxiomRulesRunner(EngineAdapter):
                     case,
                     output_targets,
                     artifact_path,
+                    allowed_program_refs=allowed_program_refs,
                     input_record_overlay=overlay,
                 )
                 for overlay in input_record_overlays
             ]
             return _select_candidate_result(self.name, case, candidate_results)
-        return self._run_case_once(case, output_targets, artifact_path)
+        return self._run_case_once(
+            case,
+            output_targets,
+            artifact_path,
+            allowed_program_refs=allowed_program_refs,
+        )
 
     def _run_case_once(
         self,
@@ -160,11 +192,13 @@ class AxiomRulesRunner(EngineAdapter):
         output_targets: list[str],
         artifact_path: Path,
         *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
         input_record_overlay: list[dict[str, Any]] | None = None,
     ) -> EngineResult:
         request = self._execution_request(
             case,
             output_targets,
+            allowed_program_refs=allowed_program_refs,
             input_record_overlay=input_record_overlay,
         )
         process = self._subprocess_run(
@@ -210,6 +244,7 @@ class AxiomRulesRunner(EngineAdapter):
         case: Case,
         outputs: list[str],
         *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
         input_record_overlay: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         period = _period_for_case(case)
@@ -222,11 +257,24 @@ class AxiomRulesRunner(EngineAdapter):
                 input_records,
                 input_record_overlay,
             )
+        if allowed_program_refs is not None:
+            input_records = [
+                record
+                for record in input_records
+                if allowed_program_refs.accepts_input(str(record["name"]))
+            ]
+        relation_records = self._relation_records(case, period)
+        if allowed_program_refs is not None:
+            relation_records = [
+                record
+                for record in relation_records
+                if allowed_program_refs.accepts_relation(str(record["name"]))
+            ]
         return {
             "mode": self.mode,
             "dataset": {
                 "inputs": input_records,
-                "relations": self._relation_records(case, period),
+                "relations": relation_records,
             },
             "queries": [
                 {
@@ -609,6 +657,84 @@ def _output_value(output: Mapping[str, Any]) -> Any:
             return float(raw)
         return raw
     return value
+
+
+class _AllowedProgramRefs:
+    def __init__(
+        self,
+        *,
+        input_slots: set[str],
+        public_values: set[str],
+        relation_names: set[str],
+    ) -> None:
+        self.input_slots = input_slots
+        self.public_values = public_values
+        self.relation_names = relation_names
+
+    def accepts_input(self, reference: str) -> bool:
+        if reference in self.public_values:
+            return True
+        if "#" not in reference:
+            return not self.public_values
+        _, fragment = reference.split("#", maxsplit=1)
+        if fragment.startswith("input."):
+            return fragment.removeprefix("input.") in self.input_slots
+        return fragment in self.input_slots
+
+    def accepts_relation(self, reference: str) -> bool:
+        if reference in self.relation_names:
+            return True
+        if "#" not in reference:
+            return not self.relation_names
+        _, fragment = reference.split("#", maxsplit=1)
+        if fragment.startswith("relation."):
+            return fragment.removeprefix("relation.") in self.relation_names
+        return fragment in self.relation_names
+
+
+def _allowed_program_refs_from_artifact(artifact_path: Path) -> _AllowedProgramRefs:
+    payload = json.loads(artifact_path.read_text())
+    program = payload.get("program", {})
+    input_slots: set[str] = set()
+    public_values: set[str] = set()
+    relation_names: set[str] = set()
+    for derived in program.get("derived", []):
+        if not isinstance(derived, Mapping):
+            continue
+        if isinstance(derived.get("id"), str):
+            public_values.add(derived["id"])
+        _collect_input_slots(derived.get("expr"), input_slots)
+    for parameter in program.get("parameters", []):
+        if not isinstance(parameter, Mapping):
+            continue
+        if isinstance(parameter.get("id"), str):
+            public_values.add(parameter["id"])
+        indexed_by = parameter.get("indexed_by")
+        if isinstance(indexed_by, str) and indexed_by:
+            input_slots.add(indexed_by)
+    for relation in program.get("relations", []):
+        if not isinstance(relation, Mapping):
+            continue
+        name = relation.get("name")
+        if isinstance(name, str) and name:
+            relation_names.add(name)
+    return _AllowedProgramRefs(
+        input_slots=input_slots,
+        public_values=public_values,
+        relation_names=relation_names,
+    )
+
+
+def _collect_input_slots(node: Any, slots: set[str]) -> None:
+    if not isinstance(node, Mapping):
+        if isinstance(node, list | tuple):
+            for item in node:
+                _collect_input_slots(item, slots)
+        return
+    if node.get("kind") == "input" and isinstance(node.get("name"), str):
+        slots.add(node["name"])
+    for value in node.values():
+        _collect_input_slots(value, slots)
 
 
 def _default_rulespec_repo_roots() -> tuple[Path, ...]:
