@@ -57,7 +57,7 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:statutes/26/63/c#standard_deduction
+      axiom: us:policies/irs/rev-proc-2025-32/standard-deduction#standard_deduction
       policyengine: standard_deduction
       taxsim: v13
 

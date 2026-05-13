@@ -10,6 +10,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from ...comparison.mappings import engine_targets_for_concepts
 from ...core.engine import EngineAdapter
 from ...core.household import Household
@@ -45,7 +47,10 @@ class AxiomRulesRunner(EngineAdapter):
         default_entity: str = "TaxUnit",
         mode: str = "explain",
         program_imports: tuple[str, ...] = (),
+        program_rules: tuple[Mapping[str, Any], ...] = (),
         rulespec_repo_roots: tuple[str | Path, ...] = (),
+        prune_unsupported_inputs: bool = False,
+        batch_size: int = 5_000,
         subprocess_run: SubprocessRun = subprocess.run,
     ) -> None:
         self.program_path = Path(program_path).expanduser() if program_path else None
@@ -59,9 +64,12 @@ class AxiomRulesRunner(EngineAdapter):
         self.default_entity = default_entity
         self.mode = mode
         self.program_imports = tuple(program_imports)
+        self.program_rules = tuple(program_rules)
         self.rulespec_repo_roots = tuple(
             str(Path(root).expanduser()) for root in rulespec_repo_roots
         )
+        self.prune_unsupported_inputs = prune_unsupported_inputs
+        self.batch_size = batch_size
         self._subprocess_run = subprocess_run
 
     def run_cases(
@@ -77,10 +85,22 @@ class AxiomRulesRunner(EngineAdapter):
             temp_path = Path(temp_dir)
             program_path = self._program_path(temp_path)
             artifact_path = self._artifact_path(temp_path, program_path)
-            results = []
-            for case in cases:
-                results.append(self._run_case(case, output_targets, artifact_path))
-            return results
+            allowed_program_refs = (
+                _allowed_program_refs_from_artifact(artifact_path)
+                if self.prune_unsupported_inputs
+                else None
+            )
+            output_targets = _execution_output_targets(
+                output_targets,
+                cases,
+                allowed_program_refs,
+            )
+            return self._run_cases(
+                cases,
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+            )
 
     def run_households(
         self,
@@ -99,9 +119,15 @@ class AxiomRulesRunner(EngineAdapter):
         if not self.program_imports:
             return None
         program_path = temp_dir / "generated-program.yaml"
-        imports = "\n".join(f"  - {target}" for target in self.program_imports)
         program_path.write_text(
-            f"format: rulespec/v1\nimports:\n{imports}\nrules: []\n"
+            yaml.safe_dump(
+                {
+                    "format": "rulespec/v1",
+                    "imports": list(self.program_imports),
+                    "rules": [dict(rule) for rule in self.program_rules],
+                },
+                sort_keys=False,
+            )
         )
         return program_path
 
@@ -138,6 +164,8 @@ class AxiomRulesRunner(EngineAdapter):
         case: Case,
         output_targets: list[str],
         artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
     ) -> EngineResult:
         period = _period_for_case(case)
         input_record_overlays = _case_input_record_overlays(case, period)
@@ -147,12 +175,190 @@ class AxiomRulesRunner(EngineAdapter):
                     case,
                     output_targets,
                     artifact_path,
+                    allowed_program_refs=allowed_program_refs,
                     input_record_overlay=overlay,
                 )
                 for overlay in input_record_overlays
             ]
             return _select_candidate_result(self.name, case, candidate_results)
-        return self._run_case_once(case, output_targets, artifact_path)
+        return self._run_case_once(
+            case,
+            output_targets,
+            artifact_path,
+            allowed_program_refs=allowed_program_refs,
+        )
+
+    def _run_cases(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+    ) -> list[EngineResult]:
+        if not output_targets:
+            return [
+                EngineResult(engine=self.name, household_id=case.case_id, values={})
+                for case in cases
+            ]
+        overlays_by_case = [
+            _case_input_record_overlays(case, _period_for_case(case))
+            for case in cases
+        ]
+        if not any(overlays_by_case):
+            return self._run_cases_once(
+                cases,
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+            )
+
+        overlay_count = len(overlays_by_case[0])
+        if not overlay_count or any(len(overlays) != overlay_count for overlays in overlays_by_case):
+            return [
+                self._run_case(
+                    case,
+                    output_targets,
+                    artifact_path,
+                    allowed_program_refs=allowed_program_refs,
+                )
+                for case in cases
+            ]
+
+        candidate_batches = [
+            self._run_cases_once(
+                cases,
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+                input_record_overlays=[
+                    overlays[index] for overlays in overlays_by_case
+                ],
+            )
+            for index in range(overlay_count)
+        ]
+        return [
+            _select_candidate_result(
+                self.name,
+                case,
+                [candidate_batch[case_index] for candidate_batch in candidate_batches],
+            )
+            for case_index, case in enumerate(cases)
+        ]
+
+    def _run_cases_once(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        input_record_overlays: list[list[dict[str, Any]]] | None = None,
+    ) -> list[EngineResult]:
+        results: list[EngineResult] = []
+        for start in range(0, len(cases), self.batch_size):
+            end = start + self.batch_size
+            overlay_chunk = (
+                input_record_overlays[start:end]
+                if input_record_overlays is not None
+                else None
+            )
+            results.extend(
+                self._run_case_batch_once(
+                    cases[start:end],
+                    output_targets,
+                    artifact_path,
+                    allowed_program_refs=allowed_program_refs,
+                    input_record_overlays=overlay_chunk,
+                )
+            )
+        return results
+
+    def _run_case_batch_once(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        input_record_overlays: list[list[dict[str, Any]]] | None = None,
+    ) -> list[EngineResult]:
+        request = self._batched_execution_request(
+            cases,
+            output_targets,
+            allowed_program_refs=allowed_program_refs,
+            input_record_overlays=input_record_overlays,
+        )
+        process = self._subprocess_run(
+            [
+                str(self.binary_path),
+                "run-compiled",
+                "--artifact",
+                str(artifact_path),
+            ],
+            input=json.dumps(request),
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if process.returncode != 0:
+            error = process.stderr.strip() or "Axiom RuleSpec execution failed"
+            return [
+                EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=(error,),
+                )
+                for case in cases
+            ]
+        try:
+            payload = json.loads(process.stdout)
+        except json.JSONDecodeError as exc:
+            return [
+                EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=(f"Axiom RuleSpec execution emitted invalid JSON: {exc}",),
+                    raw=process.stdout,
+                )
+                for case in cases
+            ]
+
+        query_results = [
+            result
+            for result in payload.get("results", [])
+            if isinstance(result, Mapping)
+        ]
+        if len(query_results) != len(cases):
+            error = (
+                "Axiom RuleSpec execution returned "
+                f"{len(query_results)} results for {len(cases)} cases."
+            )
+            return [
+                EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=(error,),
+                    raw=payload,
+                )
+                for case in cases
+            ]
+
+        return [
+            EngineResult(
+                engine=self.name,
+                household_id=case.case_id,
+                values=_values_from_query_result(query_result),
+                raw={
+                    "metadata": payload.get("metadata"),
+                    "result": query_result,
+                },
+            )
+            for case, query_result in zip(cases, query_results, strict=True)
+        ]
 
     def _run_case_once(
         self,
@@ -160,11 +366,13 @@ class AxiomRulesRunner(EngineAdapter):
         output_targets: list[str],
         artifact_path: Path,
         *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
         input_record_overlay: list[dict[str, Any]] | None = None,
     ) -> EngineResult:
         request = self._execution_request(
             case,
             output_targets,
+            allowed_program_refs=allowed_program_refs,
             input_record_overlay=input_record_overlay,
         )
         process = self._subprocess_run(
@@ -210,6 +418,7 @@ class AxiomRulesRunner(EngineAdapter):
         case: Case,
         outputs: list[str],
         *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
         input_record_overlay: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         period = _period_for_case(case)
@@ -222,11 +431,24 @@ class AxiomRulesRunner(EngineAdapter):
                 input_records,
                 input_record_overlay,
             )
+        if allowed_program_refs is not None:
+            input_records = [
+                record
+                for record in input_records
+                if allowed_program_refs.accepts_input(str(record["name"]))
+            ]
+        relation_records = self._relation_records(case, period)
+        if allowed_program_refs is not None:
+            relation_records = [
+                record
+                for record in relation_records
+                if allowed_program_refs.accepts_relation(str(record["name"]))
+            ]
         return {
             "mode": self.mode,
             "dataset": {
                 "inputs": input_records,
-                "relations": self._relation_records(case, period),
+                "relations": relation_records,
             },
             "queries": [
                 {
@@ -235,6 +457,51 @@ class AxiomRulesRunner(EngineAdapter):
                     "outputs": outputs,
                 }
             ],
+        }
+
+    def _batched_execution_request(
+        self,
+        cases: list[Case],
+        outputs: list[str],
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        input_record_overlays: list[list[dict[str, Any]]] | None = None,
+    ) -> dict[str, Any]:
+        input_records: list[dict[str, Any]] = []
+        relation_records: list[dict[str, Any]] = []
+        queries: list[dict[str, Any]] = []
+        for index, case in enumerate(cases):
+            input_record_overlay = (
+                input_record_overlays[index]
+                if input_record_overlays is not None
+                else None
+            )
+            request = self._execution_request(
+                case,
+                outputs,
+                allowed_program_refs=allowed_program_refs,
+                input_record_overlay=input_record_overlay,
+            )
+            namespace = f"case-{index}::"
+            input_records.extend(
+                _namespace_input_record(record, namespace)
+                for record in request["dataset"]["inputs"]
+            )
+            relation_records.extend(
+                _namespace_relation_record(record, namespace)
+                for record in request["dataset"]["relations"]
+            )
+            query = dict(request["queries"][0])
+            query["entity_id"] = _namespace_entity_id(namespace, query["entity_id"])
+            queries.append(query)
+
+        return {
+            "mode": self.mode,
+            "dataset": {
+                "inputs": input_records,
+                "relations": relation_records,
+            },
+            "queries": queries,
         }
 
     def _input_records(
@@ -310,11 +577,19 @@ def _resolve_binary_path(
     if program_path is not None:
         for ancestor in program_path.resolve().parents:
             candidates.append(
+                ancestor / "axiom-rules-engine/target/release/axiom-rules-engine"
+            )
+            candidates.append(ancestor / "axiom-rules-engine/target/release/axiom-rules")
+            candidates.append(
                 ancestor / "axiom-rules-engine/target/debug/axiom-rules-engine"
             )
             candidates.append(ancestor / "axiom-rules-engine/target/debug/axiom-rules")
     candidates.extend(
         [
+            Path.home()
+            / "TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine",
+            Path.home()
+            / "TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules",
             Path.home()
             / "TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules-engine",
             Path.home()
@@ -332,6 +607,29 @@ def _output_targets(variables: list[str] | None) -> list[str]:
         return []
     targets = engine_targets_for_concepts(variables, "axiom")
     return targets or list(variables)
+
+
+def _execution_output_targets(
+    output_targets: list[str],
+    cases: list[Case],
+    allowed_program_refs: "_AllowedProgramRefs | None",
+) -> list[str]:
+    outputs = list(dict.fromkeys([*output_targets, *_result_selection_outputs(cases)]))
+    if allowed_program_refs is None:
+        return outputs
+    return [output for output in outputs if allowed_program_refs.accepts_output(output)]
+
+
+def _result_selection_outputs(cases: list[Case]) -> list[str]:
+    outputs = []
+    for case in cases:
+        raw_selection = case.metadata.get(AXIOM_RESULT_SELECTION_METADATA_KEY)
+        if not isinstance(raw_selection, Mapping):
+            continue
+        output = raw_selection.get("output")
+        if isinstance(output, str) and output:
+            outputs.append(output)
+    return outputs
 
 
 def _explicit_input_records(
@@ -577,15 +875,40 @@ def _relation_tuples(value: Any) -> list[Any]:
     return [[value]]
 
 
+def _namespace_input_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+    namespaced = dict(record)
+    namespaced["entity_id"] = _namespace_entity_id(namespace, namespaced["entity_id"])
+    return namespaced
+
+
+def _namespace_relation_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+    namespaced = dict(record)
+    namespaced["tuple"] = [
+        _namespace_entity_id(namespace, value)
+        for value in namespaced.get("tuple", [])
+    ]
+    return namespaced
+
+
+def _namespace_entity_id(namespace: str, entity_id: Any) -> str:
+    return f"{namespace}{entity_id}"
+
+
 def _values_from_response(payload: Mapping[str, Any]) -> dict[str, Any]:
     values: dict[str, Any] = {}
     for result in payload.get("results", []):
         if not isinstance(result, Mapping):
             continue
-        for output_key, output in result.get("outputs", {}).items():
-            if not isinstance(output, Mapping):
-                continue
-            values[str(output_key)] = _output_value(output)
+        values.update(_values_from_query_result(result))
+    return values
+
+
+def _values_from_query_result(result: Mapping[str, Any]) -> dict[str, Any]:
+    values: dict[str, Any] = {}
+    for output_key, output in result.get("outputs", {}).items():
+        if not isinstance(output, Mapping):
+            continue
+        values[str(output_key)] = _output_value(output)
     return values
 
 
@@ -609,6 +932,89 @@ def _output_value(output: Mapping[str, Any]) -> Any:
             return float(raw)
         return raw
     return value
+
+
+class _AllowedProgramRefs:
+    def __init__(
+        self,
+        *,
+        input_slots: set[str],
+        public_values: set[str],
+        relation_names: set[str],
+    ) -> None:
+        self.input_slots = input_slots
+        self.public_values = public_values
+        self.relation_names = relation_names
+
+    def accepts_input(self, reference: str) -> bool:
+        if reference in self.public_values:
+            return True
+        if "#" not in reference:
+            return not self.public_values
+        _, fragment = reference.split("#", maxsplit=1)
+        if fragment.startswith("input."):
+            return fragment.removeprefix("input.") in self.input_slots
+        return fragment in self.input_slots
+
+    def accepts_output(self, reference: str) -> bool:
+        if reference in self.public_values:
+            return True
+        return not self.public_values
+
+    def accepts_relation(self, reference: str) -> bool:
+        if reference in self.relation_names:
+            return True
+        if "#" not in reference:
+            return not self.relation_names
+        _, fragment = reference.split("#", maxsplit=1)
+        if fragment.startswith("relation."):
+            return fragment.removeprefix("relation.") in self.relation_names
+        return fragment in self.relation_names
+
+
+def _allowed_program_refs_from_artifact(artifact_path: Path) -> _AllowedProgramRefs:
+    payload = json.loads(artifact_path.read_text())
+    program = payload.get("program", {})
+    input_slots: set[str] = set()
+    public_values: set[str] = set()
+    relation_names: set[str] = set()
+    for derived in program.get("derived", []):
+        if not isinstance(derived, Mapping):
+            continue
+        if isinstance(derived.get("id"), str):
+            public_values.add(derived["id"])
+        _collect_input_slots(derived.get("expr"), input_slots)
+    for parameter in program.get("parameters", []):
+        if not isinstance(parameter, Mapping):
+            continue
+        if isinstance(parameter.get("id"), str):
+            public_values.add(parameter["id"])
+        indexed_by = parameter.get("indexed_by")
+        if isinstance(indexed_by, str) and indexed_by:
+            input_slots.add(indexed_by)
+    for relation in program.get("relations", []):
+        if not isinstance(relation, Mapping):
+            continue
+        name = relation.get("name")
+        if isinstance(name, str) and name:
+            relation_names.add(name)
+    return _AllowedProgramRefs(
+        input_slots=input_slots,
+        public_values=public_values,
+        relation_names=relation_names,
+    )
+
+
+def _collect_input_slots(node: Any, slots: set[str]) -> None:
+    if not isinstance(node, Mapping):
+        if isinstance(node, list | tuple):
+            for item in node:
+                _collect_input_slots(item, slots)
+        return
+    if node.get("kind") == "input" and isinstance(node.get("name"), str):
+        slots.add(node["name"])
+    for value in node.values():
+        _collect_input_slots(value, slots)
 
 
 def _default_rulespec_repo_roots() -> tuple[Path, ...]:

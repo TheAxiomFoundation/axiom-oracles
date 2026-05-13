@@ -9,7 +9,7 @@ from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
 
 
-ENHANCED_CPS_DATASET = "hf://policyengine/policyengine-us-data/enhanced_cps_2024.h5"
+ENHANCED_CPS_DATASET = "enhanced_cps_2024"
 NYC_ENHANCED_CPS_DATASET = "hf://policyengine/policyengine-us-data/cities/NYC.h5"
 
 
@@ -98,12 +98,19 @@ class EnhancedCpsCaseLoader:
         if self.microsimulation_factory is not None:
             return self.microsimulation_factory(dataset)
         try:
-            from policyengine_us import Microsimulation
+            import policyengine as pe
         except ImportError as exc:
             raise RuntimeError(
                 "Install the PolicyEngine extra: uv pip install -e '.[policyengine]'"
             ) from exc
-        return Microsimulation(dataset=dataset)
+        if pe.us is None:
+            raise RuntimeError(
+                "Install the US PolicyEngine extra: uv pip install -e '.[policyengine]'"
+            )
+        return pe.us.managed_microsimulation(
+            dataset=dataset,
+            allow_unmanaged=dataset != ENHANCED_CPS_DATASET,
+        )
 
     def _households(self, sim, period: int) -> list["_HouseholdRow"]:
         household_ids = _values(sim.calculate("household_id", period=period))

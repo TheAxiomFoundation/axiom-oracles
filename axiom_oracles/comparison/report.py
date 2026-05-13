@@ -84,9 +84,7 @@ def build_comparison_report(
                 "right_engine": item.right_engine,
                 "left_errors": list(item.left_errors),
                 "right_errors": list(item.right_errors),
-                "metadata": dict(cases_by_id[item.household_id].metadata)
-                if item.household_id in cases_by_id
-                else {},
+                "metadata": _case_report_metadata(cases_by_id.get(item.household_id)),
                 "match_rate": item.match_rate,
                 "mismatches": [
                     _case_mismatch_row(mismatch, mappings_by_id)
@@ -203,6 +201,31 @@ def _case_mismatch_row(
         "tolerance": mismatch.tolerance,
         "parent": mapping.parent if mapping is not None else None,
     }
+
+
+def _case_report_metadata(case: Case | None) -> dict:
+    if case is None:
+        return {}
+    metadata = dict(case.metadata)
+    compact = {
+        key: value
+        for key, value in metadata.items()
+        if key
+        not in {
+            "axiom_input_records",
+            "axiom_input_record_overlays",
+            "axiom_relations",
+        }
+    }
+    for key in (
+        "axiom_input_records",
+        "axiom_input_record_overlays",
+        "axiom_relations",
+    ):
+        value = metadata.get(key)
+        if isinstance(value, list | tuple):
+            compact[f"{key}_count"] = len(value)
+    return compact
 
 
 def _aggregate_rows(

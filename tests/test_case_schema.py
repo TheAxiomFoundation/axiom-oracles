@@ -1,9 +1,9 @@
-import sys
 from types import SimpleNamespace
 
 from axiom_oracles import Case, Concepts, Entity
 from axiom_oracles.adapters.accessnyc import AccessNycInputMapper, AccessNycPythonRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineRunner
+from axiom_oracles.adapters.policyengine import runner as policyengine_runner_module
 from axiom_oracles.comparison.comparator import Comparator
 from axiom_oracles.comparison.mappings import (
     comparable_mappings,
@@ -248,23 +248,141 @@ def test_policyengine_projection_includes_case_scope_geography() -> None:
     assert household["place_fips"] == {2026: "51000"}
 
 
+def test_policyengine_projection_includes_case_scope_for_income_tax() -> None:
+    case = Case(
+        case_id="county-tax-case",
+        period="2026",
+        metadata={"scope": {"type": "census_county", "geoid": "36061"}},
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 30},
+            ),
+        ),
+    )
+
+    household = PolicyEngineRunner()._build_situation_from_case(
+        case,
+        variables=["income_tax"],
+    )["households"]["household"]
+
+    assert household["state_fips"] == {2026: 36}
+    assert household["county_fips"] == {2026: "36061"}
+
+
+def test_policyengine_projection_includes_state_scope_for_itemized_deductions() -> None:
+    case = Case(
+        case_id="county-tax-case",
+        period="2026",
+        metadata={"scope": {"type": "census_county", "geoid": "36061"}},
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 30},
+            ),
+        ),
+    )
+
+    household = PolicyEngineRunner()._build_situation_from_case(
+        case,
+        variables=["itemized_taxable_income_deductions"],
+    )["households"]["household"]
+
+    assert household["state_fips"] == {2026: 36}
+    assert "county_fips" not in household
+
+
+def test_policyengine_projection_sets_tax_unit_head_and_spouse_roles() -> None:
+    case = Case(
+        case_id="explicit-couple-with-older-adult",
+        period="2026",
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                },
+            ),
+            Entity(
+                entity_id="spouse",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.PERSON_AGE: 38,
+                },
+            ),
+            Entity(
+                entity_id="other",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Other",
+                    Concepts.PERSON_AGE: 70,
+                    Concepts.BLIND: True,
+                },
+            ),
+        ),
+    )
+
+    people = PolicyEngineRunner()._build_situation_from_case(case)["people"]
+
+    assert people["head"]["is_tax_unit_head"] == {2026: True}
+    assert people["head"]["is_tax_unit_spouse"] == {2026: False}
+    assert people["spouse"]["is_tax_unit_head"] == {2026: False}
+    assert people["spouse"]["is_tax_unit_spouse"] == {2026: True}
+    assert people["other"]["is_tax_unit_head"] == {2026: False}
+    assert people["other"]["is_tax_unit_spouse"] == {2026: False}
+
+
+def test_policyengine_projection_keeps_adult_child_out_of_spouse_role() -> None:
+    case = Case(
+        case_id="adult-child",
+        period="2026",
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 45,
+                },
+            ),
+            Entity(
+                entity_id="adult-child",
+                kind="person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 23,
+                },
+            ),
+        ),
+    )
+
+    people = PolicyEngineRunner()._build_situation_from_case(case)["people"]
+
+    assert people["head"]["is_tax_unit_head"] == {2026: True}
+    assert people["adult-child"]["is_tax_unit_head"] == {2026: False}
+    assert people["adult-child"]["is_tax_unit_spouse"] == {2026: False}
+
+
 def test_policyengine_runner_calculates_case_variables_at_case_period(
     monkeypatch,
 ) -> None:
     calls = []
 
-    class StubSimulation:
-        def __init__(self, situation):
-            self.situation = situation
+    class StubUS:
+        @staticmethod
+        def calculate_household(**kwargs):
+            calls.append((tuple(kwargs["extra_variables"]), kwargs["year"]))
+            return {"household": {"is_wic_eligible": False}}
 
-        def calculate(self, variable, period):
-            calls.append((variable, period))
-            return [False]
-
-    monkeypatch.setitem(
-        sys.modules,
-        "policyengine_us",
-        SimpleNamespace(Simulation=StubSimulation),
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine",
+        lambda: SimpleNamespace(us=StubUS()),
     )
     case = Case(
         case_id="wic-period",
@@ -280,7 +398,7 @@ def test_policyengine_runner_calculates_case_variables_at_case_period(
 
     PolicyEngineRunner().run_case(case, ["is_wic_eligible"])
 
-    assert calls == [("is_wic_eligible", "2026-05")]
+    assert calls == [(("is_wic_eligible",), 2026)]
 
 
 def test_policyengine_runner_calculates_annual_case_variables_at_year(
@@ -288,26 +406,16 @@ def test_policyengine_runner_calculates_annual_case_variables_at_year(
 ) -> None:
     calls = []
 
-    class StubVariable:
-        definition_period = "year"
+    class StubUS:
+        @staticmethod
+        def calculate_household(**kwargs):
+            calls.append((tuple(kwargs["extra_variables"]), kwargs["year"]))
+            return {"tax_unit": {"income_tax": 0}}
 
-    class StubTaxBenefitSystem:
-        variables = {"income_tax": StubVariable()}
-
-    class StubSimulation:
-        tax_benefit_system = StubTaxBenefitSystem()
-
-        def __init__(self, situation):
-            self.situation = situation
-
-        def calculate(self, variable, period):
-            calls.append((variable, period))
-            return [0]
-
-    monkeypatch.setitem(
-        sys.modules,
-        "policyengine_us",
-        SimpleNamespace(Simulation=StubSimulation),
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine",
+        lambda: SimpleNamespace(us=StubUS()),
     )
     case = Case(
         case_id="tax-period",
@@ -323,7 +431,34 @@ def test_policyengine_runner_calculates_annual_case_variables_at_year(
 
     PolicyEngineRunner().run_case(case, ["income_tax"])
 
-    assert calls == [("income_tax", "2026")]
+    assert calls == [(("income_tax",), 2026)]
+
+
+def test_policyengine_tax_case_runs_use_household_calculator(monkeypatch) -> None:
+    calls = []
+
+    def fake_run_case(self, case, variables):
+        calls.append((case.case_id, tuple(variables)))
+        return EngineResult("policyengine", case.case_id, {"income_tax": 0})
+
+    def fail_batch(*_args, **_kwargs):
+        raise AssertionError("tax cases must not use the batched dataset path")
+
+    monkeypatch.setattr(PolicyEngineRunner, "run_case", fake_run_case)
+    monkeypatch.setattr(PolicyEngineRunner, "_run_case_batch", fail_batch)
+
+    cases = [
+        Case(case_id="case-1", period="2026"),
+        Case(case_id="case-2", period="2026"),
+    ]
+
+    results = PolicyEngineRunner().run_cases(cases, ["income_tax"])
+
+    assert calls == [
+        ("case-1", ("income_tax",)),
+        ("case-2", ("income_tax",)),
+    ]
+    assert [result.household_id for result in results] == ["case-1", "case-2"]
 
 
 def test_policyengine_household_projection_includes_pregnancy_fact() -> None:

@@ -92,11 +92,7 @@ def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     assert "taxsim_input" not in pe_case.metadata
 
 
-def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program(monkeypatch) -> None:
-    monkeypatch.setattr(
-        "axiom_oracles.cli.attach_policyengine_tax_unit_inputs",
-        lambda cases: cases,
-    )
+def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program() -> None:
     case = Case(
         case_id="case-1",
         period="2026",
@@ -132,8 +128,51 @@ def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program(monkeypatch) ->
         "strategy": "min",
         "output": "us:statutes/26/6401#income_tax",
     }
+    assert "axiom_tax_unit_inputs" not in projected.metadata
     assert "axiom_input_records" not in explicit.metadata
     assert "axiom_input_record_overlays" not in explicit.metadata
+
+
+def test_cli_preparation_does_not_use_oracles_as_input_providers(monkeypatch) -> None:
+    def fail_if_called(*_args, **_kwargs) -> None:
+        raise AssertionError("oracle runner was used during input preparation")
+
+    monkeypatch.setattr(
+        "axiom_oracles.adapters.policyengine.runner.PolicyEngineRunner.run_cases",
+        fail_if_called,
+    )
+    monkeypatch.setattr(
+        "axiom_oracles.adapters.taxsim.runner.TaxsimPackageRunner.run_cases",
+        fail_if_called,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2024",
+        metadata={"scope": {"type": "census_state", "geoid": "36"}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+
+    [projected] = _prepare_cases_for_engines(
+        [case],
+        {"axiom", "policyengine", "taxsim"},
+        (Concepts.FEDERAL_INCOME_TAX,),
+        axiom_program=None,
+    )
+
+    assert projected.metadata["taxsim_input"]["state"] == 33
+    assert projected.metadata["axiom_input_records"]
+    assert projected.metadata["axiom_input_record_overlays"]
+    assert "axiom_tax_unit_inputs" not in projected.metadata
 
 
 def test_cli_defaults_taxsim_comparisons_to_supported_tax_year() -> None:

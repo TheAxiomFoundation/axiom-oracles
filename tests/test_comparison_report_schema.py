@@ -121,3 +121,47 @@ def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
     ]
     assert report["cases"][0]["left_errors"] == ["income_tax: invalid state"]
     assert report["aggregates"][0]["missing_left_count"] == 1
+
+
+def test_report_compacts_generated_axiom_metadata() -> None:
+    mapping = ProgramMapping(
+        standard="us:test#income_tax",
+        description="Federal income tax",
+        category="tax",
+        comparison="amount",
+        targets={"axiom": "income_tax", "policyengine": "income_tax"},
+    )
+    comparisons = Comparator([mapping]).compare(
+        [EngineResult("axiom", "case-1", {"income_tax": 0})],
+        [EngineResult("policyengine", "case-1", {"income_tax": 0})],
+    )
+
+    report = build_comparison_report(
+        suite_name="taxsim-fixture",
+        population="synthetic",
+        locales=set(),
+        scope=None,
+        cases=[
+            Case(
+                case_id="case-1",
+                period="2026",
+                metadata={
+                    "household_weight": 10,
+                    "axiom_input_records": [{"name": "large"}],
+                    "axiom_input_record_overlays": [[{"name": "overlay"}]],
+                    "axiom_relations": [{"name": "relation"}],
+                },
+            )
+        ],
+        mappings=[mapping],
+        comparisons=comparisons,
+    )
+
+    metadata = report["cases"][0]["metadata"]
+    assert metadata["household_weight"] == 10
+    assert metadata["axiom_input_records_count"] == 1
+    assert metadata["axiom_input_record_overlays_count"] == 1
+    assert metadata["axiom_relations_count"] == 1
+    assert "axiom_input_records" not in metadata
+    assert "axiom_input_record_overlays" not in metadata
+    assert "axiom_relations" not in metadata
