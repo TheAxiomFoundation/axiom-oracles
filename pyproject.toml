@@ -20,7 +20,7 @@ dev = [
   "ruff>=0.14",
 ]
 policyengine = [
-  "policyengine-us>=1.300.0",
+  "policyengine[us]==4.4.4",
 ]
 taxsim = [
   "policyengine-taxsim>=2.7.1",

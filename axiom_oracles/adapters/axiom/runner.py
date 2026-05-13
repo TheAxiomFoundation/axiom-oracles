@@ -50,6 +50,7 @@ class AxiomRulesRunner(EngineAdapter):
         program_rules: tuple[Mapping[str, Any], ...] = (),
         rulespec_repo_roots: tuple[str | Path, ...] = (),
         prune_unsupported_inputs: bool = False,
+        batch_size: int = 5_000,
         subprocess_run: SubprocessRun = subprocess.run,
     ) -> None:
         self.program_path = Path(program_path).expanduser() if program_path else None
@@ -68,6 +69,7 @@ class AxiomRulesRunner(EngineAdapter):
             str(Path(root).expanduser()) for root in rulespec_repo_roots
         )
         self.prune_unsupported_inputs = prune_unsupported_inputs
+        self.batch_size = batch_size
         self._subprocess_run = subprocess_run
 
     def run_cases(
@@ -88,17 +90,12 @@ class AxiomRulesRunner(EngineAdapter):
                 if self.prune_unsupported_inputs
                 else None
             )
-            results = []
-            for case in cases:
-                results.append(
-                    self._run_case(
-                        case,
-                        output_targets,
-                        artifact_path,
-                        allowed_program_refs=allowed_program_refs,
-                    )
-                )
-            return results
+            return self._run_cases(
+                cases,
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+            )
 
     def run_households(
         self,
@@ -185,6 +182,173 @@ class AxiomRulesRunner(EngineAdapter):
             artifact_path,
             allowed_program_refs=allowed_program_refs,
         )
+
+    def _run_cases(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+    ) -> list[EngineResult]:
+        overlays_by_case = [
+            _case_input_record_overlays(case, _period_for_case(case))
+            for case in cases
+        ]
+        if not any(overlays_by_case):
+            return self._run_cases_once(
+                cases,
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+            )
+
+        overlay_count = len(overlays_by_case[0])
+        if not overlay_count or any(len(overlays) != overlay_count for overlays in overlays_by_case):
+            return [
+                self._run_case(
+                    case,
+                    output_targets,
+                    artifact_path,
+                    allowed_program_refs=allowed_program_refs,
+                )
+                for case in cases
+            ]
+
+        candidate_batches = [
+            self._run_cases_once(
+                cases,
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+                input_record_overlays=[
+                    overlays[index] for overlays in overlays_by_case
+                ],
+            )
+            for index in range(overlay_count)
+        ]
+        return [
+            _select_candidate_result(
+                self.name,
+                case,
+                [candidate_batch[case_index] for candidate_batch in candidate_batches],
+            )
+            for case_index, case in enumerate(cases)
+        ]
+
+    def _run_cases_once(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        input_record_overlays: list[list[dict[str, Any]]] | None = None,
+    ) -> list[EngineResult]:
+        results: list[EngineResult] = []
+        for start in range(0, len(cases), self.batch_size):
+            end = start + self.batch_size
+            overlay_chunk = (
+                input_record_overlays[start:end]
+                if input_record_overlays is not None
+                else None
+            )
+            results.extend(
+                self._run_case_batch_once(
+                    cases[start:end],
+                    output_targets,
+                    artifact_path,
+                    allowed_program_refs=allowed_program_refs,
+                    input_record_overlays=overlay_chunk,
+                )
+            )
+        return results
+
+    def _run_case_batch_once(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        input_record_overlays: list[list[dict[str, Any]]] | None = None,
+    ) -> list[EngineResult]:
+        request = self._batched_execution_request(
+            cases,
+            output_targets,
+            allowed_program_refs=allowed_program_refs,
+            input_record_overlays=input_record_overlays,
+        )
+        process = self._subprocess_run(
+            [
+                str(self.binary_path),
+                "run-compiled",
+                "--artifact",
+                str(artifact_path),
+            ],
+            input=json.dumps(request),
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if process.returncode != 0:
+            error = process.stderr.strip() or "Axiom RuleSpec execution failed"
+            return [
+                EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=(error,),
+                )
+                for case in cases
+            ]
+        try:
+            payload = json.loads(process.stdout)
+        except json.JSONDecodeError as exc:
+            return [
+                EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=(f"Axiom RuleSpec execution emitted invalid JSON: {exc}",),
+                    raw=process.stdout,
+                )
+                for case in cases
+            ]
+
+        query_results = [
+            result
+            for result in payload.get("results", [])
+            if isinstance(result, Mapping)
+        ]
+        if len(query_results) != len(cases):
+            error = (
+                "Axiom RuleSpec execution returned "
+                f"{len(query_results)} results for {len(cases)} cases."
+            )
+            return [
+                EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=(error,),
+                    raw=payload,
+                )
+                for case in cases
+            ]
+
+        return [
+            EngineResult(
+                engine=self.name,
+                household_id=case.case_id,
+                values=_values_from_query_result(query_result),
+                raw={
+                    "metadata": payload.get("metadata"),
+                    "result": query_result,
+                },
+            )
+            for case, query_result in zip(cases, query_results, strict=True)
+        ]
 
     def _run_case_once(
         self,
@@ -285,6 +449,51 @@ class AxiomRulesRunner(EngineAdapter):
             ],
         }
 
+    def _batched_execution_request(
+        self,
+        cases: list[Case],
+        outputs: list[str],
+        *,
+        allowed_program_refs: "_AllowedProgramRefs | None" = None,
+        input_record_overlays: list[list[dict[str, Any]]] | None = None,
+    ) -> dict[str, Any]:
+        input_records: list[dict[str, Any]] = []
+        relation_records: list[dict[str, Any]] = []
+        queries: list[dict[str, Any]] = []
+        for index, case in enumerate(cases):
+            input_record_overlay = (
+                input_record_overlays[index]
+                if input_record_overlays is not None
+                else None
+            )
+            request = self._execution_request(
+                case,
+                outputs,
+                allowed_program_refs=allowed_program_refs,
+                input_record_overlay=input_record_overlay,
+            )
+            namespace = f"case-{index}::"
+            input_records.extend(
+                _namespace_input_record(record, namespace)
+                for record in request["dataset"]["inputs"]
+            )
+            relation_records.extend(
+                _namespace_relation_record(record, namespace)
+                for record in request["dataset"]["relations"]
+            )
+            query = dict(request["queries"][0])
+            query["entity_id"] = _namespace_entity_id(namespace, query["entity_id"])
+            queries.append(query)
+
+        return {
+            "mode": self.mode,
+            "dataset": {
+                "inputs": input_records,
+                "relations": relation_records,
+            },
+            "queries": queries,
+        }
+
     def _input_records(
         self,
         case: Case,
@@ -358,11 +567,19 @@ def _resolve_binary_path(
     if program_path is not None:
         for ancestor in program_path.resolve().parents:
             candidates.append(
+                ancestor / "axiom-rules-engine/target/release/axiom-rules-engine"
+            )
+            candidates.append(ancestor / "axiom-rules-engine/target/release/axiom-rules")
+            candidates.append(
                 ancestor / "axiom-rules-engine/target/debug/axiom-rules-engine"
             )
             candidates.append(ancestor / "axiom-rules-engine/target/debug/axiom-rules")
     candidates.extend(
         [
+            Path.home()
+            / "TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine",
+            Path.home()
+            / "TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules",
             Path.home()
             / "TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules-engine",
             Path.home()
@@ -625,15 +842,40 @@ def _relation_tuples(value: Any) -> list[Any]:
     return [[value]]
 
 
+def _namespace_input_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+    namespaced = dict(record)
+    namespaced["entity_id"] = _namespace_entity_id(namespace, namespaced["entity_id"])
+    return namespaced
+
+
+def _namespace_relation_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+    namespaced = dict(record)
+    namespaced["tuple"] = [
+        _namespace_entity_id(namespace, value)
+        for value in namespaced.get("tuple", [])
+    ]
+    return namespaced
+
+
+def _namespace_entity_id(namespace: str, entity_id: Any) -> str:
+    return f"{namespace}{entity_id}"
+
+
 def _values_from_response(payload: Mapping[str, Any]) -> dict[str, Any]:
     values: dict[str, Any] = {}
     for result in payload.get("results", []):
         if not isinstance(result, Mapping):
             continue
-        for output_key, output in result.get("outputs", {}).items():
-            if not isinstance(output, Mapping):
-                continue
-            values[str(output_key)] = _output_value(output)
+        values.update(_values_from_query_result(result))
+    return values
+
+
+def _values_from_query_result(result: Mapping[str, Any]) -> dict[str, Any]:
+    values: dict[str, Any] = {}
+    for output_key, output in result.get("outputs", {}).items():
+        if not isinstance(output, Mapping):
+            continue
+        values[str(output_key)] = _output_value(output)
     return values
 
 

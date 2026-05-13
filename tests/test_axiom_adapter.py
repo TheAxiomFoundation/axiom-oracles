@@ -30,14 +30,14 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path)
             {
                 "name": "us:statutes/26/6401#input.income_tax_before_refundable_credits",
                 "entity": "TaxUnit",
-                "entity_id": "tax_unit",
+                "entity_id": "case-0::tax_unit",
                 "interval": {"start": "2026-01-01", "end": "2026-12-31"},
                 "value": {"kind": "integer", "value": 1000},
             },
             {
                 "name": "us:statutes/26/6401#input.eitc",
                 "entity": "TaxUnit",
-                "entity_id": "tax_unit",
+                "entity_id": "case-0::tax_unit",
                 "interval": {"start": "2026-01-01", "end": "2026-12-31"},
                 "value": {"kind": "integer", "value": 250},
             },
@@ -108,7 +108,7 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
             {
                 "name": "us:statutes/26/63#input.age",
                 "entity": "Person",
-                "entity_id": "person-1",
+                "entity_id": "case-0::person-1",
                 "value": {"kind": "integer", "value": 70},
                 "interval": {"start": "2026-01-01", "end": "2026-12-31"},
             }
@@ -311,7 +311,7 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
             {
                 "name": "us:tax/federal-income-tax#input.allowed_amount",
                 "entity": "TaxUnit",
-                "entity_id": "tax_unit",
+                "entity_id": "case-0::tax_unit",
                 "interval": {"start": "2026-01-01", "end": "2026-12-31"},
                 "value": {"kind": "integer", "value": 100},
             }
@@ -319,7 +319,7 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
         assert request["dataset"]["relations"] == [
             {
                 "name": "us:statutes/26/example#relation.allowed_relation",
-                "tuple": ["person-1", "tax_unit"],
+                "tuple": ["case-0::person-1", "case-0::tax_unit"],
                 "interval": {"start": "2026-01-01", "end": "2026-12-31"},
             }
         ]

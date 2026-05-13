@@ -1,9 +1,9 @@
-import sys
 from types import SimpleNamespace
 
 from axiom_oracles import Case, Concepts, Entity
 from axiom_oracles.adapters.accessnyc import AccessNycInputMapper, AccessNycPythonRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineRunner
+from axiom_oracles.adapters.policyengine import runner as policyengine_runner_module
 from axiom_oracles.comparison.comparator import Comparator
 from axiom_oracles.comparison.mappings import (
     comparable_mappings,
@@ -341,18 +341,16 @@ def test_policyengine_runner_calculates_case_variables_at_case_period(
 ) -> None:
     calls = []
 
-    class StubSimulation:
-        def __init__(self, situation):
-            self.situation = situation
+    class StubUS:
+        @staticmethod
+        def calculate_household(**kwargs):
+            calls.append((tuple(kwargs["extra_variables"]), kwargs["year"]))
+            return {"household": {"is_wic_eligible": False}}
 
-        def calculate(self, variable, period):
-            calls.append((variable, period))
-            return [False]
-
-    monkeypatch.setitem(
-        sys.modules,
-        "policyengine_us",
-        SimpleNamespace(Simulation=StubSimulation),
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine",
+        lambda: SimpleNamespace(us=StubUS()),
     )
     case = Case(
         case_id="wic-period",
@@ -368,7 +366,7 @@ def test_policyengine_runner_calculates_case_variables_at_case_period(
 
     PolicyEngineRunner().run_case(case, ["is_wic_eligible"])
 
-    assert calls == [("is_wic_eligible", "2026-05")]
+    assert calls == [(("is_wic_eligible",), 2026)]
 
 
 def test_policyengine_runner_calculates_annual_case_variables_at_year(
@@ -376,26 +374,16 @@ def test_policyengine_runner_calculates_annual_case_variables_at_year(
 ) -> None:
     calls = []
 
-    class StubVariable:
-        definition_period = "year"
+    class StubUS:
+        @staticmethod
+        def calculate_household(**kwargs):
+            calls.append((tuple(kwargs["extra_variables"]), kwargs["year"]))
+            return {"tax_unit": {"income_tax": 0}}
 
-    class StubTaxBenefitSystem:
-        variables = {"income_tax": StubVariable()}
-
-    class StubSimulation:
-        tax_benefit_system = StubTaxBenefitSystem()
-
-        def __init__(self, situation):
-            self.situation = situation
-
-        def calculate(self, variable, period):
-            calls.append((variable, period))
-            return [0]
-
-    monkeypatch.setitem(
-        sys.modules,
-        "policyengine_us",
-        SimpleNamespace(Simulation=StubSimulation),
+    monkeypatch.setattr(
+        policyengine_runner_module,
+        "_policyengine",
+        lambda: SimpleNamespace(us=StubUS()),
     )
     case = Case(
         case_id="tax-period",
@@ -411,7 +399,7 @@ def test_policyengine_runner_calculates_annual_case_variables_at_year(
 
     PolicyEngineRunner().run_case(case, ["income_tax"])
 
-    assert calls == [("income_tax", "2026")]
+    assert calls == [(("income_tax",), 2026)]
 
 
 def test_policyengine_household_projection_includes_pregnancy_fact() -> None:

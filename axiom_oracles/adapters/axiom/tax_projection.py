@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from dataclasses import replace
 from typing import Any
 
@@ -849,7 +850,17 @@ def attach_policyengine_tax_unit_inputs(cases: list[Case]) -> list[Case]:
 
     from ..policyengine.runner import PolicyEngineRunner
 
-    runner = PolicyEngineRunner()
+    pending_cases = [
+        case
+        for case in cases
+        if not case.metadata.get(AXIOM_TAX_UNIT_INPUTS_METADATA_KEY)
+    ]
+    pending_results = iter(
+        PolicyEngineRunner().run_cases(
+            pending_cases,
+            list(_POLICYENGINE_EXTERNAL_TAX_INPUTS),
+        )
+    )
     projected = []
     for case in cases:
         metadata = dict(case.metadata)
@@ -857,7 +868,7 @@ def attach_policyengine_tax_unit_inputs(cases: list[Case]) -> list[Case]:
         if existing:
             projected.append(case)
             continue
-        result = runner.run_case(case, list(_POLICYENGINE_EXTERNAL_TAX_INPUTS))
+        result = next(pending_results)
         values = {
             name: result.values[name]
             for name in _POLICYENGINE_EXTERNAL_TAX_INPUTS
@@ -893,7 +904,13 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     dependents = _tax_dependents(people, head, spouse)
     wages = _earned_income(head) + (_earned_income(spouse) if spouse else 0)
     earned_income = wages
-    agi = wages
+    gross_income = wages + _policyengine_additional_gross_income(
+        case,
+        people=people,
+        head=head,
+        spouse=spouse,
+    )
+    agi = gross_income
     filing_status = _filing_status(spouse=spouse, dependents=dependents)
     taxpayer_is_blind = bool(head.fact(Concepts.BLIND, False))
     spouse_is_blind = bool(spouse.fact(Concepts.BLIND, False)) if spouse else False
@@ -901,7 +918,8 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     inputs: dict[str, Any] = {
         "adjusted_gross_income": agi,
         "additional_standard_deduction_entitlement_count_under_subsection_f": sum(
-            int(_age(person) >= 65 or bool(person.fact(Concepts.BLIND, False)))
+            int(_age(person) >= 65)
+            + int(bool(person.fact(Concepts.BLIND, False)))
             for person in (head, spouse)
             if person is not None
         ),
@@ -926,7 +944,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "filer_meets_eitc_identification_requirements": True,
         "filing_status": filing_status,
         "filing_status_is_joint_return": spouse is not None,
-        "gross_income": agi,
+        "gross_income": gross_income,
         "individual_is_unmarried_and_not_surviving_spouse": spouse is None,
         "is_estate_or_trust": False,
         "is_individual": True,
@@ -955,6 +973,12 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     for name in _TAX_UNIT_NUMERIC_DEFAULTS:
         inputs.setdefault(name, 0)
     inputs.update(_case_axiom_tax_unit_inputs(case))
+    irs_gross_income = inputs.pop("irs_gross_income", None)
+    if irs_gross_income is not None:
+        inputs["gross_income"] = irs_gross_income
+    if "adjusted_gross_income" in inputs:
+        inputs["modified_adjusted_gross_income"] = inputs["adjusted_gross_income"]
+        inputs["filer_adjusted_earnings"] = inputs["adjusted_gross_income"]
     inputs["deduction_provided_in_section_170_p"] = inputs.get(
         "charitable_deduction_for_non_itemizers",
         0,
@@ -1177,6 +1201,46 @@ def _additional_senior_deduction(
     phaseout = max(0, agi - threshold) * _ADDITIONAL_SENIOR_DEDUCTION_PHASEOUT_RATE
     per_senior_allowed = max(0, _ADDITIONAL_SENIOR_DEDUCTION_AMOUNT - phaseout)
     return per_senior_allowed * eligible_seniors
+
+
+def _policyengine_additional_gross_income(
+    case: Case,
+    *,
+    people: list[Entity],
+    head: Entity,
+    spouse: Entity | None,
+) -> float:
+    """Mirror PE-generated income that is not present in neutral case facts."""
+
+    scope = case.scope
+    if scope is None or not scope.geoid.startswith("02"):
+        return 0
+    non_dependent_count = sum(
+        not _is_tax_dependent(person, head, spouse)
+        for person in people
+    )
+    return non_dependent_count * _policyengine_ak_permanent_fund_dividend(
+        int(str(case.period).split("-", maxsplit=1)[0])
+    )
+
+
+@lru_cache
+def _policyengine_ak_permanent_fund_dividend(year: int) -> float:
+    try:
+        import policyengine as pe
+    except ImportError:
+        return 0
+    if pe.us is None:
+        return 0
+    parameter = pe.us.model.get_parameter(
+        "gov.states.ak.dor.permanent_fund_dividend"
+    )
+    for value in parameter.parameter_values:
+        if value.start_date.year <= year and (
+            value.end_date is None or year < value.end_date.year
+        ):
+            return float(value.value or 0)
+    return 0
 
 
 def _boolean_default(name: str, case: Case) -> bool:

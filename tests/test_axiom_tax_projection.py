@@ -1,5 +1,6 @@
 import pytest
 
+import axiom_oracles.adapters.axiom.tax_projection as tax_projection
 from axiom_oracles.adapters.axiom.tax_projection import (
     attach_axiom_tax_inputs_to_case,
     attach_axiom_tax_itemization_choice_to_case,
@@ -464,13 +465,48 @@ def test_axiom_tax_projection_phases_out_additional_senior_deduction() -> None:
     ] == 5700
 
 
+def test_axiom_tax_projection_counts_age_and_blindness_separately() -> None:
+    case = Case(
+        case_id="senior-blind-filer",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 70,
+                    Concepts.BLIND: True,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[
+        (
+            "tax_unit",
+            "us:policies/irs/rev-proc-2025-32/standard-deduction"
+            "#input.additional_standard_deduction_entitlement_count_under_subsection_f",
+        )
+    ] == 2
+
+
 def test_axiom_tax_projection_uses_external_tax_unit_inputs() -> None:
     case = Case(
         case_id="itemizer",
         period="2026",
         metadata={
             "axiom_tax_unit_inputs": {
+                "adjusted_gross_income": 103_000,
                 "itemized_taxable_income_deductions": 20_000,
+                "irs_gross_income": 105_000,
                 "qualified_business_income_deduction": 1_000,
                 "tip_income_deduction": 500,
                 "overtime_income_deduction": 250,
@@ -503,6 +539,15 @@ def test_axiom_tax_projection_uses_external_tax_unit_inputs() -> None:
         )
     ] == 20_000
     assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.adjusted_gross_income")
+    ] == 103_000
+    assert by_key[
+        ("tax_unit", "us:statutes/26/63#input.gross_income")
+    ] == 105_000
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.modified_adjusted_gross_income")
+    ] == 103_000
+    assert by_key[
         ("tax_unit", "us:statutes/26/63#input.deduction_provided_in_section_199A")
     ] == 1_000
     assert by_key[
@@ -516,6 +561,63 @@ def test_axiom_tax_projection_uses_external_tax_unit_inputs() -> None:
     ] == 100
     assert not any("tax_unit_itemizes" in name for _, name in by_key)
     assert "axiom_input_record_overlays" not in projected.metadata
+
+
+def test_axiom_tax_projection_mirrors_policyengine_alaska_pfd(monkeypatch) -> None:
+    monkeypatch.setattr(
+        tax_projection,
+        "_policyengine_ak_permanent_fund_dividend",
+        lambda year: 1_400,
+    )
+    case = Case(
+        case_id="alaska-couple-with-dependent",
+        period="2026",
+        metadata={"scope": {"type": "census_county", "geoid": "02170"}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.PERSON_AGE: 38,
+                    Concepts.YEARLY_EARNED_INCOME: 20_000,
+                },
+            ),
+            Entity(
+                "person-3",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 8,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.adjusted_gross_income")
+    ] == 72_800
+    assert by_key[
+        ("tax_unit", "us:statutes/26/63#input.gross_income")
+    ] == 72_800
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.earned_income")
+    ] == 70_000
 
 
 def test_axiom_tax_projection_counts_young_adult_as_other_dependent() -> None:
