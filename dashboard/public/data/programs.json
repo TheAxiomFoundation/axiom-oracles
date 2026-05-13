@@ -7,7 +7,7 @@
       "category": "food",
       "axiom_ref": "us:statutes/7/2014/u",
       "axiom_target": "us:statutes/7/2014/u#snap_benefit",
-      "statute_label": "7 USC § 2014(u)",
+      "statute_label": "7 USC \u00a7 2014(u)",
       "comparison": "amount",
       "tolerance": 1,
       "oracles": [
@@ -23,7 +23,7 @@
       "encoding_status": "present",
       "coverage": [
         {
-          "corpus": "rules-us-co",
+          "corpus": "rulespec-us-co",
           "file": "regulations/10-ccr-2506-1/4.207.2.yaml",
           "label": "Colorado",
           "scope": "state",
@@ -37,6 +37,13 @@
           "scope": "state",
           "country": "US",
           "state": "NY"
+        },
+        {
+          "corpus": "rulespec-us",
+          "file": "regulations/7-cfr/273/10.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
         }
       ],
       "program_family": "SNAP",
@@ -48,7 +55,7 @@
       "category": "tax",
       "axiom_ref": "us:statutes/26/6401",
       "axiom_target": "us:statutes/26/6401#income_tax",
-      "statute_label": "26 USC § 6401",
+      "statute_label": "26 USC \u00a7 6401",
       "comparison": "amount",
       "tolerance": 15,
       "oracles": [
@@ -71,12 +78,179 @@
       ]
     },
     {
+      "id": "us:tax/federal-income-tax#standard_deduction",
+      "name": "Federal standard deduction",
+      "category": "tax",
+      "axiom_ref": "us:policies/irs/rev-proc-2025-32/standard-deduction",
+      "axiom_target": "us:policies/irs/rev-proc-2025-32/standard-deduction#standard_deduction",
+      "statute_label": "us:policies/irs/rev-proc-2025-32/standard-deduction",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine",
+        "taxsim"
+      ],
+      "rule_aliases": [
+        "standard_deduction"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/63/c.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        },
+        {
+          "corpus": "rulespec-us",
+          "file": "policies/irs/rev-proc-2025-32/standard-deduction.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/federal-income-tax#taxable_income",
+      "name": "Federal taxable income",
+      "category": "tax",
+      "axiom_ref": "us:tax/federal-income-tax/oracle-bridge",
+      "axiom_target": "us:tax/federal-income-tax/oracle-bridge#taxable_income",
+      "statute_label": "us:tax/federal-income-tax/oracle-bridge",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine",
+        "taxsim"
+      ],
+      "rule_aliases": [
+        "taxable_income"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/63.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/federal-income-tax#tax_before_credits",
+      "name": "Federal tax before credits",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/1/j",
+      "axiom_target": "us:statutes/26/1/j#income_tax_main_rates",
+      "statute_label": "26 USC \u00a7 1/j",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine",
+        "taxsim"
+      ],
+      "rule_aliases": [
+        "income_tax_main_rates"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/1/j.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/federal-income-tax#eitc",
+      "name": "Earned Income Tax Credit",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/32",
+      "axiom_target": "us:statutes/26/32#eitc",
+      "statute_label": "26 USC \u00a7 32",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine",
+        "taxsim"
+      ],
+      "rule_aliases": [
+        "eitc"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/32.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/federal-income-tax#ctc",
+      "name": "Child Tax Credit value",
+      "category": "tax",
+      "axiom_ref": "us:tax/federal-income-tax/oracle-bridge",
+      "axiom_target": "us:tax/federal-income-tax/oracle-bridge#ctc_value",
+      "statute_label": "us:tax/federal-income-tax/oracle-bridge",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine",
+        "taxsim"
+      ],
+      "rule_aliases": [
+        "ctc_value"
+      ],
+      "encoding_status": "missing",
+      "coverage": []
+    },
+    {
+      "id": "us:tax/federal-income-tax#amt",
+      "name": "Alternative Minimum Tax",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/55",
+      "axiom_target": "us:statutes/26/55#alternative_minimum_tax",
+      "statute_label": "26 USC \u00a7 55",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine",
+        "taxsim"
+      ],
+      "rule_aliases": [
+        "alternative_minimum_tax"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/55.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
       "id": "us:statutes/7/2014/o#snap_eligible",
       "name": "SNAP eligibility",
       "category": "food",
       "axiom_ref": "us:statutes/7/2014/o",
       "axiom_target": "us:statutes/7/2014/o#snap_eligible",
-      "statute_label": "7 USC § 2014/o",
+      "statute_label": "7 USC \u00a7 2014/o",
       "comparison": "eligibility",
       "tolerance": null,
       "oracles": [
@@ -90,7 +264,7 @@
       "encoding_status": "present",
       "coverage": [
         {
-          "corpus": "rules-us-co",
+          "corpus": "rulespec-us-co",
           "file": "policies/cdhs/snap/fy-2026-benefit-calculation.yaml",
           "label": "Colorado",
           "scope": "state",
@@ -173,7 +347,7 @@
       "category": "food",
       "axiom_ref": "us:statutes/42/1786",
       "axiom_target": "us:statutes/42/1786#wic_eligible",
-      "statute_label": "42 USC § 1786",
+      "statute_label": "42 USC \u00a7 1786",
       "comparison": "eligibility",
       "tolerance": null,
       "oracles": [
