@@ -381,6 +381,47 @@ def test_axiom_tax_projection_routes_self_employment_through_sections_1402_and_1
     ) not in by_key
 
 
+def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> None:
+    case = Case(
+        case_id="dependent-social-security",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 59,
+                    Concepts.SELF_EMPLOYMENT_INCOME: 60_000,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 15,
+                    Concepts.SOCIAL_SECURITY_BENEFITS: 5_500,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/86#input."
+            "title_II_monthly_benefits_received_during_taxable_year",
+        )
+    ] == 5_500
+
+
 def test_axiom_tax_projection_routes_qbi_through_person_relation_rows() -> None:
     case = Case(
         case_id="qbi",

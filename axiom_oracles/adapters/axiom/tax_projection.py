@@ -1471,7 +1471,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     short_capital_gains = _sum_concept(earners, Concepts.SHORT_TERM_CAPITAL_GAINS)
     long_capital_gains = _sum_concept(earners, Concepts.LONG_TERM_CAPITAL_GAINS)
     pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
-    social_security = _sum_concept(earners, Concepts.SOCIAL_SECURITY_BENEFITS)
+    social_security = _sum_concept(people, Concepts.SOCIAL_SECURITY_BENEFITS)
     unemployment = _sum_concept(earners, Concepts.UNEMPLOYMENT_INSURANCE_INCOME)
     rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
     self_employment = _sum_concept(earners, Concepts.SELF_EMPLOYMENT_INCOME)
