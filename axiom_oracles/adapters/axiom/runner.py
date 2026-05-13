@@ -90,6 +90,11 @@ class AxiomRulesRunner(EngineAdapter):
                 if self.prune_unsupported_inputs
                 else None
             )
+            output_targets = _execution_output_targets(
+                output_targets,
+                cases,
+                allowed_program_refs,
+            )
             return self._run_cases(
                 cases,
                 output_targets,
@@ -191,6 +196,11 @@ class AxiomRulesRunner(EngineAdapter):
         *,
         allowed_program_refs: "_AllowedProgramRefs | None" = None,
     ) -> list[EngineResult]:
+        if not output_targets:
+            return [
+                EngineResult(engine=self.name, household_id=case.case_id, values={})
+                for case in cases
+            ]
         overlays_by_case = [
             _case_input_record_overlays(case, _period_for_case(case))
             for case in cases
@@ -599,6 +609,29 @@ def _output_targets(variables: list[str] | None) -> list[str]:
     return targets or list(variables)
 
 
+def _execution_output_targets(
+    output_targets: list[str],
+    cases: list[Case],
+    allowed_program_refs: "_AllowedProgramRefs | None",
+) -> list[str]:
+    outputs = list(dict.fromkeys([*output_targets, *_result_selection_outputs(cases)]))
+    if allowed_program_refs is None:
+        return outputs
+    return [output for output in outputs if allowed_program_refs.accepts_output(output)]
+
+
+def _result_selection_outputs(cases: list[Case]) -> list[str]:
+    outputs = []
+    for case in cases:
+        raw_selection = case.metadata.get(AXIOM_RESULT_SELECTION_METADATA_KEY)
+        if not isinstance(raw_selection, Mapping):
+            continue
+        output = raw_selection.get("output")
+        if isinstance(output, str) and output:
+            outputs.append(output)
+    return outputs
+
+
 def _explicit_input_records(
     case: Case,
     period: dict[str, str],
@@ -922,6 +955,11 @@ class _AllowedProgramRefs:
         if fragment.startswith("input."):
             return fragment.removeprefix("input.") in self.input_slots
         return fragment in self.input_slots
+
+    def accepts_output(self, reference: str) -> bool:
+        if reference in self.public_values:
+            return True
+        return not self.public_values
 
     def accepts_relation(self, reference: str) -> bool:
         if reference in self.relation_names:

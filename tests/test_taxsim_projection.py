@@ -20,6 +20,7 @@ def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> Non
                     Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
                     Concepts.PERSON_AGE: 40,
                     Concepts.YEARLY_EARNED_INCOME: 50_000,
+                    Concepts.SELF_EMPLOYMENT_INCOME: 3_000,
                 },
             ),
             Entity(
@@ -29,6 +30,7 @@ def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> Non
                     Concepts.HOUSEHOLD_RELATION: "Spouse",
                     Concepts.PERSON_AGE: 38,
                     Concepts.YEARLY_EARNED_INCOME: 20_000,
+                    Concepts.SELF_EMPLOYMENT_INCOME: 2_000,
                 },
             ),
             Entity(
@@ -60,13 +62,17 @@ def test_taxsim_projection_maps_family_wages_dependents_and_scope_state() -> Non
     assert row["sage"] == 38
     assert row["pwages"] == 50_000
     assert row["swages"] == 20_000
+    assert row["psemp"] == 3_000
+    assert row["ssemp"] == 2_000
     assert row["depx"] == 2
     assert row["age1"] == 5
     assert row["age2"] == 17
     assert row["dep13"] == 1
     assert row["dep17"] == 1
     assert row["dep18"] == 2
-    assert row["idtl"] == 0
+    # idtl=2 requests TAXSIM's decomposed credit columns (v10..v41) used for
+    # component-level comparisons.
+    assert row["idtl"] == 2
 
 
 def test_taxsim_projection_uses_state_code_fact_without_scope() -> None:

@@ -323,6 +323,18 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
                 "interval": {"start": "2026-01-01", "end": "2026-12-31"},
             }
         ]
+        assert request["queries"] == [
+            {
+                "entity_id": "case-0::tax_unit",
+                "period": {
+                    "period_kind": "tax_year",
+                    "start": "2026-01-01",
+                    "end": "2026-12-31",
+                    "name": "2026",
+                },
+                "outputs": ["us:statutes/26/example#tax"],
+            }
+        ]
         return subprocess.CompletedProcess(
             args,
             0,
@@ -383,7 +395,13 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
         },
     )
 
-    [result] = runner.run_cases([case], ["us:statutes/26/example#tax"])
+    [result] = runner.run_cases(
+        [case],
+        [
+            "us:statutes/26/example#tax",
+            "us:statutes/26/example#not_yet_encoded",
+        ],
+    )
 
     assert result.errors == ()
     assert result.values == {"us:statutes/26/example#tax": 100}
@@ -504,7 +522,14 @@ def test_axiom_tax_concept_is_comparable_to_policyengine() -> None:
         )
     }
 
-    assert concept_ids == {Concepts.FEDERAL_INCOME_TAX}
+    # FIT liability plus its decomposed comparison targets.
+    assert Concepts.FEDERAL_INCOME_TAX in concept_ids
+    assert Concepts.STANDARD_DEDUCTION in concept_ids
+    assert Concepts.TAXABLE_INCOME in concept_ids
+    assert Concepts.TAX_BEFORE_CREDITS in concept_ids
+    assert Concepts.EITC in concept_ids
+    assert Concepts.AMT in concept_ids
+    assert Concepts.CTC in concept_ids
 
 
 def test_cli_builds_axiom_runner() -> None:

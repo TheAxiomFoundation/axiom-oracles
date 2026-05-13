@@ -1,6 +1,5 @@
 import pytest
 
-import axiom_oracles.adapters.axiom.tax_projection as tax_projection
 from axiom_oracles.adapters.axiom.tax_projection import (
     attach_axiom_tax_inputs_to_case,
     attach_axiom_tax_itemization_choice_to_case,
@@ -563,12 +562,7 @@ def test_axiom_tax_projection_uses_case_supplied_tax_unit_inputs() -> None:
     assert "axiom_input_record_overlays" not in projected.metadata
 
 
-def test_axiom_tax_projection_mirrors_policyengine_alaska_pfd(monkeypatch) -> None:
-    monkeypatch.setattr(
-        tax_projection,
-        "_policyengine_ak_permanent_fund_dividend",
-        lambda year: 1_400,
-    )
+def test_axiom_tax_projection_does_not_synthesize_alaska_pfd_from_policyengine() -> None:
     case = Case(
         case_id="alaska-couple-with-dependent",
         period="2026",
@@ -611,10 +605,10 @@ def test_axiom_tax_projection_mirrors_policyengine_alaska_pfd(monkeypatch) -> No
 
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.adjusted_gross_income")
-    ] == 72_800
+    ] == 70_000
     assert by_key[
         ("tax_unit", "us:statutes/26/63#input.gross_income")
-    ] == 72_800
+    ] == 70_000
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.earned_income")
     ] == 70_000

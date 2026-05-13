@@ -38,10 +38,83 @@ concepts:
     comparison: amount
     tolerance: 15
     priority: high
+    components:
+      - us:tax/federal-income-tax#standard_deduction
+      - us:tax/federal-income-tax#taxable_income
+      - us:tax/federal-income-tax#tax_before_credits
+      - us:tax/federal-income-tax#eitc
+      - us:tax/federal-income-tax#ctc
+      - us:tax/federal-income-tax#amt
     targets:
       axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
       taxsim: fiitax
+
+  us:tax/federal-income-tax#standard_deduction:
+    description: Federal standard deduction
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:policies/irs/rev-proc-2025-32/standard-deduction#standard_deduction
+      policyengine: standard_deduction
+      taxsim: v13
+
+  us:tax/federal-income-tax#taxable_income:
+    description: Federal taxable income
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/63#taxable_income
+      policyengine: taxable_income
+      taxsim: v18
+
+  us:tax/federal-income-tax#tax_before_credits:
+    description: Federal tax before credits
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/1/j#income_tax_main_rates
+      policyengine: income_tax_main_rates
+      taxsim: v19
+
+  us:tax/federal-income-tax#eitc:
+    description: Earned Income Tax Credit
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/32#eitc
+      policyengine: eitc
+      taxsim: v25
+
+  us:tax/federal-income-tax#ctc:
+    description: Child Tax Credit (non-refundable)
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/24/h#ctc
+      policyengine: ctc_value
+      taxsim: v22
+
+  us:tax/federal-income-tax#amt:
+    description: Alternative Minimum Tax
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/55#alternative_minimum_tax
+      policyengine: alternative_minimum_tax
+      taxsim: v27
 
   us:tax/state-income-tax#liability:
     description: State income tax liability

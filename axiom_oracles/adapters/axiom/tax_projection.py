@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import lru_cache
 from dataclasses import replace
 from typing import Any
 
@@ -860,14 +859,31 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     head, spouse = _tax_filers(people)
     dependents = _tax_dependents(people, head, spouse)
     wages = _earned_income(head) + (_earned_income(spouse) if spouse else 0)
-    earned_income = wages
-    gross_income = wages + _policyengine_additional_gross_income(
-        case,
-        people=people,
-        head=head,
-        spouse=spouse,
+
+    # Investment / unearned income pulled from the Case so Axiom matches what
+    # PolicyEngine and TAXSIM see.
+    earners = [person for person in (head, spouse) if person is not None]
+    dividends = _sum_concept(earners, Concepts.DIVIDEND_INCOME)
+    interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
+    short_capital_gains = _sum_concept(earners, Concepts.SHORT_TERM_CAPITAL_GAINS)
+    long_capital_gains = _sum_concept(earners, Concepts.LONG_TERM_CAPITAL_GAINS)
+    pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
+    social_security = _sum_concept(earners, Concepts.SOCIAL_SECURITY_BENEFITS)
+    unemployment = _sum_concept(earners, Concepts.UNEMPLOYMENT_INSURANCE_INCOME)
+    rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
+    self_employment = _sum_concept(earners, Concepts.SELF_EMPLOYMENT_INCOME)
+
+    investment_income = (
+        dividends
+        + interest
+        + short_capital_gains
+        + long_capital_gains
+        + rental
     )
-    agi = gross_income
+    other_income = pensions + social_security + unemployment + self_employment
+    earned_income = wages + self_employment
+    agi = wages + investment_income + other_income
+    gross_income = agi
     filing_status = _filing_status(spouse=spouse, dependents=dependents)
     taxpayer_is_blind = bool(head.fact(Concepts.BLIND, False))
     spouse_is_blind = bool(spouse.fact(Concepts.BLIND, False)) if spouse else False
@@ -924,6 +940,15 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "trust_all_unexpired_interests_devoted_to_section_170_c_2_B_purposes": False,
         "wages": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
+        # Investment / unearned income — projected from Case concepts.
+        "dividend_income": dividends,
+        "qualified_dividend_income": dividends,
+        "taxable_interest_income": interest,
+        "short_term_capital_gains": short_capital_gains,
+        "long_term_capital_gains": long_capital_gains,
+        "rental_income": rental,
+        "pension_annuity_disability_benefits_received": pensions,
+        "social_security_benefits_received": social_security,
     }
     for name in _BOOLEAN_DEFAULTS_FALSE:
         inputs.setdefault(name, _boolean_default(name, case))
@@ -1160,46 +1185,6 @@ def _additional_senior_deduction(
     return per_senior_allowed * eligible_seniors
 
 
-def _policyengine_additional_gross_income(
-    case: Case,
-    *,
-    people: list[Entity],
-    head: Entity,
-    spouse: Entity | None,
-) -> float:
-    """Mirror PE-generated income that is not present in neutral case facts."""
-
-    scope = case.scope
-    if scope is None or not scope.geoid.startswith("02"):
-        return 0
-    non_dependent_count = sum(
-        not _is_tax_dependent(person, head, spouse)
-        for person in people
-    )
-    return non_dependent_count * _policyengine_ak_permanent_fund_dividend(
-        int(str(case.period).split("-", maxsplit=1)[0])
-    )
-
-
-@lru_cache
-def _policyengine_ak_permanent_fund_dividend(year: int) -> float:
-    try:
-        import policyengine as pe
-    except ImportError:
-        return 0
-    if pe.us is None:
-        return 0
-    parameter = pe.us.model.get_parameter(
-        "gov.states.ak.dor.permanent_fund_dividend"
-    )
-    for value in parameter.parameter_values:
-        if value.start_date.year <= year and (
-            value.end_date is None or year < value.end_date.year
-        ):
-            return float(value.value or 0)
-    return 0
-
-
 def _boolean_default(name: str, case: Case) -> bool:
     year = int(str(case.period).split("-", maxsplit=1)[0])
     if name == "taxable_year_begins_after_2024_and_before_2029":
@@ -1309,6 +1294,10 @@ def _age(entity: Entity) -> int:
 
 def _earned_income(entity: Entity) -> float:
     return _number(entity.fact(Concepts.YEARLY_EARNED_INCOME, 0))
+
+
+def _sum_concept(entities: list[Entity], concept: str) -> float:
+    return sum(_number(entity.fact(concept, 0)) for entity in entities)
 
 
 def _number(value: Any) -> float:

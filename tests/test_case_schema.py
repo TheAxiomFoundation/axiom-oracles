@@ -105,6 +105,16 @@ def test_default_compare_concepts_are_engine_intersection_for_suite_locale() -> 
     assert Concepts.BASIC_HEALTH_PROGRAM_ELIGIBLE not in concept_ids
 
 
+def test_component_concepts_can_be_selected_directly() -> None:
+    mappings = comparable_mappings(
+        "axiom",
+        "policyengine",
+        concepts={Concepts.EITC},
+    )
+
+    assert [mapping.concept_id for mapping in mappings] == [Concepts.EITC]
+
+
 def test_accessnyc_targets_are_locale_filtered() -> None:
     mappings = comparable_mappings(
         "accessnyc",
@@ -192,6 +202,28 @@ def test_policyengine_projection_includes_pregnancy_fact() -> None:
     situation = PolicyEngineRunner()._build_situation_from_case(case)
 
     assert situation["people"]["head"]["is_pregnant"][2026] is True
+
+
+def test_policyengine_projection_uses_taxable_interest_income() -> None:
+    case = Case(
+        case_id="interest-income",
+        period="2026",
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.INTEREST_INCOME: 1_000,
+                },
+            ),
+        ),
+    )
+
+    person = PolicyEngineRunner()._build_situation_from_case(case)["people"]["head"]
+
+    assert person["taxable_interest_income"] == {2026: 1_000}
+    assert "interest_income" not in person
 
 
 def test_policyengine_projection_includes_case_scope_geography() -> None:
@@ -400,6 +432,33 @@ def test_policyengine_runner_calculates_annual_case_variables_at_year(
     PolicyEngineRunner().run_case(case, ["income_tax"])
 
     assert calls == [(("income_tax",), 2026)]
+
+
+def test_policyengine_tax_case_runs_use_household_calculator(monkeypatch) -> None:
+    calls = []
+
+    def fake_run_case(self, case, variables):
+        calls.append((case.case_id, tuple(variables)))
+        return EngineResult("policyengine", case.case_id, {"income_tax": 0})
+
+    def fail_batch(*_args, **_kwargs):
+        raise AssertionError("tax cases must not use the batched dataset path")
+
+    monkeypatch.setattr(PolicyEngineRunner, "run_case", fake_run_case)
+    monkeypatch.setattr(PolicyEngineRunner, "_run_case_batch", fail_batch)
+
+    cases = [
+        Case(case_id="case-1", period="2026"),
+        Case(case_id="case-2", period="2026"),
+    ]
+
+    results = PolicyEngineRunner().run_cases(cases, ["income_tax"])
+
+    assert calls == [
+        ("case-1", ("income_tax",)),
+        ("case-2", ("income_tax",)),
+    ]
+    assert [result.household_id for result in results] == ["case-1", "case-2"]
 
 
 def test_policyengine_household_projection_includes_pregnancy_fact() -> None:

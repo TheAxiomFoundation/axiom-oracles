@@ -59,6 +59,8 @@ def test_comparison_report_includes_weighted_summary_and_concept_aggregates() ->
             "description": "SNAP eligibility",
             "category": "food",
             "comparison": "eligibility",
+            "parent": None,
+            "components": [],
             "comparison_count": 2,
             "mismatch_count": 1,
             "missing_left_count": 0,

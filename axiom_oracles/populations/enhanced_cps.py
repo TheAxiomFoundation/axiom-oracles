@@ -202,6 +202,18 @@ class EnhancedCpsCaseLoader:
             default=False,
             size=size,
         )
+        # Non-wage income variables. Missing variables fall back to 0.
+        non_wage_income = {
+            concept: _calculate_values(
+                sim,
+                pe_variable,
+                period,
+                map_to="person",
+                default=0,
+                size=size,
+            )
+            for concept, pe_variable in _PERSON_NON_WAGE_VARIABLES.items()
+        }
 
         people_by_household: dict[int | str, list[_PersonRow]] = defaultdict(list)
         for index, household_id in enumerate(household_ids):
@@ -221,6 +233,10 @@ class EnhancedCpsCaseLoader:
                     blind=bool(blind[index]),
                     veteran=bool(veteran[index]),
                     benefits_medicaid=bool(medicaid[index]),
+                    non_wage_income={
+                        concept: float(_clean_number(values[index]))
+                        for concept, values in non_wage_income.items()
+                    },
                 )
             )
         return people_by_household
@@ -233,6 +249,19 @@ class _HouseholdRow:
     scope: GeographyScope | None
 
 
+_PERSON_NON_WAGE_VARIABLES = {
+    Concepts.DIVIDEND_INCOME: "dividend_income",
+    Concepts.INTEREST_INCOME: "taxable_interest_income",
+    Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
+    Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
+    Concepts.PENSION_INCOME: "taxable_pension_income",
+    Concepts.SOCIAL_SECURITY_BENEFITS: "social_security",
+    Concepts.UNEMPLOYMENT_INSURANCE_INCOME: "unemployment_compensation",
+    Concepts.RENTAL_INCOME: "rental_income",
+    Concepts.SELF_EMPLOYMENT_INCOME: "self_employment_income",
+}
+
+
 @dataclass(frozen=True)
 class _PersonRow:
     person_id: int | str
@@ -243,6 +272,7 @@ class _PersonRow:
     blind: bool
     veteran: bool
     benefits_medicaid: bool
+    non_wage_income: dict[str, float]
 
 
 def _person_entity(person: _PersonRow, index: int) -> Entity:
@@ -256,6 +286,9 @@ def _person_entity(person: _PersonRow, index: int) -> Entity:
         Concepts.VETERAN: person.veteran,
         Concepts.BENEFITS_MEDICAID: person.benefits_medicaid,
     }
+    for concept, value in person.non_wage_income.items():
+        if value:
+            facts[concept] = value
     return Entity(
         entity_id=f"person-{person.person_id}",
         kind="person",
