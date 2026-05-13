@@ -606,13 +606,30 @@ class PolicyEngineRunner(EngineAdapter):
 
     @staticmethod
     def _coerce_value(value) -> float | bool:
-        import numpy as np
+        import math
 
-        array = np.asarray(value)
-        if array.dtype == bool:
-            return bool(array.any())
-        number = float(np.nan_to_num(array, nan=0).sum())
-        return number
+        if hasattr(value, "tolist"):
+            raw_values = value.tolist()
+        elif isinstance(value, Sequence) and not isinstance(value, str | bytes):
+            raw_values = list(value)
+        else:
+            raw_values = [value]
+        if not isinstance(raw_values, list):
+            raw_values = [raw_values]
+        if all(isinstance(item, bool) for item in raw_values):
+            return any(raw_values)
+        total = 0.0
+        for item in raw_values:
+            if hasattr(item, "item"):
+                item = item.item()
+            try:
+                number = float(item)
+            except (TypeError, ValueError):
+                continue
+            if math.isnan(number):
+                continue
+            total += number
+        return total
 
     @staticmethod
     def _coerce_batch_values(value, size: int) -> list[float | bool]:
