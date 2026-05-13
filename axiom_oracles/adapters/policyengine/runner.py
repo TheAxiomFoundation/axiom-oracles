@@ -1,11 +1,33 @@
 from __future__ import annotations
 
+from typing import Any
+
 from ...core.engine import EngineAdapter
 from ...core.case import Case, Concepts
 from ...core.geography import pe_inputs_for_scope
 from ...core.household import Household
 from ...core.results import EngineResult
 from ...comparison.mappings import engine_targets_for_concepts
+
+
+_PERSON_INCOME_CONCEPT_TO_PE = {
+    Concepts.DIVIDEND_INCOME: "dividend_income",
+    Concepts.INTEREST_INCOME: "taxable_interest_income",
+    Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
+    Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
+    Concepts.PENSION_INCOME: "taxable_pension_income",
+    Concepts.SOCIAL_SECURITY_BENEFITS: "social_security",
+    Concepts.UNEMPLOYMENT_INSURANCE_INCOME: "unemployment_compensation",
+    Concepts.RENTAL_INCOME: "rental_income",
+    Concepts.SELF_EMPLOYMENT_INCOME: "self_employment_income",
+}
+
+_TAX_UNIT_CONCEPT_TO_PE = {
+    Concepts.PROPERTY_TAX_PAID: "real_estate_taxes",
+    Concepts.MORTGAGE_INTEREST_PAID: "deductible_mortgage_interest",
+    Concepts.ITEMIZED_DEDUCTIONS_OTHER: "misc_deduction",
+    Concepts.CHILDCARE_EXPENSES: "tax_unit_childcare_expenses",
+}
 
 
 class PolicyEngineRunner(EngineAdapter):
@@ -146,7 +168,7 @@ class PolicyEngineRunner(EngineAdapter):
         for index, entity in enumerate(case.entities_of_kind("person")):
             person_name = entity.entity_id or f"person_{index}"
             person_names.append(person_name)
-            people[person_name] = {
+            person_inputs = {
                 "age": {year: int(entity.fact(Concepts.PERSON_AGE, 0) or 0)},
                 "employment_income": {
                     year: float(entity.fact(Concepts.YEARLY_EARNED_INCOME, 0) or 0)
@@ -155,6 +177,11 @@ class PolicyEngineRunner(EngineAdapter):
                 "is_disabled": {year: bool(entity.fact(Concepts.DISABLED, False))},
                 "is_blind": {year: bool(entity.fact(Concepts.BLIND, False))},
             }
+            for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items():
+                value = entity.fact(concept)
+                if value is not None:
+                    person_inputs[pe_variable] = {year: float(value)}
+            people[person_name] = person_inputs
 
         household_inputs = {"members": person_names}
         state_code = case.fact(Concepts.STATE_CODE)
@@ -163,10 +190,16 @@ class PolicyEngineRunner(EngineAdapter):
         for variable, value in pe_inputs_for_scope(case.scope).items():
             household_inputs[variable] = {year: value}
 
+        tax_unit_inputs: dict[str, Any] = {"members": person_names}
+        for concept, pe_variable in _TAX_UNIT_CONCEPT_TO_PE.items():
+            value = case.fact(concept)
+            if value is not None:
+                tax_unit_inputs[pe_variable] = {year: float(value)}
+
         return {
             "people": people,
             "families": {"family": {"members": person_names}},
-            "tax_units": {"tax_unit": {"members": person_names}},
+            "tax_units": {"tax_unit": tax_unit_inputs},
             "spm_units": {"spm_unit": {"members": person_names}},
             "households": {"household": household_inputs},
         }

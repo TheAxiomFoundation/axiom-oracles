@@ -9,7 +9,7 @@ from ..core.geography import GeographyScope
 from ..core.results import Value
 
 
-COMPARISON_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v1"
+COMPARISON_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2"
 
 
 class MismatchKind:
@@ -57,6 +57,8 @@ def build_comparison_report(
                 "comparison": mapping.comparison,
                 "tolerance": mapping.tolerance,
                 "priority": mapping.priority,
+                "components": list(mapping.components),
+                "parent": mapping.parent,
             }
             for mapping in mappings
         ],
@@ -156,6 +158,7 @@ def _mismatch_rows(
                     "right": mismatch.right_value,
                     "difference": mismatch.difference,
                     "tolerance": mismatch.tolerance,
+                    "parent": mapping.parent if mapping is not None else None,
                 }
             )
     return rows
@@ -198,6 +201,7 @@ def _case_mismatch_row(
         "right": mismatch.right_value,
         "difference": mismatch.difference,
         "tolerance": mismatch.tolerance,
+        "parent": mapping.parent if mapping is not None else None,
     }
 
 
@@ -251,6 +255,8 @@ def _aggregate_rows(
             "description": mapping.description,
             "category": mapping.category,
             "comparison": mapping.comparison,
+            "parent": mapping.parent,
+            "components": list(mapping.components),
             "comparison_count": bucket["comparison_count"],
             "mismatch_count": bucket["mismatch_count"],
             "missing_left_count": bucket["missing_left_count"],

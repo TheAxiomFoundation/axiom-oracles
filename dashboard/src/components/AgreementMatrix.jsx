@@ -41,11 +41,13 @@ export default function AgreementMatrix({
           style={{ fontSize: 12.5 }}
         >
           <option value="__overall__">All concepts</option>
-          {concepts.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.description}
-            </option>
-          ))}
+          {concepts
+            .filter((c) => !c.parent)
+            .map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.description}
+              </option>
+            ))}
         </select>
       </div>
 
@@ -165,6 +167,105 @@ export default function AgreementMatrix({
           <LegendRow color="var(--ink-mute)" label="n/a" muted />
         </div>
       </div>
+
+      <ComponentBreakdown
+        selectedConcept={selectedConcept}
+        concepts={concepts}
+        matrix={matrix}
+        oracles={oracles}
+      />
+    </div>
+  );
+}
+
+function ComponentBreakdown({ selectedConcept, concepts, matrix, oracles }) {
+  if (selectedConcept === "__overall__") return null;
+  const concept = concepts.find((c) => c.id === selectedConcept);
+  const componentIds = concept?.components || [];
+  if (!componentIds.length) return null;
+
+  const components = componentIds
+    .map((id) => concepts.find((c) => c.id === id))
+    .filter(Boolean);
+  if (!components.length) return null;
+
+  const otherPairs = [];
+  for (let i = 0; i < oracles.length; i++) {
+    for (let j = i + 1; j < oracles.length; j++) {
+      otherPairs.push([oracles[i], oracles[j]]);
+    }
+  }
+
+  return (
+    <div
+      style={{
+        borderTop: "1px solid var(--hairline)",
+        padding: "20px 32px 24px",
+        background: "var(--paper-warm)",
+      }}
+    >
+      <div className="section-eyebrow" style={{ marginBottom: 12 }}>
+        Components of {concept.description}
+      </div>
+      <table style={{ fontSize: 12.5 }}>
+        <thead>
+          <tr>
+            <th
+              className="section-eyebrow"
+              style={{ padding: "6px 12px 8px 0", textAlign: "left" }}
+            >
+              Component
+            </th>
+            {otherPairs.map(([a, b]) => (
+              <th
+                key={`${a}-${b}`}
+                className="section-eyebrow"
+                style={{ padding: "6px 12px 8px", textAlign: "center" }}
+              >
+                {engineLabel(a)} ↔ {engineLabel(b)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {components.map((component) => (
+            <tr
+              key={component.id}
+              style={{ borderTop: "1px solid var(--hairline)" }}
+            >
+              <td
+                style={{
+                  padding: "10px 12px 10px 0",
+                  color: "var(--ink)",
+                }}
+              >
+                {component.description}
+              </td>
+              {otherPairs.map(([a, b]) => {
+                const rate = matrix?.[component.id]?.[a]?.[b];
+                return (
+                  <td
+                    key={`${a}-${b}`}
+                    className="mono"
+                    style={{
+                      padding: "10px 12px",
+                      textAlign: "center",
+                      background:
+                        rate != null ? heatmapBg(rate) : "transparent",
+                      borderRadius: 4,
+                      color:
+                        rate != null ? rateColor(rate) : "var(--ink-mute)",
+                      fontWeight: rate != null ? 600 : 400,
+                    }}
+                  >
+                    {rate != null ? formatPct(rate) : "n/a"}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

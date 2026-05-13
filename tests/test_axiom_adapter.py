@@ -269,7 +269,11 @@ def test_axiom_tax_concept_is_comparable_to_policyengine() -> None:
         )
     }
 
-    assert concept_ids == {Concepts.FEDERAL_INCOME_TAX}
+    # FIT liability plus its decomposed components.
+    assert Concepts.FEDERAL_INCOME_TAX in concept_ids
+    assert Concepts.STANDARD_DEDUCTION in concept_ids
+    assert Concepts.EITC in concept_ids
+    assert Concepts.CTC in concept_ids
 
 
 def test_cli_builds_axiom_runner() -> None:

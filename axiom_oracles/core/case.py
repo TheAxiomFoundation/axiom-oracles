@@ -52,7 +52,7 @@ class Case:
 
 
 class Concepts:
-    """Small set of cross-engine case facts used by bundled projections.
+    """Cross-engine case facts used by bundled projections.
 
     Domain-specific outputs should usually use source-backed legal IDs, not these
     generic helper concepts. These helpers exist for facts like age and household
@@ -75,6 +75,25 @@ class Concepts:
     GEOGRAPHY_SCOPE = "axiom:case#geography_scope"
     STATE_CODE = "axiom:location/household#state_code"
 
+    # Income components (person-level, annual)
+    DIVIDEND_INCOME = "axiom:income/person#dividend_income"
+    INTEREST_INCOME = "axiom:income/person#interest_income"
+    SHORT_TERM_CAPITAL_GAINS = "axiom:income/person#short_term_capital_gains"
+    LONG_TERM_CAPITAL_GAINS = "axiom:income/person#long_term_capital_gains"
+    PENSION_INCOME = "axiom:income/person#pension_income"
+    SOCIAL_SECURITY_BENEFITS = "axiom:income/person#social_security_benefits"
+    UNEMPLOYMENT_INSURANCE_INCOME = "axiom:income/person#unemployment_insurance"
+    RENTAL_INCOME = "axiom:income/person#rental_income"
+    SELF_EMPLOYMENT_INCOME = "axiom:income/person#self_employment_income"
+
+    # Itemization / household-level inputs (annual)
+    PROPERTY_TAX_PAID = "axiom:housing/household#property_tax_paid"
+    MORTGAGE_INTEREST_PAID = "axiom:housing/household#mortgage_interest_paid"
+    ITEMIZED_DEDUCTIONS_OTHER = "axiom:tax/household#itemized_deductions_other"
+    RENT_PAID = "axiom:housing/household#rent_paid"
+    CHILDCARE_EXPENSES = "axiom:tax/household#childcare_expenses"
+
+    # Program outputs
     SNAP_BENEFIT = "us:statutes/7/2014/u#snap_benefit"
     SNAP_ELIGIBLE = "us:statutes/7/2014/o#snap_eligible"
     FEDERAL_INCOME_TAX = "us:tax/federal-income-tax#liability"
@@ -86,3 +105,12 @@ class Concepts:
     BASIC_HEALTH_PROGRAM_ELIGIBLE = "us:programs/basic-health-program#eligible"
     CHILD_HEALTH_PLUS_ELIGIBLE = "us:programs/child-health-plus#eligible"
     WIC_ELIGIBLE = "us:statutes/42/1786#wic_eligible"
+
+    # Federal income tax components (sub-outputs of FEDERAL_INCOME_TAX)
+    AGI = "us:tax/federal-income-tax#agi"
+    STANDARD_DEDUCTION = "us:tax/federal-income-tax#standard_deduction"
+    TAXABLE_INCOME = "us:tax/federal-income-tax#taxable_income"
+    TAX_BEFORE_CREDITS = "us:tax/federal-income-tax#tax_before_credits"
+    EITC = "us:tax/federal-income-tax#eitc"
+    CTC = "us:tax/federal-income-tax#ctc"
+    AMT = "us:tax/federal-income-tax#amt"

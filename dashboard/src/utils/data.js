@@ -59,8 +59,17 @@ export async function loadOracleData(basePath = "") {
     (p) => p.encoding_status !== "missing",
   );
 
-  // Filter reports to only concepts that are encoded in the Axiom corpus
+  // Filter reports to concepts encoded in the Axiom corpus, plus any
+  // components those concepts declare. Components carry parent={parent_id}
+  // in the report so they hitch a ride on their parent's allow-listing.
   const allowedConcepts = new Set(programs.map((p) => p.id));
+  for (const report of reports) {
+    for (const concept of report.concepts || []) {
+      if (concept.parent && allowedConcepts.has(concept.parent)) {
+        allowedConcepts.add(concept.id);
+      }
+    }
+  }
   const filteredReports = reports.map((report) =>
     filterReportToConcepts(report, allowedConcepts),
   );
