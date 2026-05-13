@@ -17,7 +17,6 @@ from .adapters.axiom import (
     US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
     attach_axiom_tax_inputs,
     attach_axiom_tax_itemization_choice,
-    attach_policyengine_tax_unit_inputs,
 )
 from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
@@ -435,8 +434,6 @@ def _prepare_cases_for_engines(
         and axiom_program is None
         and Concepts.FEDERAL_INCOME_TAX in concept_ids
     ):
-        if "policyengine" in engines:
-            prepared = attach_policyengine_tax_unit_inputs(prepared)
         prepared = attach_axiom_tax_inputs(prepared)
         if engines & {"policyengine", "taxsim"}:
             prepared = attach_axiom_tax_itemization_choice(prepared)

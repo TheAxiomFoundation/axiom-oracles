@@ -498,7 +498,7 @@ def test_axiom_tax_projection_counts_age_and_blindness_separately() -> None:
     ] == 2
 
 
-def test_axiom_tax_projection_uses_external_tax_unit_inputs() -> None:
+def test_axiom_tax_projection_uses_case_supplied_tax_unit_inputs() -> None:
     case = Case(
         case_id="itemizer",
         period="2026",

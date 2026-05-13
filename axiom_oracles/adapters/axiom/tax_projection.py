@@ -351,15 +351,6 @@ _TAX_FILER_ADULT_AGE = 18
 _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100
 _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT = 15_750
 
-_POLICYENGINE_EXTERNAL_TAX_INPUTS = (
-    "auto_loan_interest_deduction",
-    "charitable_deduction_for_non_itemizers",
-    "itemized_taxable_income_deductions",
-    "overtime_income_deduction",
-    "qualified_business_income_deduction",
-    "tip_income_deduction",
-)
-
 _RELATION_REFS = (
     "us:statutes/26/21#relation.qualifying_individual_of_tax_unit",
     "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
@@ -843,40 +834,6 @@ def attach_axiom_tax_itemization_choice_to_case(case: Case) -> Case:
         "output": "us:statutes/26/6401#income_tax",
     }
     return replace(case, metadata=metadata)
-
-
-def attach_policyengine_tax_unit_inputs(cases: list[Case]) -> list[Case]:
-    """Attach external tax inputs calculated by the PolicyEngine projection."""
-
-    from ..policyengine.runner import PolicyEngineRunner
-
-    pending_cases = [
-        case
-        for case in cases
-        if not case.metadata.get(AXIOM_TAX_UNIT_INPUTS_METADATA_KEY)
-    ]
-    pending_results = iter(
-        PolicyEngineRunner().run_cases(
-            pending_cases,
-            list(_POLICYENGINE_EXTERNAL_TAX_INPUTS),
-        )
-    )
-    projected = []
-    for case in cases:
-        metadata = dict(case.metadata)
-        existing = metadata.get(AXIOM_TAX_UNIT_INPUTS_METADATA_KEY)
-        if existing:
-            projected.append(case)
-            continue
-        result = next(pending_results)
-        values = {
-            name: result.values[name]
-            for name in _POLICYENGINE_EXTERNAL_TAX_INPUTS
-            if name in result.values
-        }
-        metadata[AXIOM_TAX_UNIT_INPUTS_METADATA_KEY] = values
-        projected.append(replace(case, metadata=metadata))
-    return projected
 
 
 def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
