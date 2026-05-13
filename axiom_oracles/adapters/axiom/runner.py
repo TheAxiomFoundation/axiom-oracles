@@ -48,6 +48,7 @@ class AxiomRulesRunner(EngineAdapter):
         mode: str = "explain",
         program_imports: tuple[str, ...] = (),
         program_rules: tuple[Mapping[str, Any], ...] = (),
+        generated_program_target: str | None = None,
         rulespec_repo_roots: tuple[str | Path, ...] = (),
         prune_unsupported_inputs: bool = False,
         batch_size: int = 5_000,
@@ -65,6 +66,7 @@ class AxiomRulesRunner(EngineAdapter):
         self.mode = mode
         self.program_imports = tuple(program_imports)
         self.program_rules = tuple(program_rules)
+        self.generated_program_target = generated_program_target
         self.rulespec_repo_roots = tuple(
             str(Path(root).expanduser()) for root in rulespec_repo_roots
         )
@@ -118,7 +120,11 @@ class AxiomRulesRunner(EngineAdapter):
             return self.program_path
         if not self.program_imports:
             return None
-        program_path = temp_dir / "generated-program.yaml"
+        program_path = _generated_program_path(
+            temp_dir,
+            self.generated_program_target,
+        )
+        program_path.parent.mkdir(parents=True, exist_ok=True)
         program_path.write_text(
             yaml.safe_dump(
                 {
@@ -600,6 +606,27 @@ def _resolve_binary_path(
         if candidate.exists():
             return candidate
     return Path("axiom-rules")
+
+
+def _generated_program_path(temp_dir: Path, target: str | None) -> Path:
+    if not target:
+        return temp_dir / "generated-program.yaml"
+    if "#" in target or ":" not in target:
+        raise RuntimeError(
+            "generated RuleSpec program target must be an absolute module target."
+        )
+    prefix, relative = target.split(":", maxsplit=1)
+    relative_path = Path(relative.strip("/"))
+    if (
+        not prefix
+        or not relative_path.as_posix()
+        or relative_path.is_absolute()
+        or any(part == ".." for part in relative_path.parts)
+    ):
+        raise RuntimeError(
+            "generated RuleSpec program target must be an absolute module target."
+        )
+    return temp_dir / f"rulespec-{prefix}" / relative_path.with_suffix(".yaml")
 
 
 def _output_targets(variables: list[str] | None) -> list[str]:

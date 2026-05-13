@@ -67,6 +67,42 @@ def _generated_tax_unit_rule(
     return rule
 
 
+def _generated_person_rule(
+    name: str,
+    *,
+    dtype: str,
+    source: str,
+    formula: str,
+    unit: str | None = None,
+) -> dict[str, Any]:
+    rule: dict[str, Any] = {
+        "name": name,
+        "kind": "derived",
+        "entity": "Person",
+        "dtype": dtype,
+        "period": "Year",
+        "source": source,
+        "versions": [
+            {
+                "effective_from": "2026-01-01",
+                "formula": formula,
+            }
+        ],
+    }
+    if unit is not None:
+        rule["unit"] = unit
+    return rule
+
+
+def _generated_data_relation_rule(name: str, *, source: str) -> dict[str, Any]:
+    return {
+        "name": name,
+        "kind": "data_relation",
+        "source": source,
+        "data_relation": {"arity": 2},
+    }
+
+
 US_FEDERAL_INCOME_TAX_IMPORTS = (
     "us:policies/irs/rev-proc-2025-32/child-tax-credit",
     "us:policies/irs/rev-proc-2025-32/standard-deduction",
@@ -79,14 +115,19 @@ US_FEDERAL_INCOME_TAX_IMPORTS = (
     "us:statutes/26/26",
     "us:statutes/26/32",
     "us:statutes/26/55",
+    "us:statutes/26/86",
     "us:statutes/26/163",
+    "us:statutes/26/164/f",
     "us:statutes/26/1401",
+    "us:statutes/26/1402/a",
     "us:statutes/26/1411",
     "us:statutes/26/3101/a",
     "us:statutes/26/3101/b/1",
     "us:statutes/26/3101/b/2",
     "us:statutes/26/6401",
 )
+
+US_FEDERAL_INCOME_TAX_BRIDGE_TARGET = "us:tax/federal-income-tax/oracle-bridge"
 
 US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
     _generated_parameter_rule(
@@ -106,6 +147,81 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         dtype="Rate",
         source="26 USC 24(d)(2)(A)(ii)-(iii)",
         formula="0.50",
+    ),
+    _generated_parameter_rule(
+        "additional_senior_deduction_amount",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70103",
+        formula="6000",
+    ),
+    _generated_parameter_rule(
+        "additional_senior_deduction_phaseout_rate",
+        dtype="Rate",
+        source="H.R.1 (119th Congress), section 70103",
+        formula="0.06",
+    ),
+    _generated_parameter_rule(
+        "additional_senior_deduction_joint_threshold",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70103",
+        formula="150000",
+    ),
+    _generated_parameter_rule(
+        "additional_senior_deduction_other_threshold",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70103",
+        formula="75000",
+    ),
+    _generated_parameter_rule(
+        "qualified_business_income_deduction_rate",
+        dtype="Rate",
+        source="26 USC 199A(a)(2)",
+        formula="0.20",
+    ),
+    _generated_parameter_rule(
+        "qualified_business_income_deduction_phaseout_joint_start",
+        dtype="Money",
+        unit="USD",
+        source="Rev. Proc. 2025-32 section 3.27; 26 USC 199A(e)(2)",
+        formula="403500",
+    ),
+    _generated_parameter_rule(
+        "qualified_business_income_deduction_phaseout_other_start",
+        dtype="Money",
+        unit="USD",
+        source="Rev. Proc. 2025-32 section 3.27; 26 USC 199A(e)(2)",
+        formula="201750",
+    ),
+    _generated_parameter_rule(
+        "qualified_business_income_deduction_phaseout_joint_length",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70105; 26 USC 199A(b)(3)(B)",
+        formula="150000",
+    ),
+    _generated_parameter_rule(
+        "qualified_business_income_deduction_phaseout_other_length",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70105; 26 USC 199A(b)(3)(B)",
+        formula="75000",
+    ),
+    _generated_parameter_rule(
+        "qualified_business_income_deduction_floor_threshold",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70105",
+        formula="1000",
+    ),
+    _generated_parameter_rule(
+        "qualified_business_income_deduction_floor_amount",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70105",
+        formula="400",
     ),
     _generated_tax_unit_rule(
         "ctc_refundable_phase_in_threshold",
@@ -255,14 +371,285 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         formula="max(0, ctc_credit_without_subsection_and_26a_limit - refundable_ctc)",
     ),
     _generated_tax_unit_rule(
-        "current_law_deductions_if_not_itemizing",
+        "ctc_value",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge for 2026 federal income tax deductions",
+        source="Oracle comparison bridge matching PolicyEngine's realized CTC value",
+        formula=(
+            "min("
+            "ctc_credit_without_subsection_and_26a_limit, "
+            "ctc_refundable_limitation_increase_amount"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "self_employment_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying 26 USC 1402(a) before 26 USC 1401",
+        formula="max(0, net_earnings_from_self_employment)",
+    ),
+    _generated_tax_unit_rule(
+        "self_employment_1401_taxes",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge exposing 26 USC 1401(a) and (b)(1) taxes for 26 USC 24(d)(2)",
+        formula="self_employment_oasdi_tax + self_employment_hospital_insurance_tax",
+    ),
+    _generated_tax_unit_rule(
+        "self_employment_tax_ald",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge exposing 26 USC 164(f) above-the-line deduction",
+        formula="self_employment_tax_deduction",
+    ),
+    _generated_tax_unit_rule(
+        "taxable_earned_income_under_section_32",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying 26 USC 164(f) to earned income used by 26 USC 24(d)",
+        formula=(
+            "wages "
+            "+ net_earnings_before_paragraph_12_adjustment "
+            "- self_employment_tax_deduction"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "earned_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge using 26 USC 32 earned income after self-employment tax adjustment",
+        formula="taxable_earned_income_under_section_32",
+    ),
+    _generated_tax_unit_rule(
+        "filer_adjusted_earnings",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine adjusted earnings from leaf income facts",
+        formula="taxable_earned_income_under_section_32",
+    ),
+    _generated_tax_unit_rule(
+        "additional_senior_deduction_eligible_count",
+        dtype="Integer",
+        source="Oracle composition bridge applying H.R.1 section 70103 age and filing-status eligibility",
+        formula=(
+            "(if taxpayer_has_attained_age_65_before_close_of_taxable_year: 1 else: 0) "
+            "+ (if spouse_has_attained_age_65_before_close_of_taxable_year "
+            "and filing_status_is_joint_return: 1 else: 0)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "additional_senior_deduction_magi",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge using adjusted gross income for H.R.1 section 70103 phaseout",
+        formula="adjusted_gross_income",
+    ),
+    _generated_tax_unit_rule(
+        "additional_senior_deduction_phaseout_threshold",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying H.R.1 section 70103 filing-status thresholds",
+        formula=(
+            "if filing_status_is_joint_return: "
+            "additional_senior_deduction_joint_threshold "
+            "else: additional_senior_deduction_other_threshold"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "additional_senior_deduction_phaseout_amount",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying H.R.1 section 70103 phaseout",
+        formula=(
+            "max(0, additional_senior_deduction_magi "
+            "- additional_senior_deduction_phaseout_threshold) "
+            "* additional_senior_deduction_phaseout_rate"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "additional_senior_deduction",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying H.R.1 section 70103 senior deduction",
+        formula=(
+            "max("
+            "0, "
+            "additional_senior_deduction_amount "
+            "- additional_senior_deduction_phaseout_amount"
+            ") * additional_senior_deduction_eligible_count"
+        ),
+    ),
+    _generated_data_relation_rule(
+        "business_income_of_tax_unit",
+        source="Oracle comparison bridge relating tax-unit filers to person-level 26 USC 199A income leaves",
+    ),
+    _generated_person_rule(
+        "business_income_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine person-level 26 USC 199A QBI aggregation",
+        formula=(
+            "max("
+            "0, "
+            "person_self_employment_income_for_qbid "
+            "+ person_rental_income_for_qbid"
+            ")"
+        ),
+    ),
+    _generated_person_rule(
+        "business_income_counts_for_qbid",
+        dtype="Judgment",
+        source="Oracle comparison bridge matching PolicyEngine positive person-level QBI aggregation",
+        formula="business_income_for_qbid > 0",
+    ),
+    _generated_tax_unit_rule(
+        "qualified_business_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 199A(c) to ECPS self-employment and rental income leaves",
+        formula=(
+            "max("
+            "0, "
+            "sum_where("
+            "business_income_of_tax_unit, "
+            "business_income_for_qbid, "
+            "business_income_counts_for_qbid"
+            ") - self_employment_tax_deduction"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "adjusted_net_capital_gain_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge approximating 26 USC 199A(a)(2) capital-gain cap from ECPS leaves",
+        formula="max(0, long_term_capital_gains + qualified_dividend_income)",
+    ),
+    _generated_tax_unit_rule(
+        "amt_part_iii_required",
+        dtype="Judgment",
+        source="Oracle comparison bridge applying Form 6251 Part III when preferential gains are present",
+        formula=(
+            "adjusted_net_capital_gain > 0 "
+            "or unrecaptured_section_1250_gain > 0 "
+            "or capital_gains_28_percent_rate_gain > 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_adjusted_net_capital_gain_limited",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge limiting preferential gains for the AMT capital-gain worksheet",
+        formula="min(adjusted_net_capital_gain, amt_income_less_exemptions)",
+    ),
+    _generated_tax_unit_rule(
+        "amt_income_less_adjusted_net_capital_gain",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge computing non-preferential AMT income",
+        formula=(
+            "max(0, amt_income_less_exemptions "
+            "- amt_adjusted_net_capital_gain_limited)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_ordinary_income_tax_under_amt_rates",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 55 AMT rates to non-preferential AMT income",
+        formula=(
+            "amt_lower_rate "
+            "* min("
+            "amt_income_less_adjusted_net_capital_gain, "
+            "amt_twenty_eight_percent_threshold"
+            ") "
+            "+ amt_higher_rate "
+            "* max("
+            "0, "
+            "amt_income_less_adjusted_net_capital_gain "
+            "- amt_twenty_eight_percent_threshold"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gains_in_zero_rate_bracket",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1(h) preferential brackets inside AMT",
+        formula=(
+            "max("
+            "0, "
+            "min(max(amt_income_less_exemptions, 0), capital_gains_zero_rate_threshold) "
+            "- amt_income_less_adjusted_net_capital_gain"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gains_in_fifteen_percent_bracket",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1(h) preferential brackets inside AMT",
+        formula=(
+            "min("
+            "max("
+            "0, "
+            "amt_adjusted_net_capital_gain_limited "
+            "- amt_capital_gains_in_zero_rate_bracket"
+            "), "
+            "max("
+            "0, "
+            "min("
+            "max(amt_income_less_exemptions, 0), "
+            "capital_gains_fifteen_percent_threshold"
+            ") "
+            "- (amt_income_less_adjusted_net_capital_gain "
+            "+ amt_capital_gains_in_zero_rate_bracket)"
+            ")"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_capital_gains_in_twenty_percent_bracket",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1(h) preferential brackets inside AMT",
+        formula=(
+            "max("
+            "0, "
+            "amt_adjusted_net_capital_gain_limited "
+            "- amt_capital_gains_in_zero_rate_bracket "
+            "- amt_capital_gains_in_fifteen_percent_bracket"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "amt_tax_including_capital_gains",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge computing Form 6251 Part III preferential-gain tax",
+        formula=(
+            "amt_ordinary_income_tax_under_amt_rates "
+            "+ capital_gains_zero_rate "
+            "* amt_capital_gains_in_zero_rate_bracket "
+            "+ capital_gains_fifteen_percent_rate "
+            "* amt_capital_gains_in_fifteen_percent_bracket "
+            "+ capital_gains_twenty_percent_rate "
+            "* amt_capital_gains_in_twenty_percent_bracket "
+            "+ unrecaptured_section_1250_gain_rate "
+            "* unrecaptured_section_1250_gain "
+            "+ capital_gains_28_percent_rate "
+            "* capital_gains_28_percent_rate_gain"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "current_law_deductions_before_qbid_if_not_itemizing",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge for 2026 federal income tax deductions before 26 USC 199A",
         formula=(
             "standard_deduction "
             "+ deduction_for_personal_exemptions_provided_in_section_151 "
-            "+ deduction_provided_in_section_199A "
             "+ deduction_provided_in_section_170_p "
             "+ deduction_provided_in_section_224 "
             "+ deduction_provided_in_section_225 "
@@ -271,18 +658,188 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         ),
     ),
     _generated_tax_unit_rule(
-        "current_law_deductions_if_itemizing",
+        "current_law_deductions_before_qbid_if_itemizing",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge for 2026 federal income tax deductions",
+        source="Oracle comparison bridge for 2026 federal income tax deductions before 26 USC 199A",
         formula=(
             "itemized_taxable_income_deductions "
-            "+ deduction_provided_in_section_199A "
             "+ deduction_provided_in_section_224 "
             "+ deduction_provided_in_section_225 "
             "+ wagering_losses_deduction "
             "+ qualified_passenger_vehicle_loan_interest_deduction "
             "+ additional_senior_deduction"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "taxable_income_less_qbid",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching 26 USC 199A taxable-income cap ordering",
+        formula=(
+            "if individual_who_does_not_elect_to_itemize_deductions_for_taxable_year: "
+            "max(0, adjusted_gross_income - current_law_deductions_before_qbid_if_not_itemizing) "
+            "else: max(0, gross_income - current_law_deductions_before_qbid_if_itemizing)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "qualified_business_income_deduction_phaseout_start",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge selecting 2026 26 USC 199A(e)(2) threshold by filing status",
+        formula=(
+            "if filing_status == 1: "
+            "qualified_business_income_deduction_phaseout_joint_start "
+            "else: qualified_business_income_deduction_phaseout_other_start"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "qualified_business_income_deduction_phaseout_length",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge selecting 26 USC 199A(b)(3)(B) phaseout range by filing status",
+        formula=(
+            "if filing_status == 1: "
+            "qualified_business_income_deduction_phaseout_joint_length "
+            "else: qualified_business_income_deduction_phaseout_other_length"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "qualified_business_income_deduction_phaseout_rate",
+        dtype="Rate",
+        source="Oracle comparison bridge applying 26 USC 199A(b)(3)(B) phaseout for missing W-2/UBIA leaves",
+        formula=(
+            "min("
+            "1, "
+            "max("
+            "0, "
+            "taxable_income_less_qbid "
+            "- qualified_business_income_deduction_phaseout_start"
+            ") / qualified_business_income_deduction_phaseout_length"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "qualified_business_income_deduction_before_floor",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 199A(a)(2) rate and taxable-income cap",
+        formula=(
+            "min("
+            "qualified_business_income_deduction_rate "
+            "* qualified_business_income "
+            "* (1 - qualified_business_income_deduction_phaseout_rate), "
+            "qualified_business_income_deduction_rate "
+            "* max(0, taxable_income_less_qbid - adjusted_net_capital_gain_for_qbid)"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "qualified_business_income_deduction_floor",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying H.R.1 section 70105 qualified business income deduction floor",
+        formula=(
+            "if qualified_business_income >= qualified_business_income_deduction_floor_threshold: "
+            "qualified_business_income_deduction_floor_amount "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "qualified_business_income_deduction",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 199A to ECPS leaf inputs",
+        formula=(
+            "max("
+            "qualified_business_income_deduction_before_floor, "
+            "qualified_business_income_deduction_floor"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "deduction_provided_in_section_199A",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge routing 26 USC 199A deduction into 26 USC 63",
+        formula="qualified_business_income_deduction",
+    ),
+    _generated_tax_unit_rule(
+        "gross_income_before_social_security_benefits",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge aggregating ECPS leaf income facts before applying 26 USC 86",
+        formula=(
+            "wages "
+            "+ dividend_income "
+            "+ taxable_interest_income "
+            "+ short_term_capital_gains "
+            "+ long_term_capital_gains "
+            "+ rental_income "
+            "+ pension_annuity_disability_benefits_received "
+            "+ unemployment_compensation "
+            "+ net_earnings_before_paragraph_12_adjustment"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge routing ECPS capital-gain leaves into 26 USC 1411(c)(1)(A)(iii)",
+        formula="short_term_capital_gains + long_term_capital_gains",
+    ),
+    _generated_tax_unit_rule(
+        "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying 26 USC 164(f) before 26 USC 86",
+        formula=(
+            "gross_income_before_social_security_benefits "
+            "- self_employment_tax_deduction"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "adjusted_gross_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying 26 USC 86 to adjusted gross income before social security",
+        formula=(
+            "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933 "
+            "+ social_security_benefits_included_in_gross_income"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "gross_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge applying 26 USC 86 to ECPS leaf income facts",
+        formula="adjusted_gross_income",
+    ),
+    _generated_tax_unit_rule(
+        "modified_adjusted_gross_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge using derived adjusted gross income where no imported modifier applies",
+        formula="adjusted_gross_income",
+    ),
+    _generated_tax_unit_rule(
+        "current_law_deductions_if_not_itemizing",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge for 2026 federal income tax deductions",
+        formula=(
+            "current_law_deductions_before_qbid_if_not_itemizing "
+            "+ deduction_provided_in_section_199A "
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "current_law_deductions_if_itemizing",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge for 2026 federal income tax deductions",
+        formula=(
+            "current_law_deductions_before_qbid_if_itemizing "
+            "+ deduction_provided_in_section_199A "
         ),
     ),
     _generated_tax_unit_rule(
@@ -341,16 +898,12 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
 
 _TAX_UNIT_ID = "tax_unit"
 _AXIOM_TAX_REF_PREFIX = "us:tax/federal-income-tax"
-_ADDITIONAL_SENIOR_DEDUCTION_AMOUNT = 6_000
-_ADDITIONAL_SENIOR_DEDUCTION_AGE = 65
-_ADDITIONAL_SENIOR_DEDUCTION_PHASEOUT_RATE = 0.06
-_ADDITIONAL_SENIOR_DEDUCTION_JOINT_THRESHOLD = 150_000
-_ADDITIONAL_SENIOR_DEDUCTION_OTHER_THRESHOLD = 75_000
 _TAX_FILER_ADULT_AGE = 18
 _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100
 _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT = 15_750
 
 _RELATION_REFS = (
+    "us:tax/federal-income-tax/oracle-bridge#relation.business_income_of_tax_unit",
     "us:statutes/26/21#relation.qualifying_individual_of_tax_unit",
     "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
     "us:statutes/26/24/h#relation.dependent_of_tax_unit",
@@ -424,6 +977,7 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "loan_finances_vehicle_with_salvage_title",
     "loan_for_commercial_vehicle_not_used_for_personal_purposes",
     "married_individual_filing_separate_return_where_either_spouse_itemizes_deductions",
+    "married_taxpayer_lived_apart_from_spouse_at_all_times_during_taxable_year",
     "meets_higher_education_act_student_requirements",
     "medically_determinable_impairment",
     "nonresident_alien_individual",
@@ -448,6 +1002,8 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "taxable_year_begins_before_2027",
     "taxable_year_begins_after_2025",
     "taxpayer_claims_section_911_benefits",
+    "taxpayer_makes_lump_sum_election_under_subsection_e",
+    "taxpayer_receives_social_security_benefit_for_listed_purpose",
     "taxpayer_is_nonresident_alien_for_any_portion_of_year",
     "taxpayer_is_qualifying_child_of_another_taxpayer",
     "taxpayer_is_section_1_g_child",
@@ -507,10 +1063,12 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "form_4972_lumpsum_distributions",
     "impairment_duration_months",
     "highest_section_1_e_bracket_begin_amount",
+    "inclusion_by_reason_of_prior_year_lump_sum_portion_before_subsection_e_limitation",
     "individual_testing_period_distributions",
     "investment_of_working_capital_income",
     "itemized_taxable_income_deductions",
     "long_term_capital_gains",
+    "lump_sum_payment_portion_attributable_to_prior_taxable_years",
     "min_head_spouse_earned",
     "misc_deduction",
     "new_clean_vehicle_credit",
@@ -520,7 +1078,6 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "passive_activity_business_income",
     "passenger_vehicle_loan_interest_paid_or_accrued",
     "pension_annuity_disability_benefits_received",
-    "qualified_business_income_deduction",
     "qualified_dividend_income",
     "qualified_plan_distributions",
     "qualifying_children_count",
@@ -530,6 +1087,8 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "recapture_of_investment_credit",
     "recovery_rebate_credit",
     "railroad_3211a_taxes",
+    "railroad_retirement_annuity_amount_equivalent_to_social_security_benefit",
+    "railroad_retirement_monthly_annuity_amount_under_section_3_f_3",
     "refundable_payroll_tax_credit",
     "railroad_retirement_act_benefits_excluded_from_gross_income",
     "rental_income",
@@ -550,28 +1109,27 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "section_911_excluded_income",
     "section_931_excluded_income",
     "section_933_excluded_income",
-    "self_employment_income",
-    "self_employment_1401_taxes",
     "self_employment_income_subject_to_1401_b",
-    "self_employment_tax_ald",
     "short_term_capital_gains",
-    "social_security_benefits_received",
+    "social_security_benefit_checks_deemed_received_in_taxable_year_under_section_708",
+    "social_security_benefit_repayments_during_taxable_year",
     "social_security_title_ii_benefits_excluded_from_gross_income",
     "special_refund_social_security_taxes_under_6413c",
     "spouse_earned_income_for_cdcc",
     "spouse_testing_period_distributions",
+    "sum_of_prior_year_gross_income_increases_from_lump_sum_portion",
+    "tax_exempt_interest_received_or_accrued",
     "tax_unit_childcare_expenses",
     "taxable_interest_income",
     "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception",
     "taxable_net_gain_from_dispositions",
     "taxable_pension_annuity_disability_benefits_included",
-    "taxable_social_security_benefits_included",
     "tax_imposed_by_chapter_before_cdcc",
     "taxpayer_earned_income_for_cdcc",
-    "taxable_earned_income_under_section_32",
     "tip_income_deduction",
     "trustee_to_trustee_transfer_or_rollover_distribution_portion",
     "undistributed_net_investment_income",
+    "unemployment_compensation",
     "unrecaptured_section_1250_gain",
     "unreported_payroll_tax",
     "used_clean_vehicle_credit",
@@ -580,6 +1138,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "voluntary_employee_qualified_plan_contributions",
     "veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income",
     "wagering_losses_deduction",
+    "workers_compensation_benefit_portion_equal_to_social_security_reduction",
     "workers_compensation_treated_as_social_security_benefit_under_section_86_d_3",
 )
 
@@ -757,6 +1316,42 @@ _INPUT_REF_OVERRIDES.update(
 )
 _INPUT_REF_OVERRIDES.update(
     {
+        name: f"us:statutes/26/86#input.{name}"
+        for name in (
+            "inclusion_by_reason_of_prior_year_lump_sum_portion_before_subsection_e_limitation",
+            "lump_sum_payment_portion_attributable_to_prior_taxable_years",
+            "married_taxpayer_lived_apart_from_spouse_at_all_times_during_taxable_year",
+            "railroad_retirement_annuity_amount_equivalent_to_social_security_benefit",
+            "railroad_retirement_monthly_annuity_amount_under_section_3_f_3",
+            "social_security_benefit_checks_deemed_received_in_taxable_year_under_section_708",
+            "social_security_benefit_repayments_during_taxable_year",
+            "sum_of_prior_year_gross_income_increases_from_lump_sum_portion",
+            "tax_exempt_interest_received_or_accrued",
+            "taxpayer_makes_lump_sum_election_under_subsection_e",
+            "taxpayer_receives_social_security_benefit_for_listed_purpose",
+            "title_II_monthly_benefits_received_during_taxable_year",
+            "workers_compensation_benefit_portion_equal_to_social_security_reduction",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
+        name: f"us:statutes/26/164/f#input.{name}"
+        for name in ("taxpayer_is_individual",)
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
+        name: f"us:statutes/26/1402/a#input.{name}"
+        for name in (
+            "partnership_section_702_a_8_income_or_loss",
+            "self_employment_trade_or_business_deductions",
+            "self_employment_trade_or_business_gross_income",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
         name: f"us:statutes/26/24/d#input.{name}"
         for name in (
             "aggregate_subpart_c_credits_with_increased_26a_limit",
@@ -768,9 +1363,7 @@ _INPUT_REF_OVERRIDES.update(
             "employee_3101_3201a_taxes",
             "qualifying_children_count",
             "railroad_3211a_taxes",
-            "self_employment_1401_taxes",
             "special_refund_social_security_taxes_under_6413c",
-            "taxable_earned_income_under_section_32",
         )
     }
 )
@@ -808,6 +1401,15 @@ _INPUT_REF_OVERRIDES.update(
             "childless_taxpayer_or_spouse_age_eligible_for_eitc",
             "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year",
             "eitc_disallowance_period_applies",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
+        name: f"{US_FEDERAL_INCOME_TAX_BRIDGE_TARGET}#input.{name}"
+        for name in (
+            "person_rental_income_for_qbid",
+            "person_self_employment_income_for_qbid",
         )
     }
 )
@@ -864,6 +1466,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     # PolicyEngine and TAXSIM see.
     earners = [person for person in (head, spouse) if person is not None]
     dividends = _sum_concept(earners, Concepts.DIVIDEND_INCOME)
+    qualified_dividends = _sum_concept(earners, Concepts.QUALIFIED_DIVIDEND_INCOME)
     interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
     short_capital_gains = _sum_concept(earners, Concepts.SHORT_TERM_CAPITAL_GAINS)
     long_capital_gains = _sum_concept(earners, Concepts.LONG_TERM_CAPITAL_GAINS)
@@ -873,51 +1476,29 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
     self_employment = _sum_concept(earners, Concepts.SELF_EMPLOYMENT_INCOME)
 
-    investment_income = (
-        dividends
-        + interest
-        + short_capital_gains
-        + long_capital_gains
-        + rental
-    )
-    other_income = pensions + social_security + unemployment + self_employment
-    earned_income = wages + self_employment
-    agi = wages + investment_income + other_income
-    gross_income = agi
     filing_status = _filing_status(spouse=spouse, dependents=dependents)
     taxpayer_is_blind = bool(head.fact(Concepts.BLIND, False))
     spouse_is_blind = bool(spouse.fact(Concepts.BLIND, False)) if spouse else False
 
     inputs: dict[str, Any] = {
-        "adjusted_gross_income": agi,
         "additional_standard_deduction_entitlement_count_under_subsection_f": sum(
             int(_age(person) >= 65)
             + int(bool(person.fact(Concepts.BLIND, False)))
             for person in (head, spouse)
             if person is not None
         ),
-        "additional_senior_deduction": _additional_senior_deduction(
-            agi=agi,
-            filing_status=filing_status,
-            head=head,
-            spouse=spouse,
-        ),
         "additional_exemption_allowable_for_spouse_under_section_151_b": spouse
         is not None,
         "age_at_close_of_taxable_year": _age(head),
         "childless_taxpayer_or_spouse_age_eligible_for_eitc": (
-            _eitc_childless_age_eligible(head)
-            or bool(spouse and _eitc_childless_age_eligible(spouse))
+            any(_eitc_childless_age_eligible(person) for person in people)
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
-        "earned_income": earned_income,
         "employee_medicare_tax": wages * 0.0145,
         "employee_social_security_tax": wages * 0.062,
-        "filer_adjusted_earnings": earned_income,
         "filer_meets_eitc_identification_requirements": True,
         "filing_status": filing_status,
         "filing_status_is_joint_return": spouse is not None,
-        "gross_income": gross_income,
         "individual_is_unmarried_and_not_surviving_spouse": spouse is None,
         "is_estate_or_trust": False,
         "is_individual": True,
@@ -925,7 +1506,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "married_filing_separate_return": False,
         "married_joint_return_filed": spouse is not None,
         "may_be_claimed_as_dependent_by_another_taxpayer": False,
-        "modified_adjusted_gross_income": agi,
+        "tax_exempt_interest_received_or_accrued": 0,
         "spouse_has_attained_age_65_before_close_of_taxable_year": bool(
             spouse and _age(spouse) >= 65
         ),
@@ -942,31 +1523,26 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "wages_taken_into_account_for_additional_medicare_tax": wages,
         # Investment / unearned income — projected from Case concepts.
         "dividend_income": dividends,
-        "qualified_dividend_income": dividends,
+        "qualified_dividend_income": qualified_dividends,
         "taxable_interest_income": interest,
         "short_term_capital_gains": short_capital_gains,
         "long_term_capital_gains": long_capital_gains,
         "rental_income": rental,
         "pension_annuity_disability_benefits_received": pensions,
-        "social_security_benefits_received": social_security,
+        "partnership_section_702_a_8_income_or_loss": 0,
+        "self_employment_trade_or_business_deductions": 0,
+        "self_employment_trade_or_business_gross_income": self_employment,
+        "taxpayer_is_individual": True,
+        "title_II_monthly_benefits_received_during_taxable_year": social_security,
+        "unemployment_compensation": unemployment,
     }
     for name in _BOOLEAN_DEFAULTS_FALSE:
         inputs.setdefault(name, _boolean_default(name, case))
     for name in _TAX_UNIT_NUMERIC_DEFAULTS:
         inputs.setdefault(name, 0)
     inputs.update(_case_axiom_tax_unit_inputs(case))
-    irs_gross_income = inputs.pop("irs_gross_income", None)
-    if irs_gross_income is not None:
-        inputs["gross_income"] = irs_gross_income
-    if "adjusted_gross_income" in inputs:
-        inputs["modified_adjusted_gross_income"] = inputs["adjusted_gross_income"]
-        inputs["filer_adjusted_earnings"] = inputs["adjusted_gross_income"]
     inputs["deduction_provided_in_section_170_p"] = inputs.get(
         "charitable_deduction_for_non_itemizers",
-        0,
-    )
-    inputs["deduction_provided_in_section_199A"] = inputs.get(
-        "qualified_business_income_deduction",
         0,
     )
     inputs["deduction_provided_in_section_224"] = inputs.get(
@@ -987,7 +1563,6 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     inputs["qualifying_children_count"] = sum(
         1 for dependent in dependents if _age(dependent) < 17
     )
-    inputs["taxable_earned_income_under_section_32"] = earned_income
     inputs["passenger_vehicle_loan_interest_paid_or_accrued"] = inputs.get(
         "auto_loan_interest_deduction",
         0,
@@ -1034,6 +1609,12 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "meets_ctc_child_identification_requirements": is_dependent,
             "meets_eitc_identification_requirements": is_dependent,
             "noncitizen_exception_to_other_dependent_credit_under_subsection_h": False,
+            "person_rental_income_for_qbid": _number(
+                person.fact(Concepts.RENTAL_INCOME, 0)
+            ),
+            "person_self_employment_income_for_qbid": _number(
+                person.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)
+            ),
             "qualifying_child_described_in_subsection_c": is_dependent and age < 17,
             "qualifying_child_is_married_at_close_of_taxable_year": False,
             "qualifying_child_name_age_and_tin_included_on_return": is_dependent,
@@ -1061,7 +1642,10 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
     tax_filers = [person for person in (head, spouse) if person is not None]
     records = []
     for relation_ref in _RELATION_REFS:
-        if relation_ref == "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit":
+        if relation_ref in {
+            "us:tax/federal-income-tax/oracle-bridge#relation.business_income_of_tax_unit",
+            "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
+        }:
             relation_people = tax_filers
         elif relation_ref in {
             "us:statutes/26/24/h#relation.dependent_of_tax_unit",
@@ -1117,6 +1701,29 @@ def _case_axiom_tax_unit_inputs(case: Case) -> dict[str, Any]:
             "metadata['axiom_tax_unit_inputs'] must not include itemization status; "
             "itemization status is resolved by Axiom candidate selection."
         )
+    aggregate_inputs = {
+        "adjusted_gross_income",
+        "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933",
+        "additional_senior_deduction",
+        "earned_income",
+        "filer_adjusted_earnings",
+        "gross_income",
+        "irs_gross_income",
+        "modified_adjusted_gross_income",
+        "deduction_provided_in_section_199A",
+        "qualified_business_income_deduction",
+        "self_employment_1401_taxes",
+        "self_employment_income",
+        "self_employment_tax_ald",
+        "taxable_earned_income_under_section_32",
+        "taxable_social_security_benefits_included",
+    }
+    supplied_aggregate_inputs = sorted(aggregate_inputs.intersection(raw_inputs))
+    if supplied_aggregate_inputs:
+        raise RuntimeError(
+            "metadata['axiom_tax_unit_inputs'] must not include calculator-derived "
+            f"aggregate inputs: {', '.join(supplied_aggregate_inputs)}."
+        )
     return dict(raw_inputs)
 
 
@@ -1159,30 +1766,6 @@ def _filing_status(*, spouse: Entity | None, dependents: list[Entity]) -> int:
     if dependents:
         return 3
     return 0
-
-
-def _additional_senior_deduction(
-    *,
-    agi: float,
-    filing_status: int,
-    head: Entity,
-    spouse: Entity | None,
-) -> float:
-    eligible_seniors = sum(
-        _age(person) >= _ADDITIONAL_SENIOR_DEDUCTION_AGE
-        for person in (head, spouse)
-        if person is not None
-    )
-    if eligible_seniors == 0:
-        return 0
-    threshold = (
-        _ADDITIONAL_SENIOR_DEDUCTION_JOINT_THRESHOLD
-        if filing_status == 1
-        else _ADDITIONAL_SENIOR_DEDUCTION_OTHER_THRESHOLD
-    )
-    phaseout = max(0, agi - threshold) * _ADDITIONAL_SENIOR_DEDUCTION_PHASEOUT_RATE
-    per_senior_allowed = max(0, _ADDITIONAL_SENIOR_DEDUCTION_AMOUNT - phaseout)
-    return per_senior_allowed * eligible_seniors
 
 
 def _boolean_default(name: str, case: Case) -> bool:

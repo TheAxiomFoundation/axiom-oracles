@@ -13,6 +13,7 @@ from .adapters.accessnyc import (
 )
 from .adapters.axiom import (
     AxiomRulesRunner,
+    US_FEDERAL_INCOME_TAX_BRIDGE_TARGET,
     US_FEDERAL_INCOME_TAX_IMPORTS,
     US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
     attach_axiom_tax_inputs,
@@ -495,6 +496,9 @@ def _build_runner(
             program_rules=US_FEDERAL_INCOME_TAX_PROGRAM_RULES
             if program_imports
             else (),
+            generated_program_target=US_FEDERAL_INCOME_TAX_BRIDGE_TARGET
+            if program_imports
+            else None,
             prune_unsupported_inputs=bool(program_imports),
         )
     if engine == "taxsim":
