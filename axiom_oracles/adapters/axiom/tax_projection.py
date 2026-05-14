@@ -156,6 +156,13 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         formula="186000",
     ),
     _generated_parameter_rule(
+        "alaska_permanent_fund_dividend_amount",
+        dtype="Money",
+        unit="USD",
+        source="Alaska Department of Revenue 2024 Permanent Fund Dividend amount, carried forward for 2026 oracle comparison",
+        formula="1403.83",
+    ),
+    _generated_parameter_rule(
         "additional_senior_deduction_amount",
         dtype="Money",
         unit="USD",
@@ -494,9 +501,11 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         unit="USD",
         source="Oracle composition bridge applying 26 USC 164(f) to earned income used by 26 USC 24(d)",
         formula=(
-            "wages "
-            "+ net_earnings_before_paragraph_12_adjustment "
-            "- self_employment_tax_deduction"
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_adjusted_earnings_for_eitc, "
+            "person_has_adjusted_earnings_for_eitc"
+            ")"
         ),
     ),
     _generated_tax_unit_rule(
@@ -568,6 +577,10 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
     _generated_data_relation_rule(
         "business_income_of_tax_unit",
         source="Oracle comparison bridge relating tax-unit members to person-level 26 USC 199A income leaves",
+    ),
+    _generated_data_relation_rule(
+        "filer_adjusted_earnings_of_tax_unit",
+        source="Oracle comparison bridge relating tax-unit filers to person-level 26 USC 32 adjusted earnings",
     ),
     _generated_person_rule(
         "person_self_employment_net_earnings_before_paragraph_12",
@@ -653,6 +666,26 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         ),
     ),
     _generated_person_rule(
+        "person_adjusted_earnings_for_eitc",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine person-level adjusted earnings for 26 USC 32",
+        formula=(
+            "max("
+            "0, "
+            "person_payroll_earnings "
+            "+ person_self_employment_income_for_qbid "
+            "- person_self_employment_tax_ald_for_qbid"
+            ")"
+        ),
+    ),
+    _generated_person_rule(
+        "person_has_adjusted_earnings_for_eitc",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying tax-unit filers with positive adjusted earnings for 26 USC 32",
+        formula="person_adjusted_earnings_for_eitc > 0",
+    ),
+    _generated_person_rule(
         "person_has_self_employment_tax_ald_for_qbid",
         dtype="Judgment",
         source="Oracle comparison bridge identifying tax-unit members with person-level 26 USC 164(f) deductions",
@@ -712,14 +745,20 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="Oracle comparison bridge approximating 26 USC 199A(a)(2) capital-gain cap from ECPS leaves",
-        formula="max(0, long_term_capital_gains + qualified_dividend_income)",
+        formula=(
+            "max(0, capital_gains_tax_long_term_capital_gains "
+            "+ capital_gains_tax_qualified_dividend_income)"
+        ),
     ),
     _generated_tax_unit_rule(
         "net_capital_gains",
         dtype="Money",
         unit="USD",
         source="Oracle comparison bridge matching PolicyEngine net capital gains before loss limitation",
-        formula="long_term_capital_gains + short_term_capital_gains",
+        formula=(
+            "capital_gains_tax_long_term_capital_gains "
+            "+ capital_gains_tax_short_term_capital_gains"
+        ),
     ),
     _generated_tax_unit_rule(
         "loss_limited_net_capital_gains",
@@ -753,9 +792,9 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         formula=(
             "loss_limited_net_capital_gains > 0 "
             "or net_capital_gains > 0 "
-            "or long_term_capital_gains > 0 "
+            "or capital_gains_tax_long_term_capital_gains > 0 "
             "or non_sch_d_capital_gains > 0 "
-            "or qualified_dividend_income > 0"
+            "or capital_gains_tax_qualified_dividend_income > 0"
         ),
     ),
     _generated_tax_unit_rule(
@@ -766,7 +805,8 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         formula=(
             "max("
             "0, "
-            "qualified_dividend_income - max(0, investment_income_form_4952)"
+            "capital_gains_tax_qualified_dividend_income "
+            "- max(0, investment_income_form_4952)"
             ")"
         ),
     ),
@@ -784,7 +824,8 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
             "max("
             "0, "
             "min("
-            "long_term_capital_gains + qualified_dividend_income, "
+            "capital_gains_tax_long_term_capital_gains "
+            "+ capital_gains_tax_qualified_dividend_income, "
             "net_capital_gains"
             ") "
             ") + non_sch_d_capital_gains"
@@ -805,7 +846,8 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
             "max("
             "0, "
             "min("
-            "long_term_capital_gains + qualified_dividend_income, "
+            "capital_gains_tax_long_term_capital_gains "
+            "+ capital_gains_tax_qualified_dividend_income, "
             "net_capital_gains"
             ")"
             ") + non_sch_d_capital_gains"
@@ -1186,14 +1228,25 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         source="Oracle composition bridge aggregating ECPS leaf income facts before applying 26 USC 86",
         formula=(
             "wages "
-            "+ dividend_income "
-            "+ taxable_interest_income "
-            "+ short_term_capital_gains "
-            "+ long_term_capital_gains "
-            "+ rental_income "
-            "+ pension_annuity_disability_benefits_received "
-            "+ unemployment_compensation "
+            "+ filer_dividend_income "
+            "+ filer_taxable_interest_income "
+            "+ filer_short_term_capital_gains "
+            "+ filer_long_term_capital_gains "
+            "+ filer_rental_income "
+            "+ filer_pension_annuity_disability_benefits_received "
+            "+ filer_unemployment_compensation "
+            "+ alaska_permanent_fund_dividend "
             "+ net_earnings_before_paragraph_12_adjustment"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "alaska_permanent_fund_dividend",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying Alaska Permanent Fund Dividend to Alaska tax-unit filers",
+        formula=(
+            "alaska_permanent_fund_dividend_amount "
+            "* alaska_permanent_fund_dividend_eligible_person_count"
         ),
     ),
     _generated_tax_unit_rule(
@@ -1201,7 +1254,10 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="Oracle composition bridge routing ECPS capital-gain leaves into 26 USC 1411(c)(1)(A)(iii)",
-        formula="short_term_capital_gains + long_term_capital_gains",
+        formula=(
+            "capital_gains_tax_short_term_capital_gains "
+            "+ capital_gains_tax_long_term_capital_gains"
+        ),
     ),
     _generated_tax_unit_rule(
         "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933",
@@ -1319,6 +1375,7 @@ _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT = 15_750
 
 _RELATION_REFS = (
     "us:tax/federal-income-tax/oracle-bridge#relation.business_income_of_tax_unit",
+    "us:tax/federal-income-tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
     "us:tax/federal-income-tax/oracle-bridge#relation.payroll_member_of_tax_unit",
     "us:statutes/26/21#relation.qualifying_individual_of_tax_unit",
     "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
@@ -1824,6 +1881,17 @@ _INPUT_REF_OVERRIDES.update(
     {
         name: f"{US_FEDERAL_INCOME_TAX_BRIDGE_TARGET}#input.{name}"
         for name in (
+            "alaska_permanent_fund_dividend_eligible_person_count",
+            "capital_gains_tax_long_term_capital_gains",
+            "capital_gains_tax_qualified_dividend_income",
+            "capital_gains_tax_short_term_capital_gains",
+            "filer_dividend_income",
+            "filer_long_term_capital_gains",
+            "filer_pension_annuity_disability_benefits_received",
+            "filer_rental_income",
+            "filer_short_term_capital_gains",
+            "filer_taxable_interest_income",
+            "filer_unemployment_compensation",
             "person_payroll_earnings",
             "person_rental_income_for_qbid",
             "person_self_employment_income_for_qbid",
@@ -1882,15 +1950,37 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     # Investment / unearned income pulled from the Case so Axiom matches what
     # PolicyEngine and TAXSIM see.
     earners = [person for person in (head, spouse) if person is not None]
-    dividends = _sum_concept(earners, Concepts.DIVIDEND_INCOME)
-    qualified_dividends = _sum_concept(earners, Concepts.QUALIFIED_DIVIDEND_INCOME)
-    interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
-    short_capital_gains = _sum_concept(earners, Concepts.SHORT_TERM_CAPITAL_GAINS)
-    long_capital_gains = _sum_concept(earners, Concepts.LONG_TERM_CAPITAL_GAINS)
-    pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
+    filer_dividends = _sum_concept(earners, Concepts.DIVIDEND_INCOME)
+    filer_interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
+    filer_short_capital_gains = _sum_concept(
+        earners,
+        Concepts.SHORT_TERM_CAPITAL_GAINS,
+    )
+    filer_long_capital_gains = _sum_concept(
+        earners,
+        Concepts.LONG_TERM_CAPITAL_GAINS,
+    )
+    capital_gains_tax_qualified_dividends = _sum_concept(
+        people,
+        Concepts.QUALIFIED_DIVIDEND_INCOME,
+    )
+    capital_gains_tax_short_capital_gains = _sum_concept(
+        people,
+        Concepts.SHORT_TERM_CAPITAL_GAINS,
+    )
+    capital_gains_tax_long_capital_gains = _sum_concept(
+        people,
+        Concepts.LONG_TERM_CAPITAL_GAINS,
+    )
+    tax_unit_dividends = _sum_concept(people, Concepts.DIVIDEND_INCOME)
+    tax_unit_interest = _sum_concept(people, Concepts.INTEREST_INCOME)
+    filer_pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
     social_security = _sum_concept(people, Concepts.SOCIAL_SECURITY_BENEFITS)
-    unemployment = _sum_concept(earners, Concepts.UNEMPLOYMENT_INSURANCE_INCOME)
-    rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
+    filer_unemployment = _sum_concept(
+        earners,
+        Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
+    )
+    filer_rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
     self_employment = _sum_concept(earners, Concepts.SELF_EMPLOYMENT_INCOME)
 
     filing_status = _filing_status(spouse=spouse, dependents=dependents)
@@ -1937,19 +2027,33 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "wages": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
         # Investment / unearned income — projected from Case concepts.
-        "dividend_income": dividends,
-        "qualified_dividend_income": qualified_dividends,
-        "taxable_interest_income": interest,
-        "short_term_capital_gains": short_capital_gains,
-        "long_term_capital_gains": long_capital_gains,
-        "rental_income": rental,
-        "pension_annuity_disability_benefits_received": pensions,
+        "dividend_income": tax_unit_dividends,
+        "qualified_dividend_income": capital_gains_tax_qualified_dividends,
+        "taxable_interest_income": tax_unit_interest,
+        "short_term_capital_gains": capital_gains_tax_short_capital_gains,
+        "long_term_capital_gains": capital_gains_tax_long_capital_gains,
+        "rental_income": filer_rental,
+        "pension_annuity_disability_benefits_received": filer_pensions,
+        "filer_dividend_income": filer_dividends,
+        "filer_taxable_interest_income": filer_interest,
+        "filer_short_term_capital_gains": filer_short_capital_gains,
+        "filer_long_term_capital_gains": filer_long_capital_gains,
+        "filer_rental_income": filer_rental,
+        "filer_pension_annuity_disability_benefits_received": filer_pensions,
+        "filer_unemployment_compensation": filer_unemployment,
         "partnership_section_702_a_8_income_or_loss": 0,
         "self_employment_trade_or_business_deductions": 0,
         "self_employment_trade_or_business_gross_income": self_employment,
+        "alaska_permanent_fund_dividend_eligible_person_count": _alaska_permanent_fund_dividend_eligible_person_count(
+            case,
+            people,
+        ),
+        "capital_gains_tax_qualified_dividend_income": capital_gains_tax_qualified_dividends,
+        "capital_gains_tax_short_term_capital_gains": capital_gains_tax_short_capital_gains,
+        "capital_gains_tax_long_term_capital_gains": capital_gains_tax_long_capital_gains,
         "taxpayer_is_individual": True,
         "title_II_monthly_benefits_received_during_taxable_year": social_security,
-        "unemployment_compensation": unemployment,
+        "unemployment_compensation": filer_unemployment,
     }
     for name in _BOOLEAN_DEFAULTS_FALSE:
         inputs.setdefault(name, _boolean_default(name, case))
@@ -2058,6 +2162,7 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
     records = []
     for relation_ref in _RELATION_REFS:
         if relation_ref in {
+            "us:tax/federal-income-tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
             "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
         }:
             relation_people = tax_filers
@@ -2209,6 +2314,32 @@ def _standard_deduction_cola(case: Case) -> float:
         - _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT
     )
     return increase / _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT
+
+
+def _alaska_permanent_fund_dividend_eligible_person_count(
+    case: Case,
+    people: list[Entity],
+) -> int:
+    if not _is_alaska_case(case):
+        return 0
+    head, spouse = _tax_filers(people)
+    return sum(1 for person in (head, spouse) if person is not None)
+
+
+def _is_alaska_case(case: Case) -> bool:
+    scope = case.scope
+    if scope is not None and scope.type != "country":
+        return scope.geoid.startswith("02")
+
+    state_code = (
+        case.fact(Concepts.STATE_CODE)
+        or case.metadata.get("state_code")
+        or case.metadata.get("state")
+    )
+    if state_code in (None, ""):
+        return False
+    normalized = str(state_code).strip().upper()
+    return normalized in {"AK", "02", "2"}
 
 
 def _eitc_childless_age_eligible(person: Entity) -> bool:

@@ -232,7 +232,17 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         ("person-2", "tax_unit"),
         ("person-3", "tax_unit"),
     }
-    assert len(projected.metadata["axiom_relations"]) == 16
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
+        if record["name"]
+        == "us:tax/federal-income-tax/oracle-bridge#relation."
+        "filer_adjusted_earnings_of_tax_unit"
+    } == {
+        ("person-1", "tax_unit"),
+        ("person-2", "tax_unit"),
+    }
+    assert len(projected.metadata["axiom_relations"]) == 18
     assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_result_selection" not in projected.metadata
 
@@ -443,8 +453,14 @@ def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qb
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
     }
+    assert "person_adjusted_earnings_for_eitc" in generated_rules_by_name
     assert "person_self_employment_tax_ald_for_qbid" in generated_rules_by_name
     assert "self_employment_tax_ald_for_agi" in generated_rules_by_name
+    assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
+        generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
+            0
+        ]["formula"]
+    )
     assert "self_employment_tax_ald_for_agi" in (
         generated_rules_by_name[
             "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933"
@@ -457,6 +473,60 @@ def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qb
         generated_rules_by_name["business_income_for_qbid"]["versions"][0]["formula"]
     )
     assert "- self_employment_tax_deduction" not in qualified_business_income_formula
+
+
+def test_axiom_tax_projection_floors_eitc_adjusted_earnings_per_filer() -> None:
+    case = Case(
+        case_id="negative-spouse-self-employment",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 61,
+                    Concepts.YEARLY_EARNED_INCOME: 5_466.55,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.PERSON_AGE: 59,
+                    Concepts.SELF_EMPLOYMENT_INCOME: -10_019.35,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+    }
+
+    assert by_key[
+        (
+            "person-2",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "person_self_employment_income_for_qbid",
+        )
+    ] == -10_019.35
+    assert "max(0, person_payroll_earnings" in (
+        generated_rules_by_name["person_adjusted_earnings_for_eitc"]["versions"][0][
+            "formula"
+        ]
+    )
+    assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
+        generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
+            0
+        ]["formula"]
+    )
 
 
 def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> None:
@@ -828,6 +898,98 @@ def test_axiom_tax_projection_uses_qualified_dividend_leaf_input() -> None:
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.qualified_dividend_income")
     ] == 600
+
+
+def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi() -> None:
+    case = Case(
+        case_id="dependent-preferential-income",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 45,
+                    Concepts.YEARLY_EARNED_INCOME: 100_000,
+                    Concepts.DIVIDEND_INCOME: 1_000,
+                    Concepts.QUALIFIED_DIVIDEND_INCOME: 600,
+                    Concepts.SHORT_TERM_CAPITAL_GAINS: 100,
+                    Concepts.LONG_TERM_CAPITAL_GAINS: 200,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 15,
+                    Concepts.DIVIDEND_INCOME: 500,
+                    Concepts.QUALIFIED_DIVIDEND_INCOME: 300,
+                    Concepts.SHORT_TERM_CAPITAL_GAINS: 40,
+                    Concepts.LONG_TERM_CAPITAL_GAINS: 50,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[("tax_unit", "us:statutes/26/1411#input.dividend_income")] == 1_500
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.qualified_dividend_income")
+    ] == 900
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.short_term_capital_gains")
+    ] == 140
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.long_term_capital_gains")
+    ] == 250
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax/oracle-bridge#input.filer_dividend_income",
+        )
+    ] == 1_000
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "filer_short_term_capital_gains",
+        )
+    ] == 100
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "filer_long_term_capital_gains",
+        )
+    ] == 200
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "capital_gains_tax_qualified_dividend_income",
+        )
+    ] == 900
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "capital_gains_tax_short_term_capital_gains",
+        )
+    ] == 140
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "capital_gains_tax_long_term_capital_gains",
+        )
+    ] == 250
 
 
 def test_axiom_tax_projection_uses_oldest_adults_as_filers() -> None:
@@ -1205,7 +1367,7 @@ def test_axiom_tax_projection_rejects_case_supplied_tax_aggregates() -> None:
         attach_axiom_tax_inputs_to_case(case)
 
 
-def test_axiom_tax_projection_does_not_synthesize_alaska_pfd_from_policyengine() -> None:
+def test_axiom_tax_projection_derives_alaska_pfd_for_tax_filers_from_scope() -> None:
     case = Case(
         case_id="alaska-couple-with-dependent",
         period="2026",
@@ -1260,6 +1422,13 @@ def test_axiom_tax_projection_does_not_synthesize_alaska_pfd_from_policyengine()
         "tax_unit",
         "us:tax/federal-income-tax#input.earned_income",
     ) not in by_key
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "alaska_permanent_fund_dividend_eligible_person_count",
+        )
+    ] == 2
 
 
 def test_axiom_tax_projection_counts_young_adult_as_other_dependent() -> None:

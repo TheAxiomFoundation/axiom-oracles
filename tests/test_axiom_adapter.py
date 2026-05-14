@@ -705,8 +705,14 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     )
     assert "business_income_of_tax_unit" in generated_rule_names
     assert "business_income_for_qbid" in generated_rule_names
+    assert "person_adjusted_earnings_for_eitc" in generated_rule_names
     assert "qualified_business_income_deduction_phaseout_rate" in generated_rule_names
     assert "qualified_business_income_deduction" in generated_rule_names
+    assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
+        generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
+            0
+        ]["formula"]
+    )
     assert "qualified_business_income_deduction_phaseout_rate" in (
         generated_rules_by_name["qualified_business_income_deduction_before_floor"][
             "versions"
@@ -717,10 +723,17 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     )
     assert "amt_part_iii_required" in generated_rule_names
     assert "amt_tax_including_capital_gains" in generated_rule_names
+    assert "alaska_permanent_fund_dividend" in generated_rule_names
+    assert "alaska_permanent_fund_dividend_amount" in generated_rule_names
     assert "capital_gains_worksheet_line_10" in generated_rule_names
     assert "capital_gains_worksheet_line_13" in generated_rule_names
     assert "capital_gains_worksheet_line_14" in generated_rule_names
     assert "capital_gains_worksheet_line_19" in generated_rule_names
+    assert "capital_gains_tax_qualified_dividend_income" in (
+        generated_rules_by_name["capital_gains_worksheet_line_10"]["versions"][0][
+            "formula"
+        ]
+    )
     assert "capital_gains_worksheet_line_10 > 0" in (
         generated_rules_by_name["amt_part_iii_required"]["versions"][0]["formula"]
     )
@@ -737,7 +750,7 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
         generated_rules_by_name[
             "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
         ]["versions"][0]["formula"]
-        == "short_term_capital_gains + long_term_capital_gains"
+        == "capital_gains_tax_short_term_capital_gains + capital_gains_tax_long_term_capital_gains"
     )
     assert "deduction_provided_in_section_199A" in generated_rule_names
     assert "us:statutes/26/24/d" not in US_FEDERAL_INCOME_TAX_IMPORTS
