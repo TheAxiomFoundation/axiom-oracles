@@ -65,6 +65,29 @@ def test_missing_amount_output_is_not_treated_as_zero_match() -> None:
     assert not variable.matches
 
 
+def test_amount_comparison_can_use_relative_tolerance_for_large_outputs() -> None:
+    mappings = [
+        ProgramMapping(
+            standard="us:test#state_income_tax",
+            description="State income tax",
+            category="tax",
+            comparison="amount",
+            tolerance=15,
+            relative_tolerance=0.0000002,
+            targets={"axiom": "state_income_tax", "policyengine": "state_income_tax"},
+        )
+    ]
+    left = [EngineResult("axiom", 1, {"state_income_tax": 736_657_861.9593371})]
+    right = [EngineResult("policyengine", 1, {"state_income_tax": 736_657_920.0})]
+
+    comparison = Comparator(mappings).compare(left, right)[0]
+    variable = comparison.comparisons[0]
+
+    assert comparison.match_rate == 100
+    assert variable.matches
+    assert variable.relative_tolerance == 0.0000002
+
+
 def test_comparison_carries_engine_errors() -> None:
     mappings = [
         ProgramMapping(

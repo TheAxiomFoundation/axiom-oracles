@@ -6,10 +6,11 @@ import yaml
 
 from axiom_oracles.adapters.axiom import (
     AxiomRulesRunner,
-    US_FEDERAL_INCOME_TAX_BRIDGE_TARGET,
-    US_FEDERAL_INCOME_TAX_IMPORTS,
-    US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
+    US_TAX_ORACLE_BRIDGE_TARGET,
+    US_TAX_ORACLE_IMPORTS,
+    US_TAX_ORACLE_PROGRAM_RULES,
 )
+from axiom_oracles.adapters.axiom.runner import _scalar_value
 from axiom_oracles.cli import _build_runner
 from axiom_oracles.comparison.mappings import comparable_mappings, load_program_mappings
 from axiom_oracles.core.case import Case, Concepts
@@ -144,6 +145,21 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     [result] = runner.run_cases([case], [])
 
     assert result.errors == ()
+
+
+def test_axiom_runner_serializes_float_inputs_without_exponents() -> None:
+    assert _scalar_value(-1.232816068197709e-13) == {
+        "kind": "decimal",
+        "value": "0",
+    }
+    assert _scalar_value(123.450000) == {
+        "kind": "decimal",
+        "value": "123.45",
+    }
+    assert _scalar_value(1.2e6) == {
+        "kind": "decimal",
+        "value": "1200000",
+    }
 
 
 def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> None:
@@ -522,10 +538,9 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
         calls.append((args, kwargs))
         if args[1] == "compile":
             program_path = Path(args[args.index("--program") + 1])
-            assert program_path.parts[-4:] == (
+            assert program_path.parts[-3:] == (
                 "rulespec-us",
                 "tax",
-                "federal-income-tax",
                 "oracle-bridge.yaml",
             )
             output_path = Path(args[args.index("--output") + 1])
@@ -536,7 +551,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
                             "derived": [
                                 {
                                     "id": (
-                                        "us:tax/federal-income-tax/oracle-bridge"
+                                        "us:tax/oracle-bridge"
                                         "#taxable_income"
                                     ),
                                     "name": "taxable_income",
@@ -553,7 +568,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         assert request["queries"][0]["outputs"] == [
-            "us:tax/federal-income-tax/oracle-bridge#taxable_income"
+            "us:tax/oracle-bridge#taxable_income"
         ]
         return subprocess.CompletedProcess(
             args,
@@ -563,7 +578,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
                     "results": [
                         {
                             "outputs": {
-                                "us:tax/federal-income-tax/oracle-bridge#taxable_income": {
+                                "us:tax/oracle-bridge#taxable_income": {
                                     "kind": "scalar",
                                     "value": {
                                         "kind": "integer",
@@ -598,18 +613,18 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
                 ],
             },
         ),
-        generated_program_target=US_FEDERAL_INCOME_TAX_BRIDGE_TARGET,
+        generated_program_target=US_TAX_ORACLE_BRIDGE_TARGET,
         subprocess_run=fake_run,
     )
 
     [result] = runner.run_cases(
         [Case(case_id="case-1", period="2026")],
-        ["us:tax/federal-income-tax/oracle-bridge#taxable_income"],
+        ["us:tax/oracle-bridge#taxable_income"],
     )
 
     assert result.errors == ()
     assert result.values == {
-        "us:tax/federal-income-tax/oracle-bridge#taxable_income": 0
+        "us:tax/oracle-bridge#taxable_income": 0
     }
     assert [call[0][1] for call in calls] == ["compile", "run-compiled"]
 
@@ -641,7 +656,7 @@ def test_federal_ctc_component_maps_to_total_ctc_value() -> None:
         if mapping.concept_id == Concepts.CTC
     )
 
-    assert mapping.targets["axiom"] == "us:tax/federal-income-tax/oracle-bridge#ctc_value"
+    assert mapping.targets["axiom"] == "us:tax/oracle-bridge#ctc_value"
     assert mapping.targets["policyengine"] == "ctc_value"
 
 
@@ -672,21 +687,21 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
 
     assert isinstance(runner, AxiomRulesRunner)
     assert runner.program_imports
-    assert runner.program_rules == US_FEDERAL_INCOME_TAX_PROGRAM_RULES
-    assert runner.generated_program_target == US_FEDERAL_INCOME_TAX_BRIDGE_TARGET
+    assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
+    assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     assert runner.prune_unsupported_inputs
     assert (
         "us:policies/irs/rev-proc-2025-32/standard-deduction"
-        in US_FEDERAL_INCOME_TAX_IMPORTS
+        in US_TAX_ORACLE_IMPORTS
     )
-    assert "us:statutes/26/86" in US_FEDERAL_INCOME_TAX_IMPORTS
-    assert "us:statutes/26/1402/a" in US_FEDERAL_INCOME_TAX_IMPORTS
-    assert "us:statutes/26/164/f" in US_FEDERAL_INCOME_TAX_IMPORTS
+    assert "us:statutes/26/86" in US_TAX_ORACLE_IMPORTS
+    assert "us:statutes/26/1402/a" in US_TAX_ORACLE_IMPORTS
+    assert "us:statutes/26/164/f" in US_TAX_ORACLE_IMPORTS
     generated_rule_names = {
-        rule["name"] for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+        rule["name"] for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
     generated_rules_by_name = {
-        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
     assert "self_employment_income" in generated_rule_names
     assert "self_employment_1401_taxes" in generated_rule_names
@@ -708,6 +723,31 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     assert "person_adjusted_earnings_for_eitc" in generated_rule_names
     assert "qualified_business_income_deduction_phaseout_rate" in generated_rule_names
     assert "qualified_business_income_deduction" in generated_rule_names
+    assert "state_income_tax" in generated_rule_names
+    assert "state_withheld_income_tax" in generated_rule_names
+
+
+def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
+    runner = _build_runner(
+        "axiom",
+        "api",
+        None,
+        None,
+        (Concepts.STATE_INCOME_TAX,),
+        axiom_program=None,
+        axiom_engine_binary=Path("/tmp/axiom-rules"),
+    )
+
+    assert isinstance(runner, AxiomRulesRunner)
+    assert runner.program_imports == US_TAX_ORACLE_IMPORTS
+    assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
+    assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
+    generated_rule_names = {
+        rule["name"] for rule in US_TAX_ORACLE_PROGRAM_RULES
+    }
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
+    }
     assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
         generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
             0
@@ -753,5 +793,5 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
         == "capital_gains_tax_short_term_capital_gains + capital_gains_tax_long_term_capital_gains"
     )
     assert "deduction_provided_in_section_199A" in generated_rule_names
-    assert "us:statutes/26/24/d" not in US_FEDERAL_INCOME_TAX_IMPORTS
-    assert "us:statutes/26/63" not in US_FEDERAL_INCOME_TAX_IMPORTS
+    assert "us:statutes/26/24/d" not in US_TAX_ORACLE_IMPORTS
+    assert "us:statutes/26/63" not in US_TAX_ORACLE_IMPORTS

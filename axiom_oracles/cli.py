@@ -13,9 +13,9 @@ from .adapters.accessnyc import (
 )
 from .adapters.axiom import (
     AxiomRulesRunner,
-    US_FEDERAL_INCOME_TAX_BRIDGE_TARGET,
-    US_FEDERAL_INCOME_TAX_IMPORTS,
-    US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
+    US_TAX_ORACLE_BRIDGE_TARGET,
+    US_TAX_ORACLE_IMPORTS,
+    US_TAX_ORACLE_PROGRAM_RULES,
     US_SNAP_CO_COMPILED_ARTIFACT_PATH,
     attach_axiom_snap_co_inputs,
     attach_axiom_tax_inputs,
@@ -52,6 +52,10 @@ _SNAP_CONCEPTS = frozenset({Concepts.SNAP_BENEFIT, Concepts.SNAP_ELIGIBLE})
 
 def _wants_snap(concept_ids: tuple[str, ...]) -> bool:
     return any(c in _SNAP_CONCEPTS for c in concept_ids)
+
+
+def _wants_tax(concept_ids: tuple[str, ...]) -> bool:
+    return any(c.startswith("us:tax/") for c in concept_ids)
 
 
 @click.group()
@@ -242,6 +246,10 @@ def compare(
         )
     except RuntimeError as exc:
         raise click.ClickException(str(exc)) from exc
+    if not cases:
+        raise click.ClickException(
+            "No cases remain after engine-specific preparation filters."
+        )
 
     left_runner = _build_runner(
         left,
@@ -457,8 +465,12 @@ def _prepare_cases_for_engines(
     if (
         "axiom" in engines
         and axiom_program is None
-        and Concepts.FEDERAL_INCOME_TAX in concept_ids
+        and _wants_tax(concept_ids)
     ):
+        if Concepts.STATE_INCOME_TAX in concept_ids:
+            # The generated state-income-tax bridge currently implements
+            # Colorado. Keep comparisons scoped to the encoded jurisdiction.
+            prepared = [case for case in prepared if _is_co_household(case)]
         prepared = attach_axiom_tax_inputs(prepared)
         if engines & {"policyengine", "taxsim"}:
             prepared = attach_axiom_tax_itemization_choice(prepared)
@@ -524,17 +536,17 @@ def _build_runner(
     if engine == "axiom":
         # SNAP runs through a precompiled artifact (avoids re-compiling the
         # CO RuleSpec module on every case and the engine's `kind: reiteration`
-        # support requirement). FIT and other concepts keep compiling fresh
-        # from the program imports.
+        # support requirement). Tax concepts keep compiling fresh from the
+        # generated oracle bridge imports.
         wants_snap = _wants_snap(concept_ids) and axiom_program is None
         compiled_artifact = (
             US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
         )
         program_imports = (
-            US_FEDERAL_INCOME_TAX_IMPORTS
+            US_TAX_ORACLE_IMPORTS
             if axiom_program is None
             and not wants_snap
-            and Concepts.FEDERAL_INCOME_TAX in concept_ids
+            and _wants_tax(concept_ids)
             else ()
         )
         return AxiomRulesRunner(
@@ -544,10 +556,10 @@ def _build_runner(
             default_entity_id="household" if wants_snap else axiom_entity_id,
             default_entity="Household" if wants_snap else "TaxUnit",
             program_imports=program_imports,
-            program_rules=US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+            program_rules=US_TAX_ORACLE_PROGRAM_RULES
             if program_imports
             else (),
-            generated_program_target=US_FEDERAL_INCOME_TAX_BRIDGE_TARGET
+            generated_program_target=US_TAX_ORACLE_BRIDGE_TARGET
             if program_imports
             else None,
             prune_unsupported_inputs=bool(program_imports),

@@ -133,6 +133,42 @@ def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program() -> None:
     assert "axiom_input_record_overlays" not in explicit.metadata
 
 
+def test_cli_prepares_axiom_tax_inputs_for_state_income_tax() -> None:
+    co_case = Case(
+        case_id="state-tax",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "08"}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+    ny_case = Case(
+        case_id="ny-state-tax",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "36"}},
+        entities=co_case.entities,
+    )
+
+    [projected] = _prepare_cases_for_engines(
+        [co_case, ny_case],
+        {"policyengine", "axiom"},
+        (Concepts.STATE_INCOME_TAX,),
+        axiom_program=None,
+    )
+
+    assert projected.case_id == "state-tax"
+    assert projected.metadata["axiom_input_records"]
+    assert projected.metadata["axiom_input_record_overlays"]
+
+
 def test_cli_preparation_does_not_use_oracles_as_input_providers(monkeypatch) -> None:
     def fail_if_called(*_args, **_kwargs) -> None:
         raise AssertionError("oracle runner was used during input preparation")
