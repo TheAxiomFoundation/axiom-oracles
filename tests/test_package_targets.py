@@ -257,6 +257,35 @@ def test_cli_keeps_scope_free_federal_components_national() -> None:
     ]
 
 
+def test_cli_skips_itemization_overlays_for_scope_free_federal_components() -> None:
+    case = Case(
+        case_id="standard-deduction",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "06"}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+
+    [prepared] = _prepare_cases_for_engines(
+        [case],
+        {"policyengine", "axiom"},
+        (Concepts.STANDARD_DEDUCTION,),
+        axiom_program=None,
+    )
+
+    assert prepared.metadata["axiom_input_records"]
+    assert "axiom_input_record_overlays" not in prepared.metadata
+
+
 def test_cli_preparation_does_not_use_oracles_as_input_providers(monkeypatch) -> None:
     def fail_if_called(*_args, **_kwargs) -> None:
         raise AssertionError("oracle runner was used during input preparation")
@@ -295,7 +324,7 @@ def test_cli_preparation_does_not_use_oracles_as_input_providers(monkeypatch) ->
 
     assert projected.metadata["taxsim_input"]["state"] == 33
     assert projected.metadata["axiom_input_records"]
-    assert projected.metadata["axiom_input_record_overlays"]
+    assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_tax_unit_inputs" not in projected.metadata
 
 

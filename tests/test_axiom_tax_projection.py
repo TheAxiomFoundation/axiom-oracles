@@ -812,6 +812,76 @@ def test_axiom_tax_projection_limits_head_of_household_to_qualifying_dependents(
     assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 0
 
 
+def test_axiom_tax_projection_infers_head_of_household_for_low_income_young_adult_dependent() -> None:
+    case = Case(
+        case_id="single-parent-with-young-adult-dependent",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 39,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Dependent",
+                    Concepts.PERSON_AGE: 22,
+                    Concepts.YEARLY_EARNED_INCOME: 0,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 3
+
+
+def test_axiom_tax_projection_does_not_treat_high_income_disabled_adult_as_head_of_household_dependent() -> None:
+    case = Case(
+        case_id="single-filer-with-high-income-disabled-adult",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 66,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Dependent",
+                    Concepts.PERSON_AGE: 34,
+                    Concepts.DISABLED: True,
+                    Concepts.YEARLY_EARNED_INCOME: 21_866,
+                    Concepts.SELF_EMPLOYMENT_INCOME: 5_010,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 0
+
+
 def test_axiom_tax_projection_infers_head_of_household_for_qualifying_child() -> None:
     case = Case(
         case_id="single-parent-with-qualifying-child",

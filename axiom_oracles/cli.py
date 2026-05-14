@@ -54,6 +54,7 @@ _STATE_TAX_DEPENDENT_FEDERAL_TAX_CONCEPTS = frozenset(
         Concepts.FEDERAL_INCOME_TAX,
         Concepts.TAXABLE_INCOME,
         Concepts.TAX_BEFORE_CREDITS,
+        Concepts.AMT,
     }
 )
 
@@ -68,6 +69,13 @@ def _wants_tax(concept_ids: tuple[str, ...]) -> bool:
 
 def _wants_state_tax_dependent_federal_tax(concept_ids: tuple[str, ...]) -> bool:
     return any(c in _STATE_TAX_DEPENDENT_FEDERAL_TAX_CONCEPTS for c in concept_ids)
+
+
+def _needs_axiom_tax_itemization_choice(concept_ids: tuple[str, ...]) -> bool:
+    return (
+        Concepts.STATE_INCOME_TAX in concept_ids
+        or _wants_state_tax_dependent_federal_tax(concept_ids)
+    )
 
 
 @click.group()
@@ -503,16 +511,16 @@ def _prepare_cases_for_engines(
         and axiom_program is None
         and _wants_tax(concept_ids)
     ):
-        if (
-            Concepts.STATE_INCOME_TAX in concept_ids
-            or _wants_state_tax_dependent_federal_tax(concept_ids)
-        ):
+        if _needs_axiom_tax_itemization_choice(concept_ids):
             # The generated state-income-tax bridge currently implements
             # Colorado. Federal taxable-income and liability comparisons also
             # need the encoded state tax for SALT/itemization resolution.
             prepared = [case for case in prepared if _is_co_household(case)]
         prepared = attach_axiom_tax_inputs(prepared)
-        if engines & {"policyengine", "taxsim"}:
+        if (
+            engines & {"policyengine", "taxsim"}
+            and _needs_axiom_tax_itemization_choice(concept_ids)
+        ):
             prepared = attach_axiom_tax_itemization_choice(prepared)
     if "axiom" in engines and _wants_snap(concept_ids):
         # Axiom SNAP is encoded only for Colorado today. Filter the

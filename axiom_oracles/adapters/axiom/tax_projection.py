@@ -2725,6 +2725,8 @@ US_TAX_ORACLE_PROGRAM_RULES = (
 )
 
 _TAX_UNIT_ID = "tax_unit"
+_HOH_YOUNG_ADULT_DEPENDENT_AGE_LIMIT = 24
+_HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = 5_500
 _AXIOM_TAX_REF_PREFIX = "us:tax/federal-income-tax"
 _TAX_FILER_ADULT_AGE = 18
 _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100
@@ -3700,7 +3702,28 @@ def _filing_status(*, spouse: Entity | None, dependents: list[Entity]) -> int:
 
 
 def _hoh_qualifying_dependent(dependent: Entity) -> bool:
-    return _age(dependent) < 19 or bool(dependent.fact(Concepts.DISABLED, False))
+    age = _age(dependent)
+    if age < 19:
+        return True
+    return (
+        age < _HOH_YOUNG_ADULT_DEPENDENT_AGE_LIMIT
+        and _dependent_gross_income(dependent)
+        < _HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT
+    )
+
+
+def _dependent_gross_income(dependent: Entity) -> float:
+    return (
+        _earned_income(dependent)
+        + max(0, _number(dependent.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)))
+        + _number(dependent.fact(Concepts.DIVIDEND_INCOME, 0))
+        + _number(dependent.fact(Concepts.INTEREST_INCOME, 0))
+        + _number(dependent.fact(Concepts.SHORT_TERM_CAPITAL_GAINS, 0))
+        + _number(dependent.fact(Concepts.LONG_TERM_CAPITAL_GAINS, 0))
+        + _number(dependent.fact(Concepts.PENSION_INCOME, 0))
+        + _number(dependent.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0))
+        + max(0, _number(dependent.fact(Concepts.RENTAL_INCOME, 0)))
+    )
 
 
 def _boolean_default(name: str, case: Case) -> bool:
