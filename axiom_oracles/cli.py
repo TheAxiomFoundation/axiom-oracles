@@ -15,6 +15,8 @@ from .adapters.axiom import (
     AxiomRulesRunner,
     US_FEDERAL_INCOME_TAX_IMPORTS,
     US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
+    US_SNAP_CO_COMPILED_ARTIFACT_PATH,
+    attach_axiom_snap_co_inputs,
     attach_axiom_tax_inputs,
     attach_axiom_tax_itemization_choice,
 )
@@ -43,6 +45,12 @@ NYC_BENEFITS_DATASET_URL = (
 )
 DEFAULT_PERIOD = "2026-05"
 TAXSIM_DEFAULT_PERIOD = "2024"
+
+_SNAP_CONCEPTS = frozenset({Concepts.SNAP_BENEFIT, Concepts.SNAP_ELIGIBLE})
+
+
+def _wants_snap(concept_ids: tuple[str, ...]) -> bool:
+    return any(c in _SNAP_CONCEPTS for c in concept_ids)
 
 
 @click.group()
@@ -437,7 +445,19 @@ def _prepare_cases_for_engines(
         prepared = attach_axiom_tax_inputs(prepared)
         if engines & {"policyengine", "taxsim"}:
             prepared = attach_axiom_tax_itemization_choice(prepared)
+    if "axiom" in engines and _wants_snap(concept_ids):
+        # Axiom SNAP is encoded only for Colorado today. Filter the
+        # population to CO households so the comparison is apples-to-apples.
+        prepared = [case for case in prepared if _is_co_household(case)]
+        prepared = attach_axiom_snap_co_inputs(prepared)
     return prepared
+
+
+def _is_co_household(case: Case) -> bool:
+    scope = case.scope
+    if scope is None or not scope.geoid:
+        return False
+    return str(scope.geoid)[:2] == "08"
 
 
 def _resolve_period(period: str | None, left: str, right: str) -> str:
@@ -446,6 +466,9 @@ def _resolve_period(period: str | None, left: str, right: str) -> str:
     if "taxsim" in {left, right}:
         return TAXSIM_DEFAULT_PERIOD
     return DEFAULT_PERIOD
+
+
+SNAP_DEFAULT_PERIOD = "2026-01"
 
 
 def _build_runner(
@@ -482,15 +505,27 @@ def _build_runner(
             return PolicyEngineTaxsimRunner()
         return PolicyEngineRunner()
     if engine == "axiom":
+        # SNAP runs through a precompiled artifact (avoids re-compiling the
+        # CO RuleSpec module on every case and the engine's `kind: reiteration`
+        # support requirement). FIT and other concepts keep compiling fresh
+        # from the program imports.
+        wants_snap = _wants_snap(concept_ids) and axiom_program is None
+        compiled_artifact = (
+            US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
+        )
         program_imports = (
             US_FEDERAL_INCOME_TAX_IMPORTS
-            if axiom_program is None and Concepts.FEDERAL_INCOME_TAX in concept_ids
+            if axiom_program is None
+            and not wants_snap
+            and Concepts.FEDERAL_INCOME_TAX in concept_ids
             else ()
         )
         return AxiomRulesRunner(
             program_path=axiom_program,
+            compiled_artifact_path=compiled_artifact,
             binary_path=axiom_engine_binary,
-            default_entity_id=axiom_entity_id,
+            default_entity_id="household" if wants_snap else axiom_entity_id,
+            default_entity="Household" if wants_snap else "TaxUnit",
             program_imports=program_imports,
             program_rules=US_FEDERAL_INCOME_TAX_PROGRAM_RULES
             if program_imports
