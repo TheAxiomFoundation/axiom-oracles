@@ -672,7 +672,12 @@ def _echo_comparison_report(report: dict) -> None:
         f"comparisons: {summary['comparison_count']}; "
         f"mismatches: {summary['mismatch_count']}"
     )
+    if not summary["mismatch_count"]:
+        return
+    click.echo("Mismatches:")
     for case in report["cases"]:
+        if not case["mismatches"]:
+            continue
         click.echo(f"{case['case_id']}: {case['match_rate']:.1f}% match")
         for mismatch in case["mismatches"]:
             click.echo(
