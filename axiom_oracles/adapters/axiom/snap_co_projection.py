@@ -29,9 +29,74 @@ _SNAP_HOUSEHOLD_ID = "household"
 _SNAP_HOUSEHOLD_ENTITY = "Household"
 _MEMBER_RELATION = "us:statutes/7/2012/j#relation.member_of_household"
 _WAGES_INPUT = "us-co:regulations/10-ccr-2506-1/4.403#input.employee_wages_received"
+_GROSS_MONTHLY_INCOME_INPUT = (
+    "us:regulations/7-cfr/273/9#input.snap_gross_monthly_income"
+)
+_MONTHLY_HOUSEHOLD_INCOME_INPUT = (
+    "us:statutes/7/2014/e/6/A#input.snap_monthly_household_income"
+)
 _HOUSEHOLD_SIZE_INPUT = (
     "us-co:regulations/10-ccr-2506-1/4.207.3#input.household_size"
 )
+_FEDERAL_NET_INCOME_DEFAULTS = {
+    "us:policies/usda/snap/fy-2026-cola/deductions#input.household_size": None,
+    "us:regulations/7-cfr/273/10#input.household_size": None,
+    "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income": None,
+    "us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income": 0,
+    "us:regulations/7-cfr/273/10#input.snap_income_exclusions": 0,
+    "us:regulations/7-cfr/273/10#input.household_entitled_to_excess_medical_deduction": False,
+    "us:regulations/7-cfr/273/10#input.snap_total_medical_expenses": 0,
+    "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_dependent_care_expenses": 0,
+    "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_child_support_payments": 0,
+    "us:regulations/7-cfr/273/10#input.snap_claimed_homeless_shelter_deduction": 0,
+    "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses": 500,
+    "us:regulations/7-cfr/273/10#input.state_agency_rounds_thirty_percent_net_income_up": True,
+    "us:regulations/7-cfr/273/10#input.household_initial_month": False,
+}
+_FEDERAL_MEMBER_DEFAULTS = {
+    "us:regulations/7-cfr/273/6#input.member_refused_or_failed_to_provide_or_apply_for_ssn": False,
+    "us:regulations/7-cfr/273/6#input.member_has_documentary_or_collateral_evidence_of_ssn_application_or_every_effort": False,
+    "us:regulations/7-cfr/273/6#input.state_agency_fault_in_ssn_application_processing": False,
+    "us:regulations/7-cfr/273/6#input.member_unable_to_obtain_documents_required_for_ssn_application_with_caseworker_assistance_needed": False,
+    "us:regulations/7-cfr/273/6#input.member_ssn_application_filed_pending_state_agency_notification": False,
+    "us:regulations/7-cfr/273/6#input.member_later_provided_ssn_ending_disqualification": False,
+    "us:regulations/7-cfr/273/7#input.member_age_16_or_17_is_not_household_head_or_attends_school_or_training_half_time": False,
+    "us:regulations/7-cfr/273/7#input.member_physically_or_mentally_unfit_for_employment": None,
+    "us:regulations/7-cfr/273/7#input.member_subject_to_and_complying_with_title_iv_work_requirement": False,
+    "us:regulations/7-cfr/273/7#input.member_responsible_for_dependent_child_under_six_or_incapacitated_person": False,
+    "us:regulations/7-cfr/273/7#input.member_receiving_or_applying_for_unemployment_compensation_and_complying": False,
+    "us:regulations/7-cfr/273/7#input.member_regular_participant_in_drug_or_alcohol_treatment": False,
+    "us:regulations/7-cfr/273/7#input.member_weekly_work_hours": None,
+    "us:regulations/7-cfr/273/7#input.member_weekly_wages": None,
+    "us:regulations/7-cfr/273/7#input.federal_or_state_minimum_wage": 15,
+    "us:regulations/7-cfr/273/7#input.migrant_or_seasonal_farmworker_under_contract_to_begin_employment_within_30_days": False,
+    "us:regulations/7-cfr/273/7#input.alaska_subsistence_hunts_or_fishes_30_hours_weekly": False,
+    "us:regulations/7-cfr/273/7#input.member_student_enrolled_at_least_half_time_and_student_eligible": False,
+    "us:regulations/7-cfr/273/7#input.member_registered_for_work_or_registered_by_state": True,
+    "us:regulations/7-cfr/273/7#input.member_participated_in_snap_et_if_assigned": True,
+    "us:regulations/7-cfr/273/7#input.member_participated_in_workfare_if_assigned": True,
+    "us:regulations/7-cfr/273/7#input.member_provided_employment_status_or_availability_information": True,
+    "us:regulations/7-cfr/273/7#input.member_reported_to_referred_suitable_employer_if_referred": True,
+    "us:regulations/7-cfr/273/7#input.member_accepted_bona_fide_suitable_employment_offer_if_offered": True,
+    "us:regulations/7-cfr/273/7#input.member_voluntarily_quit_or_reduced_work_below_30_hours_without_good_cause": False,
+    "us:regulations/7-cfr/273/7#input.member_snap_work_requirements_waived_due_to_pending_ssi_joint_application": False,
+    "us:regulations/7-cfr/273/24#input.member_medically_certified_physically_or_mentally_unfit_for_employment": None,
+    "us:regulations/7-cfr/273/24#input.member_is_parent_of_household_member_under_age_eighteen": False,
+    "us:regulations/7-cfr/273/24#input.member_resides_with_household_member_under_age_eighteen": False,
+    "us:regulations/7-cfr/273/24#input.member_is_pregnant": None,
+    "us:regulations/7-cfr/273/24#input.member_is_homeless": False,
+    "us:regulations/7-cfr/273/24#input.member_is_veteran": None,
+    "us:regulations/7-cfr/273/24#input.member_age_24_or_younger_and_was_in_foster_care_on_attaining_age_18": False,
+    "us:regulations/7-cfr/273/24#input.member_covered_by_abawd_time_limit_waiver": False,
+    "us:regulations/7-cfr/273/24#input.member_abawd_weekly_work_hours": None,
+    "us:regulations/7-cfr/273/24#input.member_abawd_monthly_work_hours": None,
+    "us:regulations/7-cfr/273/24#input.member_participates_in_abawd_work_program_20_hours_weekly": False,
+    "us:regulations/7-cfr/273/24#input.member_combines_work_and_work_program_20_hours_weekly": False,
+    "us:regulations/7-cfr/273/24#input.member_participates_in_abawd_workfare_program": False,
+    "us:regulations/7-cfr/273/24#input.snap_abawd_countable_months_in_three_year_period": 0,
+    "us:regulations/7-cfr/273/24#input.member_regained_abawd_eligibility": False,
+    "us:regulations/7-cfr/273/24#input.member_has_additional_three_month_abawd_eligibility": False,
+}
 
 US_SNAP_CO_PROGRAM_PATH = (
     "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
@@ -60,9 +125,18 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
 
         # Tax-unit/household level inputs: start from the test-fixture
         # baseline, then override the few fields the Case carries.
+        monthly_income = _monthly_income(people)
         inputs = dict(BASE_INPUTS)
         inputs[_HOUSEHOLD_SIZE_INPUT] = household_size
-        inputs[_WAGES_INPUT] = _monthly_income(people)
+        inputs[_WAGES_INPUT] = monthly_income
+        inputs[_GROSS_MONTHLY_INCOME_INPUT] = monthly_income
+        inputs[_MONTHLY_HOUSEHOLD_INCOME_INPUT] = monthly_income
+        for input_name, default in _FEDERAL_NET_INCOME_DEFAULTS.items():
+            if default is None:
+                value = monthly_income if "income" in input_name else household_size
+            else:
+                value = default
+            inputs[input_name] = value
 
         records = [
             _input_record(name, _SNAP_HOUSEHOLD_ENTITY, _SNAP_HOUSEHOLD_ID, value)
@@ -80,6 +154,15 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
                 value = _member_value(input_name, person, default)
                 member_records.append(
                     _input_record(input_name, "Person", person_id, value)
+                )
+            for input_name, default in _FEDERAL_MEMBER_DEFAULTS.items():
+                member_records.append(
+                    _input_record(
+                        input_name,
+                        "Person",
+                        person_id,
+                        _member_value(input_name, person, default),
+                    )
                 )
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = records + member_records
@@ -116,7 +199,7 @@ def _monthly_income(people: list[Entity]) -> float:
 
 
 def _member_value(input_name: str, person: Entity, default: Any) -> Any:
-    if "member_age" in input_name:
+    if input_name.endswith("#input.member_age"):
         age = person.fact(Concepts.PERSON_AGE)
         if age is not None:
             return int(age)
@@ -124,6 +207,20 @@ def _member_value(input_name: str, person: Entity, default: Any) -> Any:
         age = _number(person.fact(Concepts.PERSON_AGE, 0))
         disabled = bool(person.fact(Concepts.DISABLED, False))
         return age >= 60 or disabled
+    if "physically_or_mentally_unfit_for_employment" in input_name:
+        return bool(person.fact(Concepts.DISABLED, False))
+    if input_name.endswith("#input.member_is_pregnant"):
+        return bool(person.fact(Concepts.PREGNANT, False))
+    if input_name.endswith("#input.member_is_veteran"):
+        return bool(person.fact(Concepts.VETERAN, False))
+    if input_name.endswith("#input.member_weekly_work_hours"):
+        return 30 if _number(person.fact(Concepts.YEARLY_EARNED_INCOME, 0)) else 0
+    if input_name.endswith("#input.member_weekly_wages"):
+        return round(_number(person.fact(Concepts.YEARLY_EARNED_INCOME, 0)) / 52, 2)
+    if input_name.endswith("#input.member_abawd_weekly_work_hours"):
+        return 20 if _number(person.fact(Concepts.YEARLY_EARNED_INCOME, 0)) else 0
+    if input_name.endswith("#input.member_abawd_monthly_work_hours"):
+        return 80 if _number(person.fact(Concepts.YEARLY_EARNED_INCOME, 0)) else 0
     if "enrolled_at_least_half_time" in input_name:
         return False
     if "member_is_us_citizen" in input_name:
