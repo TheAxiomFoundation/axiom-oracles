@@ -178,6 +178,10 @@ federal liability only; add `--include-components` when you also want mapped
 breakdowns like standard deduction, taxable income, EITC, CTC, and AMT.
 Use `--axiom-batch-size` to tune large RuleSpec runs over the full Enhanced CPS
 population; the default favors bounded Rust execution over maximum throughput.
+Use `--comparison-batch-size` to tune how many cases are prepared, executed, and
+accumulated per pass. JSON reports written with `--output` stream per-case rows
+through a temporary JSONL file, so full-population runs do not need to retain all
+engine results and report cases in memory.
 
 Reports include per-case mismatches plus weighted aggregate summaries when the
 population supplies household weights. The JSON report's `summary.weighted`

@@ -4,6 +4,7 @@ from dataclasses import replace
 import gc
 import json
 from pathlib import Path
+import tempfile
 
 import click
 
@@ -33,7 +34,10 @@ from .comparison.mappings import (
     comparison_scope_for_targets,
     engine_targets_for_concepts,
 )
-from .comparison.report import build_comparison_report
+from .comparison.report import (
+    ComparisonReportAccumulator,
+    build_comparison_report,
+)
 from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
@@ -47,6 +51,7 @@ NYC_BENEFITS_DATASET_URL = (
 )
 DEFAULT_PERIOD = "2026-05"
 TAXSIM_DEFAULT_PERIOD = "2024"
+MAX_CONSOLE_MISMATCHES = 50
 
 _SNAP_CONCEPTS = frozenset({Concepts.SNAP_BENEFIT, Concepts.SNAP_ELIGIBLE})
 _STATE_TAX_DEPENDENT_FEDERAL_TAX_CONCEPTS = frozenset(
@@ -195,6 +200,13 @@ def cli() -> None:
     help="Number of cases per Axiom run-compiled request.",
 )
 @click.option(
+    "--comparison-batch-size",
+    type=click.IntRange(min=1),
+    default=5_000,
+    show_default=True,
+    help="Number of cases to prepare and compare per report-accumulation batch.",
+)
+@click.option(
     "--output",
     "output_path",
     type=click.Path(dir_okay=False, path_type=Path),
@@ -220,6 +232,7 @@ def compare(
     axiom_engine_binary: Path | None,
     axiom_entity_id: str,
     axiom_batch_size: int,
+    comparison_batch_size: int,
     output_path: Path | None,
     json_output: bool,
 ) -> None:
@@ -276,19 +289,6 @@ def compare(
 
         concept_ids = tuple(mapping.concept_id for mapping in mappings)
         cases = [replace(case, outputs=concept_ids) for case in cases]
-        try:
-            cases = _prepare_cases_for_engines(
-                cases,
-                {left, right},
-                concept_ids,
-                axiom_program=axiom_program,
-            )
-        except RuntimeError as exc:
-            raise click.ClickException(str(exc)) from exc
-        if not cases:
-            raise click.ClickException(
-                "No cases remain after engine-specific preparation filters."
-            )
 
         left_runner = _build_runner(
             left,
@@ -315,32 +315,62 @@ def compare(
             paired_engine=left,
         )
 
-        try:
-            left_results = left_runner.run_cases(cases, list(concept_ids))
-            right_results = right_runner.run_cases(cases, list(concept_ids))
-        except RuntimeError as exc:
-            raise click.ClickException(str(exc)) from exc
+        comparator = Comparator(mappings)
+        stream_case_rows = output_path is not None or not json_output
+        with tempfile.TemporaryDirectory(prefix="axiom-oracles-report-") as report_dir:
+            accumulator = ComparisonReportAccumulator(
+                suite_name=suite_name,
+                population=population,
+                locales=case_locales,
+                scope=comparison_scope,
+                mappings=mappings,
+                case_rows_path=Path(report_dir) / "cases.jsonl"
+                if stream_case_rows
+                else None,
+            )
+            for case_batch in _batched(cases, comparison_batch_size):
+                try:
+                    prepared_cases = _prepare_cases_for_engines(
+                        case_batch,
+                        {left, right},
+                        concept_ids,
+                        axiom_program=axiom_program,
+                    )
+                except RuntimeError as exc:
+                    raise click.ClickException(str(exc)) from exc
+                if not prepared_cases:
+                    continue
+                try:
+                    left_results = left_runner.run_cases(
+                        prepared_cases,
+                        list(concept_ids),
+                    )
+                    right_results = right_runner.run_cases(
+                        prepared_cases,
+                        list(concept_ids),
+                    )
+                except RuntimeError as exc:
+                    raise click.ClickException(str(exc)) from exc
 
-        comparisons = Comparator(mappings).compare(left_results, right_results)
-        report = _comparison_report(
-            suite_name=suite_name,
-            population=population,
-            locales=case_locales,
-            scope=comparison_scope,
-            cases=cases,
-            mappings=mappings,
-            comparisons=comparisons,
-        )
+                accumulator.add_batch(
+                    prepared_cases,
+                    comparator.compare(left_results, right_results),
+                )
 
-        if output_path:
-            output_path.parent.mkdir(parents=True, exist_ok=True)
-            output_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+            if not accumulator.case_count:
+                raise click.ClickException(
+                    "No cases remain after engine-specific preparation filters."
+                )
 
-        if json_output:
-            click.echo(json.dumps(report, indent=2, sort_keys=True))
-            return
+            if output_path:
+                accumulator.write_json(output_path)
 
-        _echo_comparison_report(report)
+            if json_output:
+                report = accumulator.to_dict()
+                click.echo(json.dumps(report, indent=2, sort_keys=True))
+                return
+
+            _echo_comparison_report(accumulator.to_dict(include_cases=False))
     finally:
         if gc_was_enabled:
             gc.enable()
@@ -440,6 +470,11 @@ def _resolve_suite_name(suite: str, left: str, right: str) -> str:
 
 def _case_locales(cases: list[Case]) -> set[str]:
     return {case.locale for case in cases if case.locale}
+
+
+def _batched(cases: list[Case], batch_size: int):
+    for start in range(0, len(cases), batch_size):
+        yield cases[start : start + batch_size]
 
 
 def _load_population_cases(
@@ -675,15 +710,45 @@ def _echo_comparison_report(report: dict) -> None:
     if not summary["mismatch_count"]:
         return
     click.echo("Mismatches:")
+    if not report.get("cases"):
+        mismatches = report.get("mismatches", [])
+        for mismatch in mismatches[:MAX_CONSOLE_MISMATCHES]:
+            click.echo(
+                f"{mismatch['case_id']}: {mismatch['description']} "
+                f"{mismatch['left']} != {mismatch['right']}"
+            )
+        _echo_omitted_mismatches(
+            summary["mismatch_count"],
+            min(len(mismatches), MAX_CONSOLE_MISMATCHES),
+        )
+        return
+    printed = 0
     for case in report["cases"]:
         if not case["mismatches"]:
             continue
-        click.echo(f"{case['case_id']}: {case['match_rate']:.1f}% match")
+        case_printed = False
         for mismatch in case["mismatches"]:
+            if printed >= MAX_CONSOLE_MISMATCHES:
+                _echo_omitted_mismatches(summary["mismatch_count"], printed)
+                return
+            if not case_printed:
+                click.echo(f"{case['case_id']}: {case['match_rate']:.1f}% match")
+                case_printed = True
             click.echo(
                 f"  {mismatch['description']}: "
                 f"{mismatch['left']} != {mismatch['right']}"
             )
+            printed += 1
+
+
+def _echo_omitted_mismatches(total_count: int, printed_count: int) -> None:
+    omitted_count = total_count - printed_count
+    if omitted_count <= 0:
+        return
+    click.echo(
+        f"... {omitted_count} additional mismatches omitted; "
+        "use --output for the full JSON report."
+    )
 
 
 if __name__ == "__main__":
