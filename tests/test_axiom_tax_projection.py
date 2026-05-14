@@ -1,7 +1,7 @@
 import pytest
 
 from axiom_oracles.adapters.axiom.tax_projection import (
-    US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
+    US_TAX_ORACLE_PROGRAM_RULES,
     attach_axiom_tax_inputs_to_case,
     attach_axiom_tax_itemization_choice_to_case,
 )
@@ -217,6 +217,14 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     assert {
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
+        if record["name"]
+        == "us:tax/oracle-bridge#relation.co_dependent_of_tax_unit"
+    } == {
+        ("person-3", "tax_unit"),
+    }
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
         if record["name"] == "us:statutes/26/32#relation.qualifying_child_of_tax_unit"
     } == {
         ("person-3", "tax_unit"),
@@ -225,7 +233,7 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
         if record["name"]
-        == "us:tax/federal-income-tax/oracle-bridge#relation."
+        == "us:tax/oracle-bridge#relation."
         "business_income_of_tax_unit"
     } == {
         ("person-1", "tax_unit"),
@@ -236,13 +244,13 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
         if record["name"]
-        == "us:tax/federal-income-tax/oracle-bridge#relation."
+        == "us:tax/oracle-bridge#relation."
         "filer_adjusted_earnings_of_tax_unit"
     } == {
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
     }
-    assert len(projected.metadata["axiom_relations"]) == 18
+    assert len(projected.metadata["axiom_relations"]) == 22
     assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_result_selection" not in projected.metadata
 
@@ -428,11 +436,11 @@ def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qb
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
         if record["name"]
-        == "us:tax/federal-income-tax/oracle-bridge#relation."
+        == "us:tax/oracle-bridge#relation."
         "business_income_of_tax_unit"
     }
     generated_rules_by_name = {
-        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
 
     assert by_key[
@@ -445,7 +453,7 @@ def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qb
     assert by_key[
         (
             "person-2",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "person_self_employment_income_for_qbid",
         )
     ] == 2_004.071
@@ -507,13 +515,13 @@ def test_axiom_tax_projection_floors_eitc_adjusted_earnings_per_filer() -> None:
         for record in projected.metadata["axiom_input_records"]
     }
     generated_rules_by_name = {
-        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
 
     assert by_key[
         (
             "person-2",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "person_self_employment_income_for_qbid",
         )
     ] == -10_019.35
@@ -635,7 +643,7 @@ def test_axiom_tax_projection_uses_tax_unit_wages_for_ctc_payroll_tax() -> None:
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
         if record["name"]
-        == "us:tax/federal-income-tax/oracle-bridge#relation.payroll_member_of_tax_unit"
+        == "us:tax/oracle-bridge#relation.payroll_member_of_tax_unit"
     } == {
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
@@ -644,7 +652,7 @@ def test_axiom_tax_projection_uses_tax_unit_wages_for_ctc_payroll_tax() -> None:
     }
 
     generated_rules_by_name = {
-        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
     assert "sum_where(payroll_member_of_tax_unit" in (
         generated_rules_by_name["employee_3101_3201a_taxes"]["versions"][0][
@@ -693,21 +701,21 @@ def test_axiom_tax_projection_routes_qbi_through_person_relation_rows() -> None:
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
         if record["name"]
-        == "us:tax/federal-income-tax/oracle-bridge#relation."
+        == "us:tax/oracle-bridge#relation."
         "business_income_of_tax_unit"
     }
 
     assert by_key[
         (
             "person-1",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "person_rental_income_for_qbid",
         )
     ] == 1_127.323
     assert by_key[
         (
             "person-2",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "person_rental_income_for_qbid",
         )
     ] == -11_272.103
@@ -952,41 +960,41 @@ def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi()
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax/oracle-bridge#input.filer_dividend_income",
+            "us:tax/oracle-bridge#input.filer_dividend_income",
         )
     ] == 1_000
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "filer_short_term_capital_gains",
         )
     ] == 100
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "filer_long_term_capital_gains",
         )
     ] == 200
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "capital_gains_tax_qualified_dividend_income",
         )
     ] == 900
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "capital_gains_tax_short_term_capital_gains",
         )
     ] == 140
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "capital_gains_tax_long_term_capital_gains",
         )
     ] == 250
@@ -1219,7 +1227,7 @@ def test_axiom_tax_projection_derives_additional_senior_deduction_in_bridge() ->
 
 def test_axiom_tax_projection_reduces_each_senior_deduction_amount_for_phaseout() -> None:
     generated_rules_by_name = {
-        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
     formula = generated_rules_by_name["additional_senior_deduction"]["versions"][0][
         "formula"
@@ -1278,7 +1286,7 @@ def test_axiom_tax_projection_uses_case_supplied_tax_unit_inputs() -> None:
         period="2026",
         metadata={
             "axiom_tax_unit_inputs": {
-                "itemized_taxable_income_deductions": 20_000,
+                "state_sales_tax": 1_000,
                 "tip_income_deduction": 500,
                 "overtime_income_deduction": 250,
                 "charitable_deduction_for_non_itemizers": 100,
@@ -1306,9 +1314,13 @@ def test_axiom_tax_projection_uses_case_supplied_tax_unit_inputs() -> None:
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax#input.itemized_taxable_income_deductions",
+            "us:tax/federal-income-tax#input.state_sales_tax",
         )
-    ] == 20_000
+    ] == 1_000
+    assert (
+        "tax_unit",
+        "us:tax/federal-income-tax#input.itemized_taxable_income_deductions",
+    ) not in by_key
     assert (
         "tax_unit",
         "us:tax/federal-income-tax#input.adjusted_gross_income",
@@ -1335,6 +1347,128 @@ def test_axiom_tax_projection_uses_case_supplied_tax_unit_inputs() -> None:
     assert "axiom_input_record_overlays" not in projected.metadata
 
 
+def test_axiom_tax_projection_computes_itemized_leaves_and_colorado_tax_wiring() -> None:
+    case = Case(
+        case_id="co-itemizer",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "08"}},
+        facts={
+            Concepts.PROPERTY_TAX_PAID: 2_000,
+            Concepts.MORTGAGE_INTEREST_PAID: 5_000,
+            Concepts.ITEMIZED_DEDUCTIONS_OTHER: 300,
+        },
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 100_000,
+                    Concepts.DIVIDEND_INCOME: 1_500,
+                    Concepts.INTEREST_INCOME: 100,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
+    }
+
+    assert by_key[
+        ("tax_unit", "us:tax/oracle-bridge#input.is_colorado_tax_unit")
+    ] is True
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.real_estate_taxes")
+    ] == 2_000
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.deductible_mortgage_interest")
+    ] == 5_000
+    assert by_key[
+        ("tax_unit", "us:tax/federal-income-tax#input.misc_deduction")
+    ] == 300
+    assert by_key[
+        ("person-1", "us:tax/oracle-bridge#input.person_dividend_income")
+    ] == 1_500
+    assert by_key[
+        ("person-1", "us:tax/oracle-bridge#input.person_taxable_interest_income")
+    ] == 100
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
+        if record["name"]
+        == "us:tax/oracle-bridge#relation.co_withheld_income_tax_member_of_tax_unit"
+    } == {("person-1", "tax_unit")}
+    assert "state_withheld_income_tax" in generated_rules_by_name
+    assert "itemized_taxable_income_deductions" in generated_rules_by_name
+    assert "state_income_tax" in generated_rules_by_name
+    assert "loss_ald" in generated_rules_by_name
+    assert "limited_capital_loss" in generated_rules_by_name
+    assert "limited_business_loss" in generated_rules_by_name
+    assert "co_pension_subtraction_income" not in generated_rules_by_name
+    assert "co_pension_subtraction_cap_after_social_security" not in (
+        generated_rules_by_name
+    )
+    assert (
+        "positive_capital_gains_for_agi"
+        in generated_rules_by_name["gross_income_before_social_security_benefits"][
+            "versions"
+        ][0]["formula"]
+    )
+    assert (
+        "filer_short_term_capital_gains"
+        not in generated_rules_by_name["gross_income_before_social_security_benefits"][
+            "versions"
+        ][0]["formula"]
+    )
+    assert (
+        "loss_ald"
+        in generated_rules_by_name[
+            "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933"
+        ]["versions"][0]["formula"]
+    )
+    assert (
+        "current_law_deductions_if_not_itemizing"
+        in generated_rules_by_name["co_taxable_income_deductions_for_addback"][
+            "versions"
+        ][0]["formula"]
+    )
+    assert (
+        "co_modified_agi"
+        in generated_rules_by_name["co_sales_tax_refund_base"]["versions"][0][
+            "formula"
+        ]
+    )
+    assert (
+        "title_II_monthly_benefits_received_during_taxable_year"
+        in generated_rules_by_name["co_modified_agi"]["versions"][0]["formula"]
+    )
+    assert (
+        "co_sales_tax_refund"
+        in generated_rules_by_name["co_refundable_credits"]["versions"][0]["formula"]
+    )
+    assert (
+        "co_head_pension_subtraction"
+        in generated_rules_by_name["co_pension_subtraction"]["versions"][0]["formula"]
+    )
+    assert (
+        "co_spouse_pension_subtraction"
+        in generated_rules_by_name["co_pension_subtraction"]["versions"][0]["formula"]
+    )
+    assert (
+        "co_spouse_social_security_benefits"
+        in generated_rules_by_name["co_spouse_taxable_social_security"]["versions"][0][
+            "formula"
+        ]
+    )
+
+
 def test_axiom_tax_projection_rejects_case_supplied_tax_aggregates() -> None:
     case = Case(
         case_id="aggregate-inputs",
@@ -1344,9 +1478,13 @@ def test_axiom_tax_projection_rejects_case_supplied_tax_aggregates() -> None:
                 "adjusted_gross_income": 103_000,
                 "additional_senior_deduction": 6_000,
                 "deduction_provided_in_section_199A": 2_000,
+                "itemized_taxable_income_deductions": 20_000,
                 "irs_gross_income": 105_000,
                 "qualified_business_income_deduction": 2_000,
+                "salt_deduction": 10_000,
                 "self_employment_tax_ald": 1_000,
+                "state_income_tax": 4_000,
+                "state_withheld_income_tax": 4_000,
                 "taxable_earned_income_under_section_32": 90_000,
             }
         },
@@ -1425,7 +1563,7 @@ def test_axiom_tax_projection_derives_alaska_pfd_for_tax_filers_from_scope() -> 
     assert by_key[
         (
             "tax_unit",
-            "us:tax/federal-income-tax/oracle-bridge#input."
+            "us:tax/oracle-bridge#input."
             "alaska_permanent_fund_dividend_eligible_person_count",
         )
     ] == 2

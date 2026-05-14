@@ -15,6 +15,7 @@ class VariableComparison:
     matches: bool
     difference: float | None = None
     tolerance: float = 0
+    relative_tolerance: float = 0
     description: str = ""
 
 
@@ -105,6 +106,7 @@ class Comparator:
                 matches = isclose(
                     left_number,
                     right_number,
+                    rel_tol=mapping.relative_tolerance,
                     abs_tol=mapping.tolerance,
                 )
         else:
@@ -122,6 +124,7 @@ class Comparator:
             matches=matches,
             difference=difference,
             tolerance=mapping.tolerance,
+            relative_tolerance=mapping.relative_tolerance,
             description=mapping.description,
         )
 

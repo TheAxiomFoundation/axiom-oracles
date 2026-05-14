@@ -56,6 +56,7 @@ def build_comparison_report(
                 "category": mapping.category,
                 "comparison": mapping.comparison,
                 "tolerance": mapping.tolerance,
+                "relative_tolerance": mapping.relative_tolerance,
                 "priority": mapping.priority,
                 "components": list(mapping.components),
                 "parent": mapping.parent,
@@ -156,6 +157,7 @@ def _mismatch_rows(
                     "right": mismatch.right_value,
                     "difference": mismatch.difference,
                     "tolerance": mismatch.tolerance,
+                    "relative_tolerance": mismatch.relative_tolerance,
                     "parent": mapping.parent if mapping is not None else None,
                 }
             )
@@ -199,6 +201,7 @@ def _case_mismatch_row(
         "right": mismatch.right_value,
         "difference": mismatch.difference,
         "tolerance": mismatch.tolerance,
+        "relative_tolerance": mismatch.relative_tolerance,
         "parent": mapping.parent if mapping is not None else None,
     }
 

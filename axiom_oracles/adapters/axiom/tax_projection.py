@@ -103,7 +103,7 @@ def _generated_data_relation_rule(name: str, *, source: str) -> dict[str, Any]:
     }
 
 
-US_FEDERAL_INCOME_TAX_IMPORTS = (
+US_TAX_ORACLE_IMPORTS = (
     "us:policies/irs/rev-proc-2025-32/child-tax-credit",
     "us:policies/irs/rev-proc-2025-32/standard-deduction",
     "us:statutes/26/1/j",
@@ -127,9 +127,9 @@ US_FEDERAL_INCOME_TAX_IMPORTS = (
     "us:statutes/26/6401",
 )
 
-US_FEDERAL_INCOME_TAX_BRIDGE_TARGET = "us:tax/federal-income-tax/oracle-bridge"
+US_TAX_ORACLE_BRIDGE_TARGET = "us:tax/oracle-bridge"
 
-US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
+US_TAX_ORACLE_PROGRAM_RULES = (
     _generated_parameter_rule(
         "ctc_refundable_phase_in_rate",
         dtype="Rate",
@@ -243,6 +243,253 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         unit="USD",
         source="26 USC 1402(b)(2)",
         formula="400",
+    ),
+    _generated_parameter_rule(
+        "capital_loss_limit_joint_or_non_separate",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 1211(b), PolicyEngine 2026 capital-loss limit",
+        formula="3000",
+    ),
+    _generated_parameter_rule(
+        "capital_loss_limit_separate",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 1211(b), PolicyEngine 2026 capital-loss limit",
+        formula="1500",
+    ),
+    _generated_parameter_rule(
+        "business_loss_limit_joint_2026",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), PolicyEngine 2026 excess business-loss threshold",
+        formula="610000",
+    ),
+    _generated_parameter_rule(
+        "business_loss_limit_other_2026",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), PolicyEngine 2026 excess business-loss threshold",
+        formula="305000",
+    ),
+    _generated_parameter_rule(
+        "co_income_tax_rate",
+        dtype="Rate",
+        source="C.R.S. 39-22-104(1.7)(a)(V), matching PolicyEngine's 2026 Colorado income tax rate",
+        formula="0.044",
+    ),
+    _generated_parameter_rule(
+        "co_withholding_single_standard_deduction",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Colorado withheld-tax proxy for 2026",
+        formula="16100",
+    ),
+    _generated_parameter_rule(
+        "co_eitc_match_2026",
+        dtype="Rate",
+        source="C.R.S. 39-22-123.5, resolved for 2026 oracle comparison",
+        formula="0.25",
+    ),
+    _generated_parameter_rule(
+        "co_family_affordability_child_amount_2026",
+        dtype="Money",
+        unit="USD",
+        source="Colorado HB24-1311 and 2025 DR 0104 Book, carried forward by PolicyEngine for 2026 oracle comparison",
+        formula="3273",
+    ),
+    _generated_parameter_rule(
+        "co_family_affordability_reduction_threshold_joint_2026",
+        dtype="Money",
+        unit="USD",
+        source="Colorado HB24-1311 family affordability credit threshold, uprated by PolicyEngine for 2026",
+        formula="26000",
+    ),
+    _generated_parameter_rule(
+        "co_family_affordability_reduction_threshold_other_2026",
+        dtype="Money",
+        unit="USD",
+        source="Colorado HB24-1311 family affordability credit threshold, uprated by PolicyEngine for 2026",
+        formula="16000",
+    ),
+    _generated_parameter_rule(
+        "co_family_affordability_reduction_increment_2026",
+        dtype="Money",
+        unit="USD",
+        source="Colorado HB24-1311 family affordability credit reduction increment, uprated by PolicyEngine for 2026",
+        formula="5000",
+    ),
+    _generated_parameter_rule(
+        "co_family_affordability_reduction_rate",
+        dtype="Rate",
+        source="Colorado HB24-1311 family affordability credit reduction rate",
+        formula="0.06875",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_child_age_threshold",
+        dtype="Integer",
+        source="C.R.S. 39-22-129 child tax credit age threshold",
+        formula="6",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_joint_first_threshold_2026",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit, 2025 thresholds carried forward by PolicyEngine for 2026",
+        formula="36000",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_joint_second_threshold_2026",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit, 2025 thresholds carried forward by PolicyEngine for 2026",
+        formula="61000",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_joint_third_threshold_2026",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit, 2025 thresholds carried forward by PolicyEngine for 2026",
+        formula="87000",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_other_first_threshold_2026",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit, 2025 thresholds carried forward by PolicyEngine for 2026",
+        formula="26000",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_other_second_threshold_2026",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit, 2025 thresholds carried forward by PolicyEngine for 2026",
+        formula="51000",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_other_third_threshold_2026",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit, 2025 thresholds carried forward by PolicyEngine for 2026",
+        formula="77000",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_high_amount",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit amount table",
+        formula="1200",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_middle_amount",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit amount table",
+        formula="600",
+    ),
+    _generated_parameter_rule(
+        "co_ctc_low_amount",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit amount table",
+        formula="200",
+    ),
+    _generated_parameter_rule(
+        "co_pension_subtraction_older_cap",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(g)(III)(B)",
+        formula="24000",
+    ),
+    _generated_parameter_rule(
+        "co_pension_subtraction_younger_cap",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(g)(III)(A)",
+        formula="20000",
+    ),
+    _generated_parameter_rule(
+        "co_federal_deduction_addback_agi_threshold",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(p), 2025 DR 0104 Book Additions Line 4",
+        formula="300000",
+    ),
+    _generated_parameter_rule(
+        "co_federal_deduction_addback_joint_exemption",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(p), 2025 DR 0104 Book Additions Line 4",
+        formula="16000",
+    ),
+    _generated_parameter_rule(
+        "co_federal_deduction_addback_other_exemption",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(p), 2025 DR 0104 Book Additions Line 4",
+        formula="12000",
+    ),
+    _generated_parameter_rule(
+        "co_qbid_addback_joint_agi_threshold",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(o), 2025 DR 0104 Book Additions Line 3",
+        formula="1000000",
+    ),
+    _generated_parameter_rule(
+        "co_qbid_addback_other_agi_threshold",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(o), 2025 DR 0104 Book Additions Line 3",
+        formula="500000",
+    ),
+    _generated_parameter_rule(
+        "salt_cap_joint_or_non_separate_2026",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70120; policyengine.py 4.4.4 2026 SALT cap",
+        formula="40400",
+    ),
+    _generated_parameter_rule(
+        "salt_cap_separate_2026",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70120; policyengine.py 4.4.4 2026 SALT cap",
+        formula="20200",
+    ),
+    _generated_parameter_rule(
+        "salt_cap_phaseout_threshold_joint_or_non_separate_2026",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70120; policyengine.py 4.4.4 2026 SALT cap phaseout",
+        formula="505000",
+    ),
+    _generated_parameter_rule(
+        "salt_cap_phaseout_threshold_separate_2026",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70120; policyengine.py 4.4.4 2026 SALT cap phaseout",
+        formula="252500",
+    ),
+    _generated_parameter_rule(
+        "salt_cap_phaseout_rate",
+        dtype="Rate",
+        source="H.R.1 (119th Congress), section 70120; policyengine.py 4.4.4 SALT cap phaseout rate",
+        formula="0.30",
+    ),
+    _generated_parameter_rule(
+        "salt_cap_floor_joint_or_non_separate",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70120; policyengine.py 4.4.4 SALT cap floor",
+        formula="10000",
+    ),
+    _generated_parameter_rule(
+        "salt_cap_floor_separate",
+        dtype="Money",
+        unit="USD",
+        source="H.R.1 (119th Congress), section 70120; policyengine.py 4.4.4 SALT cap floor",
+        formula="5000",
     ),
     _generated_tax_unit_rule(
         "ctc_refundable_phase_in_threshold",
@@ -581,6 +828,155 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
     _generated_data_relation_rule(
         "filer_adjusted_earnings_of_tax_unit",
         source="Oracle comparison bridge relating tax-unit filers to person-level 26 USC 32 adjusted earnings",
+    ),
+    _generated_person_rule(
+        "person_capital_gains_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61 and 1211, projected from ECPS capital-gain leaves",
+        formula="person_short_term_capital_gains + person_long_term_capital_gains",
+    ),
+    _generated_person_rule(
+        "person_positive_capital_gains_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine gross-income convention for 26 USC 61 capital-gain leaves",
+        formula="max(0, person_capital_gains_for_agi)",
+    ),
+    _generated_person_rule(
+        "person_capital_losses_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 1211, projected from ECPS capital-gain leaves",
+        formula="max(0, -person_capital_gains_for_agi)",
+    ),
+    _generated_person_rule(
+        "person_has_positive_capital_gains_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive person capital gains",
+        formula="person_positive_capital_gains_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_has_capital_losses_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying person capital losses",
+        formula="person_capital_losses_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_positive_self_employment_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine gross-income convention for 26 USC 61 self-employment leaves",
+        formula="max(0, person_self_employment_income_for_qbid)",
+    ),
+    _generated_person_rule(
+        "person_self_employment_loss_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), projected from ECPS self-employment leaves",
+        formula="max(0, -person_self_employment_income_for_qbid)",
+    ),
+    _generated_person_rule(
+        "person_has_positive_self_employment_income_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive person self-employment income",
+        formula="person_positive_self_employment_income_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_has_self_employment_loss_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying person self-employment losses",
+        formula="person_self_employment_loss_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_positive_rental_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine gross-income convention for 26 USC 61 rental leaves",
+        formula="max(0, person_rental_income_for_qbid)",
+    ),
+    _generated_person_rule(
+        "person_rental_loss_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), projected from ECPS rental leaves",
+        formula="max(0, -person_rental_income_for_qbid)",
+    ),
+    _generated_person_rule(
+        "person_has_positive_rental_income_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive person rental income",
+        formula="person_positive_rental_income_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_has_rental_loss_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying person rental losses",
+        formula="person_rental_loss_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_positive_dividend_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine gross-income convention for 26 USC 61 dividend leaves",
+        formula="max(0, person_dividend_income)",
+    ),
+    _generated_person_rule(
+        "person_has_positive_dividend_income_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive person dividend income",
+        formula="person_positive_dividend_income_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_positive_taxable_interest_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine gross-income convention for 26 USC 61 interest leaves",
+        formula="max(0, person_taxable_interest_income)",
+    ),
+    _generated_person_rule(
+        "person_has_positive_taxable_interest_income_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive person taxable interest income",
+        formula="person_positive_taxable_interest_income_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_positive_pension_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine gross-income convention for 26 USC 61 pension leaves",
+        formula="max(0, person_pension_income)",
+    ),
+    _generated_person_rule(
+        "person_has_positive_pension_income_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive person pension income",
+        formula="person_positive_pension_income_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_positive_unemployment_compensation_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine gross-income convention for 26 USC 85 unemployment leaves",
+        formula="max(0, person_unemployment_compensation)",
+    ),
+    _generated_person_rule(
+        "person_has_positive_unemployment_compensation_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive person unemployment compensation",
+        formula="person_positive_unemployment_compensation_for_agi > 0",
+    ),
+    _generated_person_rule(
+        "person_is_tax_unit_head_for_co",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying the tax-unit head for Colorado person-level subtractions",
+        formula="is_taxpayer and not is_spouse",
+    ),
+    _generated_person_rule(
+        "person_is_tax_unit_spouse_for_co",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying the tax-unit spouse for Colorado person-level subtractions",
+        formula="is_spouse",
     ),
     _generated_person_rule(
         "person_self_employment_net_earnings_before_paragraph_12",
@@ -1099,6 +1495,240 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
             "+ amt_capital_gain_line_37_excess_tax"
         ),
     ),
+    _generated_data_relation_rule(
+        "co_withheld_income_tax_member_of_tax_unit",
+        source="Oracle comparison bridge relating Colorado tax-unit members to person-level withheld income tax proxies",
+    ),
+    _generated_data_relation_rule(
+        "co_dependent_of_tax_unit",
+        source="Oracle comparison bridge relating Colorado tax units to dependent children for state refundable credits",
+    ),
+    _generated_person_rule(
+        "person_agi_for_co_withholding",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine's person-level Colorado withheld-tax proxy from ECPS income leaves",
+        formula=(
+            "max("
+            "0, "
+            "person_payroll_earnings "
+            "+ person_self_employment_income_for_qbid "
+            "+ person_rental_income_for_qbid "
+            "+ person_dividend_income "
+            "+ person_taxable_interest_income "
+            "+ person_short_term_capital_gains "
+            "+ person_long_term_capital_gains "
+            "+ person_pension_income "
+            "+ person_unemployment_compensation"
+            ")"
+        ),
+    ),
+    _generated_person_rule(
+        "person_gross_income_for_co_withholding_count",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge identifying filers with income for Colorado withholding proxy",
+        formula=(
+            "max(0, person_payroll_earnings) "
+            "+ person_positive_self_employment_income_for_agi "
+            "+ person_positive_rental_income_for_agi "
+            "+ person_positive_capital_gains_for_agi "
+            "+ person_positive_dividend_income_for_agi "
+            "+ person_positive_taxable_interest_income_for_agi "
+            "+ person_positive_pension_income_for_agi "
+            "+ person_positive_unemployment_compensation_for_agi "
+            "+ max(0, person_social_security_benefits)"
+        ),
+    ),
+    _generated_person_rule(
+        "person_has_gross_income_for_co_withholding_count",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying filers with Colorado withholding income",
+        formula="person_gross_income_for_co_withholding_count > 0",
+    ),
+    _generated_person_rule(
+        "person_co_withheld_income_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching PolicyEngine Colorado withheld income tax proxy",
+        formula=(
+            "co_income_tax_rate "
+            "* max(0, person_agi_for_co_withholding "
+            "- co_withholding_single_standard_deduction)"
+        ),
+    ),
+    _generated_person_rule(
+        "person_has_co_withheld_income_tax",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying tax-unit members with positive Colorado withheld income tax",
+        formula="person_co_withheld_income_tax > 0",
+    ),
+    _generated_person_rule(
+        "co_ctc_eligible_child",
+        dtype="Judgment",
+        source="C.R.S. 39-22-129 Colorado child tax credit eligible child proxy from ECPS household facts",
+        formula="oracle_person_is_tax_unit_dependent and oracle_person_age < co_ctc_child_age_threshold",
+    ),
+    _generated_person_rule(
+        "co_family_affordability_child_eligible",
+        dtype="Judgment",
+        source="Colorado HB24-1311 family affordability credit qualifying child proxy from ECPS household facts",
+        formula="oracle_person_is_qualifying_child_dependent and oracle_person_age < 17",
+    ),
+    _generated_person_rule(
+        "co_family_affordability_child_age_multiplier",
+        dtype="Decimal",
+        source="Colorado HB24-1311 family affordability credit age multiplier",
+        formula=(
+            "if oracle_person_age < 6: "
+            "1 "
+            "else: "
+            "if oracle_person_age < 17: 0.75 else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "state_withheld_income_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge computing Colorado state withheld income tax for federal SALT itemization",
+        formula=(
+            "if is_colorado_tax_unit: "
+            "co_income_tax_rate "
+            "* max("
+            "0, "
+            "adjusted_gross_income "
+            "- co_withholding_single_standard_deduction "
+            "* co_withholding_filer_count"
+            ") "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_withholding_filer_count",
+        dtype="Integer",
+        source="Oracle comparison bridge counting filers with positive Colorado withholding income",
+        formula=(
+            "count_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_has_gross_income_for_co_withholding_count"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "state_and_local_sales_or_income_tax",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(a), resolved against available ECPS sales and income tax leaves",
+        formula=(
+            "max("
+            "state_withheld_income_tax + local_income_tax, "
+            "state_sales_tax + local_sales_tax"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "salt",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(a), state and local taxes before the statutory cap",
+        formula="state_and_local_sales_or_income_tax + real_estate_taxes",
+    ),
+    _generated_tax_unit_rule(
+        "salt_cap_max",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(b)(6), resolved for 2026 oracle comparison",
+        formula=(
+            "if filing_status == 2: "
+            "salt_cap_separate_2026 "
+            "else: salt_cap_joint_or_non_separate_2026"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "salt_cap_phaseout_threshold",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(b)(6), resolved for 2026 oracle comparison",
+        formula=(
+            "if filing_status == 2: "
+            "salt_cap_phaseout_threshold_separate_2026 "
+            "else: salt_cap_phaseout_threshold_joint_or_non_separate_2026"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "salt_cap_floor",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(b)(6), resolved for 2026 oracle comparison",
+        formula=(
+            "if filing_status == 2: "
+            "salt_cap_floor_separate "
+            "else: salt_cap_floor_joint_or_non_separate"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "salt_cap_phaseout_reduction",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(b)(6), resolved for 2026 oracle comparison",
+        formula=(
+            "salt_cap_phaseout_rate "
+            "* max(0, adjusted_gross_income - salt_cap_phaseout_threshold)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "salt_cap",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(b)(6), resolved for 2026 oracle comparison",
+        formula=(
+            "max("
+            "salt_cap_floor, "
+            "max(0, salt_cap_max - salt_cap_phaseout_reduction)"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "salt_deduction",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 164(b)(6), capped state and local tax deduction",
+        formula="min(salt_cap, salt)",
+    ),
+    _generated_tax_unit_rule(
+        "interest_deduction",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 163, projected from mortgage-interest case leaves",
+        formula="deductible_mortgage_interest",
+    ),
+    _generated_tax_unit_rule(
+        "total_itemized_taxable_income_deductions",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge aggregating itemized deduction leaves",
+        formula=(
+            "salt_deduction "
+            "+ interest_deduction "
+            "+ itemized_medical_expenses "
+            "+ casualty_loss_deduction "
+            "+ charitable_deduction "
+            "+ misc_deduction"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "itemized_taxable_income_deductions",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge computing itemized deductions from leaf inputs",
+        formula=(
+            "max("
+            "0, "
+            "total_itemized_taxable_income_deductions "
+            "- itemized_taxable_income_deductions_reduction"
+            ")"
+        ),
+    ),
     _generated_tax_unit_rule(
         "current_law_deductions_before_qbid_if_not_itemizing",
         dtype="Money",
@@ -1222,21 +1852,208 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         formula="qualified_business_income_deduction",
     ),
     _generated_tax_unit_rule(
+        "capital_losses",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 1211, capital losses expressed as a non-negative amount",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_capital_losses_for_agi, "
+            "person_has_capital_losses_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "capital_loss_limit",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 1211(b), capital-loss limit selected by filing status",
+        formula=(
+            "if filing_status == 2: "
+            "capital_loss_limit_separate "
+            "else: capital_loss_limit_joint_or_non_separate"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "limited_capital_loss",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 1211(b), limited capital loss deduction",
+        formula="min(capital_loss_limit, capital_losses)",
+    ),
+    _generated_tax_unit_rule(
+        "business_loss_limit",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), excess business-loss threshold selected by filing status",
+        formula=(
+            "if filing_status == 1: "
+            "business_loss_limit_joint_2026 "
+            "else: business_loss_limit_other_2026"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "business_income_for_loss_limit",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), positive business income before excess-loss limitation",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_self_employment_income_for_agi, "
+            "person_has_positive_self_employment_income_for_agi"
+            ") "
+            "+ sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_rental_income_for_agi, "
+            "person_has_positive_rental_income_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "business_loss_for_loss_limit",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), business losses before excess-loss limitation",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_self_employment_loss_for_agi, "
+            "person_has_self_employment_loss_for_agi"
+            ") "
+            "+ sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_rental_loss_for_agi, "
+            "person_has_rental_loss_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "limited_business_loss",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 461(l), excess business-loss limitation",
+        formula=(
+            "min("
+            "business_loss_for_loss_limit, "
+            "business_income_for_loss_limit + business_loss_limit"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "loss_ald",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 165, 461(l), and 1211, loss deductions above the line",
+        formula="limited_business_loss + limited_capital_loss",
+    ),
+    _generated_tax_unit_rule(
+        "positive_capital_gains_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61, positive capital gains included in gross income",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_capital_gains_for_agi, "
+            "person_has_positive_capital_gains_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "positive_self_employment_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61, positive self-employment income included in gross income",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_self_employment_income_for_agi, "
+            "person_has_positive_self_employment_income_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "positive_rental_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61, positive rental income included in gross income",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_rental_income_for_agi, "
+            "person_has_positive_rental_income_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "positive_dividend_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61, positive dividend income included in gross income",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_dividend_income_for_agi, "
+            "person_has_positive_dividend_income_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "positive_taxable_interest_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61, positive taxable interest included in gross income",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_taxable_interest_income_for_agi, "
+            "person_has_positive_taxable_interest_income_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "positive_pension_income_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61, positive pension income included in gross income",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_pension_income_for_agi, "
+            "person_has_positive_pension_income_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "positive_unemployment_compensation_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 85, positive unemployment compensation included in gross income",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_positive_unemployment_compensation_for_agi, "
+            "person_has_positive_unemployment_compensation_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
         "gross_income_before_social_security_benefits",
         dtype="Money",
         unit="USD",
         source="Oracle composition bridge aggregating ECPS leaf income facts before applying 26 USC 86",
         formula=(
             "wages "
-            "+ filer_dividend_income "
-            "+ filer_taxable_interest_income "
-            "+ filer_short_term_capital_gains "
-            "+ filer_long_term_capital_gains "
-            "+ filer_rental_income "
-            "+ filer_pension_annuity_disability_benefits_received "
-            "+ filer_unemployment_compensation "
-            "+ alaska_permanent_fund_dividend "
-            "+ net_earnings_before_paragraph_12_adjustment"
+            "+ positive_self_employment_income_for_agi "
+            "+ positive_rental_income_for_agi "
+            "+ positive_capital_gains_for_agi "
+            "+ positive_dividend_income_for_agi "
+            "+ positive_taxable_interest_income_for_agi "
+            "+ positive_pension_income_for_agi "
+            "+ positive_unemployment_compensation_for_agi "
+            "+ alaska_permanent_fund_dividend"
         ),
     ),
     _generated_tax_unit_rule(
@@ -1266,6 +2083,7 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         source="Oracle composition bridge applying 26 USC 164(f) before 26 USC 86",
         formula=(
             "gross_income_before_social_security_benefits "
+            "- loss_ald "
             "- self_employment_tax_ald_for_agi"
         ),
     ),
@@ -1339,6 +2157,545 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         ),
     ),
     _generated_tax_unit_rule(
+        "co_additions",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3), resolved from encoded Colorado addition leaves available to the oracle bridge",
+        formula=(
+            "co_state_addback "
+            "+ co_federal_deduction_addback "
+            "+ co_qualified_business_income_deduction_addback"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_state_addback_line_a",
+        dtype="Money",
+        unit="USD",
+        source="Colorado state income tax addback worksheet, 2025 DR 0104 Book Additions Line 2",
+        formula=(
+            "if state_withheld_income_tax + real_estate_taxes > salt_deduction: "
+            "max(0, salt_deduction - real_estate_taxes) "
+            "else: max(0, state_withheld_income_tax)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_state_addback_line_d",
+        dtype="Money",
+        unit="USD",
+        source="Colorado state income tax addback worksheet, 2025 DR 0104 Book Additions Line 2",
+        formula=(
+            "max("
+            "0, "
+            "total_itemized_taxable_income_deductions - standard_deduction"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_state_addback",
+        dtype="Money",
+        unit="USD",
+        source="Colorado state income tax addback worksheet, 2025 DR 0104 Book Additions Line 2",
+        formula=(
+            "if individual_makes_election_to_itemize_deductions_for_taxable_year: "
+            "min(co_state_addback_line_a, co_state_addback_line_d) "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_federal_deduction_addback_exemption",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(p), exemption selected by filing status",
+        formula=(
+            "if filing_status == 1: "
+            "co_federal_deduction_addback_joint_exemption "
+            "else: co_federal_deduction_addback_other_exemption"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_taxable_income_deductions_for_addback",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(p), federal deductions subject to Colorado addback",
+        formula=(
+            "if individual_makes_election_to_itemize_deductions_for_taxable_year: "
+            "current_law_deductions_if_itemizing "
+            "else: current_law_deductions_if_not_itemizing"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_federal_deduction_addback",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(p), federal deduction addback",
+        formula=(
+            "if adjusted_gross_income > co_federal_deduction_addback_agi_threshold: "
+            "max("
+            "0, "
+            "co_taxable_income_deductions_for_addback "
+            "- co_federal_deduction_addback_exemption"
+            ") "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_qualified_business_income_deduction_addback",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(3)(o), qualified business income deduction addback",
+        formula=(
+            "if filing_status == 1: "
+            "if adjusted_gross_income > co_qbid_addback_joint_agi_threshold: "
+            "qualified_business_income_deduction "
+            "else: 0 "
+            "else: "
+            "if adjusted_gross_income > co_qbid_addback_other_agi_threshold: "
+            "qualified_business_income_deduction "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_subtractions",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4), resolved from encoded Colorado subtraction leaves available to the oracle bridge",
+        formula=(
+            "max("
+            "0, "
+            "co_social_security_subtraction "
+            "+ co_pension_subtraction"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_head_age",
+        dtype="Integer",
+        source="Oracle comparison bridge projecting Colorado head age for person-level subtractions",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "oracle_person_age, "
+            "person_is_tax_unit_head_for_co"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_spouse_age",
+        dtype="Integer",
+        source="Oracle comparison bridge projecting Colorado spouse age for person-level subtractions",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "oracle_person_age, "
+            "person_is_tax_unit_spouse_for_co"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_head_social_security_benefits",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge projecting Colorado head Social Security benefits for person-level subtractions",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_social_security_benefits, "
+            "person_is_tax_unit_head_for_co"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_spouse_social_security_benefits",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge projecting Colorado spouse Social Security benefits for person-level subtractions",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_social_security_benefits, "
+            "person_is_tax_unit_spouse_for_co"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_head_taxable_social_security",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine taxable Social Security allocation, assigning non-spouse residual to the head",
+        formula=(
+            "max("
+            "0, "
+            "social_security_benefits_included_in_gross_income "
+            "- co_spouse_taxable_social_security"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_spouse_taxable_social_security",
+        dtype="Money",
+        unit="USD",
+        source="PolicyEngine taxable Social Security allocation to the tax-unit spouse",
+        formula=(
+            "if title_II_monthly_benefits_received_during_taxable_year > 0: "
+            "social_security_benefits_included_in_gross_income "
+            "* co_spouse_social_security_benefits "
+            "/ title_II_monthly_benefits_received_during_taxable_year "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_head_social_security_subtraction",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(f), head-level Colorado Social Security subtraction",
+        formula=(
+            "if co_head_age >= 65: "
+            "co_head_taxable_social_security "
+            "else: "
+            "if co_head_age >= 55: "
+            "min(co_head_taxable_social_security, co_pension_subtraction_younger_cap) "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_spouse_social_security_subtraction",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(f), spouse-level Colorado Social Security subtraction",
+        formula=(
+            "if co_spouse_age >= 65: "
+            "co_spouse_taxable_social_security "
+            "else: "
+            "if co_spouse_age >= 55: "
+            "min(co_spouse_taxable_social_security, co_pension_subtraction_younger_cap) "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_social_security_subtraction",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(f), summed head/spouse Colorado Social Security subtraction",
+        formula=(
+            "co_head_social_security_subtraction "
+            "+ co_spouse_social_security_subtraction"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_head_pension_subtraction_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge projecting Colorado head pension income for person-level subtractions",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_pension_income, "
+            "person_is_tax_unit_head_for_co"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_spouse_pension_subtraction_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge projecting Colorado spouse pension income for person-level subtractions",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_pension_income, "
+            "person_is_tax_unit_spouse_for_co"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_head_pension_subtraction_cap_after_social_security",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(g)(III), head pension cap after Colorado Social Security subtraction",
+        formula=(
+            "if co_head_age >= 65: "
+            "max(0, co_pension_subtraction_older_cap "
+            "- co_head_social_security_subtraction) "
+            "else: "
+            "if co_head_age >= 55: "
+            "max(0, co_pension_subtraction_younger_cap "
+            "- co_head_social_security_subtraction) "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_spouse_pension_subtraction_cap_after_social_security",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(g)(III), spouse pension cap after Colorado Social Security subtraction",
+        formula=(
+            "if co_spouse_age >= 65: "
+            "max(0, co_pension_subtraction_older_cap "
+            "- co_spouse_social_security_subtraction) "
+            "else: "
+            "if co_spouse_age >= 55: "
+            "max(0, co_pension_subtraction_younger_cap "
+            "- co_spouse_social_security_subtraction) "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_head_pension_subtraction",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(g), head Colorado pension and annuity subtraction",
+        formula=(
+            "min("
+            "max(0, co_head_pension_subtraction_income), "
+            "co_head_pension_subtraction_cap_after_social_security"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_spouse_pension_subtraction",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(g), spouse Colorado pension and annuity subtraction",
+        formula=(
+            "min("
+            "max(0, co_spouse_pension_subtraction_income), "
+            "co_spouse_pension_subtraction_cap_after_social_security"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_pension_subtraction",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(4)(g), pension and annuity subtraction",
+        formula=(
+            "co_head_pension_subtraction "
+            "+ co_spouse_pension_subtraction"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_taxable_income",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(1.7), Colorado taxable income starts from federal taxable income",
+        formula="max(0, taxable_income + co_additions - co_subtractions)",
+    ),
+    _generated_tax_unit_rule(
+        "co_income_tax_before_non_refundable_credits",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-104(1.7), Colorado flat-rate income tax",
+        formula="co_taxable_income * co_income_tax_rate",
+    ),
+    _generated_tax_unit_rule(
+        "co_non_refundable_credits",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge default for unencoded Colorado non-refundable credits",
+        formula="0",
+    ),
+    _generated_tax_unit_rule(
+        "co_income_tax_before_refundable_credits",
+        dtype="Money",
+        unit="USD",
+        source="Colorado income tax before refundable credits",
+        formula=(
+            "max("
+            "0, "
+            "co_income_tax_before_non_refundable_credits "
+            "- co_non_refundable_credits"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_sales_tax_refund_eligible",
+        dtype="Judgment",
+        source="Colorado sales tax refund eligibility, matching PolicyEngine 2026 oracle comparison",
+        formula=(
+            "age_at_close_of_taxable_year >= 18 "
+            "or filing_status_is_joint_return "
+            "or co_income_tax_before_non_refundable_credits > 0 "
+            "or wages > 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_sales_tax_refund",
+        dtype="Money",
+        unit="USD",
+        source="Colorado sales tax refund, matching PolicyEngine 2026 oracle comparison",
+        formula=(
+            "if co_sales_tax_refund_eligible: "
+            "co_sales_tax_refund_base "
+            "* co_sales_tax_refund_filing_status_multiplier "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_refundable_credits",
+        dtype="Money",
+        unit="USD",
+        source="Colorado refundable credits resolved from encoded bridge components",
+        formula=(
+            "co_sales_tax_refund"
+            " + co_eitc"
+            " + co_ctc"
+            " + co_family_affordability_credit"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_eitc",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-123.5 Colorado earned income tax credit",
+        formula="eitc * co_eitc_match_2026",
+    ),
+    _generated_tax_unit_rule(
+        "co_ctc_eligible_children_count",
+        dtype="Integer",
+        source="C.R.S. 39-22-129 child tax credit eligible children",
+        formula="count_where(co_dependent_of_tax_unit, co_ctc_eligible_child)",
+    ),
+    _generated_tax_unit_rule(
+        "co_ctc_amount_per_child",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 child tax credit amount table",
+        formula=(
+            "if filing_status == 1: "
+            "if adjusted_gross_income <= co_ctc_joint_first_threshold_2026: "
+            "co_ctc_high_amount "
+            "else: "
+            "if adjusted_gross_income <= co_ctc_joint_second_threshold_2026: "
+            "co_ctc_middle_amount "
+            "else: "
+            "if adjusted_gross_income <= co_ctc_joint_third_threshold_2026: "
+            "co_ctc_low_amount "
+            "else: 0 "
+            "else: "
+            "if adjusted_gross_income <= co_ctc_other_first_threshold_2026: "
+            "co_ctc_high_amount "
+            "else: "
+            "if adjusted_gross_income <= co_ctc_other_second_threshold_2026: "
+            "co_ctc_middle_amount "
+            "else: "
+            "if adjusted_gross_income <= co_ctc_other_third_threshold_2026: "
+            "co_ctc_low_amount "
+            "else: 0"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_ctc",
+        dtype="Money",
+        unit="USD",
+        source="C.R.S. 39-22-129 Colorado child tax credit",
+        formula="co_ctc_eligible_children_count * co_ctc_amount_per_child",
+    ),
+    _generated_tax_unit_rule(
+        "co_family_affordability_child_units",
+        dtype="Decimal",
+        source="Colorado HB24-1311 family affordability credit age-weighted child count",
+        formula=(
+            "sum_where("
+            "co_dependent_of_tax_unit, "
+            "co_family_affordability_child_age_multiplier, "
+            "co_family_affordability_child_eligible"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_family_affordability_pre_reduction_credit",
+        dtype="Money",
+        unit="USD",
+        source="Colorado HB24-1311 family affordability credit before AGI reduction",
+        formula=(
+            "co_family_affordability_child_amount_2026 "
+            "* co_family_affordability_child_units"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_family_affordability_reduction_threshold",
+        dtype="Money",
+        unit="USD",
+        source="Colorado HB24-1311 family affordability credit reduction threshold",
+        formula=(
+            "if filing_status == 1: "
+            "co_family_affordability_reduction_threshold_joint_2026 "
+            "else: co_family_affordability_reduction_threshold_other_2026"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_family_affordability_reduction_fraction",
+        dtype="Rate",
+        source="Colorado HB24-1311 family affordability credit reduction",
+        formula=(
+            "min("
+            "1, "
+            "ceil("
+            "max(0, adjusted_gross_income - co_family_affordability_reduction_threshold) "
+            "/ co_family_affordability_reduction_increment_2026"
+            ") * co_family_affordability_reduction_rate"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_family_affordability_credit",
+        dtype="Money",
+        unit="USD",
+        source="Colorado HB24-1311 family affordability credit",
+        formula=(
+            "co_family_affordability_pre_reduction_credit "
+            "* (1 - co_family_affordability_reduction_fraction)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_sales_tax_refund_base",
+        dtype="Money",
+        unit="USD",
+        source="Colorado 2025 state sales tax refund table, carried forward by PolicyEngine for 2026 oracle comparison",
+        formula=(
+            "19 "
+            "+ (if co_modified_agi >= 52001: 6 else: 0) "
+            "+ (if co_modified_agi >= 105001: 4 else: 0) "
+            "+ (if co_modified_agi >= 168001: 6 else: 0) "
+            "+ (if co_modified_agi >= 233001: 2 else: 0) "
+            "+ (if co_modified_agi >= 299001: 22 else: 0)"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_modified_agi",
+        dtype="Money",
+        unit="USD",
+        source="Colorado sales tax refund modified adjusted gross income, including tax-exempt Social Security",
+        formula=(
+            "adjusted_gross_income "
+            "+ max("
+            "0, "
+            "title_II_monthly_benefits_received_during_taxable_year "
+            "- social_security_benefits_included_in_gross_income"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "co_sales_tax_refund_filing_status_multiplier",
+        dtype="Decimal",
+        source="Colorado sales tax refund filing-status multiplier",
+        formula="if filing_status == 1: 2 else: 1",
+    ),
+    _generated_tax_unit_rule(
+        "co_income_tax",
+        dtype="Money",
+        unit="USD",
+        source="Colorado income tax liability resolved from encoded bridge components",
+        formula="co_income_tax_before_refundable_credits - co_refundable_credits",
+    ),
+    _generated_tax_unit_rule(
+        "state_income_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge routing state income tax liability by jurisdiction",
+        formula="if is_colorado_tax_unit: co_income_tax else: 0",
+    ),
+    _generated_tax_unit_rule(
         "credits_allowable_under_subpart_c_excluding_section_33_for_overpayment",
         dtype="Money",
         unit="USD",
@@ -1374,9 +2731,11 @@ _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100
 _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT = 15_750
 
 _RELATION_REFS = (
-    "us:tax/federal-income-tax/oracle-bridge#relation.business_income_of_tax_unit",
-    "us:tax/federal-income-tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
-    "us:tax/federal-income-tax/oracle-bridge#relation.payroll_member_of_tax_unit",
+    "us:tax/oracle-bridge#relation.business_income_of_tax_unit",
+    "us:tax/oracle-bridge#relation.co_dependent_of_tax_unit",
+    "us:tax/oracle-bridge#relation.co_withheld_income_tax_member_of_tax_unit",
+    "us:tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
+    "us:tax/oracle-bridge#relation.payroll_member_of_tax_unit",
     "us:statutes/26/21#relation.qualifying_individual_of_tax_unit",
     "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
     "us:statutes/26/24/h#relation.dependent_of_tax_unit",
@@ -1509,13 +2868,16 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "aotc_prior_year_election_count",
     "american_employer_foreign_affiliate_equivalent_3121l_taxes",
     "auto_loan_interest_deduction",
+    "casualty_loss_deduction",
     "capital_gains_28_percent_rate_gain",
+    "charitable_deduction",
     "charitable_deduction_for_non_itemizers",
     "cost_of_living_adjustment_25b",
     "credit_allowed_under_section_33",
     "credit_against_chapter_tax_before_section_911_double_benefit_denial",
     "credit_properly_allocable_or_chargeable_to_amounts_excluded_under_subsection_a",
     "ctc_limiting_tax_liability",
+    "deductible_mortgage_interest",
     "deduction_properly_allocable_or_chargeable_to_amounts_excluded_under_subsection_a",
     "deduction_under_subtitle_before_section_911_double_benefit_denial",
     "dependent_care_assistance_exclusion",
@@ -1539,7 +2901,10 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "inclusion_by_reason_of_prior_year_lump_sum_portion_before_subsection_e_limitation",
     "individual_testing_period_distributions",
     "investment_of_working_capital_income",
-    "itemized_taxable_income_deductions",
+    "itemized_medical_expenses",
+    "itemized_taxable_income_deductions_reduction",
+    "local_income_tax",
+    "local_sales_tax",
     "long_term_capital_gains",
     "lump_sum_payment_portion_attributable_to_prior_taxable_years",
     "min_head_spouse_earned",
@@ -1565,9 +2930,9 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "refundable_payroll_tax_credit",
     "railroad_retirement_act_benefits_excluded_from_gross_income",
     "rental_income",
+    "real_estate_taxes",
     "residential_clean_energy_credit",
     "royalty_income",
-    "salt_deduction",
     "section_104_a_4_va_benefits",
     "section_22_disability_income",
     "section_401_k_8_distribution",
@@ -1599,6 +2964,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "taxable_pension_annuity_disability_benefits_included",
     "tax_imposed_by_chapter_before_cdcc",
     "taxpayer_earned_income_for_cdcc",
+    "state_sales_tax",
     "tip_income_deduction",
     "trustee_to_trustee_transfer_or_rollover_distribution_portion",
     "undistributed_net_investment_income",
@@ -1879,7 +3245,7 @@ _INPUT_REF_OVERRIDES.update(
 )
 _INPUT_REF_OVERRIDES.update(
     {
-        name: f"{US_FEDERAL_INCOME_TAX_BRIDGE_TARGET}#input.{name}"
+        name: f"{US_TAX_ORACLE_BRIDGE_TARGET}#input.{name}"
         for name in (
             "alaska_permanent_fund_dividend_eligible_person_count",
             "capital_gains_tax_long_term_capital_gains",
@@ -1892,16 +3258,29 @@ _INPUT_REF_OVERRIDES.update(
             "filer_short_term_capital_gains",
             "filer_taxable_interest_income",
             "filer_unemployment_compensation",
+            "is_colorado_tax_unit",
+            "oracle_person_age",
+            "oracle_person_is_qualifying_child_dependent",
+            "oracle_person_is_tax_unit_dependent",
+            "person_dividend_income",
+            "person_long_term_capital_gains",
             "person_payroll_earnings",
+            "person_pension_income",
             "person_rental_income_for_qbid",
             "person_self_employment_income_for_qbid",
+            "person_short_term_capital_gains",
+            "person_social_security_benefits",
+            "person_taxable_interest_income",
+            "person_unemployment_compensation",
+            "spouse_has_attained_age_55_before_close_of_taxable_year",
+            "taxpayer_has_attained_age_55_before_close_of_taxable_year",
         )
     }
 )
 
 
 def attach_axiom_tax_inputs(cases: list[Case]) -> list[Case]:
-    """Attach Axiom federal tax input records to ECPS-style neutral cases."""
+    """Attach Axiom tax input records to ECPS-style neutral cases."""
 
     return [attach_axiom_tax_inputs_to_case(case) for case in cases]
 
@@ -2006,6 +3385,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "filing_status_is_joint_return": spouse is not None,
         "individual_is_unmarried_and_not_surviving_spouse": spouse is None,
         "is_estate_or_trust": False,
+        "is_colorado_tax_unit": _is_colorado_case(case),
         "is_individual": True,
         "married_at_close_of_taxable_year": spouse is not None,
         "married_filing_separate_return": False,
@@ -2015,11 +3395,15 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "spouse_has_attained_age_65_before_close_of_taxable_year": bool(
             spouse and _age(spouse) >= 65
         ),
+        "spouse_has_attained_age_55_before_close_of_taxable_year": bool(
+            spouse and _age(spouse) >= 55
+        ),
         "spouse_is_blind_as_of_close_of_taxable_year_or_time_of_death": spouse_is_blind,
         "spouse_includes_required_social_security_number_on_return": spouse is not None,
         "taxable_year_is_full_12_months": True,
         "taxpayer_includes_required_social_security_number_on_return": True,
         "taxpayer_has_attained_age_65_before_close_of_taxable_year": _age(head) >= 65,
+        "taxpayer_has_attained_age_55_before_close_of_taxable_year": _age(head) >= 55,
         "taxpayer_is_blind_at_close_of_taxable_year": taxpayer_is_blind,
         "taxpayer_is_dependent_for_section_151_to_another_taxpayer": False,
         "taxpayer_is_married_under_section_7703_a": spouse is not None,
@@ -2041,7 +3425,15 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "filer_rental_income": filer_rental,
         "filer_pension_annuity_disability_benefits_received": filer_pensions,
         "filer_unemployment_compensation": filer_unemployment,
+        "deductible_mortgage_interest": _number(
+            case.fact(Concepts.MORTGAGE_INTEREST_PAID, 0)
+        ),
+        "misc_deduction": _number(case.fact(Concepts.ITEMIZED_DEDUCTIONS_OTHER, 0)),
+        "tax_unit_childcare_expenses": _number(
+            case.fact(Concepts.CHILDCARE_EXPENSES, 0)
+        ),
         "partnership_section_702_a_8_income_or_loss": 0,
+        "real_estate_taxes": _number(case.fact(Concepts.PROPERTY_TAX_PAID, 0)),
         "self_employment_trade_or_business_deductions": 0,
         "self_employment_trade_or_business_gross_income": self_employment,
         "alaska_permanent_fund_dividend_eligible_person_count": _alaska_permanent_fund_dividend_eligible_person_count(
@@ -2085,24 +3477,14 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "auto_loan_interest_deduction",
         0,
     )
-    itemized_taxable_income_deductions = inputs.get(
-        "itemized_taxable_income_deductions",
-        0,
-    )
     inputs.setdefault(
         "cost_of_living_adjustment_under_section_1_f_3",
         _standard_deduction_cola(case),
     )
     inputs.setdefault("deduction_for_personal_exemptions_provided_in_section_151", 0)
     inputs.setdefault("deductions_allowable_in_arriving_at_adjusted_gross_income", 0)
-    inputs.setdefault(
-        "deductions_allowable_under_this_chapter",
-        itemized_taxable_income_deductions,
-    )
-    inputs.setdefault(
-        "deductions_allowed_by_this_chapter_other_than_standard_deduction",
-        itemized_taxable_income_deductions,
-    )
+    inputs.setdefault("deductions_allowable_under_this_chapter", 0)
+    inputs.setdefault("deductions_allowed_by_this_chapter_other_than_standard_deduction", 0)
     return [_input_record(name, "TaxUnit", _TAX_UNIT_ID, value) for name, value in inputs.items()]
 
 
@@ -2127,12 +3509,34 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "meets_ctc_child_identification_requirements": is_dependent,
             "meets_eitc_identification_requirements": is_dependent,
             "noncitizen_exception_to_other_dependent_credit_under_subsection_h": False,
+            "oracle_person_age": age,
+            "oracle_person_is_qualifying_child_dependent": is_dependent and age < 19,
+            "oracle_person_is_tax_unit_dependent": is_dependent,
+            "person_dividend_income": _number(
+                person.fact(Concepts.DIVIDEND_INCOME, 0)
+            ),
+            "person_long_term_capital_gains": _number(
+                person.fact(Concepts.LONG_TERM_CAPITAL_GAINS, 0)
+            ),
             "person_payroll_earnings": _earned_income(person),
+            "person_pension_income": _number(person.fact(Concepts.PENSION_INCOME, 0)),
             "person_rental_income_for_qbid": _number(
                 person.fact(Concepts.RENTAL_INCOME, 0)
             ),
             "person_self_employment_income_for_qbid": _number(
                 person.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)
+            ),
+            "person_short_term_capital_gains": _number(
+                person.fact(Concepts.SHORT_TERM_CAPITAL_GAINS, 0)
+            ),
+            "person_social_security_benefits": _number(
+                person.fact(Concepts.SOCIAL_SECURITY_BENEFITS, 0)
+            ),
+            "person_taxable_interest_income": _number(
+                person.fact(Concepts.INTEREST_INCOME, 0)
+            ),
+            "person_unemployment_compensation": _number(
+                person.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0)
             ),
             "qualifying_child_described_in_subsection_c": is_dependent and age < 17,
             "qualifying_child_is_married_at_close_of_taxable_year": False,
@@ -2162,11 +3566,12 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
     records = []
     for relation_ref in _RELATION_REFS:
         if relation_ref in {
-            "us:tax/federal-income-tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
+            "us:tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
             "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
         }:
             relation_people = tax_filers
         elif relation_ref in {
+            "us:tax/oracle-bridge#relation.co_dependent_of_tax_unit",
             "us:statutes/26/24/h#relation.dependent_of_tax_unit",
             "us:statutes/26/32#relation.qualifying_child_of_tax_unit",
         }:
@@ -2231,12 +3636,16 @@ def _case_axiom_tax_unit_inputs(case: Case) -> dict[str, Any]:
         "filer_adjusted_earnings",
         "gross_income",
         "irs_gross_income",
+        "itemized_taxable_income_deductions",
         "modified_adjusted_gross_income",
         "deduction_provided_in_section_199A",
         "qualified_business_income_deduction",
+        "salt_deduction",
         "self_employment_1401_taxes",
         "self_employment_income",
         "self_employment_tax_ald",
+        "state_income_tax",
+        "state_withheld_income_tax",
         "taxable_earned_income_under_section_32",
         "taxable_social_security_benefits_included",
     }
@@ -2340,6 +3749,22 @@ def _is_alaska_case(case: Case) -> bool:
         return False
     normalized = str(state_code).strip().upper()
     return normalized in {"AK", "02", "2"}
+
+
+def _is_colorado_case(case: Case) -> bool:
+    scope = case.scope
+    if scope is not None and scope.type != "country":
+        return scope.geoid.startswith("08")
+
+    state_code = (
+        case.fact(Concepts.STATE_CODE)
+        or case.metadata.get("state_code")
+        or case.metadata.get("state")
+    )
+    if state_code in (None, ""):
+        return False
+    normalized = str(state_code).strip().upper()
+    return normalized in {"CO", "08", "8"}
 
 
 def _eitc_childless_age_eligible(person: Entity) -> bool:

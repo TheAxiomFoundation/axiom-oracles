@@ -32,6 +32,7 @@ class ProgramMapping:
     axiom_output: str | None = None
     comparison: str = "eligibility"
     tolerance: float = 0
+    relative_tolerance: float = 0
     priority: str = "normal"
     components: tuple[str, ...] = field(default_factory=tuple)
     parent: str | None = None

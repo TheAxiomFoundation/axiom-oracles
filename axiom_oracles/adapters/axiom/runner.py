@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import subprocess
 import tempfile
 from calendar import monthrange
 from collections.abc import Callable, Mapping
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -30,6 +32,7 @@ AXIOM_RELATIONS_METADATA_KEY = "axiom_relations"
 AXIOM_ENTITY_ID_METADATA_KEY = "axiom_entity_id"
 AXIOM_ENTITY_METADATA_KEY = "axiom_entity"
 AXIOM_RULESPEC_REPO_ROOTS_ENV = "AXIOM_RULESPEC_REPO_ROOTS"
+FLOAT_ZERO_TOLERANCE = 1e-9
 
 
 class AxiomRulesRunner(EngineAdapter):
@@ -886,10 +889,21 @@ def _scalar_value(value: Any) -> dict[str, Any]:
     if isinstance(value, int) and not isinstance(value, bool):
         return {"kind": "integer", "value": value}
     if isinstance(value, float):
-        return {"kind": "decimal", "value": str(value)}
+        return {"kind": "decimal", "value": _decimal_literal(value)}
     if isinstance(value, date):
         return {"kind": "date", "value": value.isoformat()}
     return {"kind": "text", "value": str(value)}
+
+
+def _decimal_literal(value: float) -> str:
+    if not math.isfinite(value):
+        raise RuntimeError(f"Axiom decimal inputs must be finite, got {value!r}.")
+    if abs(value) < FLOAT_ZERO_TOLERANCE:
+        return "0"
+    literal = format(Decimal(str(value)), "f")
+    if "." in literal:
+        literal = literal.rstrip("0").rstrip(".")
+    return "0" if literal == "-0" else literal
 
 
 def _relation_tuples(value: Any) -> list[Any]:
