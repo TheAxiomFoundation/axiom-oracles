@@ -9,11 +9,12 @@ from axiom_oracles.adapters.axiom import (
     US_TAX_ORACLE_BRIDGE_TARGET,
     US_TAX_ORACLE_IMPORTS,
     US_TAX_ORACLE_PROGRAM_RULES,
+    attach_axiom_snap_co_inputs,
 )
 from axiom_oracles.adapters.axiom.runner import _scalar_value
 from axiom_oracles.cli import _build_runner
 from axiom_oracles.comparison.mappings import comparable_mappings, load_program_mappings
-from axiom_oracles.core.case import Case, Concepts
+from axiom_oracles.core.case import Case, Concepts, Entity
 
 
 def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path) -> None:
@@ -145,6 +146,82 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     [result] = runner.run_cases([case], [])
 
     assert result.errors == ()
+
+
+def test_snap_co_projection_supplies_federal_gross_income_input() -> None:
+    [case] = attach_axiom_snap_co_inputs(
+        [
+            Case(
+                case_id="co-snap",
+                period="2026-01",
+                entities=(
+                    Entity(
+                        entity_id="person-1",
+                        kind="person",
+                        facts={Concepts.YEARLY_EARNED_INCOME: 30_000},
+                    ),
+                ),
+            )
+        ]
+    )
+
+    records = {
+        record["name"]: record["value"]
+        for record in case.metadata["axiom_input_records"]
+        if record["entity"] == "Household"
+    }
+
+    assert (
+        records["us:regulations/7-cfr/273/9#input.snap_gross_monthly_income"]
+        == 2500
+    )
+    assert (
+        records[
+            "us:statutes/7/2014/e/6/A#input."
+            "snap_monthly_household_income"
+        ]
+        == 2500
+    )
+    assert (
+        records[
+            "us:regulations/7-cfr/273/10#input."
+            "snap_gross_monthly_earned_income"
+        ]
+        == 2500
+    )
+    assert (
+        records[
+            "us:regulations/7-cfr/273/10#input."
+            "snap_claimed_homeless_shelter_deduction"
+        ]
+        == 0
+    )
+    assert (
+        records[
+            "us:regulations/7-cfr/273/10#input."
+            "snap_total_allowable_shelter_expenses"
+        ]
+        == 500
+    )
+    assert (
+        records[
+            "us-co:regulations/10-ccr-2506-1/4.403#input."
+            "employee_wages_received"
+        ]
+        == 2500
+    )
+    member_records = {
+        record["name"]: record["value"]
+        for record in case.metadata["axiom_input_records"]
+        if record["entity"] == "Person"
+    }
+    assert (
+        member_records[
+            "us:regulations/7-cfr/273/6#input."
+            "member_refused_or_failed_to_provide_or_apply_for_ssn"
+        ]
+        is False
+    )
 
 
 def test_axiom_runner_serializes_float_inputs_without_exponents() -> None:
