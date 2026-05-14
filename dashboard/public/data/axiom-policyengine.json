@@ -15,18 +15,18 @@
       ],
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
-      "left_weighted_sum": 1770086518556.3232,
-      "match_rate": 98.769988,
-      "match_weight": 200840770.5625,
-      "mismatch_count": 10,
-      "mismatch_weight": 1920389.8125,
+      "left_weighted_sum": 1770516339988.7297,
+      "match_rate": 99.138991,
+      "match_weight": 201320868.015625,
+      "mismatch_count": 7,
+      "mismatch_weight": 1440292.359375,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
       "right_weighted_sum": 1768394819247.3118,
-      "weighted_difference": 1691699309.011475,
-      "weighted_match_rate": 99.052881
+      "weighted_difference": 2121520741.417969,
+      "weighted_match_rate": 99.289661
     },
     {
       "category": "tax",
@@ -57,18 +57,18 @@
       "components": [],
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
-      "left_weighted_sum": 10711810270740.393,
-      "match_rate": 98.892989,
-      "match_weight": 201000803.046875,
-      "mismatch_count": 9,
-      "mismatch_weight": 1760357.328125,
+      "left_weighted_sum": 10712791970975.26,
+      "match_rate": 99.384994,
+      "match_weight": 201640932.984375,
+      "mismatch_count": 5,
+      "mismatch_weight": 1120227.390625,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
       "right_weighted_sum": 10706735259736.555,
-      "weighted_difference": 5075011003.837891,
-      "weighted_match_rate": 99.131807
+      "weighted_difference": 6056711238.705078,
+      "weighted_match_rate": 99.447514
     },
     {
       "category": "tax",
@@ -78,18 +78,18 @@
       "components": [],
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
-      "left_weighted_sum": 1737662649275.3337,
-      "match_rate": 98.769988,
-      "match_weight": 200840770.5625,
-      "mismatch_count": 10,
-      "mismatch_weight": 1920389.8125,
+      "left_weighted_sum": 1738092470707.7397,
+      "match_rate": 99.138991,
+      "match_weight": 201320868.015625,
+      "mismatch_count": 7,
+      "mismatch_weight": 1440292.359375,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
       "right_weighted_sum": 1735915839449.8757,
-      "weighted_difference": 1746809825.458008,
-      "weighted_match_rate": 99.052881
+      "weighted_difference": 2176631257.864014,
+      "weighted_match_rate": 99.289661
     },
     {
       "category": "tax",
@@ -277,7 +277,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -305,7 +305,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -473,7 +473,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1574,
-        "axiom_relations_count": 30,
+        "axiom_relations_count": 35,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -865,7 +865,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -921,7 +921,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -1201,7 +1201,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -1537,7 +1537,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -1649,7 +1649,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -1820,7 +1820,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -1904,7 +1904,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -2324,7 +2324,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -2408,7 +2408,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -2436,7 +2436,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -2520,7 +2520,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -2660,7 +2660,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -2705,11 +2705,11 @@
       "case_id": "ecps-tax-unit-7176",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 57.14285714285714,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -2725,38 +2725,7 @@
         },
         "tax_unit_id": 7176
       },
-      "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#liability",
-          "description": "Federal income tax liability",
-          "difference": 92.53341802978503,
-          "kind": "amount_difference",
-          "left": 8244.713105529785,
-          "parent": null,
-          "right": 8152.1796875,
-          "tolerance": 15
-        },
-        {
-          "concept": "us:tax/federal-income-tax#taxable_income",
-          "description": "Federal taxable income",
-          "difference": 771.1144210815401,
-          "kind": "amount_difference",
-          "left": 77005.94254608154,
-          "parent": "us:tax/federal-income-tax#liability",
-          "right": 76234.828125,
-          "tolerance": 5
-        },
-        {
-          "concept": "us:tax/federal-income-tax#tax_before_credits",
-          "description": "Federal tax before credits",
-          "difference": 92.53341802978503,
-          "kind": "amount_difference",
-          "left": 8744.713105529785,
-          "parent": "us:tax/federal-income-tax#liability",
-          "right": 8652.1796875,
-          "tolerance": 5
-        }
-      ],
+      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -2796,7 +2765,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3048,7 +3017,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3104,7 +3073,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3328,7 +3297,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3356,7 +3325,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3384,7 +3353,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 2020,
-        "axiom_relations_count": 40,
+        "axiom_relations_count": 46,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3524,7 +3493,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3580,7 +3549,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3608,7 +3577,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3692,7 +3661,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3772,11 +3741,11 @@
       "case_id": "ecps-tax-unit-10590",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 57.14285714285714,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3792,38 +3761,7 @@
         },
         "tax_unit_id": 10590
       },
-      "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#liability",
-          "description": "Federal income tax liability",
-          "difference": 169.43749218749872,
-          "kind": "amount_difference",
-          "left": 46015.6367109375,
-          "parent": null,
-          "right": 45846.19921875,
-          "tolerance": 15
-        },
-        {
-          "concept": "us:tax/federal-income-tax#taxable_income",
-          "description": "Federal taxable income",
-          "difference": 541.58203125,
-          "kind": "amount_difference",
-          "left": 222901.50390625,
-          "parent": "us:tax/federal-income-tax#liability",
-          "right": 222359.921875,
-          "tolerance": 5
-        },
-        {
-          "concept": "us:tax/federal-income-tax#tax_before_credits",
-          "description": "Federal tax before credits",
-          "difference": 173.3054687499971,
-          "kind": "amount_difference",
-          "left": 45975.48125,
-          "parent": "us:tax/federal-income-tax#liability",
-          "right": 45802.17578125,
-          "tolerance": 5
-        }
-      ],
+      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -3835,7 +3773,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -3891,7 +3829,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4059,7 +3997,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 2020,
-        "axiom_relations_count": 40,
+        "axiom_relations_count": 46,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4143,7 +4081,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4451,7 +4389,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4507,7 +4445,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4535,7 +4473,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4675,7 +4613,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4843,7 +4781,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4871,7 +4809,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -4955,7 +4893,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -5011,7 +4949,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -5403,7 +5341,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -5795,7 +5733,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -5823,7 +5761,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -5879,7 +5817,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -5907,7 +5845,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -5991,7 +5929,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6075,7 +6013,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6243,7 +6181,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6299,7 +6237,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6383,7 +6321,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6663,7 +6601,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6691,7 +6629,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6747,7 +6685,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6775,7 +6713,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -6971,7 +6909,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7027,7 +6965,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7083,7 +7021,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7111,7 +7049,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7251,7 +7189,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7279,7 +7217,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7307,7 +7245,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1574,
-        "axiom_relations_count": 30,
+        "axiom_relations_count": 34,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7447,7 +7385,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7475,7 +7413,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7531,7 +7469,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7587,7 +7525,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7615,7 +7553,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7699,7 +7637,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7811,7 +7749,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7839,7 +7777,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -7891,7 +7829,7 @@
       "case_id": "ecps-tax-unit-20270",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 85.71428571428571,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 459,
@@ -7911,18 +7849,7 @@
         },
         "tax_unit_id": 20270
       },
-      "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#taxable_income",
-          "description": "Federal taxable income",
-          "difference": -8.49497516574047,
-          "kind": "amount_difference",
-          "left": 11732.93568889676,
-          "parent": "us:tax/federal-income-tax#liability",
-          "right": 11741.4306640625,
-          "tolerance": 5
-        }
-      ],
+      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -8186,7 +8113,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -8214,7 +8141,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -8242,7 +8169,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -8298,7 +8225,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -8522,7 +8449,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -8550,7 +8477,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -8606,7 +8533,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -8858,7 +8785,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9138,7 +9065,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9218,11 +9145,11 @@
       "case_id": "ecps-tax-unit-25986",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 57.14285714285714,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9238,38 +9165,7 @@
         },
         "tax_unit_id": 25986
       },
-      "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#liability",
-          "description": "Federal income tax liability",
-          "difference": 588.1096105194083,
-          "kind": "amount_difference",
-          "left": 18981.59203239441,
-          "parent": null,
-          "right": 18393.482421875,
-          "tolerance": 15
-        },
-        {
-          "concept": "us:tax/federal-income-tax#taxable_income",
-          "description": "Federal taxable income",
-          "difference": 2673.2195434570312,
-          "kind": "amount_difference",
-          "left": 138937.14141845703,
-          "parent": "us:tax/federal-income-tax#liability",
-          "right": 136263.921875,
-          "tolerance": 5
-        },
-        {
-          "concept": "us:tax/federal-income-tax#tax_before_credits",
-          "description": "Federal tax before credits",
-          "difference": 588.1086808776854,
-          "kind": "amount_difference",
-          "left": 19963.208290252685,
-          "parent": "us:tax/federal-income-tax#liability",
-          "right": 19375.099609375,
-          "tolerance": 5
-        }
-      ],
+      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -9281,7 +9177,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1574,
-        "axiom_relations_count": 30,
+        "axiom_relations_count": 34,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9309,7 +9205,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9449,7 +9345,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9505,7 +9401,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9533,7 +9429,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9869,7 +9765,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -9925,7 +9821,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10037,7 +9933,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10401,7 +10297,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10429,7 +10325,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10457,7 +10353,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10513,7 +10409,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10541,7 +10437,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 29,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10765,7 +10661,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10821,7 +10717,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -10877,7 +10773,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11045,7 +10941,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11185,7 +11081,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11325,7 +11221,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11437,7 +11333,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11577,7 +11473,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11661,7 +11557,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11913,7 +11809,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1797,
-        "axiom_relations_count": 35,
+        "axiom_relations_count": 41,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -11941,7 +11837,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -12221,7 +12117,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -12305,7 +12201,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -12389,7 +12285,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -12501,7 +12397,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1574,
-        "axiom_relations_count": 30,
+        "axiom_relations_count": 35,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -12641,7 +12537,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -12837,7 +12733,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13005,7 +12901,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13117,7 +13013,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13201,7 +13097,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13341,7 +13237,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13369,7 +13265,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13537,7 +13433,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13593,7 +13489,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13677,7 +13573,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -13985,7 +13881,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -14069,7 +13965,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -14181,7 +14077,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -14237,7 +14133,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -14349,7 +14245,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -14405,7 +14301,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -14433,7 +14329,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -14741,7 +14637,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15021,7 +14917,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1574,
-        "axiom_relations_count": 30,
+        "axiom_relations_count": 34,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15273,7 +15169,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15301,7 +15197,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15357,7 +15253,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15413,7 +15309,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15441,7 +15337,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15469,7 +15365,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15581,7 +15477,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15665,7 +15561,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 29,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -15721,7 +15617,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16029,7 +15925,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16113,7 +16009,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16169,7 +16065,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16225,7 +16121,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16477,7 +16373,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16505,7 +16401,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16638,7 +16534,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16750,7 +16646,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16806,7 +16702,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16834,7 +16730,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -16918,7 +16814,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17086,7 +16982,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17170,7 +17066,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17310,7 +17206,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17478,7 +17374,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17506,7 +17402,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17534,7 +17430,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17814,7 +17710,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17898,7 +17794,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1574,
-        "axiom_relations_count": 30,
+        "axiom_relations_count": 34,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17926,7 +17822,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -17982,7 +17878,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18150,7 +18046,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18206,7 +18102,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18234,7 +18130,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18374,7 +18270,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18486,7 +18382,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18598,7 +18494,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18766,7 +18662,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -18850,7 +18746,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19130,7 +19026,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19158,7 +19054,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19186,7 +19082,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19242,7 +19138,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19438,7 +19334,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19578,7 +19474,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19634,7 +19530,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19718,7 +19614,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -19858,7 +19754,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -20306,7 +20202,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -20474,7 +20370,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -20502,7 +20398,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -20558,7 +20454,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -20642,7 +20538,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -20922,7 +20818,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -20970,9 +20866,9 @@
         {
           "concept": "us:tax/federal-income-tax#liability",
           "description": "Federal income tax liability",
-          "difference": 3848.4219460160093,
+          "difference": 7387.09447347383,
           "kind": "amount_difference",
-          "left": 97430.53913351601,
+          "left": 100969.21166097383,
           "parent": null,
           "right": 93582.1171875,
           "tolerance": 15
@@ -20980,9 +20876,9 @@
         {
           "concept": "us:tax/federal-income-tax#taxable_income",
           "description": "Federal taxable income",
-          "difference": 10995.47831674217,
+          "difference": 21105.971252335934,
           "kind": "amount_difference",
-          "left": 369814.79081674217,
+          "left": 379925.28375233593,
           "parent": "us:tax/federal-income-tax#liability",
           "right": 358819.3125,
           "tolerance": 5
@@ -20990,9 +20886,9 @@
         {
           "concept": "us:tax/federal-income-tax#tax_before_credits",
           "description": "Federal tax before credits",
-          "difference": 3848.4232702347654,
+          "difference": 7387.095797692571,
           "kind": "amount_difference",
-          "left": 94944.37639523477,
+          "left": 98483.04892269257,
           "parent": "us:tax/federal-income-tax#liability",
           "right": 91095.953125,
           "tolerance": 5
@@ -21037,7 +20933,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -21261,7 +21157,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -21737,7 +21633,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 17,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -21793,7 +21689,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -21821,7 +21717,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 23,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -21877,7 +21773,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22045,7 +21941,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22101,7 +21997,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22185,7 +22081,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22241,7 +22137,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1128,
-        "axiom_relations_count": 20,
+        "axiom_relations_count": 22,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22381,7 +22277,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1351,
-        "axiom_relations_count": 25,
+        "axiom_relations_count": 28,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22465,7 +22361,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22664,7 +22560,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 905,
-        "axiom_relations_count": 15,
+        "axiom_relations_count": 16,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22723,7 +22619,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1797,
-        "axiom_relations_count": 35,
+        "axiom_relations_count": 40,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22891,7 +22787,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 1574,
-        "axiom_relations_count": 30,
+        "axiom_relations_count": 34,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -22975,7 +22871,7 @@
       "metadata": {
         "axiom_input_record_overlays_count": 2,
         "axiom_input_records_count": 682,
-        "axiom_relations_count": 10,
+        "axiom_relations_count": 11,
         "axiom_result_selection": {
           "output": "us:statutes/26/6401#income_tax",
           "strategy": "min"
@@ -23386,156 +23282,6 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-tax-unit-7176",
-      "concept": "us:tax/federal-income-tax#liability",
-      "description": "Federal income tax liability",
-      "difference": 92.53341802978503,
-      "kind": "amount_difference",
-      "left": 8244.713105529785,
-      "parent": null,
-      "pregnant_head": null,
-      "right": 8152.1796875,
-      "scenario": null,
-      "tolerance": 15,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-7176",
-      "concept": "us:tax/federal-income-tax#taxable_income",
-      "description": "Federal taxable income",
-      "difference": 771.1144210815401,
-      "kind": "amount_difference",
-      "left": 77005.94254608154,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "right": 76234.828125,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-7176",
-      "concept": "us:tax/federal-income-tax#tax_before_credits",
-      "description": "Federal tax before credits",
-      "difference": 92.53341802978503,
-      "kind": "amount_difference",
-      "left": 8744.713105529785,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "right": 8652.1796875,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-10590",
-      "concept": "us:tax/federal-income-tax#liability",
-      "description": "Federal income tax liability",
-      "difference": 169.43749218749872,
-      "kind": "amount_difference",
-      "left": 46015.6367109375,
-      "parent": null,
-      "pregnant_head": null,
-      "right": 45846.19921875,
-      "scenario": null,
-      "tolerance": 15,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-10590",
-      "concept": "us:tax/federal-income-tax#taxable_income",
-      "description": "Federal taxable income",
-      "difference": 541.58203125,
-      "kind": "amount_difference",
-      "left": 222901.50390625,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "right": 222359.921875,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-10590",
-      "concept": "us:tax/federal-income-tax#tax_before_credits",
-      "description": "Federal tax before credits",
-      "difference": 173.3054687499971,
-      "kind": "amount_difference",
-      "left": 45975.48125,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "right": 45802.17578125,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-20270",
-      "concept": "us:tax/federal-income-tax#taxable_income",
-      "description": "Federal taxable income",
-      "difference": -8.49497516574047,
-      "kind": "amount_difference",
-      "left": 11732.93568889676,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "right": 11741.4306640625,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-25986",
-      "concept": "us:tax/federal-income-tax#liability",
-      "description": "Federal income tax liability",
-      "difference": 588.1096105194083,
-      "kind": "amount_difference",
-      "left": 18981.59203239441,
-      "parent": null,
-      "pregnant_head": null,
-      "right": 18393.482421875,
-      "scenario": null,
-      "tolerance": 15,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-25986",
-      "concept": "us:tax/federal-income-tax#taxable_income",
-      "description": "Federal taxable income",
-      "difference": 2673.2195434570312,
-      "kind": "amount_difference",
-      "left": 138937.14141845703,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "right": 136263.921875,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-25986",
-      "concept": "us:tax/federal-income-tax#tax_before_credits",
-      "description": "Federal tax before credits",
-      "difference": 588.1086808776854,
-      "kind": "amount_difference",
-      "left": 19963.208290252685,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "right": 19375.099609375,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-tax-unit-50124",
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
@@ -23569,9 +23315,9 @@
       "case_id": "ecps-tax-unit-64926",
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
-      "difference": 3848.4219460160093,
+      "difference": 7387.09447347383,
       "kind": "amount_difference",
-      "left": 97430.53913351601,
+      "left": 100969.21166097383,
       "parent": null,
       "pregnant_head": null,
       "right": 93582.1171875,
@@ -23584,9 +23330,9 @@
       "case_id": "ecps-tax-unit-64926",
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
-      "difference": 10995.47831674217,
+      "difference": 21105.971252335934,
       "kind": "amount_difference",
-      "left": 369814.79081674217,
+      "left": 379925.28375233593,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "right": 358819.3125,
@@ -23599,9 +23345,9 @@
       "case_id": "ecps-tax-unit-64926",
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
-      "difference": 3848.4232702347654,
+      "difference": 7387.095797692571,
       "kind": "amount_difference",
-      "left": 94944.37639523477,
+      "left": 98483.04892269257,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "right": 91095.953125,
@@ -23756,39 +23502,39 @@
     "comparison_count": 5691,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 5662,
-    "mismatch_count": 29,
+    "match_count": 5672,
+    "mismatch_count": 19,
     "mismatches_by_concept": [
       {
-        "count": 10,
+        "count": 7,
         "value": "us:tax/federal-income-tax#liability"
       },
       {
-        "count": 10,
+        "count": 7,
         "value": "us:tax/federal-income-tax#tax_before_credits"
       },
       {
-        "count": 9,
+        "count": 5,
         "value": "us:tax/federal-income-tax#taxable_income"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 29,
+        "count": 19,
         "value": "amount_difference"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 29,
+        "count": 19,
         "value": null
       }
     ],
     "weighted": {
       "comparison_weight": 1419328122.625,
-      "match_rate": 99.605367,
-      "match_weight": 1413726985.671875,
-      "mismatch_weight": 5601136.953125
+      "match_rate": 99.718119,
+      "match_weight": 1415327310.515625,
+      "mismatch_weight": 4000812.109375
     }
   }
 }

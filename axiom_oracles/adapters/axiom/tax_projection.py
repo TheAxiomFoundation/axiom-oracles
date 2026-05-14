@@ -230,6 +230,13 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         source="H.R.1 (119th Congress), section 70105",
         formula="400",
     ),
+    _generated_parameter_rule(
+        "self_employment_net_earnings_exemption",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 1402(b)(2)",
+        formula="400",
+    ),
     _generated_tax_unit_rule(
         "ctc_refundable_phase_in_threshold",
         dtype="Money",
@@ -479,7 +486,7 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="Oracle comparison bridge exposing 26 USC 164(f) above-the-line deduction",
-        formula="self_employment_tax_deduction",
+        formula="self_employment_tax_ald_for_agi",
     ),
     _generated_tax_unit_rule(
         "taxable_earned_income_under_section_32",
@@ -560,7 +567,96 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
     ),
     _generated_data_relation_rule(
         "business_income_of_tax_unit",
-        source="Oracle comparison bridge relating tax-unit filers to person-level 26 USC 199A income leaves",
+        source="Oracle comparison bridge relating tax-unit members to person-level 26 USC 199A income leaves",
+    ),
+    _generated_person_rule(
+        "person_self_employment_net_earnings_before_paragraph_12",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1402(a) to person-level ECPS self-employment leaves",
+        formula="max(0, person_self_employment_income_for_qbid)",
+    ),
+    _generated_person_rule(
+        "person_self_employment_net_earnings_after_paragraph_12",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1402(a)(12) to person-level ECPS self-employment leaves",
+        formula=(
+            "person_self_employment_net_earnings_before_paragraph_12 "
+            "* (1 - (self_employment_tax_equivalent_deduction_fraction "
+            "* (self_employment_oasdi_tax_rate "
+            "+ self_employment_hospital_insurance_tax_rate)))"
+        ),
+    ),
+    _generated_person_rule(
+        "person_taxable_self_employment_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1402(b)(2) to person-level ECPS self-employment leaves",
+        formula=(
+            "if person_self_employment_net_earnings_after_paragraph_12 "
+            "< self_employment_net_earnings_exemption: "
+            "0 "
+            "else: person_self_employment_net_earnings_after_paragraph_12"
+        ),
+    ),
+    _generated_person_rule(
+        "person_social_security_taxable_self_employment_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying the 26 USC 1401(a) wage-base interaction to person-level ECPS leaves",
+        formula=(
+            "min("
+            "person_taxable_self_employment_income, "
+            "max(0, social_security_wage_base - employee_payroll_wages)"
+            ")"
+        ),
+    ),
+    _generated_person_rule(
+        "person_self_employment_oasdi_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1401(a) to person-level ECPS self-employment leaves",
+        formula=(
+            "person_social_security_taxable_self_employment_income "
+            "* self_employment_oasdi_tax_rate"
+        ),
+    ),
+    _generated_person_rule(
+        "person_self_employment_hospital_insurance_tax",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 1401(b)(1) to person-level ECPS self-employment leaves",
+        formula=(
+            "person_taxable_self_employment_income "
+            "* self_employment_hospital_insurance_tax_rate"
+        ),
+    ),
+    _generated_person_rule(
+        "person_self_employment_1401_tax_before_additional_medicare",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge summing 26 USC 1401(a) and (b)(1) person-level self-employment taxes",
+        formula=(
+            "person_self_employment_oasdi_tax "
+            "+ person_self_employment_hospital_insurance_tax"
+        ),
+    ),
+    _generated_person_rule(
+        "person_self_employment_tax_ald_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 164(f) to person-level self-employment taxes for AGI and QBI",
+        formula=(
+            "person_self_employment_1401_tax_before_additional_medicare "
+            "* self_employment_tax_deduction_fraction"
+        ),
+    ),
+    _generated_person_rule(
+        "person_has_self_employment_tax_ald_for_qbid",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying tax-unit members with person-level 26 USC 164(f) deductions",
+        formula="person_self_employment_tax_ald_for_qbid > 0",
     ),
     _generated_person_rule(
         "business_income_for_qbid",
@@ -571,7 +667,8 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
             "max("
             "0, "
             "person_self_employment_income_for_qbid "
-            "+ person_rental_income_for_qbid"
+            "+ person_rental_income_for_qbid "
+            "- person_self_employment_tax_ald_for_qbid"
             ")"
         ),
     ),
@@ -593,7 +690,20 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
             "business_income_of_tax_unit, "
             "business_income_for_qbid, "
             "business_income_counts_for_qbid"
-            ") - self_employment_tax_deduction"
+            ")"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "self_employment_tax_ald_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge summing member-level 26 USC 164(f) deductions for PolicyEngine AGI alignment",
+        formula=(
+            "sum_where("
+            "business_income_of_tax_unit, "
+            "person_self_employment_tax_ald_for_qbid, "
+            "person_has_self_employment_tax_ald_for_qbid"
             ")"
         ),
     ),
@@ -1100,7 +1210,7 @@ US_FEDERAL_INCOME_TAX_PROGRAM_RULES = (
         source="Oracle composition bridge applying 26 USC 164(f) before 26 USC 86",
         formula=(
             "gross_income_before_social_security_benefits "
-            "- self_employment_tax_deduction"
+            "- self_employment_tax_ald_for_agi"
         ),
     ),
     _generated_tax_unit_rule(
@@ -1948,7 +2058,6 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
     records = []
     for relation_ref in _RELATION_REFS:
         if relation_ref in {
-            "us:tax/federal-income-tax/oracle-bridge#relation.business_income_of_tax_unit",
             "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
         }:
             relation_people = tax_filers

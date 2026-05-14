@@ -230,8 +230,9 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     } == {
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
+        ("person-3", "tax_unit"),
     }
-    assert len(projected.metadata["axiom_relations"]) == 15
+    assert len(projected.metadata["axiom_relations"]) == 16
     assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_result_selection" not in projected.metadata
 
@@ -380,6 +381,82 @@ def test_axiom_tax_projection_routes_self_employment_through_sections_1402_and_1
         "tax_unit",
         "us:statutes/26/63#input.deduction_provided_in_section_199A",
     ) not in by_key
+
+
+def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qbi() -> None:
+    case = Case(
+        case_id="dependent-self-employment",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 56,
+                    Concepts.YEARLY_EARNED_INCOME: 245_994.781,
+                },
+            ),
+            Entity(
+                "person-2",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 23,
+                    Concepts.SELF_EMPLOYMENT_INCOME: 2_004.071,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+    qbi_relation_rows = {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
+        if record["name"]
+        == "us:tax/federal-income-tax/oracle-bridge#relation."
+        "business_income_of_tax_unit"
+    }
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+    }
+
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/1402/a#input."
+            "self_employment_trade_or_business_gross_income",
+        )
+    ] == 0
+    assert by_key[
+        (
+            "person-2",
+            "us:tax/federal-income-tax/oracle-bridge#input."
+            "person_self_employment_income_for_qbid",
+        )
+    ] == 2_004.071
+    assert qbi_relation_rows == {
+        ("person-1", "tax_unit"),
+        ("person-2", "tax_unit"),
+    }
+    assert "person_self_employment_tax_ald_for_qbid" in generated_rules_by_name
+    assert "self_employment_tax_ald_for_agi" in generated_rules_by_name
+    assert "self_employment_tax_ald_for_agi" in (
+        generated_rules_by_name[
+            "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933"
+        ]["versions"][0]["formula"]
+    )
+    qualified_business_income_formula = generated_rules_by_name[
+        "qualified_business_income"
+    ]["versions"][0]["formula"]
+    assert "person_self_employment_tax_ald_for_qbid" in (
+        generated_rules_by_name["business_income_for_qbid"]["versions"][0]["formula"]
+    )
+    assert "- self_employment_tax_deduction" not in qualified_business_income_formula
 
 
 def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> None:
