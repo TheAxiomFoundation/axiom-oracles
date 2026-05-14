@@ -506,6 +506,23 @@
         ]
       },
       {
+        "id": "us:statutes/7/2014/e/6/A#snap_excess_shelter_income_share_threshold",
+        "name": "snap_excess_shelter_income_share_threshold",
+        "unit": null,
+        "indexed_by": null,
+        "versions": [
+          {
+            "effective_from": "2008-10-01",
+            "values": {
+              "0": {
+                "kind": "decimal",
+                "value": "0.5"
+              }
+            }
+          }
+        ]
+      },
+      {
         "id": "us:statutes/7/2017/a#snap_household_food_contribution_rate",
         "name": "snap_household_food_contribution_rate",
         "unit": null,
@@ -2617,7 +2634,7 @@
         "expr": {
           "kind": "comparison",
           "left": {
-            "kind": "derived",
+            "kind": "input",
             "name": "snap_net_income"
           },
           "op": "lte",
@@ -3388,9 +3405,9 @@
         }
       },
       {
-        "id": "us:statutes/7/2014/e/6/A#snap_net_income_pre_shelter",
-        "name": "snap_net_income_pre_shelter",
-        "entity": "Household",
+        "id": "us:statutes/7/2014/e/6/A#snap_excess_shelter_expense_deduction",
+        "name": "snap_excess_shelter_expense_deduction",
+        "entity": "SnapUnit",
         "dtype": "decimal",
         "unit": "USD",
         "period": "Month",
@@ -3410,74 +3427,26 @@
             {
               "kind": "sub",
               "left": {
-                "kind": "sub",
+                "kind": "input",
+                "name": "snap_household_shelter_expenses_not_paid_by_third_party"
+              },
+              "right": {
+                "kind": "mul",
                 "left": {
-                  "kind": "sub",
-                  "left": {
-                    "kind": "sub",
-                    "left": {
-                      "kind": "sub",
-                      "left": {
-                        "kind": "input",
-                        "name": "snap_monthly_household_income"
-                      },
-                      "right": {
-                        "kind": "derived",
-                        "name": "snap_standard_deduction"
-                      }
-                    },
-                    "right": {
-                      "kind": "derived",
-                      "name": "snap_earned_income_deduction"
+                  "kind": "parameter_lookup",
+                  "parameter": "snap_excess_shelter_income_share_threshold",
+                  "index": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "integer",
+                      "value": 0
                     }
-                  },
-                  "right": {
-                    "kind": "derived",
-                    "name": "dependent_care_deduction"
                   }
                 },
                 "right": {
-                  "kind": "derived",
-                  "name": "child_support_deduction"
+                  "kind": "input",
+                  "name": "snap_household_income_after_other_deductions"
                 }
-              },
-              "right": {
-                "kind": "derived",
-                "name": "medical_deduction"
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "us:statutes/7/2014/e/6/A#snap_net_income",
-        "name": "snap_net_income",
-        "entity": "Household",
-        "dtype": "decimal",
-        "unit": "USD",
-        "period": "Month",
-        "source": "7 USC 2014(d) and (e)",
-        "source_url": null,
-        "semantics": "scalar",
-        "expr": {
-          "kind": "max",
-          "items": [
-            {
-              "kind": "literal",
-              "value": {
-                "kind": "decimal",
-                "value": "0"
-              }
-            },
-            {
-              "kind": "sub",
-              "left": {
-                "kind": "derived",
-                "name": "snap_net_income_pre_shelter"
-              },
-              "right": {
-                "kind": "derived",
-                "name": "snap_excess_shelter_deduction_for_net_income"
               }
             }
           ]
@@ -3504,7 +3473,7 @@
               }
             },
             {
-              "kind": "derived",
+              "kind": "input",
               "name": "snap_net_income"
             }
           ]
@@ -15123,6 +15092,7 @@
       "snap_educational_income_prorated_under_4_402_2",
       "snap_eitc_resource_exemption",
       "snap_excess_medical_deduction_for_net_income",
+      "snap_excess_shelter_expense_deduction",
       "snap_farm_self_employment_property_resource_exemption",
       "snap_federal_energy_assistance_income_exclusion",
       "snap_federal_tax_refund_resource_exemption",
@@ -15194,6 +15164,11 @@
       "snap_minimum_benefit",
       "snap_monthly_income_conversion_factor",
       "snap_converted_monthly_income",
+      "snap_net_income_for_allotment",
+      "snap_household_food_contribution",
+      "snap_allotment_before_minimum",
+      "snap_application_denied_for_zero_benefit",
+      "snap_initial_month_prorated_allotment",
       "snap_net_income_limit_100_percent_fpl_48_states_dc",
       "co_snap_expanded_categorical_gross_income_limit",
       "snap_new_source_income_not_timely_available",
@@ -15277,9 +15252,12 @@
       "snap_ssn_eligible",
       "snap_standard_deduction_48_states_dc",
       "snap_standard_deduction",
-      "snap_net_income_pre_shelter",
       "snap_standard_gross_income_eligible",
       "passes_gross_income_test",
+      "snap_standard_net_income_eligible",
+      "passes_net_income_test",
+      "snap_income_eligible",
+      "snap_standard_income_eligible",
       "snap_standard_utility_allowance",
       "snap_striker_income_for_eligibility",
       "snap_student_age_exemption",
@@ -15306,19 +15284,9 @@
       "snap_net_income_before_shelter",
       "snap_excess_shelter_cost",
       "snap_excess_shelter_deduction_for_net_income",
-      "snap_net_income",
-      "snap_net_income_for_allotment",
-      "snap_household_food_contribution",
-      "snap_allotment_before_minimum",
-      "snap_application_denied_for_zero_benefit",
-      "snap_initial_month_prorated_allotment",
       "snap_net_monthly_income",
       "snap_calculated_monthly_allotment_before_minimums",
       "snap_monthly_allotment",
-      "snap_standard_net_income_eligible",
-      "passes_net_income_test",
-      "snap_income_eligible",
-      "snap_standard_income_eligible",
       "snap_transferred_resource_excess_amount",
       "snap_resource_transfer_disqualification_months",
       "snap_transferred_title_iv_a_child_support_exclusion",
