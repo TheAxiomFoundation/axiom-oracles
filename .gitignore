@@ -6,5 +6,6 @@ __pycache__/
 .env
 *.pyc
 reports/*.json
+reports/*.log
 data/.cache/
 data/county_fips_2020.csv.gz

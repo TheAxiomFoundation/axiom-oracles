@@ -72,7 +72,7 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:statutes/26/63#taxable_income
+      axiom: us:tax/federal-income-tax/oracle-bridge#taxable_income
       policyengine: taxable_income
       taxsim: v18
 
@@ -99,13 +99,13 @@ concepts:
       taxsim: v25
 
   us:tax/federal-income-tax#ctc:
-    description: Child Tax Credit (non-refundable)
+    description: Child Tax Credit value
     category: tax
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:statutes/26/24/h#ctc
+      axiom: us:tax/federal-income-tax/oracle-bridge#ctc_value
       policyengine: ctc_value
       taxsim: v22
 

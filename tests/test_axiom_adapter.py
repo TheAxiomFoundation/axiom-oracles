@@ -6,11 +6,12 @@ import yaml
 
 from axiom_oracles.adapters.axiom import (
     AxiomRulesRunner,
+    US_FEDERAL_INCOME_TAX_BRIDGE_TARGET,
     US_FEDERAL_INCOME_TAX_IMPORTS,
     US_FEDERAL_INCOME_TAX_PROGRAM_RULES,
 )
 from axiom_oracles.cli import _build_runner
-from axiom_oracles.comparison.mappings import comparable_mappings
+from axiom_oracles.comparison.mappings import comparable_mappings, load_program_mappings
 from axiom_oracles.core.case import Case, Concepts
 
 
@@ -512,6 +513,107 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
     assert [call[0][1] for call in calls] == ["compile", "run-compiled"]
 
 
+def test_axiom_runner_writes_generated_program_under_canonical_target(
+    tmp_path: Path,
+) -> None:
+    calls = []
+
+    def fake_run(args, **kwargs):
+        calls.append((args, kwargs))
+        if args[1] == "compile":
+            program_path = Path(args[args.index("--program") + 1])
+            assert program_path.parts[-4:] == (
+                "rulespec-us",
+                "tax",
+                "federal-income-tax",
+                "oracle-bridge.yaml",
+            )
+            output_path = Path(args[args.index("--output") + 1])
+            output_path.write_text(
+                json.dumps(
+                    {
+                        "program": {
+                            "derived": [
+                                {
+                                    "id": (
+                                        "us:tax/federal-income-tax/oracle-bridge"
+                                        "#taxable_income"
+                                    ),
+                                    "name": "taxable_income",
+                                    "expr": {"kind": "integer", "value": 0},
+                                }
+                            ],
+                            "parameters": [],
+                            "relations": [],
+                        },
+                        "metadata": {},
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        request = json.loads(kwargs["input"])
+        assert request["queries"][0]["outputs"] == [
+            "us:tax/federal-income-tax/oracle-bridge#taxable_income"
+        ]
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [
+                        {
+                            "outputs": {
+                                "us:tax/federal-income-tax/oracle-bridge#taxable_income": {
+                                    "kind": "scalar",
+                                    "value": {
+                                        "kind": "integer",
+                                        "value": 0,
+                                    },
+                                }
+                            }
+                        }
+                    ]
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        binary_path=tmp_path / "axiom-rules",
+        program_imports=("us:statutes/26/example",),
+        program_rules=(
+            {
+                "name": "taxable_income",
+                "kind": "derived",
+                "entity": "TaxUnit",
+                "dtype": "Money",
+                "period": "Year",
+                "unit": "USD",
+                "source": "test bridge",
+                "versions": [
+                    {
+                        "effective_from": "2026-01-01",
+                        "formula": "0",
+                    }
+                ],
+            },
+        ),
+        generated_program_target=US_FEDERAL_INCOME_TAX_BRIDGE_TARGET,
+        subprocess_run=fake_run,
+    )
+
+    [result] = runner.run_cases(
+        [Case(case_id="case-1", period="2026")],
+        ["us:tax/federal-income-tax/oracle-bridge#taxable_income"],
+    )
+
+    assert result.errors == ()
+    assert result.values == {
+        "us:tax/federal-income-tax/oracle-bridge#taxable_income": 0
+    }
+    assert [call[0][1] for call in calls] == ["compile", "run-compiled"]
+
+
 def test_axiom_tax_concept_is_comparable_to_policyengine() -> None:
     concept_ids = {
         mapping.concept_id
@@ -530,6 +632,17 @@ def test_axiom_tax_concept_is_comparable_to_policyengine() -> None:
     assert Concepts.EITC in concept_ids
     assert Concepts.AMT in concept_ids
     assert Concepts.CTC in concept_ids
+
+
+def test_federal_ctc_component_maps_to_total_ctc_value() -> None:
+    mapping = next(
+        mapping
+        for mapping in load_program_mappings()
+        if mapping.concept_id == Concepts.CTC
+    )
+
+    assert mapping.targets["axiom"] == "us:tax/federal-income-tax/oracle-bridge#ctc_value"
+    assert mapping.targets["policyengine"] == "ctc_value"
 
 
 def test_cli_builds_axiom_runner() -> None:
@@ -560,10 +673,85 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     assert isinstance(runner, AxiomRulesRunner)
     assert runner.program_imports
     assert runner.program_rules == US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+    assert runner.generated_program_target == US_FEDERAL_INCOME_TAX_BRIDGE_TARGET
     assert runner.prune_unsupported_inputs
     assert (
         "us:policies/irs/rev-proc-2025-32/standard-deduction"
         in US_FEDERAL_INCOME_TAX_IMPORTS
     )
+    assert "us:statutes/26/86" in US_FEDERAL_INCOME_TAX_IMPORTS
+    assert "us:statutes/26/1402/a" in US_FEDERAL_INCOME_TAX_IMPORTS
+    assert "us:statutes/26/164/f" in US_FEDERAL_INCOME_TAX_IMPORTS
+    generated_rule_names = {
+        rule["name"] for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+    }
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+    }
+    assert "self_employment_income" in generated_rule_names
+    assert "self_employment_1401_taxes" in generated_rule_names
+    assert "self_employment_tax_ald" in generated_rule_names
+    assert "taxable_earned_income_under_section_32" in generated_rule_names
+    assert (
+        generated_rules_by_name["self_employment_income"]["versions"][0]["formula"]
+        == "max(0, net_earnings_from_self_employment)"
+    )
+    assert "additional_senior_deduction" in generated_rule_names
+    assert "additional_senior_deduction_magi" in generated_rule_names
+    assert "ctc_value" in generated_rule_names
+    assert (
+        generated_rules_by_name["ctc_value"]["versions"][0]["formula"]
+        == "min(ctc_credit_without_subsection_and_26a_limit, ctc_refundable_limitation_increase_amount)"
+    )
+    assert "business_income_of_tax_unit" in generated_rule_names
+    assert "business_income_for_qbid" in generated_rule_names
+    assert "person_adjusted_earnings_for_eitc" in generated_rule_names
+    assert "qualified_business_income_deduction_phaseout_rate" in generated_rule_names
+    assert "qualified_business_income_deduction" in generated_rule_names
+    assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
+        generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
+            0
+        ]["formula"]
+    )
+    assert "qualified_business_income_deduction_phaseout_rate" in (
+        generated_rules_by_name["qualified_business_income_deduction_before_floor"][
+            "versions"
+        ][0]["formula"]
+    )
+    assert "sum_where(business_income_of_tax_unit" in (
+        generated_rules_by_name["qualified_business_income"]["versions"][0]["formula"]
+    )
+    assert "amt_part_iii_required" in generated_rule_names
+    assert "amt_tax_including_capital_gains" in generated_rule_names
+    assert "alaska_permanent_fund_dividend" in generated_rule_names
+    assert "alaska_permanent_fund_dividend_amount" in generated_rule_names
+    assert "capital_gains_worksheet_line_10" in generated_rule_names
+    assert "capital_gains_worksheet_line_13" in generated_rule_names
+    assert "capital_gains_worksheet_line_14" in generated_rule_names
+    assert "capital_gains_worksheet_line_19" in generated_rule_names
+    assert "capital_gains_tax_qualified_dividend_income" in (
+        generated_rules_by_name["capital_gains_worksheet_line_10"]["versions"][0][
+            "formula"
+        ]
+    )
+    assert "capital_gains_worksheet_line_10 > 0" in (
+        generated_rules_by_name["amt_part_iii_required"]["versions"][0]["formula"]
+    )
+    assert "amt_capital_gain_line_31_tax" in (
+        generated_rules_by_name["amt_tax_including_capital_gains"]["versions"][0][
+            "formula"
+        ]
+    )
+    assert (
+        "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
+        in generated_rule_names
+    )
+    assert (
+        generated_rules_by_name[
+            "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
+        ]["versions"][0]["formula"]
+        == "capital_gains_tax_short_term_capital_gains + capital_gains_tax_long_term_capital_gains"
+    )
+    assert "deduction_provided_in_section_199A" in generated_rule_names
     assert "us:statutes/26/24/d" not in US_FEDERAL_INCOME_TAX_IMPORTS
     assert "us:statutes/26/63" not in US_FEDERAL_INCOME_TAX_IMPORTS

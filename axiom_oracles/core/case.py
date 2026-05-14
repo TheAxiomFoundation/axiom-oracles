@@ -77,6 +77,7 @@ class Concepts:
 
     # Income components (person-level, annual)
     DIVIDEND_INCOME = "axiom:income/person#dividend_income"
+    QUALIFIED_DIVIDEND_INCOME = "axiom:income/person#qualified_dividend_income"
     INTEREST_INCOME = "axiom:income/person#interest_income"
     SHORT_TERM_CAPITAL_GAINS = "axiom:income/person#short_term_capital_gains"
     LONG_TERM_CAPITAL_GAINS = "axiom:income/person#long_term_capital_gains"

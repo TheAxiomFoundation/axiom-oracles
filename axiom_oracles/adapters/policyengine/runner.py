@@ -27,6 +27,7 @@ _STATE_SCOPE_FEDERAL_TAX_VARIABLES = {
 
 _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.DIVIDEND_INCOME: "dividend_income",
+    Concepts.QUALIFIED_DIVIDEND_INCOME: "qualified_dividend_income",
     Concepts.INTEREST_INCOME: "taxable_interest_income",
     Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
     Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
@@ -71,6 +72,7 @@ _HEAD_RELATIONS = {
 _DEPENDENT_RELATIONS = {
     "child",
     "daughter",
+    "dependent",
     "foster_child",
     "grandchild",
     "son",
