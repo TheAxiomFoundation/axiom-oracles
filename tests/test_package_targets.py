@@ -1,4 +1,5 @@
 from axiom_oracles.adapters.prd import PrdPackageRunner
+from axiom_oracles.adapters.axiom import AxiomRulesRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
 from axiom_oracles.cli import (
@@ -67,6 +68,21 @@ def test_cli_builds_package_target_runners() -> None:
     assert isinstance(policyengine_for_taxsim, PolicyEngineTaxsimRunner)
 
 
+def test_cli_passes_axiom_batch_size_to_runner() -> None:
+    runner = _build_runner(
+        "axiom",
+        "api",
+        None,
+        None,
+        (Concepts.FEDERAL_INCOME_TAX,),
+        axiom_batch_size=123,
+        paired_engine="policyengine",
+    )
+
+    assert isinstance(runner, AxiomRulesRunner)
+    assert runner.batch_size == 123
+
+
 def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     case = Case(
         case_id="case-1",
@@ -96,6 +112,7 @@ def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program() -> None:
     case = Case(
         case_id="case-1",
         period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "08"}},
         entities=(
             Entity(
                 "person-1",
@@ -169,6 +186,77 @@ def test_cli_prepares_axiom_tax_inputs_for_state_income_tax() -> None:
     assert projected.metadata["axiom_input_record_overlays"]
 
 
+def test_cli_filters_state_tax_dependent_federal_tax_to_encoded_state() -> None:
+    co_case = Case(
+        case_id="co-federal-tax",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "08"}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+    ca_case = Case(
+        case_id="ca-federal-tax",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "06"}},
+        entities=co_case.entities,
+    )
+
+    prepared = _prepare_cases_for_engines(
+        [co_case, ca_case],
+        {"policyengine", "axiom"},
+        (Concepts.FEDERAL_INCOME_TAX,),
+        axiom_program=None,
+    )
+
+    assert [case.case_id for case in prepared] == ["co-federal-tax"]
+
+
+def test_cli_keeps_scope_free_federal_components_national() -> None:
+    co_case = Case(
+        case_id="co-standard-deduction",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "08"}},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
+                },
+            ),
+        ),
+    )
+    ca_case = Case(
+        case_id="ca-standard-deduction",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "06"}},
+        entities=co_case.entities,
+    )
+
+    prepared = _prepare_cases_for_engines(
+        [co_case, ca_case],
+        {"policyengine", "axiom"},
+        (Concepts.STANDARD_DEDUCTION,),
+        axiom_program=None,
+    )
+
+    assert [case.case_id for case in prepared] == [
+        "co-standard-deduction",
+        "ca-standard-deduction",
+    ]
+
+
 def test_cli_preparation_does_not_use_oracles_as_input_providers(monkeypatch) -> None:
     def fail_if_called(*_args, **_kwargs) -> None:
         raise AssertionError("oracle runner was used during input preparation")
@@ -201,7 +289,7 @@ def test_cli_preparation_does_not_use_oracles_as_input_providers(monkeypatch) ->
     [projected] = _prepare_cases_for_engines(
         [case],
         {"axiom", "policyengine", "taxsim"},
-        (Concepts.FEDERAL_INCOME_TAX,),
+        (Concepts.STANDARD_DEDUCTION,),
         axiom_program=None,
     )
 

@@ -172,6 +172,13 @@ GEOID (`{type: census_place, geoid: "3651000"}`), while PolicyEngine and Axiom
 are scoped to the US. Comparing ACCESS NYC to PolicyEngine therefore resolves
 to the NYC scope automatically.
 
+Parent concepts compare only the parent output unless `--include-components` is
+supplied. For example, `--concept us:tax/federal-income-tax#liability` compares
+federal liability only; add `--include-components` when you also want mapped
+breakdowns like standard deduction, taxable income, EITC, CTC, and AMT.
+Use `--axiom-batch-size` to tune large RuleSpec runs over the full Enhanced CPS
+population; the default favors bounded Rust execution over maximum throughput.
+
 Reports include per-case mismatches plus weighted aggregate summaries when the
 population supplies household weights. The JSON report's `summary.weighted`
 block gives weighted match/mismatch totals, and `aggregates` gives per-concept

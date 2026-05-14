@@ -216,6 +216,7 @@ def comparable_mappings(
     target_scopes: dict[str, GeographyScope] | None = None,
     concepts: set[str] | None = None,
     categories: set[str] | None = None,
+    include_components: bool = False,
 ) -> list[ProgramMapping]:
     selected = []
     selected_ids: set[str] = set()
@@ -261,11 +262,12 @@ def comparable_mappings(
         if not _engine_ok(mapping):
             continue
         _append(mapping)
-        for component_id in mapping.components:
-            component = by_concept.get(component_id)
-            if component is None or not _engine_ok(component):
-                continue
-            _append(component)
+        if include_components:
+            for component_id in mapping.components:
+                component = by_concept.get(component_id)
+                if component is None or not _engine_ok(component):
+                    continue
+                _append(component)
     return selected
 
 

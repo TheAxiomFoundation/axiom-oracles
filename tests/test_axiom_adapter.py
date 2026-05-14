@@ -636,10 +636,11 @@ def test_axiom_tax_concept_is_comparable_to_policyengine() -> None:
             "axiom",
             "policyengine",
             categories={"tax"},
+            include_components=True,
         )
     }
 
-    # FIT liability plus its decomposed comparison targets.
+    # FIT liability plus its explicit decomposed comparison targets.
     assert Concepts.FEDERAL_INCOME_TAX in concept_ids
     assert Concepts.STANDARD_DEDUCTION in concept_ids
     assert Concepts.TAXABLE_INCOME in concept_ids

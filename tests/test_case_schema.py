@@ -118,6 +118,37 @@ def test_component_concepts_can_be_selected_directly() -> None:
     assert [mapping.concept_id for mapping in mappings] == [Concepts.EITC]
 
 
+def test_parent_concepts_do_not_expand_components_by_default() -> None:
+    mappings = comparable_mappings(
+        "axiom",
+        "policyengine",
+        concepts={Concepts.FEDERAL_INCOME_TAX},
+    )
+
+    assert [mapping.concept_id for mapping in mappings] == [
+        Concepts.FEDERAL_INCOME_TAX
+    ]
+
+
+def test_parent_concepts_expand_components_when_requested() -> None:
+    mappings = comparable_mappings(
+        "axiom",
+        "policyengine",
+        concepts={Concepts.FEDERAL_INCOME_TAX},
+        include_components=True,
+    )
+
+    assert [mapping.concept_id for mapping in mappings] == [
+        Concepts.FEDERAL_INCOME_TAX,
+        Concepts.STANDARD_DEDUCTION,
+        Concepts.TAXABLE_INCOME,
+        Concepts.TAX_BEFORE_CREDITS,
+        Concepts.EITC,
+        Concepts.CTC,
+        Concepts.AMT,
+    ]
+
+
 def test_accessnyc_targets_are_locale_filtered() -> None:
     mappings = comparable_mappings(
         "accessnyc",

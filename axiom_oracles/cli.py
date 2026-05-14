@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import gc
 import json
 from pathlib import Path
 
@@ -48,6 +49,13 @@ DEFAULT_PERIOD = "2026-05"
 TAXSIM_DEFAULT_PERIOD = "2024"
 
 _SNAP_CONCEPTS = frozenset({Concepts.SNAP_BENEFIT, Concepts.SNAP_ELIGIBLE})
+_STATE_TAX_DEPENDENT_FEDERAL_TAX_CONCEPTS = frozenset(
+    {
+        Concepts.FEDERAL_INCOME_TAX,
+        Concepts.TAXABLE_INCOME,
+        Concepts.TAX_BEFORE_CREDITS,
+    }
+)
 
 
 def _wants_snap(concept_ids: tuple[str, ...]) -> bool:
@@ -56,6 +64,10 @@ def _wants_snap(concept_ids: tuple[str, ...]) -> bool:
 
 def _wants_tax(concept_ids: tuple[str, ...]) -> bool:
     return any(c.startswith("us:tax/") for c in concept_ids)
+
+
+def _wants_state_tax_dependent_federal_tax(concept_ids: tuple[str, ...]) -> bool:
+    return any(c in _STATE_TAX_DEPENDENT_FEDERAL_TAX_CONCEPTS for c in concept_ids)
 
 
 @click.group()
@@ -122,6 +134,11 @@ def cli() -> None:
     help="Limit default concepts to mapping categories such as food or health.",
 )
 @click.option(
+    "--include-components",
+    is_flag=True,
+    help="Also compare component concepts declared under selected parent concepts.",
+)
+@click.option(
     "--locale",
     "locales",
     multiple=True,
@@ -163,6 +180,13 @@ def cli() -> None:
     help="Default Axiom query entity id when a case does not override it.",
 )
 @click.option(
+    "--axiom-batch-size",
+    type=click.IntRange(min=1, max=20_000),
+    default=5_000,
+    show_default=True,
+    help="Number of cases per Axiom run-compiled request.",
+)
+@click.option(
     "--output",
     "output_path",
     type=click.Path(dir_okay=False, path_type=Path),
@@ -179,6 +203,7 @@ def compare(
     ecps_dataset: str | None,
     concepts: tuple[str, ...],
     categories: tuple[str, ...],
+    include_components: bool,
     locales: tuple[str, ...],
     accessnyc_mode: str,
     accessnyc_rules_dir: Path | None,
@@ -186,6 +211,7 @@ def compare(
     axiom_program: Path | None,
     axiom_engine_binary: Path | None,
     axiom_entity_id: str,
+    axiom_batch_size: int,
     output_path: Path | None,
     json_output: bool,
 ) -> None:
@@ -194,112 +220,122 @@ def compare(
     if left == right:
         raise click.ClickException("Choose two different systems to compare.")
 
-    period = _resolve_period(period, left, right)
-    comparison_scope = comparison_scope_for_targets(left, right)
-    suite_name = _resolve_suite_name(suite, left, right)
-    cases = _load_population_cases(
-        population=population,
-        suite_name=suite_name,
-        scope=comparison_scope,
-        period=period,
-        sample_size=sample_size,
-        ecps_dataset=ecps_dataset,
-        categories=categories,
-        concepts=concepts,
-    )
-    if not cases:
-        raise click.ClickException(
-            "No cases found for the resolved target scope and population."
-        )
-    case_locales = set(locales) if locales else _case_locales(cases)
-    mappings = comparable_mappings(
-        left,
-        right,
-        locales=case_locales,
-        scope=comparison_scope,
-        concepts=set(concepts) or None,
-        categories=set(categories) or None,
-    )
+    gc_was_enabled = gc.isenabled()
+    if gc_was_enabled:
+        gc.disable()
     try:
-        mappings = _filter_for_accessnyc_mode(
-            mappings,
+        period = _resolve_period(period, left, right)
+        comparison_scope = comparison_scope_for_targets(left, right)
+        suite_name = _resolve_suite_name(suite, left, right)
+        cases = _load_population_cases(
+            population=population,
+            suite_name=suite_name,
+            scope=comparison_scope,
+            period=period,
+            sample_size=sample_size,
+            ecps_dataset=ecps_dataset,
+            categories=categories,
+            concepts=concepts,
+        )
+        if not cases:
+            raise click.ClickException(
+                "No cases found for the resolved target scope and population."
+            )
+        case_locales = set(locales) if locales else _case_locales(cases)
+        mappings = comparable_mappings(
             left,
             right,
-            accessnyc_mode,
-            accessnyc_python_path,
+            locales=case_locales,
+            scope=comparison_scope,
+            concepts=set(concepts) or None,
+            categories=set(categories) or None,
+            include_components=include_components,
         )
-    except RuntimeError as exc:
-        raise click.ClickException(str(exc)) from exc
-    if not mappings:
-        raise click.ClickException(
-            "No comparable concepts found for those engines, locales, and filters."
-        )
+        try:
+            mappings = _filter_for_accessnyc_mode(
+                mappings,
+                left,
+                right,
+                accessnyc_mode,
+                accessnyc_python_path,
+            )
+        except RuntimeError as exc:
+            raise click.ClickException(str(exc)) from exc
+        if not mappings:
+            raise click.ClickException(
+                "No comparable concepts found for those engines, locales, and filters."
+            )
 
-    concept_ids = tuple(mapping.concept_id for mapping in mappings)
-    cases = [replace(case, outputs=concept_ids) for case in cases]
-    try:
-        cases = _prepare_cases_for_engines(
-            cases,
-            {left, right},
+        concept_ids = tuple(mapping.concept_id for mapping in mappings)
+        cases = [replace(case, outputs=concept_ids) for case in cases]
+        try:
+            cases = _prepare_cases_for_engines(
+                cases,
+                {left, right},
+                concept_ids,
+                axiom_program=axiom_program,
+            )
+        except RuntimeError as exc:
+            raise click.ClickException(str(exc)) from exc
+        if not cases:
+            raise click.ClickException(
+                "No cases remain after engine-specific preparation filters."
+            )
+
+        left_runner = _build_runner(
+            left,
+            accessnyc_mode,
+            accessnyc_rules_dir,
+            accessnyc_python_path,
             concept_ids,
             axiom_program=axiom_program,
+            axiom_engine_binary=axiom_engine_binary,
+            axiom_entity_id=axiom_entity_id,
+            axiom_batch_size=axiom_batch_size,
+            paired_engine=right,
         )
-    except RuntimeError as exc:
-        raise click.ClickException(str(exc)) from exc
-    if not cases:
-        raise click.ClickException(
-            "No cases remain after engine-specific preparation filters."
+        right_runner = _build_runner(
+            right,
+            accessnyc_mode,
+            accessnyc_rules_dir,
+            accessnyc_python_path,
+            concept_ids,
+            axiom_program=axiom_program,
+            axiom_engine_binary=axiom_engine_binary,
+            axiom_entity_id=axiom_entity_id,
+            axiom_batch_size=axiom_batch_size,
+            paired_engine=left,
         )
 
-    left_runner = _build_runner(
-        left,
-        accessnyc_mode,
-        accessnyc_rules_dir,
-        accessnyc_python_path,
-        concept_ids,
-        axiom_program=axiom_program,
-        axiom_engine_binary=axiom_engine_binary,
-        axiom_entity_id=axiom_entity_id,
-        paired_engine=right,
-    )
-    right_runner = _build_runner(
-        right,
-        accessnyc_mode,
-        accessnyc_rules_dir,
-        accessnyc_python_path,
-        concept_ids,
-        axiom_program=axiom_program,
-        axiom_engine_binary=axiom_engine_binary,
-        axiom_entity_id=axiom_entity_id,
-        paired_engine=left,
-    )
+        try:
+            left_results = left_runner.run_cases(cases, list(concept_ids))
+            right_results = right_runner.run_cases(cases, list(concept_ids))
+        except RuntimeError as exc:
+            raise click.ClickException(str(exc)) from exc
 
-    try:
-        left_results = left_runner.run_cases(cases, list(concept_ids))
-        right_results = right_runner.run_cases(cases, list(concept_ids))
-    except RuntimeError as exc:
-        raise click.ClickException(str(exc)) from exc
+        comparisons = Comparator(mappings).compare(left_results, right_results)
+        report = _comparison_report(
+            suite_name=suite_name,
+            population=population,
+            locales=case_locales,
+            scope=comparison_scope,
+            cases=cases,
+            mappings=mappings,
+            comparisons=comparisons,
+        )
 
-    comparisons = Comparator(mappings).compare(left_results, right_results)
-    report = _comparison_report(
-        suite_name=suite_name,
-        population=population,
-        locales=case_locales,
-        scope=comparison_scope,
-        cases=cases,
-        mappings=mappings,
-        comparisons=comparisons,
-    )
+        if output_path:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
-    if output_path:
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+        if json_output:
+            click.echo(json.dumps(report, indent=2, sort_keys=True))
+            return
 
-    if json_output:
-        click.echo(json.dumps(report, indent=2, sort_keys=True))
-        return
-
-    _echo_comparison_report(report)
+        _echo_comparison_report(report)
+    finally:
+        if gc_was_enabled:
+            gc.enable()
 
 
 @cli.group()
@@ -467,9 +503,13 @@ def _prepare_cases_for_engines(
         and axiom_program is None
         and _wants_tax(concept_ids)
     ):
-        if Concepts.STATE_INCOME_TAX in concept_ids:
+        if (
+            Concepts.STATE_INCOME_TAX in concept_ids
+            or _wants_state_tax_dependent_federal_tax(concept_ids)
+        ):
             # The generated state-income-tax bridge currently implements
-            # Colorado. Keep comparisons scoped to the encoded jurisdiction.
+            # Colorado. Federal taxable-income and liability comparisons also
+            # need the encoded state tax for SALT/itemization resolution.
             prepared = [case for case in prepared if _is_co_household(case)]
         prepared = attach_axiom_tax_inputs(prepared)
         if engines & {"policyengine", "taxsim"}:
@@ -510,6 +550,7 @@ def _build_runner(
     axiom_program: Path | None = None,
     axiom_engine_binary: Path | None = None,
     axiom_entity_id: str = "tax_unit",
+    axiom_batch_size: int = 5_000,
     paired_engine: str | None = None,
 ) -> EngineAdapter:
     if engine == "accessnyc":
@@ -563,6 +604,7 @@ def _build_runner(
             if program_imports
             else None,
             prune_unsupported_inputs=bool(program_imports),
+            batch_size=axiom_batch_size,
         )
     if engine == "taxsim":
         return TaxsimPackageRunner()
