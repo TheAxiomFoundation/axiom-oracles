@@ -1055,6 +1055,28 @@ def test_axiom_tax_projection_derives_additional_senior_deduction_in_bridge() ->
     ) not in by_key
 
 
+def test_axiom_tax_projection_reduces_each_senior_deduction_amount_for_phaseout() -> None:
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_FEDERAL_INCOME_TAX_PROGRAM_RULES
+    }
+    formula = generated_rules_by_name["additional_senior_deduction"]["versions"][0][
+        "formula"
+    ]
+
+    deduction = eval(
+        formula,
+        {"__builtins__": {}},
+        {
+            "max": max,
+            "additional_senior_deduction_amount": 6_000,
+            "additional_senior_deduction_eligible_count": 2,
+            "additional_senior_deduction_phaseout_amount": 600,
+        },
+    )
+
+    assert deduction == 10_800
+
+
 def test_axiom_tax_projection_counts_age_and_blindness_separately() -> None:
     case = Case(
         case_id="senior-blind-filer",
