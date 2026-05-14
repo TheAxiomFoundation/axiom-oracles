@@ -13,7 +13,6 @@ records up via ``case.metadata[AXIOM_INPUT_RECORDS_METADATA_KEY]``.
 """
 from __future__ import annotations
 
-from collections.abc import Mapping
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
