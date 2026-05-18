@@ -1,0 +1,117 @@
+name: FIIT Compare (Axiom vs PolicyEngine)
+
+# Weekly federal individual income tax comparison: Axiom RuleSpec vs
+# PolicyEngine on the Enhanced CPS, via `axiom-encode tax-ecps-compare`.
+#
+# See docs/federal-income-tax-comparison.md for the recipe and known
+# residuals. Reports are gitignored by convention; every workflow run
+# uploads the JSON as a workflow artifact (retention follows repo default)
+# and the headline numbers land in the run summary.
+
+on:
+  workflow_dispatch:
+    inputs:
+      sample_size:
+        description: "ECPS tax-unit sample size (0 = full ~7,039)"
+        required: false
+        default: "1000"
+  schedule:
+    # 06:00 UTC every Monday
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fiit-compare
+  cancel-in-progress: false
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout axiom-oracles
+        uses: actions/checkout@v4
+        with:
+          path: axiom-oracles
+
+      - name: Checkout axiom-encode
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-encode
+          path: axiom-encode
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout axiom-rules
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules
+          path: axiom-rules
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            axiom-rules/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('axiom-rules/Cargo.lock') }}
+          restore-keys: |
+            cargo-${{ runner.os }}-
+
+      - name: Build axiom-rules-engine (debug)
+        working-directory: axiom-rules
+        run: cargo build --bin axiom-rules-engine
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Cache PolicyEngine ECPS dataset
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/policyengine
+          key: pe-ecps-${{ runner.os }}
+
+      - name: Run FIIT comparison
+        env:
+          AXIOM_ENCODE_REPO: ${{ github.workspace }}/axiom-encode
+          AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
+          SAMPLE_SIZE: ${{ inputs.sample_size || '1000' }}
+        working-directory: axiom-oracles
+        run: |
+          scripts/run_fiit_compare.sh \
+            --sample-size "$SAMPLE_SIZE" \
+            --output "reports/axiom-policyengine-fiit-ecps-${SAMPLE_SIZE}-$(date +%Y-%m-%d).json"
+
+      - name: Summarize agreement
+        working-directory: axiom-oracles
+        run: |
+          latest=$(ls -t reports/axiom-policyengine-fiit-ecps-*.json | head -1)
+          echo "## FIIT compare result ($(basename "$latest"))" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python3 -c "
+          import json
+          d = json.load(open('$latest'))
+          cv, mc = d['compared_values'], d['mismatch_count']
+          pct = 100*(cv-mc)/cv if cv else 0
+          print(f'compared_values: {cv}')
+          print(f'mismatch_count:  {mc}')
+          print(f'agreement:       {pct:.4f}%')
+          " >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fiit-compare-report
+          path: axiom-oracles/reports/axiom-policyengine-fiit-ecps-*.json
