@@ -1,0 +1,29 @@
+# Federal Individual Income Tax — Axiom RuleSpec vs PolicyEngine, Enhanced CPS.
+#
+# Wraps `axiom-encode tax-ecps-compare` (the harness Max wrote in axiom-encode).
+# See docs/federal-income-tax-comparison.md for the recipe, the gotchas, and
+# the known residuals.
+
+name: fiit-ecps
+title: Federal income tax — Axiom vs PolicyEngine
+description: >-
+  Compares every federal-tax surface (CTC, standard deduction, EITC, capital
+  gain definitions, OASDI, Medicare) Axiom RuleSpec encodes against
+  PolicyEngine, using the Enhanced CPS as the validation population.
+documentation: docs/federal-income-tax-comparison.md
+
+runner:
+  type: axiom-encode-tax-ecps-compare
+  axiom_encode_repo: $HOME/axiom-encode
+  axiom_rules_repo: $HOME/axiom-rules
+  rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+  parameters:
+    sample_size: 1000
+    year: 2026
+    surface: all
+    # `axiom-encode require_policyengine_versions()` rejects any other PE.
+    # Flip to false when that pin is relaxed upstream.
+    pinned: true
+
+artifacts:
+  report_basename: axiom-policyengine-fiit-ecps

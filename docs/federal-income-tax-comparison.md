@@ -6,30 +6,35 @@ Enhanced CPS. As of May 2026 the comparison runs at ~99.6% agreement across
 ~28k compared values (7,039 tax units), and the residual mismatches trace to a
 small number of known issues, not PE bugs.
 
+The comparison is one entry in the [comparisons registry](../comparisons/);
+see [`comparisons/README.md`](../comparisons/README.md) for the registry
+pattern and the available runner types.
+
 ## TL;DR — run it locally
 
 ```bash
-scripts/run_fiit_compare.sh --sample-size 1000
+scripts/run_comparison.py fiit-ecps --summary
 ```
 
-That clones `rulespec-us` fresh, builds the engine if needed, runs the
-comparison with the latest PolicyEngine release on PyPI, writes a JSON report
-to `reports/axiom-policyengine-fiit-ecps-1000-<date>.json`, and prints the
-headline numbers.
+That reads [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml),
+clones `rulespec-us` fresh, builds the engine if needed, runs the comparison
+with the pinned PolicyEngine stack, writes a JSON report under `reports/`,
+and prints the headline agreement numbers.
 
-For the canonical "Max's PR #13" reproduction against pinned PE versions:
+To list every available comparison:
 
 ```bash
-scripts/run_fiit_compare.sh --sample-size 0 --pinned
+scripts/run_comparison.py --list
 ```
 
 ## What runs
 
 The harness is **`axiom-encode tax-ecps-compare`** — it lives in `axiom-encode`,
-not `axiom-oracles` (the SNAP comparison uses a different code path with a
-precompiled artifact; the two should converge eventually). The script in this
-repo wraps the harness, takes care of the gotchas below, and lands the JSON
-report under `reports/`.
+not `axiom-oracles` (the SNAP comparison uses a different code path through the
+in-repo `axiom-oracles compare` CLI; the two should converge eventually). The
+orchestrator in this repo dispatches to the right harness based on the
+`runner.type` field of the comparison YAML, takes care of the gotchas below,
+and lands the JSON report under `reports/`.
 
 ## Gotchas
 
@@ -106,18 +111,24 @@ them.
 
 ## CI
 
-`.github/workflows/fiit-compare.yml` runs this script weekly (Mondays 06:00
-UTC) and on demand (`workflow_dispatch`). Every run uploads the JSON as a
-workflow artifact and writes the headline agreement numbers to the run
-summary. Reports themselves are gitignored — the existing repo convention
-treats them as transient outputs, not committed history. Wiring the result
-into the Oracles dashboard is a known follow-up (the `tax-ecps-compare`
-output shape differs from the per-case shape `dashboard/public/data/` uses,
-so it needs a small adapter to render alongside CO SNAP).
+`.github/workflows/comparisons.yml` matrix-runs every entry in
+`comparisons/*.yaml` weekly (Mondays 06:00 UTC) and on demand
+(`workflow_dispatch`, with an optional `only` input to scope to one
+comparison). Every run uploads the JSON as a workflow artifact and writes the
+headline agreement numbers to the run summary. Reports themselves are
+gitignored — the existing repo convention treats them as transient outputs,
+not committed history.
+
+Wiring the result into the Oracles dashboard is a known follow-up (the
+`tax-ecps-compare` output shape differs from the per-case shape
+`dashboard/public/data/` uses, so it needs a small adapter to render
+alongside CO SNAP).
 
 ## See also
 
-- [`scripts/run_fiit_compare.sh`](../scripts/run_fiit_compare.sh) — the wrapper.
+- [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml) — registry entry.
+- [`comparisons/README.md`](../comparisons/README.md) — registry pattern, runner types.
+- [`scripts/run_comparison.py`](../scripts/run_comparison.py) — the orchestrator.
 - `reports/` — local output directory (gitignored).
 - TheAxiomFoundation/axiom-encode#13 (Max's PR introducing the bridge and the
   original 99.04% number).

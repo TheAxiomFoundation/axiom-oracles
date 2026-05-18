@@ -1,0 +1,163 @@
+name: Oracle Comparisons
+
+# Matrix-runs every comparison declared in comparisons/*.yaml. Adding a new
+# comparison is a YAML edit — no workflow change required. Reports are
+# uploaded as workflow artifacts; headline agreement numbers land in each
+# job's run summary. Reports stay gitignored by repo convention.
+#
+# See comparisons/README.md for the registry schema and runner types.
+
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Run only this comparison name (blank = all)"
+        required: false
+        default: ""
+  schedule:
+    # Mondays 06:00 UTC
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oracle-comparisons
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.list.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build comparison matrix
+        id: list
+        env:
+          ONLY: ${{ inputs.only }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          only = os.environ.get("ONLY", "").strip()
+          names = sorted(p.stem for p in Path("comparisons").glob("*.yaml"))
+          if only:
+              names = [n for n in names if n == only]
+              if not names:
+                  raise SystemExit(f"unknown comparison: {only}")
+          matrix = {"include": [{"name": n} for n in names]}
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"matrix={json.dumps(matrix)}\n")
+          print(json.dumps(matrix, indent=2))
+          PY
+
+  compare:
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - name: Checkout axiom-oracles
+        uses: actions/checkout@v4
+        with:
+          path: axiom-oracles
+
+      - name: Checkout axiom-encode
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-encode
+          path: axiom-encode
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout axiom-rules
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules
+          path: axiom-rules
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            axiom-rules/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('axiom-rules/Cargo.lock') }}
+          restore-keys: |
+            cargo-${{ runner.os }}-
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install orchestrator deps + axiom-oracles
+        working-directory: axiom-oracles
+        run: |
+          uv pip install --system pyyaml
+          uv pip install --system -e .
+
+      - name: Cache PolicyEngine ECPS dataset
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/policyengine
+          key: pe-ecps-${{ runner.os }}
+
+      - name: Run comparison
+        env:
+          AXIOM_ENCODE_REPO: ${{ github.workspace }}/axiom-encode
+          AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
+        working-directory: axiom-oracles
+        run: |
+          # The runner configs reference $HOME/axiom-encode etc.; symlink the
+          # checked-out siblings so config paths resolve without per-CI edits.
+          ln -sfn "$AXIOM_ENCODE_REPO" "$HOME/axiom-encode"
+          ln -sfn "$AXIOM_RULES_REPO" "$HOME/axiom-rules"
+          python3 scripts/run_comparison.py ${{ matrix.name }} --summary
+
+      - name: Summarize agreement
+        if: always()
+        working-directory: axiom-oracles
+        run: |
+          latest=$(ls -t reports/*${{ matrix.name }}*.json 2>/dev/null | head -1)
+          if [ -z "$latest" ]; then
+            echo "(no report produced)" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "## ${{ matrix.name }} ($(basename "$latest"))" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          python3 -c "
+          import json
+          d = json.load(open('$latest'))
+          if 'compared_values' in d:
+              cv, mc = d['compared_values'], d['mismatch_count']
+              pct = 100*(cv-mc)/cv if cv else 0
+              print(f'compared_values: {cv}')
+              print(f'mismatch_count:  {mc}')
+              print(f'agreement:       {pct:.4f}%')
+          elif 'case_count' in d:
+              cc = d.get('case_count', 0)
+              mm = sum(len(c.get('mismatches', []) or []) for c in d.get('cases', []))
+              print(f'cases:            {cc}')
+              print(f'mismatch_entries: {mm}')
+          " >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.name }}
+          path: axiom-oracles/reports/*${{ matrix.name }}*.json
