@@ -25,6 +25,9 @@ jobs:
       - name: Lint
         run: uv run ruff check .
 
+      - name: Validate comparison registry
+        run: uv run scripts/run_comparison.py --list
+
       - name: Test
         run: uv run pytest -q
 

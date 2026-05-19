@@ -97,7 +97,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - uses: astral-sh/setup-uv@v5
         with:
@@ -106,8 +106,7 @@ jobs:
       - name: Install orchestrator deps + axiom-oracles
         working-directory: axiom-oracles
         run: |
-          uv pip install --system pyyaml
-          uv pip install --system -e .
+          uv pip install --system -e '.[policyengine]'
 
       - name: Cache PolicyEngine ECPS dataset
         uses: actions/cache@v4

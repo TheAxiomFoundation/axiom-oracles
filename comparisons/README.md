@@ -9,8 +9,8 @@ every config in the registry on a weekly schedule.
 ## How to run one locally
 
 ```bash
-scripts/run_comparison.py fiit-ecps --summary
-scripts/run_comparison.py co-snap-ecps --summary
+uv run scripts/run_comparison.py fiit-ecps --summary
+uv run scripts/run_comparison.py co-snap-ecps --summary
 ```
 
 ## How to add a new comparison

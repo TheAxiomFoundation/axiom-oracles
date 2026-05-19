@@ -13,7 +13,7 @@ pattern and the available runner types.
 ## TL;DR — run it locally
 
 ```bash
-scripts/run_comparison.py fiit-ecps --summary
+uv run scripts/run_comparison.py fiit-ecps --summary
 ```
 
 That reads [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml),
@@ -24,7 +24,7 @@ and prints the headline agreement numbers.
 To list every available comparison:
 
 ```bash
-scripts/run_comparison.py --list
+uv run scripts/run_comparison.py --list
 ```
 
 ## What runs
@@ -90,24 +90,25 @@ data-model is per-case; this report is aggregated by federal-tax surface):
 
 ## Known residuals (May 2026)
 
-Even at 99.6%+ agreement, two non-PE-bug categories of mismatch persist on the
-full run:
+Even at 99.6%+ agreement, a few non-PE-bug categories of mismatch persist on
+the full run:
 
 - **OASDI 2026 base drift.** PolicyEngine uses $186,000 as the Social Security
   contribution-and-benefit base; the encoded SSA 2026 automatic determination
   is $184,500. These produce ~2 mismatches per surface (employee + employer
   OASDI) at the 50-unit smoke and a larger count at full scale. Not a PE bug;
   the encoded source-of-truth differs.
-- **EITC tax-unit-role inference.** The harness in `axiom-encode` currently
-  infers head/spouse roles from age, not from PE's `is_tax_unit_head` /
-  `is_tax_unit_spouse` variables. Max maintains an uncommitted local patch in
-  `src/axiom_encode/oracles/policyengine/ecps_tax.py` (and the matching test)
-  that uses PE's role variables directly; with that patch applied, EITC drops
-  to ~99.8%+. Without it, expect a small EITC mismatch count.
-
-Capital-gain mismatches in earlier runs traced to PE's capital-gain inputs vs
-encoded Section 1(h) definitions; recent rulespec-us tip resolves most of
-them.
+- **EITC amount residuals.** `axiom-encode` now uses PE's explicit
+  tax-unit-role variables for the EITC oracle projection, so the previous
+  head/spouse inference mismatch is fixed as of TheAxiomFoundation/axiom-encode#74.
+  Any remaining full-run EITC residuals are amount-level differences from
+  Axiom computing Section 32 earned income through encoded upstream rules
+  rather than passing through PE's filer-adjusted-earnings helper.
+- **Capital-gain definition residuals.** Remaining differences trace to
+  Section 1(h) definition boundaries, especially inputs such as the
+  investment-income-election adjustment. These are semantic boundary
+  differences between the encoded statutory definition and PE's helper
+  variables, not evidence of a PE bug by themselves.
 
 ## CI
 
