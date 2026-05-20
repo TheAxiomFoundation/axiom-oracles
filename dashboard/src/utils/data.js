@@ -74,8 +74,19 @@ export async function loadOracleData(basePath = "") {
     filterReportToConcepts(report, allowedConcepts),
   );
 
+  // Each report declares its own suite (a (population, case-selection) pair).
+  // Surfacing the list lets the UI offer a selector; "all" means no filter.
+  const suites = [
+    ...new Set(filteredReports.map((r) => r.suite).filter(Boolean)),
+  ].sort();
+
   const data = buildNWayData(filteredReports);
-  return { ...data, programs, reports: filteredReports };
+  return { ...data, programs, reports: filteredReports, suites };
+}
+
+export function filterReportsBySuite(reports, suite) {
+  if (!suite || suite === "all") return reports;
+  return reports.filter((r) => r.suite === suite);
 }
 
 function filterReportToConcepts(report, allowed) {

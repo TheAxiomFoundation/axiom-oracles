@@ -27,3 +27,10 @@ runner:
 
 artifacts:
   report_basename: axiom-policyengine-fiit-ecps
+
+# Dashboard adapter: rewrites the run output into axiom.comparison_report.v2
+# at dashboard/public/data/<filename> and adds it to manifest.json. The
+# dashboard's suite selector groups reports by `suite`.
+dashboard:
+  filename: axiom-policyengine-fiit-ecps.json
+  suite: fiit-ecps

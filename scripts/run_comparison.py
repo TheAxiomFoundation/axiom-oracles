@@ -30,6 +30,79 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parent.parent
 COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "reports"
+DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
+
+# ---------------------------------------------------------------------------
+# tax-ecps-compare → v2 dashboard schema adapter
+# ---------------------------------------------------------------------------
+#
+# The axiom-encode `tax-ecps-compare` harness emits a flat shape
+# (`output_summary` + `mismatches` by entity_id) that the dashboard
+# (`axiom.comparison_report.v2`) doesn't speak natively. The mapping below
+# pins each FIIT surface to a concept id the dashboard already understands.
+#
+# Surfaces without a real concept (payroll, capital-gain) are hung off the
+# FIIT liability parent so data.js auto-allows them. Long-term, these belong
+# in axiom_oracles/config/concept_mappings.yaml so sync_programs.py picks them
+# up legitimately — tracked as a follow-up.
+FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
+    "ctc": {
+        "concept": "us:tax/federal-income-tax#ctc",
+        "description": "Child Tax Credit value",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "standard-deduction": {
+        "concept": "us:tax/federal-income-tax#standard_deduction",
+        "description": "Federal standard deduction",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "eitc": {
+        "concept": "us:tax/federal-income-tax#eitc",
+        "description": "Earned Income Tax Credit",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "capital-gain-definitions": {
+        "concept": "us:tax/federal-income-tax#capital_gain",
+        "description": "Capital gain definitions",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "employee-oasdi": {
+        "concept": "us:tax/payroll#employee_oasdi",
+        "description": "Employee OASDI (Social Security)",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "employer-oasdi": {
+        "concept": "us:tax/payroll#employer_oasdi",
+        "description": "Employer OASDI (Social Security)",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "employee-medicare": {
+        "concept": "us:tax/payroll#employee_medicare",
+        "description": "Employee Medicare",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "employer-medicare": {
+        "concept": "us:tax/payroll#employer_medicare",
+        "description": "Employer Medicare",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+}
 
 
 def main() -> int:
@@ -55,6 +128,12 @@ def main() -> int:
         action="store_true",
         help="List available comparisons and exit",
     )
+    parser.add_argument(
+        "--sample-size",
+        type=int,
+        default=None,
+        help="Override the comparison's sample_size for this run only",
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -67,6 +146,8 @@ def main() -> int:
         parser.error("name is required (or pass --list)")
 
     config = _load_comparison(args.name)
+    if args.sample_size is not None:
+        config["runner"]["parameters"]["sample_size"] = args.sample_size
     runner_type = config["runner"]["type"]
     runner_fn = RUNNERS.get(runner_type)
     if runner_fn is None:
@@ -84,6 +165,14 @@ def main() -> int:
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     runner_fn(config["runner"], output)
     print(f"Wrote: {output}")
+
+    dashboard_target = config.get("dashboard", {}).get("filename")
+    if dashboard_target:
+        suite = config.get("dashboard", {}).get("suite", config["name"])
+        adapted = _adapt_to_v2(
+            output, runner_type, config, suite=suite,
+        )
+        _write_dashboard_report(adapted, dashboard_target)
 
     if args.summary:
         _print_summary(output)
@@ -240,6 +329,222 @@ def _print_summary(output: Path) -> None:
                 )
     else:
         print("(unknown report shape — committed JSON for offline inspection)")
+
+
+# ---------------------------------------------------------------------------
+# Dashboard adapter
+# ---------------------------------------------------------------------------
+
+
+def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) -> dict:
+    raw = json.loads(raw_path.read_text())
+    if runner_type == "axiom-encode-tax-ecps-compare":
+        return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
+    # axiom-oracles-compare already emits v2 — pass through, just normalize suite.
+    raw.setdefault("suite", suite)
+    return raw
+
+
+def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
+    """Convert tax-ecps-compare flat output to axiom.comparison_report.v2.
+
+    Surfaces become aggregates; mismatching entities become cases (matching
+    units are counted in summary/aggregates but don't appear in cases[]). The
+    schema treats `comparison_weight` as the running denominator; we don't
+    have ECPS household weights here, so we set weights = counts to keep
+    the dashboard's weighted columns identical to unweighted.
+    """
+    from collections import defaultdict
+
+    # Surface → list of output rows from output_summary
+    by_surface: dict[str, list[dict]] = defaultdict(list)
+    for row in raw.get("output_summary", []):
+        by_surface[row["surface"]].append(row)
+
+    # Surface → list of mismatch tuples grouped by tax-unit entity
+    mismatches_by_entity: dict[str, list[dict]] = defaultdict(list)
+    for m in raw.get("mismatches", []):
+        mismatches_by_entity[m["entity_id"]].append(m)
+
+    # Aggregates: one per surface, plus a synthetic FIIT-liability parent
+    aggregates: list[dict] = []
+    component_concepts: list[str] = []
+    for surface, rows in by_surface.items():
+        spec = FIIT_SURFACE_CONCEPTS.get(surface)
+        if spec is None:
+            continue
+        compared = sum(r["compared"] for r in rows)
+        mismatches = sum(r["mismatches"] for r in rows)
+        matched = compared - mismatches
+        match_rate = (matched / compared * 100) if compared else 100.0
+        aggregates.append({
+            "category": spec["category"],
+            "comparison": "amount",
+            "comparison_count": compared,
+            "comparison_weight": compared,
+            "components": [],
+            "concept": spec["concept"],
+            "description": spec["description"],
+            "left_weighted_sum": 0,
+            "match_rate": match_rate,
+            "match_weight": matched,
+            "mismatch_count": mismatches,
+            "mismatch_weight": mismatches,
+            "missing_both_count": 0,
+            "missing_left_count": 0,
+            "missing_right_count": 0,
+            "parent": spec["parent"],
+            "right_weighted_sum": 0,
+            "weighted_difference": 0,
+            "weighted_match_rate": match_rate,
+        })
+        component_concepts.append(spec["concept"])
+
+    parent_compared = raw.get("compared_values", 0)
+    parent_mismatches = raw.get("mismatch_count", 0)
+    parent_matched = parent_compared - parent_mismatches
+    parent_rate = (parent_matched / parent_compared * 100) if parent_compared else 100.0
+    aggregates.insert(0, {
+        "category": "tax",
+        "comparison": "amount",
+        "comparison_count": parent_compared,
+        "comparison_weight": parent_compared,
+        "components": component_concepts,
+        "concept": "us:tax/federal-income-tax#liability",
+        "description": "Federal income tax liability (ECPS, all surfaces)",
+        "left_weighted_sum": 0,
+        "match_rate": parent_rate,
+        "match_weight": parent_matched,
+        "mismatch_count": parent_mismatches,
+        "mismatch_weight": parent_mismatches,
+        "missing_both_count": 0,
+        "missing_left_count": 0,
+        "missing_right_count": 0,
+        "parent": None,
+        "right_weighted_sum": 0,
+        "weighted_difference": 0,
+        "weighted_match_rate": parent_rate,
+    })
+
+    # Concepts manifest mirrors aggregates so the dashboard's concept loader
+    # picks them up. Components carry parent={parent_id} for auto-allow.
+    concepts: list[dict] = [{
+        "category": "tax",
+        "comparison": "amount",
+        "components": component_concepts,
+        "description": "Federal income tax liability (ECPS, all surfaces)",
+        "id": "us:tax/federal-income-tax#liability",
+        "parent": None,
+        "tolerance": 15,
+    }]
+    for surface, rows in by_surface.items():
+        spec = FIIT_SURFACE_CONCEPTS.get(surface)
+        if spec is None:
+            continue
+        concepts.append({
+            "category": spec["category"],
+            "comparison": "amount",
+            "components": [],
+            "description": spec["description"],
+            "id": spec["concept"],
+            "parent": spec["parent"],
+            "tolerance": spec["tolerance"],
+        })
+
+    # Cases: one per mismatching entity. Matching entities are not enumerated
+    # (the harness doesn't surface their ids); summary/aggregates capture them.
+    surface_to_spec = {
+        s: FIIT_SURFACE_CONCEPTS[s] for s in by_surface if s in FIIT_SURFACE_CONCEPTS
+    }
+    cases: list[dict] = []
+    flat_mismatches: list[dict] = []
+    for entity_id, ms in mismatches_by_entity.items():
+        case_id = f"ecps-{entity_id}"
+        case_mismatches = []
+        for m in ms:
+            spec = surface_to_spec.get(m["surface"])
+            if spec is None:
+                continue
+            mm = {
+                "case_id": case_id,
+                "concept": spec["concept"],
+                "description": f"{spec['description']} — output={m['output']}",
+                "difference": m.get("diff", 0),
+                "kind": "amount_difference",
+                "left": m.get("axiom", 0),
+                "parent": spec["parent"],
+                "right": m.get("policyengine", 0),
+                "tolerance": spec["tolerance"],
+            }
+            case_mismatches.append(mm)
+            flat_mismatches.append(mm)
+        if not case_mismatches:
+            continue
+        cases.append({
+            "case_id": case_id,
+            "left_engine": "axiom",
+            "left_errors": [],
+            "match_rate": 0.0,
+            "metadata": {
+                "case_unit": "tax_unit",
+                "dataset": "enhanced_cps",
+                "entity_id": entity_id,
+                "population": "enhanced-cps",
+                "suite": suite,
+            },
+            "mismatches": case_mismatches,
+            "right_engine": "policyengine",
+            "right_errors": [],
+        })
+
+    return {
+        "aggregates": aggregates,
+        "case_count": raw.get("compared_tax_units", 0),
+        "cases": cases,
+        "concepts": concepts,
+        "engines": {"left": "axiom", "right": "policyengine"},
+        "errors": [],
+        "locales": [],
+        "mismatches": flat_mismatches,
+        "population": "enhanced-cps",
+        "schema_version": "axiom.comparison_report.v2",
+        "scope": {"geoid": "US", "type": "country"},
+        "suite": suite,
+        "summary": {
+            "comparison_count": parent_compared,
+            "error_count": 0,
+            "errors_by_engine": {},
+            "match_count": parent_matched,
+            "mismatch_count": parent_mismatches,
+            "mismatches_by_concept": {},
+            "mismatches_by_kind": {"amount_difference": parent_mismatches},
+            "mismatches_by_scenario": {},
+            "weighted": {
+                "comparison_weight": parent_compared,
+                "match_rate": parent_rate,
+                "match_weight": parent_matched,
+                "mismatch_weight": parent_mismatches,
+            },
+        },
+    }
+
+
+def _write_dashboard_report(report: dict, filename: str) -> None:
+    DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    target = DASHBOARD_DATA_DIR / filename
+    target.write_text(json.dumps(report, indent=2, sort_keys=True))
+    print(f"Wrote dashboard report: {target}")
+
+    manifest_path = DASHBOARD_DATA_DIR / "manifest.json"
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text())
+    else:
+        manifest = {"reports": []}
+    reports = manifest.setdefault("reports", [])
+    if filename not in reports:
+        reports.append(filename)
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+        print(f"Added {filename} to manifest.json")
 
 
 if __name__ == "__main__":
