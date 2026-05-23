@@ -1,0 +1,2402 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 27380,
+      "comparison_weight": 27380,
+      "components": [
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare"
+      ],
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability (ECPS, all surfaces)",
+      "left_weighted_sum": null,
+      "match_rate": 99.7991234477721,
+      "match_weight": 27325,
+      "mismatch_count": 55,
+      "mismatch_weight": 55,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 99.7991234477721
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 5000,
+      "comparison_weight": 5000,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit value",
+      "left_weighted_sum": null,
+      "match_rate": 99.98,
+      "match_weight": 4999,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 99.98
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 3000,
+      "comparison_weight": 3000,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#standard_deduction",
+      "description": "Federal standard deduction",
+      "left_weighted_sum": null,
+      "match_rate": 100.0,
+      "match_weight": 3000,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 100.0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2000,
+      "comparison_weight": 2000,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#capital_gain",
+      "description": "Capital gain definitions",
+      "left_weighted_sum": null,
+      "match_rate": 100.0,
+      "match_weight": 2000,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 100.0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10000,
+      "comparison_weight": 10000,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "left_weighted_sum": null,
+      "match_rate": 99.46000000000001,
+      "match_weight": 9946,
+      "mismatch_count": 54,
+      "mismatch_weight": 54,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 99.46000000000001
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 1845,
+      "comparison_weight": 1845,
+      "components": [],
+      "concept": "us:tax/payroll#employee_oasdi",
+      "description": "Employee OASDI (Social Security)",
+      "left_weighted_sum": null,
+      "match_rate": 100.0,
+      "match_weight": 1845,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 100.0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 1845,
+      "comparison_weight": 1845,
+      "components": [],
+      "concept": "us:tax/payroll#employee_medicare",
+      "description": "Employee Medicare",
+      "left_weighted_sum": null,
+      "match_rate": 100.0,
+      "match_weight": 1845,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 100.0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 1845,
+      "comparison_weight": 1845,
+      "components": [],
+      "concept": "us:tax/payroll#employer_oasdi",
+      "description": "Employer OASDI (Social Security)",
+      "left_weighted_sum": null,
+      "match_rate": 100.0,
+      "match_weight": 1845,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 100.0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 1845,
+      "comparison_weight": 1845,
+      "components": [],
+      "concept": "us:tax/payroll#employer_medicare",
+      "description": "Employer Medicare",
+      "left_weighted_sum": null,
+      "match_rate": 100.0,
+      "match_weight": 1845,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 100.0
+    }
+  ],
+  "case_count": 1000,
+  "cases": [
+    {
+      "case_id": "ecps-tax_unit_5066",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5066",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5066",
+          "concept": "us:tax/federal-income-tax#ctc",
+          "description": "Child Tax Credit value \u2014 output=ctc_phaseout_amount",
+          "difference": 50.0,
+          "kind": "amount_difference",
+          "left": 30816600.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 30816550.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_159",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_159",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_159",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": 5789.963075471282,
+          "kind": "amount_difference",
+          "left": 21857.09491140878,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 16067.1318359375,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_299",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_299",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_299",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -380.6610107421875,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 380.6610107421875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_463",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_463",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_463",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_627",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_627",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_627",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -4443.6923828125,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 4443.6923828125,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_629",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_629",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_629",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -275.79849604428455,
+          "kind": "amount_difference",
+          "left": 53589.174160205715,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 53864.97265625,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_862",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_862",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_862",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -1134.4683110351561,
+          "kind": "amount_difference",
+          "left": 16247.246532714844,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 17381.71484375,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_920",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_920",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_920",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -638.0923437499987,
+          "kind": "amount_difference",
+          "left": 22367.356875,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 23005.44921875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_1063",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_1063",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_1063",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_1420",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_1420",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_1420",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_1451",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_1451",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_1451",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2297",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2297",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2297",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2391",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2391",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2391",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": 664.0,
+          "kind": "amount_difference",
+          "left": 664.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2446",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2446",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2446",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2503",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2503",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2503",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2536",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2536",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2536",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -10.987141372272163,
+          "kind": "amount_difference",
+          "left": 46039.93473362773,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 46050.921875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2551",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2551",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2551",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": 664.0,
+          "kind": "amount_difference",
+          "left": 664.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        },
+        {
+          "case_id": "ecps-tax_unit_2551",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": 1745.2674140625,
+          "kind": "amount_difference",
+          "left": 1745.2674140625,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2826",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2826",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2826",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -45237.4714375,
+          "kind": "amount_difference",
+          "left": 40446.5285625,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 85684.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_2976",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_2976",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_2976",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -2176.4068750000006,
+          "kind": "amount_difference",
+          "left": 83235.155625,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 85411.5625,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3043",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3043",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3043",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        },
+        {
+          "case_id": "ecps-tax_unit_3043",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -3529.814298828125,
+          "kind": "amount_difference",
+          "left": 3250.590486328125,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 6780.40478515625,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3077",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3077",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3077",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -118.10161590576172,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 118.10161590576172,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3297",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3297",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3297",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -613.8170645751953,
+          "kind": "amount_difference",
+          "left": 50.18293542480469,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3384",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3384",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3384",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -380.6610107421875,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 380.6610107421875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3631",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3631",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3631",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -222.3901906738281,
+          "kind": "amount_difference",
+          "left": 441.6098093261719,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3666",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3666",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3666",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -379.03934598202665,
+          "kind": "amount_difference",
+          "left": 284.96065401797335,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3820",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3820",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3820",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": 600.7533085937503,
+          "kind": "amount_difference",
+          "left": 7645.21815234375,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 7044.46484375,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_3857",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_3857",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_3857",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_4171",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_4171",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_4171",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_4295",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_4295",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_4295",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -206.60357666015625,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 206.60357666015625,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_4427",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_4427",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_4427",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -882.0276781249995,
+          "kind": "amount_difference",
+          "left": 14455.550446875,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 15337.578125,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_4540",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_4540",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_4540",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -1344.3838634655258,
+          "kind": "amount_difference",
+          "left": 24655.731370909474,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 26000.115234375,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_4779",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_4779",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_4779",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -17122.20291875,
+          "kind": "amount_difference",
+          "left": 2009.07051875,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 19131.2734375,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_4966",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_4966",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_4966",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        },
+        {
+          "case_id": "ecps-tax_unit_4966",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -2845.81640625,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 2845.81640625,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5014",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5014",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5014",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": 100.46646533203125,
+          "kind": "amount_difference",
+          "left": 285.0545390625,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 184.58807373046875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5043",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5043",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5043",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": 2846.45931640625,
+          "kind": "amount_difference",
+          "left": 8787.60580078125,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 5941.146484375,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5410",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5410",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5410",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5611",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5611",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5611",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -237.3731231689453,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 237.3731231689453,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5628",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5628",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5628",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -231.02530633578135,
+          "kind": "amount_difference",
+          "left": 83531.61531866422,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 83762.640625,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5645",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5645",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5645",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -3097.033935546875,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 3097.033935546875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5650",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5650",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5650",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": 7316.0,
+          "kind": "amount_difference",
+          "left": 7316.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5651",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5651",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5651",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5732",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5732",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5732",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -78.53242626953124,
+          "kind": "amount_difference",
+          "left": 585.4675737304688,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5766",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5766",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5766",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": 7316.0,
+          "kind": "amount_difference",
+          "left": 7316.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5897",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5897",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5897",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": -207.15148749999935,
+          "kind": "amount_difference",
+          "left": 24454.14148125,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 24661.29296875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5925",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5925",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5925",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -39.92189025878906,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 39.92189025878906,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_5978",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_5978",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_5978",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": 1284.49267578125,
+          "kind": "amount_difference",
+          "left": 8231.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 6946.50732421875,
+          "tolerance": 5
+        },
+        {
+          "case_id": "ecps-tax_unit_5978",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": 560.5094570312503,
+          "kind": "amount_difference",
+          "left": 4950.2599453125,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 4389.75048828125,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_6001",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_6001",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_6001",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -39.92189025878906,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 39.92189025878906,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_6090",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_6090",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_6090",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_6262",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_6262",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_6262",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": -664.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 664.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax_unit_6297",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "enhanced_cps",
+        "entity_id": "tax_unit_6297",
+        "population": "enhanced-cps",
+        "suite": "fiit-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-tax_unit_6297",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+          "difference": 4427.0,
+          "kind": "amount_difference",
+          "left": 4427.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 0.0,
+          "tolerance": 5
+        },
+        {
+          "case_id": "ecps-tax_unit_6297",
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+          "difference": 1623.783371386719,
+          "kind": "amount_difference",
+          "left": 2297.26170390625,
+          "parent": "us:tax/federal-income-tax#liability",
+          "right": 673.4783325195312,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare"
+      ],
+      "description": "Federal income tax liability (ECPS, all surfaces)",
+      "id": "us:tax/federal-income-tax#liability",
+      "parent": null,
+      "tolerance": 15
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Child Tax Credit value",
+      "id": "us:tax/federal-income-tax#ctc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal standard deduction",
+      "id": "us:tax/federal-income-tax#standard_deduction",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Capital gain definitions",
+      "id": "us:tax/federal-income-tax#capital_gain",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Earned Income Tax Credit",
+      "id": "us:tax/federal-income-tax#eitc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Employee OASDI (Social Security)",
+      "id": "us:tax/payroll#employee_oasdi",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Employee Medicare",
+      "id": "us:tax/payroll#employee_medicare",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Employer OASDI (Social Security)",
+      "id": "us:tax/payroll#employer_oasdi",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Employer Medicare",
+      "id": "us:tax/payroll#employer_medicare",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [],
+  "mismatches": [
+    {
+      "case_id": "ecps-tax_unit_5066",
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit value \u2014 output=ctc_phaseout_amount",
+      "difference": 50.0,
+      "kind": "amount_difference",
+      "left": 30816600.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 30816550.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_159",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": 5789.963075471282,
+      "kind": "amount_difference",
+      "left": 21857.09491140878,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 16067.1318359375,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_299",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -380.6610107421875,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 380.6610107421875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_463",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_627",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -4443.6923828125,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 4443.6923828125,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_629",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -275.79849604428455,
+      "kind": "amount_difference",
+      "left": 53589.174160205715,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 53864.97265625,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_862",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -1134.4683110351561,
+      "kind": "amount_difference",
+      "left": 16247.246532714844,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 17381.71484375,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_920",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -638.0923437499987,
+      "kind": "amount_difference",
+      "left": 22367.356875,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 23005.44921875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_1063",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_1420",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_1451",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2297",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2391",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": 664.0,
+      "kind": "amount_difference",
+      "left": 664.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 0.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2446",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2503",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2536",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -10.987141372272163,
+      "kind": "amount_difference",
+      "left": 46039.93473362773,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 46050.921875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2551",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": 664.0,
+      "kind": "amount_difference",
+      "left": 664.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 0.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2551",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": 1745.2674140625,
+      "kind": "amount_difference",
+      "left": 1745.2674140625,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 0.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2826",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -45237.4714375,
+      "kind": "amount_difference",
+      "left": 40446.5285625,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 85684.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_2976",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -2176.4068750000006,
+      "kind": "amount_difference",
+      "left": 83235.155625,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 85411.5625,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3043",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3043",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -3529.814298828125,
+      "kind": "amount_difference",
+      "left": 3250.590486328125,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 6780.40478515625,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3077",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -118.10161590576172,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 118.10161590576172,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3297",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -613.8170645751953,
+      "kind": "amount_difference",
+      "left": 50.18293542480469,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3384",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -380.6610107421875,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 380.6610107421875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3631",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -222.3901906738281,
+      "kind": "amount_difference",
+      "left": 441.6098093261719,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3666",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -379.03934598202665,
+      "kind": "amount_difference",
+      "left": 284.96065401797335,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3820",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": 600.7533085937503,
+      "kind": "amount_difference",
+      "left": 7645.21815234375,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 7044.46484375,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_3857",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_4171",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_4295",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -206.60357666015625,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 206.60357666015625,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_4427",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -882.0276781249995,
+      "kind": "amount_difference",
+      "left": 14455.550446875,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 15337.578125,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_4540",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -1344.3838634655258,
+      "kind": "amount_difference",
+      "left": 24655.731370909474,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 26000.115234375,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_4779",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -17122.20291875,
+      "kind": "amount_difference",
+      "left": 2009.07051875,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 19131.2734375,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_4966",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_4966",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -2845.81640625,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 2845.81640625,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5014",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": 100.46646533203125,
+      "kind": "amount_difference",
+      "left": 285.0545390625,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 184.58807373046875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5043",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": 2846.45931640625,
+      "kind": "amount_difference",
+      "left": 8787.60580078125,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 5941.146484375,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5410",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5611",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -237.3731231689453,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 237.3731231689453,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5628",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -231.02530633578135,
+      "kind": "amount_difference",
+      "left": 83531.61531866422,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 83762.640625,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5645",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -3097.033935546875,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 3097.033935546875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5650",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": 7316.0,
+      "kind": "amount_difference",
+      "left": 7316.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 0.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5651",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5732",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -78.53242626953124,
+      "kind": "amount_difference",
+      "left": 585.4675737304688,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5766",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": 7316.0,
+      "kind": "amount_difference",
+      "left": 7316.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 0.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5897",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": -207.15148749999935,
+      "kind": "amount_difference",
+      "left": 24454.14148125,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 24661.29296875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5925",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -39.92189025878906,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 39.92189025878906,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5978",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": 1284.49267578125,
+      "kind": "amount_difference",
+      "left": 8231.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 6946.50732421875,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_5978",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": 560.5094570312503,
+      "kind": "amount_difference",
+      "left": 4950.2599453125,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 4389.75048828125,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_6001",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -39.92189025878906,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 39.92189025878906,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_6090",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_6262",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": -664.0,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 664.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_6297",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_phased_in",
+      "difference": 4427.0,
+      "kind": "amount_difference",
+      "left": 4427.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 0.0,
+      "tolerance": 5
+    },
+    {
+      "case_id": "ecps-tax_unit_6297",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit \u2014 output=eitc_reduction",
+      "difference": 1623.783371386719,
+      "kind": "amount_difference",
+      "left": 2297.26170390625,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right": 673.4783325195312,
+      "tolerance": 5
+    }
+  ],
+  "population": "enhanced-cps",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "US",
+    "type": "country"
+  },
+  "suite": "fiit-ecps",
+  "summary": {
+    "comparison_count": 27380,
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 27325,
+    "mismatch_count": 55,
+    "mismatches_by_concept": [
+      {
+        "count": 54,
+        "value": "us:tax/federal-income-tax#eitc"
+      },
+      {
+        "count": 1,
+        "value": "us:tax/federal-income-tax#ctc"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 55,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": {},
+    "weighted": {
+      "comparison_weight": 27380,
+      "match_rate": 99.7991234477721,
+      "match_weight": 27325,
+      "mismatch_weight": 55
+    }
+  }
+}

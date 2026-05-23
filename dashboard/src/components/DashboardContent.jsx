@@ -1,10 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { loadOracleData } from "../utils/data";
+import { useState, useEffect, useMemo } from "react";
+import {
+  loadOracleData,
+  buildNWayData,
+  filterReportsBySuite,
+} from "../utils/data";
 import MetricsRow from "./MetricsRow";
 import ProgramBreakdown from "./ProgramBreakdown";
 import AgreementMatrix from "./AgreementMatrix";
+import SuiteSelector from "./SuiteSelector";
 
 function TopBar() {
   return (
@@ -51,6 +56,7 @@ export default function DashboardContent() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [suite, setSuite] = useState("all");
 
   useEffect(() => {
     loadOracleData("")
@@ -58,6 +64,14 @@ export default function DashboardContent() {
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
+
+  // Re-derive the comparison view when the user picks a different suite.
+  // Reports are already loaded; we just re-filter and rebuild the matrix.
+  const viewData = useMemo(() => {
+    if (!data) return null;
+    const filtered = filterReportsBySuite(data.reports, suite);
+    return { ...buildNWayData(filtered), programs: data.programs };
+  }, [data, suite]);
 
   if (loading) {
     return (
@@ -90,7 +104,7 @@ export default function DashboardContent() {
     );
   }
 
-  const hasComparisonData = data.summary.totalCases > 0;
+  const hasComparisonData = viewData.summary.totalCases > 0;
 
   return (
     <>
@@ -102,27 +116,33 @@ export default function DashboardContent() {
           padding: "56px 20px 80px",
         }}
       >
-        <PageIntro data={data} />
+        <PageIntro data={viewData} />
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <SuiteSelector
+            suites={data.suites || []}
+            value={suite}
+            onChange={setSuite}
+          />
+
           <MetricsRow
-            summary={data.summary}
-            programCount={data.programs.length}
+            summary={viewData.summary}
+            programCount={viewData.programs.length}
           />
 
           {hasComparisonData && (
             <AgreementMatrix
-              oracles={data.oracles}
-              matrix={data.matrix}
-              overallMatrix={data.overallMatrix}
-              concepts={data.concepts}
+              oracles={viewData.oracles}
+              matrix={viewData.matrix}
+              overallMatrix={viewData.overallMatrix}
+              concepts={viewData.concepts}
             />
           )}
 
           <ProgramBreakdown
-            programs={data.programs}
-            reports={data.reports}
-            oracles={data.oracles}
+            programs={viewData.programs}
+            reports={viewData.reports}
+            oracles={viewData.oracles}
           />
         </div>
 

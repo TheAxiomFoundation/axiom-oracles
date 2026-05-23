@@ -41,7 +41,9 @@ Invokes `axiom-encode tax-ecps-compare` via `uv run`. Builds a debug
 `axiom-rules-engine` binary if missing; clones `rulespec-us` fresh into a
 directory named exactly `rulespec-us` (required by the engine import
 resolver). Honors a `pinned` parameter that controls the PolicyEngine version
-stack; today axiom-encode hard-pins so this stays `true`.
+stack. The runner installs the local `axiom-encode` checkout with
+`--with-editable` so comparison configs can validate unmerged harness changes
+before they land.
 
 Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 `rulespec_remote`. Required `parameters`: `sample_size`, `year`, `surface`.

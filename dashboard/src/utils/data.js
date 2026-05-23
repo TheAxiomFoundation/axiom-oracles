@@ -74,8 +74,19 @@ export async function loadOracleData(basePath = "") {
     filterReportToConcepts(report, allowedConcepts),
   );
 
+  // Each report declares its own suite (a (population, case-selection) pair).
+  // Surfacing the list lets the UI offer a selector; "all" means no filter.
+  const suites = [
+    ...new Set(filteredReports.map((r) => r.suite).filter(Boolean)),
+  ].sort();
+
   const data = buildNWayData(filteredReports);
-  return { ...data, programs, reports: filteredReports };
+  return { ...data, programs, reports: filteredReports, suites };
+}
+
+export function filterReportsBySuite(reports, suite) {
+  if (!suite || suite === "all") return reports;
+  return reports.filter((r) => r.suite === suite);
 }
 
 function filterReportToConcepts(report, allowed) {
@@ -197,6 +208,11 @@ export function buildNWayData(reports) {
   }
 
   const allCases = [...caseIndex.values()];
+  const reportCaseCount = reports.reduce(
+    (acc, r) =>
+      acc + (Number.isFinite(r.case_count) ? r.case_count : (r.cases || []).length),
+    0,
+  );
 
   // Summary stats — recomputed from filtered aggregates so dropped concepts
   // (e.g., state income tax that isn't in the Axiom corpus) don't inflate
@@ -214,7 +230,7 @@ export function buildNWayData(reports) {
   );
 
   const summary = {
-    totalCases: allCases.length,
+    totalCases: reportCaseCount,
     totalOracles: oracles.length,
     totalConcepts: concepts.length,
     totalReports: reports.length,
@@ -227,4 +243,3 @@ export function buildNWayData(reports) {
 
   return { oracles, reports, matrix, overallMatrix, concepts, allCases, summary };
 }
-

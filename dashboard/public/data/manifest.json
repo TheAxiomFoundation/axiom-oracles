@@ -1,6 +1,7 @@
 {
   "reports": [
     "axiom-policyengine.json",
-    "policyengine-taxsim.json"
+    "policyengine-taxsim.json",
+    "axiom-policyengine-fiit-ecps.json"
   ]
 }

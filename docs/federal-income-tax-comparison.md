@@ -2,9 +2,9 @@
 
 This document covers the canonical recipe for comparing Axiom-encoded RuleSpec
 federal individual income tax (FIIT) outputs against PolicyEngine on the
-Enhanced CPS. As of May 2026 the comparison runs at ~99.6% agreement across
-~28k compared values (7,039 tax units), and the residual mismatches trace to a
-small number of known issues, not PE bugs.
+Enhanced CPS. As of May 23, 2026 the committed dashboard artifact uses a
+1,000-tax-unit sample and runs against Python 3.14, PolicyEngine 4.4.4,
+PolicyEngine Core 3.26.0, and PolicyEngine-US 1.705.1.
 
 The comparison is one entry in the [comparisons registry](../comparisons/);
 see [`comparisons/README.md`](../comparisons/README.md) for the registry
@@ -19,7 +19,9 @@ uv run scripts/run_comparison.py fiit-ecps --summary
 That reads [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml),
 clones `rulespec-us` fresh, builds the engine if needed, runs the comparison
 with the pinned PolicyEngine stack, writes a JSON report under `reports/`,
-and prints the headline agreement numbers.
+rewrites the dashboard data at
+`dashboard/public/data/axiom-policyengine-fiit-ecps.json`, and prints the
+headline agreement numbers.
 
 To list every available comparison:
 
@@ -54,8 +56,8 @@ The harness has four hard requirements that are not obvious:
    `axiom-oracles compare` path.** `tax-ecps-compare` takes
    `--rulespec-root` directly.
 
-4. **`uv run --python 3.13 --no-project`** is the canonical invocation.
-   `--with /path/to/axiom-encode` installs it from the local checkout;
+4. **`uv run --python 3.14 --no-project`** is the canonical invocation.
+   `--with-editable /path/to/axiom-encode` installs it from the local checkout;
    `--with 'policyengine[...]'` resolves PE from PyPI on every run.
 
 ## Interpreting the output
@@ -90,14 +92,16 @@ data-model is per-case; this report is aggregated by federal-tax surface):
 
 ## Known residuals (May 2026)
 
-Even at 99.6%+ agreement, a few non-PE-bug categories of mismatch persist on
-the full run:
+The May 23, 2026 1,000-tax-unit run compared 27,380 values with 55 mismatches
+for 99.7991% agreement. OASDI and Medicare both matched at 100%; the remaining
+sample residuals were concentrated in EITC plus one CTC edge case.
 
-- **OASDI 2026 base drift.** PolicyEngine uses $186,000 as the Social Security
-  contribution-and-benefit base; the encoded SSA 2026 automatic determination
-  is $184,500. These produce ~2 mismatches per surface (employee + employer
-  OASDI) at the 50-unit smoke and a larger count at full scale. Not a PE bug;
-  the encoded source-of-truth differs.
+Even at high agreement, a few non-PE-bug categories of mismatch can persist:
+
+- **OASDI 2026 base drift.** Older PolicyEngine-US releases used $186,000 as
+  the Social Security contribution-and-benefit base; the encoded SSA 2026
+  automatic determination is $184,500. PolicyEngine-US 1.705.1 includes the
+  corrected base, and the comparison runner pins that or newer vetted releases.
 - **EITC amount residuals.** `axiom-encode` now uses PE's explicit
   tax-unit-role variables for the EITC oracle projection, so the previous
   head/spouse inference mismatch is fixed as of TheAxiomFoundation/axiom-encode#74.
@@ -109,6 +113,10 @@ the full run:
   investment-income-election adjustment. These are semantic boundary
   differences between the encoded statutory definition and PE's helper
   variables, not evidence of a PE bug by themselves.
+- **Full-run runtime.** `--sample-size 0` currently can exceed
+  `axiom-encode`'s per-program 120-second timeout on Section 32/EITC. Until
+  the harness supports a longer timeout or a release engine path, the committed
+  dashboard artifact uses the configured 1,000-unit sample.
 
 ## CI
 
