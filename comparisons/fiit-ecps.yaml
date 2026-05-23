@@ -21,9 +21,11 @@ runner:
     sample_size: 1000
     year: 2026
     surface: all
-    # `axiom-encode require_policyengine_versions()` rejects any other PE.
-    # Flip to false when that pin is relaxed upstream.
+    # Keep PE and core on axiom-encode's certified stack, but use the current
+    # PE-US package so the ECPS oracle reflects latest upstream tax fixes.
     pinned: true
+    allow_policyengine_us_version: true
+    allow_uncertified_policyengine_data: true
 
 artifacts:
   report_basename: axiom-policyengine-fiit-ecps

@@ -208,6 +208,11 @@ export function buildNWayData(reports) {
   }
 
   const allCases = [...caseIndex.values()];
+  const reportCaseCount = reports.reduce(
+    (acc, r) =>
+      acc + (Number.isFinite(r.case_count) ? r.case_count : (r.cases || []).length),
+    0,
+  );
 
   // Summary stats — recomputed from filtered aggregates so dropped concepts
   // (e.g., state income tax that isn't in the Axiom corpus) don't inflate
@@ -225,7 +230,7 @@ export function buildNWayData(reports) {
   );
 
   const summary = {
-    totalCases: allCases.length,
+    totalCases: reportCaseCount,
     totalOracles: oracles.length,
     totalConcepts: concepts.length,
     totalReports: reports.length,
@@ -238,4 +243,3 @@ export function buildNWayData(reports) {
 
   return { oracles, reports, matrix, overallMatrix, concepts, allCases, summary };
 }
-

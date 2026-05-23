@@ -139,7 +139,7 @@ def main() -> int:
     if args.list:
         for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
             config = yaml.safe_load(path.read_text())
-            print(f"{config['name']:24s}  {config.get('title','')}")
+            print(f"{config['name']:24s}  {config.get('title', '')}")
         return 0
 
     if not args.name:
@@ -152,8 +152,7 @@ def main() -> int:
     runner_fn = RUNNERS.get(runner_type)
     if runner_fn is None:
         raise SystemExit(
-            f"unknown runner type {runner_type!r}; "
-            f"available: {sorted(RUNNERS)}"
+            f"unknown runner type {runner_type!r}; available: {sorted(RUNNERS)}"
         )
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -170,7 +169,10 @@ def main() -> int:
     if dashboard_target:
         suite = config.get("dashboard", {}).get("suite", config["name"])
         adapted = _adapt_to_v2(
-            output, runner_type, config, suite=suite,
+            output,
+            runner_type,
+            config,
+            suite=suite,
         )
         _write_dashboard_report(adapted, dashboard_target)
 
@@ -195,29 +197,50 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     pinned = params.get("pinned", True)
     pe_pins = (
         [
-            "--with", "policyengine==4.4.4",
-            "--with", "policyengine-us==1.691.3",
-            "--with", "policyengine-core==3.26.0",
+            "--with",
+            "policyengine==4.4.4",
+            "--with",
+            "policyengine-us==1.705.1",
+            "--with",
+            "policyengine-core==3.26.0",
         ]
         if pinned
         else [
-            "--with", "policyengine",
-            "--with", "policyengine-us",
-            "--with", "policyengine-core",
+            "--with",
+            "policyengine",
+            "--with",
+            "policyengine-us",
+            "--with",
+            "policyengine-core",
         ]
     )
     cmd = [
-        "uv", "run", "--python", "3.13", "--no-project",
-        "--with", str(axiom_encode_repo),
+        "uv",
+        "run",
+        "--python",
+        "3.14",
+        "--no-project",
+        "--with-editable",
+        str(axiom_encode_repo),
         *pe_pins,
-        "axiom-encode", "tax-ecps-compare",
-        "--rulespec-root", str(rulespec_root),
-        "--axiom-rules-engine-path", str(axiom_rules_repo),
-        "--sample-size", str(params.get("sample_size", 1000)),
-        "--year", str(params.get("year", 2026)),
-        "--surface", params.get("surface", "all"),
+        "axiom-encode",
+        "tax-ecps-compare",
+        "--rulespec-root",
+        str(rulespec_root),
+        "--axiom-rules-engine-path",
+        str(axiom_rules_repo),
+        "--sample-size",
+        str(params.get("sample_size", 1000)),
+        "--year",
+        str(params.get("year", 2026)),
+        "--surface",
+        params.get("surface", "all"),
         "--json",
     ]
+    if params.get("allow_policyengine_us_version", True):
+        cmd.append("--allow-policyengine-us-version")
+    if params.get("allow_uncertified_policyengine_data", True):
+        cmd.append("--allow-uncertified-policyengine-data")
     try:
         with output.open("w") as f:
             subprocess.run(cmd, check=True, stdout=f)
@@ -231,15 +254,24 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     _ensure_engine_binary(axiom_rules_repo, kind="release")
     params = runner["parameters"]
     cmd = [
-        sys.executable, "-m", "axiom_oracles.cli", "compare",
-        params["left"], params["right"],
-        "--population", params.get("population", "enhanced-cps"),
-        "--sample-size", str(params.get("sample_size", 1000)),
-        "--period", str(params["period"]),
-        "--concept", params["concept"],
+        sys.executable,
+        "-m",
+        "axiom_oracles.cli",
+        "compare",
+        params["left"],
+        params["right"],
+        "--population",
+        params.get("population", "enhanced-cps"),
+        "--sample-size",
+        str(params.get("sample_size", 1000)),
+        "--period",
+        str(params["period"]),
+        "--concept",
+        params["concept"],
         "--axiom-engine-binary",
         str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
-        "--output", str(output),
+        "--output",
+        str(output),
     ]
     subprocess.run(cmd, check=True, cwd=REPO_ROOT)
 
@@ -267,6 +299,15 @@ def _load_comparison(name: str) -> dict:
 
 def _resolve_path(raw: str, field: str) -> Path:
     expanded = Path(os.path.expandvars(os.path.expanduser(str(raw)))).resolve()
+    if not expanded.exists():
+        env_override = {
+            "axiom_encode_repo": "AXIOM_ENCODE_REPO",
+            "axiom_rules_repo": "AXIOM_RULES_REPO",
+        }.get(field)
+        if env_override and os.environ.get(env_override):
+            expanded = Path(
+                os.path.expandvars(os.path.expanduser(os.environ[env_override]))
+            ).resolve()
     if not expanded.exists():
         raise SystemExit(f"{field}: path does not exist: {expanded}")
     return expanded
@@ -305,6 +346,7 @@ def _print_summary(output: Path) -> None:
         print(f"Mismatches:        {mc}")
         print(f"Agreement:         {pct:.4f}%")
         from collections import defaultdict
+
         by_surface = defaultdict(lambda: [0, 0])
         for row in data.get("output_summary", []):
             by_surface[row["surface"]][0] += row["compared"]
@@ -312,7 +354,7 @@ def _print_summary(output: Path) -> None:
         print()
         for surf, (c, m) in sorted(by_surface.items(), key=lambda x: -x[1][1]):
             p = 100 * (c - m) / c if c else 0
-            print(f"  {surf:30s}  {c-m}/{c} ({p:6.2f}%)  mismatches={m}")
+            print(f"  {surf:30s}  {c - m}/{c} ({p:6.2f}%)  mismatches={m}")
     elif "case_count" in data:
         cc = data.get("case_count", 0)
         mm = sum(len(c.get("mismatches", []) or []) for c in data.get("cases", []))
@@ -323,9 +365,9 @@ def _print_summary(output: Path) -> None:
             print()
             for a in agg[:8]:
                 print(
-                    f"  {a.get('concept','?'):40s}  "
-                    f"compared={a.get('compared',0)}  "
-                    f"matched={a.get('matched',0)}"
+                    f"  {a.get('concept', '?'):40s}  "
+                    f"compared={a.get('compared', 0)}  "
+                    f"matched={a.get('matched', 0)}"
                 )
     else:
         print("(unknown report shape — committed JSON for offline inspection)")
@@ -354,7 +396,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     have ECPS household weights here, so we set weights = counts to keep
     the dashboard's weighted columns identical to unweighted.
     """
-    from collections import defaultdict
+    from collections import Counter, defaultdict
 
     # Surface → list of output rows from output_summary
     by_surface: dict[str, list[dict]] = defaultdict(list)
@@ -377,79 +419,88 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         mismatches = sum(r["mismatches"] for r in rows)
         matched = compared - mismatches
         match_rate = (matched / compared * 100) if compared else 100.0
-        aggregates.append({
-            "category": spec["category"],
-            "comparison": "amount",
-            "comparison_count": compared,
-            "comparison_weight": compared,
-            "components": [],
-            "concept": spec["concept"],
-            "description": spec["description"],
-            "left_weighted_sum": 0,
-            "match_rate": match_rate,
-            "match_weight": matched,
-            "mismatch_count": mismatches,
-            "mismatch_weight": mismatches,
-            "missing_both_count": 0,
-            "missing_left_count": 0,
-            "missing_right_count": 0,
-            "parent": spec["parent"],
-            "right_weighted_sum": 0,
-            "weighted_difference": 0,
-            "weighted_match_rate": match_rate,
-        })
+        aggregates.append(
+            {
+                "category": spec["category"],
+                "comparison": "amount",
+                "comparison_count": compared,
+                "comparison_weight": compared,
+                "components": [],
+                "concept": spec["concept"],
+                "description": spec["description"],
+                "left_weighted_sum": None,
+                "match_rate": match_rate,
+                "match_weight": matched,
+                "mismatch_count": mismatches,
+                "mismatch_weight": mismatches,
+                "missing_both_count": 0,
+                "missing_left_count": 0,
+                "missing_right_count": 0,
+                "parent": spec["parent"],
+                "right_weighted_sum": None,
+                "weighted_difference": None,
+                "weighted_match_rate": match_rate,
+            }
+        )
         component_concepts.append(spec["concept"])
 
     parent_compared = raw.get("compared_values", 0)
     parent_mismatches = raw.get("mismatch_count", 0)
     parent_matched = parent_compared - parent_mismatches
     parent_rate = (parent_matched / parent_compared * 100) if parent_compared else 100.0
-    aggregates.insert(0, {
-        "category": "tax",
-        "comparison": "amount",
-        "comparison_count": parent_compared,
-        "comparison_weight": parent_compared,
-        "components": component_concepts,
-        "concept": "us:tax/federal-income-tax#liability",
-        "description": "Federal income tax liability (ECPS, all surfaces)",
-        "left_weighted_sum": 0,
-        "match_rate": parent_rate,
-        "match_weight": parent_matched,
-        "mismatch_count": parent_mismatches,
-        "mismatch_weight": parent_mismatches,
-        "missing_both_count": 0,
-        "missing_left_count": 0,
-        "missing_right_count": 0,
-        "parent": None,
-        "right_weighted_sum": 0,
-        "weighted_difference": 0,
-        "weighted_match_rate": parent_rate,
-    })
+    aggregates.insert(
+        0,
+        {
+            "category": "tax",
+            "comparison": "amount",
+            "comparison_count": parent_compared,
+            "comparison_weight": parent_compared,
+            "components": component_concepts,
+            "concept": "us:tax/federal-income-tax#liability",
+            "description": "Federal income tax liability (ECPS, all surfaces)",
+            "left_weighted_sum": None,
+            "match_rate": parent_rate,
+            "match_weight": parent_matched,
+            "mismatch_count": parent_mismatches,
+            "mismatch_weight": parent_mismatches,
+            "missing_both_count": 0,
+            "missing_left_count": 0,
+            "missing_right_count": 0,
+            "parent": None,
+            "right_weighted_sum": None,
+            "weighted_difference": None,
+            "weighted_match_rate": parent_rate,
+        },
+    )
 
     # Concepts manifest mirrors aggregates so the dashboard's concept loader
     # picks them up. Components carry parent={parent_id} for auto-allow.
-    concepts: list[dict] = [{
-        "category": "tax",
-        "comparison": "amount",
-        "components": component_concepts,
-        "description": "Federal income tax liability (ECPS, all surfaces)",
-        "id": "us:tax/federal-income-tax#liability",
-        "parent": None,
-        "tolerance": 15,
-    }]
+    concepts: list[dict] = [
+        {
+            "category": "tax",
+            "comparison": "amount",
+            "components": component_concepts,
+            "description": "Federal income tax liability (ECPS, all surfaces)",
+            "id": "us:tax/federal-income-tax#liability",
+            "parent": None,
+            "tolerance": 15,
+        }
+    ]
     for surface, rows in by_surface.items():
         spec = FIIT_SURFACE_CONCEPTS.get(surface)
         if spec is None:
             continue
-        concepts.append({
-            "category": spec["category"],
-            "comparison": "amount",
-            "components": [],
-            "description": spec["description"],
-            "id": spec["concept"],
-            "parent": spec["parent"],
-            "tolerance": spec["tolerance"],
-        })
+        concepts.append(
+            {
+                "category": spec["category"],
+                "comparison": "amount",
+                "components": [],
+                "description": spec["description"],
+                "id": spec["concept"],
+                "parent": spec["parent"],
+                "tolerance": spec["tolerance"],
+            }
+        )
 
     # Cases: one per mismatching entity. Matching entities are not enumerated
     # (the harness doesn't surface their ids); summary/aggregates capture them.
@@ -480,22 +531,32 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             flat_mismatches.append(mm)
         if not case_mismatches:
             continue
-        cases.append({
-            "case_id": case_id,
-            "left_engine": "axiom",
-            "left_errors": [],
-            "match_rate": 0.0,
-            "metadata": {
-                "case_unit": "tax_unit",
-                "dataset": "enhanced_cps",
-                "entity_id": entity_id,
-                "population": "enhanced-cps",
-                "suite": suite,
-            },
-            "mismatches": case_mismatches,
-            "right_engine": "policyengine",
-            "right_errors": [],
-        })
+        cases.append(
+            {
+                "case_id": case_id,
+                "left_engine": "axiom",
+                "left_errors": [],
+                "match_rate": 0.0,
+                "metadata": {
+                    "case_unit": "tax_unit",
+                    "dataset": "enhanced_cps",
+                    "entity_id": entity_id,
+                    "population": "enhanced-cps",
+                    "suite": suite,
+                },
+                "mismatches": case_mismatches,
+                "right_engine": "policyengine",
+                "right_errors": [],
+            }
+        )
+
+    mismatches_by_concept = [
+        {"value": value, "count": count}
+        for value, count in sorted(
+            Counter(m["concept"] for m in flat_mismatches).items(),
+            key=lambda item: (-item[1], item[0]),
+        )
+    ]
 
     return {
         "aggregates": aggregates,
@@ -516,8 +577,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "errors_by_engine": {},
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
-            "mismatches_by_concept": {},
-            "mismatches_by_kind": {"amount_difference": parent_mismatches},
+            "mismatches_by_concept": mismatches_by_concept,
+            "mismatches_by_kind": [
+                {"value": "amount_difference", "count": parent_mismatches}
+            ],
             "mismatches_by_scenario": {},
             "weighted": {
                 "comparison_weight": parent_compared,
