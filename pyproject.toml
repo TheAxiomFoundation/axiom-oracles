@@ -7,7 +7,7 @@ name = "axiom-oracles"
 version = "0.1.0"
 description = "Axiom oracle adapters and cross-engine comparison tooling"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = "==3.14.*"
 dependencies = [
   "click>=8.1",
   "pyyaml>=6.0",
