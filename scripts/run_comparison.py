@@ -191,7 +191,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     """`axiom-encode tax-ecps-compare` via uv run with the pinned PE stack."""
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    _ensure_engine_binary(axiom_rules_repo, kind="debug")
+    _ensure_engine_binary(axiom_rules_repo, kind="release")
     rulespec_root = _ensure_rulespec_us_checkout(runner["rulespec_remote"])
     params = runner["parameters"]
     pinned = params.get("pinned", True)
