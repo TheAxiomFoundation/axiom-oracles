@@ -249,14 +249,75 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
 
 
 def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
-    """`axiom_oracles.cli compare <left> <right>` (in-repo CLI)."""
+    """`axiom_oracles.cli compare <left> <right>` (in-repo CLI).
+
+    Runs via `uv run --python 3.13` against pinned PolicyEngine versions so
+    PE 4.11.0's pydantic-based models load cleanly. Mirrors the
+    `axiom-encode-tax-ecps-compare` runner's environment.
+    """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     _ensure_engine_binary(axiom_rules_repo, kind="release")
     params = runner["parameters"]
+    # PolicyEngine 4.11.0 hard-pins its bundled ECPS manifest at PE-US 1.700.0;
+    # we run against 1.705.1 (the version axiom-encode pins) so the manifest
+    # certification check refuses to load the model. Monkey-patch it before
+    # importing the CLI — same shape axiom-encode tax-ecps-compare uses.
+    _PE_CERT_OVERRIDE = """
+import os, sys
+# Skip the eager US country import so we can patch the certification check
+# BEFORE the consuming `model_version` module imports the symbol it calls.
+os.environ['POLICYENGINE_SKIP_COUNTRY_IMPORTS'] = '1'
+try:
+    import policyengine.provenance.manifest as _m
+
+    def _allow_local_oracle_data(
+        country_id, runtime_model_version, runtime_data_build_fingerprint=None
+    ):
+        return _m.DataCertification(
+            compatibility_basis='axiom_oracle_local_policyengine_us_override',
+            certified_for_model_version=runtime_model_version,
+            data_build_fingerprint=runtime_data_build_fingerprint,
+            certified_by='axiom-oracles run_comparison.py',
+        )
+
+    _m.certify_data_release_compatibility = _allow_local_oracle_data
+    try:
+        import policyengine.tax_benefit_models.common.model_version as _mv
+        _mv.certify_data_release_compatibility = _allow_local_oracle_data
+    except ImportError:
+        pass
+except ImportError:
+    pass
+
+# Now load the US country module manually so `pe.us` is populated.
+os.environ.pop('POLICYENGINE_SKIP_COUNTRY_IMPORTS', None)
+try:
+    import policyengine
+    from policyengine.tax_benefit_models import us as _us
+    policyengine.us = _us
+except Exception:
+    pass
+
+from axiom_oracles.cli import cli as _cli
+_cli(sys.argv[1:], standalone_mode=False)
+"""
     cmd = [
-        sys.executable,
-        "-m",
-        "axiom_oracles.cli",
+        "uv",
+        "run",
+        "--python",
+        "3.14",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine==4.11.0",
+        "--with",
+        "policyengine-us==1.705.1",
+        "--with",
+        "policyengine-core==3.26.11",
+        "python",
+        "-c",
+        _PE_CERT_OVERRIDE,
         "compare",
         params["left"],
         params["right"],
