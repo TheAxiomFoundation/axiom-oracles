@@ -198,11 +198,11 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     pe_pins = (
         [
             "--with",
-            "policyengine==4.4.4",
+            "policyengine==4.11.0",
             "--with",
             "policyengine-us==1.705.1",
             "--with",
-            "policyengine-core==3.26.0",
+            "policyengine-core==3.26.11",
         ]
         if pinned
         else [
