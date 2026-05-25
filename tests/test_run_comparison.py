@@ -73,9 +73,9 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert cmd[:4] == ["uv", "run", "--python", "3.14"]
     assert "--with-editable" in cmd
     assert str(axiom_encode.resolve()) in cmd
-    assert "policyengine==4.4.4" in cmd
+    assert "policyengine==4.11.0" in cmd
     assert "policyengine-us==1.705.1" in cmd
-    assert "policyengine-core==3.26.0" in cmd
+    assert "policyengine-core==3.26.11" in cmd
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
     assert output.read_text() == "{}"
