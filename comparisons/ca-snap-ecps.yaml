@@ -1,0 +1,34 @@
+# California SNAP (CalFresh) eligibility — Axiom vs PolicyEngine on the
+# Enhanced CPS. The Axiom side is produced by composing the declarative
+# program spec at axiom-programs/us-ca/snap/fy-2026.yaml through axiom-compose,
+# which synthesizes snap_member_eligible (Person), snap_unit (derived_relation,
+# SnapUnit), and snap_eligible (Household) from generic transformation patterns
+# applied to atomic federal predicates in rulespec-us plus CA-specific
+# atomic rules in rulespec-us-ca.
+#
+# This is the first state SNAP comparison driven by axiom-compose rather than
+# bucket-E composition in a rulespec repo.
+
+name: ca-snap-ecps
+title: California SNAP — Axiom vs PolicyEngine
+description: Compares California SNAP eligibility produced by the composed
+  axiom-programs/us-ca/snap/fy-2026 spec against PolicyEngine on the Enhanced
+  CPS, filtered to California households.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules
+  parameters:
+    left: axiom
+    right: policyengine
+    concept: us:statutes/7/2014/o#snap_eligible
+    sample_size: 1000
+    period: 2026-01
+    population: enhanced-cps
+
+artifacts:
+  report_basename: axiom-policyengine-ca-snap-ecps
+
+dashboard:
+  filename: axiom-policyengine-ca-snap-ecps.json
+  suite: ca-snap-ecps

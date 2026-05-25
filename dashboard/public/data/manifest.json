@@ -2,6 +2,7 @@
   "reports": [
     "axiom-policyengine.json",
     "policyengine-taxsim.json",
-    "axiom-policyengine-fiit-ecps.json"
+    "axiom-policyengine-fiit-ecps.json",
+    "axiom-policyengine-ca-snap-ecps.json"
   ]
 }
