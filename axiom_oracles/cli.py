@@ -319,6 +319,7 @@ def compare(
             accessnyc_python_path,
             concept_ids,
             axiom_program=axiom_program,
+            axiom_compiled_program=axiom_compiled_program,
             axiom_engine_binary=axiom_engine_binary,
             axiom_entity_id=axiom_entity_id,
             axiom_batch_size=axiom_batch_size,
@@ -331,6 +332,7 @@ def compare(
             accessnyc_python_path,
             concept_ids,
             axiom_program=axiom_program,
+            axiom_compiled_program=axiom_compiled_program,
             axiom_engine_binary=axiom_engine_binary,
             axiom_entity_id=axiom_entity_id,
             axiom_batch_size=axiom_batch_size,
@@ -641,6 +643,7 @@ def _build_runner(
     concept_ids: tuple[str, ...],
     *,
     axiom_program: Path | None = None,
+    axiom_compiled_program: Path | None = None,
     axiom_engine_binary: Path | None = None,
     axiom_entity_id: str = "tax_unit",
     axiom_batch_size: int = 5_000,
@@ -672,10 +675,15 @@ def _build_runner(
         # CO RuleSpec module on every case and the engine's `kind: reiteration`
         # support requirement). Tax concepts keep compiling fresh from the
         # generated oracle bridge imports.
+        # When the caller passes --axiom-compiled-program (e.g. CA SNAP via
+        # axiom-programs), use that artifact instead of the bundled CO one.
         wants_snap = _wants_snap(concept_ids) and axiom_program is None
-        compiled_artifact = (
-            US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
-        )
+        if axiom_compiled_program is not None:
+            compiled_artifact = axiom_compiled_program
+        else:
+            compiled_artifact = (
+                US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
+            )
         program_imports = (
             US_TAX_ORACLE_IMPORTS
             if axiom_program is None

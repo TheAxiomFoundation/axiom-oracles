@@ -222,6 +222,7 @@ def project_case_inputs(
     ecps_mapping: EcpsMapping | None = None,
     case_facts: Mapping[str, Any] | None = None,
     person_facts: list[Mapping[str, Any]] | None = None,
+    program_target: str = "axiom:program",
 ) -> list[GenericInputRecord]:
     """Project a single case into engine input records the compiled program needs.
 
@@ -242,6 +243,16 @@ def project_case_inputs(
     person_facts = person_facts or [{} for _ in person_ids]
     records: list[GenericInputRecord] = []
 
+    # The engine requires dataset inputs to use absolute legal RuleSpec
+    # references (namespace:path#input.<bare-name>); bare names are rejected
+    # under public-id mode. The bare slot name is the engine's resolution
+    # key — the target prefix is just provenance — so any well-formed
+    # public reference works. We synthesize one per slot so the strict
+    # path accepts the records. When compose later emits a canonical
+    # inputs manifest, callers can pass the real per-slot target through.
+    def _qualify(name: str) -> str:
+        return f"{program_target}#input.{name}"
+
     for slot in slots:
         if slot.entity == "Person":
             for person_id, facts in zip(person_ids, person_facts, strict=False):
@@ -250,7 +261,7 @@ def project_case_inputs(
                 )
                 records.append(
                     GenericInputRecord(
-                        name=slot.name,
+                        name=_qualify(slot.name),
                         entity="Person",
                         entity_id=person_id,
                         value=value,
@@ -263,7 +274,7 @@ def project_case_inputs(
             )
             records.append(
                 GenericInputRecord(
-                    name=slot.name,
+                    name=_qualify(slot.name),
                     entity=slot.entity,
                     entity_id=household_id,
                     value=value,
@@ -352,6 +363,11 @@ def attach_generic_inputs(
         except Exception:
             ecps_mapping = None
 
+    # Derive a stable synthetic target from the compiled-program path so the
+    # absolute references the engine sees are deterministic per program.
+    # Example: /tmp/ca-snap-compiled.json → axiom:ca-snap-compiled.
+    program_target = f"axiom:{Path(compiled_program_path).stem}"
+
     projected: list = []
     for case in cases:
         metadata = dict(case.metadata)
@@ -381,6 +397,7 @@ def attach_generic_inputs(
             ecps_mapping=ecps_mapping,
             case_facts=case_facts,
             person_facts=person_facts,
+            program_target=program_target,
         )
 
         interval = {
