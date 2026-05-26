@@ -225,6 +225,14 @@ def _print_coverage_warnings(config: dict) -> None:
     if not compiled_program.exists():
         return
     target = str(concept).rsplit("#", 1)[-1]
+    # Coverage detection asks "what eligibility tests are orphaned" — only
+    # auto-fires when the target itself looks like an eligibility judgment.
+    # For amount targets (snap_benefit, federal-income-tax#liability) the
+    # orphaned eligibility rules are intentionally on a different chain;
+    # surfacing them as alarms would be noise. Users can still opt in
+    # via `axiom-oracles coverage` directly with any target.
+    if not any(m in target for m in ("eligible", "ineligible")):
+        return
     try:
         from axiom_oracles.coverage import (
             find_uncovered_eligibility_rules,

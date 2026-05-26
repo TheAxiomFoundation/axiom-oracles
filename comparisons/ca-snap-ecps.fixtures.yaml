@@ -18,6 +18,12 @@
 # rule chains (over-permissive or over-restrictive defaults) at one
 # stroke. It is the single most valuable guardrail against silent
 # wrong-answer regressions.
+#
+# Design note — always include both True-expected and False-expected
+# cases. A constant-True engine will accidentally pass all
+# True-expected fixtures and a constant-False engine will accidentally
+# pass all False-expected ones; the suite stays robust against either
+# silent-degenerate mode only as long as both directions are covered.
 
 concept: us:statutes/7/2014/o#snap_eligible
 period: 2026-01

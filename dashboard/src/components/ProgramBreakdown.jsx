@@ -19,6 +19,7 @@ const CATEGORY_LABEL = {
  */
 function programStats(program, reports, oracles) {
   const pairs = [];
+  const qualityFlags = [];
   let matches = 0;
   let comparisons = 0;
   const matrix = {};
@@ -40,6 +41,17 @@ function programStats(program, reports, oracles) {
         mismatch: agg.mismatch_count,
         count: agg.comparison_count,
       });
+      for (const flag of agg.quality_flags || []) {
+        qualityFlags.push({
+          left,
+          right,
+          severity: flag.severity || "alarm",
+          code: flag.code,
+          message: flag.message,
+          leftPositiveRate: agg.left_positive_rate,
+          rightPositiveRate: agg.right_positive_rate,
+        });
+      }
       matches += (agg.comparison_count - agg.mismatch_count) || 0;
       comparisons += agg.comparison_count || 0;
       if (rate != null) {
@@ -58,6 +70,7 @@ function programStats(program, reports, oracles) {
 
   return {
     pairs,
+    qualityFlags,
     overallRate,
     comparisons,
     mismatches: comparisons - matches,
@@ -65,6 +78,54 @@ function programStats(program, reports, oracles) {
     oraclesWithData,
   };
 }
+
+function QualityAlarms({ flags }) {
+  // Surface positive-rate divergence alarms separately from the headline
+  // match rate. An engine that's silently broken (returns False for every
+  // case while the counterpart has real spread) would otherwise look like
+  // "high agreement" because both sides agree on the dominant outcome.
+  return (
+    <div style={{ marginTop: 18 }}>
+      <div
+        className="section-eyebrow"
+        style={{ marginBottom: 8, color: "var(--bad)" }}
+      >
+        Quality alarms
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {flags.map((flag, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "10px 12px",
+              border: "1px solid var(--bad)",
+              borderRadius: 8,
+              background: "rgba(180, 35, 24, 0.06)",
+              fontSize: 12.5,
+              lineHeight: 1.5,
+              color: "var(--ink)",
+            }}
+          >
+            <div
+              className="mono"
+              style={{
+                fontSize: 11,
+                color: "var(--bad)",
+                marginBottom: 4,
+                letterSpacing: 0.4,
+              }}
+            >
+              {flag.code} · {engineLabel(flag.left)} vs{" "}
+              {engineLabel(flag.right)}
+            </div>
+            <div style={{ color: "var(--ink-mute)" }}>{flag.message}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 
 function StatusPill({ status }) {
   const cfg = {
@@ -431,6 +492,10 @@ function ProgramCard({ program, stats, oracles }) {
                   "No comparisons run yet for this program."
                 )}
               </div>
+
+              {stats.qualityFlags && stats.qualityFlags.length > 0 && (
+                <QualityAlarms flags={stats.qualityFlags} />
+              )}
 
               {program.encoding_note && (
                 <>
