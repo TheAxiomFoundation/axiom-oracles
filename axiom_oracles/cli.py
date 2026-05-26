@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import replace
 import gc
 import json
+import sys
 from pathlib import Path
 import tempfile
 
@@ -86,6 +87,150 @@ def _needs_axiom_tax_itemization_choice(concept_ids: tuple[str, ...]) -> bool:
 @click.group()
 def cli() -> None:
     """Axiom program validation and oracle-comparison tools."""
+
+
+@cli.command("coverage")
+@click.option(
+    "--compiled-program",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+)
+@click.option("--target", required=True, help="Name of the derived rule to audit.")
+def coverage_check(compiled_program: Path, target: str) -> None:
+    """Report eligibility-looking rules that exist in a compiled program but
+    are not referenced by ``target``.
+
+    Surfaces the compose-spec gap that bit us on CA SNAP — the spec
+    only wired per-member eligibility into snap_eligible while gross-
+    income, net-income, and resource-limit rules were available but
+    unreferenced. Non-zero exit if any gaps are detected.
+    """
+    from .coverage import find_uncovered_eligibility_rules, format_coverage_warning
+
+    uncovered = find_uncovered_eligibility_rules(compiled_program, target=target)
+    if uncovered:
+        click.echo(format_coverage_warning(target, uncovered))
+        sys.exit(1)
+    click.echo(f"Coverage OK — no eligibility-looking rules orphaned from {target}.")
+
+
+@cli.command("sanity")
+@click.argument("fixtures_file", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option("--left", default="axiom", type=click.Choice(["axiom", "policyengine"]))
+@click.option("--right", default="policyengine", type=click.Choice(["axiom", "policyengine"]))
+@click.option("--axiom-engine-binary", type=click.Path(path_type=Path, exists=True))
+@click.option("--axiom-compiled-program", type=click.Path(path_type=Path, exists=True))
+@click.option("--jurisdiction-fips", type=str, default=None)
+def sanity_check(
+    fixtures_file: Path,
+    left: str,
+    right: str,
+    axiom_engine_binary: Path | None,
+    axiom_compiled_program: Path | None,
+    jurisdiction_fips: str | None,
+) -> None:
+    """Run a comparison's sanity fixtures and verify expected per-engine outcomes.
+
+    Sanity fixtures are hand-built cases whose expected outcomes follow
+    from public domain knowledge of the program rules. Running them
+    *before* a population-scale comparison catches infrastructure bugs
+    (missing relations, wrong intervals) and rule-chain gaps
+    (over-permissive or over-restrictive defaults) that aggregate match
+    rates can mask. Non-zero exit on any failure.
+    """
+    from .sanity import (
+        SanityResult,
+        SanitySummary,
+        fixture_to_case,
+        load_fixtures,
+        print_summary,
+    )
+
+    concept, period, fixtures = load_fixtures(fixtures_file)
+    if not fixtures:
+        click.echo("No fixtures to run.", err=True)
+        sys.exit(2)
+
+    cases = [
+        fixture_to_case(f, concept=concept, period=period) for f in fixtures
+    ]
+    concept_ids = (concept,)
+
+    left_runner = _build_runner(
+        left, "api", None, None, concept_ids,
+        axiom_compiled_program=axiom_compiled_program,
+        axiom_engine_binary=axiom_engine_binary,
+        paired_engine=right,
+    )
+    right_runner = _build_runner(
+        right, "api", None, None, concept_ids,
+        axiom_compiled_program=axiom_compiled_program,
+        axiom_engine_binary=axiom_engine_binary,
+        paired_engine=left,
+    )
+
+    try:
+        prepared = _prepare_cases_for_engines(
+            cases, {left, right}, concept_ids,
+            axiom_compiled_program=axiom_compiled_program,
+            jurisdiction_fips=jurisdiction_fips,
+        )
+    except RuntimeError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+    left_results = left_runner.run_cases(prepared, list(concept_ids))
+    right_results = right_runner.run_cases(prepared, list(concept_ids))
+
+    summary = SanitySummary(concept=concept, period=period)
+    by_left = {r.household_id: r for r in left_results}
+    by_right = {r.household_id: r for r in right_results}
+    for fixture, case in zip(fixtures, prepared, strict=False):
+        for engine_name, results_by_id in ((left, by_left), (right, by_right)):
+            # Fixtures declare which engines they assert against; missing
+            # entries mean "this fixture doesn't have a confident expected
+            # value for this engine" — skip rather than guess.
+            if engine_name not in fixture.expected:
+                continue
+            expected = bool(fixture.expected[engine_name])
+            engine_result = results_by_id.get(case.case_id)
+            if engine_result is None:
+                summary.results.append(SanityResult(
+                    fixture_id=fixture.id, engine=engine_name,
+                    expected=expected, actual=None, matched=False,
+                    error="no result returned",
+                ))
+                continue
+            # Engines key their output dicts differently — axiom uses bare
+            # derived names (`snap_eligible`), PolicyEngine uses its
+            # variable names (`is_snap_eligible`), and some emit the full
+            # concept ID. Look up by the concept ID first, then by the
+            # fragment after `#`, then by any non-None value.
+            values = engine_result.values
+            fragment = concept.rsplit("#", 1)[-1]
+            actual = values.get(concept)
+            if actual is None:
+                actual = values.get(fragment)
+            if actual is None:
+                non_none = [v for v in values.values() if v is not None]
+                actual = non_none[0] if len(non_none) == 1 else None
+            err = "; ".join(engine_result.errors or ()) or None
+            # An engine that returns None (couldn't compute) is a hard
+            # failure for a sanity check — it means the engine pipeline
+            # didn't produce the value the comparison depends on.
+            if actual is None and err is None:
+                err = (
+                    "engine returned no value for the requested concept "
+                    f"(values={list(values)!r})"
+                )
+            summary.results.append(SanityResult(
+                fixture_id=fixture.id, engine=engine_name,
+                expected=expected, actual=actual,
+                matched=(bool(actual) == expected) if err is None else False,
+                error=err,
+            ))
+
+    print_summary(summary)
+    sys.exit(0 if summary.passed else 1)
 
 
 @cli.command()
