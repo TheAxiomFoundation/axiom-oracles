@@ -406,10 +406,24 @@ def attach_generic_inputs(
         }
         input_dicts = [r.to_dict(interval) for r in records]
 
-        relation_records = [
-            {"name": member_relation, "tuple": [pid, household_entity_id]}
-            for pid in person_ids
-        ]
+        # Emit the relation under both the absolute (`us:.../#relation.X`)
+        # and bare (`X`) forms. Compose-synthesized rules call
+        # `count_related` with bare relation names, while atomic encoded
+        # rules use the absolute form. The engine's relation lookup
+        # treats them as two distinct relations, so emit both to keep
+        # both worlds happy. The bare name is derived from the absolute
+        # form's fragment after stripping the `#relation.` prefix.
+        bare_name = member_relation
+        if "#" in member_relation:
+            _, fragment = member_relation.split("#", maxsplit=1)
+            bare_name = fragment.removeprefix("relation.")
+
+        relation_records: list[dict[str, Any]] = []
+        for pid in person_ids:
+            tuple_pair = [pid, household_entity_id]
+            relation_records.append({"name": member_relation, "tuple": tuple_pair})
+            if bare_name != member_relation:
+                relation_records.append({"name": bare_name, "tuple": tuple_pair})
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
@@ -434,12 +448,19 @@ def _interval_start(period: str) -> str:
 
 
 def _interval_end(period: str) -> str:
-    """Convert a case period like '2026-01' into an ISO end date (month-end)."""
+    """Convert a case period like '2026-01' into an ISO end date (month-end).
+
+    The end date must cover the full query period — the engine's interval-
+    membership check is strict, so an input recorded as 2026-01-01..28 is
+    invisible to a query for 2026-01-29..31. Use the calendar's actual
+    last day of the month.
+    """
+    from calendar import monthrange
+
     if len(period) == 7:
         year, month = period.split("-")
-        # Conservative: 28th — good enough for monthly comparison; month length
-        # doesn't affect the engine's interval-membership check.
-        return f"{period}-28"
+        last_day = monthrange(int(year), int(month))[1]
+        return f"{period}-{last_day:02d}"
     if len(period) == 4:
         return f"{period}-12-31"
     return period
