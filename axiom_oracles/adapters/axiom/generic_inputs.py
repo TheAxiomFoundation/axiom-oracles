@@ -314,6 +314,7 @@ def attach_generic_inputs(
     household_entity: str = "Household",
     household_entity_id: str = "household",
     member_relation: str = "us:statutes/7/2012/j#relation.member_of_household",
+    load_default_mapping: bool = True,
 ) -> list:
     """Attach generic Axiom input records to each case.
 
@@ -340,6 +341,17 @@ def attach_generic_inputs(
         compiled = json.load(f)
     program = compiled.get("program", compiled)
 
+    # If the caller didn't pass a mapping, resolve one from the default YAML.
+    # The mapping table itself is data (axiom_oracles/data/ecps_input_mapping.yaml);
+    # this just picks the entries that match the program's specific slots.
+    if ecps_mapping is None and load_default_mapping:
+        try:
+            from .ecps_mapping_loader import load_ecps_mapping_for_program
+
+            ecps_mapping = load_ecps_mapping_for_program(program)
+        except Exception:
+            ecps_mapping = None
+
     projected: list = []
     for case in cases:
         metadata = dict(case.metadata)
@@ -356,16 +368,18 @@ def attach_generic_inputs(
         # Build facts dicts so the generic resolver can look up values by
         # unqualified input name. ECPS Cases store facts on entities, not
         # by input-slot identifiers — the ecps_mapping is the place to do
-        # the actual translation. Here we just expose person.facts and an
-        # empty case-level dict.
+        # the actual translation. The household-level dict carries a hidden
+        # __people__ key so household-scoped transforms (hh_size,
+        # sum_over_people) can see the per-person facts.
         person_facts = [dict(person.facts) for person in people]
+        case_facts = {"__people__": person_facts}
 
         records = project_case_inputs(
             compiled_program=program,
             household_id=household_entity_id,
             person_ids=person_ids,
             ecps_mapping=ecps_mapping,
-            case_facts={},
+            case_facts=case_facts,
             person_facts=person_facts,
         )
 

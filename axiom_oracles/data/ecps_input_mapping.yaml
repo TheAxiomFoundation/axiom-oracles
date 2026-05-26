@@ -1,0 +1,144 @@
+# ECPS-to-input mapping table — data, not code.
+#
+# Each entry declares HOW a single input slot in a compiled program gets
+# populated from ECPS facts on a Case. The generic projector
+# (axiom_oracles.adapters.axiom.generic_inputs) reads this table at startup,
+# builds an EcpsMapping, and applies it to every compiled program it runs.
+#
+# Adding a new program comparison no longer requires Python: extend this
+# table with the slot names the new program declares, point each at an
+# ECPS fact (or a constant / derived value), and the generic projector
+# handles the rest. Tracked as the "data, not code" follow-up under #26.
+#
+# Match rules:
+#   match.kind: suffix | exact | substring
+#     suffix    — slot name ends with `match.value` (most common; covers
+#                 both us:... and us-co:... variants of the same input)
+#     exact     — slot name equals `match.value`
+#     substring — `match.value` appears anywhere in slot name
+#
+# Source rules:
+#   source.kind: fact | constant | derived
+#     fact     — read Case fact named `source.name` from the relevant
+#                entity (Person facts for Person-scoped slots,
+#                Case-level for Household/SnapUnit/TaxUnit).
+#                Optional `default` if the fact is missing.
+#     constant — yield `source.value` for every case (e.g. citizenship=True
+#                until ECPS exposes the citizenship column we want)
+#     derived  — apply a named transform to one or more facts:
+#                  transform: monthly       (annual → monthly, ÷12, 2dp)
+#                  transform: weekly        (annual → weekly, ÷52, 2dp)
+#                  transform: hh_size       (len(people))
+#                  transform: elderly_or_disabled  (age ≥ 60 OR disabled)
+#                  transform: positive      (1/True if value > 0 else 0/False)
+#                  transform: positive_to_constant  (constant if value>0)
+#
+# Scope:
+#   scope: person | household
+#     person    — slot evaluated per-person; transforms see the Person facts
+#     household — slot evaluated once per case; transforms see the case
+#                 (with `people` available for hh_size etc.)
+
+mappings:
+  # ---------------------------------------------------------------------
+  # Household-level
+  # ---------------------------------------------------------------------
+
+  - match: { kind: exact, value: household_size }
+    scope: household
+    source:
+      kind: derived
+      transform: hh_size
+
+  - match: { kind: substring, value: employee_wages_received }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [YEARLY_EARNED_INCOME]
+      aggregate: sum_over_people
+
+  - match: { kind: substring, value: snap_gross_monthly_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [YEARLY_EARNED_INCOME]
+      aggregate: sum_over_people
+
+  - match: { kind: substring, value: snap_monthly_household_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [YEARLY_EARNED_INCOME]
+      aggregate: sum_over_people
+
+  # ---------------------------------------------------------------------
+  # Person-level
+  # ---------------------------------------------------------------------
+
+  - match: { kind: exact, value: member_age }
+    scope: person
+    source: { kind: fact, name: PERSON_AGE, cast: int }
+
+  - match: { kind: substring, value: snap_member_is_elderly_or_disabled }
+    scope: person
+    source:
+      kind: derived
+      transform: elderly_or_disabled
+
+  - match: { kind: substring, value: physically_or_mentally_unfit_for_employment }
+    scope: person
+    source: { kind: fact, name: DISABLED, default: false, cast: bool }
+
+  - match: { kind: substring, value: member_is_pregnant }
+    scope: person
+    source: { kind: fact, name: PREGNANT, default: false, cast: bool }
+
+  - match: { kind: substring, value: member_is_veteran }
+    scope: person
+    source: { kind: fact, name: VETERAN, default: false, cast: bool }
+
+  - match: { kind: substring, value: member_weekly_work_hours }
+    scope: person
+    source:
+      kind: derived
+      transform: positive_to_constant
+      from_facts: [YEARLY_EARNED_INCOME]
+      constant: 30
+
+  - match: { kind: substring, value: member_weekly_wages }
+    scope: person
+    source:
+      kind: derived
+      transform: weekly
+      from_facts: [YEARLY_EARNED_INCOME]
+
+  - match: { kind: substring, value: member_abawd_weekly_work_hours }
+    scope: person
+    source:
+      kind: derived
+      transform: positive_to_constant
+      from_facts: [YEARLY_EARNED_INCOME]
+      constant: 20
+
+  - match: { kind: substring, value: member_abawd_monthly_work_hours }
+    scope: person
+    source:
+      kind: derived
+      transform: positive_to_constant
+      from_facts: [YEARLY_EARNED_INCOME]
+      constant: 80
+
+  - match: { kind: substring, value: enrolled_at_least_half_time }
+    scope: person
+    source: { kind: constant, value: false }
+
+  # `member_is_us_citizen` defaults to True until ECPS exposes a column
+  # we can read. This replicates the legacy CO projection's behaviour
+  # exactly; replace with `{kind: fact, name: IS_US_CITIZEN}` when the
+  # case fact lands.
+  - match: { kind: substring, value: member_is_us_citizen }
+    scope: person
+    source: { kind: constant, value: true }
