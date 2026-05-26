@@ -25,6 +25,12 @@ runner:
     sample_size: 1000
     period: 2026-01
     population: enhanced-cps
+    # The generic input projector (axiom-oracles#26) needs the compiled
+    # program artifact so it can enumerate input slots and the FIPS prefix
+    # so the comparison runs on the right state's households. Without
+    # these, the harness falls back to the Colorado-only path.
+    axiom_compiled_program: /tmp/ca-snap-compiled.json
+    jurisdiction_fips: "06"
 
 artifacts:
   report_basename: axiom-policyengine-ca-snap-ecps

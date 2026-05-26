@@ -200,6 +200,26 @@ def cli() -> None:
     help="Number of cases per Axiom run-compiled request.",
 )
 @click.option(
+    "--axiom-compiled-program",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    envvar="AXIOM_COMPILED_PROGRAM",
+    help=(
+        "Compiled program JSON (output of `axiom-rules-engine compile`). "
+        "When provided alongside --jurisdiction-fips, the harness uses the "
+        "generic input projector instead of program-specific Python "
+        "adapters (axiom-oracles#26)."
+    ),
+)
+@click.option(
+    "--jurisdiction-fips",
+    default=None,
+    help=(
+        "Two-digit FIPS prefix used to filter ECPS households for this "
+        "comparison (e.g. `06` for California, `08` for Colorado). When "
+        "unset, the harness applies its legacy Colorado-only SNAP filter."
+    ),
+)
+@click.option(
     "--comparison-batch-size",
     type=click.IntRange(min=1),
     default=5_000,
@@ -232,6 +252,8 @@ def compare(
     axiom_engine_binary: Path | None,
     axiom_entity_id: str,
     axiom_batch_size: int,
+    axiom_compiled_program: Path | None,
+    jurisdiction_fips: str | None,
     comparison_batch_size: int,
     output_path: Path | None,
     json_output: bool,
@@ -335,6 +357,8 @@ def compare(
                         {left, right},
                         concept_ids,
                         axiom_program=axiom_program,
+                        axiom_compiled_program=axiom_compiled_program,
+                        jurisdiction_fips=jurisdiction_fips,
                     )
                 except RuntimeError as exc:
                     raise click.ClickException(str(exc)) from exc
@@ -537,6 +561,8 @@ def _prepare_cases_for_engines(
     concept_ids: tuple[str, ...] = (),
     *,
     axiom_program: Path | None = None,
+    axiom_compiled_program: Path | None = None,
+    jurisdiction_fips: str | None = None,
 ) -> list[Case]:
     prepared = cases
     if "taxsim" in engines:
@@ -558,18 +584,42 @@ def _prepare_cases_for_engines(
         ):
             prepared = attach_axiom_tax_itemization_choice(prepared)
     if "axiom" in engines and _wants_snap(concept_ids):
-        # Axiom SNAP is encoded only for Colorado today. Filter the
-        # population to CO households so the comparison is apples-to-apples.
-        prepared = [case for case in prepared if _is_co_household(case)]
-        prepared = attach_axiom_snap_co_inputs(prepared)
+        # Two paths:
+        # - Generic: a compiled program + jurisdiction FIPS were provided.
+        #   Drives projection from the program artifact, filters by the
+        #   requested state. Same code for any (jurisdiction, SNAP) pair.
+        # - Legacy: Colorado-specific Python projection and FIPS filter.
+        #   Preserved until the CO mapping is extracted as data
+        #   (axiom-oracles#26 follow-up).
+        if axiom_compiled_program is not None and jurisdiction_fips:
+            from .adapters.axiom.generic_inputs import attach_generic_inputs
+
+            prepared = [
+                case
+                for case in prepared
+                if _household_in_jurisdiction(case, jurisdiction_fips)
+            ]
+            prepared = attach_generic_inputs(
+                prepared,
+                compiled_program_path=axiom_compiled_program,
+            )
+        else:
+            prepared = [case for case in prepared if _is_co_household(case)]
+            prepared = attach_axiom_snap_co_inputs(prepared)
     return prepared
 
 
-def _is_co_household(case: Case) -> bool:
+def _household_in_jurisdiction(case: Case, fips_prefix: str) -> bool:
+    """Generic FIPS-prefix filter (replaces hardcoded _is_co_household)."""
     scope = case.scope
     if scope is None or not scope.geoid:
         return False
-    return str(scope.geoid)[:2] == "08"
+    return str(scope.geoid).startswith(fips_prefix)
+
+
+def _is_co_household(case: Case) -> bool:
+    """Legacy Colorado-only filter; kept for the CO-specific SNAP path."""
+    return _household_in_jurisdiction(case, "08")
 
 
 def _resolve_period(period: str | None, left: str, right: str) -> str:

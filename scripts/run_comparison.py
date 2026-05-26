@@ -334,6 +334,13 @@ _cli(sys.argv[1:], standalone_mode=False)
         "--output",
         str(output),
     ]
+    if params.get("axiom_compiled_program"):
+        cmd.extend([
+            "--axiom-compiled-program",
+            str(_resolve_path(params["axiom_compiled_program"], "axiom_compiled_program")),
+        ])
+    if params.get("jurisdiction_fips"):
+        cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
     subprocess.run(cmd, check=True, cwd=REPO_ROOT)
 
 
