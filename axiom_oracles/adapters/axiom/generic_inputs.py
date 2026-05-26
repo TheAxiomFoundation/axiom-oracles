@@ -299,3 +299,116 @@ def _resolve_value(
     if unqualified in facts_table:
         return facts_table[unqualified]
     return default_for(slot.dtype)
+
+
+# ---------------------------------------------------------------------------
+# Case-level attach (CLI integration entry point)
+# ---------------------------------------------------------------------------
+
+
+def attach_generic_inputs(
+    cases: list,
+    *,
+    compiled_program_path: Path,
+    ecps_mapping: EcpsMapping | None = None,
+    household_entity: str = "Household",
+    household_entity_id: str = "household",
+    member_relation: str = "us:statutes/7/2012/j#relation.member_of_household",
+) -> list:
+    """Attach generic Axiom input records to each case.
+
+    Drop-in replacement for ``attach_axiom_snap_co_inputs`` and friends: the
+    compiled program declares its inputs; we project each case's facts into
+    those slots, falling back to type-zero defaults for inputs ECPS doesn't
+    measure. An optional ``ecps_mapping`` supplies per-program overrides
+    (data, not code).
+
+    The case's ``metadata[AXIOM_INPUT_RECORDS_METADATA_KEY]`` ends up with
+    one record per input slot per relevant entity; the relation between
+    persons and the household is also recorded so the engine can resolve
+    member-scoped inputs.
+    """
+    from dataclasses import replace
+
+    from ...core.case import Case, Entity
+    from .runner import (
+        AXIOM_INPUT_RECORDS_METADATA_KEY,
+        AXIOM_RELATIONS_METADATA_KEY,
+    )
+
+    with open(compiled_program_path) as f:
+        compiled = json.load(f)
+    program = compiled.get("program", compiled)
+
+    projected: list = []
+    for case in cases:
+        metadata = dict(case.metadata)
+        if metadata.get(AXIOM_INPUT_RECORDS_METADATA_KEY):
+            projected.append(case)
+            continue
+
+        people = [
+            entity
+            for entity in case.entities
+            if str(entity.kind).lower().replace("_", "-") == "person"
+        ]
+        person_ids = [f"member-{i}" for i, _ in enumerate(people)]
+        # Build facts dicts so the generic resolver can look up values by
+        # unqualified input name. ECPS Cases store facts on entities, not
+        # by input-slot identifiers — the ecps_mapping is the place to do
+        # the actual translation. Here we just expose person.facts and an
+        # empty case-level dict.
+        person_facts = [dict(person.facts) for person in people]
+
+        records = project_case_inputs(
+            compiled_program=program,
+            household_id=household_entity_id,
+            person_ids=person_ids,
+            ecps_mapping=ecps_mapping,
+            case_facts={},
+            person_facts=person_facts,
+        )
+
+        interval = {
+            "start": _interval_start(case.period),
+            "end": _interval_end(case.period),
+        }
+        input_dicts = [r.to_dict(interval) for r in records]
+
+        relation_records = [
+            {"name": member_relation, "tuple": [pid, household_entity_id]}
+            for pid in person_ids
+        ]
+
+        metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts
+        metadata[AXIOM_RELATIONS_METADATA_KEY] = [
+            *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
+            *relation_records,
+        ]
+        metadata["axiom_entity"] = household_entity
+        metadata["axiom_entity_id"] = household_entity_id
+
+        projected.append(replace(case, metadata=metadata))
+
+    return projected
+
+
+def _interval_start(period: str) -> str:
+    """Convert a case period like '2026-01' into an ISO start date."""
+    if len(period) == 7:  # YYYY-MM
+        return f"{period}-01"
+    if len(period) == 4:  # YYYY
+        return f"{period}-01-01"
+    return period
+
+
+def _interval_end(period: str) -> str:
+    """Convert a case period like '2026-01' into an ISO end date (month-end)."""
+    if len(period) == 7:
+        year, month = period.split("-")
+        # Conservative: 28th — good enough for monthly comparison; month length
+        # doesn't affect the engine's interval-membership check.
+        return f"{period}-28"
+    if len(period) == 4:
+        return f"{period}-12-31"
+    return period
