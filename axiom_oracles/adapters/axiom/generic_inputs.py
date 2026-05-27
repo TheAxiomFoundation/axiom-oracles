@@ -342,7 +342,6 @@ def attach_generic_inputs(
     """
     from dataclasses import replace
 
-    from ...core.case import Case, Entity
     from .runner import (
         AXIOM_INPUT_RECORDS_METADATA_KEY,
         AXIOM_RELATIONS_METADATA_KEY,

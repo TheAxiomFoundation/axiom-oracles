@@ -14,7 +14,6 @@ import pytest
 
 from axiom_oracles.core.case import Concepts
 from axiom_oracles.sanity import (
-    SanityFixture,
     SanityResult,
     SanitySummary,
     fixture_to_case,
