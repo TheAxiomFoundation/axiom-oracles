@@ -222,6 +222,7 @@ def project_case_inputs(
     ecps_mapping: EcpsMapping | None = None,
     case_facts: Mapping[str, Any] | None = None,
     person_facts: list[Mapping[str, Any]] | None = None,
+    program_target: str = "axiom:program",
 ) -> list[GenericInputRecord]:
     """Project a single case into engine input records the compiled program needs.
 
@@ -242,6 +243,16 @@ def project_case_inputs(
     person_facts = person_facts or [{} for _ in person_ids]
     records: list[GenericInputRecord] = []
 
+    # The engine requires dataset inputs to use absolute legal RuleSpec
+    # references (namespace:path#input.<bare-name>); bare names are rejected
+    # under public-id mode. The bare slot name is the engine's resolution
+    # key — the target prefix is just provenance — so any well-formed
+    # public reference works. We synthesize one per slot so the strict
+    # path accepts the records. When compose later emits a canonical
+    # inputs manifest, callers can pass the real per-slot target through.
+    def _qualify(name: str) -> str:
+        return f"{program_target}#input.{name}"
+
     for slot in slots:
         if slot.entity == "Person":
             for person_id, facts in zip(person_ids, person_facts, strict=False):
@@ -250,7 +261,7 @@ def project_case_inputs(
                 )
                 records.append(
                     GenericInputRecord(
-                        name=slot.name,
+                        name=_qualify(slot.name),
                         entity="Person",
                         entity_id=person_id,
                         value=value,
@@ -263,7 +274,7 @@ def project_case_inputs(
             )
             records.append(
                 GenericInputRecord(
-                    name=slot.name,
+                    name=_qualify(slot.name),
                     entity=slot.entity,
                     entity_id=household_id,
                     value=value,
@@ -314,6 +325,7 @@ def attach_generic_inputs(
     household_entity: str = "Household",
     household_entity_id: str = "household",
     member_relation: str = "us:statutes/7/2012/j#relation.member_of_household",
+    load_default_mapping: bool = True,
 ) -> list:
     """Attach generic Axiom input records to each case.
 
@@ -330,7 +342,6 @@ def attach_generic_inputs(
     """
     from dataclasses import replace
 
-    from ...core.case import Case, Entity
     from .runner import (
         AXIOM_INPUT_RECORDS_METADATA_KEY,
         AXIOM_RELATIONS_METADATA_KEY,
@@ -339,6 +350,22 @@ def attach_generic_inputs(
     with open(compiled_program_path) as f:
         compiled = json.load(f)
     program = compiled.get("program", compiled)
+
+    # If the caller didn't pass a mapping, resolve one from the default YAML.
+    # The mapping table itself is data (axiom_oracles/data/ecps_input_mapping.yaml);
+    # this just picks the entries that match the program's specific slots.
+    if ecps_mapping is None and load_default_mapping:
+        try:
+            from .ecps_mapping_loader import load_ecps_mapping_for_program
+
+            ecps_mapping = load_ecps_mapping_for_program(program)
+        except Exception:
+            ecps_mapping = None
+
+    # Derive a stable synthetic target from the compiled-program path so the
+    # absolute references the engine sees are deterministic per program.
+    # Example: /tmp/ca-snap-compiled.json → axiom:ca-snap-compiled.
+    program_target = f"axiom:{Path(compiled_program_path).stem}"
 
     projected: list = []
     for case in cases:
@@ -356,17 +383,20 @@ def attach_generic_inputs(
         # Build facts dicts so the generic resolver can look up values by
         # unqualified input name. ECPS Cases store facts on entities, not
         # by input-slot identifiers — the ecps_mapping is the place to do
-        # the actual translation. Here we just expose person.facts and an
-        # empty case-level dict.
+        # the actual translation. The household-level dict carries a hidden
+        # __people__ key so household-scoped transforms (hh_size,
+        # sum_over_people) can see the per-person facts.
         person_facts = [dict(person.facts) for person in people]
+        case_facts = {"__people__": person_facts}
 
         records = project_case_inputs(
             compiled_program=program,
             household_id=household_entity_id,
             person_ids=person_ids,
             ecps_mapping=ecps_mapping,
-            case_facts={},
+            case_facts=case_facts,
             person_facts=person_facts,
+            program_target=program_target,
         )
 
         interval = {
@@ -375,10 +405,24 @@ def attach_generic_inputs(
         }
         input_dicts = [r.to_dict(interval) for r in records]
 
-        relation_records = [
-            {"name": member_relation, "tuple": [pid, household_entity_id]}
-            for pid in person_ids
-        ]
+        # Emit the relation under both the absolute (`us:.../#relation.X`)
+        # and bare (`X`) forms. Compose-synthesized rules call
+        # `count_related` with bare relation names, while atomic encoded
+        # rules use the absolute form. The engine's relation lookup
+        # treats them as two distinct relations, so emit both to keep
+        # both worlds happy. The bare name is derived from the absolute
+        # form's fragment after stripping the `#relation.` prefix.
+        bare_name = member_relation
+        if "#" in member_relation:
+            _, fragment = member_relation.split("#", maxsplit=1)
+            bare_name = fragment.removeprefix("relation.")
+
+        relation_records: list[dict[str, Any]] = []
+        for pid in person_ids:
+            tuple_pair = [pid, household_entity_id]
+            relation_records.append({"name": member_relation, "tuple": tuple_pair})
+            if bare_name != member_relation:
+                relation_records.append({"name": bare_name, "tuple": tuple_pair})
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
@@ -403,12 +447,19 @@ def _interval_start(period: str) -> str:
 
 
 def _interval_end(period: str) -> str:
-    """Convert a case period like '2026-01' into an ISO end date (month-end)."""
+    """Convert a case period like '2026-01' into an ISO end date (month-end).
+
+    The end date must cover the full query period — the engine's interval-
+    membership check is strict, so an input recorded as 2026-01-01..28 is
+    invisible to a query for 2026-01-29..31. Use the calendar's actual
+    last day of the month.
+    """
+    from calendar import monthrange
+
     if len(period) == 7:
         year, month = period.split("-")
-        # Conservative: 28th — good enough for monthly comparison; month length
-        # doesn't affect the engine's interval-membership check.
-        return f"{period}-28"
+        last_day = monthrange(int(year), int(month))[1]
+        return f"{period}-{last_day:02d}"
     if len(period) == 4:
         return f"{period}-12-31"
     return period
