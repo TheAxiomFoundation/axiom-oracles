@@ -32,6 +32,14 @@ COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "reports"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 
+# The outer script runs under the host python interpreter (not the uv
+# subprocess that runs the actual comparison), so make sure the editable
+# package layout is importable for in-process helpers like the coverage
+# analyzer. Without this, `from axiom_oracles.coverage import ...`
+# silently fails and the coverage warnings get dropped.
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 # ---------------------------------------------------------------------------
 # tax-ecps-compare → v2 dashboard schema adapter
 # ---------------------------------------------------------------------------
@@ -134,16 +142,30 @@ def main() -> int:
         default=None,
         help="Override the comparison's sample_size for this run only",
     )
+    parser.add_argument(
+        "--sanity",
+        action="store_true",
+        help=(
+            "Run the comparison's hand-built sanity fixtures "
+            "(<name>.fixtures.yaml) instead of the population-scale "
+            "comparison. Non-zero exit if any fixture fails."
+        ),
+    )
     args = parser.parse_args()
 
     if args.list:
         for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
+            if path.name.endswith(".fixtures.yaml"):
+                continue
             config = yaml.safe_load(path.read_text())
             print(f"{config['name']:24s}  {config.get('title', '')}")
         return 0
 
     if not args.name:
         parser.error("name is required (or pass --list)")
+
+    if args.sanity:
+        return _run_sanity(args.name)
 
     config = _load_comparison(args.name)
     if args.sample_size is not None:
@@ -178,8 +200,51 @@ def main() -> int:
 
     if args.summary:
         _print_summary(output)
+        _print_coverage_warnings(config)
 
     return 0
+
+
+def _print_coverage_warnings(config: dict) -> None:
+    """Run compose-spec coverage analysis against the comparison's compiled
+    program and surface any eligibility-looking rules that aren't
+    referenced by the comparison concept's expression tree.
+
+    Cheap static analysis — runs in-process (no uv subprocess) since it
+    only needs to read the compiled JSON. Silent when there are no gaps.
+    """
+    params = config.get("runner", {}).get("parameters") or {}
+    compiled_program_ref = params.get("axiom_compiled_program")
+    concept = params.get("concept")
+    if not compiled_program_ref or not concept:
+        return
+    try:
+        compiled_program = _resolve_path(compiled_program_ref, "axiom_compiled_program")
+    except SystemExit:
+        return
+    if not compiled_program.exists():
+        return
+    target = str(concept).rsplit("#", 1)[-1]
+    # Coverage detection asks "what eligibility tests are orphaned" — only
+    # auto-fires when the target itself looks like an eligibility judgment.
+    # For amount targets (snap_benefit, federal-income-tax#liability) the
+    # orphaned eligibility rules are intentionally on a different chain;
+    # surfacing them as alarms would be noise. Users can still opt in
+    # via `axiom-oracles coverage` directly with any target.
+    if not any(m in target for m in ("eligible", "ineligible")):
+        return
+    try:
+        from axiom_oracles.coverage import (
+            find_uncovered_eligibility_rules,
+            format_coverage_warning,
+        )
+    except ImportError:
+        return
+    uncovered = find_uncovered_eligibility_rules(compiled_program, target=target)
+    warning = format_coverage_warning(target, uncovered)
+    if warning:
+        print()
+        print(warning)
 
 
 # ---------------------------------------------------------------------------
@@ -248,26 +313,16 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
 
-def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
-    """`axiom_oracles.cli compare <left> <right>` (in-repo CLI).
-
-    Runs via `uv run --python 3.13` against pinned PolicyEngine versions so
-    PE 4.11.0's pydantic-based models load cleanly. Mirrors the
-    `axiom-encode-tax-ecps-compare` runner's environment.
-    """
-    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
-    params = runner["parameters"]
-    # PolicyEngine 4.11.0 hard-pins its bundled ECPS manifest at PE-US 1.700.0;
-    # we run against 1.705.1 (the version axiom-encode pins) so the manifest
-    # certification check refuses to load the model. Monkey-patch it before
-    # importing the CLI — same shape axiom-encode tax-ecps-compare uses.
-    _PE_CERT_OVERRIDE = """
+# PolicyEngine 4.11.0 hard-pins its bundled ECPS manifest at PE-US 1.700.0; we
+# run against 1.705.1 (the version axiom-encode pins) so the manifest
+# certification check refuses to load the model. The compare and sanity
+# subprocesses share this monkey-patch — extracted to module scope so
+# `_run_sanity` can reuse it.
+_PE_CERT_OVERRIDE = """
 import os, sys
-# Skip the eager US country import so we can patch the certification check
-# BEFORE the consuming `model_version` module imports the symbol it calls.
 os.environ['POLICYENGINE_SKIP_COUNTRY_IMPORTS'] = '1'
 try:
+    import policyengine
     import policyengine.provenance.manifest as _m
 
     def _allow_local_oracle_data(
@@ -289,7 +344,6 @@ try:
 except ImportError:
     pass
 
-# Now load the US country module manually so `pe.us` is populated.
 os.environ.pop('POLICYENGINE_SKIP_COUNTRY_IMPORTS', None)
 try:
     import policyengine
@@ -301,6 +355,18 @@ except Exception:
 from axiom_oracles.cli import cli as _cli
 _cli(sys.argv[1:], standalone_mode=False)
 """
+
+
+def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
+    """`axiom_oracles.cli compare <left> <right>` (in-repo CLI).
+
+    Runs via `uv run --python 3.13` against pinned PolicyEngine versions so
+    PE 4.11.0's pydantic-based models load cleanly. Mirrors the
+    `axiom-encode-tax-ecps-compare` runner's environment.
+    """
+    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+    _ensure_engine_binary(axiom_rules_repo, kind="release")
+    params = runner["parameters"]
     cmd = [
         "uv",
         "run",
@@ -348,6 +414,47 @@ RUNNERS = {
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
 }
+
+
+def _run_sanity(name: str) -> int:
+    """Run a comparison's sanity fixtures via the CLI's `sanity` command.
+
+    Reuses the same uv subprocess shape and PE certification override as
+    the population comparison so engines see the same environment. Returns
+    the CLI's exit code (non-zero on any failure).
+    """
+    config = _load_comparison(name)
+    fixtures_path = COMPARISONS_DIR / f"{name}.fixtures.yaml"
+    if not fixtures_path.exists():
+        print(f"No fixtures file at {fixtures_path}", file=sys.stderr)
+        return 2
+    params = config["runner"]["parameters"]
+    axiom_rules_repo = _resolve_path(
+        config["runner"].get("axiom_rules_repo", "$HOME/axiom-rules"),
+        "axiom_rules_repo",
+    )
+    cmd = [
+        "uv", "run", "--python", "3.14", "--no-project",
+        "--with-editable", str(REPO_ROOT),
+        "--with", "policyengine==4.11.0",
+        "--with", "policyengine-us==1.705.1",
+        "--with", "policyengine-core==3.26.11",
+        "python", "-c", _PE_CERT_OVERRIDE,
+        "sanity", str(fixtures_path),
+        "--left", params.get("left", "axiom"),
+        "--right", params.get("right", "policyengine"),
+        "--axiom-engine-binary",
+        str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+    ]
+    if params.get("axiom_compiled_program"):
+        cmd.extend([
+            "--axiom-compiled-program",
+            str(_resolve_path(params["axiom_compiled_program"], "axiom_compiled_program")),
+        ])
+    if params.get("jurisdiction_fips"):
+        cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
+    result = subprocess.run(cmd, cwd=REPO_ROOT)
+    return result.returncode
 
 
 # ---------------------------------------------------------------------------
@@ -432,13 +539,44 @@ def _print_summary(output: Path) -> None:
         if agg:
             print()
             for a in agg[:8]:
-                print(
+                line = (
                     f"  {a.get('concept', '?'):40s}  "
                     f"compared={a.get('compared', 0)}  "
                     f"matched={a.get('matched', 0)}"
                 )
+                # Surface positive-rate context for binary concepts so the
+                # reader can tell whether "agreement" is real agreement or
+                # both-engines-returning-the-dominant-value agreement.
+                if a.get("comparison") != "amount" and "left_positive_rate" in a:
+                    line += (
+                        f"  left+={a['left_positive_rate']:.0f}%"
+                        f"  right+={a['right_positive_rate']:.0f}%"
+                    )
+                print(line)
+            _print_quality_flags(agg)
     else:
         print("(unknown report shape — committed JSON for offline inspection)")
+
+
+def _print_quality_flags(aggregates: list) -> None:
+    """Print loud, separable alarms for degenerate positive rates.
+
+    Quality flags computed in report.py travel attached to each aggregate
+    row; rendering them as a dedicated block (not nested inside the per-
+    concept table) is what makes them visible at a glance.
+    """
+    flags = [
+        (a.get("concept", "?"), flag)
+        for a in aggregates
+        for flag in (a.get("quality_flags") or [])
+    ]
+    if not flags:
+        return
+    print()
+    print("!! QUALITY ALARMS")
+    for concept, flag in flags:
+        print(f"  [{flag.get('severity', '?').upper()}] {concept}")
+        print(f"    {flag.get('code', '?')}: {flag.get('message', '')}")
 
 
 # ---------------------------------------------------------------------------

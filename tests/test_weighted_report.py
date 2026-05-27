@@ -76,6 +76,16 @@ def test_comparison_report_includes_weighted_summary_and_concept_aggregates() ->
             "left_positive_rate": 10,
             "right_positive_rate": 0,
             "positive_rate_difference": 10,
+            "quality_flags": [
+                {
+                    "severity": "alarm",
+                    "code": "right_always_false",
+                    "message": (
+                        "Right engine never returned True while left engine "
+                        "returned True for 10.0% — right pipeline likely broken."
+                    ),
+                },
+            ],
         }
     ]
 

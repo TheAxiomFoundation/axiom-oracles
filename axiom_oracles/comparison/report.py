@@ -477,6 +477,12 @@ def _aggregate_rows_from_buckets(
                 }
             )
         else:
+            left_rate = _percentage(
+                bucket["left_positive_weight"], bucket["comparison_weight"]
+            )
+            right_rate = _percentage(
+                bucket["right_positive_weight"], bucket["comparison_weight"]
+            )
             row.update(
                 {
                     "left_positive_weight": _clean_float(
@@ -485,23 +491,73 @@ def _aggregate_rows_from_buckets(
                     "right_positive_weight": _clean_float(
                         bucket["right_positive_weight"]
                     ),
-                    "left_positive_rate": _percentage(
-                        bucket["left_positive_weight"],
-                        bucket["comparison_weight"],
-                    ),
-                    "right_positive_rate": _percentage(
-                        bucket["right_positive_weight"],
-                        bucket["comparison_weight"],
-                    ),
+                    "left_positive_rate": left_rate,
+                    "right_positive_rate": right_rate,
                     "positive_rate_difference": _percentage(
                         bucket["left_positive_weight"]
                         - bucket["right_positive_weight"],
                         bucket["comparison_weight"],
                     ),
+                    "quality_flags": _quality_flags(left_rate, right_rate),
                 }
             )
         rows.append(row)
     return rows
+
+
+def _quality_flags(left_rate: float, right_rate: float) -> list[dict]:
+    """Detect degenerate positive-rate divergence on binary comparisons.
+
+    A binary engine that *never* returns True (or *always* returns True) while
+    the counterpart engine has real spread is almost certainly broken —
+    "agreement" on the dominant outcome can mask a silent failure where the
+    pipeline returns a constant. We flag these explicitly so the dashboard
+    and CLI surface them next to the match rate.
+    """
+    flags: list[dict] = []
+    if left_rate == 0 and right_rate > 0:
+        flags.append({
+            "severity": "alarm",
+            "code": "left_always_false",
+            "message": (
+                f"Left engine never returned True ({left_rate:.1f}%) while "
+                f"right engine returned True for {right_rate:.1f}% of cases "
+                "— match rate likely reflects agreement on the dominant False "
+                "outcome, not real agreement."
+            ),
+        })
+    if left_rate == 100 and right_rate < 100:
+        flags.append({
+            "severity": "alarm",
+            "code": "left_always_true",
+            "message": (
+                f"Left engine returned True for {left_rate:.1f}% of cases "
+                f"while right engine returned True for {right_rate:.1f}% — "
+                "likely over-permissive (missing eligibility tests) or "
+                "always-true bug."
+            ),
+        })
+    if right_rate == 0 and left_rate > 0:
+        flags.append({
+            "severity": "alarm",
+            "code": "right_always_false",
+            "message": (
+                f"Right engine never returned True while left engine "
+                f"returned True for {left_rate:.1f}% — right pipeline likely "
+                "broken."
+            ),
+        })
+    if right_rate == 100 and left_rate < 100:
+        flags.append({
+            "severity": "alarm",
+            "code": "right_always_true",
+            "message": (
+                f"Right engine returned True for 100% of cases while left "
+                f"returned True for {left_rate:.1f}% — right likely "
+                "over-permissive."
+            ),
+        })
+    return flags
 
 
 def _aggregate_bucket() -> dict[str, float | int]:

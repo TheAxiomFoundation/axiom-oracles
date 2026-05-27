@@ -1,0 +1,107 @@
+# Sanity fixtures for the ca-snap-ecps comparison.
+#
+# Each fixture is a hand-crafted case where the expected eligibility
+# decision is unambiguous from public SNAP rules. Run via:
+#
+#   python scripts/run_comparison.py ca-snap-ecps --sanity
+#
+# Each fixture's `expected` map names only the engines we have a confident
+# expected outcome for. Currently axiom-only — projecting synthetic
+# Cases into PolicyEngine's input format requires additional plumbing
+# we haven't built yet. If/when that lands, add `policyengine: ...`
+# entries alongside.
+#
+# If any engine produces an unexpected outcome on any case, the
+# comparison harness or the rule chain is broken — population-scale
+# agreement numbers cannot be trusted. This catches infrastructure bugs
+# (wrong intervals, dropped relations, missing inputs) AND incomplete
+# rule chains (over-permissive or over-restrictive defaults) at one
+# stroke. It is the single most valuable guardrail against silent
+# wrong-answer regressions.
+#
+# Design note — always include both True-expected and False-expected
+# cases. A constant-True engine will accidentally pass all
+# True-expected fixtures and a constant-False engine will accidentally
+# pass all False-expected ones; the suite stays robust against either
+# silent-degenerate mode only as long as both directions are covered.
+
+concept: us:statutes/7/2014/o#snap_eligible
+period: 2026-01
+
+fixtures:
+  - id: obviously-eligible-single-low-income
+    description: |
+      Single 30-year-old citizen earning $5,000/year. Far below 130% FPL
+      gross-income limit for a 1-person CA household ($1,632/mo = $19,584/yr).
+      Should be SNAP-eligible by both engines under any complete rule set.
+    facts:
+      household:
+        state_code: CA
+      members:
+        - age: 30
+          yearly_earned_income: 5000
+          is_disabled: false
+          is_us_citizen: true
+    expected:
+      axiom: true
+
+  - id: obviously-ineligible-high-income
+    description: |
+      Single 30-year-old citizen earning $200,000/year. Well above any
+      SNAP income limit. Should be ineligible by both engines. If Axiom
+      says True, the rule chain is missing income-limit tests (current
+      known gap in ca-snap fy-2026 compose spec).
+    facts:
+      household:
+        state_code: CA
+      members:
+        - age: 30
+          yearly_earned_income: 200000
+          is_disabled: false
+          is_us_citizen: true
+    expected:
+      axiom: false
+
+  - id: eligible-family-with-children
+    description: |
+      Four-person household — two adults earning $20,000/year combined,
+      two children. Household gross income $20,000/yr = $1,667/mo, below
+      130% FPL for 4 ($3,380/mo). Should be eligible.
+    facts:
+      household:
+        state_code: CA
+      members:
+        - age: 35
+          yearly_earned_income: 12000
+          is_disabled: false
+          is_us_citizen: true
+        - age: 33
+          yearly_earned_income: 8000
+          is_disabled: false
+          is_us_citizen: true
+        - age: 8
+          yearly_earned_income: 0
+          is_disabled: false
+          is_us_citizen: true
+        - age: 5
+          yearly_earned_income: 0
+          is_disabled: false
+          is_us_citizen: true
+    expected:
+      axiom: true
+
+  - id: elderly-low-income-single
+    description: |
+      Single 70-year-old earning $10,000/year. Elderly households have
+      a higher income limit (200% FPL gross) AND no work requirement.
+      Should be eligible by both engines.
+    facts:
+      household:
+        state_code: CA
+      members:
+        - age: 70
+          yearly_earned_income: 10000
+          is_disabled: false
+          is_us_citizen: true
+    expected:
+      axiom: true
