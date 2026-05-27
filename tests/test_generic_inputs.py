@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from axiom_oracles.adapters.axiom.generic_inputs import (
     GenericInputRecord,
-    InputSlot,
     default_for,
     enumerate_inputs,
     project_case_inputs,
