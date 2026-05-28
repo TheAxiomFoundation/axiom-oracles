@@ -142,3 +142,25 @@ mappings:
   - match: { kind: substring, value: member_is_us_citizen }
     scope: person
     source: { kind: constant, value: true }
+
+  # Comparisons filter cases to a single state's FIPS, so every case under
+  # comparison IS a resident of the target state by construction. ECPS
+  # doesn't expose a "lives in application state" column directly.
+  - match: { kind: substring, value: household_lives_in_application_state }
+    scope: household
+    source: { kind: constant, value: true }
+
+  - match: { kind: substring, value: household_in_project_area_solely_for_vacation }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: household_contains_individual_participating_in_more_than_one_household_or_project_area }
+    scope: household
+    source: { kind: constant, value: false }
+
+  # ECPS doesn't track household financial resources / countable assets.
+  # Default to 0 so SNAP's resource test passes; revise when ECPS exposes
+  # an assets column.
+  - match: { kind: substring, value: snap_countable_financial_resources }
+    scope: household
+    source: { kind: constant, value: 0 }
