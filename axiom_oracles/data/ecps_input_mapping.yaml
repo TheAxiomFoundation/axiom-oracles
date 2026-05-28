@@ -63,7 +63,19 @@ mappings:
     source:
       kind: derived
       transform: monthly
-      from_facts: [YEARLY_EARNED_INCOME]
+      # SNAP gross income includes earned + unearned: wages, self-employment,
+      # SS/SSI, pensions, UI, rental, dividends, interest. Without the unearned
+      # sources the gross-income gate under-counts and the comparison flips
+      # households PE marks ineligible (false-positive on Axiom side).
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+        - RENTAL_INCOME
+        - DIVIDEND_INCOME
+        - INTEREST_INCOME
       aggregate: sum_over_people
 
   - match: { kind: substring, value: snap_monthly_household_income }
@@ -71,7 +83,15 @@ mappings:
     source:
       kind: derived
       transform: monthly
-      from_facts: [YEARLY_EARNED_INCOME]
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+        - RENTAL_INCOME
+        - DIVIDEND_INCOME
+        - INTEREST_INCOME
       aggregate: sum_over_people
 
   # ---------------------------------------------------------------------
