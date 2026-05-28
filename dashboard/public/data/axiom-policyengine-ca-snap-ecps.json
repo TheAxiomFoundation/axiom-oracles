@@ -3,30 +3,108 @@
     {
       "category": "food",
       "comparison": "eligibility",
-      "comparison_count": 58,
-      "comparison_weight": 23149916.09375,
+      "comparison_count": 277,
+      "comparison_weight": 19546026.131592,
       "components": [],
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
-      "left_positive_rate": 20.714286,
-      "left_positive_weight": 4795339.734375,
-      "match_rate": 93.103448,
-      "match_weight": 21165637.578125,
-      "mismatch_count": 4,
-      "mismatch_weight": 1984278.515625,
+      "left_positive_rate": 20.803226,
+      "left_positive_weight": 4066204.0354,
+      "match_rate": 93.140794,
+      "match_weight": 18721618.017822,
+      "mismatch_count": 19,
+      "mismatch_weight": 824408.11377,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "positive_rate_difference": -8.571429,
+      "positive_rate_difference": -4.150563,
       "quality_flags": [],
-      "right_positive_rate": 29.285714,
-      "right_positive_weight": 6779618.25,
-      "weighted_match_rate": 91.428571
+      "right_positive_rate": 24.953789,
+      "right_positive_weight": 4877474.171631,
+      "weighted_match_rate": 95.782221
     }
   ],
-  "case_count": 58,
+  "case_count": 277,
   "cases": [
+    {
+      "case_id": "ecps-79530",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06029",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79535",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 95250.3359375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06029",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79552",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 187216.171875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06029",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
     {
       "case_id": "ecps-79627",
       "left_engine": "axiom",
@@ -38,10 +116,54 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 407277.3125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06029",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79696",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06007",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79717",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
           "type": "census_county"
         }
       },
@@ -60,7 +182,29 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 59120.90234375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79726",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -82,7 +226,7 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 1984278.5,
+        "household_weight": 807985.625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06095",
@@ -90,6 +234,62 @@
         }
       },
       "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79734",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06029",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79755",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1197,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06097",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_left_only",
+          "left": true,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": false,
+          "tolerance": 0
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -104,7 +304,7 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 36129.4375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06001",
@@ -112,6 +312,74 @@
         }
       },
       "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79778",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06015",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79791",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -126,10 +394,32 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 496069.625,
+        "household_weight": 292320.0,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79845",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
           "type": "census_county"
         }
       },
@@ -148,7 +438,7 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 298889.0,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06019",
@@ -156,6 +446,40 @@
         }
       },
       "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79876",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 19706.96484375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -170,7 +494,7 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 351440.875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06019",
@@ -192,10 +516,198 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 551795.0625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79910",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1378,
+        "axiom_relations_count": 14,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79948",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79952",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 22991.4609375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79953",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79964",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79969",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-79983",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80042",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 16422.470703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06031",
           "type": "census_county"
         }
       },
@@ -214,7 +726,51 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 1488208.875,
+        "household_weight": 1146288.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80077",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80114",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -236,7 +792,7 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -260,6 +816,116 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-80192",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80223",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80334",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80352",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 55836.40234375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80362",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-80370",
       "left_engine": "axiom",
       "left_errors": [],
@@ -270,7 +936,659 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80377",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 29560.451171875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80390",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80404",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80413",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80431",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 157655.71875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80485",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 16422.470703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80497",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 16422.470703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80510",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80515",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80545",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 26275.955078125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80623",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 259475.046875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80657",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80676",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80695",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80754",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_left_only",
+          "left": true,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": false,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80799",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80809",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80832",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80835",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80846",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80912",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80913",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1197,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80914",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 13137.9775390625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80947",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80969",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 19706.96484375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-80988",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81261",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81322",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 62405.39453125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -292,7 +1610,29 @@
         "axiom_input_records_count": 835,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 16422.470703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81352",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -314,7 +1654,7 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -338,6 +1678,50 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-81384",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81400",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-81451",
       "left_engine": "axiom",
       "left_errors": [],
@@ -348,7 +1732,29 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 128095.28125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81460",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -370,7 +1776,7 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 68974.3828125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -392,10 +1798,286 @@
         "axiom_input_records_count": 835,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 249621.578125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81530",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 55836.40234375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81536",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 49267.4140625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81558",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81587",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81628",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81645",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81707",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81752",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 13137.9775390625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81834",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81851",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81855",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81898",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
           "type": "census_county"
         }
       },
@@ -414,7 +2096,7 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 1488208.875,
+        "household_weight": 745580.25,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
@@ -438,6 +2120,50 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-81930",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81952",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-81979",
       "left_engine": "axiom",
       "left_errors": [],
@@ -448,10 +2174,32 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 1322852.375,
+        "household_weight": 913089.4375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06035",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-81999",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
           "type": "census_county"
         }
       },
@@ -470,7 +2218,7 @@
         "axiom_input_records_count": 1197,
         "axiom_relations_count": 12,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 101819.328125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
@@ -492,7 +2240,29 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 243052.59375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82034",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
@@ -514,7 +2284,29 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 661426.1875,
+        "household_weight": 601062.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82058",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
@@ -536,7 +2328,117 @@
         "axiom_input_records_count": 1378,
         "axiom_relations_count": 14,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 157655.71875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82100",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82110",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82112",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82145",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82147",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
@@ -558,7 +2460,95 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 826782.6875,
+        "household_weight": 384285.84375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82259",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1378,
+        "axiom_relations_count": 14,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82282",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82285",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 187216.171875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82286",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
@@ -580,7 +2570,7 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 6568.98876953125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
@@ -604,6 +2594,116 @@
       "right_errors": []
     },
     {
+      "case_id": "ecps-82368",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82371",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82394",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 22991.4609375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82395",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 91965.84375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82396",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
       "case_id": "ecps-82407",
       "left_engine": "axiom",
       "left_errors": [],
@@ -614,10 +2714,54 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 170793.71875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82441",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06099",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82475",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06071",
           "type": "census_county"
         }
       },
@@ -636,7 +2780,51 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 55836.40234375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06099",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82487",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06099",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82498",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06099",
@@ -658,10 +2846,32 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 118241.8046875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06099",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82578",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06111",
           "type": "census_county"
         }
       },
@@ -680,10 +2890,220 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 9853.482421875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82697",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 42698.4296875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82750",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06089",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82759",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06089",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82794",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 72258.875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82811",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82827",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82867",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06065",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82964",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 292320.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-82979",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 39413.9296875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
           "type": "census_county"
         }
       },
@@ -702,7 +3122,7 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 413846.3125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
@@ -724,7 +3144,7 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 160940.21875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06083",
@@ -746,7 +3166,7 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 512381.125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06083",
@@ -768,10 +3188,164 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 239768.09375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83075",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83077",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06107",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83078",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 13137.9775390625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06099",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83094",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83163",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 101819.328125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06071",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83180",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83207",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06097",
           "type": "census_county"
         }
       },
@@ -790,7 +3364,29 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 289035.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83307",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06001",
@@ -812,10 +3408,164 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 384285.84375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83343",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1197,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83368",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83435",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83449",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83456",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83466",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83493",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06111",
           "type": "census_county"
         }
       },
@@ -834,10 +3584,76 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 154371.234375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83564",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83568",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83580",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 325164.9375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06017",
           "type": "census_county"
         }
       },
@@ -856,10 +3672,154 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 826782.6875,
+        "household_weight": 443406.75,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06041",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83621",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06017",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83673",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1197,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83690",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83709",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06099",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83761",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06067",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83773",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06067",
           "type": "census_county"
         }
       },
@@ -878,7 +3838,7 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 36129.4375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06067",
@@ -886,6 +3846,150 @@
         }
       },
       "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83840",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 78827.859375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06067",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83861",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06067",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83862",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06067",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83887",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06067",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-83977",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06067",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84011",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06113",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -900,10 +4004,32 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 59120.90234375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06113",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84087",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
           "type": "census_county"
         }
       },
@@ -922,7 +4048,7 @@
         "axiom_input_records_count": 835,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 661426.1875,
+        "household_weight": 243052.59375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06053",
@@ -930,6 +4056,84 @@
         }
       },
       "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84121",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84125",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 312026.96875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84158",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -944,10 +4148,550 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 992139.25,
+        "household_weight": 712735.25,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84187",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "description": "SNAP eligibility",
+          "difference": null,
+          "kind": "eligibility_right_only",
+          "left": false,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": true,
+          "tolerance": 0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84206",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84211",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84234",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 13137.9775390625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84243",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84264",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1197,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84315",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84352",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 36129.4375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84373",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84387",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84453",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84539",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84543",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 13137.9775390625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84544",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84560",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 22991.4609375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84585",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84610",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 13137.9775390625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84617",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84619",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 147802.25,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84636",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 52551.91015625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84678",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84706",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06053",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84711",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84741",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 26275.955078125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
           "type": "census_county"
         }
       },
@@ -966,7 +4710,7 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 661426.1875,
+        "household_weight": 282466.53125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06073",
@@ -988,10 +4732,428 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 364578.875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84911",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1740,
+        "axiom_relations_count": 18,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84925",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84950",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-84989",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06065",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85022",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85046",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85052",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85062",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 13137.9775390625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06107",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85066",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85069",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85109",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85143",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06115",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85150",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06023",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85169",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85209",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85344",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85347",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85355",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1197,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
           "type": "census_county"
         }
       },
@@ -1010,10 +5172,120 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 1818921.875,
+        "household_weight": 719304.3125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06075",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85390",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85421",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06065",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85426",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85446",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 6568.98876953125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85474",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 42698.4296875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
           "type": "census_county"
         }
       },
@@ -1032,7 +5304,29 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 496069.625,
+        "household_weight": 177362.703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85489",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06081",
@@ -1054,7 +5348,51 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 105103.8203125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85532",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85537",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06081",
@@ -1076,10 +5414,54 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 371147.875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85576",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85586",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 49267.4140625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
           "type": "census_county"
         }
       },
@@ -1098,10 +5480,32 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 121526.296875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85615",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 39413.9296875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06097",
           "type": "census_county"
         }
       },
@@ -1120,10 +5524,208 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 131379.765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85630",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85635",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 16422.470703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85636",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06073",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85642",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85659",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06019",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85670",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85675",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 177362.703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85676",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85704",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06115",
           "type": "census_county"
         }
       },
@@ -1142,10 +5744,32 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 39413.9296875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85709",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 19706.96484375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
           "type": "census_county"
         }
       },
@@ -1164,10 +5788,54 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 144517.75,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85746",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85798",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 16422.470703125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
           "type": "census_county"
         }
       },
@@ -1186,10 +5854,32 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 16422.470703125,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06001",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-85954",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 45982.921875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
           "type": "census_county"
         }
       },
@@ -1208,10 +5898,54 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 59120.90234375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06083",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86046",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06083",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86059",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06095",
           "type": "census_county"
         }
       },
@@ -1230,7 +5964,7 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 124810.7890625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06065",
@@ -1252,7 +5986,7 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 39413.9296875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06077",
@@ -1274,7 +6008,7 @@
         "axiom_input_records_count": 292,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 49267.4140625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06077",
@@ -1296,7 +6030,51 @@
         "axiom_input_records_count": 473,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 330713.09375,
+        "household_weight": 328449.4375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06077",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86210",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06077",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86252",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06077",
@@ -1318,10 +6096,208 @@
         "axiom_input_records_count": 835,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 165356.546875,
+        "household_weight": 223345.609375,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06077",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86262",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06077",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86267",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 654,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06077",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86287",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 835,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06065",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86321",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86332",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 9853.482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06095",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86338",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06007",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86346",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 1016,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06095",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86358",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 292,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06037",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86440",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 3284.494384765625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06107",
           "type": "census_county"
         }
       },
@@ -1340,7 +6316,29 @@
         "axiom_input_records_count": 654,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
-        "household_weight": 496069.625,
+        "household_weight": 413846.3125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06107",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-86467",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 473,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_weight": 42698.4296875,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "06107",
@@ -1374,6 +6372,102 @@
   "mismatches": [
     {
       "ages": null,
+      "case_id": "ecps-79530",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-79755",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_left_only",
+      "left": true,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": false,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-79778",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-79791",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-79876",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-79953",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-80170",
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
@@ -1390,7 +6484,71 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-80754",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_left_only",
+      "left": true,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": false,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-80988",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-81261",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-81356",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-81855",
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
       "difference": null,
@@ -1435,6 +6593,86 @@
       "scenario": null,
       "tolerance": 0,
       "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-82750",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-83761",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-84011",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-84158",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-84187",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "difference": null,
+      "kind": "eligibility_right_only",
+      "left": false,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": true,
+      "scenario": null,
+      "tolerance": 0,
+      "yearly_earned_income": null
     }
   ],
   "population": "enhanced-cps",
@@ -1445,34 +6683,38 @@
   },
   "suite": "nyc-synthetic",
   "summary": {
-    "comparison_count": 58,
+    "comparison_count": 277,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 54,
-    "mismatch_count": 4,
+    "match_count": 258,
+    "mismatch_count": 19,
     "mismatches_by_concept": [
       {
-        "count": 4,
+        "count": 19,
         "value": "us:statutes/7/2014/o#snap_eligible"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 4,
+        "count": 17,
         "value": "eligibility_right_only"
+      },
+      {
+        "count": 2,
+        "value": "eligibility_left_only"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 4,
+        "count": 19,
         "value": null
       }
     ],
     "weighted": {
-      "comparison_weight": 23149916.09375,
-      "match_rate": 91.428571,
-      "match_weight": 21165637.578125,
-      "mismatch_weight": 1984278.515625
+      "comparison_weight": 19546026.131592,
+      "match_rate": 95.782221,
+      "match_weight": 18721618.017822,
+      "mismatch_weight": 824408.11377
     }
   }
 }
