@@ -69,27 +69,37 @@ def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:
     for rule in compiled_program.get("derived", []):
         entity = str(rule.get("entity") or "Household")
         expr = rule.get("expr") or {}
-        for name, dtype in _walk_for_inputs(expr, parent=None):
+        for name, dtype, child_entity in _walk_for_inputs(
+            expr, parent=None, related_scope=None
+        ):
+            slot_entity = child_entity or entity
             existing = by_name.get(name)
-            if existing is not None and existing.entity != entity:
+            if existing is not None and existing.entity != slot_entity:
                 # Same input referenced from rules with different entities;
                 # prefer the more specific (non-Household) scope.
-                if existing.entity == "Household" and entity != "Household":
-                    by_name[name] = InputSlot(name=name, entity=entity, dtype=dtype)
+                if existing.entity == "Household" and slot_entity != "Household":
+                    by_name[name] = InputSlot(
+                        name=name, entity=slot_entity, dtype=dtype
+                    )
                 continue
             if existing is None:
-                by_name[name] = InputSlot(name=name, entity=entity, dtype=dtype)
+                by_name[name] = InputSlot(name=name, entity=slot_entity, dtype=dtype)
             elif existing.dtype == "Judgment" and dtype != "Judgment":
-                by_name[name] = InputSlot(name=name, entity=entity, dtype=dtype)
+                by_name[name] = InputSlot(name=name, entity=slot_entity, dtype=dtype)
     return sorted(by_name.values(), key=lambda slot: slot.name)
 
 
-def _walk_for_inputs(node: Any, *, parent: dict | None):
-    """Yield (input_name, inferred_dtype) tuples from an expr tree.
+def _walk_for_inputs(node: Any, *, parent: dict | None, related_scope: str | None):
+    """Yield (input_name, inferred_dtype, scope_override) tuples from an expr tree.
 
-    Passes the parent NODE (not just kind) so dtype inference can peek at
-    siblings — a comparison with a bool literal implies the input is
-    Judgment, with a numeric literal implies Decimal.
+    ``related_scope`` is set when the walk descends into a relational
+    aggregation (``count_related``/``sum_related``/``any_related``/etc.)
+    whose ``where`` predicate runs per related entity. Inputs referenced
+    inside that predicate are scoped to the related entity (typically
+    Person), not the outer rule's entity. Without this, an input read
+    per-member by a Household-level count_related gets emitted at
+    Household scope and the engine rejects it as missing at
+    ``case-N::member-K``.
     """
 
     if isinstance(node, dict):
@@ -97,13 +107,30 @@ def _walk_for_inputs(node: Any, *, parent: dict | None):
         if kind == "input":
             name = node.get("name")
             if isinstance(name, str) and name:
-                yield name, _infer_dtype(parent, node)
+                yield name, _infer_dtype(parent, node), related_scope
+            return
+        # Relational aggregations evaluate their `where` clause once per
+        # related entity. Inputs in that clause are Person-scoped (or
+        # whatever the related slot's entity is). We don't have the
+        # slot-entity map here, so fall back to "Person" — the only
+        # related entity in the current SNAP compose graph and the safe
+        # default for benefit programs that aggregate per household
+        # member. Sibling branches (relation, current_slot, related_slot)
+        # are walked without scope override.
+        if kind in {"count_related", "sum_related", "any_related", "all_related"}:
+            for key, child in node.items():
+                child_related = "Person" if key == "where" else related_scope
+                yield from _walk_for_inputs(
+                    child, parent=node, related_scope=child_related
+                )
             return
         for child in node.values():
-            yield from _walk_for_inputs(child, parent=node)
+            yield from _walk_for_inputs(child, parent=node, related_scope=related_scope)
     elif isinstance(node, list):
         for child in node:
-            yield from _walk_for_inputs(child, parent=parent)
+            yield from _walk_for_inputs(
+                child, parent=parent, related_scope=related_scope
+            )
 
 
 def _infer_dtype(parent: dict | None, input_node: dict) -> str:
