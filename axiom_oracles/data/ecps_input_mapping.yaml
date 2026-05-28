@@ -184,3 +184,15 @@ mappings:
   - match: { kind: substring, value: snap_countable_financial_resources }
     scope: household
     source: { kind: constant, value: 0 }
+
+  # Map ECPS housing_cost (annual) into SNAP's shelter expense slot.
+  # The full SNAP shelter computation also considers utility allowances;
+  # for now we use housing_cost alone (PE's `housing_cost` already
+  # includes rent/mortgage). Adding the standard utility allowance is a
+  # follow-up via Concepts.HEATING_EXPENSE et al.
+  - match: { kind: substring, value: snap_total_allowable_shelter_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [RENT_PAID]

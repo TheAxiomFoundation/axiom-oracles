@@ -92,7 +92,10 @@ class EnhancedCpsCaseLoader:
                     Case(
                         case_id=f"ecps-{household.household_id}",
                         period=period,
-                        facts={Concepts.CASH_ON_HAND: 0},
+                        facts={
+                            Concepts.CASH_ON_HAND: 0,
+                            Concepts.RENT_PAID: household.housing_cost,
+                        },
                         entities=tuple(
                             _person_entity(person, index, case_unit=case_unit)
                             for index, person in enumerate(people)
@@ -150,19 +153,31 @@ class EnhancedCpsCaseLoader:
         state_fips = _calculate_values(sim, "state_fips", period, default="", size=size)
         county_fips = _calculate_values(sim, "county_fips", period, default="", size=size)
         place_fips = _calculate_values(sim, "place_fips", period, default="", size=size)
+        # housing_cost is an SPMUnit variable; map_to="household" sums across
+        # SPM units per household so the result is one value per household.
+        housing_costs = _calculate_values(
+            sim,
+            "housing_cost",
+            period,
+            map_to="household",
+            default=0,
+            size=size,
+        )
 
         return [
             _HouseholdRow(
                 household_id=_clean_id(household_id),
                 weight=float(_clean_number(weight)),
                 scope=_scope_from_geography(state, county, place),
+                housing_cost=float(_clean_number(housing_cost)),
             )
-            for household_id, weight, state, county, place in zip(
+            for household_id, weight, state, county, place, housing_cost in zip(
                 household_ids,
                 weights,
                 state_fips,
                 county_fips,
                 place_fips,
+                housing_costs,
                 strict=True,
             )
         ]
@@ -318,6 +333,7 @@ class _HouseholdRow:
     household_id: int | str
     weight: float
     scope: GeographyScope | None
+    housing_cost: float = 0.0
 
 
 _PERSON_NON_WAGE_VARIABLES = {
