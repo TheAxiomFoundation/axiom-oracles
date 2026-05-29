@@ -6681,7 +6681,7 @@
     "geoid": "US",
     "type": "country"
   },
-  "suite": "nyc-synthetic",
+  "suite": "ca-snap-ecps",
   "summary": {
     "comparison_count": 277,
     "error_count": 0,
