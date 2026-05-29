@@ -588,8 +588,13 @@ def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) 
     raw = json.loads(raw_path.read_text())
     if runner_type == "axiom-encode-tax-ecps-compare":
         return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
-    # axiom-oracles-compare already emits v2 — pass through, just normalize suite.
-    raw.setdefault("suite", suite)
+    # axiom-oracles-compare already emits v2 — pass through, but override
+    # the suite with the comparison-config value. The upstream report
+    # stamps the population/synthetic-subset name (e.g. "nyc-synthetic"),
+    # not the per-comparison identity, so without this override every
+    # state's SNAP report collapses into one suite bucket in the
+    # dashboard's suite selector.
+    raw["suite"] = suite
     return raw
 
 
