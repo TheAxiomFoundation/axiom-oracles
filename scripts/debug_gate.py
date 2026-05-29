@@ -32,6 +32,15 @@ GATE_OUTPUTS = [
     "us:regulations/7-cfr/273/8#snap_resource_eligible",
     "us:regulations/7-cfr/273/2/j#snap_regular_categorically_eligible",
     "us-ny:regulations/18-nycrr/387/14/a/5#ny_snap_categorically_eligible",
+    # Allotment chain
+    "us:regulations/7-cfr/273/10#snap_monthly_allotment",
+    "us:regulations/7-cfr/273/10#snap_calculated_monthly_allotment_before_minimums",
+    "us:statutes/7/2017/a#snap_allotment_before_minimum",
+    "us:regulations/7-cfr/273/9#snap_net_income",
+    "us:regulations/7-cfr/273/9#snap_net_income_pre_shelter",
+    "us:regulations/7-cfr/273/9#snap_excess_shelter_cost",
+    "us:regulations/7-cfr/273/9#snap_standard_deduction",
+    "us:regulations/7-cfr/273/9#snap_earned_income_deduction",
 ]
 
 

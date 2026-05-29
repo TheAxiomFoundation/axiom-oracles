@@ -10,6 +10,7 @@ import MetricsRow from "./MetricsRow";
 import ProgramBreakdown from "./ProgramBreakdown";
 import AgreementMatrix from "./AgreementMatrix";
 import SuiteSelector from "./SuiteSelector";
+import AlignmentReport from "./AlignmentReport";
 
 function TopBar() {
   return (
@@ -131,19 +132,59 @@ export default function DashboardContent() {
           />
 
           {hasComparisonData && (
-            <AgreementMatrix
-              oracles={viewData.oracles}
-              matrix={viewData.matrix}
-              overallMatrix={viewData.overallMatrix}
-              concepts={viewData.concepts}
-            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+              }}
+            >
+              <div className="section-eyebrow">Alignment by program</div>
+              {viewData.reports
+                .filter((r) => (r.aggregates || []).length > 0)
+                .map((report, i) => (
+                  <AlignmentReport
+                    key={`${report.suite || "report"}-${i}`}
+                    report={report}
+                  />
+                ))}
+            </div>
           )}
 
-          <ProgramBreakdown
-            programs={viewData.programs}
-            reports={viewData.reports}
-            oracles={viewData.oracles}
-          />
+          <details
+            style={{
+              background: "var(--paper-elevated)",
+              border: "1px solid var(--hairline)",
+              borderRadius: 12,
+              padding: "12px 16px",
+            }}
+          >
+            <summary
+              style={{
+                cursor: "pointer",
+                fontSize: 13,
+                color: "var(--ink-mute)",
+              }}
+            >
+              All encoded programs (with and without live comparison data) ·
+              advanced view
+            </summary>
+            <div style={{ marginTop: 12 }}>
+              {hasComparisonData && (
+                <AgreementMatrix
+                  oracles={viewData.oracles}
+                  matrix={viewData.matrix}
+                  overallMatrix={viewData.overallMatrix}
+                  concepts={viewData.concepts}
+                />
+              )}
+              <ProgramBreakdown
+                programs={viewData.programs}
+                reports={viewData.reports}
+                oracles={viewData.oracles}
+              />
+            </div>
+          </details>
         </div>
 
         <footer

@@ -215,23 +215,19 @@ def _print_coverage_warnings(config: dict) -> None:
     """
     params = config.get("runner", {}).get("parameters") or {}
     compiled_program_ref = params.get("axiom_compiled_program")
-    concept = params.get("concept")
-    if not compiled_program_ref or not concept:
+    # Coverage analysis is per-concept; if a comparison declares multiple,
+    # iterate. Falls back to the legacy single `concept:` field.
+    concepts_raw = params.get("concepts") or (
+        [params.get("concept")] if params.get("concept") else []
+    )
+    concepts: list[str] = [c for c in concepts_raw if isinstance(c, str) and c]
+    if not compiled_program_ref or not concepts:
         return
     try:
         compiled_program = _resolve_path(compiled_program_ref, "axiom_compiled_program")
     except SystemExit:
         return
     if not compiled_program.exists():
-        return
-    target = str(concept).rsplit("#", 1)[-1]
-    # Coverage detection asks "what eligibility tests are orphaned" — only
-    # auto-fires when the target itself looks like an eligibility judgment.
-    # For amount targets (snap_benefit, federal-income-tax#liability) the
-    # orphaned eligibility rules are intentionally on a different chain;
-    # surfacing them as alarms would be noise. Users can still opt in
-    # via `axiom-oracles coverage` directly with any target.
-    if not any(m in target for m in ("eligible", "ineligible")):
         return
     try:
         from axiom_oracles.coverage import (
@@ -240,11 +236,21 @@ def _print_coverage_warnings(config: dict) -> None:
         )
     except ImportError:
         return
-    uncovered = find_uncovered_eligibility_rules(compiled_program, target=target)
-    warning = format_coverage_warning(target, uncovered)
-    if warning:
-        print()
-        print(warning)
+    # Coverage detection asks "what eligibility tests are orphaned" — only
+    # auto-fires when the target itself looks like an eligibility judgment.
+    # For amount targets (snap_benefit, federal-income-tax#liability) the
+    # orphaned eligibility rules are intentionally on a different chain;
+    # surfacing them as alarms would be noise. Users can still opt in
+    # via `axiom-oracles coverage` directly with any target.
+    for concept in concepts:
+        target = str(concept).rsplit("#", 1)[-1]
+        if not any(m in target for m in ("eligible", "ineligible")):
+            continue
+        uncovered = find_uncovered_eligibility_rules(compiled_program, target=target)
+        warning = format_coverage_warning(target, uncovered)
+        if warning:
+            print()
+            print(warning)
 
 
 # ---------------------------------------------------------------------------
@@ -357,6 +363,33 @@ _cli(sys.argv[1:], standalone_mode=False)
 """
 
 
+def _concept_args(params: dict) -> list[str]:
+    """Build `--concept <id>` repetitions from the comparison config.
+
+    Accepts either ``concept: <id>`` (legacy single-string form) or
+    ``concepts: [<id>, ...]`` for comparisons that span more than one
+    output (e.g. SNAP eligibility AND benefit amount). The compare CLI's
+    ``--concept`` option is ``multiple=True``, so we just repeat the
+    flag once per concept."""
+
+    concepts: list[str] = []
+    raw_list = params.get("concepts")
+    if isinstance(raw_list, list):
+        concepts.extend(str(item) for item in raw_list if item)
+    single = params.get("concept")
+    if isinstance(single, str) and single and single not in concepts:
+        concepts.append(single)
+    if not concepts:
+        raise SystemExit(
+            "comparison config must declare either `concept:` (single) "
+            "or `concepts:` (list) under runner.parameters"
+        )
+    args: list[str] = []
+    for concept in concepts:
+        args.extend(["--concept", concept])
+    return args
+
+
 def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     """`axiom_oracles.cli compare <left> <right>` (in-repo CLI).
 
@@ -393,8 +426,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         str(params.get("sample_size", 1000)),
         "--period",
         str(params["period"]),
-        "--concept",
-        params["concept"],
+        *_concept_args(params),
         "--axiom-engine-binary",
         str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
         "--output",
