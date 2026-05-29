@@ -1,0 +1,32 @@
+# New York SNAP eligibility — Axiom vs PolicyEngine on the Enhanced CPS.
+# The Axiom side composes axiom-programs/us-ny/snap/fy-2026.yaml through
+# axiom-compose. Same shape as the CA comparison — only the program path,
+# FIPS, and compiled-program artifact differ. This is the first NY oracle
+# comparison and exercises the "sustainability" claim of the data-driven
+# compose + projector pipeline.
+
+name: ny-snap-ecps
+title: New York SNAP — Axiom vs PolicyEngine
+description: Compares New York SNAP eligibility produced by the composed
+  axiom-programs/us-ny/snap/fy-2026 spec against PolicyEngine on the
+  Enhanced CPS, filtered to New York households.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules
+  parameters:
+    left: axiom
+    right: policyengine
+    concept: us:statutes/7/2014/o#snap_eligible
+    sample_size: 1000
+    period: 2026-01
+    population: enhanced-cps
+    axiom_compiled_program: /tmp/ny-snap-compiled.json
+    jurisdiction_fips: "36"
+
+artifacts:
+  report_basename: axiom-policyengine-ny-snap-ecps
+
+dashboard:
+  filename: axiom-policyengine-ny-snap-ecps.json
+  suite: ny-snap-ecps
