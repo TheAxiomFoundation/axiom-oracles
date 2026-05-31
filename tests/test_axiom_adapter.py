@@ -785,6 +785,7 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     assert "self_employment_1401_taxes" in generated_rule_names
     assert "self_employment_tax_ald" in generated_rule_names
     assert "taxable_earned_income_under_section_32" in generated_rule_names
+    assert "earned_income" not in generated_rule_names
     assert (
         generated_rules_by_name["self_employment_income"]["versions"][0]["formula"]
         == "max(0, net_earnings_from_self_employment)"
@@ -817,7 +818,9 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     )
 
     assert isinstance(runner, AxiomRulesRunner)
-    assert runner.program_imports == US_TAX_ORACLE_IMPORTS
+    assert runner.program_imports
+    assert "us:statutes/26/1411" not in runner.program_imports
+    assert set(runner.program_imports).issubset(set(US_TAX_ORACLE_IMPORTS))
     assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     generated_rule_names = {

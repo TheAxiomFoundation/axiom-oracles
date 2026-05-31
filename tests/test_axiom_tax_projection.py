@@ -52,10 +52,56 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.filing_status")
     ] == 1
+    assert by_key[("tax_unit", "us:statutes/26/1401#input.filing_status")] == 1
     assert by_key[("tax_unit", "us:tax/federal-income-tax#input.wages")] == 70_000
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/1401#input."
+            "international_social_security_agreement_under_section_233_in_effect",
+        )
+    ] is False
+    assert by_key[
+        ("tax_unit", "us:statutes/26/26#input.net_investment_income_tax")
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/32/c/2#input."
+            "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income",
+        )
+    ] == 70_000
+    assert by_key[
+        ("tax_unit", "us:statutes/26/32/c/2#input.pension_or_annuity_amounts_received")
+    ] == 0
     assert by_key[
         ("person-3", "us:tax/federal-income-tax#input.is_tax_unit_dependent")
     ] is True
+    assert by_key[
+        ("person-3", "us:statutes/26/151#input.tin_included_on_return_claiming_exemption")
+    ] is True
+    assert by_key[
+        ("person-1", "us:statutes/26/151#input.is_taxpayer")
+    ] is True
+    assert by_key[
+        ("person-2", "us:statutes/26/151#input.is_spouse_of_taxpayer")
+    ] is True
+    assert by_key[
+        ("person-3", "us:statutes/26/151#input.is_taxpayer")
+    ] is False
+    assert by_key[
+        ("person-3", "us:statutes/26/151#input.is_spouse_of_taxpayer")
+    ] is False
+    assert by_key[
+        ("person-3", "us:statutes/26/151#input.filing_status")
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/1/h#input."
+            "net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii",
+        )
+    ] == 0
     assert by_key[
         ("person-3", "us:tax/federal-income-tax#input.age")
     ] == 8
@@ -81,11 +127,54 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         )
     ] is True
     assert by_key[
+        (
+            "person-3",
+            "us:statutes/26/32#input."
+            "qualifying_child_marital_status_requires_section_151_entitlement",
+        )
+    ] is False
+    assert by_key[
         ("person-3", "us:statutes/26/24/h#input.qualifying_child_described_in_subsection_c")
+    ] is True
+    assert by_key[
+        ("person-3", "us:statutes/26/24/h#input.ctc_child_satisfies_subsection_c")
+    ] is True
+    assert by_key[
+        ("person-3", "us:statutes/26/24/h#input.ctc_person_satisfies_dependency_rules")
     ] is True
     assert by_key[
         ("person-3", "us:statutes/26/24/h#input.dependent_under_section_152")
     ] is True
+    assert by_key[
+        (
+            "person-3",
+            "us:statutes/26/152/c#input."
+            "individual_is_child_of_taxpayer_or_descendant_of_such_child",
+        )
+    ] is True
+    assert by_key[
+        (
+            "person-3",
+            "us:statutes/26/152/c#input.individual_age_at_close_of_calendar_year",
+        )
+    ] == 8
+    assert by_key[
+        (
+            "person-3",
+            "us:statutes/26/152/c#input."
+            "individual_principal_place_of_abode_with_taxpayer_fraction",
+        )
+    ] == 1
+    assert by_key[
+        ("person-3", "us:statutes/26/152/c#input.filing_status")
+    ] == 0
+    assert by_key[
+        (
+            "person-1",
+            "us:statutes/26/152/c#input."
+            "individual_is_child_of_taxpayer_or_descendant_of_such_child",
+        )
+    ] is False
     assert by_key[
         ("person-1", "us:tax/federal-income-tax#input.is_taxpayer")
     ] is True
@@ -160,6 +249,13 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         (
             "tax_unit",
             "us:statutes/26/6401#input."
+            "nonresident_withholding_credit_treated_as_refundable_amount",
+        )
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/6401#input."
             "section_6013_g_or_h_election_in_effect_for_taxable_year",
         )
     ] is False
@@ -168,6 +264,13 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     ] is True
     assert by_key[
         ("tax_unit", "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income")
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/22#input."
+            "workers_compensation_treated_as_social_security_benefit",
+        )
     ] == 0
     assert by_key[
         ("tax_unit", "us:statutes/26/32#input.childless_taxpayer_or_spouse_age_eligible_for_eitc")
@@ -180,6 +283,18 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     ] is True
     assert by_key[
         ("tax_unit", "us:statutes/26/32#input.taxpayer_is_married_under_section_7703_a")
+    ] is True
+    assert by_key[
+        ("tax_unit", "us:statutes/26/7703#input.spouse_dies_during_taxable_year")
+    ] is False
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/7703#input.taxpayer_married_at_close_of_taxable_year",
+        )
+    ] is True
+    assert by_key[
+        ("person-3", "us:statutes/26/7703#input.person_is_child_within_federal_tax_child_definition")
     ] is True
     assert by_key[
         ("tax_unit", "us:statutes/26/63/c#input.taxable_year_begins_after_2025")
@@ -232,6 +347,22 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     assert {
         tuple(record["tuple"])
         for record in projected.metadata["axiom_relations"]
+        if record["name"] == "us:statutes/26/151#relation.exemption_individual_of_tax_unit"
+    } == {
+        ("person-1", "tax_unit"),
+        ("person-2", "tax_unit"),
+        ("person-3", "tax_unit"),
+    }
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
+        if record["name"] == "us:statutes/26/7703#relation.living_apart_child_of_tax_unit"
+    } == {
+        ("person-3", "tax_unit"),
+    }
+    assert {
+        tuple(record["tuple"])
+        for record in projected.metadata["axiom_relations"]
         if record["name"]
         == "us:tax/oracle-bridge#relation."
         "business_income_of_tax_unit"
@@ -250,7 +381,7 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
     }
-    assert len(projected.metadata["axiom_relations"]) == 22
+    assert len(projected.metadata["axiom_relations"]) == 29
     assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_result_selection" not in projected.metadata
 
@@ -323,10 +454,47 @@ def test_axiom_tax_projection_routes_social_security_to_section_86() -> None:
             "title_II_monthly_benefits_received_during_taxable_year",
         )
     ] == 20_000
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/86#input."
+            "railroad_retirement_additional_tier_1_monthly_annuity_amount",
+        )
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/86#input."
+            "early_delivered_social_security_benefit_checks_deemed_received_in_taxable_year",
+        )
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/86#input."
+            "inclusion_by_reason_of_prior_year_lump_sum_portion_before_lump_sum_limitation",
+        )
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/86#input."
+            "taxpayer_makes_lump_sum_election_for_prior_year_portion",
+        )
+    ] is False
     assert (
         "tax_unit",
         "us:tax/federal-income-tax#input.taxable_social_security_benefits_included",
     ) not in by_key
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
+    }
+    assert (
+        generated_rules_by_name[
+            "adjusted_gross_income_before_listed_exclusions_and_social_security_inclusion"
+        ]["versions"][0]["formula"]
+        == "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933"
+    )
 
 
 def test_axiom_tax_projection_routes_self_employment_through_sections_1402_and_164() -> None:
@@ -1481,6 +1649,12 @@ def test_axiom_tax_projection_computes_itemized_leaves_and_colorado_tax_wiring()
     assert "loss_ald" in generated_rules_by_name
     assert "limited_capital_loss" in generated_rules_by_name
     assert "limited_business_loss" in generated_rules_by_name
+    assert (
+        generated_rules_by_name["qualified_passenger_vehicle_loan_interest_deduction"][
+            "versions"
+        ][0]["formula"]
+        == "auto_loan_interest_deduction"
+    )
     assert "co_pension_subtraction_income" not in generated_rules_by_name
     assert "co_pension_subtraction_cap_after_social_security" not in (
         generated_rules_by_name
