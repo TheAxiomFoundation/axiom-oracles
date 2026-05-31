@@ -7,6 +7,7 @@ import ProgramBreakdown from "./ProgramBreakdown";
 import AgreementMatrix from "./AgreementMatrix";
 import AlignmentReport from "./AlignmentReport";
 import OverviewHero from "./OverviewHero";
+import CoverageOverview from "./CoverageOverview";
 
 function TopBar() {
   return (
@@ -104,6 +105,13 @@ export default function DashboardContent() {
               (r) => (r.aggregates || []).length > 0,
             )}
             programCount={viewData.programs.length}
+          />
+
+          <CoverageOverview
+            reports={viewData.reports.filter(
+              (r) => (r.aggregates || []).length > 0,
+            )}
+            coverageOverview={data.coverageOverview}
           />
 
           {hasComparisonData && (

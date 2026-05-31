@@ -68,6 +68,20 @@ export async function loadOracleData(basePath = "") {
     // continue without cause attribution
   }
 
+  // Load coverage context from the local PolicyEngine tracker and the
+  // executable Axiom program specs. Alignment percentages are still computed
+  // from the comparison reports; this file only tells the UI what coverage
+  // each engine claims for those compared programs.
+  let coverageOverview = null;
+  try {
+    const coverageResp = await fetch(`${basePath}/data/coverage_overview.json`);
+    if (coverageResp.ok) {
+      coverageOverview = await coverageResp.json();
+    }
+  } catch {
+    // continue without coverage context
+  }
+
   // Drop aspirational / missing programs — the dashboard reflects only what
   // is actually encoded in the Axiom corpus today.
   const programs = allPrograms.filter(
@@ -96,7 +110,14 @@ export async function loadOracleData(basePath = "") {
   ].sort();
 
   const data = buildNWayData(filteredReports);
-  return { ...data, programs, reports: filteredReports, suites, knownCauses };
+  return {
+    ...data,
+    programs,
+    reports: filteredReports,
+    suites,
+    knownCauses,
+    coverageOverview,
+  };
 }
 
 export function filterReportsBySuite(reports, suite) {

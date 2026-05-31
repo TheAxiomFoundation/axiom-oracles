@@ -267,3 +267,26 @@ a.cite {
 a.cite:hover {
   color: var(--ink);
 }
+
+.coverage-table {
+  min-width: 1080px;
+  font-size: 12.5px;
+}
+.coverage-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--ink-mute);
+  background: var(--paper-warm);
+  border-bottom: 1px solid var(--hairline);
+  font-weight: 600;
+}
+.coverage-table td {
+  vertical-align: top;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+.coverage-table tbody tr:last-child td {
+  border-bottom: 0;
+}

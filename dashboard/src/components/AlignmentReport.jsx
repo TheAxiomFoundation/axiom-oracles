@@ -253,8 +253,8 @@ function MismatchCaseTable({ cases, casesById }) {
           </tr>
         </thead>
         <tbody>
-          {cases.map((m) => {
-            const key = `${m.case_id}-${m.concept}`;
+          {cases.map((m, index) => {
+            const key = `${m.case_id}-${m.concept}-${m.kind || "mismatch"}-${index}`;
             const isOpen = openCase === key;
             const row = casesById?.get(m.case_id);
             return (
