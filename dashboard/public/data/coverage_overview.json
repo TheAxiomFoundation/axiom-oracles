@@ -1,0 +1,108 @@
+{
+  "_comment": "Coverage context for the dashboard. PolicyEngine rows are transcribed from the local policyengine-coverage-tracker repo; Axiom rows reflect merged axiom-programs specs and the live dashboard comparison suites. Alignment rates are computed from comparison reports at runtime.",
+  "sources": {
+    "policyengine": "../policyengine-coverage-tracker/src/data/programs.ts",
+    "axiom_programs": "../axiom-programs",
+    "axiom_reports": "dashboard/public/data/*.json"
+  },
+  "policyengine": {
+    "programs": [
+      {
+        "id": "snap",
+        "name": "SNAP",
+        "full_name": "Supplemental Nutrition Assistance Program",
+        "status": "complete",
+        "coverage": "US",
+        "has_state_variation": true,
+        "notes": "PolicyEngine tracker marks SNAP complete nationally, with remaining special-deduction notes for AK, AZ, HI, NY, TN, and VA."
+      },
+      {
+        "id": "federal_income_tax",
+        "name": "Federal income tax",
+        "full_name": "Federal income taxes, including credits",
+        "status": "complete",
+        "coverage": "US",
+        "notes": "PolicyEngine tracker marks federal income tax complete and validated against NBER TAXSIM."
+      },
+      {
+        "id": "payroll_tax",
+        "name": "Payroll tax",
+        "full_name": "Employee and employer payroll taxes",
+        "status": "complete",
+        "coverage": "US",
+        "notes": "PolicyEngine tracker marks Social Security and Medicare payroll taxes complete."
+      },
+      {
+        "id": "tanf",
+        "name": "TANF",
+        "full_name": "Temporary Assistance for Needy Families",
+        "status": "inProgress",
+        "coverage": "US",
+        "excluded_from_current_work": true,
+        "notes": "Shown only as context. Current dashboard gap work excludes TANF/TAFDC/Families First modeling."
+      }
+    ]
+  },
+  "axiom": {
+    "programs": [
+      {
+        "program": "snap",
+        "jurisdiction": "AL",
+        "status": "executable",
+        "source": "axiom-programs/us-al/snap/fy-2026.yaml",
+        "known_non_tanf_gaps": [
+          "minimum-benefit and eligibility edge cases",
+          "state utility amount table not legally wired; not an observed current mismatch driver"
+        ]
+      },
+      {
+        "program": "snap",
+        "jurisdiction": "CA",
+        "status": "executable",
+        "source": "axiom-programs/us-ca/snap/fy-2026.yaml",
+        "known_non_tanf_gaps": [
+          "compose coverage risk for CA-specific eligibility paths"
+        ]
+      },
+      {
+        "program": "snap",
+        "jurisdiction": "MA",
+        "status": "executable",
+        "source": "axiom-programs/us-ma/snap/fy-2026.yaml",
+        "known_non_tanf_gaps": [
+          "categorical and BBCE facts not present in ECPS projection",
+          "MA cross-referenced categorical income standards still deferred"
+        ]
+      },
+      {
+        "program": "snap",
+        "jurisdiction": "NY",
+        "status": "executable",
+        "source": "axiom-programs/us-ny/snap/fy-2026.yaml",
+        "known_non_tanf_gaps": [
+          "known minimum-benefit eligibility edge",
+          "compose coverage risk for broader NY BBCE paths"
+        ]
+      },
+      {
+        "program": "snap",
+        "jurisdiction": "TN",
+        "status": "executable",
+        "source": "axiom-programs/us-tn/snap/fy-2026.yaml",
+        "known_non_tanf_gaps": [
+          "utility amount table encoded in an unsafe mixed block and needs encoder split",
+          "minimum-benefit and eligibility edge cases"
+        ]
+      },
+      {
+        "program": "federal_income_tax",
+        "jurisdiction": "US",
+        "status": "executable",
+        "source": "rulespec-us/tax + dashboard comparison reports",
+        "known_non_tanf_gaps": [
+          "small FIIT residuals are documented in the tax triage report"
+        ]
+      }
+    ]
+  }
+}
