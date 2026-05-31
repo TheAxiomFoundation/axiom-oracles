@@ -756,13 +756,6 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         ),
     ),
     _generated_tax_unit_rule(
-        "earned_income",
-        dtype="Money",
-        unit="USD",
-        source="Oracle composition bridge using 26 USC 32 earned income after self-employment tax adjustment",
-        formula="taxable_earned_income_under_section_32",
-    ),
-    _generated_tax_unit_rule(
         "filer_adjusted_earnings",
         dtype="Money",
         unit="USD",
@@ -1730,6 +1723,13 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         ),
     ),
     _generated_tax_unit_rule(
+        "qualified_passenger_vehicle_loan_interest_deduction",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge supplying PolicyEngine's 2026 qualified passenger vehicle loan interest deduction leaf",
+        formula="auto_loan_interest_deduction",
+    ),
+    _generated_tax_unit_rule(
         "current_law_deductions_before_qbid_if_not_itemizing",
         dtype="Money",
         unit="USD",
@@ -2085,6 +2085,15 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "gross_income_before_social_security_benefits "
             "- loss_ald "
             "- self_employment_tax_ald_for_agi"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "adjusted_gross_income_before_listed_exclusions_and_social_security_inclusion",
+        dtype="Money",
+        unit="USD",
+        source="Oracle composition bridge supplying 26 USC 86(b)(2) modified-AGI base",
+        formula=(
+            "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933"
         ),
     ),
     _generated_tax_unit_rule(
@@ -2738,11 +2747,14 @@ _RELATION_REFS = (
     "us:tax/oracle-bridge#relation.co_withheld_income_tax_member_of_tax_unit",
     "us:tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
     "us:tax/oracle-bridge#relation.payroll_member_of_tax_unit",
+    "us:statutes/26/151#relation.exemption_individual_of_tax_unit",
+    "us:statutes/26/151#relation.senior_deduction_individual_of_tax_unit",
     "us:statutes/26/21#relation.qualifying_individual_of_tax_unit",
     "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
     "us:statutes/26/24/h#relation.dependent_of_tax_unit",
     "us:statutes/26/25A#relation.education_credit_member_of_tax_unit",
     "us:statutes/26/32#relation.qualifying_child_of_tax_unit",
+    "us:statutes/26/7703#relation.living_apart_child_of_tax_unit",
 )
 
 _SPOUSE_RELATIONS = {
@@ -2799,6 +2811,7 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "institution_employer_identification_number_included",
     "individual_makes_election_to_itemize_deductions_for_taxable_year",
     "individual_who_does_not_elect_to_itemize_deductions_for_taxable_year",
+    "international_social_security_agreement_under_section_233_in_effect",
     "is_dependent_under_section_152_a_1",
     "is_dependent_under_section_152_disregarding_listed_subsections",
     "is_incapable_of_self_care",
@@ -2830,19 +2843,27 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "section_6013_g_or_h_election_in_effect_for_taxable_year",
     "section_6013_resident_alien_election",
     "service_provider_identifying_information_requirement_satisfied",
+    "self_employment_income_is_subject_exclusively_to_foreign_social_security_laws_under_agreement",
     "spouses_lived_apart_all_year",
     "spouse_not_member_of_household_during_last_six_months",
+    "spouse_dies_during_taxable_year",
     "taxable_year_closed_by_reason_of_taxpayer_death",
     "taxable_year_begins_after_2024_and_before_2029",
     "taxable_year_begins_before_2027",
     "taxable_year_begins_after_2025",
+    "taxpayer_files_separate_return",
+    "taxpayer_maintains_household_as_home",
     "taxpayer_claims_section_911_benefits",
+    "taxpayer_makes_lump_sum_election_for_prior_year_portion",
     "taxpayer_makes_lump_sum_election_under_subsection_e",
+    "taxpayer_married_at_time_of_spouse_death",
+    "taxpayer_elects_to_treat_section_112_excluded_amounts_as_earned_income",
     "taxpayer_receives_social_security_benefit_for_listed_purpose",
     "taxpayer_is_nonresident_alien_for_any_portion_of_year",
     "taxpayer_is_qualifying_child_of_another_taxpayer",
     "taxpayer_is_section_1_g_child",
     "taxpayer_treated_as_resident_by_section_6013_g_or_h_election",
+    "legally_separated_under_decree_of_divorce_or_separate_maintenance",
     "taxpayer_or_spouse_has_us_principal_abode_more_than_half_year",
     "unable_to_engage_substantial_gainful_activity",
     "vehicle_final_assembly_occurred_within_united_states",
@@ -2869,6 +2890,8 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "annuity_income",
     "aotc_prior_year_election_count",
     "american_employer_foreign_affiliate_equivalent_3121l_taxes",
+    "amounts_received_for_services_while_inmate_at_penal_institution",
+    "amounts_to_which_section_871_a_applies",
     "auto_loan_interest_deduction",
     "casualty_loss_deduction",
     "capital_gains_28_percent_rate_gain",
@@ -2895,11 +2918,13 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "exclusion_from_gross_income_under_subtitle_before_section_911_double_benefit_denial",
     "exclusion_properly_allocable_or_chargeable_to_amounts_excluded_under_subsection_a",
     "exemptions",
+    "early_delivered_social_security_benefit_checks_deemed_received_in_taxable_year",
     "financial_trading_business_income",
     "foreign_tax_credit",
     "form_4972_lumpsum_distributions",
     "impairment_duration_months",
     "highest_section_1_e_bracket_begin_amount",
+    "inclusion_by_reason_of_prior_year_lump_sum_portion_before_lump_sum_limitation",
     "inclusion_by_reason_of_prior_year_lump_sum_portion_before_subsection_e_limitation",
     "individual_testing_period_distributions",
     "investment_of_working_capital_income",
@@ -2912,11 +2937,14 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "min_head_spouse_earned",
     "misc_deduction",
     "new_clean_vehicle_credit",
+    "net_investment_income_tax",
+    "nonresident_withholding_credit_treated_as_refundable_amount",
     "other_nontaxable_pension_annuity_disability_benefits_subject_to_reduction",
     "other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income",
     "overtime_income_deduction",
     "passive_activity_business_income",
     "passenger_vehicle_loan_interest_paid_or_accrued",
+    "pension_or_annuity_amounts_received",
     "pension_annuity_disability_benefits_received",
     "qualified_dividend_income",
     "qualified_plan_distributions",
@@ -2927,6 +2955,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "recapture_of_investment_credit",
     "recovery_rebate_credit",
     "railroad_3211a_taxes",
+    "railroad_retirement_additional_tier_1_monthly_annuity_amount",
     "railroad_retirement_annuity_amount_equivalent_to_social_security_benefit",
     "railroad_retirement_monthly_annuity_amount_under_section_3_f_3",
     "refundable_payroll_tax_credit",
@@ -2949,6 +2978,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "section_911_excluded_income",
     "section_931_excluded_income",
     "section_933_excluded_income",
+    "self_employment_income_amount_subject_exclusively_to_foreign_social_security_laws_under_agreement",
     "self_employment_income_subject_to_1401_b",
     "short_term_capital_gains",
     "social_security_benefit_checks_deemed_received_in_taxable_year_under_section_708",
@@ -2956,10 +2986,12 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "social_security_title_ii_benefits_excluded_from_gross_income",
     "special_refund_social_security_taxes_under_6413c",
     "spouse_earned_income_for_cdcc",
+    "spouse_not_member_of_household_final_month_count",
     "spouse_testing_period_distributions",
     "sum_of_prior_year_gross_income_increases_from_lump_sum_portion",
     "tax_exempt_interest_received_or_accrued",
     "tax_unit_childcare_expenses",
+    "taxpayer_household_cost_fraction_furnished",
     "taxable_interest_income",
     "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception",
     "taxable_net_gain_from_dispositions",
@@ -2967,6 +2999,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "tax_imposed_by_chapter_before_cdcc",
     "taxpayer_earned_income_for_cdcc",
     "state_sales_tax",
+    "subsidized_state_work_activity_amounts_received",
     "tip_income_deduction",
     "trustee_to_trustee_transfer_or_rollover_distribution_portion",
     "undistributed_net_investment_income",
@@ -2980,6 +3013,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income",
     "wagering_losses_deduction",
     "workers_compensation_benefit_portion_equal_to_social_security_reduction",
+    "workers_compensation_treated_as_social_security_benefit",
     "workers_compensation_treated_as_social_security_benefit_under_section_86_d_3",
 )
 
@@ -3132,6 +3166,8 @@ _INPUT_REF_OVERRIDES.update(
     {
         name: f"us:statutes/26/24/h#input.{name}"
         for name in (
+            "ctc_child_satisfies_subsection_c",
+            "ctc_person_satisfies_dependency_rules",
             "dependent_under_section_152",
             "filing_status_is_joint_return",
             "noncitizen_exception_to_other_dependent_credit_under_subsection_h",
@@ -3151,6 +3187,7 @@ _INPUT_REF_OVERRIDES.update(
             "railroad_retirement_act_benefits_excluded_from_gross_income",
             "social_security_title_ii_benefits_excluded_from_gross_income",
             "veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income",
+            "workers_compensation_treated_as_social_security_benefit",
             "workers_compensation_treated_as_social_security_benefit_under_section_86_d_3",
         )
     }
@@ -3160,13 +3197,17 @@ _INPUT_REF_OVERRIDES.update(
         name: f"us:statutes/26/86#input.{name}"
         for name in (
             "inclusion_by_reason_of_prior_year_lump_sum_portion_before_subsection_e_limitation",
+            "inclusion_by_reason_of_prior_year_lump_sum_portion_before_lump_sum_limitation",
             "lump_sum_payment_portion_attributable_to_prior_taxable_years",
             "married_taxpayer_lived_apart_from_spouse_at_all_times_during_taxable_year",
+            "railroad_retirement_additional_tier_1_monthly_annuity_amount",
             "railroad_retirement_annuity_amount_equivalent_to_social_security_benefit",
             "railroad_retirement_monthly_annuity_amount_under_section_3_f_3",
+            "early_delivered_social_security_benefit_checks_deemed_received_in_taxable_year",
             "social_security_benefit_checks_deemed_received_in_taxable_year_under_section_708",
             "social_security_benefit_repayments_during_taxable_year",
             "sum_of_prior_year_gross_income_increases_from_lump_sum_portion",
+            "taxpayer_makes_lump_sum_election_for_prior_year_portion",
             "tax_exempt_interest_received_or_accrued",
             "taxpayer_makes_lump_sum_election_under_subsection_e",
             "taxpayer_receives_social_security_benefit_for_listed_purpose",
@@ -3183,11 +3224,28 @@ _INPUT_REF_OVERRIDES.update(
 )
 _INPUT_REF_OVERRIDES.update(
     {
+        name: f"us:statutes/26/26#input.{name}"
+        for name in ("net_investment_income_tax",)
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
         name: f"us:statutes/26/1402/a#input.{name}"
         for name in (
             "partnership_section_702_a_8_income_or_loss",
             "self_employment_trade_or_business_deductions",
             "self_employment_trade_or_business_gross_income",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
+        name: f"us:statutes/26/1401#input.{name}"
+        for name in (
+            "international_social_security_agreement_under_section_233_in_effect",
+            "self_employment_income_is_subject_exclusively_to_foreign_social_security_laws_under_agreement",
+            "self_employment_income_amount_subject_exclusively_to_foreign_social_security_laws_under_agreement",
+            "wages_taken_into_account_for_additional_medicare_tax",
         )
     }
 )
@@ -3215,6 +3273,7 @@ _INPUT_REF_OVERRIDES.update(
             "credit_allowed_under_section_33",
             "credit_allowed_under_section_33_by_reason_of_section_1446",
             "credits_allowable_under_subpart_c_excluding_section_33_for_overpayment",
+            "nonresident_withholding_credit_treated_as_refundable_amount",
             "section_6013_g_or_h_election_in_effect_for_taxable_year",
         )
     }
@@ -3224,6 +3283,7 @@ _INPUT_REF_OVERRIDES.update(
         name: f"us:statutes/26/32#input.{name}"
         for name in (
             "qualifying_child_is_married_at_close_of_taxable_year",
+            "qualifying_child_marital_status_requires_section_151_entitlement",
             "qualifying_child_name_age_and_tin_included_on_return",
             "qualifying_child_principal_place_of_abode_is_in_united_states",
             "qualifying_child_under_section_152_c_as_modified_for_eitc",
@@ -3242,6 +3302,34 @@ _INPUT_REF_OVERRIDES.update(
             "childless_taxpayer_or_spouse_age_eligible_for_eitc",
             "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year",
             "eitc_disallowance_period_applies",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
+        name: f"us:statutes/26/32/c/2#input.{name}"
+        for name in (
+            "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income",
+            "pension_or_annuity_amounts_received",
+            "amounts_to_which_section_871_a_applies",
+            "amounts_received_for_services_while_inmate_at_penal_institution",
+            "subsidized_state_work_activity_amounts_received",
+            "taxpayer_elects_to_treat_section_112_excluded_amounts_as_earned_income",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
+        name: f"us:statutes/26/7703#input.{name}"
+        for name in (
+            "spouse_dies_during_taxable_year",
+            "taxpayer_married_at_time_of_spouse_death",
+            "taxpayer_married_at_close_of_taxable_year",
+            "legally_separated_under_decree_of_divorce_or_separate_maintenance",
+            "taxpayer_files_separate_return",
+            "taxpayer_maintains_household_as_home",
+            "taxpayer_household_cost_fraction_furnished",
+            "spouse_not_member_of_household_final_month_count",
         )
     }
 )
@@ -3402,15 +3490,21 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         ),
         "spouse_is_blind_as_of_close_of_taxable_year_or_time_of_death": spouse_is_blind,
         "spouse_includes_required_social_security_number_on_return": spouse is not None,
+        "spouse_dies_during_taxable_year": False,
         "taxable_year_is_full_12_months": True,
+        "taxpayer_files_separate_return": False,
+        "taxpayer_maintains_household_as_home": False,
         "taxpayer_includes_required_social_security_number_on_return": True,
         "taxpayer_has_attained_age_65_before_close_of_taxable_year": _age(head) >= 65,
         "taxpayer_has_attained_age_55_before_close_of_taxable_year": _age(head) >= 55,
         "taxpayer_is_blind_at_close_of_taxable_year": taxpayer_is_blind,
         "taxpayer_is_dependent_for_section_151_to_another_taxpayer": False,
         "taxpayer_is_married_under_section_7703_a": spouse is not None,
+        "taxpayer_married_at_close_of_taxable_year": spouse is not None,
+        "taxpayer_married_at_time_of_spouse_death": spouse is not None,
         "trust_all_unexpired_interests_devoted_to_section_170_c_2_B_purposes": False,
         "wages": wages,
+        "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
         # Investment / unearned income — projected from Case concepts.
         "dividend_income": tax_unit_dividends,
@@ -3487,11 +3581,65 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     inputs.setdefault("deductions_allowable_in_arriving_at_adjusted_gross_income", 0)
     inputs.setdefault("deductions_allowable_under_this_chapter", 0)
     inputs.setdefault("deductions_allowed_by_this_chapter_other_than_standard_deduction", 0)
-    return [_input_record(name, "TaxUnit", _TAX_UNIT_ID, value) for name, value in inputs.items()]
+    records = [
+        _input_record(name, "TaxUnit", _TAX_UNIT_ID, value)
+        for name, value in inputs.items()
+    ]
+    records.append(
+        _input_record_for_ref(
+            "us:statutes/26/1401#input.filing_status",
+            "TaxUnit",
+            _TAX_UNIT_ID,
+            filing_status,
+        )
+    )
+    for name, value in {
+        "long_term_capital_gains": capital_gains_tax_long_capital_gains,
+        "short_term_capital_gains": capital_gains_tax_short_capital_gains,
+        "net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "qualified_dividend_income": capital_gains_tax_qualified_dividends,
+        "unrecaptured_section_1250_gain": inputs.get("unrecaptured_section_1250_gain", 0),
+        "capital_gains_28_percent_rate_gain": inputs.get(
+            "capital_gains_28_percent_rate_gain",
+            0,
+        ),
+    }.items():
+        records.append(
+            _input_record_for_ref(
+                f"us:statutes/26/1/h#input.{name}",
+                "TaxUnit",
+                _TAX_UNIT_ID,
+                value,
+            )
+        )
+    for name, value in {
+        "tin_included_on_return_claiming_exemption": True,
+        "is_taxpayer": True,
+        "is_spouse_of_taxpayer": False,
+        "filing_status": filing_status,
+        "spouse_has_no_gross_income_for_calendar_year": False,
+        "spouse_is_dependent_of_another_taxpayer": False,
+        "qualified_individual_social_security_number_included_on_return": True,
+        "age": _age(head),
+        "taxpayer_is_individual": True,
+        "taxable_year_begins_after_exemption_amount_zero_start": True,
+        "taxable_year_begins_before_senior_deduction_termination": True,
+    }.items():
+        records.append(
+            _input_record_for_ref(
+                f"us:statutes/26/151#input.{name}",
+                "TaxUnit",
+                _TAX_UNIT_ID,
+                value,
+            )
+        )
+    return records
 
 
 def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
     head, spouse = _tax_filers(people)
+    dependents = _tax_dependents(people, head, spouse)
+    filing_status = _filing_status(spouse=spouse, dependents=dependents)
     records = []
     for person in people:
         age = _age(person)
@@ -3540,8 +3688,11 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "person_unemployment_compensation": _number(
                 person.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0)
             ),
+            "ctc_child_satisfies_subsection_c": is_dependent and age < 17,
+            "ctc_person_satisfies_dependency_rules": is_dependent,
             "qualifying_child_described_in_subsection_c": is_dependent and age < 17,
             "qualifying_child_is_married_at_close_of_taxable_year": False,
+            "qualifying_child_marital_status_requires_section_151_entitlement": False,
             "qualifying_child_name_age_and_tin_included_on_return": is_dependent,
             "qualifying_child_principal_place_of_abode_is_in_united_states": is_dependent,
             "qualifying_child_ssn_included_on_return": is_dependent,
@@ -3558,7 +3709,121 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             inputs.setdefault(name, 0)
         for name, value in inputs.items():
             records.append(_input_record(name, "Person", person.entity_id, value))
+        for name, value in _section_151_person_inputs(
+            person,
+            head=head,
+            spouse=spouse,
+            filing_status=filing_status,
+        ).items():
+            records.append(
+                _input_record_for_ref(
+                    f"us:statutes/26/151#input.{name}",
+                    "Person",
+                    person.entity_id,
+                    value,
+                )
+            )
+        for name, value in _section_152c_person_inputs(
+            person,
+            head=head,
+            is_dependent=is_dependent,
+        ).items():
+            records.append(
+                _input_record_for_ref(
+                    f"us:statutes/26/152/c#input.{name}",
+                    "Person",
+                    person.entity_id,
+                    value,
+                )
+            )
+        for name, value in _section_7703_person_inputs(
+            person,
+            is_dependent=is_dependent,
+        ).items():
+            records.append(
+                _input_record_for_ref(
+                    f"us:statutes/26/7703#input.{name}",
+                    "Person",
+                    person.entity_id,
+                    value,
+                )
+            )
     return records
+
+
+def _section_151_person_inputs(
+    person: Entity,
+    *,
+    head: Entity,
+    spouse: Entity | None,
+    filing_status: int,
+) -> dict[str, Any]:
+    is_taxpayer = person is head
+    is_spouse = person is spouse
+    return {
+        "tin_included_on_return_claiming_exemption": True,
+        "is_taxpayer": is_taxpayer,
+        "is_spouse_of_taxpayer": is_spouse,
+        "spouse_has_no_gross_income_for_calendar_year": False,
+        "spouse_is_dependent_of_another_taxpayer": False,
+        "qualified_individual_social_security_number_included_on_return": True,
+        "age": _age(person),
+        "filing_status": filing_status if is_taxpayer or is_spouse else 0,
+    }
+
+
+def _section_152c_person_inputs(
+    person: Entity,
+    *,
+    head: Entity,
+    is_dependent: bool,
+) -> dict[str, Any]:
+    age = _age(person)
+    relationship = _relation(person)
+    is_child_or_descendant = is_dependent and relationship in _DEPENDENT_RELATIONS
+    return {
+        "individual_is_child_of_taxpayer_or_descendant_of_such_child": (
+            is_child_or_descendant
+        ),
+        "individual_is_sibling_stepsibling_or_descendant_of_such_relative": False,
+        "individual_is_permanently_and_totally_disabled": False,
+        "individual_is_younger_than_taxpayer": age < _age(head),
+        "individual_age_at_close_of_calendar_year": age,
+        "individual_is_student": False,
+        "individual_principal_place_of_abode_with_taxpayer_fraction": (
+            1 if is_dependent else 0
+        ),
+        "individual_own_support_fraction_provided_by_individual": 0,
+        "filing_status": 0,
+        "return_filed_only_for_claim_of_refund": False,
+        "individual_may_be_claimed_as_qualifying_child_by_two_or_more_taxpayers": False,
+        "parents_of_individual_may_claim_individual_but_no_parent_claims": False,
+        "taxpayer_is_parent_of_individual": is_child_or_descendant,
+        "taxpayer_adjusted_gross_income_higher_than_highest_parent_adjusted_gross_income": True,
+        "parents_filing_status": 1,
+        "child_resided_with_taxpayer_parent_for_longest_period": True,
+        "child_resided_with_both_parents_same_amount_of_time_and_taxpayer_parent_has_highest_adjusted_gross_income": False,
+        "no_parent_of_individual_is_a_claiming_taxpayer": False,
+        "taxpayer_has_highest_adjusted_gross_income_among_claiming_taxpayers": True,
+    }
+
+
+def _section_7703_person_inputs(
+    person: Entity,
+    *,
+    is_dependent: bool,
+) -> dict[str, Any]:
+    age = _age(person)
+    relationship = _relation(person)
+    is_child_or_descendant = is_dependent and relationship in _DEPENDENT_RELATIONS
+    return {
+        "person_is_child_within_federal_tax_child_definition": (
+            is_child_or_descendant and age < 19
+        ),
+        "taxpayer_household_is_child_principal_place_of_abode": is_dependent,
+        "child_principal_abode_fraction_of_taxable_year": 1 if is_dependent else 0,
+        "would_be_entitled_to_child_deduction_but_for_parent_release_rule": is_dependent,
+    }
 
 
 def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
@@ -3576,6 +3841,7 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
             "us:tax/oracle-bridge#relation.co_dependent_of_tax_unit",
             "us:statutes/26/24/h#relation.dependent_of_tax_unit",
             "us:statutes/26/32#relation.qualifying_child_of_tax_unit",
+            "us:statutes/26/7703#relation.living_apart_child_of_tax_unit",
         }:
             relation_people = dependents
         else:
@@ -3596,8 +3862,17 @@ def _input_record(
     entity_id: str,
     value: Any,
 ) -> dict[str, Any]:
+    return _input_record_for_ref(_input_ref(name), entity, entity_id, value)
+
+
+def _input_record_for_ref(
+    ref: str,
+    entity: str,
+    entity_id: str,
+    value: Any,
+) -> dict[str, Any]:
     return {
-        "name": _input_ref(name),
+        "name": ref,
         "entity": entity,
         "entity_id": entity_id,
         "value": value,

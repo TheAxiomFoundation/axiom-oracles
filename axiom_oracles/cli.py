@@ -830,7 +830,7 @@ def _build_runner(
                 US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
             )
         program_imports = (
-            US_TAX_ORACLE_IMPORTS
+            _tax_oracle_imports_for_concepts(concept_ids)
             if axiom_program is None
             and not wants_snap
             and _wants_tax(concept_ids)
@@ -857,6 +857,16 @@ def _build_runner(
     if engine == "prd":
         return PrdPackageRunner()
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
+
+
+def _tax_oracle_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:
+    if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
+        return tuple(
+            import_ref
+            for import_ref in US_TAX_ORACLE_IMPORTS
+            if import_ref != "us:statutes/26/1411"
+        )
+    return US_TAX_ORACLE_IMPORTS
 
 
 def _filter_for_accessnyc_mode(
