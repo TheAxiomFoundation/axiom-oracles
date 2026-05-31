@@ -171,7 +171,7 @@ function SourceLine({ program }) {
 
 function GapText({ gaps }) {
   if (!gaps?.length) {
-    return <span style={{ color: "var(--ink-mute)" }}>No non-TANF gap called out.</span>;
+    return <span style={{ color: "var(--ink-mute)" }}>No current gap called out.</span>;
   }
   return (
     <span>
@@ -217,7 +217,7 @@ export default function CoverageOverview({ reports, coverageOverview }) {
               <th>PolicyEngine coverage</th>
               <th>Eligibility alignment</th>
               <th>Amount alignment</th>
-              <th>Current non-TANF gap</th>
+              <th>Current gaps</th>
             </tr>
           </thead>
           <tbody>

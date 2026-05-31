@@ -124,6 +124,233 @@ function ConceptMetric({ aggregate }) {
   );
 }
 
+const FEDERAL_TAX_BREAKOUT = [
+  {
+    label: "Taxable income",
+    suffixes: ["#taxable_income"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Tax before credits",
+    suffixes: ["#tax_before_credits"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Federal income tax liability",
+    suffixes: ["#liability"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Nonrefundable credits",
+    suffixes: ["#nonrefundable_credits", "#non_refundable_credits"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Earned Income Tax Credit",
+    suffixes: ["#eitc"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Child Tax Credit",
+    suffixes: ["#ctc"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Child and Dependent Care Credit",
+    suffixes: ["#cdcc", "#child_and_dependent_care_credit"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Alternative Minimum Tax",
+    suffixes: ["#amt", "#alternative_minimum_tax"],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+  {
+    label: "Standard deduction",
+    suffixes: ["#standard_deduction"],
+    fallback: "Compared as a federal tax component",
+  },
+  {
+    label: "Capital gain definitions",
+    suffixes: ["#capital_gain"],
+    fallback: "Compared as a federal tax component",
+  },
+  {
+    label: "Payroll taxes",
+    suffixes: [
+      "#employee_oasdi",
+      "#employee_medicare",
+      "#employer_oasdi",
+      "#employer_medicare",
+    ],
+    fallback: "Not compared in the current FIIT ECPS suite",
+  },
+];
+
+function findBreakoutAggregates(aggregates, suffixes) {
+  return aggregates.filter((aggregate) =>
+    suffixes.some((suffix) => aggregate.concept?.endsWith(suffix)),
+  );
+}
+
+function combineBreakoutAggregates(items) {
+  if (!items.length) return null;
+  let total = 0;
+  let mismatches = 0;
+  let weightedTotal = 0;
+  let weightedMatches = 0;
+  for (const item of items) {
+    total += item.comparison_count || 0;
+    mismatches += item.mismatch_count || 0;
+    if (item.comparison_weight != null && item.match_weight != null) {
+      weightedTotal += item.comparison_weight;
+      weightedMatches += item.match_weight;
+    }
+  }
+  const matched = total - mismatches;
+  return {
+    matched,
+    total,
+    mismatches,
+    rate: total > 0 ? (matched / total) * 100 : null,
+    weightedRate: weightedTotal > 0 ? (weightedMatches / weightedTotal) * 100 : null,
+  };
+}
+
+function FederalTaxBreakout({ aggregates }) {
+  const rows = FEDERAL_TAX_BREAKOUT.map((row) => {
+    const matches = findBreakoutAggregates(aggregates, row.suffixes);
+    return {
+      ...row,
+      metrics: combineBreakoutAggregates(matches),
+      comparedCount: matches.length,
+    };
+  });
+
+  return (
+    <section
+      style={{
+        padding: "13px 14px",
+        border: "1px solid var(--hairline-strong)",
+        borderRadius: 8,
+        background: "var(--paper-warm)",
+      }}
+    >
+      <div
+        className="section-eyebrow"
+        style={{ fontSize: 10.5, marginBottom: 8 }}
+      >
+        Federal income tax pieces
+      </div>
+      <div style={{ overflowX: "auto" }}>
+        <table
+          className="mono"
+          style={{
+            width: "100%",
+            minWidth: 640,
+            borderCollapse: "collapse",
+            fontSize: 11.5,
+          }}
+        >
+          <thead>
+            <tr style={{ color: "var(--ink-mute)" }}>
+              <th style={{ textAlign: "left", padding: "0 8px 6px 0" }}>
+                Piece
+              </th>
+              <th style={{ textAlign: "right", padding: "0 8px 6px" }}>
+                Alignment
+              </th>
+              <th style={{ textAlign: "right", padding: "0 8px 6px" }}>
+                Matched
+              </th>
+              <th style={{ textAlign: "right", padding: "0 8px 6px" }}>
+                Mismatches
+              </th>
+              <th style={{ textAlign: "left", padding: "0 0 6px 8px" }}>
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => {
+              const metrics = row.metrics;
+              const compared = metrics && metrics.total > 0;
+              return (
+                <tr
+                  key={row.label}
+                  style={{ borderTop: "1px solid var(--hairline)" }}
+                >
+                  <td
+                    style={{
+                      padding: "7px 8px 7px 0",
+                      color: "var(--ink)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {row.label}
+                  </td>
+                  <td
+                    style={{
+                      padding: "7px 8px",
+                      textAlign: "right",
+                      color: compared ? rateColor(metrics.rate) : "var(--ink-mute)",
+                      fontWeight: compared ? 600 : 400,
+                    }}
+                  >
+                    {compared ? formatPct(metrics.rate) : "—"}
+                  </td>
+                  <td
+                    style={{
+                      padding: "7px 8px",
+                      textAlign: "right",
+                      color: compared ? "var(--ink)" : "var(--ink-mute)",
+                    }}
+                  >
+                    {compared
+                      ? `${metrics.matched.toLocaleString()}/${metrics.total.toLocaleString()}`
+                      : "—"}
+                  </td>
+                  <td
+                    style={{
+                      padding: "7px 8px",
+                      textAlign: "right",
+                      color:
+                        compared && metrics.mismatches > 0
+                          ? "var(--bad)"
+                          : "var(--ink-mute)",
+                    }}
+                  >
+                    {compared ? metrics.mismatches.toLocaleString() : "—"}
+                  </td>
+                  <td
+                    style={{
+                      padding: "7px 0 7px 8px",
+                      color: compared ? "var(--ink-mute)" : "var(--ink-soft)",
+                      whiteSpace: "normal",
+                      lineHeight: 1.35,
+                    }}
+                  >
+                    {compared
+                      ? row.comparedCount > 1
+                        ? `${row.comparedCount} payroll components compared`
+                        : "Compared in current FIIT suite"
+                      : row.fallback}
+                    {compared &&
+                      metrics.weightedRate != null &&
+                      Math.abs(metrics.weightedRate - metrics.rate) > 0.5 && (
+                        <> · {formatPct(metrics.weightedRate)} weighted</>
+                      )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 function HouseholdDetail({ row, mismatch }) {
   // Pull household-shaped fields out of the case metadata + the mismatch
   // payload. Anything that's null is hidden so the panel stays tight.
@@ -701,6 +928,10 @@ export default function AlignmentReport({ report, knownCauses = [] }) {
           />
         ))}
       </div>
+
+      {report.suite === "fiit-ecps" && (
+        <FederalTaxBreakout aggregates={aggregates} />
+      )}
 
       {mismatchCount > 0 && (() => {
         // Collect top causes across all (concept, kind) buckets so the
