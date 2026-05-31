@@ -1,0 +1,255 @@
+{
+  "_comment": "Registry of known explanations for recurring mismatch patterns. Keyed by (suite, concept, kind). The dashboard renders the cause inline next to the disagreement count so reviewers see the underlying issue rather than a bare 'N cases failed' tally.",
+  "entries": [
+    {
+      "suite": "ca-snap-ecps",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "kind": "amount_difference",
+      "label": "Compiled-program benefit overstatement",
+      "description": "After routing the dashboard concept to composed `snap_benefit`, CA eligibility matches in the sampled ECPS dashboard path, but 5 of 58 benefit amounts still differ. The inspected residuals have Axiom above PolicyEngine because PolicyEngine includes TANF cash assistance in SNAP unearned income while Axiom's current ECPS SNAP path does not yet model TANF.",
+      "drivers": [
+        {
+          "label": "TANF is missing from Axiom SNAP unearned income",
+          "description": "PolicyEngine computes CA TANF and includes it in SNAP unearned income. Axiom currently projects earned income and raw ECPS unearned facts, but does not compute or inject TANF into the SNAP benefit path.",
+          "evidence": [
+            "ecps-79627: Axiom unearned income $0 vs PE TANF/snap_unearned_income about $728.90/month.",
+            "ecps-81521: Axiom unearned income $0 vs PE TANF/snap_unearned_income about $804.91/month.",
+            "In both inspected cases, utility allowance aligns at $663/month, so utility wiring is not the remaining driver."
+          ]
+        },
+        {
+          "label": "Compose coverage gap",
+          "description": "The dashboard run reports CA eligibility-looking rules in the compiled program that are not referenced by `snap_eligible`; those do not explain the current eligibility match, but they are still a real coverage risk for broader samples.",
+          "evidence": [
+            "Unreferenced examples include `legal_noncitizen_eligible_for_cfap`, `ineligible_student_excluded_household_member`, and `snap_member_work_requirement_ineligible`."
+          ]
+        },
+        {
+          "label": "Direct encoder oracle differs from dashboard path",
+          "description": "The direct `axiom-encode snap-ecps-compare` path now maps utility allowance and shelter diagnostics explicitly. The dashboard path runs a separately composed program plus generic ECPS projection, so remaining deltas should be fixed there rather than by Python amount overrides.",
+          "evidence": [
+            "The latest dashboard run compares 58 CA cases: benefit 53/58, eligibility 58/58."
+          ]
+        }
+      ],
+      "fix_owner": "investigation"
+    },
+    {
+      "suite": "ny-snap-ecps",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "kind": "amount_difference",
+      "label": "Compiled-program benefit and minimum-benefit residuals",
+      "description": "After routing the dashboard concept to composed `snap_benefit` and fixing the NY program spec to use `snap_monthly_allotment`, NY has 4 benefit residuals and 1 eligibility residual in the dashboard path. The direct encoder oracle remains cleaner, so these remaining dashboard deltas are specific to composed-program/generic-projection coverage and the known minimum-benefit/eligibility edge around ecps-9901.",
+      "drivers": [
+        {
+          "label": "TANF is missing from Axiom SNAP unearned income",
+          "description": "For inspected NY benefit residuals, PolicyEngine computes NY TANF and includes it in SNAP unearned income. Axiom's current ECPS SNAP path does not yet model TANF, so Axiom net income is too low and the benefit is too high.",
+          "evidence": [
+            "ecps-10351: Axiom unearned income $0 vs PE NY TANF/snap_unearned_income about $574.50/month.",
+            "For ecps-10351, utility allowance aligns at $877/month; the large benefit delta is driven by the missing TANF income contribution."
+          ]
+        },
+        {
+          "label": "Known minimum-benefit edge",
+          "description": "ecps-9901 still shows Axiom ineligible/$0 while PolicyEngine is eligible with a small benefit. This is the remaining minimum-benefit/eligibility edge in the dashboard path.",
+          "evidence": [
+            "ecps-9901: Axiom eligibility false and $0 benefit; PE eligibility true and $23.97 benefit."
+          ]
+        },
+        {
+          "label": "Compose coverage gap",
+          "description": "The dashboard run reports NY eligibility-looking rules in the compiled program that are not referenced by `snap_eligible`, so broader samples may expose additional misses until the compose graph is tightened.",
+          "evidence": [
+            "Unreferenced examples include `snap_income_limit_exemption_for_categorically_eligible_household`, `snap_member_work_requirement_ineligible`, and `snap_telephone_standard_allowance_eligible`."
+          ]
+        }
+      ],
+      "fix_owner": "investigation"
+    },
+    {
+      "suite": "ca-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_right_only",
+      "label": "CalFresh BBCE not encoded",
+      "description": "Households between 130% and 200% FPL pass California's Broad-Based Categorical Eligibility (CalFresh) but fail Axiom's standard income test. The CA-specific BBCE rule isn't yet encoded in rulespec-us-ca, so Axiom only sees the federal 130% FPL limit. PolicyEngine applies CalFresh BBCE and counts these as eligible.",
+      "fix_owner": "rulespec-us-ca"
+    },
+    {
+      "suite": "ca-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_left_only",
+      "label": "Likely missing disqualification path",
+      "description": "Axiom marks these eligible but PolicyEngine rejects. All core gates (income, resource, residency, member-eligibility) pass in Axiom's chain. Most plausible cause: PolicyEngine applies a CA-specific disqualification (work registration, ABAWD time limit, immigration status) that Axiom's rulespec-us-ca doesn't yet encode. Needs per-case PE rule introspection to confirm.",
+      "fix_owner": "investigation"
+    },
+    {
+      "suite": "ny-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_right_only",
+      "label": "NY BBCE expansion not fully encoded",
+      "description": "Households fail Axiom's standard income test (>130% FPL) and don't qualify under NY's encoded categorical paths (18 NYCRR 387.14(a)(5)). PolicyEngine marks them eligible — likely via a broader NY BBCE rule (TANF-funded service, 200% FPL ceiling) not yet captured in rulespec-us-ny.",
+      "fix_owner": "rulespec-us-ny"
+    },
+    {
+      "suite": "ma-snap-ecps",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "kind": "amount_difference",
+      "label": "MA categorical, utility, and TAFDC gaps",
+      "description": "The full MA ECPS run compares 896 households. After encoding and wiring the FY 2026 MA heating/cooling SUA amount, benefit amount mismatches fell from 106 to 79 and total mismatch entries fell from 163 to 121. Remaining benefit mismatches are split across categorical/BBCE eligibility cases and MA TAFDC/TANF income composition.",
+      "drivers": [
+        {
+          "label": "MA heating/cooling SUA amount is now wired",
+          "description": "106 CMR 364.945 was encoded as deferred because the regulation points externally. The external DTA Policy Online COLA source was added to corpus and encoded through the encoder as `heating_cooling_standard_utility_allowance = $914`, effective October 1, 2025. The MA program now composes that amount into shelter costs when the heating/cooling SUA eligibility path holds.",
+          "evidence": [
+            "Benefit matches improved from 790/896 to 817/896 after HCSUA wiring.",
+            "Total mismatch entries improved from 163 to 121.",
+            "Encoder-applied files: rulespec-us-ma/regulations/106-cmr/364/945/block-1.yaml, status deferred; rulespec-us-ma/policies/dta/snap/fy-2026-cola/heating-cooling-standard-utility-allowance.yaml, executable $914 amount."
+          ]
+        },
+        {
+          "label": "MA TAFDC/TANF is not modeled in Axiom SNAP unearned income",
+          "description": "For Axiom-over-PolicyEngine benefit mismatches, PolicyEngine often computes MA TAFDC and includes it in SNAP unearned income. Axiom's ECPS SNAP path still projects only observed ECPS income facts and does not compute or inject MA TAFDC.",
+          "evidence": [
+            "After HCSUA wiring, 44 of 79 benefit mismatches have Axiom above PolicyEngine.",
+            "The pre-HCSUA diagnostic found positive PE MA TAFDC in 22 of 27 Axiom-over-PE benefit mismatches.",
+            "ecps-3317 remains Axiom-over-PE after HCSUA wiring: Axiom benefit $785 vs PE $450.32, with PE MA TAFDC previously measured at about $927.30/month."
+          ]
+        },
+                {
+                    "label": "MA categorical/BBCE path is encoded but not yet outcome-driving",
+                    "description": "Many benefit mismatches are paired with Axiom ineligible/$0 while PolicyEngine is eligible with a positive allotment. The 106 CMR 365.180(A) corpus block has been repaired and the categorical rule has now been applied through the encoder, but the ECPS projection does not yet supply the categorical/authorized-benefit facts and MA's cross-referenced gross/net categorical standards remain deferred. The program scopes the new rule and aliases the broad categorical output, but it did not change the full-run mismatch count.",
+                    "evidence": [
+                        "After HCSUA wiring, 33 benefit mismatches are paired with eligibility mismatches and 46 are benefit-only.",
+                        "Eligibility mismatches fell from 57 to 42; 39 are PE-only and 3 are Axiom-only.",
+                        "Encoder-applied files: rulespec-us-ma/regulations/106-cmr/365/180/A.yaml and A.test.yaml, with a signed manifest.",
+                        "After adding 365.180(A) to the MA program scope and wiring categorical aliases, the full ECPS run stayed at 121 mismatch entries because the required factual inputs default false and the MA income-standard tables are still deferred."
+                    ]
+                }
+      ],
+      "fix_owner": "rulespec-us-ma"
+    },
+    {
+      "suite": "ma-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_right_only",
+            "label": "MA categorical/BBCE facts and standards still incomplete",
+            "description": "The full MA run now has 39 cases where PolicyEngine marks the household SNAP eligible and Axiom does not. The 106 CMR 365.180(A) categorical artifact has been applied through the encoder and scoped into the MA program, but ECPS does not currently supply the required authorized SSI/EAEDC/TAFDC or TANF-service facts. The related MA gross/net categorical standards at 106 CMR 364.950, 364.970, and 364.976 remain deferred because those source slices point to externally posted standards rather than stating the executable tables.",
+            "fix_owner": "rulespec-us-ma"
+        },
+    {
+      "suite": "ma-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_left_only",
+      "label": "MA gross cap divergence",
+      "description": "There are now three cases where Axiom marks the household eligible and PolicyEngine does not. The previously inspected case has a disabled one-person household with PE gross income at about 210.6% FPG and net income at about 95.2% FPG; Axiom passes the federal elderly/disabled net-income path while PolicyEngine rejects under the MA gross/categorical treatment.",
+      "fix_owner": "rulespec-us-ma"
+    },
+    {
+      "suite": "al-snap-ecps",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "kind": "amount_difference",
+      "label": "AL TANF income and minimum-benefit residuals",
+      "description": "The first Alabama full ECPS run composes and compares end to end without Python overrides. Eligibility is close. The dominant benefit residual is now traced: PolicyEngine imputes Alabama TANF and counts it in SNAP unearned income, while Axiom does not yet compute or inject Alabama TANF into the composed SNAP income path. The remaining PE-greater-than-Axiom cases are mostly minimum-benefit/eligibility edges with PE at about $23.97 and Axiom at $0.",
+      "drivers": [
+        {
+          "label": "PE-imputed Alabama TANF is missing from Axiom SNAP income",
+          "description": "Twenty-one of 37 AL benefit residuals have positive PolicyEngine Alabama TANF. All 21 are in the Axiom-greater-than-PE direction, because PE includes TANF in SNAP unearned income and Axiom's current ECPS projection does not.",
+          "evidence": [
+            "AL full run: 704 cases, 1,408 comparisons, 41 mismatch entries; benefit 667/704, eligibility 700/704.",
+            "Benefit residual buckets: 30 Axiom > PE, 7 PE > Axiom; 21 of the 30 Axiom > PE cases have PE TANF > $0.",
+            "ecps-51206 / county 01011: Axiom $785 vs PE $749.27; PE al_tanf and snap_unearned_income are both $4,128/year.",
+            "ecps-51544 / county 01117: Axiom $62 vs PE $0; PE al_tanf is $3,648/year and PE rejects SNAP eligibility.",
+            "ecps-52446 / county 01087: Axiom $403 vs PE $0; PE al_tanf is about $5,284.59/year and snap_unearned_income is about $5,856/year."
+          ]
+        },
+        {
+          "label": "Minimum-benefit and PE-greater-than-Axiom edges",
+          "description": "Seven AL benefit residuals have PE above Axiom. The inspected examples show PE eligible with a small positive monthly allotment while Axiom is ineligible/$0, so these should be treated as eligibility/minimum-benefit edges rather than amount overrides.",
+          "evidence": [
+            "ecps-51307 / county 01121: Axiom $0 and ineligible; PE eligible with $23.97/month.",
+            "ecps-51708 / county 01043: Axiom $96 vs PE $98.89, within the small residual direction after PE shelter and net-income calculation."
+          ]
+        },
+        {
+          "label": "AL utility and eligibility coverage still need legal wiring",
+          "description": "The first-pass AL program did not wire a state-specific standard utility allowance amount table. This is a real modeling gap, but it is not the observed driver of the current AL benefit residuals: PE applied zero SNAP utility allowance in all 37 AL benefit-mismatch cases. The encoded AL POE page states SUA/BUA/telephone eligibility mechanics, but not the executable FY 2026 amount table. Compose also reports eligibility-looking AL rules outside `snap_eligible`, so broader eligibility behavior needs targeted source review before those rules are gated.",
+          "evidence": [
+            "PE diagnostic across all 37 AL benefit-mismatch cases: `snap_utility_allowance > 0` in 0 cases; `housing_cost > 0` in 33 cases.",
+            "Coverage-gap examples include `household_meets_snap_income_eligibility_standards`, `person_eligible_under_abawd_provision`, and `person_is_eligible_alien`."
+          ]
+        }
+      ],
+      "fix_owner": "rulespec-us-al"
+    },
+    {
+      "suite": "al-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_left_only",
+      "label": "AL missing disqualification or state eligibility gate",
+      "description": "Three Alabama cases have Axiom eligible while PolicyEngine is ineligible. The first-pass composed program has encoded AL eligibility-looking rules that are not yet safely connected to `snap_eligible`; these cases need per-case gate tracing before any rule is force-wired.",
+      "fix_owner": "rulespec-us-al"
+    },
+    {
+      "suite": "al-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_right_only",
+      "label": "AL minimum-benefit or categorical edge",
+      "description": "One Alabama case has PolicyEngine eligible with a positive SNAP benefit while Axiom is ineligible. This should be treated as a targeted eligibility/minimum-benefit edge until per-case income, categorical, and allotment diagnostics are traced.",
+      "fix_owner": "investigation"
+    },
+    {
+      "suite": "tn-snap-ecps",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "kind": "amount_difference",
+      "label": "TN Families First income and utility-table wiring residuals",
+      "description": "The first Tennessee full ECPS run composes and compares end to end without Python overrides. The dominant benefit residual is now traced: PolicyEngine imputes Tennessee Families First/TANF and counts it in SNAP unearned income, while Axiom does not yet compute or inject Families First into the composed SNAP income path. TN also has an encoded utility allowance table, but it lives in a regulation block that also contains older SNAP income/deduction parameters, so it cannot be safely scoped wholesale without re-encoding or splitting the utility surface.",
+      "drivers": [
+        {
+          "label": "PE-imputed Tennessee Families First is missing from Axiom SNAP income",
+          "description": "Thirty of 48 TN benefit residuals have positive PolicyEngine Families First/TANF. All 30 are in the Axiom-greater-than-PE direction, because PE includes this cash assistance in SNAP unearned income and Axiom's current ECPS projection does not.",
+          "evidence": [
+            "TN full run: 852 cases, 1,704 comparisons, 54 mismatch entries; benefit 804/852, eligibility 846/852.",
+            "Benefit residual buckets: 38 Axiom > PE, 10 PE > Axiom; 30 of the 38 Axiom > PE cases have PE Families First/TANF > $0.",
+            "ecps-49363 / county 47157: Axiom $909 vs PE $733.70; PE tn_ff and snap_unearned_income are both $5,652/year.",
+            "ecps-49447 / county 47093: Axiom $308 and eligible; PE $0 and ineligible with tn_ff $5,652/year.",
+            "ecps-49860 / county 47047: Axiom $61 and eligible; PE $0 and ineligible with tn_ff $4,116/year."
+          ]
+        },
+        {
+          "label": "TN utility amount source is encoded but not safely scoped",
+          "description": "TN RuleSpec includes `snap_standard_utility_allowance`, `snap_basic_utility_allowance`, `snap_telephone_standard`, and `snap_homeless_shelter_standard` in `regulations/1240-01/04/27/block-1`. That same block also exports older SNAP income standards, max allotment, standard deduction, and shelter cap values with broad effective dates. This is a real wiring gap, but it is not the observed driver of the current TN benefit residuals: PE applied zero SNAP utility allowance in all 48 TN benefit-mismatch cases. The sustainable fix is to re-encode or split the utility table through the encoder, then compose only the utility amount surface into shelter costs.",
+          "evidence": [
+            "PE diagnostic across all 48 TN benefit-mismatch cases: `snap_utility_allowance > 0` in 0 cases; `housing_cost > 0` in 44 cases.",
+            "`rulespec-us-tn/regulations/1240-01/04/27/block-1.yaml` has the utility table but also exports `snap_gross_income_standard`, `snap_max_net_income`, `snap_max_coupon_allotment`, and `snap_standard_deduction`.",
+            "USDA FNS states SUAs are used for SNAP utility costs and vary by household size in Tennessee.",
+            "The current TN program does not include that regulation block to avoid overriding current federal FY 2026 values."
+          ]
+        },
+        {
+          "label": "Minimum-benefit and PE-greater-than-Axiom edges",
+          "description": "Ten TN benefit residuals have PE above Axiom. The inspected examples show PE eligible with a small positive monthly allotment while Axiom returns $0, so these remain eligibility/minimum-benefit edges until traced through the composed Axiom gate.",
+          "evidence": [
+            "ecps-49546 / county 47037: Axiom $0 while PE is eligible with $23.97/month.",
+            "ecps-49795 / county 47037: Axiom $0 while PE is eligible with $23.97/month."
+          ]
+        },
+        {
+          "label": "TN utility and eligibility coverage still need legal wiring",
+          "description": "The first-pass TN program did not wire a state-specific standard utility allowance amount. Compose also reports eligibility-looking TN rules outside the `snap_eligible` expression tree, so targeted review is needed before gating them into eligibility.",
+          "evidence": [
+            "Coverage-gap examples include `income_eligibility_standards_met`, `ineligible_household_member_due_to_enumeration`, `individual_transitional_snap_eligible`, and `bua_eligible`."
+          ]
+        }
+      ],
+      "fix_owner": "rulespec-us-tn"
+    },
+    {
+      "suite": "tn-snap-ecps",
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "kind": "eligibility_left_only",
+      "label": "TN missing disqualification or state eligibility gate",
+      "description": "Six Tennessee cases have Axiom eligible while PolicyEngine is ineligible. The first-pass composed program deliberately excluded one duplicate `excluded_household_member` page from scope and still reports uncovered eligibility-looking rules; these cases need targeted tracing before expanding the eligibility gate.",
+      "fix_owner": "rulespec-us-tn"
+    }
+  ]
+}

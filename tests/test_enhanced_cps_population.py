@@ -3,6 +3,7 @@ from axiom_oracles.core.geography import GeographyScope
 from axiom_oracles.populations.enhanced_cps import (
     NYC_ENHANCED_CPS_DATASET,
     EnhancedCpsCaseLoader,
+    _clean_number,
     _scope_from_geography,
     dataset_for_scope,
     load_enhanced_cps_cases,
@@ -99,6 +100,10 @@ def test_scope_from_geography_combines_state_and_county_components() -> None:
         geoid="21",
     )
     assert _scope_from_geography(float("nan"), 0, "") is None
+
+
+def test_clean_number_treats_unknown_as_missing() -> None:
+    assert _clean_number("UNKNOWN") == 0
 
 
 class FakeSeries:

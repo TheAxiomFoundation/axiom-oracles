@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { IconChevronRight, IconChevronDown } from "@tabler/icons-react";
 import { formatPct, formatCurrency, engineLabel } from "../utils/format";
 import { rateColor, heatmapBg } from "../utils/colors";
@@ -44,54 +44,79 @@ function kindLabel(kind) {
   return KIND_LABEL[kind] || kind;
 }
 
-function ConceptMetric({ aggregate, mismatchCount }) {
+function ConceptMetric({ aggregate }) {
   const rate = aggregate.match_rate;
   const total = aggregate.comparison_count;
   const matched = total - aggregate.mismatch_count;
   const weighted = aggregate.weighted_match_rate;
   const tolerance = aggregate.tolerance;
   const isAmount = aggregate.comparison === "amount";
+  // The descriptive label comes from the concept (e.g. "SNAP benefit
+  // amount", "Child Tax Credit value", "Federal income tax liability").
+  // Falls back to the kind tag only when no description is set.
+  const title = aggregate.description || (isAmount ? "Amount" : "Eligibility");
   return (
     <div
       style={{
-        flex: 1,
-        minWidth: 220,
-        padding: "14px 16px",
+        flex: "1 1 200px",
+        minWidth: 200,
+        padding: "12px 14px",
         background: rate != null ? heatmapBg(rate) : "var(--paper-warm)",
         border: "1px solid var(--hairline)",
         borderRadius: 8,
       }}
     >
       <div
-        className="section-eyebrow"
-        style={{ fontSize: 10.5, letterSpacing: "0.1em" }}
+        style={{
+          fontSize: 12,
+          color: "var(--ink)",
+          fontWeight: 500,
+          lineHeight: 1.35,
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+        }}
       >
-        {isAmount ? "Benefit amount" : "Eligibility"}
-        {isAmount && tolerance != null ? (
-          <span style={{ marginLeft: 6, color: "var(--ink-mute)" }}>
-            (±{formatCurrency(tolerance)})
-          </span>
-        ) : null}
+        {title}
+      </div>
+      <div
+        className="mono"
+        style={{
+          fontSize: 9.5,
+          letterSpacing: "0.08em",
+          color: "var(--ink-soft)",
+          textTransform: "uppercase",
+          marginTop: 2,
+        }}
+      >
+        {isAmount ? "Amount comparison" : "Eligibility comparison"}
       </div>
       <div
         className="mono"
         style={{
           fontSize: 22,
           fontWeight: 500,
-          marginTop: 6,
+          marginTop: 8,
           color: rate != null ? rateColor(rate) : "var(--ink-mute)",
+          letterSpacing: "-0.01em",
+          lineHeight: 1,
         }}
       >
         {rate != null ? formatPct(rate) : "—"}
       </div>
       <div
         className="mono"
-        style={{ fontSize: 11.5, color: "var(--ink-mute)", marginTop: 4 }}
+        style={{ fontSize: 11, color: "var(--ink-mute)", marginTop: 6 }}
       >
-        {matched.toLocaleString()}/{total.toLocaleString()} cases match
-        {weighted != null && weighted !== rate && (
-          <span style={{ marginLeft: 8 }}>
-            · {formatPct(weighted)} weighted
+        {matched.toLocaleString()}/{total.toLocaleString()}
+        {isAmount && tolerance != null && (
+          <span style={{ marginLeft: 6 }}>
+            · ±{formatCurrency(tolerance)}
+          </span>
+        )}
+        {weighted != null && Math.abs(weighted - rate) > 0.5 && (
+          <span style={{ marginLeft: 6 }}>
+            · {formatPct(weighted)} wtd
           </span>
         )}
       </div>
@@ -99,7 +124,106 @@ function ConceptMetric({ aggregate, mismatchCount }) {
   );
 }
 
-function MismatchCaseTable({ cases }) {
+function HouseholdDetail({ row, mismatch }) {
+  // Pull household-shaped fields out of the case metadata + the mismatch
+  // payload. Anything that's null is hidden so the panel stays tight.
+  const md = row?.metadata || {};
+  const scope = md.scope || {};
+  const hh = md.household_summary || {};
+  const items = [
+    [
+      "household size",
+      hh.household_size ??
+        (Array.isArray(mismatch.ages) ? mismatch.ages.length : null),
+    ],
+    [
+      "member ages",
+      (hh.ages && hh.ages.join(", ")) || mismatch.ages?.join?.(", "),
+    ],
+    [
+      "yearly earned income (total)",
+      hh.yearly_earned_income_total != null
+        ? "$" + hh.yearly_earned_income_total.toLocaleString()
+        : mismatch.yearly_earned_income != null
+          ? "$" + mismatch.yearly_earned_income.toLocaleString()
+          : null,
+    ],
+    [
+      "income per person",
+      hh.yearly_earned_income_per_person?.length
+        ? hh.yearly_earned_income_per_person
+            .map((v) => "$" + v.toLocaleString())
+            .join(", ")
+        : null,
+    ],
+    [
+      "pregnant member",
+      hh.pregnant_member_present === true || mismatch.pregnant_head === true
+        ? "yes"
+        : null,
+    ],
+    ["county/geoid", scope.geoid],
+    [
+      "household weight",
+      md.household_weight != null
+        ? Math.round(md.household_weight).toLocaleString()
+        : null,
+    ],
+    ["dataset", md.dataset],
+    [
+      "axiom inputs sent",
+      md.axiom_input_records_count != null
+        ? md.axiom_input_records_count.toLocaleString()
+        : null,
+    ],
+    ["scenario", mismatch.scenario],
+  ].filter(([_, v]) => v !== undefined && v !== null && v !== "");
+
+  if (!items.length) {
+    return (
+      <div
+        style={{
+          padding: "8px 12px",
+          fontSize: 11.5,
+          color: "var(--ink-mute)",
+          background: "var(--paper-warm)",
+          borderTop: "1px dashed var(--hairline)",
+        }}
+      >
+        No additional household context recorded for this case.
+      </div>
+    );
+  }
+  return (
+    <div
+      style={{
+        padding: "8px 12px",
+        background: "var(--paper-warm)",
+        borderTop: "1px dashed var(--hairline)",
+        fontSize: 11.5,
+        display: "grid",
+        gridTemplateColumns: "max-content 1fr",
+        columnGap: 12,
+        rowGap: 4,
+      }}
+    >
+      {items.map(([k, v]) => (
+        <span key={k} style={{ display: "contents" }}>
+          <span
+            className="mono"
+            style={{ color: "var(--ink-mute)", whiteSpace: "nowrap" }}
+          >
+            {k}
+          </span>
+          <span style={{ color: "var(--ink)" }}>{String(v)}</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function MismatchCaseTable({ cases, casesById }) {
+  const [openCase, setOpenCase] = useState(null);
   return (
     <div
       style={{
@@ -107,7 +231,7 @@ function MismatchCaseTable({ cases }) {
         background: "var(--paper-elevated)",
         border: "1px solid var(--hairline)",
         borderRadius: 6,
-        maxHeight: 280,
+        maxHeight: 360,
         overflow: "auto",
       }}
     >
@@ -121,6 +245,7 @@ function MismatchCaseTable({ cases }) {
       >
         <thead>
           <tr style={{ background: "var(--paper-warm)" }}>
+            <th style={{ textAlign: "left", padding: "6px 10px", width: 24 }} />
             <th style={{ textAlign: "left", padding: "6px 10px" }}>case_id</th>
             <th style={{ textAlign: "right", padding: "6px 10px" }}>Axiom</th>
             <th style={{ textAlign: "right", padding: "6px 10px" }}>PE</th>
@@ -128,28 +253,59 @@ function MismatchCaseTable({ cases }) {
           </tr>
         </thead>
         <tbody>
-          {cases.map((m) => (
-            <tr
-              key={`${m.case_id}-${m.concept}`}
-              style={{ borderTop: "1px solid var(--hairline)" }}
-            >
-              <td style={{ padding: "5px 10px", color: "var(--ink-mute)" }}>
-                {m.case_id}
-              </td>
-              <td style={{ padding: "5px 10px", textAlign: "right" }}>
-                {formatValue(m.left)}
-              </td>
-              <td style={{ padding: "5px 10px", textAlign: "right" }}>
-                {formatValue(m.right)}
-              </td>
-              <td style={{ padding: "5px 10px", textAlign: "right" }}>
-                {m.difference != null
-                  ? (m.difference >= 0 ? "+" : "") +
-                    m.difference.toFixed(2)
-                  : "—"}
-              </td>
-            </tr>
-          ))}
+          {cases.map((m) => {
+            const key = `${m.case_id}-${m.concept}`;
+            const isOpen = openCase === key;
+            const row = casesById?.get(m.case_id);
+            return (
+              <React.Fragment key={key}>
+                <tr
+                  onClick={() => setOpenCase(isOpen ? null : key)}
+                  style={{
+                    borderTop: "1px solid var(--hairline)",
+                    cursor: "pointer",
+                    background: isOpen ? "var(--paper-warm)" : "transparent",
+                  }}
+                >
+                  <td
+                    style={{
+                      padding: "5px 10px",
+                      color: "var(--ink-mute)",
+                      width: 24,
+                    }}
+                  >
+                    {isOpen ? (
+                      <IconChevronDown size={11} />
+                    ) : (
+                      <IconChevronRight size={11} />
+                    )}
+                  </td>
+                  <td style={{ padding: "5px 10px", color: "var(--ink-mute)" }}>
+                    {m.case_id}
+                  </td>
+                  <td style={{ padding: "5px 10px", textAlign: "right" }}>
+                    {formatValue(m.left)}
+                  </td>
+                  <td style={{ padding: "5px 10px", textAlign: "right" }}>
+                    {formatValue(m.right)}
+                  </td>
+                  <td style={{ padding: "5px 10px", textAlign: "right" }}>
+                    {m.difference != null
+                      ? (m.difference >= 0 ? "+" : "") +
+                        m.difference.toFixed(2)
+                      : "—"}
+                  </td>
+                </tr>
+                {isOpen && (
+                  <tr>
+                    <td colSpan={5} style={{ padding: 0 }}>
+                      <HouseholdDetail row={row} mismatch={m} />
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -163,7 +319,88 @@ function formatValue(v) {
   return String(v);
 }
 
-function MismatchPattern({ kind, cases, totalForConcept }) {
+function CauseDriverBreakdown({ cause, compact = false }) {
+  const drivers = cause?.drivers || [];
+  if (!drivers.length) return null;
+
+  return (
+    <div
+      style={{
+        marginTop: compact ? 8 : 10,
+        display: "grid",
+        gridTemplateColumns: compact
+          ? "1fr"
+          : "repeat(auto-fit, minmax(220px, 1fr))",
+        gap: 8,
+      }}
+    >
+      {drivers.map((driver) => (
+        <div
+          key={driver.label}
+          style={{
+            padding: compact ? "7px 9px" : "8px 10px",
+            border: "1px solid var(--hairline)",
+            borderRadius: 6,
+            background: compact ? "var(--paper-elevated)" : "var(--paper-warm)",
+          }}
+        >
+          <div
+            className="mono"
+            style={{
+              fontSize: 10.5,
+              color: "var(--ink)",
+              fontWeight: 600,
+              letterSpacing: "0.03em",
+              textTransform: "uppercase",
+            }}
+          >
+            {driver.label}
+          </div>
+          <div
+            style={{
+              fontSize: 11.5,
+              color: "var(--ink-mute)",
+              lineHeight: 1.45,
+              marginTop: 4,
+            }}
+          >
+            {driver.description}
+          </div>
+          {driver.evidence?.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 3,
+                marginTop: 6,
+              }}
+            >
+              {driver.evidence.map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    gap: 6,
+                    fontSize: 11,
+                    lineHeight: 1.35,
+                    color: "var(--ink-soft)",
+                  }}
+                >
+                  <span className="mono" style={{ color: "var(--ink-mute)" }}>
+                    -
+                  </span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MismatchPattern({ kind, cases, casesById, knownCause }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <div
@@ -178,7 +415,7 @@ function MismatchPattern({ kind, cases, totalForConcept }) {
         style={{
           width: "100%",
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-start",
           gap: 10,
           background: "transparent",
           border: 0,
@@ -188,7 +425,7 @@ function MismatchPattern({ kind, cases, totalForConcept }) {
           fontFamily: "inherit",
         }}
       >
-        <span style={{ color: "var(--ink-mute)" }}>
+        <span style={{ color: "var(--ink-mute)", marginTop: 2 }}>
           {expanded ? (
             <IconChevronDown size={14} />
           ) : (
@@ -203,13 +440,41 @@ function MismatchPattern({ kind, cases, totalForConcept }) {
             minWidth: 36,
             textAlign: "right",
             fontWeight: 600,
+            marginTop: 1,
           }}
         >
           {cases.length}
         </span>
-        <span style={{ fontSize: 13, color: "var(--ink)" }}>
-          {kindLabel(kind)}
-        </span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 13, color: "var(--ink)" }}>
+            {kindLabel(kind)}
+          </div>
+          {knownCause && (
+            <div
+              style={{
+                fontSize: 11.5,
+                marginTop: 3,
+                color: "var(--ink-mute)",
+              }}
+            >
+              {knownCause.label}
+              {knownCause.issue_url && (
+                <>
+                  {" "}
+                  <a
+                    href={knownCause.issue_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="cite"
+                  >
+                    (track)
+                  </a>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </button>
       {expanded && (
         <>
@@ -217,15 +482,16 @@ function MismatchPattern({ kind, cases, totalForConcept }) {
             style={{
               fontSize: 12,
               color: "var(--ink-mute)",
-              padding: "4px 0 0 24px",
+              padding: "6px 0 0 60px",
               lineHeight: 1.5,
-              maxWidth: 640,
+              maxWidth: 760,
             }}
           >
-            {KIND_DESCRIPTION[kind]}
+            {knownCause?.description || KIND_DESCRIPTION[kind]}
+            <CauseDriverBreakdown cause={knownCause} />
           </div>
-          <div style={{ paddingLeft: 24 }}>
-            <MismatchCaseTable cases={cases} />
+          <div style={{ paddingLeft: 60 }}>
+            <MismatchCaseTable cases={cases} casesById={casesById} />
           </div>
         </>
       )}
@@ -233,7 +499,26 @@ function MismatchPattern({ kind, cases, totalForConcept }) {
   );
 }
 
+// Human-readable display names for the suites we currently know about.
+// Falls back to the suite slug if not listed.
+const SUITE_TITLE = {
+  "ca-snap-ecps": "California SNAP (CalFresh)",
+  "ny-snap-ecps": "New York SNAP",
+  "co-snap-ecps": "Colorado SNAP",
+  "fiit-ecps": "Federal Income Tax",
+  "nyc-synthetic": "NYC Synthetic Scenarios",
+};
+
+const SUITE_JURISDICTION = {
+  "ca-snap-ecps": "US-CA",
+  "ny-snap-ecps": "US-NY",
+  "co-snap-ecps": "US-CO",
+  "fiit-ecps": "US (federal)",
+  "nyc-synthetic": "US-NY-NYC",
+};
+
 function reportTitle(report) {
+  if (report.suite && SUITE_TITLE[report.suite]) return SUITE_TITLE[report.suite];
   if (report.suite) return report.suite;
   const left = engineLabel(report.engines?.left);
   const right = engineLabel(report.engines?.right);
@@ -246,7 +531,21 @@ function reportEngines(report) {
   return `${left} vs ${right}`;
 }
 
-export default function AlignmentReport({ report }) {
+function reportJurisdiction(report) {
+  return SUITE_JURISDICTION[report.suite] || null;
+}
+
+function reportHeadlineRate(aggregates) {
+  let matched = 0;
+  let total = 0;
+  for (const a of aggregates) {
+    total += a.comparison_count || 0;
+    matched += (a.comparison_count || 0) - (a.mismatch_count || 0);
+  }
+  return total > 0 ? (matched / total) * 100 : null;
+}
+
+export default function AlignmentReport({ report, knownCauses = [] }) {
   const aggregates = report.aggregates || [];
   const mismatches = report.mismatches || [];
 
@@ -258,6 +557,22 @@ export default function AlignmentReport({ report }) {
     if (!byKind.has(m.kind)) byKind.set(m.kind, []);
     byKind.get(m.kind).push(m);
   }
+
+  // Index the report's case rows by case_id so the per-case drawer can
+  // pull household metadata (county, weight, dataset) without extra fetch.
+  const casesById = new Map();
+  for (const c of report.cases || []) {
+    if (c?.case_id) casesById.set(c.case_id, c);
+  }
+
+  // Quick lookup for known causes scoped to this report.
+  const causeFor = (concept, kind) =>
+    knownCauses.find(
+      (c) =>
+        c.suite === report.suite &&
+        c.concept === concept &&
+        c.kind === kind,
+    );
 
   const aggregateCount = aggregates.reduce(
     (sum, a) => sum + (a.comparison_count || 0),
@@ -284,35 +599,70 @@ export default function AlignmentReport({ report }) {
       <header
         style={{
           display: "flex",
-          alignItems: "baseline",
-          gap: 12,
+          alignItems: "flex-start",
+          gap: 16,
           flexWrap: "wrap",
         }}
       >
-        <h3
-          style={{
-            fontSize: 16,
-            fontWeight: 500,
-            margin: 0,
-            color: "var(--ink)",
-          }}
-        >
-          {reportTitle(report)}
-        </h3>
-        <span
-          className="mono"
-          style={{ fontSize: 11, color: "var(--ink-mute)" }}
-        >
-          {reportEngines(report)}
-        </span>
-        <span style={{ flex: 1 }} />
-        <span
-          className="mono"
-          style={{ fontSize: 11, color: "var(--ink-mute)" }}
-        >
-          {report.case_count?.toLocaleString() || aggregateCount.toLocaleString()}{" "}
-          households
-        </span>
+        <div style={{ flex: 1, minWidth: 220 }}>
+          <h3
+            style={{
+              fontSize: 18,
+              fontWeight: 500,
+              margin: 0,
+              color: "var(--ink)",
+              letterSpacing: "-0.005em",
+            }}
+          >
+            {reportTitle(report)}
+          </h3>
+          <div
+            className="mono"
+            style={{
+              fontSize: 11,
+              color: "var(--ink-mute)",
+              marginTop: 4,
+            }}
+          >
+            {reportEngines(report)}
+            {reportJurisdiction(report) && (
+              <>
+                {" · "}
+                {reportJurisdiction(report)}
+              </>
+            )}
+            {" · "}
+            {(report.case_count ?? aggregateCount).toLocaleString()} households
+            {report.population && <> · {report.population}</>}
+          </div>
+        </div>
+        {(() => {
+          const headline = reportHeadlineRate(aggregates);
+          if (headline == null) return null;
+          return (
+            <div style={{ textAlign: "right" }}>
+              <div
+                className="section-eyebrow"
+                style={{ fontSize: 10, color: "var(--ink-mute)" }}
+              >
+                Combined match
+              </div>
+              <div
+                className="mono"
+                style={{
+                  fontSize: 28,
+                  fontWeight: 500,
+                  marginTop: 2,
+                  color: rateColor(headline),
+                  lineHeight: 1,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {formatPct(headline)}
+              </div>
+            </div>
+          );
+        })()}
       </header>
 
       {alarms.length > 0 && (
@@ -352,13 +702,127 @@ export default function AlignmentReport({ report }) {
         ))}
       </div>
 
+      {mismatchCount > 0 && (() => {
+        // Collect top causes across all (concept, kind) buckets so the
+        // user sees the dominant explanations up front rather than
+        // hunting through chevrons.
+        const causes = [];
+        for (const agg of aggregates) {
+          const byKind = byConcept.get(agg.concept);
+          if (!byKind) continue;
+          for (const [kind, cases] of byKind.entries()) {
+            const cause = causeFor(agg.concept, kind);
+            if (cause) {
+              causes.push({
+                cause,
+                count: cases.length,
+                kind,
+                concept: agg.description || agg.concept,
+              });
+            }
+          }
+        }
+        causes.sort((a, b) => b.count - a.count);
+        if (causes.length === 0) return null;
+        return (
+          <div
+            style={{
+              padding: "14px 16px",
+              background: "var(--paper-warm)",
+              border: "1px solid var(--hairline-strong)",
+              borderRadius: 8,
+            }}
+          >
+            <div
+              className="section-eyebrow"
+              style={{ fontSize: 10.5, marginBottom: 8 }}
+            >
+              Why the {mismatchCount} mismatch{mismatchCount === 1 ? "" : "es"}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {causes.map((c, i) => (
+                <div
+                  key={`${c.concept}-${c.kind}-${i}`}
+                  style={{ display: "flex", gap: 12, alignItems: "flex-start" }}
+                >
+                  <div
+                    className="mono"
+                    style={{
+                      minWidth: 44,
+                      textAlign: "right",
+                      fontSize: 13,
+                      color: "var(--bad)",
+                      fontWeight: 600,
+                      paddingTop: 1,
+                    }}
+                  >
+                    {c.count}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        color: "var(--ink)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {c.cause.label}
+                      {c.cause.issue_url && (
+                        <>
+                          {" "}
+                          <a
+                            href={c.cause.issue_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="cite"
+                            style={{ fontSize: 11 }}
+                          >
+                            (track)
+                          </a>
+                        </>
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 11.5,
+                        color: "var(--ink-mute)",
+                        marginTop: 2,
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {c.cause.description}
+                    </div>
+                    <CauseDriverBreakdown cause={c.cause} compact />
+                    <div
+                      className="mono"
+                      style={{
+                        fontSize: 10.5,
+                        color: "var(--ink-soft)",
+                        marginTop: 4,
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {c.concept} · {kindLabel(c.kind)}
+                      {c.cause.fix_owner && (
+                        <> · owner: {c.cause.fix_owner}</>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
       {mismatchCount > 0 && (
         <div>
           <div
             className="section-eyebrow"
             style={{ marginBottom: 4, fontSize: 10.5 }}
           >
-            Disagreement patterns
+            All disagreement patterns
           </div>
           {aggregates.map((agg) => {
             const byKind = byConcept.get(agg.concept);
@@ -379,7 +843,8 @@ export default function AlignmentReport({ report }) {
                     key={kind}
                     kind={kind}
                     cases={cases}
-                    totalForConcept={agg.comparison_count}
+                    casesById={casesById}
+                    knownCause={causeFor(agg.concept, kind)}
                   />
                 ))}
               </div>

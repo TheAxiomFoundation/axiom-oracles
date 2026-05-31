@@ -88,6 +88,10 @@ class EnhancedCpsCaseLoader:
                 **_locale_metadata(household_scope),
             }
             if case_unit == "household":
+                entities = [
+                    _person_entity(person, index, case_unit=case_unit)
+                    for index, person in enumerate(people)
+                ]
                 cases.append(
                     Case(
                         case_id=f"ecps-{household.household_id}",
@@ -96,10 +100,7 @@ class EnhancedCpsCaseLoader:
                             Concepts.CASH_ON_HAND: 0,
                             Concepts.RENT_PAID: household.housing_cost,
                         },
-                        entities=tuple(
-                            _person_entity(person, index, case_unit=case_unit)
-                            for index, person in enumerate(people)
-                        ),
+                        entities=tuple(entities),
                         metadata=metadata,
                     )
                 )
@@ -343,6 +344,7 @@ _PERSON_NON_WAGE_VARIABLES = {
     Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
     Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
     Concepts.PENSION_INCOME: "taxable_pension_income",
+    Concepts.SSI_BENEFITS: "ssi",
     Concepts.SOCIAL_SECURITY_BENEFITS: "social_security",
     Concepts.UNEMPLOYMENT_INSURANCE_INCOME: "unemployment_compensation",
     Concepts.RENTAL_INCOME: "rental_income",
@@ -464,7 +466,7 @@ def _clean_id(value) -> int | str:
 
 def _clean_number(value) -> float:
     cleaned = _clean_value(value)
-    if cleaned in {"", None}:
+    if cleaned in {"", "UNKNOWN", None}:
         return 0
     return float(cleaned)
 

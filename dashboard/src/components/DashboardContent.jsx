@@ -1,16 +1,12 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import {
-  loadOracleData,
-  buildNWayData,
-  filterReportsBySuite,
-} from "../utils/data";
+import { loadOracleData, buildNWayData } from "../utils/data";
 import MetricsRow from "./MetricsRow";
 import ProgramBreakdown from "./ProgramBreakdown";
 import AgreementMatrix from "./AgreementMatrix";
-import SuiteSelector from "./SuiteSelector";
 import AlignmentReport from "./AlignmentReport";
+import OverviewHero from "./OverviewHero";
 
 function TopBar() {
   return (
@@ -38,26 +34,11 @@ function TopBar() {
   );
 }
 
-function PageIntro({ data }) {
-  return (
-    <div className="page-intro" style={{ marginBottom: 36 }}>
-      <h1>
-        Programs encoded in the <em>Axiom corpus</em>, validated against other engines.
-      </h1>
-      <p>
-        Each program below is a statute or regulation encoded as an Axiom
-        RuleSpec module. As coverage grows, every encoding gets cross-checked
-        against the engines that already compute it.
-      </p>
-    </div>
-  );
-}
 
 export default function DashboardContent() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [suite, setSuite] = useState("all");
 
   useEffect(() => {
     loadOracleData("")
@@ -66,13 +47,13 @@ export default function DashboardContent() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Re-derive the comparison view when the user picks a different suite.
-  // Reports are already loaded; we just re-filter and rebuild the matrix.
+  // All reports are always in view — every comparison shows in the
+  // alignment cards section. (The previous per-suite filter selector
+  // was removed; reviewers want the full picture by default.)
   const viewData = useMemo(() => {
     if (!data) return null;
-    const filtered = filterReportsBySuite(data.reports, suite);
-    return { ...buildNWayData(filtered), programs: data.programs };
-  }, [data, suite]);
+    return { ...buildNWayData(data.reports), programs: data.programs };
+  }, [data]);
 
   if (loading) {
     return (
@@ -117,17 +98,11 @@ export default function DashboardContent() {
           padding: "56px 20px 80px",
         }}
       >
-        <PageIntro data={viewData} />
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <SuiteSelector
-            suites={data.suites || []}
-            value={suite}
-            onChange={setSuite}
-          />
-
-          <MetricsRow
-            summary={viewData.summary}
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+          <OverviewHero
+            reports={viewData.reports.filter(
+              (r) => (r.aggregates || []).length > 0,
+            )}
             programCount={viewData.programs.length}
           />
 
@@ -139,13 +114,14 @@ export default function DashboardContent() {
                 gap: 16,
               }}
             >
-              <div className="section-eyebrow">Alignment by program</div>
+              <div className="section-eyebrow">By program</div>
               {viewData.reports
                 .filter((r) => (r.aggregates || []).length > 0)
                 .map((report, i) => (
                   <AlignmentReport
                     key={`${report.suite || "report"}-${i}`}
                     report={report}
+                    knownCauses={data.knownCauses || []}
                   />
                 ))}
             </div>

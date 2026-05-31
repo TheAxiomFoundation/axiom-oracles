@@ -82,6 +82,8 @@ class Concepts:
     SHORT_TERM_CAPITAL_GAINS = "axiom:income/person#short_term_capital_gains"
     LONG_TERM_CAPITAL_GAINS = "axiom:income/person#long_term_capital_gains"
     PENSION_INCOME = "axiom:income/person#pension_income"
+    TANF_BENEFITS = "axiom:income/person#tanf_benefits"
+    SSI_BENEFITS = "axiom:income/person#ssi_benefits"
     SOCIAL_SECURITY_BENEFITS = "axiom:income/person#social_security_benefits"
     UNEMPLOYMENT_INSURANCE_INCOME = "axiom:income/person#unemployment_insurance"
     RENTAL_INCOME = "axiom:income/person#rental_income"

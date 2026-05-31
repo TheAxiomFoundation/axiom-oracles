@@ -81,6 +81,81 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert output.read_text() == "{}"
 
 
+def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    compose_binary = tmp_path / "axiom-compose"
+    program = tmp_path / "axiom-programs" / "us-al" / "snap" / "fy-2026.yaml"
+    rulespec_us = tmp_path / "rulespec-us"
+    rulespec_al = tmp_path / "rulespec-us-al"
+    composed = tmp_path / "al-snap-composed.yaml"
+    compiled = tmp_path / "al-snap-compiled.json"
+    output = tmp_path / "report.json"
+    for path in (axiom_rules, rulespec_us, rulespec_al, program.parent):
+        path.mkdir(parents=True, exist_ok=True)
+    compose_binary.write_text("#!/bin/sh\n")
+    program.write_text("program: us-al/snap\n")
+    calls = []
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
+    )
+
+    def fake_run(cmd, *, check, cwd=None, env=None):
+        del check, cwd, env
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+
+    run_comparison._run_axiom_oracles_compare(
+        {
+            "axiom_rules_repo": str(axiom_rules),
+            "parameters": {
+                "left": "axiom",
+                "right": "policyengine",
+                "concepts": [
+                    "us:statutes/7/2014/o#snap_eligible",
+                    "us:statutes/7/2014/u#snap_benefit",
+                ],
+                "sample_size": 0,
+                "period": "2026-01",
+                "population": "enhanced-cps",
+                "axiom_compose_binary": str(compose_binary),
+                "axiom_program": str(program),
+                "axiom_composed_program": str(composed),
+                "axiom_compiled_program": str(compiled),
+                "rulespec_roots": [str(rulespec_us), str(rulespec_al)],
+                "axiom_rulespec_repo_roots": str(tmp_path),
+                "jurisdiction_fips": "01",
+            },
+        },
+        output,
+    )
+
+    assert calls[0] == [
+        str(compose_binary.resolve()),
+        str(program.resolve()),
+        "--rulespec-root",
+        str(rulespec_us.resolve()),
+        "--rulespec-root",
+        str(rulespec_al.resolve()),
+        "-o",
+        str(composed.resolve()),
+    ]
+    assert calls[1] == [
+        str(axiom_rules.resolve() / "target" / "release" / "axiom-rules-engine"),
+        "compile",
+        "--program",
+        str(composed.resolve()),
+        "--output",
+        str(compiled.resolve()),
+    ]
+    assert calls[2][:4] == ["uv", "run", "--python", "3.14"]
+    assert "--axiom-compiled-program" in calls[2]
+    assert str(compiled.resolve()) in calls[2]
+
+
 def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
     run_comparison = load_run_comparison_module()
 

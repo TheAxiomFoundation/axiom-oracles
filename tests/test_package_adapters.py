@@ -1,7 +1,61 @@
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
+from axiom_oracles.adapters.policyengine.runner import (
+    _normalize_value_for_requested_period,
+)
 from axiom_oracles.adapters.prd import PrdPackageRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
 from axiom_oracles.core.case import Case, Concepts, Entity
+
+
+class _FakeVariable:
+    def __init__(self, definition_period: str) -> None:
+        self.definition_period = definition_period
+
+
+class _FakePolicyEngineModel:
+    def __init__(self, definition_period: str) -> None:
+        self.definition_period = definition_period
+
+    def get_variable(self, variable: str) -> _FakeVariable:
+        del variable
+        return _FakeVariable(self.definition_period)
+
+
+class _FakePolicyEngine:
+    def __init__(self, definition_period: str) -> None:
+        self.us = type("FakeUS", (), {"model": _FakePolicyEngineModel(definition_period)})()
+
+
+def test_policyengine_monthly_numeric_output_is_normalized_for_month_period() -> None:
+    value = _normalize_value_for_requested_period(
+        _FakePolicyEngine("month"),
+        "snap",
+        "2026-01",
+        1_846.6170654296875,
+    )
+
+    assert value == 1_846.6170654296875 / 12
+
+
+def test_policyengine_normalization_preserves_booleans_and_annual_values() -> None:
+    assert (
+        _normalize_value_for_requested_period(
+            _FakePolicyEngine("month"),
+            "is_snap_eligible",
+            "2026-01",
+            True,
+        )
+        is True
+    )
+    assert (
+        _normalize_value_for_requested_period(
+            _FakePolicyEngine("year"),
+            "income_tax",
+            "2026-01",
+            1200,
+        )
+        == 1200
+    )
 
 
 def test_taxsim_package_runner_wraps_taxsim_format_rows() -> None:
