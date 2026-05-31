@@ -5,12 +5,16 @@ Pure-function tests — no engine binary or PolicyEngine dependency required.
 
 from __future__ import annotations
 
+import json
+
 from axiom_oracles.adapters.axiom.generic_inputs import (
     GenericInputRecord,
+    attach_generic_inputs,
     default_for,
     enumerate_inputs,
     project_case_inputs,
 )
+from axiom_oracles.core.case import Case, Concepts, Entity
 
 
 def _input(name: str) -> dict:
@@ -124,6 +128,23 @@ def test_arithmetic_op_input_inferred_as_decimal() -> None:
     }
     slots = enumerate_inputs(program)
     assert all(s.dtype == "Decimal" for s in slots)
+
+
+def test_root_input_uses_containing_rule_dtype() -> None:
+    program = {
+        "derived": [
+            {
+                "name": "rule",
+                "entity": "Household",
+                "dtype": "decimal",
+                "expr": _input("household_shelter_costs_incurred"),
+            }
+        ],
+    }
+
+    [slot] = enumerate_inputs(program)
+
+    assert slot.dtype == "Decimal"
 
 
 def test_more_specific_entity_wins_when_input_appears_in_multiple_rules() -> None:
@@ -250,6 +271,43 @@ def test_project_case_inputs_falls_back_to_case_facts_by_unqualified_name() -> N
     )
     [r] = records
     assert r.value is True
+
+
+def test_attach_generic_inputs_passes_household_facts_to_mapping(tmp_path) -> None:
+    compiled = {
+        "program": {
+            "derived": [
+                {
+                    "name": "rule",
+                    "entity": "Household",
+                    "expr": {
+                        "kind": "add",
+                        "items": [_input("household_shelter_costs_incurred")],
+                    },
+                }
+            ]
+        }
+    }
+    compiled_path = tmp_path / "program.compiled.json"
+    compiled_path.write_text(json.dumps(compiled))
+    case = Case(
+        case_id="case-1",
+        period="2026-01",
+        facts={Concepts.RENT_PAID: 12_000},
+        entities=(Entity("person-1", "person", facts={}),),
+    )
+
+    [projected] = attach_generic_inputs(
+        [case],
+        compiled_program_path=compiled_path,
+    )
+
+    record = next(
+        item
+        for item in projected.metadata["axiom_input_records"]
+        if item["name"].endswith("#input.household_shelter_costs_incurred")
+    )
+    assert record["value"] == {"kind": "decimal", "value": "1000.0"}
 
 
 def test_generic_input_record_to_dict_emits_scalar_value_spec() -> None:

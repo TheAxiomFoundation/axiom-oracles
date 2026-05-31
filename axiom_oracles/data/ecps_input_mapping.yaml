@@ -58,18 +58,44 @@ mappings:
       from_facts: [YEARLY_EARNED_INCOME]
       aggregate: sum_over_people
 
+  - match: { kind: substring, value: snap_gross_monthly_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts:
+        - YEARLY_EARNED_INCOME
+      aggregate: sum_over_people
+
+  - match: { kind: substring, value: snap_total_monthly_unearned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts:
+        - TANF_BENEFITS
+        - SSI_BENEFITS
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+        - RENTAL_INCOME
+        - DIVIDEND_INCOME
+        - INTEREST_INCOME
+      aggregate: sum_over_people
+
   - match: { kind: substring, value: snap_gross_monthly_income }
     scope: household
     source:
       kind: derived
       transform: monthly
-      # SNAP gross income includes earned + unearned: wages, self-employment,
-      # SS/SSI, pensions, UI, rental, dividends, interest. Without the unearned
-      # sources the gross-income gate under-counts and the comparison flips
-      # households PE marks ineligible (false-positive on Axiom side).
+      # SNAP gross income includes earned + unearned: wages, TANF, SSI/SS,
+      # pensions, UI, rental, dividends, interest. Raw ECPS self-employment
+      # income is not included here because PolicyEngine's SNAP path uses net
+      # self-employment after the SNAP self-employment expense deduction instead.
       from_facts:
         - YEARLY_EARNED_INCOME
-        - SELF_EMPLOYMENT_INCOME
+        - TANF_BENEFITS
+        - SSI_BENEFITS
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
@@ -85,7 +111,8 @@ mappings:
       transform: monthly
       from_facts:
         - YEARLY_EARNED_INCOME
-        - SELF_EMPLOYMENT_INCOME
+        - TANF_BENEFITS
+        - SSI_BENEFITS
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
@@ -185,14 +212,109 @@ mappings:
     scope: household
     source: { kind: constant, value: 0 }
 
-  # Map ECPS housing_cost (annual) into SNAP's shelter expense slot.
-  # The full SNAP shelter computation also considers utility allowances;
-  # for now we use housing_cost alone (PE's `housing_cost` already
-  # includes rent/mortgage). Adding the standard utility allowance is a
-  # follow-up via Concepts.HEATING_EXPENSE et al.
+  # ECPS annual datasets represent ordinary benefit months, not SNAP initial
+  # issuance months. This keeps 7 CFR 273.10(e)(2)(ii)'s minimum-benefit branch
+  # aligned with PolicyEngine's normal-allotment comparison.
+  - match: { kind: substring, value: household_initial_month }
+    scope: household
+    source: { kind: constant, value: false }
+
+  # Map ECPS housing_cost (annual) into the base shelter-cost input. Program
+  # specs should derive snap_total_allowable_shelter_expenses from this base
+  # amount plus any encoded utility allowances.
+  - match: { kind: substring, value: household_shelter_costs_incurred }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [RENT_PAID]
+
+  # Fallback for compiled programs that still consume the federal shelter
+  # total directly instead of deriving it from household_shelter_costs_incurred.
   - match: { kind: substring, value: snap_total_allowable_shelter_expenses }
     scope: household
     source:
       kind: derived
       transform: monthly
       from_facts: [RENT_PAID]
+
+  # Enhanced CPS does not expose separate utility-expense detail. PolicyEngine's
+  # SNAP baseline assigns the standard heating/cooling utility allowance in
+  # state SNAP runs, so mirror that projection assumption where encoded state
+  # utility rules request the corresponding eligibility inputs.
+  - match: { kind: substring, value: household_incurred_or_anticipated_heating_or_cooling_costs_separate_from_rent_or_mortgage }
+    scope: household
+    source: { kind: constant, value: true }
+
+  - match: { kind: substring, value: household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage }
+    scope: household
+    source: { kind: constant, value: true }
+
+  - match: { kind: substring, value: household_incurs_heating_or_cooling_expenses_separately_from_rent_or_mortgage }
+    scope: household
+    source: { kind: constant, value: true }
+
+  - match: { kind: substring, value: household_in_central_meter_housing_charged_only_for_excess_heating_or_cooling }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: household_in_public_housing_unit_with_central_utility_meters_charged_only_for_excess_heating_or_cooling_costs }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: household_in_rental_housing_billed_by_landlord_based_on_individual_usage_or_flat_rate_separately_from_rent }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: household_entitled_to_heap_or_liheaa_payment }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: liheaa_or_similar_energy_assistance_payment_received_or_made_on_household_behalf_in_current_month_or_immediately_preceding_twelve_months }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: liheaa_or_similar_energy_assistance_annual_payment_amount }
+    scope: household
+    source: { kind: constant, value: 0 }
+
+  - match: { kind: substring, value: limited_utility_allowance_utility_count }
+    scope: household
+    source: { kind: constant, value: 0 }
+
+  - match: { kind: substring, value: state_agency_mandates_use_of_standard_utility_allowances_under_paragraph_g }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: household_billed_separately_for_non_telephone_standard_utility }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: household_incurred_or_anticipated_basic_service_cost_for_one_telephone }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: household_resides_in_new_york_city }
+    scope: household
+    source:
+      kind: derived
+      transform: scope_geoid_in
+      geoids:
+        - "36005"
+        - "36047"
+        - "36061"
+        - "36081"
+        - "36085"
+
+  - match: { kind: substring, value: household_resides_in_nassau_or_suffolk_county }
+    scope: household
+    source:
+      kind: derived
+      transform: scope_geoid_in
+      geoids:
+        - "36059"
+        - "36103"
+
+  - match: { kind: substring, value: state_agency_rounds_thirty_percent_net_income_up }
+    scope: household
+    source: { kind: constant, value: true }

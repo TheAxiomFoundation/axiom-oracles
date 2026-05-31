@@ -121,6 +121,7 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
     from_facts = [_resolve_concept(name) for name in source.get("from_facts", [])]
     aggregate = source.get("aggregate")
     constant = source.get("constant")
+    geoids = tuple(str(value) for value in source.get("geoids", ()))
 
     def derived(case_facts, person_facts):
         if transform == "hh_size":
@@ -152,6 +153,15 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
         if transform == "positive_to_constant":
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
             return constant if float(value) > 0 else 0
+
+        if transform == "scope_geoid_in":
+            metadata = (case_facts or {}).get("__metadata__") or {}
+            scope = metadata.get("scope") or {}
+            geoid = str(scope.get("geoid") or "")
+            return any(
+                geoid == candidate or geoid.startswith(candidate)
+                for candidate in geoids
+            )
 
         return None
 

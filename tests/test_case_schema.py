@@ -56,11 +56,10 @@ def test_case_is_concept_keyed_and_projects_to_accessnyc_payload() -> None:
 
 def test_concept_mapping_compares_snap_amount_by_legal_id() -> None:
     mappings = load_program_mappings()
-    # Axiom maps the SNAP benefit concept to the federal canonical rule
-    # us:regulations/7-cfr/273/10#snap_monthly_allotment so multi-state
-    # comparisons (CO, CA, NY, …) all resolve through the same id. The
-    # engine returns it under that qualified key.
-    snap_target = "us:regulations/7-cfr/273/10#snap_monthly_allotment"
+    # Axiom maps the SNAP benefit concept to the composed payable benefit,
+    # not the imported federal monthly-allotment diagnostic, so state
+    # eligibility gates can zero out ineligible households.
+    snap_target = "snap_benefit"
     left = [
         EngineResult(
             "axiom",
@@ -68,7 +67,9 @@ def test_concept_mapping_compares_snap_amount_by_legal_id() -> None:
             {snap_target: 120.00},
         )
     ]
-    right = [EngineResult("policyengine", "case-1", {"snap": 120.50})]
+    right = [
+        EngineResult("policyengine", "case-1", {"snap_normal_allotment": 120.50})
+    ]
 
     comparison = Comparator(mappings).compare(left, right)[0]
     snap = next(
@@ -505,6 +506,7 @@ def test_policyengine_dataset_rows_zero_fill_sparse_tax_inputs() -> None:
         facts={
             Concepts.PROPERTY_TAX_PAID: 2_000,
             Concepts.MORTGAGE_INTEREST_PAID: 5_000,
+            Concepts.RENT_PAID: 12_000,
         },
         entities=(
             Entity(
@@ -559,14 +561,17 @@ def test_policyengine_dataset_rows_zero_fill_sparse_tax_inputs() -> None:
     assert rows_by_id["case_0__head"]["taxable_interest_income"] == 0
     assert rows_by_id["case_0__head"]["real_estate_taxes"] == 2_000
     assert rows_by_id["case_0__head"]["deductible_mortgage_interest"] == 5_000
+    assert rows_by_id["case_0__head"]["pre_subsidy_rent"] == 12_000
     assert rows_by_id["case_0__spouse"]["taxable_interest_income"] == 0.78
     assert rows_by_id["case_0__spouse"]["social_security"] == 0
     assert rows_by_id["case_0__spouse"]["real_estate_taxes"] == 0
     assert rows_by_id["case_0__spouse"]["deductible_mortgage_interest"] == 0
+    assert rows_by_id["case_0__spouse"]["pre_subsidy_rent"] == 0
     assert rows_by_id["case_0__adult-child"]["social_security"] == 0
     assert rows_by_id["case_0__adult-child"]["taxable_interest_income"] == 0
     assert rows_by_id["case_0__adult-child"]["real_estate_taxes"] == 0
     assert rows_by_id["case_0__adult-child"]["deductible_mortgage_interest"] == 0
+    assert rows_by_id["case_0__adult-child"]["pre_subsidy_rent"] == 0
 
     tax_unit_row = tax_unit_rows[0]
     for pe_variable in policyengine_runner_module._TAX_UNIT_CONCEPT_TO_PE.values():
@@ -581,6 +586,7 @@ def test_policyengine_household_calculator_input_includes_tax_leaf_inputs() -> N
         facts={
             Concepts.PROPERTY_TAX_PAID: 2_000,
             Concepts.MORTGAGE_INTEREST_PAID: 5_000,
+            Concepts.RENT_PAID: 12_000,
             Concepts.ITEMIZED_DEDUCTIONS_OTHER: 300,
             Concepts.CHILDCARE_EXPENSES: 400,
         },
@@ -615,6 +621,7 @@ def test_policyengine_household_calculator_input_includes_tax_leaf_inputs() -> N
     assert household_input["people"][0]["social_security"] == 32_240.64
     assert household_input["people"][0]["real_estate_taxes"] == 2_000
     assert household_input["people"][0]["deductible_mortgage_interest"] == 5_000
+    assert household_input["people"][0]["pre_subsidy_rent"] == 12_000
     assert household_input["people"][1]["taxable_interest_income"] == 0.78
     assert household_input["tax_unit"]["misc_deduction"] == 300
     assert household_input["tax_unit"]["tax_unit_childcare_expenses"] == 400

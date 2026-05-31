@@ -25,23 +25,20 @@ concepts:
     description: SNAP benefit amount
     category: food
     comparison: amount
-    tolerance: 1
+    # PolicyEngine reports monthly SNAP amounts from annualized parameters,
+    # while RuleSpec applies the whole-dollar allotment and 30%-of-net-income
+    # rounding rules directly. Keep a narrow dollar tolerance so the dashboard
+    # catches structural gaps without flagging known annualization noise.
+    tolerance: 7
     priority: high
     targets:
-      # snap_monthly_allotment is the federal canonical "household
-      # monthly SNAP benefit" rule (7 CFR 273.10(e)(2)(ii)). Every SNAP
-      # compose spec (CO, CA, NY, …) pulls 7-cfr/273/10 into scope so
-      # the name resolves uniformly across states. State-specific
-      # allotments (e.g. NY's snap_allotment in 18-nycrr/387/14/a/1
-      # with initial-month proration) require per-state routing —
-      # tracked as a follow-up; the federal version is a faithful
-      # baseline for non-proration cases.
-      # Qualified id required: the engine resolves bare names only
-      # against program-local rules (e.g. the auto-gated snap_eligible).
-      # Imported derived outputs from rulespec modules need the full
-      # absolute reference.
-      axiom: us:regulations/7-cfr/273/10#snap_monthly_allotment
-      policyengine: snap
+      # Compare the composed program benefit, not the imported federal
+      # monthly allotment. The local snap_benefit rule applies each
+      # state's composed eligibility gate before exposing a payable SNAP
+      # amount; the imported 7 CFR allotment remains useful as a diagnostic
+      # intermediate but can overstate benefits for ineligible households.
+      axiom: snap_benefit
+      policyengine: snap_normal_allotment
       prd: value.snap
 
   us:tax/federal-income-tax#liability:

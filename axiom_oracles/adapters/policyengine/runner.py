@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from functools import lru_cache
 from typing import Any
 
 from ...core.engine import EngineAdapter
@@ -25,6 +26,11 @@ _STATE_SCOPE_FEDERAL_TAX_VARIABLES = {
     "itemized_taxable_income_deductions",
 }
 
+_MONTHLY_NUMERIC_OUTPUT_VARIABLES = {
+    "snap",
+    "snap_normal_allotment",
+}
+
 _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.DIVIDEND_INCOME: "dividend_income",
     Concepts.QUALIFIED_DIVIDEND_INCOME: "qualified_dividend_income",
@@ -32,6 +38,7 @@ _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
     Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
     Concepts.PENSION_INCOME: "taxable_pension_income",
+    Concepts.SSI_BENEFITS: "ssi",
     Concepts.SOCIAL_SECURITY_BENEFITS: "social_security",
     Concepts.UNEMPLOYMENT_INSURANCE_INCOME: "unemployment_compensation",
     Concepts.RENTAL_INCOME: "rental_income",
@@ -41,6 +48,7 @@ _PERSON_INCOME_CONCEPT_TO_PE = {
 _PERSON_CASE_CONCEPT_TO_PE = {
     Concepts.PROPERTY_TAX_PAID: "real_estate_taxes",
     Concepts.MORTGAGE_INTEREST_PAID: "deductible_mortgage_interest",
+    Concepts.RENT_PAID: "pre_subsidy_rent",
 }
 
 _TAX_UNIT_CONCEPT_TO_PE = {
@@ -174,7 +182,12 @@ class PolicyEngineRunner(EngineAdapter):
                 extra_variables=variables,
             )
             values = {
-                variable: _household_result_value(result, variable)
+                variable: _normalize_value_for_requested_period(
+                    pe,
+                    variable,
+                    str(case.period),
+                    _household_result_value(result, variable),
+                )
                 for variable in variables
             }
         except Exception:
@@ -184,7 +197,12 @@ class PolicyEngineRunner(EngineAdapter):
                         **household_input,
                         extra_variables=[variable],
                     )
-                    values[variable] = _household_result_value(result, variable)
+                    values[variable] = _normalize_value_for_requested_period(
+                        pe,
+                        variable,
+                        str(case.period),
+                        _household_result_value(result, variable),
+                    )
                 except Exception as exc:  # pragma: no cover - depends on PE variable set
                     errors.append(f"{variable}: {exc}")
 
@@ -536,7 +554,12 @@ class PolicyEngineRunner(EngineAdapter):
                 rows = frame[frame[id_column].isin(entity_ids)]
                 if variable not in rows:
                     raise KeyError(variable)
-                case_values[variable] = self._coerce_value(rows[variable].to_numpy())
+                case_values[variable] = _normalize_value_for_requested_period(
+                    pe,
+                    variable,
+                    str(_case.period),
+                    self._coerce_value(rows[variable].to_numpy()),
+                )
             values_by_case.append(case_values)
 
         return [
@@ -784,6 +807,67 @@ def _extra_variables_by_entity(pe, variables: Sequence[str]) -> dict[str, list[s
 
 def _variable_entity(pe, variable: str) -> str:
     return str(pe.us.model.get_variable(variable).entity)
+
+
+def _normalize_value_for_requested_period(
+    pe,
+    variable: str,
+    requested_period: str,
+    value: float | bool,
+) -> float | bool:
+    """Convert PolicyEngine annual output-dataset values to requested months.
+
+    policyengine.py's Simulation output dataset is year-shaped: month-defined
+    numeric variables such as SNAP are emitted as annual sums. Oracle
+    comparisons can request a month (`2026-01`), so normalize those numeric
+    month variables back to one month before comparing with Axiom.
+    """
+    if "-" not in requested_period or isinstance(value, bool):
+        return value
+    definition_period = _policyengine_definition_period(pe, variable)
+    if definition_period.lower() != "month":
+        return value
+    return float(value) / 12
+
+
+def _policyengine_definition_period(pe, variable: str) -> str:
+    model = getattr(pe.us, "model", None)
+    if model is None:
+        return _policyengine_source_definition_period(variable)
+    variable_definition = model.get_variable(variable)
+    definition_period = getattr(variable_definition, "definition_period", None)
+    if definition_period is not None:
+        return str(definition_period).lower()
+    if variable in _MONTHLY_NUMERIC_OUTPUT_VARIABLES:
+        return "month"
+    return _policyengine_source_definition_period(variable)
+
+
+@lru_cache(maxsize=None)
+def _policyengine_source_definition_period(variable: str) -> str:
+    try:
+        import importlib
+        import pkgutil
+
+        import policyengine_us.variables as variables_pkg
+    except Exception:
+        return ""
+
+    for module_info in pkgutil.walk_packages(
+        variables_pkg.__path__,
+        prefix=f"{variables_pkg.__name__}.",
+    ):
+        if module_info.name.rsplit(".", maxsplit=1)[-1] != variable:
+            continue
+        try:
+            module = importlib.import_module(module_info.name)
+        except Exception:
+            continue
+        variable_class = getattr(module, variable, None)
+        definition_period = getattr(variable_class, "definition_period", None)
+        if definition_period is not None:
+            return str(definition_period).lower()
+    return ""
 
 
 def _include_scope_inputs(variables: list[str] | None) -> bool:

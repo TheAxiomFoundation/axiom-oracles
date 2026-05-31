@@ -13,7 +13,7 @@ description: Compares New York SNAP eligibility produced by the composed
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules
+  axiom_rules_repo: $HOME/axiom-rules-engine
   parameters:
     left: axiom
     right: policyengine
@@ -23,7 +23,14 @@ runner:
     sample_size: 1000
     period: 2026-01
     population: enhanced-cps
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-programs/us-ny/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/ny-snap-composed.yaml
     axiom_compiled_program: /tmp/ny-snap-compiled.json
+    axiom_rulespec_repo_roots: $HOME
+    rulespec_roots:
+      - $HOME/rulespec-us
+      - $HOME/rulespec-us-ny
     jurisdiction_fips: "36"
 
 artifacts:

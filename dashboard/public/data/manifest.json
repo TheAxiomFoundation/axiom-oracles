@@ -4,6 +4,9 @@
     "policyengine-taxsim.json",
     "axiom-policyengine-fiit-ecps.json",
     "axiom-policyengine-ca-snap-ecps.json",
-    "axiom-policyengine-ny-snap-ecps.json"
+    "axiom-policyengine-ny-snap-ecps.json",
+    "axiom-policyengine-ma-snap-ecps.json",
+    "axiom-policyengine-al-snap-ecps.json",
+    "axiom-policyengine-tn-snap-ecps.json"
   ]
 }

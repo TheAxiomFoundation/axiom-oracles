@@ -70,7 +70,10 @@ def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:
         entity = str(rule.get("entity") or "Household")
         expr = rule.get("expr") or {}
         for name, dtype, child_entity in _walk_for_inputs(
-            expr, parent=None, related_scope=None
+            expr,
+            parent=None,
+            related_scope=None,
+            default_dtype=_slot_dtype_from_rule(rule.get("dtype")),
         ):
             slot_entity = child_entity or entity
             existing = by_name.get(name)
@@ -89,7 +92,13 @@ def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:
     return sorted(by_name.values(), key=lambda slot: slot.name)
 
 
-def _walk_for_inputs(node: Any, *, parent: dict | None, related_scope: str | None):
+def _walk_for_inputs(
+    node: Any,
+    *,
+    parent: dict | None,
+    related_scope: str | None,
+    default_dtype: str,
+):
     """Yield (input_name, inferred_dtype, scope_override) tuples from an expr tree.
 
     ``related_scope`` is set when the walk descends into a relational
@@ -107,7 +116,7 @@ def _walk_for_inputs(node: Any, *, parent: dict | None, related_scope: str | Non
         if kind == "input":
             name = node.get("name")
             if isinstance(name, str) and name:
-                yield name, _infer_dtype(parent, node), related_scope
+                yield name, _infer_dtype(parent, node, default_dtype), related_scope
             return
         # Relational aggregations evaluate their `where` clause once per
         # related entity. Inputs in that clause are Person-scoped (or
@@ -121,23 +130,34 @@ def _walk_for_inputs(node: Any, *, parent: dict | None, related_scope: str | Non
             for key, child in node.items():
                 child_related = "Person" if key == "where" else related_scope
                 yield from _walk_for_inputs(
-                    child, parent=node, related_scope=child_related
+                    child,
+                    parent=node,
+                    related_scope=child_related,
+                    default_dtype=default_dtype,
                 )
             return
         for child in node.values():
-            yield from _walk_for_inputs(child, parent=node, related_scope=related_scope)
+            yield from _walk_for_inputs(
+                child,
+                parent=node,
+                related_scope=related_scope,
+                default_dtype=default_dtype,
+            )
     elif isinstance(node, list):
         for child in node:
             yield from _walk_for_inputs(
-                child, parent=parent, related_scope=related_scope
+                child,
+                parent=parent,
+                related_scope=related_scope,
+                default_dtype=default_dtype,
             )
 
 
-def _infer_dtype(parent: dict | None, input_node: dict) -> str:
+def _infer_dtype(parent: dict | None, input_node: dict, default_dtype: str) -> str:
     """Infer the input slot's dtype from the way the parent expression uses it."""
 
     if parent is None:
-        return "Judgment"
+        return default_dtype
     parent_kind = parent.get("kind")
     if parent_kind in {"and", "or", "not"}:
         return "Judgment"
@@ -159,6 +179,17 @@ def _infer_dtype(parent: dict | None, input_node: dict) -> str:
         # then/else branches inherit the if's overall dtype, which we
         # don't track here. Default Judgment is the safer fallback for
         # SNAP/eligibility-heavy programs.
+        return "Judgment"
+    return "Judgment"
+
+
+def _slot_dtype_from_rule(dtype: Any) -> str:
+    normalized = str(dtype or "").lower()
+    if normalized in {"money", "decimal", "float", "number"}:
+        return "Decimal"
+    if normalized in {"integer", "count"}:
+        return "Integer"
+    if normalized in {"judgment", "boolean", "bool"}:
         return "Judgment"
     return "Judgment"
 
@@ -408,13 +439,13 @@ def attach_generic_inputs(
         ]
         person_ids = [f"member-{i}" for i, _ in enumerate(people)]
         # Build facts dicts so the generic resolver can look up values by
-        # unqualified input name. ECPS Cases store facts on entities, not
-        # by input-slot identifiers — the ecps_mapping is the place to do
-        # the actual translation. The household-level dict carries a hidden
-        # __people__ key so household-scoped transforms (hh_size,
-        # sum_over_people) can see the per-person facts.
+        # unqualified input name. The household-level dict includes the case's
+        # own facts plus hidden keys for transforms that need people or
+        # metadata context.
         person_facts = [dict(person.facts) for person in people]
-        case_facts = {"__people__": person_facts}
+        case_facts = dict(case.facts)
+        case_facts["__people__"] = person_facts
+        case_facts["__metadata__"] = dict(case.metadata)
 
         records = project_case_inputs(
             compiled_program=program,

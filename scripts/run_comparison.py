@@ -400,6 +400,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     _ensure_engine_binary(axiom_rules_repo, kind="release")
     params = runner["parameters"]
+    _ensure_composed_axiom_program(params, axiom_rules_repo)
     cmd = [
         "uv",
         "run",
@@ -433,13 +434,91 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         str(output),
     ]
     if params.get("axiom_compiled_program"):
+        compiled_program = (
+            _expand_path(params["axiom_compiled_program"])
+            if params.get("axiom_program")
+            else _resolve_path(
+                params["axiom_compiled_program"],
+                "axiom_compiled_program",
+            )
+        )
         cmd.extend([
             "--axiom-compiled-program",
-            str(_resolve_path(params["axiom_compiled_program"], "axiom_compiled_program")),
+            str(compiled_program),
         ])
     if params.get("jurisdiction_fips"):
         cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
     subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+
+
+def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None:
+    """Compose/compile a program artifact when the comparison config declares one.
+
+    Dashboard comparisons consume compiled artifacts, but `/tmp` artifacts are
+    intentionally disposable. This hook keeps state SNAP dashboard regeneration
+    reproducible from the declarative `axiom-programs` spec instead of relying
+    on a prior manual compose step.
+    """
+    program_ref = params.get("axiom_program")
+    if not program_ref:
+        return
+    compiled_ref = params.get("axiom_compiled_program")
+    if not compiled_ref:
+        raise SystemExit(
+            "`axiom_program` comparisons must also declare "
+            "`axiom_compiled_program`."
+        )
+
+    compose_binary = _resolve_path(
+        params.get(
+            "axiom_compose_binary",
+            "$HOME/axiom-compose/.venv/bin/axiom-compose",
+        ),
+        "axiom_compose_binary",
+    )
+    program_path = _resolve_path(program_ref, "axiom_program")
+    composed_path = _expand_path(
+        params.get(
+            "axiom_composed_program",
+            str(_expand_path(compiled_ref).with_suffix(".composed.yaml")),
+        )
+    )
+    compiled_path = _expand_path(compiled_ref)
+    composed_path.parent.mkdir(parents=True, exist_ok=True)
+    compiled_path.parent.mkdir(parents=True, exist_ok=True)
+
+    roots = [
+        _resolve_path(root, "rulespec_roots")
+        for root in params.get("rulespec_roots", [])
+    ]
+    compose_cmd = [str(compose_binary), str(program_path)]
+    for root in roots:
+        compose_cmd.extend(["--rulespec-root", str(root)])
+    compose_cmd.extend(["-o", str(composed_path)])
+    subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
+
+    compile_env = dict(os.environ)
+    roots_env = params.get("axiom_rulespec_repo_roots")
+    if roots_env:
+        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = str(_expand_path(roots_env))
+    elif "AXIOM_RULESPEC_REPO_ROOTS" not in compile_env and roots:
+        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
+            str(root.parent) for root in roots
+        )
+
+    subprocess.run(
+        [
+            str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+            "compile",
+            "--program",
+            str(composed_path),
+            "--output",
+            str(compiled_path),
+        ],
+        check=True,
+        cwd=REPO_ROOT,
+        env=compile_env,
+    )
 
 
 RUNNERS = {
@@ -505,7 +584,7 @@ def _load_comparison(name: str) -> dict:
 
 
 def _resolve_path(raw: str, field: str) -> Path:
-    expanded = Path(os.path.expandvars(os.path.expanduser(str(raw)))).resolve()
+    expanded = _expand_path(raw)
     if not expanded.exists():
         env_override = {
             "axiom_encode_repo": "AXIOM_ENCODE_REPO",
@@ -518,6 +597,10 @@ def _resolve_path(raw: str, field: str) -> Path:
     if not expanded.exists():
         raise SystemExit(f"{field}: path does not exist: {expanded}")
     return expanded
+
+
+def _expand_path(raw: str | Path) -> Path:
+    return Path(os.path.expandvars(os.path.expanduser(str(raw)))).resolve()
 
 
 def _ensure_engine_binary(repo: Path, *, kind: str) -> None:
@@ -571,10 +654,14 @@ def _print_summary(output: Path) -> None:
         if agg:
             print()
             for a in agg[:8]:
+                compared = a.get("compared", a.get("comparison_count", 0))
+                matched = a.get("matched", a.get("match_count"))
+                if matched is None:
+                    matched = compared - a.get("mismatch_count", 0)
                 line = (
                     f"  {a.get('concept', '?'):40s}  "
-                    f"compared={a.get('compared', 0)}  "
-                    f"matched={a.get('matched', 0)}"
+                    f"compared={compared}  "
+                    f"matched={matched}"
                 )
                 # Surface positive-rate context for binary concepts so the
                 # reader can tell whether "agreement" is real agreement or

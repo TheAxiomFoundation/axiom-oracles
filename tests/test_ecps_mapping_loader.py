@@ -61,6 +61,12 @@ mappings:
   - match: { kind: exact, value: member_age }
     scope: person
     source: { kind: fact, name: PERSON_AGE, cast: int }
+  - match: { kind: exact, value: in_target_county }
+    scope: household
+    source:
+      kind: derived
+      transform: scope_geoid_in
+      geoids: ["36047", "36059"]
 """.strip()
     )
     return path
@@ -110,6 +116,26 @@ def test_fact_source_reads_person_scope_and_casts(custom_yaml: Path) -> None:
     assert value == 30 and isinstance(value, int)
 
 
+def test_scope_geoid_in_reads_case_metadata(custom_yaml: Path) -> None:
+    program = _program(["in_target_county"])
+    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+
+    assert (
+        mapping["in_target_county"](
+            {"__metadata__": {"scope": {"type": "census_county", "geoid": "36047"}}},
+            None,
+        )
+        is True
+    )
+    assert (
+        mapping["in_target_county"](
+            {"__metadata__": {"scope": {"type": "census_county", "geoid": "06037"}}},
+            None,
+        )
+        is False
+    )
+
+
 def test_default_yaml_loads_against_ca_program(tmp_path: Path) -> None:
     """Sanity check: the shipped YAML resolves at least the slots we
     deliberately added entries for (household_size, member_age, etc.).
@@ -121,6 +147,9 @@ def test_default_yaml_loads_against_ca_program(tmp_path: Path) -> None:
             "member_age",
             "member_is_us_citizen",
             "snap_gross_monthly_income",
+            "snap_gross_monthly_earned_income",
+            "snap_total_monthly_unearned_income",
+            "state_agency_rounds_thirty_percent_net_income_up",
         ]
     )
     mapping = load_ecps_mapping_for_program(program)
@@ -129,4 +158,100 @@ def test_default_yaml_loads_against_ca_program(tmp_path: Path) -> None:
         "member_age",
         "member_is_us_citizen",
         "snap_gross_monthly_income",
+        "snap_gross_monthly_earned_income",
+        "snap_total_monthly_unearned_income",
+        "state_agency_rounds_thirty_percent_net_income_up",
     }.issubset(mapping)
+
+
+def test_default_yaml_maps_snap_income_slots_separately() -> None:
+    program = _program(
+        [
+            "snap_gross_monthly_earned_income",
+            "snap_total_monthly_unearned_income",
+            "snap_gross_monthly_income",
+            "state_agency_rounds_thirty_percent_net_income_up",
+        ]
+    )
+    mapping = load_ecps_mapping_for_program(program)
+    case_facts = {
+        "__people__": [
+            {
+                Concepts.YEARLY_EARNED_INCOME: 24_000,
+                Concepts.SELF_EMPLOYMENT_INCOME: 6_000,
+                Concepts.TANF_BENEFITS: 6_000,
+                Concepts.SSI_BENEFITS: 3_000,
+                Concepts.SOCIAL_SECURITY_BENEFITS: 12_000,
+                Concepts.INTEREST_INCOME: 120,
+            },
+            {
+                Concepts.YEARLY_EARNED_INCOME: 12_000,
+                Concepts.UNEMPLOYMENT_INSURANCE_INCOME: 2_400,
+                Concepts.DIVIDEND_INCOME: 240,
+            },
+        ]
+    }
+
+    assert mapping["snap_gross_monthly_earned_income"](case_facts, None) == 3000
+    assert mapping["snap_total_monthly_unearned_income"](case_facts, None) == 1980
+    assert mapping["snap_gross_monthly_income"](case_facts, None) == 4980
+    assert mapping["state_agency_rounds_thirty_percent_net_income_up"](
+        case_facts, None
+    ) is True
+
+
+def test_default_yaml_maps_ecps_snap_cases_as_non_initial_months() -> None:
+    program = _program(["household_initial_month"])
+    mapping = load_ecps_mapping_for_program(program)
+
+    assert mapping["household_initial_month"]({}, None) is False
+
+
+def test_default_yaml_maps_snap_utility_allowance_projection_assumptions() -> None:
+    program = _program(
+        [
+            "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage",
+            "household_incurs_heating_or_cooling_expenses_separately_from_rent_or_mortgage",
+            "household_in_public_housing_unit_with_central_utility_meters_charged_only_for_excess_heating_or_cooling_costs",
+            "liheaa_or_similar_energy_assistance_payment_received_or_made_on_household_behalf_in_current_month_or_immediately_preceding_twelve_months",
+            "liheaa_or_similar_energy_assistance_annual_payment_amount",
+            "limited_utility_allowance_utility_count",
+            "state_agency_mandates_use_of_standard_utility_allowances_under_paragraph_g",
+        ]
+    )
+    mapping = load_ecps_mapping_for_program(program)
+
+    assert (
+        mapping[
+            "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage"
+        ]({}, None)
+        is True
+    )
+    assert (
+        mapping[
+            "household_incurs_heating_or_cooling_expenses_separately_from_rent_or_mortgage"
+        ]({}, None)
+        is True
+    )
+    assert (
+        mapping[
+            "household_in_public_housing_unit_with_central_utility_meters_charged_only_for_excess_heating_or_cooling_costs"
+        ]({}, None)
+        is False
+    )
+    assert (
+        mapping[
+            "liheaa_or_similar_energy_assistance_payment_received_or_made_on_household_behalf_in_current_month_or_immediately_preceding_twelve_months"
+        ]({}, None)
+        is False
+    )
+    assert mapping["liheaa_or_similar_energy_assistance_annual_payment_amount"](
+        {}, None
+    ) == 0
+    assert mapping["limited_utility_allowance_utility_count"]({}, None) == 0
+    assert (
+        mapping[
+            "state_agency_mandates_use_of_standard_utility_allowances_under_paragraph_g"
+        ]({}, None)
+        is False
+    )

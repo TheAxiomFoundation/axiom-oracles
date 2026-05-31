@@ -17,7 +17,7 @@ description: Compares California SNAP eligibility produced by the composed
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules
+  axiom_rules_repo: $HOME/axiom-rules-engine
   parameters:
     left: axiom
     right: policyengine
@@ -31,7 +31,14 @@ runner:
     # program artifact so it can enumerate input slots and the FIPS prefix
     # so the comparison runs on the right state's households. Without
     # these, the harness falls back to the Colorado-only path.
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-programs/us-ca/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/ca-snap-composed.yaml
     axiom_compiled_program: /tmp/ca-snap-compiled.json
+    axiom_rulespec_repo_roots: $HOME
+    rulespec_roots:
+      - $HOME/rulespec-us
+      - $HOME/rulespec-us-ca
     jurisdiction_fips: "06"
 
 artifacts:

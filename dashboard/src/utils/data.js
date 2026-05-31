@@ -53,6 +53,21 @@ export async function loadOracleData(basePath = "") {
     // continue without programs filter
   }
 
+  // Load the known-causes registry — a static catalogue that labels
+  // recurring (suite, concept, kind) mismatch buckets with their
+  // structural explanation + an issue link when applicable. Optional;
+  // the dashboard renders fine without it.
+  let knownCauses = [];
+  try {
+    const causesResp = await fetch(`${basePath}/data/known_causes.json`);
+    if (causesResp.ok) {
+      const payload = await causesResp.json();
+      knownCauses = payload.entries || [];
+    }
+  } catch {
+    // continue without cause attribution
+  }
+
   // Drop aspirational / missing programs — the dashboard reflects only what
   // is actually encoded in the Axiom corpus today.
   const programs = allPrograms.filter(
@@ -81,7 +96,7 @@ export async function loadOracleData(basePath = "") {
   ].sort();
 
   const data = buildNWayData(filteredReports);
-  return { ...data, programs, reports: filteredReports, suites };
+  return { ...data, programs, reports: filteredReports, suites, knownCauses };
 }
 
 export function filterReportsBySuite(reports, suite) {

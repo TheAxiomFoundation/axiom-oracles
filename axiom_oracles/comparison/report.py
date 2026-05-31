@@ -3,10 +3,11 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 import json
 from pathlib import Path
+from typing import Any
 
 from .comparator import HouseholdComparison, VariableComparison
 from .mappings import ProgramMapping
-from ..core.case import Case
+from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
 from ..core.results import Value
 
@@ -371,7 +372,50 @@ def _case_report_metadata(case: Case | None) -> dict:
         value = metadata.get(key)
         if isinstance(value, list | tuple):
             compact[f"{key}_count"] = len(value)
+    summary = _household_summary(case)
+    if summary:
+        compact["household_summary"] = summary
     return compact
+
+
+def _household_summary(case: Case) -> dict:
+    """Extract a compact human-readable household snapshot from a Case.
+
+    The comparison report stores one row per household. Reviewers triaging
+    a specific mismatch want to see *who* the household actually is —
+    member ages, total earned income, count — without re-running the
+    projector. Pulls from the case's Person entities since ECPS-loaded
+    cases keep per-person facts under entities[Person].facts."""
+
+    ages: list[int] = []
+    incomes: list[float] = []
+    pregnant = False
+    for entity in case.entities:
+        if (entity.kind or "").lower() != "person":
+            continue
+        facts = entity.facts or {}
+        age = facts.get(Concepts.PERSON_AGE)
+        if isinstance(age, (int, float)):
+            ages.append(int(age))
+        income = facts.get(Concepts.YEARLY_EARNED_INCOME)
+        if isinstance(income, (int, float)):
+            incomes.append(float(income))
+        if facts.get(Concepts.PREGNANT) is True:
+            pregnant = True
+
+    if not ages and not incomes:
+        return {}
+
+    summary: dict[str, Any] = {}
+    if ages:
+        summary["household_size"] = len(ages)
+        summary["ages"] = ages
+    if incomes:
+        summary["yearly_earned_income_total"] = round(sum(incomes), 2)
+        summary["yearly_earned_income_per_person"] = [round(v, 2) for v in incomes]
+    if pregnant:
+        summary["pregnant_member_present"] = True
+    return summary
 
 
 def _concept_rows(mappings: list[ProgramMapping]) -> list[dict]:
