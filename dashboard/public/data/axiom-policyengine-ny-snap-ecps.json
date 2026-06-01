@@ -8,18 +8,18 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 817321088.636719,
-      "match_rate": 89.130435,
-      "match_weight": 8433335.470703,
-      "mismatch_count": 10,
-      "mismatch_weight": 1574001.689453,
+      "left_weighted_sum": 832829147.449219,
+      "match_rate": 92.391304,
+      "match_weight": 9079504.587891,
+      "mismatch_count": 7,
+      "mismatch_weight": 927832.572266,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
       "right_weighted_sum": 581560890.77878,
-      "weighted_difference": 235760197.857939,
-      "weighted_match_rate": 84.271523
+      "weighted_difference": 251268256.670439,
+      "weighted_match_rate": 90.728477
     },
     {
       "category": "food",
@@ -29,21 +29,21 @@
       "components": [],
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "description": "SNAP eligibility",
-      "left_positive_rate": 16.059603,
-      "left_positive_weight": 1607138.570312,
-      "match_rate": 96.73913,
-      "match_weight": 9361168.042969,
-      "mismatch_count": 3,
-      "mismatch_weight": 646169.117188,
+      "left_positive_rate": 22.516556,
+      "left_positive_weight": 2253307.6875,
+      "match_rate": 100,
+      "match_weight": 10007337.160156,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "positive_rate_difference": -6.456954,
+      "positive_rate_difference": 0,
       "quality_flags": [],
       "right_positive_rate": 22.516556,
       "right_positive_weight": 2253307.6875,
-      "weighted_match_rate": 93.543046
+      "weighted_match_rate": 100
     }
   ],
   "case_count": 92,
@@ -56,7 +56,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -88,7 +88,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -122,7 +122,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -168,7 +168,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -204,7 +204,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -238,7 +238,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -274,7 +274,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -308,7 +308,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -342,7 +342,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -380,7 +380,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -414,7 +414,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -446,7 +446,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -478,7 +478,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -514,7 +514,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -564,7 +564,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -598,7 +598,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -630,7 +630,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -662,7 +662,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -700,7 +700,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -734,7 +734,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -766,11 +766,11 @@
       "case_id": "ecps-7570",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -790,30 +790,7 @@
           "type": "census_county"
         }
       },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": -23.973597208658855,
-          "kind": "amount_difference",
-          "left": 0.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 23.973597208658855,
-          "tolerance": 7
-        },
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "description": "SNAP eligibility",
-          "difference": null,
-          "kind": "eligibility_right_only",
-          "left": false,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": true,
-          "tolerance": 0
-        }
-      ],
+      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -825,7 +802,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -861,7 +838,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -893,7 +870,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -927,7 +904,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -961,7 +938,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -995,7 +972,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1029,7 +1006,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1063,7 +1040,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1111,7 +1088,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1149,7 +1126,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1181,7 +1158,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1213,7 +1190,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1247,7 +1224,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1283,7 +1260,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1317,7 +1294,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1349,7 +1326,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1383,7 +1360,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1415,7 +1392,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1447,7 +1424,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1483,7 +1460,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1515,7 +1492,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1549,7 +1526,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1587,7 +1564,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1623,7 +1600,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1661,7 +1638,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1697,7 +1674,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1733,7 +1710,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1769,7 +1746,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1803,7 +1780,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1841,7 +1818,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1873,7 +1850,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1905,7 +1882,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1939,7 +1916,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -1973,7 +1950,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2007,7 +1984,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2039,7 +2016,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2073,7 +2050,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2107,7 +2084,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2141,7 +2118,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2189,7 +2166,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2227,7 +2204,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2259,7 +2236,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2293,7 +2270,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2325,7 +2302,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2359,7 +2336,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2391,7 +2368,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2427,7 +2404,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2463,7 +2440,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2495,7 +2472,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 500,
+        "axiom_input_records_count": 499,
         "axiom_relations_count": 8,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2533,7 +2510,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2565,7 +2542,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2599,7 +2576,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 1256,
+        "axiom_input_records_count": 1255,
         "axiom_relations_count": 22,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2663,7 +2640,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2695,11 +2672,11 @@
       "case_id": "ecps-9542",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2719,30 +2696,7 @@
           "type": "census_county"
         }
       },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": -23.973597208658855,
-          "kind": "amount_difference",
-          "left": 0.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 23.973597208658855,
-          "tolerance": 7
-        },
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "description": "SNAP eligibility",
-          "difference": null,
-          "kind": "eligibility_right_only",
-          "left": false,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": true,
-          "tolerance": 0
-        }
-      ],
+      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -2754,7 +2708,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2788,7 +2742,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2824,7 +2778,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2852,11 +2806,11 @@
       "case_id": "ecps-9901",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2876,30 +2830,7 @@
           "type": "census_county"
         }
       },
-      "mismatches": [
-        {
-          "concept": "us:statutes/7/2014/u#snap_benefit",
-          "description": "SNAP benefit amount",
-          "difference": -23.973597208658855,
-          "kind": "amount_difference",
-          "left": 0.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 23.973597208658855,
-          "tolerance": 7
-        },
-        {
-          "concept": "us:statutes/7/2014/o#snap_eligible",
-          "description": "SNAP eligibility",
-          "difference": null,
-          "kind": "eligibility_right_only",
-          "left": false,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": true,
-          "tolerance": 0
-        }
-      ],
+      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -2911,7 +2842,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2947,7 +2878,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -2979,7 +2910,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3015,7 +2946,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3051,7 +2982,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3099,7 +3030,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3135,7 +3066,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3169,7 +3100,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3201,7 +3132,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3235,7 +3166,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 608,
+        "axiom_input_records_count": 607,
         "axiom_relations_count": 10,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3275,7 +3206,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 284,
+        "axiom_input_records_count": 283,
         "axiom_relations_count": 4,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3321,7 +3252,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 392,
+        "axiom_input_records_count": 391,
         "axiom_relations_count": 6,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3357,7 +3288,7 @@
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
-        "axiom_input_records_count": 176,
+        "axiom_input_records_count": 175,
         "axiom_relations_count": 2,
         "dataset": "enhanced_cps_2024",
         "household_summary": {
@@ -3447,38 +3378,6 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-7570",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": -23.973597208658855,
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 23.973597208658855,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-7570",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
-      "description": "SNAP eligibility",
-      "difference": null,
-      "kind": "eligibility_right_only",
-      "left": false,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": true,
-      "scenario": null,
-      "tolerance": 0,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-7828",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -3527,70 +3426,6 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-9542",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": -23.973597208658855,
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 23.973597208658855,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-9542",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
-      "description": "SNAP eligibility",
-      "difference": null,
-      "kind": "eligibility_right_only",
-      "left": false,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": true,
-      "scenario": null,
-      "tolerance": 0,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-9901",
-      "concept": "us:statutes/7/2014/u#snap_benefit",
-      "description": "SNAP benefit amount",
-      "difference": -23.973597208658855,
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 23.973597208658855,
-      "scenario": null,
-      "tolerance": 7,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-9901",
-      "concept": "us:statutes/7/2014/o#snap_eligible",
-      "description": "SNAP eligibility",
-      "difference": null,
-      "kind": "eligibility_right_only",
-      "left": false,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": true,
-      "scenario": null,
-      "tolerance": 0,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-10039",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
@@ -3633,39 +3468,31 @@
     "comparison_count": 184,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 171,
-    "mismatch_count": 13,
+    "match_count": 177,
+    "mismatch_count": 7,
     "mismatches_by_concept": [
       {
-        "count": 10,
+        "count": 7,
         "value": "us:statutes/7/2014/u#snap_benefit"
-      },
-      {
-        "count": 3,
-        "value": "us:statutes/7/2014/o#snap_eligible"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 10,
+        "count": 7,
         "value": "amount_difference"
-      },
-      {
-        "count": 3,
-        "value": "eligibility_right_only"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 13,
+        "count": 7,
         "value": null
       }
     ],
     "weighted": {
       "comparison_weight": 20014674.320312,
-      "match_rate": 88.907285,
-      "match_weight": 17794503.513672,
-      "mismatch_weight": 2220170.806641
+      "match_rate": 95.364238,
+      "match_weight": 19086841.748047,
+      "mismatch_weight": 927832.572266
     }
   }
 }
