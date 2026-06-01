@@ -9,6 +9,25 @@ import AlignmentReport from "./AlignmentReport";
 import OverviewHero from "./OverviewHero";
 import CoverageOverview from "./CoverageOverview";
 
+const SUITE_DISPLAY_ORDER = {
+  "fiit-ecps": 10,
+  "ca-snap-ecps": 20,
+  "ny-snap-ecps": 30,
+  "ma-snap-ecps": 40,
+  "al-snap-ecps": 50,
+  "tn-snap-ecps": 60,
+  "nyc-synthetic": 1000,
+};
+
+function orderedReports(reports) {
+  return [...reports].sort((a, b) => {
+    const aOrder = SUITE_DISPLAY_ORDER[a.suite] ?? 500;
+    const bOrder = SUITE_DISPLAY_ORDER[b.suite] ?? 500;
+    if (aOrder !== bOrder) return aOrder - bOrder;
+    return (a.suite || "").localeCompare(b.suite || "");
+  });
+}
+
 function TopBar() {
   return (
     <header className="topbar">
@@ -53,7 +72,8 @@ export default function DashboardContent() {
   // was removed; reviewers want the full picture by default.)
   const viewData = useMemo(() => {
     if (!data) return null;
-    return { ...buildNWayData(data.reports), programs: data.programs };
+    const reports = orderedReports(data.reports);
+    return { ...buildNWayData(reports), reports, programs: data.programs };
   }, [data]);
 
   if (loading) {
