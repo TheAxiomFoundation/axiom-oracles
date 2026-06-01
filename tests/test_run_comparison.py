@@ -180,11 +180,14 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
             "axiom_snap_eligible,pe_gross_income,axiom_gross_income,"
             "pe_net_income,axiom_net_income,pe_utility_allowance,"
             "axiom_utility_allowance,pe_shelter_deduction,"
-            "axiom_shelter_deduction\n"
+            "axiom_shelter_deduction,"
+            "pe_standard_deduction,"
+            "axiom_ny_snap_categorically_eligible,"
+            "axiom_ny_snap_residual_130_percent_categorical_path_satisfied\n"
             "101,201,77.20,76.00,-1.20,1.20,True,True,True,"
-            "1200,1200,900,900,200,200,50,50\n"
-            "102,202,0.00,0.00,0.00,0.00,True,False,not_holds,"
-            "12000,12000,9000,9000,0,0,0,0\n"
+            "1200,1200,900,900,200,200,50,50,209,not_holds,not_holds\n"
+            "102,202,0.00,24.00,24.00,24.00,False,False,holds,"
+            "12000,12000,9000,9000,0,0,0,0,209,holds,holds\n"
         )
         return subprocess.CompletedProcess(cmd, 0)
 
@@ -217,12 +220,17 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     assert report["schema_version"] == "axiom.comparison_report.v2"
     assert report["case_count"] == 2
     assert report["summary"]["comparison_count"] == 4
-    assert report["summary"]["mismatch_count"] == 0
-    assert report["aggregates"][0]["matched"] == 2
+    assert report["summary"]["mismatch_count"] == 2
+    assert report["aggregates"][0]["matched"] == 1
     assert report["aggregates"][0]["comparison"] == "amount"
     assert report["aggregates"][1]["comparison"] == "eligibility"
-    assert report["aggregates"][1]["matched"] == 2
-    assert report["cases"] == []
+    assert report["aggregates"][1]["matched"] == 1
+    assert len(report["cases"]) == 1
+    assert report["cases"][0]["metadata"]["axiom_ny_snap_categorically_eligible"]
+    assert report["cases"][0]["metadata"][
+        "axiom_ny_snap_residual_130_percent_categorical_path_satisfied"
+    ]
+    assert report["cases"][0]["metadata"]["pe_standard_deduction"] == 209
 
 
 def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():

@@ -1082,35 +1082,39 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         case_match_rate = (
             (2 - len(case_mismatches)) / 2 * 100 if case_mismatches else 100.0
         )
+        metadata = {
+            "axiom_gross_income": _csv_float(row.get("axiom_gross_income")),
+            "axiom_net_income": _csv_float(row.get("axiom_net_income")),
+            "axiom_shelter_deduction": _csv_float(
+                row.get("axiom_shelter_deduction")
+            ),
+            "axiom_snap_eligible": _csv_bool(row.get("axiom_snap_eligible")),
+            "axiom_utility_allowance": _csv_float(
+                row.get("axiom_utility_allowance")
+            ),
+            "case_unit": "spm_unit",
+            "dataset": "enhanced_cps",
+            "household_id": row.get("household_id"),
+            "population": "enhanced-cps",
+            "pe_gross_income": _csv_float(row.get("pe_gross_income")),
+            "pe_net_income": _csv_float(row.get("pe_net_income")),
+            "pe_shelter_deduction": _csv_float(row.get("pe_shelter_deduction")),
+            "pe_snap_eligible": _csv_bool(row.get("pe_snap_eligible")),
+            "pe_utility_allowance": _csv_float(row.get("pe_utility_allowance")),
+            "spm_unit_id": spm_unit_id,
+            "state": state_code,
+            "suite": f"{jurisdiction}-snap-ecps",
+        }
+        for key, value in row.items():
+            if key.startswith(("axiom_", "pe_")) and key not in metadata:
+                metadata[key] = _csv_scalar(value)
         cases.append(
             {
                 "case_id": case_id,
                 "left_engine": "axiom",
                 "left_errors": [],
                 "match_rate": case_match_rate,
-                "metadata": {
-                    "axiom_gross_income": _csv_float(row.get("axiom_gross_income")),
-                    "axiom_net_income": _csv_float(row.get("axiom_net_income")),
-                    "axiom_shelter_deduction": _csv_float(
-                        row.get("axiom_shelter_deduction")
-                    ),
-                    "axiom_snap_eligible": _csv_bool(row.get("axiom_snap_eligible")),
-                    "axiom_utility_allowance": _csv_float(
-                        row.get("axiom_utility_allowance")
-                    ),
-                    "case_unit": "spm_unit",
-                    "dataset": "enhanced_cps",
-                    "household_id": row.get("household_id"),
-                    "population": "enhanced-cps",
-                    "pe_gross_income": _csv_float(row.get("pe_gross_income")),
-                    "pe_net_income": _csv_float(row.get("pe_net_income")),
-                    "pe_shelter_deduction": _csv_float(row.get("pe_shelter_deduction")),
-                    "pe_snap_eligible": _csv_bool(row.get("pe_snap_eligible")),
-                    "pe_utility_allowance": _csv_float(row.get("pe_utility_allowance")),
-                    "spm_unit_id": spm_unit_id,
-                    "state": state_code,
-                    "suite": f"{jurisdiction}-snap-ecps",
-                },
+                "metadata": metadata,
                 "mismatches": case_mismatches,
                 "right_engine": "policyengine",
                 "right_errors": [],
@@ -1267,6 +1271,20 @@ def _csv_float(value: object, default: float = 0.0) -> float:
         return float(value)
     except (TypeError, ValueError):
         return default
+
+
+def _csv_scalar(value: object) -> object:
+    text = str(value).strip()
+    if text.lower() in {"1", "true", "t", "yes", "y", "holds"}:
+        return True
+    if text.lower() in {"0", "false", "f", "no", "n", "not_holds"}:
+        return False
+    if text == "":
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return value
 
 
 def _write_dashboard_report(report: dict, filename: str) -> None:
