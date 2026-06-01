@@ -20,7 +20,7 @@ runner:
     concepts:
       - us:statutes/7/2014/o#snap_eligible
       - us:statutes/7/2014/u#snap_benefit
-    sample_size: 10000
+    sample_size: 0
     period: 2026-01
     population: enhanced-cps
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
