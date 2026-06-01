@@ -183,6 +183,8 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
             "axiom_shelter_deduction\n"
             "101,201,77.20,76.00,-1.20,1.20,True,True,True,"
             "1200,1200,900,900,200,200,50,50\n"
+            "102,202,0.00,0.00,0.00,0.00,True,False,not_holds,"
+            "12000,12000,9000,9000,0,0,0,0\n"
         )
         return subprocess.CompletedProcess(cmd, 0)
 
@@ -213,10 +215,13 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
 
     report = json.loads(output.read_text())
     assert report["schema_version"] == "axiom.comparison_report.v2"
-    assert report["case_count"] == 1
-    assert report["summary"]["comparison_count"] == 1
+    assert report["case_count"] == 2
+    assert report["summary"]["comparison_count"] == 4
     assert report["summary"]["mismatch_count"] == 0
-    assert report["aggregates"][0]["matched"] == 1
+    assert report["aggregates"][0]["matched"] == 2
+    assert report["aggregates"][0]["comparison"] == "amount"
+    assert report["aggregates"][1]["comparison"] == "eligibility"
+    assert report["aggregates"][1]["matched"] == 2
     assert report["cases"] == []
 
 

@@ -23,6 +23,33 @@
       "right_weighted_sum": 18929.679819,
       "weighted_difference": -11.679819000000862,
       "weighted_match_rate": 100.0
+    },
+    {
+      "category": "food",
+      "compared": 730,
+      "comparison": "eligibility",
+      "comparison_count": 730,
+      "comparison_weight": 730,
+      "components": [],
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "left_positive_rate": 11.095890410958905,
+      "left_positive_weight": 81,
+      "match_count": 730,
+      "match_rate": 100.0,
+      "match_weight": 730,
+      "matched": 730,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "positive_rate_difference": 0.0,
+      "quality_flags": [],
+      "right_positive_rate": 11.095890410958905,
+      "right_positive_weight": 81,
+      "weighted_match_rate": 100.0
     }
   ],
   "case_count": 730,
@@ -35,7 +62,20 @@
       "description": "SNAP benefit amount",
       "id": "us:statutes/7/2014/u#snap_benefit",
       "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
       "tolerance": 1.5
+    },
+    {
+      "category": "food",
+      "comparison": "eligibility",
+      "components": [],
+      "description": "SNAP eligibility",
+      "id": "us:statutes/7/2014/o#snap_eligible",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0
     }
   ],
   "engines": {
@@ -55,23 +95,18 @@
   },
   "suite": "co-snap-ecps",
   "summary": {
-    "comparison_count": 730,
+    "comparison_count": 1460,
     "error_count": 0,
     "errors_by_engine": {},
-    "match_count": 730,
+    "match_count": 1460,
     "mismatch_count": 0,
     "mismatches_by_concept": [],
-    "mismatches_by_kind": [
-      {
-        "count": 0,
-        "value": "amount_difference"
-      }
-    ],
+    "mismatches_by_kind": [],
     "mismatches_by_scenario": {},
     "weighted": {
-      "comparison_weight": 730,
+      "comparison_weight": 1460,
       "match_rate": 100.0,
-      "match_weight": 730,
+      "match_weight": 1460,
       "mismatch_weight": 0
     }
   }
