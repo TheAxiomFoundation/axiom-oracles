@@ -148,7 +148,7 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     assert result.errors == ()
 
 
-def test_snap_co_projection_supplies_federal_gross_income_input() -> None:
+def test_snap_co_projection_uses_repaired_colorado_income_surface() -> None:
     [case] = attach_axiom_snap_co_inputs(
         [
             Case(
@@ -171,37 +171,14 @@ def test_snap_co_projection_supplies_federal_gross_income_input() -> None:
         if record["entity"] == "Household"
     }
 
+    assert "us:regulations/7-cfr/273/9#input.snap_gross_monthly_income" not in records
     assert (
-        records["us:regulations/7-cfr/273/9#input.snap_gross_monthly_income"]
-        == 2500
+        "us:statutes/7/2014/e/6/A#input.snap_monthly_household_income"
+        not in records
     )
     assert (
-        records[
-            "us:statutes/7/2014/e/6/A#input."
-            "snap_monthly_household_income"
-        ]
-        == 2500
-    )
-    assert (
-        records[
-            "us:regulations/7-cfr/273/10#input."
-            "snap_gross_monthly_earned_income"
-        ]
-        == 2500
-    )
-    assert (
-        records[
-            "us:regulations/7-cfr/273/10#input."
-            "snap_claimed_homeless_shelter_deduction"
-        ]
-        == 0
-    )
-    assert (
-        records[
-            "us:regulations/7-cfr/273/10#input."
-            "snap_total_allowable_shelter_expenses"
-        ]
-        == 500
+        "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income"
+        not in records
     )
     assert (
         records[
@@ -210,6 +187,11 @@ def test_snap_co_projection_supplies_federal_gross_income_input() -> None:
         ]
         == 2500
     )
+    relation_names = {
+        relation["name"] for relation in case.metadata["axiom_relations"]
+    }
+    assert "us:statutes/7/2012/j#relation.member_of_household" in relation_names
+    assert "member_of_household" in relation_names
     member_records = {
         record["name"]: record["value"]
         for record in case.metadata["axiom_input_records"]

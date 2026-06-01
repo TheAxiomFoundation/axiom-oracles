@@ -13,7 +13,9 @@ records up via ``case.metadata[AXIOM_INPUT_RECORDS_METADATA_KEY]``.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import replace
+from functools import cache
 from pathlib import Path
 from typing import Any
 
@@ -28,30 +30,14 @@ from .runner import (
 _SNAP_HOUSEHOLD_ID = "household"
 _SNAP_HOUSEHOLD_ENTITY = "Household"
 _MEMBER_RELATION = "us:statutes/7/2012/j#relation.member_of_household"
+_MEMBER_RELATION_RUNTIME = "member_of_household"
 _WAGES_INPUT = "us-co:regulations/10-ccr-2506-1/4.403#input.employee_wages_received"
-_GROSS_MONTHLY_INCOME_INPUT = (
-    "us:regulations/7-cfr/273/9#input.snap_gross_monthly_income"
-)
-_MONTHLY_HOUSEHOLD_INCOME_INPUT = (
-    "us:statutes/7/2014/e/6/A#input.snap_monthly_household_income"
-)
 _HOUSEHOLD_SIZE_INPUT = (
     "us-co:regulations/10-ccr-2506-1/4.207.3#input.household_size"
 )
 _FEDERAL_NET_INCOME_DEFAULTS = {
     "us:policies/usda/snap/fy-2026-cola/deductions#input.household_size": None,
     "us:regulations/7-cfr/273/10#input.household_size": None,
-    "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income": None,
-    "us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income": 0,
-    "us:regulations/7-cfr/273/10#input.snap_income_exclusions": 0,
-    "us:regulations/7-cfr/273/10#input.household_entitled_to_excess_medical_deduction": False,
-    "us:regulations/7-cfr/273/10#input.snap_total_medical_expenses": 0,
-    "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_dependent_care_expenses": 0,
-    "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_child_support_payments": 0,
-    "us:regulations/7-cfr/273/10#input.snap_claimed_homeless_shelter_deduction": 0,
-    "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses": 500,
-    "us:regulations/7-cfr/273/10#input.state_agency_rounds_thirty_percent_net_income_up": True,
-    "us:regulations/7-cfr/273/10#input.household_initial_month": False,
 }
 _FEDERAL_MEMBER_DEFAULTS = {
     "us:regulations/7-cfr/273/6#input.member_refused_or_failed_to_provide_or_apply_for_ssn": False,
@@ -111,6 +97,38 @@ US_SNAP_CO_COMPILED_ARTIFACT_PATH = (
 )
 
 
+@cache
+def _compiled_reference_targets() -> frozenset[str]:
+    artifact = json.loads(US_SNAP_CO_COMPILED_ARTIFACT_PATH.read_text())
+    program = artifact.get("program") if isinstance(artifact, dict) else {}
+    if not isinstance(program, dict):
+        return frozenset()
+    targets: set[str] = set()
+    for collection in ("derived", "parameters"):
+        for item in program.get(collection, []):
+            if not isinstance(item, dict):
+                continue
+            item_id = item.get("id")
+            if isinstance(item_id, str) and "#" in item_id:
+                targets.add(item_id.split("#", 1)[0])
+    return frozenset(targets)
+
+
+def _supported_input_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    reference_targets = _compiled_reference_targets()
+    if not reference_targets:
+        return records
+    supported = []
+    for record in records:
+        name = str(record.get("name"))
+        if "#" not in name:
+            supported.append(record)
+            continue
+        if name.split("#", 1)[0] in reference_targets:
+            supported.append(record)
+    return supported
+
+
 def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
     """Attach Axiom CO SNAP input records to cases that lack them."""
     projected = []
@@ -129,8 +147,6 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
         inputs = dict(BASE_INPUTS)
         inputs[_HOUSEHOLD_SIZE_INPUT] = household_size
         inputs[_WAGES_INPUT] = monthly_income
-        inputs[_GROSS_MONTHLY_INCOME_INPUT] = monthly_income
-        inputs[_MONTHLY_HOUSEHOLD_INCOME_INPUT] = monthly_income
         for input_name, default in _FEDERAL_NET_INCOME_DEFAULTS.items():
             if default is None:
                 value = monthly_income if "income" in input_name else household_size
@@ -165,12 +181,15 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
                     )
                 )
 
-        metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = records + member_records
+        metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = _supported_input_records(
+            records + member_records
+        )
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
             *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
             *[
-                {"name": _MEMBER_RELATION, "tuple": tup}
+                {"name": relation_name, "tuple": tup}
                 for tup in relation_tuples
+                for relation_name in (_MEMBER_RELATION, _MEMBER_RELATION_RUNTIME)
             ],
         ]
         # Output entity for SNAP outputs is the Household, not the default
