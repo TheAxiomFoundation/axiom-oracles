@@ -154,6 +154,15 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
             return constant if float(value) > 0 else 0
 
+        if transform == "all_people_any_positive":
+            people = (case_facts or {}).get("__people__") or []
+            if not people:
+                return False
+            return all(
+                any(float(person.get(key, 0) or 0) > 0 for key in from_facts)
+                for person in people
+            )
+
         if transform == "scope_geoid_in":
             metadata = (case_facts or {}).get("__metadata__") or {}
             scope = metadata.get("scope") or {}

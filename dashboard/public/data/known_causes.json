@@ -94,8 +94,8 @@
       "suite": "ma-snap-ecps",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "kind": "amount_difference",
-      "label": "MA categorical, utility, and TAFDC gaps",
-      "description": "The full MA ECPS run compares 896 households. After encoding and wiring the FY 2026 MA heating/cooling SUA amount, current benefit amount mismatches are 77 and total mismatch entries are 119. Remaining benefit mismatches are split across categorical/BBCE eligibility cases and MA TAFDC/TANF income composition.",
+      "label": "MA TAFDC and categorical/BBCE gaps",
+      "description": "The full MA ECPS run compares 896 households. The FY 2026 MA heating/cooling SUA amount is wired and matches the current PE utility assumption in the residual cases. Current benefit amount mismatches remain 77 and total mismatch entries remain 119. Remaining benefit mismatches are split across MA TAFDC/TANF income composition and categorical/BBCE eligibility cases.",
       "drivers": [
         {
           "label": "MA heating/cooling SUA amount is now wired",
@@ -103,6 +103,7 @@
           "evidence": [
             "Benefit matches are now 819/896 after HCSUA wiring.",
             "Total mismatch entries are now 119.",
+            "Current residual trace: PE `snap_utility_allowance` is $10,968/year ($914/month) in all 86 mismatching MA households, matching Axiom's `ma_snap_heating_cooling_standard_utility_allowance_for_shelter_costs = $914/month`.",
             "Encoder-applied files: rulespec-us-ma/regulations/106-cmr/364/945/block-1.yaml, status deferred; rulespec-us-ma/policies/dta/snap/fy-2026-cola/heating-cooling-standard-utility-allowance.yaml, executable $914 amount."
           ]
         },
@@ -110,19 +111,20 @@
           "label": "MA TAFDC/TANF is not modeled in Axiom SNAP unearned income",
           "description": "For Axiom-over-PolicyEngine benefit mismatches, PolicyEngine often computes MA TAFDC and includes it in SNAP unearned income. Axiom's ECPS SNAP path still projects only observed ECPS income facts and does not compute or inject MA TAFDC.",
           "evidence": [
-            "After HCSUA wiring, many Axiom-over-PolicyEngine benefit mismatches remain consistent with missing MA TAFDC/TANF income composition.",
-            "The pre-HCSUA diagnostic found positive PE MA TAFDC in 22 of 27 Axiom-over-PE benefit mismatches.",
-            "ecps-3317 remains Axiom-over-PE after HCSUA wiring: Axiom benefit $785 vs PE $450.32, with PE MA TAFDC previously measured at about $927.30/month."
+            "Current residual trace: PE has positive MA TAFDC/TANF in 31 of 86 mismatching MA households.",
+            "ecps-3317: Axiom benefit $785 vs PE $450.32; Axiom unearned income is $1,011/month while PE unearned income is $23,259.64/year, including $11,127.63/year of MA TAFDC/TANF.",
+            "ecps-3328: Axiom benefit $307 vs PE $23.97; PE MA TAFDC/TANF is $9,536/year."
           ]
         },
                 {
                     "label": "MA categorical/BBCE path is encoded but not yet outcome-driving",
-                    "description": "Many benefit mismatches are paired with Axiom ineligible/$0 while PolicyEngine is eligible with a positive allotment. The 106 CMR 365.180(A) corpus block has been repaired and the categorical rule has now been applied through the encoder, but the ECPS projection does not yet supply the categorical/authorized-benefit facts and MA's cross-referenced gross/net categorical standards remain deferred. The program scopes the new rule and aliases the broad categorical output, but it did not change the full-run mismatch count.",
+                    "description": "Many benefit mismatches are paired with Axiom ineligible/$0 while PolicyEngine is eligible with a positive allotment. The 106 CMR 365.180(A) corpus block has been repaired and the categorical rule has now been applied through the encoder. The ECPS projection now maps the observed SSI/TAFDC assistance facts it can support, but the composed `snap_eligible` expression still does not reference the categorical outputs, and the TANF-service/categorical income-standard facts remain incomplete.",
                     "evidence": [
                         "Current full run: 77 benefit mismatches and 42 eligibility mismatches.",
                         "Eligibility mismatches fell from 57 to 42; 39 are PE-only and 3 are Axiom-only.",
                         "Encoder-applied files: rulespec-us-ma/regulations/106-cmr/365/180/A.yaml and A.test.yaml, with a signed manifest.",
-                        "After adding 365.180(A) to the MA program scope and wiring categorical aliases, the required factual inputs still default false and the MA income-standard tables are still deferred."
+                        "Current compose coverage warning: `snap_household_is_categorically_eligible`, `household_categorically_eligible`, `household_is_categorically_eligible`, and `household_is_categorically_eligible_under_106_cmr_365_180` are present but not referenced by `snap_eligible`.",
+                        "After adding an SSI/TAFDC assistance projection, the full-run mismatch count remained 119 because the categorical gate is still orphaned from `snap_eligible`."
                     ]
                 }
       ],
@@ -132,8 +134,8 @@
       "suite": "ma-snap-ecps",
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "kind": "eligibility_right_only",
-            "label": "MA categorical/BBCE facts and standards still incomplete",
-            "description": "The full MA run has 39 cases where PolicyEngine marks the household SNAP eligible and Axiom does not. The 106 CMR 365.180(A) categorical artifact has been applied through the encoder and scoped into the MA program, but ECPS does not currently supply the required authorized SSI/EAEDC/TAFDC or TANF-service facts. The related MA gross/net categorical standards at 106 CMR 364.950, 364.970, and 364.976 remain deferred because those source slices point to externally posted standards rather than stating the executable tables.",
+            "label": "MA categorical/BBCE gate is not yet connected",
+            "description": "The full MA run has 39 cases where PolicyEngine marks the household SNAP eligible and Axiom does not. The 106 CMR 365.180(A) categorical artifact has been applied through the encoder and scoped into the MA program, and the ECPS projection now maps observed SSI/TAFDC assistance facts where available. The composed `snap_eligible` expression still does not reference those categorical outputs, and the TANF-service plus gross categorical income-standard facts remain incomplete.",
             "fix_owner": "rulespec-us-ma"
         },
     {

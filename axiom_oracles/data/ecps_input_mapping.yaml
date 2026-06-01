@@ -32,6 +32,8 @@
 #                  transform: elderly_or_disabled  (age ≥ 60 OR disabled)
 #                  transform: positive      (1/True if value > 0 else 0/False)
 #                  transform: positive_to_constant  (constant if value>0)
+#                  transform: all_people_any_positive  (every person has at
+#                              least one positive fact from from_facts)
 #
 # Scope:
 #   scope: person | household
@@ -318,3 +320,33 @@ mappings:
   - match: { kind: substring, value: state_agency_rounds_thirty_percent_net_income_up }
     scope: household
     source: { kind: constant, value: true }
+
+  # Massachusetts categorical eligibility can be established when all members
+  # receive or are authorized for SSI/EAEDC, TAFDC, or a combination. ECPS
+  # carries SSI and the generic SNAP income path already understands TANF when
+  # a case supplies it; EAEDC is not exposed yet, so this mapping only asserts
+  # the portions actually supported by observed/provided case facts.
+  - match: { kind: substring, value: all_members_receive_or_authorized_for_ssi_or_eaedc }
+    scope: household
+    source:
+      kind: derived
+      transform: all_people_any_positive
+      from_facts:
+        - SSI_BENEFITS
+
+  - match: { kind: substring, value: all_members_receive_or_authorized_for_tafdc }
+    scope: household
+    source:
+      kind: derived
+      transform: all_people_any_positive
+      from_facts:
+        - TANF_BENEFITS
+
+  - match: { kind: substring, value: all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc }
+    scope: household
+    source:
+      kind: derived
+      transform: all_people_any_positive
+      from_facts:
+        - SSI_BENEFITS
+        - TANF_BENEFITS

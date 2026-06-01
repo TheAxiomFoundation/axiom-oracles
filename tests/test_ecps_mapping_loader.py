@@ -67,6 +67,12 @@ mappings:
       kind: derived
       transform: scope_geoid_in
       geoids: ["36047", "36059"]
+  - match: { kind: exact, value: all_people_with_assistance }
+    scope: household
+    source:
+      kind: derived
+      transform: all_people_any_positive
+      from_facts: [SSI_BENEFITS, TANF_BENEFITS]
 """.strip()
     )
     return path
@@ -130,6 +136,38 @@ def test_scope_geoid_in_reads_case_metadata(custom_yaml: Path) -> None:
     assert (
         mapping["in_target_county"](
             {"__metadata__": {"scope": {"type": "census_county", "geoid": "06037"}}},
+            None,
+        )
+        is False
+    )
+
+
+def test_all_people_any_positive_requires_each_person_to_have_a_listed_fact(
+    custom_yaml: Path,
+) -> None:
+    program = _program(["all_people_with_assistance"])
+    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+
+    assert (
+        mapping["all_people_with_assistance"](
+            {
+                "__people__": [
+                    {Concepts.SSI_BENEFITS: 1},
+                    {Concepts.TANF_BENEFITS: 1},
+                ]
+            },
+            None,
+        )
+        is True
+    )
+    assert (
+        mapping["all_people_with_assistance"](
+            {
+                "__people__": [
+                    {Concepts.SSI_BENEFITS: 1},
+                    {},
+                ]
+            },
             None,
         )
         is False
@@ -254,4 +292,37 @@ def test_default_yaml_maps_snap_utility_allowance_projection_assumptions() -> No
             "state_agency_mandates_use_of_standard_utility_allowances_under_paragraph_g"
         ]({}, None)
         is False
+    )
+
+
+def test_default_yaml_maps_ma_categorical_assistance_inputs() -> None:
+    program = _program(
+        [
+            "all_members_receive_or_authorized_for_ssi_or_eaedc",
+            "all_members_receive_or_authorized_for_tafdc",
+            "all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc",
+        ]
+    )
+    mapping = load_ecps_mapping_for_program(program)
+    mixed_case = {
+        "__people__": [
+            {Concepts.SSI_BENEFITS: 1},
+            {Concepts.TANF_BENEFITS: 1},
+        ]
+    }
+
+    assert (
+        mapping["all_members_receive_or_authorized_for_ssi_or_eaedc"](
+            mixed_case, None
+        )
+        is False
+    )
+    assert mapping["all_members_receive_or_authorized_for_tafdc"](
+        mixed_case, None
+    ) is False
+    assert (
+        mapping[
+            "all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc"
+        ](mixed_case, None)
+        is True
     )
