@@ -9,12 +9,14 @@ adding a new runner type is a function here plus a README update.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -319,6 +321,78 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
 
+def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
+    """`axiom-encode snap-ecps-compare`, adapted from CSV to v2 JSON."""
+    axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
+    params = runner["parameters"]
+    axiom_binary = None
+    if runner.get("axiom_rules_repo"):
+        axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+        _ensure_engine_binary(axiom_rules_repo, kind="release")
+        axiom_binary = axiom_rules_repo / "target" / "release" / "axiom-rules-engine"
+
+    with tempfile.TemporaryDirectory(prefix="snap-ecps-compare.") as tmp:
+        csv_path = Path(tmp) / "rows.csv"
+        cmd = [
+            "uv",
+            "run",
+            "--directory",
+            str(axiom_encode_repo),
+            "--with",
+            "policyengine-us==1.705.1",
+            "--with",
+            "numpy",
+            "axiom-encode",
+            "snap-ecps-compare",
+            "--jurisdiction",
+            str(params.get("jurisdiction", "us-co")),
+            "--year",
+            str(params.get("year", 2026)),
+            "--month",
+            str(params.get("month", 1)),
+            "--utility-projection",
+            str(params.get("utility_projection", "policyengine-type")),
+            "--tolerance",
+            str(params.get("tolerance", 1.5)),
+            "--max-differences",
+            str(params.get("max_differences", 50)),
+            "--write-csv",
+            str(csv_path),
+        ]
+        sample_size = params.get("sample_size")
+        if sample_size not in (None, 0, "0"):
+            cmd.extend(["--sample-size", str(sample_size)])
+        if params.get("positive_snap_only"):
+            cmd.append("--positive-snap-only")
+        if params.get("state"):
+            cmd.extend(["--state", str(params["state"])])
+        if params.get("program"):
+            cmd.extend(["--program", str(_resolve_path(params["program"], "program"))])
+        if params.get("test_template"):
+            cmd.extend(
+                [
+                    "--test-template",
+                    str(_resolve_path(params["test_template"], "test_template")),
+                ]
+            )
+        if params.get("workspace_root"):
+            cmd.extend(
+                [
+                    "--workspace-root",
+                    str(_resolve_path(params["workspace_root"], "workspace_root")),
+                ]
+            )
+        if axiom_binary is not None:
+            cmd.extend(["--axiom-binary", str(axiom_binary)])
+
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+        with csv_path.open(newline="") as f:
+            rows = list(csv.DictReader(f))
+
+    report = _adapt_snap_ecps_csv_to_v2(rows, runner)
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+
+
 # PolicyEngine 4.11.0 hard-pins its bundled ECPS manifest at PE-US 1.700.0; we
 # run against 1.705.1 (the version axiom-encode pins) so the manifest
 # certification check refuses to load the model. The compare and sanity
@@ -522,6 +596,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
 
 
 RUNNERS = {
+    "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
 }
@@ -920,6 +995,164 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             },
         },
     }
+
+
+def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
+    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2."""
+    params = runner.get("parameters", {})
+    jurisdiction = str(params.get("jurisdiction", "us-co"))
+    state_code = str(params.get("state") or jurisdiction.rsplit("-", 1)[-1]).upper()
+    tolerance = float(params.get("tolerance", 1.5))
+    concept_id = "us:statutes/7/2014/u#snap_benefit"
+    compared = len(rows)
+    mismatching_rows = [row for row in rows if not _csv_bool(row.get("match"))]
+    matched = compared - len(mismatching_rows)
+    match_rate = (matched / compared * 100) if compared else 100.0
+    left_sum = sum(_csv_float(row.get("axiom_snap_allotment")) for row in rows)
+    right_sum = sum(_csv_float(row.get("pe_snap")) for row in rows)
+
+    cases: list[dict] = []
+    flat_mismatches: list[dict] = []
+    for row in mismatching_rows:
+        spm_unit_id = str(row.get("spm_unit_id") or "unknown")
+        case_id = f"ecps-spm-{spm_unit_id}"
+        axiom_value = _csv_float(row.get("axiom_snap_allotment"))
+        pe_value = _csv_float(row.get("pe_snap"))
+        difference = _csv_float(row.get("difference"), axiom_value - pe_value)
+        mismatch = {
+            "case_id": case_id,
+            "concept": concept_id,
+            "description": "SNAP benefit amount",
+            "difference": difference,
+            "kind": "amount_difference",
+            "left": axiom_value,
+            "parent": None,
+            "right": pe_value,
+            "tolerance": tolerance,
+        }
+        flat_mismatches.append(mismatch)
+        cases.append(
+            {
+                "case_id": case_id,
+                "left_engine": "axiom",
+                "left_errors": [],
+                "match_rate": 0.0,
+                "metadata": {
+                    "axiom_gross_income": _csv_float(row.get("axiom_gross_income")),
+                    "axiom_net_income": _csv_float(row.get("axiom_net_income")),
+                    "axiom_shelter_deduction": _csv_float(
+                        row.get("axiom_shelter_deduction")
+                    ),
+                    "axiom_snap_eligible": _csv_bool(row.get("axiom_snap_eligible")),
+                    "axiom_utility_allowance": _csv_float(
+                        row.get("axiom_utility_allowance")
+                    ),
+                    "case_unit": "spm_unit",
+                    "dataset": "enhanced_cps",
+                    "household_id": row.get("household_id"),
+                    "population": "enhanced-cps",
+                    "pe_gross_income": _csv_float(row.get("pe_gross_income")),
+                    "pe_net_income": _csv_float(row.get("pe_net_income")),
+                    "pe_shelter_deduction": _csv_float(row.get("pe_shelter_deduction")),
+                    "pe_snap_eligible": _csv_bool(row.get("pe_snap_eligible")),
+                    "pe_utility_allowance": _csv_float(row.get("pe_utility_allowance")),
+                    "spm_unit_id": spm_unit_id,
+                    "state": state_code,
+                    "suite": f"{jurisdiction}-snap-ecps",
+                },
+                "mismatches": [mismatch],
+                "right_engine": "policyengine",
+                "right_errors": [],
+            }
+        )
+
+    aggregate = {
+        "category": "food",
+        "comparison": "amount",
+        "comparison_count": compared,
+        "comparison_weight": compared,
+        "compared": compared,
+        "components": [],
+        "concept": concept_id,
+        "description": "SNAP benefit amount",
+        "left_weighted_sum": left_sum,
+        "match_count": matched,
+        "match_rate": match_rate,
+        "match_weight": matched,
+        "matched": matched,
+        "mismatch_count": len(mismatching_rows),
+        "mismatch_weight": len(mismatching_rows),
+        "missing_both_count": 0,
+        "missing_left_count": 0,
+        "missing_right_count": 0,
+        "parent": None,
+        "right_weighted_sum": right_sum,
+        "weighted_difference": left_sum - right_sum,
+        "weighted_match_rate": match_rate,
+    }
+    mismatches_by_concept = [
+        {"value": value, "count": count}
+        for value, count in sorted(
+            Counter(m["concept"] for m in flat_mismatches).items(),
+            key=lambda item: (-item[1], item[0]),
+        )
+    ]
+
+    return {
+        "aggregates": [aggregate],
+        "case_count": compared,
+        "cases": cases,
+        "concepts": [
+            {
+                "category": "food",
+                "comparison": "amount",
+                "components": [],
+                "description": "SNAP benefit amount",
+                "id": concept_id,
+                "parent": None,
+                "tolerance": tolerance,
+            }
+        ],
+        "engines": {"left": "axiom", "right": "policyengine"},
+        "errors": [],
+        "locales": [state_code],
+        "mismatches": flat_mismatches,
+        "population": "enhanced-cps",
+        "schema_version": "axiom.comparison_report.v2",
+        "scope": {"geoid": state_code, "type": "state"},
+        "suite": f"{jurisdiction}-snap-ecps",
+        "summary": {
+            "comparison_count": compared,
+            "error_count": 0,
+            "errors_by_engine": {},
+            "match_count": matched,
+            "mismatch_count": len(mismatching_rows),
+            "mismatches_by_concept": mismatches_by_concept,
+            "mismatches_by_kind": [
+                {"value": "amount_difference", "count": len(mismatching_rows)}
+            ],
+            "mismatches_by_scenario": {},
+            "weighted": {
+                "comparison_weight": compared,
+                "match_rate": match_rate,
+                "match_weight": matched,
+                "mismatch_weight": len(mismatching_rows),
+            },
+        },
+    }
+
+
+def _csv_bool(value: object) -> bool:
+    return str(value).strip().lower() in {"1", "true", "t", "yes", "y"}
+
+
+def _csv_float(value: object, default: float = 0.0) -> float:
+    if value in (None, ""):
+        return default
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
 
 
 def _write_dashboard_report(report: dict, filename: str) -> None:

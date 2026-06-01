@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import subprocess
 from pathlib import Path
 
@@ -154,6 +155,69 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
     assert calls[2][:4] == ["uv", "run", "--python", "3.14"]
     assert "--axiom-compiled-program" in calls[2]
     assert str(compiled.resolve()) in calls[2]
+
+
+def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_encode = tmp_path / "axiom-encode"
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_encode.mkdir()
+    axiom_rules.mkdir()
+    output = tmp_path / "report.json"
+    calls = []
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
+    )
+
+    def fake_run(cmd, *, check, cwd=None):
+        del check, cwd
+        calls.append(cmd)
+        csv_path = cmd[cmd.index("--write-csv") + 1]
+        Path(csv_path).write_text(
+            "spm_unit_id,household_id,pe_snap,axiom_snap_allotment,"
+            "difference,absolute_difference,match,pe_snap_eligible,"
+            "axiom_snap_eligible,pe_gross_income,axiom_gross_income,"
+            "pe_net_income,axiom_net_income,pe_utility_allowance,"
+            "axiom_utility_allowance,pe_shelter_deduction,"
+            "axiom_shelter_deduction\n"
+            "101,201,77.20,76.00,-1.20,1.20,True,True,True,"
+            "1200,1200,900,900,200,200,50,50\n"
+        )
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+
+    run_comparison._run_axiom_encode_snap_ecps_compare(
+        {
+            "axiom_encode_repo": str(axiom_encode),
+            "axiom_rules_repo": str(axiom_rules),
+            "parameters": {
+                "jurisdiction": "us-co",
+                "sample_size": 0,
+                "year": 2026,
+                "month": 1,
+                "utility_projection": "policyengine-type",
+                "tolerance": 1.5,
+            },
+        },
+        output,
+    )
+
+    cmd = calls[0]
+    assert cmd[:3] == ["uv", "run", "--directory"]
+    assert str(axiom_encode.resolve()) in cmd
+    assert "snap-ecps-compare" in cmd
+    assert "--sample-size" not in cmd
+    assert "--axiom-binary" in cmd
+
+    report = json.loads(output.read_text())
+    assert report["schema_version"] == "axiom.comparison_report.v2"
+    assert report["case_count"] == 1
+    assert report["summary"]["comparison_count"] == 1
+    assert report["summary"]["mismatch_count"] == 0
+    assert report["aggregates"][0]["matched"] == 1
+    assert report["cases"] == []
 
 
 def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
