@@ -149,32 +149,32 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "kind": "amount_difference",
       "label": "AL TANF income and minimum-benefit residuals",
-      "description": "The first Alabama full ECPS run composes and compares end to end without Python overrides. Eligibility is close. The dominant benefit residual is now traced: PolicyEngine imputes Alabama TANF and counts it in SNAP unearned income, while Axiom does not yet compute or inject Alabama TANF into the composed SNAP income path. The remaining PE-greater-than-Axiom cases are mostly minimum-benefit/eligibility edges with PE at about $23.97 and Axiom at $0.",
+      "description": "The current Alabama full ECPS run composes and compares end to end without Python overrides. Eligibility is close. The dominant benefit residual is traced to PolicyEngine-imputed Alabama TANF counted in SNAP unearned income, while Axiom does not yet compute or inject Alabama TANF into the composed SNAP income path. Two current PE-greater-than-Axiom cases remain minimum-benefit or small net-income residual edges.",
       "drivers": [
         {
           "label": "PE-imputed Alabama TANF is missing from Axiom SNAP income",
-          "description": "Twenty-one of 37 AL benefit residuals have positive PolicyEngine Alabama TANF. All 21 are in the Axiom-greater-than-PE direction, because PE includes TANF in SNAP unearned income and Axiom's current ECPS projection does not.",
+          "description": "Twenty-two of 32 AL benefit residuals have positive PolicyEngine Alabama TANF. All 22 are in the Axiom-greater-than-PE direction, because PE includes TANF in SNAP unearned income and Axiom's current ECPS projection does not.",
           "evidence": [
-            "AL full run: 704 cases, 1,408 comparisons, 41 mismatch entries; benefit 667/704, eligibility 700/704.",
-            "Benefit residual buckets: 30 Axiom > PE, 7 PE > Axiom; 21 of the 30 Axiom > PE cases have PE TANF > $0.",
+            "AL full run: 704 cases, 1,408 comparisons, 36 mismatch entries; benefit 672/704, eligibility 700/704.",
+            "Benefit residual buckets: 30 Axiom > PE, 2 PE > Axiom; 22 of the 30 Axiom > PE cases have PE TANF > $0.",
             "ecps-51206 / county 01011: Axiom $785 vs PE $749.27; PE al_tanf and snap_unearned_income are both $4,128/year.",
-            "ecps-51544 / county 01117: Axiom $62 vs PE $0; PE al_tanf is $3,648/year and PE rejects SNAP eligibility.",
-            "ecps-52446 / county 01087: Axiom $403 vs PE $0; PE al_tanf is about $5,284.59/year and snap_unearned_income is about $5,856/year."
+            "ecps-51308: Axiom $546 vs PE $520.93; PE al_tanf and snap_unearned_income are both $3,648/year.",
+            "ecps-51373: Axiom $546 vs PE $520.93; PE al_tanf and snap_unearned_income are both $3,648/year."
           ]
         },
         {
           "label": "Minimum-benefit and PE-greater-than-Axiom edges",
-          "description": "Seven AL benefit residuals have PE above Axiom. The inspected examples show PE eligible with a small positive monthly allotment while Axiom is ineligible/$0, so these should be treated as eligibility/minimum-benefit edges rather than amount overrides.",
+          "description": "Two AL benefit residuals have PE above Axiom. One is paired with PE eligibility and Axiom ineligibility at a small positive allotment; the other is a small amount residual just above the $7 tolerance.",
           "evidence": [
-            "ecps-51307 / county 01121: Axiom $0 and ineligible; PE eligible with $23.97/month.",
-            "ecps-51708 / county 01043: Axiom $96 vs PE $98.89, within the small residual direction after PE shelter and net-income calculation."
+            "ecps-51400: Axiom $0 and ineligible; PE eligible with $23.97/month.",
+            "ecps-51859: Axiom $828 vs PE $835.78, a $7.78 residual just over the configured tolerance."
           ]
         },
         {
           "label": "AL utility and eligibility coverage still need legal wiring",
-          "description": "The first-pass AL program did not wire a state-specific standard utility allowance amount table. This is a real modeling gap, but it is not the observed driver of the current AL benefit residuals: PE applied zero SNAP utility allowance in all 37 AL benefit-mismatch cases. The encoded AL POE page states SUA/BUA/telephone eligibility mechanics, but not the executable FY 2026 amount table. Compose also reports eligibility-looking AL rules outside `snap_eligible`, so broader eligibility behavior needs targeted source review before those rules are gated.",
+          "description": "The current AL program does not wire a state-specific standard utility allowance amount table. This is a real modeling gap, but it is not the observed driver of the current AL benefit residuals: PE applied zero SNAP utility allowance in all 32 AL benefit-mismatch cases. The encoded AL POE page states SUA/BUA/telephone eligibility mechanics, but not the executable FY 2026 amount table. Compose also reports eligibility-looking AL rules outside `snap_eligible`, so broader eligibility behavior needs targeted source review before those rules are gated.",
           "evidence": [
-            "PE diagnostic across all 37 AL benefit-mismatch cases: `snap_utility_allowance > 0` in 0 cases; `housing_cost > 0` in 33 cases.",
+            "PE diagnostic across all 32 AL benefit-mismatch cases: `snap_utility_allowance > 0` in 0 cases; `housing_cost > 0` in 30 cases.",
             "Coverage-gap examples include `household_meets_snap_income_eligibility_standards`, `person_eligible_under_abawd_provision`, and `person_is_eligible_alien`."
           ]
         }
@@ -202,35 +202,35 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "kind": "amount_difference",
       "label": "TN Families First income and utility-table wiring residuals",
-      "description": "The first Tennessee full ECPS run composes and compares end to end without Python overrides. The dominant benefit residual is now traced: PolicyEngine imputes Tennessee Families First/TANF and counts it in SNAP unearned income, while Axiom does not yet compute or inject Families First into the composed SNAP income path. TN also has an encoded utility allowance table, but it lives in a regulation block that also contains older SNAP income/deduction parameters, so it cannot be safely scoped wholesale without re-encoding or splitting the utility surface.",
+      "description": "The current Tennessee full ECPS run composes and compares end to end without Python overrides. The dominant benefit residual is traced to PolicyEngine-imputed Tennessee Families First/TANF counted in SNAP unearned income, while Axiom does not yet compute or inject Families First into the composed SNAP income path. TN also has an encoded utility allowance table, but it lives in a regulation block that also contains older SNAP income/deduction parameters, so it cannot be safely scoped wholesale without re-encoding or splitting the utility surface.",
       "drivers": [
         {
           "label": "PE-imputed Tennessee Families First is missing from Axiom SNAP income",
-          "description": "Thirty of 48 TN benefit residuals have positive PolicyEngine Families First/TANF. All 30 are in the Axiom-greater-than-PE direction, because PE includes this cash assistance in SNAP unearned income and Axiom's current ECPS projection does not.",
+          "description": "Thirty of 39 TN benefit residuals have positive PolicyEngine Families First/TANF. All 30 are in the Axiom-greater-than-PE direction, because PE includes this cash assistance in SNAP unearned income and Axiom's current ECPS projection does not.",
           "evidence": [
-            "TN full run: 852 cases, 1,704 comparisons, 54 mismatch entries; benefit 804/852, eligibility 846/852.",
-            "Benefit residual buckets: 38 Axiom > PE, 10 PE > Axiom; 30 of the 38 Axiom > PE cases have PE Families First/TANF > $0.",
+            "TN full run: 852 cases, 1,704 comparisons, 45 mismatch entries; benefit 813/852, eligibility 846/852.",
+            "Benefit residual buckets: 39 Axiom > PE, 0 PE > Axiom; 30 of the 39 Axiom > PE cases have PE Families First/TANF > $0.",
             "ecps-49363 / county 47157: Axiom $909 vs PE $733.70; PE tn_ff and snap_unearned_income are both $5,652/year.",
             "ecps-49447 / county 47093: Axiom $308 and eligible; PE $0 and ineligible with tn_ff $5,652/year.",
-            "ecps-49860 / county 47047: Axiom $61 and eligible; PE $0 and ineligible with tn_ff $4,116/year."
+            "ecps-49502: Axiom $563 vs PE $429.28; PE tn_ff is $5,652/year and snap_unearned_income is about $22,476/year."
           ]
         },
         {
           "label": "TN utility amount source is encoded but not safely scoped",
-          "description": "TN RuleSpec includes `snap_standard_utility_allowance`, `snap_basic_utility_allowance`, `snap_telephone_standard`, and `snap_homeless_shelter_standard` in `regulations/1240-01/04/27/block-1`. That same block also exports older SNAP income standards, max allotment, standard deduction, and shelter cap values with broad effective dates. This is a real wiring gap, but it is not the observed driver of the current TN benefit residuals: PE applied zero SNAP utility allowance in all 48 TN benefit-mismatch cases. The sustainable fix is to re-encode or split the utility table through the encoder, then compose only the utility amount surface into shelter costs.",
+          "description": "TN RuleSpec includes `snap_standard_utility_allowance`, `snap_basic_utility_allowance`, `snap_telephone_standard`, and `snap_homeless_shelter_standard` in `regulations/1240-01/04/27/block-1`. That same block also exports older SNAP income standards, max allotment, standard deduction, and shelter cap values with broad effective dates. This is a real wiring gap, but it is not the observed driver of the current TN benefit residuals: PE applied zero SNAP utility allowance in all 39 TN benefit-mismatch cases. The sustainable fix is to re-encode or split the utility table through the encoder, then compose only the utility amount surface into shelter costs.",
           "evidence": [
-            "PE diagnostic across all 48 TN benefit-mismatch cases: `snap_utility_allowance > 0` in 0 cases; `housing_cost > 0` in 44 cases.",
+            "PE diagnostic across all 39 TN benefit-mismatch cases: `snap_utility_allowance > 0` in 0 cases; `housing_cost > 0` in 36 cases.",
             "`rulespec-us-tn/regulations/1240-01/04/27/block-1.yaml` has the utility table but also exports `snap_gross_income_standard`, `snap_max_net_income`, `snap_max_coupon_allotment`, and `snap_standard_deduction`.",
             "USDA FNS states SUAs are used for SNAP utility costs and vary by household size in Tennessee.",
             "The current TN program does not include that regulation block to avoid overriding current federal FY 2026 values."
           ]
         },
         {
-          "label": "Minimum-benefit and PE-greater-than-Axiom edges",
-          "description": "Ten TN benefit residuals have PE above Axiom. The inspected examples show PE eligible with a small positive monthly allotment while Axiom returns $0, so these remain eligibility/minimum-benefit edges until traced through the composed Axiom gate.",
+          "label": "Remaining non-TANF benefit edges",
+          "description": "Nine TN benefit residuals do not have positive PolicyEngine Families First/TANF, but all current TN benefit residuals are still Axiom-greater-than-PE. These should be traced as disqualification, income, or deduction differences rather than patched with amount overrides.",
           "evidence": [
-            "ecps-49546 / county 47037: Axiom $0 while PE is eligible with $23.97/month.",
-            "ecps-49795 / county 47037: Axiom $0 while PE is eligible with $23.97/month."
+            "Current TN benefit residual buckets: 39 Axiom > PE, 0 PE > Axiom.",
+            "Six benefit residuals are paired with Axiom-eligible / PolicyEngine-ineligible eligibility mismatches."
           ]
         },
         {
