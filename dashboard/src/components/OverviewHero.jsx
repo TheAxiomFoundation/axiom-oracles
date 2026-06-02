@@ -18,16 +18,23 @@ function pairMetric(reports, otherOracle) {
   let weightedMatch = 0;
   let weightedTotal = 0;
   let programs = 0;
+  let mismatches = 0;
   for (const report of reports) {
     const left = report.engines?.left;
     const right = report.engines?.right;
     if (left !== "axiom" && right !== "axiom") continue;
     const other = left === "axiom" ? right : left;
     if (other !== otherOracle) continue;
-    programs += 1;
+    const reportTotal = (report.aggregates || []).reduce(
+      (sum, agg) => sum + (agg.comparison_count || 0),
+      0,
+    );
+    if (reportTotal > 0) programs += 1;
     for (const agg of report.aggregates || []) {
       total += agg.comparison_count || 0;
-      matched += (agg.comparison_count || 0) - (agg.mismatch_count || 0);
+      const aggregateMismatches = agg.mismatch_count || 0;
+      matched += (agg.comparison_count || 0) - aggregateMismatches;
+      mismatches += aggregateMismatches;
       weightedTotal += agg.comparison_weight || 0;
       weightedMatch += agg.match_weight || 0;
     }
@@ -40,6 +47,7 @@ function pairMetric(reports, otherOracle) {
     weightedRate:
       weightedTotal > 0 ? (weightedMatch / weightedTotal) * 100 : null,
     programs,
+    mismatches,
   };
 }
 
@@ -154,9 +162,11 @@ export default function OverviewHero({ reports }) {
   // Roll-up headline: total comparisons + match rate across every pair.
   let allMatched = 0;
   let allTotal = 0;
+  let allMismatches = 0;
   for (const p of pairs) {
     allMatched += p.matched;
     allTotal += p.total;
+    allMismatches += p.mismatches;
   }
   const headlineRate = allTotal > 0 ? (allMatched / allTotal) * 100 : null;
   const comparisonSuiteCount = pairs.reduce(
@@ -220,7 +230,11 @@ export default function OverviewHero({ reports }) {
               value={comparisonSuiteCount.toLocaleString()}
             />
             <SummaryStat
-              label="oracle"
+              label="mismatches"
+              value={allMismatches.toLocaleString()}
+            />
+            <SummaryStat
+              label="oracle pairs"
               value={pairs.length.toLocaleString()}
             />
           </div>
