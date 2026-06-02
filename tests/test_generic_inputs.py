@@ -147,6 +147,29 @@ def test_root_input_uses_containing_rule_dtype() -> None:
     assert slot.dtype == "Decimal"
 
 
+def test_if_condition_is_judgment_but_branches_inherit_rule_dtype() -> None:
+    program = {
+        "derived": [
+            {
+                "name": "rule",
+                "entity": "Household",
+                "dtype": "decimal",
+                "expr": {
+                    "kind": "if",
+                    "condition": _input("has_self_employment"),
+                    "then_expr": _input("annual_self_employment_income"),
+                    "else_expr": _decimal_literal("0"),
+                },
+            }
+        ],
+    }
+
+    slots = {slot.name: slot for slot in enumerate_inputs(program)}
+
+    assert slots["has_self_employment"].dtype == "Judgment"
+    assert slots["annual_self_employment_income"].dtype == "Decimal"
+
+
 def test_more_specific_entity_wins_when_input_appears_in_multiple_rules() -> None:
     program = {
         "derived": [

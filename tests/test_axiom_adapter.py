@@ -102,6 +102,65 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path)
     assert result.values == {"us:statutes/26/6401#income_tax": 750.0}
 
 
+def test_axiom_runner_aliases_unique_local_output_to_qualified_id(
+    tmp_path: Path,
+) -> None:
+    artifact_path = tmp_path / "program.compiled.json"
+    artifact_path.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "derived": [
+                        {
+                            "id": "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_eligible",
+                            "name": "snap_eligible",
+                        }
+                    ]
+                }
+            }
+        )
+    )
+
+    def fake_run(args, **kwargs):
+        request = json.loads(kwargs["input"])
+        assert request["queries"][0]["outputs"] == [
+            "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_eligible"
+        ]
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [
+                        {
+                            "outputs": {
+                                "us-co:policies/cdhs/snap/fy-2026-benefit-calculation#snap_eligible": {
+                                    "kind": "judgment",
+                                    "outcome": "not_holds",
+                                }
+                            }
+                        }
+                    ]
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        compiled_artifact_path=artifact_path,
+        binary_path=tmp_path / "axiom-rules",
+        subprocess_run=fake_run,
+    )
+
+    [result] = runner.run_cases(
+        [Case(case_id="case-1", period="2026-01")],
+        ["snap_eligible"],
+    )
+
+    assert result.errors == ()
+    assert result.values["snap_eligible"] is False
+
+
 def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     def fake_run(args, **kwargs):
         if args[1] == "compile":

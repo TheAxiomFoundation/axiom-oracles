@@ -84,6 +84,13 @@ FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
         "category": "tax",
         "tolerance": 5,
     },
+    "tax-before-credits": {
+        "concept": "us:tax/federal-income-tax#tax_before_credits",
+        "description": "Federal tax before credits",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
     "employee-oasdi": {
         "concept": "us:tax/payroll#employee_oasdi",
         "description": "Employee OASDI (Social Security)",

@@ -123,7 +123,7 @@ function metricFor(report, comparison) {
 
 function measurementNote(row) {
   if (row.suite === "co-snap-ecps") {
-    return "Measured by the encoder-backed CO SNAP report; the axiom-programs wrapper compiles but is not yet the dashboard comparison path.";
+    return "Measured by the encoder-backed CO SNAP report; the axiom-programs wrapper now has generic output/input mapping smoke-tested, but is not yet the dashboard comparison path.";
   }
   if (row.axiomProgram?.status === "coverageOnly") {
     return "Coverage-only surface; not a measured alignment run.";
