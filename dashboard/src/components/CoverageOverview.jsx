@@ -121,6 +121,22 @@ function metricFor(report, comparison) {
   };
 }
 
+function measurementNote(row) {
+  if (row.suite === "co-snap-ecps") {
+    return "Measured by the encoder-backed CO SNAP report; the axiom-programs wrapper compiles but is not yet the dashboard comparison path.";
+  }
+  if (row.axiomProgram?.status === "coverageOnly") {
+    return "Coverage-only surface; not a measured alignment run.";
+  }
+  if (row.axiomProgram?.status === "parameter") {
+    return "Parameter check; not end-to-end household eligibility.";
+  }
+  if (row.report?.population === "enhanced-cps") {
+    return "Measured over the Enhanced CPS slice for this jurisdiction.";
+  }
+  return null;
+}
+
 function lookupProgram(programs, predicate) {
   return (programs || []).find(predicate) || null;
 }
@@ -161,6 +177,13 @@ function AlignmentCell({ metric, label }) {
     return (
       <span className="mono" style={{ color: "var(--ink-mute)", fontSize: 12 }}>
         Not compared
+      </span>
+    );
+  }
+  if (!metric.total) {
+    return (
+      <span className="mono" style={{ color: "var(--ink-mute)", fontSize: 12 }}>
+        Not measured
       </span>
     );
   }
@@ -214,9 +237,26 @@ function SourceLine({ program }) {
   );
 }
 
+function MeasurementLine({ row }) {
+  const note = measurementNote(row);
+  if (!note) return null;
+  return (
+    <div
+      style={{
+        marginTop: 6,
+        color: "var(--ink-mute)",
+        fontSize: 11.5,
+        lineHeight: 1.35,
+      }}
+    >
+      {note}
+    </div>
+  );
+}
+
 function GapText({ gaps }) {
   if (!gaps?.length) {
-    return <span style={{ color: "var(--ink-mute)" }}>No current gap called out.</span>;
+    return <span style={{ color: "var(--ink-mute)" }}>No current non-TANF gap called out.</span>;
   }
   return (
     <span>
@@ -234,8 +274,14 @@ export default function CoverageOverview({ reports, coverageOverview }) {
   const rows = buildRows(reports, coverageOverview);
   if (!rows.length) return null;
 
-  const axiomExecutable = rows.filter((row) => row.axiomProgram?.status === "executable").length;
-  const peComplete = rows.filter((row) => row.peProgram?.status === "complete").length;
+  const measured = rows.filter(
+    (row) => row.eligibility?.total > 0 || row.amount?.total > 0,
+  ).length;
+  const axiomExecutable = rows.filter(
+    (row) =>
+      row.axiomProgram?.status === "executable" ||
+      row.axiomProgram?.status === "parameter",
+  ).length;
   const compared = rows.length;
 
   return (
@@ -248,8 +294,8 @@ export default function CoverageOverview({ reports, coverageOverview }) {
           </div>
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <span className="badge badge-good">{peComplete}/{compared} PE complete</span>
-          <span className="badge badge-good">{axiomExecutable}/{compared} Axiom executable</span>
+          <span className="badge badge-good">{measured}/{compared} measured</span>
+          <span className="badge badge-good">{axiomExecutable}/{compared} Axiom executable or parameter</span>
         </div>
       </div>
 
@@ -261,8 +307,8 @@ export default function CoverageOverview({ reports, coverageOverview }) {
               <th>Axiom coverage</th>
               <th>PolicyEngine coverage</th>
               <th>Eligibility alignment</th>
-              <th>Amount alignment</th>
-              <th>Current gaps</th>
+              <th>Amount / parameter alignment</th>
+              <th>Current non-TANF gaps</th>
             </tr>
           </thead>
           <tbody>
@@ -273,6 +319,7 @@ export default function CoverageOverview({ reports, coverageOverview }) {
                   <div className="mono" style={{ color: "var(--ink-mute)", fontSize: 11 }}>
                     {row.suite}
                   </div>
+                  <MeasurementLine row={row} />
                 </td>
                 <td>
                   <span className={statusClass(row.axiomProgram?.status)}>
