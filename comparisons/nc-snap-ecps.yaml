@@ -19,7 +19,7 @@ runner:
     period: 2026-01
     population: enhanced-cps
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: comparisons/programs/us-nc/snap/fy-2026.yaml
+    axiom_program: $HOME/axiom-programs/us-nc/snap/fy-2026.yaml
     axiom_composed_program: /tmp/nc-snap-composed.yaml
     axiom_compiled_program: /tmp/nc-snap-compiled.json
     axiom_rulespec_repo_roots: $HOME
