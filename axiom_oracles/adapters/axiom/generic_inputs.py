@@ -59,7 +59,7 @@ class InputSlot:
 # arithmetic and comparisons get a Decimal-ish input. The default falls
 # back to Judgment because the SNAP program is judgment-dominated.
 _BOOLEAN_OPS = {"and", "or", "not", "comparison", "if"}
-_NUMERIC_OPS = {"add", "sub", "mul", "max", "min", "ceil", "floor"}
+_NUMERIC_OPS = {"add", "sub", "mul", "div", "max", "min", "ceil", "floor"}
 
 
 def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:

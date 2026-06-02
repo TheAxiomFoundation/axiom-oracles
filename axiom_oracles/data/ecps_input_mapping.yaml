@@ -321,6 +321,60 @@ mappings:
     scope: household
     source: { kind: constant, value: true }
 
+  # Neutral denominator defaults for optional SNAP branches that ECPS does not
+  # measure directly. These prevent unused zero-numerator branches from
+  # crashing the generic RuleSpec runner; measured income/resource inputs above
+  # still drive the substantive comparison.
+  - match: { kind: substring, value: income_intended_cover_months }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: educational_income_intended_cover_months }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: fluctuating_income_intended_cover_months }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: known_previous_month_count }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: self_employment_income_period_months }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: farm_loss_period_months }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: intended_beneficiary_count }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: real_property_assessment_percentage_rate }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  - match: { kind: substring, value: household_size_including_disqualified_members }
+    scope: household
+    source:
+      kind: derived
+      transform: hh_size
+
+  - match: { kind: substring, value: total_people_paying_or_contributing_to_shared_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: hh_size
+
+  - match: { kind: substring, value: total_people_covered_by_combined_wage_count }
+    scope: household
+    source:
+      kind: derived
+      transform: hh_size
+
   # CO's encoded 10 CCR 2506-1 categorical branches require basic/expanded
   # categorical-service facts. ECPS does not expose those service facts, so the
   # generic projector mirrors the existing CO fixture/legacy adapter baseline:
@@ -333,10 +387,6 @@ mappings:
   - match: { kind: substring, value: snap_expanded_categorical_eligible }
     scope: household
     source: { kind: constant, value: false }
-
-  - match: { kind: substring, value: self_employment_income_period_months }
-    scope: household
-    source: { kind: constant, value: 1 }
 
   # Massachusetts categorical eligibility can be established when all members
   # receive or are authorized for SSI/EAEDC, TAFDC, or a combination. ECPS

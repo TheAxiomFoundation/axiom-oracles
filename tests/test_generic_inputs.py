@@ -130,6 +130,26 @@ def test_arithmetic_op_input_inferred_as_decimal() -> None:
     assert all(s.dtype == "Decimal" for s in slots)
 
 
+def test_division_op_input_inferred_as_decimal() -> None:
+    program = {
+        "derived": [
+            {
+                "name": "rule",
+                "entity": "Household",
+                "expr": {
+                    "kind": "div",
+                    "left": _input("annual_contract_income"),
+                    "right": _decimal_literal("12"),
+                },
+            }
+        ],
+    }
+
+    [slot] = enumerate_inputs(program)
+
+    assert slot.dtype == "Decimal"
+
+
 def test_root_input_uses_containing_rule_dtype() -> None:
     program = {
         "derived": [
