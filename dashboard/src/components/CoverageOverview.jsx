@@ -34,6 +34,42 @@ const SUITE_META = {
     label: "Tennessee SNAP",
     order: 60,
   },
+  "co-snap-ecps": {
+    program: "snap",
+    jurisdiction: "CO",
+    label: "Colorado SNAP",
+    order: 70,
+  },
+  "sc-snap-ecps": {
+    program: "snap",
+    jurisdiction: "SC",
+    label: "South Carolina SNAP",
+    order: 80,
+  },
+  "nc-snap-ecps": {
+    program: "snap",
+    jurisdiction: "NC",
+    label: "North Carolina SNAP",
+    order: 90,
+  },
+  "co-state-income-tax-ecps": {
+    program: "state_income_tax",
+    jurisdiction: "CO",
+    label: "Colorado income tax",
+    order: 100,
+  },
+  "co-health-thresholds": {
+    program: "medicaid_chip_bhp_thresholds",
+    jurisdiction: "CO",
+    label: "Colorado Medicaid / CHIP / BHP thresholds",
+    order: 110,
+  },
+  "co-tanf-coverage": {
+    program: "tanf",
+    jurisdiction: "CO",
+    label: "Colorado Works TANF",
+    order: 120,
+  },
   "fiit-ecps": {
     program: "federal_income_tax",
     jurisdiction: "US",
@@ -52,6 +88,8 @@ function statusLabel(status) {
   const labels = {
     complete: "Complete",
     executable: "Executable",
+    parameter: "Parameter check",
+    coverageOnly: "Coverage only",
     inProgress: "In progress",
     partial: "Partial",
     notStarted: "Not started",
@@ -60,8 +98,12 @@ function statusLabel(status) {
 }
 
 function statusClass(status) {
-  if (status === "complete" || status === "executable") return "badge badge-good";
-  if (status === "inProgress" || status === "partial") return "badge badge-warn";
+  if (status === "complete" || status === "executable" || status === "parameter") {
+    return "badge badge-good";
+  }
+  if (status === "inProgress" || status === "partial" || status === "coverageOnly") {
+    return "badge badge-warn";
+  }
   return "badge badge-bad";
 }
 
@@ -105,9 +147,12 @@ function buildRows(reports, coverageOverview) {
         axiomProgram,
         eligibility: metricFor(report, "eligibility"),
         amount: metricFor(report, "amount"),
+        hasReportSurface:
+          (report.summary?.alarms || []).length > 0 ||
+          (report.aggregates || []).some((agg) => (agg.quality_flags || []).length > 0),
       };
     })
-    .filter((row) => row.eligibility || row.amount)
+    .filter((row) => row.eligibility || row.amount || row.hasReportSurface)
     .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label));
 }
 

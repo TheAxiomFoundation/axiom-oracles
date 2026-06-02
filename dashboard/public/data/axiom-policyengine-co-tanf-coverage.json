@@ -1,0 +1,85 @@
+{
+  "aggregates": [
+    {
+      "category": "cash",
+      "comparison": "coverage",
+      "comparison_count": 0,
+      "comparison_weight": 0,
+      "components": [],
+      "concept": "us-co:regulations/9-ccr-2503-6/3.606.1#colorado_works_basic_cash_assistance",
+      "description": "Colorado Works basic cash assistance",
+      "left_weighted_sum": null,
+      "match_count": 0,
+      "match_rate": null,
+      "match_weight": 0,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "quality_flags": [
+        {
+          "code": "not-directly-comparable",
+          "message": "Colorado Works TANF standards are encoded, but the current PolicyEngine oracle registry marks these outputs as not one-to-one comparable: PE exposes adjacent annual Colorado TANF variables and its current grant-standard table needs a 2025 update before direct alignment is meaningful.",
+          "severity": "info"
+        }
+      ],
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": null
+    }
+  ],
+  "case_count": 0,
+  "cases": [],
+  "concepts": [
+    {
+      "category": "cash",
+      "comparison": "coverage",
+      "components": [],
+      "description": "Colorado Works basic cash assistance",
+      "id": "us-co:regulations/9-ccr-2503-6/3.606.1#colorado_works_basic_cash_assistance",
+      "parent": null,
+      "tolerance": 0
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [
+    "CO"
+  ],
+  "mismatches": [],
+  "population": "rulespec-coverage",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "CO",
+    "type": "state"
+  },
+  "suite": "co-tanf-coverage",
+  "summary": {
+    "alarms": [
+      {
+        "code": "not-directly-comparable",
+        "message": "Colorado Works TANF standards are encoded, but the current PolicyEngine oracle registry marks these outputs as not one-to-one comparable: PE exposes adjacent annual Colorado TANF variables and its current grant-standard table needs a 2025 update before direct alignment is meaningful.",
+        "severity": "info"
+      }
+    ],
+    "comparison_count": 0,
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 0,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": {},
+    "weighted": {
+      "comparison_weight": 0,
+      "match_rate": null,
+      "match_weight": 0,
+      "mismatch_weight": 0
+    }
+  }
+}

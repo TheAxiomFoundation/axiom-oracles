@@ -18,7 +18,6 @@ function pairMetric(reports, otherOracle) {
   let weightedMatch = 0;
   let weightedTotal = 0;
   let programs = 0;
-  let alarmCount = 0;
   for (const report of reports) {
     const left = report.engines?.left;
     const right = report.engines?.right;
@@ -31,7 +30,6 @@ function pairMetric(reports, otherOracle) {
       matched += (agg.comparison_count || 0) - (agg.mismatch_count || 0);
       weightedTotal += agg.comparison_weight || 0;
       weightedMatch += agg.match_weight || 0;
-      alarmCount += (agg.quality_flags || []).length;
     }
   }
   return {
@@ -42,8 +40,46 @@ function pairMetric(reports, otherOracle) {
     weightedRate:
       weightedTotal > 0 ? (weightedMatch / weightedTotal) * 100 : null,
     programs,
-    alarmCount,
   };
+}
+
+function SummaryStat({ label, value }) {
+  return (
+    <div
+      style={{
+        padding: "8px 10px",
+        border: "1px solid var(--hairline)",
+        borderRadius: 8,
+        background: "var(--paper-elevated)",
+        minWidth: 128,
+      }}
+    >
+      <div
+        className="mono"
+        style={{
+          fontSize: 15,
+          lineHeight: 1,
+          color: "var(--ink)",
+          fontWeight: 500,
+          letterSpacing: 0,
+        }}
+      >
+        {value}
+      </div>
+      <div
+        className="mono"
+        style={{
+          fontSize: 10.5,
+          color: "var(--ink-mute)",
+          marginTop: 5,
+          textTransform: "uppercase",
+          letterSpacing: "0.04em",
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
 }
 
 function PairCard({ pair }) {
@@ -56,7 +92,7 @@ function PairCard({ pair }) {
         background:
           pair.rate != null ? heatmapBg(pair.rate) : "var(--paper-warm)",
         border: "1px solid var(--hairline)",
-        borderRadius: 10,
+        borderRadius: 8,
       }}
     >
       <div
@@ -75,7 +111,7 @@ function PairCard({ pair }) {
           fontSize: 34,
           fontWeight: 500,
           marginTop: 6,
-          letterSpacing: "-0.01em",
+          letterSpacing: 0,
           color: pair.rate != null ? rateColor(pair.rate) : "var(--ink-mute)",
           lineHeight: 1,
         }}
@@ -98,26 +134,11 @@ function PairCard({ pair }) {
           </span>
         )}
       </div>
-      <div
-        className="mono"
-        style={{
-          fontSize: 11.5,
-          marginTop: 4,
-          color: pair.alarmCount > 0 ? "var(--bad)" : "var(--ink-mute)",
-        }}
-      >
-        {pair.programs} program{pair.programs === 1 ? "" : "s"}
-        {pair.alarmCount > 0 && (
-          <span style={{ marginLeft: 6 }}>
-            · {pair.alarmCount} alarm{pair.alarmCount === 1 ? "" : "s"}
-          </span>
-        )}
-      </div>
     </div>
   );
 }
 
-export default function OverviewHero({ reports, programCount }) {
+export default function OverviewHero({ reports }) {
   const others = new Set();
   for (const report of reports) {
     const left = report.engines?.left;
@@ -138,47 +159,70 @@ export default function OverviewHero({ reports, programCount }) {
     allTotal += p.total;
   }
   const headlineRate = allTotal > 0 ? (allMatched / allTotal) * 100 : null;
+  const comparisonSuiteCount = pairs.reduce(
+    (sum, pair) => sum + pair.programs,
+    0,
+  );
 
   return (
     <section style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      <div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr)",
+          gap: 14,
+        }}
+      >
         <div className="section-eyebrow">Where Axiom stands today</div>
         <div
           style={{
             display: "flex",
-            alignItems: "baseline",
-            gap: 14,
+            alignItems: "flex-end",
+            gap: 20,
             flexWrap: "wrap",
-            marginTop: 8,
           }}
         >
-          <h1
-            className="mono"
-            style={{
-              fontSize: 52,
-              fontWeight: 500,
-              letterSpacing: "-0.025em",
-              margin: 0,
-              color:
-                headlineRate != null ? rateColor(headlineRate) : "var(--ink)",
-              lineHeight: 1,
-            }}
-          >
-            {headlineRate != null ? formatPct(headlineRate, 1) : "—"}
-          </h1>
-          <div
-            style={{
-              fontSize: 14,
-              color: "var(--ink-mute)",
-              maxWidth: 540,
-              lineHeight: 1.55,
-            }}
-          >
-            of {allTotal.toLocaleString()} comparisons agree across{" "}
-            {programCount} program{programCount === 1 ? "" : "s"} and{" "}
-            {pairs.length} oracle{pairs.length === 1 ? "" : "s"}. Each card
-            below breaks the result down per program; expand a mismatch
-            pattern to see why.
+          <div>
+            <h1
+              className="mono"
+              style={{
+                fontSize: 52,
+                fontWeight: 500,
+                letterSpacing: 0,
+                margin: 0,
+                color:
+                  headlineRate != null ? rateColor(headlineRate) : "var(--ink)",
+                lineHeight: 1,
+              }}
+            >
+              {headlineRate != null ? formatPct(headlineRate, 1) : "—"}
+            </h1>
+            <div
+              style={{
+                fontSize: 14,
+                color: "var(--ink-mute)",
+                maxWidth: 620,
+                lineHeight: 1.5,
+                marginTop: 8,
+              }}
+            >
+              Agreement across live Axiom comparisons. Program cards below show
+              the breakdown; mismatch groups explain the known residuals.
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <SummaryStat
+              label="comparisons"
+              value={allTotal.toLocaleString()}
+            />
+            <SummaryStat
+              label="comparison suites"
+              value={comparisonSuiteCount.toLocaleString()}
+            />
+            <SummaryStat
+              label="oracle"
+              value={pairs.length.toLocaleString()}
+            />
           </div>
         </div>
       </div>

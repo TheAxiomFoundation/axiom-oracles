@@ -88,13 +88,27 @@ export async function loadOracleData(basePath = "") {
     (p) => p.encoding_status !== "missing",
   );
 
-  // Filter reports to concepts encoded in the Axiom corpus, plus any
-  // components those concepts declare. Components carry parent={parent_id}
-  // in the report so they hitch a ride on their parent's allow-listing.
+  // Filter reports to concepts encoded in the Axiom corpus, plus concepts
+  // with live comparison data. The latter matters for generated bridge and
+  // parameter-oracle reports whose executable surface is real but not a
+  // top-level RuleSpec corpus rule discoverable by sync_programs.py.
   const allowedConcepts = new Set(programs.map((p) => p.id));
   for (const report of reports) {
+    for (const aggregate of report.aggregates || []) {
+      if (
+        (aggregate.comparison_count || 0) > 0 ||
+        (aggregate.quality_flags || []).length > 0 ||
+        (report.summary?.alarms || []).length > 0
+      ) {
+        allowedConcepts.add(aggregate.concept);
+      }
+    }
+  }
+  for (const report of reports) {
     for (const concept of report.concepts || []) {
-      if (concept.parent && allowedConcepts.has(concept.parent)) {
+      if (allowedConcepts.has(concept.id)) {
+        allowedConcepts.add(concept.id);
+      } else if (concept.parent && allowedConcepts.has(concept.parent)) {
         allowedConcepts.add(concept.id);
       }
     }

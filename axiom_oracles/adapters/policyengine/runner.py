@@ -56,6 +56,10 @@ _TAX_UNIT_CONCEPT_TO_PE = {
     Concepts.CHILDCARE_EXPENSES: "tax_unit_childcare_expenses",
 }
 
+_SPM_UNIT_CASE_CONCEPT_TO_PE = {
+    Concepts.RENT_PAID: "housing_cost",
+}
+
 _TAX_FILER_ADULT_AGE = 18
 
 _SPOUSE_RELATIONS = {
@@ -354,11 +358,17 @@ class PolicyEngineRunner(EngineAdapter):
             if value is not None:
                 tax_unit_inputs[pe_variable] = {year: float(value)}
 
+        spm_unit_inputs: dict[str, Any] = {"members": person_names}
+        for concept, pe_variable in _SPM_UNIT_CASE_CONCEPT_TO_PE.items():
+            value = case.fact(concept)
+            if value is not None:
+                spm_unit_inputs[pe_variable] = {year: float(value)}
+
         return {
             "people": people,
             "families": {"family": {"members": person_names}},
             "tax_units": {"tax_unit": tax_unit_inputs},
-            "spm_units": {"spm_unit": {"members": person_names}},
+            "spm_units": {"spm_unit": spm_unit_inputs},
             "households": {"household": household_inputs},
         }
 
@@ -407,10 +417,16 @@ class PolicyEngineRunner(EngineAdapter):
             if value is not None:
                 tax_unit_inputs[pe_variable] = float(value)
 
+        spm_unit_inputs: dict[str, Any] = {}
+        for concept, pe_variable in _SPM_UNIT_CASE_CONCEPT_TO_PE.items():
+            value = case.fact(concept)
+            if value is not None:
+                spm_unit_inputs[pe_variable] = float(value)
+
         return {
             "people": people,
             "family": {},
-            "spm_unit": {},
+            "spm_unit": spm_unit_inputs,
             "tax_unit": tax_unit_inputs,
             "household": household_inputs,
             "year": year,
@@ -613,7 +629,17 @@ class PolicyEngineRunner(EngineAdapter):
                 {"marital_unit_id": marital_unit_id, "marital_unit_weight": weight}
             )
             family_rows.append({"family_id": family_id, "family_weight": weight})
-            spm_unit_rows.append({"spm_unit_id": spm_unit_id, "spm_unit_weight": weight})
+            spm_unit_row: dict[str, Any] = {
+                "spm_unit_id": spm_unit_id,
+                "spm_unit_weight": weight,
+            }
+            for pe_variable in _SPM_UNIT_CASE_CONCEPT_TO_PE.values():
+                spm_unit_row[pe_variable] = 0
+            for concept, pe_variable in _SPM_UNIT_CASE_CONCEPT_TO_PE.items():
+                value = case.fact(concept)
+                if value is not None:
+                    spm_unit_row[pe_variable] = float(value)
+            spm_unit_rows.append(spm_unit_row)
             tax_unit_row: dict[str, Any] = {
                 "tax_unit_id": tax_unit_id,
                 "tax_unit_weight": weight,

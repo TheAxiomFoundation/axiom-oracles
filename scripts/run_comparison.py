@@ -393,11 +393,20 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
-# PolicyEngine 4.11.0 hard-pins its bundled ECPS manifest at PE-US 1.700.0; we
-# run against 1.705.1 (the version axiom-encode pins) so the manifest
-# certification check refuses to load the model. The compare and sanity
-# subprocesses share this monkey-patch — extracted to module scope so
-# `_run_sanity` can reuse it.
+# PolicyEngine 4.11.0 hard-pins its bundled ECPS manifest at PE-US 1.700.0.
+# Keep the in-repo oracle runner on that certified pair so PE SNAP outputs are
+# reproducible across environments. The axiom-encode subprocess runners above
+# keep their own pins because they are validating the encoder stack.
+_PE_ORACLE_PINS = (
+    "policyengine==4.11.0",
+    "policyengine-us==1.700.0",
+    "policyengine-core==3.26.11",
+)
+
+# The compare and sanity subprocesses share this import shim — extracted to
+# module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
+# need to bypass certification, but the shim keeps policyengine.us import
+# behavior stable for the local CLI.
 _PE_CERT_OVERRIDE = """
 import os, sys
 os.environ['POLICYENGINE_SKIP_COUNTRY_IMPORTS'] = '1'
@@ -483,12 +492,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine==4.11.0",
-        "--with",
-        "policyengine-us==1.705.1",
-        "--with",
-        "policyengine-core==3.26.11",
+        *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
@@ -507,6 +511,17 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    if params.get("comparison_batch_size"):
+        comparison_batch_size = params["comparison_batch_size"]
+    elif any(
+        concept.endswith("#snap_eligible") or concept.endswith("#snap_benefit")
+        for concept in params.get("concepts", [])
+    ):
+        comparison_batch_size = 100
+    else:
+        comparison_batch_size = None
+    if comparison_batch_size is not None:
+        cmd.extend(["--comparison-batch-size", str(comparison_batch_size)])
     if params.get("axiom_compiled_program"):
         compiled_program = (
             _expand_path(params["axiom_compiled_program"])
@@ -522,7 +537,13 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         ])
     if params.get("jurisdiction_fips"):
         cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
-    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    env = dict(os.environ)
+    roots_env = params.get("axiom_rulespec_repo_roots")
+    if roots_env:
+        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
+            _resolve_path(roots_env, "axiom_rulespec_repo_roots")
+        )
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
 def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None:
@@ -622,9 +643,7 @@ def _run_sanity(name: str) -> int:
     cmd = [
         "uv", "run", "--python", "3.14", "--no-project",
         "--with-editable", str(REPO_ROOT),
-        "--with", "policyengine==4.11.0",
-        "--with", "policyengine-us==1.705.1",
-        "--with", "policyengine-core==3.26.11",
+        *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
         "python", "-c", _PE_CERT_OVERRIDE,
         "sanity", str(fixtures_path),
         "--left", params.get("left", "axiom"),

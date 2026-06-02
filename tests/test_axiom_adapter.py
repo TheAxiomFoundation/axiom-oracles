@@ -803,14 +803,19 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     assert runner.program_imports
     assert "us:statutes/26/1411" not in runner.program_imports
     assert set(runner.program_imports).issubset(set(US_TAX_ORACLE_IMPORTS))
-    assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
+    assert runner.program_rules == tuple(
+        rule
+        for rule in US_TAX_ORACLE_PROGRAM_RULES
+        if rule["name"] != "self_employment_income"
+    )
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     generated_rule_names = {
-        rule["name"] for rule in US_TAX_ORACLE_PROGRAM_RULES
+        rule["name"] for rule in runner.program_rules
     }
     generated_rules_by_name = {
-        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
+        rule["name"]: rule for rule in runner.program_rules
     }
+    assert "self_employment_income" not in generated_rule_names
     assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
         generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
             0

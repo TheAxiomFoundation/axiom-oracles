@@ -1,0 +1,36 @@
+# North Carolina SNAP -- Axiom vs PolicyEngine on Enhanced CPS.
+
+name: nc-snap-ecps
+title: North Carolina SNAP -- Axiom vs PolicyEngine
+description: Compares North Carolina SNAP eligibility and benefit amount from
+  the composed signed-manifest RuleSpec surface against PolicyEngine on the
+  Enhanced CPS, filtered to North Carolina households.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    concepts:
+      - us:statutes/7/2014/o#snap_eligible
+      - us:statutes/7/2014/u#snap_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: comparisons/programs/us-nc/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/nc-snap-composed.yaml
+    axiom_compiled_program: /tmp/nc-snap-compiled.json
+    axiom_rulespec_repo_roots: $HOME
+    rulespec_roots:
+      - $HOME/rulespec-us
+      - $HOME/rulespec-us-nc
+    jurisdiction_fips: "37"
+
+artifacts:
+  report_basename: axiom-policyengine-nc-snap-ecps
+
+dashboard:
+  filename: axiom-policyengine-nc-snap-ecps.json
+  suite: nc-snap-ecps

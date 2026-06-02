@@ -573,6 +573,9 @@ def test_policyengine_dataset_rows_zero_fill_sparse_tax_inputs() -> None:
     assert rows_by_id["case_0__adult-child"]["deductible_mortgage_interest"] == 0
     assert rows_by_id["case_0__adult-child"]["pre_subsidy_rent"] == 0
 
+    spm_unit_row = _spm_unit_rows[0]
+    assert spm_unit_row["housing_cost"] == 12_000
+
     tax_unit_row = tax_unit_rows[0]
     for pe_variable in policyengine_runner_module._TAX_UNIT_CONCEPT_TO_PE.values():
         assert pe_variable in tax_unit_row
@@ -623,6 +626,7 @@ def test_policyengine_household_calculator_input_includes_tax_leaf_inputs() -> N
     assert household_input["people"][0]["deductible_mortgage_interest"] == 5_000
     assert household_input["people"][0]["pre_subsidy_rent"] == 12_000
     assert household_input["people"][1]["taxable_interest_income"] == 0.78
+    assert household_input["spm_unit"]["housing_cost"] == 12_000
     assert household_input["tax_unit"]["misc_deduction"] == 300
     assert household_input["tax_unit"]["tax_unit_childcare_expenses"] == 400
 
