@@ -321,6 +321,23 @@ mappings:
     scope: household
     source: { kind: constant, value: true }
 
+  # CO's encoded 10 CCR 2506-1 categorical branches require basic/expanded
+  # categorical-service facts. ECPS does not expose those service facts, so the
+  # generic projector mirrors the existing CO fixture/legacy adapter baseline:
+  # compare the ordinary non-categorical path unless a future dataset supplies
+  # source-backed BCE/ECE inputs.
+  - match: { kind: substring, value: snap_basic_categorical_eligible }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: snap_expanded_categorical_eligible }
+    scope: household
+    source: { kind: constant, value: false }
+
+  - match: { kind: substring, value: self_employment_income_period_months }
+    scope: household
+    source: { kind: constant, value: 1 }
+
   # Massachusetts categorical eligibility can be established when all members
   # receive or are authorized for SSI/EAEDC, TAFDC, or a combination. ECPS
   # carries SSI and the generic SNAP income path already understands TANF when

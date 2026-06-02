@@ -2,9 +2,9 @@
 
 This document covers the canonical recipe for comparing Axiom-encoded RuleSpec
 federal individual income tax (FIIT) outputs against PolicyEngine on the
-Enhanced CPS. As of May 23, 2026 the committed dashboard artifact uses a
-1,000-tax-unit sample and runs against Python 3.14, PolicyEngine 4.4.4,
-PolicyEngine Core 3.26.0, and PolicyEngine-US 1.705.1.
+Enhanced CPS. As of June 2, 2026 the committed dashboard artifact uses the
+full weighted ECPS slice (`--sample-size 0`) and runs against Python 3.14,
+PolicyEngine 4.11.0, PolicyEngine Core 3.26.11, and PolicyEngine-US 1.705.16.
 
 The comparison is one entry in the [comparisons registry](../comparisons/);
 see [`comparisons/README.md`](../comparisons/README.md) for the registry
@@ -90,11 +90,26 @@ data-model is per-case; this report is aggregated by federal-tax surface):
 
 `agreement = 100 * (compared_values - mismatch_count) / compared_values`.
 
-## Known residuals (May 2026)
+## Current residuals (June 2026)
 
-The May 23, 2026 1,000-tax-unit run compared 27,380 values with 55 mismatches
-for 99.7991% agreement. OASDI and Medicare both matched at 100%; the remaining
-sample residuals were concentrated in EITC plus one CTC edge case.
+The June 2, 2026 full ECPS run compared 208,486 values with 172 mismatches for
+99.9175% agreement. CTC, standard deduction, capital-gain definitions, tax
+before credits, employee/employer OASDI, and employee/employer Medicare all
+matched at 100%. The remaining residuals are all in EITC.
+
+Per-surface result:
+
+| Surface | Compared values | Mismatches | Agreement |
+| --- | ---: | ---: | ---: |
+| EITC | 77,429 | 172 | 99.78% |
+| CTC | 35,195 | 0 | 100.00% |
+| Standard deduction | 21,117 | 0 | 100.00% |
+| Capital-gain definitions | 14,078 | 0 | 100.00% |
+| Tax before credits | 7,039 | 0 | 100.00% |
+| Employee OASDI | 13,407 | 0 | 100.00% |
+| Employee Medicare | 13,407 | 0 | 100.00% |
+| Employer OASDI | 13,407 | 0 | 100.00% |
+| Employer Medicare | 13,407 | 0 | 100.00% |
 
 Even at high agreement, a few non-PE-bug categories of mismatch can persist:
 
@@ -108,15 +123,15 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   Any remaining full-run EITC residuals are amount-level differences from
   Axiom computing Section 32 earned income through encoded upstream rules
   rather than passing through PE's filer-adjusted-earnings helper.
-- **Capital-gain definition residuals.** Remaining differences trace to
-  Section 1(h) definition boundaries, especially inputs such as the
-  investment-income-election adjustment. These are semantic boundary
-  differences between the encoded statutory definition and PE's helper
-  variables, not evidence of a PE bug by themselves.
-- **Full-run runtime.** `--sample-size 0` currently can exceed
-  `axiom-encode`'s per-program 120-second timeout on Section 32/EITC. Until
-  the harness supports a longer timeout or a release engine path, the committed
-  dashboard artifact uses the configured 1,000-unit sample.
+- **Capital-gain definitions and tax before credits.** These now compare
+  cleanly on the full ECPS slice. The tax-before-credits surface feeds the
+  Section 1(j) rate calculation with source-backed filing-status and taxable
+  income inputs, plus the imported Section 1(h) capital-gain definition inputs
+  required by the encoded rule.
+- **Federal credit expansion still pending.** CDCC and aggregate
+  nonrefundable credits are intentionally not emitted yet. Adding them should
+  be done through encoder projections into the encoded legal surfaces, not by
+  treating PolicyEngine aggregate outputs as Axiom inputs.
 
 ## CI
 
@@ -128,10 +143,8 @@ headline agreement numbers to the run summary. Reports themselves are
 gitignored — the existing repo convention treats them as transient outputs,
 not committed history.
 
-Wiring the result into the Oracles dashboard is a known follow-up (the
-`tax-ecps-compare` output shape differs from the per-case shape
-`dashboard/public/data/` uses, so it needs a small adapter to render
-alongside CO SNAP).
+The dashboard consumes the generated aggregate report directly through
+`dashboard/public/data/axiom-policyengine-fiit-ecps.json`.
 
 ## See also
 

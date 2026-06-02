@@ -118,6 +118,23 @@ def _walk_for_inputs(
             if isinstance(name, str) and name:
                 yield name, _infer_dtype(parent, node, default_dtype), related_scope
             return
+        if kind == "if":
+            for key, child in node.items():
+                if key == "condition":
+                    yield from _walk_for_inputs(
+                        child,
+                        parent=node,
+                        related_scope=related_scope,
+                        default_dtype="Judgment",
+                    )
+                elif key in {"then_expr", "else_expr"}:
+                    yield from _walk_for_inputs(
+                        child,
+                        parent=None,
+                        related_scope=related_scope,
+                        default_dtype=default_dtype,
+                    )
+            return
         # Relational aggregations evaluate their `where` clause once per
         # related entity. Inputs in that clause are Person-scoped (or
         # whatever the related slot's entity is). We don't have the

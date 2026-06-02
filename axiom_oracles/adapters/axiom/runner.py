@@ -90,22 +90,29 @@ class AxiomRulesRunner(EngineAdapter):
             temp_path = Path(temp_dir)
             program_path = self._program_path(temp_path)
             artifact_path = self._artifact_path(temp_path, program_path)
+            output_aliases = _output_aliases_from_artifact(output_targets, artifact_path)
+            execution_targets = [
+                output_aliases.get(output, output) for output in output_targets
+            ]
             allowed_program_refs = (
                 _allowed_program_refs_from_artifact(artifact_path)
                 if self.prune_unsupported_inputs
                 else None
             )
-            output_targets = _execution_output_targets(
-                output_targets,
+            execution_targets = _execution_output_targets(
+                execution_targets,
                 cases,
                 allowed_program_refs,
             )
-            return self._run_cases(
+            results = self._run_cases(
                 cases,
-                output_targets,
+                execution_targets,
                 artifact_path,
                 allowed_program_refs=allowed_program_refs,
             )
+            return [
+                _remap_output_aliases(result, output_aliases) for result in results
+            ]
 
     def run_households(
         self,
@@ -637,6 +644,68 @@ def _output_targets(variables: list[str] | None) -> list[str]:
         return []
     targets = engine_targets_for_concepts(variables, "axiom")
     return targets or list(variables)
+
+
+def _output_aliases_from_artifact(
+    output_targets: list[str],
+    artifact_path: Path,
+) -> dict[str, str]:
+    """Map requested local output names to unique qualified RuleSpec IDs.
+
+    Some composed program outputs are compiled under their source legal module
+    ID even though the dashboard-facing concept map uses the local program
+    name. Keep that concept map stable and query the qualified ID only when the
+    compiled artifact makes the local-name mapping unambiguous.
+    """
+
+    local_to_ids: dict[str, list[str]] = {}
+    try:
+        payload = json.loads(artifact_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return {}
+    program = payload.get("program", {})
+    if not isinstance(program, Mapping):
+        return {}
+    for derived in program.get("derived", []):
+        if not isinstance(derived, Mapping):
+            continue
+        name = derived.get("name")
+        identifier = derived.get("id")
+        if isinstance(name, str) and isinstance(identifier, str):
+            local_to_ids.setdefault(name, []).append(identifier)
+
+    aliases: dict[str, str] = {}
+    for output in output_targets:
+        if ":" in output or "#" in output:
+            continue
+        identifiers = local_to_ids.get(output, [])
+        if len(identifiers) == 1:
+            aliases[output] = identifiers[0]
+    return aliases
+
+
+def _remap_output_aliases(
+    result: EngineResult,
+    output_aliases: Mapping[str, str],
+) -> EngineResult:
+    if not output_aliases:
+        return result
+    reverse_aliases = {
+        actual: requested for requested, actual in output_aliases.items()
+    }
+    values = dict(result.values)
+    for actual, requested in reverse_aliases.items():
+        if actual in values and requested not in values:
+            values[requested] = values[actual]
+    if values == result.values:
+        return result
+    return EngineResult(
+        engine=result.engine,
+        household_id=result.household_id,
+        values=values,
+        errors=result.errors,
+        raw=result.raw,
+    )
 
 
 def _execution_output_targets(
