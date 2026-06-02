@@ -51,9 +51,16 @@ concepts:
       - us:tax/federal-income-tax#standard_deduction
       - us:tax/federal-income-tax#taxable_income
       - us:tax/federal-income-tax#tax_before_credits
+      - us:tax/federal-income-tax#nonrefundable_credits
       - us:tax/federal-income-tax#eitc
       - us:tax/federal-income-tax#ctc
+      - us:tax/federal-income-tax#cdcc
       - us:tax/federal-income-tax#amt
+      - us:tax/federal-income-tax#capital_gain
+      - us:tax/payroll#employee_oasdi
+      - us:tax/payroll#employee_medicare
+      - us:tax/payroll#employer_oasdi
+      - us:tax/payroll#employer_medicare
     targets:
       axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
@@ -92,6 +99,16 @@ concepts:
       policyengine: income_tax_main_rates
       taxsim: v19
 
+  us:tax/federal-income-tax#nonrefundable_credits:
+    description: Federal capped nonrefundable credits
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/26#income_tax_capped_non_refundable_credits
+      policyengine: income_tax_capped_non_refundable_credits
+
   us:tax/federal-income-tax#eitc:
     description: Earned Income Tax Credit
     category: tax
@@ -114,6 +131,16 @@ concepts:
       policyengine: ctc_value
       taxsim: v22
 
+  us:tax/federal-income-tax#cdcc:
+    description: Child and Dependent Care Credit
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/21#cdcc
+      policyengine: cdcc
+
   us:tax/federal-income-tax#amt:
     description: Alternative Minimum Tax
     category: tax
@@ -124,6 +151,56 @@ concepts:
       axiom: us:statutes/26/55#alternative_minimum_tax
       policyengine: alternative_minimum_tax
       taxsim: v27
+
+  us:tax/federal-income-tax#capital_gain:
+    description: Federal capital gain definitions
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/1/h#net_capital_gain
+      policyengine: net_capital_gain
+
+  us:tax/payroll#employee_oasdi:
+    description: Employee OASDI (Social Security)
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/3101/a#oasdi_wage_tax
+      policyengine: employee_social_security_tax
+
+  us:tax/payroll#employee_medicare:
+    description: Employee Medicare
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/3101/b/1#hospital_insurance_wage_tax
+      policyengine: employee_medicare_tax
+
+  us:tax/payroll#employer_oasdi:
+    description: Employer OASDI (Social Security)
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/3111/a#employer_oasdi_excise_tax
+      policyengine: employer_social_security_tax
+
+  us:tax/payroll#employer_medicare:
+    description: Employer Medicare
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/3111/b#hospital_insurance_employer_tax
+      policyengine: employer_medicare_tax
 
   us:tax/state-income-tax#liability:
     description: State income tax liability

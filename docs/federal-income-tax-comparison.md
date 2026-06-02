@@ -138,10 +138,16 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   Section 1(j) rate calculation with source-backed filing-status and taxable
   income inputs, plus the imported Section 1(h) capital-gain definition inputs
   required by the encoded rule.
+- **Payroll components.** Employee OASDI, employee Medicare, employer OASDI,
+  and employer Medicare compare cleanly on the full ECPS slice. The dashboard
+  now tracks these as first-class encoded coverage, backed by 26 USC 3101(a),
+  3101(b)(1), 3111(a), and 3111(b).
 - **Federal credit expansion still pending.** CDCC and aggregate
-  nonrefundable credits are intentionally not emitted yet. Adding them should
-  be done through encoder projections into the encoded legal surfaces, not by
-  treating PolicyEngine aggregate outputs as Axiom inputs.
+  nonrefundable credits are encoded and listed in dashboard coverage, but the
+  current `tax-ecps-compare` harness does not emit ECPS comparison surfaces for
+  them yet. Adding those alignment percentages should be done through encoder
+  projections into the encoded legal surfaces, not by treating PolicyEngine
+  aggregate outputs as Axiom inputs.
 
 ## CI
 

@@ -20,6 +20,7 @@ runner:
   parameters:
     sample_size: 0
     year: 2026
+    python: "3.13"
     surface: all
     # Keep PE and core on axiom-encode's certified stack, but use the current
     # PE-US package so the ECPS oracle reflects latest upstream tax fixes.

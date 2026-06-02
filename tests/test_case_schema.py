@@ -146,9 +146,16 @@ def test_parent_concepts_expand_components_when_requested() -> None:
         Concepts.STANDARD_DEDUCTION,
         Concepts.TAXABLE_INCOME,
         Concepts.TAX_BEFORE_CREDITS,
+        Concepts.NONREFUNDABLE_CREDITS,
         Concepts.EITC,
         Concepts.CTC,
+        Concepts.CDCC,
         Concepts.AMT,
+        Concepts.CAPITAL_GAIN,
+        Concepts.EMPLOYEE_OASDI,
+        Concepts.EMPLOYEE_MEDICARE,
+        Concepts.EMPLOYER_OASDI,
+        Concepts.EMPLOYER_MEDICARE,
     ]
 
 
