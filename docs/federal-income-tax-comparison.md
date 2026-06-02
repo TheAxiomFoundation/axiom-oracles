@@ -92,10 +92,10 @@ data-model is per-case; this report is aggregated by federal-tax surface):
 
 ## Current residuals (June 2026)
 
-The June 2, 2026 full ECPS run compared 208,486 values with 172 mismatches for
-99.9175% agreement. CTC, standard deduction, capital-gain definitions, tax
-before credits, employee/employer OASDI, and employee/employer Medicare all
-matched at 100%. The remaining residuals are all in EITC.
+The June 2, 2026 full ECPS run compared 278,876 values with 172 mismatches for
+99.9383% agreement. CTC, standard deduction, capital-gain definitions, tax
+before credits, CDCC, AOTC, employee/employer OASDI, and employee/employer
+Medicare all matched at 100%. The remaining residuals are all in EITC.
 
 Per-surface result:
 
@@ -106,6 +106,8 @@ Per-surface result:
 | Standard deduction | 21,117 | 0 | 100.00% |
 | Capital-gain definitions | 14,078 | 0 | 100.00% |
 | Tax before credits | 7,039 | 0 | 100.00% |
+| CDCC | 42,234 | 0 | 100.00% |
+| AOTC | 28,156 | 0 | 100.00% |
 | Employee OASDI | 13,407 | 0 | 100.00% |
 | Employee Medicare | 13,407 | 0 | 100.00% |
 | Employer OASDI | 13,407 | 0 | 100.00% |
@@ -122,7 +124,7 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
 
 - **OASDI 2026 base drift.** Older PolicyEngine-US releases used $186,000 as
   the Social Security contribution-and-benefit base; the encoded SSA 2026
-  automatic determination is $184,500. PolicyEngine-US 1.705.1 includes the
+  automatic determination is $184,500. PolicyEngine-US 1.705.16 includes the
   corrected base, and the comparison runner pins that or newer vetted releases.
 - **EITC amount residuals.** `axiom-encode` now uses PE's explicit
   tax-unit-role variables for the EITC oracle projection, so the previous
@@ -148,6 +150,18 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   potential credit, and final credit; childcare expenses, the head/spouse
   earned-income cap, and available nonrefundable-credit limit remain explicit
   upstream boundary inputs until those chains are encoded end-to-end.
+- **AOTC.** American Opportunity Credit now runs as an emitted ECPS surface and
+  compares cleanly on the current dashboard ECPS cache. The projection uses
+  encoded 26 USC 25A math from tuition, educational-assistance, enrollment,
+  credential, institution, prior-claim, and SSN facts; income tax before
+  credits, CDCC, and foreign tax credit remain explicit upstream boundary
+  inputs until the full federal credit-ordering chain is encoded end-to-end.
+  A newer local PolicyEngine data cache with raw AOTC fields surfaced 28
+  residual output entries across 8 tax units after the duplicate-column loader
+  fix: most are PolicyEngine-positive/Axiom-zero where PE uses tuition directly
+  while RuleSpec subtracts educational assistance under 26 USC 25A(g)(2), and
+  two are filer-identification edge cases that should be handled by a future
+  25A re-encode rather than a dashboard override.
 - **Federal credit expansion still pending.** Aggregate capped nonrefundable
   credits are encoded and listed in dashboard coverage, but the current
   `tax-ecps-compare` harness does not emit an ECPS comparison surface for that

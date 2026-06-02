@@ -105,6 +105,13 @@ FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
         "category": "tax",
         "tolerance": 5,
     },
+    "aotc": {
+        "concept": "us:tax/federal-income-tax#aotc",
+        "description": "American Opportunity Credit",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
     "employee-oasdi": {
         "concept": "us:tax/payroll#employee_oasdi",
         "description": "Employee OASDI (Social Security)",
@@ -294,7 +301,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
             "--with",
             "policyengine==4.11.0",
             "--with",
-            "policyengine-us==1.705.1",
+            "policyengine-us==1.705.16",
             "--with",
             "policyengine-core==3.26.11",
         ]
@@ -331,6 +338,11 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         params.get("surface", "all"),
         "--json",
     ]
+    if params.get("data_folder"):
+        cmd.extend([
+            "--data-folder",
+            str(_resolve_path(params["data_folder"], "data_folder")),
+        ])
     if params.get("allow_policyengine_us_version", True):
         cmd.append("--allow-policyengine-us-version")
     if params.get("allow_uncertified_policyengine_data", True):

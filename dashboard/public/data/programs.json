@@ -416,6 +416,33 @@
       ]
     },
     {
+      "id": "us:tax/federal-income-tax#aotc",
+      "name": "American Opportunity Credit",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/25A",
+      "axiom_target": "us:statutes/26/25A#american_opportunity_credit",
+      "statute_label": "26 USC \u00a7 25A",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "american_opportunity_credit"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/25A.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
       "id": "us:tax/federal-income-tax#capital_gain",
       "name": "Federal capital gain definitions",
       "category": "tax",

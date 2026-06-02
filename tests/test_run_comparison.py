@@ -33,9 +33,11 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     axiom_encode = tmp_path / "axiom-encode"
     axiom_rules = tmp_path / "axiom-rules-engine"
     rulespec = tmp_path / "workspace" / "rulespec-us"
+    data_folder = tmp_path / "policyengine-data"
     axiom_encode.mkdir()
     axiom_rules.mkdir()
     rulespec.mkdir(parents=True)
+    data_folder.mkdir()
     output = tmp_path / "report.json"
     calls = []
 
@@ -65,6 +67,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
                 "year": 2026,
                 "python": "3.13",
                 "surface": "all",
+                "data_folder": str(data_folder),
                 "pinned": True,
             },
         },
@@ -76,8 +79,10 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert "--with-editable" in cmd
     assert str(axiom_encode.resolve()) in cmd
     assert "policyengine==4.11.0" in cmd
-    assert "policyengine-us==1.705.1" in cmd
+    assert "policyengine-us==1.705.16" in cmd
     assert "policyengine-core==3.26.11" in cmd
+    assert "--data-folder" in cmd
+    assert str(data_folder.resolve()) in cmd
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
     assert output.read_text() == "{}"

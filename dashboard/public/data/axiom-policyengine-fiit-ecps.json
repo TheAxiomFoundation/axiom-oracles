@@ -3,8 +3,8 @@
     {
       "category": "tax",
       "comparison": "amount",
-      "comparison_count": 250720,
-      "comparison_weight": 250720,
+      "comparison_count": 278876,
+      "comparison_weight": 278876,
       "components": [
         "us:tax/federal-income-tax#ctc",
         "us:tax/federal-income-tax#standard_deduction",
@@ -12,6 +12,7 @@
         "us:tax/federal-income-tax#tax_before_credits",
         "us:tax/federal-income-tax#eitc",
         "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
         "us:tax/payroll#employee_oasdi",
         "us:tax/payroll#employee_medicare",
         "us:tax/payroll#employer_oasdi",
@@ -20,8 +21,8 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability (ECPS, all surfaces)",
       "left_weighted_sum": null,
-      "match_rate": 99.93139757498405,
-      "match_weight": 250548,
+      "match_rate": 99.9383238428549,
+      "match_weight": 278704,
       "mismatch_count": 172,
       "mismatch_weight": 172,
       "missing_both_count": 0,
@@ -30,7 +31,7 @@
       "parent": null,
       "right_weighted_sum": null,
       "weighted_difference": null,
-      "weighted_match_rate": 99.93139757498405
+      "weighted_match_rate": 99.9383238428549
     },
     {
       "category": "tax",
@@ -148,6 +149,27 @@
       "left_weighted_sum": null,
       "match_rate": 100.0,
       "match_weight": 42234,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": null,
+      "weighted_difference": null,
+      "weighted_match_rate": 100.0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 28156,
+      "comparison_weight": 28156,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#aotc",
+      "description": "American Opportunity Credit",
+      "left_weighted_sum": null,
+      "match_rate": 100.0,
+      "match_weight": 28156,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
@@ -4070,6 +4092,7 @@
         "us:tax/federal-income-tax#tax_before_credits",
         "us:tax/federal-income-tax#eitc",
         "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
         "us:tax/payroll#employee_oasdi",
         "us:tax/payroll#employee_medicare",
         "us:tax/payroll#employer_oasdi",
@@ -4131,6 +4154,15 @@
       "components": [],
       "description": "Child and Dependent Care Credit",
       "id": "us:tax/federal-income-tax#cdcc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "American Opportunity Credit",
+      "id": "us:tax/federal-income-tax#aotc",
       "parent": "us:tax/federal-income-tax#liability",
       "tolerance": 5
     },
@@ -6079,10 +6111,10 @@
   },
   "suite": "fiit-ecps",
   "summary": {
-    "comparison_count": 250720,
+    "comparison_count": 278876,
     "error_count": 0,
     "errors_by_engine": {},
-    "match_count": 250548,
+    "match_count": 278704,
     "mismatch_count": 172,
     "mismatches_by_concept": [
       {
@@ -6098,9 +6130,9 @@
     ],
     "mismatches_by_scenario": {},
     "weighted": {
-      "comparison_weight": 250720,
-      "match_rate": 99.93139757498405,
-      "match_weight": 250548,
+      "comparison_weight": 278876,
+      "match_rate": 99.9383238428549,
+      "match_weight": 278704,
       "mismatch_weight": 172
     }
   }

@@ -150,6 +150,7 @@ def test_parent_concepts_expand_components_when_requested() -> None:
         Concepts.EITC,
         Concepts.CTC,
         Concepts.CDCC,
+        Concepts.AOTC,
         Concepts.AMT,
         Concepts.CAPITAL_GAIN,
         Concepts.EMPLOYEE_OASDI,
