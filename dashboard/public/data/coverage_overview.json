@@ -100,16 +100,16 @@
         "program": "snap",
         "jurisdiction": "CO",
         "status": "executable",
-        "source": "dashboard comparison reports + composed CO SNAP program",
+        "source": "rulespec-us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml + axiom-programs/us-co/snap/fy-2026.yaml wrapper",
         "known_non_tanf_gaps": []
       },
       {
         "program": "snap",
         "jurisdiction": "SC",
         "status": "executable",
-        "source": "comparisons/programs/us-sc/snap/fy-2026.yaml",
+        "source": "axiom-programs/us-sc/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "first-pass composed state SNAP program from signed SC encoder manifests",
+          "promoted composed state SNAP program from signed SC encoder manifests",
           "categorical rollup is connected; weighted PE-only cases appear to reflect PE's broader categorical treatment versus SC's encoded 130% Family Independence service path",
           "large traced benefit amount residuals are PE TANF income, not utility allowance; PE reports zero utility allowance and zero excess shelter deduction in the inspected high-dollar cases"
         ]
@@ -118,9 +118,9 @@
         "program": "snap",
         "jurisdiction": "NC",
         "status": "executable",
-        "source": "comparisons/programs/us-nc/snap/fy-2026.yaml",
+        "source": "axiom-programs/us-nc/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "first-pass composed state SNAP program from signed NC encoder manifests",
+          "promoted composed state SNAP program from signed NC encoder manifests",
           "NC 200% categorical income path is wired through composed SNAP income eligibility",
           "remaining eligibility residuals are near-threshold annual-FPG versus FY2026 SNAP monthly-table differences",
           "SNAP shelter input projection is fixed: the case RENT_PAID fact now feeds PE SNAP housing_cost as well as Axiom shelter costs",

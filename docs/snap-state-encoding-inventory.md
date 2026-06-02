@@ -9,9 +9,9 @@ all listed rules are fully comparable to PolicyEngine.
 | --- | --- | --- |
 | CA | Dashboard SNAP clean | Direct encoder comparison path; 0 current mismatches. |
 | NY | Dashboard SNAP clean | Direct encoder comparison path; 0 current mismatches. |
-| CO | Dashboard SNAP clean | Existing composed SNAP program; good candidate for broader axiom-programs consolidation. |
-| NC | Dashboard-composed SNAP | Local composed spec under `comparisons/programs`; not yet merged into `axiom-programs`. Remaining non-TANF issue is annual-FPG vs FY2026 monthly SNAP table treatment. |
-| SC | Dashboard-composed SNAP | Local composed spec under `comparisons/programs`; not yet merged into `axiom-programs`. Remaining residuals include PE categorical treatment and TANF income. |
+| CO | Dashboard SNAP clean | Direct encoder comparison path is clean. A narrow `axiom-programs/us-co/snap/fy-2026.yaml` wrapper now compiles, but the dashboard still uses the encoder-backed comparison until the generic program output IDs are source-mapped to the federal SNAP dashboard concepts. |
+| NC | Promoted axiom-programs SNAP | Composed spec now lives under `axiom-programs/us-nc/snap/fy-2026.yaml`. Remaining non-TANF issue is annual-FPG vs FY2026 monthly SNAP table treatment. |
+| SC | Promoted axiom-programs SNAP | Composed spec now lives under `axiom-programs/us-sc/snap/fy-2026.yaml`. Remaining residuals include PE categorical treatment and TANF income. |
 | AL | Merged axiom-programs SNAP | Current residuals are 21 PE TANF-in-SNAP-income cases, 1 PE-only income/categorical case, 1 Axiom-only threshold/disqualification case, and 1 PE-greater amount edge. |
 | TN | Merged axiom-programs SNAP | Current residuals are 30 PE Families First/TANF-in-SNAP-income cases and 1 PE-greater amount edge; five eligibility residuals also include PE Families First/TANF. |
 | MA | Merged axiom-programs SNAP | HCSUA and categorical/standard income rollup are wired; remaining gaps are TAFDC/TANF and missing categorical service/source facts in ECPS. |
@@ -29,14 +29,13 @@ all listed rules are fully comparable to PolicyEngine.
 
 ## Next Practical Moves
 
-1. Promote NC and SC local dashboard-composed specs into `axiom-programs` once
-   the current comparison shape is accepted.
-2. For CO, either add the existing composed SNAP program to `axiom-programs` or
-   document why it should stay dashboard-local.
-3. For FL, build a first-pass composed SNAP program from the existing categorical
+1. For CO, add source-backed mappings from the generic composed program outputs
+   to the federal SNAP dashboard concept IDs before switching the dashboard off
+   the current clean encoder-backed comparison path.
+2. For FL, build a first-pass composed SNAP program from the existing categorical
    and food-assistance corpus, then run full ECPS before attempting fixes.
-4. For AZ, use the encoded utility/deduction surfaces to improve shelter-cost
+3. For AZ, use the encoded utility/deduction surfaces to improve shelter-cost
    modeling only after a state amount source is available.
-5. Continue avoiding TANF/Families First/TAFDC synthetic projection. Those gaps
+4. Continue avoiding TANF/Families First/TAFDC synthetic projection. Those gaps
    should remain visible until the relevant cash-assistance programs are modeled
    or an explicit source-backed input is available.

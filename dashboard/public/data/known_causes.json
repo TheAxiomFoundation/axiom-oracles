@@ -248,7 +248,7 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "kind": "amount_difference",
       "label": "SC first-pass composed SNAP residuals",
-      "description": "The South Carolina SNAP dashboard run is a first-pass composed program built from signed SC encoder manifests, without Python amount overrides. It compiles and runs over the full SC ECPS slice, with 61 benefit amounts and 35 eligibility results still differing. The residuals include small minimum-benefit cases where PolicyEngine returns about $23.97/month while Axiom returns $0, TANF-driven Axiom-greater-than-PolicyEngine cases, and residuals paired with eligibility disagreement.",
+      "description": "The South Carolina SNAP dashboard run uses the promoted axiom-programs composed spec built from signed SC encoder manifests, without Python amount overrides. It compiles and runs over the full SC ECPS slice, with 61 benefit amounts and 35 eligibility results still differing. The residuals include small minimum-benefit cases where PolicyEngine returns about $23.97/month while Axiom returns $0, TANF-driven Axiom-greater-than-PolicyEngine cases, and residuals paired with eligibility disagreement.",
       "drivers": [
         {
           "label": "Large amount residuals are TANF income, not utility allowance",
@@ -303,7 +303,7 @@
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "kind": "amount_difference",
       "label": "NC first-pass composed SNAP residuals",
-      "description": "The North Carolina SNAP dashboard run is a first-pass composed program built from signed NC encoder manifests, without Python amount overrides. After wiring the encoded 200% categorical income path into a composed `snap_income_eligible` rollup, aliasing its source-language income inputs to canonical SNAP quantities, and projecting the same case shelter fact into PolicyEngine SNAP `housing_cost`, the full NC ECPS run is down to 40 benefit residuals and 12 eligibility residuals. The remaining large benefit residuals are TANF-on-SSI cases, not a missing hand-coded benefit formula.",
+      "description": "The North Carolina SNAP dashboard run uses the promoted axiom-programs composed spec built from signed NC encoder manifests, without Python amount overrides. After wiring the encoded 200% categorical income path into a composed `snap_income_eligible` rollup, aliasing its source-language income inputs to canonical SNAP quantities, and projecting the same case shelter fact into PolicyEngine SNAP `housing_cost`, the full NC ECPS run is down to 40 benefit residuals and 12 eligibility residuals. The remaining large benefit residuals are TANF-on-SSI cases, not a missing hand-coded benefit formula.",
       "drivers": [
         {
           "label": "Shelter projection contract is fixed in the PE adapter",
