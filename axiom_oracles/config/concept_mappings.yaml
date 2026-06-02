@@ -55,6 +55,7 @@ concepts:
       - us:tax/federal-income-tax#eitc
       - us:tax/federal-income-tax#ctc
       - us:tax/federal-income-tax#cdcc
+      - us:tax/federal-income-tax#aotc
       - us:tax/federal-income-tax#amt
       - us:tax/federal-income-tax#capital_gain
       - us:tax/payroll#employee_oasdi
@@ -140,6 +141,16 @@ concepts:
     targets:
       axiom: us:statutes/26/21#cdcc
       policyengine: cdcc
+
+  us:tax/federal-income-tax#aotc:
+    description: American Opportunity Credit
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      axiom: us:statutes/26/25A#american_opportunity_credit
+      policyengine: american_opportunity_credit
 
   us:tax/federal-income-tax#amt:
     description: Alternative Minimum Tax

@@ -118,6 +118,7 @@ class Concepts:
     EITC = "us:tax/federal-income-tax#eitc"
     CTC = "us:tax/federal-income-tax#ctc"
     CDCC = "us:tax/federal-income-tax#cdcc"
+    AOTC = "us:tax/federal-income-tax#aotc"
     AMT = "us:tax/federal-income-tax#amt"
     CAPITAL_GAIN = "us:tax/federal-income-tax#capital_gain"
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
