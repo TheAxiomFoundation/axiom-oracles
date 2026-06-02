@@ -177,7 +177,19 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "kind": "eligibility_left_only",
       "label": "AL missing disqualification or state eligibility gate",
-      "description": "Three Alabama cases have Axiom eligible while PolicyEngine is ineligible. Two are TANF-driven: PE includes Alabama TANF in SNAP unearned income and pushes the household over its compared eligibility/amount result. The non-TANF case, ecps-51708, passes Axiom core, residency, resource, gross-income, and net-income gates while PE denies despite PE net income around 41% FPG; that case needs disqualification or categorical-source tracing rather than another income-standard alias.",
+      "description": "Three Alabama cases have Axiom eligible while PolicyEngine is ineligible. All three have household weight 0. Two are TANF-driven: PE includes Alabama TANF in SNAP unearned income and pushes the household over its compared eligibility/amount result. The non-TANF case, ecps-51708, passes Axiom gross/net income gates while PE denies despite PE net income around 41% FPG; that case remains a zero-weight PE disqualification or categorical-source edge rather than another income-standard alias.",
+      "drivers": [
+        {
+          "label": "Zero-weight TANF and disqualification edges",
+          "description": "Corrected pinned traces confirm that ecps-51544 and ecps-52446 are TANF income interactions, while ecps-51708 is not TANF-driven.",
+          "evidence": [
+            "All three AL Axiom-only eligibility cases have household_weight = 0.",
+            "ecps-51544: Axiom sees $0 unearned income and benefit $62; PE includes $3,648/year of AL TANF and denies with net income at 106.1% FPG.",
+            "ecps-52446: Axiom sees $47.62/month unearned income and benefit $403; PE includes about $5,284.59/year of AL TANF and denies with net income at 103.5% FPG.",
+            "ecps-51708: PE TANF is $0, PE utility allowance is $0, PE net income is about 41.3% FPG, and PE still denies while Axiom returns $146."
+          ]
+        }
+      ],
       "fix_owner": "rulespec-us-al"
     },
     {
@@ -221,7 +233,7 @@
           "description": "One TN benefit residual is PE-greater-than-Axiom. The June 2 residual trace found positive PE Families First/TANF in all 30 Axiom-greater benefit residual households, so the remaining non-TANF amount edge is ecps-50388 rather than a broad class of untraced Axiom-greater cases.",
           "evidence": [
             "Current TN benefit residual buckets: 30 Axiom > PE, 1 PE > Axiom.",
-            "ecps-50388: Axiom $24 vs PE $85.69, no PE tn_ff, PE utility allowance $0, PE gross income around 155% FPG and net income around 53% FPG.",
+            "ecps-50388: Axiom $24 vs PE $85.69, PE `tn_ff` and `tanf` are $0, PE utility allowance is $0, PE gross income is about 154.6% FPG, and PE net income is about 53.3% FPG.",
             "Five benefit residuals are paired with Axiom-eligible / PolicyEngine-ineligible eligibility mismatches."
           ]
         },
@@ -240,7 +252,18 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "kind": "eligibility_left_only",
       "label": "TN missing disqualification or state eligibility gate",
-      "description": "Five Tennessee cases have Axiom eligible while PolicyEngine is ineligible. The June 2 trace found positive PE Families First/TANF in all five, with PE net-income FPG ratios around 104%-108% after TANF is included. The encoded TN `income_eligibility_standards_met` rule is now wired through source-input aliases to canonical SNAP gross/net income calculations, and the rerun stayed at the same 36 mismatch entries; the remaining eligibility disagreement is TANF income interaction plus any PE disqualification/categorical treatment, not another income-standard alias.",
+      "description": "Five Tennessee cases have Axiom eligible while PolicyEngine is ineligible. Corrected pinned traces find positive PE Families First/TANF in all five, with PE net-income FPG ratios around 103.6%-108.2% after Families First is included. The encoded TN `income_eligibility_standards_met` rule is now wired through source-input aliases to canonical SNAP gross/net income calculations, and the rerun stayed at the same 36 mismatch entries; the remaining eligibility disagreement is TANF/Families First income interaction, not another income-standard alias.",
+      "drivers": [
+        {
+          "label": "Families First income pushes PE over the net-income edge",
+          "description": "Axiom passes standard income because it does not project Families First into SNAP unearned income. PE includes `tn_ff`/`tanf`, pushing all five cases over its compared net-income result.",
+          "evidence": [
+            "ecps-49447 is the only weighted TN eligibility residual; Axiom benefit is $308, while PE includes $5,652/year of `tn_ff` and denies with net income at 104.8% FPG.",
+            "Zero-weight examples: ecps-49860 has `tn_ff = $4,116/year` and PE net income at 108.2% FPG; ecps-50114 has `tn_ff = $6,672/year` and PE net income at 105.9% FPG.",
+            "PE utility allowance is $0 in all corrected pinned eligibility traces."
+          ]
+        }
+      ],
       "fix_owner": "rulespec-us-tn"
     },
     {
@@ -295,8 +318,19 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "kind": "eligibility_left_only",
       "label": "SC Axiom-only eligibility edge",
-      "description": "Six SC cases have Axiom eligible while PolicyEngine is ineligible. These should be treated as missing disqualification or state eligibility-gate residuals until the case-level gate trace identifies the exact encoded path.",
-      "fix_owner": "rulespec-us-sc"
+      "description": "Six SC cases have Axiom eligible while PolicyEngine is ineligible. All six are zero-weight ECPS rows. Corrected pinned traces show the same income-coverage shape as the large SC amount residuals: PolicyEngine adds imputed SC TANF to SNAP unearned income and can push the case over the compared income result, while Axiom only uses observed ECPS income facts and does not synthesize TANF.",
+      "drivers": [
+        {
+          "label": "Zero-weight TANF income interaction",
+          "description": "The traced Axiom-only cases pass Axiom's standard income gates because Axiom lacks the PE-imputed SC TANF income. PolicyEngine includes positive `sc_tanf` / `tanf` in SNAP unearned income and denies.",
+          "evidence": [
+            "All six SC Axiom-only eligibility cases have household_weight = 0.",
+            "ecps-40402: Axiom gross income is $4,282.13/month with $0 unearned income and benefit $482; PE includes $8,790.44/year of SC TANF, reports net income at 104.2% FPG, and denies.",
+            "ecps-40659: Axiom benefit is $77 and eligible; PE includes $4,303.43/year of SC TANF, reports net income at 116.0% FPG, and denies."
+          ]
+        }
+      ],
+      "fix_owner": "program-coverage"
     },
     {
       "suite": "nc-snap-ecps",
@@ -336,11 +370,12 @@
         },
         {
           "label": "Remaining eligibility residuals are FPG-threshold differences",
-          "description": "All 12 remaining NC eligibility residuals fail only `snap_income_eligible`; Axiom core, residency, and resource gates pass. The remaining weighted case is a near-threshold categorical-income case where Axiom uses the FY2026 SNAP monthly income-standard base and PolicyEngine uses an annual FPG ratio.",
+          "description": "All 12 remaining NC eligibility residuals are PolicyEngine-only. Eleven have household weight 0. The one weighted case is a near-threshold categorical-income case where Axiom uses the FY2026 SNAP monthly 100% FPL table times the encoded 2.00 multiplier and PolicyEngine uses an annual FPG ratio.",
           "evidence": [
-            "ecps-39817: Axiom gross income is $7,256.55/month; Axiom's 200% threshold from the FY2026 SNAP table is $7,192/month for a six-person household.",
+            "ecps-39817 is the only weighted NC eligibility residual, with household_weight 18,316.63.",
+            "ecps-39817: Axiom gross income is $7,256.55/month; Axiom's encoded 200% threshold is $3,596 * 2 = $7,192/month for a six-person household.",
             "PolicyEngine for the same case reports annual gross income $87,078.53 and FPG ratio 1.963 against annual FPG $43,452.50, so PE marks it eligible.",
-            "The other remaining NC eligibility residuals show the same pattern: income just over Axiom's rounded monthly SNAP table but under PolicyEngine's annual FPG ceiling, or zero-weight rows."
+            "Corrected pinned traces for zero-weight examples ecps-38715, ecps-38802, ecps-128370, and ecps-128670 show the same monthly-table-versus-annual-FPG shape, with no PE TANF."
           ]
         },
         {
@@ -360,8 +395,35 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "kind": "eligibility_right_only",
       "label": "NC remaining PE-only eligibility residuals",
-      "description": "Twelve NC eligibility mismatches remain, all PolicyEngine eligible while Axiom is ineligible. The large categorical-income miss was fixed by the composed `snap_income_eligible` rollup. The remaining traced cases fail only income eligibility and are explained by PolicyEngine using annual FPG ratios while Axiom uses the source-backed FY2026 SNAP monthly income-standard base; changing Axiom requires an encoder/source decision about which FPG table controls NC's 200% maximum allowable gross income limit.",
+      "description": "Twelve NC eligibility mismatches remain, all PolicyEngine eligible while Axiom is ineligible. Eleven are zero-weight rows. The large categorical-income miss was fixed by the composed `snap_income_eligible` rollup. The remaining traced cases fail only income eligibility and are explained by PolicyEngine using annual FPG ratios while Axiom uses the source-backed FY2026 SNAP monthly 100% FPL base times the encoded NC 2.00 multiplier; changing Axiom requires an encoder/source decision about which FPG table controls NC's 200% maximum allowable gross income limit.",
       "fix_owner": "rulespec-us-nc"
+    },
+    {
+      "suite": "fiit-ecps",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "kind": "amount_difference",
+      "label": "EITC earned-income component residuals",
+      "description": "The June 2 full federal income tax run compares 208,486 scalar values and has 172 mismatches. Every remaining mismatch is in the EITC surface: 113 are `eitc_earned_income` and 59 are `eitc_reduction`. CTC, standard deduction, tax before credits, capital-gain definitions, employee/employer OASDI, and employee/employer Medicare all match at 100%.",
+      "drivers": [
+        {
+          "label": "Axiom computes Section 32 earned income from encoded inputs",
+          "description": "The comparison no longer passes PolicyEngine's filer-adjusted EITC earned-income helper through as an Axiom input. Axiom computes the Section 32 earned-income chain from encoded upstream wage and self-employment facts, including farm operations and partnership self-employment income. The remaining differences are component-level EITC earned-income and phaseout-reduction differences, not final-tax output overrides.",
+          "evidence": [
+            "Full FIIT run: 208,486 compared values, 172 mismatches, 99.9175% agreement.",
+            "EITC output split: 113 `eitc_earned_income` mismatches and 59 `eitc_reduction` mismatches.",
+            "All non-EITC emitted federal tax surfaces currently have 0 mismatches."
+          ]
+        },
+        {
+          "label": "No synthetic PE alignment",
+          "description": "The EITC residuals stay visible because replacing Axiom's encoded earned-income calculation with PolicyEngine's helper would hide a real upstream modeling boundary. The sustainable next step is encoder work on the upstream earned-income and self-employment surfaces, not a Python override.",
+          "evidence": [
+            "The report's projection notes state that Section 32 earned income is computed by Axiom and compared as an output rather than passed in from PolicyEngine.",
+            "Maximum absolute diff is $11,439.03 for `eitc_earned_income` and $2,409.04 for `eitc_reduction`."
+          ]
+        }
+      ],
+      "fix_owner": "rulespec-us"
     },
     {
       "suite": "co-state-income-tax-ecps",

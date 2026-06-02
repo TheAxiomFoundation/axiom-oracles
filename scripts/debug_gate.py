@@ -12,6 +12,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from debug_policyengine_env import ensure_pinned_policyengine_env  # noqa: E402
+
+
+ensure_pinned_policyengine_env(Path(__file__).resolve(), ROOT)
+
 
 def _allow_uncertified_policyengine_data() -> None:
     """Match the local ECPS override used by scripts/run_comparison.py."""

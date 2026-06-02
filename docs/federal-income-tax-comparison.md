@@ -111,6 +111,13 @@ Per-surface result:
 | Employer OASDI | 13,407 | 0 | 100.00% |
 | Employer Medicare | 13,407 | 0 | 100.00% |
 
+EITC residual split:
+
+| EITC output | Compared values | Mismatches | Max absolute diff |
+| --- | ---: | ---: | ---: |
+| `eitc_earned_income` | 7,039 | 113 | $11,439.03 |
+| `eitc_reduction` | 7,039 | 59 | $2,409.04 |
+
 Even at high agreement, a few non-PE-bug categories of mismatch can persist:
 
 - **OASDI 2026 base drift.** Older PolicyEngine-US releases used $186,000 as
@@ -122,7 +129,10 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   head/spouse inference mismatch is fixed as of TheAxiomFoundation/axiom-encode#74.
   Any remaining full-run EITC residuals are amount-level differences from
   Axiom computing Section 32 earned income through encoded upstream rules
-  rather than passing through PE's filer-adjusted-earnings helper.
+  rather than passing through PE's filer-adjusted-earnings helper. Replacing
+  the encoded earned-income chain with PE's helper would be an output alignment
+  override, so the residuals stay visible until the upstream earned-income and
+  self-employment surfaces are encoded tighter.
 - **Capital-gain definitions and tax before credits.** These now compare
   cleanly on the full ECPS slice. The tax-before-credits surface feeds the
   Section 1(j) rate calculation with source-backed filing-status and taxable

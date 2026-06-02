@@ -8,6 +8,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from debug_policyengine_env import ensure_pinned_policyengine_env  # noqa: E402
+
+
+ensure_pinned_policyengine_env(Path(__file__).resolve(), ROOT)
+
 
 def _allow_uncertified_policyengine_data() -> None:
     os.environ["POLICYENGINE_SKIP_COUNTRY_IMPORTS"] = "1"
@@ -91,17 +96,16 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     variables = args.variables or DEFAULT_VARIABLES
-    results = PolicyEngineRunner(batch_size=len(target_cases)).run_cases(
-        target_cases,
-        variables=variables,
-    )
-    for result in results:
-        print(f"\n=== {result.household_id} ===")
-        if result.errors:
-            for error in result.errors:
-                print(f"  ERROR {error}")
+    runner = PolicyEngineRunner(batch_size=len(target_cases))
+    for case in target_cases:
+        print(f"\n=== {case.case_id} ===")
         for variable in variables:
-            print(f"  {variable}: {result.values.get(variable, '(missing)')}")
+            result = runner.run_cases([case], variables=[variable])[0]
+            if result.errors:
+                error = result.errors[0] if result.errors else ""
+                print(f"  {variable}: ERROR ({error[:120]})")
+            else:
+                print(f"  {variable}: {result.values.get(variable, '(missing)')}")
     return 0
 
 
