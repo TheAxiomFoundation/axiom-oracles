@@ -360,6 +360,202 @@
       ],
       "encoding_status": "missing",
       "coverage": []
+    },
+    {
+      "id": "us:tax/federal-income-tax#nonrefundable_credits",
+      "name": "Federal capped nonrefundable credits",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/26",
+      "axiom_target": "us:statutes/26/26#income_tax_capped_non_refundable_credits",
+      "statute_label": "26 USC \u00a7 26",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "income_tax_capped_non_refundable_credits"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/26.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/federal-income-tax#cdcc",
+      "name": "Child and Dependent Care Credit",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/21",
+      "axiom_target": "us:statutes/26/21#cdcc",
+      "statute_label": "26 USC \u00a7 21",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "cdcc"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/21.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/federal-income-tax#capital_gain",
+      "name": "Federal capital gain definitions",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/1/h",
+      "axiom_target": "us:statutes/26/1/h#net_capital_gain",
+      "statute_label": "26 USC \u00a7 1/h",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "net_capital_gain"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/1222.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        },
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/1/h.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/payroll#employee_oasdi",
+      "name": "Employee OASDI (Social Security)",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/3101/a",
+      "axiom_target": "us:statutes/26/3101/a#oasdi_wage_tax",
+      "statute_label": "26 USC \u00a7 3101/a",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "oasdi_wage_tax"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/3101/a.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/payroll#employee_medicare",
+      "name": "Employee Medicare",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/3101/b/1",
+      "axiom_target": "us:statutes/26/3101/b/1#hospital_insurance_wage_tax",
+      "statute_label": "26 USC \u00a7 3101/b/1",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "hospital_insurance_wage_tax"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/3101/b/1.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/payroll#employer_oasdi",
+      "name": "Employer OASDI (Social Security)",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/3111/a",
+      "axiom_target": "us:statutes/26/3111/a#employer_oasdi_excise_tax",
+      "statute_label": "26 USC \u00a7 3111/a",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "employer_oasdi_excise_tax"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/3111/a.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
+    },
+    {
+      "id": "us:tax/payroll#employer_medicare",
+      "name": "Employer Medicare",
+      "category": "tax",
+      "axiom_ref": "us:statutes/26/3111/b",
+      "axiom_target": "us:statutes/26/3111/b#hospital_insurance_employer_tax",
+      "statute_label": "26 USC \u00a7 3111/b",
+      "comparison": "amount",
+      "tolerance": 5,
+      "oracles": [
+        "axiom",
+        "policyengine"
+      ],
+      "rule_aliases": [
+        "hospital_insurance_employer_tax"
+      ],
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "statutes/26/3111/b.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
     }
   ]
 }

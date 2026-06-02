@@ -63,6 +63,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
             "parameters": {
                 "sample_size": 1000,
                 "year": 2026,
+                "python": "3.13",
                 "surface": "all",
                 "pinned": True,
             },
@@ -71,7 +72,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     )
 
     cmd = calls[0]
-    assert cmd[:4] == ["uv", "run", "--python", "3.14"]
+    assert cmd[:4] == ["uv", "run", "--python", "3.13"]
     assert "--with-editable" in cmd
     assert str(axiom_encode.resolve()) in cmd
     assert "policyengine==4.11.0" in cmd
@@ -239,8 +240,8 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
     report = run_comparison._adapt_tax_ecps_to_v2(
         {
             "compared_tax_units": 2,
-            "compared_values": 5,
-            "mismatch_count": 1,
+            "compared_values": 7,
+            "mismatch_count": 2,
             "output_summary": [
                 {
                     "surface": "ctc",
@@ -258,6 +259,22 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
                     "max_abs_diff": 0,
                     "max_relative_diff": 0,
                 },
+                {
+                    "surface": "cdcc",
+                    "output": "cdcc",
+                    "compared": 1,
+                    "mismatches": 0,
+                    "max_abs_diff": 0,
+                    "max_relative_diff": 0,
+                },
+                {
+                    "surface": "nonrefundable-credits",
+                    "output": "income_tax_capped_non_refundable_credits",
+                    "compared": 1,
+                    "mismatches": 1,
+                    "max_abs_diff": 25,
+                    "max_relative_diff": 1,
+                },
             ],
             "mismatches": [
                 {
@@ -267,6 +284,14 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
                     "axiom": 100,
                     "policyengine": 150,
                     "diff": -50,
+                },
+                {
+                    "entity_id": "tax_unit_2",
+                    "surface": "nonrefundable-credits",
+                    "output": "income_tax_capped_non_refundable_credits",
+                    "axiom": 75,
+                    "policyengine": 100,
+                    "diff": -25,
                 }
             ],
         },
@@ -276,19 +301,24 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
 
     assert report["schema_version"] == "axiom.comparison_report.v2"
     assert report["suite"] == "fiit-ecps"
-    assert report["summary"]["comparison_count"] == 5
-    assert report["summary"]["mismatch_count"] == 1
+    assert report["summary"]["comparison_count"] == 7
+    assert report["summary"]["mismatch_count"] == 2
     assert report["summary"]["mismatches_by_concept"] == [
-        {"value": "us:tax/federal-income-tax#ctc", "count": 1}
+        {"value": "us:tax/federal-income-tax#ctc", "count": 1},
+        {"value": "us:tax/federal-income-tax#nonrefundable_credits", "count": 1},
     ]
     assert report["summary"]["mismatches_by_kind"] == [
-        {"value": "amount_difference", "count": 1}
+        {"value": "amount_difference", "count": 2}
     ]
     assert report["aggregates"][0]["concept"] == "us:tax/federal-income-tax#liability"
-    assert report["aggregates"][0]["match_rate"] == 80
+    assert report["aggregates"][0]["match_rate"] == 500 / 7
     assert report["aggregates"][0]["left_weighted_sum"] is None
     assert report["aggregates"][1]["weighted_difference"] is None
     assert report["case_count"] == 2
-    assert len(report["cases"]) == 1
+    assert len(report["cases"]) == 2
     assert report["cases"][0]["metadata"]["entity_id"] == "tax_unit_1"
     assert report["mismatches"][0]["concept"] == "us:tax/federal-income-tax#ctc"
+    assert any(
+        aggregate["concept"] == "us:tax/federal-income-tax#cdcc"
+        for aggregate in report["aggregates"]
+    )
