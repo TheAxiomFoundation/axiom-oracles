@@ -12,7 +12,7 @@ assistance programs or source-backed case inputs are available.
 | CA | 0 benefit, 0 eligibility mismatches | Stable | Leave as regression guard. |
 | NY | 0 benefit, 0 eligibility mismatches | Stable | Leave as regression guard. |
 | CO | 0 benefit, 0 eligibility mismatches on encoder-backed run | Stable comparison; generic wrapper not yet dashboard path | Keep dashboard on encoder-backed run until the generic ECPS projection compares the same SNAP/SPM units and is clean. |
-| NC | 40 benefit, 12 eligibility mismatches | Partly fixable | Do one more case-level pass on PE-only eligibility and annual-FPG versus FY2026 monthly SNAP table treatment. Keep the two large TANF-on-SSI benefit residuals visible. |
+| NC | 40 benefit, 12 eligibility mismatches | Mostly documented; one source/encoder question remains | Review NC's 200% categorical income source alias before changing threshold math. Keep cash-assistance income residuals visible until WFFA/TANF coverage exists. |
 | SC | 61 benefit, 35 eligibility mismatches | Needs source review | Do not wire PE's broader categorical treatment until the SC source establishes it. Current source evidence points to a 130% Family Independence service path, not broad BBCE. |
 | AL | 24 benefit, 4 eligibility mismatches | Mostly blocked on TANF / targeted gates | Document and leave TANF residuals visible. Investigate the remaining PE-only income/categorical case and Axiom-only disqualification/threshold cases separately. |
 | TN | 31 benefit, 5 eligibility mismatches | Mostly blocked on Families First / targeted gates | Document and leave Families First residuals visible. Review uncovered eligibility-looking gates before adding any to `snap_eligible`. |
@@ -27,11 +27,20 @@ Current full ECPS alignment:
 - Benefit: 1,326 / 1,366 matched; 40 mismatches.
 - Eligibility: 1,354 / 1,366 matched; 12 PE-only eligibility mismatches.
 
-Fixable now:
+Current non-TANF gaps:
 
-- Continue the threshold/FPG trace for the 12 PE-only eligibility residuals.
-  The existing evidence points to annual-FPG versus FY2026 monthly SNAP table
-  treatment after the NC 200% categorical income path was wired.
+- The 12 PE-only eligibility residuals are at the NC 200% categorical income
+  edge. Traced cases such as `ecps-39817` and `ecps-128370` show PE accepting
+  the household through gross-FPG/categorical treatment while Axiom rejects on
+  the composed NC income gate. The NC source says "200% maximum allowable gross
+  income limit"; the wrapper currently aliases the base limit to the FY2026
+  monthly SNAP income table. A source/encoder review is needed before changing
+  this to PE's annual-FPG treatment.
+- Non-TANF benefit residuals are mostly small monthly-versus-annual
+  periodization and deduction differences. Traced weighted cases
+  `ecps-39711`, `ecps-40009`, and `ecps-39762` have zero PE utility allowance
+  and zero Axiom utility allowance; the differences land in earned-income,
+  standard, shelter, and net-income rounding after period conversion.
 - Keep the shelter projection fix as-is. The case `RENT_PAID` fact now feeds
   both Axiom shelter costs and PE SNAP `housing_cost`.
 
@@ -40,6 +49,9 @@ Not fixable without new coverage:
 - The two benefit residuals over $100 are TANF-on-SSI cases where PE adds
   `nc_tanf` / `tanf` to SNAP unearned income and Axiom has no source-backed
   TANF fact to project.
+- Additional positive benefit residuals such as `ecps-40245` and `ecps-38982`
+  have the same shape at smaller dollar amounts: PE counts more annual unearned
+  cash income than Axiom can source from current NC ECPS inputs.
 
 ### SC
 

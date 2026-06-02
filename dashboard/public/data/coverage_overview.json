@@ -124,12 +124,9 @@
         "status": "executable",
         "source": "axiom-programs/us-nc/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "promoted composed state SNAP program from signed NC encoder manifests",
-          "NC 200% categorical income path is wired through composed SNAP income eligibility",
-          "remaining eligibility residuals are near-threshold annual-FPG versus FY2026 SNAP monthly-table differences",
-          "SNAP shelter input projection is fixed: the case RENT_PAID fact now feeds PE SNAP housing_cost as well as Axiom shelter costs",
-          "only two current benefit residuals exceed $100, and both are TANF-on-SSI cases outside current Axiom ECPS input coverage",
-          "NC duplicate/admin corpus surfaces are intentionally narrowed out pending encoder cleanup"
+          "12 PE-only eligibility residuals sit at the NC 200% categorical income edge; source/encoder review is needed for annual-FPG versus FY2026 monthly SNAP table treatment",
+          "most non-TANF benefit residuals are small monthly-versus-annual periodization and deduction differences; traced cases show no utility allowance driver",
+          "NC duplicate/admin corpus surfaces remain intentionally narrowed pending encoder cleanup"
         ]
       },
       {
