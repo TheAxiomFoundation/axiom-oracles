@@ -142,13 +142,13 @@
       "drivers": [
         {
           "label": "PE-imputed Alabama TANF is missing from Axiom SNAP income",
-          "description": "The refreshed AL run has 24 benefit residuals. Twenty-two are in the Axiom-greater-than-PE direction, consistent with the traced pattern where PE includes TANF in SNAP unearned income and Axiom's current ECPS projection does not.",
+          "description": "The refreshed AL run has 24 benefit residuals. Twenty-two are in the Axiom-greater-than-PE direction; 21 of those have positive PE-imputed Alabama TANF in SNAP unearned income. The remaining Axiom-greater case is a non-TANF threshold/disqualification edge.",
           "evidence": [
             "AL full run after the shelter projection refresh: 704 cases, 1,408 comparisons, 28 mismatch entries; benefit 680/704, eligibility 700/704.",
-            "Benefit residual buckets: 22 Axiom > PE, 2 PE > Axiom.",
+            "Benefit residual buckets from the June 2 trace: 21 PE TANF-in-SNAP-income cases, 1 PE-only income/categorical case, 1 Axiom-only threshold/disqualification case, and 1 PE-greater amount edge.",
             "ecps-51206 / county 01011: Axiom $785 vs PE $749.27; PE al_tanf and snap_unearned_income are both $4,128/year.",
             "ecps-51308: Axiom $546 vs PE $520.93; PE al_tanf and snap_unearned_income are both $3,648/year.",
-            "ecps-51373: Axiom $546 vs PE $520.93; PE al_tanf and snap_unearned_income are both $3,648/year."
+            "ecps-51708: Axiom $146 and eligible; PE $0 and ineligible with no PE al_tanf, PE gross income at about 143% FPG, and PE net income at about 41% FPG."
           ]
         },
         {
@@ -177,7 +177,7 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "kind": "eligibility_left_only",
       "label": "AL missing disqualification or state eligibility gate",
-      "description": "Three Alabama cases have Axiom eligible while PolicyEngine is ineligible. Targeted Axiom traces show these households pass the current composed core, residency, resource, gross-income, and net-income gates. PolicyEngine's compared `is_snap_eligible`/`snap` outputs deny them, and diagnostic PE runs indicate the edge is income/categorical-computation sensitive rather than a simple disqualification flag. The encoded AL `household_meets_snap_income_eligibility_standards` rule is now wired through source-input aliases to canonical SNAP gross/net income calculations, and the rerun stayed at the same 28 mismatch entries; the remaining Axiom-only cases need disqualification, categorical, or PE income-threshold tracing rather than another income-standard alias.",
+      "description": "Three Alabama cases have Axiom eligible while PolicyEngine is ineligible. Two are TANF-driven: PE includes Alabama TANF in SNAP unearned income and pushes the household over its compared eligibility/amount result. The non-TANF case, ecps-51708, passes Axiom core, residency, resource, gross-income, and net-income gates while PE denies despite PE net income around 41% FPG; that case needs disqualification or categorical-source tracing rather than another income-standard alias.",
       "fix_owner": "rulespec-us-al"
     },
     {
@@ -218,9 +218,10 @@
         },
         {
           "label": "Remaining non-TANF benefit edges",
-          "description": "One TN benefit residual is now PE-greater-than-Axiom, and some Axiom-greater residuals may still need non-TANF tracing. These should be traced as disqualification, income, or deduction differences rather than patched with amount overrides.",
+          "description": "One TN benefit residual is PE-greater-than-Axiom. The June 2 residual trace found positive PE Families First/TANF in all 30 Axiom-greater benefit residual households, so the remaining non-TANF amount edge is ecps-50388 rather than a broad class of untraced Axiom-greater cases.",
           "evidence": [
             "Current TN benefit residual buckets: 30 Axiom > PE, 1 PE > Axiom.",
+            "ecps-50388: Axiom $24 vs PE $85.69, no PE tn_ff, PE utility allowance $0, PE gross income around 155% FPG and net income around 53% FPG.",
             "Five benefit residuals are paired with Axiom-eligible / PolicyEngine-ineligible eligibility mismatches."
           ]
         },
@@ -239,7 +240,7 @@
       "concept": "us:statutes/7/2014/o#snap_eligible",
       "kind": "eligibility_left_only",
       "label": "TN missing disqualification or state eligibility gate",
-      "description": "Five Tennessee cases have Axiom eligible while PolicyEngine is ineligible. Targeted Axiom traces show these households pass the current composed core, residency, resource, gross-income, and net-income gates. PolicyEngine's compared outputs deny them; diagnostic PE quantities place the same households just above the 100% net-income FPG threshold, with no categorical eligibility. The encoded TN `income_eligibility_standards_met` rule is now wired through source-input aliases to canonical SNAP gross/net income calculations, and the rerun stayed at the same 36 mismatch entries; the remaining Axiom-only cases need disqualification, categorical, or PE income-threshold tracing rather than another income-standard alias.",
+      "description": "Five Tennessee cases have Axiom eligible while PolicyEngine is ineligible. The June 2 trace found positive PE Families First/TANF in all five, with PE net-income FPG ratios around 104%-108% after TANF is included. The encoded TN `income_eligibility_standards_met` rule is now wired through source-input aliases to canonical SNAP gross/net income calculations, and the rerun stayed at the same 36 mismatch entries; the remaining eligibility disagreement is TANF income interaction plus any PE disqualification/categorical treatment, not another income-standard alias.",
       "fix_owner": "rulespec-us-tn"
     },
     {
