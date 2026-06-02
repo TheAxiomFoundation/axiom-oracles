@@ -67,9 +67,9 @@
         "status": "executable",
         "source": "axiom-programs/us-al/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "minimum-benefit formula is present; one PE-only case is an income/categorical eligibility edge",
-          "AL state income-standard rule is wired through source-input aliases to canonical SNAP gross/net income calculations; residual Axiom-only eligibility edges remain",
-          "state utility amount table not legally wired; not an observed current mismatch driver"
+          "one weighted PE-only elderly/disabled minimum-benefit case fails Axiom's income gate; Axiom computes the minimum allotment but lacks a source-backed categorical approval path",
+          "zero-weight Axiom-only eligibility edges are driven by PE counting additional unearned income that current Axiom ECPS inputs do not source",
+          "state utility amount table is not legally wired, but traced current mismatches show zero utility allowance on the PE side"
         ]
       },
       {
@@ -113,9 +113,9 @@
         "status": "executable",
         "source": "axiom-programs/us-sc/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "promoted composed state SNAP program from signed SC encoder manifests",
-          "categorical rollup is connected; weighted PE-only cases appear to reflect PE's broader categorical treatment versus SC's encoded 130% Family Independence service path",
-          "large traced benefit amount residuals are PE TANF income, not utility allowance; PE reports zero utility allowance and zero excess shelter deduction in the inspected high-dollar cases"
+          "weighted PE-only elderly/disabled minimum-benefit cases fail Axiom's income gate; Axiom computes the minimum allotment but lacks PE's categorical/SCCAP-style approval path",
+          "SC categorical participation-basis tracing still exposes missing source inputs, including a substantial-liquid-resources fact, so broad categorical wiring needs encoder/source review",
+          "large traced benefit amount residuals are PE TANF/cash-assistance income, not utility allowance; inspected PE cases report zero utility allowance"
         ]
       },
       {
@@ -163,9 +163,9 @@
         "status": "executable",
         "source": "axiom-programs/us-tn/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "utility amount table encoded in an unsafe mixed block and needs encoder split",
-          "Axiom-only eligibility edges pass current federal gates while PE denies near/above the 100% net-income threshold",
-          "TN state income-standard rule is wired through source-input aliases to canonical SNAP gross/net income calculations; residual eligibility edges remain"
+          "Axiom-only eligibility edges pass standard income because current Axiom ECPS inputs miss PE-counted Families First/TANF-like unearned income",
+          "PE denies traced residuals near or above the 100% net-income threshold after counting that additional unearned income",
+          "utility amount table is encoded in an unsafe mixed block and needs encoder split, but traced current mismatches show zero PE utility allowance"
         ]
       },
       {
