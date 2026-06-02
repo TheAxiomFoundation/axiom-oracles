@@ -11,7 +11,7 @@ assistance programs or source-backed case inputs are available.
 | --- | ---: | --- | --- |
 | CA | 0 benefit, 0 eligibility mismatches | Stable | Leave as regression guard. |
 | NY | 0 benefit, 0 eligibility mismatches | Stable | Leave as regression guard. |
-| CO | 0 benefit, 0 eligibility mismatches on encoder-backed run | Stable comparison; wrapper not yet dashboard path | Keep dashboard on encoder-backed run until generic program outputs map source-backed to the federal SNAP concept IDs. |
+| CO | 0 benefit, 0 eligibility mismatches on encoder-backed run | Stable comparison; generic wrapper not yet dashboard path | Keep dashboard on encoder-backed run until the generic ECPS projection compares the same SNAP/SPM units and is clean. |
 | NC | 40 benefit, 12 eligibility mismatches | Partly fixable | Do one more case-level pass on PE-only eligibility and annual-FPG versus FY2026 monthly SNAP table treatment. Keep the two large TANF-on-SSI benefit residuals visible. |
 | SC | 61 benefit, 35 eligibility mismatches | Needs source review | Do not wire PE's broader categorical treatment until the SC source establishes it. Current source evidence points to a 130% Family Independence service path, not broad BBCE. |
 | AL | 24 benefit, 4 eligibility mismatches | Mostly blocked on TANF / targeted gates | Document and leave TANF residuals visible. Investigate the remaining PE-only income/categorical case and Axiom-only disqualification/threshold cases separately. |
@@ -130,12 +130,17 @@ What changed:
 - Generic ECPS input projection now supplies CO's basic/expanded categorical
   inputs as the same non-categorical baseline used by the CO source fixture and
   legacy CO adapter, because ECPS does not expose those service facts.
-- Generic input dtype inference now treats `if` conditions as judgments while
-  preserving numeric dtype for `then`/`else` branches.
-- `self_employment_income_period_months` uses the CO source-fixture neutral
-  denominator of `1`.
+- Generic input dtype inference now treats `if` conditions as judgments,
+  preserves numeric dtype for `then`/`else` branches, and treats division
+  operands as numeric.
+- Optional branch denominators that ECPS does not measure directly use neutral
+  nonzero defaults, including self-employment period months and related
+  proration/count/rate inputs.
 
 Smoke status: generic CO SNAP passed a 1,000-record prefilter smoke run
-(10 CO households, 20 comparisons, 0 mismatches). The dashboard still should
-not switch from the encoder-backed CO path until a full generic CO run is clean
-and accepted as the replacement artifact.
+(10 CO households, 20 comparisons, 0 mismatches). A full generic run now
+executes without engine errors after dtype/denominator projection fixes, but it
+is not clean: 694 CO households, 1,388 comparisons, 276 mismatches. The
+encoder-backed dashboard path projects 730 CO ECPS SNAP/SPM units and remains
+clean, so the dashboard should not switch until the generic projection compares
+the same benefit units and closes the remaining policy/input gaps.

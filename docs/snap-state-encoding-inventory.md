@@ -9,7 +9,7 @@ all listed rules are fully comparable to PolicyEngine.
 | --- | --- | --- |
 | CA | Dashboard SNAP clean | Direct encoder comparison path; 0 current mismatches. |
 | NY | Dashboard SNAP clean | Direct encoder comparison path; 0 current mismatches. |
-| CO | Dashboard SNAP clean | Direct encoder comparison path is clean. The `axiom-programs/us-co/snap/fy-2026.yaml` wrapper now compiles and has generic output/input mapping smoke-tested over 10 CO ECPS households; the dashboard still uses the encoder-backed comparison until a full generic CO run is clean. |
+| CO | Dashboard SNAP clean | Direct encoder comparison path is clean. The `axiom-programs/us-co/snap/fy-2026.yaml` wrapper compiles and the generic adapter now runs without engine errors, but the full generic household-level run is not clean (694 CO households, 1,388 comparisons, 276 mismatches). The dashboard remains on the encoder-backed SPM/SNAP-unit projection, which is clean over 730 units. |
 | NC | Promoted axiom-programs SNAP | Composed spec now lives under `axiom-programs/us-nc/snap/fy-2026.yaml`. Remaining non-TANF issue is annual-FPG vs FY2026 monthly SNAP table treatment. |
 | SC | Promoted axiom-programs SNAP | Composed spec now lives under `axiom-programs/us-sc/snap/fy-2026.yaml`. Remaining residuals include PE categorical treatment and TANF income. |
 | AL | Merged axiom-programs SNAP | Current residuals are 21 PE TANF-in-SNAP-income cases, 1 PE-only income/categorical case, 1 Axiom-only threshold/disqualification case, and 1 PE-greater amount edge. |

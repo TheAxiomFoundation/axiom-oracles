@@ -103,7 +103,8 @@
         "source": "rulespec-us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml + axiom-programs/us-co/snap/fy-2026.yaml wrapper",
         "known_non_tanf_gaps": [
           "dashboard still uses the encoder-backed CO SNAP report",
-          "generic axiom-programs wrapper output/input mapping is smoke-tested but awaiting a clean full generic CO run before dashboard switch"
+          "generic axiom-programs wrapper now runs full CO ECPS without engine errors, but the household-level generic report is not clean: 694 households, 1,388 comparisons, 276 mismatches",
+          "encoder-backed CO dashboard path remains clean over 730 SNAP/SPM units; switch only after generic projection compares the same benefit units"
         ]
       },
       {
