@@ -5,11 +5,51 @@ False so we can attribute the failure to a specific gate."""
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+
+
+def _allow_uncertified_policyengine_data() -> None:
+    """Match the local ECPS override used by scripts/run_comparison.py."""
+    os.environ["POLICYENGINE_SKIP_COUNTRY_IMPORTS"] = "1"
+    try:
+        import policyengine.provenance.manifest as manifest
+
+        def allow_local_oracle_data(
+            country_id, runtime_model_version, runtime_data_build_fingerprint=None
+        ):
+            return manifest.DataCertification(
+                compatibility_basis="axiom_oracle_local_policyengine_us_override",
+                certified_for_model_version=runtime_model_version,
+                data_build_fingerprint=runtime_data_build_fingerprint,
+                certified_by="axiom-oracles debug_gate.py",
+            )
+
+        manifest.certify_data_release_compatibility = allow_local_oracle_data
+        try:
+            import policyengine.tax_benefit_models.common.model_version as model_version
+
+            model_version.certify_data_release_compatibility = allow_local_oracle_data
+        except ImportError:
+            pass
+    except ImportError:
+        pass
+    finally:
+        os.environ.pop("POLICYENGINE_SKIP_COUNTRY_IMPORTS", None)
+
+
+_allow_uncertified_policyengine_data()
+try:
+    import policyengine
+    from policyengine.tax_benefit_models import us as _us
+
+    policyengine.us = _us
+except Exception:
+    pass
 
 from axiom_oracles.populations.enhanced_cps import load_enhanced_cps_cases  # noqa: E402
 from axiom_oracles.core.geography import GeographyScope  # noqa: E402
@@ -21,7 +61,7 @@ from axiom_oracles.adapters.axiom.generic_inputs import attach_generic_inputs  #
 # requires absolute refs for derived outputs that originate in imported
 # RuleSpec modules; only program-local outputs (e.g. the synthesized
 # snap_eligible/snap_eligible_core) accept bare names.
-GATE_OUTPUTS = [
+DEFAULT_GATE_OUTPUTS = [
     "snap_eligible",
     "snap_eligible_core",
     "us:regulations/7-cfr/273/3#snap_household_residency_eligible",
@@ -52,6 +92,12 @@ def main(argv: list[str] | None = None) -> int:
                         help="ECPS case IDs to debug (e.g. ecps-7371)")
     parser.add_argument("--sample-size", type=int, default=2000,
                         help="ECPS sample size to scan for the case IDs")
+    parser.add_argument(
+        "--output",
+        action="append",
+        dest="outputs",
+        help="Axiom output id to inspect. Repeatable. Defaults to NY SNAP gate diagnostics.",
+    )
     args = parser.parse_args(argv)
 
     cases = load_enhanced_cps_cases(
@@ -75,26 +121,37 @@ def main(argv: list[str] | None = None) -> int:
         binary_path=Path.home() / "axiom-rules-engine" / "target" / "release" / "axiom-rules-engine",
         rulespec_repo_roots=[
             str(Path.home() / "rulespec-us"),
-            str(Path.home() / "rulespec-us-ny"),
-            str(Path.home() / "rulespec-us-ca"),
+            str(Path.home() / f"rulespec-us-{_state_slug(args.fips)}"),
         ],
     )
     # Ask one output at a time — different rules may demand different
     # input scopes; asking for all of them in one shot lets a single
     # missing-input error mask values for all other rules.
     for case in target_cases:
-        print(f"\n=== {case.case_id} ===")
-        for output in GATE_OUTPUTS:
+        print(f"\n=== {case.case_id} ===", flush=True)
+        for output in args.outputs or DEFAULT_GATE_OUTPUTS:
             results = runner.run_cases([case], variables=[output])
             res = results[0]
             if res.errors:
                 err = res.errors[0] if res.errors else ""
-                print(f"  {output}: ERROR ({err[:80]})")
+                print(f"  {output}: ERROR ({err[:80]})", flush=True)
             else:
                 value = res.values.get(output, "(missing)")
-                print(f"  {output}: {value}")
+                print(f"  {output}: {value}", flush=True)
 
     return 0
+
+
+def _state_slug(fips: str) -> str:
+    return {
+        "01": "al",
+        "06": "ca",
+        "25": "ma",
+        "36": "ny",
+        "37": "nc",
+        "45": "sc",
+        "47": "tn",
+    }.get(fips, fips.lower())
 
 
 if __name__ == "__main__":

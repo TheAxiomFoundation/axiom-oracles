@@ -425,6 +425,10 @@ def compare(
             categories=categories,
             concepts=concepts,
         )
+        if jurisdiction_fips and _wants_snap(concepts):
+            cases = [
+                case for case in cases if _household_in_jurisdiction(case, jurisdiction_fips)
+            ]
         if not cases:
             raise click.ClickException(
                 "No cases found for the resolved target scope and population."
@@ -497,7 +501,16 @@ def compare(
                 if stream_case_rows
                 else None,
             )
-            for case_batch in _batched(cases, comparison_batch_size):
+            total_batches = (len(cases) + comparison_batch_size - 1) // comparison_batch_size
+            for batch_index, case_batch in enumerate(
+                _batched(cases, comparison_batch_size),
+                start=1,
+            ):
+                click.echo(
+                    f"Comparing batch {batch_index}/{total_batches} "
+                    f"({len(case_batch)} case(s))...",
+                    err=True,
+                )
                 try:
                     prepared_cases = _prepare_cases_for_engines(
                         case_batch,
@@ -730,6 +743,11 @@ def _prepare_cases_for_engines(
             and _needs_axiom_tax_itemization_choice(concept_ids)
         ):
             prepared = attach_axiom_tax_itemization_choice(prepared)
+            if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
+                prepared = [
+                    _select_axiom_state_income_tax_candidate(case)
+                    for case in prepared
+                ]
     if "axiom" in engines and _wants_snap(concept_ids):
         # Two paths:
         # - Generic: a compiled program + jurisdiction FIPS were provided.
@@ -767,6 +785,15 @@ def _household_in_jurisdiction(case: Case, fips_prefix: str) -> bool:
 def _is_co_household(case: Case) -> bool:
     """Legacy Colorado-only filter; kept for the CO-specific SNAP path."""
     return _household_in_jurisdiction(case, "08")
+
+
+def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
+    metadata = dict(case.metadata)
+    metadata["axiom_result_selection"] = {
+        "strategy": "min",
+        "output": "us:tax/oracle-bridge#state_income_tax",
+    }
+    return replace(case, metadata=metadata)
 
 
 def _resolve_period(period: str | None, left: str, right: str) -> str:
@@ -814,7 +841,7 @@ def _build_runner(
     if engine == "policyengine":
         if paired_engine == "taxsim":
             return PolicyEngineTaxsimRunner()
-        return PolicyEngineRunner()
+        return PolicyEngineRunner(batch_size=100 if _wants_snap(concept_ids) else 5_000)
     if engine == "axiom":
         # SNAP runs through a precompiled artifact (avoids re-compiling the
         # CO RuleSpec module on every case and the engine's `kind: reiteration`
@@ -843,7 +870,7 @@ def _build_runner(
             default_entity_id="household" if wants_snap else axiom_entity_id,
             default_entity="Household" if wants_snap else "TaxUnit",
             program_imports=program_imports,
-            program_rules=US_TAX_ORACLE_PROGRAM_RULES
+            program_rules=_tax_oracle_program_rules_for_concepts(concept_ids)
             if program_imports
             else (),
             generated_program_target=US_TAX_ORACLE_BRIDGE_TARGET
@@ -867,6 +894,18 @@ def _tax_oracle_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str,
             if import_ref != "us:statutes/26/1411"
         )
     return US_TAX_ORACLE_IMPORTS
+
+
+def _tax_oracle_program_rules_for_concepts(
+    concept_ids: tuple[str, ...],
+) -> tuple[dict, ...]:
+    if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
+        return tuple(
+            rule
+            for rule in US_TAX_ORACLE_PROGRAM_RULES
+            if rule.get("name") != "self_employment_income"
+        )
+    return US_TAX_ORACLE_PROGRAM_RULES
 
 
 def _filter_for_accessnyc_mode(

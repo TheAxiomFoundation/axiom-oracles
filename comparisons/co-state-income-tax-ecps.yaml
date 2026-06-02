@@ -1,0 +1,25 @@
+name: co-state-income-tax-ecps
+title: Colorado state income tax — Axiom vs PolicyEngine
+description: >-
+  Compares the Colorado state income tax liability produced by the generated
+  Axiom tax oracle bridge against PolicyEngine on Colorado Enhanced CPS
+  households.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules
+  parameters:
+    left: axiom
+    right: policyengine
+    population: enhanced-cps
+    sample_size: 0
+    period: "2026"
+    concept: us:tax/state-income-tax#liability
+    axiom_rulespec_repo_roots: $HOME
+
+artifacts:
+  report_basename: axiom-policyengine-co-state-income-tax-ecps
+
+dashboard:
+  filename: axiom-policyengine-co-state-income-tax-ecps.json
+  suite: co-state-income-tax-ecps

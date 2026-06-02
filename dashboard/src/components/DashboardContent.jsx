@@ -16,6 +16,12 @@ const SUITE_DISPLAY_ORDER = {
   "ma-snap-ecps": 40,
   "al-snap-ecps": 50,
   "tn-snap-ecps": 60,
+  "co-snap-ecps": 70,
+  "sc-snap-ecps": 80,
+  "nc-snap-ecps": 90,
+  "co-state-income-tax-ecps": 100,
+  "co-health-thresholds": 110,
+  "co-tanf-coverage": 120,
   "nyc-synthetic": 1000,
 };
 

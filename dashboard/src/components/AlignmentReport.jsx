@@ -732,6 +732,11 @@ const SUITE_TITLE = {
   "ca-snap-ecps": "California SNAP (CalFresh)",
   "ny-snap-ecps": "New York SNAP",
   "co-snap-ecps": "Colorado SNAP",
+  "sc-snap-ecps": "South Carolina SNAP",
+  "nc-snap-ecps": "North Carolina SNAP",
+  "co-state-income-tax-ecps": "Colorado State Income Tax",
+  "co-health-thresholds": "Colorado Medicaid / CHIP / BHP Thresholds",
+  "co-tanf-coverage": "Colorado Works TANF",
   "fiit-ecps": "Federal Income Tax",
   "nyc-synthetic": "NYC Synthetic Scenarios",
 };
@@ -740,6 +745,11 @@ const SUITE_JURISDICTION = {
   "ca-snap-ecps": "US-CA",
   "ny-snap-ecps": "US-NY",
   "co-snap-ecps": "US-CO",
+  "sc-snap-ecps": "US-SC",
+  "nc-snap-ecps": "US-NC",
+  "co-state-income-tax-ecps": "US-CO",
+  "co-health-thresholds": "US-CO",
+  "co-tanf-coverage": "US-CO",
   "fiit-ecps": "US (federal)",
   "nyc-synthetic": "US-NY-NYC",
 };
@@ -1084,7 +1094,21 @@ export default function AlignmentReport({ report, knownCauses = [] }) {
         </div>
       )}
 
-      {mismatchCount === 0 && (
+      {aggregateCount === 0 && alarms.length > 0 && (
+        <div
+          style={{
+            fontSize: 12.5,
+            color: "var(--ink-mute)",
+            padding: "6px 10px",
+            background: "var(--paper-warm)",
+            borderRadius: 6,
+          }}
+        >
+          No case-level comparison is available for this encoded surface yet.
+        </div>
+      )}
+
+      {mismatchCount === 0 && aggregateCount > 0 && (
         <div
           style={{
             fontSize: 12.5,

@@ -25,6 +25,22 @@
         "notes": "PolicyEngine tracker marks federal income tax complete and validated against NBER TAXSIM."
       },
       {
+        "id": "state_income_tax",
+        "name": "State income tax",
+        "full_name": "State individual income tax",
+        "status": "complete",
+        "coverage": "CO",
+        "notes": "Colorado state income tax is available through PolicyEngine's state income tax liability output."
+      },
+      {
+        "id": "medicaid_chip_bhp_thresholds",
+        "name": "Medicaid / CHIP / BHP thresholds",
+        "full_name": "Colorado Medicaid, CHIP, and Basic Health Program income thresholds",
+        "status": "partial",
+        "coverage": "CO",
+        "notes": "The current dashboard check validates threshold parameters, not full household-level eligibility."
+      },
+      {
         "id": "payroll_tax",
         "name": "Payroll tax",
         "full_name": "Employee and employer payroll taxes",
@@ -51,7 +67,8 @@
         "status": "executable",
         "source": "axiom-programs/us-al/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "minimum-benefit and eligibility edge cases",
+          "minimum-benefit formula is present; one PE-only case is an income/categorical eligibility edge",
+          "AL state income-standard rule is wired through source-input aliases to canonical SNAP gross/net income calculations; residual Axiom-only eligibility edges remain",
           "state utility amount table not legally wired; not an observed current mismatch driver"
         ]
       },
@@ -60,9 +77,7 @@
         "jurisdiction": "CA",
         "status": "executable",
         "source": "axiom-programs/us-ca/snap/fy-2026.yaml",
-        "known_non_tanf_gaps": [
-          "compose coverage risk for CA-specific eligibility paths"
-        ]
+        "known_non_tanf_gaps": []
       },
       {
         "program": "snap",
@@ -70,7 +85,7 @@
         "status": "executable",
         "source": "axiom-programs/us-ma/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "categorical and BBCE facts not present in ECPS projection",
+          "categorical and BBCE rollup is wired, but traced PE-only cases still lack source-backed MA assistance/service facts in the ECPS projection",
           "MA cross-referenced categorical income standards still deferred"
         ]
       },
@@ -79,9 +94,66 @@
         "jurisdiction": "NY",
         "status": "executable",
         "source": "axiom-programs/us-ny/snap/fy-2026.yaml",
+        "known_non_tanf_gaps": []
+      },
+      {
+        "program": "snap",
+        "jurisdiction": "CO",
+        "status": "executable",
+        "source": "dashboard comparison reports + composed CO SNAP program",
+        "known_non_tanf_gaps": []
+      },
+      {
+        "program": "snap",
+        "jurisdiction": "SC",
+        "status": "executable",
+        "source": "comparisons/programs/us-sc/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
-          "known minimum-benefit eligibility edge",
-          "compose coverage risk for broader NY BBCE paths"
+          "first-pass composed state SNAP program from signed SC encoder manifests",
+          "categorical rollup is connected; weighted PE-only cases appear to reflect PE's broader categorical treatment versus SC's encoded 130% Family Independence service path",
+          "large traced benefit amount residuals are PE TANF income, not utility allowance; PE reports zero utility allowance and zero excess shelter deduction in the inspected high-dollar cases"
+        ]
+      },
+      {
+        "program": "snap",
+        "jurisdiction": "NC",
+        "status": "executable",
+        "source": "comparisons/programs/us-nc/snap/fy-2026.yaml",
+        "known_non_tanf_gaps": [
+          "first-pass composed state SNAP program from signed NC encoder manifests",
+          "NC 200% categorical income path is wired through composed SNAP income eligibility",
+          "remaining eligibility residuals are near-threshold annual-FPG versus FY2026 SNAP monthly-table differences",
+          "SNAP shelter input projection is fixed: the case RENT_PAID fact now feeds PE SNAP housing_cost as well as Axiom shelter costs",
+          "only two current benefit residuals exceed $100, and both are TANF-on-SSI cases outside current Axiom ECPS input coverage",
+          "NC duplicate/admin corpus surfaces are intentionally narrowed out pending encoder cleanup"
+        ]
+      },
+      {
+        "program": "state_income_tax",
+        "jurisdiction": "CO",
+        "status": "executable",
+        "source": "generated Axiom tax oracle bridge + encoded Colorado tax rules",
+        "known_non_tanf_gaps": [
+          "six unweighted ECPS tax-unit residuals remain for component tracing"
+        ]
+      },
+      {
+        "program": "medicaid_chip_bhp_thresholds",
+        "jurisdiction": "CO",
+        "status": "parameter",
+        "source": "rulespec-us-co/policies/cms/colorado-medicaid-chip-bhp-eligibility-levels.yaml",
+        "known_non_tanf_gaps": [
+          "parameter-only comparison; no end-to-end Medicaid/CHIP/BHP household eligibility run yet"
+        ]
+      },
+      {
+        "program": "tanf",
+        "jurisdiction": "CO",
+        "status": "coverageOnly",
+        "source": "rulespec-us-co/regulations/9-ccr-2503-6/3.606.1/*.yaml",
+        "known_non_tanf_gaps": [
+          "not directly comparable to the current PolicyEngine Colorado TANF output surface",
+          "PE grant-standard table needs a current-year update before direct alignment is meaningful"
         ]
       },
       {
@@ -91,7 +163,8 @@
         "source": "axiom-programs/us-tn/snap/fy-2026.yaml",
         "known_non_tanf_gaps": [
           "utility amount table encoded in an unsafe mixed block and needs encoder split",
-          "minimum-benefit and eligibility edge cases"
+          "Axiom-only eligibility edges pass current federal gates while PE denies near/above the 100% net-income threshold",
+          "TN state income-standard rule is wired through source-input aliases to canonical SNAP gross/net income calculations; residual eligibility edges remain"
         ]
       },
       {
@@ -100,7 +173,10 @@
         "status": "executable",
         "source": "rulespec-us/tax + dashboard comparison reports",
         "known_non_tanf_gaps": [
-          "small FIIT residuals are documented in the tax triage report"
+          "current full FIIT ECPS report covers CTC, standard deduction, capital gains, EITC, and payroll tax surfaces",
+          "CTC, standard deduction, capital gains, and payroll surfaces are clean in the current report",
+          "172 current residual entries are all EITC component differences",
+          "CDCC, tax before credits, and nonrefundable credits are not emitted by the current tax-ecps-compare encoder surface list"
         ]
       }
     ]

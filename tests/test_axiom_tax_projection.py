@@ -1623,6 +1623,30 @@ def test_axiom_tax_projection_computes_itemized_leaves_and_colorado_tax_wiring()
         ("tax_unit", "us:tax/oracle-bridge#input.is_colorado_tax_unit")
     ] is True
     assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax#input.individual_is_nonresident_alien",
+        )
+    ] is False
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax#input.individual_is_noncitizen_territory_resident",
+        )
+    ] is False
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax#input.social_security_agreement_under_section_233_applies_to_nonresident_alien",
+        )
+    ] is False
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/federal-income-tax#input.wages_paid_to_individual_for_section_1401_a",
+        )
+    ] == 100_000
+    assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.real_estate_taxes")
     ] == 2_000
     assert by_key[
@@ -1644,6 +1668,10 @@ def test_axiom_tax_projection_computes_itemized_leaves_and_colorado_tax_wiring()
         == "us:tax/oracle-bridge#relation.co_withheld_income_tax_member_of_tax_unit"
     } == {("person-1", "tax_unit")}
     assert "state_withheld_income_tax" in generated_rules_by_name
+    assert (
+        "contribution_and_benefit_base_under_section_230_of_social_security_act"
+        in generated_rules_by_name
+    )
     assert "itemized_taxable_income_deductions" in generated_rules_by_name
     assert "state_income_tax" in generated_rules_by_name
     assert "loss_ald" in generated_rules_by_name

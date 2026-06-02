@@ -184,6 +184,10 @@ def test_cli_prepares_axiom_tax_inputs_for_state_income_tax() -> None:
     assert projected.case_id == "state-tax"
     assert projected.metadata["axiom_input_records"]
     assert projected.metadata["axiom_input_record_overlays"]
+    assert projected.metadata["axiom_result_selection"] == {
+        "strategy": "min",
+        "output": "us:tax/oracle-bridge#state_income_tax",
+    }
 
 
 def test_cli_filters_state_tax_dependent_federal_tax_to_encoded_state() -> None:
