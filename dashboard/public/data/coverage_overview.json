@@ -175,10 +175,10 @@
         "status": "executable",
         "source": "rulespec-us/tax + dashboard comparison reports",
         "known_non_tanf_gaps": [
-          "current full FIIT ECPS report covers CTC, standard deduction, capital gains, tax before credits, EITC, and payroll tax surfaces",
-          "CTC, standard deduction, capital gains, tax before credits, and payroll surfaces are clean in the current report",
+          "current full FIIT ECPS report covers CTC, standard deduction, capital gains, tax before credits, EITC, CDCC, and payroll tax surfaces",
+          "CTC, standard deduction, capital gains, tax before credits, CDCC, and payroll surfaces are clean in the current report",
           "172 current residual entries are all EITC component differences",
-          "CDCC and capped nonrefundable credits are encoded and listed as coverage, but are not emitted by the current tax-ecps-compare encoder surface list"
+          "capped nonrefundable credits are encoded and listed as coverage, but are not emitted by the current tax-ecps-compare encoder surface list"
         ]
       }
     ]

@@ -142,12 +142,18 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   and employer Medicare compare cleanly on the full ECPS slice. The dashboard
   now tracks these as first-class encoded coverage, backed by 26 USC 3101(a),
   3101(b)(1), 3111(a), and 3111(b).
-- **Federal credit expansion still pending.** CDCC and aggregate
-  nonrefundable credits are encoded and listed in dashboard coverage, but the
-  current `tax-ecps-compare` harness does not emit ECPS comparison surfaces for
-  them yet. Adding those alignment percentages should be done through encoder
-  projections into the encoded legal surfaces, not by treating PolicyEngine
-  aggregate outputs as Axiom inputs.
+- **CDCC.** Child and dependent care credit now runs as an emitted ECPS
+  surface and compares cleanly on the full ECPS slice. The projection uses
+  encoded 26 USC 21 math for qualifying counts, expense limits, rates,
+  potential credit, and final credit; childcare expenses, the head/spouse
+  earned-income cap, and available nonrefundable-credit limit remain explicit
+  upstream boundary inputs until those chains are encoded end-to-end.
+- **Federal credit expansion still pending.** Aggregate capped nonrefundable
+  credits are encoded and listed in dashboard coverage, but the current
+  `tax-ecps-compare` harness does not emit an ECPS comparison surface for that
+  aggregate yet. Adding that alignment percentage should be done through
+  encoder projections into the encoded legal surfaces, not by treating
+  PolicyEngine aggregate outputs as Axiom inputs.
 
 ## CI
 
