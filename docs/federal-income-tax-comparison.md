@@ -92,10 +92,11 @@ data-model is per-case; this report is aggregated by federal-tax surface):
 
 ## Current residuals (June 2026)
 
-The June 2, 2026 full ECPS run compared 278,876 values with 172 mismatches for
-99.9383% agreement. CTC, standard deduction, capital-gain definitions, tax
-before credits, CDCC, AOTC, employee/employer OASDI, and employee/employer
-Medicare all matched at 100%. The remaining residuals are all in EITC.
+The June 3, 2026 full ECPS run compared 299,993 values with 172 mismatches for
+99.9427% agreement. CTC, standard deduction, capital-gain definitions, tax
+before credits, CDCC, AOTC, capped nonrefundable credits, employee/employer
+OASDI, and employee/employer Medicare all matched at 100%. The remaining
+residuals are all in EITC.
 
 Per-surface result:
 
@@ -108,6 +109,7 @@ Per-surface result:
 | Tax before credits | 7,039 | 0 | 100.00% |
 | CDCC | 42,234 | 0 | 100.00% |
 | AOTC | 28,156 | 0 | 100.00% |
+| Capped nonrefundable credits | 21,117 | 0 | 100.00% |
 | Employee OASDI | 13,407 | 0 | 100.00% |
 | Employee Medicare | 13,407 | 0 | 100.00% |
 | Employer OASDI | 13,407 | 0 | 100.00% |
@@ -162,12 +164,12 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   while RuleSpec subtracts educational assistance under 26 USC 25A(g)(2), and
   two are filer-identification edge cases that should be handled by a future
   25A re-encode rather than a dashboard override.
-- **Federal credit expansion still pending.** Aggregate capped nonrefundable
-  credits are encoded and listed in dashboard coverage, but the current
-  `tax-ecps-compare` harness does not emit an ECPS comparison surface for that
-  aggregate yet. Adding that alignment percentage should be done through
-  encoder projections into the encoded legal surfaces, not by treating
-  PolicyEngine aggregate outputs as Axiom inputs.
+- **Capped nonrefundable credits.** Section 26 aggregate nonrefundable-credit
+  sum and cap math now runs as an emitted ECPS surface and compares cleanly on
+  the full ECPS slice. Upstream component credits are supplied as explicit
+  boundary inputs for this aggregate surface; individual component-credit
+  correctness remains with each component surface until the full federal
+  credit chain is encoded end-to-end.
 
 ## CI
 
