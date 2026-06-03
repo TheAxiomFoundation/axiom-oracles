@@ -128,15 +128,19 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   the Social Security contribution-and-benefit base; the encoded SSA 2026
   automatic determination is $184,500. PolicyEngine-US 1.705.16 includes the
   corrected base, and the comparison runner pins that or newer vetted releases.
-- **EITC amount residuals.** `axiom-encode` now uses PE's explicit
-  tax-unit-role variables for the EITC oracle projection, so the previous
-  head/spouse inference mismatch is fixed as of TheAxiomFoundation/axiom-encode#74.
-  Any remaining full-run EITC residuals are amount-level differences from
-  Axiom computing Section 32 earned income through encoded upstream rules
-  rather than passing through PE's filer-adjusted-earnings helper. Replacing
-  the encoded earned-income chain with PE's helper would be an output alignment
-  override, so the residuals stay visible until the upstream earned-income and
-  self-employment surfaces are encoded tighter.
+- **EITC amount residuals.** All 113 `eitc_earned_income` residual tax units
+  are joint returns. Axiom's current ECPS request feeds Sections 1402(b), 1401,
+  and 164(f) as one aggregate tax-unit entity, while PolicyEngine computes
+  `self_employment_tax_ald_person` per filer and sums non-dependent filers for
+  EITC. The residual triage confirms every Axiom `eitc_earned_income` value
+  matches that aggregate Section 1402(b)/164(f) model; 45 of the 113 affected
+  tax units have PE's Social Security self-employment taxable income capped
+  below Medicare taxable self-employment income for at least one filer. The
+  sustainable fix is encoder work that lets 32(c)(2) aggregate person-level
+  Section 164(f) results through an explicit filer relation. Replacing the
+  encoded earned-income chain with PE's helper would be an output alignment
+  override, so the residuals stay visible until that upstream entity-shape issue
+  is fixed.
 - **Capital-gain definitions and tax before credits.** These now compare
   cleanly on the full ECPS slice. The tax-before-credits surface feeds the
   Section 1(j) rate calculation with source-backed filing-status and taxable
