@@ -129,18 +129,22 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
   automatic determination is $184,500. PolicyEngine-US 1.705.16 includes the
   corrected base, and the comparison runner pins that or newer vetted releases.
 - **EITC amount residuals.** All 113 `eitc_earned_income` residual tax units
-  are joint returns. Axiom's current ECPS request feeds Sections 1402(b), 1401,
-  and 164(f) as one aggregate tax-unit entity, while PolicyEngine computes
-  `self_employment_tax_ald_person` per filer and sums non-dependent filers for
-  EITC. The residual triage confirms every Axiom `eitc_earned_income` value
-  matches that aggregate Section 1402(b)/164(f) model; 45 of the 113 affected
-  tax units have PE's Social Security self-employment taxable income capped
-  below Medicare taxable self-employment income for at least one filer. The
-  sustainable fix is encoder work that lets 32(c)(2) aggregate person-level
-  Section 164(f) results through an explicit filer relation. Replacing the
-  encoded earned-income chain with PE's helper would be an output alignment
-  override, so the residuals stay visible until that upstream entity-shape issue
-  is fixed.
+  are joint returns. Axiom's live RuleSpec chain still has 26 USC 1402(a),
+  1402(b), and 32(c)(2) shaped around aggregate TaxUnit self-employment and
+  earned-income inputs, while PolicyEngine computes `self_employment_tax_ald`
+  per filer and sums non-dependent filers for EITC. The residual triage
+  confirms every Axiom `eitc_earned_income` value matches that aggregate
+  Section 1402(b)/164(f) model; 45 of the 113 affected tax units have PE's
+  Social Security self-employment taxable income capped below Medicare taxable
+  self-employment income for at least one filer. Encoder guardrails now flag
+  stale TaxUnit-shaped 26 USC 1402(a) money outputs and block new unit-scope
+  formulas that compose those stale imports, but no live RuleSpec file has been
+  replaced yet. A no-manual 26 USC 1402(a) rerun deferred because the full
+  subsection has unresolved exception branches, and a narrower 26 USC
+  1402(a)(12) rerun failed validation while still importing the stale aggregate
+  1402(a) base. Replacing the encoded earned-income chain with PE's helper
+  would be an output alignment override, so the residuals stay visible until the
+  staged person-scoped re-encode can land.
 - **Capital-gain definitions and tax before credits.** These now compare
   cleanly on the full ECPS slice. The tax-before-credits surface feeds the
   Section 1(j) rate calculation with source-backed filing-status and taxable

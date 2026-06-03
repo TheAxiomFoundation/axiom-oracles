@@ -407,20 +407,22 @@
       "drivers": [
         {
           "label": "Person-level SE tax chain is collapsed to the tax unit",
-          "description": "All 113 `eitc_earned_income` residual tax units are joint returns. The oracle request currently feeds Sections 1402(b), 1401, and 164(f) as one aggregate tax-unit entity, while PolicyEngine computes `self_employment_tax_ald_person` per filer and then sums non-dependent filers for EITC. That changes the OASDI wage-cap interaction and leaves Axiom earned income higher in these joint cases.",
+          "description": "All 113 `eitc_earned_income` residual tax units are joint returns. The live Axiom RuleSpec chain still has 26 USC 1402(a), 1402(b), and 32(c)(2) shaped around aggregate TaxUnit self-employment and earned-income inputs, while PolicyEngine computes the self-employment tax deduction per filer and then sums non-dependent filers for EITC. That changes the OASDI wage-cap interaction and leaves Axiom earned income higher in these joint cases.",
           "evidence": [
             "Full FIIT run: 299,993 compared values, 172 mismatches, 99.9427% agreement.",
             "EITC output split: 113 `eitc_earned_income` mismatches and 59 `eitc_reduction` mismatches.",
             "Residual triage: every Axiom `eitc_earned_income` value matches an aggregate Section 1402(b)/164(f) model; every affected tax unit is a joint return.",
-            "45 of the 113 earned-income residual tax units have PolicyEngine Social Security self-employment taxable income capped below Medicare taxable self-employment income for at least one filer."
+            "45 of the 113 earned-income residual tax units have PolicyEngine Social Security self-employment taxable income capped below Medicare taxable self-employment income for at least one filer.",
+            "Encoder guardrails now flag stale TaxUnit-shaped 26 USC 1402(a) money outputs and block new unit-scope formulas that compose those stale imports, but the live rulespec-us files have not yet been replaced by a safe person-scoped re-encode."
           ]
         },
         {
           "label": "No synthetic PE alignment",
-          "description": "The residuals stay visible because replacing Axiom's encoded earned-income calculation with PolicyEngine's EITC earned-income helper would hide a real upstream entity-shape boundary. The sustainable next step is encoder work that lets 32(c)(2) aggregate person-level Section 164(f) results through an explicit filer relation, not a Python override.",
+          "description": "The residuals stay visible because replacing Axiom's encoded earned-income calculation with PolicyEngine's EITC earned-income helper would hide a real upstream entity-shape boundary. The sustainable next step is staged encoder work that makes 1402(a), 1402(b), 164(f), and 32(c)(2) person-scoped where the statute speaks about an individual, then aggregates through an explicit filer relation at the Section 32 parent level.",
           "evidence": [
             "The report's projection notes state that Section 32 earned income is computed by Axiom and compared as an output rather than passed in from PolicyEngine.",
-            "Maximum absolute diff is $11,439.03 for `eitc_earned_income` and $2,409.04 for `eitc_reduction`."
+            "Maximum absolute diff is $11,439.03 for `eitc_earned_income` and $2,409.04 for `eitc_reduction`.",
+            "A no-manual 26 USC 1402(a) rerun deferred because the full subsection has unresolved exception branches; a narrower 26 USC 1402(a)(12) rerun failed validation and still imported the stale aggregate 1402(a) base, so it was not applied."
           ]
         }
       ],
