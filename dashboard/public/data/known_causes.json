@@ -402,21 +402,22 @@
       "suite": "fiit-ecps",
       "concept": "us:tax/federal-income-tax#eitc",
       "kind": "amount_difference",
-      "label": "EITC earned-income component residuals",
-      "description": "The June 2 full federal income tax run compares 208,486 scalar values and has 172 mismatches. Every remaining mismatch is in the EITC surface: 113 are `eitc_earned_income` and 59 are `eitc_reduction`. CTC, standard deduction, tax before credits, capital-gain definitions, employee/employer OASDI, and employee/employer Medicare all match at 100%.",
+      "label": "Joint-return EITC self-employment deduction residuals",
+      "description": "The June 3 full federal income tax run compares 299,993 scalar values and has 172 mismatches. Every remaining mismatch is in the EITC surface: 113 are `eitc_earned_income` and 59 are `eitc_reduction`. CTC, standard deduction, tax before credits, capital-gain definitions, CDCC, AOTC, capped nonrefundable credits, employee/employer OASDI, and employee/employer Medicare all match at 100%.",
       "drivers": [
         {
-          "label": "Axiom computes Section 32 earned income from encoded inputs",
-          "description": "The comparison no longer passes PolicyEngine's filer-adjusted EITC earned-income helper through as an Axiom input. Axiom computes the Section 32 earned-income chain from encoded upstream wage and self-employment facts, including farm operations and partnership self-employment income. The remaining differences are component-level EITC earned-income and phaseout-reduction differences, not final-tax output overrides.",
+          "label": "Person-level SE tax chain is collapsed to the tax unit",
+          "description": "All 113 `eitc_earned_income` residual tax units are joint returns. The oracle request currently feeds Sections 1402(b), 1401, and 164(f) as one aggregate tax-unit entity, while PolicyEngine computes `self_employment_tax_ald_person` per filer and then sums non-dependent filers for EITC. That changes the OASDI wage-cap interaction and leaves Axiom earned income higher in these joint cases.",
           "evidence": [
-            "Full FIIT run: 208,486 compared values, 172 mismatches, 99.9175% agreement.",
+            "Full FIIT run: 299,993 compared values, 172 mismatches, 99.9427% agreement.",
             "EITC output split: 113 `eitc_earned_income` mismatches and 59 `eitc_reduction` mismatches.",
-            "All non-EITC emitted federal tax surfaces currently have 0 mismatches."
+            "Residual triage: every Axiom `eitc_earned_income` value matches an aggregate Section 1402(b)/164(f) model; every affected tax unit is a joint return.",
+            "45 of the 113 earned-income residual tax units have PolicyEngine Social Security self-employment taxable income capped below Medicare taxable self-employment income for at least one filer."
           ]
         },
         {
           "label": "No synthetic PE alignment",
-          "description": "The EITC residuals stay visible because replacing Axiom's encoded earned-income calculation with PolicyEngine's helper would hide a real upstream modeling boundary. The sustainable next step is encoder work on the upstream earned-income and self-employment surfaces, not a Python override.",
+          "description": "The residuals stay visible because replacing Axiom's encoded earned-income calculation with PolicyEngine's EITC earned-income helper would hide a real upstream entity-shape boundary. The sustainable next step is encoder work that lets 32(c)(2) aggregate person-level Section 164(f) results through an explicit filer relation, not a Python override.",
           "evidence": [
             "The report's projection notes state that Section 32 earned income is computed by Axiom and compared as an output rather than passed in from PolicyEngine.",
             "Maximum absolute diff is $11,439.03 for `eitc_earned_income` and $2,409.04 for `eitc_reduction`."
