@@ -1,10 +1,14 @@
 name: uk-universal-credit-efrs
 title: UK Universal Credit — Axiom vs PolicyEngine
 description: >-
-  Compares the Universal Credit Regulation 36 component amounts encoded in
-  Axiom RuleSpec against PolicyEngine UK on the Enhanced FRS population.
-  Known PolicyEngine UK 2026 forecast-indexed rate divergences are retained
-  as visible difference rows and labeled separately from true Axiom mismatches.
+  Compares the currently projection-safe Universal Credit component surfaces
+  encoded in Axiom RuleSpec against PolicyEngine UK on the Enhanced FRS
+  population. The composed Axiom program now includes the final award assembly,
+  but the EFRS dashboard does not compare final entitlement until the remaining
+  housing, childcare payment, sanctions, capital, and deduction inputs can be
+  projected without using PolicyEngine internals as Axiom facts. Known
+  PolicyEngine UK 2026 forecast-indexed rate divergences are retained as
+  visible difference rows and labeled separately from true Axiom mismatches.
 
 runner:
   type: axiom-encode-uk-efrs-compare

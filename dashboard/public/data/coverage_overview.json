@@ -54,7 +54,7 @@
         "full_name": "UK Universal Credit",
         "status": "partial",
         "coverage": "UK",
-        "notes": "Current dashboard comparison validates Universal Credit Regulation 36 component amounts over Enhanced FRS, not full entitlement, taper, housing, sanctions, or passported eligibility."
+        "notes": "Axiom now has an executable Universal Credit award assembly package. The current dashboard comparison remains limited to projection-safe component surfaces over Enhanced FRS until housing, childcare payment, sanctions, capital, and deduction facts can be projected without using PolicyEngine internals as Axiom inputs."
       },
       {
         "id": "tanf",
@@ -191,11 +191,11 @@
       {
         "program": "universal_credit",
         "jurisdiction": "UK",
-        "status": "parameter",
-        "source": "rulespec-uk-official/regulations/uksi/2013/376/36.yaml",
+        "status": "executable",
+        "source": "axiom-programs/uk/universal-credit/fy-2026-27.yaml plus rulespec-uk-official WRA 2012 s.8 and UC Regulations 2013 regs. 22, 24, 26, 27, 29, 34, and 36",
         "known_non_tanf_gaps": [
-          "initial dashboard comparison covers Regulation 36 component amounts only",
-          "full Universal Credit entitlement is not wired yet: claimant conditions, income taper, housing costs, childcare payment facts, sanctions, capital, and award assembly remain outside this first EFRS check",
+          "composed Axiom package now assembles universal_credit_award_amount from maximum amount and earned/unearned deductions",
+          "dashboard comparison still covers projection-safe component surfaces only; final EFRS entitlement comparison is intentionally withheld until housing, childcare payment, sanctions, capital, and deduction facts can be projected without PE-derived overrides",
           "known PolicyEngine UK 2026 forecast-indexed Universal Credit rate divergences are labeled in the comparison rather than hidden"
         ]
       }
