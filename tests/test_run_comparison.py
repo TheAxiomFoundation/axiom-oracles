@@ -239,6 +239,164 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     assert report["cases"][0]["metadata"]["pe_standard_deduction"] == 209
 
 
+def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_encode = tmp_path / "axiom-encode"
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    rulespec_uk = tmp_path / "rulespec-uk"
+    data_folder = tmp_path / "policyengine-data"
+    for path in (axiom_encode, axiom_rules, rulespec_uk, data_folder):
+        path.mkdir()
+    output = tmp_path / "report.json"
+    calls = []
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
+    )
+
+    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
+        del check, cwd, capture_output, text
+        calls.append(cmd)
+        surface = cmd[cmd.index("--surface") + 1]
+        payload = {
+            "compared_persons": 2,
+            "compared_benunits": 1,
+            "compared_values": 1,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "oracle_divergence_count": 0,
+            "oracle_divergences": [],
+            "output_summary": [
+                {
+                    "surface": surface,
+                    "output": "carer_element",
+                    "compared": 1,
+                    "mismatches": 0,
+                    "oracle_divergences": 0,
+                    "max_abs_diff": 0,
+                    "max_relative_diff": 0,
+                }
+            ],
+            "skipped_surfaces": [],
+            "projection_notes": [f"note {surface}"],
+        }
+        return subprocess.CompletedProcess(cmd, 0, stdout=json.dumps(payload))
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+
+    run_comparison._run_axiom_encode_uk_efrs_compare(
+        {
+            "axiom_encode_repo": str(axiom_encode),
+            "axiom_rules_repo": str(axiom_rules),
+            "rulespec_root": str(rulespec_uk),
+            "parameters": {
+                "sample_size": 100,
+                "year": 2026,
+                "python": "3.13",
+                "dataset": "enhanced_frs_2023_24",
+                "data_folder": str(data_folder),
+                "surfaces": [
+                    "universal-credit-carer-element",
+                    "universal-credit-childcare-cap",
+                ],
+            },
+        },
+        output,
+    )
+
+    assert len(calls) == 2
+    assert calls[0][:4] == ["uv", "run", "--python", "3.13"]
+    assert "uk-efrs-compare" in calls[0]
+    assert "policyengine[uk]==4.11.0" in calls[0]
+    assert "policyengine-uk==2.88.20" in calls[0]
+    assert "--rulespec-root" in calls[0]
+    assert str(rulespec_uk.resolve()) in calls[0]
+
+    report = json.loads(output.read_text())
+    assert report["compared_values"] == 2
+    assert report["compared_persons"] == 2
+    assert len(report["output_summary"]) == 2
+    assert report["projection_notes"] == [
+        "note universal-credit-carer-element",
+        "note universal-credit-childcare-cap",
+    ]
+
+
+def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_encode = tmp_path / "axiom-encode"
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    rulespec_uk = tmp_path / "rulespec-uk"
+    data_folder = tmp_path / "policyengine-data"
+    compose_binary = tmp_path / "axiom-compose"
+    program = tmp_path / "axiom-programs" / "uk" / "universal-credit" / "fy-2026-27.yaml"
+    composed = tmp_path / "uk-uc-composed.yaml"
+    output = tmp_path / "report.json"
+    for path in (axiom_encode, axiom_rules, rulespec_uk, data_folder, program.parent):
+        path.mkdir(parents=True, exist_ok=True)
+    compose_binary.write_text("#!/bin/sh\n")
+    program.write_text("program: uk/universal-credit\n")
+    calls = []
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
+    )
+
+    def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
+        del check, cwd, capture_output, text
+        calls.append(cmd)
+        if "uk-efrs-compare" not in cmd:
+            return subprocess.CompletedProcess(cmd, 0)
+        payload = {
+            "compared_persons": 1,
+            "compared_benunits": 1,
+            "compared_values": 1,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "oracle_divergence_count": 0,
+            "oracle_divergences": [],
+            "output_summary": [],
+            "skipped_surfaces": [],
+            "projection_notes": [],
+        }
+        return subprocess.CompletedProcess(cmd, 0, stdout=json.dumps(payload))
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+
+    run_comparison._run_axiom_encode_uk_efrs_compare(
+        {
+            "axiom_encode_repo": str(axiom_encode),
+            "axiom_rules_repo": str(axiom_rules),
+            "rulespec_root": str(rulespec_uk),
+            "parameters": {
+                "sample_size": 100,
+                "year": 2026,
+                "python": "3.13",
+                "dataset": "enhanced_frs_2023_24",
+                "data_folder": str(data_folder),
+                "surface": "universal-credit-carer-element",
+                "axiom_compose_binary": str(compose_binary),
+                "axiom_program": str(program),
+                "axiom_composed_program": str(composed),
+                "rulespec_roots": [str(rulespec_uk)],
+            },
+        },
+        output,
+    )
+
+    assert calls[0] == [
+        str(compose_binary.resolve()),
+        str(program.resolve()),
+        "--rulespec-root",
+        str(rulespec_uk.resolve()),
+        "-o",
+        str(composed.resolve()),
+    ]
+    assert "uk-efrs-compare" in calls[1]
+    assert "--universal-credit-program" in calls[1]
+    assert str(composed.resolve()) in calls[1]
+
+
 def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
     run_comparison = load_run_comparison_module()
 
@@ -327,3 +485,126 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
         aggregate["concept"] == "us:tax/federal-income-tax#cdcc"
         for aggregate in report["aggregates"]
     )
+
+
+def test_uk_efrs_dashboard_adapter_separates_known_pe_divergence():
+    run_comparison = load_run_comparison_module()
+
+    report = run_comparison._adapt_uk_efrs_to_v2(
+        {
+            "compared_persons": 1,
+            "compared_benunits": 1,
+            "compared_values": 2,
+            "mismatch_count": 1,
+            "mismatches": [
+                {
+                    "surface": "universal-credit-carer-element",
+                    "entity_id": "benunit_1",
+                    "output": "carer_element",
+                    "axiom": 209.34,
+                    "policyengine": 200.00,
+                    "diff": 9.34,
+                }
+            ],
+            "oracle_divergence_count": 1,
+            "oracle_divergences": [
+                {
+                    "surface": "universal-credit-standard-allowance",
+                    "entity_id": "benunit_2",
+                    "output": "standard_allowance_single_25_or_over",
+                    "axiom": 424.90,
+                    "policyengine": 410.00,
+                    "diff": 14.90,
+                    "reason": "PolicyEngine UK forecast-indexed rate",
+                    "issue_url": "https://example.test/pe-issue",
+                }
+            ],
+            "output_summary": [
+                {
+                    "surface": "universal-credit-carer-element",
+                    "output": "carer_element",
+                    "compared": 1,
+                    "mismatches": 1,
+                    "oracle_divergences": 0,
+                    "max_abs_diff": 9.34,
+                    "max_relative_diff": 0.04,
+                },
+                {
+                    "surface": "universal-credit-standard-allowance",
+                    "output": "standard_allowance_single_25_or_over",
+                    "compared": 1,
+                    "mismatches": 0,
+                    "oracle_divergences": 1,
+                    "max_abs_diff": 14.90,
+                    "max_relative_diff": 0.04,
+                },
+            ],
+            "projection_notes": ["component amount comparison"],
+        },
+        {},
+        suite="uk-universal-credit-efrs",
+    )
+
+    assert report["schema_version"] == "axiom.comparison_report.v2"
+    assert report["suite"] == "uk-universal-credit-efrs"
+    assert report["summary"]["comparison_count"] == 2
+    assert report["summary"]["mismatch_count"] == 2
+    assert report["summary"]["true_mismatch_count"] == 1
+    assert report["summary"]["known_policyengine_divergence_count"] == 1
+    assert report["summary"]["mismatches_by_kind"] == [
+        {"value": "amount_difference", "count": 1},
+        {"value": "known_policyengine_divergence", "count": 1},
+    ]
+    assert report["aggregates"][0]["concept"] == "uk:benefits/universal-credit#amount"
+    assert report["aggregates"][0]["match_rate"] == 0
+    assert report["mismatches"][1]["kind"] == "known_policyengine_divergence"
+    assert report["mismatches"][1]["issue_url"] == "https://example.test/pe-issue"
+
+
+def test_uk_efrs_dashboard_adapter_caps_known_divergence_examples():
+    run_comparison = load_run_comparison_module()
+
+    report = run_comparison._adapt_uk_efrs_to_v2(
+        {
+            "compared_persons": 3,
+            "compared_benunits": 0,
+            "compared_values": 3,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "oracle_divergence_count": 3,
+            "oracle_divergences": [
+                {
+                    "surface": "universal-credit-carer-element",
+                    "entity_id": f"person_{index}",
+                    "output": "carer_element",
+                    "axiom": 209.34,
+                    "policyengine": 200.00,
+                    "diff": 9.34,
+                    "reason": "PolicyEngine UK forecast-indexed rate",
+                }
+                for index in range(3)
+            ],
+            "output_summary": [
+                {
+                    "surface": "universal-credit-carer-element",
+                    "output": "carer_element",
+                    "compared": 3,
+                    "mismatches": 0,
+                    "oracle_divergences": 3,
+                    "max_abs_diff": 9.34,
+                    "max_relative_diff": 0.04,
+                }
+            ],
+        },
+        {"dashboard": {"known_policyengine_divergence_detail_limit": 1}},
+        suite="uk-universal-credit-efrs",
+    )
+
+    assert report["summary"]["mismatch_count"] == 3
+    assert report["summary"]["known_policyengine_divergence_count"] == 3
+    assert report["summary"]["stored_mismatch_example_count"] == 1
+    assert report["summary"]["mismatches_by_kind"] == [
+        {"value": "known_policyengine_divergence", "count": 3}
+    ]
+    assert len(report["mismatches"]) == 1
+    assert len(report["cases"]) == 1

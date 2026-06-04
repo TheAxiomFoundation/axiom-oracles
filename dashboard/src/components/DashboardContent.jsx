@@ -22,6 +22,7 @@ const SUITE_DISPLAY_ORDER = {
   "co-state-income-tax-ecps": 100,
   "co-health-thresholds": 110,
   "co-tanf-coverage": 120,
+  "uk-universal-credit-efrs": 130,
   "nyc-synthetic": 1000,
 };
 

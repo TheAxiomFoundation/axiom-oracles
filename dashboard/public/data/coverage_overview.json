@@ -49,6 +49,14 @@
         "notes": "PolicyEngine tracker marks Social Security and Medicare payroll taxes complete."
       },
       {
+        "id": "universal_credit",
+        "name": "Universal Credit",
+        "full_name": "UK Universal Credit",
+        "status": "partial",
+        "coverage": "UK",
+        "notes": "Axiom now has an executable Universal Credit award assembly package. The current dashboard comparison remains limited to projection-safe component surfaces over Enhanced FRS until housing, childcare payment, sanctions, capital, and deduction facts can be projected without using PolicyEngine internals as Axiom inputs."
+      },
+      {
         "id": "tanf",
         "name": "TANF",
         "full_name": "Temporary Assistance for Needy Families",
@@ -178,6 +186,17 @@
           "current full FIIT ECPS report covers CTC, standard deduction, capital gains, tax before credits, EITC, CDCC, AOTC, capped nonrefundable credits, and payroll tax surfaces",
           "CTC, standard deduction, capital gains, tax before credits, CDCC, AOTC, capped nonrefundable credits, and payroll surfaces are clean in the current report",
           "172 current residual entries are all EITC component differences"
+        ]
+      },
+      {
+        "program": "universal_credit",
+        "jurisdiction": "UK",
+        "status": "executable",
+        "source": "axiom-programs/uk/universal-credit/fy-2026-27.yaml plus rulespec-uk-official WRA 2012 s.8 and UC Regulations 2013 regs. 22, 24, 26, 27, 29, 34, and 36",
+        "known_non_tanf_gaps": [
+          "composed Axiom package now assembles universal_credit_award_amount from maximum amount and earned/unearned deductions",
+          "dashboard comparison still covers projection-safe component surfaces only; final EFRS entitlement comparison is intentionally withheld until housing, childcare payment, sanctions, capital, and deduction facts can be projected without PE-derived overrides",
+          "known PolicyEngine UK 2026 forecast-indexed Universal Credit rate divergences are labeled in the comparison rather than hidden"
         ]
       }
     ]

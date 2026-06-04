@@ -11,6 +11,7 @@ every config in the registry on a weekly schedule.
 ```bash
 uv run scripts/run_comparison.py fiit-ecps --summary
 uv run scripts/run_comparison.py co-snap-ecps --summary
+uv run scripts/run_comparison.py uk-universal-credit-efrs --summary
 ```
 
 ## How to add a new comparison
@@ -47,6 +48,18 @@ before they land.
 
 Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 `rulespec_remote`. Required `parameters`: `sample_size`, `year`, `surface`.
+
+### `axiom-encode-uk-efrs-compare`
+
+Invokes `axiom-encode uk-efrs-compare` via `uv run` with the pinned
+PolicyEngine UK stack. Supports either one `surface` or a `surfaces` list; the
+runner merges multi-surface JSON output before adapting it to the dashboard.
+When `parameters.axiom_program` is declared, the runner first composes that
+`axiom-programs` spec and passes the composed RuleSpec file as the Universal
+Credit program under test.
+
+Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
+`rulespec_root`. Required `parameters`: `sample_size`, `year`, `dataset`.
 
 ### `axiom-oracles-compare`
 
