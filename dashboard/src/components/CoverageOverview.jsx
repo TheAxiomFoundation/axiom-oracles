@@ -76,6 +76,12 @@ const SUITE_META = {
     label: "Federal income tax",
     order: 10,
   },
+  "uk-universal-credit-efrs": {
+    program: "universal_credit",
+    jurisdiction: "UK",
+    label: "UK Universal Credit",
+    order: 130,
+  },
 };
 
 function titleFromId(id) {

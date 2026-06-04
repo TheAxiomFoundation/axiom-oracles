@@ -142,6 +142,63 @@ FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
     },
 }
 
+UK_UNIVERSAL_CREDIT_PARENT = "uk:benefits/universal-credit#amount"
+
+UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS: dict[str, dict] = {
+    "standard_allowance_single_under_25": {
+        "concept": "uk:regulations/uksi/2013/376/36#standard_allowance_single_under_25",
+        "description": "Universal Credit standard allowance, single under 25",
+    },
+    "standard_allowance_single_25_or_over": {
+        "concept": "uk:regulations/uksi/2013/376/36#standard_allowance_single_25_or_over",
+        "description": "Universal Credit standard allowance, single 25 or over",
+    },
+    "standard_allowance_joint_both_under_25": {
+        "concept": "uk:regulations/uksi/2013/376/36#standard_allowance_joint_both_under_25",
+        "description": "Universal Credit standard allowance, joint both under 25",
+    },
+    "standard_allowance_joint_either_25_or_over": {
+        "concept": "uk:regulations/uksi/2013/376/36#standard_allowance_joint_either_25_or_over",
+        "description": "Universal Credit standard allowance, joint either 25 or over",
+    },
+    "child_element_first_child_or_qualifying_young_person": {
+        "concept": "uk:regulations/uksi/2013/376/36#child_element_first_child_or_qualifying_young_person",
+        "description": "Universal Credit child element, first child",
+    },
+    "child_element_second_and_each_subsequent_child_or_qualifying_young_person": {
+        "concept": "uk:regulations/uksi/2013/376/36#child_element_second_and_each_subsequent_child_or_qualifying_young_person",
+        "description": "Universal Credit child element, second and subsequent child",
+    },
+    "disabled_child_additional_amount_lower_rate": {
+        "concept": "uk:regulations/uksi/2013/376/36#disabled_child_additional_amount_lower_rate",
+        "description": "Universal Credit disabled child addition, lower rate",
+    },
+    "disabled_child_additional_amount_higher_rate": {
+        "concept": "uk:regulations/uksi/2013/376/36#disabled_child_additional_amount_higher_rate",
+        "description": "Universal Credit disabled child addition, higher rate",
+    },
+    "lcwra_element_standard_lcwra_claimant": {
+        "concept": "uk:regulations/uksi/2013/376/36#lcwra_element_standard_lcwra_claimant",
+        "description": "Universal Credit LCWRA element",
+    },
+    "lcwra_element_pre_2026_severe_conditions_or_terminally_ill_claimant": {
+        "concept": "uk:regulations/uksi/2013/376/36#lcwra_element_pre_2026_severe_conditions_or_terminally_ill_claimant",
+        "description": "Universal Credit LCWRA pre-2026 higher amount",
+    },
+    "carer_element": {
+        "concept": "uk:regulations/uksi/2013/376/36#carer_element",
+        "description": "Universal Credit carer element",
+    },
+    "childcare_costs_element_maximum_one_child": {
+        "concept": "uk:regulations/uksi/2013/376/36#childcare_costs_element_maximum_one_child",
+        "description": "Universal Credit childcare costs cap, one child",
+    },
+    "childcare_costs_element_maximum_two_or_more_children": {
+        "concept": "uk:regulations/uksi/2013/376/36#childcare_costs_element_maximum_two_or_more_children",
+        "description": "Universal Credit childcare costs cap, two or more children",
+    },
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -352,6 +409,160 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
             subprocess.run(cmd, check=True, stdout=f)
     finally:
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
+
+
+def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
+    """`axiom-encode uk-efrs-compare` via uv run with the pinned PE UK stack."""
+    axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
+    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+    rulespec_root = _resolve_path(runner["rulespec_root"], "rulespec_root")
+    _ensure_engine_binary(axiom_rules_repo, kind="release")
+    params = runner["parameters"]
+    universal_credit_program = _compose_uk_universal_credit_program(params)
+    pe_pins = [
+        "--with",
+        "policyengine[uk]==4.11.0",
+        "--with",
+        "policyengine-uk==2.88.20",
+        "--with",
+        "policyengine-core==3.26.11",
+    ]
+    surfaces = params.get("surfaces")
+    if surfaces is None:
+        surfaces = [params.get("surface", "all")]
+    if isinstance(surfaces, str):
+        surfaces = [surfaces]
+
+    reports: list[dict] = []
+    for surface in surfaces:
+        cmd = [
+            "uv",
+            "run",
+            "--python",
+            str(params.get("python", "3.13")),
+            "--no-project",
+            "--with-editable",
+            str(axiom_encode_repo),
+            *pe_pins,
+            "axiom-encode",
+            "uk-efrs-compare",
+            "--rulespec-root",
+            str(rulespec_root),
+            "--axiom-rules-engine-path",
+            str(axiom_rules_repo),
+            "--sample-size",
+            str(params.get("sample_size", 100)),
+            "--year",
+            str(params.get("year", 2026)),
+            "--surface",
+            str(surface),
+            "--dataset",
+            str(params.get("dataset", "enhanced_frs_2023_24")),
+            "--data-folder",
+            str(_resolve_path(params["data_folder"], "data_folder"))
+            if params.get("data_folder")
+            else str(REPO_ROOT / ".axiom" / "policyengine-data"),
+            "--tolerance",
+            str(params.get("tolerance", 0.01)),
+            "--relative-tolerance",
+            str(params.get("relative_tolerance", 2e-7)),
+            "--json",
+        ]
+        if universal_credit_program is not None:
+            cmd.extend([
+                "--universal-credit-program",
+                str(universal_credit_program),
+            ])
+        if params.get("workspace_root"):
+            cmd.extend([
+                "--root",
+                str(_resolve_path(params["workspace_root"], "workspace_root")),
+            ])
+        result = subprocess.run(
+            cmd,
+            check=True,
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+        )
+        reports.append(json.loads(result.stdout))
+
+    output.write_text(json.dumps(_merge_uk_efrs_reports(reports), indent=2) + "\n")
+
+
+def _compose_uk_universal_credit_program(params: dict) -> Path | None:
+    program_ref = params.get("axiom_program")
+    if not program_ref:
+        return None
+
+    compose_binary = _resolve_path(
+        params.get(
+            "axiom_compose_binary",
+            "$HOME/axiom-compose/.venv/bin/axiom-compose",
+        ),
+        "axiom_compose_binary",
+    )
+    program_path = _resolve_path(program_ref, "axiom_program")
+    composed_path = _expand_path(
+        params.get("axiom_composed_program", "/tmp/uk-universal-credit-composed.yaml")
+    )
+    composed_path.parent.mkdir(parents=True, exist_ok=True)
+    roots = [
+        _resolve_path(root, "rulespec_roots")
+        for root in params.get("rulespec_roots", [])
+    ]
+    compose_cmd = [str(compose_binary), str(program_path)]
+    for root in roots:
+        compose_cmd.extend(["--rulespec-root", str(root)])
+    compose_cmd.extend(["-o", str(composed_path)])
+    subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
+    return composed_path.resolve()
+
+
+def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
+    if not reports:
+        return {
+            "compared_persons": 0,
+            "compared_benunits": 0,
+            "compared_values": 0,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "oracle_divergence_count": 0,
+            "oracle_divergences": [],
+            "output_summary": [],
+            "skipped_surfaces": [],
+            "projection_notes": [],
+        }
+    if len(reports) == 1:
+        return reports[0]
+    merged = {
+        "compared_persons": max(r.get("compared_persons", 0) for r in reports),
+        "compared_benunits": max(r.get("compared_benunits", 0) for r in reports),
+        "compared_values": sum(r.get("compared_values", 0) for r in reports),
+        "mismatches": [],
+        "oracle_divergences": [],
+        "output_summary": [],
+        "skipped_surfaces": [],
+        "projection_notes": [],
+    }
+    seen_notes: set[str] = set()
+    seen_skipped: set[str] = set()
+    for report in reports:
+        merged["mismatches"].extend(report.get("mismatches", []))
+        merged["oracle_divergences"].extend(report.get("oracle_divergences", []))
+        merged["output_summary"].extend(report.get("output_summary", []))
+        for skipped in report.get("skipped_surfaces", []):
+            key = json.dumps(skipped, sort_keys=True)
+            if key not in seen_skipped:
+                seen_skipped.add(key)
+                merged["skipped_surfaces"].append(skipped)
+        for note in report.get("projection_notes", []):
+            if note not in seen_notes:
+                seen_notes.add(note)
+                merged["projection_notes"].append(note)
+    merged["mismatch_count"] = len(merged["mismatches"])
+    merged["oracle_divergence_count"] = len(merged["oracle_divergences"])
+    return merged
 
 
 def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
@@ -652,6 +863,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
+    "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
 }
 
@@ -758,20 +970,27 @@ def _print_summary(output: Path) -> None:
     if "compared_values" in data:
         cv = data["compared_values"]
         mc = data["mismatch_count"]
-        pct = 100 * (cv - mc) / cv if cv else 0
+        od = data.get("oracle_divergence_count", 0)
+        differences = mc + od
+        pct = 100 * (cv - differences) / cv if cv else 0
         print(f"Compared values:   {cv}")
+        print(f"Differences:       {differences}")
         print(f"Mismatches:        {mc}")
+        if od:
+            print(f"Known PE issues:   {od}")
         print(f"Agreement:         {pct:.4f}%")
         from collections import defaultdict
 
         by_surface = defaultdict(lambda: [0, 0])
         for row in data.get("output_summary", []):
             by_surface[row["surface"]][0] += row["compared"]
-            by_surface[row["surface"]][1] += row["mismatches"]
+            by_surface[row["surface"]][1] += row["mismatches"] + row.get(
+                "oracle_divergences", 0
+            )
         print()
         for surf, (c, m) in sorted(by_surface.items(), key=lambda x: -x[1][1]):
             p = 100 * (c - m) / c if c else 0
-            print(f"  {surf:30s}  {c - m}/{c} ({p:6.2f}%)  mismatches={m}")
+            print(f"  {surf:30s}  {c - m}/{c} ({p:6.2f}%)  differences={m}")
     elif "case_count" in data:
         cc = data.get("case_count", 0)
         mm = sum(len(c.get("mismatches", []) or []) for c in data.get("cases", []))
@@ -834,6 +1053,8 @@ def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) 
     raw = json.loads(raw_path.read_text())
     if runner_type == "axiom-encode-tax-ecps-compare":
         return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
+    if runner_type == "axiom-encode-uk-efrs-compare":
+        return _adapt_uk_efrs_to_v2(raw, config, suite=suite)
     # axiom-oracles-compare already emits v2 — pass through, but override
     # the suite with the comparison-config value. The upstream report
     # stamps the population/synthetic-subset name (e.g. "nyc-synthetic"),
@@ -842,6 +1063,273 @@ def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) 
     # dashboard's suite selector.
     raw["suite"] = suite
     return raw
+
+
+def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
+    """Convert uk-efrs-compare output to axiom.comparison_report.v2."""
+    from collections import Counter, defaultdict
+
+    dashboard_config = config.get("dashboard") or {}
+    known_divergence_detail_limit = int(
+        dashboard_config.get("known_policyengine_divergence_detail_limit", 100)
+    )
+    by_output = {
+        row["output"]: row
+        for row in raw.get("output_summary", [])
+        if row.get("output") in UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS
+    }
+    mismatch_rows = [
+        {**row, "kind": "amount_difference"}
+        for row in raw.get("mismatches", [])
+        if row.get("output") in UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS
+    ]
+    divergence_rows = [
+        {**row, "kind": "known_policyengine_divergence"}
+        for row in raw.get("oracle_divergences", [])
+        if row.get("output") in UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS
+    ]
+    all_difference_rows = [*mismatch_rows, *divergence_rows]
+    visible_divergence_rows = _limit_rows_by_output(
+        divergence_rows,
+        limit_per_output=known_divergence_detail_limit,
+    )
+    visible_difference_rows = [*mismatch_rows, *visible_divergence_rows]
+
+    component_concepts: list[str] = []
+    aggregates: list[dict] = []
+    for output_name, row in by_output.items():
+        spec = UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[output_name]
+        compared = int(row.get("compared", 0) or 0)
+        true_mismatches = int(row.get("mismatches", 0) or 0)
+        known_divergences = int(row.get("oracle_divergences", 0) or 0)
+        differences = true_mismatches + known_divergences
+        matched = compared - differences
+        match_rate = (matched / compared * 100) if compared else 100.0
+        quality_flags = []
+        if known_divergences:
+            quality_flags.append(
+                {
+                    "code": "known_policyengine_uk_divergence",
+                    "message": (
+                        "PolicyEngine UK currently uses forecast-indexed "
+                        "2026 Universal Credit rates for this component."
+                    ),
+                    "severity": "warning",
+                }
+            )
+        aggregates.append(
+            {
+                "category": "benefits",
+                "comparison": "amount",
+                "comparison_count": compared,
+                "comparison_weight": compared,
+                "components": [],
+                "concept": spec["concept"],
+                "description": spec["description"],
+                "known_policyengine_divergence_count": known_divergences,
+                "left_weighted_sum": None,
+                "match_count": matched,
+                "match_rate": match_rate,
+                "match_weight": matched,
+                "mismatch_count": differences,
+                "mismatch_weight": differences,
+                "missing_both_count": 0,
+                "missing_left_count": 0,
+                "missing_right_count": 0,
+                "parent": UK_UNIVERSAL_CREDIT_PARENT,
+                "quality_flags": quality_flags,
+                "right_weighted_sum": None,
+                "true_mismatch_count": true_mismatches,
+                "weighted_difference": None,
+                "weighted_match_rate": match_rate,
+            }
+        )
+        component_concepts.append(spec["concept"])
+
+    parent_compared = sum(a["comparison_count"] for a in aggregates)
+    parent_mismatches = sum(a["mismatch_count"] for a in aggregates)
+    parent_known_divergences = sum(
+        a["known_policyengine_divergence_count"] for a in aggregates
+    )
+    parent_matched = parent_compared - parent_mismatches
+    parent_rate = (parent_matched / parent_compared * 100) if parent_compared else 100.0
+    aggregates.insert(
+        0,
+        {
+            "category": "benefits",
+            "comparison": "amount",
+            "comparison_count": parent_compared,
+            "comparison_weight": parent_compared,
+            "components": component_concepts,
+            "concept": UK_UNIVERSAL_CREDIT_PARENT,
+            "description": "Universal Credit Regulation 36 component amounts",
+            "known_policyengine_divergence_count": parent_known_divergences,
+            "left_weighted_sum": None,
+            "match_count": parent_matched,
+            "match_rate": parent_rate,
+            "match_weight": parent_matched,
+            "mismatch_count": parent_mismatches,
+            "mismatch_weight": parent_mismatches,
+            "missing_both_count": 0,
+            "missing_left_count": 0,
+            "missing_right_count": 0,
+            "parent": None,
+            "right_weighted_sum": None,
+            "true_mismatch_count": len(mismatch_rows),
+            "weighted_difference": None,
+            "weighted_match_rate": parent_rate,
+        },
+    )
+
+    concepts = [
+        {
+            "category": "benefits",
+            "comparison": "amount",
+            "components": component_concepts,
+            "description": "Universal Credit Regulation 36 component amounts",
+            "id": UK_UNIVERSAL_CREDIT_PARENT,
+            "parent": None,
+            "tolerance": 0.01,
+        }
+    ]
+    for output_name in by_output:
+        spec = UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[output_name]
+        concepts.append(
+            {
+                "category": "benefits",
+                "comparison": "amount",
+                "components": [],
+                "description": spec["description"],
+                "id": spec["concept"],
+                "parent": UK_UNIVERSAL_CREDIT_PARENT,
+                "tolerance": 0.01,
+            }
+        )
+
+    cases_by_entity: dict[str, list[dict]] = defaultdict(list)
+    flat_mismatches: list[dict] = []
+    for row in visible_difference_rows:
+        spec = UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[row["output"]]
+        kind = row["kind"]
+        mismatch = {
+            "case_id": f"uk-efrs-{row['entity_id']}",
+            "concept": spec["concept"],
+            "description": row.get("reason")
+            or f"{spec['description']} — output={row['output']}",
+            "difference": row.get("diff", 0),
+            "issue_url": row.get("issue_url"),
+            "kind": kind,
+            "left": row.get("axiom", 0),
+            "parent": UK_UNIVERSAL_CREDIT_PARENT,
+            "relative_tolerance": 2e-7,
+            "right": row.get("policyengine", 0),
+            "surface": row.get("surface"),
+            "tolerance": 0.01,
+        }
+        cases_by_entity[str(row["entity_id"])].append(mismatch)
+        flat_mismatches.append(mismatch)
+
+    cases = []
+    for entity_id, case_mismatches in cases_by_entity.items():
+        cases.append(
+            {
+                "case_id": f"uk-efrs-{entity_id}",
+                "left_engine": "axiom",
+                "left_errors": [],
+                "match_rate": 0.0,
+                "metadata": {
+                    "case_unit": "benefit_unit_or_person",
+                    "dataset": "enhanced_frs_2023_24",
+                    "entity_id": entity_id,
+                    "population": "enhanced-frs",
+                    "suite": suite,
+                },
+                "mismatches": case_mismatches,
+                "right_engine": "policyengine",
+                "right_errors": [],
+            }
+        )
+
+    mismatches_by_concept = [
+        {"value": value, "count": count}
+        for value, count in sorted(
+            Counter(
+                UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[row["output"]]["concept"]
+                for row in all_difference_rows
+            ).items(),
+            key=lambda item: (-item[1], item[0]),
+        )
+    ]
+    mismatches_by_kind = [
+        {"value": value, "count": count}
+        for value, count in sorted(
+            Counter(row["kind"] for row in all_difference_rows).items(),
+            key=lambda item: (-item[1], item[0]),
+        )
+    ]
+    alarms = []
+    if parent_known_divergences:
+        alarms.append(
+            {
+                "code": "known_policyengine_uk_divergence",
+                "message": (
+                    f"{parent_known_divergences:,} differences are classified "
+                    "as known PolicyEngine UK 2026 Universal Credit rate "
+                    "divergences, not source-backed Axiom calculation defects."
+                ),
+                "severity": "warning",
+            }
+        )
+
+    return {
+        "aggregates": aggregates,
+        "case_count": raw.get("compared_persons", 0) + raw.get("compared_benunits", 0),
+        "cases": cases,
+        "concepts": concepts,
+        "engines": {"left": "axiom", "right": "policyengine"},
+        "errors": [],
+        "locales": ["UK"],
+        "mismatches": flat_mismatches,
+        "population": "enhanced-frs",
+        "projection_notes": raw.get("projection_notes", []),
+        "schema_version": "axiom.comparison_report.v2",
+        "scope": {"geoid": "UK", "type": "country"},
+        "suite": suite,
+        "summary": {
+            "alarms": alarms,
+            "comparison_count": parent_compared,
+            "error_count": 0,
+            "errors_by_engine": {},
+            "known_policyengine_divergence_count": parent_known_divergences,
+            "match_count": parent_matched,
+            "mismatch_count": parent_mismatches,
+            "mismatches_by_concept": mismatches_by_concept,
+            "mismatches_by_kind": mismatches_by_kind,
+            "mismatches_by_scenario": {},
+            "stored_mismatch_example_count": len(flat_mismatches),
+            "true_mismatch_count": len(mismatch_rows),
+            "weighted": {
+                "comparison_weight": parent_compared,
+                "match_rate": parent_rate,
+                "match_weight": parent_matched,
+                "mismatch_weight": parent_mismatches,
+            },
+        },
+    }
+
+
+def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[dict]:
+    if limit_per_output <= 0:
+        return []
+    counts: Counter[str] = Counter()
+    selected: list[dict] = []
+    for row in rows:
+        output = str(row.get("output") or "")
+        if counts[output] >= limit_per_output:
+            continue
+        counts[output] += 1
+        selected.append(row)
+    return selected
 
 
 def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:

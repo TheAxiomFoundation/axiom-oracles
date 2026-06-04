@@ -49,6 +49,14 @@
         "notes": "PolicyEngine tracker marks Social Security and Medicare payroll taxes complete."
       },
       {
+        "id": "universal_credit",
+        "name": "Universal Credit",
+        "full_name": "UK Universal Credit",
+        "status": "partial",
+        "coverage": "UK",
+        "notes": "Current dashboard comparison validates Universal Credit Regulation 36 component amounts over Enhanced FRS, not full entitlement, taper, housing, sanctions, or passported eligibility."
+      },
+      {
         "id": "tanf",
         "name": "TANF",
         "full_name": "Temporary Assistance for Needy Families",
@@ -178,6 +186,17 @@
           "current full FIIT ECPS report covers CTC, standard deduction, capital gains, tax before credits, EITC, CDCC, AOTC, capped nonrefundable credits, and payroll tax surfaces",
           "CTC, standard deduction, capital gains, tax before credits, CDCC, AOTC, capped nonrefundable credits, and payroll surfaces are clean in the current report",
           "172 current residual entries are all EITC component differences"
+        ]
+      },
+      {
+        "program": "universal_credit",
+        "jurisdiction": "UK",
+        "status": "parameter",
+        "source": "rulespec-uk-official/regulations/uksi/2013/376/36.yaml",
+        "known_non_tanf_gaps": [
+          "initial dashboard comparison covers Regulation 36 component amounts only",
+          "full Universal Credit entitlement is not wired yet: claimant conditions, income taper, housing costs, childcare payment facts, sanctions, capital, and award assembly remain outside this first EFRS check",
+          "known PolicyEngine UK 2026 forecast-indexed Universal Credit rate divergences are labeled in the comparison rather than hidden"
         ]
       }
     ]

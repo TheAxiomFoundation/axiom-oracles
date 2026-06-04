@@ -738,6 +738,7 @@ const SUITE_TITLE = {
   "co-health-thresholds": "Colorado Medicaid / CHIP / BHP Thresholds",
   "co-tanf-coverage": "Colorado Works TANF",
   "fiit-ecps": "Federal Income Tax",
+  "uk-universal-credit-efrs": "UK Universal Credit",
   "nyc-synthetic": "NYC Synthetic Scenarios",
 };
 
@@ -751,6 +752,7 @@ const SUITE_JURISDICTION = {
   "co-health-thresholds": "US-CO",
   "co-tanf-coverage": "US-CO",
   "fiit-ecps": "US (federal)",
+  "uk-universal-credit-efrs": "UK",
   "nyc-synthetic": "US-NY-NYC",
 };
 

@@ -1,0 +1,40 @@
+name: uk-universal-credit-efrs
+title: UK Universal Credit — Axiom vs PolicyEngine
+description: >-
+  Compares the Universal Credit Regulation 36 component amounts encoded in
+  Axiom RuleSpec against PolicyEngine UK on the Enhanced FRS population.
+  Known PolicyEngine UK 2026 forecast-indexed rate divergences are retained
+  as visible difference rows and labeled separately from true Axiom mismatches.
+
+runner:
+  type: axiom-encode-uk-efrs-compare
+  axiom_encode_repo: $HOME/axiom-encode
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  rulespec_root: $HOME/rulespec-uk-official
+  parameters:
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-programs/uk/universal-credit/fy-2026-27.yaml
+    axiom_composed_program: /tmp/uk-universal-credit-fy-2026-27-composed.yaml
+    rulespec_roots:
+      - $HOME/rulespec-uk-official
+    data_folder: $HOME/axiom-oracles/.axiom/policyengine-data
+    sample_size: 0
+    year: 2026
+    python: "3.13"
+    dataset: enhanced_frs_2023_24
+    tolerance: 0.01
+    relative_tolerance: 2e-7
+    surfaces:
+      - universal-credit-standard-allowance
+      - universal-credit-child-element
+      - universal-credit-lcwra-element
+      - universal-credit-carer-element
+      - universal-credit-childcare-cap
+
+artifacts:
+  report_basename: axiom-policyengine-uk-universal-credit-efrs
+
+dashboard:
+  filename: axiom-policyengine-uk-universal-credit-efrs.json
+  suite: uk-universal-credit-efrs
+  known_policyengine_divergence_detail_limit: 25
