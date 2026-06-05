@@ -1,0 +1,394 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 6,
+      "comparison_weight": 6,
+      "components": [],
+      "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+      "description": "NYC school tax credit rate-reduction amount",
+      "left_weighted_sum": 184.64800000000002,
+      "match_count": 3,
+      "match_rate": 50.0,
+      "match_weight": 3,
+      "mismatch_count": 3,
+      "mismatch_weight": 3,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us-ny:tax/nyc-income-tax#liability",
+      "right_weighted_sum": 183.31199645996094,
+      "tolerance": 0.01,
+      "weighted_difference": 1.336003540039087,
+      "weighted_match_rate": 50.0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 5,
+      "comparison_weight": 5,
+      "components": [],
+      "concept": "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#form_it216_line_24_nyc_child_dependent_care_credit",
+      "description": "NYC child and dependent care credit, full-year slice",
+      "left_weighted_sum": 1500.0,
+      "match_count": 5,
+      "match_rate": 100.0,
+      "match_weight": 5,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us-ny:tax/nyc-income-tax#liability",
+      "right_weighted_sum": 1500.0,
+      "tolerance": 0.01,
+      "weighted_difference": 0.0,
+      "weighted_match_rate": 100.0
+    }
+  ],
+  "case_count": 11,
+  "cases": [
+    {
+      "case_id": "nyc-school-rate-single-20k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0,
+      "metadata": {
+        "component": "school_rate_reduction",
+        "filing_status": "SINGLE",
+        "nyc_taxable_income": 20000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [
+        {
+          "case_id": "nyc-school-rate-single-20k",
+          "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+          "description": "NYC school tax credit rate-reduction amount",
+          "difference": 0.48000167846679886,
+          "kind": "amount_difference",
+          "left": 39.24,
+          "right": 38.7599983215332,
+          "scenario": "school_rate_reduction",
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-school-rate-joint-20k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "component": "school_rate_reduction",
+        "filing_status": "JOINT",
+        "nyc_taxable_income": 20000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-school-rate-head-20k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0,
+      "metadata": {
+        "component": "school_rate_reduction",
+        "filing_status": "HEAD_OF_HOUSEHOLD",
+        "nyc_taxable_income": 20000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [
+        {
+          "case_id": "nyc-school-rate-head-20k",
+          "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+          "description": "NYC school tax credit rate-reduction amount",
+          "difference": 0.3760017089843757,
+          "kind": "amount_difference",
+          "left": 37.768,
+          "right": 37.391998291015625,
+          "scenario": "school_rate_reduction",
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-school-rate-separate-20k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0,
+      "metadata": {
+        "component": "school_rate_reduction",
+        "filing_status": "SEPARATE",
+        "nyc_taxable_income": 20000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [
+        {
+          "case_id": "nyc-school-rate-separate-20k",
+          "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+          "description": "NYC school tax credit rate-reduction amount",
+          "difference": 0.48000167846679886,
+          "kind": "amount_difference",
+          "left": 39.24,
+          "right": 38.7599983215332,
+          "scenario": "school_rate_reduction",
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-school-rate-surviving-spouse-20k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "component": "school_rate_reduction",
+        "filing_status": "SURVIVING_SPOUSE",
+        "nyc_taxable_income": 20000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-school-rate-joint-500001",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "component": "school_rate_reduction",
+        "filing_status": "JOINT",
+        "nyc_taxable_income": 500001,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-cdcc-full-year-25k-one-under4",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "child_ages": [
+          3
+        ],
+        "component": "cdcc_full_year",
+        "fagi": 25000,
+        "ny_cdcc": 1000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-cdcc-full-year-27500-one-under4",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "child_ages": [
+          3
+        ],
+        "component": "cdcc_full_year",
+        "fagi": 27500,
+        "ny_cdcc": 1000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-cdcc-full-year-30001-one-under4",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "child_ages": [
+          3
+        ],
+        "component": "cdcc_full_year",
+        "fagi": 30001,
+        "ny_cdcc": 1000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-cdcc-full-year-25k-no-under4",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "child_ages": [
+          5
+        ],
+        "component": "cdcc_full_year",
+        "fagi": 25000,
+        "ny_cdcc": 1000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "nyc-cdcc-full-year-25k-half-expenses-under4",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100,
+      "metadata": {
+        "child_ages": [
+          3,
+          5
+        ],
+        "component": "cdcc_full_year",
+        "fagi": 25000,
+        "ny_cdcc": 1000,
+        "population": "synthetic-components",
+        "suite": "nyc-income-tax-gap"
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "NYC school tax credit rate-reduction amount",
+      "id": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+      "parent": "us-ny:tax/nyc-income-tax#liability",
+      "tolerance": 0.01
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "NYC child and dependent care credit, full-year slice",
+      "id": "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#form_it216_line_24_nyc_child_dependent_care_credit",
+      "parent": "us-ny:tax/nyc-income-tax#liability",
+      "tolerance": 0.01
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [
+    "US-NY-NYC"
+  ],
+  "mismatches": [
+    {
+      "case_id": "nyc-school-rate-single-20k",
+      "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+      "description": "NYC school tax credit rate-reduction amount",
+      "difference": 0.48000167846679886,
+      "kind": "amount_difference",
+      "left": 39.24,
+      "right": 38.7599983215332,
+      "scenario": "school_rate_reduction",
+      "tolerance": 0.01
+    },
+    {
+      "case_id": "nyc-school-rate-head-20k",
+      "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+      "description": "NYC school tax credit rate-reduction amount",
+      "difference": 0.3760017089843757,
+      "kind": "amount_difference",
+      "left": 37.768,
+      "right": 37.391998291015625,
+      "scenario": "school_rate_reduction",
+      "tolerance": 0.01
+    },
+    {
+      "case_id": "nyc-school-rate-separate-20k",
+      "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+      "description": "NYC school tax credit rate-reduction amount",
+      "difference": 0.48000167846679886,
+      "kind": "amount_difference",
+      "left": 39.24,
+      "right": 38.7599983215332,
+      "scenario": "school_rate_reduction",
+      "tolerance": 0.01
+    }
+  ],
+  "population": "synthetic-components",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "3651000",
+    "type": "census_place"
+  },
+  "suite": "nyc-income-tax-gap",
+  "summary": {
+    "alarms": [
+      {
+        "code": "component-only",
+        "message": "NYC comparison is a synthetic source-backed component check, not a full Enhanced CPS run. It covers school-tax rate reduction and full-year CDCC only, and is not a final nyc_income_tax liability comparison.",
+        "severity": "warning"
+      },
+      {
+        "code": "source-vs-pe-rounded-base",
+        "message": "School-tax second-band differences are caused by Axiom using source-stated rounded base amounts while PolicyEngine derives bracket carry-ins from marginal rates and thresholds.",
+        "severity": "info"
+      }
+    ],
+    "comparison_count": 11,
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 8,
+    "mismatch_count": 3,
+    "mismatches_by_concept": [
+      {
+        "count": 3,
+        "value": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 3,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 3,
+        "value": "school_rate_reduction"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 11,
+      "match_rate": 72.72727272727273,
+      "match_weight": 8,
+      "mismatch_weight": 3
+    }
+  }
+}

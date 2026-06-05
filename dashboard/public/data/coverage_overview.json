@@ -33,6 +33,14 @@
         "notes": "Colorado state income tax is available through PolicyEngine's state income tax liability output."
       },
       {
+        "id": "nyc_income_tax",
+        "name": "NYC income tax",
+        "full_name": "New York City personal income tax",
+        "status": "complete",
+        "coverage": "US-NY-NYC",
+        "notes": "PolicyEngine exposes NYC income tax liability through `nyc_income_tax`, including the NYC residence gate, NYC taxable income, rate table, and NYC credit stack."
+      },
+      {
         "id": "medicaid_chip_bhp_thresholds",
         "name": "Medicaid / CHIP / BHP thresholds",
         "full_name": "Colorado Medicaid, CHIP, and Basic Health Program income thresholds",
@@ -147,6 +155,31 @@
         ]
       },
       {
+        "program": "nyc_income_tax",
+        "jurisdiction": "NYC",
+        "suite": "nyc-income-tax-gap",
+        "status": "partial",
+        "source": "rulespec-us-ny/statutes/NYC/11-1701.yaml + statutes/NYC/11-1704/1.yaml + statutes/NYC/11-1706.yaml + policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction.yaml + policies/tax/it-216-instructions/nyc-child-dependent-care-credit.yaml; NYC Admin Code and NY tax-form source coverage in axiom-corpus",
+        "known_non_tanf_gaps": [
+          "final `nyc_income_tax` is not independently executable yet because the NY taxable-income path (`ny_taxable_income`) is not source-backed through Axiom",
+          "ordinary NYC credit composition is incomplete: household credit, unincorporated-business credit, EITC, remaining school-tax credit pieces, and final resident/status selector still need source-backed encodes and composition",
+          "CDCC page 6 and school-tax rate-reduction are landed and component-tested, but they are not yet composed into final NYC liability",
+          "do not show a full final-liability alignment percentage until Axiom runs without PE-derived taxable-income, NY CDCC, or final-tax inputs"
+        ]
+      },
+      {
+        "program": "nyc_income_tax",
+        "jurisdiction": "NYC",
+        "suite": "nyc-income-tax-ecps-diagnostic",
+        "status": "partial",
+        "source": "full NYC ECPS diagnostic over source-backed NYC school-tax rate-reduction and full-year CDCC components",
+        "known_non_tanf_gaps": [
+          "no substantive formula gap in the tested components: CDCC is 137,915/137,915 clean; school-tax mismatches are second-band rounded-base convention differences under $1",
+          "diagnostic still uses PE/ECPS upstream tax-unit projections (`nyc_taxable_income`, `ny_cdcc`) as Axiom inputs, so this is not a final-liability comparison",
+          "next source-backed work is final-liability coverage: NY taxable income, ordinary NYC credits, and final `nyc_income_tax` assembly"
+        ]
+      },
+      {
         "program": "medicaid_chip_bhp_thresholds",
         "jurisdiction": "CO",
         "status": "parameter",
@@ -159,11 +192,14 @@
       {
         "program": "tanf",
         "jurisdiction": "CO",
-        "status": "coverageOnly",
-        "source": "rulespec-us-co/regulations/9-ccr-2503-6/3.606.1/*.yaml",
+        "status": "executableCoverage",
+        "source": "axiom-programs/us-co/tanf/fy-2026.yaml + rulespec-us-co/policies/cdhs/colorado-works/basic-cash-assistance.yaml",
         "known_non_tanf_gaps": [
+          "axiom-programs now exposes an executable monthly Colorado Works `tanf_benefit` for the encoded basic-cash-assistance slice",
+          "the package composes current-law standards, earned-income disregards, countable income, authorized grant, and pregnancy allowance via a runtime pregnant-parent relation",
           "not directly comparable to the current PolicyEngine Colorado TANF output surface",
-          "PE grant-standard table needs a current-year update before direct alignment is meaningful"
+          "PE grant-standard table needs a current-year update before direct alignment is meaningful",
+          "full TANF enrollment/demographic/take-up eligibility remains outside this package"
         ]
       },
       {
