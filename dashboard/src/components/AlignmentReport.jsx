@@ -739,6 +739,8 @@ const SUITE_TITLE = {
   "co-tanf-coverage": "Colorado Works TANF",
   "fiit-ecps": "Federal Income Tax",
   "uk-universal-credit-efrs": "UK Universal Credit",
+  "nyc-income-tax-gap": "NYC Income Tax Components",
+  "nyc-income-tax-ecps-diagnostic": "NYC Income Tax ECPS Diagnostic",
   "nyc-synthetic": "NYC Synthetic Scenarios",
 };
 
@@ -753,6 +755,8 @@ const SUITE_JURISDICTION = {
   "co-tanf-coverage": "US-CO",
   "fiit-ecps": "US (federal)",
   "uk-universal-credit-efrs": "UK",
+  "nyc-income-tax-gap": "US-NY-NYC",
+  "nyc-income-tax-ecps-diagnostic": "US-NY-NYC",
   "nyc-synthetic": "US-NY-NYC",
 };
 

@@ -58,6 +58,18 @@ const SUITE_META = {
     label: "Colorado income tax",
     order: 100,
   },
+  "nyc-income-tax-gap": {
+    program: "nyc_income_tax",
+    jurisdiction: "NYC",
+    label: "NYC income tax",
+    order: 105,
+  },
+  "nyc-income-tax-ecps-diagnostic": {
+    program: "nyc_income_tax",
+    jurisdiction: "NYC",
+    label: "NYC income tax ECPS diagnostic",
+    order: 106,
+  },
   "co-health-thresholds": {
     program: "medicaid_chip_bhp_thresholds",
     jurisdiction: "CO",
@@ -94,6 +106,7 @@ function statusLabel(status) {
   const labels = {
     complete: "Complete",
     executable: "Executable",
+    executableCoverage: "Executable coverage",
     parameter: "Parameter check",
     coverageOnly: "Coverage only",
     inProgress: "In progress",
@@ -107,7 +120,12 @@ function statusClass(status) {
   if (status === "complete" || status === "executable" || status === "parameter") {
     return "badge badge-good";
   }
-  if (status === "inProgress" || status === "partial" || status === "coverageOnly") {
+  if (
+    status === "inProgress" ||
+    status === "partial" ||
+    status === "coverageOnly" ||
+    status === "executableCoverage"
+  ) {
     return "badge badge-warn";
   }
   return "badge badge-bad";
@@ -134,6 +152,9 @@ function measurementNote(row) {
   if (row.axiomProgram?.status === "coverageOnly") {
     return "Coverage-only surface; not a measured alignment run.";
   }
+  if (row.axiomProgram?.status === "executableCoverage") {
+    return "Executable Axiom package; PE comparison is still coverage-only, not a measured alignment run.";
+  }
   if (row.axiomProgram?.status === "parameter") {
     return "Parameter check; not end-to-end household eligibility.";
   }
@@ -151,16 +172,18 @@ function buildRows(reports, coverageOverview) {
   const pePrograms = coverageOverview?.policyengine?.programs || [];
   const axiomPrograms = coverageOverview?.axiom?.programs || [];
 
-  return (reports || [])
+  const reportRows = (reports || [])
     .filter((report) => SUITE_META[report.suite])
     .filter((report) => report.engines?.left === "axiom" || report.engines?.right === "axiom")
     .map((report) => {
       const meta = SUITE_META[report.suite];
       const peProgram = lookupProgram(pePrograms, (p) => p.id === meta.program);
-      const axiomProgram = lookupProgram(
-        axiomPrograms,
-        (p) => p.program === meta.program && p.jurisdiction === meta.jurisdiction,
-      );
+      const axiomProgram =
+        lookupProgram(axiomPrograms, (p) => p.suite === report.suite) ||
+        lookupProgram(
+          axiomPrograms,
+          (p) => p.program === meta.program && p.jurisdiction === meta.jurisdiction,
+        );
       return {
         ...meta,
         suite: report.suite,
@@ -174,7 +197,29 @@ function buildRows(reports, coverageOverview) {
           (report.aggregates || []).some((agg) => (agg.quality_flags || []).length > 0),
       };
     })
-    .filter((row) => row.eligibility || row.amount || row.hasReportSurface)
+    .filter((row) => row.eligibility || row.amount || row.hasReportSurface);
+
+  const reportedSuites = new Set(reportRows.map((row) => row.suite));
+  const coverageRows = axiomPrograms
+    .filter((program) => program.suite && SUITE_META[program.suite])
+    .filter((program) => !reportedSuites.has(program.suite))
+    .map((program) => {
+      const meta = SUITE_META[program.suite];
+      const peProgram = lookupProgram(pePrograms, (p) => p.id === meta.program);
+      return {
+        ...meta,
+        suite: program.suite,
+        report: null,
+        peProgram,
+        axiomProgram: program,
+        eligibility: null,
+        amount: null,
+        hasReportSurface: false,
+        coverageOnly: true,
+      };
+    });
+
+  return [...reportRows, ...coverageRows]
     .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label));
 }
 
@@ -286,6 +331,7 @@ export default function CoverageOverview({ reports, coverageOverview }) {
   const axiomExecutable = rows.filter(
     (row) =>
       row.axiomProgram?.status === "executable" ||
+      row.axiomProgram?.status === "executableCoverage" ||
       row.axiomProgram?.status === "parameter",
   ).length;
   const compared = rows.length;
@@ -325,6 +371,18 @@ export default function CoverageOverview({ reports, coverageOverview }) {
                   <div className="mono" style={{ color: "var(--ink-mute)", fontSize: 11 }}>
                     {row.suite}
                   </div>
+                  {row.coverageOnly && (
+                    <div
+                      style={{
+                        marginTop: 6,
+                        color: "var(--ink-mute)",
+                        fontSize: 11.5,
+                        lineHeight: 1.35,
+                      }}
+                    >
+                      Current gap only; no Axiom-vs-PolicyEngine alignment run yet.
+                    </div>
+                  )}
                   <MeasurementLine row={row} />
                 </td>
                 <td>
