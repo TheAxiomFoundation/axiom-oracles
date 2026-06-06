@@ -78,6 +78,46 @@
       "fix_owner": "rulespec-us-ny"
     },
     {
+      "suite": "nyc-income-tax-gap",
+      "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+      "kind": "amount_difference",
+      "label": "NYC source-rounded school-tax base amounts",
+      "description": "The synthetic NYC component check is not a full final-liability comparison. The school-tax rate-reduction mismatches are the expected second-band convention difference: Axiom uses the rounded base amounts stated in the NYC IT-201 instructions, while PolicyEngine derives carry-in amounts from the first-band rate and threshold.",
+      "drivers": [
+        {
+          "label": "Second-band carry-in convention",
+          "description": "The compared formulas agree on bracket shape and rates. They differ only on whether the second-band base amount is source-rounded before the marginal calculation.",
+          "evidence": [
+            "Source-stated second-band base amounts are $37 for joint/surviving spouse, $25 for head of household, and $21 for single or separate.",
+            "PolicyEngine-derived carry-ins are $36.936, $24.624, and $20.52 respectively.",
+            "The synthetic report has 3 school-rate mismatches and 5/5 NYC CDCC component matches."
+          ]
+        }
+      ],
+      "fix_owner": "source-vs-pe-convention"
+    },
+    {
+      "suite": "nyc-income-tax-ecps-diagnostic",
+      "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+      "kind": "amount_difference",
+      "label": "NYC source-rounded school-tax base amounts",
+      "description": "The full Enhanced CPS NYC tax diagnostic compares encoded component formulas, not final NYC income tax liability. Every school-tax rate-reduction mismatch is a second-band convention difference: Axiom uses the rounded base amounts stated in the NYC IT-201 instructions, while PolicyEngine derives carry-in amounts from the first-band rate and threshold.",
+      "drivers": [
+        {
+          "label": "Second-band carry-in convention",
+          "description": "All first-band, over-limit, and zero-or-negative cases match. The only mismatching school-rate cases are second-band cases, with differences around $0.06 to $0.48 depending on filing-status group.",
+          "evidence": [
+            "Current ECPS diagnostic: 56,718/137,915 school-rate cases match; the 81,197 mismatches are all second-band cases.",
+            "Joint/surviving-spouse base: Axiom $37 vs PE carry-in $36.936.",
+            "Head-of-household base: Axiom $25 vs PE carry-in $24.624.",
+            "Single/separate base: Axiom $21 vs PE carry-in $20.52.",
+            "NYC CDCC full-year slice matches 137,915/137,915 cases."
+          ]
+        }
+      ],
+      "fix_owner": "source-vs-pe-convention"
+    },
+    {
       "suite": "ma-snap-ecps",
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "kind": "amount_difference",
