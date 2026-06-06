@@ -228,10 +228,10 @@
         "program": "universal_credit",
         "jurisdiction": "UK",
         "status": "executable",
-        "source": "axiom-programs/uk/universal-credit/fy-2026-27.yaml plus rulespec-uk-official WRA 2012 s.8 and UC Regulations 2013 regs. 22, 24, 26, 27, 29, 34, and 36",
+        "source": "axiom-programs/uk/universal-credit/fy-2026-27.yaml plus rulespec-uk-official WRA 2012 s.8 and UC Regulations 2013 regs. 18, 22, 24, 26, 27, 29, 32, 34, 36, 72, Schedule 4, Schedule 5, and Schedule 10",
         "known_non_tanf_gaps": [
-          "composed Axiom package now assembles universal_credit_award_amount from maximum amount and earned/unearned deductions",
-          "dashboard comparison still covers projection-safe component surfaces only; final EFRS entitlement comparison is intentionally withheld until housing, childcare payment, sanctions, capital, and deduction facts can be projected without PE-derived overrides",
+          "composed Axiom package now assembles universal_credit_award_amount from maximum amount, housing costs, childcare, capital tariff income, and earned/unearned deductions",
+          "dashboard comparison now includes projection-safe final award, housing costs, work allowance, income deduction, assessable capital, tariff income, childcare work condition, and childcare element surfaces; sanctions and non-projected runtime facts remain outside the comparison",
           "known PolicyEngine UK 2026 forecast-indexed Universal Credit rate divergences are labeled in the comparison rather than hidden"
         ]
       }

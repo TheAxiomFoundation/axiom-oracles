@@ -307,8 +307,8 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
     assert len(calls) == 2
     assert calls[0][:4] == ["uv", "run", "--python", "3.13"]
     assert "uk-efrs-compare" in calls[0]
-    assert "policyengine[uk]==4.11.0" in calls[0]
-    assert "policyengine-uk==2.88.20" in calls[0]
+    assert "policyengine[uk]==4.11.0" not in calls[0]
+    assert "policyengine-uk==2.88.43" in calls[0]
     assert "--rulespec-root" in calls[0]
     assert str(rulespec_uk.resolve()) in calls[0]
 
@@ -538,6 +538,15 @@ def test_uk_efrs_dashboard_adapter_separates_known_pe_divergence():
                     "max_abs_diff": 14.90,
                     "max_relative_diff": 0.04,
                 },
+                {
+                    "surface": "universal-credit-award",
+                    "output": "universal_credit_award_amount",
+                    "compared": 1,
+                    "mismatches": 0,
+                    "oracle_divergences": 0,
+                    "max_abs_diff": 0,
+                    "max_relative_diff": 0,
+                },
             ],
             "projection_notes": ["component amount comparison"],
         },
@@ -547,7 +556,7 @@ def test_uk_efrs_dashboard_adapter_separates_known_pe_divergence():
 
     assert report["schema_version"] == "axiom.comparison_report.v2"
     assert report["suite"] == "uk-universal-credit-efrs"
-    assert report["summary"]["comparison_count"] == 2
+    assert report["summary"]["comparison_count"] == 3
     assert report["summary"]["mismatch_count"] == 2
     assert report["summary"]["true_mismatch_count"] == 1
     assert report["summary"]["known_policyengine_divergence_count"] == 1
@@ -556,7 +565,12 @@ def test_uk_efrs_dashboard_adapter_separates_known_pe_divergence():
         {"value": "known_policyengine_divergence", "count": 1},
     ]
     assert report["aggregates"][0]["concept"] == "uk:benefits/universal-credit#amount"
-    assert report["aggregates"][0]["match_rate"] == 0
+    assert round(report["aggregates"][0]["match_rate"], 6) == round(100 / 3, 6)
+    assert any(
+        aggregate["concept"]
+        == "uk:statutes/ukpga/2012/5/8#universal_credit_award_amount"
+        for aggregate in report["aggregates"]
+    )
     assert report["mismatches"][1]["kind"] == "known_policyengine_divergence"
     assert report["mismatches"][1]["issue_url"] == "https://example.test/pe-issue"
 
