@@ -197,6 +197,54 @@ UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS: dict[str, dict] = {
         "concept": "uk:regulations/uksi/2013/376/36#childcare_costs_element_maximum_two_or_more_children",
         "description": "Universal Credit childcare costs cap, two or more children",
     },
+    "section_11_amount_for_accommodation_payments": {
+        "concept": "uk:statutes/ukpga/2012/5/11#section_11_amount_for_accommodation_payments",
+        "description": "Universal Credit housing costs amount",
+    },
+    "universal_credit_maximum_amount": {
+        "concept": "uk:statutes/ukpga/2012/5/8#universal_credit_maximum_amount",
+        "description": "Universal Credit maximum amount",
+    },
+    "universal_credit_amounts_to_be_deducted": {
+        "concept": "uk:statutes/ukpga/2012/5/8#universal_credit_amounts_to_be_deducted",
+        "description": "Universal Credit total deductions",
+    },
+    "universal_credit_award_amount": {
+        "concept": "uk:statutes/ukpga/2012/5/8#universal_credit_award_amount",
+        "description": "Universal Credit final award amount",
+    },
+    "applicable_work_allowance_amount": {
+        "concept": "uk:regulations/uksi/2013/376/22#applicable_work_allowance_amount",
+        "description": "Universal Credit work allowance",
+    },
+    "earned_income_amount_subject_to_taper": {
+        "concept": "uk:regulations/uksi/2013/376/22#earned_income_amount_subject_to_taper",
+        "description": "Universal Credit earned income subject to taper",
+    },
+    "unearned_income_for_deduction": {
+        "concept": "uk:regulations/uksi/2013/376/22#unearned_income_for_deduction",
+        "description": "Universal Credit unearned income deduction",
+    },
+    "universal_credit_award_deduction_from_maximum_amount": {
+        "concept": "uk:regulations/uksi/2013/376/22#universal_credit_award_deduction_from_maximum_amount",
+        "description": "Universal Credit deduction from maximum amount",
+    },
+    "claimant_capital_for_prescribed_capital_limit": {
+        "concept": "uk:regulations/uksi/2013/376/18#claimant_capital_for_prescribed_capital_limit",
+        "description": "Universal Credit assessable capital",
+    },
+    "capital_tariff_monthly_income": {
+        "concept": "uk:regulations/uksi/2013/376/72#capital_tariff_monthly_income",
+        "description": "Universal Credit capital tariff monthly income",
+    },
+    "work_condition_met_for_assessment_period": {
+        "concept": "uk:regulations/uksi/2013/376/32#work_condition_met_for_assessment_period",
+        "description": "Universal Credit childcare work condition",
+    },
+    "childcare_costs_element_amount": {
+        "concept": "uk:regulations/uksi/2013/376/34#childcare_costs_element_amount",
+        "description": "Universal Credit childcare costs element",
+    },
 }
 
 
@@ -421,12 +469,20 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     universal_credit_program = _compose_uk_universal_credit_program(params)
     pe_pins = [
         "--with",
-        "policyengine[uk]==4.11.0",
-        "--with",
-        "policyengine-uk==2.88.20",
+        "policyengine-uk==2.88.43",
         "--with",
         "policyengine-core==3.26.11",
     ]
+    data_folder = (
+        _resolve_path(params["data_folder"], "data_folder")
+        if params.get("data_folder")
+        else REPO_ROOT / ".axiom" / "policyengine-data"
+    )
+    dataset = _ensure_uk_single_year_dataset(
+        params.get("dataset", "enhanced_frs_2023_24"),
+        data_folder=data_folder,
+        year=int(params.get("year", 2026)),
+    )
     surfaces = params.get("surfaces")
     if surfaces is None:
         surfaces = [params.get("surface", "all")]
@@ -457,11 +513,9 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             "--surface",
             str(surface),
             "--dataset",
-            str(params.get("dataset", "enhanced_frs_2023_24")),
+            str(dataset),
             "--data-folder",
-            str(_resolve_path(params["data_folder"], "data_folder"))
-            if params.get("data_folder")
-            else str(REPO_ROOT / ".axiom" / "policyengine-data"),
+            str(data_folder),
             "--tolerance",
             str(params.get("tolerance", 0.01)),
             "--relative-tolerance",
@@ -488,6 +542,64 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
         reports.append(json.loads(result.stdout))
 
     output.write_text(json.dumps(_merge_uk_efrs_reports(reports), indent=2) + "\n")
+
+
+def _ensure_uk_single_year_dataset(dataset: str, *, data_folder: Path, year: int) -> str:
+    """Return a PE-UK 2.88 single-year H5 path, adding time_period if needed."""
+    dataset_path = _resolve_uk_dataset_path(dataset, data_folder=data_folder, year=year)
+    if dataset_path is None:
+        return dataset
+    if _h5_has_dataset(dataset_path, "time_period"):
+        return str(dataset_path)
+
+    compatible_path = dataset_path.with_name(f"{dataset_path.stem}.uksingle.h5")
+    if (
+        compatible_path.exists()
+        and compatible_path.stat().st_mtime >= dataset_path.stat().st_mtime
+        and _h5_has_dataset(compatible_path, "time_period")
+    ):
+        return str(compatible_path)
+
+    try:
+        import pandas as pd
+    except ImportError as exc:
+        raise SystemExit(
+            "pandas is required to prepare a PE-UK single-year EFRS dataset "
+            f"from {dataset_path}"
+        ) from exc
+
+    with pd.HDFStore(dataset_path, mode="r") as source, pd.HDFStore(
+        compatible_path,
+        mode="w",
+    ) as target:
+        for key in ("person", "benunit", "household"):
+            target.put(key, source[key], format="table", data_columns=True)
+        target.put("time_period", pd.Series([year]), format="table")
+    return str(compatible_path)
+
+
+def _resolve_uk_dataset_path(
+    dataset: str,
+    *,
+    data_folder: Path,
+    year: int,
+) -> Path | None:
+    direct = Path(os.path.expandvars(os.path.expanduser(dataset))).resolve()
+    if direct.exists() and direct.suffix == ".h5":
+        return direct
+    candidate = data_folder / f"{dataset}_year_{year}.h5"
+    if candidate.exists():
+        return candidate.resolve()
+    return None
+
+
+def _h5_has_dataset(path: Path, name: str) -> bool:
+    try:
+        import h5py
+    except ImportError:
+        return False
+    with h5py.File(path, "r") as h5_file:
+        return name in h5_file
 
 
 def _compose_uk_universal_credit_program(params: dict) -> Path | None:
@@ -1162,7 +1274,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "comparison_weight": parent_compared,
             "components": component_concepts,
             "concept": UK_UNIVERSAL_CREDIT_PARENT,
-            "description": "Universal Credit Regulation 36 component amounts",
+            "description": "Universal Credit amount surfaces",
             "known_policyengine_divergence_count": parent_known_divergences,
             "left_weighted_sum": None,
             "match_count": parent_matched,
@@ -1186,7 +1298,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "category": "benefits",
             "comparison": "amount",
             "components": component_concepts,
-            "description": "Universal Credit Regulation 36 component amounts",
+            "description": "Universal Credit amount surfaces",
             "id": UK_UNIVERSAL_CREDIT_PARENT,
             "parent": None,
             "tolerance": 0.01,
