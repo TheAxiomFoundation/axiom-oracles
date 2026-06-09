@@ -494,6 +494,34 @@
         }
       ],
       "fix_owner": "investigation"
+    },
+    {
+      "suite": "uk-tax-benefits-efrs",
+      "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
+      "kind": "amount_difference",
+      "label": "Student-loan outstanding-balance cap not yet encoded",
+      "description": "The full UK EFRS run has 43 student-loan repayment mismatches out of 115,710 compared people. In every residual, PolicyEngine UK caps the modelled repayment at the positive `student_loan_balance`, while Axiom currently applies the GOV.UK plan/rate/threshold formula without the outstanding-balance cap. The mismatch stays visible until the cap is added through RuleSpec/encoder work.",
+      "drivers": [
+        {
+          "label": "PolicyEngine applies `min(uncapped repayment, balance)`",
+          "description": "PolicyEngine UK 2.88.56's `student_loan_repayment` formula calculates the uncapped plan repayment and then returns the smaller of that amount and `student_loan_balance` when balance is positive.",
+          "evidence": [
+            "All 43 full-run residuals have PolicyEngine equal to the EFRS `student_loan_balance` value.",
+            "Example person_3512002: Axiom GBP 1,901.53, PolicyEngine GBP 294.12, and EFRS student_loan_balance GBP 294.12.",
+            "Example person_18366005: Axiom GBP 6,315.73, PolicyEngine GBP 2,000.00, and EFRS student_loan_balance GBP 2,000.00."
+          ]
+        },
+        {
+          "label": "Axiom currently encodes only the rate-over-threshold rule",
+          "description": "The merged RuleSpec surface computes repayment as repayment rate times income over the selected plan threshold. It does not yet consume an outstanding-balance runtime fact or apply a balance cap.",
+          "evidence": [
+            "RuleSpec output `student_loan_repayment` is `student_loan_repayment_rate * max(0, annual_income_before_tax_and_other_deductions - student_loan_annual_income_threshold)` for listed plans.",
+            "The mismatch count is limited to 43 people, because most EFRS rows either have no positive balance cap or the uncapped repayment is below balance.",
+            "This is not treated as a PolicyEngine divergence or a Python projection override; the dashboard report still counts all 43 as true amount mismatches."
+          ]
+        }
+      ],
+      "fix_owner": "rulespec-uk"
     }
   ]
 }

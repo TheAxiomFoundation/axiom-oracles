@@ -308,7 +308,7 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
     assert calls[0][:4] == ["uv", "run", "--python", "3.13"]
     assert "uk-efrs-compare" in calls[0]
     assert "policyengine[uk]==4.11.0" not in calls[0]
-    assert "policyengine-uk==2.88.43" in calls[0]
+    assert "policyengine-uk==2.88.56" in calls[0]
     assert "--rulespec-root" in calls[0]
     assert str(rulespec_uk.resolve()) in calls[0]
 
@@ -622,3 +622,39 @@ def test_uk_efrs_dashboard_adapter_caps_known_divergence_examples():
     ]
     assert len(report["mismatches"]) == 1
     assert len(report["cases"]) == 1
+
+
+def test_uk_efrs_dashboard_adapter_maps_non_uc_surface():
+    run_comparison = load_run_comparison_module()
+
+    report = run_comparison._adapt_uk_efrs_to_v2(
+        {
+            "compared_persons": 1,
+            "compared_benunits": 0,
+            "mismatches": [],
+            "oracle_divergences": [],
+            "output_summary": [
+                {
+                    "surface": "national-insurance-final",
+                    "output": "national_insurance_contribution",
+                    "compared": 1,
+                    "mismatches": 0,
+                    "oracle_divergences": 0,
+                }
+            ],
+        },
+        {
+            "dashboard": {
+                "parent_concept": "uk:tax-benefits/efrs#amount",
+                "parent_description": "UK tax and benefit EFRS surfaces",
+            }
+        },
+        suite="uk-tax-benefits-efrs",
+    )
+
+    assert report["suite"] == "uk-tax-benefits-efrs"
+    assert report["summary"]["comparison_count"] == 1
+    assert report["aggregates"][0]["concept"] == "uk:tax-benefits/efrs#amount"
+    assert report["aggregates"][1]["concept"] == (
+        "uk:statutes/ukpga/1992/4/1#national_insurance_contribution"
+    )

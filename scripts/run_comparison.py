@@ -143,6 +143,7 @@ FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
 }
 
 UK_UNIVERSAL_CREDIT_PARENT = "uk:benefits/universal-credit#amount"
+UK_TAX_BENEFITS_PARENT = "uk:tax-benefits/efrs#amount"
 
 UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS: dict[str, dict] = {
     "standard_allowance_single_under_25": {
@@ -244,6 +245,234 @@ UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS: dict[str, dict] = {
     "childcare_costs_element_amount": {
         "concept": "uk:regulations/uksi/2013/376/34#childcare_costs_element_amount",
         "description": "Universal Credit childcare costs element",
+    },
+}
+
+UK_EFRS_OUTPUT_CONCEPTS: dict[tuple[str, str], dict] = {
+    ("national-insurance-class-1", "main_primary_class_1_contribution"): {
+        "concept": "uk:statutes/ukpga/1992/4/8#main_primary_class_1_contribution",
+        "description": "UK National Insurance main primary Class 1 contribution",
+    },
+    ("national-insurance-class-1", "additional_primary_class_1_contribution"): {
+        "concept": "uk:statutes/ukpga/1992/4/8#additional_primary_class_1_contribution",
+        "description": "UK National Insurance additional primary Class 1 contribution",
+    },
+    ("national-insurance-class-1", "primary_class_1_contribution"): {
+        "concept": "uk:statutes/ukpga/1992/4/8#primary_class_1_contribution",
+        "description": "UK National Insurance primary Class 1 contribution",
+    },
+    ("national-insurance-class-1", "employee_national_insurance"): {
+        "concept": "uk:contributions/national-insurance#employee_national_insurance",
+        "description": "UK employee National Insurance",
+    },
+    ("national-insurance-class-4", "main_class_4_contribution"): {
+        "concept": "uk:statutes/ukpga/1992/4/15#main_class_4_contribution",
+        "description": "UK National Insurance main Class 4 contribution",
+    },
+    ("national-insurance-class-4-final", "class_4_annual_maximum"): {
+        "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
+        "description": "UK National Insurance Class 4 annual maximum",
+    },
+    (
+        "national-insurance-class-4-final",
+        "class_4_contribution_after_annual_maximum",
+    ): {
+        "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
+        "description": "UK National Insurance Class 4 after annual maximum",
+    },
+    ("national-insurance-final", "national_insurance_contribution"): {
+        "concept": "uk:statutes/ukpga/1992/4/1#national_insurance_contribution",
+        "description": "UK National Insurance contribution",
+    },
+    ("personal-allowance", "personal_allowance"): {
+        "concept": "uk:statutes/ukpga/2007/3/35#personal_allowance",
+        "description": "UK personal allowance",
+    },
+    ("income-tax-income-base", "total_income"): {
+        "concept": "uk:statutes/ukpga/2007/3/23#total_income",
+        "description": "UK income tax total income",
+    },
+    ("income-tax-income-base", "net_income"): {
+        "concept": "uk:statutes/ukpga/2007/3/23#net_income",
+        "description": "UK income tax net income",
+    },
+    ("income-tax-income-base", "income_tax_liability"): {
+        "concept": "uk:statutes/ukpga/2007/3/23#income_tax_liability",
+        "description": "UK income tax liability",
+    },
+    ("income-tax-section-10-earned-income", "income_charged_at_basic_rate"): {
+        "concept": "uk:statutes/ukpga/2007/3/10#income_charged_at_basic_rate",
+        "description": "UK earned income charged at basic rate",
+    },
+    ("income-tax-section-10-earned-income", "income_charged_at_higher_rate"): {
+        "concept": "uk:statutes/ukpga/2007/3/10#income_charged_at_higher_rate",
+        "description": "UK earned income charged at higher rate",
+    },
+    (
+        "income-tax-section-10-earned-income",
+        "income_charged_at_additional_rate",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/10#income_charged_at_additional_rate",
+        "description": "UK earned income charged at additional rate",
+    },
+    ("income-tax-section-10-earned-income", "tax_on_income_charged_at_basic_rate"): {
+        "concept": "uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_basic_rate",
+        "description": "UK tax on basic-rate earned income",
+    },
+    ("income-tax-section-10-earned-income", "tax_on_income_charged_at_higher_rate"): {
+        "concept": "uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_higher_rate",
+        "description": "UK tax on higher-rate earned income",
+    },
+    (
+        "income-tax-section-10-earned-income",
+        "tax_on_income_charged_at_additional_rate",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_additional_rate",
+        "description": "UK tax on additional-rate earned income",
+    },
+    ("income-tax-section-10-earned-income", "income_tax_on_section_10_income"): {
+        "concept": "uk:statutes/ukpga/2007/3/10#income_tax_on_section_10_income",
+        "description": "UK tax on section 10 earned income",
+    },
+    (
+        "income-tax-section-11d-savings-income",
+        "savings_income_charged_at_savings_basic_rate",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/11D#savings_income_charged_at_savings_basic_rate",
+        "description": "UK savings income charged at savings basic rate",
+    },
+    (
+        "income-tax-section-11d-savings-income",
+        "savings_income_charged_at_savings_higher_rate",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/11D#savings_income_charged_at_savings_higher_rate",
+        "description": "UK savings income charged at savings higher rate",
+    },
+    (
+        "income-tax-section-11d-savings-income",
+        "savings_income_charged_at_savings_additional_rate",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/11D#savings_income_charged_at_savings_additional_rate",
+        "description": "UK savings income charged at savings additional rate",
+    },
+    (
+        "income-tax-section-11d-savings-income",
+        "savings_income_charged_under_section_11d",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/11D#savings_income_charged_under_section_11d",
+        "description": "UK savings income charged under section 11D",
+    },
+    (
+        "income-tax-section-11d-savings-income",
+        "income_tax_on_section_11d_savings_income",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/11D#income_tax_on_section_11d_savings_income",
+        "description": "UK tax on section 11D savings income",
+    },
+    (
+        "income-tax-section-13-dividend-income",
+        "dividend_income_charged_under_section_13",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/13#dividend_income_charged_under_section_13",
+        "description": "UK dividend income charged under section 13",
+    },
+    (
+        "income-tax-section-13-dividend-income",
+        "income_tax_on_section_13_dividend_income",
+    ): {
+        "concept": "uk:statutes/ukpga/2007/3/13#income_tax_on_section_13_dividend_income",
+        "description": "UK tax on section 13 dividend income",
+    },
+    ("child-benefit", "child_benefit_weekly_rate"): {
+        "concept": "uk:regulations/uksi/2006/965/2#child_benefit_weekly_rate",
+        "description": "UK Child Benefit weekly rate",
+    },
+    ("child-benefit-final", "child_benefit_weekly_amount"): {
+        "concept": "uk:policies/govuk/child-benefit#child_benefit_weekly_amount",
+        "description": "UK Child Benefit weekly amount",
+    },
+    ("benefit-cap-relevant-amount", "benefit_cap_relevant_amount"): {
+        "concept": "uk:regulations/uksi/2013/376/80A#benefit_cap_relevant_amount",
+        "description": "UK benefit cap relevant amount",
+    },
+    ("state-pension-credit-qualifying-age", "qualifying_age"): {
+        "concept": "uk:statutes/ukpga/2002/16/1#qualifying_age",
+        "description": "UK State Pension Credit qualifying age",
+    },
+    (
+        "state-pension-credit-qualifying-age",
+        "claimant_has_attained_qualifying_age",
+    ): {
+        "concept": "uk:statutes/ukpga/2002/16/1#claimant_has_attained_qualifying_age",
+        "description": "UK State Pension Credit qualifying-age status",
+    },
+    ("state-pension-credit-guarantee-credit", "appropriate_minimum_guarantee"): {
+        "concept": "uk:statutes/ukpga/2002/16/2#appropriate_minimum_guarantee",
+        "description": "UK Pension Credit appropriate minimum guarantee",
+    },
+    ("state-pension-credit-guarantee-credit", "guarantee_credit"): {
+        "concept": "uk:statutes/ukpga/2002/16/2#guarantee_credit",
+        "description": "UK Pension Credit guarantee credit",
+    },
+    ("state-pension-credit-savings-credit", "savings_credit"): {
+        "concept": "uk:statutes/ukpga/2002/16/3#savings_credit",
+        "description": "UK Pension Credit savings credit",
+    },
+    ("state-pension-final", "state_pension_weekly_amount"): {
+        "concept": "uk:policies/govuk/state-pension#state_pension_weekly_amount",
+        "description": "UK State Pension weekly amount",
+    },
+    ("pension-credit", "standard_minimum_guarantee"): {
+        "concept": "uk:regulations/uksi/2002/1792/6#standard_minimum_guarantee",
+        "description": "UK Pension Credit standard minimum guarantee",
+    },
+    ("pension-credit", "severe_disability_additional_amount"): {
+        "concept": "uk:regulations/uksi/2002/1792/6#severe_disability_additional_amount",
+        "description": "UK Pension Credit severe disability addition",
+    },
+    ("pension-credit", "carer_additional_amount"): {
+        "concept": "uk:regulations/uksi/2002/1792/6#carer_additional_amount",
+        "description": "UK Pension Credit carer addition",
+    },
+    ("pension-credit-child-addition", "additional_amount_applicable"): {
+        "concept": "uk:regulations/uksi/2002/1792/6#additional_amount_applicable",
+        "description": "UK Pension Credit child additional amount",
+    },
+    ("pension-credit-deemed-income", "capital_deemed_weekly_income"): {
+        "concept": "uk:regulations/uksi/2002/1792/schedule/IIA#capital_deemed_weekly_income",
+        "description": "UK Pension Credit capital deemed weekly income",
+    },
+    ("esa-income-tariff-income", "capital_tariff_weekly_income"): {
+        "concept": "uk:regulations/uksi/2008/794/118#capital_tariff_weekly_income",
+        "description": "UK ESA income capital tariff weekly income",
+    },
+    ("jsa-income-tariff-income", "capital_tariff_weekly_income"): {
+        "concept": "uk:regulations/uksi/1996/207/116#capital_tariff_weekly_income",
+        "description": "UK JSA income capital tariff weekly income",
+    },
+    ("income-support-tariff-income", "capital_tariff_weekly_income"): {
+        "concept": "uk:regulations/uksi/1987/1967/53#capital_tariff_weekly_income",
+        "description": "UK Income Support capital tariff weekly income",
+    },
+    ("housing-benefit-working-age-tariff-income", "capital_tariff_weekly_income"): {
+        "concept": "uk:regulations/uksi/2006/213/52#capital_tariff_weekly_income",
+        "description": "UK Housing Benefit working-age capital tariff weekly income",
+    },
+    ("housing-benefit-pension-age-tariff-income", "capital_tariff_weekly_income"): {
+        "concept": "uk:regulations/uksi/2006/214/29#capital_tariff_weekly_income",
+        "description": "UK Housing Benefit pension-age capital tariff weekly income",
+    },
+    ("universal-credit-final", "universal_credit_annual_amount"): {
+        "concept": "uk:policies/govuk/universal-credit#universal_credit_annual_amount",
+        "description": "UK Universal Credit annual amount",
+    },
+    ("student-loan-repayment", "student_loan_repayment"): {
+        "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
+        "description": "UK student loan repayment",
+    },
+    ("carers-allowance-final", "carers_allowance_annual_amount"): {
+        "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
+        "description": "UK Carer's Allowance annual amount",
     },
 }
 
@@ -469,9 +698,9 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     universal_credit_program = _compose_uk_universal_credit_program(params)
     pe_pins = [
         "--with",
-        "policyengine-uk==2.88.43",
+        f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
         "--with",
-        "policyengine-core==3.26.11",
+        f"policyengine-core=={params.get('policyengine_core_version', '3.26.11')}",
     ]
     data_folder = (
         _resolve_path(params["data_folder"], "data_folder")
@@ -1182,23 +1411,48 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     from collections import Counter, defaultdict
 
     dashboard_config = config.get("dashboard") or {}
+    parent_concept = dashboard_config.get("parent_concept", UK_UNIVERSAL_CREDIT_PARENT)
+    parent_category = dashboard_config.get("parent_category", "benefits")
+    parent_description = dashboard_config.get(
+        "parent_description", "Universal Credit amount surfaces"
+    )
     known_divergence_detail_limit = int(
         dashboard_config.get("known_policyengine_divergence_detail_limit", 100)
     )
+
+    def spec_for(row: dict) -> dict | None:
+        surface = row.get("surface")
+        output = row.get("output")
+        if (surface, output) in UK_EFRS_OUTPUT_CONCEPTS:
+            return UK_EFRS_OUTPUT_CONCEPTS[(surface, output)]
+        return UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS.get(output)
+
+    def category_for(spec: dict) -> str:
+        concept = str(spec.get("concept") or "")
+        tax_markers = (
+            "/income-tax",
+            "/national-insurance",
+            "/student-loan",
+            "/student-loans",
+            "ukpga/1992/4",
+            "ukpga/2007/3",
+        )
+        return "tax" if any(marker in concept for marker in tax_markers) else "benefits"
+
     by_output = {
-        row["output"]: row
+        (row.get("surface"), row.get("output")): row
         for row in raw.get("output_summary", [])
-        if row.get("output") in UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS
+        if spec_for(row)
     }
     mismatch_rows = [
         {**row, "kind": "amount_difference"}
         for row in raw.get("mismatches", [])
-        if row.get("output") in UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS
+        if spec_for(row)
     ]
     divergence_rows = [
         {**row, "kind": "known_policyengine_divergence"}
         for row in raw.get("oracle_divergences", [])
-        if row.get("output") in UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS
+        if spec_for(row)
     ]
     all_difference_rows = [*mismatch_rows, *divergence_rows]
     visible_divergence_rows = _limit_rows_by_output(
@@ -1209,8 +1463,10 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     component_concepts: list[str] = []
     aggregates: list[dict] = []
-    for output_name, row in by_output.items():
-        spec = UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[output_name]
+    for _output_key, row in by_output.items():
+        spec = spec_for(row)
+        if spec is None:
+            continue
         compared = int(row.get("compared", 0) or 0)
         true_mismatches = int(row.get("mismatches", 0) or 0)
         known_divergences = int(row.get("oracle_divergences", 0) or 0)
@@ -1231,7 +1487,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             )
         aggregates.append(
             {
-                "category": "benefits",
+                "category": category_for(spec),
                 "comparison": "amount",
                 "comparison_count": compared,
                 "comparison_weight": compared,
@@ -1248,7 +1504,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "missing_both_count": 0,
                 "missing_left_count": 0,
                 "missing_right_count": 0,
-                "parent": UK_UNIVERSAL_CREDIT_PARENT,
+                "parent": parent_concept,
                 "quality_flags": quality_flags,
                 "right_weighted_sum": None,
                 "true_mismatch_count": true_mismatches,
@@ -1268,13 +1524,13 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     aggregates.insert(
         0,
         {
-            "category": "benefits",
+            "category": parent_category,
             "comparison": "amount",
             "comparison_count": parent_compared,
             "comparison_weight": parent_compared,
             "components": component_concepts,
-            "concept": UK_UNIVERSAL_CREDIT_PARENT,
-            "description": "Universal Credit amount surfaces",
+            "concept": parent_concept,
+            "description": parent_description,
             "known_policyengine_divergence_count": parent_known_divergences,
             "left_weighted_sum": None,
             "match_count": parent_matched,
@@ -1295,25 +1551,27 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     concepts = [
         {
-            "category": "benefits",
+            "category": parent_category,
             "comparison": "amount",
             "components": component_concepts,
-            "description": "Universal Credit amount surfaces",
-            "id": UK_UNIVERSAL_CREDIT_PARENT,
+            "description": parent_description,
+            "id": parent_concept,
             "parent": None,
             "tolerance": 0.01,
         }
     ]
-    for output_name in by_output:
-        spec = UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[output_name]
+    for row in by_output.values():
+        spec = spec_for(row)
+        if spec is None:
+            continue
         concepts.append(
             {
-                "category": "benefits",
+                "category": category_for(spec),
                 "comparison": "amount",
                 "components": [],
                 "description": spec["description"],
                 "id": spec["concept"],
-                "parent": UK_UNIVERSAL_CREDIT_PARENT,
+                "parent": parent_concept,
                 "tolerance": 0.01,
             }
         )
@@ -1321,7 +1579,9 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     cases_by_entity: dict[str, list[dict]] = defaultdict(list)
     flat_mismatches: list[dict] = []
     for row in visible_difference_rows:
-        spec = UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[row["output"]]
+        spec = spec_for(row)
+        if spec is None:
+            continue
         kind = row["kind"]
         mismatch = {
             "case_id": f"uk-efrs-{row['entity_id']}",
@@ -1332,7 +1592,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "issue_url": row.get("issue_url"),
             "kind": kind,
             "left": row.get("axiom", 0),
-            "parent": UK_UNIVERSAL_CREDIT_PARENT,
+            "parent": parent_concept,
             "relative_tolerance": 2e-7,
             "right": row.get("policyengine", 0),
             "surface": row.get("surface"),
@@ -1366,8 +1626,9 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         {"value": value, "count": count}
         for value, count in sorted(
             Counter(
-                UK_UNIVERSAL_CREDIT_OUTPUT_CONCEPTS[row["output"]]["concept"]
+                spec_for(row)["concept"]
                 for row in all_difference_rows
+                if spec_for(row) is not None
             ).items(),
             key=lambda item: (-item[1], item[0]),
         )

@@ -85,6 +85,29 @@
   max-width: 1180px;
   margin: 0 auto;
 }
+.country-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 2px;
+  background: white;
+}
+.country-toggle-btn {
+  border: 0;
+  background: transparent;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-mute);
+  letter-spacing: 0.05em;
+}
+.country-toggle-btn-active {
+  background: var(--ink);
+  color: white;
+}
 .brand-link {
   display: inline-flex;
   align-items: center;

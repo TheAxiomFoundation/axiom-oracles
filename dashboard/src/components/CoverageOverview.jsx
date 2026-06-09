@@ -94,6 +94,12 @@ const SUITE_META = {
     label: "UK Universal Credit",
     order: 130,
   },
+  "uk-tax-benefits-efrs": {
+    program: "uk_tax_benefits",
+    jurisdiction: "UK",
+    label: "UK tax and benefits",
+    order: 140,
+  },
 };
 
 function titleFromId(id) {
@@ -168,12 +174,19 @@ function lookupProgram(programs, predicate) {
   return (programs || []).find(predicate) || null;
 }
 
-function buildRows(reports, coverageOverview) {
+function regionForSuite(suite) {
+  return String(suite || "").startsWith("uk-") ? "uk" : "us";
+}
+
+function buildRows(reports, coverageOverview, jurisdictionFilter = "all") {
   const pePrograms = coverageOverview?.policyengine?.programs || [];
   const axiomPrograms = coverageOverview?.axiom?.programs || [];
+  const includeSuite = (suite) =>
+    jurisdictionFilter === "all" || regionForSuite(suite) === jurisdictionFilter;
 
   const reportRows = (reports || [])
     .filter((report) => SUITE_META[report.suite])
+    .filter((report) => includeSuite(report.suite))
     .filter((report) => report.engines?.left === "axiom" || report.engines?.right === "axiom")
     .map((report) => {
       const meta = SUITE_META[report.suite];
@@ -202,6 +215,7 @@ function buildRows(reports, coverageOverview) {
   const reportedSuites = new Set(reportRows.map((row) => row.suite));
   const coverageRows = axiomPrograms
     .filter((program) => program.suite && SUITE_META[program.suite])
+    .filter((program) => includeSuite(program.suite))
     .filter((program) => !reportedSuites.has(program.suite))
     .map((program) => {
       const meta = SUITE_META[program.suite];
@@ -321,8 +335,12 @@ function GapText({ gaps }) {
   );
 }
 
-export default function CoverageOverview({ reports, coverageOverview }) {
-  const rows = buildRows(reports, coverageOverview);
+export default function CoverageOverview({
+  reports,
+  coverageOverview,
+  jurisdictionFilter = "all",
+}) {
+  const rows = buildRows(reports, coverageOverview, jurisdictionFilter);
   if (!rows.length) return null;
 
   const measured = rows.filter(
