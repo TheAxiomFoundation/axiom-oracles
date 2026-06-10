@@ -1,0 +1,70 @@
+name: uk-tax-benefits-efrs
+title: UK tax and benefits — Axiom vs PolicyEngine
+description: >-
+  Compares merged UK RuleSpec tax, National Insurance, Child Benefit, State
+  Pension, Pension Credit, tariff-income, student-loan, Carer's Allowance, and
+  final Universal Credit surfaces against PolicyEngine UK on the Enhanced FRS
+  population. Missing final wrappers such as Pension Credit final, ESA income
+  final, Housing Benefit final, Carer Support Payment, Scottish Child Payment,
+  and Severe Disablement Allowance are intentionally excluded until their
+  RuleSpecs are merged.
+
+runner:
+  type: axiom-encode-uk-efrs-compare
+  axiom_encode_repo: $HOME/axiom-encode
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  rulespec_root: $HOME/rulespec-uk-official
+  parameters:
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-programs/uk/universal-credit/fy-2026-27.yaml
+    axiom_composed_program: /tmp/uk-universal-credit-fy-2026-27-composed.yaml
+    rulespec_roots:
+      - $HOME/rulespec-uk-official
+    data_folder: $HOME/axiom-oracles/.axiom/policyengine-data
+    sample_size: 0
+    year: 2026
+    python: "3.13"
+    dataset: enhanced_frs_2023_24
+    policyengine_uk_version: 2.88.56
+    policyengine_core_version: 3.26.11
+    tolerance: 0.01
+    relative_tolerance: 2e-7
+    surfaces:
+      - national-insurance-class-1
+      - national-insurance-class-4
+      - national-insurance-class-4-final
+      - national-insurance-final
+      - personal-allowance
+      - income-tax-income-base
+      - income-tax-section-10-earned-income
+      - income-tax-section-11d-savings-income
+      - income-tax-section-13-dividend-income
+      - child-benefit
+      - child-benefit-final
+      - benefit-cap-relevant-amount
+      - state-pension-credit-qualifying-age
+      - state-pension-credit-guarantee-credit
+      - state-pension-credit-savings-credit
+      - state-pension-final
+      - pension-credit
+      - pension-credit-child-addition
+      - pension-credit-deemed-income
+      - esa-income-tariff-income
+      - jsa-income-tariff-income
+      - income-support-tariff-income
+      - housing-benefit-working-age-tariff-income
+      - housing-benefit-pension-age-tariff-income
+      - universal-credit-final
+      - student-loan-repayment
+      - carers-allowance-final
+
+artifacts:
+  report_basename: axiom-policyengine-uk-tax-benefits-efrs
+
+dashboard:
+  filename: axiom-policyengine-uk-tax-benefits-efrs.json
+  suite: uk-tax-benefits-efrs
+  parent_concept: uk:tax-benefits/efrs#amount
+  parent_category: tax-benefits
+  parent_description: UK tax and benefit EFRS surfaces
+  known_policyengine_divergence_detail_limit: 25

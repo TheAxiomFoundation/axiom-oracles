@@ -23,6 +23,7 @@ const SUITE_DISPLAY_ORDER = {
   "co-health-thresholds": 110,
   "co-tanf-coverage": 120,
   "uk-universal-credit-efrs": 130,
+  "uk-tax-benefits-efrs": 140,
   "nyc-synthetic": 1000,
 };
 
@@ -35,7 +36,32 @@ function orderedReports(reports) {
   });
 }
 
-function TopBar() {
+function reportRegion(report) {
+  const suite = String(report?.suite || "");
+  if (suite.startsWith("uk-")) return "uk";
+  return "us";
+}
+
+function programRegion(program) {
+  const id = String(program?.id || "");
+  if (id.startsWith("uk:")) return "uk";
+  if (id.startsWith("us:")) return "us";
+  const coverage = program?.coverage || [];
+  if (coverage.some((entry) => entry?.country === "UK")) return "uk";
+  if (coverage.some((entry) => entry?.country === "US")) return "us";
+  return "us";
+}
+
+function filterReportsByRegion(reports, region) {
+  return reports.filter((report) => reportRegion(report) === region);
+}
+
+function filterProgramsByRegion(programs, region) {
+  return programs.filter((program) => programRegion(program) === region);
+}
+
+function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
+  const isUS = jurisdiction === "us";
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -56,16 +82,40 @@ function TopBar() {
           <span className="brand-divider" aria-hidden="true" />
           <span className="brand-product">Oracles</span>
         </span>
+        <div className="country-toggle" role="tablist" aria-label="Country">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={isUS}
+            className={`country-toggle-btn ${
+              isUS ? "country-toggle-btn-active" : ""
+            }`}
+            onClick={() => onJurisdictionChange("us")}
+          >
+            US
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={!isUS}
+            className={`country-toggle-btn ${
+              !isUS ? "country-toggle-btn-active" : ""
+            }`}
+            onClick={() => onJurisdictionChange("uk")}
+          >
+            UK
+          </button>
+        </div>
       </div>
     </header>
   );
 }
 
-
 export default function DashboardContent() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [jurisdiction, setJurisdiction] = useState("us");
 
   useEffect(() => {
     loadOracleData("")
@@ -74,19 +124,20 @@ export default function DashboardContent() {
       .finally(() => setLoading(false));
   }, []);
 
-  // All reports are always in view — every comparison shows in the
-  // alignment cards section. (The previous per-suite filter selector
-  // was removed; reviewers want the full picture by default.)
   const viewData = useMemo(() => {
     if (!data) return null;
-    const reports = orderedReports(data.reports);
-    return { ...buildNWayData(reports), reports, programs: data.programs };
-  }, [data]);
+    const reports = orderedReports(filterReportsByRegion(data.reports, jurisdiction));
+    const programs = filterProgramsByRegion(data.programs, jurisdiction);
+    return { ...buildNWayData(reports), reports, programs };
+  }, [data, jurisdiction]);
 
   if (loading) {
     return (
       <>
-        <TopBar />
+        <TopBar
+          jurisdiction={jurisdiction}
+          onJurisdictionChange={setJurisdiction}
+        />
         <main style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px" }}>
           <div className="page-intro">
             <p className="mono" style={{ fontSize: 13 }}>
@@ -101,7 +152,10 @@ export default function DashboardContent() {
   if (error || !data) {
     return (
       <>
-        <TopBar />
+        <TopBar
+          jurisdiction={jurisdiction}
+          onJurisdictionChange={setJurisdiction}
+        />
         <main style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px" }}>
           <div className="page-intro">
             <h1>No reports found.</h1>
@@ -118,7 +172,10 @@ export default function DashboardContent() {
 
   return (
     <>
-      <TopBar />
+      <TopBar
+        jurisdiction={jurisdiction}
+        onJurisdictionChange={setJurisdiction}
+      />
       <main
         style={{
           maxWidth: 1180,
@@ -139,6 +196,7 @@ export default function DashboardContent() {
               (r) => (r.aggregates || []).length > 0,
             )}
             coverageOverview={data.coverageOverview}
+            jurisdictionFilter={jurisdiction}
           />
 
           {hasComparisonData && (
