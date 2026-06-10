@@ -810,14 +810,26 @@ export default function AlignmentReport({ report, knownCauses = [] }) {
     if (c?.case_id) casesById.set(c.case_id, c);
   }
 
-  // Quick lookup for known causes scoped to this report.
-  const causeFor = (concept, kind) =>
-    knownCauses.find(
+  // Quick lookup for known causes scoped to this report. Entries may carry an
+  // optional `engines` pair to disambiguate reports that share a suite slug
+  // (e.g. the two nyc-synthetic reports); engine-specific entries win, and
+  // entries without `engines` apply to any report in the suite.
+  const causeFor = (concept, kind) => {
+    const candidates = knownCauses.filter(
       (c) =>
         c.suite === report.suite &&
         c.concept === concept &&
         c.kind === kind,
     );
+    return (
+      candidates.find(
+        (c) =>
+          c.engines &&
+          c.engines.left === report.engines?.left &&
+          c.engines.right === report.engines?.right,
+      ) || candidates.find((c) => !c.engines)
+    );
+  };
 
   const aggregateCount = aggregates.reduce(
     (sum, a) => sum + (a.comparison_count || 0),
