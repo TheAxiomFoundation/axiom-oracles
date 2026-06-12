@@ -16,6 +16,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -748,7 +749,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
         surfaces = [surfaces]
 
     reports: list[dict] = []
-    for surface in surfaces:
+    for index, surface in enumerate(surfaces, start=1):
         cmd = [
             "uv",
             "run",
@@ -790,12 +791,30 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
                 "--root",
                 str(_resolve_path(params["workspace_root"], "workspace_root")),
             ])
-        result = subprocess.run(
-            cmd,
-            check=True,
-            cwd=REPO_ROOT,
-            capture_output=True,
-            text=True,
+        print(
+            f"  [{index}/{len(surfaces)}] UK EFRS surface {surface}...",
+            flush=True,
+        )
+        started = time.perf_counter()
+        try:
+            result = subprocess.run(
+                cmd,
+                check=True,
+                cwd=REPO_ROOT,
+                capture_output=True,
+                text=True,
+            )
+        except subprocess.CalledProcessError as exc:
+            if exc.stdout:
+                print(exc.stdout[-4000:], file=sys.stderr)
+            if exc.stderr:
+                print(exc.stderr[-4000:], file=sys.stderr)
+            raise
+        elapsed = time.perf_counter() - started
+        print(
+            f"  [{index}/{len(surfaces)}] UK EFRS surface {surface} "
+            f"completed in {elapsed:.1f}s",
+            flush=True,
         )
         reports.append(json.loads(result.stdout))
 
