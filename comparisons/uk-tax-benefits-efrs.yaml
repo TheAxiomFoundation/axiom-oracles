@@ -2,12 +2,14 @@ name: uk-tax-benefits-efrs
 title: UK tax and benefits — Axiom vs PolicyEngine
 description: >-
   Compares merged UK RuleSpec tax, National Insurance, Child Benefit, State
-  Pension, Pension Credit, tariff-income, student-loan, Carer's Allowance, and
-  final Universal Credit surfaces against PolicyEngine UK on the Enhanced FRS
-  population. Missing final wrappers such as Pension Credit final, ESA income
-  final, Housing Benefit final, Carer Support Payment, Scottish Child Payment,
-  and Severe Disablement Allowance are intentionally excluded until their
-  RuleSpecs are merged.
+  Pension Credit, tariff-income, student-loan, Carer's Allowance, and final
+  Carer Support Payment, Scottish Child Payment, and child Disability Living
+  Allowance surfaces against PolicyEngine UK on the Enhanced FRS population.
+  Missing or source-fact-blocked final wrappers such as Child Benefit final,
+  State Pension final, Universal Credit final, Pension Credit final, ESA income
+  final, Housing Benefit final, and Severe Disablement Allowance are
+  intentionally excluded until their RuleSpecs and projection facts are
+  available.
 
 runner:
   type: axiom-encode-uk-efrs-compare
@@ -40,12 +42,10 @@ runner:
       - income-tax-section-11d-savings-income
       - income-tax-section-13-dividend-income
       - child-benefit
-      - child-benefit-final
       - benefit-cap-relevant-amount
       - state-pension-credit-qualifying-age
       - state-pension-credit-guarantee-credit
       - state-pension-credit-savings-credit
-      - state-pension-final
       - pension-credit
       - pension-credit-child-addition
       - pension-credit-deemed-income
@@ -54,9 +54,11 @@ runner:
       - income-support-tariff-income
       - housing-benefit-working-age-tariff-income
       - housing-benefit-pension-age-tariff-income
-      - universal-credit-final
       - student-loan-repayment
       - carers-allowance-final
+      - carer-support-payment-final
+      - scottish-child-payment-final
+      - disability-living-allowance-final
 
 artifacts:
   report_basename: axiom-policyengine-uk-tax-benefits-efrs

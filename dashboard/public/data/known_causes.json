@@ -246,6 +246,38 @@
       "fix_owner": "rulespec-uk"
     },
     {
+      "suite": "uk-tax-benefits-efrs",
+      "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
+      "kind": "amount_difference",
+      "label": "Reported-receipt rows below statutory age gate",
+      "description": "The 152 Carer's Allowance residuals are rows where PolicyEngine UK pays from reported Carer's Allowance receipt even though the EFRS person age is under 16. The refreshed Axiom GOV.UK wrapper enforces the source age-16 eligibility gate. The oracle projects positive PE/reported receipt to the statutory 35-hour care condition because current EFRS care_hours is zero on reported-receipt rows, but it does not override the age gate.",
+      "fix_owner": "policyengine-data"
+    },
+    {
+      "suite": "uk-tax-benefits-efrs",
+      "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
+      "kind": "amount_difference",
+      "label": "Reported-receipt rows below statutory age gate",
+      "description": "The 12 Carer Support Payment residuals mirror the Carer's Allowance pattern: PolicyEngine UK pays from reported receipt on under-16 rows, while the source-backed Axiom wrapper keeps the statutory age-16 gate. The comparison leaves those rows visible rather than projecting age from the PE final award.",
+      "fix_owner": "policyengine-data"
+    },
+    {
+      "suite": "uk-tax-benefits-efrs",
+      "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
+      "kind": "amount_difference",
+      "label": "PE pays higher mobility before age 3",
+      "description": "The 34 child DLA mobility residuals are children aged 0-2 where PolicyEngine UK has a higher-rate DLA mobility category and pays the weekly mobility component. The GOV.UK child DLA wrapper requires age 3 or over for higher-rate mobility and age 5 or over for lower-rate mobility, so Axiom returns zero for this component.",
+      "fix_owner": "policyengine-data"
+    },
+    {
+      "suite": "uk-tax-benefits-efrs",
+      "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
+      "kind": "amount_difference",
+      "label": "Downstream of under-age mobility component",
+      "description": "The 34 child DLA annual-amount residuals are the annualized effect of the same age 0-2 higher-rate mobility rows. The care component agrees; the annual amount differs because PolicyEngine includes the mobility component while the source-backed Axiom child DLA wrapper applies the GOV.UK mobility age threshold.",
+      "fix_owner": "policyengine-data"
+    },
+    {
       "suite": "nyc-synthetic",
       "engines": { "left": "policyengine", "right": "taxsim" },
       "concept": "us:tax/federal-income-tax#liability",

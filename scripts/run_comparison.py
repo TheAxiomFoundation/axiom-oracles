@@ -474,6 +474,35 @@ UK_EFRS_OUTPUT_CONCEPTS: dict[tuple[str, str], dict] = {
         "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
         "description": "UK Carer's Allowance annual amount",
     },
+    ("carer-support-payment-final", "carer_support_payment_annual_amount"): {
+        "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
+        "description": "UK Carer Support Payment annual amount",
+    },
+    ("scottish-child-payment-final", "scottish_child_payment_annual_amount"): {
+        "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+        "description": "UK Scottish Child Payment annual amount",
+    },
+    (
+        "disability-living-allowance-final",
+        "disability_living_allowance_self_care_weekly_amount",
+    ): {
+        "concept": "uk:policies/govuk/disability-living-allowance#dla_care_component_weekly_amount",
+        "description": "UK child DLA care component weekly amount",
+    },
+    (
+        "disability-living-allowance-final",
+        "disability_living_allowance_mobility_weekly_amount",
+    ): {
+        "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
+        "description": "UK child DLA mobility component weekly amount",
+    },
+    (
+        "disability-living-allowance-final",
+        "disability_living_allowance_annual_amount",
+    ): {
+        "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
+        "description": "UK child DLA annual amount",
+    },
 }
 
 
