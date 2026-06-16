@@ -1,0 +1,38 @@
+# Florida SNAP -- Axiom vs PolicyEngine on Enhanced CPS.
+
+name: fl-snap-ecps
+title: Florida SNAP -- Axiom vs PolicyEngine
+description: Compares Florida SNAP eligibility and benefit amount from the
+  composed axiom-programs/us-fl/snap/fy-2026 spec against PolicyEngine on the
+  Enhanced CPS, filtered to Florida households. The current Axiom wrapper is
+  benefit/income focused; BBCE qualification and utility-allowance eligibility
+  remain documented source/runtime gaps.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    concepts:
+      - us:statutes/7/2014/o#snap_eligible
+      - us:statutes/7/2014/u#snap_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-programs/us-fl/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/fl-snap-composed.yaml
+    axiom_compiled_program: /tmp/fl-snap-compiled.json
+    axiom_rulespec_repo_roots: $HOME
+    rulespec_roots:
+      - $HOME/rulespec-us
+      - $HOME/rulespec-us-fl
+    jurisdiction_fips: "12"
+
+artifacts:
+  report_basename: axiom-policyengine-fl-snap-ecps
+
+dashboard:
+  filename: axiom-policyengine-fl-snap-ecps.json
+  suite: fl-snap-ecps
