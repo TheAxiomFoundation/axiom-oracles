@@ -17,6 +17,7 @@
     "axiom-policyengine-uk-universal-credit-efrs.json",
     "axiom-policyengine-nyc-income-tax-components.json",
     "axiom-policyengine-nyc-income-tax-components-ecps.json",
-    "axiom-policyengine-uk-tax-benefits-efrs.json"
+    "axiom-policyengine-uk-tax-benefits-efrs.json",
+    "axiom-policyengine-az-snap-ecps.json"
   ]
 }
