@@ -706,6 +706,7 @@ function MismatchPattern({ kind, cases, casesById, knownCause }) {
       {expanded && (
         <>
           <div
+            className="indent-deep"
             style={{
               fontSize: 12,
               color: "var(--ink-mute)",
@@ -717,7 +718,7 @@ function MismatchPattern({ kind, cases, casesById, knownCause }) {
             {knownCause?.description || KIND_DESCRIPTION[kind]}
             <CauseDriverBreakdown cause={knownCause} />
           </div>
-          <div style={{ paddingLeft: 60 }}>
+          <div className="indent-deep" style={{ paddingLeft: 60 }}>
             <MismatchCaseTable cases={cases} casesById={casesById} />
           </div>
         </>

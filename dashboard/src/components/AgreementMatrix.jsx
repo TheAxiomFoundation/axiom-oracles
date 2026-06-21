@@ -52,6 +52,7 @@ export default function AgreementMatrix({
       </div>
 
       <div
+        className="matrix-wrap"
         style={{
           padding: "32px 40px 36px",
           display: "flex",
@@ -61,6 +62,7 @@ export default function AgreementMatrix({
           flexWrap: "wrap",
         }}
       >
+        <div className="table-scroll" style={{ maxWidth: "100%" }}>
         <table
           style={{
             borderSpacing: 4,
@@ -150,6 +152,7 @@ export default function AgreementMatrix({
             ))}
           </tbody>
         </table>
+        </div>
 
         {/* Legend */}
         <div
@@ -207,6 +210,7 @@ function ComponentBreakdown({ selectedConcept, concepts, matrix, oracles }) {
       <div className="section-eyebrow" style={{ marginBottom: 12 }}>
         Components of {concept.description}
       </div>
+      <div className="table-scroll">
       <table style={{ fontSize: 12.5 }}>
         <thead>
           <tr>
@@ -266,6 +270,7 @@ function ComponentBreakdown({ selectedConcept, concepts, matrix, oracles }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

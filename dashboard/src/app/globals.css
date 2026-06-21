@@ -291,6 +291,13 @@ a.cite:hover {
   color: var(--ink);
 }
 
+/* Horizontal-scroll container for wide tables so the page itself never
+   overflows on narrow screens. Desktop layout is unchanged. */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .coverage-table {
   min-width: 1080px;
   font-size: 12.5px;
@@ -312,4 +319,51 @@ a.cite:hover {
 }
 .coverage-table tbody tr:last-child td {
   border-bottom: 0;
+}
+
+/* ── Responsive: phone + small-tablet adjustments ──
+   These only apply at <= 640px so the desktop layout is untouched.
+   They (a) stop the page from overflowing horizontally, (b) shrink the
+   deep left-indents used in the alignment cards, and (c) scale down the
+   largest headline numbers so they fit a phone column. */
+html,
+body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 640px) {
+  .topbar-inner {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  /* The <main> wrapper uses an inline maxWidth + 20px padding; nudge the
+     horizontal padding down on phones via the responsive helper class. */
+  .page-main {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 32px !important;
+  }
+
+  /* Deep indents (padding-left: 52–60px) that were tuned for desktop push
+     content off-screen on phones. Pull them back in. */
+  .indent-deep {
+    padding-left: 24px !important;
+  }
+
+  /* Oversized headline figures crowd a 360–430px column; scale them down
+     without touching the desktop sizes. */
+  .hero-figure {
+    font-size: 40px !important;
+  }
+  .hero-pair-figure {
+    font-size: 28px !important;
+  }
+
+  /* The agreement matrix uses generous desktop padding; trim it so the
+     scrollable table has more room on phones. */
+  .matrix-wrap {
+    padding: 20px 16px 24px !important;
+    gap: 20px !important;
+  }
 }
