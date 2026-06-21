@@ -114,7 +114,7 @@ function PairCard({ pair }) {
         Axiom vs {engineLabel(pair.other)}
       </div>
       <div
-        className="mono"
+        className="mono hero-pair-figure"
         style={{
           fontSize: 34,
           fontWeight: 500,
@@ -194,7 +194,7 @@ export default function OverviewHero({ reports }) {
         >
           <div>
             <h1
-              className="mono"
+              className="mono hero-figure"
               style={{
                 fontSize: 52,
                 fontWeight: 500,
