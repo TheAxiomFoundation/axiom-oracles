@@ -2,7 +2,7 @@ import Script from "next/script";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const GA_ID = "G-5PB7KEWV38";
+const GA_ID = "G-2YHG89FY0N";
 const TOOL_NAME = "axiom-oracles";
 
 const geist = Geist({
