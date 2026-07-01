@@ -201,10 +201,14 @@ export function reportMetric(report) {
   };
 }
 
-/** Plain-language status for a measured agreement rate. */
+/**
+ * Plain-language status for a measured agreement rate. Tiers match
+ * rateColor() in utils/colors.js so a tile and its run row never disagree:
+ * 90%+ reads as verified, not as a warning.
+ */
 export function rateStatus(rate) {
   if (rate == null) return "unmeasured";
-  if (rate >= 99) return "verified";
-  if (rate >= 90) return "diverging";
+  if (rate >= 90) return "verified";
+  if (rate >= 70) return "diverging";
   return "attention";
 }

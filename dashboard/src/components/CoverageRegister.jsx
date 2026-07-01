@@ -214,9 +214,9 @@ function FamilyRow({ family, cells }) {
 }
 
 const LEGEND = [
-  { status: "verified", label: "Verified — engines agree on 99%+ of checks" },
-  { status: "diverging", label: "Diverging — measured, mismatches under triage" },
-  { status: "attention", label: "Needs attention — below 90% agreement" },
+  { status: "verified", label: "Verified — engines agree on 90%+ of checks" },
+  { status: "diverging", label: "Diverging — 70–90% agreement, under triage" },
+  { status: "attention", label: "Needs attention — below 70% agreement" },
   { status: "encoded", label: "Encoded, not yet verified" },
   { status: "parameter", label: "Parameter check only" },
   { status: "diagnostic", label: "Diagnostic run" },

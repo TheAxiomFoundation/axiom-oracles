@@ -15,9 +15,9 @@ import {
 
 /**
  * Every verification run as one collapsed line: program, engines, how many
- * checks, how often they agreed. Runs with the most disagreement sort first
- * so the reading order is the triage order. Expanding a row reveals the full
- * per-concept breakdown, cause attribution, and case drawer.
+ * checks, how often they agreed, sorted highest agreement first. Expanding a
+ * row reveals the full per-concept breakdown, cause attribution, and case
+ * drawer.
  *
  * Rows are keyed by (suite, engine pair), so the same program verified
  * against several oracles (PolicyEngine, TAXSIM, …) lists once per oracle.
@@ -194,11 +194,9 @@ function RunRow({ report, knownCauses, coverageOverview, isOpen, onToggle, ancho
 
 function sortRuns(reports) {
   return [...reports].sort((a, b) => {
-    const ma = reportMetric(a);
-    const mb = reportMetric(b);
-    const ra = ma.rate ?? 101; // unmeasured after measured
-    const rb = mb.rate ?? 101;
-    if (ra !== rb) return ra - rb;
+    const ra = reportMetric(a).rate ?? -1; // unmeasured after measured
+    const rb = reportMetric(b).rate ?? -1;
+    if (ra !== rb) return rb - ra; // highest agreement first
     return suiteMeta(a.suite).order - suiteMeta(b.suite).order;
   });
 }
@@ -276,9 +274,7 @@ export default function ProgramRuns({ reports, knownCauses, coverageOverview }) 
     <section style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {verification.length > 0 && (
         <>
-          <div className="section-eyebrow">
-            Verification runs · lowest agreement first
-          </div>
+          <div className="section-eyebrow">Verification runs</div>
           <RunGroup
             reports={verification}
             knownCauses={knownCauses}
