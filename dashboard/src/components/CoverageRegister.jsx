@@ -122,6 +122,7 @@ function cellTitle(cell) {
 const FAMILY_FALLBACK_ORDER = {
   federal_income_tax: 10,
   social_security: 20,
+  ssi: 25,
   snap: 100,
   state_income_tax: 200,
   medicaid_chip_bhp_thresholds: 210,

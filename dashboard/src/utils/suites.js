@@ -33,6 +33,7 @@ export const FAMILY_LABELS = {
   snap: "SNAP food assistance",
   federal_income_tax: "Federal income tax",
   social_security: "Social Security (OASDI) amounts",
+  ssi: "SSI (Supplemental Security Income)",
   state_income_tax: "State income tax",
   nyc_income_tax: "NYC income tax",
   medicaid_chip_bhp_thresholds: "Medicaid / CHIP / BHP thresholds",

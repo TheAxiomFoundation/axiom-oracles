@@ -88,6 +88,14 @@
     "status": "partial",
     "coverage": "US",
     "notes": "PolicyEngine models Medicaid eligibility by category and state income limits; group-by-group 42 CFR 435 pathways are not exposed as separate outputs."
+   },
+   {
+    "id": "ssi",
+    "name": "SSI",
+    "full_name": "Supplemental Security Income",
+    "status": "complete",
+    "coverage": "US",
+    "notes": "PolicyEngine tracker marks federal SSI complete, with state supplements for several states."
    }
   ]
  },
@@ -311,6 +319,16 @@
     "source": "rulespec-us-ny/policies/tax/it-201-instructions + it-216-instructions",
     "known_non_tanf_gaps": [
      "used by the NYC income tax diagnostic; no NY state income tax verification suite yet"
+    ]
+   },
+   {
+    "program": "ssi",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "source": "rulespec-us main (upstream): us/statutes/42/1382, 1382a, 1382b, 1382c, 1382f \u2014 SSI eligibility, benefit computation, income/resource exclusions, and COLA machinery (12 sections)",
+    "known_non_tanf_gaps": [
+     "no oracle comparison yet; PolicyEngine models SSI fully (gov.ssa.ssi), so both a parameter check and an ECPS household suite are feasible",
+     "state supplement schedules (per-state SSP amounts) are not yet encoded anywhere in the corpus"
     ]
    }
   ]
