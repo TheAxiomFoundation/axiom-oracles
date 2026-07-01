@@ -2,45 +2,14 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { loadOracleData, buildNWayData } from "../utils/data";
-import MetricsRow from "./MetricsRow";
-import ProgramBreakdown from "./ProgramBreakdown";
-import AgreementMatrix from "./AgreementMatrix";
-import AlignmentReport from "./AlignmentReport";
+import { suiteRegion } from "../utils/suites";
 import OverviewHero from "./OverviewHero";
+import CoverageRegister from "./CoverageRegister";
+import GapLedger from "./GapLedger";
+import ProgramRuns from "./ProgramRuns";
 import CoverageOverview from "./CoverageOverview";
-
-const SUITE_DISPLAY_ORDER = {
-  "fiit-ecps": 10,
-  "ca-snap-ecps": 20,
-  "ny-snap-ecps": 30,
-  "ma-snap-ecps": 40,
-  "al-snap-ecps": 50,
-  "tn-snap-ecps": 60,
-  "co-snap-ecps": 70,
-  "sc-snap-ecps": 80,
-  "nc-snap-ecps": 90,
-  "co-state-income-tax-ecps": 100,
-  "co-health-thresholds": 110,
-  "co-tanf-coverage": 120,
-  "uk-universal-credit-efrs": 130,
-  "uk-tax-benefits-efrs": 140,
-  "nyc-synthetic": 1000,
-};
-
-function orderedReports(reports) {
-  return [...reports].sort((a, b) => {
-    const aOrder = SUITE_DISPLAY_ORDER[a.suite] ?? 500;
-    const bOrder = SUITE_DISPLAY_ORDER[b.suite] ?? 500;
-    if (aOrder !== bOrder) return aOrder - bOrder;
-    return (a.suite || "").localeCompare(b.suite || "");
-  });
-}
-
-function reportRegion(report) {
-  const suite = String(report?.suite || "");
-  if (suite.startsWith("uk-")) return "uk";
-  return "us";
-}
+import AgreementMatrix from "./AgreementMatrix";
+import ProgramBreakdown from "./ProgramBreakdown";
 
 function programRegion(program) {
   const id = String(program?.id || "");
@@ -50,14 +19,6 @@ function programRegion(program) {
   if (coverage.some((entry) => entry?.country === "UK")) return "uk";
   if (coverage.some((entry) => entry?.country === "US")) return "us";
   return "us";
-}
-
-function filterReportsByRegion(reports, region) {
-  return reports.filter((report) => reportRegion(report) === region);
-}
-
-function filterProgramsByRegion(programs, region) {
-  return programs.filter((program) => programRegion(program) === region);
 }
 
 function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
@@ -126,8 +87,12 @@ export default function DashboardContent() {
 
   const viewData = useMemo(() => {
     if (!data) return null;
-    const reports = orderedReports(filterReportsByRegion(data.reports, jurisdiction));
-    const programs = filterProgramsByRegion(data.programs, jurisdiction);
+    const reports = data.reports.filter(
+      (r) => suiteRegion(r.suite) === jurisdiction,
+    );
+    const programs = data.programs.filter(
+      (p) => programRegion(p) === jurisdiction,
+    );
     return { ...buildNWayData(reports), reports, programs };
   }, [data, jurisdiction]);
 
@@ -168,7 +133,10 @@ export default function DashboardContent() {
     );
   }
 
-  const hasComparisonData = viewData.summary.totalCases > 0;
+  const withData = viewData.reports.filter(
+    (r) =>
+      (r.aggregates || []).length > 0 || (r.summary?.alarms || []).length > 0,
+  );
 
   return (
     <>
@@ -184,42 +152,23 @@ export default function DashboardContent() {
           padding: "56px 20px 80px",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-          <OverviewHero
-            reports={viewData.reports.filter(
-              (r) => (r.aggregates || []).length > 0,
-            )}
-            programCount={viewData.programs.length}
-          />
+        <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
+          <OverviewHero reports={withData} />
 
-          <CoverageOverview
-            reports={viewData.reports.filter(
-              (r) => (r.aggregates || []).length > 0,
-            )}
+          <CoverageRegister
+            reports={withData}
             coverageOverview={data.coverageOverview}
-            jurisdictionFilter={jurisdiction}
+            region={jurisdiction}
           />
 
-          {hasComparisonData && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-              }}
-            >
-              <div className="section-eyebrow">By program</div>
-              {viewData.reports
-                .filter((r) => (r.aggregates || []).length > 0)
-                .map((report, i) => (
-                  <AlignmentReport
-                    key={`${report.suite || "report"}-${i}`}
-                    report={report}
-                    knownCauses={data.knownCauses || []}
-                  />
-                ))}
-            </div>
-          )}
+          <GapLedger
+            reports={withData}
+            knownCauses={data.knownCauses || []}
+            coverageOverview={data.coverageOverview}
+            region={jurisdiction}
+          />
+
+          <ProgramRuns reports={withData} knownCauses={data.knownCauses || []} />
 
           <details
             style={{
@@ -236,11 +185,16 @@ export default function DashboardContent() {
                 color: "var(--ink-mute)",
               }}
             >
-              All encoded programs (with and without live comparison data) ·
-              advanced view
+              Advanced view · coverage table, agreement matrix, and all encoded
+              programs
             </summary>
-            <div style={{ marginTop: 12 }}>
-              {hasComparisonData && (
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 16 }}>
+              <CoverageOverview
+                reports={withData}
+                coverageOverview={data.coverageOverview}
+                jurisdictionFilter={jurisdiction}
+              />
+              {viewData.summary.totalCases > 0 && (
                 <AgreementMatrix
                   oracles={viewData.oracles}
                   matrix={viewData.matrix}

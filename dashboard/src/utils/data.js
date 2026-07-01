@@ -34,7 +34,21 @@ export async function loadOracleData(basePath = "") {
       const url = `${basePath}/data/${file}`;
       const resp = await fetch(url);
       if (resp.ok) {
-        reports.push(await resp.json());
+        const report = await resp.json();
+        report.file = file;
+        // Older generator runs wrote state SNAP reports with the legacy
+        // "nyc-synthetic" default suite even though the file is named for its
+        // real suite. Trust the filename for that one known-stale case so the
+        // report groups and labels correctly (e.g. fl-snap-ecps).
+        const fromFile = file.match(/^axiom-policyengine-([a-z]{2}-snap-ecps)\.json$/);
+        if (
+          fromFile &&
+          (!report.suite || report.suite === "nyc-synthetic") &&
+          report.suite !== fromFile[1]
+        ) {
+          report.suite = fromFile[1];
+        }
+        reports.push(report);
       }
     } catch {
       // skip missing files

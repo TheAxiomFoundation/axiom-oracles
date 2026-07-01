@@ -2,105 +2,19 @@
 
 import { formatPct } from "../utils/format";
 import { rateColor, heatmapBg } from "../utils/colors";
+import { suiteMeta } from "../utils/suites";
 
-const SUITE_META = {
-  "al-snap-ecps": {
-    program: "snap",
-    jurisdiction: "AL",
-    label: "Alabama SNAP",
-    order: 20,
-  },
-  "ca-snap-ecps": {
-    program: "snap",
-    jurisdiction: "CA",
-    label: "California SNAP",
-    order: 30,
-  },
-  "ma-snap-ecps": {
-    program: "snap",
-    jurisdiction: "MA",
-    label: "Massachusetts SNAP",
-    order: 40,
-  },
-  "ny-snap-ecps": {
-    program: "snap",
-    jurisdiction: "NY",
-    label: "New York SNAP",
-    order: 50,
-  },
-  "tn-snap-ecps": {
-    program: "snap",
-    jurisdiction: "TN",
-    label: "Tennessee SNAP",
-    order: 60,
-  },
-  "co-snap-ecps": {
-    program: "snap",
-    jurisdiction: "CO",
-    label: "Colorado SNAP",
-    order: 70,
-  },
-  "sc-snap-ecps": {
-    program: "snap",
-    jurisdiction: "SC",
-    label: "South Carolina SNAP",
-    order: 80,
-  },
-  "nc-snap-ecps": {
-    program: "snap",
-    jurisdiction: "NC",
-    label: "North Carolina SNAP",
-    order: 90,
-  },
-  "co-state-income-tax-ecps": {
-    program: "state_income_tax",
-    jurisdiction: "CO",
-    label: "Colorado income tax",
-    order: 100,
-  },
-  "nyc-income-tax-gap": {
-    program: "nyc_income_tax",
-    jurisdiction: "NYC",
-    label: "NYC income tax",
-    order: 105,
-  },
-  "nyc-income-tax-ecps-diagnostic": {
-    program: "nyc_income_tax",
-    jurisdiction: "NYC",
-    label: "NYC income tax ECPS diagnostic",
-    order: 106,
-  },
-  "co-health-thresholds": {
-    program: "medicaid_chip_bhp_thresholds",
-    jurisdiction: "CO",
-    label: "Colorado Medicaid / CHIP / BHP thresholds",
-    order: 110,
-  },
-  "co-tanf-coverage": {
-    program: "tanf",
-    jurisdiction: "CO",
-    label: "Colorado Works TANF",
-    order: 120,
-  },
-  "fiit-ecps": {
-    program: "federal_income_tax",
-    jurisdiction: "US",
-    label: "Federal income tax",
-    order: 10,
-  },
-  "uk-universal-credit-efrs": {
-    program: "universal_credit",
-    jurisdiction: "UK",
-    label: "UK Universal Credit",
-    order: 130,
-  },
-  "uk-tax-benefits-efrs": {
-    program: "uk_tax_benefits",
-    jurisdiction: "UK",
-    label: "UK tax and benefits",
-    order: 140,
-  },
-};
+// Adapt the central suite metadata to the field names this table was built
+// around (`program` here means program family).
+function metaFor(suite) {
+  const m = suiteMeta(suite);
+  return {
+    program: m.family,
+    jurisdiction: m.jurisdiction,
+    label: m.label,
+    order: m.order,
+  };
+}
 
 function titleFromId(id) {
   return String(id || "")
@@ -185,11 +99,11 @@ function buildRows(reports, coverageOverview, jurisdictionFilter = "all") {
     jurisdictionFilter === "all" || regionForSuite(suite) === jurisdictionFilter;
 
   const reportRows = (reports || [])
-    .filter((report) => SUITE_META[report.suite])
+    .filter((report) => report.suite)
     .filter((report) => includeSuite(report.suite))
     .filter((report) => report.engines?.left === "axiom" || report.engines?.right === "axiom")
     .map((report) => {
-      const meta = SUITE_META[report.suite];
+      const meta = metaFor(report.suite);
       const peProgram = lookupProgram(pePrograms, (p) => p.id === meta.program);
       const axiomProgram =
         lookupProgram(axiomPrograms, (p) => p.suite === report.suite) ||
@@ -214,11 +128,11 @@ function buildRows(reports, coverageOverview, jurisdictionFilter = "all") {
 
   const reportedSuites = new Set(reportRows.map((row) => row.suite));
   const coverageRows = axiomPrograms
-    .filter((program) => program.suite && SUITE_META[program.suite])
+    .filter((program) => program.suite)
     .filter((program) => includeSuite(program.suite))
     .filter((program) => !reportedSuites.has(program.suite))
     .map((program) => {
-      const meta = SUITE_META[program.suite];
+      const meta = metaFor(program.suite);
       const peProgram = lookupProgram(pePrograms, (p) => p.id === meta.program);
       return {
         ...meta,
