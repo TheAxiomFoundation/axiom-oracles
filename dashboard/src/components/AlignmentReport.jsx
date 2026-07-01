@@ -2,8 +2,14 @@
 
 import React, { useState } from "react";
 import { IconChevronRight, IconChevronDown } from "@tabler/icons-react";
-import { formatPct, formatCurrency, engineLabel } from "../utils/format";
+import {
+  formatPct,
+  formatCurrency,
+  engineLabel,
+  mismatchKindLabel,
+} from "../utils/format";
 import { rateColor, heatmapBg } from "../utils/colors";
+import { suiteMeta } from "../utils/suites";
 
 /**
  * Per-report alignment card.
@@ -18,30 +24,19 @@ import { rateColor, heatmapBg } from "../utils/colors";
  * can take a concrete case_id into a triage script.
  */
 
-const KIND_LABEL = {
-  eligibility_right_only: "PE eligible, Axiom not",
-  eligibility_left_only: "Axiom eligible, PE not",
-  amount_difference: "Amount differs",
-  missing_left: "Axiom returned no value",
-  missing_right: "PE returned no value",
-  missing_both: "Both engines missing",
-};
-
-const KIND_DESCRIPTION = {
-  eligibility_right_only:
-    "Households PolicyEngine marks eligible that Axiom rejects. Usually points to an unencoded eligibility path (state BBCE, categorical exemption, …).",
-  eligibility_left_only:
-    "Households Axiom marks eligible that PolicyEngine rejects. Often Axiom missing a disqualifying condition the rulespec hasn't encoded yet.",
-  amount_difference:
-    "Both engines agree on eligibility, but the dollar amount diverges beyond tolerance.",
-  missing_left:
-    "Axiom didn't produce a value for this case — typically a missing input or formula that references an undeclared identifier.",
-  missing_right: "PolicyEngine didn't produce a value.",
-  missing_both: "Neither engine could evaluate the case.",
-};
-
-function kindLabel(kind) {
-  return KIND_LABEL[kind] || kind;
+function kindDescription(kind, engines) {
+  const left = engineLabel(engines?.left || "axiom");
+  const right = engineLabel(engines?.right || "policyengine");
+  const descriptions = {
+    eligibility_right_only: `Households ${right} marks eligible that ${left} rejects. Usually points to an unencoded eligibility path (state BBCE, categorical exemption, …).`,
+    eligibility_left_only: `Households ${left} marks eligible that ${right} rejects. Often ${left} missing a disqualifying condition the rulespec hasn't encoded yet.`,
+    amount_difference:
+      "Both engines agree on eligibility, but the dollar amount diverges beyond tolerance.",
+    missing_left: `${left} didn't produce a value for this case — typically a missing input or formula that references an undeclared identifier.`,
+    missing_right: `${right} didn't produce a value.`,
+    missing_both: "Neither engine could evaluate the case.",
+  };
+  return descriptions[kind];
 }
 
 function ConceptMetric({ aggregate }) {
@@ -449,7 +444,7 @@ function HouseholdDetail({ row, mismatch }) {
   );
 }
 
-function MismatchCaseTable({ cases, casesById }) {
+function MismatchCaseTable({ cases, casesById, engines }) {
   const [openCase, setOpenCase] = useState(null);
   return (
     <div
@@ -474,8 +469,12 @@ function MismatchCaseTable({ cases, casesById }) {
           <tr style={{ background: "var(--paper-warm)" }}>
             <th style={{ textAlign: "left", padding: "6px 10px", width: 24 }} />
             <th style={{ textAlign: "left", padding: "6px 10px" }}>case_id</th>
-            <th style={{ textAlign: "right", padding: "6px 10px" }}>Axiom</th>
-            <th style={{ textAlign: "right", padding: "6px 10px" }}>PE</th>
+            <th style={{ textAlign: "right", padding: "6px 10px" }}>
+              {engineLabel(engines?.left || "axiom")}
+            </th>
+            <th style={{ textAlign: "right", padding: "6px 10px" }}>
+              {engineLabel(engines?.right || "policyengine")}
+            </th>
             <th style={{ textAlign: "right", padding: "6px 10px" }}>diff</th>
           </tr>
         </thead>
@@ -627,7 +626,7 @@ function CauseDriverBreakdown({ cause, compact = false }) {
   );
 }
 
-function MismatchPattern({ kind, cases, casesById, knownCause }) {
+function MismatchPattern({ kind, cases, casesById, knownCause, engines }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <div
@@ -674,7 +673,7 @@ function MismatchPattern({ kind, cases, casesById, knownCause }) {
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, color: "var(--ink)" }}>
-            {kindLabel(kind)}
+            {mismatchKindLabel(kind, engines)}
           </div>
           {knownCause && (
             <div
@@ -715,11 +714,15 @@ function MismatchPattern({ kind, cases, casesById, knownCause }) {
               maxWidth: 760,
             }}
           >
-            {knownCause?.description || KIND_DESCRIPTION[kind]}
+            {knownCause?.description || kindDescription(kind, engines)}
             <CauseDriverBreakdown cause={knownCause} />
           </div>
           <div className="indent-deep" style={{ paddingLeft: 60 }}>
-            <MismatchCaseTable cases={cases} casesById={casesById} />
+            <MismatchCaseTable
+              cases={cases}
+              casesById={casesById}
+              engines={engines}
+            />
           </div>
         </>
       )}
@@ -727,45 +730,8 @@ function MismatchPattern({ kind, cases, casesById, knownCause }) {
   );
 }
 
-// Human-readable display names for the suites we currently know about.
-// Falls back to the suite slug if not listed.
-const SUITE_TITLE = {
-  "ca-snap-ecps": "California SNAP (CalFresh)",
-  "ny-snap-ecps": "New York SNAP",
-  "co-snap-ecps": "Colorado SNAP",
-  "sc-snap-ecps": "South Carolina SNAP",
-  "nc-snap-ecps": "North Carolina SNAP",
-  "co-state-income-tax-ecps": "Colorado State Income Tax",
-  "co-health-thresholds": "Colorado Medicaid / CHIP / BHP Thresholds",
-  "co-tanf-coverage": "Colorado Works TANF",
-  "fiit-ecps": "Federal Income Tax",
-  "uk-universal-credit-efrs": "UK Universal Credit",
-  "uk-tax-benefits-efrs": "UK Tax and Benefits",
-  "nyc-income-tax-gap": "NYC Income Tax Components",
-  "nyc-income-tax-ecps-diagnostic": "NYC Income Tax ECPS Diagnostic",
-  "nyc-synthetic": "NYC Synthetic Scenarios",
-};
-
-const SUITE_JURISDICTION = {
-  "ca-snap-ecps": "US-CA",
-  "ny-snap-ecps": "US-NY",
-  "co-snap-ecps": "US-CO",
-  "sc-snap-ecps": "US-SC",
-  "nc-snap-ecps": "US-NC",
-  "co-state-income-tax-ecps": "US-CO",
-  "co-health-thresholds": "US-CO",
-  "co-tanf-coverage": "US-CO",
-  "fiit-ecps": "US (federal)",
-  "uk-universal-credit-efrs": "UK",
-  "uk-tax-benefits-efrs": "UK",
-  "nyc-income-tax-gap": "US-NY-NYC",
-  "nyc-income-tax-ecps-diagnostic": "US-NY-NYC",
-  "nyc-synthetic": "US-NY-NYC",
-};
-
 function reportTitle(report) {
-  if (report.suite && SUITE_TITLE[report.suite]) return SUITE_TITLE[report.suite];
-  if (report.suite) return report.suite;
+  if (report.suite) return suiteMeta(report.suite).label;
   const left = engineLabel(report.engines?.left);
   const right = engineLabel(report.engines?.right);
   return `${left} vs ${right}`;
@@ -778,7 +744,7 @@ function reportEngines(report) {
 }
 
 function reportJurisdiction(report) {
-  return SUITE_JURISDICTION[report.suite] || null;
+  return report.suite ? suiteMeta(report.suite).jurisdiction : null;
 }
 
 function reportHeadlineRate(aggregates) {
@@ -791,7 +757,11 @@ function reportHeadlineRate(aggregates) {
   return total > 0 ? (matched / total) * 100 : null;
 }
 
-export default function AlignmentReport({ report, knownCauses = [] }) {
+export default function AlignmentReport({
+  report,
+  knownCauses = [],
+  embedded = false,
+}) {
   const aggregates = report.aggregates || [];
   const mismatches = report.mismatches || [];
 
@@ -845,15 +815,16 @@ export default function AlignmentReport({ report, knownCauses = [] }) {
   return (
     <div
       style={{
-        background: "var(--paper-elevated)",
-        border: "1px solid var(--hairline)",
-        borderRadius: 12,
-        padding: "18px 20px",
+        background: embedded ? "transparent" : "var(--paper-elevated)",
+        border: embedded ? 0 : "1px solid var(--hairline)",
+        borderRadius: embedded ? 0 : 12,
+        padding: embedded ? 0 : "18px 20px",
         display: "flex",
         flexDirection: "column",
         gap: 14,
       }}
     >
+      {!embedded && (
       <header
         style={{
           display: "flex",
@@ -922,6 +893,7 @@ export default function AlignmentReport({ report, knownCauses = [] }) {
           );
         })()}
       </header>
+      )}
 
       {alarms.length > 0 && (
         <div
@@ -1065,7 +1037,7 @@ export default function AlignmentReport({ report, knownCauses = [] }) {
                         textTransform: "uppercase",
                       }}
                     >
-                      {c.concept} · {kindLabel(c.kind)}
+                      {c.concept} · {mismatchKindLabel(c.kind, report.engines)}
                       {c.cause.fix_owner && (
                         <> · owner: {c.cause.fix_owner}</>
                       )}
@@ -1107,6 +1079,7 @@ export default function AlignmentReport({ report, knownCauses = [] }) {
                     cases={cases}
                     casesById={casesById}
                     knownCause={causeFor(agg.concept, kind)}
+                    engines={report.engines}
                   />
                 ))}
               </div>
