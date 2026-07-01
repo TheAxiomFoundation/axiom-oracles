@@ -165,7 +165,9 @@ function RunRow({ report, knownCauses, coverageOverview, isOpen, onToggle, ancho
           <span className="mono run-meta">
             {engines}
             {report.case_count > 0 &&
-              ` · ${report.case_count.toLocaleString()} households`}
+              ` · ${report.case_count.toLocaleString()} ${
+                meta.kind === "parameter" ? "parameters" : "households"
+              }`}
             {report.population && ` · ${report.population}`}
           </span>
         </span>

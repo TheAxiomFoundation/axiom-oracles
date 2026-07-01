@@ -21,6 +21,7 @@
     "axiom-policyengine-uk-tax-benefits-efrs.json",
     "axiom-policyengine-az-snap-ecps.json",
     "axiom-policyengine-or-snap-ecps.json",
-    "axiom-policyengine-ut-snap-ecps.json"
+    "axiom-policyengine-ut-snap-ecps.json",
+    "axiom-policyengine-ssa-parameters.json"
   ]
 }

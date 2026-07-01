@@ -32,9 +32,11 @@ export const US_STATE_NAMES = {
 export const FAMILY_LABELS = {
   snap: "SNAP food assistance",
   federal_income_tax: "Federal income tax",
+  social_security: "Social Security (OASDI) amounts",
   state_income_tax: "State income tax",
   nyc_income_tax: "NYC income tax",
   medicaid_chip_bhp_thresholds: "Medicaid / CHIP / BHP thresholds",
+  medicaid_eligibility_groups: "Medicaid eligibility groups (incl. SSI state supplements)",
   tanf: "TANF cash assistance",
   universal_credit: "Universal Credit",
   uk_tax_benefits: "UK tax & benefits",
@@ -48,6 +50,14 @@ const SUITE_OVERRIDES = {
     region: "us",
     kind: "household",
     order: 10,
+  },
+  "ssa-parameters": {
+    family: "social_security",
+    jurisdiction: "US",
+    label: "Social Security wage-indexed amounts",
+    region: "us",
+    kind: "parameter",
+    order: 20,
   },
   "co-state-income-tax-ecps": {
     family: "state_income_tax",

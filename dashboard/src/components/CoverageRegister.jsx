@@ -86,7 +86,15 @@ function buildCells(reports) {
 }
 
 function cellTile(cell) {
-  if (cell.kind === "parameter") return { status: "parameter", note: "parameters" };
+  if (cell.kind === "parameter") {
+    return {
+      status: "parameter",
+      note:
+        cell.combined.total > 0
+          ? formatAgreementRate(cell.combined.rate, cell.combined.mismatches)
+          : "parameters",
+    };
+  }
   if (cell.kind === "coverage") return { status: "encoded", note: "encoded" };
   if (cell.kind === "diagnostic") return { status: "diagnostic", note: "diagnostic" };
   return {
@@ -96,6 +104,9 @@ function cellTile(cell) {
 }
 
 function cellTitle(cell) {
+  if (!cell.runs.length) {
+    return `${cell.meta.label} — encoded, not yet verified${cell.source ? `\n${cell.source}` : ""}`;
+  }
   const lines = cell.runs.map((r) => {
     const oracle = engineLabel(r.oracle);
     if (r.metric.total > 0) {
@@ -104,6 +115,55 @@ function cellTitle(cell) {
     return `vs ${oracle}: no case-level comparison yet`;
   });
   return `${cell.meta.label}\n${lines.join("\n")}`;
+}
+
+// Row order for program families that only exist as coverage entries (no
+// comparison run yet), aligned with the suite orders in utils/suites.js.
+const FAMILY_FALLBACK_ORDER = {
+  federal_income_tax: 10,
+  social_security: 20,
+  snap: 100,
+  state_income_tax: 200,
+  medicaid_chip_bhp_thresholds: 210,
+  medicaid_eligibility_groups: 215,
+  tanf: 220,
+  nyc_income_tax: 400,
+};
+
+function coverageRegion(program) {
+  return program.jurisdiction === "UK" ? "uk" : "us";
+}
+
+/**
+ * Programs the corpus has encoded but no comparison suite exercises yet.
+ * They render as outlined "encoded" cells so the register distinguishes
+ * "not compared yet" from "not encoded".
+ */
+function addCoverageOnlyCells(cells, coveragePrograms, region) {
+  for (const program of coveragePrograms || []) {
+    if (!program.program || program.program === "snap") continue; // snap → state strip
+    if (coverageRegion(program) !== region) continue;
+    const key = `${program.program}::${program.jurisdiction}`;
+    if (cells.has(key)) continue;
+    const label = FAMILY_LABELS[program.program] || program.program;
+    cells.set(key, {
+      meta: {
+        family: program.program,
+        jurisdiction: program.jurisdiction,
+        label:
+          program.jurisdiction && !["US", "UK"].includes(program.jurisdiction)
+            ? `${US_STATE_NAMES[program.jurisdiction] || program.jurisdiction} ${label}`
+            : label,
+        order: FAMILY_FALLBACK_ORDER[program.program] ?? 450,
+        kind: program.status === "parameter" ? "parameter" : "coverage",
+      },
+      kind: program.status === "parameter" ? "parameter" : "coverage",
+      runs: [],
+      combined: { total: 0, mismatches: 0, rate: null },
+      anchor: null,
+      source: program.source,
+    });
+  }
 }
 
 function Tile({ jurisdiction, title, tile, anchor, wide = false }) {
@@ -225,6 +285,7 @@ const LEGEND = [
 
 export default function CoverageRegister({ reports, coverageOverview, region }) {
   const cells = buildCells(reports);
+  addCoverageOnlyCells(cells, coverageOverview?.axiom?.programs, region);
   if (cells.size === 0) return null;
 
   const families = new Map();
