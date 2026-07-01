@@ -25,6 +25,94 @@ import {
  * and never mix into the verified numbers.
  */
 
+const COVERAGE_STATUS_LABEL = {
+  complete: "Complete",
+  executable: "Executable",
+  executableCoverage: "Executable coverage",
+  parameter: "Parameter check",
+  coverageOnly: "Coverage only",
+  inProgress: "In progress",
+  partial: "Partial",
+};
+
+function measurementNote(report, axiomProgram) {
+  if (report.suite === "co-snap-ecps") {
+    return "Measured by the encoder-backed CO SNAP report; the axiom-programs wrapper now has generic output/input mapping smoke-tested, but is not yet the dashboard comparison path.";
+  }
+  if (axiomProgram?.status === "coverageOnly") {
+    return "Coverage-only surface; not a measured alignment run.";
+  }
+  if (axiomProgram?.status === "executableCoverage") {
+    return "Executable Axiom package; the comparison is still coverage-only, not a measured alignment run.";
+  }
+  if (axiomProgram?.status === "parameter") {
+    return "Parameter check; not end-to-end household eligibility.";
+  }
+  if (report.population === "enhanced-cps") {
+    return "Measured over the Enhanced CPS slice for this jurisdiction.";
+  }
+  if (report.population === "enhanced-frs") {
+    return "Measured over the Enhanced FRS slice.";
+  }
+  return null;
+}
+
+/**
+ * What each engine claims to cover for this run's program — the piece of the
+ * old coverage table that the register and rate figures don't already say.
+ */
+function RunCoverageContext({ report, coverageOverview }) {
+  const meta = suiteMeta(report.suite);
+  const axiomPrograms = coverageOverview?.axiom?.programs || [];
+  const pePrograms = coverageOverview?.policyengine?.programs || [];
+
+  const axiomProgram =
+    axiomPrograms.find((p) => p.suite === report.suite) ||
+    axiomPrograms.find(
+      (p) => p.program === meta.family && p.jurisdiction === meta.jurisdiction,
+    );
+  const peProgram = pePrograms.find((p) => p.id === meta.family);
+  const note = measurementNote(report, axiomProgram);
+
+  if (!axiomProgram && !peProgram && !note) return null;
+
+  return (
+    <div className="run-context">
+      {axiomProgram && (
+        <div className="run-context-item">
+          <span className="mono run-context-label">Axiom coverage</span>
+          <span>
+            {COVERAGE_STATUS_LABEL[axiomProgram.status] || axiomProgram.status}
+            {axiomProgram.source && (
+              <span className="mono run-context-source">
+                {" "}
+                · {axiomProgram.source}
+              </span>
+            )}
+          </span>
+        </div>
+      )}
+      {peProgram && (
+        <div className="run-context-item">
+          <span className="mono run-context-label">
+            PolicyEngine coverage
+          </span>
+          <span>
+            {COVERAGE_STATUS_LABEL[peProgram.status] || peProgram.status}
+            {peProgram.notes && <> — {peProgram.notes}</>}
+          </span>
+        </div>
+      )}
+      {note && (
+        <div className="run-context-item">
+          <span className="mono run-context-label">Measurement</span>
+          <span>{note}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RunStatus({ metric, kind, alarms }) {
   if (kind === "parameter") {
     return <span className="badge badge-warn">Parameter check</span>;
@@ -53,7 +141,7 @@ function RunStatus({ metric, kind, alarms }) {
   );
 }
 
-function RunRow({ report, knownCauses, isOpen, onToggle, anchorId }) {
+function RunRow({ report, knownCauses, coverageOverview, isOpen, onToggle, anchorId }) {
   const meta = suiteMeta(report.suite);
   const metric = reportMetric(report);
   const alarms = (report.summary?.alarms || []).length;
@@ -93,6 +181,10 @@ function RunRow({ report, knownCauses, isOpen, onToggle, anchorId }) {
       </button>
       {isOpen && (
         <div className="run-detail">
+          <RunCoverageContext
+            report={report}
+            coverageOverview={coverageOverview}
+          />
           <AlignmentReport report={report} knownCauses={knownCauses} embedded />
         </div>
       )}
@@ -111,7 +203,7 @@ function sortRuns(reports) {
   });
 }
 
-function RunGroup({ reports, knownCauses, open, toggle }) {
+function RunGroup({ reports, knownCauses, coverageOverview, open, toggle }) {
   return (
     <div className="run-list">
       {reports.map((report, i) => {
@@ -124,6 +216,7 @@ function RunGroup({ reports, knownCauses, open, toggle }) {
             key={key}
             report={report}
             knownCauses={knownCauses}
+            coverageOverview={coverageOverview}
             anchorId={anchor}
             isOpen={open.has(anchor)}
             onToggle={() => toggle(anchor)}
@@ -134,7 +227,7 @@ function RunGroup({ reports, knownCauses, open, toggle }) {
   );
 }
 
-export default function ProgramRuns({ reports, knownCauses }) {
+export default function ProgramRuns({ reports, knownCauses, coverageOverview }) {
   const [open, setOpen] = useState(() => new Set());
 
   // Register tiles and ledger rows link to #run-…; expand the target row.
@@ -189,6 +282,7 @@ export default function ProgramRuns({ reports, knownCauses }) {
           <RunGroup
             reports={verification}
             knownCauses={knownCauses}
+            coverageOverview={coverageOverview}
             open={open}
             toggle={toggle}
           />

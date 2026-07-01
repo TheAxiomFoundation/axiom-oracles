@@ -7,7 +7,6 @@ import OverviewHero from "./OverviewHero";
 import CoverageRegister from "./CoverageRegister";
 import GapLedger from "./GapLedger";
 import ProgramRuns from "./ProgramRuns";
-import CoverageOverview from "./CoverageOverview";
 import AgreementMatrix from "./AgreementMatrix";
 import ProgramBreakdown from "./ProgramBreakdown";
 
@@ -161,14 +160,18 @@ export default function DashboardContent() {
             region={jurisdiction}
           />
 
+          <ProgramRuns
+            reports={withData}
+            knownCauses={data.knownCauses || []}
+            coverageOverview={data.coverageOverview}
+          />
+
           <GapLedger
             reports={withData}
             knownCauses={data.knownCauses || []}
             coverageOverview={data.coverageOverview}
             region={jurisdiction}
           />
-
-          <ProgramRuns reports={withData} knownCauses={data.knownCauses || []} />
 
           <details
             style={{
@@ -185,15 +188,10 @@ export default function DashboardContent() {
                 color: "var(--ink-mute)",
               }}
             >
-              Advanced view · coverage table, agreement matrix, and all encoded
-              programs
+              Advanced view · oracle agreement matrix and the encoded-rule
+              inventory (statute references, corpus files)
             </summary>
             <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 16 }}>
-              <CoverageOverview
-                reports={withData}
-                coverageOverview={data.coverageOverview}
-                jurisdictionFilter={jurisdiction}
-              />
               {viewData.summary.totalCases > 0 && (
                 <AgreementMatrix
                   oracles={viewData.oracles}

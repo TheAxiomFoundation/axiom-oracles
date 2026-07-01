@@ -258,15 +258,24 @@ export default function CoverageRegister({ reports, coverageOverview, region }) 
         </div>
       </div>
       <div className="register-body">
+        {/* Families ordered before SNAP (order < 100, i.e. federal income
+            tax) render above the state strip; the rest follow it. */}
+        {familyRows
+          .filter(([, c]) => Math.min(...c.map((x) => x.meta.order)) < 100)
+          .map(([family, familyCells]) => (
+            <FamilyRow key={family} family={family} cells={familyCells} />
+          ))}
         {region === "us" && hasSnap && (
           <SnapRow
             cells={cells}
             coveragePrograms={coverageOverview?.axiom?.programs}
           />
         )}
-        {familyRows.map(([family, familyCells]) => (
-          <FamilyRow key={family} family={family} cells={familyCells} />
-        ))}
+        {familyRows
+          .filter(([, c]) => Math.min(...c.map((x) => x.meta.order)) >= 100)
+          .map(([family, familyCells]) => (
+            <FamilyRow key={family} family={family} cells={familyCells} />
+          ))}
         <div className="register-legend">
           {LEGEND.filter((l) => usedStatuses.has(l.status)).map((l) => (
             <span key={l.status} className="register-legend-item">
