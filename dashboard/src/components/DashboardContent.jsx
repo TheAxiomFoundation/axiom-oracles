@@ -161,6 +161,7 @@ export default function DashboardContent() {
           />
 
           <ProgramRuns
+            key={jurisdiction}
             reports={withData}
             knownCauses={data.knownCauses || []}
             coverageOverview={data.coverageOverview}

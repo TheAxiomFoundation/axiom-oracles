@@ -6,6 +6,7 @@ import AlignmentReport from "./AlignmentReport";
 import { engineLabel, formatAgreementRate } from "../utils/format";
 import { rateColor } from "../utils/colors";
 import {
+  US_STATE_NAMES,
   suiteMeta,
   reportMetric,
   rateStatus,
@@ -14,10 +15,11 @@ import {
 } from "../utils/suites";
 
 /**
- * Every verification run as one collapsed line: program, engines, how many
- * checks, how often they agreed, sorted highest agreement first. Expanding a
- * row reveals the full per-concept breakdown, cause attribution, and case
- * drawer.
+ * Every verification run, expanded by default and ordered the same way as
+ * the coverage register above (federal income tax, then SNAP states, then
+ * the remaining programs), so scrolling the runs follows the register.
+ * Each row shows the full per-concept breakdown, cause attribution, and
+ * case drawer; the header line collapses it.
  *
  * Rows are keyed by (suite, engine pair), so the same program verified
  * against several oracles (PolicyEngine, TAXSIM, …) lists once per oracle.
@@ -192,12 +194,16 @@ function RunRow({ report, knownCauses, coverageOverview, isOpen, onToggle, ancho
   );
 }
 
+// Mirror the coverage register's order: family order first, then
+// jurisdictions by state name within a family (matching the state strip).
 function sortRuns(reports) {
   return [...reports].sort((a, b) => {
-    const ra = reportMetric(a).rate ?? -1; // unmeasured after measured
-    const rb = reportMetric(b).rate ?? -1;
-    if (ra !== rb) return rb - ra; // highest agreement first
-    return suiteMeta(a.suite).order - suiteMeta(b.suite).order;
+    const ma = suiteMeta(a.suite);
+    const mb = suiteMeta(b.suite);
+    if (ma.order !== mb.order) return ma.order - mb.order;
+    const ja = US_STATE_NAMES[ma.jurisdiction] || ma.jurisdiction || "";
+    const jb = US_STATE_NAMES[mb.jurisdiction] || mb.jurisdiction || "";
+    return ja.localeCompare(jb);
   });
 }
 
@@ -226,21 +232,6 @@ function RunGroup({ reports, knownCauses, coverageOverview, open, toggle }) {
 }
 
 export default function ProgramRuns({ reports, knownCauses, coverageOverview }) {
-  const [open, setOpen] = useState(() => new Set());
-
-  // Register tiles and ledger rows link to #run-…; expand the target row.
-  useEffect(() => {
-    const openFromHash = () => {
-      const match = window.location.hash.match(/^#(run-.+)$/);
-      if (!match) return;
-      const anchor = decodeURIComponent(match[1]);
-      setOpen((prev) => new Set(prev).add(anchor));
-    };
-    openFromHash();
-    window.addEventListener("hashchange", openFromHash);
-    return () => window.removeEventListener("hashchange", openFromHash);
-  }, []);
-
   const withData = (reports || []).filter(
     (r) =>
       (r.aggregates || []).length > 0 ||
@@ -257,6 +248,25 @@ export default function ProgramRuns({ reports, knownCauses, coverageOverview }) 
       (r) => isAxiomPair(r) && suiteMeta(r.suite).kind === "diagnostic",
     ),
   );
+
+  // Verification runs start expanded; cross-checks and diagnostics start
+  // collapsed inside their groups.
+  const [open, setOpen] = useState(
+    () => new Set(verification.map(runAnchor)),
+  );
+
+  // Register tiles and ledger rows link to #run-…; expand the target row.
+  useEffect(() => {
+    const openFromHash = () => {
+      const match = window.location.hash.match(/^#(run-.+)$/);
+      if (!match) return;
+      const anchor = decodeURIComponent(match[1]);
+      setOpen((prev) => new Set(prev).add(anchor));
+    };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, []);
 
   if (!verification.length && !crossChecks.length && !diagnostics.length) {
     return null;
