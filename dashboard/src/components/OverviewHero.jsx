@@ -5,6 +5,7 @@ import { rateColor } from "../utils/colors";
 import {
   suiteKind,
   reportMetric,
+  reportProgramCount,
   isAxiomPair,
   otherOracle,
 } from "../utils/suites";
@@ -60,6 +61,10 @@ export default function OverviewHero({ reports }) {
   }
   const oracles = new Set(byOracle.keys());
   const rate = total > 0 ? (matched / total) * 100 : null;
+  const programCount = headlineReports.reduce(
+    (n, r) => n + reportProgramCount(r),
+    0,
+  );
 
   const oracleNames = [...oracles].map(engineLabel);
   const oracleText =
@@ -75,7 +80,7 @@ export default function OverviewHero({ reports }) {
           Axiom agrees with {oracleText} on{" "}
           <em style={{ color: rateColor(rate) }}>{formatPct(rate, 2)}</em> of{" "}
           <em>{compactCount(total)}</em> checks across{" "}
-          <em>{headlineReports.length}</em> verified program runs.
+          <em>{programCount}</em> verified programs.
         </h1>
       ) : (
         <h1 className="hero-thesis">No verified program runs yet.</h1>

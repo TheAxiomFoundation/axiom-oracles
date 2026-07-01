@@ -185,6 +185,24 @@ export function runAnchor(report) {
   return `run-${suite}-${left}-${right}`;
 }
 
+/**
+ * How many verified programs a report represents. Most reports verify one
+ * program (its eligibility and amount concepts are facets of the same
+ * program), but the federal income tax suite tests separable pieces — CTC,
+ * EITC, standard deduction, … — each of which counts on its own. The four
+ * payroll components group as one piece, matching the breakout table.
+ */
+export function reportProgramCount(report) {
+  if (suiteMeta(report?.suite).family !== "federal_income_tax") return 1;
+  const pieces = new Set();
+  for (const agg of report.aggregates || []) {
+    if (!((agg.comparison_count || 0) > 0)) continue;
+    const concept = String(agg.concept || "");
+    pieces.add(concept.startsWith("us:tax/payroll") ? "payroll" : concept);
+  }
+  return Math.max(1, pieces.size);
+}
+
 /** Aggregate one report's aggregates into a single matched/total metric. */
 export function reportMetric(report) {
   let total = 0;
