@@ -1,0 +1,25 @@
+name: ut-snap-ecps
+title: Utah SNAP -- Axiom vs PolicyEngine
+description: >-
+  Compares Utah SNAP eligibility and benefit amount produced by the
+  RuleSpec composition against PolicyEngine on the Enhanced CPS, filtered to
+  Utah households.
+
+runner:
+  type: axiom-encode-snap-ecps-compare
+  axiom_encode_repo: $HOME/axiom-encode
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    jurisdiction: us-ut
+    sample_size: 0
+    year: 2026
+    month: 1
+    utility_projection: policyengine-type
+    tolerance: 1.5
+
+artifacts:
+  report_basename: axiom-policyengine-ut-snap-ecps
+
+dashboard:
+  filename: axiom-policyengine-ut-snap-ecps.json
+  suite: ut-snap-ecps

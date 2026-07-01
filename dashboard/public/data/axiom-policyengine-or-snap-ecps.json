@@ -1,0 +1,113 @@
+{
+  "aggregates": [
+    {
+      "category": "food",
+      "compared": 597,
+      "comparison": "amount",
+      "comparison_count": 597,
+      "comparison_weight": 597,
+      "components": [],
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "left_weighted_sum": 22332.28,
+      "match_count": 597,
+      "match_rate": 100.0,
+      "match_weight": 597,
+      "matched": 597,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 22324.179768,
+      "weighted_difference": 8.10023199999705,
+      "weighted_match_rate": 100.0
+    },
+    {
+      "category": "food",
+      "compared": 597,
+      "comparison": "eligibility",
+      "comparison_count": 597,
+      "comparison_weight": 597,
+      "components": [],
+      "concept": "us:statutes/7/2014/o#snap_eligible",
+      "description": "SNAP eligibility",
+      "left_positive_rate": 12.897822445561138,
+      "left_positive_weight": 77,
+      "match_count": 597,
+      "match_rate": 100.0,
+      "match_weight": 597,
+      "matched": 597,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "positive_rate_difference": 0.0,
+      "quality_flags": [],
+      "right_positive_rate": 12.897822445561138,
+      "right_positive_weight": 77,
+      "weighted_match_rate": 100.0
+    }
+  ],
+  "case_count": 597,
+  "cases": [],
+  "concepts": [
+    {
+      "category": "food",
+      "comparison": "amount",
+      "components": [],
+      "description": "SNAP benefit amount",
+      "id": "us:statutes/7/2014/u#snap_benefit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1.5
+    },
+    {
+      "category": "food",
+      "comparison": "eligibility",
+      "components": [],
+      "description": "SNAP eligibility",
+      "id": "us:statutes/7/2014/o#snap_eligible",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [
+    "OR"
+  ],
+  "mismatches": [],
+  "population": "enhanced-cps",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "OR",
+    "type": "state"
+  },
+  "suite": "or-snap-ecps",
+  "summary": {
+    "comparison_count": 1194,
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 1194,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": {},
+    "weighted": {
+      "comparison_weight": 1194,
+      "match_rate": 100.0,
+      "match_weight": 1194,
+      "mismatch_weight": 0
+    }
+  }
+}
