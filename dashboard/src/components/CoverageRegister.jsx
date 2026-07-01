@@ -1,12 +1,15 @@
 "use client";
 
-import { formatPct, formatAgreementRate } from "../utils/format";
+import { formatPct, formatAgreementRate, engineLabel } from "../utils/format";
 import {
   US_STATE_NAMES,
   FAMILY_LABELS,
   suiteMeta,
   reportMetric,
   rateStatus,
+  isAxiomPair,
+  otherOracle,
+  runAnchor,
 } from "../utils/suites";
 
 /**
@@ -14,43 +17,107 @@ import {
  * where are the gaps?"
  *
  * Rows are program families; cells are jurisdictions. A tile is:
- *  - tinted with its agreement rate when a verification run exists,
+ *  - tinted with its agreement rate when verification runs exist,
  *  - outlined when the program is encoded but not yet measured,
  *  - hatched when nothing is encoded there yet.
  *
- * The SNAP row deliberately shows all 50 states + DC so the remaining work
- * is as visible as the finished work.
+ * A cell aggregates every oracle Axiom was checked against there (e.g. a
+ * federal-income-tax cell can combine PolicyEngine and TAXSIM runs); the
+ * tooltip breaks the rate out per oracle. The SNAP row deliberately shows
+ * all 50 states + DC so remaining work is as visible as finished work.
  */
 
 const STATE_ORDER = Object.keys(US_STATE_NAMES);
 
-function isAxiomPair(report) {
-  return report.engines?.left === "axiom" || report.engines?.right === "axiom";
+// When a surface has both real verification runs and diagnostic probes,
+// the register reports the most authoritative kind only.
+const KIND_RANK = { household: 0, parameter: 1, coverage: 2, diagnostic: 3 };
+
+/**
+ * Group axiom-pair reports into register cells keyed by
+ * (family, jurisdiction), keeping only the most authoritative run kind per
+ * cell and combining metrics across oracle pairs of that kind.
+ */
+function buildCells(reports) {
+  const cells = new Map();
+  for (const report of reports || []) {
+    if (!isAxiomPair(report)) continue;
+    if (!(report.aggregates || []).length && !(report.summary?.alarms || []).length)
+      continue;
+    const meta = suiteMeta(report.suite);
+    const key = `${meta.family}::${meta.jurisdiction}`;
+    if (!cells.has(key)) cells.set(key, []);
+    cells.get(key).push({
+      meta,
+      metric: reportMetric(report),
+      oracle: otherOracle(report),
+      anchor: runAnchor(report),
+    });
+  }
+
+  const out = new Map();
+  for (const [key, runs] of cells) {
+    const bestRank = Math.min(...runs.map((r) => KIND_RANK[r.meta.kind] ?? 9));
+    const kept = runs.filter((r) => (KIND_RANK[r.meta.kind] ?? 9) === bestRank);
+    let total = 0;
+    let mismatches = 0;
+    for (const r of kept) {
+      total += r.metric.total;
+      mismatches += r.metric.mismatches;
+    }
+    const combined = {
+      total,
+      mismatches,
+      rate: total > 0 ? ((total - mismatches) / total) * 100 : null,
+    };
+    // Link to the run that most needs attention.
+    const worst = [...kept].sort(
+      (a, b) => (a.metric.rate ?? 101) - (b.metric.rate ?? 101),
+    )[0];
+    out.set(key, {
+      meta: worst.meta,
+      kind: worst.meta.kind,
+      runs: kept,
+      combined,
+      anchor: worst.anchor,
+    });
+  }
+  return out;
 }
 
-function tileForMeasured(metric, kind) {
-  if (kind === "parameter") return { status: "parameter", note: "parameters" };
-  if (kind === "coverage") return { status: "encoded", note: "encoded" };
-  if (kind === "diagnostic") return { status: "diagnostic", note: "diagnostic" };
+function cellTile(cell) {
+  if (cell.kind === "parameter") return { status: "parameter", note: "parameters" };
+  if (cell.kind === "coverage") return { status: "encoded", note: "encoded" };
+  if (cell.kind === "diagnostic") return { status: "diagnostic", note: "diagnostic" };
   return {
-    status: rateStatus(metric.rate),
-    note: formatAgreementRate(metric.rate, metric.mismatches),
+    status: rateStatus(cell.combined.rate),
+    note: formatAgreementRate(cell.combined.rate, cell.combined.mismatches),
   };
 }
 
-function Tile({ jurisdiction, title, tile, wide = false }) {
+function cellTitle(cell) {
+  const lines = cell.runs.map((r) => {
+    const oracle = engineLabel(r.oracle);
+    if (r.metric.total > 0) {
+      return `vs ${oracle}: ${formatPct(r.metric.rate, 1)} agreement over ${r.metric.total.toLocaleString()} checks`;
+    }
+    return `vs ${oracle}: no case-level comparison yet`;
+  });
+  return `${cell.meta.label}\n${lines.join("\n")}`;
+}
+
+function Tile({ jurisdiction, title, tile, anchor, wide = false }) {
   const status = tile?.status || "gap";
-  const label = tile?.note;
   const body = (
     <>
       <span className="tile-code">{jurisdiction}</span>
-      {label && <span className="tile-rate">{label}</span>}
+      {tile?.note && <span className="tile-rate">{tile.note}</span>}
     </>
   );
   const cls = `register-tile tile-${status}${wide ? " register-tile-wide" : ""}`;
-  if (tile?.suite) {
+  if (anchor) {
     return (
-      <a className={cls} href={`#run-${tile.suite}`} title={title}>
+      <a className={cls} href={`#${anchor}`} title={title}>
         {body}
       </a>
     );
@@ -62,28 +129,11 @@ function Tile({ jurisdiction, title, tile, wide = false }) {
   );
 }
 
-function buildSuiteIndex(reports) {
-  const bySuite = new Map();
-  for (const report of reports || []) {
-    if (!isAxiomPair(report)) continue;
-    if (!(report.aggregates || []).length && !(report.summary?.alarms || []).length)
-      continue;
-    const meta = suiteMeta(report.suite);
-    const metric = reportMetric(report);
-    const existing = bySuite.get(report.suite);
-    // Keep the run with the most comparisons if a suite appears twice.
-    if (!existing || metric.total > existing.metric.total) {
-      bySuite.set(report.suite, { report, meta, metric });
-    }
-  }
-  return bySuite;
-}
-
-function SnapRow({ bySuite, coveragePrograms }) {
+function SnapRow({ cells, coveragePrograms }) {
   const measured = new Map();
-  for (const entry of bySuite.values()) {
-    if (entry.meta.family === "snap" && entry.meta.jurisdiction) {
-      measured.set(entry.meta.jurisdiction, entry);
+  for (const cell of cells.values()) {
+    if (cell.meta.family === "snap" && cell.meta.jurisdiction) {
+      measured.set(cell.meta.jurisdiction, cell);
     }
   }
   const encoded = new Set(
@@ -94,18 +144,11 @@ function SnapRow({ bySuite, coveragePrograms }) {
 
   let verified = 0;
   const tiles = STATE_ORDER.map((abbr) => {
-    const entry = measured.get(abbr);
-    if (entry) {
-      const tile = {
-        ...tileForMeasured(entry.metric, entry.meta.kind),
-        suite: entry.meta.suite,
-      };
+    const cell = measured.get(abbr);
+    if (cell) {
+      const tile = cellTile(cell);
       if (tile.status === "verified") verified += 1;
-      return {
-        abbr,
-        tile,
-        title: `${US_STATE_NAMES[abbr]} SNAP — ${formatPct(entry.metric.rate, 1)} agreement over ${entry.metric.total.toLocaleString()} checks`,
-      };
+      return { abbr, tile, anchor: cell.anchor, title: cellTitle(cell) };
     }
     if (encoded.has(abbr)) {
       return {
@@ -132,15 +175,21 @@ function SnapRow({ bySuite, coveragePrograms }) {
         </span>
       </div>
       <div className="register-grid">
-        {tiles.map(({ abbr, tile, title }) => (
-          <Tile key={abbr} jurisdiction={abbr} tile={tile} title={title} />
+        {tiles.map(({ abbr, tile, title, anchor }) => (
+          <Tile
+            key={abbr}
+            jurisdiction={abbr}
+            tile={tile}
+            title={title}
+            anchor={anchor}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function FamilyRow({ family, entries }) {
+function FamilyRow({ family, cells }) {
   return (
     <div className="register-row">
       <div className="register-rowhead">
@@ -149,17 +198,14 @@ function FamilyRow({ family, entries }) {
         </span>
       </div>
       <div className="register-grid">
-        {entries.map(({ meta, metric }) => (
+        {cells.map((cell) => (
           <Tile
-            key={meta.suite}
-            jurisdiction={meta.jurisdiction || meta.label}
+            key={`${cell.meta.family}-${cell.meta.jurisdiction}`}
+            jurisdiction={cell.meta.jurisdiction || cell.meta.label}
             wide
-            tile={{ ...tileForMeasured(metric, meta.kind), suite: meta.suite }}
-            title={
-              metric.total > 0
-                ? `${meta.label} — ${formatPct(metric.rate, 1)} agreement over ${metric.total.toLocaleString()} checks`
-                : `${meta.label} — no case-level comparison yet`
-            }
+            tile={cellTile(cell)}
+            anchor={cell.anchor}
+            title={cellTitle(cell)}
           />
         ))}
       </div>
@@ -178,41 +224,27 @@ const LEGEND = [
 ];
 
 export default function CoverageRegister({ reports, coverageOverview, region }) {
-  const bySuite = buildSuiteIndex(reports);
-  if (bySuite.size === 0) return null;
+  const cells = buildCells(reports);
+  if (cells.size === 0) return null;
 
-  // One tile per (family, jurisdiction): several diagnostic suites can probe
-  // the same surface (e.g. NYC income tax), but the register answers "what is
-  // covered where", not "how many runs exist".
-  const byCell = new Map();
-  for (const entry of bySuite.values()) {
-    if (entry.meta.family === "snap") continue; // rendered as the state strip
-    const cell = `${entry.meta.family}::${entry.meta.jurisdiction}`;
-    const existing = byCell.get(cell);
-    const better =
-      !existing ||
-      (existing.meta.kind === "diagnostic" && entry.meta.kind !== "diagnostic") ||
-      (existing.meta.kind === entry.meta.kind &&
-        entry.metric.total > existing.metric.total);
-    if (better) byCell.set(cell, entry);
-  }
   const families = new Map();
-  for (const entry of byCell.values()) {
-    if (!families.has(entry.meta.family)) families.set(entry.meta.family, []);
-    families.get(entry.meta.family).push(entry);
+  for (const cell of cells.values()) {
+    if (cell.meta.family === "snap") continue; // rendered as the state strip
+    if (!families.has(cell.meta.family)) families.set(cell.meta.family, []);
+    families.get(cell.meta.family).push(cell);
   }
   const familyRows = [...families.entries()].sort(
     (a, b) =>
-      Math.min(...a[1].map((e) => e.meta.order)) -
-      Math.min(...b[1].map((e) => e.meta.order)),
+      Math.min(...a[1].map((c) => c.meta.order)) -
+      Math.min(...b[1].map((c) => c.meta.order)),
   );
 
-  const hasSnap = [...bySuite.values()].some((e) => e.meta.family === "snap");
+  const hasSnap = [...cells.values()].some((c) => c.meta.family === "snap");
   const usedStatuses = new Set();
   // Hatched "not encoded" tiles only appear on the 50-state SNAP strip.
   if (region === "us" && hasSnap) usedStatuses.add("gap");
-  for (const entry of bySuite.values()) {
-    usedStatuses.add(tileForMeasured(entry.metric, entry.meta.kind).status);
+  for (const cell of cells.values()) {
+    usedStatuses.add(cellTile(cell).status);
   }
 
   return (
@@ -228,12 +260,12 @@ export default function CoverageRegister({ reports, coverageOverview, region }) 
       <div className="register-body">
         {region === "us" && hasSnap && (
           <SnapRow
-            bySuite={bySuite}
+            cells={cells}
             coveragePrograms={coverageOverview?.axiom?.programs}
           />
         )}
-        {familyRows.map(([family, entries]) => (
-          <FamilyRow key={family} family={family} entries={entries} />
+        {familyRows.map(([family, familyCells]) => (
+          <FamilyRow key={family} family={family} cells={familyCells} />
         ))}
         <div className="register-legend">
           {LEGEND.filter((l) => usedStatuses.has(l.status)).map((l) => (

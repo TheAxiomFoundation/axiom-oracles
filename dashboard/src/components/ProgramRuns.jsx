@@ -5,7 +5,13 @@ import { IconChevronRight, IconChevronDown } from "@tabler/icons-react";
 import AlignmentReport from "./AlignmentReport";
 import { engineLabel, formatAgreementRate } from "../utils/format";
 import { rateColor } from "../utils/colors";
-import { suiteMeta, reportMetric, rateStatus } from "../utils/suites";
+import {
+  suiteMeta,
+  reportMetric,
+  rateStatus,
+  isAxiomPair,
+  runAnchor,
+} from "../utils/suites";
 
 /**
  * Every verification run as one collapsed line: program, engines, how many
@@ -13,13 +19,11 @@ import { suiteMeta, reportMetric, rateStatus } from "../utils/suites";
  * so the reading order is the triage order. Expanding a row reveals the full
  * per-concept breakdown, cause attribution, and case drawer.
  *
- * Diagnostic and instrumentation runs live in their own group at the end and
- * never mix into the verified numbers.
+ * Rows are keyed by (suite, engine pair), so the same program verified
+ * against several oracles (PolicyEngine, TAXSIM, …) lists once per oracle.
+ * Oracle-vs-oracle cross-checks and diagnostic runs live in their own groups
+ * and never mix into the verified numbers.
  */
-
-function runKey(report, index) {
-  return `${report.file || report.suite || "report"}-${index}`;
-}
 
 function RunStatus({ metric, kind, alarms }) {
   if (kind === "parameter") {
@@ -107,16 +111,39 @@ function sortRuns(reports) {
   });
 }
 
+function RunGroup({ reports, knownCauses, open, toggle }) {
+  return (
+    <div className="run-list">
+      {reports.map((report, i) => {
+        const anchor = runAnchor(report);
+        // Anchor collisions are only possible if the exact (suite, pair)
+        // ran twice; suffix the index so open-state stays per-row.
+        const key = `${anchor}-${i}`;
+        return (
+          <RunRow
+            key={key}
+            report={report}
+            knownCauses={knownCauses}
+            anchorId={anchor}
+            isOpen={open.has(anchor)}
+            onToggle={() => toggle(anchor)}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export default function ProgramRuns({ reports, knownCauses }) {
   const [open, setOpen] = useState(() => new Set());
 
-  // Register tiles and ledger rows link to #run-<suite>; expand the target.
+  // Register tiles and ledger rows link to #run-…; expand the target row.
   useEffect(() => {
     const openFromHash = () => {
-      const match = window.location.hash.match(/^#run-(.+)$/);
+      const match = window.location.hash.match(/^#(run-.+)$/);
       if (!match) return;
-      const suite = decodeURIComponent(match[1]);
-      setOpen((prev) => new Set(prev).add(suite));
+      const anchor = decodeURIComponent(match[1]);
+      setOpen((prev) => new Set(prev).add(anchor));
     };
     openFromHash();
     window.addEventListener("hashchange", openFromHash);
@@ -129,19 +156,26 @@ export default function ProgramRuns({ reports, knownCauses }) {
       (r.summary?.alarms || []).length > 0,
   );
   const verification = sortRuns(
-    withData.filter((r) => suiteMeta(r.suite).kind !== "diagnostic"),
+    withData.filter(
+      (r) => isAxiomPair(r) && suiteMeta(r.suite).kind !== "diagnostic",
+    ),
   );
+  const crossChecks = sortRuns(withData.filter((r) => !isAxiomPair(r)));
   const diagnostics = sortRuns(
-    withData.filter((r) => suiteMeta(r.suite).kind === "diagnostic"),
+    withData.filter(
+      (r) => isAxiomPair(r) && suiteMeta(r.suite).kind === "diagnostic",
+    ),
   );
 
-  if (!verification.length && !diagnostics.length) return null;
+  if (!verification.length && !crossChecks.length && !diagnostics.length) {
+    return null;
+  }
 
-  const toggle = (suite) =>
+  const toggle = (anchor) =>
     setOpen((prev) => {
       const next = new Set(prev);
-      if (next.has(suite)) next.delete(suite);
-      else next.add(suite);
+      if (next.has(anchor)) next.delete(anchor);
+      else next.add(anchor);
       return next;
     });
 
@@ -152,19 +186,31 @@ export default function ProgramRuns({ reports, knownCauses }) {
           <div className="section-eyebrow">
             Verification runs · lowest agreement first
           </div>
-          <div className="run-list">
-            {verification.map((report, i) => (
-              <RunRow
-                key={runKey(report, i)}
-                report={report}
-                knownCauses={knownCauses}
-                anchorId={`run-${report.suite}`}
-                isOpen={open.has(report.suite)}
-                onToggle={() => toggle(report.suite)}
-              />
-            ))}
-          </div>
+          <RunGroup
+            reports={verification}
+            knownCauses={knownCauses}
+            open={open}
+            toggle={toggle}
+          />
         </>
+      )}
+
+      {crossChecks.length > 0 && (
+        <details className="diagnostics-group">
+          <summary>
+            Oracle cross-checks · {crossChecks.length}{" "}
+            {crossChecks.length === 1 ? "run" : "runs"} comparing the oracles
+            to each other
+          </summary>
+          <div style={{ marginTop: 10 }}>
+            <RunGroup
+              reports={crossChecks}
+              knownCauses={knownCauses}
+              open={open}
+              toggle={toggle}
+            />
+          </div>
+        </details>
       )}
 
       {diagnostics.length > 0 && (
@@ -174,21 +220,13 @@ export default function ProgramRuns({ reports, knownCauses }) {
             {diagnostics.length === 1 ? " run" : " runs"}, excluded from
             headline numbers
           </summary>
-          <div className="run-list" style={{ marginTop: 10 }}>
-            {diagnostics.map((report, i) => {
-              // Two diagnostic reports can share a suite slug, so key
-              // open-state by file name rather than suite.
-              const key = `diag-${runKey(report, i)}`;
-              return (
-                <RunRow
-                  key={key}
-                  report={report}
-                  knownCauses={knownCauses}
-                  isOpen={open.has(key)}
-                  onToggle={() => toggle(key)}
-                />
-              );
-            })}
+          <div style={{ marginTop: 10 }}>
+            <RunGroup
+              reports={diagnostics}
+              knownCauses={knownCauses}
+              open={open}
+              toggle={toggle}
+            />
           </div>
         </details>
       )}

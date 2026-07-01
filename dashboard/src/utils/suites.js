@@ -160,6 +160,31 @@ export function suiteKind(suite) {
   return suiteMeta(suite).kind;
 }
 
+/** True when one side of the comparison is Axiom. */
+export function isAxiomPair(report) {
+  return report?.engines?.left === "axiom" || report?.engines?.right === "axiom";
+}
+
+/** The non-Axiom engine in an Axiom-pair report (e.g. policyengine, taxsim). */
+export function otherOracle(report) {
+  if (!isAxiomPair(report)) return null;
+  return report.engines.left === "axiom"
+    ? report.engines.right
+    : report.engines.left;
+}
+
+/**
+ * Stable anchor id for a verification run. Keyed by (suite, engine pair) so
+ * the same suite run against different oracles gets distinct anchors.
+ */
+export function runAnchor(report) {
+  const suite = report?.suite || "report";
+  if (isAxiomPair(report)) return `run-${suite}-vs-${otherOracle(report)}`;
+  const left = report?.engines?.left || "left";
+  const right = report?.engines?.right || "right";
+  return `run-${suite}-${left}-${right}`;
+}
+
 /** Aggregate one report's aggregates into a single matched/total metric. */
 export function reportMetric(report) {
   let total = 0;

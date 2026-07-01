@@ -1,8 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { mismatchKindLabel } from "../utils/format";
-import { FAMILY_LABELS, US_STATE_NAMES, suiteMeta, suiteLabel } from "../utils/suites";
+import { engineLabel, mismatchKindLabel } from "../utils/format";
+import {
+  FAMILY_LABELS,
+  US_STATE_NAMES,
+  suiteMeta,
+  suiteLabel,
+  isAxiomPair,
+  otherOracle,
+  runAnchor,
+} from "../utils/suites";
 
 /**
  * The open-gaps ledger: every measured disagreement, rolled up across all
@@ -13,10 +21,6 @@ import { FAMILY_LABELS, US_STATE_NAMES, suiteMeta, suiteLabel } from "../utils/s
  * Below the ledger, documented encoding gaps (work known before any run)
  * are listed per program.
  */
-
-function isAxiomPair(report) {
-  return report.engines?.left === "axiom" || report.engines?.right === "axiom";
-}
 
 function causeFor(knownCauses, report, concept, kind) {
   const candidates = (knownCauses || []).filter(
@@ -52,7 +56,10 @@ function buildLedger(reports, knownCauses) {
       rows.push({
         count,
         suite: report.suite,
+        anchor: runAnchor(report),
         program: suiteLabel(report.suite),
+        oracle: otherOracle(report),
+        engines: report.engines,
         conceptLabel: descriptions.get(concept) || concept,
         kind,
         cause,
@@ -70,7 +77,7 @@ function LedgerRow({ row }) {
         <div className="ledger-label">
           {row.cause?.label || (
             <>
-              {mismatchKindLabel(row.kind)}
+              {mismatchKindLabel(row.kind, row.engines)}
               <span className="ledger-unexplained"> · not yet explained</span>
             </>
           )}
@@ -93,11 +100,12 @@ function LedgerRow({ row }) {
           <div className="ledger-desc">{row.cause.description}</div>
         )}
         <div className="mono ledger-meta">
-          <a href={`#run-${row.suite}`} className="ledger-programlink">
+          <a href={`#${row.anchor}`} className="ledger-programlink">
             {row.program}
           </a>
+          {row.oracle && <> · vs {engineLabel(row.oracle)}</>}
           {" · "}
-          {row.conceptLabel} · {mismatchKindLabel(row.kind)}
+          {row.conceptLabel} · {mismatchKindLabel(row.kind, row.engines)}
           {row.cause?.fix_owner && <> · owner: {row.cause.fix_owner}</>}
         </div>
       </div>

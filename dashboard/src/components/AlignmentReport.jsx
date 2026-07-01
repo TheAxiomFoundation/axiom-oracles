@@ -24,20 +24,20 @@ import { suiteMeta } from "../utils/suites";
  * can take a concrete case_id into a triage script.
  */
 
-const KIND_DESCRIPTION = {
-  eligibility_right_only:
-    "Households PolicyEngine marks eligible that Axiom rejects. Usually points to an unencoded eligibility path (state BBCE, categorical exemption, …).",
-  eligibility_left_only:
-    "Households Axiom marks eligible that PolicyEngine rejects. Often Axiom missing a disqualifying condition the rulespec hasn't encoded yet.",
-  amount_difference:
-    "Both engines agree on eligibility, but the dollar amount diverges beyond tolerance.",
-  missing_left:
-    "Axiom didn't produce a value for this case — typically a missing input or formula that references an undeclared identifier.",
-  missing_right: "PolicyEngine didn't produce a value.",
-  missing_both: "Neither engine could evaluate the case.",
-};
-
-const kindLabel = mismatchKindLabel;
+function kindDescription(kind, engines) {
+  const left = engineLabel(engines?.left || "axiom");
+  const right = engineLabel(engines?.right || "policyengine");
+  const descriptions = {
+    eligibility_right_only: `Households ${right} marks eligible that ${left} rejects. Usually points to an unencoded eligibility path (state BBCE, categorical exemption, …).`,
+    eligibility_left_only: `Households ${left} marks eligible that ${right} rejects. Often ${left} missing a disqualifying condition the rulespec hasn't encoded yet.`,
+    amount_difference:
+      "Both engines agree on eligibility, but the dollar amount diverges beyond tolerance.",
+    missing_left: `${left} didn't produce a value for this case — typically a missing input or formula that references an undeclared identifier.`,
+    missing_right: `${right} didn't produce a value.`,
+    missing_both: "Neither engine could evaluate the case.",
+  };
+  return descriptions[kind];
+}
 
 function ConceptMetric({ aggregate }) {
   const rate = aggregate.match_rate;
@@ -444,7 +444,7 @@ function HouseholdDetail({ row, mismatch }) {
   );
 }
 
-function MismatchCaseTable({ cases, casesById }) {
+function MismatchCaseTable({ cases, casesById, engines }) {
   const [openCase, setOpenCase] = useState(null);
   return (
     <div
@@ -469,8 +469,12 @@ function MismatchCaseTable({ cases, casesById }) {
           <tr style={{ background: "var(--paper-warm)" }}>
             <th style={{ textAlign: "left", padding: "6px 10px", width: 24 }} />
             <th style={{ textAlign: "left", padding: "6px 10px" }}>case_id</th>
-            <th style={{ textAlign: "right", padding: "6px 10px" }}>Axiom</th>
-            <th style={{ textAlign: "right", padding: "6px 10px" }}>PE</th>
+            <th style={{ textAlign: "right", padding: "6px 10px" }}>
+              {engineLabel(engines?.left || "axiom")}
+            </th>
+            <th style={{ textAlign: "right", padding: "6px 10px" }}>
+              {engineLabel(engines?.right || "policyengine")}
+            </th>
             <th style={{ textAlign: "right", padding: "6px 10px" }}>diff</th>
           </tr>
         </thead>
@@ -622,7 +626,7 @@ function CauseDriverBreakdown({ cause, compact = false }) {
   );
 }
 
-function MismatchPattern({ kind, cases, casesById, knownCause }) {
+function MismatchPattern({ kind, cases, casesById, knownCause, engines }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <div
@@ -669,7 +673,7 @@ function MismatchPattern({ kind, cases, casesById, knownCause }) {
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, color: "var(--ink)" }}>
-            {kindLabel(kind)}
+            {mismatchKindLabel(kind, engines)}
           </div>
           {knownCause && (
             <div
@@ -710,11 +714,15 @@ function MismatchPattern({ kind, cases, casesById, knownCause }) {
               maxWidth: 760,
             }}
           >
-            {knownCause?.description || KIND_DESCRIPTION[kind]}
+            {knownCause?.description || kindDescription(kind, engines)}
             <CauseDriverBreakdown cause={knownCause} />
           </div>
           <div className="indent-deep" style={{ paddingLeft: 60 }}>
-            <MismatchCaseTable cases={cases} casesById={casesById} />
+            <MismatchCaseTable
+              cases={cases}
+              casesById={casesById}
+              engines={engines}
+            />
           </div>
         </>
       )}
@@ -1029,7 +1037,7 @@ export default function AlignmentReport({
                         textTransform: "uppercase",
                       }}
                     >
-                      {c.concept} · {kindLabel(c.kind)}
+                      {c.concept} · {mismatchKindLabel(c.kind, report.engines)}
                       {c.cause.fix_owner && (
                         <> · owner: {c.cause.fix_owner}</>
                       )}
@@ -1071,6 +1079,7 @@ export default function AlignmentReport({
                     cases={cases}
                     casesById={casesById}
                     knownCause={causeFor(agg.concept, kind)}
+                    engines={report.engines}
                   />
                 ))}
               </div>

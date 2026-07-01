@@ -1,25 +1,22 @@
 "use client";
 
-import { engineLabel, formatPct } from "../utils/format";
+import { engineLabel, formatPct, formatAgreementRate } from "../utils/format";
 import { rateColor } from "../utils/colors";
-import { suiteKind, reportMetric } from "../utils/suites";
+import {
+  suiteKind,
+  reportMetric,
+  isAxiomPair,
+  otherOracle,
+} from "../utils/suites";
 
 /**
  * The page opens with a sentence, not a widget: what was checked, against
  * whom, and how often the answers agreed. Only household-level verification
  * runs count toward the headline; diagnostic instrumentation runs are
- * disclosed separately so they can't flatter or sink the number.
+ * disclosed separately so they can't flatter or sink the number. When Axiom
+ * is verified against several oracles, the per-oracle rates are broken out
+ * so the blend can't hide a weak pair.
  */
-
-function isAxiomPair(report) {
-  return report.engines?.left === "axiom" || report.engines?.right === "axiom";
-}
-
-function otherEngine(report) {
-  return report.engines?.left === "axiom"
-    ? report.engines?.right
-    : report.engines?.left;
-}
 
 function compactCount(n) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)} million`;
@@ -47,15 +44,23 @@ export default function OverviewHero({ reports }) {
   let matched = 0;
   let total = 0;
   let households = 0;
-  const oracles = new Set();
+  const byOracle = new Map();
   for (const report of headlineReports) {
     const m = reportMetric(report);
     matched += m.matched;
     total += m.total;
     households += report.case_count || 0;
-    const other = otherEngine(report);
-    if (other) oracles.add(other);
+    const other = otherOracle(report);
+    if (!other) continue;
+    if (!byOracle.has(other)) {
+      byOracle.set(other, { matched: 0, total: 0, runs: 0 });
+    }
+    const pair = byOracle.get(other);
+    pair.matched += m.matched;
+    pair.total += m.total;
+    pair.runs += 1;
   }
+  const oracles = new Set(byOracle.keys());
   const rate = total > 0 ? (matched / total) * 100 : null;
   const mismatches = total - matched;
 
@@ -74,7 +79,7 @@ export default function OverviewHero({ reports }) {
       <div className="section-eyebrow">Verification status</div>
       {rate != null ? (
         <h1 className="hero-thesis">
-          Axiom and {oracleText} agree on{" "}
+          Axiom agrees with {oracleText} on{" "}
           <em style={{ color: rateColor(rate) }}>{formatPct(rate, 2)}</em> of{" "}
           <em>{compactCount(total)}</em> checks across{" "}
           <em>{headlineReports.length}</em> verified program runs.
@@ -105,6 +110,27 @@ export default function OverviewHero({ reports }) {
           />
         )}
       </div>
+      {byOracle.size > 1 && (
+        <div className="hero-stats">
+          {[...byOracle.entries()]
+            .sort((a, b) => b[1].total - a[1].total)
+            .map(([oracle, pair]) => {
+              const pairRate =
+                pair.total > 0 ? (pair.matched / pair.total) * 100 : null;
+              return (
+                <Stat
+                  key={oracle}
+                  value={
+                    <span style={{ color: rateColor(pairRate) }}>
+                      {formatAgreementRate(pairRate, pair.total - pair.matched)}
+                    </span>
+                  }
+                  label={`vs ${engineLabel(oracle)} · ${pair.total.toLocaleString()} checks`}
+                />
+              );
+            })}
+        </div>
+      )}
     </section>
   );
 }

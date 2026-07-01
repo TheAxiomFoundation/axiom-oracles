@@ -33,17 +33,23 @@ export function formatDiff(value) {
   return `${sign}${formatCurrency(value)}`;
 }
 
-const MISMATCH_KIND_LABELS = {
-  eligibility_right_only: "PolicyEngine eligible, Axiom not",
-  eligibility_left_only: "Axiom eligible, PolicyEngine not",
-  amount_difference: "Amount differs",
-  missing_left: "Axiom returned no value",
-  missing_right: "PolicyEngine returned no value",
-  missing_both: "Both engines missing",
-};
-
-export function mismatchKindLabel(kind) {
-  return MISMATCH_KIND_LABELS[kind] || kind;
+/**
+ * Mismatch kinds are left/right-relative, so labels must name the actual
+ * engine pair of the report they came from — "TAXSIM eligible, Axiom not"
+ * for a taxsim run, not a hard-coded PolicyEngine.
+ */
+export function mismatchKindLabel(kind, engines) {
+  const left = engineLabel(engines?.left || "axiom");
+  const right = engineLabel(engines?.right || "policyengine");
+  const labels = {
+    eligibility_right_only: `${right} eligible, ${left} not`,
+    eligibility_left_only: `${left} eligible, ${right} not`,
+    amount_difference: "Amount differs",
+    missing_left: `${left} returned no value`,
+    missing_right: `${right} returned no value`,
+    missing_both: "Both engines missing",
+  };
+  return labels[kind] || kind;
 }
 
 export function engineLabel(name) {
