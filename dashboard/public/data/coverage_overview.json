@@ -265,9 +265,8 @@
     "program": "medicaid_eligibility_groups",
     "jurisdiction": "US",
     "status": "coverageOnly",
-    "source": "rulespec-us branch encode-medicaid-eligibility-groups: regulations/42-cfr/435 \u2014 8 SSI-linked pathway rules (435.120 x6, 435.122, 435.130 mandatory state supplements) plus 435.121 209(b) framework and 435.131; rulespec-us main has the MAGI groups (435.110/116/118/119) and 435.55x community engagement",
+    "source": "rulespec-us main (upstream): us/regulations/42-cfr/435 \u2014 SSI-linked groups incl. 435.120 ssi-mandatory-group and 435.121 209(b), optional state supplements (435.230/232/234), medically needy (435.301-350), financial methodologies (435.601-603), income standards (435.811-845)",
     "known_non_tanf_gaps": [
-     "SSI-linked group encodings (incl. 435.130 mandatory state supplements) are on the unmerged encode-medicaid-eligibility-groups branch of rulespec-us",
      "no household-level comparison yet; needs an axiom-programs composition and ECPS concept mapping to PolicyEngine Medicaid outputs"
     ]
    },
@@ -283,7 +282,9 @@
     "jurisdiction": "FL",
     "status": "coverageOnly",
     "source": "rulespec-us-fl/policies/dcf/ess-program-policy-manual (Temporary Cash Assistance chapters; the FL comparison suite covers only the SNAP slice)",
-    "known_non_tanf_gaps": []
+    "known_non_tanf_gaps": [
+     "TCA encodings sit on the local fl-snap-policy-fs-tca branch with no PR; not yet on rulespec-us-fl main"
+    ]
    },
    {
     "program": "snap",
