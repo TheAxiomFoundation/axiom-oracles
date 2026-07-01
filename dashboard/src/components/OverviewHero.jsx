@@ -43,13 +43,11 @@ export default function OverviewHero({ reports }) {
 
   let matched = 0;
   let total = 0;
-  let households = 0;
   const byOracle = new Map();
   for (const report of headlineReports) {
     const m = reportMetric(report);
     matched += m.matched;
     total += m.total;
-    households += report.case_count || 0;
     const other = otherOracle(report);
     if (!other) continue;
     if (!byOracle.has(other)) {
@@ -62,11 +60,6 @@ export default function OverviewHero({ reports }) {
   }
   const oracles = new Set(byOracle.keys());
   const rate = total > 0 ? (matched / total) * 100 : null;
-  const mismatches = total - matched;
-
-  const diagnosticCount = (reports || []).filter(
-    (r) => isAxiomPair(r) && suiteKind(r.suite) === "diagnostic",
-  ).length;
 
   const oracleNames = [...oracles].map(engineLabel);
   const oracleText =
@@ -93,23 +86,6 @@ export default function OverviewHero({ reports }) {
         whether the answers match. Every disagreement below is traced to a
         cause.
       </p>
-      <div className="hero-stats">
-        <Stat value={households.toLocaleString()} label="households compared" />
-        <Stat
-          value={mismatches.toLocaleString()}
-          label="open disagreements"
-        />
-        <Stat
-          value={headlineReports.length.toLocaleString()}
-          label="verified runs"
-        />
-        {diagnosticCount > 0 && (
-          <Stat
-            value={diagnosticCount.toLocaleString()}
-            label="diagnostic runs (not in headline)"
-          />
-        )}
-      </div>
       {byOracle.size > 1 && (
         <div className="hero-stats">
           {[...byOracle.entries()]
