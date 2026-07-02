@@ -55,6 +55,7 @@ NYC_BENEFITS_DATASET_URL = (
 DEFAULT_PERIOD = "2026-05"
 TAXSIM_DEFAULT_PERIOD = "2024"
 MAX_CONSOLE_MISMATCHES = 50
+EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY = "euromod_to_axiom_input_bridge"
 
 _SNAP_CONCEPTS = frozenset({Concepts.SNAP_BENEFIT, Concepts.SNAP_ELIGIBLE})
 _STATE_TAX_DEPENDENT_FEDERAL_TAX_CONCEPTS = frozenset(
@@ -547,19 +548,23 @@ def compare(
                 if not prepared_cases:
                     continue
                 try:
-                    left_results = left_runner.run_cases(
+                    (
+                        accumulator_cases,
+                        left_results,
+                        right_results,
+                    ) = _run_comparison_batch(
                         prepared_cases,
-                        list(concept_ids),
-                    )
-                    right_results = right_runner.run_cases(
-                        prepared_cases,
-                        list(concept_ids),
+                        left=left,
+                        right=right,
+                        left_runner=left_runner,
+                        right_runner=right_runner,
+                        concept_ids=concept_ids,
                     )
                 except RuntimeError as exc:
                     raise click.ClickException(str(exc)) from exc
 
                 accumulator.add_batch(
-                    prepared_cases,
+                    accumulator_cases,
                     comparator.compare(left_results, right_results),
                 )
 
@@ -685,6 +690,86 @@ def _case_output_concepts(cases: list[Case]) -> set[str]:
         for output in case.outputs
         if isinstance(output, str) and output
     }
+
+
+def _run_comparison_batch(
+    cases: list[Case],
+    *,
+    left: str,
+    right: str,
+    left_runner: EngineAdapter,
+    right_runner: EngineAdapter,
+    concept_ids: tuple[str, ...],
+) -> tuple[list[Case], list, list]:
+    variables = list(concept_ids)
+    bridge_outputs = _euromod_to_axiom_bridge_outputs(cases)
+    euromod_variables = list(dict.fromkeys([*variables, *bridge_outputs]))
+
+    if bridge_outputs and left == "euromod" and right == "axiom":
+        left_results = left_runner.run_cases(cases, euromod_variables)
+        bridged_cases = _apply_euromod_to_axiom_input_bridge(cases, left_results)
+        right_results = right_runner.run_cases(bridged_cases, variables)
+        return bridged_cases, left_results, right_results
+
+    if bridge_outputs and left == "axiom" and right == "euromod":
+        right_results = right_runner.run_cases(cases, euromod_variables)
+        bridged_cases = _apply_euromod_to_axiom_input_bridge(cases, right_results)
+        left_results = left_runner.run_cases(bridged_cases, variables)
+        return bridged_cases, left_results, right_results
+
+    return (
+        cases,
+        left_runner.run_cases(cases, variables),
+        right_runner.run_cases(cases, variables),
+    )
+
+
+def _euromod_to_axiom_bridge_outputs(cases: list[Case]) -> list[str]:
+    outputs: list[str] = []
+    for case in cases:
+        bridge = case.metadata.get(EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY)
+        if not isinstance(bridge, dict):
+            continue
+        outputs.extend(str(output) for output in bridge if output)
+    return list(dict.fromkeys(outputs))
+
+
+def _apply_euromod_to_axiom_input_bridge(
+    cases: list[Case],
+    euromod_results: list,
+) -> list[Case]:
+    results_by_id = {result.household_id: result for result in euromod_results}
+    bridged_cases: list[Case] = []
+    for case in cases:
+        bridge = case.metadata.get(EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY)
+        result = results_by_id.get(case.case_id)
+        if not isinstance(bridge, dict) or result is None:
+            bridged_cases.append(case)
+            continue
+
+        inputs = dict(case.metadata.get("axiom_inputs", {}))
+        applied: dict[str, float | int | bool | str | None] = {}
+        for euromod_output, axiom_inputs in bridge.items():
+            value = result.values.get(str(euromod_output))
+            if value is None:
+                continue
+            if isinstance(axiom_inputs, str):
+                input_names = (axiom_inputs,)
+            else:
+                input_names = tuple(axiom_inputs)
+            for input_name in input_names:
+                inputs[str(input_name)] = value
+                applied[str(input_name)] = value
+
+        if not applied:
+            bridged_cases.append(case)
+            continue
+
+        metadata = dict(case.metadata)
+        metadata["axiom_inputs"] = inputs
+        metadata["euromod_to_axiom_input_bridge_applied"] = applied
+        bridged_cases.append(replace(case, metadata=metadata))
+    return bridged_cases
 
 
 def _batched(cases: list[Case], batch_size: int):

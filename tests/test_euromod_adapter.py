@@ -229,10 +229,11 @@ class TestSubprocessContract:
             variables=[
                 Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
                 Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+                "yem",
             ],
         )
 
-        assert requested == ["tin_s", "tscee_s"]
+        assert requested == ["tin_s", "tscee_s", "yem"]
         assert result.values["tin_s"] == pytest.approx(1_200.0)
         assert result.values["tscee_s"] == pytest.approx(600.0)
 

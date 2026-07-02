@@ -4,9 +4,12 @@ from axiom_oracles.adapters.euromod import EuromodPlatformRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
 from axiom_oracles.cli import (
+    _apply_euromod_to_axiom_input_bridge,
     _build_runner,
+    _euromod_to_axiom_bridge_outputs,
     _load_population_cases,
     _prepare_cases_for_engines,
+    _run_comparison_batch,
     _resolve_period,
 )
 from axiom_oracles.comparison.mappings import (
@@ -15,6 +18,8 @@ from axiom_oracles.comparison.mappings import (
 )
 from axiom_oracles.core.case import Case, Concepts, Entity
 from axiom_oracles.core.geography import GeographyScope
+from axiom_oracles.core.results import EngineResult
+from axiom_oracles.suites import load_suite
 
 
 def test_unknown_engines_do_not_get_implicit_concept_targets() -> None:
@@ -368,6 +373,65 @@ def test_synthetic_population_honors_requested_period_and_sample_size() -> None:
 
     assert len(cases) == 3
     assert {case.period for case in cases} == {"2024"}
+
+
+def test_euromod_bridge_overwrites_declared_axiom_inputs() -> None:
+    [case] = load_suite("be-worker-ssc")[:1]
+    input_name = next(iter(case.metadata["axiom_inputs"]))
+
+    assert _euromod_to_axiom_bridge_outputs([case]) == ["yem"]
+
+    [bridged] = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [EngineResult("euromod", case.case_id, {"yem": 31_651.0})],
+    )
+
+    assert bridged.metadata["axiom_inputs"][input_name] == 31_651.0
+    assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        input_name: 31_651.0
+    }
+
+
+def test_euromod_bridge_runs_euromod_before_axiom() -> None:
+    [case] = load_suite("be-worker-ssc")[:1]
+    calls = []
+
+    class FakeEuromodRunner:
+        def run_cases(self, cases, variables=None):
+            calls.append(("euromod", variables))
+            return [EngineResult("euromod", cases[0].case_id, {"tscee_s": 4_136.74, "yem": 31_651.0})]
+
+    class FakeAxiomRunner:
+        def run_cases(self, cases, variables=None):
+            calls.append(("axiom", cases[0].metadata["axiom_inputs"], variables))
+            return [
+                EngineResult(
+                    "axiom",
+                    cases[0].case_id,
+                    {
+                        "belgium_employee_social_security_ordinary_worker_contribution": 4_136.74
+                    },
+                )
+            ]
+
+    bridged_cases, left_results, right_results = _run_comparison_batch(
+        [case],
+        left="axiom",
+        right="euromod",
+        left_runner=FakeAxiomRunner(),
+        right_runner=FakeEuromodRunner(),
+        concept_ids=(Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,),
+    )
+
+    assert calls[0] == (
+        "euromod",
+        [Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS, "yem"],
+    )
+    assert calls[1][0] == "axiom"
+    assert list(calls[1][1].values())[0] == 31_651.0
+    assert bridged_cases[0].metadata["euromod_to_axiom_input_bridge_applied"]
+    assert left_results[0].values
+    assert right_results[0].values
 
 
 def test_tax_only_enhanced_cps_comparisons_use_tax_unit_cases() -> None:

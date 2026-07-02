@@ -26,7 +26,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Callable
 
-from axiom_oracles.comparison.mappings import engine_targets_for_concepts
+from axiom_oracles.comparison.mappings import mappings_by_concept
 from axiom_oracles.core.case import Case
 from axiom_oracles.core.engine import EngineAdapter
 from axiom_oracles.core.results import EngineResult
@@ -127,11 +127,7 @@ class EuromodPlatformRunner(EngineAdapter):
         of its members'), and monthly amounts are annualized when
         ``annualize_outputs`` is set.
         """
-        outputs = (
-            engine_targets_for_concepts(variables, self.name) or list(variables)
-            if variables
-            else list(DEFAULT_OUTPUTS)
-        )
+        outputs = _euromod_outputs_for_variables(variables)
         rows: list[dict[str, Any]] = []
         for index, case in enumerate(cases):
             for row in euromod_input_rows(
@@ -215,3 +211,21 @@ class EuromodPlatformRunner(EngineAdapter):
                     )
                 }
             return json.loads(result_path.read_text(encoding="utf-8"))
+
+
+def _euromod_outputs_for_variables(variables: list[str] | None) -> list[str]:
+    if not variables:
+        return list(DEFAULT_OUTPUTS)
+
+    by_concept = mappings_by_concept()
+    outputs: list[str] = []
+    for variable in variables:
+        mapping = by_concept.get(variable)
+        target = mapping.target_for_engine("euromod") if mapping is not None else None
+        if isinstance(target, list):
+            outputs.extend(target)
+        elif target:
+            outputs.append(target)
+        else:
+            outputs.append(variable)
+    return list(dict.fromkeys(outputs))
