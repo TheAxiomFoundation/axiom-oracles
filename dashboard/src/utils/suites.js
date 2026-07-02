@@ -303,7 +303,18 @@ export function runAnchor(report) {
  * payroll components group as one piece, matching the breakout table.
  */
 export function reportProgramCount(report) {
-  if (suiteMeta(report?.suite).family !== "federal_income_tax") return 1;
+  const family = suiteMeta(report?.suite).family;
+  // Medicaid eligibility groups: each 42 CFR 435 group concept is its own
+  // verified program surface, like the federal income tax pieces below.
+  if (family === "medicaid_eligibility_groups") {
+    const concepts = new Set(
+      (report.aggregates || [])
+        .filter((agg) => (agg.comparison_count || 0) > 0)
+        .map((agg) => agg.concept),
+    );
+    return Math.max(1, concepts.size);
+  }
+  if (family !== "federal_income_tax") return 1;
   const pieces = new Set();
   for (const agg of report.aggregates || []) {
     if (!((agg.comparison_count || 0) > 0)) continue;
