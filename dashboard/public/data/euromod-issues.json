@@ -1,0 +1,29 @@
+{
+  "schema": "axiom_oracles.euromod_issues.v1",
+  "updated_at": "2026-07-02",
+  "purpose": "Track EUROMOD-platform issues and workarounds that affect household-level Axiom oracle comparisons. Statutory encoding gaps belong in coverage inventories and comparison reports, not in this ledger.",
+  "entries": [
+    {
+      "id": "jrc-euromod-4-be-training-data-income-list-prep",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/4",
+      "summary": "Running Belgium BE_2025 under the bundled BE_training_data dataset name can abort during preparation because some income lists are registered only under real SILC dataset-name conditions while formulas that reference them still compile.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_training_data"
+      },
+      "workaround": {
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "description": "Run the policy system under the real dataset configuration name while templating synthetic rows from the bundled training-data schema. This reads no licensed SILC records."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    }
+  ]
+}

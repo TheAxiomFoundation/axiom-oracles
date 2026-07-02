@@ -252,7 +252,7 @@ export function suiteMeta(suite) {
     family: slug || "unknown",
     jurisdiction: null,
     label: slug || "Unnamed run",
-    region: slug.startsWith("uk-") ? "uk" : "us",
+    region: slug.startsWith("uk-") ? "uk" : slug.startsWith("be-") ? "be" : "us",
     kind: "household",
     order: 500,
   };

@@ -26,6 +26,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Callable
 
+from axiom_oracles.comparison.mappings import engine_targets_for_concepts
 from axiom_oracles.core.case import Case
 from axiom_oracles.core.engine import EngineAdapter
 from axiom_oracles.core.results import EngineResult
@@ -126,7 +127,11 @@ class EuromodPlatformRunner(EngineAdapter):
         of its members'), and monthly amounts are annualized when
         ``annualize_outputs`` is set.
         """
-        outputs = list(variables) if variables else list(DEFAULT_OUTPUTS)
+        outputs = (
+            engine_targets_for_concepts(variables, self.name) or list(variables)
+            if variables
+            else list(DEFAULT_OUTPUTS)
+        )
         rows: list[dict[str, Any]] = []
         for index, case in enumerate(cases):
             for row in euromod_input_rows(

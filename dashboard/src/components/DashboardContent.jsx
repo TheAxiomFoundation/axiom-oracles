@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { loadOracleData, buildNWayData } from "../utils/data";
 import { suiteRegion } from "../utils/suites";
 import OverviewHero from "./OverviewHero";
+import BelgiumEuromodCoverage from "./BelgiumEuromodCoverage";
 import CoverageRegister from "./CoverageRegister";
 import GapLedger from "./GapLedger";
 import ProgramRuns from "./ProgramRuns";
@@ -12,16 +13,23 @@ import ProgramBreakdown from "./ProgramBreakdown";
 
 function programRegion(program) {
   const id = String(program?.id || "");
+  if (id.startsWith("be:")) return "be";
   if (id.startsWith("uk:")) return "uk";
   if (id.startsWith("us:")) return "us";
   const coverage = program?.coverage || [];
+  if (coverage.some((entry) => entry?.country === "BE")) return "be";
   if (coverage.some((entry) => entry?.country === "UK")) return "uk";
   if (coverage.some((entry) => entry?.country === "US")) return "us";
   return "us";
 }
 
+const COUNTRIES = [
+  { id: "us", label: "US" },
+  { id: "uk", label: "UK" },
+  { id: "be", label: "BE" },
+];
+
 function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
-  const isUS = jurisdiction === "us";
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -43,28 +51,23 @@ function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
           <span className="brand-product">Oracles</span>
         </span>
         <div className="country-toggle" role="tablist" aria-label="Country">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={isUS}
-            className={`country-toggle-btn ${
-              isUS ? "country-toggle-btn-active" : ""
-            }`}
-            onClick={() => onJurisdictionChange("us")}
-          >
-            US
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={!isUS}
-            className={`country-toggle-btn ${
-              !isUS ? "country-toggle-btn-active" : ""
-            }`}
-            onClick={() => onJurisdictionChange("uk")}
-          >
-            UK
-          </button>
+          {COUNTRIES.map((country) => {
+            const active = jurisdiction === country.id;
+            return (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={active}
+                className={`country-toggle-btn ${
+                  active ? "country-toggle-btn-active" : ""
+                }`}
+                onClick={() => onJurisdictionChange(country.id)}
+                key={country.id}
+              >
+                {country.label}
+              </button>
+            );
+          })}
         </div>
       </div>
     </header>
@@ -136,6 +139,7 @@ export default function DashboardContent() {
     (r) =>
       (r.aggregates || []).length > 0 || (r.summary?.alarms || []).length > 0,
   );
+  const isBelgium = jurisdiction === "be";
 
   return (
     <>
@@ -152,62 +156,78 @@ export default function DashboardContent() {
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
-          <OverviewHero reports={withData} />
+          {isBelgium ? (
+            <BelgiumEuromodCoverage
+              coverage={data.euromodCoverage}
+              issues={data.euromodIssues}
+            />
+          ) : (
+            <>
+              <OverviewHero reports={withData} />
 
-          <CoverageRegister
-            reports={withData}
-            coverageOverview={data.coverageOverview}
-            region={jurisdiction}
-          />
-
-          <ProgramRuns
-            key={jurisdiction}
-            reports={withData}
-            knownCauses={data.knownCauses || []}
-            coverageOverview={data.coverageOverview}
-          />
-
-          <GapLedger
-            reports={withData}
-            knownCauses={data.knownCauses || []}
-            coverageOverview={data.coverageOverview}
-            region={jurisdiction}
-          />
-
-          <details
-            style={{
-              background: "var(--paper-elevated)",
-              border: "1px solid var(--hairline)",
-              borderRadius: 12,
-              padding: "12px 16px",
-            }}
-          >
-            <summary
-              style={{
-                cursor: "pointer",
-                fontSize: 13,
-                color: "var(--ink-mute)",
-              }}
-            >
-              Advanced view · oracle agreement matrix and the encoded-rule
-              inventory (statute references, corpus files)
-            </summary>
-            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 16 }}>
-              {viewData.summary.totalCases > 0 && (
-                <AgreementMatrix
-                  oracles={viewData.oracles}
-                  matrix={viewData.matrix}
-                  overallMatrix={viewData.overallMatrix}
-                  concepts={viewData.concepts}
-                />
-              )}
-              <ProgramBreakdown
-                programs={viewData.programs}
-                reports={viewData.reports}
-                oracles={viewData.oracles}
+              <CoverageRegister
+                reports={withData}
+                coverageOverview={data.coverageOverview}
+                region={jurisdiction}
               />
-            </div>
-          </details>
+
+              <ProgramRuns
+                key={jurisdiction}
+                reports={withData}
+                knownCauses={data.knownCauses || []}
+                coverageOverview={data.coverageOverview}
+              />
+
+              <GapLedger
+                reports={withData}
+                knownCauses={data.knownCauses || []}
+                coverageOverview={data.coverageOverview}
+                region={jurisdiction}
+              />
+
+              <details
+                style={{
+                  background: "var(--paper-elevated)",
+                  border: "1px solid var(--hairline)",
+                  borderRadius: 12,
+                  padding: "12px 16px",
+                }}
+              >
+                <summary
+                  style={{
+                    cursor: "pointer",
+                    fontSize: 13,
+                    color: "var(--ink-mute)",
+                  }}
+                >
+                  Advanced view · oracle agreement matrix and the encoded-rule
+                  inventory (statute references, corpus files)
+                </summary>
+                <div
+                  style={{
+                    marginTop: 12,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 16,
+                  }}
+                >
+                  {viewData.summary.totalCases > 0 && (
+                    <AgreementMatrix
+                      oracles={viewData.oracles}
+                      matrix={viewData.matrix}
+                      overallMatrix={viewData.overallMatrix}
+                      concepts={viewData.concepts}
+                    />
+                  )}
+                  <ProgramBreakdown
+                    programs={viewData.programs}
+                    reports={viewData.reports}
+                    oracles={viewData.oracles}
+                  />
+                </div>
+              </details>
+            </>
+          )}
         </div>
 
         <footer

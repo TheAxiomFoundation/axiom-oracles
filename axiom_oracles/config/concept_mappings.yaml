@@ -15,12 +15,61 @@ targets:
     scope:
       type: country
       geoid: US
+  euromod:
+    scope:
+      type: country
+      geoid: BE
   accessnyc:
     scope:
       type: census_place
       geoid: "3651000"
 
 concepts:
+  be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_federal_and_local_tax_before_withholding:
+    description: Belgium worker PIT before withholding
+    category: tax
+    comparison: amount
+    tolerance: 15
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_federal_and_local_tax_before_withholding
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution:
+    description: Belgium employee social-security contribution
+    category: social_contributions
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_employee_social_security_ordinary_worker_contribution
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: BE
+
   us:statutes/7/2014/u#snap_benefit:
     description: SNAP benefit amount
     category: food
