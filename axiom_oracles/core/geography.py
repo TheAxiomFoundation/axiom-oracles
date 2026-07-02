@@ -14,6 +14,8 @@ _GEOID_LENGTHS = {
     "zcta": 5,
 }
 
+_SUPPORTED_COUNTRIES = frozenset({"BE", "UK", "US"})
+
 
 @dataclass(frozen=True)
 class GeographyScope:
@@ -33,7 +35,7 @@ class GeographyScope:
         object.__setattr__(self, "geoid", geoid)
 
         if scope_type == "country":
-            if geoid != "US":
+            if geoid not in _SUPPORTED_COUNTRIES:
                 raise ValueError(f"Unsupported country scope: {geoid}")
             return
 

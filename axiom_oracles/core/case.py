@@ -129,7 +129,15 @@ class Concepts:
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"
     )
+    BE_WORKER_PIT_BEFORE_WITHHOLDING = (
+        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
+        "#belgium_pit_federal_and_local_tax_before_withholding"
+    )
     BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS = (
+        "be:regulations/social_security/workers/employee_contributions"
+        "#belgium_employee_social_security_ordinary_worker_contribution"
+    )
+    BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"
     )

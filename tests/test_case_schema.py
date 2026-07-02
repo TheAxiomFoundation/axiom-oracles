@@ -178,6 +178,34 @@ def test_accessnyc_policyengine_scope_intersection_is_nyc() -> None:
     )
 
 
+def test_axiom_euromod_scope_intersection_is_country_ambiguous() -> None:
+    assert comparison_scope_for_targets("axiom", "euromod") is None
+
+
+def test_belgium_euromod_concepts_are_locale_filtered() -> None:
+    mappings = comparable_mappings(
+        "axiom",
+        "euromod",
+        load_program_mappings(),
+        locales={"BE"},
+    )
+
+    assert {mapping.concept_id for mapping in mappings} == {
+        Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
+        Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+    }
+
+    assert (
+        comparable_mappings(
+            "axiom",
+            "euromod",
+            load_program_mappings(),
+            locales={"US-NY-NYC"},
+        )
+        == []
+    )
+
+
 def test_accessnyc_targets_are_scope_filtered() -> None:
     mappings = comparable_mappings(
         "accessnyc",
@@ -214,6 +242,25 @@ def test_nyc_synthetic_suite_has_triage_metadata() -> None:
     assert all("yearly_earned_income" in case.metadata for case in cases)
     assert all("ages" in case.metadata for case in cases)
     assert {case.period for case in cases} == {"2026-05"}
+
+
+def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
+    pit_cases = load_suite("be-worker-pit")
+    ssc_cases = load_suite("be-worker-ssc")
+
+    assert {case.locale for case in pit_cases + ssc_cases} == {"BE"}
+    assert {case.scope for case in pit_cases + ssc_cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in pit_cases} == {
+        (Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,)
+    }
+    assert {case.outputs for case in ssc_cases} == {
+        (Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Person" for case in pit_cases)
+    assert all("#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"])
+    assert all("#input." in key for case in ssc_cases for key in case.metadata["axiom_inputs"])
 
 
 def test_accessnyc_python_runner_discovers_local_rule_codes(tmp_path) -> None:

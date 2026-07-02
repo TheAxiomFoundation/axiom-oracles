@@ -121,7 +121,50 @@ function PolicyDenominator({ policies }) {
   );
 }
 
-export default function BelgiumEuromodCoverage({ coverage }) {
+function EuromodIssueLedger({ issues }) {
+  const entries = (issues?.entries || []).filter(
+    (issue) => issue.jurisdiction === "BE",
+  );
+  if (entries.length === 0) return null;
+
+  return (
+    <section className="card-flat">
+      <div className="section-head">
+        <div>
+          <div className="section-eyebrow">EUROMOD issue ledger</div>
+          <div className="section-title">
+            External engine or model issues affecting household-level oracles
+          </div>
+        </div>
+        <div className="mono be-config">{issues.updated_at}</div>
+      </div>
+      <div className="be-issue-list">
+        {entries.map((issue) => (
+          <div className="be-issue-row" key={issue.id}>
+            <div>
+              <div className="be-issue-title">
+                <span className="mono">{issue.id}</span>
+                <CoverageBadge status="oracle_anchor_not_target_output" />
+              </div>
+              <p>{issue.summary}</p>
+              <p>{issue.workaround?.description}</p>
+            </div>
+            <a
+              className="cite"
+              href={issue.upstream_url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              upstream issue
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default function BelgiumEuromodCoverage({ coverage, issues }) {
   if (!coverage) {
     return (
       <section className="hero">
@@ -196,6 +239,8 @@ export default function BelgiumEuromodCoverage({ coverage }) {
         </div>
         <DomainCoverage domains={coverage.domain_coverage || []} />
       </section>
+
+      <EuromodIssueLedger issues={issues} />
 
       <section className="card-flat">
         <div className="section-head">

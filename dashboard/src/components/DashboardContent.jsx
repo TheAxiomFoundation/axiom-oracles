@@ -157,7 +157,10 @@ export default function DashboardContent() {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
           {isBelgium ? (
-            <BelgiumEuromodCoverage coverage={data.euromodCoverage} />
+            <BelgiumEuromodCoverage
+              coverage={data.euromodCoverage}
+              issues={data.euromodIssues}
+            />
           ) : (
             <>
               <OverviewHero reports={withData} />

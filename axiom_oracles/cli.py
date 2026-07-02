@@ -455,12 +455,13 @@ def compare(
                 "No cases found for the resolved target scope and population."
             )
         case_locales = set(locales) if locales else _case_locales(cases)
+        requested_concepts = set(concepts) or _case_output_concepts(cases) or None
         mappings = comparable_mappings(
             left,
             right,
             locales=case_locales,
             scope=comparison_scope,
-            concepts=set(concepts) or None,
+            concepts=requested_concepts,
             categories=set(categories) or None,
             include_components=include_components,
         )
@@ -675,6 +676,15 @@ def _resolve_suite_name(suite: str, left: str, right: str) -> str:
 
 def _case_locales(cases: list[Case]) -> set[str]:
     return {case.locale for case in cases if case.locale}
+
+
+def _case_output_concepts(cases: list[Case]) -> set[str]:
+    return {
+        output
+        for case in cases
+        for output in case.outputs
+        if isinstance(output, str) and output
+    }
 
 
 def _batched(cases: list[Case], batch_size: int):
@@ -939,6 +949,7 @@ def _build_runner(
             country=os.environ.get("EUROMOD_COUNTRY", "UK"),
             system=os.environ.get("EUROMOD_SYSTEM", "UK_2025"),
             dataset=os.environ.get("EUROMOD_DATASET", "training_data"),
+            template_dataset=os.environ.get("EUROMOD_TEMPLATE_DATASET") or None,
             country_code=int(os.environ.get("EUROMOD_COUNTRY_CODE", "15")),
         )
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")

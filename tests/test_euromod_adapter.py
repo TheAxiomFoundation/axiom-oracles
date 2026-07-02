@@ -200,6 +200,42 @@ class TestSubprocessContract:
         results = runner.run_cases([_single_earner("a", 30_000.0)])
         assert "engine exploded" in results[0].errors[0]
 
+    def test_concept_ids_project_to_euromod_output_columns(self) -> None:
+        requested = []
+
+        def run(argv, **kwargs):
+            job = json.loads(Path(argv[2]).read_text())
+            requested.extend(job["outputs"])
+            Path(argv[3]).write_text(
+                json.dumps(
+                    {
+                        "columns": ["tin_s", "tscee_s"],
+                        "missing": [],
+                        "idhh": [1],
+                        "values": {"tin_s": [100.0], "tscee_s": [50.0]},
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="BE",
+            system="BE_2025",
+            subprocess_run=run,
+        )
+        [result] = runner.run_cases(
+            [_single_earner("be-30k", 30_000.0)],
+            variables=[
+                Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
+                Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+            ],
+        )
+
+        assert requested == ["tin_s", "tscee_s"]
+        assert result.values["tin_s"] == pytest.approx(1_200.0)
+        assert result.values["tscee_s"] == pytest.approx(600.0)
+
 
 @pytest.mark.skipif(
     not (UKMOD_MODEL_ROOT and EUROMOD_PYTHON),

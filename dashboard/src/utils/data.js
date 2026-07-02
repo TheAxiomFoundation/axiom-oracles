@@ -109,6 +109,16 @@ export async function loadOracleData(basePath = "") {
     // continue without EUROMOD coverage context
   }
 
+  let euromodIssues = null;
+  try {
+    const euromodIssuesResp = await fetch(`${basePath}/data/euromod-issues.json`);
+    if (euromodIssuesResp.ok) {
+      euromodIssues = await euromodIssuesResp.json();
+    }
+  } catch {
+    // continue without EUROMOD issue context
+  }
+
   // Drop aspirational / missing programs — the dashboard reflects only what
   // is actually encoded in the Axiom corpus today.
   const programs = allPrograms.filter(
@@ -159,6 +169,7 @@ export async function loadOracleData(basePath = "") {
     knownCauses,
     coverageOverview,
     euromodCoverage,
+    euromodIssues,
   };
 }
 

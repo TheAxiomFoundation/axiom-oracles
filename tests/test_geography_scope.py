@@ -15,6 +15,11 @@ def test_country_scope_contains_census_place() -> None:
     )
 
 
+def test_country_scope_accepts_belgium_and_uk() -> None:
+    assert GeographyScope(type="country", geoid="be").geoid == "BE"
+    assert GeographyScope(type="country", geoid="uk").geoid == "UK"
+
+
 def test_census_place_geoid_projects_to_policyengine_inputs() -> None:
     assert pe_inputs_for_scope(
         GeographyScope(type="census_place", geoid="3651000")

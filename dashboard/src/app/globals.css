@@ -639,6 +639,37 @@ a.register-tile:hover {
   color: var(--ink-soft);
   text-transform: capitalize;
 }
+.be-issue-list {
+  display: flex;
+  flex-direction: column;
+}
+.be-issue-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--hairline);
+  align-items: start;
+}
+.be-issue-row:last-child {
+  border-bottom: 0;
+}
+.be-issue-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.be-issue-title .mono {
+  font-size: 12px;
+  font-weight: 600;
+}
+.be-issue-row p {
+  margin: 7px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-mute);
+}
 .be-denominator {
   padding: 16px 20px 20px;
 }
@@ -989,7 +1020,8 @@ body {
     height: 32px;
   }
   .be-output-row,
-  .be-domain-row {
+  .be-domain-row,
+  .be-issue-row {
     grid-template-columns: 1fr;
     gap: 8px;
     padding-left: 14px;

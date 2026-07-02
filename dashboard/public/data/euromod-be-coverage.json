@@ -70,10 +70,10 @@
     {
       "euromod_variable": "tscee_s",
       "meaning": "employee social contributions",
-      "rulespec_output": "be:statutes/social_security/workers/contribution_rates#belgium_worker_article_17_uncapped_component_contribution",
-      "rulespec_module": "be/statutes/social_security/workers/contribution_rates.yaml",
+      "rulespec_output": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
+      "rulespec_module": "be/regulations/social_security/workers/employee_contributions.yaml",
       "status": "live_oracle_verified_for_regular_worker_statutory_slice",
-      "evidence": "axiom-oracles EUROMOD Belgium live test checks tscee_s against 13.07 percent of EUROMOD post-uprating gross yem.",
+      "evidence": "The RuleSpec Article 38 ordinary employee-contribution bridge and the axiom-oracles EUROMOD Belgium live test both check tscee_s against 13.07 percent of EUROMOD post-uprating gross yem.",
       "remaining_gap": "Full ONSS contribution bases, reductions, work bonus, special regimes, and household integration remain partial."
     },
     {

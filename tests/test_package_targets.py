@@ -1,5 +1,6 @@
 from axiom_oracles.adapters.prd import PrdPackageRunner
 from axiom_oracles.adapters.axiom import AxiomRulesRunner
+from axiom_oracles.adapters.euromod import EuromodPlatformRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
 from axiom_oracles.cli import (
@@ -81,6 +82,23 @@ def test_cli_passes_axiom_batch_size_to_runner() -> None:
 
     assert isinstance(runner, AxiomRulesRunner)
     assert runner.batch_size == 123
+
+
+def test_cli_builds_euromod_runner_from_environment(monkeypatch) -> None:
+    monkeypatch.setenv("EUROMOD_MODEL_ROOT", "/tmp/euromod")
+    monkeypatch.setenv("EUROMOD_COUNTRY", "BE")
+    monkeypatch.setenv("EUROMOD_SYSTEM", "BE_2025")
+    monkeypatch.setenv("EUROMOD_DATASET", "BE_2024_c1_2015_03_e2")
+    monkeypatch.setenv("EUROMOD_TEMPLATE_DATASET", "BE_training_data")
+
+    runner = _build_runner("euromod", "api", None, None, ())
+
+    assert isinstance(runner, EuromodPlatformRunner)
+    assert runner.model_root.as_posix() == "/tmp/euromod"
+    assert runner.country == "BE"
+    assert runner.system == "BE_2025"
+    assert runner.dataset == "BE_2024_c1_2015_03_e2"
+    assert runner.template_dataset == "BE_training_data"
 
 
 def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:

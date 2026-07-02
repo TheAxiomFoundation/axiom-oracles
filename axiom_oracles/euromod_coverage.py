@@ -15,3 +15,13 @@ def load_belgium_coverage() -> dict[str, Any]:
         .read_text(encoding="utf-8")
     )
     return json.loads(payload)
+
+
+def load_euromod_issues() -> dict[str, Any]:
+    """Return logged EUROMOD-platform bugs and oracle workarounds."""
+    payload = (
+        resources.files("axiom_oracles.data")
+        .joinpath("euromod_issues.json")
+        .read_text(encoding="utf-8")
+    )
+    return json.loads(payload)
