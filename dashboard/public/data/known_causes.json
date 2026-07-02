@@ -343,7 +343,8 @@
    "kind": "amount_difference",
    "label": "PolicyEngine 2026 taxable maximum is a Trustees projection",
    "description": "PolicyEngine carries $186,000 for the 2026 OASDI contribution and benefit base, a Trustees-report projection. SSA's announced 2026 base, encoded from the Federal Register determination, is $184,500 ($60,600 x AWI-2024/AWI-1992, rounded to the nearest $300).",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
   },
   {
    "suite": "ssa-parameters",
@@ -351,7 +352,8 @@
    "kind": "amount_difference",
    "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
   },
   {
    "suite": "ssa-parameters",
@@ -359,7 +361,8 @@
    "kind": "amount_difference",
    "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
   },
   {
    "suite": "ssa-parameters",
@@ -367,7 +370,8 @@
    "kind": "amount_difference",
    "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
   },
   {
    "suite": "ssa-parameters",
@@ -375,7 +379,8 @@
    "kind": "amount_difference",
    "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
   },
   {
    "suite": "ssa-parameters",
@@ -383,7 +388,8 @@
    "kind": "amount_difference",
    "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
   },
   {
    "suite": "ga-health-thresholds",
@@ -391,7 +397,8 @@
    "kind": "amount_difference",
    "label": "GA parent/caretaker standard is dollar-based; PolicyEngine carries an FPL approximation",
    "description": "Georgia's parent/caretaker Medicaid standard is published as dollar amounts (the encoding flags georgia_parent_caretaker_standard_uses_dollar_amounts), which the source approximates at 28% FPL + the 5% MAGI disregard (0.33). PolicyEngine carries 0.39 FPL from its 2018-vintage state table. Neither side is wrong per se \u2014 the comparison flags that PE's approximation predates the current published standard.",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8834"
   },
   {
    "suite": "co-state-supplement",
@@ -399,7 +406,8 @@
    "kind": "amount_difference",
    "label": "PolicyEngine carries the SSI FBR as Colorado's OAP grant standard",
    "description": "PolicyEngine's gov.states.co.ssa.state_supplement.grant_standard values ($943 in 2024, $967 in 2025) equal the federal SSI benefit rate for those years, but Colorado's Old Age Pension total grant standard is set by state rule above the FBR \u2014 9 CCR 2503-5 sec. 3.530 sets $1,032 effective January 1, 2026. The parameter appears to conflate the OAP standard with the FBR and lacks a 2026 value.",
-   "fix_owner": "policyengine-data"
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8833"
   }
  ]
 }
