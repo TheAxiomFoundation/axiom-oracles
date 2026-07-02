@@ -275,6 +275,21 @@ wired but currently xfail (J2.0 aborts at parameter preparation under the
 connector: `Operand index does not contain operand il_xs_hl06` — raised
 upstream; UKMOD runs clean on the same engine).
 
+### Population source: populace-us
+
+The ECPS population loader takes any dataset path or `hf://` URL
+(`--ecps-dataset` on the CLI; `ecps_dataset` in a comparison config's
+parameters), and the certified populace-us artifact is a drop-in
+`USSingleYearDataset` — verified: cases load with populated facts and
+census-state scopes from `hf://policyengine/populace-us/populace_us_2024.h5`
+(the current certified release is the sparse ~57k-household national
+artifact, which downloads fast and samples well). Known populace-us gaps
+that shape which rule branches a comparison exercises: the artifact stores
+no immigration/SSN columns (everyone defaults to citizen) and housing
+tenure is degenerate, so immigrant-status-sensitive eligibility paths and
+owner-shelter deductions see no coverage until those imputation stages
+land (PolicyEngine/populace#225).
+
 For the CLI, `axiom-oracles compare euromod axiom ...` reads
 `EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,
 `EUROMOD_DATASET`, and `EUROMOD_PYTHON` from the environment.

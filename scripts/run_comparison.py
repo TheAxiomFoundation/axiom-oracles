@@ -1176,6 +1176,10 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         ])
     if params.get("jurisdiction_fips"):
         cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
+    if params.get("ecps_dataset"):
+        # Population dataset override (path or hf:// URL) — e.g. the certified
+        # populace-us artifact instead of the enhanced CPS.
+        cmd.extend(["--ecps-dataset", str(params["ecps_dataset"])])
     env = dict(os.environ)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
