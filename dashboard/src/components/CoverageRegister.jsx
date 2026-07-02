@@ -123,12 +123,23 @@ const FAMILY_FALLBACK_ORDER = {
   federal_income_tax: 10,
   social_security: 20,
   ssi: 25,
+  state_ssi_supplement: 26,
+  snap_federal: 90,
   snap: 100,
   state_income_tax: 200,
   medicaid_chip_bhp_thresholds: 210,
   medicaid_eligibility_groups: 215,
+  chip: 216,
+  medicare: 230,
   tanf: 220,
+  childcare_assistance: 270,
+  pell_grant: 240,
+  immigrant_eligibility: 250,
+  energy_rebates: 260,
+  head_start: 280,
+  lifeline: 290,
   nyc_income_tax: 400,
+  other_federal: 460,
 };
 
 function coverageRegion(program) {

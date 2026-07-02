@@ -330,6 +330,336 @@
      "no oracle comparison yet; PolicyEngine models SSI fully (gov.ssa.ssi), so both a parameter check and an ECPS household suite are feasible",
      "state supplement schedules (per-state SSP amounts) are not yet encoded anywhere in the corpus"
     ]
+   },
+   {
+    "program": "childcare_assistance",
+    "jurisdiction": "AZ",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/des/ccap, policies/des/faa5, regulations/aac/title-6 (7 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "childcare_assistance",
+    "jurisdiction": "GA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/decal/caps (6 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "chip",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/42-cfr/457, statutes/42/1397jj (7 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "energy_rebates",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: statutes/42/18795, statutes/42/18795.yaml, statutes/42/18795a (4 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "head_start",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/45-cfr/1302 (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "immigrant_eligibility",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: statutes/8/1612, statutes/8/1613.yaml, statutes/8/1641, statutes/8/1641.yaml (4 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "lifeline",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/47-cfr/54 (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "GA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_eligibility_groups",
+    "jurisdiction": "GA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dfcs/medicaid (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicare",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: statutes/42/426, statutes/42/426.yaml (13 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "other_federal",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: statutes/37/556.yaml, statutes/5/5566.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "pell_grant",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/ed/fsa, statutes/20/1070a (7 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "snap",
+    "jurisdiction": "AZ",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/des/faa5 (16 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "snap",
+    "jurisdiction": "FL",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dcf/ess-program-policy-manual, regulations/fac/65a-1 (120 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "snap",
+    "jurisdiction": "GA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dfcs/snap (8 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "snap",
+    "jurisdiction": "IN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dfr/snap-tanf-program-policy-manual (7 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "snap",
+    "jurisdiction": "WY",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dfs/snap-power-policy-manual (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "snap_federal",
+    "jurisdiction": "US",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/usda/snap, regulations/7-cfr/246, regulations/7-cfr/273, regulations/7-cfr/275, statutes/7/2012, statutes/7/2014, statutes/7/2015, statutes/7/2017 (86 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "state_ssi_supplement",
+    "jurisdiction": "AK",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dpa/apa (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "state_ssi_supplement",
+    "jurisdiction": "CA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/cdss/eas (7 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "state_ssi_supplement",
+    "jurisdiction": "CO",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/9-ccr-2503-5/3.520.72.yaml, regulations/9-ccr-2503-5/3.530.yaml, regulations/9-ccr-2503-5/3.532.yaml, regulations/9-ccr-2503-5/3.533.yaml, regula\u2026 (7 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "state_ssi_supplement",
+    "jurisdiction": "IL",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dhs/csmm, statutes/320/30 (6 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "state_ssi_supplement",
+    "jurisdiction": "MI",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/mdhhs/bridges, policies/mdhhs/rft (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "state_ssi_supplement",
+    "jurisdiction": "MN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dhs/combined-manual (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "state_ssi_supplement",
+    "jurisdiction": "WA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/388/388-474 (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "AK",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dpa/atap, regulations/aac/title-7 (9 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "AZ",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/des/faa5 (16 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "CA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cdss/calworks (9 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "GA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dfcs/tanf (10 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "KS",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dcf/keesm (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "MN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dhs/combined-manual (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "TX",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/hhs/texas-works-handbook (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "WA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/388/388-450, regulations/388/388-478 (5 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
    }
   ]
  }
