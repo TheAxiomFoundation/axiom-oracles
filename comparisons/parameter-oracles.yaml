@@ -1,0 +1,63 @@
+# Parameter-oracle suites: encoded rulespec parameter values compared against
+# PolicyEngine parameters at a fixed instant. The rulespec side is read from
+# upstream rulespec-us origin/main (local checkouts drift), evaluated from the
+# encoded formulas by scripts/run_parameter_comparisons.py.
+#
+# axiom_formula (optional) combines rules from the same file — e.g. Medicaid
+# effective limits are raw FPL limit + the 5% MAGI disregard, mirroring how
+# PolicyEngine stores the effective limit.
+
+period: "2026-01-01"
+
+suites:
+  - suite: ga-health-thresholds
+    category: health
+    locales: [GA]
+    comparisons:
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_children_medicaid_ages_0_to_1_fpl_limit
+        axiom_formula: georgia_children_medicaid_ages_0_to_1_fpl_limit + magi_fpl_disregard_rate
+        description: Children Medicaid ages 0-1 FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.infant.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_children_medicaid_ages_1_to_5_fpl_limit
+        axiom_formula: georgia_children_medicaid_ages_1_to_5_fpl_limit + magi_fpl_disregard_rate
+        description: Children Medicaid ages 1-5 FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.young_child.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_children_medicaid_ages_6_to_18_fpl_limit
+        axiom_formula: georgia_children_medicaid_ages_6_to_18_fpl_limit + magi_fpl_disregard_rate
+        description: Children Medicaid ages 6-18 FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.older_child.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_pregnant_women_medicaid_fpl_limit
+        axiom_formula: georgia_pregnant_women_medicaid_fpl_limit + magi_fpl_disregard_rate
+        description: Pregnant women Medicaid FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.pregnant.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_parent_caretaker_adults_medicaid_fpl_limit
+        axiom_formula: georgia_parent_caretaker_adults_medicaid_fpl_limit + magi_fpl_disregard_rate
+        description: Parent / caretaker adult Medicaid FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.parent.income_limit.GA
+
+  - suite: pell-parameters
+    category: education
+    locales: [US]
+    comparisons:
+      - file: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml
+        rule: maximum_pell_grant_award
+        description: Maximum Pell Grant award
+        pe: gov.ed.pell_grant.amount.max
+      - file: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml
+        rule: minimum_pell_grant_award
+        description: Minimum Pell Grant award
+        pe: gov.ed.pell_grant.amount.min
+
+  - suite: lifeline-parameters
+    category: utilities
+    locales: [US]
+    comparisons:
+      - file: us/regulations/47-cfr/54/409.yaml
+        rule: lifeline_income_limit_ratio
+        description: Lifeline income limit (share of federal poverty guidelines)
+        pe: gov.fcc.lifeline.fpg_limit

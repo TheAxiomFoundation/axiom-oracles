@@ -1,0 +1,142 @@
+{
+ "aggregates": [
+  {
+   "category": "education",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us:policies/ed/fsa/gen-26-01-pell-award-amounts/block-1#maximum_pell_grant_award",
+   "description": "Maximum Pell Grant award",
+   "left_weighted_sum": 7395.0,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 7395.0,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "education",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us:policies/ed/fsa/gen-26-01-pell-award-amounts/block-1#minimum_pell_grant_award",
+   "description": "Minimum Pell Grant award",
+   "left_weighted_sum": 740.0,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 740.0,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  }
+ ],
+ "case_count": 2,
+ "cases": [
+  {
+   "case_id": "pell-parameters-maximum_pell_grant_award",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": null,
+    "axiom_rule": "maximum_pell_grant_award",
+    "axiom_source": "rulespec-us origin/main: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.ed.pell_grant.amount.max",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "pell-parameters-minimum_pell_grant_award",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": null,
+    "axiom_rule": "minimum_pell_grant_award",
+    "axiom_source": "rulespec-us origin/main: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.ed.pell_grant.amount.min",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  }
+ ],
+ "concepts": [
+  {
+   "category": "education",
+   "comparison": "amount",
+   "components": [],
+   "description": "Maximum Pell Grant award",
+   "id": "us:policies/ed/fsa/gen-26-01-pell-award-amounts/block-1#maximum_pell_grant_award",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "education",
+   "comparison": "amount",
+   "components": [],
+   "description": "Minimum Pell Grant award",
+   "id": "us:policies/ed/fsa/gen-26-01-pell-award-amounts/block-1#minimum_pell_grant_award",
+   "parent": null,
+   "tolerance": 1e-09
+  }
+ ],
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "errors": [],
+ "locales": [
+  "US"
+ ],
+ "mismatches": [],
+ "population": "rulespec-parameters",
+ "schema_version": "axiom.comparison_report.v1",
+ "scope": {
+  "period": "2026-01-01",
+  "source": "rulespec-us origin/main"
+ },
+ "suite": "pell-parameters",
+ "summary": {
+  "alarms": [],
+  "comparison_count": 2,
+  "error_count": 0,
+  "errors_by_engine": {},
+  "match_count": 2,
+  "mismatch_count": 0,
+  "mismatches_by_concept": [],
+  "mismatches_by_kind": [],
+  "mismatches_by_scenario": {},
+  "weighted": {
+   "comparison_weight": 2,
+   "match_rate": 100.0,
+   "match_weight": 2,
+   "mismatch_weight": 0
+  }
+ }
+}

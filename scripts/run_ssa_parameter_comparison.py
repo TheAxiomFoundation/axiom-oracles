@@ -94,25 +94,33 @@ _NAME_RE = re.compile(r"[a-z_][a-z0-9_]*")
 _ALLOWED_FORMULA = re.compile(r"^[a-z0-9_+\-*/(),.\s]+$")
 
 
-def evaluate_rulespec_parameters(path: Path) -> dict[str, float]:
-    """Evaluate every parameter rule in one rulespec file.
+def evaluate_rulespec_text(text: str, source: str = "<rulespec>") -> dict[str, float]:
+    """Evaluate the parameter rules in one rulespec document.
 
     Rules reference each other by name; iterate until the dependency graph
-    settles. Formulas are restricted to arithmetic, floor(), and max().
+    settles. Formulas are restricted to arithmetic, floor(), max()/min(),
+    and boolean literals. Rules whose formulas need runtime facts (derived
+    eligibility logic, conditionals) simply stay unresolved — callers check
+    that the specific rules they compare did resolve.
     """
-    doc = yaml.safe_load(path.read_text())
+    doc = yaml.safe_load(text)
     formulas: dict[str, str] = {}
     for rule in doc.get("rules", []):
         versions = rule.get("versions") or []
         if rule.get("kind") != "parameter" or not versions:
             continue
         formula = str(versions[0].get("formula", "")).strip()
-        if not _ALLOWED_FORMULA.match(formula):
-            raise ValueError(f"{path.name}: formula for {rule['name']} has unsupported syntax")
-        formulas[rule["name"]] = formula
+        if _ALLOWED_FORMULA.match(formula):
+            formulas[rule["name"]] = formula
 
     values: dict[str, float] = {}
-    namespace = {"floor": math.floor, "max": max, "min": min}
+    namespace = {
+        "floor": math.floor,
+        "max": max,
+        "min": min,
+        "true": True,
+        "false": False,
+    }
     for _ in range(len(formulas) + 1):
         progressed = False
         for name, formula in formulas.items():
@@ -125,31 +133,35 @@ def evaluate_rulespec_parameters(path: Path) -> dict[str, float]:
             ]
             if any(dep not in values for dep in deps):
                 continue
-            values[name] = float(
-                eval(formula, {"__builtins__": {}}, {**namespace, **values})  # noqa: S307
-            )
+            try:
+                values[name] = float(
+                    eval(formula, {"__builtins__": {}}, {**namespace, **values})  # noqa: S307
+                )
+            except Exception:
+                continue
             progressed = True
         if not progressed:
             break
-    unresolved = set(formulas) - set(values)
-    if unresolved:
-        raise ValueError(f"{path.name}: could not resolve {sorted(unresolved)}")
     return values
 
 
-def policyengine_value(parameters, accessor: str) -> float:
+def evaluate_rulespec_parameters(path: Path) -> dict[str, float]:
+    return evaluate_rulespec_text(path.read_text(), source=path.name)
+
+
+def policyengine_value(parameters, accessor: str, period: str = PERIOD) -> float:
     """Resolve a PE parameter accessor like ``a.b.c`` or ``a.b[1].threshold``."""
     bracket = re.match(r"^(?P<path>[\w.]+)\[(?P<index>\d+)\]\.threshold$", accessor)
     if bracket:
         node = parameters
         for part in bracket.group("path").split("."):
             node = node.children[part]
-        scale = node(PERIOD)
+        scale = node(period)
         return float(scale.thresholds[int(bracket.group("index"))])
     node = parameters
     for part in accessor.split("."):
         node = node.children[part]
-    return float(node(PERIOD))
+    return float(node(period))
 
 
 def build_report() -> dict:

@@ -1,0 +1,92 @@
+{
+ "aggregates": [
+  {
+   "category": "utilities",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us:regulations/47-cfr/54/409#lifeline_income_limit_ratio",
+   "description": "Lifeline income limit (share of federal poverty guidelines)",
+   "left_weighted_sum": 1.35,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 1.35,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  }
+ ],
+ "case_count": 1,
+ "cases": [
+  {
+   "case_id": "lifeline-parameters-lifeline_income_limit_ratio",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": null,
+    "axiom_rule": "lifeline_income_limit_ratio",
+    "axiom_source": "rulespec-us origin/main: us/regulations/47-cfr/54/409.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.fcc.lifeline.fpg_limit",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  }
+ ],
+ "concepts": [
+  {
+   "category": "utilities",
+   "comparison": "amount",
+   "components": [],
+   "description": "Lifeline income limit (share of federal poverty guidelines)",
+   "id": "us:regulations/47-cfr/54/409#lifeline_income_limit_ratio",
+   "parent": null,
+   "tolerance": 1e-09
+  }
+ ],
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "errors": [],
+ "locales": [
+  "US"
+ ],
+ "mismatches": [],
+ "population": "rulespec-parameters",
+ "schema_version": "axiom.comparison_report.v1",
+ "scope": {
+  "period": "2026-01-01",
+  "source": "rulespec-us origin/main"
+ },
+ "suite": "lifeline-parameters",
+ "summary": {
+  "alarms": [],
+  "comparison_count": 1,
+  "error_count": 0,
+  "errors_by_engine": {},
+  "match_count": 1,
+  "mismatch_count": 0,
+  "mismatches_by_concept": [],
+  "mismatches_by_kind": [],
+  "mismatches_by_scenario": {},
+  "weighted": {
+   "comparison_weight": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_weight": 0
+  }
+ }
+}

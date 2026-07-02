@@ -1,0 +1,320 @@
+{
+ "aggregates": [
+  {
+   "category": "health",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_children_medicaid_ages_0_to_1_fpl_limit",
+   "description": "Children Medicaid ages 0-1 FPL limit",
+   "left_weighted_sum": 2.0999999999999996,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 2.1,
+   "tolerance": 1e-09,
+   "weighted_difference": -4.440892098500626e-16,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_children_medicaid_ages_1_to_5_fpl_limit",
+   "description": "Children Medicaid ages 1-5 FPL limit",
+   "left_weighted_sum": 1.54,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 1.54,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_children_medicaid_ages_6_to_18_fpl_limit",
+   "description": "Children Medicaid ages 6-18 FPL limit",
+   "left_weighted_sum": 1.3800000000000001,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 1.38,
+   "tolerance": 1e-09,
+   "weighted_difference": 2.220446049250313e-16,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_pregnant_women_medicaid_fpl_limit",
+   "description": "Pregnant women Medicaid FPL limit",
+   "left_weighted_sum": 2.25,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 2.25,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
+   "description": "Parent / caretaker adult Medicaid FPL limit",
+   "left_weighted_sum": 0.33,
+   "match_count": 0,
+   "match_rate": 0.0,
+   "match_weight": 0,
+   "mismatch_count": 1,
+   "mismatch_weight": 1,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 0.39,
+   "tolerance": 1e-09,
+   "weighted_difference": -0.06,
+   "weighted_match_rate": 0.0
+  }
+ ],
+ "case_count": 5,
+ "cases": [
+  {
+   "case_id": "ga-health-thresholds-georgia_children_medicaid_ages_0_to_1_fpl_limit",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": "georgia_children_medicaid_ages_0_to_1_fpl_limit + magi_fpl_disregard_rate",
+    "axiom_rule": "georgia_children_medicaid_ages_0_to_1_fpl_limit",
+    "axiom_source": "rulespec-us origin/main: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.hhs.medicaid.eligibility.categories.infant.income_limit.GA",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "ga-health-thresholds-georgia_children_medicaid_ages_1_to_5_fpl_limit",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": "georgia_children_medicaid_ages_1_to_5_fpl_limit + magi_fpl_disregard_rate",
+    "axiom_rule": "georgia_children_medicaid_ages_1_to_5_fpl_limit",
+    "axiom_source": "rulespec-us origin/main: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.hhs.medicaid.eligibility.categories.young_child.income_limit.GA",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "ga-health-thresholds-georgia_children_medicaid_ages_6_to_18_fpl_limit",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": "georgia_children_medicaid_ages_6_to_18_fpl_limit + magi_fpl_disregard_rate",
+    "axiom_rule": "georgia_children_medicaid_ages_6_to_18_fpl_limit",
+    "axiom_source": "rulespec-us origin/main: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.hhs.medicaid.eligibility.categories.older_child.income_limit.GA",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "ga-health-thresholds-georgia_pregnant_women_medicaid_fpl_limit",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": "georgia_pregnant_women_medicaid_fpl_limit + magi_fpl_disregard_rate",
+    "axiom_rule": "georgia_pregnant_women_medicaid_fpl_limit",
+    "axiom_source": "rulespec-us origin/main: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.hhs.medicaid.eligibility.categories.pregnant.income_limit.GA",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "ga-health-thresholds-georgia_parent_caretaker_adults_medicaid_fpl_limit",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 0.0,
+   "metadata": {
+    "axiom_formula": "georgia_parent_caretaker_adults_medicaid_fpl_limit + magi_fpl_disregard_rate",
+    "axiom_rule": "georgia_parent_caretaker_adults_medicaid_fpl_limit",
+    "axiom_source": "rulespec-us origin/main: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.hhs.medicaid.eligibility.categories.parent.income_limit.GA",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [
+    {
+     "case_id": "ga-health-thresholds-georgia_parent_caretaker_adults_medicaid_fpl_limit",
+     "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
+     "difference": -0.06,
+     "kind": "amount_difference",
+     "left": 0.33,
+     "right": 0.39
+    }
+   ],
+   "right_engine": "policyengine",
+   "right_errors": []
+  }
+ ],
+ "concepts": [
+  {
+   "category": "health",
+   "comparison": "amount",
+   "components": [],
+   "description": "Children Medicaid ages 0-1 FPL limit",
+   "id": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_children_medicaid_ages_0_to_1_fpl_limit",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "components": [],
+   "description": "Children Medicaid ages 1-5 FPL limit",
+   "id": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_children_medicaid_ages_1_to_5_fpl_limit",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "components": [],
+   "description": "Children Medicaid ages 6-18 FPL limit",
+   "id": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_children_medicaid_ages_6_to_18_fpl_limit",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "components": [],
+   "description": "Pregnant women Medicaid FPL limit",
+   "id": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_pregnant_women_medicaid_fpl_limit",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "health",
+   "comparison": "amount",
+   "components": [],
+   "description": "Parent / caretaker adult Medicaid FPL limit",
+   "id": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
+   "parent": null,
+   "tolerance": 1e-09
+  }
+ ],
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "errors": [],
+ "locales": [
+  "GA"
+ ],
+ "mismatches": [
+  {
+   "case_id": "ga-health-thresholds-georgia_parent_caretaker_adults_medicaid_fpl_limit",
+   "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
+   "difference": -0.06,
+   "kind": "amount_difference",
+   "left": 0.33,
+   "right": 0.39
+  }
+ ],
+ "population": "rulespec-parameters",
+ "schema_version": "axiom.comparison_report.v1",
+ "scope": {
+  "period": "2026-01-01",
+  "source": "rulespec-us origin/main"
+ },
+ "suite": "ga-health-thresholds",
+ "summary": {
+  "alarms": [],
+  "comparison_count": 5,
+  "error_count": 0,
+  "errors_by_engine": {},
+  "match_count": 4,
+  "mismatch_count": 1,
+  "mismatches_by_concept": [
+   {
+    "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
+    "count": 1
+   }
+  ],
+  "mismatches_by_kind": [
+   {
+    "count": 1,
+    "kind": "amount_difference"
+   }
+  ],
+  "mismatches_by_scenario": {},
+  "weighted": {
+   "comparison_weight": 5,
+   "match_rate": 80.0,
+   "match_weight": 4,
+   "mismatch_weight": 1
+  }
+ }
+}

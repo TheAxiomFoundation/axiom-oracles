@@ -22,6 +22,9 @@
     "axiom-policyengine-az-snap-ecps.json",
     "axiom-policyengine-or-snap-ecps.json",
     "axiom-policyengine-ut-snap-ecps.json",
-    "axiom-policyengine-ssa-parameters.json"
+    "axiom-policyengine-ssa-parameters.json",
+    "axiom-policyengine-ga-health-thresholds.json",
+    "axiom-policyengine-pell-parameters.json",
+    "axiom-policyengine-lifeline-parameters.json"
   ]
 }
