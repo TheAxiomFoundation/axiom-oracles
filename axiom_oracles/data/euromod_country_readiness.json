@@ -1,0 +1,260 @@
+{
+  "description": "Per-country EUROMOD-platform oracle readiness, probed live through EuromodPlatformRunner's engine path (3-household smoke per country). status ok_training_name: runs under the bundled training dataset name. status ok_real_config_workaround: the country's policy spine gates content on real dataset names (Run_Cond IsUsedDatabase; see ec-jrc/JRC-EUROMOD-software-source-code#4), so runs pass the listed run_dataset as the configuration with template_dataset '<CC>_training_data' for the row schema.",
+  "model_release": "EUROMOD_RELEASES_J2.0+ (JRC, 2026-02)",
+  "probed": "2026-07-02",
+  "note_sl": "SL is a EUROMOD-internal Slovenia variant directory alongside SI; both probe green.",
+  "countries": {
+    "SL": {
+      "systems": "SL_1996..SL_1996 (1)",
+      "latest_system": "SL_1996",
+      "training_dataset": "SL_training_data",
+      "training_rows": 2397,
+      "status": "ok_training_name",
+      "run_dataset": "SL_training_data",
+      "error": null
+    },
+    "SK": {
+      "systems": "SK_2006..SK_2025 (20)",
+      "latest_system": "SK_2025",
+      "training_dataset": "SK_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "SK_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "SE": {
+      "systems": "SE_2006..SE_2025 (20)",
+      "latest_system": "SE_2025",
+      "training_dataset": "SE_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "SE_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "PL": {
+      "systems": "PL_2005..PL_2025 (21)",
+      "latest_system": "PL_2025",
+      "training_dataset": "PL_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "PL_2021_b1_2015_03_e2",
+      "error": null
+    },
+    "MT": {
+      "systems": "MT_2007..MT_2025 (19)",
+      "latest_system": "MT_2025",
+      "training_dataset": "MT_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "MT_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "BE": {
+      "systems": "BE_2005..BE_2025 (21)",
+      "latest_system": "BE_2025",
+      "training_dataset": "BE_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "BE_2024_c1_2015_03_e2",
+      "error": null
+    },
+    "EE": {
+      "systems": "EE_2005..EE_2025 (21)",
+      "latest_system": "EE_2025",
+      "training_dataset": "EE_training_data",
+      "training_rows": 2397,
+      "status": "ok_training_name",
+      "run_dataset": "EE_training_data",
+      "error": null
+    },
+    "EL": {
+      "systems": "EL_2005..EL_2025 (21)",
+      "latest_system": "EL_2025",
+      "training_dataset": "EL_training_data",
+      "training_rows": 2397,
+      "status": "ok_training_name",
+      "run_dataset": "EL_training_data",
+      "error": null
+    },
+    "LV": {
+      "systems": "LV_2006..LV_2025 (20)",
+      "latest_system": "LV_2025",
+      "training_dataset": "LV_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "LV_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "IT": {
+      "systems": "IT_2005..IT_2025 (21)",
+      "latest_system": "IT_2025",
+      "training_dataset": "IT_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "IT_2024_a1_2015_03_e2",
+      "error": null
+    },
+    "CZ": {
+      "systems": "CZ_2005..CZ_2025 (21)",
+      "latest_system": "CZ_2025",
+      "training_dataset": "CZ_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "CZ_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "RO": {
+      "systems": "RO_2007..RO_2025 (19)",
+      "latest_system": "RO_2025",
+      "training_dataset": "RO_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "RO_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "PT": {
+      "systems": "PT_2006..PT_2025 (20)",
+      "latest_system": "PT_2025",
+      "training_dataset": "PT_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "PT_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "SI": {
+      "systems": "SI_2006..SI_2025 (20)",
+      "latest_system": "SI_2025",
+      "training_dataset": "SI_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "SI_2024_c1_2015_03_e2",
+      "error": null
+    },
+    "HR": {
+      "systems": "HR_2011..HR_2025 (15)",
+      "latest_system": "HR_2025",
+      "training_dataset": "HR_training_data",
+      "training_rows": 2397,
+      "status": "ok_training_name",
+      "run_dataset": "HR_training_data",
+      "error": null
+    },
+    "HU": {
+      "systems": "HU_2005..HU_2025 (21)",
+      "latest_system": "HU_2025",
+      "training_dataset": "HU_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "HU_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "NL": {
+      "systems": "NL_2006..NL_2025 (20)",
+      "latest_system": "NL_2025",
+      "training_dataset": "NL_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "NL_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "BG": {
+      "systems": "BG_2007..BG_2025 (19)",
+      "latest_system": "BG_2025",
+      "training_dataset": "BG_training_data",
+      "training_rows": 2397,
+      "status": "ok_training_name",
+      "run_dataset": "BG_training_data",
+      "error": null
+    },
+    "AT": {
+      "systems": "AT_2007..AT_2025 (19)",
+      "latest_system": "AT_2025",
+      "training_dataset": "AT_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "AT_2024_b1_2015_03_n2",
+      "error": null
+    },
+    "DE": {
+      "systems": "DE_2007..DE_2025 (19)",
+      "latest_system": "DE_2025",
+      "training_dataset": "DE_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "DE_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "DK": {
+      "systems": "DK_2007..DK_2025 (19)",
+      "latest_system": "DK_2025",
+      "training_dataset": "DK_training_data",
+      "training_rows": 2397,
+      "status": "ok_training_name",
+      "run_dataset": "DK_training_data",
+      "error": null
+    },
+    "FI": {
+      "systems": "FI_2007..FI_2025 (19)",
+      "latest_system": "FI_2025",
+      "training_dataset": "FI_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "FI_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "LU": {
+      "systems": "LU_2007..LU_2025 (19)",
+      "latest_system": "LU_2025",
+      "training_dataset": "LU_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "LU_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "FR": {
+      "systems": "FR_2006..FR_2025 (20)",
+      "latest_system": "FR_2025",
+      "training_dataset": "FR_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "FR_2024_c1_2015_03_e2",
+      "error": null
+    },
+    "ES": {
+      "systems": "ES_2005..ES_2025 (21)",
+      "latest_system": "ES_2025",
+      "training_dataset": "ES_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "ES_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "IE": {
+      "systems": "IE_2006..IE_2025 (20)",
+      "latest_system": "IE_2025",
+      "training_dataset": "IE_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "IE_2024_b1_2015_03_e2",
+      "error": null
+    },
+    "LT": {
+      "systems": "LT_2005..LT_2025 (21)",
+      "latest_system": "LT_2025",
+      "training_dataset": "LT_training_data",
+      "training_rows": 2397,
+      "status": "ok_real_config_workaround",
+      "run_dataset": "LT_2024_c1_2015_03_e2",
+      "error": null
+    },
+    "CY": {
+      "systems": "CY_2006..CY_2025 (20)",
+      "latest_system": "CY_2025",
+      "training_dataset": "CY_training_data",
+      "training_rows": 2397,
+      "status": "ok_training_name",
+      "run_dataset": "CY_training_data",
+      "error": null
+    }
+  }
+}
