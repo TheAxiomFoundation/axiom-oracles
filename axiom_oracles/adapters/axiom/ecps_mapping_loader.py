@@ -159,6 +159,22 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             rest = [bool(facts.get(key, False) or False) for key in from_facts[1:]]
             return age >= float(source.get("threshold", 0)) and not any(rest)
 
+        if transform == "any_age_below_or_flags":
+            # True when any person is younger than source.threshold OR has
+            # any of the remaining flags — e.g. TANF's "unit contains a
+            # minor child or pregnant member" demographic gate.
+            people = (case_facts or {}).get("__people__") or []
+            threshold = float(source.get("threshold", 0))
+            if not from_facts:
+                return False
+            age_key, *flag_keys = from_facts
+            for person in people:
+                if float(person.get(age_key, 0) or 0) < threshold:
+                    return True
+                if any(bool(person.get(key, False) or False) for key in flag_keys):
+                    return True
+            return False
+
         if transform == "monthly":
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
             return round(float(value) / 12, 2)

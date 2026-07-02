@@ -1,0 +1,3875 @@
+{
+  "aggregates": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 2288,
+      "comparison_weight": 9847728.049866,
+      "components": [],
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "left_weighted_sum": 2603301699.598363,
+      "match_rate": 97.465035,
+      "match_weight": 9016667.880486,
+      "mismatch_count": 58,
+      "mismatch_weight": 831060.16938,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 2082709375.048419,
+      "weighted_difference": 520592324.549944,
+      "weighted_match_rate": 91.560894
+    }
+  ],
+  "case_count": 2288,
+  "cases": [
+    {
+      "case_id": "ecps-6900",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            44,
+            14
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            18586.27,
+            0.0
+          ],
+          "yearly_earned_income_total": 18586.27
+        },
+        "household_weight": 169057.265625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 863.1984,
+          "kind": "amount_difference",
+          "left": 863.1984,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-7057",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 253,
+        "axiom_relations_count": 18,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            63,
+            35,
+            16,
+            14,
+            12,
+            6,
+            5,
+            32,
+            8
+          ],
+          "household_size": 9,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 534.5429077148438,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36119",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1499.9537109375,
+          "kind": "amount_difference",
+          "left": 678.6,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 2178.5537109375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-7327",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            24,
+            6,
+            1
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            26239.44,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 26239.44
+        },
+        "household_weight": 237.45433044433594,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 205.0128,
+          "kind": "amount_difference",
+          "left": 205.0128,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-7375",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            42,
+            3,
+            1
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36005",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -519.4033203125,
+          "kind": "amount_difference",
+          "left": 8376.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 8895.4033203125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-7828",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            29,
+            15,
+            14
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            21866.2,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 21866.2
+        },
+        "household_weight": 152506.515625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1531.9607625,
+          "kind": "amount_difference",
+          "left": 1866.8592,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 334.8984375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-7862",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            30,
+            4
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 153117.140625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -768.0,
+          "kind": "amount_difference",
+          "left": 6126.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6894.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-7873",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            49,
+            51,
+            19,
+            16,
+            10
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            8746.48,
+            0.0,
+            1639.97,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 10386.45
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 426.37744374999966,
+          "kind": "amount_difference",
+          "left": 5277.5376,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 4851.16015625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-8234",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            31,
+            1,
+            24,
+            62,
+            56
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            1093.31,
+            0.0,
+            10933.1,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 12026.41
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -483.4816093749996,
+          "kind": "amount_difference",
+          "left": 9286.368,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 9769.849609375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-8265",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            16,
+            31,
+            11,
+            6
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            19679.58,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 19679.58
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1137.5284015625002,
+          "kind": "amount_difference",
+          "left": 4518.1368,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 3380.6083984375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-8284",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            33,
+            31,
+            13,
+            13,
+            0
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            13994.37,
+            14213.03,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 28207.4
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 204.87358124999992,
+          "kind": "amount_difference",
+          "left": 3137.5728,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 2932.69921875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-8619",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 53,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            22
+          ],
+          "household_size": 1,
+          "pregnant_member_present": true,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -756.0565039062503,
+          "kind": "amount_difference",
+          "left": 4764.36,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 5520.41650390625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-8822",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            60,
+            13,
+            9
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1092.0,
+          "kind": "amount_difference",
+          "left": 8376.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 9468.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-8835",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            34,
+            10,
+            8,
+            3
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            27332.75,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 27332.75
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 167.1912,
+          "kind": "amount_difference",
+          "left": 167.1912,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-9026",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            27,
+            9
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 147.9699249267578,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -454.02490234375,
+          "kind": "amount_difference",
+          "left": 6126.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6580.02490234375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-9275",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            29,
+            9
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 280957.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1035.6316136718751,
+          "kind": "amount_difference",
+          "left": 2212.0176,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1176.385986328125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-9327",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            22,
+            23,
+            44,
+            17
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            19679.58,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 19679.58
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1137.5385285156253,
+          "kind": "amount_difference",
+          "left": 4515.0168,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 3377.478271484375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-9577",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            45,
+            18,
+            14,
+            5,
+            39
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            32799.3,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 32799.3
+        },
+        "household_weight": 784.3922119140625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36103",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1392.6432,
+          "kind": "amount_difference",
+          "left": 1392.6432,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-9887",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 178,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            37,
+            12,
+            10,
+            8,
+            6,
+            5
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            1344.77,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 1344.77
+        },
+        "household_weight": 9178.9091796875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36055",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1440.0013671875004,
+          "kind": "amount_difference",
+          "left": 13418.4,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 14858.4013671875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-10039",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            37,
+            12,
+            11
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            6559.86,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 6559.86
+        },
+        "household_weight": 59127.52734375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36055",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -304.8384476562496,
+          "kind": "amount_difference",
+          "left": 7683.2304,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 7988.06884765625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-10061",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            36,
+            13
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36055",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -768.0,
+          "kind": "amount_difference",
+          "left": 6126.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6894.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-10156",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            78,
+            7
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            2186.62,
+            0.0
+          ],
+          "yearly_earned_income_total": 2186.62
+        },
+        "household_weight": 5336.51513671875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -242.46044921875,
+          "kind": "amount_difference",
+          "left": 6126.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6368.46044921875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-10269",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            27,
+            6,
+            0
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 74.93647003173828,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1092.0,
+          "kind": "amount_difference",
+          "left": 8376.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 9468.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-95949",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            38,
+            38,
+            11,
+            0
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36091",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1224.0013671875004,
+          "kind": "amount_difference",
+          "left": 10196.4,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 11420.4013671875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96295",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            42,
+            3,
+            1
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            15963.5,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 15963.5
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36005",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1396.2255003906248,
+          "kind": "amount_difference",
+          "left": 4109.8776,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 2713.652099609375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96383",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            37,
+            17,
+            10,
+            1
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36005",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 364.04324140624976,
+          "kind": "amount_difference",
+          "left": 6967.5408,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6603.49755859375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96575",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            33,
+            6
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            3620.99,
+            0.0
+          ],
+          "yearly_earned_income_total": 3620.99
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36005",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -757.50537109375,
+          "kind": "amount_difference",
+          "left": 6126.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6883.50537109375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96679",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            43,
+            10,
+            9,
+            52
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            1609.33,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 1609.33
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36103",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1224.0013671875004,
+          "kind": "amount_difference",
+          "left": 10196.4,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 11420.4013671875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96686",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            30,
+            6
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            19208.12,
+            0.0
+          ],
+          "yearly_earned_income_total": 19208.12
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36091",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 626.8992,
+          "kind": "amount_difference",
+          "left": 626.8992,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96709",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            47,
+            54,
+            13
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            2845.28,
+            505.2,
+            0.0
+          ],
+          "yearly_earned_income_total": 3350.48
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1092.0,
+          "kind": "amount_difference",
+          "left": 8376.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 9468.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96733",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 203,
+        "axiom_relations_count": 14,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            40,
+            39,
+            17,
+            16,
+            12,
+            7,
+            6
+          ],
+          "household_size": 7,
+          "yearly_earned_income_per_person": [
+            0.0,
+            82408.52,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 82408.52
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 7952.88,
+          "kind": "amount_difference",
+          "left": 7952.88,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96748",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            29,
+            15,
+            14
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            11953.16,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 11953.16
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 342.36358984374965,
+          "kind": "amount_difference",
+          "left": 5633.784,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 5291.42041015625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96777",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            54,
+            24,
+            22,
+            13,
+            80
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            26346.27,
+            10824.03,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 37170.3
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 5893.08607734375,
+          "kind": "amount_difference",
+          "left": 6331.5768,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 438.49072265625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-96904",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            37,
+            1
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            46982.02,
+            0.0
+          ],
+          "yearly_earned_income_total": 46982.02
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1736.4648,
+          "kind": "amount_difference",
+          "left": 1736.4648,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97145",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            43,
+            5,
+            4
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1092.0,
+          "kind": "amount_difference",
+          "left": 8376.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 9468.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97185",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            16,
+            31,
+            11,
+            6
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            17910.27,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 17910.27
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 925.2441515624996,
+          "kind": "amount_difference",
+          "left": 5190.5088,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 4265.2646484375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97194",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            50,
+            17,
+            14
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            25178.21,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 25178.21
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 608.2992,
+          "kind": "amount_difference",
+          "left": 608.2992,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97204",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            33,
+            31,
+            13,
+            13,
+            0
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            18690.11,
+            17366.56,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 36056.67
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 154.8768,
+          "kind": "amount_difference",
+          "left": 154.8768,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97339",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            36,
+            17,
+            9,
+            3
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36059",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1588.1026164062496,
+          "kind": "amount_difference",
+          "left": 6329.7408,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 4741.63818359375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97531",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            40,
+            10,
+            8,
+            6
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1223.9886328124994,
+          "kind": "amount_difference",
+          "left": 9882.36,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 11106.3486328125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97539",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 53,
+        "axiom_relations_count": 2,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            22
+          ],
+          "household_size": 1,
+          "pregnant_member_present": true,
+          "yearly_earned_income_per_person": [
+            14795.44
+          ],
+          "yearly_earned_income_total": 14795.44
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 942.948,
+          "kind": "amount_difference",
+          "left": 942.948,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97565",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            26,
+            10
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            13497.6,
+            0.0
+          ],
+          "yearly_earned_income_total": 13497.6
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 851.7103398437498,
+          "kind": "amount_difference",
+          "left": 2796.912,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1945.20166015625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-97763",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            35,
+            33,
+            14,
+            11,
+            7
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            22053.48,
+            7835.16,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 29888.64
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36061",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 406.63574531250015,
+          "kind": "amount_difference",
+          "left": 2498.7168,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 2092.0810546875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98005",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            41,
+            16,
+            13,
+            9
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1224.0013671875004,
+          "kind": "amount_difference",
+          "left": 10196.4,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 11420.4013671875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98103",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 128,
+        "axiom_relations_count": 8,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            38,
+            39,
+            2,
+            1
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1224.0013671875004,
+          "kind": "amount_difference",
+          "left": 10196.4,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 11420.4013671875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98129",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            35,
+            12,
+            11,
+            10,
+            9
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            21803.81,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 21803.81
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1236.47559453125,
+          "kind": "amount_difference",
+          "left": 5570.9712,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 4334.49560546875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98196",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 203,
+        "axiom_relations_count": 14,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            40,
+            44,
+            37,
+            53,
+            52,
+            17,
+            13
+          ],
+          "household_size": 7,
+          "yearly_earned_income_per_person": [
+            23731.59,
+            102825.24,
+            165475.34,
+            42050.21,
+            25048.42,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 359130.8
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 12852.84,
+          "kind": "amount_difference",
+          "left": 12852.84,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98305",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            23,
+            1
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            8721.52,
+            0.0
+          ],
+          "yearly_earned_income_total": 8721.52
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36085",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1046.6220433593753,
+          "kind": "amount_difference",
+          "left": 4456.3176,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 3409.695556640625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98317",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            41,
+            41,
+            12,
+            11,
+            6
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            86033.03,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 86033.03
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36087",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1380.0013671875004,
+          "kind": "amount_difference",
+          "left": 12056.4,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 13436.4013671875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98570",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            48,
+            18,
+            17
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            1525.39,
+            7135.28,
+            0.0
+          ],
+          "yearly_earned_income_total": 8660.67
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36103",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -815.4040398437501,
+          "kind": "amount_difference",
+          "left": 6884.9568,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 7700.36083984375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98658",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            69,
+            57,
+            9,
+            8,
+            7
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            0.0,
+            20363.38,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 20363.38
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36119",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -1369.8666015625004,
+          "kind": "amount_difference",
+          "left": 12056.4,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 13426.2666015625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98694",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            48,
+            17
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36119",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -768.0,
+          "kind": "amount_difference",
+          "left": 6126.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6894.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98807",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 178,
+        "axiom_relations_count": 12,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            37,
+            12,
+            10,
+            8,
+            6,
+            5
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            39454.51,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 39454.51
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36055",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 225.6672,
+          "kind": "amount_difference",
+          "left": 225.6672,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-98959",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            37,
+            12,
+            11
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36055",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 1507.7592,
+          "kind": "amount_difference",
+          "left": 1507.7592,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-99076",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            78,
+            7
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -242.46861328125033,
+          "kind": "amount_difference",
+          "left": 6114.36,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6356.82861328125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-99189",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 103,
+        "axiom_relations_count": 6,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            27,
+            6,
+            0
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            6489.23,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 6489.23
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 778.6940148437498,
+          "kind": "amount_difference",
+          "left": 5660.8488,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 4882.15478515625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-99211",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            50,
+            16
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36081",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": -768.0410742187496,
+          "kind": "amount_difference",
+          "left": 4699.56,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 5467.60107421875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-99269",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 153,
+        "axiom_relations_count": 10,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            38,
+            33,
+            11,
+            9,
+            2
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            0.0,
+            18690.11,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 18690.11
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36069",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 650.85885234375,
+          "kind": "amount_difference",
+          "left": 850.6152,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 199.75634765625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-99271",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 78,
+        "axiom_relations_count": 4,
+        "dataset": "enhanced_cps_2024",
+        "household_summary": {
+          "ages": [
+            34,
+            12
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            12044.01,
+            0.0
+          ],
+          "yearly_earned_income_total": 12044.01
+        },
+        "household_weight": 0.0,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36095",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+          "description": "NY TANF benefit (annualized)",
+          "difference": 677.2694386718749,
+          "kind": "amount_difference",
+          "left": 3349.2648,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 2671.995361328125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "NY TANF benefit (annualized)",
+      "id": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 25
+    }
+  ],
+  "dashboard_truncation": {
+    "shown_case_rows": 58,
+    "shown_mismatches": 58,
+    "total_case_rows": 2288,
+    "total_mismatches": 58
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "ecps-6900",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 863.1984,
+      "kind": "amount_difference",
+      "left": 863.1984,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-7057",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1499.9537109375,
+      "kind": "amount_difference",
+      "left": 678.6,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 2178.5537109375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-7327",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 205.0128,
+      "kind": "amount_difference",
+      "left": 205.0128,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-7375",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -519.4033203125,
+      "kind": "amount_difference",
+      "left": 8376.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 8895.4033203125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-7828",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1531.9607625,
+      "kind": "amount_difference",
+      "left": 1866.8592,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 334.8984375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-7862",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -768.0,
+      "kind": "amount_difference",
+      "left": 6126.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6894.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-7873",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 426.37744374999966,
+      "kind": "amount_difference",
+      "left": 5277.5376,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 4851.16015625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-8234",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -483.4816093749996,
+      "kind": "amount_difference",
+      "left": 9286.368,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 9769.849609375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-8265",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1137.5284015625002,
+      "kind": "amount_difference",
+      "left": 4518.1368,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 3380.6083984375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-8284",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 204.87358124999992,
+      "kind": "amount_difference",
+      "left": 3137.5728,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 2932.69921875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-8619",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -756.0565039062503,
+      "kind": "amount_difference",
+      "left": 4764.36,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 5520.41650390625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-8822",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1092.0,
+      "kind": "amount_difference",
+      "left": 8376.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 9468.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-8835",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 167.1912,
+      "kind": "amount_difference",
+      "left": 167.1912,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-9026",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -454.02490234375,
+      "kind": "amount_difference",
+      "left": 6126.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6580.02490234375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-9275",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1035.6316136718751,
+      "kind": "amount_difference",
+      "left": 2212.0176,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1176.385986328125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-9327",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1137.5385285156253,
+      "kind": "amount_difference",
+      "left": 4515.0168,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 3377.478271484375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-9577",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1392.6432,
+      "kind": "amount_difference",
+      "left": 1392.6432,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-9887",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1440.0013671875004,
+      "kind": "amount_difference",
+      "left": 13418.4,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 14858.4013671875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-10039",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -304.8384476562496,
+      "kind": "amount_difference",
+      "left": 7683.2304,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 7988.06884765625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-10061",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -768.0,
+      "kind": "amount_difference",
+      "left": 6126.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6894.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-10156",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -242.46044921875,
+      "kind": "amount_difference",
+      "left": 6126.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6368.46044921875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-10269",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1092.0,
+      "kind": "amount_difference",
+      "left": 8376.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 9468.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-95949",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1224.0013671875004,
+      "kind": "amount_difference",
+      "left": 10196.4,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 11420.4013671875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96295",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1396.2255003906248,
+      "kind": "amount_difference",
+      "left": 4109.8776,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 2713.652099609375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96383",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 364.04324140624976,
+      "kind": "amount_difference",
+      "left": 6967.5408,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6603.49755859375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96575",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -757.50537109375,
+      "kind": "amount_difference",
+      "left": 6126.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6883.50537109375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96679",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1224.0013671875004,
+      "kind": "amount_difference",
+      "left": 10196.4,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 11420.4013671875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96686",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 626.8992,
+      "kind": "amount_difference",
+      "left": 626.8992,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96709",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1092.0,
+      "kind": "amount_difference",
+      "left": 8376.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 9468.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96733",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 7952.88,
+      "kind": "amount_difference",
+      "left": 7952.88,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96748",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 342.36358984374965,
+      "kind": "amount_difference",
+      "left": 5633.784,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 5291.42041015625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96777",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 5893.08607734375,
+      "kind": "amount_difference",
+      "left": 6331.5768,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 438.49072265625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-96904",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1736.4648,
+      "kind": "amount_difference",
+      "left": 1736.4648,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97145",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1092.0,
+      "kind": "amount_difference",
+      "left": 8376.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 9468.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97185",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 925.2441515624996,
+      "kind": "amount_difference",
+      "left": 5190.5088,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 4265.2646484375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97194",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 608.2992,
+      "kind": "amount_difference",
+      "left": 608.2992,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97204",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 154.8768,
+      "kind": "amount_difference",
+      "left": 154.8768,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97339",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1588.1026164062496,
+      "kind": "amount_difference",
+      "left": 6329.7408,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 4741.63818359375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97531",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1223.9886328124994,
+      "kind": "amount_difference",
+      "left": 9882.36,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 11106.3486328125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97539",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 942.948,
+      "kind": "amount_difference",
+      "left": 942.948,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97565",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 851.7103398437498,
+      "kind": "amount_difference",
+      "left": 2796.912,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1945.20166015625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-97763",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 406.63574531250015,
+      "kind": "amount_difference",
+      "left": 2498.7168,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 2092.0810546875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98005",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1224.0013671875004,
+      "kind": "amount_difference",
+      "left": 10196.4,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 11420.4013671875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98103",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1224.0013671875004,
+      "kind": "amount_difference",
+      "left": 10196.4,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 11420.4013671875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98129",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1236.47559453125,
+      "kind": "amount_difference",
+      "left": 5570.9712,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 4334.49560546875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98196",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 12852.84,
+      "kind": "amount_difference",
+      "left": 12852.84,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98305",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1046.6220433593753,
+      "kind": "amount_difference",
+      "left": 4456.3176,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 3409.695556640625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98317",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1380.0013671875004,
+      "kind": "amount_difference",
+      "left": 12056.4,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 13436.4013671875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98570",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -815.4040398437501,
+      "kind": "amount_difference",
+      "left": 6884.9568,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 7700.36083984375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98658",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -1369.8666015625004,
+      "kind": "amount_difference",
+      "left": 12056.4,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 13426.2666015625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98694",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -768.0,
+      "kind": "amount_difference",
+      "left": 6126.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6894.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98807",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 225.6672,
+      "kind": "amount_difference",
+      "left": 225.6672,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-98959",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 1507.7592,
+      "kind": "amount_difference",
+      "left": 1507.7592,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-99076",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -242.46861328125033,
+      "kind": "amount_difference",
+      "left": 6114.36,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6356.82861328125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-99189",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 778.6940148437498,
+      "kind": "amount_difference",
+      "left": 5660.8488,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 4882.15478515625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-99211",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": -768.0410742187496,
+      "kind": "amount_difference",
+      "left": 4699.56,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 5467.60107421875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-99269",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 650.85885234375,
+      "kind": "amount_difference",
+      "left": 850.6152,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 199.75634765625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-99271",
+      "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+      "description": "NY TANF benefit (annualized)",
+      "difference": 677.2694386718749,
+      "kind": "amount_difference",
+      "left": 3349.2648,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 2671.995361328125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "enhanced-cps",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "US",
+    "type": "country"
+  },
+  "suite": "ny-tanf-ecps",
+  "summary": {
+    "comparison_count": 2288,
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 2230,
+    "mismatch_count": 58,
+    "mismatches_by_concept": [
+      {
+        "count": 58,
+        "value": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 58,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 58,
+        "value": null
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 9847728.049866,
+      "match_rate": 91.560894,
+      "match_weight": 9016667.880486,
+      "mismatch_weight": 831060.16938
+    }
+  }
+}

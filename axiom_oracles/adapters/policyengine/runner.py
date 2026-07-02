@@ -661,6 +661,12 @@ class PolicyEngineRunner(EngineAdapter):
                     entity.entity_id or f"person_{person_index}",
                 )
                 person_ids.append(person_id)
+                employment_income = float(
+                    entity.fact(Concepts.YEARLY_EARNED_INCOME, 0) or 0
+                )
+                self_employment_income = float(
+                    entity.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0) or 0
+                )
                 person_row = {
                     "person_id": person_id,
                     "household_id": household_id,
@@ -670,9 +676,15 @@ class PolicyEngineRunner(EngineAdapter):
                     "tax_unit_id": tax_unit_id,
                     "person_weight": weight,
                     "age": int(entity.fact(Concepts.PERSON_AGE, 0) or 0),
-                    "employment_income": float(
-                        entity.fact(Concepts.YEARLY_EARNED_INCOME, 0) or 0
-                    ),
+                    "employment_income": employment_income,
+                    # Benefit programs (TANF income sources, among others)
+                    # read the pre-labor-supply-response income variables.
+                    # The situation-based single-case path back-propagates
+                    # employment_income into them, but a custom dataset does
+                    # not — leaving them at 0 silently erases earned income
+                    # from every program that counts *_before_lsr.
+                    "employment_income_before_lsr": employment_income,
+                    "self_employment_income_before_lsr": self_employment_income,
                     "is_pregnant": bool(entity.fact(Concepts.PREGNANT, False)),
                     "is_disabled": bool(entity.fact(Concepts.DISABLED, False)),
                     "is_blind": bool(entity.fact(Concepts.BLIND, False)),

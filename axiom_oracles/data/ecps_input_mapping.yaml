@@ -597,3 +597,123 @@ mappings:
   - match: { kind: suffix, value: subchapter_ii_increase_was_determined_on_wage_increase_percentage }
     scope: household
     source: { kind: constant, value: false }
+
+  # ---------------------------------------------------------------------
+  # NY TANF (us-ny/tanf program) — state plan 2024-2026 slice.
+  #
+  # Income slots are monthly household sums; the demographic gate mirrors
+  # PolicyEngine's ny_tanf_eligible (minor child or pregnant member). The
+  # earned income disregard is applied unconditionally (PolicyEngine's
+  # post-October-2022 semantics), and the resource/work-activity rules are
+  # outside the compared output tree, so their slots take inert constants.
+  # ---------------------------------------------------------------------
+
+  - match: { kind: suffix, value: household_has_minor_or_pregnant_member }
+    scope: household
+    source:
+      kind: derived
+      transform: any_age_below_or_flags
+      threshold: 18
+      from_facts: [PERSON_AGE, PREGNANT]
+
+  - match: { kind: suffix, value: number_of_persons_in_household }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+
+  - match: { kind: exact, value: family_size }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+
+  - match: { kind: suffix, value: monthly_rent_amount_actually_paid }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [RENT_PAID]
+
+  - match: { kind: suffix, value: household_has_verified_rental_obligation }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [RENT_PAID]
+
+  - match: { kind: exact, value: unearned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+
+  - match: { kind: exact, value: earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
+  - match: { kind: suffix, value: gross_earned_and_unearned_income_is_below_poverty_level }
+    scope: household
+    source: { kind: constant, value: true }
+  - match: { kind: suffix, value: working_applicant_eligible_for_public_assistance_without_earned_income_disregard }
+    scope: household
+    source: { kind: constant, value: true }
+  - match: { kind: suffix, value: working_applicant_received_public_assistance_in_one_of_previous_four_months }
+    scope: household
+    source: { kind: constant, value: false }
+
+  # Slots owned by rules outside the compared output tree (resource test,
+  # work-activity disregards, screening sanctions): inert constants.
+  - match: { kind: substring, value: asset_is_ }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: asset_value }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: asset_equity_value }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: asset_fair_market_value }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: federal_poverty_level }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: months_since_job_entry }
+    scope: person
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: person_entered_unsubsidized_employment }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_has_previously_used_lifetime_unsubsidized_employment_disregard }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_is_tanf_recipient }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: resulting_total_income }
+    scope: person
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: earned_income_is_from_otda_qualified_work_activity_or_training_program }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_failed_to_participate_in_screening_or_assessment_process }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: treatment_nonparticipation_instance_number }
+    scope: person
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: unit_has_disabled_member }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: unit_has_member_age_sixty_or_over }
+    scope: household
+    source: { kind: constant, value: false }

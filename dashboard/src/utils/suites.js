@@ -95,6 +95,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 26,
   },
+  "ny-tanf-ecps": {
+    family: "tanf",
+    jurisdiction: "NY",
+    label: "New York TANF (Family Assistance)",
+    region: "us",
+    kind: "household",
+    order: 220,
+  },
   "wa-tanf-payment-standard": {
     family: "tanf",
     jurisdiction: "WA",

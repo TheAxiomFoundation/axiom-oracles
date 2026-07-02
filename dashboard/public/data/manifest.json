@@ -30,6 +30,7 @@
     "axiom-policyengine-co-state-supplement.json",
     "axiom-policyengine-wa-tanf-payment-standard.json",
     "axiom-policyengine-ny-tanf-standards.json",
-    "axiom-policyengine-ssi-ecps.json"
+    "axiom-policyengine-ssi-ecps.json",
+    "axiom-policyengine-ny-tanf-ecps.json"
   ]
 }

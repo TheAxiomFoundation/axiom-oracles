@@ -225,6 +225,20 @@ concepts:
       policyengine: state_income_tax
       taxsim: siitax
 
+  us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit:
+    description: NY TANF benefit (annualized)
+    category: cash
+    comparison: amount
+    # Both sides compute max(0, need standard - countable income) monthly.
+    # Known parameter divergences (62% vs 50% earned income disregard,
+    # different local-agency shelter schedules) surface as amount
+    # mismatches; keep a small tolerance for rounding only.
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: ny_tanf_annual_benefit
+      policyengine: ny_tanf
+
   us:statutes/42/1382#ssi_benefit:
     description: SSI annual benefit amount
     category: cash

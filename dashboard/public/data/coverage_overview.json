@@ -281,9 +281,12 @@
    {
     "program": "tanf",
     "jurisdiction": "NY",
-    "status": "coverageOnly",
-    "source": "rulespec-us-ny/policies/otda/tanf-state-plan-2024-2026",
-    "known_non_tanf_gaps": []
+    "status": "executable",
+    "source": "axiom-programs/us-ny/tanf/fy-2026.yaml composing the rulespec-us-ny TANF state plan 2024-2026 (standard of need, home energy allowances, with-children shelter allowance, earned income disregards)",
+    "known_non_tanf_gaps": [
+     "resource test and work-activity disregards outside the compared slice; immigration status assumed eligible"
+    ],
+    "suite": "ny-tanf-ecps"
    },
    {
     "program": "tanf",
