@@ -1,0 +1,159 @@
+# US SSI (Supplemental Security Income) -- FY 2026, individual slice.
+#
+# Composes the encoded 42 USC 1382 eligibility and benefit computation with
+# the 1382a income exclusions and the 1382f cost-of-living amounts. The
+# source law lives in rulespec-us (monorepo us/ tree); this wrapper only
+# assembles the countable-income plumbing the statute leaves to the agency
+# and exposes program-facing outputs.
+#
+# v1 scope decisions (each is a documented divergence class on the
+# axiom-oracles dashboard, not a hidden assumption):
+#   - Eligible couples are approximated: two aged/blind/disabled adults in
+#     one household are treated as a couple and each compared at half the
+#     couple rate (ECPS lacks marital linkage at the projection layer).
+#     Ineligible-spouse deeming (1382c(f)) is not encoded upstream and
+#     remains an encoder-backlog divergence class.
+#   - The 1382f chain is fed the announced 2025 in-effect annual amounts
+#     and the 2.8% 2026 COLA; the encoding computes the 2026 individual
+#     FBR ($11,928) including the statutory $12 rounding.
+#   - The general income exclusion is applied to unearned income only.
+
+program: us/ssi
+period: 2026-01
+
+outputs:
+  # Household-level: the oracle harness queries one household entity, and
+  # PolicyEngine's person-level `ssi` aggregates to the household sum on
+  # the other side.
+  - ssi_annual_benefit
+
+acknowledged_incomplete:
+  # The compose coverage guard wants the grandfathered 1382a(b)(2)
+  # state-age payment path and couple-branch rules in the output tree;
+  # both are out of the v1 individual slice.
+  - ssi_annual_benefit
+
+scope:
+  federal:
+    - statutes/42/1382/a/1
+    - statutes/42/1382/a/3
+    - statutes/42/1382/b
+    - statutes/42/1382a/b/2
+    - statutes/42/1382a/b/4
+    - statutes/42/1382c/a/1
+    - statutes/42/1382f/a
+
+transformations:
+  # Household membership relation; the axiom-oracles ECPS projector emits
+  # (person, household) tuples under this name for every case.
+  - pattern: data_relation
+    name: member_of_household
+    arity: 2
+    source: axiom-oracles ECPS projection household membership
+
+  # Countable income: the statute references "income other than income
+  # excluded pursuant to section 1382a(b)" without prescribing the wiring;
+  # assemble it from the encoded exclusion producers.
+  - pattern: derived_formula
+    name: ssi_countable_unearned_income
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 countable-income assembly
+    formula: |-
+      max(0, annual_income_not_paid_on_basis_of_need - annual_general_income_excluded)
+
+  - pattern: derived_formula
+    name: ssi_earned_income_excluded
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 countable-income assembly
+    formula: |-
+      blind_branch_earned_income_excluded
+      + disabled_branch_earned_income_excluded
+      + age_sixty_five_branch_earned_income_excluded
+
+  - pattern: derived_formula
+    name: ssi_countable_earned_income
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 countable-income assembly
+    formula: |-
+      max(0, earned_income_not_excluded_by_preceding_paragraphs - ssi_earned_income_excluded)
+
+  - pattern: derived_formula
+    name: individual_income_not_excluded_pursuant_to_section_1382a_b
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 countable-income assembly
+    formula: |-
+      ssi_countable_unearned_income + ssi_countable_earned_income
+
+  - pattern: derived_formula
+    name: annual_income_other_than_excluded_pursuant_to_section_1382a_b
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 countable-income assembly
+    formula: |-
+      individual_income_not_excluded_pursuant_to_section_1382a_b
+
+  # Program-facing outputs.
+  - pattern: derived_formula
+    name: person_ssi_couple_half_benefit
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 program output
+    formula: |-
+      annual_benefit_with_eligible_spouse / 2
+
+  - pattern: derived_formula
+    name: person_ssi_counted
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Judgment
+    period: Month
+    source: axiom-programs/us/ssi/fy-2026 program output
+    formula: |-
+      eligible_individual
+      or (individual_has_eligible_spouse and aged_blind_or_disabled_individual)
+
+  - pattern: derived_formula
+    name: individual_ssi_annual_benefit
+    effective_from: '2026-01-01'
+    entity: Person
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 program output
+    formula: |-
+      if individual_has_eligible_spouse and aged_blind_or_disabled_individual: person_ssi_couple_half_benefit
+      else:
+        if eligible_individual: annual_benefit_without_eligible_spouse else: 0
+
+  - pattern: derived_formula
+    name: ssi_annual_benefit
+    effective_from: '2026-01-01'
+    entity: Household
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-programs/us/ssi/fy-2026 program output
+    formula: |-
+      sum_where(member_of_household, individual_ssi_annual_benefit, person_ssi_counted)

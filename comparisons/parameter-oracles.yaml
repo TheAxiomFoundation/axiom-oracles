@@ -3,6 +3,11 @@
 # upstream rulespec-us origin/main (local checkouts drift), evaluated from the
 # encoded formulas by scripts/run_parameter_comparisons.py.
 #
+# NOTE: the parameter runner evaluates PolicyEngine from the repo venv,
+# while household suites run the pinned PE 4.11 stack — a PE upgrade can
+# make the two families disagree about the same parameter. Keep the venv
+# and _PE_ORACLE_PINS aligned when bumping either.
+#
 # axiom_formula (optional) combines rules from the same file — e.g. Medicaid
 # effective limits are raw FPL limit + the 5% MAGI disregard, mirroring how
 # PolicyEngine stores the effective limit.
