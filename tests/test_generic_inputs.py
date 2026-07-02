@@ -350,7 +350,7 @@ def test_attach_generic_inputs_passes_household_facts_to_mapping(tmp_path) -> No
         for item in projected.metadata["axiom_input_records"]
         if item["name"].endswith("#input.household_shelter_costs_incurred")
     )
-    assert record["value"] == {"kind": "decimal", "value": "1000.0"}
+    assert record["value"] == {"kind": "decimal", "value": "1000"}
 
 
 def test_generic_input_record_to_dict_emits_scalar_value_spec() -> None:

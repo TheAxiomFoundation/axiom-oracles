@@ -1,0 +1,46 @@
+# Medicaid MAGI + SSI-recipient groups -- Axiom vs PolicyEngine, CO households.
+
+name: medicaid-magi-co-ecps
+title: Medicaid eligibility groups (CO) -- Axiom vs PolicyEngine
+description: >-
+  Compares "household has a Medicaid-eligible member" from the composed
+  us/medicaid-magi program (42 CFR 435.116/.118/.119 MAGI groups plus the
+  435.120 mandatory SSI-recipient group, with Colorado state-plan
+  standards) against PolicyEngine's is_medicaid_eligible on Enhanced CPS
+  households in Colorado. Known classes: PolicyEngine also covers optional
+  groups (young adults, senior/disabled, medically needy) out of this
+  composition's scope, and compares adults at the 138% effective limit
+  where 435.119's statutory text is 133%.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    suite: medicaid-magi-co-ecps
+    concepts:
+      - us:regulations/42-cfr/435#infant_eligible
+      - us:regulations/42-cfr/435#young_child_eligible
+      - us:regulations/42-cfr/435#older_child_eligible
+      - us:regulations/42-cfr/435#pregnant_eligible
+      - us:regulations/42-cfr/435#adult_eligible
+      - us:regulations/42-cfr/435#ssi_recipient_eligible
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    jurisdiction_fips: "08"
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-programs/us/medicaid-magi/fy-2026.yaml
+    axiom_composed_program: /tmp/medicaid-magi-composed.yaml
+    axiom_compiled_program: /tmp/medicaid-magi-compiled.json
+    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    rulespec_roots:
+      - $HOME/.axiom-oracles/roots/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-medicaid-magi-co-ecps
+
+dashboard:
+  filename: axiom-policyengine-medicaid-magi-co-ecps.json
+  suite: medicaid-magi-co-ecps

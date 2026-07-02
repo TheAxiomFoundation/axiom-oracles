@@ -272,10 +272,10 @@
    {
     "program": "medicaid_eligibility_groups",
     "jurisdiction": "US",
-    "status": "coverageOnly",
+    "status": "executable",
     "source": "rulespec-us main (upstream): us/regulations/42-cfr/435 \u2014 SSI-linked groups incl. 435.120 ssi-mandatory-group and 435.121 209(b), optional state supplements (435.230/232/234), medically needy (435.301-350), financial methodologies (435.601-603), income standards (435.811-845)",
     "known_non_tanf_gaps": [
-     "no household-level comparison yet; needs an axiom-programs composition and ECPS concept mapping to PolicyEngine Medicaid outputs"
+     "the CO-slice household suite covers the MAGI groups (435.116/.118/.119) and the mandatory SSI-recipient group (435.120); optional groups (young adults, senior/disabled, medically needy), 435.603 MAGI methodology, and other states remain"
     ]
    },
    {

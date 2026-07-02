@@ -127,6 +127,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 222,
   },
+  "medicaid-magi-co-ecps": {
+    family: "medicaid_eligibility_groups",
+    jurisdiction: "CO",
+    label: "Medicaid eligibility groups (CO slice)",
+    region: "us",
+    kind: "household",
+    order: 215,
+  },
   "ga-health-thresholds": {
     family: "medicaid_chip_bhp_thresholds",
     jurisdiction: "GA",

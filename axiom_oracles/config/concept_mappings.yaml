@@ -225,6 +225,60 @@ concepts:
       policyengine: state_income_tax
       taxsim: siitax
 
+  us:regulations/42-cfr/435#infant_eligible:
+    description: Medicaid infants group (42 CFR 435.118)
+    category: health
+    comparison: eligibility
+    priority: high
+    targets:
+      axiom: household_has_medicaid_infant_eligible
+      policyengine: is_infant_for_medicaid
+
+  us:regulations/42-cfr/435#young_child_eligible:
+    description: Medicaid young children group (42 CFR 435.118)
+    category: health
+    comparison: eligibility
+    priority: high
+    targets:
+      axiom: household_has_medicaid_young_child_eligible
+      policyengine: is_young_child_for_medicaid
+
+  us:regulations/42-cfr/435#older_child_eligible:
+    description: Medicaid older children group (42 CFR 435.118)
+    category: health
+    comparison: eligibility
+    priority: high
+    targets:
+      axiom: household_has_medicaid_older_child_eligible
+      policyengine: is_older_child_for_medicaid
+
+  us:regulations/42-cfr/435#pregnant_eligible:
+    description: Medicaid pregnant women group (42 CFR 435.116)
+    category: health
+    comparison: eligibility
+    priority: high
+    targets:
+      axiom: household_has_medicaid_pregnant_eligible
+      policyengine: is_pregnant_for_medicaid
+
+  us:regulations/42-cfr/435#adult_eligible:
+    description: Medicaid adult expansion group (42 CFR 435.119)
+    category: health
+    comparison: eligibility
+    priority: high
+    targets:
+      axiom: household_has_medicaid_adult_eligible
+      policyengine: is_adult_for_medicaid
+
+  us:regulations/42-cfr/435#ssi_recipient_eligible:
+    description: Medicaid mandatory SSI-recipient group (42 CFR 435.120)
+    category: health
+    comparison: eligibility
+    priority: high
+    targets:
+      axiom: household_has_medicaid_ssi_recipient_eligible
+      policyengine: is_ssi_recipient_for_medicaid
+
   us-wa:regulations/388#wa_tanf_benefit:
     description: WA TANF benefit (annualized)
     category: cash

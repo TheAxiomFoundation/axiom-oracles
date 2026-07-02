@@ -159,6 +159,40 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             rest = [bool(facts.get(key, False) or False) for key in from_facts[1:]]
             return age >= float(source.get("threshold", 0)) and not any(rest)
 
+        if transform == "age_below":
+            # Person-scope: age fact strictly below source.threshold.
+            facts = person_facts or {}
+            age_key = from_facts[0] if from_facts else Concepts.PERSON_AGE
+            return float(facts.get(age_key, 0) or 0) < float(source.get("threshold", 0))
+
+        if transform == "age_at_least_or_flags":
+            # Person-scope: age >= threshold OR any of the remaining flags —
+            # e.g. Medicaid's aged (65+) / blind / disabled status.
+            facts = person_facts or {}
+            if not from_facts:
+                return False
+            age_key, *flag_keys = from_facts
+            if float(facts.get(age_key, 0) or 0) >= float(source.get("threshold", 0)):
+                return True
+            return any(bool(facts.get(key, False) or False) for key in flag_keys)
+
+        if transform == "fpl_ratio":
+            # Household annual income (sum of from_facts over people) as a
+            # fraction of the federal poverty guideline for the household
+            # size: base + per_person * (size - 1). Guideline values come
+            # from the mapping entry so the projector mirrors the oracle's
+            # published FPG table.
+            people = (case_facts or {}).get("__people__") or []
+            total = 0.0
+            for person in people:
+                for key in from_facts:
+                    total += float(person.get(key, 0) or 0)
+            base = float(source.get("fpg_base", 0) or 0)
+            per = float(source.get("fpg_per_person", 0) or 0)
+            size = max(1, len(people))
+            guideline = base + per * (size - 1)
+            return round(total / guideline, 6) if guideline else 0.0
+
         if transform == "any_age_below_or_flags":
             # True when any person is younger than source.threshold OR has
             # any of the remaining flags — e.g. TANF's "unit contains a

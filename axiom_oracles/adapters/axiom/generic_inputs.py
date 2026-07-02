@@ -298,8 +298,16 @@ def _scalar_value(value: Any, dtype: str) -> dict[str, Any]:
         return {"kind": "bool", "value": bool(value)}
     if dtype == "Integer":
         return {"kind": "integer", "value": int(value)}
-    # Default to decimal — money/decimal both use the same wrapper.
-    return {"kind": "decimal", "value": str(value)}
+    # Default to decimal — money/decimal both use the same wrapper. The
+    # engine's decimal parser rejects scientific notation, and str() emits
+    # it for small floats (str(0.000098) == '9.8e-05'), so format through
+    # Decimal to guarantee fixed-point literals.
+    from decimal import Decimal
+
+    literal = format(Decimal(str(value)), "f")
+    if "." in literal:
+        literal = literal.rstrip("0").rstrip(".") or "0"
+    return {"kind": "decimal", "value": literal}
 
 
 def project_case_inputs(

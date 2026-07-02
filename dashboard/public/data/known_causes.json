@@ -439,6 +439,22 @@
    "description": "58 of 2,288 NY households diverge, in two clean classes. 32 (Axiom pays more, all working households): the encoded 2024-2026 state plan applies a 62% earned income disregard while PolicyEngine carries 50%. 26 (PolicyEngine pays more, all no-earnings renters): the two sides carry different local-agency shelter maximum schedules (PE 277/283/400\u2026 vs the encoded 214/219/309\u2026 by household size), and the difference equals the per-size schedule gap exactly.",
    "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8835",
    "fix_owner": "policyengine-data"
+  },
+  {
+   "suite": "medicaid-magi-co-ecps",
+   "concept": "us:regulations/42-cfr/435#adult_eligible",
+   "kind": "eligibility_right_only",
+   "label": "MAGI income definition and the 435.603(d) 5% disregard",
+   "description": "52 of 694 CO households have an adult PolicyEngine deems expansion-eligible where the composed 435.119 does not. Two drivers: PolicyEngine compares MAGI (taxable Social Security, tax-unit composition) while the projection uses gross cash income over the whole household; and PolicyEngine applies the 138% effective limit (133% + the 435.603(d) disregard) where the composed rule carries the statutory 133% \u2014 the disregard lives in 435.603, outside this composition.",
+   "fix_owner": "program-coverage"
+  },
+  {
+   "suite": "medicaid-magi-co-ecps",
+   "concept": "us:regulations/42-cfr/435#adult_eligible",
+   "kind": "eligibility_left_only",
+   "label": "Household-unit and income-definition edges",
+   "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not \u2014 tax-unit household composition and MAGI additions on the PolicyEngine side.",
+   "fix_owner": "program-coverage"
   }
  ]
 }

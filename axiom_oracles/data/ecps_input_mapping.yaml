@@ -806,3 +806,177 @@ mappings:
   - match: { kind: suffix, value: recipient_is_dependent_child_under_two_years_of_age }
     scope: person
     source: { kind: constant, value: false }
+
+  # ---------------------------------------------------------------------
+  # Medicaid MAGI groups (us/medicaid-magi program) — 42 CFR 435, CO slice.
+  # State-plan standards are constants mirroring PolicyEngine's Colorado
+  # limits (verified by the co-health-thresholds parameter suite). The
+  # SSI-status detail, 1619, medically-needy, and state-supplement slots
+  # belong to transitively imported rules outside the compared rollup.
+  # ---------------------------------------------------------------------
+
+  - match: { kind: exact, value: household_income_as_fraction_of_fpl }
+    scope: household
+    source:
+      kind: derived
+      transform: fpl_ratio
+      fpg_base: 15960
+      fpg_per_person: 5680
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+
+  - match: { kind: exact, value: person_age }
+    scope: person
+    source: { kind: fact, name: PERSON_AGE, cast: int }
+  - match: { kind: exact, value: person_is_pregnant }
+    scope: person
+    source: { kind: fact, name: PREGNANT, default: false, cast: bool }
+  - match: { kind: exact, value: person_is_under_age_18 }
+    scope: person
+    source:
+      kind: derived
+      transform: age_below
+      threshold: 18
+      from_facts: [PERSON_AGE]
+  - match: { kind: exact, value: person_is_aged_blind_or_disabled }
+    scope: person
+    source:
+      kind: derived
+      transform: age_at_least_or_flags
+      threshold: 65
+      from_facts: [PERSON_AGE, BLIND, DISABLED]
+
+  - match: { kind: exact, value: person_receives_ssi_benefits }
+    scope: person
+    source: { kind: derived, transform: positive, from_facts: [SSI_BENEFITS] }
+  - match: { kind: exact, value: person_is_receiving_or_deemed_receiving_ssi }
+    scope: person
+    source: { kind: derived, transform: positive, from_facts: [SSI_BENEFITS] }
+  - match: { kind: exact, value: person_is_ssi_beneficiary_or_deemed_ssi_beneficiary }
+    scope: person
+    source: { kind: derived, transform: positive, from_facts: [SSI_BENEFITS] }
+
+  # Colorado state-plan standards (PolicyEngine CO values).
+  - match: { kind: exact, value: state_plan_child_income_standard_fpl_ratio }
+    scope: household
+    source: { kind: constant, value: 1.47 }
+  - match: { kind: exact, value: state_plan_pregnant_women_income_standard_fpl_ratio }
+    scope: household
+    source: { kind: constant, value: 2.0 }
+  - match: { kind: exact, value: state_plan_full_medicaid_applicable_income_limit_fpl_ratio }
+    scope: household
+    source: { kind: constant, value: 2.0 }
+  - match: { kind: exact, value: state_plan_authorized_infant_income_standard_fpl_ratio }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: exact, value: state_plan_age_group_grandfathered_income_standard_fpl_ratio }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: exact, value: state_had_authorizing_legislation_for_higher_infant_income_standard }
+    scope: household
+    source: { kind: constant, value: false }
+
+  # Adult-group blocking and elections: children assumed covered.
+  - match: { kind: exact, value: dependent_child_enrolled_in_minimum_essential_coverage }
+    scope: person
+    source: { kind: constant, value: true }
+  - match: { kind: exact, value: dependent_child_receiving_chip }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: exact, value: dependent_child_receiving_medicaid }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: exact, value: person_is_parent_or_caretaker_relative }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: exact, value: person_lives_with_dependent_child_under_age_threshold }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: exact, value: state_elected_435_222_higher_age }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: exact, value: state_elected_435_222_higher_age_as_of_march_23_2010 }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: exact, value: person_eligible_and_enrolled_for_mandatory_medicaid_under_subpart_b }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: exact, value: person_entitled_to_or_enrolled_in_medicare_part_a_or_b }
+    scope: person
+    source: { kind: constant, value: false }
+
+  # Transitively imported SSI-status / 1619 / medically-needy / QMB paths:
+  # inert constants (their rules sit outside the compared rollup).
+  - match: { kind: substring, value: "1619" }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: medically_needy }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: spend_down }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_is_eligible_for_state_supplement }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_is_eligible_spouse_of_ssi_beneficiary }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_is_state_supplement_beneficiary }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_is_qualified_medicare_beneficiary_described_in_section_1905_p }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_is_qualified_severely_impaired_individual_defined_in_section_1905_q }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_is_qualified_working_disabled_individual_described_in_section_1905_s }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_receives_ssi_pending_final_blindness_or_disability_determination }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_receives_ssi_under_resource_disposal_agreement_with_social_security_administration }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_was_issued_medicaid_card_for_reference_month_under_more_restrictive_state_plan_criteria }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_would_be_eligible_to_receive_afdc_under_approved_state_plan_if_not_receiving_ssi }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: section_435_121_allows_other_medicaid_treatment_for_this_person }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_has_income_above_categorically_needy_standards }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_income_is_equal_to_or_below_optional_categorically_needy_standard }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: agency_applies_more_restrictive }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: agency_limits_disabled_eligibility_to_individuals_age_18_or_older }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: categorically_needy_income_standard_selected_under_this_section_is_less_than_optional_categorically_needy_standard }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: state_does_not_have_medically_needy_program }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: state_elects_medically_needy_coverage }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: person_can_spend_down_to_state_selected_living_arrangement_standard }
+    scope: person
+    source: { kind: constant, value: false }
