@@ -25,7 +25,7 @@ targets:
       geoid: "3651000"
 
 concepts:
-  be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_federal_and_local_tax_before_withholding:
+  be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding:
     description: Belgium worker PIT before withholding
     category: tax
     comparison: amount
@@ -37,7 +37,7 @@ concepts:
       geoid: BE
     targets:
       axiom:
-        name: belgium_pit_federal_and_local_tax_before_withholding
+        name: belgium_pit_pilot_federal_and_local_tax_before_withholding
         scope:
           type: country
           geoid: BE

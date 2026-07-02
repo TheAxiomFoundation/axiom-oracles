@@ -2,7 +2,7 @@
   "created_at": "2026-07-02",
   "jurisdiction": "be",
   "purpose": "Coverage inventory for the EUROMOD Belgium BE_2025 model surface against Belgium RuleSpec. EUROMOD is an executable comparison oracle, not legal authority; statutory and regulatory RuleSpec modules must still cite upstream Belgian law.",
-  "coverage_claim": "Current Axiom coverage is two EUROMOD-facing output concepts: employee SSC tscee_s is live-verified for the regular worker statutory slice; PIT tin_s has a composed single-worker pilot ready for per-case oracle comparison. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
+  "coverage_claim": "Current Axiom coverage is two EUROMOD-facing output concepts: employee SSC tscee_s is live-verified for the regular worker statutory slice; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses and supports supplied Article 289ter/1 work-bonus credit amounts. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
   "source_artifacts": [
     {
       "kind": "euromod_country_model",
@@ -79,11 +79,11 @@
     {
       "euromod_variable": "tin_s",
       "meaning": "simulated personal income tax",
-      "rulespec_output": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_federal_and_local_tax_before_withholding",
+      "rulespec_output": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
       "rulespec_module": "be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml",
       "status": "prepared_worker_pilot_not_full_household_parity",
-      "evidence": "RuleSpec has a dense-executable worker-remuneration-to-PIT pipeline; exact per-case EUROMOD parity still needs the oracle comparison run for this output.",
-      "remaining_gap": "Full household PIT, joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering remain outside the pilot."
+      "evidence": "RuleSpec has a dense-executable worker-remuneration-to-PIT pipeline that composes Article 38 ordinary employee SSC into the PIT professional-income base, then applies Article 51 forfait expenses, Article 130/134 tax, supplied Article 289ter/1 work-bonus credit amounts, and supplied local rates.",
+      "remaining_gap": "Exact gross-to-tin_s parity still needs the ONSS work-bonus A/B amount calculation or an oracle bridge for those intermediate amounts. Full household PIT, joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering remain outside the pilot."
     },
     {
       "euromod_variable": "ils_tax",
@@ -140,7 +140,7 @@
         "be/statutes/income_tax/benefits/company_car.yaml"
       ],
       "status": "partial_statutory_coverage_worker_oracle_pilot",
-      "oracle_status": "tin_s worker pilot prepared; not full household parity"
+      "oracle_status": "tin_s worker pilot prepared with SSC netting and supplied work-bonus credit amounts; not full household parity"
     },
     {
       "domain": "social_contributions",

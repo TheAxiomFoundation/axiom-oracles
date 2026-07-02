@@ -131,7 +131,7 @@ class Concepts:
     )
     BE_WORKER_PIT_BEFORE_WITHHOLDING = (
         "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
-        "#belgium_pit_federal_and_local_tax_before_withholding"
+        "#belgium_pit_pilot_federal_and_local_tax_before_withholding"
     )
     BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS = (
         "be:regulations/social_security/workers/employee_contributions"
