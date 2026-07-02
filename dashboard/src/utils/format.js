@@ -59,6 +59,7 @@ export function engineLabel(name) {
     axiom: "Axiom",
     accessnyc: "ACCESS NYC",
     prd: "PRD",
+    euromod: "EUROMOD",
   };
   return labels[name] || name;
 }

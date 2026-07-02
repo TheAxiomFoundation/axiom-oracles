@@ -96,6 +96,19 @@ export async function loadOracleData(basePath = "") {
     // continue without coverage context
   }
 
+  // Load country-model coverage inventories that are not comparison reports.
+  // These drive dashboard surfaces for oracle readiness even before every
+  // target has a pairwise case-comparison report.
+  let euromodCoverage = null;
+  try {
+    const euromodResp = await fetch(`${basePath}/data/euromod-be-coverage.json`);
+    if (euromodResp.ok) {
+      euromodCoverage = await euromodResp.json();
+    }
+  } catch {
+    // continue without EUROMOD coverage context
+  }
+
   // Drop aspirational / missing programs — the dashboard reflects only what
   // is actually encoded in the Axiom corpus today.
   const programs = allPrograms.filter(
@@ -145,6 +158,7 @@ export async function loadOracleData(basePath = "") {
     suites,
     knownCauses,
     coverageOverview,
+    euromodCoverage,
   };
 }
 
