@@ -289,14 +289,22 @@ from the bundled training schema (`template_dataset="BE_training_data"`)
 
 The US representative population is the **certified populace-us artifact**
 (`populace://policyengine/populace-us/populace_us_2024.h5`, resolved
-through the Hugging Face dataset repo; the current release is the sparse
-~57k-household national artifact, which downloads fast and samples well).
+through the Hugging Face dataset repo). The reference is **content-pinned**
+to a specific Hugging Face revision with a verified sha256
+(`axiom_oracles/populations/enhanced_cps.py::POPULACE_PINS`) — it does NOT
+follow HF-latest. Latest currently points at a sparse L0 refit that zeroes
+untargeted input bases (IRA/HSA/self-employed pension/childcare and ~80
+other engine inputs are dead in that artifact, PolicyEngine/populace#278),
+so a comparison run against latest would silently score against ~$0 bases.
+The pin is the dense release certified in PolicyEngine bundle 4.18.6/4.18.7;
+re-pin once the post-#279 rebuilt dense release is published and certified.
 The enhanced CPS is retired for every scope populace can serve; the one
 remaining eCPS-derived path is the NYC per-city file, because populace-us
 carries no place/county geography yet (PolicyEngine/populace#204) — it
 retires the moment the populace spine grows place grain. Override any run
 with `--ecps-dataset` (CLI) or `ecps_dataset` (comparison config
-parameters).
+parameters); an override to a different `populace://…@revision` reference
+carries its own pin, and unpinned references resolve at HF-latest.
 
 Known populace-us gaps that shape which rule branches a comparison
 exercises: the artifact stores no immigration/SSN columns (everyone

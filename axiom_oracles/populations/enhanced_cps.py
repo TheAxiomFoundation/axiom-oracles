@@ -15,12 +15,57 @@ from ..core.geography import GeographyScope, normalize_scope, scope_contains
 # own hf:// loader only reaches model repos).
 POPULACE_US_DATASET = "populace://policyengine/populace-us/populace_us_2024.h5"
 ENHANCED_CPS_DATASET = "enhanced_cps_2024"
-#: The one remaining eCPS-derived dependency: populace-us carries no
-#: place/county geography yet (its county_fips/place_fips are empty and
+#: The one remaining eCPS-derived dependency in this repo: populace-us carries
+#: no place/county geography yet (its county_fips/place_fips are empty and
 #: in_nyc is degenerate), so NYC-scoped comparisons cannot filter a national
-#: populace artifact. Retire this the moment the populace spine grows place
-#: grain (PolicyEngine/populace#204).
+#: populace artifact. This is the ONLY legacy-eCPS path left — every other
+#: scope reads the pinned populace-us release below. Retire this the moment
+#: the populace spine grows place grain (PolicyEngine/populace#204).
 NYC_ENHANCED_CPS_DATASET = "hf://policyengine/policyengine-us-data/cities/NYC.h5"
+
+
+@dataclass(frozen=True)
+class PopulacePin:
+    """A content-addressed pin for a ``populace://`` artifact.
+
+    ``revision`` names a Hugging Face git ref (tag or commit) so the download
+    is reproducible instead of following ``main`` (HF-latest); ``sha256`` is
+    the expected content hash of the downloaded file, verified on every
+    resolution so a moved tag or a corrupted transfer fails loudly rather than
+    silently swapping the population under a comparison.
+    """
+
+    revision: str
+    sha256: str
+
+
+# Content pins for the ``populace://`` artifacts this repo resolves, keyed by
+# ``(repo_id, filename)``. WITHOUT a pin the resolver falls back to HF-latest
+# (``main``), which is exactly the failure this table exists to prevent:
+#
+#   HF-latest for policyengine/populace-us currently points at the sparse L0
+#   refit (``populace-us-2024-sparse-l0-refit-57k-71a0887-national-only-*``),
+#   which zeroes untargeted input bases — IRA/HSA/self-employed-pension/
+#   childcare and ~80 other engine inputs are dead in that artifact
+#   (PolicyEngine/populace#278). A weekly comparison following latest would
+#   silently score Axiom against ~$0 bases and report spurious agreement.
+#
+# The pin below is the DENSE release certified in PolicyEngine bundle
+# 4.18.6/4.18.7 against policyengine-us 1.729.0 — the last artifact known to
+# carry live input bases across every surface the oracle matrix exercises.
+#
+# UPGRADE NOTE: #278 was closed 2026-07-02 by pipeline-fix PR
+# PolicyEngine/populace#279, but the rebuilt (dense, non-sparse) release is not
+# yet published. Re-pin `revision` + `sha256` to that release once it lands AND
+# is certified in a PolicyEngine bundle — do not repin to a bare ``main`` sha,
+# and do not repin to a sparse artifact. Verify the new sha256 against the HF
+# LFS pointer (`get_hf_file_metadata(...).etag`) before committing.
+POPULACE_PINS: dict[tuple[str, str], PopulacePin] = {
+    ("policyengine/populace-us", "populace_us_2024.h5"): PopulacePin(
+        revision="populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+        sha256="16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f",
+    ),
+}
 
 
 MicrosimulationFactory = Callable[[str], Any]
@@ -35,19 +80,65 @@ def dataset_for_scope(scope: GeographyScope | dict[str, Any] | None) -> str:
 
 
 def _resolve_populace_dataset(dataset: str) -> str:
-    """Download a ``populace://`` artifact and return its local path.
+    """Download a ``populace://`` artifact and return its verified local path.
 
     ``populace://<repo_id>/<filename>`` names a file in a Hugging Face
     *dataset* repo (e.g. the certified ``policyengine/populace-us``
     release). policyengine-us resolves its own ``hf://`` scheme against
     model repos only, so the population loader fetches the artifact itself
     and hands the engine a local path.
+
+    A trailing ``@revision`` on the reference, or a registered
+    :data:`POPULACE_PINS` entry, pins the download to a specific Hugging Face
+    ref instead of HF-latest. When a pin carries a ``sha256`` the downloaded
+    file is hashed and checked against it, so a moved tag or a corrupted
+    transfer raises rather than silently swapping the population.
     """
     from huggingface_hub import hf_hub_download
 
     reference = dataset.removeprefix("populace://")
+    reference, _, inline_revision = reference.partition("@")
     repo_id, _, filename = reference.rpartition("/")
-    return hf_hub_download(repo_id=repo_id, filename=filename, repo_type="dataset")
+
+    pin = POPULACE_PINS.get((repo_id, filename))
+    revision = inline_revision or (pin.revision if pin else None)
+    if pin is not None and inline_revision and inline_revision != pin.revision:
+        raise ValueError(
+            f"populace:// reference pins revision {inline_revision!r} for "
+            f"{repo_id}/{filename}, but the registered POPULACE_PINS entry "
+            f"expects {pin.revision!r}. Refusing to resolve an ambiguous pin."
+        )
+
+    local_path = hf_hub_download(
+        repo_id=repo_id,
+        filename=filename,
+        repo_type="dataset",
+        revision=revision,
+    )
+
+    if pin is not None and pin.sha256:
+        _verify_sha256(local_path, expected=pin.sha256, source=f"{repo_id}/{filename}")
+    return local_path
+
+
+def _verify_sha256(path: str, *, expected: str, source: str) -> None:
+    """Raise unless ``path`` hashes to ``expected`` (loud integrity gate)."""
+    import hashlib
+
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
+            digest.update(chunk)
+    actual = digest.hexdigest()
+    if actual != expected:
+        raise RuntimeError(
+            f"populace artifact {source} at {path} failed its sha256 check: "
+            f"expected {expected}, got {actual}. The pinned Hugging Face "
+            "revision was moved or the download is corrupt — refusing to run a "
+            "comparison against an unverified population. Clear the Hugging "
+            "Face cache and retry, or update POPULACE_PINS if this is an "
+            "intended, certified re-pin."
+        )
 
 
 def load_enhanced_cps_cases(
