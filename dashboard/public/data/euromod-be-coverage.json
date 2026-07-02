@@ -310,7 +310,7 @@
   "next_mapping_work": [
     "Map every euromod_policies entry to RuleSpec modules and mark encoded, composed, oracle-tested, or gap.",
     "Expand tin_s beyond the single-worker pilot to full household PIT, including joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering.",
-    "Decide whether the 2025 work-bonus January-vs-February timing residual is an intentional EUROMOD simplification to keep documented or an upstream EUROMOD issue to file.",
+    "Track the 2025 work-bonus January-vs-February timing residual in the EUROMOD issue ledger and file upstream if confirmed against the BE_2025 model sources.",
     "Build household-level outputs for ils_tax, ils_ben, and ils_dispy before claiming disposable-income parity."
   ]
 }
