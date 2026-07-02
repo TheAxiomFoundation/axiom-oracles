@@ -45,7 +45,8 @@ def main() -> None:
         return
 
     model_root = Path(job["model_root"])
-    dataset_header_path = model_root / "Input" / f"{job['dataset']}.txt"
+    template_name = job.get("template_dataset") or job["dataset"]
+    dataset_header_path = model_root / "Input" / f"{template_name}.txt"
     if not dataset_header_path.exists():
         _fail(result_path, f"No dataset file at {dataset_header_path}.")
         return

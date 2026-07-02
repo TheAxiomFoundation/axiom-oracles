@@ -270,10 +270,20 @@ datasets are monthly (inputs divide by 12, outputs annualize back), and
 the datasets uprate incomes from their data year to the system year — so
 comparisons bridge on the engine's own post-uprating gross (`yem`), which
 is returned alongside the outputs. The live UKMOD tests reproduce
-hand-computed 2025-26 income tax and employee NICs; EUROMOD Belgium is
-wired but currently xfail (J2.0 aborts at parameter preparation under the
-connector: `Operand index does not contain operand il_xs_hl06` — raised
-upstream; UKMOD runs clean on the same engine).
+hand-computed 2025-26 income tax and employee NICs; the live EUROMOD
+Belgium tests recover the statutory 13.07% employee social contribution
+exactly and progressive PIT.
+
+One EUROMOD-release quirk the adapter absorbs: some model content is
+gated on the *dataset name* (`Run_Cond IsUsedDatabase` patterns matching
+real SILC files), and the engine skips registering gated income lists
+while still compiling identically gated formulas that reference them —
+so running under the bundled `BE_training_data` name aborts at parameter
+preparation (`Operand index does not contain operand il_xs_hl06`; raised
+upstream). Per-case runs therefore pass a real dataset *configuration*
+name (`dataset="BE_2024_c1_2015_03_e2"`) while templating input rows
+from the bundled training schema (`template_dataset="BE_training_data"`)
+— no licensed file is ever read.
 
 ### Population source: populace-us (the default)
 

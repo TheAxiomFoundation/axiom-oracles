@@ -55,9 +55,16 @@ class EuromodPlatformRunner(EngineAdapter):
         country: Country name inside the model (``"UK"`` in UKMOD B2026.03,
             ``"BE"`` in EUROMOD releases).
         system: Policy system to simulate (e.g. ``"UK_2025"``, ``"BE_2025"``).
-        dataset: Demo/input dataset name the rows are interpreted under
+        dataset: Dataset *configuration* the rows are interpreted under
             (default ``"training_data"`` for UKMOD; EUROMOD releases name
-            theirs ``"<CC>_training_data"``).
+            theirs ``"<CC>_training_data"``). Some model content is
+            conditioned on the dataset name (``Run_Cond IsUsedDatabase``),
+            so per-case runs may need a real dataset's configuration name
+            even though its licensed file is absent.
+        template_dataset: Dataset file whose header supplies the input-row
+            schema when it differs from ``dataset`` (e.g. run under the
+            real ``BE_2024_c1_2015_03_e2`` configuration while templating
+            rows from the bundled ``BE_training_data``).
         country_code: ``dct`` value for schemas that carry one (UKMOD demo
             data uses 15). Ignored by schemas without a ``dct`` column.
         monthly_inputs: Whether the dataset's monetary convention is
@@ -81,6 +88,7 @@ class EuromodPlatformRunner(EngineAdapter):
         country: str,
         system: str,
         dataset: str = "training_data",
+        template_dataset: str | None = None,
         country_code: int = 15,
         monthly_inputs: bool = True,
         annualize_outputs: bool = True,
@@ -93,6 +101,7 @@ class EuromodPlatformRunner(EngineAdapter):
         self.country = country
         self.system = system
         self.dataset = dataset
+        self.template_dataset = template_dataset
         self.country_code = country_code
         self.monthly_inputs = monthly_inputs
         self.annualize_outputs = annualize_outputs
@@ -172,6 +181,7 @@ class EuromodPlatformRunner(EngineAdapter):
             "country": self.country,
             "system": self.system,
             "dataset": self.dataset,
+            "template_dataset": self.template_dataset,
             "rows": rows,
             "outputs": outputs,
         }

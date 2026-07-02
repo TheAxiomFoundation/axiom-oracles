@@ -243,41 +243,56 @@ class TestUkmodLive:
         "EUROMOD Belgium oracle"
     ),
 )
-@pytest.mark.xfail(
-    reason=(
-        "EUROMOD J2.0 via the connector aborts every BE (and AT) system at "
-        "parameter preparation: 'Operand index does not contain operand "
-        "il_xs_hl06'. The BE spine defines il_xs_hl06 in a conditional DefIl "
-        "and references it elsewhere; the connector's run path treats the "
-        "prep-time gap as fatal (the UI apparently does not). UKMOD, on the "
-        "same engine, runs clean. Raised upstream with the JRC; this test "
-        "flips green the moment a release/connector fix lands."
-    ),
-    strict=False,
-)
 class TestEuromodBelgiumLive:
+    """EUROMOD Belgium, live, under a real dataset *configuration*.
+
+    Running under the bundled ``BE_training_data`` name aborts at parameter
+    preparation: the BE spine defines consumption income lists
+    (``il_xs_hl06`` etc.) in ``DefIl`` functions gated on
+    ``Run_Cond IsUsedDatabase`` matching real SILC dataset names
+    (``be_20??_??_????_??_??``), and the engine skips their registration
+    under a non-matching dataset while still compiling the identically
+    gated formulas that reference them (raised upstream). The oracle
+    therefore runs under the real ``BE_2024_c1_2015_03_e2`` configuration
+    while templating rows from the bundled training schema — no licensed
+    file is read.
+
+    The employee social-contribution check is statutory: Belgian employee
+    SSC is a flat 13.07% of gross.
+    """
+
     @pytest.fixture(scope="class")
     def runner(self) -> EuromodPlatformRunner:
         return EuromodPlatformRunner(
             model_root=EUROMOD_MODEL_ROOT_BE,
             country="BE",
             system="BE_2025",
-            dataset="BE_training_data",
+            dataset="BE_2024_c1_2015_03_e2",
+            template_dataset="BE_training_data",
         )
 
-    def test_pit_and_contributions_are_positive_and_monotone(self, runner) -> None:
-        """Belgian PIT for employees at 30k/60k gross (sanity, not statute).
-
-        Exact per-article bridging against rulespec-be is the comparison
-        suite's job; here the oracle must produce a plausible, monotone
-        liability so a broken model load or dataset mapping cannot pass.
-        """
+    def test_employee_contributions_are_the_statutory_13_07_percent(
+        self, runner
+    ) -> None:
         results = runner.run_cases(
             [_single_earner("be-30k", 30_000.0), _single_earner("be-60k", 60_000.0)],
-            variables=["tin_s", "tscee_s", "ils_dispy", "yem"],
+            variables=["tin_s", "tscee_s", "yem"],
+        )
+        for result in results:
+            gross = result.values["yem"]  # engine's post-uprating gross
+            assert result.values["tscee_s"] == pytest.approx(
+                gross * 0.1307, rel=1e-3
+            )
+
+    def test_pit_is_positive_and_progressive(self, runner) -> None:
+        results = runner.run_cases(
+            [_single_earner("be-30k", 30_000.0), _single_earner("be-60k", 60_000.0)],
+            variables=["tin_s", "ils_dispy", "yem"],
         )
         low, high = results
         assert low.values["tin_s"] > 0
-        assert high.values["tin_s"] > low.values["tin_s"]
-        assert 0 < low.values["tscee_s"] < low.values["yem"] * 0.15
+        # progressive: average rate rises with income
+        assert (high.values["tin_s"] / high.values["yem"]) > (
+            low.values["tin_s"] / low.values["yem"]
+        )
         assert high.values["ils_dispy"] > low.values["ils_dispy"]
