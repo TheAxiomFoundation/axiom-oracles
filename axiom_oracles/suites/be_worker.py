@@ -48,8 +48,6 @@ def _single_worker_pit_case(case_id: str, annual_income: float) -> Case:
             _pit_input(
                 "belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies"
             ): False,
-            _pit_input("belgium_pit_pilot_article_289ter1_work_bonus_a_amount"): 0,
-            _pit_input("belgium_pit_pilot_article_289ter1_work_bonus_b_amount"): 0,
             _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
             _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
         },
