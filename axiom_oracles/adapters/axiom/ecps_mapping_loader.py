@@ -132,6 +132,33 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             people = (case_facts or {}).get("__people__")
             return len(people) if people is not None else 1
 
+        if transform == "sum":
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            return round(float(value), 2)
+
+        if transform == "flag_and_not_flags":
+            # First fact truthy AND every remaining fact falsy — e.g.
+            # "disabled and not blind" for SSI's disabled-branch exclusion.
+            facts = person_facts if scope == "person" else (case_facts or {})
+            facts = facts or {}
+            if not from_facts:
+                return False
+            first = bool(facts.get(from_facts[0], False) or False)
+            rest = [bool(facts.get(key, False) or False) for key in from_facts[1:]]
+            return first and not any(rest)
+
+        if transform == "age_at_least_and_not_flags":
+            # First fact (an age) >= source.threshold AND every remaining
+            # fact falsy — e.g. SSI's age-65 earned-income branch, which
+            # applies only to people not in the blind/disabled branches.
+            facts = person_facts if scope == "person" else (case_facts or {})
+            facts = facts or {}
+            if not from_facts:
+                return False
+            age = float(facts.get(from_facts[0], 0) or 0)
+            rest = [bool(facts.get(key, False) or False) for key in from_facts[1:]]
+            return age >= float(source.get("threshold", 0)) and not any(rest)
+
         if transform == "monthly":
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
             return round(float(value) / 12, 2)
@@ -165,8 +192,8 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
 
         if transform == "scope_geoid_in":
             metadata = (case_facts or {}).get("__metadata__") or {}
-            scope = metadata.get("scope") or {}
-            geoid = str(scope.get("geoid") or "")
+            case_scope = metadata.get("scope") or {}
+            geoid = str(case_scope.get("geoid") or "")
             return any(
                 geoid == candidate or geoid.startswith(candidate)
                 for candidate in geoids

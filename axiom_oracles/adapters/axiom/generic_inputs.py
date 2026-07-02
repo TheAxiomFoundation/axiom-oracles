@@ -62,6 +62,19 @@ _BOOLEAN_OPS = {"and", "or", "not", "comparison", "if"}
 _NUMERIC_OPS = {"add", "sub", "mul", "div", "max", "min", "ceil", "floor"}
 
 
+# Entities the engine keys by the case's household id; anything else is a
+# pseudo entity whose inputs get broadcast per person too (see below).
+_UNIT_ENTITIES = {
+    "Household",
+    "SnapUnit",
+    "TaxUnit",
+    "SpmUnit",
+    "TanfUnit",
+    "AssistanceUnit",
+    "Family",
+}
+
+
 def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:
     """Return one InputSlot per unique input name referenced by any derived rule."""
 
@@ -356,6 +369,23 @@ def project_case_inputs(
                     dtype=slot.dtype,
                 )
             )
+            # Pseudo-entity slots (e.g. the SSI statute's StatutoryDollarAmount
+            # cost-of-living amounts) are resolved by the engine against
+            # whichever entity is being evaluated, which for person-level
+            # rule chains is each person. Broadcast the same value to every
+            # person so cross-entity references resolve; unit-scoped entities
+            # stay keyed by the household id alone.
+            if slot.entity not in _UNIT_ENTITIES:
+                for person_id in person_ids:
+                    records.append(
+                        GenericInputRecord(
+                            name=_qualify(slot.name),
+                            entity=slot.entity,
+                            entity_id=person_id,
+                            value=value,
+                            dtype=slot.dtype,
+                        )
+                    )
 
     return records
 

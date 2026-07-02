@@ -71,6 +71,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 20,
   },
+  "ssi-ecps": {
+    family: "ssi",
+    jurisdiction: "US",
+    label: "SSI (Supplemental Security Income)",
+    region: "us",
+    kind: "household",
+    order: 24,
+  },
   "ssi-parameters": {
     family: "ssi",
     jurisdiction: "US",

@@ -252,6 +252,15 @@ def sanity_check(
     ),
 )
 @click.option(
+    "--report-suite",
+    default=None,
+    help=(
+        "Suite label written into the comparison report. ECPS comparisons "
+        "have no synthetic suite, so without this the report is labeled "
+        "'nyc-synthetic' regardless of what it compared."
+    ),
+)
+@click.option(
     "--population",
     type=click.Choice(["enhanced-cps", "synthetic"]),
     default="enhanced-cps",
@@ -382,6 +391,7 @@ def compare(
     left: str,
     right: str,
     suite: str,
+    report_suite: str | None,
     population: str,
     sample_size: int,
     period: str | None,
@@ -492,7 +502,7 @@ def compare(
         stream_case_rows = output_path is not None or not json_output
         with tempfile.TemporaryDirectory(prefix="axiom-oracles-report-") as report_dir:
             accumulator = ComparisonReportAccumulator(
-                suite_name=suite_name,
+                suite_name=report_suite or suite_name,
                 population=population,
                 locales=case_locales,
                 scope=comparison_scope,
@@ -771,6 +781,27 @@ def _prepare_cases_for_engines(
         else:
             prepared = [case for case in prepared if _is_co_household(case)]
             prepared = attach_axiom_snap_co_inputs(prepared)
+    elif (
+        "axiom" in engines
+        and axiom_compiled_program is not None
+        and not _wants_tax(concept_ids)
+    ):
+        # Generic compiled-program path for non-SNAP, non-tax programs
+        # (e.g. the us/ssi composition): project inputs from the program
+        # artifact via the data-driven ECPS mapping, optionally filtered
+        # to a jurisdiction.
+        from .adapters.axiom.generic_inputs import attach_generic_inputs
+
+        if jurisdiction_fips:
+            prepared = [
+                case
+                for case in prepared
+                if _household_in_jurisdiction(case, jurisdiction_fips)
+            ]
+        prepared = attach_generic_inputs(
+            prepared,
+            compiled_program_path=axiom_compiled_program,
+        )
     return prepared
 
 

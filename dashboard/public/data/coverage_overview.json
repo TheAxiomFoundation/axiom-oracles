@@ -324,12 +324,13 @@
    {
     "program": "ssi",
     "jurisdiction": "US",
-    "status": "coverageOnly",
-    "source": "rulespec-us main (upstream): us/statutes/42/1382, 1382a, 1382b, 1382c, 1382f \u2014 SSI eligibility, benefit computation, income/resource exclusions, and COLA machinery (12 sections)",
+    "status": "executable",
+    "source": "axiom-programs/us/ssi/fy-2026.yaml composing rulespec-us us/statutes/42/1382, 1382a, 1382c, 1382f (announced 2025 amounts + 2.8% COLA fed to the encoded 1382f chain, which computes the 2026 FBR)",
     "known_non_tanf_gaps": [
-     "no oracle comparison yet; PolicyEngine models SSI fully (gov.ssa.ssi), so both a parameter check and an ECPS household suite are feasible",
+     "spousal deeming (1382c(f)) and the eligible-couple rate are not yet composed; every person is compared at the individual rate",
      "state supplement schedules (per-state SSP amounts) are not yet encoded anywhere in the corpus"
-    ]
+    ],
+    "suite": "ssi-ecps"
    },
    {
     "program": "childcare_assistance",

@@ -225,6 +225,19 @@ concepts:
       policyengine: state_income_tax
       taxsim: siitax
 
+  us:statutes/42/1382#ssi_benefit:
+    description: SSI annual benefit amount
+    category: cash
+    comparison: amount
+    # PolicyEngine's `ssi` is person-level annual dollars; the composed
+    # us/ssi program emits ssi_annual_benefit on the same shape. Keep a
+    # $25/year tolerance to absorb monthly-vs-annual rounding.
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: ssi_annual_benefit
+      policyengine: ssi
+
   us:statutes/7/2014/o#snap_eligible:
     description: SNAP eligibility
     category: food

@@ -1138,6 +1138,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         str(params.get("sample_size", 1000)),
         "--period",
         str(params["period"]),
+        *(["--report-suite", str(params["suite"])] if params.get("suite") else []),
         *_concept_args(params),
         "--axiom-engine-binary",
         str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
@@ -2248,11 +2249,52 @@ def _csv_scalar(value: object) -> object:
         return value
 
 
+# The dashboard fetches every report on page load, so population-scale runs
+# must not ship all their case rows. Aggregates carry the headline numbers;
+# case rows exist only to power the per-mismatch drawer, so keep just the
+# mismatching cases (and cap both lists) once a report crosses the threshold.
+_DASHBOARD_MAX_MISMATCHES = 1000
+_DASHBOARD_MAX_CASE_ROWS = 1000
+
+
+def _slim_report_for_dashboard(report: dict) -> dict:
+    mismatches = report.get("mismatches") or []
+    cases = report.get("cases") or []
+    if (
+        len(mismatches) <= _DASHBOARD_MAX_MISMATCHES
+        and len(cases) <= _DASHBOARD_MAX_CASE_ROWS
+    ):
+        return report
+    slim = dict(report)
+    kept_mismatches = mismatches[:_DASHBOARD_MAX_MISMATCHES]
+    kept_ids = {m.get("case_id") for m in kept_mismatches}
+    slim["mismatches"] = kept_mismatches
+    slim["cases"] = [
+        case for case in cases if case.get("case_id") in kept_ids
+    ][:_DASHBOARD_MAX_CASE_ROWS]
+    slim["dashboard_truncation"] = {
+        "total_mismatches": len(mismatches),
+        "shown_mismatches": len(kept_mismatches),
+        "total_case_rows": len(cases),
+        "shown_case_rows": len(slim["cases"]),
+    }
+    return slim
+
+
 def _write_dashboard_report(report: dict, filename: str) -> None:
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     target = DASHBOARD_DATA_DIR / filename
-    target.write_text(json.dumps(report, indent=2, sort_keys=True))
+    slim = _slim_report_for_dashboard(report)
+    truncation = slim.get("dashboard_truncation")
+    target.write_text(json.dumps(slim, indent=2, sort_keys=True))
     print(f"Wrote dashboard report: {target}")
+    if truncation:
+        print(
+            "Dashboard copy truncated: "
+            f"{truncation['shown_mismatches']}/{truncation['total_mismatches']} mismatches, "
+            f"{truncation['shown_case_rows']}/{truncation['total_case_rows']} case rows "
+            "(full report under reports/)."
+        )
 
     manifest_path = DASHBOARD_DATA_DIR / "manifest.json"
     if manifest_path.exists():
