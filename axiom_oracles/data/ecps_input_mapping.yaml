@@ -503,16 +503,17 @@ mappings:
     scope: person
     source: { kind: constant, value: false }
 
-  # Couple branch out of scope in v1: everyone compared at individual rate.
+  # Couple branch: two aged/blind/disabled adults in one household are
+  # treated as an SSI eligible couple (ECPS lacks marital linkage here).
   - match: { kind: suffix, value: individual_has_eligible_spouse }
     scope: person
-    source: { kind: constant, value: false }
+    source: { kind: derived, transform: abd_adult_with_abd_adult_partner }
   - match: { kind: suffix, value: individual_has_spouse_with_whom_living }
     scope: person
-    source: { kind: constant, value: false }
+    source: { kind: derived, transform: abd_adult_with_abd_adult_partner }
   - match: { kind: suffix, value: individual_and_spouse_income_not_excluded_pursuant_to_section_1382a_b }
     scope: person
-    source: { kind: constant, value: 0 }
+    source: { kind: derived, transform: ssi_couple_countable_income }
 
   # Resources: ECPS carries no asset data (CASH_ON_HAND is a stub 0), and
   # PolicyEngine's ECPS SSI faces the same absence, so both sides are

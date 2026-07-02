@@ -330,7 +330,8 @@
     "status": "executable",
     "source": "axiom-programs/us/ssi/fy-2026.yaml composing rulespec-us us/statutes/42/1382, 1382a, 1382c, 1382f (announced 2025 amounts + 2.8% COLA fed to the encoded 1382f chain, which computes the 2026 FBR)",
     "known_non_tanf_gaps": [
-     "spousal deeming (1382c(f)) and the eligible-couple rate are not yet composed; every person is compared at the individual rate",
+     "spousal deeming (1382c(f)) is not yet encoded upstream \u2014 encoder backlog",
+     "couples approximated as two aged/blind/disabled adults per household (no marital linkage in the projection)",
      "state supplement schedules (per-state SSP amounts) are not yet encoded anywhere in the corpus"
     ],
     "suite": "ssi-ecps"

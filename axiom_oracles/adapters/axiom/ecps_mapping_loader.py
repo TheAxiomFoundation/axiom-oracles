@@ -159,6 +159,66 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             rest = [bool(facts.get(key, False) or False) for key in from_facts[1:]]
             return age >= float(source.get("threshold", 0)) and not any(rest)
 
+        if transform == "abd_adult_with_abd_adult_partner":
+            # SSI eligible-spouse approximation: this person is an
+            # aged (65+)/blind/disabled adult AND exactly one other
+            # aged/blind/disabled adult lives in the household. ECPS lacks
+            # marital linkage at this layer, so two ABD adults in one
+            # household are treated as an eligible couple.
+            facts = person_facts or {}
+            def _abd(f):
+                return (
+                    float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 65
+                    or bool(f.get(Concepts.BLIND, False) or False)
+                    or bool(f.get(Concepts.DISABLED, False) or False)
+                )
+            def _adult(f):
+                return float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 18
+            if not (_abd(facts) and _adult(facts)):
+                return False
+            others = [
+                f for f in facts.get("__others__", []) if _abd(f) and _adult(f)
+            ]
+            return len(others) == 1
+
+        if transform == "ssi_couple_countable_income":
+            # Combined countable income for an SSI eligible couple (this
+            # person + the single other ABD adult): unearned less the $240
+            # annual general exclusion, plus earned less $780 and half the
+            # remainder — mirroring the individual-side wrapper math.
+            facts = person_facts or {}
+            def _abd2(f):
+                return (
+                    float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 65
+                    or bool(f.get(Concepts.BLIND, False) or False)
+                    or bool(f.get(Concepts.DISABLED, False) or False)
+                ) and float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 18
+            members = [facts] + [
+                f for f in facts.get("__others__", []) if _abd2(f)
+            ][:1]
+            unearned_keys = [
+                Concepts.SOCIAL_SECURITY_BENEFITS,
+                Concepts.PENSION_INCOME,
+                Concepts.INTEREST_INCOME,
+                Concepts.DIVIDEND_INCOME,
+                Concepts.RENTAL_INCOME,
+                Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
+            ]
+            earned_keys = [
+                Concepts.YEARLY_EARNED_INCOME,
+                Concepts.SELF_EMPLOYMENT_INCOME,
+            ]
+            unearned = sum(
+                float(m.get(k, 0) or 0) for m in members for k in unearned_keys
+            )
+            earned = sum(
+                float(m.get(k, 0) or 0) for m in members for k in earned_keys
+            )
+            countable_unearned = max(0.0, unearned - 240.0)
+            earned_after_initial = max(0.0, earned - 780.0)
+            countable_earned = earned_after_initial / 2
+            return round(countable_unearned + countable_earned, 2)
+
         if transform == "age_below":
             # Person-scope: age fact strictly below source.threshold.
             facts = person_facts or {}

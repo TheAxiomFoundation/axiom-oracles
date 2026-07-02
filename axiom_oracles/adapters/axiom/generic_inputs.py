@@ -498,6 +498,14 @@ def attach_generic_inputs(
         # own facts plus hidden keys for transforms that need people or
         # metadata context.
         person_facts = [dict(person.facts) for person in people]
+        # Person-scope transforms sometimes need the rest of the household
+        # (e.g. SSI eligible-spouse detection). Expose each person's
+        # co-members under a hidden key, mirroring the case-level
+        # __people__ convention.
+        for index, facts in enumerate(person_facts):
+            facts["__others__"] = [
+                other for i, other in enumerate(person_facts) if i != index
+            ]
         case_facts = dict(case.facts)
         case_facts["__people__"] = person_facts
         case_facts["__metadata__"] = dict(case.metadata)

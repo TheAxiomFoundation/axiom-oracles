@@ -414,7 +414,7 @@
    "concept": "us:statutes/42/1382#ssi_benefit",
    "kind": "amount_difference",
    "label": "Statutory entitlement vs dataset SSI (take-up, imputed resources, deeming, couples)",
-   "description": "Of 4,987 divergences over 41,314 households, 4,522 (91%) are Axiom paying statutory entitlement where the dataset's simulated SSI is zero \u2014 take-up seeding, the resource test over imputed assets, and spousal deeming all live on the dataset side while the projection exposes no resource data. 462 cases pay on both sides with different amounts (couples at the individual rate, partial deeming), and 3 pay only in the dataset. The dashboard copy shows the first 1,000 mismatches; the full report is under reports/.",
+   "description": "Of 3,231 divergences over 41,314 households (92.2% match), the dominant class remains the dataset withholding SSI from statutorily entitled people (take-up seeding, imputed-resource tests, spousal deeming \u2014 all dataset-side). Eligible couples are now paid at half the couple FBR each via a two-ABD-adults approximation; remaining couple noise and 1382c(f) ineligible-spouse deeming (not yet encoded upstream) account for most of the both-pay-differ residue. Dashboard copy shows the first 1,000 mismatches.",
    "drivers": [
     {
      "label": "Take-up and imputed resources (dataset side)",
@@ -425,8 +425,8 @@
      "description": "42 USC 1382c(f) income deeming from an ineligible spouse is outside the v1 composition, so Axiom pays aged/disabled people whose high-earning spouses disqualify them in the dataset."
     },
     {
-     "label": "Eligible couples compared at individual rate",
-     "description": "v1 treats every person as an individual; a household where both spouses are aged/blind/disabled gets 2x the individual FBR from Axiom vs the couple FBR ($17,892) in the dataset."
+     "label": "Couple approximation edges",
+     "description": "Couples are detected as 'two aged/blind/disabled adults in one household', so unmarried ABD pairs and 3+ ABD households diverge from PolicyEngine's marital-unit treatment."
     }
    ],
    "fix_owner": "program-coverage"
