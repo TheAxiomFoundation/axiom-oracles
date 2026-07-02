@@ -658,12 +658,13 @@
    {
     "program": "tanf",
     "jurisdiction": "WA",
-    "status": "coverageOnly",
+    "status": "executable",
     "generated": true,
-    "source": "rulespec-us origin/main: regulations/388/388-450, regulations/388/388-478 (5 rule files)",
+    "source": "axiom-programs/us-wa/tanf/fy-2026.yaml composing WAC 388-450-0162/0170 + 388-478-0020/0035",
     "known_non_tanf_gaps": [
-     "encoded upstream; no comparison suite yet"
-    ]
+     "dependent care deductions, deemed income, and the resource test are outside the compared slice"
+    ],
+    "suite": "wa-tanf-ecps"
    }
   ]
  }

@@ -225,6 +225,20 @@ concepts:
       policyengine: state_income_tax
       taxsim: siitax
 
+  us-wa:regulations/388#wa_tanf_benefit:
+    description: WA TANF benefit (annualized)
+    category: cash
+    comparison: amount
+    # Both sides: max(0, payment standard - countable income) with the
+    # $500 + 50% earned income work deductions; the payment standard and
+    # gross earned income limit tables verified identical in the
+    # wa-tanf-payment-standard parameter suite.
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: wa_tanf_annual_benefit
+      policyengine: wa_tanf
+
   us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit:
     description: NY TANF benefit (annualized)
     category: cash

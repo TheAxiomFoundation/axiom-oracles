@@ -31,6 +31,7 @@
     "axiom-policyengine-wa-tanf-payment-standard.json",
     "axiom-policyengine-ny-tanf-standards.json",
     "axiom-policyengine-ssi-ecps.json",
-    "axiom-policyengine-ny-tanf-ecps.json"
+    "axiom-policyengine-ny-tanf-ecps.json",
+    "axiom-policyengine-wa-tanf-ecps.json"
   ]
 }

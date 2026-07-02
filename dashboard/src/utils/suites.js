@@ -103,6 +103,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 220,
   },
+  "wa-tanf-ecps": {
+    family: "tanf",
+    jurisdiction: "WA",
+    label: "Washington TANF (WorkFirst)",
+    region: "us",
+    kind: "household",
+    order: 221,
+  },
   "wa-tanf-payment-standard": {
     family: "tanf",
     jurisdiction: "WA",

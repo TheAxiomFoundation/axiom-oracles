@@ -717,3 +717,92 @@ mappings:
   - match: { kind: suffix, value: unit_has_member_age_sixty_or_over }
     scope: household
     source: { kind: constant, value: false }
+
+  # ---------------------------------------------------------------------
+  # WA TANF (us-wa/tanf program) — WAC 388-450 / 388-478 slice.
+  # Dependent care, deemed income, and outside-unit allocations are not
+  # observable in ECPS and take inert constants; the demographic gate
+  # entry above (household_has_minor_or_pregnant_member) is shared.
+  # ---------------------------------------------------------------------
+
+  - match: { kind: exact, value: assistance_unit_size }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+  - match: { kind: exact, value: number_of_family_members }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+
+  - match: { kind: exact, value: household_gross_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: exact, value: cash_assistance_family_gross_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: exact, value: gross_monthly_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: suffix, value: countable_unearned_income_after_exclusions_and_disregards }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+
+  - match: { kind: suffix, value: deemed_or_allocated_income_from_financially_responsible_nonmembers }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: income_allocated_to_persons_outside_assistance_unit }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: other_cash_assistance_deductions_allowed_under_wac_388_450_0177_and_388_450_0178 }
+    scope: household
+    source: { kind: constant, value: 0 }
+
+  - match: { kind: suffix, value: care_paid_before_benefit_approval }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: care_provider_is_not_parent_or_stepparent }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: dependent_care_amount_paid_prorated_to_eligibility_date }
+    scope: person
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: expense_verified }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: hours_worked_per_month }
+    scope: person
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: recipient_gets_cash_assistance_with_person }
+    scope: person
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: recipient_is_dependent_child_under_two_years_of_age }
+    scope: person
+    source: { kind: constant, value: false }
