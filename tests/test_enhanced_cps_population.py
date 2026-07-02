@@ -2,19 +2,53 @@ from axiom_oracles.core.case import Concepts
 from axiom_oracles.core.geography import GeographyScope
 from axiom_oracles.populations.enhanced_cps import (
     NYC_ENHANCED_CPS_DATASET,
+    POPULACE_US_DATASET,
     EnhancedCpsCaseLoader,
     _clean_number,
+    _resolve_populace_dataset,
     _scope_from_geography,
     dataset_for_scope,
     load_enhanced_cps_cases,
 )
 
 
+def test_national_scope_defaults_to_the_populace_artifact() -> None:
+    assert dataset_for_scope(None) == POPULACE_US_DATASET
+    assert dataset_for_scope(GeographyScope(type="census_state", geoid="06")) == (
+        POPULACE_US_DATASET
+    )
+
+
 def test_nyc_scope_uses_nyc_enhanced_cps_dataset() -> None:
+    # The one remaining eCPS-derived path: populace-us has no place grain
+    # yet (PolicyEngine/populace#204), so NYC keeps its dedicated file.
     assert (
         dataset_for_scope(GeographyScope(type="census_place", geoid="3651000"))
         == NYC_ENHANCED_CPS_DATASET
     )
+
+
+def test_populace_reference_resolves_through_the_dataset_repo(monkeypatch) -> None:
+    # huggingface_hub arrives with the policyengine extra; stub it so the
+    # resolution contract tests without the heavyweight install.
+    calls = {}
+
+    def fake_download(*, repo_id, filename, repo_type):
+        calls.update(repo_id=repo_id, filename=filename, repo_type=repo_type)
+        return "/tmp/populace_us_2024.h5"
+
+    import types
+
+    stub = types.ModuleType("huggingface_hub")
+    stub.hf_hub_download = fake_download
+    monkeypatch.setitem(__import__("sys").modules, "huggingface_hub", stub)
+    path = _resolve_populace_dataset(POPULACE_US_DATASET)
+    assert path == "/tmp/populace_us_2024.h5"
+    assert calls == {
+        "repo_id": "policyengine/populace-us",
+        "filename": "populace_us_2024.h5",
+        "repo_type": "dataset",
+    }
 
 
 def test_loader_projects_sampled_ecps_households_to_cases() -> None:

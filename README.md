@@ -275,20 +275,25 @@ wired but currently xfail (J2.0 aborts at parameter preparation under the
 connector: `Operand index does not contain operand il_xs_hl06` — raised
 upstream; UKMOD runs clean on the same engine).
 
-### Population source: populace-us
+### Population source: populace-us (the default)
 
-The ECPS population loader takes any dataset path or `hf://` URL
-(`--ecps-dataset` on the CLI; `ecps_dataset` in a comparison config's
-parameters), and the certified populace-us artifact is a drop-in
-`USSingleYearDataset` — verified: cases load with populated facts and
-census-state scopes from `hf://policyengine/populace-us/populace_us_2024.h5`
-(the current certified release is the sparse ~57k-household national
-artifact, which downloads fast and samples well). Known populace-us gaps
-that shape which rule branches a comparison exercises: the artifact stores
-no immigration/SSN columns (everyone defaults to citizen) and housing
-tenure is degenerate, so immigrant-status-sensitive eligibility paths and
-owner-shelter deductions see no coverage until those imputation stages
-land (PolicyEngine/populace#225).
+The US representative population is the **certified populace-us artifact**
+(`populace://policyengine/populace-us/populace_us_2024.h5`, resolved
+through the Hugging Face dataset repo; the current release is the sparse
+~57k-household national artifact, which downloads fast and samples well).
+The enhanced CPS is retired for every scope populace can serve; the one
+remaining eCPS-derived path is the NYC per-city file, because populace-us
+carries no place/county geography yet (PolicyEngine/populace#204) — it
+retires the moment the populace spine grows place grain. Override any run
+with `--ecps-dataset` (CLI) or `ecps_dataset` (comparison config
+parameters).
+
+Known populace-us gaps that shape which rule branches a comparison
+exercises: the artifact stores no immigration/SSN columns (everyone
+defaults to citizen) and housing tenure is degenerate, so
+immigrant-status-sensitive eligibility paths and owner-shelter deductions
+see no coverage until those imputation stages land
+(PolicyEngine/populace#225).
 
 For the CLI, `axiom-oracles compare euromod axiom ...` reads
 `EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,

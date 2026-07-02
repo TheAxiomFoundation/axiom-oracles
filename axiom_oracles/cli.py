@@ -292,7 +292,12 @@ def sanity_check(
 @click.option(
     "--ecps-dataset",
     type=click.Path(dir_okay=False),
-    help="Override the Enhanced CPS dataset path or hf:// URL.",
+    help=(
+        "Override the population dataset (path, hf:// URL, or populace:// "
+        "dataset-repo reference). Defaults to the certified populace-us "
+        "artifact; NYC scopes keep their dedicated file until populace "
+        "grows place geography."
+    ),
 )
 @click.option(
     "--concept",

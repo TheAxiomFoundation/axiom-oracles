@@ -9,7 +9,17 @@ from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
 
 
+# The certified populace-us artifact is the standing US population: eCPS is
+# retired for everything populace can serve (2026-07-02). The populace://
+# scheme resolves through the Hugging Face *dataset* repo (policyengine-us's
+# own hf:// loader only reaches model repos).
+POPULACE_US_DATASET = "populace://policyengine/populace-us/populace_us_2024.h5"
 ENHANCED_CPS_DATASET = "enhanced_cps_2024"
+#: The one remaining eCPS-derived dependency: populace-us carries no
+#: place/county geography yet (its county_fips/place_fips are empty and
+#: in_nyc is degenerate), so NYC-scoped comparisons cannot filter a national
+#: populace artifact. Retire this the moment the populace spine grows place
+#: grain (PolicyEngine/populace#204).
 NYC_ENHANCED_CPS_DATASET = "hf://policyengine/policyengine-us-data/cities/NYC.h5"
 
 
@@ -21,7 +31,23 @@ def dataset_for_scope(scope: GeographyScope | dict[str, Any] | None) -> str:
     normalized = normalize_scope(scope)
     if normalized == GeographyScope(type="census_place", geoid="3651000"):
         return NYC_ENHANCED_CPS_DATASET
-    return ENHANCED_CPS_DATASET
+    return POPULACE_US_DATASET
+
+
+def _resolve_populace_dataset(dataset: str) -> str:
+    """Download a ``populace://`` artifact and return its local path.
+
+    ``populace://<repo_id>/<filename>`` names a file in a Hugging Face
+    *dataset* repo (e.g. the certified ``policyengine/populace-us``
+    release). policyengine-us resolves its own ``hf://`` scheme against
+    model repos only, so the population loader fetches the artifact itself
+    and hands the engine a local path.
+    """
+    from huggingface_hub import hf_hub_download
+
+    reference = dataset.removeprefix("populace://")
+    repo_id, _, filename = reference.rpartition("/")
+    return hf_hub_download(repo_id=repo_id, filename=filename, repo_type="dataset")
 
 
 def load_enhanced_cps_cases(
@@ -142,6 +168,16 @@ class EnhancedCpsCaseLoader:
             raise RuntimeError(
                 "Install the US PolicyEngine extra: uv pip install -e '.[policyengine]'"
             )
+        if dataset.startswith("populace://"):
+            # policyengine's managed layer validates references against its
+            # vendored bundle manifest, which exists to enforce certified
+            # defaults — exactly what a populace override replaces. Build
+            # the engine dataset directly instead.
+            from policyengine_us import Microsimulation
+            from policyengine_us.data import USSingleYearDataset
+
+            local_path = _resolve_populace_dataset(dataset)
+            return Microsimulation(dataset=USSingleYearDataset(file_path=local_path))
         return pe.us.managed_microsimulation(
             dataset=dataset,
             allow_unmanaged=dataset != ENHANCED_CPS_DATASET,
