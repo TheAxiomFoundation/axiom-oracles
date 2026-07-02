@@ -12,6 +12,7 @@ BE_METADATA = {
 }
 PIT_MODULE = "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
 SSC_MODULE = "be:regulations/social_security/workers/employee_contributions"
+EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 
 
 def be_worker_pit_cases() -> list[Case]:
@@ -33,12 +34,13 @@ def be_worker_ssc_cases() -> list[Case]:
 
 
 def _single_worker_pit_case(case_id: str, annual_income: float) -> Case:
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
     return _single_worker_case(
         case_id,
         annual_income,
         output=Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
         axiom_inputs={
-            _pit_input("belgium_pit_article_23_worker_remuneration"): annual_income,
+            remuneration_input: annual_income,
             _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
@@ -55,19 +57,21 @@ def _single_worker_pit_case(case_id: str, annual_income: float) -> Case:
         metadata_extra={
             "scenario": "single-worker-pit",
             "yearly_earned_income": annual_income,
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {"yem": [remuneration_input]},
         },
     )
 
 
 def _single_worker_ssc_case(case_id: str, annual_income: float) -> Case:
+    contribution_base_input = _ssc_input(
+        "belgium_employee_social_security_contribution_base"
+    )
     return _single_worker_case(
         case_id,
         annual_income,
         output=Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
         axiom_inputs={
-            _ssc_input(
-                "belgium_employee_social_security_contribution_base"
-            ): annual_income,
+            contribution_base_input: annual_income,
             _ssc_input(
                 "belgium_employee_social_security_supplied_work_bonus_reduction"
             ): 0,
@@ -78,6 +82,7 @@ def _single_worker_ssc_case(case_id: str, annual_income: float) -> Case:
         metadata_extra={
             "scenario": "single-worker-ssc",
             "yearly_earned_income": annual_income,
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {"yem": [contribution_base_input]},
         },
     )
 
