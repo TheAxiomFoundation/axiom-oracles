@@ -46,7 +46,12 @@ def upstream_text(path: str) -> str:
 def axiom_value(values: dict[str, float], spec: dict) -> float:
     formula = spec.get("axiom_formula")
     if not formula:
-        return values[spec["rule"]]
+        value = values[spec["rule"]]
+        # Table parameters (payment-standard schedules) are keyed by
+        # assistance-unit size; `key` selects one entry.
+        if "key" in spec:
+            return float(value[spec["key"]])
+        return value
     if not _ALLOWED_FORMULA.match(formula):
         raise ValueError(f"unsupported axiom_formula: {formula}")
     names = {n: values[n] for n in re.findall(r"[a-z_][a-z0-9_]*", formula) if n in values}
@@ -58,7 +63,12 @@ def concept_id(spec: dict) -> str:
     # us-ga/... → us-ga: prefix; us/... → us: prefix, matching corpus ids.
     first, _, rest = root.partition("/")
     prefix = "us" if first == "us" else first
-    return f"{prefix}:{rest}#{spec['rule']}"
+    cid = f"{prefix}:{rest}#{spec['rule']}"
+    # Table comparisons reuse one rule across several keys (e.g. payment
+    # standards by unit size); the key must be part of the concept id.
+    if "key" in spec:
+        cid += f"@{spec['key']}"
+    return cid
 
 
 def build_suite_report(suite: dict, period: str, parameters) -> dict:

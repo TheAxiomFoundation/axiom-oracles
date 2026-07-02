@@ -105,15 +105,22 @@ def evaluate_rulespec_text(text: str, source: str = "<rulespec>") -> dict[str, f
     """
     doc = yaml.safe_load(text)
     formulas: dict[str, str] = {}
+    tables: dict[str, dict] = {}
     for rule in doc.get("rules", []):
         versions = rule.get("versions") or []
         if rule.get("kind") != "parameter" or not versions:
+            continue
+        # Table parameters carry a values mapping (e.g. payment standards
+        # keyed by assistance-unit size) instead of a formula.
+        table = versions[0].get("values")
+        if isinstance(table, dict):
+            tables[rule["name"]] = {k: float(v) for k, v in table.items()}
             continue
         formula = str(versions[0].get("formula", "")).strip()
         if _ALLOWED_FORMULA.match(formula):
             formulas[rule["name"]] = formula
 
-    values: dict[str, float] = {}
+    values: dict[str, float] = dict(tables)
     namespace = {
         "floor": math.floor,
         "max": max,

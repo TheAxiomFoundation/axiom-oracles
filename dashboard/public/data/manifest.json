@@ -25,6 +25,10 @@
     "axiom-policyengine-ssa-parameters.json",
     "axiom-policyengine-ga-health-thresholds.json",
     "axiom-policyengine-pell-parameters.json",
-    "axiom-policyengine-lifeline-parameters.json"
+    "axiom-policyengine-lifeline-parameters.json",
+    "axiom-policyengine-ssi-parameters.json",
+    "axiom-policyengine-co-state-supplement.json",
+    "axiom-policyengine-wa-tanf-payment-standard.json",
+    "axiom-policyengine-ny-tanf-standards.json"
   ]
 }

@@ -40,6 +40,89 @@ suites:
         description: Parent / caretaker adult Medicaid FPL limit
         pe: gov.hhs.medicaid.eligibility.categories.parent.income_limit.GA
 
+  - suite: ssi-parameters
+    category: cash
+    locales: [US]
+    comparisons:
+      # The SSI income exclusions were never inflation-adjusted, so the
+      # encoded 1972 statutory annual amounts compare directly against
+      # PolicyEngine's current monthly parameters. The federal benefit rate
+      # itself is NOT compared here: computing it from the encoded statute
+      # requires the full 1382f COLA chain (a composition, not a file).
+      - file: us/statutes/42/1382a/b/2.yaml
+        rule: annual_general_income_exclusion_limit
+        axiom_formula: annual_general_income_exclusion_limit / 12
+        description: SSI general income exclusion (monthly)
+        pe: gov.ssa.ssi.income.exclusions.general
+      - file: us/statutes/42/1382a/b/4.yaml
+        rule: annual_earned_income_initial_exclusion_limit
+        axiom_formula: annual_earned_income_initial_exclusion_limit / 12
+        description: SSI earned income initial exclusion (monthly)
+        pe: gov.ssa.ssi.income.exclusions.earned
+      - file: us/statutes/42/1382a/b/4.yaml
+        rule: earned_income_remainder_exclusion_rate
+        description: SSI earned income remainder exclusion rate
+        pe: gov.ssa.ssi.income.exclusions.earned_share
+
+  - suite: co-state-supplement
+    category: cash
+    locales: [CO]
+    comparisons:
+      - file: us-co/regulations/9-ccr-2503-5/3.530.yaml
+        rule: oap_total_monthly_grant_standard
+        description: Colorado Old Age Pension total monthly grant standard
+        pe: gov.states.co.ssa.state_supplement.grant_standard
+
+  - suite: wa-tanf-payment-standard
+    category: cash
+    locales: [WA]
+    comparisons:
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 1
+        description: WA cash assistance payment standard, unit size 1
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.1
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 3
+        description: WA cash assistance payment standard, unit size 3
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.3
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 5
+        description: WA cash assistance payment standard, unit size 5
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.5
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 8
+        description: WA cash assistance payment standard, unit size 8
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.8
+
+  - suite: ny-tanf-standards
+    category: cash
+    locales: [NY]
+    comparisons:
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: regular_recurring_monthly_need_schedule
+        key: 1
+        description: NY regular recurring monthly need, household of 1
+        pe: gov.states.ny.otda.tanf.need_standard.main.1
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: regular_recurring_monthly_need_schedule
+        key: 3
+        description: NY regular recurring monthly need, household of 3
+        pe: gov.states.ny.otda.tanf.need_standard.main.3
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: regular_recurring_monthly_need_schedule
+        key: 6
+        description: NY regular recurring monthly need, household of 6
+        pe: gov.states.ny.otda.tanf.need_standard.main.6
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: monthly_home_energy_payment_schedule
+        key: 3
+        description: NY home energy payment, household of 3
+        pe: gov.states.ny.otda.tanf.need_standard.home_energy.main.3
+
   - suite: pell-parameters
     category: education
     locales: [US]

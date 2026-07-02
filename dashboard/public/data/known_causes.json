@@ -392,6 +392,14 @@
    "label": "GA parent/caretaker standard is dollar-based; PolicyEngine carries an FPL approximation",
    "description": "Georgia's parent/caretaker Medicaid standard is published as dollar amounts (the encoding flags georgia_parent_caretaker_standard_uses_dollar_amounts), which the source approximates at 28% FPL + the 5% MAGI disregard (0.33). PolicyEngine carries 0.39 FPL from its 2018-vintage state table. Neither side is wrong per se \u2014 the comparison flags that PE's approximation predates the current published standard.",
    "fix_owner": "policyengine-data"
+  },
+  {
+   "suite": "co-state-supplement",
+   "concept": "us-co:regulations/9-ccr-2503-5/3.530#oap_total_monthly_grant_standard",
+   "kind": "amount_difference",
+   "label": "PolicyEngine carries the SSI FBR as Colorado's OAP grant standard",
+   "description": "PolicyEngine's gov.states.co.ssa.state_supplement.grant_standard values ($943 in 2024, $967 in 2025) equal the federal SSI benefit rate for those years, but Colorado's Old Age Pension total grant standard is set by state rule above the FBR \u2014 9 CCR 2503-5 sec. 3.530 sets $1,032 effective January 1, 2026. The parameter appears to conflate the OAP standard with the FBR and lacks a 2026 value.",
+   "fix_owner": "policyengine-data"
   }
  ]
 }
