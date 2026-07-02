@@ -377,18 +377,33 @@ def test_synthetic_population_honors_requested_period_and_sample_size() -> None:
 
 def test_euromod_bridge_overwrites_declared_axiom_inputs() -> None:
     [case] = load_suite("be-worker-ssc")[:1]
-    input_name = next(iter(case.metadata["axiom_inputs"]))
+    contribution_input = (
+        "be:regulations/social_security/workers/employee_contributions#input."
+        "belgium_employee_social_security_contribution_base"
+    )
+    reference_input = (
+        "be:regulations/social_security/workers/work_bonus#input."
+        "belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+    )
 
-    assert _euromod_to_axiom_bridge_outputs([case]) == ["yem"]
+    assert _euromod_to_axiom_bridge_outputs([case]) == ["yem", "yemeq_s"]
 
     [bridged] = _apply_euromod_to_axiom_input_bridge(
         [case],
-        [EngineResult("euromod", case.case_id, {"yem": 31_651.0})],
+        [
+            EngineResult(
+                "euromod",
+                case.case_id,
+                {"yem": 31_651.0, "yemeq_s": 27_100.0},
+            )
+        ],
     )
 
-    assert bridged.metadata["axiom_inputs"][input_name] == 31_651.0
+    assert bridged.metadata["axiom_inputs"][contribution_input] == 31_651.0
+    assert bridged.metadata["axiom_inputs"][reference_input] == 27_100.0
     assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
-        input_name: 31_651.0
+        contribution_input: 31_651.0,
+        reference_input: 27_100.0,
     }
 
 
@@ -399,7 +414,13 @@ def test_euromod_bridge_runs_euromod_before_axiom() -> None:
     class FakeEuromodRunner:
         def run_cases(self, cases, variables=None):
             calls.append(("euromod", variables))
-            return [EngineResult("euromod", cases[0].case_id, {"tscee_s": 4_136.74, "yem": 31_651.0})]
+            return [
+                EngineResult(
+                    "euromod",
+                    cases[0].case_id,
+                    {"tscee_net_s": 4_136.74, "yem": 31_651.0, "yemeq_s": 27_100.0},
+                )
+            ]
 
     class FakeAxiomRunner:
         def run_cases(self, cases, variables=None):
@@ -425,7 +446,7 @@ def test_euromod_bridge_runs_euromod_before_axiom() -> None:
 
     assert calls[0] == (
         "euromod",
-        [Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS, "yem"],
+        [Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS, "yem", "yemeq_s"],
     )
     assert calls[1][0] == "axiom"
     assert list(calls[1][1].values())[0] == 31_651.0

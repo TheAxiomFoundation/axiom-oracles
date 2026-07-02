@@ -47,8 +47,54 @@ concepts:
           type: country
           geoid: BE
 
+  be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_article_38_contribution_before_reductions:
+    description: Belgium employee social-security contribution before worker reductions
+    category: social_contributions
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_employee_social_security_article_38_contribution_before_reductions
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction:
+    description: Belgium employee social-security work-bonus reduction
+    category: social_contributions
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_worker_work_bonus_full_year_equal_monthly_total_reduction
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tsceerd_s
+        scope:
+          type: country
+          geoid: BE
+
   be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution:
-    description: Belgium employee social-security contribution
+    description: Belgium employee social-security contribution after work-bonus reduction
     category: social_contributions
     comparison: amount
     tolerance: 1
@@ -65,7 +111,7 @@ concepts:
           type: country
           geoid: BE
       euromod:
-        name: tscee_s
+        name: tscee_net_s
         scope:
           type: country
           geoid: BE

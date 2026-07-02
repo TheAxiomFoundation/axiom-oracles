@@ -35,9 +35,18 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
     assert outputs["tscee_s"]["status"] == (
-        "live_oracle_verified_for_regular_worker_statutory_slice"
+        "live_oracle_verified_gross_regular_worker_slice"
     )
-    assert outputs["tin_s"]["status"] == "prepared_worker_pilot_not_full_household_parity"
+    assert outputs["tsceerd_s"]["status"] == (
+        "live_oracle_compared_with_known_2025_timing_residual"
+    )
+    assert outputs["tscee_net_s"]["status"] == (
+        "live_oracle_compared_with_known_2025_timing_residual"
+    )
+    assert (
+        outputs["tin_s"]["status"]
+        == "live_oracle_compared_worker_pilot_not_full_household_parity"
+    )
     assert outputs["ils_dispy"]["status"] == "not_mapped"
 
 

@@ -24,6 +24,34 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-real-config-bsa-is-literal-yes",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "observed_local",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": null,
+      "summary": "Running Belgium BE_2025 under the real SILC dataset configuration names can abort in bsa_be/DefConst/IsLiteral because the literal token yes is parsed as an unknown variable.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "datasets": [
+          "BE_2023_c1_2015_03_e2",
+          "BE_2024_c1_2015_03_e2"
+        ],
+        "euromod_connector": "0.1.20a0",
+        "dotnet": "10.0.301 osx-x64"
+      },
+      "workaround": {
+        "dataset": "BE_training_data",
+        "alternate_dataset": "BE_2025_hhot",
+        "template_dataset": "BE_training_data",
+        "description": "Synthetic household oracle cases run under the bundled training-data schema or the BE_2025_hhot configuration while templating rows from BE_training_data. This reads no licensed SILC records."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

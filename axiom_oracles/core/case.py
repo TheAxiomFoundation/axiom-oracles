@@ -137,6 +137,14 @@ class Concepts:
         "be:regulations/social_security/workers/employee_contributions"
         "#belgium_employee_social_security_ordinary_worker_contribution"
     )
+    BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS = (
+        "be:regulations/social_security/workers/employee_contributions"
+        "#belgium_employee_social_security_article_38_contribution_before_reductions"
+    )
+    BE_EMPLOYEE_WORK_BONUS_REDUCTION = (
+        "be:regulations/social_security/workers/work_bonus"
+        "#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction"
+    )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"
