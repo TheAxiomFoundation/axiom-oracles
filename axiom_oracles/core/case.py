@@ -121,6 +121,19 @@ class Concepts:
     AOTC = "us:tax/federal-income-tax#aotc"
     AMT = "us:tax/federal-income-tax#amt"
     CAPITAL_GAIN = "us:tax/federal-income-tax#capital_gain"
+    # EUROMOD-platform oracle concepts (durable RuleSpec ids where the
+    # encoding exists; UKMOD/EUROMOD outputs bridge to these).
+    UK_INCOME_TAX = "uk:statutes/ukpga/2007/3/23#income_tax_liability"
+    UK_EMPLOYEE_NIC = "uk:tax/national-insurance#employee_contributions"
+    BE_PERSONAL_INCOME_TAX = (
+        "be:statutes/income_tax/individual/tax_liability_pipeline"
+        "#belgium_pit_final_income_tax_payable"
+    )
+    BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS = (
+        "be:statutes/social_security/workers/contribution_rates"
+        "#belgium_worker_article_17_uncapped_component_contribution"
+    )
+
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
     EMPLOYER_OASDI = "us:tax/payroll#employer_oasdi"

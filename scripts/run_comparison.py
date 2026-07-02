@@ -552,6 +552,11 @@ def main() -> int:
             if path.name.endswith(".fixtures.yaml"):
                 continue
             config = yaml.safe_load(path.read_text())
+            if "name" not in config:
+                # Not a registry entry (e.g. parameter-oracles.yaml declares
+                # suites); listed by filename so it stays visible.
+                print(f"{path.stem:24s}  (non-registry config)")
+                continue
             print(f"{config['name']:24s}  {config.get('title', '')}")
         return 0
 
@@ -1171,6 +1176,10 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         ])
     if params.get("jurisdiction_fips"):
         cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
+    if params.get("ecps_dataset"):
+        # Population dataset override (path or hf:// URL) — e.g. the certified
+        # populace-us artifact instead of the enhanced CPS.
+        cmd.extend(["--ecps-dataset", str(params["ecps_dataset"])])
     env = dict(os.environ)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:

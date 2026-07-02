@@ -235,6 +235,80 @@ Python replatform and can run locally through `--accessnyc-mode python`.
 `--accessnyc-mode drools` exists to make the Drools limitation explicit and to
 define where a future local runner should attach.
 
+## EUROMOD-Platform Oracle (UKMOD, EUROMOD)
+
+`EuromodPlatformRunner` runs concept-keyed cases through any model built on
+the EUROMOD software platform — CeMPA's UKMOD for the UK and the JRC's
+EUROMOD release for Belgium and the other member states. Both ship openly
+downloadable policy XMLs and demo input data, so per-case oracle validation
+needs no licensed microdata:
+
+- UKMOD: `git clone --branch B2026.03 https://github.com/centreformicrosimulation/UKMOD-PUBLIC`
+- EUROMOD: the `EUROMOD_RELEASES_J*.zip` bundle from the JRC download page
+
+The engine (`EM_Executable.dll`, .NET) executes via the official `euromod`
+PyPI connector in a subprocess. The DLL requires an x86_64 process, so the
+adapter targets an execution environment named by `EUROMOD_PYTHON`: on
+Linux/CI a normal x86_64 venv with `uv pip install euromod`, on Apple
+Silicon a Rosetta venv (x86_64 Python + x64 .NET via `dotnet-install.sh`,
+`polars-lts-cpu` instead of `polars`, and the manylinux wheel unpacked into
+site-packages).
+
+```python
+from axiom_oracles.adapters.euromod import EuromodPlatformRunner
+
+runner = EuromodPlatformRunner(
+    model_root="~/Downloads/UKMOD_PUBLIC_B2026.03",
+    country="UK",
+    system="UK_2025",
+)
+results = runner.run_cases(cases, variables=["tin_s", "tscee_s", "yem"])
+```
+
+Conventions the adapter owns: case facts are annual while the demo
+datasets are monthly (inputs divide by 12, outputs annualize back), and
+the datasets uprate incomes from their data year to the system year — so
+comparisons bridge on the engine's own post-uprating gross (`yem`), which
+is returned alongside the outputs. The live UKMOD tests reproduce
+hand-computed 2025-26 income tax and employee NICs; the live EUROMOD
+Belgium tests recover the statutory 13.07% employee social contribution
+exactly and progressive PIT.
+
+One EUROMOD-release quirk the adapter absorbs: some model content is
+gated on the *dataset name* (`Run_Cond IsUsedDatabase` patterns matching
+real SILC files), and the engine skips registering gated income lists
+while still compiling identically gated formulas that reference them —
+so running under the bundled `BE_training_data` name aborts at parameter
+preparation (`Operand index does not contain operand il_xs_hl06`; raised
+upstream). Per-case runs therefore pass a real dataset *configuration*
+name (`dataset="BE_2024_c1_2015_03_e2"`) while templating input rows
+from the bundled training schema (`template_dataset="BE_training_data"`)
+— no licensed file is ever read.
+
+### Population source: populace-us (the default)
+
+The US representative population is the **certified populace-us artifact**
+(`populace://policyengine/populace-us/populace_us_2024.h5`, resolved
+through the Hugging Face dataset repo; the current release is the sparse
+~57k-household national artifact, which downloads fast and samples well).
+The enhanced CPS is retired for every scope populace can serve; the one
+remaining eCPS-derived path is the NYC per-city file, because populace-us
+carries no place/county geography yet (PolicyEngine/populace#204) — it
+retires the moment the populace spine grows place grain. Override any run
+with `--ecps-dataset` (CLI) or `ecps_dataset` (comparison config
+parameters).
+
+Known populace-us gaps that shape which rule branches a comparison
+exercises: the artifact stores no immigration/SSN columns (everyone
+defaults to citizen) and housing tenure is degenerate, so
+immigrant-status-sensitive eligibility paths and owner-shelter deductions
+see no coverage until those imputation stages land
+(PolicyEngine/populace#225).
+
+For the CLI, `axiom-oracles compare euromod axiom ...` reads
+`EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,
+`EUROMOD_DATASET`, and `EUROMOD_PYTHON` from the environment.
+
 ## Thin Case Schema
 
 The shared schema is intentionally not a universal household ontology. Cases are
