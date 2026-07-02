@@ -235,6 +235,50 @@ Python replatform and can run locally through `--accessnyc-mode python`.
 `--accessnyc-mode drools` exists to make the Drools limitation explicit and to
 define where a future local runner should attach.
 
+## EUROMOD-Platform Oracle (UKMOD, EUROMOD)
+
+`EuromodPlatformRunner` runs concept-keyed cases through any model built on
+the EUROMOD software platform — CeMPA's UKMOD for the UK and the JRC's
+EUROMOD release for Belgium and the other member states. Both ship openly
+downloadable policy XMLs and demo input data, so per-case oracle validation
+needs no licensed microdata:
+
+- UKMOD: `git clone --branch B2026.03 https://github.com/centreformicrosimulation/UKMOD-PUBLIC`
+- EUROMOD: the `EUROMOD_RELEASES_J*.zip` bundle from the JRC download page
+
+The engine (`EM_Executable.dll`, .NET) executes via the official `euromod`
+PyPI connector in a subprocess. The DLL requires an x86_64 process, so the
+adapter targets an execution environment named by `EUROMOD_PYTHON`: on
+Linux/CI a normal x86_64 venv with `uv pip install euromod`, on Apple
+Silicon a Rosetta venv (x86_64 Python + x64 .NET via `dotnet-install.sh`,
+`polars-lts-cpu` instead of `polars`, and the manylinux wheel unpacked into
+site-packages).
+
+```python
+from axiom_oracles.adapters.euromod import EuromodPlatformRunner
+
+runner = EuromodPlatformRunner(
+    model_root="~/Downloads/UKMOD_PUBLIC_B2026.03",
+    country="UK",
+    system="UK_2025",
+)
+results = runner.run_cases(cases, variables=["tin_s", "tscee_s", "yem"])
+```
+
+Conventions the adapter owns: case facts are annual while the demo
+datasets are monthly (inputs divide by 12, outputs annualize back), and
+the datasets uprate incomes from their data year to the system year — so
+comparisons bridge on the engine's own post-uprating gross (`yem`), which
+is returned alongside the outputs. The live UKMOD tests reproduce
+hand-computed 2025-26 income tax and employee NICs; EUROMOD Belgium is
+wired but currently xfail (J2.0 aborts at parameter preparation under the
+connector: `Operand index does not contain operand il_xs_hl06` — raised
+upstream; UKMOD runs clean on the same engine).
+
+For the CLI, `axiom-oracles compare euromod axiom ...` reads
+`EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,
+`EUROMOD_DATASET`, and `EUROMOD_PYTHON` from the environment.
+
 ## Thin Case Schema
 
 The shared schema is intentionally not a universal household ontology. Cases are

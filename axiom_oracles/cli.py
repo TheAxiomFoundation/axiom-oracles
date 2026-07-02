@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import replace
 import gc
 import json
+import os
 import sys
 from pathlib import Path
 import tempfile
@@ -24,6 +25,7 @@ from .adapters.axiom import (
     attach_axiom_tax_inputs,
     attach_axiom_tax_itemization_choice,
 )
+from .adapters.euromod import EuromodPlatformRunner
 from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
@@ -236,11 +238,15 @@ def sanity_check(
 @cli.command()
 @click.argument(
     "left",
-    type=click.Choice(["accessnyc", "policyengine", "axiom", "taxsim", "prd"]),
+    type=click.Choice(
+        ["accessnyc", "policyengine", "axiom", "taxsim", "prd", "euromod"]
+    ),
 )
 @click.argument(
     "right",
-    type=click.Choice(["accessnyc", "policyengine", "axiom", "taxsim", "prd"]),
+    type=click.Choice(
+        ["accessnyc", "policyengine", "axiom", "taxsim", "prd", "euromod"]
+    ),
 )
 @click.option(
     "--suite",
@@ -914,6 +920,22 @@ def _build_runner(
         return TaxsimPackageRunner()
     if engine == "prd":
         return PrdPackageRunner()
+    if engine == "euromod":
+        model_root = os.environ.get("EUROMOD_MODEL_ROOT")
+        if not model_root:
+            raise click.ClickException(
+                "The euromod engine needs EUROMOD_MODEL_ROOT (a UKMOD or "
+                "EUROMOD model directory), plus EUROMOD_COUNTRY and "
+                "EUROMOD_SYSTEM; EUROMOD_PYTHON names the execution "
+                "environment interpreter."
+            )
+        return EuromodPlatformRunner(
+            model_root=model_root,
+            country=os.environ.get("EUROMOD_COUNTRY", "UK"),
+            system=os.environ.get("EUROMOD_SYSTEM", "UK_2025"),
+            dataset=os.environ.get("EUROMOD_DATASET", "training_data"),
+            country_code=int(os.environ.get("EUROMOD_COUNTRY_CODE", "15")),
+        )
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
 
 
