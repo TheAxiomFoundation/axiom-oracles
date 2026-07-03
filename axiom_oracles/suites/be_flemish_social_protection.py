@@ -33,7 +33,30 @@ def be_flemish_social_protection_premium_cases() -> list[Case]:
                 ),
             ),
             outputs=(Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,),
-        )
+        ),
+        Case(
+            case_id="be-flemish-social-protection-premium-reduced-adult",
+            period="2025",
+            metadata={
+                **BE_METADATA,
+                "scenario": "flemish-adult-reduced-premium",
+                "yearly_earned_income": 0.0,
+                "axiom_inputs": _reduced_adult_axiom_inputs(),
+                "euromod_inputs": [_euromod_flemish_reduced_premium_adult_input()],
+            },
+            entities=(
+                Entity(
+                    entity_id="head",
+                    kind="person",
+                    facts={
+                        Concepts.PERSON_AGE: 35,
+                        Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                        Concepts.YEARLY_EARNED_INCOME: 0.0,
+                    },
+                ),
+            ),
+            outputs=(Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,),
+        ),
     ]
 
 
@@ -49,6 +72,16 @@ def _ordinary_adult_axiom_inputs() -> dict[str, float | int | bool]:
             "flanders_social_protection_has_increased_health_insurance_reimbursement_on_previous_january_1"
         ): False,
     }
+
+
+def _reduced_adult_axiom_inputs() -> dict[str, float | int | bool]:
+    inputs = _ordinary_adult_axiom_inputs()
+    inputs[
+        _premium_input(
+            "flanders_social_protection_has_increased_health_insurance_reimbursement_on_previous_january_1"
+        )
+    ] = True
+    return inputs
 
 
 def _euromod_flemish_high_income_adult_input() -> dict[str, float | int]:
@@ -73,6 +106,23 @@ def _euromod_flemish_high_income_adult_input() -> dict[str, float | int]:
         "yiy": 0,
         "poa": 0,
     }
+
+
+def _euromod_flemish_reduced_premium_adult_input() -> dict[str, float | int]:
+    row = _euromod_flemish_high_income_adult_input()
+    row.update(
+        {
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "bsa": 1,
+        }
+    )
+    return row
 
 
 def _premium_input(name: str) -> str:

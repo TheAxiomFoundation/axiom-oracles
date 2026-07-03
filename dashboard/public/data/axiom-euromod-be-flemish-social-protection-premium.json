@@ -1,0 +1,191 @@
+{
+  "aggregates": [
+    {
+      "category": "social_contributions",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "be-vlg:regulations/social_security/flemish_social_protection/premium#flanders_social_protection_annual_premium",
+      "description": "Belgium Flemish Social Protection annual premium",
+      "left_weighted_sum": 96,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 96,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 2,
+  "concepts": [
+    {
+      "category": "social_contributions",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium Flemish Social Protection annual premium",
+      "id": "be-vlg:regulations/social_security/flemish_social_protection/premium#flanders_social_protection_annual_premium",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": null,
+  "suite": "be-flemish-social-protection-premium",
+  "summary": {
+    "comparison_count": 2,
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 2,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 2,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_weight": 0
+    }
+  },
+  "cases": [
+    {
+      "case_id": "be-flemish-social-protection-premium-ordinary-adult",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_age_years": 35,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_has_increased_health_insurance_reimbursement_on_previous_january_1": false,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_is_administratively_affiliated_without_premium": false,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_is_subject_to_premium": true,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_premium_year": 2025
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "poa": 0,
+            "yem": 5000,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            60000.0
+          ],
+          "yearly_earned_income_total": 60000.0
+        },
+        "locale": "BE",
+        "scenario": "flemish-adult-ordinary-premium",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 60000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-flemish-social-protection-premium-reduced-adult",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_age_years": 35,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_has_increased_health_insurance_reimbursement_on_previous_january_1": true,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_is_administratively_affiliated_without_premium": false,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_is_subject_to_premium": true,
+          "be-vlg:regulations/social_security/flemish_social_protection/premium#input.flanders_social_protection_premium_year": 2025
+        },
+        "euromod_inputs": [
+          {
+            "bsa": 1,
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "BE",
+        "scenario": "flemish-adult-reduced-premium",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 0.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ]
+}
