@@ -261,6 +261,11 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     assert {case.outputs for case in pit_cases} == {
         (Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,)
     }
+    assert [case.metadata["yearly_earned_income"] for case in pit_cases] == [
+        10_000,
+        30_000,
+        60_000,
+    ]
     assert {case.outputs for case in ssc_cases} == {
         (
             Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
