@@ -107,10 +107,10 @@
       "id": "euromod-be-2025-self-employed-main-rate",
       "jurisdiction": "BE",
       "system": "BE_2025",
-      "status": "observed_static_model_source",
-      "classification": "euromod_model_rate_issue",
+      "status": "not_reproduced_live",
+      "classification": "static_model_inspection_superseded_by_live_oracle",
       "upstream_url": null,
-      "summary": "The Belgium BE_2025 self-employed social-contribution policy tscse_be defines the main-activity first-bracket rate as 19.65 percent, while the current consolidated upstream Royal Decree No. 38 Article 12 text in corpus states 20.50 percent. For a 30k main-activity self-employed case before uprating, this is 5,895 EUR in the BE_2025 XML schedule versus 6,150 EUR in the statute-backed RuleSpec output.",
+      "summary": "Static XML inspection suggested the Belgium BE_2025 self-employed social-contribution policy tscse_be might use a 19.65 percent main-activity first-bracket rate while the current consolidated upstream Royal Decree No. 38 Article 12 text in corpus states 20.50 percent. The 2026-07-03 live household oracle did not reproduce that discrepancy: after EUROMOD uprated yse to 31,650.67 EUR, EUROMOD tscse_s and Axiom both returned 6,488.39 EUR, exactly the statutory 20.50 percent path.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "BE",
@@ -125,6 +125,14 @@
           "euromod_tscse_s": 5895,
           "axiom_belgium_self_employed_selected_annual_social_contribution": 6150,
           "residual": -255
+        },
+        "live_household_output_after_uprating": {
+          "dataset": "BE_2024_c1_2015_03_e2",
+          "template_dataset": "BE_training_data",
+          "euromod_yse": 31650.67178502879,
+          "euromod_tscse_s": 6488.387715930901,
+          "axiom_belgium_self_employed_selected_annual_social_contribution": 6488.387715930902,
+          "residual": -0.0000000000009094947017729282
         }
       },
       "statutory_evidence": {
@@ -134,7 +142,7 @@
         "statutory_second_bracket_rate": "14.16 percent"
       },
       "workaround": {
-        "description": "Keep the statutory RuleSpec rate at 20.50 percent and keep the expected residual visible in the self-employed household-level oracle; do not widen tolerance or retarget Axiom to EUROMOD's 19.65 percent model rate."
+        "description": "No live workaround required for the main-activity household slice. Keep the statutory RuleSpec rate at 20.50 percent and keep this ledger entry as a superseded static-inspection note unless a future live case reproduces a real rate residual."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false

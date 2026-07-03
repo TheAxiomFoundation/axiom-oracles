@@ -34,8 +34,8 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 3
-    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 3
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 5
+    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 1
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
     )
@@ -49,11 +49,14 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         outputs["tin_s"]["status"]
         == "live_oracle_verified_worker_pilot_not_full_household_parity"
     )
-    assert outputs["bsa_s"]["status"] == "prepared_oracle_suite_not_live_verified"
-    assert outputs["bsaoa_s"]["status"] == "prepared_oracle_suite_not_live_verified"
+    assert outputs["bsa_s"]["status"] == "live_oracle_verified_isolated_no_resources"
+    assert (
+        outputs["bsaoa_s"]["status"]
+        == "prepared_oracle_suite_blocked_by_euromod_policy_switch"
+    )
     assert (
         outputs["tscse_s"]["status"]
-        == "prepared_oracle_suite_known_euromod_rate_residual"
+        == "live_oracle_verified_main_activity_self_employed_slice"
     )
     assert outputs["tci_s"]["status"] == "live_oracle_verified_ordinary_adult_flanders"
     assert outputs["ils_dispy"]["status"] == "not_mapped"
