@@ -153,6 +153,10 @@ class Concepts:
         "be:statutes/income_guarantee_for_elderly/payable_amount"
         "#belgium_grapa_income_guarantee_for_elderly_annual_amount"
     )
+    BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS = (
+        "be:regulations/social_security/self_employed/contributions"
+        "#belgium_self_employed_selected_annual_social_contribution"
+    )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"

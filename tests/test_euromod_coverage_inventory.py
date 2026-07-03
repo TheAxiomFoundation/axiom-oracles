@@ -35,7 +35,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
     assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 2
-    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 2
+    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 3
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
     )
@@ -51,6 +51,10 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert outputs["bsa_s"]["status"] == "prepared_oracle_suite_not_live_verified"
     assert outputs["bsaoa_s"]["status"] == "prepared_oracle_suite_not_live_verified"
+    assert (
+        outputs["tscse_s"]["status"]
+        == "prepared_oracle_suite_known_euromod_rate_residual"
+    )
     assert outputs["ils_dispy"]["status"] == "not_mapped"
 
 
@@ -75,3 +79,6 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
     )
     assert issues["entries"][0]["upstream_url"].endswith("/issues/4")
     assert issues["entries"][0]["counts_as_axiom_gap"] is False
+    assert {
+        entry["id"] for entry in issues["entries"] if entry["jurisdiction"] == "BE"
+    } >= {"euromod-be-2025-self-employed-main-rate"}

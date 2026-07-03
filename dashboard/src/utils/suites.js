@@ -217,6 +217,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 510,
   },
+  "be-self-employed-ssc": {
+    family: "be_social_security",
+    jurisdiction: "BE",
+    label: "Belgium self-employed social-security contributions",
+    region: "be",
+    kind: "household",
+    order: 515,
+  },
   "be-social-assistance": {
     family: "be_social_assistance",
     jurisdiction: "BE",
