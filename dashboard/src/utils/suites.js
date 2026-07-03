@@ -217,6 +217,22 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 510,
   },
+  "be-social-assistance": {
+    family: "be_social_assistance",
+    jurisdiction: "BE",
+    label: "Belgium social integration income support",
+    region: "be",
+    kind: "household",
+    order: 520,
+  },
+  "be-elderly-income-support": {
+    family: "be_social_assistance",
+    jurisdiction: "BE",
+    label: "Belgium elderly income guarantee",
+    region: "be",
+    kind: "household",
+    order: 530,
+  },
   "nyc-income-tax-gap": {
     family: "nyc_income_tax",
     jurisdiction: "NYC",

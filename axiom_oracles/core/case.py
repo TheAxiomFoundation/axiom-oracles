@@ -145,6 +145,14 @@ class Concepts:
         "be:regulations/social_security/workers/work_bonus"
         "#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction"
     )
+    BE_SOCIAL_INTEGRATION_INCOME_SUPPORT = (
+        "be:statutes/social_integration/payable_amount"
+        "#belgium_social_integration_income_support_annual_amount"
+    )
+    BE_INCOME_GUARANTEE_FOR_ELDERLY = (
+        "be:statutes/income_guarantee_for_elderly/payable_amount"
+        "#belgium_grapa_income_guarantee_for_elderly_annual_amount"
+    )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"

@@ -195,6 +195,8 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
         Concepts.BE_EMPLOYEE_WORK_BONUS_REDUCTION,
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+        Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
+        Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
     }
 
     assert (
@@ -268,6 +270,50 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     assert all("#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"])
     assert all("#input." in key for case in ssc_cases for key in case.metadata["axiom_inputs"])
     assert all("euromod_inputs" in case.metadata for case in pit_cases + ssc_cases)
+
+
+def test_belgium_social_assistance_suite_defines_oracle_concept_and_inputs() -> None:
+    cases = load_suite("be-social-assistance")
+
+    assert len(cases) == 1
+    [case] = cases
+    assert case.locale == "BE"
+    assert case.scope == GeographyScope(type="country", geoid="BE")
+    assert case.outputs == (Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,)
+    assert case.metadata["axiom_entity"] == "Person"
+    assert case.metadata["axiom_entity_id"] == "head"
+    assert all("#input." in key for key in case.metadata["axiom_inputs"])
+    assert case.metadata["axiom_inputs"][
+        "be:statutes/social_integration/payable_amount#input."
+        "belgium_social_integration_use_supplied_chapter_2_countable_annual_resources"
+    ] is True
+    assert "euromod_inputs" in case.metadata
+    assert case.metadata["euromod_inputs"][0]["dag"] == 35
+    assert case.period == "2025"
+
+
+def test_belgium_elderly_income_support_suite_defines_oracle_concept_and_inputs() -> None:
+    cases = load_suite("be-elderly-income-support")
+
+    assert len(cases) == 1
+    [case] = cases
+    assert case.locale == "BE"
+    assert case.scope == GeographyScope(type="country", geoid="BE")
+    assert case.outputs == (Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,)
+    assert case.metadata["axiom_entity"] == "Person"
+    assert case.metadata["axiom_entity_id"] == "head"
+    assert all("#input." in key for key in case.metadata["axiom_inputs"])
+    assert case.metadata["axiom_inputs"][
+        "be:statutes/income_guarantee_for_elderly/payable_amount#input."
+        "belgium_grapa_use_supplied_article_6_maximum_annual_amount"
+    ] is True
+    assert case.metadata["axiom_inputs"][
+        "be:statutes/income_guarantee_for_elderly/payable_amount#input."
+        "belgium_grapa_supplied_article_6_maximum_annual_amount"
+    ] == 17_520.96
+    assert "euromod_inputs" in case.metadata
+    assert case.metadata["euromod_inputs"][0]["dag"] == 70
+    assert case.period == "2025"
 
 
 def test_accessnyc_python_runner_discovers_local_rule_codes(tmp_path) -> None:
