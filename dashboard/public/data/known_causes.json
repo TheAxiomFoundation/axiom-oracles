@@ -455,6 +455,24 @@
    "label": "Household-unit and income-definition edges",
    "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not \u2014 tax-unit household composition and MAGI additions on the PolicyEngine side.",
    "fix_owner": "program-coverage"
+  },
+  {
+   "suite": "be-worker-ssc",
+   "concept": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
+   "kind": "amount_difference",
+   "label": "EUROMOD applies the February 2025 work-bonus table to January",
+   "description": "The 30k Belgium worker residual is the open JRC EUROMOD BE_2025 timing issue: EUROMOD appears to apply the February-through-December ONSS worker work-bonus table to all 12 months, while Axiom applies the separate January 2025 statutory table for one month and the February table for 11 months.",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5"
+  },
+  {
+   "suite": "be-worker-ssc",
+   "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
+   "kind": "amount_difference",
+   "label": "Downstream of the EUROMOD work-bonus timing issue",
+   "description": "The net employee-contribution residual is exactly the opposite side of the worker work-bonus residual. The gross 13.07% employee contribution before reductions matches EUROMOD exactly; only the reduction timing differs.",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5"
   }
  ]
 }

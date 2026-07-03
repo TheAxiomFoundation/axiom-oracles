@@ -52,6 +52,8 @@ export const FAMILY_LABELS = {
   other_federal: "Other federal provisions",
   universal_credit: "Universal Credit",
   uk_tax_benefits: "UK tax & benefits",
+  be_personal_income_tax: "Belgium personal income tax",
+  be_social_security: "Belgium social security",
 };
 
 const SUITE_OVERRIDES = {
@@ -198,6 +200,22 @@ const SUITE_OVERRIDES = {
     region: "uk",
     kind: "household",
     order: 310,
+  },
+  "be-worker-pit": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium worker PIT",
+    region: "be",
+    kind: "household",
+    order: 500,
+  },
+  "be-worker-ssc": {
+    family: "be_social_security",
+    jurisdiction: "BE",
+    label: "Belgium employee social-security contributions",
+    region: "be",
+    kind: "household",
+    order: 510,
   },
   "nyc-income-tax-gap": {
     family: "nyc_income_tax",
