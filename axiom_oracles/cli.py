@@ -1036,8 +1036,44 @@ def _build_runner(
             dataset=os.environ.get("EUROMOD_DATASET", "training_data"),
             template_dataset=os.environ.get("EUROMOD_TEMPLATE_DATASET") or None,
             country_code=int(os.environ.get("EUROMOD_COUNTRY_CODE", "15")),
+            switches=_parse_euromod_switches(
+                os.environ.get("EUROMOD_SWITCHES"),
+                "EUROMOD_SWITCHES",
+            ),
+            policy_switch_overrides=_parse_euromod_switches(
+                os.environ.get("EUROMOD_POLICY_SWITCHES"),
+                "EUROMOD_POLICY_SWITCHES",
+            ),
         )
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
+
+
+def _parse_euromod_switches(
+    raw: str | None,
+    env_var: str = "EUROMOD_SWITCHES",
+) -> tuple[tuple[str, bool], ...]:
+    if not raw:
+        return ()
+    switches: list[tuple[str, bool]] = []
+    for entry in raw.split(","):
+        if not entry.strip():
+            continue
+        if "=" not in entry:
+            raise click.ClickException(
+                f"{env_var} entries must be name=on/off pairs."
+            )
+        name, value = entry.split("=", 1)
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "on"}:
+            enabled = True
+        elif normalized in {"0", "false", "no", "off"}:
+            enabled = False
+        else:
+            raise click.ClickException(
+                f"{env_var} values must be booleans or on/off strings."
+            )
+        switches.append((name.strip(), enabled))
+    return tuple(switches)
 
 
 def _tax_oracle_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:

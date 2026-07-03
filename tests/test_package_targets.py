@@ -95,6 +95,8 @@ def test_cli_builds_euromod_runner_from_environment(monkeypatch) -> None:
     monkeypatch.setenv("EUROMOD_SYSTEM", "BE_2025")
     monkeypatch.setenv("EUROMOD_DATASET", "BE_2024_c1_2015_03_e2")
     monkeypatch.setenv("EUROMOD_TEMPLATE_DATASET", "BE_training_data")
+    monkeypatch.setenv("EUROMOD_SWITCHES", "Belmod_endo=on,BTA=off")
+    monkeypatch.setenv("EUROMOD_POLICY_SWITCHES", "bsaoa_be=on,bun_be=off")
 
     runner = _build_runner("euromod", "api", None, None, ())
 
@@ -104,6 +106,8 @@ def test_cli_builds_euromod_runner_from_environment(monkeypatch) -> None:
     assert runner.system == "BE_2025"
     assert runner.dataset == "BE_2024_c1_2015_03_e2"
     assert runner.template_dataset == "BE_training_data"
+    assert runner.switches == (("Belmod_endo", True), ("BTA", False))
+    assert runner.policy_switch_overrides == (("bsaoa_be", True), ("bun_be", False))
 
 
 def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:

@@ -358,9 +358,10 @@ def test_belgium_elderly_income_support_suite_defines_oracle_concept_and_inputs(
     assert case.metadata["axiom_inputs"][
         "be:statutes/income_guarantee_for_elderly/payable_amount#input."
         "belgium_grapa_supplied_article_6_maximum_annual_amount"
-    ] == 17_520.96
+    ] == 18_964.44
     assert "euromod_inputs" in case.metadata
     assert case.metadata["euromod_inputs"][0]["dag"] == 70
+    assert case.metadata["euromod_policy_switch_overrides"] == [("bsaoa_be", True)]
     assert case.period == "2025"
 
 

@@ -34,8 +34,8 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 5
-    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 1
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 6
+    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
     )
@@ -52,7 +52,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     assert outputs["bsa_s"]["status"] == "live_oracle_verified_isolated_no_resources"
     assert (
         outputs["bsaoa_s"]["status"]
-        == "prepared_oracle_suite_blocked_by_euromod_policy_switch"
+        == "live_oracle_verified_isolated_no_resources_with_policy_switch_override"
     )
     assert (
         outputs["tscse_s"]["status"]
