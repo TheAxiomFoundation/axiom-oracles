@@ -213,13 +213,21 @@ class TestSubprocessContract:
             Path(argv[3]).write_text(
                 json.dumps(
                     {
-                        "columns": ["tin_s", "tscee_s", "tsceerd_s"],
+                        "columns": [
+                            "tin_s",
+                            "tscee_s",
+                            "tsceerd_s",
+                            "bsa_s",
+                            "bsaoa_s",
+                        ],
                         "missing": [],
                         "idhh": [1],
                         "values": {
                             "tin_s": [100.0],
                             "tscee_s": [50.0],
                             "tsceerd_s": [12.0],
+                            "bsa_s": [20.0],
+                            "bsaoa_s": [30.0],
                         },
                     }
                 )
@@ -237,15 +245,26 @@ class TestSubprocessContract:
             variables=[
                 Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
                 Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+                Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
+                Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
                 "yem",
             ],
         )
 
-        assert requested == ["tin_s", "tscee_s", "tsceerd_s", "yem"]
+        assert requested == [
+            "tin_s",
+            "tscee_s",
+            "tsceerd_s",
+            "bsa_s",
+            "bsaoa_s",
+            "yem",
+        ]
         assert result.values["tin_s"] == pytest.approx(1_200.0)
         assert result.values["tscee_s"] == pytest.approx(600.0)
         assert result.values["tsceerd_s"] == pytest.approx(144.0)
         assert result.values["tscee_net_s"] == pytest.approx(456.0)
+        assert result.values["bsa_s"] == pytest.approx(240.0)
+        assert result.values["bsaoa_s"] == pytest.approx(360.0)
 
 
 @pytest.mark.skipif(

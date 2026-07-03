@@ -2,7 +2,7 @@
   "created_at": "2026-07-02",
   "jurisdiction": "be",
   "purpose": "Coverage inventory for the EUROMOD Belgium BE_2025 model surface against Belgium RuleSpec. EUROMOD is an executable comparison oracle, not legal authority; statutory and regulatory RuleSpec modules must still cite upstream Belgian law.",
-  "coverage_claim": "Current Axiom coverage is four EUROMOD-facing output concepts: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from the encoded ONSS January and February-onward 2025 work-bonus A/B reduction, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for the full-year equal-month worker slice. The committed live PIT artifact still covers 30k and 60k worker cases only; the next live run should add a low-wage refundability case. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
+  "coverage_claim": "Current Axiom coverage has six EUROMOD-facing output concepts or prepared oracle targets: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from the encoded ONSS January and February-onward 2025 work-bonus A/B reduction, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for the full-year equal-month worker slice; social-integration income support bsa_s and elderly income guarantee bsaoa_s have prepared isolated no-resources suites and RuleSpec outputs but still need live EUROMOD runs. The committed live PIT artifact still covers 30k and 60k worker cases only; the next live run should add a low-wage refundability case. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
   "source_artifacts": [
     {
       "kind": "euromod_country_model",
@@ -60,9 +60,9 @@
     }
   },
   "coverage_summary": {
-    "current_oracle_output_targets": 4,
+    "current_oracle_output_targets": 6,
     "live_verified_oracle_output_targets": 2,
-    "prepared_oracle_output_targets": 0,
+    "prepared_oracle_output_targets": 2,
     "full_household_disposable_income_parity": false,
     "rule_percentage": null,
     "rule_percentage_note": "No percentage is reported until each BE_2025 policy/function is mapped to RuleSpec modules and marked encoded, composed, oracle-tested, or gap."
@@ -103,6 +103,24 @@
       "status": "live_oracle_verified_worker_pilot_not_full_household_parity",
       "evidence": "RuleSpec has a dense-executable worker-remuneration-to-PIT pipeline that composes Article 38 ordinary employee SSC into the PIT professional-income base, then applies Article 51 forfait expenses, Article 130/134 tax, the Article 5/2 autonomy factor, Article 289ter/1 work-bonus credit amounts computed from the ONSS January and February-onward 2025 work-bonus A/B reduction, refundable Article 289ter/1 imputation under CIR 92 Articles 290 and 304, and supplied local rates. The 2026-07-02 live synthetic comparison matches 2/2 cases within the 15 EUR tolerance: at 30k EUROMOD tin_s is 1679.61 and Axiom is 1681.77; at 60k EUROMOD tin_s is 10646.43 and Axiom is 10646.43. Aggregate EUROMOD-minus-Axiom residual is -2.16 across the two cases.",
       "remaining_gap": "This is single-worker PIT pilot parity, not full household PIT. The low-wage refundable-credit case added to RuleSpec after rulespec-be#7 needs the next live EUROMOD rerun before the dashboard can claim live refundability parity. Exact cent parity still depends on resolving or documenting the 2025 work-bonus timing residual; full parity also needs joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering outside the pilot."
+    },
+    {
+      "euromod_variable": "bsa_s",
+      "meaning": "social integration income support",
+      "rulespec_output": "be:statutes/social_integration/payable_amount#belgium_social_integration_income_support_annual_amount",
+      "rulespec_module": "be/statutes/social_integration/payable_amount.yaml",
+      "status": "prepared_oracle_suite_not_live_verified",
+      "evidence": "RuleSpec now exposes a dense-executable social-integration income-support output that composes Article 3/4 eligibility, Article 14/15 amounts, supplied Chapter II resources, and cent-presented monthly support into an annual amount. axiom-oracles maps that concept to EUROMOD bsa_s and adds a BE_2025 isolated-adult no-resources suite case.",
+      "remaining_gap": "Needs a live EUROMOD comparison artifact before the dashboard can claim bsa_s parity. Broader social-assistance parity still needs itemized resources, cohabitant resources, CPAS equity/procedure surfaces, household composition variants, and elderly income support bsaoa_s."
+    },
+    {
+      "euromod_variable": "bsaoa_s",
+      "meaning": "income guarantee for elderly people",
+      "rulespec_output": "be:statutes/income_guarantee_for_elderly/payable_amount#belgium_grapa_income_guarantee_for_elderly_annual_amount",
+      "rulespec_module": "be/statutes/income_guarantee_for_elderly/payable_amount.yaml",
+      "status": "prepared_oracle_suite_not_live_verified",
+      "evidence": "RuleSpec now exposes a dense-executable GRAPA annual output that composes Article 6 selected maximum amount, Article 7 resources, and Article 11 resource reduction. axiom-oracles maps that concept to EUROMOD bsaoa_s and adds a BE_2025 isolated-senior no-resources suite case using EUROMOD's 2025 current monthly Cat2 amount as a supplied current-amount bridge.",
+      "remaining_gap": "Needs a live EUROMOD comparison artifact before the dashboard can claim bsaoa_s parity. Broader GRAPA parity still needs current-amount source ingestion, detailed delegated resource exclusions, property and capital resource calculations, cohabiting cases, and administrative eligibility surfaces."
     },
     {
       "euromod_variable": "ils_tax",
@@ -196,7 +214,8 @@
         "be-dg/statutes/family_benefits/eligibility.yaml",
         "be-dg/statutes/family_benefits/amounts.yaml"
       ],
-      "status": "partial_statutory_coverage_no_euromod_oracle_parity"
+      "status": "partial_statutory_coverage_prepared_benefit_oracles",
+      "oracle_status": "bsa_s and bsaoa_s have prepared isolated no-resources oracle suites and RuleSpec outputs, but still need live EUROMOD runs"
     },
     {
       "domain": "social_assistance_and_elderly_income_support",
