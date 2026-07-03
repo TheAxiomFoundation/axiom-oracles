@@ -192,6 +192,8 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
 
     assert {mapping.concept_id for mapping in mappings} == {
         Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
+        Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
+        Concepts.BE_EMPLOYEE_WORK_BONUS_REDUCTION,
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
     }
 
@@ -256,11 +258,16 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         (Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,)
     }
     assert {case.outputs for case in ssc_cases} == {
-        (Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,)
+        (
+            Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
+            Concepts.BE_EMPLOYEE_WORK_BONUS_REDUCTION,
+            Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+        )
     }
     assert all(case.metadata["axiom_entity"] == "Person" for case in pit_cases)
     assert all("#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"])
     assert all("#input." in key for case in ssc_cases for key in case.metadata["axiom_inputs"])
+    assert all("euromod_inputs" in case.metadata for case in pit_cases + ssc_cases)
 
 
 def test_accessnyc_python_runner_discovers_local_rule_codes(tmp_path) -> None:

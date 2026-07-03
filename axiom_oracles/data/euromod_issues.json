@@ -24,6 +24,84 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-real-config-bsa-is-literal-yes",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "observed_local",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": null,
+      "summary": "Running Belgium BE_2025 under the real SILC dataset configuration names can abort in bsa_be/DefConst/IsLiteral because the literal token yes is parsed as an unknown variable.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "datasets": [
+          "BE_2023_c1_2015_03_e2",
+          "BE_2024_c1_2015_03_e2"
+        ],
+        "euromod_connector": "0.1.20a0",
+        "dotnet": "10.0.301 osx-x64"
+      },
+      "workaround": {
+        "dataset": "BE_training_data",
+        "alternate_dataset": "BE_2025_hhot",
+        "template_dataset": "BE_training_data",
+        "description": "Synthetic household oracle cases run under the bundled training-data schema or the BE_2025_hhot configuration while templating rows from BE_training_data. This reads no licensed SILC records."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-work-bonus-january-timing",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "observed_local",
+      "classification": "euromod_model_timing_issue",
+      "upstream_url": null,
+      "summary": "The Belgium BE_2025 employee work-bonus output appears to apply the February-onward 2025 ONSS work-bonus table to all 12 months in the full-year equal-month worker case. The statutory RuleSpec pilot applies the separate January 2025 table for one month and the February-through-December table for 11 months, producing an 11.65 EUR residual at the 30k synthetic worker case.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_training_data",
+        "template_dataset": "BE_training_data",
+        "suite": "be-worker-ssc",
+        "period": "2025",
+        "case_id": "be-worker-ssc-30k",
+        "euromod_output": {
+          "tsceerd_s": 3398.52,
+          "tscee_net_s": 522.48
+        },
+        "axiom_output": {
+          "belgium_worker_work_bonus_full_year_equal_monthly_total_reduction": 3386.87,
+          "belgium_employee_social_security_ordinary_worker_contribution": 534.13
+        },
+        "residual": 11.65
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/regulations/social_security/workers/work_bonus.yaml",
+        "january_table_rules": [
+          "belgium_worker_work_bonus_january_2025_s1_threshold",
+          "belgium_worker_work_bonus_january_2025_s1bis_threshold",
+          "belgium_worker_work_bonus_january_2025_s2_threshold",
+          "belgium_worker_work_bonus_january_2025_a_monthly_maximum",
+          "belgium_worker_work_bonus_january_2025_b_monthly_maximum"
+        ],
+        "february_to_december_table_rules": [
+          "belgium_worker_work_bonus_s1_threshold",
+          "belgium_worker_work_bonus_s1bis_threshold",
+          "belgium_worker_work_bonus_s2_threshold",
+          "belgium_worker_work_bonus_a_monthly_maximum",
+          "belgium_worker_work_bonus_b_monthly_maximum"
+        ]
+      },
+      "workaround": {
+        "description": "Keep the residual visible in the household-level oracle instead of widening tolerance; PIT uses a 15 EUR tolerance while this timing issue is unresolved."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

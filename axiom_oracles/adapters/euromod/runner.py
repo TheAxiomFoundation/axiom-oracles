@@ -41,11 +41,16 @@ SubprocessRun = Callable[..., "subprocess.CompletedProcess[Any]"]
 DEFAULT_OUTPUTS: tuple[str, ...] = (
     "tin_s",
     "tscee_s",
+    "tscee_net_s",
     "ils_tax",
     "ils_ben",
     "ils_dispy",
     "yem",
 )
+
+DERIVED_OUTPUTS: dict[str, tuple[str, ...]] = {
+    "tscee_net_s": ("tscee_s", "tsceerd_s"),
+}
 
 
 class EuromodPlatformRunner(EngineAdapter):
@@ -128,6 +133,7 @@ class EuromodPlatformRunner(EngineAdapter):
         ``annualize_outputs`` is set.
         """
         outputs = _euromod_outputs_for_variables(variables)
+        worker_outputs = _expand_derived_outputs(outputs)
         rows: list[dict[str, Any]] = []
         for index, case in enumerate(cases):
             for row in euromod_input_rows(
@@ -138,7 +144,7 @@ class EuromodPlatformRunner(EngineAdapter):
             ):
                 rows.append(row)
 
-        payload = self._execute(rows, outputs)
+        payload = self._execute(rows, worker_outputs)
         if "error" in payload:
             error = (payload["error"],)
             return [
@@ -150,6 +156,7 @@ class EuromodPlatformRunner(EngineAdapter):
                 )
                 for case in cases
             ]
+        _attach_derived_outputs(payload, outputs)
 
         by_household: dict[int, dict[str, float]] = {}
         for position, household in enumerate(payload["idhh"]):
@@ -229,3 +236,37 @@ def _euromod_outputs_for_variables(variables: list[str] | None) -> list[str]:
         else:
             outputs.append(variable)
     return list(dict.fromkeys(outputs))
+
+
+def _expand_derived_outputs(outputs: list[str]) -> list[str]:
+    expanded: list[str] = []
+    for output in outputs:
+        components = DERIVED_OUTPUTS.get(output)
+        if components is None:
+            expanded.append(output)
+        else:
+            expanded.extend(components)
+    return list(dict.fromkeys(expanded))
+
+
+def _attach_derived_outputs(payload: dict[str, Any], outputs: list[str]) -> None:
+    columns = list(payload.get("columns", []))
+    values = payload.get("values", {})
+    missing = list(payload.get("missing", []))
+    for output in outputs:
+        if output != "tscee_net_s":
+            continue
+        if output in columns:
+            continue
+        if "tscee_s" not in values or "tsceerd_s" not in values:
+            if output not in missing:
+                missing.append(output)
+            continue
+        values[output] = [
+            float(gross) - float(reduction)
+            for gross, reduction in zip(values["tscee_s"], values["tsceerd_s"], strict=True)
+        ]
+        columns.append(output)
+    payload["columns"] = columns
+    payload["values"] = values
+    payload["missing"] = missing

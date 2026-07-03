@@ -43,6 +43,10 @@ from axiom_oracles.core.case import Case, Concepts, Entity
 UKMOD_MODEL_ROOT = os.environ.get("UKMOD_MODEL_ROOT")
 EUROMOD_MODEL_ROOT_BE = os.environ.get("EUROMOD_MODEL_ROOT_BE")
 EUROMOD_PYTHON = os.environ.get("EUROMOD_PYTHON")
+EUROMOD_DATASET_BE = os.environ.get("EUROMOD_DATASET_BE", "BE_training_data")
+EUROMOD_TEMPLATE_DATASET_BE = os.environ.get(
+    "EUROMOD_TEMPLATE_DATASET_BE", "BE_training_data"
+)
 
 
 def _single_earner(case_id: str, annual_income: float) -> Case:
@@ -209,10 +213,14 @@ class TestSubprocessContract:
             Path(argv[3]).write_text(
                 json.dumps(
                     {
-                        "columns": ["tin_s", "tscee_s"],
+                        "columns": ["tin_s", "tscee_s", "tsceerd_s"],
                         "missing": [],
                         "idhh": [1],
-                        "values": {"tin_s": [100.0], "tscee_s": [50.0]},
+                        "values": {
+                            "tin_s": [100.0],
+                            "tscee_s": [50.0],
+                            "tsceerd_s": [12.0],
+                        },
                     }
                 )
             )
@@ -233,9 +241,11 @@ class TestSubprocessContract:
             ],
         )
 
-        assert requested == ["tin_s", "tscee_s", "yem"]
+        assert requested == ["tin_s", "tscee_s", "tsceerd_s", "yem"]
         assert result.values["tin_s"] == pytest.approx(1_200.0)
         assert result.values["tscee_s"] == pytest.approx(600.0)
+        assert result.values["tsceerd_s"] == pytest.approx(144.0)
+        assert result.values["tscee_net_s"] == pytest.approx(456.0)
 
 
 @pytest.mark.skipif(
@@ -281,18 +291,14 @@ class TestUkmodLive:
     ),
 )
 class TestEuromodBelgiumLive:
-    """EUROMOD Belgium, live, under a real dataset *configuration*.
+    """EUROMOD Belgium, live, under the configured synthetic dataset path.
 
-    Running under the bundled ``BE_training_data`` name aborts at parameter
-    preparation: the BE spine defines consumption income lists
-    (``il_xs_hl06`` etc.) in ``DefIl`` functions gated on
-    ``Run_Cond IsUsedDatabase`` matching real SILC dataset names
-    (``be_20??_??_????_??_??``), and the engine skips their registration
-    under a non-matching dataset while still compiling the identically
-    gated formulas that reference them (raised upstream). The oracle
-    therefore runs under the real ``BE_2024_c1_2015_03_e2`` configuration
-    while templating rows from the bundled training schema — no licensed
-    file is read.
+    The current J2.0 local connector run succeeds under ``BE_training_data``
+    but aborts under the real SILC configuration names with
+    ``bsa_be/DefConst/IsLiteral`` parsing ``yes`` as an unknown variable. The
+    issue ledger records both this local failure and the earlier inverse
+    training-data prep failure. The dataset names are env-overridable for
+    reproducing either behavior.
 
     The employee social-contribution check is statutory: Belgian employee
     SSC is a flat 13.07% of gross.
@@ -304,8 +310,8 @@ class TestEuromodBelgiumLive:
             model_root=EUROMOD_MODEL_ROOT_BE,
             country="BE",
             system="BE_2025",
-            dataset="BE_2024_c1_2015_03_e2",
-            template_dataset="BE_training_data",
+            dataset=EUROMOD_DATASET_BE,
+            template_dataset=EUROMOD_TEMPLATE_DATASET_BE,
         )
 
     def test_employee_contributions_are_the_statutory_13_07_percent(
