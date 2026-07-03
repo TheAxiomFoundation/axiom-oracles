@@ -34,8 +34,8 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 2
-    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 4
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 3
+    assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 3
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
     )
@@ -55,7 +55,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         outputs["tscse_s"]["status"]
         == "prepared_oracle_suite_known_euromod_rate_residual"
     )
-    assert outputs["tci_s"]["status"] == "prepared_oracle_suite_not_live_verified"
+    assert outputs["tci_s"]["status"] == "live_oracle_verified_ordinary_adult_flanders"
     assert outputs["ils_dispy"]["status"] == "not_mapped"
 
 
