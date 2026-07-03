@@ -33,6 +33,8 @@
     "axiom-policyengine-ssi-ecps.json",
     "axiom-policyengine-ny-tanf-ecps.json",
     "axiom-policyengine-wa-tanf-ecps.json",
-    "axiom-policyengine-medicaid-magi-co-ecps.json"
+    "axiom-policyengine-medicaid-magi-co-ecps.json",
+    "axiom-euromod-be-worker-pit.json",
+    "axiom-euromod-be-worker-ssc.json"
   ]
 }

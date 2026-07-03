@@ -157,10 +157,68 @@ export default function DashboardContent() {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
           {isBelgium ? (
-            <BelgiumEuromodCoverage
-              coverage={data.euromodCoverage}
-              issues={data.euromodIssues}
-            />
+            <>
+              <BelgiumEuromodCoverage
+                coverage={data.euromodCoverage}
+                issues={data.euromodIssues}
+              />
+
+              <ProgramRuns
+                key={jurisdiction}
+                reports={withData}
+                knownCauses={data.knownCauses || []}
+                coverageOverview={data.coverageOverview}
+              />
+
+              <GapLedger
+                reports={withData}
+                knownCauses={data.knownCauses || []}
+                coverageOverview={data.coverageOverview}
+                region={jurisdiction}
+              />
+
+              <details
+                style={{
+                  background: "var(--paper-elevated)",
+                  border: "1px solid var(--hairline)",
+                  borderRadius: 12,
+                  padding: "12px 16px",
+                }}
+              >
+                <summary
+                  style={{
+                    cursor: "pointer",
+                    fontSize: 13,
+                    color: "var(--ink-mute)",
+                  }}
+                >
+                  Advanced view · EUROMOD agreement matrix and encoded-rule
+                  inventory
+                </summary>
+                <div
+                  style={{
+                    marginTop: 12,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 16,
+                  }}
+                >
+                  {viewData.summary.totalCases > 0 && (
+                    <AgreementMatrix
+                      oracles={viewData.oracles}
+                      matrix={viewData.matrix}
+                      overallMatrix={viewData.overallMatrix}
+                      concepts={viewData.concepts}
+                    />
+                  )}
+                  <ProgramBreakdown
+                    programs={viewData.programs}
+                    reports={viewData.reports}
+                    oracles={viewData.oracles}
+                  />
+                </div>
+              </details>
+            </>
           ) : (
             <>
               <OverviewHero reports={withData} />
