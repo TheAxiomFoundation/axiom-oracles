@@ -57,9 +57,9 @@
       "id": "euromod-be-2025-work-bonus-january-timing",
       "jurisdiction": "BE",
       "system": "BE_2025",
-      "status": "observed_local",
+      "status": "upstream_filed",
       "classification": "euromod_model_timing_issue",
-      "upstream_url": null,
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5",
       "summary": "The Belgium BE_2025 employee work-bonus output appears to apply the February-onward 2025 ONSS work-bonus table to all 12 months in the full-year equal-month worker case. The statutory RuleSpec pilot applies the separate January 2025 table for one month and the February-through-December table for 11 months, producing an 11.65 EUR residual at the 30k synthetic worker case.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
