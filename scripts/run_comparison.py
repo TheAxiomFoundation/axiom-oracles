@@ -665,12 +665,20 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     rulespec_root = _ensure_rulespec_us_checkout(runner["rulespec_remote"])
     params = runner["parameters"]
     pinned = params.get("pinned", True)
+    # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
+    # artifact was built with (axiom-encode population.py::POPULACE_PINS, built_with
+    # "1.729.0"), and it clears the tax harness's floor (ecps_tax.py
+    # MIN_POLICYENGINE_US_VERSION = "1.723"). The previously pinned 1.705.16 is
+    # below that floor, so the harness now rejects it — a pinned FIIT run would
+    # fail hard. Keeping the PE meta-package at 4.11.0 (the oracle baseline used
+    # by the other runners) with an explicit newer -us is why the runner passes
+    # --allow-policyengine-us-version to the harness.
     pe_pins = (
         [
             "--with",
             "policyengine==4.11.0",
             "--with",
-            "policyengine-us==1.705.16",
+            "policyengine-us==1.729.0",
             "--with",
             "policyengine-core==3.26.11",
         ]
@@ -1763,6 +1771,40 @@ def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[di
     return selected
 
 
+def _normalize_dataset_identity(raw: dict) -> dict | None:
+    """Return the encode `dataset_identity` block, or None when absent/empty.
+
+    `axiom-encode tax-populace-compare --json` emits a top-level
+    `dataset_identity` object (added in axiom-encode#952) describing exactly
+    which Populace artifact the PolicyEngine oracle ran against — the pinned
+    revision, the sha256 (first 12 hex), the PolicyEngine model version it was
+    built with, and how it resolved (`pinned` / `local-override` / `unpinned`).
+    Older harness output (pre-#952) omits the key; a run that fell through an
+    error path may emit an empty dict. Both collapse to None here so the
+    adapter can keep the legacy `enhanced_cps` label and stay back-compatible.
+    """
+    identity = raw.get("dataset_identity")
+    if not isinstance(identity, dict) or not identity:
+        return None
+    return identity
+
+
+def _dataset_label_from_identity(identity: dict | None, *, fallback: str) -> str:
+    """Human dataset label for `metadata.dataset`, derived from identity.
+
+    Prefers a stable, self-documenting `populace-<country>@<revision>` string
+    so a checked-in report says which artifact produced it without needing the
+    full identity block. Falls back to the legacy label when identity is
+    absent (keeps pre-#952 reports and unit fixtures unchanged).
+    """
+    if not identity:
+        return fallback
+    country = str(identity.get("country") or "").strip().lower()
+    revision = str(identity.get("revision") or "").strip()
+    base = f"populace-{country}" if country else "populace"
+    return f"{base}@{revision}" if revision else base
+
+
 def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     """Convert tax-ecps-compare flat output to axiom.comparison_report.v2.
 
@@ -1771,8 +1813,17 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     schema treats `comparison_weight` as the running denominator; we don't
     have ECPS household weights here, so we set weights = counts to keep
     the dashboard's weighted columns identical to unweighted.
+
+    The encode `dataset_identity` block (axiom-encode#952) is threaded onto the
+    report top-level and into each case's metadata so a checked-in FIIT report
+    is self-documenting about which pinned Populace artifact produced it. It is
+    carried at top-level (not only in cases) so it survives dashboard case-row
+    slimming, which can drop every case on a clean run.
     """
     from collections import Counter, defaultdict
+
+    identity = _normalize_dataset_identity(raw)
+    dataset_label = _dataset_label_from_identity(identity, fallback="enhanced_cps")
 
     # Surface → list of output rows from output_summary
     by_surface: dict[str, list[dict]] = defaultdict(list)
@@ -1907,19 +1958,22 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             flat_mismatches.append(mm)
         if not case_mismatches:
             continue
+        case_metadata = {
+            "case_unit": "tax_unit",
+            "dataset": dataset_label,
+            "entity_id": entity_id,
+            "population": "enhanced-cps",
+            "suite": suite,
+        }
+        if identity is not None:
+            case_metadata["dataset_identity"] = identity
         cases.append(
             {
                 "case_id": case_id,
                 "left_engine": "axiom",
                 "left_errors": [],
                 "match_rate": 0.0,
-                "metadata": {
-                    "case_unit": "tax_unit",
-                    "dataset": "enhanced_cps",
-                    "entity_id": entity_id,
-                    "population": "enhanced-cps",
-                    "suite": suite,
-                },
+                "metadata": case_metadata,
                 "mismatches": case_mismatches,
                 "right_engine": "policyengine",
                 "right_errors": [],
@@ -1934,7 +1988,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         )
     ]
 
-    return {
+    report = {
         "aggregates": aggregates,
         "case_count": raw.get("compared_tax_units", 0),
         "cases": cases,
@@ -1966,6 +2020,13 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             },
         },
     }
+    # Thread encode's dataset identity onto the report top-level so the
+    # checked-in FIIT report records which pinned Populace artifact produced
+    # it — and so it survives even when `cases` is slimmed to empty on a run
+    # with no mismatches (`_slim_report_for_dashboard`).
+    if identity is not None:
+        report["dataset_identity"] = identity
+    return report
 
 
 def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:

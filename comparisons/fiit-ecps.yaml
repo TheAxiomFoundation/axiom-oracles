@@ -1,16 +1,21 @@
-# Federal Individual Income Tax — Axiom RuleSpec vs PolicyEngine, Enhanced CPS.
+# Federal Individual Income Tax — Axiom RuleSpec vs PolicyEngine, pinned Populace.
 #
-# Wraps `axiom-encode tax-ecps-compare` (the harness Max wrote in axiom-encode).
-# See docs/federal-income-tax-comparison.md for the recipe, the gotchas, and
-# the known residuals.
+# Wraps `axiom-encode tax-populace-compare` (aka `tax-ecps-compare`; the two are
+# aliases for the same harness). The harness resolves the PolicyEngine oracle
+# population from the *pinned* Populace artifact by default (axiom-encode#952):
+# a fixed HF revision, sha256-verified, no `AXIOM_POPULACE_ALLOW_UNPINNED`. Its
+# `--json` output carries a `dataset_identity` block that this repo's dashboard
+# adapter threads into the report so a checked-in FIIT report records exactly
+# which artifact produced it. See docs/federal-income-tax-comparison.md for the
+# recipe, the gotchas, and the known residuals.
 
 name: fiit-ecps
 title: Federal income tax — Axiom vs PolicyEngine
 description: >-
   Compares every federal-tax surface (CTC, standard deduction, EITC, CDCC,
   AOTC, capped nonrefundable credits, capital gain definitions, OASDI, Medicare)
-  Axiom RuleSpec encodes against
-  PolicyEngine, using the Enhanced CPS as the validation population.
+  Axiom RuleSpec encodes against PolicyEngine, over the certified pinned
+  Populace US validation population.
 documentation: docs/federal-income-tax-comparison.md
 
 runner:
@@ -19,15 +24,23 @@ runner:
   axiom_rules_repo: $HOME/axiom-rules
   rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
   parameters:
+    # `data_folder` is a deprecated no-op on this harness (Populace loads from
+    # the Hugging Face cache, sha256-pinned) — kept only so older orchestrator
+    # versions still resolve the key. The pinned revision is owned by
+    # axiom-encode's population.py::POPULACE_PINS.
     data_folder: $HOME/axiom-oracles/.axiom/policyengine-data
     sample_size: 0
     year: 2026
     python: "3.13"
     surface: all
-    # Keep PE and core on axiom-encode's certified stack, but use the current
-    # PE-US package so the ECPS oracle reflects latest upstream tax fixes.
+    # `pinned: true` installs PE 4.11.0 + PE-Core 3.26.11 + PE-US 1.729.0 — the
+    # model version the certified pinned Populace artifact was built with, which
+    # also clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723). See
+    # run_comparison.py::_run_axiom_encode_tax_ecps_compare.
     pinned: true
     allow_policyengine_us_version: true
+    # Deprecated no-op on this harness (Populace validation no longer loads
+    # policyengine.py microdata); retained for orchestrator back-compat.
     allow_uncertified_policyengine_data: true
 
 artifacts:

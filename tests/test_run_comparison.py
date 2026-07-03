@@ -79,7 +79,10 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert "--with-editable" in cmd
     assert str(axiom_encode.resolve()) in cmd
     assert "policyengine==4.11.0" in cmd
-    assert "policyengine-us==1.705.16" in cmd
+    # 1.729.0 is the version the certified pinned Populace artifact was built
+    # with and clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723);
+    # the old 1.705.16 pin was below the floor and failed hard.
+    assert "policyengine-us==1.729.0" in cmd
     assert "policyengine-core==3.26.11" in cmd
     assert "--data-folder" in cmd
     assert str(data_folder.resolve()) in cmd
@@ -485,6 +488,128 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
         aggregate["concept"] == "us:tax/federal-income-tax#cdcc"
         for aggregate in report["aggregates"]
     )
+    # Back-compat: raw without a dataset_identity block keeps the legacy label
+    # and does not invent a top-level identity key.
+    assert "dataset_identity" not in report
+    assert report["cases"][0]["metadata"]["dataset"] == "enhanced_cps"
+    assert "dataset_identity" not in report["cases"][0]["metadata"]
+
+
+def test_tax_ecps_dashboard_adapter_threads_dataset_identity():
+    """axiom-encode#952 emits a top-level `dataset_identity` in --json output.
+
+    The dashboard adapter must consume it: surface it on the report top-level
+    (so it survives case-row slimming) and stamp each case's dataset label +
+    identity, replacing the hardcoded `enhanced_cps` string.
+    """
+    run_comparison = load_run_comparison_module()
+
+    identity = {
+        "country": "us",
+        "source": "pinned",
+        "path": None,
+        "sha256": "16be6338f9d0",
+        "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+        "built_with": "1.729.0",
+    }
+    report = run_comparison._adapt_tax_ecps_to_v2(
+        {
+            "compared_tax_units": 1,
+            "compared_values": 1,
+            "mismatch_count": 1,
+            "dataset_identity": identity,
+            "output_summary": [
+                {
+                    "surface": "ctc",
+                    "output": "ctc_before_advance_payments",
+                    "compared": 1,
+                    "mismatches": 1,
+                    "max_abs_diff": 50,
+                    "max_relative_diff": 1,
+                }
+            ],
+            "mismatches": [
+                {
+                    "entity_id": "tax_unit_1",
+                    "surface": "ctc",
+                    "output": "ctc_before_advance_payments",
+                    "axiom": 100,
+                    "policyengine": 150,
+                    "diff": -50,
+                }
+            ],
+        },
+        {},
+        suite="fiit-ecps",
+    )
+
+    # Top-level identity — verbatim from encode, so nothing is lost.
+    assert report["dataset_identity"] == identity
+    # Per-case dataset label is derived from identity, not the legacy constant.
+    case_metadata = report["cases"][0]["metadata"]
+    assert case_metadata["dataset"] == (
+        "populace-us@populace-us-2024-f0af251-703bd81a565c-20260620T201958Z"
+    )
+    assert case_metadata["dataset_identity"] == identity
+
+
+def test_tax_ecps_dashboard_adapter_keeps_identity_when_all_cases_match():
+    """A clean run (no mismatches) has no case rows, but the report must still
+    record which pinned artifact produced it — identity lives at top-level."""
+    run_comparison = load_run_comparison_module()
+
+    identity = {
+        "country": "us",
+        "source": "pinned",
+        "path": None,
+        "sha256": "16be6338f9d0",
+        "revision": "populace-us-2024-f0af251",
+        "built_with": "1.729.0",
+    }
+    report = run_comparison._adapt_tax_ecps_to_v2(
+        {
+            "compared_tax_units": 3,
+            "compared_values": 3,
+            "mismatch_count": 0,
+            "dataset_identity": identity,
+            "output_summary": [
+                {
+                    "surface": "ctc",
+                    "output": "ctc_before_advance_payments",
+                    "compared": 3,
+                    "mismatches": 0,
+                    "max_abs_diff": 0,
+                    "max_relative_diff": 0,
+                }
+            ],
+            "mismatches": [],
+        },
+        {},
+        suite="fiit-ecps",
+    )
+
+    assert report["cases"] == []
+    # Identity survives on the top-level even with zero case rows — this is the
+    # slice `_slim_report_for_dashboard` would ship for a clean weekly run.
+    slim = run_comparison._slim_report_for_dashboard(report)
+    assert slim["dataset_identity"] == identity
+
+
+def test_dataset_label_from_identity_falls_back_without_revision():
+    run_comparison = load_run_comparison_module()
+
+    assert (
+        run_comparison._dataset_label_from_identity(None, fallback="enhanced_cps")
+        == "enhanced_cps"
+    )
+    assert (
+        run_comparison._dataset_label_from_identity(
+            {"country": "us"}, fallback="enhanced_cps"
+        )
+        == "populace-us"
+    )
+    # An empty dict from an error path normalizes to None → legacy label.
+    assert run_comparison._normalize_dataset_identity({"dataset_identity": {}}) is None
 
 
 def test_uk_efrs_dashboard_adapter_separates_known_pe_divergence():

@@ -1,14 +1,38 @@
 # Federal Income Tax: Axiom vs PolicyEngine
 
 This document covers the canonical recipe for comparing Axiom-encoded RuleSpec
-federal individual income tax (FIIT) outputs against PolicyEngine on the
-Enhanced CPS. As of June 2, 2026 the committed dashboard artifact uses the
-full weighted ECPS slice (`--sample-size 0`) and runs against Python 3.14,
-PolicyEngine 4.11.0, PolicyEngine Core 3.26.11, and PolicyEngine-US 1.705.16.
+federal individual income tax (FIIT) outputs against PolicyEngine over the
+certified pinned **Populace US** population. The committed dashboard artifact
+uses the full weighted slice (`--sample-size 0`) and runs against Python 3.13,
+PolicyEngine 4.11.0, PolicyEngine Core 3.26.11, and PolicyEngine-US 1.729.0 —
+the model version the certified pinned Populace artifact was built with, and
+the floor the tax harness now enforces (`>= 1.723`).
 
 The comparison is one entry in the [comparisons registry](../comparisons/);
 see [`comparisons/README.md`](../comparisons/README.md) for the registry
-pattern and the available runner types.
+pattern and the available runner types. FIIT is **the same unified path** as
+every other lane: `scripts/run_comparison.py` dispatches it, it is
+auto-discovered by the weekly matrix (`.github/workflows/comparisons.yml`),
+its output is normalized to the `axiom.comparison_report.v2` schema, and the
+committed dashboard artifact refreshes through this path (it is the first suite
+in `dashboard/scripts/regenerate_all.sh`).
+
+## Population: pinned Populace, with recorded identity
+
+The harness resolves its PolicyEngine oracle population from the **pinned**
+Populace artifact by default (axiom-encode#952): a fixed Hugging Face revision,
+downloaded and sha256-verified, never HF-latest unless
+`AXIOM_POPULACE_ALLOW_UNPINNED` is deliberately set. That is the same
+verified-artifact discipline the in-repo `axiom-oracles-compare` runner gained
+in axiom-oracles#80.
+
+Because the pin can move (a re-pin bumps the revision + sha256), the harness's
+`--json` output carries a top-level `dataset_identity` block — `{country,
+source, path, sha256, revision, built_with}` — naming exactly which artifact
+produced the run. `scripts/run_comparison.py` threads that block onto the
+generated report top-level and into each case's `metadata`, so a checked-in
+FIIT report is self-documenting about its data provenance. (Older harness
+output without the block falls back to the legacy `enhanced_cps` label.)
 
 ## TL;DR — run it locally
 
@@ -31,12 +55,26 @@ uv run scripts/run_comparison.py --list
 
 ## What runs
 
-The harness is **`axiom-encode tax-ecps-compare`** — it lives in `axiom-encode`,
-not `axiom-oracles` (the SNAP comparison uses a different code path through the
-in-repo `axiom-oracles compare` CLI; the two should converge eventually). The
-orchestrator in this repo dispatches to the right harness based on the
-`runner.type` field of the comparison YAML, takes care of the gotchas below,
-and lands the JSON report under `reports/`.
+The harness is **`axiom-encode tax-populace-compare`** (the CLI also registers
+`tax-ecps-compare` as an alias for the identical command) — it lives in
+`axiom-encode`, not `axiom-oracles`. The ~17k LOC of oracle-bridge code stays
+in `axiom-encode`; A9 unified FIIT *operationally* by wrapping that harness in
+the standard runner, not by moving the bridge. The orchestrator in this repo
+dispatches to the right harness based on the `runner.type` field of the
+comparison YAML, takes care of the gotchas below, normalizes the output into
+the v2 schema, and lands the JSON report under `reports/`.
+
+### Deprecated for CI: the direct `axiom-encode tax-populace-compare` call
+
+Invoking `axiom-encode tax-populace-compare` directly (outside this repo's
+runner) still works and is fine for local development and residual triage. But
+it is **deprecated for CI / weekly reporting**: it does not normalize into the
+`axiom.comparison_report.v2` schema, does not land in the dashboard, and is not
+what refreshes the committed FIIT artifact. From now on the committed FIIT
+report refreshes only through `scripts/run_comparison.py fiit-ecps` (the weekly
+matrix and `regenerate_all.sh`). Use the direct command for a quick local
+`--json` dump or `--tax-unit-id` residual check; use the runner for anything
+that produces a reported number.
 
 ## Gotchas
 
@@ -84,9 +122,22 @@ data-model is per-case; this report is aggregated by federal-tax surface):
     },
     ...
   ],
-  "projection_notes": [...]       // human notes on boundary assumptions
+  "projection_notes": [...],      // human notes on boundary assumptions
+  "dataset_identity": {           // axiom-encode#952; null on pre-#952 output
+    "country":    "us",
+    "source":     "pinned",       // or "local-override" / "unpinned"
+    "path":       null,           // set for local overrides
+    "sha256":     "<12 hex>",
+    "revision":   "populace-us-2024-...",
+    "built_with": "<pe-us version>"
+  }
 }
 ```
+
+The v2 report this repo generates surfaces `dataset_identity` at the report
+top-level (so it survives dashboard case-row slimming) and copies it into each
+case's `metadata.dataset_identity`, with `metadata.dataset` set to a
+`populace-<country>@<revision>` label.
 
 `agreement = 100 * (compared_values - mismatch_count) / compared_values`.
 

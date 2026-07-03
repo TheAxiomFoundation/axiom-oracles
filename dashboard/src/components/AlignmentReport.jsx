@@ -747,6 +747,36 @@ function reportJurisdiction(report) {
   return report.suite ? suiteMeta(report.suite).jurisdiction : null;
 }
 
+// Compact provenance line for reports that carry an axiom-encode dataset
+// identity block ({country, source, path, sha256, revision, built_with};
+// axiom-encode#952). Currently populated by the FIIT lane; other reports
+// simply omit it. Kept terse for the header — the full block is in `title`.
+function datasetIdentitySummary(identity) {
+  if (!identity) return null;
+  const source = identity.source || "unknown";
+  const revision = identity.revision;
+  const shortRev =
+    revision && revision.length > 28 ? `${revision.slice(0, 28)}…` : revision;
+  const parts = [`data: ${source}`];
+  if (shortRev) parts.push(shortRev);
+  if (identity.sha256) parts.push(`sha ${identity.sha256}`);
+  return parts.join(" · ");
+}
+
+function datasetIdentityTitle(identity) {
+  if (!identity) return undefined;
+  return [
+    ["source", identity.source],
+    ["revision", identity.revision],
+    ["sha256", identity.sha256],
+    ["built_with_pe", identity.built_with],
+    ["path", identity.path],
+  ]
+    .filter(([, value]) => value)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("\n");
+}
+
 function reportHeadlineRate(aggregates) {
   let matched = 0;
   let total = 0;
@@ -864,6 +894,19 @@ export default function AlignmentReport({
             {(report.case_count ?? aggregateCount).toLocaleString()} households
             {report.population && <> · {report.population}</>}
           </div>
+          {report.dataset_identity && (
+            <div
+              className="mono"
+              style={{
+                fontSize: 10,
+                color: "var(--ink-mute)",
+                marginTop: 2,
+              }}
+              title={datasetIdentityTitle(report.dataset_identity)}
+            >
+              {datasetIdentitySummary(report.dataset_identity)}
+            </div>
+          )}
         </div>
         {(() => {
           const headline = reportHeadlineRate(aggregates);
