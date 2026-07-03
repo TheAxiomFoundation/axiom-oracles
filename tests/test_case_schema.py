@@ -197,6 +197,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
         Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
+        Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
     }
 
     assert (
@@ -270,6 +271,32 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     assert all("#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"])
     assert all("#input." in key for case in ssc_cases for key in case.metadata["axiom_inputs"])
     assert all("euromod_inputs" in case.metadata for case in pit_cases + ssc_cases)
+
+
+def test_belgium_self_employed_suite_defines_oracle_concept_and_inputs() -> None:
+    cases = load_suite("be-self-employed-ssc")
+
+    assert len(cases) == 1
+    [case] = cases
+    assert case.locale == "BE"
+    assert case.scope == GeographyScope(type="country", geoid="BE")
+    assert case.outputs == (Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,)
+    assert case.metadata["axiom_entity"] == "Person"
+    assert case.metadata["axiom_entity_id"] == "head"
+    assert all("#input." in key for key in case.metadata["axiom_inputs"])
+    assert case.metadata["axiom_inputs"][
+        "be:regulations/social_security/self_employed/contributions#input."
+        "belgium_self_employed_gross_professional_income"
+    ] == 30_000
+    assert case.metadata["euromod_to_axiom_input_bridge"] == {
+        "yse": [
+            "be:regulations/social_security/self_employed/contributions#input."
+            "belgium_self_employed_gross_professional_income"
+        ]
+    }
+    assert "euromod_inputs" in case.metadata
+    assert case.metadata["euromod_inputs"][0]["yse"] == 2_500
+    assert case.period == "2025"
 
 
 def test_belgium_social_assistance_suite_defines_oracle_concept_and_inputs() -> None:

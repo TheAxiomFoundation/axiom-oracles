@@ -116,6 +116,29 @@ concepts:
           type: country
           geoid: BE
 
+  be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution:
+    description: Belgium self-employed social-security contribution
+    category: social_contributions
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_self_employed_selected_annual_social_contribution
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tscse_s
+        scope:
+          type: country
+          geoid: BE
+
   be:statutes/social_integration/payable_amount#belgium_social_integration_income_support_annual_amount:
     description: Belgium social integration income support
     category: benefits
