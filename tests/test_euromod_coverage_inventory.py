@@ -58,7 +58,10 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         outputs["tscse_s"]["status"]
         == "live_oracle_verified_main_activity_self_employed_slice"
     )
-    assert outputs["tci_s"]["status"] == "live_oracle_verified_ordinary_adult_flanders"
+    assert (
+        outputs["tci_s"]["status"]
+        == "live_oracle_verified_ordinary_and_reduced_adult_flanders"
+    )
     assert outputs["ils_dispy"]["status"] == "not_mapped"
 
 

@@ -24,6 +24,7 @@ def be_worker_pit_cases() -> list[Case]:
     """Single-worker Belgium PIT cases for the EUROMOD BE_2025 oracle."""
 
     return [
+        _single_worker_pit_case("be-worker-pit-10k", 10_000.0),
         _single_worker_pit_case("be-worker-pit-30k", 30_000.0),
         _single_worker_pit_case("be-worker-pit-60k", 60_000.0),
     ]

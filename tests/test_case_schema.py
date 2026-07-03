@@ -261,6 +261,11 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     assert {case.outputs for case in pit_cases} == {
         (Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,)
     }
+    assert [case.metadata["yearly_earned_income"] for case in pit_cases] == [
+        10_000,
+        30_000,
+        60_000,
+    ]
     assert {case.outputs for case in ssc_cases} == {
         (
             Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
@@ -303,21 +308,36 @@ def test_belgium_self_employed_suite_defines_oracle_concept_and_inputs() -> None
 def test_belgium_flemish_social_protection_suite_defines_oracle_concept_and_inputs() -> None:
     cases = load_suite("be-flemish-social-protection-premium")
 
-    assert len(cases) == 1
-    [case] = cases
-    assert case.locale == "BE"
-    assert case.scope == GeographyScope(type="country", geoid="BE")
-    assert case.outputs == (Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,)
-    assert case.metadata["axiom_entity"] == "Person"
-    assert case.metadata["axiom_entity_id"] == "head"
-    assert all("#input." in key for key in case.metadata["axiom_inputs"])
-    assert case.metadata["axiom_inputs"][
+    assert len(cases) == 2
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {GeographyScope(type="country", geoid="BE")}
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
+    assert all("#input." in key for case in cases for key in case.metadata["axiom_inputs"])
+    assert all(
+        case.metadata["axiom_inputs"][
+            "be-vlg:regulations/social_security/flemish_social_protection/premium#input."
+            "flanders_social_protection_premium_year"
+        ]
+        == 2025
+        for case in cases
+    )
+    by_id = {case.case_id: case for case in cases}
+    ordinary = by_id["be-flemish-social-protection-premium-ordinary-adult"]
+    reduced = by_id["be-flemish-social-protection-premium-reduced-adult"]
+    increased_reimbursement_input = (
         "be-vlg:regulations/social_security/flemish_social_protection/premium#input."
-        "flanders_social_protection_premium_year"
-    ] == 2025
-    assert case.metadata["euromod_inputs"][0]["drgn1"] == 2
-    assert case.metadata["euromod_inputs"][0]["yem"] == 5_000
-    assert case.period == "2025"
+        "flanders_social_protection_has_increased_health_insurance_reimbursement_on_previous_january_1"
+    )
+    assert ordinary.metadata["axiom_inputs"][increased_reimbursement_input] is False
+    assert reduced.metadata["axiom_inputs"][increased_reimbursement_input] is True
+    assert ordinary.metadata["euromod_inputs"][0]["drgn1"] == 2
+    assert ordinary.metadata["euromod_inputs"][0]["yem"] == 5_000
+    assert reduced.metadata["euromod_inputs"][0]["bsa"] == 1
+    assert {case.period for case in cases} == {"2025"}
 
 
 def test_belgium_social_assistance_suite_defines_oracle_concept_and_inputs() -> None:

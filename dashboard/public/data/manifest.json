@@ -35,6 +35,7 @@
     "axiom-policyengine-wa-tanf-ecps.json",
     "axiom-policyengine-medicaid-magi-co-ecps.json",
     "axiom-euromod-be-worker-pit.json",
-    "axiom-euromod-be-worker-ssc.json"
+    "axiom-euromod-be-worker-ssc.json",
+    "axiom-euromod-be-flemish-social-protection-premium.json"
   ]
 }

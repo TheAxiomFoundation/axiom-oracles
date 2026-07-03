@@ -3,26 +3,26 @@
     {
       "category": "tax",
       "comparison": "amount",
-      "comparison_count": 2,
-      "comparison_weight": 2,
+      "comparison_count": 3,
+      "comparison_weight": 3,
       "components": [],
       "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
       "description": "Belgium worker PIT before withholding",
-      "left_weighted_sum": 12326.035463,
+      "left_weighted_sum": 12292.900862,
       "match_rate": 100,
-      "match_weight": 2,
+      "match_weight": 3,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 12328.1964,
-      "weighted_difference": -2.160937,
+      "right_weighted_sum": 12287.783083,
+      "weighted_difference": 5.117779,
       "weighted_match_rate": 100
     }
   ],
-  "case_count": 2,
+  "case_count": 3,
   "concepts": [
     {
       "category": "tax",
@@ -50,22 +50,92 @@
   "scope": null,
   "suite": "be-worker-pit",
   "summary": {
-    "comparison_count": 2,
+    "comparison_count": 3,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 2,
+    "match_count": 3,
     "mismatch_count": 0,
     "mismatches_by_concept": [],
     "mismatches_by_kind": [],
     "mismatches_by_scenario": [],
     "weighted": {
-      "comparison_weight": 2,
+      "comparison_weight": 3,
       "match_rate": 100,
-      "match_weight": 2,
+      "match_weight": 3,
       "mismatch_weight": 0
     }
   },
   "cases": [
+    {
+      "case_id": "be-worker-pit-10k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 9095.020627881837,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 10550.22392834293,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 833.3333333333334,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+          ],
+          "yemeq_s": [
+            "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 9095.020627881837,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 10550.22392834293
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            10000.0
+          ],
+          "yearly_earned_income_total": 10000.0
+        },
+        "locale": "BE",
+        "scenario": "single-worker-pit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 10000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
     {
       "case_id": "be-worker-pit-30k",
       "left_engine": "euromod",
@@ -75,9 +145,9 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 25862.068965517246,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
-          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 30000.0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 31650.67178502879,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
@@ -111,8 +181,8 @@
           ]
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 25862.068965517246,
-          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 30000.0
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 31650.67178502879
         },
         "household_summary": {
           "ages": [
@@ -145,9 +215,9 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 51724.13793103449,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 54570.12376729102,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
-          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 60000.0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 63301.34357005758,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
           "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
@@ -181,8 +251,8 @@
           ]
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 51724.13793103449,
-          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 60000.0
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 54570.12376729102,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 63301.34357005758
         },
         "household_summary": {
           "ages": [
