@@ -114,6 +114,22 @@ jobs:
           path: ~/.cache/policyengine
           key: pe-ecps-${{ runner.os }}
 
+      # The pinned populace-us artifact (see
+      # axiom_oracles/populations/enhanced_cps.py::POPULACE_PINS) downloads to
+      # the Hugging Face hub cache, not ~/.cache/policyengine. Key the cache on
+      # the pinned revision so a re-pin busts it automatically; the ~349MB
+      # dense .h5 is fetched once per revision instead of every weekly run.
+      - name: Cache pinned populace-us artifact (HF hub cache)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: >-
+            populace-hf-${{ runner.os }}-${{
+              hashFiles('axiom-oracles/axiom_oracles/populations/enhanced_cps.py')
+            }}
+          restore-keys: |
+            populace-hf-${{ runner.os }}-
+
       - name: Run comparison
         env:
           AXIOM_ENCODE_REPO: ${{ github.workspace }}/axiom-encode

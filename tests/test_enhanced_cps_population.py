@@ -1,15 +1,41 @@
+import hashlib
+import types
+
+import pytest
+
 from axiom_oracles.core.case import Concepts
 from axiom_oracles.core.geography import GeographyScope
 from axiom_oracles.populations.enhanced_cps import (
     NYC_ENHANCED_CPS_DATASET,
+    POPULACE_PINS,
     POPULACE_US_DATASET,
     EnhancedCpsCaseLoader,
+    PopulacePin,
     _clean_number,
     _resolve_populace_dataset,
     _scope_from_geography,
     dataset_for_scope,
     load_enhanced_cps_cases,
 )
+
+
+def _install_fake_hf(monkeypatch, *, on_download):
+    """Stub huggingface_hub so resolution tests need no network/heavy install.
+
+    ``on_download`` records the kwargs the resolver passes to
+    ``hf_hub_download`` and returns a local path (a real file, so the sha256
+    gate reads actual bytes).
+    """
+    stub = types.ModuleType("huggingface_hub")
+    stub.hf_hub_download = on_download
+    monkeypatch.setitem(__import__("sys").modules, "huggingface_hub", stub)
+
+
+def _artifact_file(tmp_path, contents: bytes):
+    """Write ``contents`` to a temp artifact and return (path, its sha256)."""
+    path = tmp_path / "populace_us_2024.h5"
+    path.write_bytes(contents)
+    return str(path), hashlib.sha256(contents).hexdigest()
 
 
 def test_national_scope_defaults_to_the_populace_artifact() -> None:
@@ -28,27 +54,114 @@ def test_nyc_scope_uses_nyc_enhanced_cps_dataset() -> None:
     )
 
 
-def test_populace_reference_resolves_through_the_dataset_repo(monkeypatch) -> None:
+def test_certified_populace_us_artifact_is_pinned() -> None:
+    # The default US population must be content-pinned, not HF-latest: latest
+    # follows the sparse L0 refit with dead input bases (populace#278).
+    pin = POPULACE_PINS[("policyengine/populace-us", "populace_us_2024.h5")]
+    assert pin.revision == "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z"
+    assert pin.sha256 == (
+        "16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f"
+    )
+
+
+def test_populace_reference_resolves_pinned_revision_and_verifies_hash(
+    monkeypatch, tmp_path
+) -> None:
     # huggingface_hub arrives with the policyengine extra; stub it so the
     # resolution contract tests without the heavyweight install.
+    pin = POPULACE_PINS[("policyengine/populace-us", "populace_us_2024.h5")]
+    local, digest = _artifact_file(tmp_path, b"dense-certified-bytes")
+    monkeypatch.setitem(
+        POPULACE_PINS,
+        ("policyengine/populace-us", "populace_us_2024.h5"),
+        PopulacePin(revision=pin.revision, sha256=digest),
+    )
     calls = {}
 
-    def fake_download(*, repo_id, filename, repo_type):
-        calls.update(repo_id=repo_id, filename=filename, repo_type=repo_type)
-        return "/tmp/populace_us_2024.h5"
+    def fake_download(*, repo_id, filename, repo_type, revision):
+        calls.update(
+            repo_id=repo_id, filename=filename, repo_type=repo_type, revision=revision
+        )
+        return local
 
-    import types
-
-    stub = types.ModuleType("huggingface_hub")
-    stub.hf_hub_download = fake_download
-    monkeypatch.setitem(__import__("sys").modules, "huggingface_hub", stub)
+    _install_fake_hf(monkeypatch, on_download=fake_download)
     path = _resolve_populace_dataset(POPULACE_US_DATASET)
-    assert path == "/tmp/populace_us_2024.h5"
+    assert path == local
+    # The pinned revision is passed through, and the repo is the dataset repo.
     assert calls == {
         "repo_id": "policyengine/populace-us",
         "filename": "populace_us_2024.h5",
         "repo_type": "dataset",
+        "revision": pin.revision,
     }
+
+
+def test_populace_resolution_fails_loudly_on_sha256_mismatch(
+    monkeypatch, tmp_path
+) -> None:
+    # A moved tag or corrupt transfer must raise, never silently swap the
+    # population under a comparison.
+    pin = POPULACE_PINS[("policyengine/populace-us", "populace_us_2024.h5")]
+    local, _ = _artifact_file(tmp_path, b"sparse-wrong-artifact")
+    monkeypatch.setitem(
+        POPULACE_PINS,
+        ("policyengine/populace-us", "populace_us_2024.h5"),
+        PopulacePin(revision=pin.revision, sha256="0" * 64),
+    )
+
+    def fake_download(*, repo_id, filename, repo_type, revision):
+        return local
+
+    _install_fake_hf(monkeypatch, on_download=fake_download)
+    with pytest.raises(RuntimeError, match="failed its sha256 check"):
+        _resolve_populace_dataset(POPULACE_US_DATASET)
+
+
+def test_inline_revision_override_is_passed_through(monkeypatch, tmp_path) -> None:
+    # An unregistered repo/file with an inline @revision resolves at that ref
+    # and skips hashing (no pin => no expected digest).
+    local, _ = _artifact_file(tmp_path, b"adhoc")
+    calls = {}
+
+    def fake_download(*, repo_id, filename, repo_type, revision):
+        calls.update(repo_id=repo_id, revision=revision)
+        return local
+
+    _install_fake_hf(monkeypatch, on_download=fake_download)
+    path = _resolve_populace_dataset(
+        "populace://policyengine/populace-us-experiments/probe.h5@abc123"
+    )
+    assert path == local
+    assert calls == {"repo_id": "policyengine/populace-us-experiments", "revision": "abc123"}
+
+
+def test_inline_revision_conflicting_with_pin_raises(monkeypatch, tmp_path) -> None:
+    # If a caller pins a different revision inline than the registered pin,
+    # refuse rather than resolve an ambiguous reference.
+    def fake_download(*, repo_id, filename, repo_type, revision):  # pragma: no cover
+        raise AssertionError("must not download on ambiguous pin")
+
+    _install_fake_hf(monkeypatch, on_download=fake_download)
+    with pytest.raises(ValueError, match="ambiguous pin"):
+        _resolve_populace_dataset(POPULACE_US_DATASET + "@some-other-revision")
+
+
+def test_unpinned_reference_resolves_latest_without_hashing(
+    monkeypatch, tmp_path
+) -> None:
+    # A populace:// reference with no registered pin and no inline revision
+    # still works (revision=None => HF-latest), for ad-hoc/experimental repos.
+    local, _ = _artifact_file(tmp_path, b"latest")
+    calls = {}
+
+    def fake_download(*, repo_id, filename, repo_type, revision):
+        calls.update(revision=revision)
+        return local
+
+    _install_fake_hf(monkeypatch, on_download=fake_download)
+    path = _resolve_populace_dataset("populace://some/other-dataset/file.h5")
+    assert path == local
+    assert calls == {"revision": None}
 
 
 def test_loader_projects_sampled_ecps_households_to_cases() -> None:
