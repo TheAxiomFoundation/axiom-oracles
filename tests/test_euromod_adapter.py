@@ -218,6 +218,7 @@ class TestSubprocessContract:
                             "tscee_s",
                             "tsceerd_s",
                             "tscse_s",
+                            "tci_s",
                             "bsa_s",
                             "bsaoa_s",
                         ],
@@ -228,6 +229,7 @@ class TestSubprocessContract:
                             "tscee_s": [50.0],
                             "tsceerd_s": [12.0],
                             "tscse_s": [40.0],
+                            "tci_s": [5.3333333333],
                             "bsa_s": [20.0],
                             "bsaoa_s": [30.0],
                         },
@@ -248,6 +250,7 @@ class TestSubprocessContract:
                 Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
                 Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
                 Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
+                Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
                 Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
                 Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
                 "yem",
@@ -259,6 +262,7 @@ class TestSubprocessContract:
             "tscee_s",
             "tsceerd_s",
             "tscse_s",
+            "tci_s",
             "bsa_s",
             "bsaoa_s",
             "yem",
@@ -268,6 +272,7 @@ class TestSubprocessContract:
         assert result.values["tsceerd_s"] == pytest.approx(144.0)
         assert result.values["tscee_net_s"] == pytest.approx(456.0)
         assert result.values["tscse_s"] == pytest.approx(480.0)
+        assert result.values["tci_s"] == pytest.approx(64.0)
         assert result.values["bsa_s"] == pytest.approx(240.0)
         assert result.values["bsaoa_s"] == pytest.approx(360.0)
 

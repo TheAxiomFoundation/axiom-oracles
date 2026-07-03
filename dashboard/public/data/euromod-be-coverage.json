@@ -2,7 +2,7 @@
   "created_at": "2026-07-02",
   "jurisdiction": "be",
   "purpose": "Coverage inventory for the EUROMOD Belgium BE_2025 model surface against Belgium RuleSpec. EUROMOD is an executable comparison oracle, not legal authority; statutory and regulatory RuleSpec modules must still cite upstream Belgian law.",
-  "coverage_claim": "Current Axiom coverage has seven EUROMOD-facing output concepts or prepared oracle targets: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from the encoded ONSS January and February-onward 2025 work-bonus A/B reduction, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for the full-year equal-month worker slice; self-employed social contributions tscse_s has a prepared main-activity suite and statutory RuleSpec output but exposes a known BE_2025 EUROMOD first-rate discrepancy; social-integration income support bsa_s and elderly income guarantee bsaoa_s have prepared isolated no-resources suites and RuleSpec outputs but still need live EUROMOD runs. The committed live PIT artifact still covers 30k and 60k worker cases only; the next live run should add a low-wage refundability case. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
+  "coverage_claim": "Current Axiom coverage has eight EUROMOD-facing output concepts or prepared oracle targets: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from the encoded ONSS January and February-onward 2025 work-bonus A/B reduction, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for the full-year equal-month worker slice; self-employed social contributions tscse_s has a prepared main-activity suite and statutory RuleSpec output but exposes a known BE_2025 EUROMOD first-rate discrepancy; Flemish care/social-protection premium tci_s has a prepared ordinary-adult Flanders suite and RuleSpec output using Article 68 plus official Statbel health-index values; social-integration income support bsa_s and elderly income guarantee bsaoa_s have prepared isolated no-resources suites and RuleSpec outputs but still need live EUROMOD runs. The committed live PIT artifact still covers 30k and 60k worker cases only; the next live run should add a low-wage refundability case. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
   "source_artifacts": [
     {
       "kind": "euromod_country_model",
@@ -60,9 +60,9 @@
     }
   },
   "coverage_summary": {
-    "current_oracle_output_targets": 7,
+    "current_oracle_output_targets": 8,
     "live_verified_oracle_output_targets": 2,
-    "prepared_oracle_output_targets": 3,
+    "prepared_oracle_output_targets": 4,
     "full_household_disposable_income_parity": false,
     "rule_percentage": null,
     "rule_percentage_note": "No percentage is reported until each BE_2025 policy/function is mapped to RuleSpec modules and marked encoded, composed, oracle-tested, or gap."
@@ -103,6 +103,15 @@
       "status": "prepared_oracle_suite_known_euromod_rate_residual",
       "evidence": "RuleSpec encodes Royal Decree No. 38 Article 12 self-employed contribution rates, including the statutory 20.50 percent first-bracket rate and 14.16 percent second-bracket rate. axiom-oracles maps the selected annual contribution to EUROMOD tscse_s and adds a BE_2025 single main-activity self-employed case with yse bridged back into Axiom gross income.",
       "remaining_gap": "Needs a live EUROMOD comparison artifact. Static BE_2025 XML inspection shows tscse_be/$tscse_StdRate1 is 0.1965 for the main-activity first bracket, while the upstream Article 12 text in corpus says 20.50 percent; the issue ledger tracks this as an external model discrepancy rather than an Axiom statutory gap."
+    },
+    {
+      "euromod_variable": "tci_s",
+      "meaning": "Flemish care insurance / social protection contribution",
+      "rulespec_output": "be-vlg:regulations/social_security/flemish_social_protection/premium#flanders_social_protection_annual_premium",
+      "rulespec_module": "be-vlg/regulations/social_security/flemish_social_protection/premium.yaml",
+      "status": "prepared_oracle_suite_not_live_verified",
+      "evidence": "RuleSpec computes the 2025 Flemish Social Protection ordinary annual premium from Article 68: 54 EUR base amount multiplied by the official Statbel April 2024 / April 2020 health-index ratio on base year 2013 and rounded to the nearest euro, yielding 64 EUR. axiom-oracles maps the annual premium to EUROMOD tci_s and adds a BE_2025 high-income ordinary adult in Flanders with drgn1=2 to avoid the reduced-premium brv_s path.",
+      "remaining_gap": "Needs a live EUROMOD comparison artifact before the dashboard can claim tci_s parity. Broader Flemish Social Protection parity still needs reduced-premium brv_s cases, voluntary Brussels affiliation, administrative affiliation without premium, arrears, and sanctions."
     },
     {
       "euromod_variable": "tin_s",
@@ -202,8 +211,8 @@
         "be/regulations/social_security/self_employed/contributions.yaml",
         "be-vlg/regulations/social_security/flemish_social_protection/premium.yaml"
       ],
-      "status": "partial_statutory_coverage_employee_ssc_oracle_verified_self_employed_prepared",
-      "oracle_status": "gross tscee_s regular worker slice verifies exactly; tsceerd_s and derived net tscee_net_s compare live with a visible 11.65 work-bonus timing residual at 30k; tscse_s has a prepared main-activity self-employed suite but static BE_2025 XML uses 19.65 percent where upstream Article 12 says 20.50 percent"
+      "status": "partial_statutory_coverage_employee_ssc_oracle_verified_self_employed_and_care_premium_prepared",
+      "oracle_status": "gross tscee_s regular worker slice verifies exactly; tsceerd_s and derived net tscee_net_s compare live with a visible 11.65 work-bonus timing residual at 30k; tscse_s has a prepared main-activity self-employed suite but static BE_2025 XML uses 19.65 percent where upstream Article 12 says 20.50 percent; tci_s has a prepared ordinary adult Flanders suite backed by Article 68 and official Statbel health-index values"
     },
     {
       "domain": "family_benefits",
@@ -337,6 +346,7 @@
   ],
   "next_mapping_work": [
     "Refresh the be-worker-pit live EUROMOD artifact with a low-wage case that exercises refundable Article 289ter/1 work-bonus credit after rulespec-be#7.",
+    "Run the prepared be-flemish-social-protection-premium suite live and verify whether EUROMOD returns the annual tci_s amount after the adapter's monthly-output normalization.",
     "Run the prepared be-self-employed-ssc suite live and file the BE_2025 tscse_s 19.65 percent first-rate issue upstream if confirmed by execution.",
     "Map every euromod_policies entry to RuleSpec modules and mark encoded, composed, oracle-tested, or gap.",
     "Expand tin_s beyond the single-worker pilot to full household PIT, including joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering.",
