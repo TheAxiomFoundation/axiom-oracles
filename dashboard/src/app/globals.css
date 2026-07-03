@@ -946,6 +946,185 @@ a.ledger-programlink:hover {
   color: var(--ink-mute);
 }
 
+/* ── Rule verification — per-rule coverage KPI + table ── */
+.rv-ref {
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+.rv-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  padding: 18px 20px 4px;
+}
+.rv-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--paper-elevated);
+}
+.rv-kpi[data-tone="good"] {
+  border-color: rgba(6, 95, 70, 0.28);
+  background: var(--good-bg);
+}
+.rv-kpi[data-tone="track"] {
+  border-color: rgba(180, 83, 9, 0.3);
+  background: var(--accent-soft);
+}
+.rv-kpi-value {
+  font-size: 22px;
+  line-height: 1.05;
+  font-weight: 500;
+  color: var(--ink);
+}
+.rv-kpi[data-tone="good"] .rv-kpi-value {
+  color: var(--good);
+}
+.rv-kpi[data-tone="track"] .rv-kpi-value {
+  color: var(--accent-deep);
+}
+.rv-kpi-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.rv-kpi-sub {
+  font-size: 10.5px;
+  color: var(--ink-mute);
+  line-height: 1.35;
+}
+.rv-note {
+  padding: 8px 20px 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-mute);
+  max-width: 900px;
+}
+.rv-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 20px;
+}
+.rv-toggle {
+  display: inline-flex;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 2px;
+  background: var(--paper-warm);
+}
+.rv-toggle-btn {
+  border: 0;
+  background: transparent;
+  padding: 5px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-mute);
+  font-family: inherit;
+}
+.rv-toggle-btn-active {
+  background: var(--ink);
+  color: white;
+}
+.rv-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.rv-filter input {
+  accent-color: var(--accent);
+}
+.rv-table {
+  min-width: 720px;
+}
+.rv-table th {
+  white-space: nowrap;
+}
+.rv-th-note {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-top: 2px;
+}
+.rv-num {
+  text-align: right;
+}
+.rv-rowlabel {
+  font-weight: 500;
+  color: var(--ink);
+}
+.rv-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rv-cell-pct {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  min-width: 46px;
+}
+.rv-bar {
+  display: inline-block;
+  position: relative;
+  width: 84px;
+  height: 7px;
+  border-radius: 4px;
+  background: var(--hairline);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.rv-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  background: var(--ink-mute);
+}
+.rv-bar-fill[data-tone="good"] {
+  background: var(--good);
+}
+.rv-bar-fill[data-tone="warn"] {
+  background: var(--warn);
+}
+.rv-bar-fill[data-tone="bad"] {
+  background: var(--bad);
+}
+.rv-bar-fill[data-tone="track"] {
+  background: var(--accent);
+}
+.rv-empty {
+  text-align: center;
+  color: var(--ink-mute);
+  font-size: 12.5px;
+}
+
+@media (max-width: 640px) {
+  .rv-kpis {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .rv-note,
+  .rv-controls {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .rv-bar {
+    width: 56px;
+  }
+}
+
 /* ── Quality floor: focus + reduced motion ── */
 a:focus-visible,
 button:focus-visible,
