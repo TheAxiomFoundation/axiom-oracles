@@ -33,11 +33,9 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     axiom_encode = tmp_path / "axiom-encode"
     axiom_rules = tmp_path / "axiom-rules-engine"
     rulespec = tmp_path / "workspace" / "rulespec-us"
-    data_folder = tmp_path / "policyengine-data"
     axiom_encode.mkdir()
     axiom_rules.mkdir()
     rulespec.mkdir(parents=True)
-    data_folder.mkdir()
     output = tmp_path / "report.json"
     calls = []
 
@@ -67,7 +65,9 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
                 "year": 2026,
                 "python": "3.13",
                 "surface": "all",
-                "data_folder": str(data_folder),
+                # No data_folder: Populace loads from the pinned HF cache, so the
+                # live fiit-ecps.yaml omits the key. Assert --data-folder is then
+                # not passed (and note passing a missing dir would SystemExit).
                 "pinned": True,
             },
         },
@@ -84,8 +84,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     # the old 1.705.16 pin was below the floor and failed hard.
     assert "policyengine-us==1.729.0" in cmd
     assert "policyengine-core==3.26.11" in cmd
-    assert "--data-folder" in cmd
-    assert str(data_folder.resolve()) in cmd
+    assert "--data-folder" not in cmd
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
     assert output.read_text() == "{}"

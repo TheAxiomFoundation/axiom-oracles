@@ -24,11 +24,12 @@ runner:
   axiom_rules_repo: $HOME/axiom-rules
   rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
   parameters:
-    # `data_folder` is a deprecated no-op on this harness (Populace loads from
-    # the Hugging Face cache, sha256-pinned) — kept only so older orchestrator
-    # versions still resolve the key. The pinned revision is owned by
-    # axiom-encode's population.py::POPULACE_PINS.
-    data_folder: $HOME/axiom-oracles/.axiom/policyengine-data
+    # No `data_folder`: Populace loads from the sha256-pinned Hugging Face cache
+    # (axiom-encode#952), so the harness needs no local data directory. The
+    # runner's --data-folder is only passed when this key is set, and it hard-
+    # fails if the path is missing — so omitting it is both correct and safer
+    # than pointing at a directory nothing populates. The pinned revision is
+    # owned by axiom-encode's population.py::POPULACE_PINS.
     sample_size: 0
     year: 2026
     python: "3.13"

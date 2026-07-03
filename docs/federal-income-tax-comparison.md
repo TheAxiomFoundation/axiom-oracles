@@ -86,15 +86,16 @@ The harness has four hard requirements that are not obvious:
    `rulespec-us-clean`, etc.) produces a different namespace and every import
    fails. The script enforces this by cloning to `<tmpdir>/rulespec-us`.
 
-2. **`axiom-rules-engine` debug binary must exist.** The harness probes
-   `$AXIOM_RULES_REPO/target/debug/axiom-rules-engine`, not the release build.
-   The script runs `cargo build --bin axiom-rules-engine` if it's missing.
+2. **`axiom-rules-engine` release binary must exist.** The runner probes
+   `$AXIOM_RULES_REPO/target/release/axiom-rules-engine` and runs
+   `cargo build --bin axiom-rules-engine --release` if it's missing.
 
 3. **`AXIOM_RULESPEC_REPO_ROOTS` only matters for the lower-level
    `axiom-oracles compare` path.** `tax-ecps-compare` takes
    `--rulespec-root` directly.
 
-4. **`uv run --python 3.14 --no-project`** is the canonical invocation.
+4. **`uv run --python 3.13 --no-project`** is the canonical invocation (the
+   `python` key in `fiit-ecps.yaml` is the source of truth).
    `--with-editable /path/to/axiom-encode` installs it from the local checkout;
    `--with 'policyengine[...]'` resolves PE from PyPI on every run.
 
@@ -177,8 +178,9 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
 
 - **OASDI 2026 base drift.** Older PolicyEngine-US releases used $186,000 as
   the Social Security contribution-and-benefit base; the encoded SSA 2026
-  automatic determination is $184,500. PolicyEngine-US 1.705.16 includes the
-  corrected base, and the comparison runner pins that or newer vetted releases.
+  automatic determination is $184,500. The pinned PolicyEngine-US 1.729.0 (and
+  every release at or above the runner's 1.723 floor) includes the corrected
+  base.
 - **EITC amount residuals.** All 113 `eitc_earned_income` residual tax units
   are joint returns. Axiom's live RuleSpec chain still has 26 USC 1402(a),
   1402(b), and 32(c)(2) shaped around aggregate TaxUnit self-employment and
