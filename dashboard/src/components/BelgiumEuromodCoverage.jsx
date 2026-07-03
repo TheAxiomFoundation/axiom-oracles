@@ -2,6 +2,11 @@
 
 const STATUS_LABELS = {
   live_oracle_verified_for_regular_worker_statutory_slice: "Live verified",
+  live_oracle_verified_gross_regular_worker_slice: "Live verified",
+  live_oracle_verified_worker_pilot_not_full_household_parity:
+    "Worker pilot verified",
+  live_oracle_compared_with_known_2025_timing_residual:
+    "Live compared; known residual",
   prepared_worker_pilot_not_full_household_parity: "Pilot ready",
   not_mapped: "Not mapped",
   oracle_anchor_not_target_output: "Anchor",
@@ -9,6 +14,9 @@ const STATUS_LABELS = {
 
 const STATUS_CLASS = {
   live_oracle_verified_for_regular_worker_statutory_slice: "good",
+  live_oracle_verified_gross_regular_worker_slice: "good",
+  live_oracle_verified_worker_pilot_not_full_household_parity: "good",
+  live_oracle_compared_with_known_2025_timing_residual: "warn",
   prepared_worker_pilot_not_full_household_parity: "warn",
   not_mapped: "gap",
   oracle_anchor_not_target_output: "neutral",
@@ -28,6 +36,10 @@ function statusClass(status) {
 function compactNumber(value) {
   if (value == null) return "—";
   return Number(value).toLocaleString();
+}
+
+function plural(value, singular, pluralForm = `${singular}s`) {
+  return Number(value) === 1 ? singular : pluralForm;
 }
 
 function Stat({ value, label }) {
@@ -149,14 +161,18 @@ function EuromodIssueLedger({ issues }) {
               <p>{issue.summary}</p>
               <p>{issue.workaround?.description}</p>
             </div>
-            <a
-              className="cite"
-              href={issue.upstream_url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              upstream issue
-            </a>
+            {issue.upstream_url ? (
+              <a
+                className="cite"
+                href={issue.upstream_url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                upstream issue
+              </a>
+            ) : (
+              <span className="cite">local ledger</span>
+            )}
           </div>
         ))}
       </div>
@@ -176,6 +192,14 @@ export default function BelgiumEuromodCoverage({ coverage, issues }) {
 
   const denominator = coverage.denominator || {};
   const summary = coverage.coverage_summary || {};
+  const outputTargets = coverage.oracle_output_coverage || [];
+  const mappedTargets =
+    summary.current_oracle_output_targets ||
+    outputTargets.filter((target) => target.rulespec_output).length;
+  const verifiedTargets = summary.live_verified_oracle_output_targets || 0;
+  const residualTargets = outputTargets.filter((target) =>
+    String(target.status || "").includes("known_2025_timing_residual"),
+  ).length;
   const source = coverage.source_artifacts?.find(
     (artifact) => artifact.kind === "euromod_training_input_schema",
   );
@@ -185,11 +209,14 @@ export default function BelgiumEuromodCoverage({ coverage, issues }) {
       <section className="hero">
         <div className="section-eyebrow">Belgium EUROMOD coverage</div>
         <h1 className="hero-thesis">
-          Axiom has <em>{summary.live_verified_oracle_output_targets || 0}</em>{" "}
-          live EUROMOD BE target and{" "}
-          <em>{summary.prepared_oracle_output_targets || 0}</em> prepared
-          pilot target across the{" "}
-          <em>{coverage.oracle_configuration?.system}</em> model.
+          Axiom maps <em>{compactNumber(mappedTargets)}</em> EUROMOD BE{" "}
+          {plural(mappedTargets, "output")} across the{" "}
+          <em>{coverage.oracle_configuration?.system}</em> model:{" "}
+          <em>{compactNumber(verifiedTargets)}</em>{" "}
+          {plural(verifiedTargets, "target")} verified and{" "}
+          <em>{compactNumber(residualTargets)}</em>{" "}
+          {plural(residualTargets, "target")} live-compared with a known
+          EUROMOD residual.
         </h1>
         <p className="hero-sub">{coverage.coverage_claim}</p>
         <div className="hero-stats">
