@@ -198,6 +198,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
         Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
+        Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
     }
 
     assert (
@@ -299,6 +300,26 @@ def test_belgium_self_employed_suite_defines_oracle_concept_and_inputs() -> None
     assert case.period == "2025"
 
 
+def test_belgium_flemish_social_protection_suite_defines_oracle_concept_and_inputs() -> None:
+    cases = load_suite("be-flemish-social-protection-premium")
+
+    assert len(cases) == 1
+    [case] = cases
+    assert case.locale == "BE"
+    assert case.scope == GeographyScope(type="country", geoid="BE")
+    assert case.outputs == (Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,)
+    assert case.metadata["axiom_entity"] == "Person"
+    assert case.metadata["axiom_entity_id"] == "head"
+    assert all("#input." in key for key in case.metadata["axiom_inputs"])
+    assert case.metadata["axiom_inputs"][
+        "be-vlg:regulations/social_security/flemish_social_protection/premium#input."
+        "flanders_social_protection_premium_year"
+    ] == 2025
+    assert case.metadata["euromod_inputs"][0]["drgn1"] == 2
+    assert case.metadata["euromod_inputs"][0]["yem"] == 5_000
+    assert case.period == "2025"
+
+
 def test_belgium_social_assistance_suite_defines_oracle_concept_and_inputs() -> None:
     cases = load_suite("be-social-assistance")
 
@@ -337,9 +358,10 @@ def test_belgium_elderly_income_support_suite_defines_oracle_concept_and_inputs(
     assert case.metadata["axiom_inputs"][
         "be:statutes/income_guarantee_for_elderly/payable_amount#input."
         "belgium_grapa_supplied_article_6_maximum_annual_amount"
-    ] == 17_520.96
+    ] == 18_964.44
     assert "euromod_inputs" in case.metadata
     assert case.metadata["euromod_inputs"][0]["dag"] == 70
+    assert case.metadata["euromod_policy_switch_overrides"] == [("bsaoa_be", True)]
     assert case.period == "2025"
 
 

@@ -139,6 +139,29 @@ concepts:
           type: country
           geoid: BE
 
+  be-vlg:regulations/social_security/flemish_social_protection/premium#flanders_social_protection_annual_premium:
+    description: Belgium Flemish Social Protection annual premium
+    category: social_contributions
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE, BE-VLG]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: flanders_social_protection_annual_premium
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tci_s
+        scope:
+          type: country
+          geoid: BE
+
   be:statutes/social_integration/payable_amount#belgium_social_integration_income_support_annual_amount:
     description: Belgium social integration income support
     category: benefits

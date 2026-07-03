@@ -36,6 +36,7 @@ import pytest
 from axiom_oracles.adapters.euromod import (
     DEFAULT_OUTPUTS,
     EuromodPlatformRunner,
+    _runner as euromod_worker,
     euromod_input_rows,
 )
 from axiom_oracles.core.case import Case, Concepts, Entity
@@ -150,6 +151,37 @@ class TestProjection:
 
 
 class TestSubprocessContract:
+    def test_policy_switch_patch_targets_named_system_only(self) -> None:
+        xml = """
+<CountryConfig>
+  <System>
+    <Name>BE_2024</Name>
+    <Policy>
+      <Name>bsaoa_be</Name>
+      <Switch>off</Switch>
+      <Function><Switch>on</Switch></Function>
+    </Policy>
+  </System>
+  <System>
+    <Name>BE_2025</Name>
+    <Policy>
+      <Name>bsaoa_be</Name>
+      <Switch>off</Switch>
+      <Function><Switch>on</Switch></Function>
+    </Policy>
+  </System>
+</CountryConfig>
+"""
+
+        patched = euromod_worker._patch_policy_switches(
+            xml,
+            system="BE_2025",
+            overrides=[("bsaoa_be", True)],
+        )
+
+        assert "<Name>BE_2024</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>off</Switch>" in patched
+        assert "<Name>BE_2025</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>on</Switch>" in patched
+
     def test_results_group_by_case_and_annualize(self) -> None:
         payload = {
             "columns": ["tin_s"],
@@ -218,6 +250,7 @@ class TestSubprocessContract:
                             "tscee_s",
                             "tsceerd_s",
                             "tscse_s",
+                            "tci_s",
                             "bsa_s",
                             "bsaoa_s",
                         ],
@@ -228,6 +261,7 @@ class TestSubprocessContract:
                             "tscee_s": [50.0],
                             "tsceerd_s": [12.0],
                             "tscse_s": [40.0],
+                            "tci_s": [5.3333333333],
                             "bsa_s": [20.0],
                             "bsaoa_s": [30.0],
                         },
@@ -248,6 +282,7 @@ class TestSubprocessContract:
                 Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
                 Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
                 Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
+                Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
                 Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
                 Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
                 "yem",
@@ -259,6 +294,7 @@ class TestSubprocessContract:
             "tscee_s",
             "tsceerd_s",
             "tscse_s",
+            "tci_s",
             "bsa_s",
             "bsaoa_s",
             "yem",
@@ -268,8 +304,147 @@ class TestSubprocessContract:
         assert result.values["tsceerd_s"] == pytest.approx(144.0)
         assert result.values["tscee_net_s"] == pytest.approx(456.0)
         assert result.values["tscse_s"] == pytest.approx(480.0)
+        assert result.values["tci_s"] == pytest.approx(64.0)
         assert result.values["bsa_s"] == pytest.approx(240.0)
         assert result.values["bsaoa_s"] == pytest.approx(360.0)
+
+    def test_switches_reach_worker_payload(self) -> None:
+        payload = {
+            "columns": ["bsaoa_s"],
+            "missing": [],
+            "idhh": [1],
+            "values": {"bsaoa_s": [1_580.37]},
+        }
+        observed = {}
+
+        def run(argv, **kwargs):
+            observed.update(json.loads(Path(argv[2]).read_text()))
+            Path(argv[3]).write_text(json.dumps(payload))
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        case = Case(
+            case_id="be-grapa",
+            period="2025",
+            metadata={
+                "euromod_inputs": [{"idhh": 999, "dag": 70}],
+                "euromod_switches": [("Belmod_endo", True)],
+            },
+        )
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="BE",
+            system="BE_2025",
+            switches=[("output_std_hh_be", False)],
+            subprocess_run=run,
+        )
+
+        [result] = runner.run_cases([case], variables=["bsaoa_s"])
+
+        assert observed["switches"] == [
+            ["output_std_hh_be", False],
+            ["Belmod_endo", True],
+        ]
+        assert observed["policy_switch_overrides"] == []
+        assert result.values["bsaoa_s"] == pytest.approx(18_964.44)
+
+    def test_policy_switch_overrides_reach_worker_payload(self) -> None:
+        payload = {
+            "columns": ["bsaoa_s"],
+            "missing": [],
+            "idhh": [1],
+            "values": {"bsaoa_s": [1_580.37]},
+        }
+        observed = {}
+
+        def run(argv, **kwargs):
+            observed.update(json.loads(Path(argv[2]).read_text()))
+            Path(argv[3]).write_text(json.dumps(payload))
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        case = Case(
+            case_id="be-grapa",
+            period="2025",
+            metadata={
+                "euromod_inputs": [{"idhh": 999, "dag": 70}],
+                "euromod_policy_switch_overrides": [("bsaoa_be", True)],
+            },
+        )
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="BE",
+            system="BE_2025",
+            policy_switch_overrides=[("other_be", False)],
+            subprocess_run=run,
+        )
+
+        [result] = runner.run_cases([case], variables=["bsaoa_s"])
+
+        assert observed["switches"] == []
+        assert observed["policy_switch_overrides"] == [
+            ["other_be", False],
+            ["bsaoa_be", True],
+        ]
+        assert result.values["bsaoa_s"] == pytest.approx(18_964.44)
+
+    def test_mixed_case_switches_return_errors(self) -> None:
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="BE",
+            system="BE_2025",
+            subprocess_run=lambda *_args, **_kwargs: pytest.fail(
+                "mixed switches should not execute"
+            ),
+        )
+        cases = [
+            Case(
+                case_id="default",
+                period="2025",
+                metadata={"euromod_inputs": [{"idhh": 1}]},
+            ),
+            Case(
+                case_id="grapa",
+                period="2025",
+                metadata={
+                    "euromod_inputs": [{"idhh": 2}],
+                    "euromod_switches": [("Belmod_endo", True)],
+                },
+            ),
+        ]
+
+        results = runner.run_cases(cases, variables=["bsaoa_s"])
+
+        assert all(result.values == {} for result in results)
+        assert "incompatible" in results[0].errors[0]
+
+    def test_mixed_case_policy_switch_overrides_return_errors(self) -> None:
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="BE",
+            system="BE_2025",
+            subprocess_run=lambda *_args, **_kwargs: pytest.fail(
+                "mixed policy overrides should not execute"
+            ),
+        )
+        cases = [
+            Case(
+                case_id="default",
+                period="2025",
+                metadata={"euromod_inputs": [{"idhh": 1}]},
+            ),
+            Case(
+                case_id="grapa",
+                period="2025",
+                metadata={
+                    "euromod_inputs": [{"idhh": 2}],
+                    "euromod_policy_switch_overrides": [("bsaoa_be", True)],
+                },
+            ),
+        ]
+
+        results = runner.run_cases(cases, variables=["bsaoa_s"])
+
+        assert all(result.values == {} for result in results)
+        assert "policy switch overrides" in results[0].errors[0]
 
 
 @pytest.mark.skipif(

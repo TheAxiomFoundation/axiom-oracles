@@ -52,6 +52,7 @@ def be_elderly_income_support_cases() -> list[Case]:
                 "scenario": "isolated-senior-no-resources",
                 "axiom_inputs": _isolated_senior_no_resources_axiom_inputs(),
                 "euromod_inputs": [_euromod_isolated_senior_no_resources_input()],
+                "euromod_policy_switch_overrides": [("bsaoa_be", True)],
             },
             entities=(
                 Entity(
@@ -147,7 +148,7 @@ def _isolated_senior_no_resources_axiom_inputs() -> dict[str, float | int | bool
         ): True,
         _grapa_payable_input(
             "belgium_grapa_supplied_article_6_maximum_annual_amount"
-        ): 17_520.96,
+        ): 18_964.44,
     }
 
 

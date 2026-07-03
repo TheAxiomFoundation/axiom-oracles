@@ -52,6 +52,9 @@ DERIVED_OUTPUTS: dict[str, tuple[str, ...]] = {
     "tscee_net_s": ("tscee_s", "tsceerd_s"),
 }
 
+SwitchSetting = tuple[str, bool]
+PolicySwitchOverride = tuple[str, bool]
+
 
 class EuromodPlatformRunner(EngineAdapter):
     """Run concept-keyed cases through a EUROMOD-platform model.
@@ -77,6 +80,12 @@ class EuromodPlatformRunner(EngineAdapter):
             monthly (both bundled demo datasets are).
         annualize_outputs: Multiply monetary outputs by 12 so results match
             the annual Axiom concept convention.
+        switches: EUROMOD extension switches to apply for every run, as
+            ``("extension_short_name", enabled)`` pairs.
+        policy_switch_overrides: Temporary model XML policy switches to apply
+            for every run, as ``("policy_name", enabled)`` pairs. This is for
+            policies that EUROMOD marks as manually switched off in the system
+            XML and cannot be enabled through extension switches.
         python_executable: Interpreter for the EUROMOD execution
             environment; defaults to ``$EUROMOD_PYTHON`` then
             ``sys.executable``.
@@ -98,6 +107,10 @@ class EuromodPlatformRunner(EngineAdapter):
         country_code: int = 15,
         monthly_inputs: bool = True,
         annualize_outputs: bool = True,
+        switches: list[SwitchSetting] | tuple[SwitchSetting, ...] | None = None,
+        policy_switch_overrides: (
+            list[PolicySwitchOverride] | tuple[PolicySwitchOverride, ...] | None
+        ) = None,
         python_executable: str | Path | None = None,
         dotnet_root: str | Path | None = None,
         timeout: float = 900.0,
@@ -111,6 +124,8 @@ class EuromodPlatformRunner(EngineAdapter):
         self.country_code = country_code
         self.monthly_inputs = monthly_inputs
         self.annualize_outputs = annualize_outputs
+        self.switches = _normalize_switches(switches)
+        self.policy_switch_overrides = _normalize_switches(policy_switch_overrides)
         self.python_executable = str(
             python_executable
             or os.environ.get("EUROMOD_PYTHON")
@@ -134,6 +149,23 @@ class EuromodPlatformRunner(EngineAdapter):
         """
         outputs = _euromod_outputs_for_variables(variables)
         worker_outputs = _expand_derived_outputs(outputs)
+        try:
+            switches = _switches_for_cases(cases, self.switches)
+            policy_switch_overrides = _policy_switch_overrides_for_cases(
+                cases,
+                self.policy_switch_overrides,
+            )
+        except ValueError as error:
+            return [
+                EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=(str(error),),
+                )
+                for case in cases
+            ]
+
         rows: list[dict[str, Any]] = []
         for index, case in enumerate(cases):
             for row in euromod_input_rows(
@@ -144,7 +176,12 @@ class EuromodPlatformRunner(EngineAdapter):
             ):
                 rows.append(row)
 
-        payload = self._execute(rows, worker_outputs)
+        payload = self._execute(
+            rows,
+            worker_outputs,
+            switches,
+            policy_switch_overrides,
+        )
         if "error" in payload:
             error = (payload["error"],)
             return [
@@ -182,7 +219,13 @@ class EuromodPlatformRunner(EngineAdapter):
             )
         return results
 
-    def _execute(self, rows: list[dict[str, Any]], outputs: list[str]) -> dict:
+    def _execute(
+        self,
+        rows: list[dict[str, Any]],
+        outputs: list[str],
+        switches: tuple[SwitchSetting, ...],
+        policy_switch_overrides: tuple[PolicySwitchOverride, ...],
+    ) -> dict:
         """Invoke the subprocess worker and return its JSON payload."""
         job = {
             "model_root": str(self.model_root),
@@ -192,6 +235,8 @@ class EuromodPlatformRunner(EngineAdapter):
             "template_dataset": self.template_dataset,
             "rows": rows,
             "outputs": outputs,
+            "switches": list(switches),
+            "policy_switch_overrides": list(policy_switch_overrides),
         }
         worker = Path(__file__).parent / "_runner.py"
         env = dict(os.environ)
@@ -236,6 +281,95 @@ def _euromod_outputs_for_variables(variables: list[str] | None) -> list[str]:
         else:
             outputs.append(variable)
     return list(dict.fromkeys(outputs))
+
+
+def _switches_for_cases(
+    cases: list[Case], base_switches: tuple[SwitchSetting, ...]
+) -> tuple[SwitchSetting, ...]:
+    return _settings_for_cases(
+        cases,
+        base_switches,
+        metadata_key="euromod_switches",
+        setting_label="EUROMOD extension switches",
+    )
+
+
+def _policy_switch_overrides_for_cases(
+    cases: list[Case],
+    base_overrides: tuple[PolicySwitchOverride, ...],
+) -> tuple[PolicySwitchOverride, ...]:
+    return _settings_for_cases(
+        cases,
+        base_overrides,
+        metadata_key="euromod_policy_switch_overrides",
+        setting_label="EUROMOD policy switch overrides",
+    )
+
+
+def _settings_for_cases(
+    cases: list[Case],
+    base_settings: tuple[SwitchSetting, ...],
+    *,
+    metadata_key: str,
+    setting_label: str,
+) -> tuple[SwitchSetting, ...]:
+    case_settings = {
+        _normalize_switches(case.metadata.get(metadata_key)) for case in cases
+    }
+    if not case_settings:
+        return base_settings
+    if len(case_settings) > 1:
+        raise ValueError(
+            f"Cases in one EUROMOD batch require incompatible {setting_label} "
+            f"metadata[{metadata_key!r}]; split the run by switch set."
+        )
+    return _merge_switches(base_settings, next(iter(case_settings)))
+
+
+def _merge_switches(
+    base_switches: tuple[SwitchSetting, ...],
+    case_switches: tuple[SwitchSetting, ...],
+) -> tuple[SwitchSetting, ...]:
+    merged: dict[str, bool] = {}
+    for name, enabled in (*base_switches, *case_switches):
+        merged[name] = enabled
+    return tuple(merged.items())
+
+
+def _normalize_switches(value: Any) -> tuple[SwitchSetting, ...]:
+    if value is None:
+        return ()
+    if isinstance(value, dict):
+        raw_items = value.items()
+    elif isinstance(value, (list, tuple)):
+        raw_items = value
+    else:
+        raise ValueError("EUROMOD switches must be a mapping or a sequence of pairs.")
+
+    switches: list[SwitchSetting] = []
+    for item in raw_items:
+        try:
+            name, enabled = item
+        except (TypeError, ValueError) as error:
+            raise ValueError(
+                "EUROMOD switches must be pairs of extension short name and boolean."
+            ) from error
+        if not isinstance(name, str) or not name:
+            raise ValueError("EUROMOD switch names must be non-empty strings.")
+        switches.append((name, _switch_bool(enabled)))
+    return tuple(switches)
+
+
+def _switch_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "on"}:
+            return True
+        if normalized in {"0", "false", "no", "off"}:
+            return False
+    raise ValueError("EUROMOD switch values must be boolean or on/off strings.")
 
 
 def _expand_derived_outputs(outputs: list[str]) -> list[str]:
