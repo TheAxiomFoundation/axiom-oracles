@@ -202,6 +202,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
+        Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
     }
 
     assert (
@@ -576,19 +577,87 @@ def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inpu
     assert flanders_age_13.metadata["axiom_inputs"][region_input] == 2
     assert flanders_age_13.metadata["axiom_inputs"][child_age_input] == 13
     assert flanders_age_13.metadata["euromod_inputs"][0]["drgn1"] == 2
-    assert flanders_age_13.metadata["euromod_inputs"][1]["dag"] == 13
+    assert flanders_age_13.metadata["euromod_inputs"][2]["dag"] == 13
     assert flanders_age_18.metadata["axiom_inputs"][higher_education_input] is True
-    assert flanders_age_18.metadata["euromod_inputs"][1]["dec"] == 6
-    assert len(brussels_age_18_he.metadata["euromod_inputs"]) == 2
-    assert brussels_age_18_he.metadata["euromod_inputs"][0]["yem"] == 5_000
-    assert brussels_age_18_he.metadata["euromod_inputs"][1]["dag"] == 18
-    assert brussels_age_18_he.metadata["euromod_inputs"][1]["idmother"] == 101
-    assert brussels_age_18_he.metadata["euromod_inputs"][1]["les"] == 6
-    assert brussels_age_18_he.metadata["euromod_inputs"][1]["dec"] == 6
-    assert brussels_age_18_he.metadata["euromod_inputs"][1]["xed00"] == 1
-    assert brussels_age_18_he.metadata["euromod_inputs"][1]["byr"] == 2007
-    assert brussels_age_18_no_he.metadata["euromod_inputs"][1]["dec"] == 0
-    assert brussels_age_18_no_he.metadata["euromod_inputs"][1]["xed00"] == 1
+    assert flanders_age_18.metadata["euromod_inputs"][2]["dec"] == 6
+    assert len(brussels_age_18_he.metadata["euromod_inputs"]) == 3
+    mother, father, child = brussels_age_18_he.metadata["euromod_inputs"]
+    assert mother["yem"] == 5_000
+    assert mother["idpartner"] == 103
+    assert mother["dms"] == 2
+    assert father["idpartner"] == 101
+    assert father["dms"] == 2
+    assert child["dag"] == 18
+    assert child["idmother"] == 101
+    assert child["idfather"] == 103
+    assert child["les"] == 6
+    assert child["dec"] == 6
+    assert child["xed00"] == 1
+    assert child["byr"] == 0
+    assert brussels_age_18_no_he.metadata["euromod_inputs"][2]["dec"] == 0
+    assert brussels_age_18_no_he.metadata["euromod_inputs"][2]["xed00"] == 1
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_family_child_benefit_social_supplement_suite_defines_oracle_concept_and_inputs() -> (
+    None
+):
+    cases = load_suite("be-family-child-benefit-social-supplement")
+
+    assert len(cases) == 3
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "brussels-low-income-one-child-under-6",
+        "brussels-low-income-one-child-age-13",
+        "brussels-low-income-one-child-age-18-higher-education",
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    age_0 = by_id["be-family-child-benefit-social-supplement-brussels-age-0"]
+    age_18 = by_id[
+        "be-family-child-benefit-social-supplement-brussels-age-18-higher-education"
+    ]
+    region_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_region"
+    )
+    income_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_child_benefit_brussels_article_9_household_annual_income"
+    )
+    single_parent_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_child_benefit_brussels_article_9_child_in_single_parent_family"
+    )
+    cadastral_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_child_benefit_brussels_article_9_cadastral_income_cap_exceeded"
+    )
+    higher_education_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_child_enrolled_in_higher_education"
+    )
+    assert age_0.metadata["axiom_inputs"][region_input] == 1
+    assert age_0.metadata["axiom_inputs"][income_input] == 12_000
+    assert age_0.metadata["axiom_inputs"][single_parent_input] is True
+    assert age_0.metadata["axiom_inputs"][cadastral_input] is False
+    assert len(age_0.metadata["euromod_inputs"]) == 2
+    assert age_0.metadata["euromod_inputs"][0]["yem"] == 500
+    assert age_0.metadata["euromod_inputs"][0]["yemmy"] == 12
+    assert age_18.metadata["axiom_inputs"][higher_education_input] is True
+    assert age_18.metadata["euromod_inputs"][1]["dec"] == 6
+    assert age_18.metadata["euromod_inputs"][1]["xed00"] == 1
     assert {case.period for case in cases} == {"2025"}
 
 
