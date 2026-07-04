@@ -71,7 +71,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert (
         outputs["bch_s"]["status"]
-        == "live_oracle_verified_brussels_wallonia_one_child_base_slice"
+        == "live_oracle_verified_brussels_flanders_wallonia_one_child_base_slice"
     )
     assert outputs["ils_dispy"]["status"] == "not_mapped"
 

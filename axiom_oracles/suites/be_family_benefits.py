@@ -104,6 +104,31 @@ def be_family_child_benefit_base_cases() -> list[Case]:
             higher_education=True,
         ),
         _child_benefit_base_case(
+            "be-family-child-benefit-base-flanders-age-0",
+            region=FLANDERS_REGION,
+            scenario="flanders-new-system-age-0",
+            child_age=0,
+        ),
+        _child_benefit_base_case(
+            "be-family-child-benefit-base-flanders-age-6",
+            region=FLANDERS_REGION,
+            scenario="flanders-new-system-age-6",
+            child_age=6,
+        ),
+        _child_benefit_base_case(
+            "be-family-child-benefit-base-flanders-age-13",
+            region=FLANDERS_REGION,
+            scenario="flanders-old-system-age-13",
+            child_age=13,
+        ),
+        _child_benefit_base_case(
+            "be-family-child-benefit-base-flanders-age-18",
+            region=FLANDERS_REGION,
+            scenario="flanders-old-system-age-18-higher-education",
+            child_age=18,
+            higher_education=True,
+        ),
+        _child_benefit_base_case(
             "be-family-child-benefit-base-wallonia-age-0",
             region=WALLONIA_REGION,
             scenario="wallonia-new-system-under-6",
