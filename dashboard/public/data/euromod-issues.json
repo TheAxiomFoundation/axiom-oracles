@@ -579,6 +579,69 @@
       "counts_as_axiom_gap": false
     },
     {
+      "id": "euromod-be-2025-dg-birth-allowance-zero",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_region_scope_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13",
+      "summary": "The Belgium BE_2025 birth-allowance policy bchba_be returns zero bchba_s for a synthetic German-speaking Community newborn row coded as drgn1=4, while the upstream German-speaking Community decree and official amount guidance establish a nonzero birth premium.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bchba_be",
+        "suite": "be-family-birth-allowance",
+        "period": "2025",
+        "output": "bchba_s",
+        "case": {
+          "case_id": "be-family-birth-allowance-german-speaking-community-newborn",
+          "drgn1": 4,
+          "child_age": 0,
+          "euromod_bchba_s": 0,
+          "axiom_belgium_family_benefits_birth_allowance_amount": 1376.16,
+          "residual": -1376.16
+        },
+        "control_regions": {
+          "drgn1_1_brussels": "matches bchba_s exactly",
+          "drgn1_2_flanders": "matches bchba_s exactly",
+          "drgn1_3_wallonia": "matches bchba_s exactly"
+        }
+      },
+      "euromod_xml_evidence": {
+        "path_hint": "XMLParam/Countries/BE/BE.xml",
+        "policy": "bchba_be",
+        "observed_birth_allowance_conditions": [
+          "drgn1=1 & dag=0 & sin01_s = nDepChildrenInTu",
+          "drgn1=1 & dag=0 & sin01_s < nDepChildrenInTu",
+          "drgn1=2 & dag=0 & sin01_s = nDepChildrenInTu",
+          "drgn1=2 & dag=0 & sin01_s < nDepChildrenInTu",
+          "drgn1=3 & dag=0 & sin01_s = nDepChildrenInTu",
+          "drgn1=3 & dag=0 & sin01_s < nDepChildrenInTu"
+        ],
+        "missing_condition": "No equivalent drgn1=4 newborn branch was found in bchba_be."
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/statutes/family_benefits/birth_allowance.yaml",
+        "corpus_citation_paths": [
+          "be-dg/statute/moniteur/decret-2018-04-23/2018202523/family-benefits/block-1"
+        ],
+        "source_urls": [
+          "https://www.ejustice.just.fgov.be/eli/decret/2018/04/23/2018202523/moniteur",
+          "https://ostbelgienfamilie.be/desktopdefault.aspx/tabid-5886/"
+        ],
+        "article_30_birth_premium": "1144 EUR before indexation",
+        "official_current_birth_premium": "1376.16 EUR per child"
+      },
+      "workaround": {
+        "description": "Keep the German-speaking Community birth-allowance residual visible in the household-level oracle report and do not alter RuleSpec away from the DG statute and official amount surface while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
       "id": "euromod-be-2025-flemish-jobbonus-stale-parameters",
       "jurisdiction": "BE",
       "system": "BE_2025",

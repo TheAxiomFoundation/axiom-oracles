@@ -80,7 +80,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert (
         outputs["bchba_s"]["status"]
-        == "live_oracle_verified_regional_newborn_slice"
+        == "live_oracle_verified_brussels_flanders_wallonia_with_known_dg_birth_allowance_issue"
     )
     assert (
         outputs["bch_s"]["status"]
@@ -126,5 +126,6 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
         "euromod-be-2025-special-contribution-article-108-schedule",
         "euromod-be-2025-wallonia-pre-2020-child-benefit-supplement-cumulation",
         "euromod-be-2025-dg-child-benefit-zero",
+        "euromod-be-2025-dg-birth-allowance-zero",
         "euromod-be-2025-flemish-jobbonus-stale-parameters",
     }
