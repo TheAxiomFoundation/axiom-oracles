@@ -146,6 +146,66 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-self-employed-threshold-allowance",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_threshold_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/6",
+      "summary": "The Belgium BE_2025 self-employed social-contribution policy tscse_be treats Royal Decree No. 38 Article 12 section 2 and Article 13 section 1 thresholds as deductible allowances in secondary-activity and post-pension cases. The source text makes them eligibility/exemption thresholds: below the threshold no contribution is due, but once reached, contributions apply to the stated professional-income bands rather than to income net of the threshold.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "tscse_be",
+        "suite": "be-self-employed-ssc",
+        "period": "2025",
+        "cases": [
+          {
+            "case_id": "be-self-employed-ssc-secondary-1k",
+            "euromod_yse": 1055.022392834293,
+            "euromod_tscse_s": 385.75999999999993,
+            "axiom_belgium_self_employed_selected_annual_social_contribution": 0,
+            "residual": 385.75999999999993,
+            "note": "EUROMOD applies the 96.44 EUR quarterly low limit even though yse is below the indexed Article 12 section 2 threshold."
+          },
+          {
+            "case_id": "be-self-employed-ssc-secondary-10k",
+            "euromod_yse": 10550.22392834293,
+            "euromod_tscse_s": 1777.0351053103009,
+            "axiom_belgium_self_employed_selected_annual_social_contribution": 2162.7959053103004,
+            "residual": -385.76079999999956,
+            "note": "EUROMOD subtracts the indexed Article 12 section 2 threshold before applying the 20.50 percent rate."
+          },
+          {
+            "case_id": "be-self-employed-ssc-post-pension-10k",
+            "euromod_yse": 10550.22392834293,
+            "euromod_tscse_s": 997.6469474664107,
+            "axiom_belgium_self_employed_selected_annual_social_contribution": 1550.8829174664106,
+            "residual": -553.23597,
+            "note": "EUROMOD subtracts the indexed Article 13 section 1 threshold before applying the 14.70 percent rate."
+          }
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/regulations/social_security/self_employed/contributions.yaml",
+        "corpus_citation_paths": [
+          "be/regulation/arrete/1967/07/27/1967072702/article/12",
+          "be/regulation/arrete/1967/07/27/1967072702/article/13"
+        ],
+        "source_url": "https://www.ejustice.just.fgov.be/eli/arrete/1967/07/27/1967072702/justel",
+        "statutory_article_12_section_2": "No contribution is due below 405.60 EUR base; when income reaches at least that amount, annual contributions are 20.50 percent and 14.16 percent on the stated professional-income bands.",
+        "statutory_article_13_section_1": "No contribution is due below 811.20 EUR base; when income reaches at least that amount, annual contributions are 14.70 percent and 14.16 percent on the stated professional-income bands."
+      },
+      "workaround": {
+        "description": "Keep the secondary and post-pension residuals visible in the household-level oracle report and do not adjust the RuleSpec away from Royal Decree No. 38 while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }
