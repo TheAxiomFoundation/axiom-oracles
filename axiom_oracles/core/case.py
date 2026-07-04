@@ -169,6 +169,10 @@ class Concepts:
         "be:statutes/family_benefits/birth_allowance"
         "#belgium_family_benefits_birth_allowance_amount"
     )
+    BE_FAMILY_CHILD_BENEFIT_BASE = (
+        "be:statutes/family_benefits/child_benefit_base_2025"
+        "#belgium_family_benefits_child_benefit_base_2025_annual_amount"
+    )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"

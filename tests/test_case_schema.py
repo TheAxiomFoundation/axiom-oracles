@@ -201,6 +201,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
+        Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
     }
 
     assert (
@@ -498,6 +499,84 @@ def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs(
     assert brussels_later.metadata["euromod_inputs"][2]["idmother"] == 101
     assert german_zero.metadata["axiom_inputs"][region_input] == 4
     assert german_zero.metadata["euromod_inputs"][1]["drgn1"] == 4
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inputs() -> (
+    None
+):
+    cases = load_suite("be-family-child-benefit-base")
+
+    assert len(cases) == 9
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "brussels-new-system-under-6",
+        "brussels-transition-age-6",
+        "brussels-transition-age-13",
+        "brussels-age-18-not-enrolled",
+        "brussels-age-18-higher-education",
+        "wallonia-new-system-under-6",
+        "wallonia-pre-2020-age-6",
+        "wallonia-pre-2020-age-13",
+        "wallonia-pre-2020-age-18",
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    brussels_age_0 = by_id["be-family-child-benefit-base-brussels-age-0"]
+    brussels_age_18_no_he = by_id[
+        "be-family-child-benefit-base-brussels-age-18-no-higher-education"
+    ]
+    brussels_age_18_he = by_id[
+        "be-family-child-benefit-base-brussels-age-18-higher-education"
+    ]
+    wallonia_age_13 = by_id["be-family-child-benefit-base-wallonia-age-13"]
+    region_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_region"
+    )
+    child_age_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_child_age_years"
+    )
+    child_count_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_household_child_count"
+    )
+    higher_education_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_child_enrolled_in_higher_education"
+    )
+    assert brussels_age_0.metadata["axiom_inputs"][region_input] == 1
+    assert brussels_age_0.metadata["axiom_inputs"][child_age_input] == 0
+    assert brussels_age_0.metadata["axiom_inputs"][child_count_input] == 1
+    assert (
+        brussels_age_18_no_he.metadata["axiom_inputs"][higher_education_input]
+        is False
+    )
+    assert brussels_age_18_he.metadata["axiom_inputs"][higher_education_input] is True
+    assert wallonia_age_13.metadata["axiom_inputs"][region_input] == 3
+    assert wallonia_age_13.metadata["axiom_inputs"][child_age_input] == 13
+    assert len(brussels_age_18_he.metadata["euromod_inputs"]) == 2
+    assert brussels_age_18_he.metadata["euromod_inputs"][0]["yem"] == 5_000
+    assert brussels_age_18_he.metadata["euromod_inputs"][1]["dag"] == 18
+    assert brussels_age_18_he.metadata["euromod_inputs"][1]["idmother"] == 101
+    assert brussels_age_18_he.metadata["euromod_inputs"][1]["les"] == 6
+    assert brussels_age_18_he.metadata["euromod_inputs"][1]["dec"] == 6
+    assert brussels_age_18_he.metadata["euromod_inputs"][1]["xed00"] == 1
+    assert brussels_age_18_he.metadata["euromod_inputs"][1]["byr"] == 2007
+    assert brussels_age_18_no_he.metadata["euromod_inputs"][1]["dec"] == 0
+    assert brussels_age_18_no_he.metadata["euromod_inputs"][1]["xed00"] == 1
     assert {case.period for case in cases} == {"2025"}
 
 
