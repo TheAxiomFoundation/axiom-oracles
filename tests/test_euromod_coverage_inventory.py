@@ -33,7 +33,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         coverage["coverage_summary"]["full_household_disposable_income_parity"] is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 6
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 7
     assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
@@ -56,6 +56,10 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     assert (
         outputs["tscse_s"]["status"]
         == "live_oracle_verified_main_activity_with_known_secondary_and_post_pension_euromod_issue"
+    )
+    assert (
+        outputs["tsceesp_s"]["status"]
+        == "live_oracle_verified_single_worker_low_mid_with_known_euromod_article_108_schedule_issue"
     )
     assert (
         outputs["tci_s"]["status"]
@@ -90,4 +94,5 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
     } >= {
         "euromod-be-2025-self-employed-main-rate",
         "euromod-be-2025-self-employed-threshold-allowance",
+        "euromod-be-2025-special-contribution-article-108-schedule",
     }

@@ -198,6 +198,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
         Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
+        Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
     }
 
@@ -339,6 +340,62 @@ def test_belgium_self_employed_suite_defines_oracle_concept_and_inputs() -> None
         post_pension.metadata["axiom_inputs"][
             "be:regulations/social_security/self_employed/contributions#input."
             "belgium_self_employed_receives_retirement_or_survivor_pension"
+        ]
+        is True
+    )
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_special_social_security_suite_defines_oracle_concept_and_inputs() -> (
+    None
+):
+    cases = load_suite("be-special-social-security-contribution")
+
+    assert len(cases) == 7
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "single-worker-special-social-security-contribution",
+        "joint-worker-special-social-security-contribution",
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    single_30k = by_id["be-special-social-security-single-30k"]
+    household_income_input = (
+        "be:statutes/social_security/special_contribution#input."
+        "belgium_special_social_security_article_107_household_income"
+    )
+    assert single_30k.metadata["axiom_inputs"][household_income_input] == 30_000
+    assert single_30k.metadata["euromod_to_axiom_input_bridge"] == {
+        "il_taxabley": [household_income_input]
+    }
+    assert single_30k.metadata["euromod_inputs"][0]["yem"] == 2_500
+    assert (
+        single_30k.metadata["axiom_inputs"][
+            "be:statutes/social_security/special_contribution#input."
+            "belgium_special_social_security_joint_assessment"
+        ]
+        is False
+    )
+
+    joint = by_id["be-special-social-security-joint-two-earner-30k-20k"]
+    assert len(joint.metadata["euromod_inputs"]) == 2
+    assert joint.metadata["euromod_inputs"][0]["idpartner"] == 102
+    assert joint.metadata["euromod_inputs"][1]["idpartner"] == 101
+    assert (
+        joint.metadata["axiom_inputs"][
+            "be:statutes/social_security/special_contribution#input."
+            "belgium_special_social_security_joint_assessment"
         ]
         is True
     )

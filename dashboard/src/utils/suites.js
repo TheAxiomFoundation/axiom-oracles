@@ -225,6 +225,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 515,
   },
+  "be-special-social-security-contribution": {
+    family: "be_social_security",
+    jurisdiction: "BE",
+    label: "Belgium special social-security contribution",
+    region: "be",
+    kind: "household",
+    order: 516,
+  },
   "be-flemish-social-protection-premium": {
     family: "be_social_security",
     jurisdiction: "BE",

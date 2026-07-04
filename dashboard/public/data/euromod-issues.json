@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.euromod_issues.v1",
-  "updated_at": "2026-07-03",
+  "updated_at": "2026-07-04",
   "purpose": "Track EUROMOD-platform issues and workarounds that affect household-level Axiom oracle comparisons. Statutory encoding gaps belong in coverage inventories and comparison reports, not in this ledger.",
   "entries": [
     {
@@ -132,7 +132,7 @@
           "euromod_yse": 31650.67178502879,
           "euromod_tscse_s": 6488.387715930901,
           "axiom_belgium_self_employed_selected_annual_social_contribution": 6488.387715930902,
-          "residual": -0.0000000000009094947017729282
+          "residual": -9.094947017729282e-13
         }
       },
       "statutory_evidence": {
@@ -203,6 +203,73 @@
       },
       "workaround": {
         "description": "Keep the secondary and post-pension residuals visible in the household-level oracle report and do not adjust the RuleSpec away from Royal Decree No. 38 while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-special-contribution-article-108-schedule",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_schedule_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7",
+      "summary": "The Belgium BE_2025 special social-security contribution policy tsceesp_be differs from Law of 30 March 1994 Article 108: single-household thresholds/cap behavior are mistyped, and the joint-assessment schedule appears to put a zero-rate band where Article 108 requires the 1.3 percent band, then starts 1.3 percent in the statutory plateau band.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "tsceesp_be",
+        "suite": "be-special-social-security-contribution",
+        "period": "2025",
+        "base_bridge": "EUROMOD il_taxabley returned by the engine is bridged into RuleSpec Article 107 household income",
+        "cases": [
+          {
+            "case_id": "be-special-social-security-single-80k",
+            "euromod_il_taxabley": 67440.48228726807,
+            "euromod_tsceesp_s": 743.8640246399998,
+            "axiom_belgium_special_social_security_article_108_annual_contribution": 731.28,
+            "residual": 12.584024639999825,
+            "note": "EUROMOD exceeds the statutory 731.28 EUR single-household maximum contribution."
+          },
+          {
+            "case_id": "be-special-social-security-joint-one-earner-30k",
+            "euromod_il_taxabley": 24663.415480329604,
+            "euromod_tsceesp_s": 123.94699999999992,
+            "axiom_belgium_special_social_security_article_108_annual_contribution": 170.65192124428486,
+            "residual": -46.70492124428495,
+            "note": "EUROMOD does not apply the statutory joint 1.3 percent band above 21070.96 EUR."
+          },
+          {
+            "case_id": "be-special-social-security-joint-two-earner-30k-20k",
+            "euromod_il_taxabley": 39833.86833701546,
+            "euromod_tsceesp_s": 123.94699999999989,
+            "axiom_belgium_special_social_security_article_108_annual_contribution": 367.867808381201,
+            "residual": -243.92080838120108,
+            "note": "Same joint schedule issue in the mid joint band."
+          },
+          {
+            "case_id": "be-special-social-security-joint-two-earner-60k-20k",
+            "euromod_il_taxabley": 64268.31582213691,
+            "euromod_tsceesp_s": 177.3310556877799,
+            "axiom_belgium_special_social_security_article_108_annual_contribution": 632.39,
+            "residual": -455.0589443122201,
+            "note": "EUROMOD starts the 1.3 percent band in the statutory plateau range rather than applying the 632.39 EUR plateau."
+          }
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/statutes/social_security/special_contribution.yaml",
+        "corpus_citation_path": "be/statute/loi/1994/03/30/1994021117/article/108",
+        "source_url": "https://www.ejustice.just.fgov.be/eli/loi/1994/03/30/1994021117/justel#Art.108",
+        "statutory_single_maximum": "731.28 EUR above 60181.95 EUR household income",
+        "statutory_joint_middle_band": "123.95 EUR plus 1.3 percent of household income above 21070.96 EUR from 21070.97 EUR through 60181.95 EUR",
+        "statutory_joint_plateau": "632.39 EUR from 60181.96 EUR through 74688.00 EUR"
+      },
+      "workaround": {
+        "description": "Keep the affected high-income single and joint-assessment residuals visible in the household-level oracle report and do not alter the RuleSpec statutory schedule while the upstream EUROMOD issue is open."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false

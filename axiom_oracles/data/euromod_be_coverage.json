@@ -2,7 +2,7 @@
   "created_at": "2026-07-03",
   "jurisdiction": "be",
   "purpose": "Coverage inventory for the EUROMOD Belgium BE_2025 model surface against Belgium RuleSpec. EUROMOD is an executable comparison oracle, not legal authority; statutory and regulatory RuleSpec modules must still cite upstream Belgian law.",
-  "coverage_claim": "Current Axiom coverage has eight EUROMOD-facing output concepts or prepared oracle targets: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from encoded ONSS full-year equal-month uncapped work-bonus A/B tax-credit bases, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for 10k, 30k, and 60k full-year equal-month worker cases; self-employed social contributions tscse_s live-verifies for main-activity floor, first-bracket, high-income, and capped cases after bridging EUROMOD's uprated yse into Axiom, and now exposes filed EUROMOD threshold-allowance residuals for secondary and post-pension cases; Flemish care/social-protection premium tci_s is live-verified for ordinary and reduced-premium adult Flanders cases using Article 68 plus official Statbel health-index values; social-integration income support bsa_s live-verifies for an isolated no-resources adult; elderly income guarantee bsaoa_s live-verifies for an isolated no-resources senior when the BE_2025 bsaoa_be policy is temporarily switched on in the EUROMOD model XML overlay. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
+  "coverage_claim": "Current Axiom coverage has nine EUROMOD-facing output concepts or prepared oracle targets: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from encoded ONSS full-year equal-month uncapped work-bonus A/B tax-credit bases, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for 10k, 30k, and 60k full-year equal-month worker cases; self-employed social contributions tscse_s live-verifies for main-activity floor, first-bracket, high-income, and capped cases after bridging EUROMOD's uprated yse into Axiom, and exposes filed EUROMOD threshold-allowance residuals for secondary and post-pension cases; special social-security contribution tsceesp_s bridges EUROMOD's returned il_taxabley base into the Article 108 household contribution and live-verifies the low and middle single-worker statutory slice while exposing a filed EUROMOD Article 108 schedule issue for high-income single and joint-assessment cases; Flemish care/social-protection premium tci_s is live-verified for ordinary and reduced-premium adult Flanders cases using Article 68 plus official Statbel health-index values; social-integration income support bsa_s live-verifies for an isolated no-resources adult; elderly income guarantee bsaoa_s live-verifies for an isolated no-resources senior when the BE_2025 bsaoa_be policy is temporarily switched on in the EUROMOD model XML overlay. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
   "source_artifacts": [
     {
       "kind": "euromod_country_model",
@@ -60,8 +60,8 @@
     }
   },
   "coverage_summary": {
-    "current_oracle_output_targets": 8,
-    "live_verified_oracle_output_targets": 6,
+    "current_oracle_output_targets": 9,
+    "live_verified_oracle_output_targets": 7,
     "prepared_oracle_output_targets": 0,
     "full_household_disposable_income_parity": false,
     "rule_percentage": null,
@@ -103,6 +103,15 @@
       "status": "live_oracle_verified_main_activity_with_known_secondary_and_post_pension_euromod_issue",
       "evidence": "RuleSpec encodes Royal Decree No. 38 Article 12 self-employed contribution rates, including the statutory 20.50 percent first-bracket rate and 14.16 percent second-bracket rate, and Article 13 pension-age rates. axiom-oracles maps the selected annual contribution to EUROMOD tscse_s, bridges EUROMOD's returned annual yse into Axiom gross income, and uses the BE_2025 Article 14 factor implied by EUROMOD's current Article 12 threshold. The 2026-07-03 live comparison under dataset BE_2024_c1_2015_03_e2 with template_dataset BE_training_data matches all four main-activity cases: 5k floor, 30k first bracket, 60k high first bracket, and 120k capped/second-bracket case. The same report intentionally shows three residuals for secondary and post-pension cases because EUROMOD treats the Article 12 section 2 and Article 13 section 1 thresholds as deductible allowances; that model issue is filed upstream as ec-jrc/JRC-EUROMOD-software-source-code#6 and tracked in euromod_issues.json.",
       "remaining_gap": "Broader self-employed SSC parity still needs student, spouse-helper, starter, survivor-pension, prior-year-income, and expense/loss cases. Secondary activity and post-pension cases are encoded and oracle-exercised, but exact EUROMOD parity is blocked by the filed threshold-allowance issue rather than an Axiom statutory encoding gap."
+    },
+    {
+      "euromod_variable": "tsceesp_s",
+      "meaning": "special social-security contribution",
+      "rulespec_output": "be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution",
+      "rulespec_module": "be/statutes/social_security/special_contribution.yaml",
+      "status": "live_oracle_verified_single_worker_low_mid_with_known_euromod_article_108_schedule_issue",
+      "evidence": "RuleSpec encodes Law of 30 March 1994 Article 108's annual household special social-security contribution schedule and maps it to EUROMOD tsceesp_s. The oracle suite bridges EUROMOD's returned annual il_taxabley into RuleSpec's Article 107 household-income input. The 2026-07-04 live comparison under dataset BE_2024_c1_2015_03_e2 with template_dataset BE_training_data matches 3/7 cases: the 10k zero case, the 30k single-worker middle-band case, and the 55k single-worker fourth-band case within the 1 EUR tolerance. The 80k single-worker case and all three joint-assessment cases intentionally show residuals tracked as ec-jrc/JRC-EUROMOD-software-source-code#7: EUROMOD's BE_2025 tsceesp_be schedule uses misstated single thresholds/cap behavior and appears to swap the joint 1.3 percent band with the plateau band.",
+      "remaining_gap": "Broader special-contribution parity still needs Article 107 income construction from full PIT variables, Article 109 payroll withholding comparisons, Article 110 settlement/refund comparisons, treaty exclusions, special worker categories, and resolution of the filed EUROMOD Article 108 schedule issue."
     },
     {
       "euromod_variable": "tci_s",
@@ -176,7 +185,15 @@
   "domain_coverage": [
     {
       "domain": "personal_income_tax",
-      "euromod_policies": ["tinna_be", "tinrg_be", "tinfe_be", "tinkt_be", "tintb_be", "tintace_be", "tinmu_be"],
+      "euromod_policies": [
+        "tinna_be",
+        "tinrg_be",
+        "tinfe_be",
+        "tinkt_be",
+        "tintb_be",
+        "tintace_be",
+        "tinmu_be"
+      ],
       "rulespec_modules": [
         "be/statutes/income_tax/individual/taxable_income.yaml",
         "be/statutes/income_tax/individual/professional_income.yaml",
@@ -199,7 +216,14 @@
     },
     {
       "domain": "social_contributions",
-      "euromod_policies": ["tscee_be", "tscer_be", "tscse_be", "tsceesp_be", "tscpe_be", "tci_be"],
+      "euromod_policies": [
+        "tscee_be",
+        "tscer_be",
+        "tscse_be",
+        "tsceesp_be",
+        "tscpe_be",
+        "tci_be"
+      ],
       "rulespec_modules": [
         "be/statutes/social_security/workers/contribution_rates.yaml",
         "be/regulations/social_security/workers/work_bonus.yaml",
@@ -211,12 +235,15 @@
         "be/regulations/social_security/self_employed/contributions.yaml",
         "be-vlg/regulations/social_security/flemish_social_protection/premium.yaml"
       ],
-      "status": "partial_statutory_coverage_employee_ssc_oracle_verified_self_employed_and_care_premium_prepared",
-      "oracle_status": "gross tscee_s regular worker slice verifies exactly; tsceerd_s and derived net tscee_net_s compare live with a visible 11.65 work-bonus timing residual at 30k; tscse_s live-verifies exactly for four main-activity self-employed cases after bridging EUROMOD's returned yse into Axiom, while secondary and post-pension residuals are tracked as EUROMOD threshold-allowance issue #6; tci_s live-verifies exactly for ordinary and reduced-premium adult Flanders cases backed by Article 68 and official Statbel health-index values"
+      "status": "partial_statutory_coverage_employee_self_employed_special_and_care_oracle_verified",
+      "oracle_status": "gross tscee_s regular worker slice verifies exactly; tsceerd_s and derived net tscee_net_s compare live with a visible 11.65 work-bonus timing residual at 30k; tscse_s live-verifies exactly for four main-activity self-employed cases after bridging EUROMOD's returned yse into Axiom, while secondary and post-pension residuals are tracked as EUROMOD threshold-allowance issue #6; tsceesp_s live-verifies the low and middle single-worker Article 108 slice after bridging EUROMOD's returned il_taxabley base into Axiom, while high-income single and joint-assessment residuals are tracked as EUROMOD Article 108 schedule issue #7; tci_s live-verifies exactly for ordinary and reduced-premium adult Flanders cases backed by Article 68 and official Statbel health-index values"
     },
     {
       "domain": "family_benefits",
-      "euromod_policies": ["bch_be", "bchba_be"],
+      "euromod_policies": [
+        "bch_be",
+        "bchba_be"
+      ],
       "rulespec_modules": [
         "be/statutes/family_benefits/regional_routing.yaml",
         "be/statutes/family_benefits/guaranteed_family_benefits.yaml",
@@ -237,7 +264,10 @@
     },
     {
       "domain": "social_assistance_and_elderly_income_support",
-      "euromod_policies": ["bsa_be", "bsaoa_be"],
+      "euromod_policies": [
+        "bsa_be",
+        "bsaoa_be"
+      ],
       "rulespec_modules": [
         "be/statutes/social_integration/eligibility.yaml",
         "be/statutes/social_integration/minimum_income_amounts.yaml",
@@ -253,7 +283,13 @@
     },
     {
       "domain": "unemployment_and_working_age_benefits",
-      "euromod_policies": ["bun_be", "byr_be", "bwkrg_be", "yemcomp_be", "ysecomp_be"],
+      "euromod_policies": [
+        "bun_be",
+        "byr_be",
+        "bwkrg_be",
+        "yemcomp_be",
+        "ysecomp_be"
+      ],
       "rulespec_modules": [
         "be/regulations/unemployment/admission.yaml",
         "be/regulations/unemployment/household_status.yaml",
@@ -266,7 +302,11 @@
     },
     {
       "domain": "leave_disability_and_health_insurance",
-      "euromod_policies": ["bmact_be", "bpact_be", "bfapl_be"],
+      "euromod_policies": [
+        "bmact_be",
+        "bpact_be",
+        "bfapl_be"
+      ],
       "rulespec_modules": [
         "be/statutes/disability/allowances.yaml",
         "be/statutes/health_insurance/insured_status.yaml",
@@ -279,7 +319,10 @@
     },
     {
       "domain": "property_consumption_and_other_taxes",
-      "euromod_policies": ["tprhm_be", "tco_be"],
+      "euromod_policies": [
+        "tprhm_be",
+        "tco_be"
+      ],
       "rulespec_modules": [
         "be/statutes/property_tax/cadastral_income_indexation.yaml",
         "be/statutes/property_tax/immovable_withholding.yaml",
@@ -295,55 +338,329 @@
     },
     {
       "domain": "euromod_definitions_outputs_and_uprating",
-      "euromod_policies": ["output_std_be", "output_std_hh_be", "ILsUDBDef_be", "ConstDef_be", "SetDefault_be", "uprate_be", "ILsDef_be", "ILDef_be", "random_be", "TUDef_be", "InitVars_be", "neg_be", "yem_be", "hhot_switch_be", "TransLMA_be"],
+      "euromod_policies": [
+        "output_std_be",
+        "output_std_hh_be",
+        "ILsUDBDef_be",
+        "ConstDef_be",
+        "SetDefault_be",
+        "uprate_be",
+        "ILsDef_be",
+        "ILDef_be",
+        "random_be",
+        "TUDef_be",
+        "InitVars_be",
+        "neg_be",
+        "yem_be",
+        "hhot_switch_be",
+        "TransLMA_be"
+      ],
       "rulespec_modules": [],
       "status": "oracle_adapter_support_only_not_statutory_rulespec_coverage"
     }
   ],
   "euromod_policies": [
-    {"code": "tscer_be", "label": "SIC: employer (OFF for MOTYFF)", "xml_default_switch": "on", "function_count": 49, "parameter_count": 261},
-    {"code": "tprhm_be", "label": "TAX: Advance levy on immovable property", "xml_default_switch": "on", "function_count": 17, "parameter_count": 97},
-    {"code": "tinna_be", "label": "TAX: PIT - Federal Taxes", "xml_default_switch": "on", "function_count": 52, "parameter_count": 368},
-    {"code": "bsaoa_be", "label": "\"BEN: income support for the elderly (TO BE SWITCHED ON MANUALLY, otherwise from data)\" (ON for MOTYFF )", "xml_default_switch": "off", "function_count": 9, "parameter_count": 61},
-    {"code": "output_std_be", "label": "DEF: STANDARD OUTPUT INDIVIDUAL LEVEL", "xml_default_switch": "on", "function_count": 1, "parameter_count": 26},
-    {"code": "output_std_hh_be", "label": "DEF: STANDARD OUTPUT HOUSEHOLD LEVEL", "xml_default_switch": "off", "function_count": 1, "parameter_count": 12},
-    {"code": "byr_be", "label": "BEN: Early Retirement Benefit", "xml_default_switch": "n/a", "function_count": 12, "parameter_count": 106},
-    {"code": "tci_be", "label": "SIC: Care Insurance Contribution (zorgverzekering)", "xml_default_switch": "on", "function_count": 15, "parameter_count": 84},
-    {"code": "bun_be", "label": "BEN: Unemployment benefit (PART SIMULATED)", "xml_default_switch": "off", "function_count": 22, "parameter_count": 199},
-    {"code": "tinrg_be", "label": "TAX: PIT - Regional Taxes", "xml_default_switch": "on", "function_count": 7, "parameter_count": 54},
-    {"code": "tinfe_be", "label": "TAX: PIT - Fiscal Expenditures", "xml_default_switch": "on", "function_count": 83, "parameter_count": 414},
-    {"code": "tinkt_be", "label": "TAX: Capital Income Tax", "xml_default_switch": "on", "function_count": 2, "parameter_count": 6},
-    {"code": "yem_be", "label": "DEF: minimum wage  (off in motyff)", "xml_default_switch": "off", "function_count": 10, "parameter_count": 48},
-    {"code": "neg_be", "label": "DEF: recode negative income to zero", "xml_default_switch": "on", "function_count": 1, "parameter_count": 4},
-    {"code": "tscpe_be", "label": "SIC: pensioners contributions to health and disability insurance and solidarity contribution", "xml_default_switch": "on", "function_count": 4, "parameter_count": 82},
-    {"code": "tintb_be", "label": "TAX: PIT - Tax deductions & marital quotient", "xml_default_switch": "on", "function_count": 74, "parameter_count": 342},
-    {"code": "bmact_be", "label": "BEN: Maternity leave", "xml_default_switch": "switch", "function_count": 21, "parameter_count": 120},
-    {"code": "bpact_be", "label": "BEN: Paternity leave benefit", "xml_default_switch": "switch", "function_count": 5, "parameter_count": 26},
-    {"code": "bfapl_be", "label": "BEN: Parental leave", "xml_default_switch": "switch", "function_count": 17, "parameter_count": 113},
-    {"code": "ILsUDBDef_be", "label": "DEF: UDB INCOME CONCEPTS", "xml_default_switch": "on", "function_count": 21, "parameter_count": 79},
-    {"code": "bed_be", "label": "BEN: Study allowances (Flemish and French community)", "xml_default_switch": "on", "function_count": 147, "parameter_count": 1024},
-    {"code": "ConstDef_be", "label": "DEF: Constants", "xml_default_switch": "on", "function_count": 5, "parameter_count": 28},
-    {"code": "hhot_switch_be", "label": "DEF: switch on bun for HHoT extension", "xml_default_switch": "off", "function_count": 1, "parameter_count": 2},
-    {"code": "TransLMA_be", "label": "DEF: Modelling labour market transitions (DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON)", "xml_default_switch": "off", "function_count": 31, "parameter_count": 355},
-    {"code": "yemcomp_be", "label": "BEN: Wage compensation scheme Covid-19", "xml_default_switch": "on", "function_count": 8, "parameter_count": 32},
-    {"code": "ysecomp_be", "label": "BEN: Wage compensation scheme Covid-19 (self-employed)", "xml_default_switch": "on", "function_count": 10, "parameter_count": 66},
-    {"code": "tco_be", "label": "TAX: Commodities", "xml_default_switch": "off", "function_count": 15, "parameter_count": 503},
-    {"code": "SetDefault_be", "label": "DEF: Default VALUES", "xml_default_switch": "on", "function_count": 28, "parameter_count": 308},
-    {"code": "uprate_be", "label": "DEF: UPRATING FACTORS", "xml_default_switch": "on", "function_count": 2, "parameter_count": 141},
-    {"code": "ILsDef_be", "label": "DEF: STANDARD INCOME CONCEPTS", "xml_default_switch": "on", "function_count": 38, "parameter_count": 167},
-    {"code": "ILDef_be", "label": "DEF: NON-STANDARD INCOME CONCEPTS", "xml_default_switch": "on", "function_count": 27, "parameter_count": 320},
-    {"code": "random_be", "label": "Def: Random number generator", "xml_default_switch": "on", "function_count": 27, "parameter_count": 77},
-    {"code": "TUDef_be", "label": "DEF: ASSESSMENT UNITS (OFF for MOTYFF)", "xml_default_switch": "on", "function_count": 14, "parameter_count": 92},
-    {"code": "InitVars_be", "label": "DEF: Initialization of variables", "xml_default_switch": "on", "function_count": 24, "parameter_count": 84},
-    {"code": "tscee_be", "label": "SIC: employee (OFF for MOTYFF)", "xml_default_switch": "on", "function_count": 28, "parameter_count": 170},
-    {"code": "tscse_be", "label": "SIC: self-employed", "xml_default_switch": "on", "function_count": 17, "parameter_count": 140},
-    {"code": "tintace_be", "label": "TAX: PIT - deduction professional expenses (2016-2021: policy update/checks needed)", "xml_default_switch": "on", "function_count": 5, "parameter_count": 32},
-    {"code": "tinmu_be", "label": "TAX: PIT - Local Taxes", "xml_default_switch": "on", "function_count": 3, "parameter_count": 17},
-    {"code": "tsceesp_be", "label": "SIC: special social insurance contribution", "xml_default_switch": "on", "function_count": 8, "parameter_count": 76},
-    {"code": "bchba_be", "label": "BEN: birth allowance", "xml_default_switch": "on", "function_count": 5, "parameter_count": 35},
-    {"code": "bsa_be", "label": "Income support (switch: OFF for MOTYFF, ON for other datasets)", "xml_default_switch": "on", "function_count": 44, "parameter_count": 211},
-    {"code": "bch_be", "label": "BEN: child benefit", "xml_default_switch": "on", "function_count": 257, "parameter_count": 1811},
-    {"code": "bwkrg_be", "label": "BEN: Flemish jobbonus", "xml_default_switch": "on", "function_count": 4, "parameter_count": 18}
+    {
+      "code": "tscer_be",
+      "label": "SIC: employer (OFF for MOTYFF)",
+      "xml_default_switch": "on",
+      "function_count": 49,
+      "parameter_count": 261
+    },
+    {
+      "code": "tprhm_be",
+      "label": "TAX: Advance levy on immovable property",
+      "xml_default_switch": "on",
+      "function_count": 17,
+      "parameter_count": 97
+    },
+    {
+      "code": "tinna_be",
+      "label": "TAX: PIT - Federal Taxes",
+      "xml_default_switch": "on",
+      "function_count": 52,
+      "parameter_count": 368
+    },
+    {
+      "code": "bsaoa_be",
+      "label": "\"BEN: income support for the elderly (TO BE SWITCHED ON MANUALLY, otherwise from data)\" (ON for MOTYFF )",
+      "xml_default_switch": "off",
+      "function_count": 9,
+      "parameter_count": 61
+    },
+    {
+      "code": "output_std_be",
+      "label": "DEF: STANDARD OUTPUT INDIVIDUAL LEVEL",
+      "xml_default_switch": "on",
+      "function_count": 1,
+      "parameter_count": 26
+    },
+    {
+      "code": "output_std_hh_be",
+      "label": "DEF: STANDARD OUTPUT HOUSEHOLD LEVEL",
+      "xml_default_switch": "off",
+      "function_count": 1,
+      "parameter_count": 12
+    },
+    {
+      "code": "byr_be",
+      "label": "BEN: Early Retirement Benefit",
+      "xml_default_switch": "n/a",
+      "function_count": 12,
+      "parameter_count": 106
+    },
+    {
+      "code": "tci_be",
+      "label": "SIC: Care Insurance Contribution (zorgverzekering)",
+      "xml_default_switch": "on",
+      "function_count": 15,
+      "parameter_count": 84
+    },
+    {
+      "code": "bun_be",
+      "label": "BEN: Unemployment benefit (PART SIMULATED)",
+      "xml_default_switch": "off",
+      "function_count": 22,
+      "parameter_count": 199
+    },
+    {
+      "code": "tinrg_be",
+      "label": "TAX: PIT - Regional Taxes",
+      "xml_default_switch": "on",
+      "function_count": 7,
+      "parameter_count": 54
+    },
+    {
+      "code": "tinfe_be",
+      "label": "TAX: PIT - Fiscal Expenditures",
+      "xml_default_switch": "on",
+      "function_count": 83,
+      "parameter_count": 414
+    },
+    {
+      "code": "tinkt_be",
+      "label": "TAX: Capital Income Tax",
+      "xml_default_switch": "on",
+      "function_count": 2,
+      "parameter_count": 6
+    },
+    {
+      "code": "yem_be",
+      "label": "DEF: minimum wage  (off in motyff)",
+      "xml_default_switch": "off",
+      "function_count": 10,
+      "parameter_count": 48
+    },
+    {
+      "code": "neg_be",
+      "label": "DEF: recode negative income to zero",
+      "xml_default_switch": "on",
+      "function_count": 1,
+      "parameter_count": 4
+    },
+    {
+      "code": "tscpe_be",
+      "label": "SIC: pensioners contributions to health and disability insurance and solidarity contribution",
+      "xml_default_switch": "on",
+      "function_count": 4,
+      "parameter_count": 82
+    },
+    {
+      "code": "tintb_be",
+      "label": "TAX: PIT - Tax deductions & marital quotient",
+      "xml_default_switch": "on",
+      "function_count": 74,
+      "parameter_count": 342
+    },
+    {
+      "code": "bmact_be",
+      "label": "BEN: Maternity leave",
+      "xml_default_switch": "switch",
+      "function_count": 21,
+      "parameter_count": 120
+    },
+    {
+      "code": "bpact_be",
+      "label": "BEN: Paternity leave benefit",
+      "xml_default_switch": "switch",
+      "function_count": 5,
+      "parameter_count": 26
+    },
+    {
+      "code": "bfapl_be",
+      "label": "BEN: Parental leave",
+      "xml_default_switch": "switch",
+      "function_count": 17,
+      "parameter_count": 113
+    },
+    {
+      "code": "ILsUDBDef_be",
+      "label": "DEF: UDB INCOME CONCEPTS",
+      "xml_default_switch": "on",
+      "function_count": 21,
+      "parameter_count": 79
+    },
+    {
+      "code": "bed_be",
+      "label": "BEN: Study allowances (Flemish and French community)",
+      "xml_default_switch": "on",
+      "function_count": 147,
+      "parameter_count": 1024
+    },
+    {
+      "code": "ConstDef_be",
+      "label": "DEF: Constants",
+      "xml_default_switch": "on",
+      "function_count": 5,
+      "parameter_count": 28
+    },
+    {
+      "code": "hhot_switch_be",
+      "label": "DEF: switch on bun for HHoT extension",
+      "xml_default_switch": "off",
+      "function_count": 1,
+      "parameter_count": 2
+    },
+    {
+      "code": "TransLMA_be",
+      "label": "DEF: Modelling labour market transitions (DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON)",
+      "xml_default_switch": "off",
+      "function_count": 31,
+      "parameter_count": 355
+    },
+    {
+      "code": "yemcomp_be",
+      "label": "BEN: Wage compensation scheme Covid-19",
+      "xml_default_switch": "on",
+      "function_count": 8,
+      "parameter_count": 32
+    },
+    {
+      "code": "ysecomp_be",
+      "label": "BEN: Wage compensation scheme Covid-19 (self-employed)",
+      "xml_default_switch": "on",
+      "function_count": 10,
+      "parameter_count": 66
+    },
+    {
+      "code": "tco_be",
+      "label": "TAX: Commodities",
+      "xml_default_switch": "off",
+      "function_count": 15,
+      "parameter_count": 503
+    },
+    {
+      "code": "SetDefault_be",
+      "label": "DEF: Default VALUES",
+      "xml_default_switch": "on",
+      "function_count": 28,
+      "parameter_count": 308
+    },
+    {
+      "code": "uprate_be",
+      "label": "DEF: UPRATING FACTORS",
+      "xml_default_switch": "on",
+      "function_count": 2,
+      "parameter_count": 141
+    },
+    {
+      "code": "ILsDef_be",
+      "label": "DEF: STANDARD INCOME CONCEPTS",
+      "xml_default_switch": "on",
+      "function_count": 38,
+      "parameter_count": 167
+    },
+    {
+      "code": "ILDef_be",
+      "label": "DEF: NON-STANDARD INCOME CONCEPTS",
+      "xml_default_switch": "on",
+      "function_count": 27,
+      "parameter_count": 320
+    },
+    {
+      "code": "random_be",
+      "label": "Def: Random number generator",
+      "xml_default_switch": "on",
+      "function_count": 27,
+      "parameter_count": 77
+    },
+    {
+      "code": "TUDef_be",
+      "label": "DEF: ASSESSMENT UNITS (OFF for MOTYFF)",
+      "xml_default_switch": "on",
+      "function_count": 14,
+      "parameter_count": 92
+    },
+    {
+      "code": "InitVars_be",
+      "label": "DEF: Initialization of variables",
+      "xml_default_switch": "on",
+      "function_count": 24,
+      "parameter_count": 84
+    },
+    {
+      "code": "tscee_be",
+      "label": "SIC: employee (OFF for MOTYFF)",
+      "xml_default_switch": "on",
+      "function_count": 28,
+      "parameter_count": 170
+    },
+    {
+      "code": "tscse_be",
+      "label": "SIC: self-employed",
+      "xml_default_switch": "on",
+      "function_count": 17,
+      "parameter_count": 140
+    },
+    {
+      "code": "tintace_be",
+      "label": "TAX: PIT - deduction professional expenses (2016-2021: policy update/checks needed)",
+      "xml_default_switch": "on",
+      "function_count": 5,
+      "parameter_count": 32
+    },
+    {
+      "code": "tinmu_be",
+      "label": "TAX: PIT - Local Taxes",
+      "xml_default_switch": "on",
+      "function_count": 3,
+      "parameter_count": 17
+    },
+    {
+      "code": "tsceesp_be",
+      "label": "SIC: special social insurance contribution",
+      "xml_default_switch": "on",
+      "function_count": 8,
+      "parameter_count": 76
+    },
+    {
+      "code": "bchba_be",
+      "label": "BEN: birth allowance",
+      "xml_default_switch": "on",
+      "function_count": 5,
+      "parameter_count": 35
+    },
+    {
+      "code": "bsa_be",
+      "label": "Income support (switch: OFF for MOTYFF, ON for other datasets)",
+      "xml_default_switch": "on",
+      "function_count": 44,
+      "parameter_count": 211
+    },
+    {
+      "code": "bch_be",
+      "label": "BEN: child benefit",
+      "xml_default_switch": "on",
+      "function_count": 257,
+      "parameter_count": 1811
+    },
+    {
+      "code": "bwkrg_be",
+      "label": "BEN: Flemish jobbonus",
+      "xml_default_switch": "on",
+      "function_count": 4,
+      "parameter_count": 18
+    }
   ],
   "next_mapping_work": [
     "Expand tin_s beyond the single-worker pilot to full household PIT, including joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering.",
@@ -353,5 +670,8 @@
     "Map every euromod_policies entry to RuleSpec modules and mark encoded, composed, oracle-tested, or gap.",
     "Track the 2025 work-bonus January-vs-February timing residual in the EUROMOD issue ledger and file upstream if confirmed against the BE_2025 model sources.",
     "Build household-level outputs for ils_tax, ils_ben, and ils_dispy before claiming disposable-income parity."
+  ],
+  "next_actions": [
+    "Expand be-special-social-security-contribution beyond the Article 108 annual assessment oracle cases to Article 109 payroll withholding, Article 110 settlement/refund, special worker categories, and Article 107 income construction from composed PIT variables; keep the filed EUROMOD Article 108 schedule residual visible until upstream issue #7 is resolved."
   ]
 }
