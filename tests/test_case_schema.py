@@ -202,6 +202,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
         Concepts.BE_FLEMISH_JOBBONUS,
+        Concepts.BE_IMMOVABLE_WITHHOLDING_GROSS_WITH_SUPPLIED_CENTIMES,
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
@@ -489,6 +490,63 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
             "inputs": [gross_input],
             "divide_by": 12,
         }
+    }
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_property_tax_suite_defines_oracle_concept_and_bridge() -> None:
+    cases = load_suite("be-property-tax")
+
+    assert len(cases) == 3
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_IMMOVABLE_WITHHOLDING_GROSS_WITH_SUPPLIED_CENTIMES,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Property" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "property" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "immovable-withholding-high-cadastral-income-no-reductions"
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    flanders = by_id["be-property-tax-flanders-high-cadastral-income"]
+    brussels = by_id["be-property-tax-brussels-high-cadastral-income"]
+    wallonia = by_id["be-property-tax-wallonia-high-cadastral-income"]
+    region_input = (
+        "be:statutes/property_tax/gross_withholding_and_supplied_centimes#input."
+        "belgium_immovable_withholding_supplied_centimes_region"
+    )
+    communal_centimes_input = (
+        "be:statutes/property_tax/additional_centimes#input."
+        "belgium_immovable_withholding_communal_additional_centimes"
+    )
+    flanders_income_input = (
+        "be-vlg:statutes/property_tax/immovable_withholding#input."
+        "flanders_immovable_withholding_taxable_cadastral_income"
+    )
+    belgium_income_input = (
+        "be:statutes/property_tax/immovable_withholding#input."
+        "belgium_immovable_withholding_taxable_cadastral_income"
+    )
+    assert flanders.metadata["axiom_inputs"][region_input] == 0
+    assert brussels.metadata["axiom_inputs"][region_input] == 1
+    assert wallonia.metadata["axiom_inputs"][region_input] == 2
+    assert flanders.metadata["axiom_inputs"][communal_centimes_input] == 1068
+    assert brussels.metadata["axiom_inputs"][communal_centimes_input] == 4328
+    assert wallonia.metadata["axiom_inputs"][communal_centimes_input] == 4220
+    assert flanders.metadata["euromod_inputs"][0]["drgn1"] == 2
+    assert brussels.metadata["euromod_inputs"][0]["drgn1"] == 1
+    assert wallonia.metadata["euromod_inputs"][0]["drgn1"] == 3
+    assert flanders.metadata["euromod_inputs"][0]["khooo"] == 1_000
+    assert brussels.metadata["euromod_inputs"][0]["amrtn"] == 3
+    assert flanders.metadata["euromod_to_axiom_input_bridge"] == {
+        "khooo_s": [flanders_income_input, belgium_income_input]
     }
     assert {case.period for case in cases} == {"2025"}
 

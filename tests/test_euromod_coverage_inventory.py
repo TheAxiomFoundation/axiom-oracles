@@ -33,8 +33,8 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         coverage["coverage_summary"]["full_household_disposable_income_parity"] is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 14
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 11
+    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 15
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 12
     assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
@@ -69,6 +69,10 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     assert (
         outputs["bwkrg_s"]["status"]
         == "live_oracle_compared_with_known_2025_jobbonus_parameter_residual"
+    )
+    assert (
+        outputs["tprhm_s"]["status"]
+        == "live_oracle_verified_high_cadastral_income_no_reductions"
     )
     assert (
         outputs["bchba_s"]["status"]

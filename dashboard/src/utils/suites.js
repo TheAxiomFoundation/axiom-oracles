@@ -249,6 +249,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 518,
   },
+  "be-property-tax": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium immovable withholding",
+    region: "be",
+    kind: "household",
+    order: 519,
+  },
   "be-social-assistance": {
     family: "be_social_assistance",
     jurisdiction: "BE",

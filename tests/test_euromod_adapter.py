@@ -208,6 +208,37 @@ class TestSubprocessContract:
         # per-person amounts sum to the case before annualizing
         assert results[1].values["tin_s"] == pytest.approx(150.0 * 12)
 
+    def test_belgium_property_tax_outputs_are_not_annualized(self) -> None:
+        payload = {
+            "columns": ["khooo_s", "tprhm_s", "tin_s"],
+            "missing": [],
+            "idhh": [1],
+            "values": {
+                "khooo_s": [2_244.6],
+                "tprhm_s": [1_040.8120416],
+                "tin_s": [100.0],
+            },
+        }
+
+        def run(argv, **kwargs):
+            Path(argv[3]).write_text(json.dumps(payload))
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="BE",
+            system="BE_2025",
+            subprocess_run=run,
+        )
+        result = runner.run_cases(
+            [_single_earner("a", 30_000.0)],
+            variables=["khooo_s", "tprhm_s", "tin_s"],
+        )[0]
+
+        assert result.values["khooo_s"] == pytest.approx(2_244.6)
+        assert result.values["tprhm_s"] == pytest.approx(1_040.8120416)
+        assert result.values["tin_s"] == pytest.approx(1_200.0)
+
     def test_worker_error_reaches_every_case(self) -> None:
         def run(argv, **kwargs):
             Path(argv[3]).write_text(json.dumps({"error": "boom"}))
