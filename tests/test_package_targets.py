@@ -1,5 +1,6 @@
 from axiom_oracles.adapters.prd import PrdPackageRunner
 from axiom_oracles.adapters.axiom import AxiomRulesRunner
+from axiom_oracles.adapters.axiom.runner import _input_record_names
 from axiom_oracles.adapters.euromod import EuromodPlatformRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
@@ -409,6 +410,44 @@ def test_euromod_bridge_overwrites_declared_axiom_inputs() -> None:
         contribution_input: 31_651.0,
         reference_input: 27_100.0,
     }
+
+
+def test_euromod_bridge_overwrites_employer_ssc_base() -> None:
+    [case] = load_suite("be-employer-ssc")[:1]
+    contribution_input = (
+        "be:regulations/social_security/workers/employer_contributions#input."
+        "belgium_employer_social_security_contribution_base"
+    )
+
+    assert _euromod_to_axiom_bridge_outputs([case]) == ["yem"]
+
+    [bridged] = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [
+            EngineResult(
+                "euromod",
+                case.case_id,
+                {"yem": 31_651.0},
+            )
+        ],
+    )
+
+    assert bridged.metadata["axiom_inputs"][contribution_input] == 31_651.0
+    assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        contribution_input: 31_651.0,
+    }
+
+
+def test_axiom_runner_aliases_qualified_input_refs_to_bare_slots() -> None:
+    assert _input_record_names(
+        "be:regulations/social_security/workers/employer_contributions"
+        "#input.belgium_employer_social_security_contribution_base",
+        alias_qualified=True,
+    ) == (
+        "be:regulations/social_security/workers/employer_contributions"
+        "#input.belgium_employer_social_security_contribution_base",
+        "belgium_employer_social_security_contribution_base",
+    )
 
 
 def test_euromod_bridge_runs_euromod_before_axiom() -> None:
