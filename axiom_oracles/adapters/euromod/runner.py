@@ -52,6 +52,18 @@ DERIVED_OUTPUTS: dict[str, tuple[str, ...]] = {
     "tscee_net_s": ("tscee_s", "tsceerd_s"),
 }
 
+# Most EUROMOD monetary outputs are monthly and need annualization for Axiom
+# concepts. Belgium property-tax outputs are already annual-law amounts in
+# BE_2025: the model applies annual cadastral-income tests (for example
+# ``khooo<=745#y``), and the raw ``tprhm_s`` value is the annual levy.
+NON_ANNUALIZED_OUTPUTS: frozenset[str] = frozenset(
+    {
+        "khooo_s",
+        "tprhm_s",
+        "tprhmtr_s",
+    }
+)
+
 SwitchSetting = tuple[str, bool]
 PolicySwitchOverride = tuple[str, bool]
 
@@ -201,7 +213,7 @@ class EuromodPlatformRunner(EngineAdapter):
             for column in payload["columns"]:
                 sums[column] += float(payload["values"][column][position])
 
-        factor = 12.0 if self.annualize_outputs else 1.0
+        annualization_factor = 12.0 if self.annualize_outputs else 1.0
         missing = tuple(
             f"output {name!r} is not a column of the {self.system} output"
             for name in payload["missing"]
@@ -213,7 +225,13 @@ class EuromodPlatformRunner(EngineAdapter):
                 EngineResult(
                     engine=self.name,
                     household_id=case.case_id,
-                    values={name: value * factor for name, value in sums.items()},
+                    values={
+                        name: value * _annualization_factor(
+                            name,
+                            annualization_factor,
+                        )
+                        for name, value in sums.items()
+                    },
                     errors=missing,
                 )
             )
@@ -381,6 +399,12 @@ def _expand_derived_outputs(outputs: list[str]) -> list[str]:
         else:
             expanded.extend(components)
     return list(dict.fromkeys(expanded))
+
+
+def _annualization_factor(output: str, default_factor: float) -> float:
+    if output in NON_ANNUALIZED_OUTPUTS:
+        return 1.0
+    return default_factor
 
 
 def _attach_derived_outputs(payload: dict[str, Any], outputs: list[str]) -> None:

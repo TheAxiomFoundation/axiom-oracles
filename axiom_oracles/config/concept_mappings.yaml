@@ -208,6 +208,29 @@ concepts:
           type: country
           geoid: BE
 
+  be:statutes/property_tax/gross_withholding_and_supplied_centimes#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes:
+    description: Belgium immovable withholding gross tax with supplied local centimes
+    category: tax
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE, BE-BRU, BE-VLG, BE-WAL]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_immovable_withholding_gross_tax_after_supplied_local_centimes
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tprhm_s
+        scope:
+          type: country
+          geoid: BE
+
   be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount:
     description: Belgium regional birth allowance
     category: benefits

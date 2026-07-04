@@ -38,6 +38,8 @@
     "axiom-euromod-be-worker-ssc.json",
     "axiom-euromod-be-self-employed-ssc.json",
     "axiom-euromod-be-flemish-social-protection-premium.json",
+    "axiom-euromod-be-flemish-jobbonus.json",
+    "axiom-euromod-be-property-tax.json",
     "axiom-euromod-be-family-birth-allowance.json",
     "axiom-euromod-be-family-child-benefit-base.json",
     "axiom-euromod-be-family-child-benefit-social-supplement.json",
