@@ -2,7 +2,7 @@
   "created_at": "2026-07-04",
   "jurisdiction": "be",
   "purpose": "Coverage inventory for the EUROMOD Belgium BE_2025 model surface against Belgium RuleSpec. EUROMOD is an executable comparison oracle, not legal authority; statutory and regulatory RuleSpec modules must still cite upstream Belgian law.",
-  "coverage_claim": "Current Axiom coverage has ten EUROMOD-facing output concepts or prepared oracle targets: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from encoded ONSS full-year equal-month uncapped work-bonus A/B tax-credit bases, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for 10k, 30k, and 60k full-year equal-month worker cases; self-employed social contributions tscse_s live-verifies for main-activity floor, first-bracket, high-income, and capped cases after bridging EUROMOD's uprated yse into Axiom, and exposes filed EUROMOD threshold-allowance residuals for secondary and post-pension cases; special social-security contribution tsceesp_s bridges EUROMOD's returned il_taxabley base into the Article 108 household contribution and live-verifies the low and middle single-worker statutory slice while exposing a filed EUROMOD Article 108 schedule issue for high-income single and joint-assessment cases; Flemish care/social-protection premium tci_s is live-verified for ordinary and reduced-premium adult Flanders cases using Article 68 plus official Statbel health-index values; regional birth allowance bchba_s is live-verified for Brussels first/multiple and later-child amounts, Flanders first/later amounts, Wallonia first/later amounts, and a zero German-speaking-community placeholder; social-integration income support bsa_s live-verifies for an isolated no-resources adult; elderly income guarantee bsaoa_s live-verifies for an isolated no-resources senior when the BE_2025 bsaoa_be policy is temporarily switched on in the EUROMOD model XML overlay. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
+  "coverage_claim": "Current Axiom coverage has eleven EUROMOD-facing output concepts or prepared oracle targets: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from encoded ONSS full-year equal-month uncapped work-bonus A/B tax-credit bases, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-verifies within tolerance for 10k, 30k, and 60k full-year equal-month worker cases; self-employed social contributions tscse_s live-verifies for main-activity floor, first-bracket, high-income, and capped cases after bridging EUROMOD's uprated yse into Axiom, and exposes filed EUROMOD threshold-allowance residuals for secondary and post-pension cases; special social-security contribution tsceesp_s bridges EUROMOD's returned il_taxabley base into the Article 108 household contribution and live-verifies the low and middle single-worker statutory slice while exposing a filed EUROMOD Article 108 schedule issue for high-income single and joint-assessment cases; Flemish care/social-protection premium tci_s is live-verified for ordinary and reduced-premium adult Flanders cases using Article 68 plus official Statbel health-index values; regional birth allowance bchba_s is live-verified for Brussels first/multiple and later-child amounts, Flanders first/later amounts, Wallonia first/later amounts, and a zero German-speaking-community placeholder; monthly child benefit bch_s live-verifies for a one-child high-income base-amount slice in Brussels and Wallonia across age and Brussels higher-education branches; social-integration income support bsa_s live-verifies for an isolated no-resources adult; elderly income guarantee bsaoa_s live-verifies for an isolated no-resources senior when the BE_2025 bsaoa_be policy is temporarily switched on in the EUROMOD model XML overlay. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
   "source_artifacts": [
     {
       "kind": "euromod_country_model",
@@ -60,8 +60,8 @@
     }
   },
   "coverage_summary": {
-    "current_oracle_output_targets": 10,
-    "live_verified_oracle_output_targets": 8,
+    "current_oracle_output_targets": 11,
+    "live_verified_oracle_output_targets": 9,
     "prepared_oracle_output_targets": 0,
     "full_household_disposable_income_parity": false,
     "rule_percentage": null,
@@ -129,7 +129,16 @@
       "rulespec_module": "be/statutes/family_benefits/birth_allowance.yaml",
       "status": "live_oracle_verified_regional_newborn_slice",
       "evidence": "RuleSpec maps Brussels, Flanders, and Wallonia 2025 birth-allowance amounts to EUROMOD bchba_s using upstream regional statutes for entitlement and official 2025 amount tables for indexed amounts. The live BE_2025 synthetic comparison covers Brussels first/multiple birth 1367.74 EUR, Brussels later child 621.70 EUR, Flanders first/later child 1238.78 EUR, Wallonia first/later child 1367.74 EUR, and a zero German-speaking-community placeholder because that region's birth allowance is not yet encoded in the shared Belgium module.",
-      "remaining_gap": "Broader family-benefit parity still needs monthly child benefits bch_s, German-speaking Community birth amounts, allocation/payment-recipient rules, social supplements, orphan/disability/single-parent supplements, age bands, and composition with the household benefit aggregate ils_ben."
+      "remaining_gap": "Broader family-benefit parity still needs German-speaking Community birth amounts, allocation/payment-recipient rules, multiple-birth edge cases, statutory payment timing, and composition with the household benefit aggregate ils_ben."
+    },
+    {
+      "euromod_variable": "bch_s",
+      "meaning": "monthly child benefit",
+      "rulespec_output": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
+      "rulespec_module": "be/statutes/family_benefits/child_benefit_base_2025.yaml",
+      "status": "live_oracle_verified_brussels_wallonia_one_child_base_slice",
+      "evidence": "RuleSpec computes 2025 annualized base child-benefit amounts for a one-child, high-income household slice in Brussels and Wallonia. axiom-oracles maps that annual amount to EUROMOD bch_s and uses explicit Brussels education-code projection dec=6 for the 18-year-old higher-education branch. The 2026-07-04 live BE_2025 synthetic comparison under dataset BE_2024_c1_2015_03_e2 with template_dataset BE_training_data matches 9/9 cases: Brussels ages 0, 6, 13, 18 not enrolled, 18 enrolled in higher education, and Wallonia ages 0, 6, 13, and 18.",
+      "remaining_gap": "Broader child-benefit parity still needs Flanders and German-speaking Community base amounts, low-income/social supplements, orphan/disability/single-parent supplements, multiple-child rank/composition mechanics, allocation/payment-recipient rules, and household aggregate composition into ils_ben."
     },
     {
       "euromod_variable": "tin_s",
@@ -269,8 +278,8 @@
         "be-dg/statutes/family_benefits/eligibility.yaml",
         "be-dg/statutes/family_benefits/amounts.yaml"
       ],
-      "status": "partial_statutory_coverage_birth_allowance_oracle_verified",
-      "oracle_status": "bchba_s live-verifies exactly for Brussels first/multiple and later-child newborn cases, Flanders first/later newborn cases, Wallonia first/later newborn cases, and a zero German-speaking-community placeholder. bch_s monthly child-benefit parity is still not live-oracle-covered."
+      "status": "partial_statutory_coverage_birth_allowance_and_child_benefit_base_oracle_verified",
+      "oracle_status": "bchba_s live-verifies exactly for Brussels first/multiple and later-child newborn cases, Flanders first/later newborn cases, Wallonia first/later newborn cases, and a zero German-speaking-community placeholder. bch_s live-verifies for a one-child high-income base-amount slice covering Brussels ages 0, 6, 13, 18 not enrolled, 18 enrolled in higher education, and Wallonia ages 0, 6, 13, and 18."
     },
     {
       "domain": "social_assistance_and_elderly_income_support",
@@ -678,13 +687,13 @@
     "Expand be-self-employed-ssc beyond the current main-activity, secondary, and post-pension oracle cases to student, spouse-helper, starter, survivor-pension, prior-year-income, and expense/loss cases; keep the filed EUROMOD self-employed threshold-allowance residual visible until upstream issue #6 is resolved.",
     "Ingest an upstream current-amount source for GRAPA/IGO indexed amounts so the bsaoa_s suite no longer depends on a supplied EUROMOD current-amount bridge.",
     "Expand bchba_s beyond the current Brussels/Flanders/Wallonia newborn slice to German-speaking Community birth amounts, allocation/payment-recipient rules, multiple-birth edge cases, and statutory payment timing.",
-    "Encode and oracle-test bch_s monthly child benefits across Brussels, Flanders, Wallonia, and the German-speaking Community, including age bands and social, orphan, disability, and single-parent supplements.",
+    "Expand bch_s monthly child benefits beyond the current Brussels/Wallonia one-child high-income base slice to Flanders, the German-speaking Community, low-income/social supplements, orphan/disability/single-parent supplements, and multi-child rank/composition mechanics.",
     "Map every euromod_policies entry to RuleSpec modules and mark encoded, composed, oracle-tested, or gap.",
     "Track the 2025 work-bonus January-vs-February timing residual in the EUROMOD issue ledger and file upstream if confirmed against the BE_2025 model sources.",
     "Build household-level outputs for ils_tax, ils_ben, and ils_dispy before claiming disposable-income parity."
   ],
   "next_actions": [
-    "Encode and live-oracle-test bch_s monthly child benefits, starting with base regional child amounts before adding supplements.",
+    "Expand the bch_s live oracle from the Brussels/Wallonia one-child base slice to Flanders, the German-speaking Community, supplements, rank/composition, allocation/payment-recipient rules, and ils_ben composition.",
     "Expand be-special-social-security-contribution beyond the Article 108 annual assessment oracle cases to Article 109 payroll withholding, Article 110 settlement/refund, special worker categories, and Article 107 income construction from composed PIT variables; keep the filed EUROMOD Article 108 schedule residual visible until upstream issue #7 is resolved."
   ]
 }
