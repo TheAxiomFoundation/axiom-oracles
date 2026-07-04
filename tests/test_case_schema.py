@@ -295,6 +295,10 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         case.metadata["axiom_entity"] == "Person" for case in employer_ssc_cases
     )
     assert all(
+        "axiom_alias_qualified_inputs" not in case.metadata
+        for case in pit_cases + ssc_cases + employer_ssc_cases
+    )
+    assert all(
         "#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"]
     )
     assert all(

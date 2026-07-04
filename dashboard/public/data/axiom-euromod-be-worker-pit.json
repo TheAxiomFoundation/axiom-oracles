@@ -9,17 +9,17 @@
       "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
       "description": "Belgium worker PIT before withholding",
       "left_weighted_sum": 12292.900862,
-      "match_rate": 100,
-      "match_weight": 3,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "match_rate": 66.666667,
+      "match_weight": 2,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 12287.783083,
-      "weighted_difference": 5.117779,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 13068.150415,
+      "weighted_difference": -775.249553,
+      "weighted_match_rate": 66.666667
     }
   ],
   "case_count": 3,
@@ -44,7 +44,24 @@
   "locales": [
     "BE"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-worker-pit-10k",
+      "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
+      "description": "Belgium worker PIT before withholding",
+      "difference": -780.367331889955,
+      "kind": "amount_difference",
+      "left": -1504.8488879999998,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": -724.4815561100447,
+      "scenario": "single-worker-pit",
+      "tolerance": 15,
+      "yearly_earned_income": 10000.0
+    }
+  ],
   "population": "synthetic",
   "schema_version": "axiom.comparison_report.v2",
   "scope": null,
@@ -53,16 +70,31 @@
     "comparison_count": 3,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 3,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
+    "match_count": 2,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "single-worker-pit"
+      }
+    ],
     "weighted": {
       "comparison_weight": 3,
-      "match_rate": 100,
-      "match_weight": 3,
-      "mismatch_weight": 0
+      "match_rate": 66.666667,
+      "match_weight": 2,
+      "mismatch_weight": 1
     }
   },
   "cases": [
@@ -70,7 +102,7 @@
       "case_id": "be-worker-pit-10k",
       "left_engine": "euromod",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 0.0,
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -132,7 +164,19 @@
         },
         "yearly_earned_income": 10000.0
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
+          "description": "Belgium worker PIT before withholding",
+          "difference": -780.367331889955,
+          "kind": "amount_difference",
+          "left": -1504.8488879999998,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": -724.4815561100447,
+          "tolerance": 15
+        }
+      ],
       "right_engine": "axiom",
       "right_errors": []
     },

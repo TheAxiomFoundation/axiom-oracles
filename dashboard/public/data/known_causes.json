@@ -14,6 +14,19 @@
    "fix_owner": "euromod-upstream"
   },
   {
+   "suite": "be-worker-pit",
+   "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
+   "kind": "amount_difference",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "label": "EUROMOD BE_2025 PIT credit uses uncapped work-bonus A/B amounts",
+   "description": "The 10k Belgium worker PIT residual is the filed JRC EUROMOD BE_2025 Article 289ter/1 issue: BE_2025 computes the refundable low-wage work-bonus tax credit from pre-cap i_tsceerdA_s/i_tsceerdB_s, while the source-backed RuleSpec caps the A/B credit bases by the employee Article 38 contribution before reductions because CIR 92 Article 289ter/1 refers to reductions actually granted. The 30k and 60k worker cases still match.",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12"
+  },
+  {
    "suite": "ma-snap-ecps",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
