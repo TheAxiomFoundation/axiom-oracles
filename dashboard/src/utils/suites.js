@@ -257,6 +257,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 518,
   },
+  "be-cadastral-income-indexation": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium cadastral income indexation",
+    region: "be",
+    kind: "household",
+    order: 518.5,
+  },
   "be-property-tax": {
     family: "be_personal_income_tax",
     jurisdiction: "BE",

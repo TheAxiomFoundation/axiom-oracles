@@ -8,6 +8,9 @@ PROPERTY_TAX_MODULE = "be:statutes/property_tax/gross_withholding_and_supplied_c
 BE_PROPERTY_TAX_MODULE = "be:statutes/property_tax/immovable_withholding"
 FLANDERS_PROPERTY_TAX_MODULE = "be-vlg:statutes/property_tax/immovable_withholding"
 ADDITIONAL_CENTIMES_MODULE = "be:statutes/property_tax/additional_centimes"
+CADASTRAL_INCOME_INDEXATION_MODULE = (
+    "be:statutes/property_tax/cadastral_income_indexation"
+)
 
 REGION_FLANDERS = 0
 REGION_BRUSSELS = 1
@@ -41,6 +44,58 @@ def be_property_tax_cases() -> list[Case]:
             communal_centimes=4220,
         ),
     ]
+
+
+def be_cadastral_income_indexation_cases() -> list[Case]:
+    """Belgium indexed cadastral-income cases for EUROMOD BE_2025."""
+
+    return [
+        _cadastral_income_indexation_case(
+            "be-cadastral-income-indexation-2025-rounding",
+            cadastral_income=1_000.0,
+        ),
+        _cadastral_income_indexation_case(
+            "be-cadastral-income-indexation-2025-exact-multiple",
+            cadastral_income=5_000.0,
+        ),
+    ]
+
+
+def _cadastral_income_indexation_case(
+    case_id: str,
+    *,
+    cadastral_income: float,
+) -> Case:
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "axiom_entity": "Property",
+            "axiom_entity_id": "property",
+            "scenario": "cadastral-income-indexation",
+            "cadastral_income": cadastral_income,
+            "axiom_inputs": {
+                _cadastral_income_indexation_input(
+                    "belgium_cadastral_income_non_indexed"
+                ): cadastral_income,
+            },
+            "euromod_inputs": [
+                _euromod_property_owner_input(
+                    cadastral_income=cadastral_income,
+                    region=EUROMOD_REGION_FLANDERS,
+                )
+            ],
+        },
+        entities=(
+            Entity(
+                entity_id="property",
+                kind="property",
+                facts={},
+            ),
+        ),
+        outputs=(Concepts.BE_CADASTRAL_INCOME_INDEXED,),
+    )
 
 
 def _property_tax_case(
@@ -151,3 +206,7 @@ def _flanders_property_tax_input(name: str) -> str:
 
 def _additional_centimes_input(name: str) -> str:
     return f"{ADDITIONAL_CENTIMES_MODULE}#input.{name}"
+
+
+def _cadastral_income_indexation_input(name: str) -> str:
+    return f"{CADASTRAL_INCOME_INDEXATION_MODULE}#input.{name}"

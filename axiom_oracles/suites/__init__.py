@@ -12,7 +12,10 @@ from .be_family_benefits import (
 )
 from .be_flemish_jobbonus import be_flemish_jobbonus_cases
 from .be_flemish_social_protection import be_flemish_social_protection_premium_cases
-from .be_property_tax import be_property_tax_cases
+from .be_property_tax import (
+    be_cadastral_income_indexation_cases,
+    be_property_tax_cases,
+)
 from .be_self_employed import be_self_employed_ssc_cases
 from .be_special_social_security import (
     be_special_social_security_contribution_cases,
@@ -36,6 +39,7 @@ def available_suites() -> tuple[str, ...]:
         "be-family-child-benefit-social-supplement",
         "be-family-child-benefit-wallonia-social-supplement",
         "be-flemish-jobbonus",
+        "be-cadastral-income-indexation",
         "be-property-tax",
         "be-flemish-social-protection-premium",
         "be-social-assistance",
@@ -68,6 +72,8 @@ def load_suite(name: str):
         return be_family_child_benefit_wallonia_social_supplement_cases()
     if name == "be-flemish-jobbonus":
         return be_flemish_jobbonus_cases()
+    if name == "be-cadastral-income-indexation":
+        return be_cadastral_income_indexation_cases()
     if name == "be-property-tax":
         return be_property_tax_cases()
     if name == "be-flemish-social-protection-premium":
@@ -89,6 +95,7 @@ __all__ = [
     "be_family_child_benefit_wallonia_social_supplement_cases",
     "be_flemish_jobbonus_cases",
     "be_flemish_social_protection_premium_cases",
+    "be_cadastral_income_indexation_cases",
     "be_property_tax_cases",
     "be_self_employed_ssc_cases",
     "be_special_social_security_contribution_cases",
