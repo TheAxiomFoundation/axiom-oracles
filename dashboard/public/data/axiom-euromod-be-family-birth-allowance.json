@@ -9,17 +9,17 @@
       "concept": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
       "description": "Belgium regional birth allowance",
       "left_weighted_sum": 7202.48,
-      "match_rate": 100,
-      "match_weight": 7,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "match_rate": 85.714286,
+      "match_weight": 6,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 7202.48,
-      "weighted_difference": 0,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 8578.64,
+      "weighted_difference": -1376.16,
+      "weighted_match_rate": 85.714286
     }
   ],
   "case_count": 7,
@@ -44,7 +44,24 @@
   "locales": [
     "BE"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-family-birth-allowance-german-speaking-community-newborn",
+      "concept": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
+      "description": "Belgium regional birth allowance",
+      "difference": -1376.16,
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 1376.16,
+      "scenario": "german-speaking-community-birth-premium",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
   "population": "synthetic",
   "schema_version": "axiom.comparison_report.v2",
   "scope": null,
@@ -53,16 +70,31 @@
     "comparison_count": 7,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 7,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
+    "match_count": 6,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "german-speaking-community-birth-premium"
+      }
+    ],
     "weighted": {
       "comparison_weight": 7,
-      "match_rate": 100,
-      "match_weight": 7,
-      "mismatch_weight": 0
+      "match_rate": 85.714286,
+      "match_weight": 6,
+      "mismatch_weight": 1
     }
   },
   "cases": [
@@ -691,16 +723,17 @@
       "right_errors": []
     },
     {
-      "case_id": "be-family-birth-allowance-german-region-newborn-zero",
+      "case_id": "be-family-birth-allowance-german-speaking-community-newborn",
       "left_engine": "euromod",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 0.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_inputs": {
           "be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_brussels_first_child_or_multiple_birth": true,
           "be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_child_age_years": 0,
+          "be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_german_speaking_community_pre_2025_index_factor": 1.202937062937063,
           "be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_region": 4
         },
         "brussels_first_child_or_multiple_birth": true,
@@ -770,13 +803,25 @@
         },
         "locale": "BE",
         "region_code": 4,
-        "scenario": "german-speaking-community-not-yet-encoded",
+        "scenario": "german-speaking-community-birth-premium",
         "scope": {
           "geoid": "BE",
           "type": "country"
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
+          "description": "Belgium regional birth allowance",
+          "difference": -1376.16,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 1376.16,
+          "tolerance": 1
+        }
+      ],
       "right_engine": "axiom",
       "right_errors": []
     }

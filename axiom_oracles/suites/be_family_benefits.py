@@ -13,6 +13,12 @@ BRUSSELS_REGION = 1
 FLANDERS_REGION = 2
 WALLONIA_REGION = 3
 GERMAN_SPEAKING_REGION = 4
+GERMAN_SPEAKING_BIRTH_PREMIUM_2019 = 1_144
+GERMAN_SPEAKING_BIRTH_PREMIUM_2025 = 1_376.16
+GERMAN_SPEAKING_PRE_2025_INDEX_FACTOR = (
+    GERMAN_SPEAKING_BIRTH_PREMIUM_2025
+    / GERMAN_SPEAKING_BIRTH_PREMIUM_2019
+)
 
 
 def be_family_birth_allowance_cases() -> list[Case]:
@@ -59,9 +65,9 @@ def be_family_birth_allowance_cases() -> list[Case]:
             existing_child_age=5,
         ),
         _birth_allowance_case(
-            "be-family-birth-allowance-german-region-newborn-zero",
+            "be-family-birth-allowance-german-speaking-community-newborn",
             region=GERMAN_SPEAKING_REGION,
-            scenario="german-speaking-community-not-yet-encoded",
+            scenario="german-speaking-community-birth-premium",
             first_or_multiple=True,
         ),
     ]
@@ -460,7 +466,7 @@ def _birth_allowance_axiom_inputs(
     region: int,
     first_or_multiple: bool,
 ) -> dict[str, float | int | bool]:
-    return {
+    inputs = {
         _birth_allowance_input(
             "belgium_family_benefits_birth_allowance_child_age_years"
         ): 0,
@@ -471,6 +477,13 @@ def _birth_allowance_axiom_inputs(
             "belgium_family_benefits_birth_allowance_brussels_first_child_or_multiple_birth"
         ): first_or_multiple,
     }
+    if region == GERMAN_SPEAKING_REGION:
+        inputs[
+            _birth_allowance_input(
+                "belgium_family_benefits_birth_allowance_german_speaking_community_pre_2025_index_factor"
+            )
+        ] = GERMAN_SPEAKING_PRE_2025_INDEX_FACTOR
+    return inputs
 
 
 def _birth_allowance_entities(

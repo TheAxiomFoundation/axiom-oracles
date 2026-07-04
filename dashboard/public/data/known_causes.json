@@ -509,6 +509,19 @@
    "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
   },
   {
+   "suite": "be-family-birth-allowance",
+   "concept": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
+   "kind": "amount_difference",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "label": "EUROMOD BE_2025 has no DG birth-allowance branch",
+   "description": "The German-speaking Community newborn residual is filed upstream: BE_2025 bchba_be returns zero for drgn1=4, while source-backed RuleSpec returns the official DG birth premium of 1,376.16 EUR. The same suite still matches Brussels, Flanders, and Wallonia exactly; the mismatch is isolated to the missing drgn1=4 bchba_be branch.",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13"
+  },
+  {
    "suite": "be-flemish-jobbonus",
    "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
    "kind": "amount_difference",

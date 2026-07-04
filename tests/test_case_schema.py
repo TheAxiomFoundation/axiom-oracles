@@ -1,5 +1,7 @@
 from types import SimpleNamespace
 
+import pytest
+
 from axiom_oracles import Case, Concepts, Entity
 from axiom_oracles.adapters.accessnyc import AccessNycInputMapper, AccessNycPythonRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineRunner
@@ -615,13 +617,15 @@ def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs(
         "flanders-later-child",
         "wallonia-first-child",
         "wallonia-later-child",
-        "german-speaking-community-not-yet-encoded",
+        "german-speaking-community-birth-premium",
     }
 
     by_id = {case.case_id: case for case in cases}
     brussels_first = by_id["be-family-birth-allowance-brussels-first-newborn"]
     brussels_later = by_id["be-family-birth-allowance-brussels-later-newborn"]
-    german_zero = by_id["be-family-birth-allowance-german-region-newborn-zero"]
+    german_case = by_id[
+        "be-family-birth-allowance-german-speaking-community-newborn"
+    ]
     first_or_multiple_input = (
         "be:statutes/family_benefits/birth_allowance#input."
         "belgium_family_benefits_birth_allowance_brussels_first_child_or_multiple_birth"
@@ -634,6 +638,10 @@ def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs(
         "be:statutes/family_benefits/birth_allowance#input."
         "belgium_family_benefits_birth_allowance_child_age_years"
     )
+    german_index_input = (
+        "be:statutes/family_benefits/birth_allowance#input."
+        "belgium_family_benefits_birth_allowance_german_speaking_community_pre_2025_index_factor"
+    )
     assert brussels_first.metadata["axiom_inputs"][first_or_multiple_input] is True
     assert brussels_later.metadata["axiom_inputs"][first_or_multiple_input] is False
     assert brussels_first.metadata["axiom_inputs"][region_input] == 1
@@ -642,8 +650,11 @@ def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs(
     assert brussels_later.metadata["euromod_inputs"][1]["dag"] == 5
     assert brussels_later.metadata["euromod_inputs"][2]["dag"] == 0
     assert brussels_later.metadata["euromod_inputs"][2]["idmother"] == 101
-    assert german_zero.metadata["axiom_inputs"][region_input] == 4
-    assert german_zero.metadata["euromod_inputs"][1]["drgn1"] == 4
+    assert german_case.metadata["axiom_inputs"][region_input] == 4
+    assert german_case.metadata["axiom_inputs"][german_index_input] == pytest.approx(
+        1_376.16 / 1_144
+    )
+    assert german_case.metadata["euromod_inputs"][1]["drgn1"] == 4
     assert {case.period for case in cases} == {"2025"}
 
 
