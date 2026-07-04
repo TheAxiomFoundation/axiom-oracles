@@ -359,7 +359,7 @@
    "concept": "us:tax/federal-income-tax#liability",
    "kind": "amount_difference",
    "label": "Downstream of legacy taxable-income residuals",
-   "description": "The 4 liability mismatches are the same tax units as the taxable-income residuals (ecps-tax-unit-5012, 64926, 68364, 71824) \u2014 liability differences track tax-before-credits almost exactly, so no separate credit-stage cause is indicated. The current full fiit-ecps run compares federal surfaces cleanly except the documented EITC entity-shape residuals.",
+   "description": "The 4 liability mismatches are the same tax units as the taxable-income residuals (ecps-tax-unit-5012, 64926, 68364, 71824) — liability differences track tax-before-credits almost exactly, so no separate credit-stage cause is indicated. The current full fiit-ecps run compares federal surfaces cleanly except the documented EITC entity-shape residuals.",
    "fix_owner": "investigation"
   },
   {
@@ -421,7 +421,7 @@
    "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
    "kind": "amount_difference",
    "label": "GA parent/caretaker standard is dollar-based; PolicyEngine carries an FPL approximation",
-   "description": "Georgia's parent/caretaker Medicaid standard is published as dollar amounts (the encoding flags georgia_parent_caretaker_standard_uses_dollar_amounts), which the source approximates at 28% FPL + the 5% MAGI disregard (0.33). PolicyEngine carries 0.39 FPL from its 2018-vintage state table. Neither side is wrong per se \u2014 the comparison flags that PE's approximation predates the current published standard.",
+   "description": "Georgia's parent/caretaker Medicaid standard is published as dollar amounts (the encoding flags georgia_parent_caretaker_standard_uses_dollar_amounts), which the source approximates at 28% FPL + the 5% MAGI disregard (0.33). PolicyEngine carries 0.39 FPL from its 2018-vintage state table. Neither side is wrong per se — the comparison flags that PE's approximation predates the current published standard.",
    "fix_owner": "policyengine-data",
    "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8834"
   },
@@ -430,7 +430,7 @@
    "concept": "us-co:regulations/9-ccr-2503-5/3.530#oap_total_monthly_grant_standard",
    "kind": "amount_difference",
    "label": "PolicyEngine carries the SSI FBR as Colorado's OAP grant standard",
-   "description": "PolicyEngine's gov.states.co.ssa.state_supplement.grant_standard values ($943 in 2024, $967 in 2025) equal the federal SSI benefit rate for those years, but Colorado's Old Age Pension total grant standard is set by state rule above the FBR \u2014 9 CCR 2503-5 sec. 3.530 sets $1,032 effective January 1, 2026. The parameter appears to conflate the OAP standard with the FBR and lacks a 2026 value.",
+   "description": "PolicyEngine's gov.states.co.ssa.state_supplement.grant_standard values ($943 in 2024, $967 in 2025) equal the federal SSI benefit rate for those years, but Colorado's Old Age Pension total grant standard is set by state rule above the FBR — 9 CCR 2503-5 sec. 3.530 sets $1,032 effective January 1, 2026. The parameter appears to conflate the OAP standard with the FBR and lacks a 2026 value.",
    "fix_owner": "policyengine-data",
    "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8833"
   },
@@ -439,7 +439,7 @@
    "concept": "us:statutes/42/1382#ssi_benefit",
    "kind": "amount_difference",
    "label": "Statutory entitlement vs dataset SSI (take-up, imputed resources, deeming, couples)",
-   "description": "Of 3,231 divergences over 41,314 households (92.2% match), the dominant class remains the dataset withholding SSI from statutorily entitled people (take-up seeding, imputed-resource tests, spousal deeming \u2014 all dataset-side). Eligible couples are now paid at half the couple FBR each via a two-ABD-adults approximation; remaining couple noise and 1382c(f) ineligible-spouse deeming (not yet encoded upstream) account for most of the both-pay-differ residue. Dashboard copy shows the first 1,000 mismatches.",
+   "description": "Of 3,231 divergences over 41,314 households (92.2% match), the dominant class remains the dataset withholding SSI from statutorily entitled people (take-up seeding, imputed-resource tests, spousal deeming — all dataset-side). Eligible couples are now paid at half the couple FBR each via a two-ABD-adults approximation; remaining couple noise and 1382c(f) ineligible-spouse deeming (not yet encoded upstream) account for most of the both-pay-differ residue. Dashboard copy shows the first 1,000 mismatches.",
    "drivers": [
     {
      "label": "Take-up and imputed resources (dataset side)",
@@ -461,7 +461,7 @@
    "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
    "kind": "amount_difference",
    "label": "Earned income disregard rate and shelter schedule differ between the sources",
-   "description": "58 of 2,288 NY households diverge, in two clean classes. 32 (Axiom pays more, all working households): the encoded 2024-2026 state plan applies a 62% earned income disregard while PolicyEngine carries 50%. 26 (PolicyEngine pays more, all no-earnings renters): the two sides carry different local-agency shelter maximum schedules (PE 277/283/400\u2026 vs the encoded 214/219/309\u2026 by household size), and the difference equals the per-size schedule gap exactly.",
+   "description": "58 of 2,288 NY households diverge, in two clean classes. 32 (Axiom pays more, all working households): the encoded 2024-2026 state plan applies a 62% earned income disregard while PolicyEngine carries 50%. 26 (PolicyEngine pays more, all no-earnings renters): the two sides carry different local-agency shelter maximum schedules (PE 277/283/400… vs the encoded 214/219/309… by household size), and the difference equals the per-size schedule gap exactly.",
    "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8835",
    "fix_owner": "policyengine-data"
   },
@@ -470,7 +470,7 @@
    "concept": "us:regulations/42-cfr/435#adult_eligible",
    "kind": "eligibility_right_only",
    "label": "MAGI income definition and the 435.603(d) 5% disregard",
-   "description": "52 of 694 CO households have an adult PolicyEngine deems expansion-eligible where the composed 435.119 does not. Two drivers: PolicyEngine compares MAGI (taxable Social Security, tax-unit composition) while the projection uses gross cash income over the whole household; and PolicyEngine applies the 138% effective limit (133% + the 435.603(d) disregard) where the composed rule carries the statutory 133% \u2014 the disregard lives in 435.603, outside this composition.",
+   "description": "52 of 694 CO households have an adult PolicyEngine deems expansion-eligible where the composed 435.119 does not. Two drivers: PolicyEngine compares MAGI (taxable Social Security, tax-unit composition) while the projection uses gross cash income over the whole household; and PolicyEngine applies the 138% effective limit (133% + the 435.603(d) disregard) where the composed rule carries the statutory 133% — the disregard lives in 435.603, outside this composition.",
    "fix_owner": "program-coverage"
   },
   {
@@ -478,7 +478,7 @@
    "concept": "us:regulations/42-cfr/435#adult_eligible",
    "kind": "eligibility_left_only",
    "label": "Household-unit and income-definition edges",
-   "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not \u2014 tax-unit household composition and MAGI additions on the PolicyEngine side.",
+   "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not — tax-unit household composition and MAGI additions on the PolicyEngine side.",
    "fix_owner": "program-coverage"
   },
   {
@@ -552,14 +552,15 @@
    "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
    "kind": "amount_difference",
    "label": "EUROMOD uses older 2025 Flemish jobbonus parameters",
-   "description": "Four of five full-time jobbonus cases differ because BE_2025 bwkrg_be uses 1,800/2,500 EUR thresholds, a 600 EUR maximum, a 20 EUR full-time small-payment threshold, and no 2025 fixed top-up. The source-backed Axiom RuleSpec uses the Flemish Government implementing order consolidated as of 1 January 2025: 2,115/3,114.99 EUR thresholds, 650 EUR maximum, 50 EUR floor/full-time small-payment threshold, and a 50 EUR fixed top-up. The Brussels non-Flanders zero case matches, so the residual is isolated to the amount schedule rather than regional eligibility.",
+   "description": "Five of seven jobbonus cases differ because BE_2025 bwkrg_be uses 1,800/2,500 EUR thresholds, a 600 EUR maximum, a 20 EUR full-time small-payment threshold, and no 2025 fixed top-up. The source-backed Axiom RuleSpec uses the Flemish Government implementing order consolidated as of 1 January 2025: 2,115/3,114.99 EUR thresholds, 650 EUR maximum, 50 EUR floor/full-time small-payment threshold, a 10 EUR part-time small-payment threshold, and a 50 EUR fixed top-up. The Brussels non-Flanders zero case and tiny part-time suppression case match, so the residual is isolated to the stale amount schedule rather than regional eligibility or the part-time small-payment floor.",
    "drivers": [
     {
      "label": "Missing 2025 maximum increase and fixed top-up",
-     "description": "The two lower-wage Flanders cases return Axiom 700 EUR vs EUROMOD 600 EUR: 650 EUR statutory maximum plus 50 EUR top-up, compared with EUROMOD's older 600 EUR maximum and no top-up.",
+     "description": "The two lower-wage full-time Flanders cases return Axiom 700 EUR vs EUROMOD 600 EUR: 650 EUR statutory maximum plus 50 EUR top-up, compared with EUROMOD's older 600 EUR maximum and no top-up. The half-time low-wage case scales the same stale maximum, returning Axiom 375 EUR vs EUROMOD 300 EUR.",
      "evidence": [
       "be-flemish-jobbonus-low-wage-full-time: Axiom 700.00 vs EUROMOD 600.00.",
-      "be-flemish-jobbonus-threshold-wage-full-time: Axiom 700.00 vs EUROMOD 600.00."
+      "be-flemish-jobbonus-threshold-wage-full-time: Axiom 700.00 vs EUROMOD 600.00.",
+      "be-flemish-jobbonus-low-wage-half-time: Axiom 375.00 vs EUROMOD 300.00."
      ]
     },
     {
@@ -568,6 +569,13 @@
      "evidence": [
       "be-flemish-jobbonus-upper-band-full-time: Axiom 550.1753 vs EUROMOD 381.1768.",
       "be-flemish-jobbonus-high-wage-full-time: Axiom 222.7513 vs EUROMOD 53.7560."
+     ]
+    },
+    {
+     "label": "Part-time small-payment floor still agrees",
+     "description": "The tiny part-time case is suppressed to zero by both models, which keeps the upstream residual scoped to stale jobbonus amount parameters rather than the 10 EUR part-time minimum.",
+     "evidence": [
+      "be-flemish-jobbonus-small-part-time-suppressed: Axiom 0.00 vs EUROMOD 0.00."
      ]
     }
    ],

@@ -3,26 +3,26 @@
     {
       "category": "benefits",
       "comparison": "amount",
-      "comparison_count": 5,
-      "comparison_weight": 5,
+      "comparison_count": 7,
+      "comparison_weight": 7,
       "components": [],
       "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
       "description": "Belgium Flemish jobbonus",
-      "left_weighted_sum": 2172.926551,
-      "match_rate": 20,
-      "match_weight": 1,
-      "mismatch_count": 4,
-      "mismatch_weight": 4,
+      "left_weighted_sum": 2547.926551,
+      "match_rate": 28.571429,
+      "match_weight": 2,
+      "mismatch_count": 5,
+      "mismatch_weight": 5,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 1634.932821,
-      "weighted_difference": 537.993729,
-      "weighted_match_rate": 20
+      "right_weighted_sum": 1934.932821,
+      "weighted_difference": 612.993729,
+      "weighted_match_rate": 28.571429
     }
   ],
-  "case_count": 5,
+  "case_count": 7,
   "concepts": [
     {
       "category": "benefits",
@@ -108,6 +108,22 @@
       "scenario": "flemish-jobbonus-full-time-worker",
       "tolerance": 1,
       "yearly_earned_income": 38400.0
+    },
+    {
+      "ages": null,
+      "case_id": "be-flemish-jobbonus-low-wage-half-time",
+      "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
+      "description": "Belgium Flemish jobbonus",
+      "difference": 75.0,
+      "kind": "amount_difference",
+      "left": 375.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 300.0,
+      "scenario": "flemish-jobbonus-part-time-worker",
+      "tolerance": 1,
+      "yearly_earned_income": 9000.0
     }
   ],
   "population": "synthetic",
@@ -115,20 +131,20 @@
   "scope": null,
   "suite": "be-flemish-jobbonus",
   "summary": {
-    "comparison_count": 5,
+    "comparison_count": 7,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 1,
-    "mismatch_count": 4,
+    "match_count": 2,
+    "mismatch_count": 5,
     "mismatches_by_concept": [
       {
-        "count": 4,
+        "count": 5,
         "value": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 4,
+        "count": 5,
         "value": "amount_difference"
       }
     ],
@@ -136,13 +152,17 @@
       {
         "count": 4,
         "value": "flemish-jobbonus-full-time-worker"
+      },
+      {
+        "count": 1,
+        "value": "flemish-jobbonus-part-time-worker"
       }
     ],
     "weighted": {
-      "comparison_weight": 5,
-      "match_rate": 20,
-      "match_weight": 1,
-      "mismatch_weight": 4
+      "comparison_weight": 7,
+      "match_rate": 28.571429,
+      "match_weight": 2,
+      "mismatch_weight": 5
     }
   },
   "cases": [
@@ -155,12 +175,12 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756,
-          "flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
-          "flanders_jobbonus_is_beneficiary_class": true,
-          "flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
-          "flanders_jobbonus_is_full_time_worker": true,
-          "flanders_jobbonus_work_fraction": 1.0
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction": 1.0
         },
         "euromod_inputs": [
           {
@@ -174,9 +194,9 @@
             "idperson": 101,
             "les": 3,
             "lfs": 15,
-            "lhw": 38,
+            "lhw": 38.0,
             "liwmy": 12,
-            "liwwh": 120,
+            "liwwh": 120.0,
             "loc": 5,
             "poa": 0,
             "yem": 1500.0,
@@ -189,12 +209,12 @@
           "yemeq_s": {
             "divide_by": 12,
             "inputs": [
-              "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+              "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756
         },
         "household_summary": {
           "ages": [
@@ -213,6 +233,7 @@
           "geoid": "BE",
           "type": "country"
         },
+        "work_fraction": 1.0,
         "yearly_earned_income": 18000.0
       },
       "mismatches": [
@@ -240,12 +261,12 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1819.0041255763674,
-          "flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
-          "flanders_jobbonus_is_beneficiary_class": true,
-          "flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
-          "flanders_jobbonus_is_full_time_worker": true,
-          "flanders_jobbonus_work_fraction": 1.0
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1819.0041255763674,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction": 1.0
         },
         "euromod_inputs": [
           {
@@ -259,9 +280,9 @@
             "idperson": 101,
             "les": 3,
             "lfs": 15,
-            "lhw": 38,
+            "lhw": 38.0,
             "liwmy": 12,
-            "liwwh": 120,
+            "liwwh": 120.0,
             "loc": 5,
             "poa": 0,
             "yem": 2000.0,
@@ -274,12 +295,12 @@
           "yemeq_s": {
             "divide_by": 12,
             "inputs": [
-              "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+              "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1819.0041255763674
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1819.0041255763674
         },
         "household_summary": {
           "ages": [
@@ -298,6 +319,7 @@
           "geoid": "BE",
           "type": "country"
         },
+        "work_fraction": 1.0,
         "yearly_earned_income": 24000.0
       },
       "mismatches": [
@@ -325,12 +347,12 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2364.7053632492775,
-          "flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
-          "flanders_jobbonus_is_beneficiary_class": true,
-          "flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
-          "flanders_jobbonus_is_full_time_worker": true,
-          "flanders_jobbonus_work_fraction": 1.0
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2364.7053632492775,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction": 1.0
         },
         "euromod_inputs": [
           {
@@ -344,9 +366,9 @@
             "idperson": 101,
             "les": 3,
             "lfs": 15,
-            "lhw": 38,
+            "lhw": 38.0,
             "liwmy": 12,
-            "liwwh": 120,
+            "liwwh": 120.0,
             "loc": 5,
             "poa": 0,
             "yem": 2600.0,
@@ -359,12 +381,12 @@
           "yemeq_s": {
             "divide_by": 12,
             "inputs": [
-              "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+              "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2364.7053632492775
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2364.7053632492775
         },
         "household_summary": {
           "ages": [
@@ -383,6 +405,7 @@
           "geoid": "BE",
           "type": "country"
         },
+        "work_fraction": 1.0,
         "yearly_earned_income": 31200.0
       },
       "mismatches": [
@@ -410,12 +433,12 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2910.406600922188,
-          "flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
-          "flanders_jobbonus_is_beneficiary_class": true,
-          "flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
-          "flanders_jobbonus_is_full_time_worker": true,
-          "flanders_jobbonus_work_fraction": 1.0
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2910.406600922188,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction": 1.0
         },
         "euromod_inputs": [
           {
@@ -429,9 +452,9 @@
             "idperson": 101,
             "les": 3,
             "lfs": 15,
-            "lhw": 38,
+            "lhw": 38.0,
             "liwmy": 12,
-            "liwwh": 120,
+            "liwwh": 120.0,
             "loc": 5,
             "poa": 0,
             "yem": 3200.0,
@@ -444,12 +467,12 @@
           "yemeq_s": {
             "divide_by": 12,
             "inputs": [
-              "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+              "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2910.406600922188
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 2910.406600922188
         },
         "household_summary": {
           "ages": [
@@ -468,6 +491,7 @@
           "geoid": "BE",
           "type": "country"
         },
+        "work_fraction": 1.0,
         "yearly_earned_income": 38400.0
       },
       "mismatches": [
@@ -495,12 +519,12 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756,
-          "flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
-          "flanders_jobbonus_is_beneficiary_class": true,
-          "flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": false,
-          "flanders_jobbonus_is_full_time_worker": true,
-          "flanders_jobbonus_work_fraction": 1.0
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": false,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction": 1.0
         },
         "euromod_inputs": [
           {
@@ -514,9 +538,9 @@
             "idperson": 101,
             "les": 3,
             "lfs": 15,
-            "lhw": 38,
+            "lhw": 38.0,
             "liwmy": 12,
-            "liwwh": 120,
+            "liwwh": 120.0,
             "loc": 5,
             "poa": 0,
             "yem": 1500.0,
@@ -529,12 +553,12 @@
           "yemeq_s": {
             "divide_by": 12,
             "inputs": [
-              "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+              "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
             ]
           }
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756
         },
         "household_summary": {
           "ages": [
@@ -553,7 +577,168 @@
           "geoid": "BE",
           "type": "country"
         },
+        "work_fraction": 1.0,
         "yearly_earned_income": 18000.0
+      },
+      "mismatches": [],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-flemish-jobbonus-low-wage-half-time",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker": false,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction": 0.5
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 19.0,
+            "liwmy": 12,
+            "liwwh": 60.0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 750.0,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yemeq_s": {
+            "divide_by": 12,
+            "inputs": [
+              "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            9000.0
+          ],
+          "yearly_earned_income_total": 9000.0
+        },
+        "locale": "BE",
+        "monthly_gross_income": 1500.0,
+        "scenario": "flemish-jobbonus-part-time-worker",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "work_fraction": 0.5,
+        "yearly_earned_income": 9000.0
+      },
+      "mismatches": [
+        {
+          "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
+          "description": "Belgium Flemish jobbonus",
+          "difference": 75.0,
+          "kind": "amount_difference",
+          "left": 375.0,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 300.0,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-flemish-jobbonus-small-part-time-suppressed",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year": true,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker": false,
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction": 0.01
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 0.38,
+            "liwmy": 12,
+            "liwwh": 1.2,
+            "loc": 5,
+            "poa": 0,
+            "yem": 15.0,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yemeq_s": {
+            "divide_by": 12,
+            "inputs": [
+              "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time": 1364.2530941822756
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            180.0
+          ],
+          "yearly_earned_income_total": 180.0
+        },
+        "locale": "BE",
+        "monthly_gross_income": 1500.0,
+        "scenario": "flemish-jobbonus-part-time-worker",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "work_fraction": 0.01,
+        "yearly_earned_income": 180.0
       },
       "mismatches": [],
       "right_engine": "euromod",

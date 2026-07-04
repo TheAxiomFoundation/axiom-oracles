@@ -480,7 +480,7 @@ def test_belgium_flemish_social_protection_suite_defines_oracle_concept_and_inpu
 def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> None:
     cases = load_suite("be-flemish-jobbonus")
 
-    assert len(cases) == 5
+    assert len(cases) == 7
     assert {case.locale for case in cases} == {"BE"}
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
@@ -490,21 +490,32 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
     }
     assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
     assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
-    assert all(
-        key.startswith("flanders_jobbonus_")
-        for case in cases
-        for key in case.metadata["axiom_inputs"]
-    )
+    assert all("#input." in key for case in cases for key in case.metadata["axiom_inputs"])
     assert {case.metadata["scenario"] for case in cases} == {
-        "flemish-jobbonus-full-time-worker"
+        "flemish-jobbonus-full-time-worker",
+        "flemish-jobbonus-part-time-worker",
     }
 
     by_id = {case.case_id: case for case in cases}
     low_wage = by_id["be-flemish-jobbonus-low-wage-full-time"]
     high_wage = by_id["be-flemish-jobbonus-high-wage-full-time"]
     brussels = by_id["be-flemish-jobbonus-brussels-resident"]
-    gross_input = "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+    half_time = by_id["be-flemish-jobbonus-low-wage-half-time"]
+    small_part_time = by_id["be-flemish-jobbonus-small-part-time-suppressed"]
+    gross_input = (
+        "be-vlg:regulations/employment/jobbonus#input."
+        "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+    )
+    work_fraction_input = (
+        "be-vlg:regulations/employment/jobbonus#input."
+        "flanders_jobbonus_work_fraction"
+    )
+    full_time_input = (
+        "be-vlg:regulations/employment/jobbonus#input."
+        "flanders_jobbonus_is_full_time_worker"
+    )
     domiciled_input = (
+        "be-vlg:regulations/employment/jobbonus#input."
         "flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year"
     )
     assert low_wage.metadata["axiom_inputs"][gross_input] == 1_500
@@ -512,6 +523,15 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
     assert low_wage.metadata["euromod_inputs"][0]["drgn1"] == 2
     assert brussels.metadata["euromod_inputs"][0]["drgn1"] == 1
     assert brussels.metadata["axiom_inputs"][domiciled_input] is False
+    assert half_time.metadata["axiom_inputs"][work_fraction_input] == 0.5
+    assert half_time.metadata["axiom_inputs"][full_time_input] is False
+    assert half_time.metadata["euromod_inputs"][0]["yem"] == 750
+    assert half_time.metadata["euromod_inputs"][0]["lhw"] == 19
+    assert small_part_time.metadata["axiom_inputs"][work_fraction_input] == 0.01
+    assert small_part_time.metadata["euromod_inputs"][0]["yem"] == 15
+    assert small_part_time.metadata["euromod_inputs"][0]["lhw"] == pytest.approx(
+        0.38
+    )
     assert low_wage.metadata["euromod_to_axiom_input_bridge"] == {
         "yemeq_s": {
             "inputs": [gross_input],
@@ -617,7 +637,10 @@ def test_belgium_cadastral_income_indexation_suite_defines_oracle_concept() -> (
 
 def test_euromod_to_axiom_bridge_can_scale_annualized_monthly_outputs() -> None:
     case = load_suite("be-flemish-jobbonus")[0]
-    gross_input = "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+    gross_input = (
+        "be-vlg:regulations/employment/jobbonus#input."
+        "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+    )
 
     (bridged_case,) = _apply_euromod_to_axiom_input_bridge(
         [case],
