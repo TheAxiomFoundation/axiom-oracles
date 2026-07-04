@@ -200,6 +200,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
+        Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
     }
 
     assert (
@@ -440,6 +441,63 @@ def test_belgium_flemish_social_protection_suite_defines_oracle_concept_and_inpu
     assert ordinary.metadata["euromod_inputs"][0]["drgn1"] == 2
     assert ordinary.metadata["euromod_inputs"][0]["yem"] == 5_000
     assert reduced.metadata["euromod_inputs"][0]["bsa"] == 1
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs() -> (
+    None
+):
+    cases = load_suite("be-family-birth-allowance")
+
+    assert len(cases) == 7
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_FAMILY_BIRTH_ALLOWANCE,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "brussels-first-child-or-multiple-birth",
+        "brussels-later-child",
+        "flanders-first-child",
+        "flanders-later-child",
+        "wallonia-first-child",
+        "wallonia-later-child",
+        "german-speaking-community-not-yet-encoded",
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    brussels_first = by_id["be-family-birth-allowance-brussels-first-newborn"]
+    brussels_later = by_id["be-family-birth-allowance-brussels-later-newborn"]
+    german_zero = by_id["be-family-birth-allowance-german-region-newborn-zero"]
+    first_or_multiple_input = (
+        "be:statutes/family_benefits/birth_allowance#input."
+        "belgium_family_benefits_birth_allowance_brussels_first_child_or_multiple_birth"
+    )
+    region_input = (
+        "be:statutes/family_benefits/birth_allowance#input."
+        "belgium_family_benefits_birth_allowance_region"
+    )
+    child_age_input = (
+        "be:statutes/family_benefits/birth_allowance#input."
+        "belgium_family_benefits_birth_allowance_child_age_years"
+    )
+    assert brussels_first.metadata["axiom_inputs"][first_or_multiple_input] is True
+    assert brussels_later.metadata["axiom_inputs"][first_or_multiple_input] is False
+    assert brussels_first.metadata["axiom_inputs"][region_input] == 1
+    assert brussels_later.metadata["axiom_inputs"][child_age_input] == 0
+    assert len(brussels_later.metadata["euromod_inputs"]) == 3
+    assert brussels_later.metadata["euromod_inputs"][1]["dag"] == 5
+    assert brussels_later.metadata["euromod_inputs"][2]["dag"] == 0
+    assert brussels_later.metadata["euromod_inputs"][2]["idmother"] == 101
+    assert german_zero.metadata["axiom_inputs"][region_input] == 4
+    assert german_zero.metadata["euromod_inputs"][1]["drgn1"] == 4
     assert {case.period for case in cases} == {"2025"}
 
 
