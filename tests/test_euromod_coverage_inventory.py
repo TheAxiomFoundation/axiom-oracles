@@ -103,4 +103,5 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
         "euromod-be-2025-self-employed-main-rate",
         "euromod-be-2025-self-employed-threshold-allowance",
         "euromod-be-2025-special-contribution-article-108-schedule",
+        "euromod-be-2025-dg-child-benefit-zero",
     }
