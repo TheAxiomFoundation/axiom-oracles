@@ -158,6 +158,31 @@ def be_family_child_benefit_base_cases() -> list[Case]:
             scenario="wallonia-pre-2020-age-18",
             child_age=18,
         ),
+        _child_benefit_base_case(
+            "be-family-child-benefit-base-german-speaking-community-age-0",
+            region=GERMAN_SPEAKING_REGION,
+            scenario="german-speaking-community-age-0",
+            child_age=0,
+        ),
+        _child_benefit_base_case(
+            "be-family-child-benefit-base-german-speaking-community-age-6",
+            region=GERMAN_SPEAKING_REGION,
+            scenario="german-speaking-community-age-6",
+            child_age=6,
+        ),
+        _child_benefit_base_case(
+            "be-family-child-benefit-base-german-speaking-community-age-13",
+            region=GERMAN_SPEAKING_REGION,
+            scenario="german-speaking-community-age-13",
+            child_age=13,
+        ),
+        _child_benefit_base_case(
+            "be-family-child-benefit-base-german-speaking-community-age-18-higher-education",
+            region=GERMAN_SPEAKING_REGION,
+            scenario="german-speaking-community-age-18-higher-education",
+            child_age=18,
+            higher_education=True,
+        ),
     ]
 
 

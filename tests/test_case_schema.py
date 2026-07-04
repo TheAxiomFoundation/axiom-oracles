@@ -663,7 +663,7 @@ def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inpu
 ):
     cases = load_suite("be-family-child-benefit-base")
 
-    assert len(cases) == 13
+    assert len(cases) == 17
     assert {case.locale for case in cases} == {"BE"}
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
@@ -690,6 +690,10 @@ def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inpu
         "wallonia-pre-2020-age-6",
         "wallonia-pre-2020-age-13",
         "wallonia-pre-2020-age-18",
+        "german-speaking-community-age-0",
+        "german-speaking-community-age-6",
+        "german-speaking-community-age-13",
+        "german-speaking-community-age-18-higher-education",
     }
 
     by_id = {case.case_id: case for case in cases}
@@ -703,6 +707,12 @@ def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inpu
     wallonia_age_13 = by_id["be-family-child-benefit-base-wallonia-age-13"]
     flanders_age_13 = by_id["be-family-child-benefit-base-flanders-age-13"]
     flanders_age_18 = by_id["be-family-child-benefit-base-flanders-age-18"]
+    german_age_0 = by_id[
+        "be-family-child-benefit-base-german-speaking-community-age-0"
+    ]
+    german_age_18 = by_id[
+        "be-family-child-benefit-base-german-speaking-community-age-18-higher-education"
+    ]
     region_input = (
         "be:statutes/family_benefits/child_benefit_base_2025#input."
         "belgium_family_benefits_child_benefit_region"
@@ -735,6 +745,13 @@ def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inpu
     assert flanders_age_13.metadata["euromod_inputs"][2]["dag"] == 13
     assert flanders_age_18.metadata["axiom_inputs"][higher_education_input] is True
     assert flanders_age_18.metadata["euromod_inputs"][2]["dec"] == 6
+    assert german_age_0.metadata["axiom_inputs"][region_input] == 4
+    assert german_age_0.metadata["axiom_inputs"][child_age_input] == 0
+    assert german_age_0.metadata["euromod_inputs"][0]["drgn1"] == 4
+    assert german_age_0.metadata["euromod_inputs"][2]["dag"] == 0
+    assert german_age_18.metadata["axiom_inputs"][region_input] == 4
+    assert german_age_18.metadata["axiom_inputs"][higher_education_input] is True
+    assert german_age_18.metadata["euromod_inputs"][2]["dec"] == 6
     assert len(brussels_age_18_he.metadata["euromod_inputs"]) == 3
     mother, father, child = brussels_age_18_he.metadata["euromod_inputs"]
     assert mother["yem"] == 5_000
