@@ -10,6 +10,7 @@ from axiom_oracles.comparison.mappings import (
     comparison_scope_for_targets,
     load_program_mappings,
 )
+from axiom_oracles.cli import _apply_euromod_to_axiom_input_bridge
 from axiom_oracles.core.geography import GeographyScope
 from axiom_oracles.core.household import Household, Person
 from axiom_oracles.core.results import EngineResult
@@ -200,6 +201,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
+        Concepts.BE_FLEMISH_JOBBONUS,
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
@@ -445,6 +447,65 @@ def test_belgium_flemish_social_protection_suite_defines_oracle_concept_and_inpu
     assert ordinary.metadata["euromod_inputs"][0]["yem"] == 5_000
     assert reduced.metadata["euromod_inputs"][0]["bsa"] == 1
     assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> None:
+    cases = load_suite("be-flemish-jobbonus")
+
+    assert len(cases) == 5
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_FLEMISH_JOBBONUS,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
+    assert all(
+        key.startswith("flanders_jobbonus_")
+        for case in cases
+        for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "flemish-jobbonus-full-time-worker"
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    low_wage = by_id["be-flemish-jobbonus-low-wage-full-time"]
+    high_wage = by_id["be-flemish-jobbonus-high-wage-full-time"]
+    brussels = by_id["be-flemish-jobbonus-brussels-resident"]
+    gross_input = "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+    domiciled_input = (
+        "flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year"
+    )
+    assert low_wage.metadata["axiom_inputs"][gross_input] == 1_500
+    assert high_wage.metadata["axiom_inputs"][gross_input] == 3_200
+    assert low_wage.metadata["euromod_inputs"][0]["drgn1"] == 2
+    assert brussels.metadata["euromod_inputs"][0]["drgn1"] == 1
+    assert brussels.metadata["axiom_inputs"][domiciled_input] is False
+    assert low_wage.metadata["euromod_to_axiom_input_bridge"] == {
+        "yemeq_s": {
+            "inputs": [gross_input],
+            "divide_by": 12,
+        }
+    }
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_euromod_to_axiom_bridge_can_scale_annualized_monthly_outputs() -> None:
+    case = load_suite("be-flemish-jobbonus")[0]
+    gross_input = "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+
+    (bridged_case,) = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [EngineResult("euromod", case.case_id, {"yemeq_s": 18_900})],
+    )
+
+    assert bridged_case.metadata["axiom_inputs"][gross_input] == 1_575
+    assert bridged_case.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        gross_input: 1_575
+    }
 
 
 def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs() -> (

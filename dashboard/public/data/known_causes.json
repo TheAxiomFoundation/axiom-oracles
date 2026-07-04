@@ -482,6 +482,33 @@
    "description": "The six older-child residuals are the open JRC EUROMOD BE_2025 transition issue: age-0 new-system Wallonia Article 13 cases match exactly, but pre-2020 children receive an extra annualized Article 13 supplement in EUROMOD. The middle-income residual is 31.09 * 12; the low-income residual is 68.39 * 12 on top of the statutory legacy LGAF low-income path. Walloon Articles 120, 123, and 128 keep pre-2020 LGAF amounts and bar cumulation with decree supplements.",
    "fix_owner": "euromod-upstream",
    "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+  },
+  {
+   "suite": "be-flemish-jobbonus",
+   "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
+   "kind": "amount_difference",
+   "label": "EUROMOD uses older 2025 Flemish jobbonus parameters",
+   "description": "Four of five full-time jobbonus cases differ because BE_2025 bwkrg_be uses 1,800/2,500 EUR thresholds, a 600 EUR maximum, a 20 EUR full-time small-payment threshold, and no 2025 fixed top-up. The source-backed Axiom RuleSpec uses the Flemish Government implementing order consolidated as of 1 January 2025: 2,115/3,114.99 EUR thresholds, 650 EUR maximum, 50 EUR floor/full-time small-payment threshold, and a 50 EUR fixed top-up. The Brussels non-Flanders zero case matches, so the residual is isolated to the amount schedule rather than regional eligibility.",
+   "drivers": [
+    {
+     "label": "Missing 2025 maximum increase and fixed top-up",
+     "description": "The two lower-wage Flanders cases return Axiom 700 EUR vs EUROMOD 600 EUR: 650 EUR statutory maximum plus 50 EUR top-up, compared with EUROMOD's older 600 EUR maximum and no top-up.",
+     "evidence": [
+      "be-flemish-jobbonus-low-wage-full-time: Axiom 700.00 vs EUROMOD 600.00.",
+      "be-flemish-jobbonus-threshold-wage-full-time: Axiom 700.00 vs EUROMOD 600.00."
+     ]
+    },
+    {
+     "label": "Older degressive thresholds and floor",
+     "description": "The upper-band cases differ by about 169 EUR after bridging EUROMOD yemeq_s into Axiom monthly gross, matching the 2025 threshold/floor/top-up differences filed upstream.",
+     "evidence": [
+      "be-flemish-jobbonus-upper-band-full-time: Axiom 550.1753 vs EUROMOD 381.1768.",
+      "be-flemish-jobbonus-high-wage-full-time: Axiom 222.7513 vs EUROMOD 53.7560."
+     ]
+    }
+   ],
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
   }
  ]
 }

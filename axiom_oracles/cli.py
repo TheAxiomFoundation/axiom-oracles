@@ -753,10 +753,8 @@ def _apply_euromod_to_axiom_input_bridge(
             value = result.values.get(str(euromod_output))
             if value is None:
                 continue
-            if isinstance(axiom_inputs, str):
-                input_names = (axiom_inputs,)
-            else:
-                input_names = tuple(axiom_inputs)
+            value = _transform_bridged_value(value, axiom_inputs)
+            input_names = _bridged_axiom_inputs(axiom_inputs)
             for input_name in input_names:
                 inputs[str(input_name)] = value
                 applied[str(input_name)] = value
@@ -770,6 +768,32 @@ def _apply_euromod_to_axiom_input_bridge(
         metadata["euromod_to_axiom_input_bridge_applied"] = applied
         bridged_cases.append(replace(case, metadata=metadata))
     return bridged_cases
+
+
+def _bridged_axiom_inputs(spec) -> tuple[str, ...]:
+    if isinstance(spec, str):
+        return (spec,)
+    if isinstance(spec, dict):
+        inputs = spec.get("inputs") or spec.get("input")
+        if isinstance(inputs, str):
+            return (inputs,)
+        if inputs is None:
+            return ()
+        return tuple(str(input_name) for input_name in inputs)
+    return tuple(str(input_name) for input_name in spec)
+
+
+def _transform_bridged_value(value, spec):
+    if not isinstance(spec, dict):
+        return value
+    transformed = value
+    if "divide_by" in spec:
+        transformed = transformed / float(spec["divide_by"])
+    if "multiply_by" in spec:
+        transformed = transformed * float(spec["multiply_by"])
+    if "add" in spec:
+        transformed = transformed + float(spec["add"])
+    return transformed
 
 
 def _batched(cases: list[Case], batch_size: int):

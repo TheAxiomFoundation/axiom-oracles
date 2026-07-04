@@ -241,6 +241,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 517,
   },
+  "be-flemish-jobbonus": {
+    family: "be_social_security",
+    jurisdiction: "BE",
+    label: "Belgium Flemish jobbonus",
+    region: "be",
+    kind: "household",
+    order: 518,
+  },
   "be-social-assistance": {
     family: "be_social_assistance",
     jurisdiction: "BE",
