@@ -652,7 +652,7 @@
       "status": "upstream_filed",
       "classification": "euromod_model_parameter_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10",
-      "summary": "The Belgium BE_2025 Flemish jobbonus policy bwkrg_be appears to use older thresholds, a 600 EUR maximum, a 20 EUR full-time small-payment threshold, and no 2025 fixed top-up, while the Flemish Government implementing order consolidated as of 1 January 2025 sets 2,115/3,114.99 EUR thresholds, a 650 EUR maximum, a 50 EUR floor/full-time small-payment threshold, and a 50 EUR fixed top-up when payable.",
+      "summary": "The Belgium BE_2025 Flemish jobbonus policy bwkrg_be appears to use older thresholds, a 600 EUR maximum, a 20 EUR full-time small-payment threshold, and no 2025 fixed top-up, while the Flemish Government implementing order consolidated as of 1 January 2025 sets 2,115/3,114.99 EUR thresholds, a 650 EUR maximum, a 50 EUR floor/full-time small-payment threshold, a 10 EUR part-time small-payment threshold, and a 50 EUR fixed top-up when payable. The expanded live suite also shows the 10 EUR part-time suppression case matches at zero.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "BE",
@@ -694,6 +694,22 @@
           {
             "case_id": "be-flemish-jobbonus-brussels-resident",
             "bridged_monthly_gross": 1364.2530941822756,
+            "euromod_bwkrg_s": 0.0,
+            "axiom_flanders_jobbonus_annual_amount": 0.0,
+            "residual": 0.0
+          },
+          {
+            "case_id": "be-flemish-jobbonus-low-wage-half-time",
+            "bridged_monthly_gross": 1364.2530941822756,
+            "work_fraction": 0.5,
+            "euromod_bwkrg_s": 300.0,
+            "axiom_flanders_jobbonus_annual_amount": 375.0,
+            "residual": 75.0
+          },
+          {
+            "case_id": "be-flemish-jobbonus-small-part-time-suppressed",
+            "bridged_monthly_gross": 1364.2530941822756,
+            "work_fraction": 0.01,
             "euromod_bwkrg_s": 0.0,
             "axiom_flanders_jobbonus_annual_amount": 0.0,
             "residual": 0.0
