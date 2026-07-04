@@ -38,13 +38,21 @@ artifacts:
 
 ### `axiom-encode-tax-ecps-compare`
 
-Invokes `axiom-encode tax-ecps-compare` via `uv run`. Builds a debug
-`axiom-rules-engine` binary if missing; clones `rulespec-us` fresh into a
-directory named exactly `rulespec-us` (required by the engine import
-resolver). Honors a `pinned` parameter that controls the PolicyEngine version
-stack. The runner installs the local `axiom-encode` checkout with
-`--with-editable` so comparison configs can validate unmerged harness changes
-before they land.
+Invokes `axiom-encode tax-populace-compare` (registered as `tax-ecps-compare`
+too — same command) via `uv run`. Builds a release `axiom-rules-engine` binary
+if missing; clones `rulespec-us` fresh into a directory named exactly
+`rulespec-us` (required by the engine import resolver). Honors a `pinned`
+parameter that controls the PolicyEngine version stack. The runner installs the
+local `axiom-encode` checkout with `--with-editable` so comparison configs can
+validate unmerged harness changes before they land.
+
+The oracle population is the pinned Populace US artifact (resolved and
+sha256-verified inside axiom-encode; axiom-encode#952). The harness emits a
+`dataset_identity` block in its `--json` output; the dashboard adapter threads
+it onto the generated v2 report so a checked-in report records which pinned
+artifact produced it. This is the FIIT lane of the A9 runner unification — one
+runner, one schema, one dashboard, with the ~17k LOC oracle bridge left in
+axiom-encode.
 
 Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 `rulespec_remote`. Required `parameters`: `sample_size`, `year`, `surface`.
