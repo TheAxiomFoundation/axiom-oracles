@@ -509,6 +509,19 @@
    "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
   },
   {
+   "suite": "be-family-child-benefit-base",
+   "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
+   "kind": "amount_difference",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "label": "EUROMOD BE_2025 has no DG child-benefit branch",
+   "description": "The four German-speaking Community base child-benefit residuals are filed upstream: BE_2025 bch_be returns zero for drgn1=4, while source-backed RuleSpec returns the statutory DG amount of 1,946.55 EUR/year in each entitled one-child case. Brussels, Flanders, and Wallonia base cases still match exactly, so the mismatch is isolated to the missing drgn1=4 bch_be branch.",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8"
+  },
+  {
    "suite": "be-family-birth-allowance",
    "concept": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
    "kind": "amount_difference",

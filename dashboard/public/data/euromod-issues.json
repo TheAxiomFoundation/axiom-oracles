@@ -527,29 +527,33 @@
         "output": "bch_s",
         "cases": [
           {
-            "case_id": "synthetic-dg-child-age-0",
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-0",
             "drgn1": 4,
             "child_age": 0,
-            "euromod_bch_s": 0
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
           },
           {
-            "case_id": "synthetic-dg-child-age-6",
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-6",
             "drgn1": 4,
             "child_age": 6,
-            "euromod_bch_s": 0
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
           },
           {
-            "case_id": "synthetic-dg-child-age-13",
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-13",
             "drgn1": 4,
             "child_age": 13,
-            "euromod_bch_s": 0
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
           },
           {
-            "case_id": "synthetic-dg-child-age-18-higher-education",
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-18-higher-education",
             "drgn1": 4,
             "child_age": 18,
             "dec": 6,
-            "euromod_bch_s": 0
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
           }
         ],
         "control_regions": {

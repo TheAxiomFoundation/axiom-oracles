@@ -284,7 +284,7 @@ concepts:
     tolerance: 1
     relative_tolerance: 0.001
     priority: high
-    locales: [BE, BE-BRU, BE-WAL]
+    locales: [BE, BE-BRU, BE-VLG, BE-WAL, BE-DG]
     scope:
       type: country
       geoid: BE
