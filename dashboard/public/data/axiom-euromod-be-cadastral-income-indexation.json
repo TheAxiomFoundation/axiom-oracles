@@ -1,0 +1,210 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
+      "description": "Belgium indexed cadastral income for immovable withholding",
+      "left_weighted_sum": 13467.6,
+      "match_rate": 50,
+      "match_weight": 1,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 13468,
+      "weighted_difference": -0.4,
+      "weighted_match_rate": 50
+    }
+  ],
+  "case_count": 2,
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium indexed cadastral income for immovable withholding",
+      "id": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 1e-06,
+      "tolerance": 0.01
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-cadastral-income-indexation-2025-rounding",
+      "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
+      "description": "Belgium indexed cadastral income for immovable withholding",
+      "difference": -0.3999999999996362,
+      "kind": "amount_difference",
+      "left": 2244.6000000000004,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 1e-06,
+      "right": 2245.0,
+      "scenario": "cadastral-income-indexation",
+      "tolerance": 0.01,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": null,
+  "suite": "be-cadastral-income-indexation",
+  "summary": {
+    "comparison_count": 2,
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 1,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "cadastral-income-indexation"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 2,
+      "match_rate": 50,
+      "match_weight": 1,
+      "mismatch_weight": 1
+    }
+  },
+  "cases": [
+    {
+      "case_id": "be-cadastral-income-indexation-2025-rounding",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Property",
+        "axiom_entity_id": "property",
+        "axiom_inputs": {
+          "be:statutes/property_tax/cadastral_income_indexation#input.belgium_cadastral_income_non_indexed": 1000.0
+        },
+        "cadastral_income": 1000.0,
+        "euromod_inputs": [
+          {
+            "amrtn": 3,
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "khooo": 1000.0,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "locale": "BE",
+        "scenario": "cadastral-income-indexation",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
+          "description": "Belgium indexed cadastral income for immovable withholding",
+          "difference": -0.3999999999996362,
+          "kind": "amount_difference",
+          "left": 2244.6000000000004,
+          "parent": null,
+          "relative_tolerance": 1e-06,
+          "right": 2245.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-cadastral-income-indexation-2025-exact-multiple",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Property",
+        "axiom_entity_id": "property",
+        "axiom_inputs": {
+          "be:statutes/property_tax/cadastral_income_indexation#input.belgium_cadastral_income_non_indexed": 5000.0
+        },
+        "cadastral_income": 5000.0,
+        "euromod_inputs": [
+          {
+            "amrtn": 3,
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "khooo": 5000.0,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "locale": "BE",
+        "scenario": "cadastral-income-indexation",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ]
+}

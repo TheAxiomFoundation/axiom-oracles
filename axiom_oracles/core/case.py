@@ -177,6 +177,10 @@ class Concepts:
         "be:statutes/property_tax/gross_withholding_and_supplied_centimes"
         "#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes"
     )
+    BE_CADASTRAL_INCOME_INDEXED = (
+        "be:statutes/property_tax/cadastral_income_indexation"
+        "#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed"
+    )
     BE_FAMILY_BIRTH_ALLOWANCE = (
         "be:statutes/family_benefits/birth_allowance"
         "#belgium_family_benefits_birth_allowance_amount"

@@ -733,6 +733,62 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-cadastral-income-rounding",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_rounding_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/14",
+      "summary": "The Belgium BE_2025 immovable-withholding policy tprhm_be computes khooo_s as the raw cadastral-income product khooo * 2.2446, while CIR 92 Article 518 requires rounding the indexed cadastral income to the nearest euro.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "tprhm_be",
+        "suite": "be-cadastral-income-indexation",
+        "period": "2025",
+        "cases": [
+          {
+            "case_id": "be-cadastral-income-indexation-2025-rounding",
+            "khooo": 1000,
+            "euromod_khooo_s": 2244.6000000000004,
+            "axiom_belgium_immovable_withholding_taxable_cadastral_income_from_unindexed": 2245,
+            "residual": -0.3999999999996362
+          },
+          {
+            "case_id": "be-cadastral-income-indexation-2025-exact-multiple",
+            "khooo": 5000,
+            "euromod_khooo_s": 11223,
+            "axiom_belgium_immovable_withholding_taxable_cadastral_income_from_unindexed": 11223,
+            "residual": 0
+          }
+        ],
+        "euromod_xml_observed_formula": "khooo_s = khooo * $khooo_uprate",
+        "euromod_xml_observed_2025_uprate": 2.2446
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/statutes/property_tax/cadastral_income_indexation.yaml",
+        "corpus_citation_paths": [
+          "be/statute/fisconetplus/cir92/revenus-2025/page-721",
+          "be/guidance/spf-finances/cadastral-income/definition-usage/block-1",
+          "be/guidance/spf-finances/cadastral-income/previous-years/block-16"
+        ],
+        "source_urls": [
+          "https://www.ejustice.just.fgov.be/eli/loi/1992/04/10/1992041050/moniteur",
+          "https://fin.belgium.be/fr/particuliers/habitation/revenu-cadastral/definition-usage"
+        ],
+        "article_518_rule": "Index cadastral income by the annual coefficient and round to the nearest euro.",
+        "spf_finances_2025_coefficient": 2.2446
+      },
+      "workaround": {
+        "description": "Keep the rounding residual visible in the household-level oracle report and do not remove the CIR 92 Article 518 rounding rule from Axiom while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

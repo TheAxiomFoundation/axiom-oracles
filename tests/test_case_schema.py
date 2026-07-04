@@ -205,6 +205,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
         Concepts.BE_FLEMISH_JOBBONUS,
+        Concepts.BE_CADASTRAL_INCOME_INDEXED,
         Concepts.BE_IMMOVABLE_WITHHOLDING_GROSS_WITH_SUPPLIED_CENTIMES,
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
@@ -574,6 +575,43 @@ def test_belgium_property_tax_suite_defines_oracle_concept_and_bridge() -> None:
     assert flanders.metadata["euromod_to_axiom_input_bridge"] == {
         "khooo_s": [flanders_income_input, belgium_income_input]
     }
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_cadastral_income_indexation_suite_defines_oracle_concept() -> (
+    None
+):
+    cases = load_suite("be-cadastral-income-indexation")
+
+    assert len(cases) == 2
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_CADASTRAL_INCOME_INDEXED,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Property" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "property" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "cadastral-income-indexation"
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    rounding = by_id["be-cadastral-income-indexation-2025-rounding"]
+    exact = by_id["be-cadastral-income-indexation-2025-exact-multiple"]
+    non_indexed_input = (
+        "be:statutes/property_tax/cadastral_income_indexation#input."
+        "belgium_cadastral_income_non_indexed"
+    )
+    assert rounding.metadata["axiom_inputs"][non_indexed_input] == 1_000
+    assert exact.metadata["axiom_inputs"][non_indexed_input] == 5_000
+    assert rounding.metadata["euromod_inputs"][0]["khooo"] == 1_000
+    assert exact.metadata["euromod_inputs"][0]["khooo"] == 5_000
+    assert rounding.metadata["euromod_inputs"][0]["drgn1"] == 2
     assert {case.period for case in cases} == {"2025"}
 
 

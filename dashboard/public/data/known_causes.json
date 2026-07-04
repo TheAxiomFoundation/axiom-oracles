@@ -535,6 +535,19 @@
    "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13"
   },
   {
+   "suite": "be-cadastral-income-indexation",
+   "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
+   "kind": "amount_difference",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "label": "EUROMOD BE_2025 leaves indexed cadastral income unrounded",
+   "description": "The EUR 1,000 non-indexed cadastral-income case is filed upstream: BE_2025 tprhm_be computes khooo_s as khooo * 2.2446 and returns 2,244.60, while source-backed RuleSpec applies CIR 92 Article 518 nearest-euro rounding and returns 2,245. The EUR 5,000 exact-multiple control case matches at 11,223.",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/14"
+  },
+  {
    "suite": "be-flemish-jobbonus",
    "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
    "kind": "amount_difference",
