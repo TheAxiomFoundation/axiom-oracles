@@ -273,6 +273,75 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-dg-child-benefit-zero",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_region_scope_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8",
+      "summary": "The Belgium BE_2025 child-benefit policy bch_be returns zero bch_s for synthetic German-speaking Community rows coded as drgn1=4, while the upstream German-speaking Community decree establishes nonzero base child benefit and annual-supplement amounts.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bch_be",
+        "output": "bch_s",
+        "cases": [
+          {
+            "case_id": "synthetic-dg-child-age-0",
+            "drgn1": 4,
+            "child_age": 0,
+            "euromod_bch_s": 0
+          },
+          {
+            "case_id": "synthetic-dg-child-age-6",
+            "drgn1": 4,
+            "child_age": 6,
+            "euromod_bch_s": 0
+          },
+          {
+            "case_id": "synthetic-dg-child-age-13",
+            "drgn1": 4,
+            "child_age": 13,
+            "euromod_bch_s": 0
+          },
+          {
+            "case_id": "synthetic-dg-child-age-18-higher-education",
+            "drgn1": 4,
+            "child_age": 18,
+            "dec": 6,
+            "euromod_bch_s": 0
+          }
+        ],
+        "control_regions": {
+          "drgn1_1_brussels": "nonzero bch_s",
+          "drgn1_2_flanders": "nonzero bch_s",
+          "drgn1_3_wallonia": "nonzero bch_s"
+        }
+      },
+      "statutory_evidence": {
+        "corpus_citation_paths": [
+          "be-dg/statute/moniteur/decret-2018-04-23/2018202523/family-benefits/block-1",
+          "be-dg/statute/moniteur/decret-2025-12-22/2026001207/program-decree-2025-ii-family-benefits/block-1"
+        ],
+        "source_urls": [
+          "https://www.ejustice.just.fgov.be/eli/decret/2018/04/23/2018202523/moniteur",
+          "https://www.ejustice.just.fgov.be/eli/decret/2025/12/22/2026001207/moniteur"
+        ],
+        "article_8_base_amount": "157 EUR per month",
+        "article_15_annual_supplement": "52 EUR per year",
+        "article_117_4_2025_annual_supplement": "62.55 EUR for 2025",
+        "article_117_3_index_freeze": "No family-benefit adaptation for 2025 through 2027; skipped adjustments are not carried into later indexation."
+      },
+      "workaround": {
+        "description": "Keep German-speaking Community child-benefit statutory RuleSpec outputs separate from exact EUROMOD parity until BE_2025 documents the supported DG regional coding or implements the DG bch_be branch."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }
