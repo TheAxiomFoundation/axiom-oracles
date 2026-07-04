@@ -72,7 +72,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert (
         outputs["bch_s"]["status"]
-        == "live_oracle_verified_one_child_base_brussels_article_9_wallonia_article_13_social_supplement_slice"
+        == "live_oracle_verified_one_child_base_brussels_article_9_wallonia_new_system_article_13_with_known_pre_2020_transition_issue"
     )
     assert outputs["bch_s"]["additional_rulespec_outputs"] == [
         "be:statutes/family_benefits/child_benefit_base_2025"
@@ -110,5 +110,6 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
         "euromod-be-2025-self-employed-main-rate",
         "euromod-be-2025-self-employed-threshold-allowance",
         "euromod-be-2025-special-contribution-article-108-schedule",
+        "euromod-be-2025-wallonia-pre-2020-child-benefit-supplement-cumulation",
         "euromod-be-2025-dg-child-benefit-zero",
     }

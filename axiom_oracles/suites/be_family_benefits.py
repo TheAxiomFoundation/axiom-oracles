@@ -183,6 +183,34 @@ def be_family_child_benefit_wallonia_social_supplement_cases() -> list[Case]:
 
     return [
         _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-low-income-age-0",
+            scenario="wallonia-low-income-one-child-under-6",
+            child_age=0,
+            annual_household_income=30_422.76,
+            employment_income=2_500,
+        ),
+        _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-low-income-age-6",
+            scenario="wallonia-low-income-one-child-age-6",
+            child_age=6,
+            annual_household_income=30_422.76,
+            employment_income=2_500,
+        ),
+        _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-low-income-age-13",
+            scenario="wallonia-low-income-one-child-age-13",
+            child_age=13,
+            annual_household_income=30_422.76,
+            employment_income=2_500,
+        ),
+        _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-low-income-age-18",
+            scenario="wallonia-low-income-one-child-age-18",
+            child_age=18,
+            annual_household_income=30_422.76,
+            employment_income=2_500,
+        ),
+        _child_benefit_wallonia_social_supplement_case(
             "be-family-child-benefit-wallonia-social-supplement-age-0",
             scenario="wallonia-middle-income-one-child-under-6",
             child_age=0,
@@ -317,6 +345,7 @@ def _child_benefit_wallonia_social_supplement_case(
     scenario: str,
     child_age: int,
     annual_household_income: float = 54_441.17,
+    employment_income: float = 5_000,
 ) -> Case:
     household_income_input = _child_benefit_base_input(
         "belgium_child_benefit_wallonia_article_13_household_annual_income"
@@ -344,7 +373,7 @@ def _child_benefit_wallonia_social_supplement_case(
                 region=WALLONIA_REGION,
                 child_age=child_age,
                 higher_education=False,
-                employment_income=5_000,
+                employment_income=employment_income,
                 single_parent=True,
             ),
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
