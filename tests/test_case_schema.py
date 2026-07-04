@@ -964,24 +964,63 @@ def test_belgium_family_child_benefit_wallonia_social_supplement_suite_defines_o
 def test_belgium_social_assistance_suite_defines_oracle_concept_and_inputs() -> None:
     cases = load_suite("be-social-assistance")
 
-    assert len(cases) == 1
-    [case] = cases
-    assert case.locale == "BE"
-    assert case.scope == GeographyScope(type="country", geoid="BE")
-    assert case.outputs == (Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,)
-    assert case.metadata["axiom_entity"] == "Person"
-    assert case.metadata["axiom_entity_id"] == "head"
-    assert all("#input." in key for key in case.metadata["axiom_inputs"])
+    assert len(cases) == 2
+    isolated = next(
+        case
+        for case in cases
+        if case.case_id == "be-social-assistance-isolated-no-resources"
+    )
+    single_parent = next(
+        case
+        for case in cases
+        if case.case_id == "be-social-assistance-single-parent-no-resources"
+    )
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {GeographyScope(type="country", geoid="BE")}
+    assert all(
+        case.outputs == (Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,)
+        for case in cases
+    )
+    assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
+    assert all(
+        "#input." in key
+        for case in cases
+        for key in case.metadata["axiom_inputs"]
+    )
     assert (
-        case.metadata["axiom_inputs"][
+        isolated.metadata["axiom_inputs"][
             "be:statutes/social_integration/payable_amount#input."
             "belgium_social_integration_use_supplied_chapter_2_countable_annual_resources"
         ]
         is True
     )
-    assert "euromod_inputs" in case.metadata
-    assert case.metadata["euromod_inputs"][0]["dag"] == 35
-    assert case.period == "2025"
+    dependent_family_input = (
+        "be:statutes/social_integration/minimum_income_amounts#input."
+        "has_dependent_family"
+    )
+    use_current_amounts_input = (
+        "be:statutes/social_integration/minimum_income_amounts#input."
+        "belgium_social_integration_use_supplied_current_monthly_amounts"
+    )
+    dependent_family_monthly_amount_input = (
+        "be:statutes/social_integration/minimum_income_amounts#input."
+        "belgium_social_integration_supplied_dependent_family_current_monthly_amount"
+    )
+    assert isolated.metadata["axiom_inputs"][dependent_family_input] is False
+    assert single_parent.metadata["axiom_inputs"][dependent_family_input] is True
+    assert isolated.metadata["axiom_inputs"][use_current_amounts_input] is True
+    assert (
+        single_parent.metadata["axiom_inputs"][dependent_family_monthly_amount_input]
+        == 1_776.07
+    )
+    assert "euromod_inputs" in isolated.metadata
+    assert isolated.metadata["euromod_inputs"][0]["dag"] == 35
+    assert len(single_parent.metadata["euromod_inputs"]) == 2
+    assert single_parent.metadata["euromod_inputs"][0]["dag"] == 35
+    assert single_parent.metadata["euromod_inputs"][1]["dag"] == 5
+    assert single_parent.metadata["euromod_inputs"][1]["idmother"] == 101
+    assert {case.period for case in cases} == {"2025"}
 
 
 def test_belgium_elderly_income_support_suite_defines_oracle_concept_and_inputs() -> (

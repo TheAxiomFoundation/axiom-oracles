@@ -36,7 +36,36 @@ def be_social_assistance_cases() -> list[Case]:
                 ),
             ),
             outputs=(Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,),
-        )
+        ),
+        Case(
+            case_id="be-social-assistance-single-parent-no-resources",
+            period="2025",
+            metadata={
+                **BE_METADATA,
+                "scenario": "single-parent-dependent-child-no-resources",
+                "axiom_inputs": _dependent_family_no_resources_axiom_inputs(),
+                "euromod_inputs": _euromod_single_parent_no_resources_inputs(),
+            },
+            entities=(
+                Entity(
+                    entity_id="head",
+                    kind="person",
+                    facts={
+                        Concepts.PERSON_AGE: 35,
+                        Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    },
+                ),
+                Entity(
+                    entity_id="child",
+                    kind="person",
+                    facts={
+                        Concepts.PERSON_AGE: 5,
+                        Concepts.HOUSEHOLD_RELATION: "Child",
+                    },
+                ),
+            ),
+            outputs=(Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,),
+        ),
     ]
 
 
@@ -70,6 +99,24 @@ def be_elderly_income_support_cases() -> list[Case]:
 
 
 def _isolated_no_resources_axiom_inputs() -> dict[str, float | int | bool]:
+    return _no_resources_axiom_inputs(
+        has_dependent_family=False,
+        is_cohabiting=False,
+    )
+
+
+def _dependent_family_no_resources_axiom_inputs() -> dict[str, float | int | bool]:
+    return _no_resources_axiom_inputs(
+        has_dependent_family=True,
+        is_cohabiting=False,
+    )
+
+
+def _no_resources_axiom_inputs(
+    *,
+    has_dependent_family: bool,
+    is_cohabiting: bool,
+) -> dict[str, float | int | bool]:
     return {
         _eligibility_input(
             "belgium_social_integration_habitually_and_permanently_stays_in_belgium"
@@ -116,11 +163,23 @@ def _isolated_no_resources_axiom_inputs() -> dict[str, float | int | bool]:
         _eligibility_input(
             "belgium_social_integration_maintenance_rights_against_listed_debtor_asserted"
         ): False,
-        _minimum_amount_input("has_dependent_family"): False,
-        _minimum_amount_input("is_cohabiting"): False,
+        _minimum_amount_input("has_dependent_family"): has_dependent_family,
+        _minimum_amount_input("is_cohabiting"): is_cohabiting,
         _minimum_amount_input("belgium_social_integration_current_index_factor"): (
             2.3894545454545455
         ),
+        _minimum_amount_input(
+            "belgium_social_integration_use_supplied_current_monthly_amounts"
+        ): True,
+        _minimum_amount_input(
+            "belgium_social_integration_supplied_cohabitant_current_monthly_amount"
+        ): 876.13,
+        _minimum_amount_input(
+            "belgium_social_integration_supplied_isolated_current_monthly_amount"
+        ): 1_314.20,
+        _minimum_amount_input(
+            "belgium_social_integration_supplied_dependent_family_current_monthly_amount"
+        ): 1_776.07,
         _payable_amount_input(
             "belgium_social_integration_use_supplied_chapter_2_countable_annual_resources"
         ): True,
@@ -173,6 +232,33 @@ def _euromod_isolated_no_resources_input() -> dict[str, float | int]:
         "yiy": 0,
         "poa": 0,
     }
+
+
+def _euromod_single_parent_no_resources_inputs() -> list[dict[str, float | int]]:
+    parent_id = 101
+    return [
+        _euromod_isolated_no_resources_input(),
+        {
+            "idperson": 102,
+            "idpartner": 0,
+            "idmother": parent_id,
+            "idfather": 0,
+            "dag": 5,
+            "dgn": 1,
+            "dms": 1,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 0,
+            "yemmy": 0,
+            "yse": 0,
+            "yiy": 0,
+            "poa": 0,
+        },
+    ]
 
 
 def _euromod_isolated_senior_no_resources_input() -> dict[str, float | int]:
