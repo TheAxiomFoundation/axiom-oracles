@@ -155,6 +155,29 @@ def be_family_child_benefit_base_cases() -> list[Case]:
     ]
 
 
+def be_family_child_benefit_social_supplement_cases() -> list[Case]:
+    """Belgium Brussels low-income child-benefit cases for EUROMOD BE_2025."""
+
+    return [
+        _child_benefit_social_supplement_case(
+            "be-family-child-benefit-social-supplement-brussels-age-0",
+            scenario="brussels-low-income-one-child-under-6",
+            child_age=0,
+        ),
+        _child_benefit_social_supplement_case(
+            "be-family-child-benefit-social-supplement-brussels-age-13",
+            scenario="brussels-low-income-one-child-age-13",
+            child_age=13,
+        ),
+        _child_benefit_social_supplement_case(
+            "be-family-child-benefit-social-supplement-brussels-age-18-higher-education",
+            scenario="brussels-low-income-one-child-age-18-higher-education",
+            child_age=18,
+            higher_education=True,
+        ),
+    ]
+
+
 def _birth_allowance_case(
     case_id: str,
     *,
@@ -223,6 +246,44 @@ def _child_benefit_base_case(
     )
 
 
+def _child_benefit_social_supplement_case(
+    case_id: str,
+    *,
+    scenario: str,
+    child_age: int,
+    higher_education: bool = False,
+    annual_household_income: float = 12_000,
+) -> Case:
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "axiom_entity": "Household",
+            "axiom_entity_id": "household",
+            "scenario": scenario,
+            "region_code": BRUSSELS_REGION,
+            "child_age_years": child_age,
+            "child_enrolled_in_higher_education": higher_education,
+            "brussels_article_9_household_annual_income": annual_household_income,
+            "axiom_inputs": _child_benefit_social_supplement_axiom_inputs(
+                child_age=child_age,
+                higher_education=higher_education,
+                annual_household_income=annual_household_income,
+            ),
+            "euromod_inputs": _child_benefit_base_euromod_inputs(
+                region=BRUSSELS_REGION,
+                child_age=child_age,
+                higher_education=higher_education,
+                employment_income=500,
+                single_parent=True,
+            ),
+        },
+        entities=_child_benefit_base_entities(child_age=child_age),
+        outputs=(Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,),
+    )
+
+
 def _child_benefit_base_axiom_inputs(
     *,
     region: int,
@@ -243,6 +304,33 @@ def _child_benefit_base_axiom_inputs(
             "belgium_family_benefits_child_benefit_child_enrolled_in_higher_education"
         ): higher_education,
     }
+
+
+def _child_benefit_social_supplement_axiom_inputs(
+    *,
+    child_age: int,
+    higher_education: bool,
+    annual_household_income: float,
+) -> dict[str, float | int | bool]:
+    inputs = _child_benefit_base_axiom_inputs(
+        region=BRUSSELS_REGION,
+        child_age=child_age,
+        higher_education=higher_education,
+    )
+    inputs.update(
+        {
+            _child_benefit_base_input(
+                "belgium_child_benefit_brussels_article_9_household_annual_income"
+            ): annual_household_income,
+            _child_benefit_base_input(
+                "belgium_child_benefit_brussels_article_9_child_in_single_parent_family"
+            ): True,
+            _child_benefit_base_input(
+                "belgium_child_benefit_brussels_article_9_cadastral_income_cap_exceeded"
+            ): False,
+        }
+    )
+    return inputs
 
 
 def _child_benefit_base_entities(*, child_age: int) -> tuple[Entity, ...]:
@@ -359,22 +447,57 @@ def _child_benefit_base_euromod_inputs(
     region: int,
     child_age: int,
     higher_education: bool,
+    employment_income: float = 5_000,
+    single_parent: bool = False,
 ) -> list[dict[str, float | int]]:
     mother_id = 101
+    child_id = 102
+    father_id = 103
+    if single_parent:
+        return [
+            _euromod_person_row(
+                mother_id,
+                age=35,
+                region=region,
+                gender=0,
+                employment_income=employment_income,
+            ),
+            _euromod_person_row(
+                child_id,
+                age=child_age,
+                region=region,
+                gender=1,
+                mother_id=mother_id,
+                in_education=child_age >= 6 or higher_education,
+                higher_education=higher_education,
+            ),
+        ]
+
     return [
         _euromod_person_row(
             mother_id,
             age=35,
             region=region,
             gender=0,
-            employment_income=5_000,
+            partner_id=father_id,
+            marital_status=2,
+            employment_income=employment_income,
         ),
         _euromod_person_row(
-            102,
+            father_id,
+            age=35,
+            region=region,
+            gender=1,
+            partner_id=mother_id,
+            marital_status=2,
+        ),
+        _euromod_person_row(
+            child_id,
             age=child_age,
             region=region,
             gender=1,
             mother_id=mother_id,
+            father_id=father_id,
             in_education=child_age >= 6 or higher_education,
             higher_education=higher_education,
         ),
@@ -387,7 +510,10 @@ def _euromod_person_row(
     age: int,
     region: int,
     gender: int,
+    partner_id: int = 0,
     mother_id: int = 0,
+    father_id: int = 0,
+    marital_status: int = 1,
     employment_income: float = 0,
     in_education: bool = False,
     higher_education: bool = False,
@@ -395,15 +521,15 @@ def _euromod_person_row(
     employed = employment_income > 0
     return {
         "idperson": person_id,
-        "idpartner": 0,
+        "idpartner": partner_id,
         "idmother": mother_id,
-        "idfather": 0,
-        "byr": 2025 - age,
+        "idfather": father_id,
+        "byr": 0,
         "dag": age,
         "dec": 6 if higher_education else 0,
         "drgn1": region,
         "dgn": gender,
-        "dms": 1,
+        "dms": marital_status,
         "les": 3 if employed else 6 if in_education else 0,
         "lfs": 15 if (employed or in_education) else 0,
         "lhw": 38 if employed else 0,
