@@ -34,7 +34,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
     assert coverage["coverage_summary"]["current_oracle_output_targets"] == 16
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 12
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 11
     assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
@@ -51,7 +51,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert (
         outputs["tin_s"]["status"]
-        == "live_oracle_verified_worker_pilot_not_full_household_parity"
+        == "live_oracle_compared_worker_pilot_with_known_article_289ter1_residual"
     )
     assert outputs["bsa_s"]["status"] == "live_oracle_verified_isolated_no_resources"
     assert (
@@ -120,6 +120,7 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
         entry["id"] for entry in issues["entries"] if entry["jurisdiction"] == "BE"
     } >= {
         "euromod-be-2025-employer-ssc-company-closing-fund-rates",
+        "euromod-be-2025-pit-work-bonus-credit-uncapped-ab",
         "euromod-be-2025-self-employed-main-rate",
         "euromod-be-2025-self-employed-threshold-allowance",
         "euromod-be-2025-special-contribution-article-108-schedule",

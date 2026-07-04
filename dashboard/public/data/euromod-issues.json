@@ -176,6 +176,60 @@
       "counts_as_axiom_gap": false
     },
     {
+      "id": "euromod-be-2025-pit-work-bonus-credit-uncapped-ab",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_formula_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12",
+      "summary": "The Belgium BE_2025 PIT fiscal-expenditure policy tinfe_be appears to compute the refundable Article 289ter/1 low-wage work-bonus credit from uncapped scheduled i_tsceerdA_s and i_tsceerdB_s amounts. CIR 92 Article 289ter/1 bases the credit on the work-bonus A/B reductions actually granted, so the source-backed RuleSpec caps the A/B credit bases by the Article 38 personal contribution before reductions. The live 10k worker case differs by 780.37 EUR while 30k and 60k worker PIT cases still match within tolerance.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "tinfe_be",
+        "suite": "be-worker-pit",
+        "period": "2025",
+        "case_id": "be-worker-pit-10k",
+        "input_monthly_yem": 833.3333333333334,
+        "euromod_returned_yem": 10550.22392834293,
+        "euromod_returned_yemeq_s": 9095.020627881837,
+        "euromod_tin_s": -1504.8488879999998,
+        "axiom_belgium_pit_pilot_federal_and_local_tax_before_withholding": -724.4815561100447,
+        "residual": -780.367331889955,
+        "control_cases": [
+          "be-worker-pit-30k matches within tolerance",
+          "be-worker-pit-60k matches within tolerance"
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml",
+        "corpus_citation_path": "be/statute/fisconetplus/cir92/revenus-2025/page-515",
+        "source_authority": "SPF Finances / FisconetPlus current consolidated CIR 92 text for income year 2025",
+        "source_path": "sources/be/statute/2026-06-30-be-income-tax-consolidated/official-documents/be-cir92-fisconetplus-current-code-2025-income.pdf",
+        "statutory_basis": "CIR 92 Article 289ter/1 bases the credit on 33.14 percent of volet A and 52.54 percent of volet B of the personal social-security contribution reduction actually granted, subject to the indexed 1,540 EUR ceiling.",
+        "rulespec_capping_rules": [
+          "belgium_pit_pilot_article_289ter1_work_bonus_a_tax_credit_base_amount",
+          "belgium_pit_pilot_article_289ter1_work_bonus_b_tax_credit_base_amount"
+        ]
+      },
+      "euromod_xml_observed_formula": {
+        "pit_credit_formula_line_hint": 2404876,
+        "pit_credit_formula": "(i_tsceerdA_s * $tinfe_Red_Rate_LW/100) + (i_tsceerdB_s * $tinfe_Red_Rate_VLW)",
+        "work_bonus_total_formula_line_hint": 2471403,
+        "work_bonus_total_formula": "i_tsceerdA_s+i_tsceerdB_s",
+        "final_reduction_cap_line_hint": 2471188,
+        "cap_note": "The final social-contribution reduction tsceerd_s is capped by the personal contribution due after the A/B scheduled amounts are computed, but tinfe_be reads the pre-cap A/B variables directly."
+      },
+      "workaround": {
+        "description": "Keep the 10k worker PIT residual visible in the household-level oracle report and do not alter RuleSpec away from CIR 92 Article 289ter/1 while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
       "id": "euromod-be-2025-self-employed-main-rate",
       "jurisdiction": "BE",
       "system": "BE_2025",

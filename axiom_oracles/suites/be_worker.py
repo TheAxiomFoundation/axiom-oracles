@@ -9,7 +9,6 @@ BE_METADATA = {
     "scope": BE_SCOPE,
     "axiom_entity": "Person",
     "axiom_entity_id": "head",
-    "axiom_alias_qualified_inputs": True,
 }
 PIT_MODULE = "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
 SSC_MODULE = "be:regulations/social_security/workers/employee_contributions"
