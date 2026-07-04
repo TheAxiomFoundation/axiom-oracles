@@ -3,26 +3,26 @@
     {
       "category": "benefits",
       "comparison": "amount",
-      "comparison_count": 4,
-      "comparison_weight": 4,
+      "comparison_count": 8,
+      "comparison_weight": 8,
       "components": [],
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
       "description": "Belgium Wallonia child benefit with Article 13 social supplement",
-      "left_weighted_sum": 9424.97,
-      "match_rate": 100,
-      "match_weight": 4,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "left_weighted_sum": 20486.73,
+      "match_rate": 25,
+      "match_weight": 2,
+      "mismatch_count": 6,
+      "mismatch_weight": 6,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 9424.97,
-      "weighted_difference": 0,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 24068.01,
+      "weighted_difference": -3581.28,
+      "weighted_match_rate": 25
     }
   ],
-  "case_count": 4,
+  "case_count": 8,
   "concepts": [
     {
       "category": "benefits",
@@ -44,28 +44,600 @@
   "locales": [
     "BE"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-6",
+      "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+      "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+      "difference": -820.6799999999998,
+      "kind": "amount_difference",
+      "left": 2730.98,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 3551.66,
+      "scenario": "wallonia-low-income-one-child-age-6",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-13",
+      "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+      "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+      "difference": -820.6799999999998,
+      "kind": "amount_difference",
+      "left": 3024.1,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 3844.7799999999997,
+      "scenario": "wallonia-low-income-one-child-age-13",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-18",
+      "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+      "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+      "difference": -820.6799999999989,
+      "kind": "amount_difference",
+      "left": 3267.61,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 4088.289999999999,
+      "scenario": "wallonia-low-income-one-child-age-18",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-age-6",
+      "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+      "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+      "difference": -373.08000000000015,
+      "kind": "amount_difference",
+      "left": 1735.18,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 2108.26,
+      "scenario": "wallonia-middle-income-one-child-age-6",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-age-13",
+      "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+      "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+      "difference": -373.08000000000015,
+      "kind": "amount_difference",
+      "left": 1887.8,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 2260.88,
+      "scenario": "wallonia-middle-income-one-child-age-13",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-age-18",
+      "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+      "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+      "difference": -373.0800000000004,
+      "kind": "amount_difference",
+      "left": 1972.04,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 2345.1200000000003,
+      "scenario": "wallonia-middle-income-one-child-age-18",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
   "population": "synthetic",
   "schema_version": "axiom.comparison_report.v2",
   "scope": null,
   "suite": "be-family-child-benefit-wallonia-social-supplement",
   "summary": {
-    "comparison_count": 4,
+    "comparison_count": 8,
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 4,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
+    "match_count": 2,
+    "mismatch_count": 6,
+    "mismatches_by_concept": [
+      {
+        "count": 6,
+        "value": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 6,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "wallonia-low-income-one-child-age-13"
+      },
+      {
+        "count": 1,
+        "value": "wallonia-low-income-one-child-age-18"
+      },
+      {
+        "count": 1,
+        "value": "wallonia-low-income-one-child-age-6"
+      },
+      {
+        "count": 1,
+        "value": "wallonia-middle-income-one-child-age-13"
+      },
+      {
+        "count": 1,
+        "value": "wallonia-middle-income-one-child-age-18"
+      },
+      {
+        "count": 1,
+        "value": "wallonia-middle-income-one-child-age-6"
+      }
+    ],
     "weighted": {
-      "comparison_weight": 4,
-      "match_rate": 100,
-      "match_weight": 4,
-      "mismatch_weight": 0
+      "comparison_weight": 8,
+      "match_rate": 25,
+      "match_weight": 2,
+      "mismatch_weight": 6
     }
   },
   "cases": [
+    {
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-0",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_inputs": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_age_years": 0,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_enrolled_in_higher_education": false,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_household_child_count": 1,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_region": 3
+        },
+        "child_age_years": 0,
+        "child_enrolled_in_higher_education": false,
+        "euromod_inputs": [
+          {
+            "byr": 0,
+            "dag": 35,
+            "dec": 0,
+            "dgn": 0,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 0,
+            "liwwh21_h": 18,
+            "liwwh33_h": 24,
+            "liwwh42_h": 5,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 0,
+            "yem": 2500,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          },
+          {
+            "byr": 0,
+            "dag": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 102,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "il_bch_means": [
+            "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            0
+          ],
+          "household_size": 2
+        },
+        "locale": "BE",
+        "region_code": 3,
+        "scenario": "wallonia-low-income-one-child-under-6",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "wallonia_article_13_household_annual_income": 30422.76
+      },
+      "mismatches": [],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-6",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_inputs": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_age_years": 6,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_enrolled_in_higher_education": false,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_household_child_count": 1,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_region": 3
+        },
+        "child_age_years": 6,
+        "child_enrolled_in_higher_education": false,
+        "euromod_inputs": [
+          {
+            "byr": 0,
+            "dag": 35,
+            "dec": 0,
+            "dgn": 0,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 0,
+            "liwwh21_h": 18,
+            "liwwh33_h": 24,
+            "liwwh42_h": 5,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 0,
+            "yem": 2500,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          },
+          {
+            "byr": 0,
+            "dag": 6,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 102,
+            "les": 6,
+            "lfs": 15,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 1,
+            "yem": 0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "il_bch_means": [
+            "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            6
+          ],
+          "household_size": 2
+        },
+        "locale": "BE",
+        "region_code": 3,
+        "scenario": "wallonia-low-income-one-child-age-6",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "wallonia_article_13_household_annual_income": 30422.76
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+          "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+          "difference": -820.6799999999998,
+          "kind": "amount_difference",
+          "left": 2730.98,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 3551.66,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-13",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_inputs": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_age_years": 13,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_enrolled_in_higher_education": false,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_household_child_count": 1,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_region": 3
+        },
+        "child_age_years": 13,
+        "child_enrolled_in_higher_education": false,
+        "euromod_inputs": [
+          {
+            "byr": 0,
+            "dag": 35,
+            "dec": 0,
+            "dgn": 0,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 0,
+            "liwwh21_h": 18,
+            "liwwh33_h": 24,
+            "liwwh42_h": 5,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 0,
+            "yem": 2500,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          },
+          {
+            "byr": 0,
+            "dag": 13,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 102,
+            "les": 6,
+            "lfs": 15,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 1,
+            "yem": 0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "il_bch_means": [
+            "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            13
+          ],
+          "household_size": 2
+        },
+        "locale": "BE",
+        "region_code": 3,
+        "scenario": "wallonia-low-income-one-child-age-13",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "wallonia_article_13_household_annual_income": 30422.76
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+          "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+          "difference": -820.6799999999998,
+          "kind": "amount_difference",
+          "left": 3024.1,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 3844.7799999999997,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-18",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_inputs": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_age_years": 18,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_enrolled_in_higher_education": false,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_household_child_count": 1,
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_region": 3
+        },
+        "child_age_years": 18,
+        "child_enrolled_in_higher_education": false,
+        "euromod_inputs": [
+          {
+            "byr": 0,
+            "dag": 35,
+            "dec": 0,
+            "dgn": 0,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 0,
+            "liwwh21_h": 18,
+            "liwwh33_h": 24,
+            "liwwh42_h": 5,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 0,
+            "yem": 2500,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          },
+          {
+            "byr": 0,
+            "dag": 18,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 3,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 102,
+            "les": 6,
+            "lfs": 15,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "xed00": 1,
+            "yem": 0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "il_bch_means": [
+            "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:statutes/family_benefits/child_benefit_base_2025#input.belgium_child_benefit_wallonia_article_13_household_annual_income": 30422.761559085317
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            18
+          ],
+          "household_size": 2
+        },
+        "locale": "BE",
+        "region_code": 3,
+        "scenario": "wallonia-low-income-one-child-age-18",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "wallonia_article_13_household_annual_income": 30422.76
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+          "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+          "difference": -820.6799999999989,
+          "kind": "amount_difference",
+          "left": 3267.61,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 4088.289999999999,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
     {
       "case_id": "be-family-child-benefit-wallonia-social-supplement-age-0",
       "left_engine": "axiom",
@@ -171,7 +743,7 @@
       "case_id": "be-family-child-benefit-wallonia-social-supplement-age-6",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 0.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -264,7 +836,19 @@
         },
         "wallonia_article_13_household_annual_income": 54441.17
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+          "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+          "difference": -373.08000000000015,
+          "kind": "amount_difference",
+          "left": 1735.18,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 2108.26,
+          "tolerance": 1
+        }
+      ],
       "right_engine": "euromod",
       "right_errors": []
     },
@@ -272,7 +856,7 @@
       "case_id": "be-family-child-benefit-wallonia-social-supplement-age-13",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 0.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -365,7 +949,19 @@
         },
         "wallonia_article_13_household_annual_income": 54441.17
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+          "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+          "difference": -373.08000000000015,
+          "kind": "amount_difference",
+          "left": 1887.8,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 2260.88,
+          "tolerance": 1
+        }
+      ],
       "right_engine": "euromod",
       "right_errors": []
     },
@@ -373,7 +969,7 @@
       "case_id": "be-family-child-benefit-wallonia-social-supplement-age-18",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 0.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -466,7 +1062,19 @@
         },
         "wallonia_article_13_household_annual_income": 54441.17
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
+          "description": "Belgium Wallonia child benefit with Article 13 social supplement",
+          "difference": -373.0800000000004,
+          "kind": "amount_difference",
+          "left": 1972.04,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 2345.1200000000003,
+          "tolerance": 1
+        }
+      ],
       "right_engine": "euromod",
       "right_errors": []
     }

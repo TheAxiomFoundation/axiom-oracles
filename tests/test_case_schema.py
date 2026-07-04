@@ -667,7 +667,7 @@ def test_belgium_family_child_benefit_wallonia_social_supplement_suite_defines_o
 ):
     cases = load_suite("be-family-child-benefit-wallonia-social-supplement")
 
-    assert len(cases) == 4
+    assert len(cases) == 8
     assert {case.locale for case in cases} == {"BE"}
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
@@ -681,6 +681,10 @@ def test_belgium_family_child_benefit_wallonia_social_supplement_suite_defines_o
         "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
     )
     assert {case.metadata["scenario"] for case in cases} == {
+        "wallonia-low-income-one-child-under-6",
+        "wallonia-low-income-one-child-age-6",
+        "wallonia-low-income-one-child-age-13",
+        "wallonia-low-income-one-child-age-18",
         "wallonia-middle-income-one-child-under-6",
         "wallonia-middle-income-one-child-age-6",
         "wallonia-middle-income-one-child-age-13",
@@ -688,6 +692,9 @@ def test_belgium_family_child_benefit_wallonia_social_supplement_suite_defines_o
     }
 
     by_id = {case.case_id: case for case in cases}
+    low_income_age_0 = by_id[
+        "be-family-child-benefit-wallonia-social-supplement-low-income-age-0"
+    ]
     age_0 = by_id["be-family-child-benefit-wallonia-social-supplement-age-0"]
     age_18 = by_id["be-family-child-benefit-wallonia-social-supplement-age-18"]
     region_input = (
@@ -702,6 +709,10 @@ def test_belgium_family_child_benefit_wallonia_social_supplement_suite_defines_o
         "be:statutes/family_benefits/child_benefit_base_2025#input."
         "belgium_family_benefits_child_benefit_child_enrolled_in_higher_education"
     )
+    assert low_income_age_0.metadata["axiom_inputs"][region_input] == 3
+    assert low_income_age_0.metadata["axiom_inputs"][income_input] == 30_422.76
+    assert low_income_age_0.metadata["euromod_inputs"][0]["yem"] == 2_500
+    assert low_income_age_0.metadata["euromod_inputs"][0]["yemmy"] == 12
     assert age_0.metadata["axiom_inputs"][region_input] == 3
     assert age_0.metadata["axiom_inputs"][income_input] == 54_441.17
     assert age_0.metadata["euromod_to_axiom_input_bridge"] == {
