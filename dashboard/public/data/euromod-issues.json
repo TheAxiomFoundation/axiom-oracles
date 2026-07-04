@@ -451,6 +451,95 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-flemish-jobbonus-stale-parameters",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_parameter_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10",
+      "summary": "The Belgium BE_2025 Flemish jobbonus policy bwkrg_be appears to use older thresholds, a 600 EUR maximum, a 20 EUR full-time small-payment threshold, and no 2025 fixed top-up, while the Flemish Government implementing order consolidated as of 1 January 2025 sets 2,115/3,114.99 EUR thresholds, a 650 EUR maximum, a 50 EUR floor/full-time small-payment threshold, and a 50 EUR fixed top-up when payable.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bwkrg_be",
+        "suite": "be-flemish-jobbonus",
+        "period": "2025",
+        "cases": [
+          {
+            "case_id": "be-flemish-jobbonus-low-wage-full-time",
+            "bridged_monthly_gross": 1364.2530941822756,
+            "euromod_bwkrg_s": 600.0,
+            "axiom_flanders_jobbonus_annual_amount": 700.0,
+            "residual": 100.0
+          },
+          {
+            "case_id": "be-flemish-jobbonus-threshold-wage-full-time",
+            "bridged_monthly_gross": 1819.0041255763674,
+            "euromod_bwkrg_s": 600.0,
+            "axiom_flanders_jobbonus_annual_amount": 700.0,
+            "residual": 100.0
+          },
+          {
+            "case_id": "be-flemish-jobbonus-upper-band-full-time",
+            "bridged_monthly_gross": 2364.7053632492775,
+            "euromod_bwkrg_s": 381.17678205043353,
+            "axiom_flanders_jobbonus_annual_amount": 550.1752838032716,
+            "residual": 168.99850175283802
+          },
+          {
+            "case_id": "be-flemish-jobbonus-high-wage-full-time",
+            "bridged_monthly_gross": 2910.406600922188,
+            "euromod_bwkrg_s": 53.75603944668728,
+            "axiom_flanders_jobbonus_annual_amount": 222.7512669593568,
+            "residual": 168.99522751266952
+          },
+          {
+            "case_id": "be-flemish-jobbonus-brussels-resident",
+            "bridged_monthly_gross": 1364.2530941822756,
+            "euromod_bwkrg_s": 0.0,
+            "axiom_flanders_jobbonus_annual_amount": 0.0,
+            "residual": 0.0
+          }
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be-vlg/regulations/employment/jobbonus.yaml",
+        "corpus_citation_paths": [
+          "be-vlg/statute/codex-vlaanderen/jobbonus/decree-2022-05-20/block-4",
+          "be-vlg/regulation/codex-vlaanderen/jobbonus/implementation-order-2025/block-5",
+          "be-vlg/regulation/codex-vlaanderen/jobbonus/implementation-order-2025/block-6"
+        ],
+        "source_urls": [
+          "https://codex.vlaanderen.be/PrintDocument.ashx?geannoteerd=false&id=1037121",
+          "https://codex.vlaanderen.be/PrintDocument.ashx?datum=2025-01-01&geannoteerd=false&id=1037232&print=true"
+        ],
+        "statutory_2025_parameters": {
+          "lower_monthly_gross_wage_threshold": 2115,
+          "upper_monthly_gross_wage_threshold": 3114.99,
+          "maximum_annual_full_time_amount": 650,
+          "degressive_floor_annual_full_time_amount": 50,
+          "fixed_top_up": 50,
+          "full_time_minimum_payable_amount": 50,
+          "part_time_minimum_payable_amount": 10
+        },
+        "euromod_xml_observed_parameters": {
+          "lower_monthly_gross_wage_threshold": "1800#m",
+          "upper_monthly_gross_wage_threshold": "2500#m",
+          "maximum_annual_amount": "600#y",
+          "full_time_minimum_payable_amount": "20#y",
+          "fixed_top_up": null
+        }
+      },
+      "workaround": {
+        "description": "Keep the residual visible in the household-level oracle report and do not alter RuleSpec away from the Flemish Codex and 2025 implementing order while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }
