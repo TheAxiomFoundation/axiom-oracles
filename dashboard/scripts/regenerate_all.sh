@@ -25,6 +25,10 @@ for suite in fiit-ecps co-state-income-tax-ecps ssi-ecps ny-tanf-ecps \
 done
 
 .venv/bin/python scripts/sync_encoded_coverage.py || true
+# Per-rule verification KPI (A7): joins the freshly-synced rulespec-us tree
+# against coverage_overview.json. sync_rulespec_roots.sh already pulled
+# $HOME/rulespec-us to origin/main, so read HEAD offline here.
+.venv/bin/python scripts/rule_verification.py --no-fetch || true
 .venv/bin/python -m pytest tests/ -q
 
 if ! git diff --quiet dashboard/public/data; then

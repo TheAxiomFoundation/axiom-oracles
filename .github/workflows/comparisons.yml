@@ -176,3 +176,78 @@ jobs:
         with:
           name: report-${{ matrix.name }}
           path: axiom-oracles/reports/*${{ matrix.name }}*.json
+
+  # Per-rule verification KPI (Phase-A item A7). Regenerates
+  # rule_verification.json + rule_verification_summary.json from the current
+  # rulespec-us tree so the coverage number can't rot, and commits the refresh
+  # back on the weekly schedule. Guards: only commits on schedule (not
+  # workflow_dispatch dry-runs), and no-ops cleanly if the checkout is missing.
+  rule-coverage:
+    needs: compare
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout axiom-oracles
+        uses: actions/checkout@v4
+
+      - name: Checkout rulespec-us
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-us
+          path: .rulespec-us
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Full history so rule_verification.py can rev-parse / cat-file the ref.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Regenerate per-rule verification data
+        run: |
+          if [ ! -d .rulespec-us ]; then
+            echo "rulespec-us checkout missing; skipping."
+            exit 0
+          fi
+          python3 scripts/rule_verification.py \
+            --rulespec .rulespec-us --ref HEAD --no-fetch
+
+      - name: Commit refreshed coverage KPI (scheduled runs only)
+        if: github.event_name == 'schedule'
+        run: |
+          if git diff --quiet -- dashboard/public/data/rule_verification.json \
+               dashboard/public/data/rule_verification_summary.json; then
+            echo "no coverage changes"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard/public/data/rule_verification.json \
+                  dashboard/public/data/rule_verification_summary.json
+          git commit -m "data: refresh per-rule verification KPI $(date +%Y-%m-%d)"
+          git push
+
+      - name: Summarize coverage KPI
+        if: always()
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, pathlib
+          p = pathlib.Path("dashboard/public/data/rule_verification_summary.json")
+          if not p.exists():
+              print("(no summary produced)"); raise SystemExit
+          s = json.loads(p.read_text())
+          r, surf = s["rules"], s["surfaces"]
+          print("## Per-rule verification KPI")
+          print("")
+          print(f"- rules: **{r['total']}**")
+          print(f"- grounded: **{r['grounded_pct']}%**")
+          print(f"- manifest-backed: **{r['manifest_backed_pct']}%**")
+          print(f"- executable oracle surfaces: **{surf['executable']}/{surf['total']}** ({surf['executable_pct']}%)")
+          print(f"- rules on an oracle surface (lower bound): **{r['on_oracle_surface_pct']}%**")
+          PY

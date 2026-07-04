@@ -28,6 +28,9 @@ jobs:
       - name: Validate comparison registry
         run: uv run scripts/run_comparison.py --list
 
+      - name: Validate per-rule verification KPI data
+        run: uv run scripts/check_rule_verification.py
+
       - name: Test
         run: uv run pytest -q
 

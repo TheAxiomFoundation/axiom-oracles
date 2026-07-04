@@ -6,6 +6,7 @@ import { suiteRegion } from "../utils/suites";
 import OverviewHero from "./OverviewHero";
 import BelgiumEuromodCoverage from "./BelgiumEuromodCoverage";
 import CoverageRegister from "./CoverageRegister";
+import RuleVerification from "./RuleVerification";
 import GapLedger from "./GapLedger";
 import ProgramRuns from "./ProgramRuns";
 import AgreementMatrix from "./AgreementMatrix";
@@ -228,6 +229,8 @@ export default function DashboardContent() {
                 coverageOverview={data.coverageOverview}
                 region={jurisdiction}
               />
+
+              {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
 
               <ProgramRuns
                 key={jurisdiction}
