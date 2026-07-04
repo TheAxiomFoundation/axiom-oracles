@@ -31,6 +31,7 @@ AXIOM_RESULT_SELECTION_METADATA_KEY = "axiom_result_selection"
 AXIOM_RELATIONS_METADATA_KEY = "axiom_relations"
 AXIOM_ENTITY_ID_METADATA_KEY = "axiom_entity_id"
 AXIOM_ENTITY_METADATA_KEY = "axiom_entity"
+AXIOM_ALIAS_QUALIFIED_INPUTS_METADATA_KEY = "axiom_alias_qualified_inputs"
 AXIOM_RULESPEC_REPO_ROOTS_ENV = "AXIOM_RULESPEC_REPO_ROOTS"
 FLOAT_ZERO_TOLERANCE = 1e-9
 
@@ -527,19 +528,26 @@ class AxiomRulesRunner(EngineAdapter):
         default_entity_id: str,
     ) -> list[dict[str, Any]]:
         records = _explicit_input_records(case, period)
+        alias_qualified_inputs = bool(
+            case.metadata.get(AXIOM_ALIAS_QUALIFIED_INPUTS_METADATA_KEY)
+        )
         for name, value in _case_axiom_inputs(case).items():
-            records.append(
-                {
-                    "name": name,
-                    "entity": str(
-                        case.metadata.get(AXIOM_ENTITY_METADATA_KEY)
-                        or self.default_entity
-                    ),
-                    "entity_id": default_entity_id,
-                    "interval": _interval(period),
-                    "value": _scalar_value(value),
-                }
-            )
+            for input_name in _input_record_names(
+                name,
+                alias_qualified=alias_qualified_inputs,
+            ):
+                records.append(
+                    {
+                        "name": input_name,
+                        "entity": str(
+                            case.metadata.get(AXIOM_ENTITY_METADATA_KEY)
+                            or self.default_entity
+                        ),
+                        "entity_id": default_entity_id,
+                        "interval": _interval(period),
+                        "value": _scalar_value(value),
+                    }
+                )
         return records
 
     def _compile_env(self) -> dict[str, str]:
@@ -921,6 +929,14 @@ def _case_axiom_inputs(case: Case) -> dict[str, Any]:
         if _looks_like_axiom_input_ref(key):
             inputs[str(key)] = value
     return inputs
+
+
+def _input_record_names(name: Any, *, alias_qualified: bool = False) -> tuple[str, ...]:
+    text = str(name)
+    prefix = "#input."
+    if not alias_qualified or prefix not in text:
+        return (text,)
+    return (text, text.rsplit(prefix, maxsplit=1)[-1])
 
 
 def _looks_like_axiom_input_ref(value: Any) -> bool:

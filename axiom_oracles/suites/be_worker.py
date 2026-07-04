@@ -9,9 +9,11 @@ BE_METADATA = {
     "scope": BE_SCOPE,
     "axiom_entity": "Person",
     "axiom_entity_id": "head",
+    "axiom_alias_qualified_inputs": True,
 }
 PIT_MODULE = "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
 SSC_MODULE = "be:regulations/social_security/workers/employee_contributions"
+EMPLOYER_SSC_MODULE = "be:regulations/social_security/workers/employer_contributions"
 WORK_BONUS_MODULE = "be:regulations/social_security/workers/work_bonus"
 EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 WORK_BONUS_REFERENCE_INPUT = (
@@ -36,6 +38,15 @@ def be_worker_ssc_cases() -> list[Case]:
     return [
         _single_worker_ssc_case("be-worker-ssc-30k", 30_000.0),
         _single_worker_ssc_case("be-worker-ssc-60k", 60_000.0),
+    ]
+
+
+def be_employer_ssc_cases() -> list[Case]:
+    """Single-worker Belgium employer-SSC cases for the EUROMOD BE_2025 oracle."""
+
+    return [
+        _single_worker_employer_ssc_case("be-employer-ssc-30k", 30_000.0),
+        _single_worker_employer_ssc_case("be-employer-ssc-60k", 60_000.0),
     ]
 
 
@@ -102,6 +113,35 @@ def _single_worker_ssc_case(case_id: str, annual_income: float) -> Case:
     )
 
 
+def _single_worker_employer_ssc_case(case_id: str, annual_income: float) -> Case:
+    contribution_base_input = _employer_ssc_input(
+        "belgium_employer_social_security_contribution_base"
+    )
+    return _single_worker_case(
+        case_id,
+        annual_income,
+        output=Concepts.BE_EMPLOYER_SOCIAL_CONTRIBUTIONS,
+        axiom_inputs={
+            contribution_base_input: annual_income,
+            _employer_ssc_input(
+                "belgium_employer_social_security_employer_has_at_least_10_workers"
+            ): True,
+            _employer_ssc_input(
+                "belgium_employer_social_security_employer_has_at_least_20_workers"
+            ): False,
+        },
+        metadata_extra={
+            "scenario": "single-worker-employer-ssc",
+            "yearly_earned_income": annual_income,
+            "employer_has_at_least_10_workers": True,
+            "employer_has_at_least_20_workers": False,
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "yem": [contribution_base_input],
+            },
+        },
+    )
+
+
 def _single_worker_case(
     case_id: str,
     annual_income: float,
@@ -141,6 +181,10 @@ def _pit_input(name: str) -> str:
 
 def _ssc_input(name: str) -> str:
     return f"{SSC_MODULE}#input.{name}"
+
+
+def _employer_ssc_input(name: str) -> str:
+    return f"{EMPLOYER_SSC_MODULE}#input.{name}"
 
 
 def _euromod_worker_input(annual_income: float) -> dict[str, float | int]:

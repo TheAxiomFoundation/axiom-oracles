@@ -145,6 +145,10 @@ class Concepts:
         "be:regulations/social_security/workers/work_bonus"
         "#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction"
     )
+    BE_EMPLOYER_SOCIAL_CONTRIBUTIONS = (
+        "be:regulations/social_security/workers/employer_contributions"
+        "#belgium_employer_social_security_ordinary_worker_contribution"
+    )
     BE_SOCIAL_INTEGRATION_INCOME_SUPPORT = (
         "be:statutes/social_integration/payable_amount"
         "#belgium_social_integration_income_support_annual_amount"

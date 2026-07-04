@@ -104,6 +104,78 @@
       "counts_as_axiom_gap": false
     },
     {
+      "id": "euromod-be-2025-employer-ssc-company-closing-fund-rates",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_parameter_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/11",
+      "summary": "The Belgium BE_2025 employer social-contribution policy tscer_be appears to use stale Fonds de fermeture des entreprises company-closing-fund rates: 0.06 percent and 0.12 percent, while the official ONSS 2025 workbook gives 0.18 percent and 0.23 percent including wage moderation for commercial employers below and above the 20-worker threshold. In the ordinary less-than-20-worker synthetic cases, EUROMOD returns exactly 26.75 percent of post-uprating yem while the source-backed RuleSpec path returns 26.868876 percent.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "tscer_be",
+        "suite": "be-employer-ssc",
+        "period": "2025",
+        "cases": [
+          {
+            "case_id": "be-employer-ssc-30k",
+            "euromod_yem": 31650.67178502879,
+            "euromod_tscer_s": 8466.5547024952,
+            "axiom_belgium_employer_social_security_ordinary_worker_contribution": 8504.179755086372,
+            "residual": -37.62505259117279
+          },
+          {
+            "case_id": "be-employer-ssc-60k",
+            "euromod_yem": 63301.34357005758,
+            "euromod_tscer_s": 16933.1094049904,
+            "axiom_belgium_employer_social_security_ordinary_worker_contribution": 17008.359510172744,
+            "residual": -75.25010518234558
+          }
+        ],
+        "euromod_implied_rate": 0.2675,
+        "axiom_source_backed_rate": 0.26868876,
+        "residual_rate": -0.00118876
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/regulations/social_security/workers/employer_contributions.yaml",
+        "corpus_citation_paths": [
+          "be/guidance/onss/dmfa/2025-q1/social-security-contributions/basic-rate-tax-shift",
+          "be/guidance/onss/dmfa/2025-q1/social-security-contributions/wage-moderation-contribution",
+          "be/guidance/onss/dmfa/2025-q1/social-security-contributions/wage-moderation-tax-shift",
+          "be/guidance/onss/dmfa/2025-q1/social-security-contributions/one-point-six-contribution",
+          "be/guidance/onss/dmfa/2025-q1/company-closing-fund-rates/ffe-2025-rates"
+        ],
+        "source_urls": [
+          "https://www.socialsecurity.be/employer/instructions/dmfa/fr/2025-1/instructions/socialsecuritycontributions/contributions.html",
+          "https://www.socialsecurity.be/site_fr/Infos/instructs/documents/xls/FFE_2025.xls"
+        ],
+        "official_onss_ordinary_less_than_20_rate_components": {
+          "basic_rate_after_tax_shift": 0.1988,
+          "wage_moderation_rate_after_tax_shift": 0.05118876,
+          "one_point_six_contribution_with_wage_moderation": 0.0169,
+          "ffe_less_than_20_with_wage_moderation": 0.0018,
+          "total": 0.26868876
+        },
+        "euromod_xml_observed_parameters": {
+          "tscer_stdrate": "19.88%",
+          "tscer_WageMod_rate": "5.12%",
+          "tscer_ContrWageMod01_rate": "0.016",
+          "tscer_ContrWageMod02_rate": "0.0009",
+          "tscer_CompLess20_rate": "0.06%",
+          "tscer_CompMore20_rate": "0.12%"
+        }
+      },
+      "workaround": {
+        "description": "Keep the residual visible in the household-level oracle report and do not alter RuleSpec away from official ONSS 2025 DmfA instructions and the 2025 FFE workbook while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
       "id": "euromod-be-2025-self-employed-main-rate",
       "jurisdiction": "BE",
       "system": "BE_2025",

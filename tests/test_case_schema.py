@@ -196,6 +196,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
         Concepts.BE_EMPLOYEE_WORK_BONUS_REDUCTION,
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+        Concepts.BE_EMPLOYER_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
         Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
@@ -261,9 +262,10 @@ def test_nyc_synthetic_suite_has_triage_metadata() -> None:
 def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     pit_cases = load_suite("be-worker-pit")
     ssc_cases = load_suite("be-worker-ssc")
+    employer_ssc_cases = load_suite("be-employer-ssc")
 
-    assert {case.locale for case in pit_cases + ssc_cases} == {"BE"}
-    assert {case.scope for case in pit_cases + ssc_cases} == {
+    assert {case.locale for case in pit_cases + ssc_cases + employer_ssc_cases} == {"BE"}
+    assert {case.scope for case in pit_cases + ssc_cases + employer_ssc_cases} == {
         GeographyScope(type="country", geoid="BE")
     }
     assert {case.outputs for case in pit_cases} == {
@@ -281,14 +283,32 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
             Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
         )
     }
+    assert {case.outputs for case in employer_ssc_cases} == {
+        (Concepts.BE_EMPLOYER_SOCIAL_CONTRIBUTIONS,)
+    }
+    assert [case.metadata["yearly_earned_income"] for case in employer_ssc_cases] == [
+        30_000,
+        60_000,
+    ]
     assert all(case.metadata["axiom_entity"] == "Person" for case in pit_cases)
+    assert all(
+        case.metadata["axiom_entity"] == "Person" for case in employer_ssc_cases
+    )
     assert all(
         "#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"]
     )
     assert all(
         "#input." in key for case in ssc_cases for key in case.metadata["axiom_inputs"]
     )
-    assert all("euromod_inputs" in case.metadata for case in pit_cases + ssc_cases)
+    assert all(
+        "#input." in key
+        for case in employer_ssc_cases
+        for key in case.metadata["axiom_inputs"]
+    )
+    assert all(
+        "euromod_inputs" in case.metadata
+        for case in pit_cases + ssc_cases + employer_ssc_cases
+    )
 
 
 def test_belgium_self_employed_suite_defines_oracle_concept_and_inputs() -> None:

@@ -2,6 +2,18 @@
  "_comment": "Registry of explanations for current mismatch buckets, keyed by (suite, concept, kind) and optionally disambiguated by `engines` when two reports share a suite slug. The dashboard renders the cause inline next to the disagreement count. Entries only render next to live mismatch buckets, so suites with zero mismatches need no entry; delete entries when their bucket clears.",
  "entries": [
   {
+   "suite": "be-employer-ssc",
+   "concept": "be:regulations/social_security/workers/employer_contributions#belgium_employer_social_security_ordinary_worker_contribution",
+   "kind": "amount_difference",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "label": "EUROMOD BE_2025 stale employer SSC FFE rates",
+   "description": "EUROMOD BE_2025 returns exactly 26.75% of its own post-uprating gross for the ordinary private-sector employer case. The source-backed ONSS 2025 RuleSpec path returns 26.868876% because the official FFE workbook gives 0.18% for commercial employers with fewer than 20 workers, including wage moderation, while BE_2025 uses 0.06%. The residual is tracked upstream as ec-jrc/JRC-EUROMOD-software-source-code#11.",
+   "fix_owner": "euromod-upstream"
+  },
+  {
    "suite": "ma-snap-ecps",
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "kind": "amount_difference",
