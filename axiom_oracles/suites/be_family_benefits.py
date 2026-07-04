@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from ..core.case import Case, Concepts, Entity
-from .be_worker import BE_METADATA
+from .be_worker import BE_METADATA, EUROMOD_TO_AXIOM_INPUT_BRIDGE
 
 
 BIRTH_ALLOWANCE_MODULE = "be:statutes/family_benefits/birth_allowance"
@@ -178,6 +178,33 @@ def be_family_child_benefit_social_supplement_cases() -> list[Case]:
     ]
 
 
+def be_family_child_benefit_wallonia_social_supplement_cases() -> list[Case]:
+    """Belgium Wallonia Article 13 child-benefit cases for EUROMOD BE_2025."""
+
+    return [
+        _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-age-0",
+            scenario="wallonia-middle-income-one-child-under-6",
+            child_age=0,
+        ),
+        _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-age-6",
+            scenario="wallonia-middle-income-one-child-age-6",
+            child_age=6,
+        ),
+        _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-age-13",
+            scenario="wallonia-middle-income-one-child-age-13",
+            child_age=13,
+        ),
+        _child_benefit_wallonia_social_supplement_case(
+            "be-family-child-benefit-wallonia-social-supplement-age-18",
+            scenario="wallonia-middle-income-one-child-age-18",
+            child_age=18,
+        ),
+    ]
+
+
 def _birth_allowance_case(
     case_id: str,
     *,
@@ -281,6 +308,51 @@ def _child_benefit_social_supplement_case(
         },
         entities=_child_benefit_base_entities(child_age=child_age),
         outputs=(Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,),
+    )
+
+
+def _child_benefit_wallonia_social_supplement_case(
+    case_id: str,
+    *,
+    scenario: str,
+    child_age: int,
+    annual_household_income: float = 54_441.17,
+) -> Case:
+    household_income_input = _child_benefit_base_input(
+        "belgium_child_benefit_wallonia_article_13_household_annual_income"
+    )
+    axiom_inputs = _child_benefit_base_axiom_inputs(
+        region=WALLONIA_REGION,
+        child_age=child_age,
+        higher_education=False,
+    )
+    axiom_inputs[household_income_input] = annual_household_income
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "axiom_entity": "Household",
+            "axiom_entity_id": "household",
+            "scenario": scenario,
+            "region_code": WALLONIA_REGION,
+            "child_age_years": child_age,
+            "child_enrolled_in_higher_education": False,
+            "wallonia_article_13_household_annual_income": annual_household_income,
+            "axiom_inputs": axiom_inputs,
+            "euromod_inputs": _child_benefit_base_euromod_inputs(
+                region=WALLONIA_REGION,
+                child_age=child_age,
+                higher_education=False,
+                employment_income=5_000,
+                single_parent=True,
+            ),
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "il_bch_means": [household_income_input],
+            },
+        },
+        entities=_child_benefit_base_entities(child_age=child_age),
+        outputs=(Concepts.BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT,),
     )
 
 
