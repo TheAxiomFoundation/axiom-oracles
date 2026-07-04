@@ -203,6 +203,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
+        Concepts.BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT,
     }
 
     assert (
@@ -657,6 +658,62 @@ def test_belgium_family_child_benefit_social_supplement_suite_defines_oracle_con
     assert age_0.metadata["euromod_inputs"][0]["yemmy"] == 12
     assert age_18.metadata["axiom_inputs"][higher_education_input] is True
     assert age_18.metadata["euromod_inputs"][1]["dec"] == 6
+    assert age_18.metadata["euromod_inputs"][1]["xed00"] == 1
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_family_child_benefit_wallonia_social_supplement_suite_defines_oracle_concept_and_bridge() -> (
+    None
+):
+    cases = load_suite("be-family-child-benefit-wallonia-social-supplement")
+
+    assert len(cases) == 4
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "wallonia-middle-income-one-child-under-6",
+        "wallonia-middle-income-one-child-age-6",
+        "wallonia-middle-income-one-child-age-13",
+        "wallonia-middle-income-one-child-age-18",
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    age_0 = by_id["be-family-child-benefit-wallonia-social-supplement-age-0"]
+    age_18 = by_id["be-family-child-benefit-wallonia-social-supplement-age-18"]
+    region_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_region"
+    )
+    income_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_child_benefit_wallonia_article_13_household_annual_income"
+    )
+    higher_education_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_child_enrolled_in_higher_education"
+    )
+    assert age_0.metadata["axiom_inputs"][region_input] == 3
+    assert age_0.metadata["axiom_inputs"][income_input] == 54_441.17
+    assert age_0.metadata["euromod_to_axiom_input_bridge"] == {
+        "il_bch_means": [income_input]
+    }
+    assert len(age_0.metadata["euromod_inputs"]) == 2
+    assert age_0.metadata["euromod_inputs"][0]["yem"] == 5_000
+    assert age_0.metadata["euromod_inputs"][0]["yemmy"] == 12
+    assert age_0.metadata["euromod_inputs"][1]["drgn1"] == 3
+    assert age_0.metadata["euromod_inputs"][1]["byr"] == 0
+    assert age_18.metadata["axiom_inputs"][higher_education_input] is False
+    assert age_18.metadata["euromod_inputs"][1]["dec"] == 0
     assert age_18.metadata["euromod_inputs"][1]["xed00"] == 1
     assert {case.period for case in cases} == {"2025"}
 

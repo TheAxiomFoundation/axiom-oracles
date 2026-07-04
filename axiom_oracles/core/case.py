@@ -177,6 +177,10 @@ class Concepts:
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement"
     )
+    BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT = (
+        "be:statutes/family_benefits/child_benefit_base_2025"
+        "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement"
+    )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"
