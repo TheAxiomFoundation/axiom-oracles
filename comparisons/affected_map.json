@@ -38,12 +38,28 @@
       "source": "comparisons/be-capital-income-tax.yaml"
     },
     {
+      "suite": "be-elderly-income-support",
+      "report": "axiom-euromod-be-elderly-income-support.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-elderly-income-support.yaml"
+    },
+    {
       "suite": "be-local-municipal-pit",
       "report": "axiom-euromod-be-local-municipal-pit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
       ],
       "source": "comparisons/be-local-municipal-pit.yaml"
+    },
+    {
+      "suite": "be-pensioner-contributions",
+      "report": "axiom-euromod-be-pensioner-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-pensioner-contributions.yaml"
     },
     {
       "suite": "be-regional-pit-surcharge",

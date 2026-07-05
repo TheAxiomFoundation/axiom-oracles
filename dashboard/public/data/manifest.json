@@ -71,6 +71,7 @@
     "axiom-euromod-be-maternity-leave.json",
     "axiom-euromod-be-birth-leave.json",
     "axiom-euromod-be-social-assistance.json",
-    "axiom-euromod-be-elderly-income-support.json"
+    "axiom-euromod-be-elderly-income-support.json",
+    "axiom-euromod-be-pensioner-contributions.json"
   ]
 }

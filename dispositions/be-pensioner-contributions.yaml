@@ -1,0 +1,143 @@
+schema: axiom_oracles.dispositions.v1
+suite: be-pensioner-contributions
+updated: "2026-07-05"
+entries:
+  - id: health-floor-missing-below-euromod-floor
+    concept: be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding
+    case_id: be-pensioner-tscpe-below-health-18k
+    kind: amount_difference
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        EUROMOD BE_2025 tscpe_be exempts pensions below the article 191 health
+        floor ($tscpe_lim1 = 2037.73/m) and phase-caps the 2037.73-2112.71 band,
+        so at 1500/m it withholds nothing. The source-backed RuleSpec article 191
+        rule (belgium_health_insurance_article_191_monthly_pension_withholding)
+        applies 3.55% to the whole monthly pension with no floor, so it withholds
+        18000 * 0.0355 = 639.00 per year. The gap is the entire RuleSpec amount:
+        RuleSpec is missing the article 191 low-pension floor that EUROMOD models.
+      arithmetic:
+        - expression: "18000 * 0.0355"
+          equals: 639.0
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-be/issues/89
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 639.0
+
+  - id: health-floor-and-solidarity-base-phase-in
+    concept: be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding
+    case_id: be-pensioner-tscpe-health-phase-in-24k9
+    kind: amount_difference
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        At 2075/m two RuleSpec gaps stack. Health: EUROMOD is in the article 191
+        phase-in band ((2075 - 2037.73) * 12 = 447.24) while RuleSpec withholds
+        3.55% on the whole pension (24900 * 0.0355 = 883.95), a 436.71 health-floor
+        gap. Solidarity: RuleSpec applies the article 68 top rate because 2075/m
+        exceeds its index-factor-1 fourth threshold (1915.62), adding
+        24900 * 0.02 = 498.00, while EUROMOD's 2025-indexed solidarity floor
+        (SolDepChild_lim1 = 3225.74/m) is far above 2075/m so it adds nothing. The
+        combined RuleSpec-minus-EUROMOD difference is 436.71 + 498.00 = 934.71.
+      arithmetic:
+        - expression: "24900 * 0.0355"
+          equals: 883.95
+        - expression: "883.95 - ((2075 - 2037.73) * 12)"
+          equals: 436.71
+          tolerance: 0.01
+        - expression: "24900 * 0.02"
+          equals: 498.0
+        - expression: "436.71 + 498.0"
+          equals: 934.71
+          tolerance: 0.01
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-be/issues/89
+    expires_on_source_change: true
+    pinned:
+      left: 447.24
+      right: 1381.95
+
+  - id: solidarity-base-table-above-health-30k
+    concept: be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding
+    case_id: be-pensioner-tscpe-above-health-30k
+    kind: amount_difference
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        At 2500/m the health parts agree exactly (both apply 3.55%: EUROMOD is
+        above its 2112.71/m floor, RuleSpec has no floor, so both = 30000 * 0.0355
+        = 1065.00). The entire difference is the solidarity base table: RuleSpec's
+        index-factor-1 article 68 thresholds (fourth = 1915.62/m) put 2500/m in the
+        top 2% band, adding 30000 * 0.02 = 600.00, while EUROMOD's 2025-indexed
+        solidarity floor (3225.74/m) is above 2500/m so it adds nothing. RuleSpec
+        needs the 2025-indexed article 68 base table (no single index factor
+        reconciles the two tables: EUROMOD 3225.74 / RuleSpec 1711.72 = 1.884, but
+        EUROMOD 3610 / RuleSpec 1915.62 = 1.884 only for the fourth threshold while
+        interior thresholds diverge).
+      arithmetic:
+        - expression: "30000 * 0.0355"
+          equals: 1065.0
+        - expression: "30000 * 0.02"
+          equals: 600.0
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-be/issues/89
+    expires_on_source_change: true
+    pinned:
+      left: 1065.0
+      right: 1665.0
+
+  - id: solidarity-base-table-phase-in-39k
+    concept: be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding
+    case_id: be-pensioner-tscpe-solidarity-phase-in-39k
+    kind: amount_difference
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        At 3250/m the health parts agree (both 3.55%: 39000 * 0.0355 = 1384.50).
+        EUROMOD is in its 2025-indexed solidarity phase-in band just above
+        SolDepChild_lim1 = 3225.74/m, withholding 1530.06 total (145.56 of
+        solidarity). RuleSpec applies the article 68 top 2% rate on the whole
+        pension because 3250/m exceeds its index-factor-1 fourth threshold,
+        adding 39000 * 0.02 = 780.00 for a 2164.50 total. The 634.44 difference is
+        the solidarity base-table divergence (RuleSpec top rate on all vs EUROMOD
+        indexed phase-in).
+      arithmetic:
+        - expression: "39000 * 0.0355"
+          equals: 1384.5
+        - expression: "39000 * 0.02"
+          equals: 780.0
+        - expression: "(1384.5 + 780.0) - 1530.06"
+          equals: 634.44
+          tolerance: 0.01
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-be/issues/89
+    expires_on_source_change: true
+    pinned:
+      left: 1530.06
+      right: 2164.5
+
+  - id: solidarity-base-table-mid-41k
+    concept: be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding
+    case_id: be-pensioner-tscpe-solidarity-mid-41k
+    kind: amount_difference
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        At 3416.67/m the health parts agree (41000 * 0.0355 = 1455.50). EUROMOD is
+        in its 2025-indexed solidarity band (SolDepChild_lim2..lim3), withholding
+        2070.50 total. RuleSpec applies the article 68 top 2% rate on the whole
+        pension (41000 * 0.02 = 820.00) for a 2275.50 total. The 205.00 difference
+        is the solidarity base-table divergence, now smaller because EUROMOD's own
+        indexed brackets are closing on the top rate as the pension rises (the two
+        formulas coincide by 48000, the one exact-match case in this suite).
+      arithmetic:
+        - expression: "41000 * 0.0355"
+          equals: 1455.5
+        - expression: "41000 * 0.02"
+          equals: 820.0
+        - expression: "(1455.5 + 820.0) - 2070.5"
+          equals: 205.0
+          tolerance: 0.01
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-be/issues/89
+    expires_on_source_change: true
+    pinned:
+      left: 2070.5
+      right: 2275.5

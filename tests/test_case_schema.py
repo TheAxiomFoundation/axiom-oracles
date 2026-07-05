@@ -205,6 +205,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_MATERNITY_REST_PERIOD_AMOUNT,
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
+        Concepts.BE_PENSIONER_HEALTH_AND_SOLIDARITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
         Concepts.BE_FLEMISH_JOBBONUS,
         Concepts.BE_CADASTRAL_INCOME_INDEXED,
