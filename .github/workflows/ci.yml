@@ -42,6 +42,12 @@ jobs:
         # suggestions stand alone); enforces determinism when it is present.
         run: uv run scripts/generate_boundary_cases.py --check
 
+      - name: Validate affected-comparison map
+        run: uv run scripts/generate_affected_map.py --check
+
+      - name: Vacuous-verification gate (oracle-backed + freshness)
+        run: uv run scripts/check_vacuous_gate.py --check
+
       - name: Test
         run: uv run pytest -q
 

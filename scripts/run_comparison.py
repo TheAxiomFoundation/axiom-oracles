@@ -552,9 +552,18 @@ def main() -> int:
             if path.name.endswith(".fixtures.yaml"):
                 continue
             config = yaml.safe_load(path.read_text())
+            kind = config.get("kind") if isinstance(config, dict) else None
+            if kind == "parameter-suite-list":
+                # A declarative suite list consumed by
+                # run_parameter_comparisons.py, not a runner-registry entry.
+                # It self-declares `kind`, so this is an explicit branch rather
+                # than the old "no `name:` key" heuristic (the #73 --list fix).
+                suites = config.get("suites") or []
+                print(f"{path.stem:24s}  ({len(suites)} parameter suites)")
+                continue
             if "name" not in config:
-                # Not a registry entry (e.g. parameter-oracles.yaml declares
-                # suites); listed by filename so it stays visible.
+                # Defensive: any other file without a runner name is listed by
+                # filename rather than crashing --list.
                 print(f"{path.stem:24s}  (non-registry config)")
                 continue
             print(f"{config['name']:24s}  {config.get('title', '')}")
@@ -586,6 +595,13 @@ def main() -> int:
     runner_fn(config["runner"], output)
     print(f"Wrote: {output}")
 
+    # Provenance (O2): stamp what produced this report — rulespec repos + SHAs,
+    # engine identity, oracle identity, dataset identity, run kind — onto both
+    # the reports/ JSON and the dashboard copy, so a checked-in report records
+    # exactly what it ran against and the affected-rerun map can diff its SHAs.
+    provenance = _build_run_provenance(config, runner_type, output)
+    _stamp_report_provenance(output, provenance)
+
     dashboard_target = config.get("dashboard", {}).get("filename")
     if dashboard_target:
         suite = config.get("dashboard", {}).get("suite", config["name"])
@@ -595,6 +611,7 @@ def main() -> int:
             config,
             suite=suite,
         )
+        adapted["provenance"] = provenance
         _write_dashboard_report(adapted, dashboard_target)
 
     if args.summary:
@@ -602,6 +619,136 @@ def main() -> int:
         _print_coverage_warnings(config)
 
     return 0
+
+
+def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
+    """Assemble the provenance block for a completed comparison run.
+
+    Reads the config for rulespec checkout paths / remote, engine repo, and the
+    oracle stack pins; reads the just-written report for a ``dataset_identity``
+    block (threaded by the FIIT/UK adapters). Everything degrades gracefully —
+    provenance must annotate a run, never fail one.
+    """
+    from axiom_oracles.provenance import (
+        build_provenance,
+        dataset_provenance_from_identity,
+        engine_provenance,
+        rulespec_provenance,
+    )
+
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+
+    # Rulespec repos + SHAs, from whichever path form this runner uses. The
+    # remote-cloned FIIT lane records the remote's slug (SHA is the clone's
+    # HEAD only if it survives; a fresh --depth 1 clone is main's tip).
+    rulespec_paths: list[str] = []
+    for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
+        rulespec_paths.append(str(entry))
+    for key in ("rulespec_root",):
+        val = runner.get(key) or params.get(key)
+        if val:
+            rulespec_paths.append(str(val))
+    rulespecs = rulespec_provenance(rulespec_paths)
+    remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
+    if remote and not rulespecs:
+        from axiom_oracles.provenance import repo_slug_from_remote
+
+        slug = repo_slug_from_remote(str(remote))
+        if slug:
+            rulespecs = [{"repo": slug, "sha": None}]
+
+    # Engine identity (Axiom side under test).
+    axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
+    axiom_rules_path = None
+    if axiom_rules_ref:
+        try:
+            axiom_rules_path = _resolve_path(str(axiom_rules_ref), "axiom_rules_repo")
+        except SystemExit:
+            axiom_rules_path = None
+    engine = engine_provenance(axiom_rules_path)
+
+    # Oracle identity (the side compared to). Derived from the runner type +
+    # the pins each runner installs, so the report says which oracle stack ran.
+    oracle: dict = {}
+    if runner_type == "axiom-encode-tax-ecps-compare":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_package": "policyengine==4.11.0"
+            if params.get("pinned", True)
+            else "policyengine",
+            "policyengine_us": "1.729.0" if params.get("pinned", True) else None,
+        }
+    elif runner_type == "axiom-encode-uk-efrs-compare":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.88.56"),
+        }
+    elif runner_type == "axiom-oracles-compare":
+        oracle = {
+            "name": params.get("right", "policyengine"),
+            "policyengine_package": _PE_ORACLE_PINS[0],
+            "policyengine_us": _PE_ORACLE_PINS[1].split("==", 1)[-1],
+        }
+    elif runner_type == "axiom-encode-snap-ecps-compare":
+        oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
+
+    # Dataset identity — reuse the pinned-populace identity (#80/#952) when the
+    # report carries one.
+    dataset = None
+    try:
+        raw_report = json.loads(output.read_text())
+        identity = _normalize_dataset_identity(raw_report) if isinstance(
+            raw_report, dict
+        ) else None
+        dataset = dataset_provenance_from_identity(identity)
+    except (OSError, json.JSONDecodeError):
+        dataset = None
+    if dataset is None:
+        # No encode identity block: record the population label the config
+        # declares so the dataset sub-block is never wholly empty.
+        population = params.get("population") or params.get("dataset")
+        if population:
+            dataset = {"source": "config", "population": str(population)}
+
+    return build_provenance(
+        generated_by=f"scripts/run_comparison.py::{config.get('name', '?')}",
+        rulespecs=rulespecs,
+        engine=engine,
+        oracle=oracle,
+        dataset=dataset,
+    )
+
+
+def _stamp_report_provenance(output: Path, provenance: dict) -> None:
+    """Add ``provenance`` to the reports/ JSON, preserving the file's own format.
+
+    Different runners serialize their reports/ artifact differently (sorted vs
+    insertion order, with/without trailing newline). Re-detect the original
+    formatting and re-emit in the same shape so adding provenance produces a
+    one-key diff rather than reordering every key.
+    """
+    try:
+        original_text = output.read_text()
+        data = json.loads(original_text)
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(data, dict):
+        return
+    data["provenance"] = provenance
+    trailing = "\n" if original_text.endswith("\n") else ""
+    for sort_keys in (True, False):
+        for indent in (2, 1):
+            reserialized = json.dumps(
+                json.loads(original_text), indent=indent, sort_keys=sort_keys
+            )
+            if original_text in (reserialized, reserialized + "\n"):
+                output.write_text(
+                    json.dumps(data, indent=indent, sort_keys=sort_keys) + trailing
+                )
+                return
+    # Unknown formatting (hand-edited): default to indent=2 sorted.
+    output.write_text(json.dumps(data, indent=2, sort_keys=True) + trailing)
 
 
 def _print_coverage_warnings(config: dict) -> None:

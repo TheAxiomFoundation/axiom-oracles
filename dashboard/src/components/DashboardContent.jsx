@@ -9,6 +9,7 @@ import CoverageRegister from "./CoverageRegister";
 import RuleVerification from "./RuleVerification";
 import GapLedger from "./GapLedger";
 import ProgramRuns from "./ProgramRuns";
+import FreshnessRegister from "./FreshnessRegister";
 import AgreementMatrix from "./AgreementMatrix";
 import ProgramBreakdown from "./ProgramBreakdown";
 
@@ -171,6 +172,11 @@ export default function DashboardContent() {
                 coverageOverview={data.coverageOverview}
               />
 
+              <FreshnessRegister
+                freshness={data.freshness}
+                region={jurisdiction}
+              />
+
               <GapLedger
                 reports={withData}
                 knownCauses={data.knownCauses || []}
@@ -237,6 +243,11 @@ export default function DashboardContent() {
                 reports={withData}
                 knownCauses={data.knownCauses || []}
                 coverageOverview={data.coverageOverview}
+              />
+
+              <FreshnessRegister
+                freshness={data.freshness}
+                region={jurisdiction}
               />
 
               <GapLedger
