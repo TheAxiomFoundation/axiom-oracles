@@ -1,0 +1,1684 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 12,
+      "comparison_weight": 12,
+      "components": [],
+      "concept": "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement",
+      "description": "UK Child Benefit annual entitlement (gross, pre-charge; family by child count)",
+      "left_weighted_sum": 28125.857143,
+      "match_rate": 100,
+      "match_weight": 12,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 28048.8,
+      "weighted_difference": 77.057143,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 12,
+  "cases": [
+    {
+      "case_id": "uk-child-benefit-1c-20k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 1
+        },
+        "children": 1,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 1666.6666666666667,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 20000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            20000.0
+          ],
+          "yearly_earned_income_total": 20000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-1c-70k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 1
+        },
+        "children": 1,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 5833.333333333333,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 70000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            70000.0
+          ],
+          "yearly_earned_income_total": 70000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-1c-80k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 1
+        },
+        "children": 1,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 6666.666666666667,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 80000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            80000.0
+          ],
+          "yearly_earned_income_total": 80000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-1c-90k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 1
+        },
+        "children": 1,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 7500.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 90000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            90000.0
+          ],
+          "yearly_earned_income_total": 90000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-2c-20k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 2
+        },
+        "children": 2,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 1666.6666666666667,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 20000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            20000.0
+          ],
+          "yearly_earned_income_total": 20000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-2c-70k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 2
+        },
+        "children": 2,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 5833.333333333333,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 70000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            70000.0
+          ],
+          "yearly_earned_income_total": 70000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-2c-80k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 2
+        },
+        "children": 2,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 6666.666666666667,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 80000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            80000.0
+          ],
+          "yearly_earned_income_total": 80000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-2c-90k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 2
+        },
+        "children": 2,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 7500.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 90000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            90000.0
+          ],
+          "yearly_earned_income_total": 90000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-3c-20k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 3
+        },
+        "children": 3,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 1666.6666666666667,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 4,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 105,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 20000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7,
+            4
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            20000.0
+          ],
+          "yearly_earned_income_total": 20000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-3c-70k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 3
+        },
+        "children": 3,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 5833.333333333333,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 4,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 105,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 70000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7,
+            4
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            70000.0
+          ],
+          "yearly_earned_income_total": 70000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-3c-80k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 3
+        },
+        "children": 3,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 6666.666666666667,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 4,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 105,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 80000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7,
+            4
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            80000.0
+          ],
+          "yearly_earned_income_total": 80000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-child-benefit-3c-90k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#input.uk_cb_pilot_supplied_number_of_children": 3
+        },
+        "children": 3,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 7500.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 10,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 104,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "dag": 4,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 105,
+            "les": 6,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 90000.0,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7,
+            4
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            90000.0
+          ],
+          "yearly_earned_income_total": 90000.0
+        },
+        "locale": "UK",
+        "scenario": "single-parent-child-benefit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK Child Benefit annual entitlement (gross, pre-charge; family by child count)",
+      "id": "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.003,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-05T21:38:23Z",
+    "generated_by": "scripts/run_comparison.py::uk-child-benefit-ukmod",
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-child-benefit",
+  "summary": {
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 12,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 12,
+      "match_rate": 100,
+      "match_weight": 12,
+      "mismatch_weight": 0
+    }
+  }
+}

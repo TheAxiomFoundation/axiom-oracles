@@ -930,6 +930,31 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "ukmod-cb-bch-no-takeup-gate",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "not_reproduced_live",
+      "classification": "no_engine_issue",
+      "upstream_url": null,
+      "summary": "UKMOD's Child Benefit output bch_s does NOT embed the benefit take-up correction that means-tested benefits carry. The take-up draw i_rand_tu (seeded by the DEF policies BTA_uk and random_uk) gates only the means-tested policies (bsauc_uk Universal Credit, bho_uk Housing Benefit, bsa_uk Income Support, bwkmt_bfamt_uk tax credits, bmu_uk Council Tax Benefit); the Child Benefit policy bch_uk (a non-means-tested BenCalc on the first-child and other-child rates) has no i_rand_tu gate, consistent with Child Benefit being a near-universal UK entitlement. Verified live on UKMOD_PUBLIC_B2026.03 UK_2026: for one/two/three children at 20k/70k/80k/90k earnings, bch_s (net of the bchrd_s High Income Child Benefit Charge clawback) plus bchrd_s is invariant to income at 1410.46/2343.82/3277.18 per year, and toggling the take-up policy switch overrides (BTA_uk and random_uk off) leaves bch_s and bchrd_s unchanged in every case. The take-up hazard the household Universal Credit suite documents (ukmod-uc-bsauc-takeup-correction) therefore does not affect the Child Benefit comparison.",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output": "bch_s"
+      },
+      "attempted_switches": {
+        "BTA_uk_off": "No effect on bch_s or bchrd_s (as expected: bch_uk has no take-up gate). Requested on every uk-child-benefit case for explicitness and parity with the household Universal Credit suite.",
+        "random_uk_off": "No effect on bch_s or bchrd_s for the same reason."
+      },
+      "workaround": {
+        "description": "None needed for take-up. The uk-child-benefit suite compares the composed rulespec-uk gross s.141 entitlement against UKMOD's pre-charge Child Benefit, reconstructed by summing the euromod target list [bch_s, bchrd_s] (bch_s is net of the bchrd_uk High Income Child Benefit Charge clawback; adding bchrd_s back recovers the gross amount). The High Income Child Benefit Charge is not encoded on the Axiom side (its ITEPA 2003 s.681B-H provisions are not in the corpus, rulespec-uk#75), so the comparison is gross-to-gross. The only residual is the UKMOD 52.14-week vs Axiom 52-week annualisation convention (~0.27%), absorbed by the concept's 0.3% relative tolerance; all 12 cases match."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

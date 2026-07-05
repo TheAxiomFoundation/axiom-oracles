@@ -2884,3 +2884,20 @@ prefixes:
     program: tax
     mapping_type: not_comparable
     rationale: Composed single-individual UKMOD Scottish non-savings non-dividend income-tax oracle pipeline; its band and liability outputs apply the Scottish Rate Resolution 2026-27 rates (Income Tax Act 2007 section 11A charged via Scotland Act 1998 section 80C, with the section 35 personal allowance) for the UKMOD tin_s comparison on a Scottish taxpayer (drgn1=12) rather than adding new PolicyEngine UK oracle variables — PolicyEngine's Populace oracle compares only the ordinary non-Scottish UK-rate branch.
+
+  # Composed Family-level UKMOD Child Benefit oracle pilot pipeline. It wires the
+  # SI 2006/965 regulation 2 enhanced/other weekly rates and the SSCBA 1992
+  # section 141 entitlement from a supplied child count so UKMOD (bch_s, plus its
+  # separately reported High Income Child Benefit Charge clawback bchrd_s, to
+  # reconstruct pre-charge Child Benefit) can be compared end to end. Its rate,
+  # count, weekly and annual entitlement outputs re-wire the separately mapped
+  # SSCBA 1992 section 141 entitlement and SI 2006/965 regulation 2 rate rules
+  # for the UKMOD comparison rather than adding new PolicyEngine UK oracle
+  # variables. The High Income Child Benefit Charge is not encoded on the Axiom
+  # side (its ITEPA 2003 sections 681B-H provisions are not in the corpus,
+  # rulespec-uk#75). Added for the M3 Child Benefit family.
+  - legal_id_prefix: uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#
+    country: uk
+    program: child_benefit
+    mapping_type: not_comparable
+    rationale: Composed Family-level UKMOD Child Benefit oracle pipeline; its enhanced/other weekly rate, child-count, weekly-entitlement and annual-entitlement outputs re-wire the separately mapped SSCBA 1992 section 141 entitlement and SI 2006/965 regulation 2 weekly-rate rules for the UKMOD bch_s comparison (pre-charge Child Benefit reconstructed as bch_s plus the bchrd_s High Income Child Benefit Charge clawback) rather than adding new PolicyEngine UK oracle variables.

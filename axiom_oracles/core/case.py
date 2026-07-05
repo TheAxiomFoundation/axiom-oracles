@@ -175,6 +175,17 @@ class Concepts:
         "uk:statutes/income_tax/individual/scottish_income_tax_oracle_pipeline"
         "#uk_scotpit_income_tax_liability"
     )
+    # Composed Child Benefit pipeline (rulespec-uk) that wires the SI 2006/965
+    # enhanced/other weekly rates and the SSCBA 1992 s.141 entitlement from a
+    # supplied child count, so an end-to-end UKMOD Child Benefit comparison can
+    # run. This is the gross, pre-charge annual entitlement; the UKMOD side adds
+    # the High Income Child Benefit Charge clawback (bchrd_s) back to bch_s to
+    # reconstruct the same pre-charge amount (the charge is not corpus-encoded,
+    # rulespec-uk#75).
+    UK_CHILD_BENEFIT_ENTITLEMENT = (
+        "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline"
+        "#uk_cb_pilot_annual_entitlement"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"
