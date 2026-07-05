@@ -144,3 +144,21 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
         "euromod-be-2025-flemish-jobbonus-stale-parameters",
         "euromod-be-2025-cadastral-income-rounding",
     }
+    wallonia_issue = next(
+        entry
+        for entry in issues["entries"]
+        if entry["id"]
+        == "euromod-be-2025-wallonia-pre-2020-child-benefit-supplement-cumulation"
+    )
+    assert (
+        wallonia_issue["statutory_evidence"]["indexed_2025_rulespec_module"]
+        == "be/statutes/family_benefits/child_benefit_base_2025.yaml"
+    )
+    assert (
+        wallonia_issue["statutory_evidence"]["unindexed_statutory_rulespec_module"]
+        == "be-wal/statutes/family_benefits/amounts.yaml"
+    )
+    assert all(
+        "2025-indexed Article 13" in case["note"]
+        for case in wallonia_issue["observed_with"]["cases"]
+    )

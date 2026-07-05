@@ -491,8 +491,8 @@
    "suite": "be-family-child-benefit-wallonia-social-supplement",
    "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
    "kind": "amount_difference",
-   "label": "EUROMOD cumulates Wallonia Article 13 supplement on pre-2020 children",
-   "description": "The six older-child residuals are the open JRC EUROMOD BE_2025 transition issue: age-0 new-system Wallonia Article 13 cases match exactly, but pre-2020 children receive an extra annualized Article 13 supplement in EUROMOD. The middle-income residual is 31.09 * 12; the low-income residual is 68.39 * 12 on top of the statutory legacy LGAF low-income path. Walloon Articles 120, 123, and 128 keep pre-2020 LGAF amounts and bar cumulation with decree supplements.",
+   "label": "EUROMOD cumulates indexed Wallonia Article 13 supplement on pre-2020 children",
+   "description": "The six older-child residuals are the open JRC EUROMOD BE_2025 transition issue: age-0 new-system Wallonia Article 13 cases match exactly, but pre-2020 children receive an extra annualized 2025-indexed Article 13 supplement in EUROMOD. These residual amounts use the applied 2025 RuleSpec surface in be/statutes/family_benefits/child_benefit_base_2025.yaml and the AVIQ 2025 amount table: 31.09 EUR/month for the middle-income supplement and 68.39 EUR/month for the low-income supplement. The raw Walloon Decree Article 13 statutory amounts remain 25 and 55 EUR/month in be-wal/statutes/family_benefits/amounts.yaml before indexation. Walloon Articles 120, 123, and 128 keep pre-2020 LGAF amounts and bar cumulation with decree supplements.",
    "fix_owner": "euromod-upstream",
    "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
   },
