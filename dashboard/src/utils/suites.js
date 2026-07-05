@@ -56,6 +56,7 @@ export const FAMILY_LABELS = {
   uk_national_insurance: "UK National Insurance",
   be_personal_income_tax: "Belgium personal income tax",
   be_social_security: "Belgium social security",
+  be_social_assistance: "Belgium social assistance",
 };
 
 const SUITE_OVERRIDES = {

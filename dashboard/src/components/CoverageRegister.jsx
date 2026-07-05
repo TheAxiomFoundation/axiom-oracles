@@ -266,7 +266,7 @@ function FamilyRow({ family, cells }) {
     <div className="register-row">
       <div className="register-rowhead">
         <span className="register-rowlabel">
-          {FAMILY_LABELS[family] || family}
+          {FAMILY_LABELS[family] || cells[0]?.meta?.label || family}
         </span>
       </div>
       <div className="register-grid">
