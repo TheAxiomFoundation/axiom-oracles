@@ -73,6 +73,29 @@ NON_ANNUALIZED_OUTPUTS: frozenset[str] = frozenset(
     }
 )
 
+# UKMOD reports some monetary outputs monthly whose Axiom counterpart is a
+# weekly statutory amount. UKMOD builds those monthly amounts from weekly rates
+# with a 365-day-year convention (monthly = weekly * 365 / 7 / 12), so the
+# adapter converts them back to weekly (weekly = monthly * 7 * 12 / 365) instead
+# of annualizing, and the comparison is weekly-to-weekly.
+#   - The UKMOD Pension Credit award ``boamt_s`` (and its guarantee-credit and
+#     savings-credit components) is a monthly amount whose Axiom counterpart is
+#     the composed pilot's weekly ``pc_pilot_award_amount``.
+#   - The assessed state pension ``boact_s`` is bridged into the Pension Credit
+#     pipeline's weekly assessable-income input, so it is converted the same way
+#     before the bridge reads it.
+WEEKLY_OUTPUTS: frozenset[str] = frozenset(
+    {
+        "boamt_s",
+        "boamtmm_s",
+        "boamtxp_s",
+        "boact_s",
+    }
+)
+
+# UKMOD's weekly-to-monthly factor (365-day year): monthly = weekly * this.
+_WEEKS_PER_MONTH = 365.0 / 7.0 / 12.0
+
 SwitchSetting = tuple[str, bool]
 PolicySwitchOverride = tuple[str, bool]
 
@@ -411,6 +434,12 @@ def _expand_derived_outputs(outputs: list[str]) -> list[str]:
 
 
 def _annualization_factor(output: str, default_factor: float) -> float:
+    if output in WEEKLY_OUTPUTS:
+        # Convert UKMOD's monthly amount to weekly (weekly = monthly / weeks-per-
+        # month) so it matches the pipeline's weekly award. This is independent
+        # of ``annualize_outputs`` because it is a period reconciliation, not an
+        # annualization.
+        return 1.0 / _WEEKS_PER_MONTH
     if output in NON_ANNUALIZED_OUTPUTS:
         return 1.0
     return default_factor

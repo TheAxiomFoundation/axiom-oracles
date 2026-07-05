@@ -64,7 +64,7 @@ def test_expected_jurisdictions_present() -> None:
 
 @pytest.mark.parametrize(
     "jurisdiction,expected_sets,expected_cases",
-    [("us", 2, 44), ("be", 21, 91), ("uk", 10, 73)],
+    [("us", 2, 44), ("be", 21, 91), ("uk", 11, 85)],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
     grid = load_grid(jurisdiction)
@@ -135,6 +135,7 @@ def test_uk_grid_is_present_and_covers_the_worker_suites() -> None:
         "uk-self-employed-nic",
         "uk-employer-nic",
         "uk-universal-credit",
+        "uk-pension-credit",
         "uk-income-tax-savings",
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",

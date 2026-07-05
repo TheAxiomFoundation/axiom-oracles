@@ -697,6 +697,39 @@ concepts:
           type: country
           geoid: UK
 
+  uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount:
+    description: UK Pension Credit household award (hypothetical pensioner benefit unit)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk Pension Credit pilot applies the statutory State
+    # Pension Credit Act 2002 section 2 guarantee credit weekly; UKMOD returns
+    # the same guarantee credit as boamt_s subject to its take-up / Universal-
+    # Credit-transition correction, which for hypothetical benefit units can
+    # zero the reported award away from the entitlement (see euromod_issues.json
+    # ukmod-pc-boamt-takeup-transition). UKMOD boamt_s is monthly; the adapter
+    # divides it by UKMOD's weekly-to-monthly factor (365/7/12) so the
+    # comparison is weekly-to-weekly against the pipeline's weekly award. An
+    # absolute tolerance to the pound catches structural encoding gaps; the
+    # take-up-driven zeroing is classified as a UKMOD-side artefact rather than
+    # absorbed by tolerance.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: pc_pilot_award_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: boamt_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#uk_nic_pilot_er_secondary_class_1_contribution:
     description: UK employer secondary Class 1 National Insurance contribution (single employment)
     category: social_contributions
