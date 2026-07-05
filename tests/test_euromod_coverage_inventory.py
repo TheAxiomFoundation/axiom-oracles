@@ -53,7 +53,10 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         outputs["tin_s"]["status"]
         == "live_oracle_compared_worker_pilot_with_known_article_289ter1_residual"
     )
-    assert outputs["bsa_s"]["status"] == "live_oracle_verified_isolated_no_resources"
+    assert (
+        outputs["bsa_s"]["status"]
+        == "live_oracle_verified_isolated_and_dependent_family_no_resources"
+    )
     assert (
         outputs["bsaoa_s"]["status"]
         == "live_oracle_verified_isolated_no_resources_with_policy_switch_override"
