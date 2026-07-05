@@ -6485,6 +6485,62 @@ def project_housing_benefit_final_inputs(row: Any) -> dict[str, Any]:
     }
 
 
+def project_housing_benefit_applicable_amount_inputs(row: Any) -> dict[str, Any]:
+    # The applicable amount depends only on the family type, the eldest adult's
+    # age band, whether any member has attained state pension age, and the
+    # premium amount PolicyEngine adds as benefits_premiums.
+    return {
+        "hb_pilot_is_couple": bool(row_value(row, "is_couple", False)),
+        "hb_pilot_any_member_pension_age": bool(
+            row_value(row, "housing_benefit_any_over_sp_age", False)
+        ),
+        "hb_pilot_eldest_adult_age": money(row_value(row, "eldest_adult_age", 0)),
+        "hb_pilot_premium_amount": money(row_value(row, "benefits_premiums", 0)),
+    }
+
+
+def project_housing_benefit_non_dependant_deductions_inputs(
+    row: Any,
+) -> dict[str, Any]:
+    # PolicyEngine derives the benefit-unit non-dependant deduction from a
+    # household-composition aggregation that is not recoverable from a Family
+    # count and representative income, so this surface is not run on the
+    # Enhanced FRS population (the deduction band table is exercised in the
+    # pipeline's companion tests instead). The projection supplies a single
+    # non-dependant with no gross income so the composed output is well-defined
+    # if the surface is ever run as a self-consistency check.
+    return {
+        "hb_pilot_number_of_non_dependants": 1,
+        "hb_pilot_non_dependant_gross_weekly_income": 0.0,
+    }
+
+
+def project_housing_benefit_entitlement_inputs(row: Any) -> dict[str, Any]:
+    # Reproduce PolicyEngine housing_benefit_entitlement by projecting the
+    # realised applicable income, eligible rent, and maximum rent (LHA) cap,
+    # with the applicable amount recomputed from the family type and age band.
+    # The surface is filtered to benefit units with no non-dependant deduction
+    # (housing_benefit_entitlement_defined), so the number of non-dependants is
+    # projected as zero.
+    lha_eligible = bool(row_value(row, "LHA_eligible", False))
+    return {
+        "hb_pilot_is_couple": bool(row_value(row, "is_couple", False)),
+        "hb_pilot_any_member_pension_age": bool(
+            row_value(row, "housing_benefit_any_over_sp_age", False)
+        ),
+        "hb_pilot_eldest_adult_age": money(row_value(row, "eldest_adult_age", 0)),
+        "hb_pilot_premium_amount": money(row_value(row, "benefits_premiums", 0)),
+        "hb_pilot_number_of_non_dependants": 0,
+        "hb_pilot_non_dependant_gross_weekly_income": 0.0,
+        "hb_pilot_applicable_income": money(
+            row_value(row, "housing_benefit_applicable_income", 0)
+        ),
+        "hb_pilot_eligible_rent": money(row_value(row, "benunit_rent", 0)),
+        "hb_pilot_lha_path_applies": lha_eligible,
+        "hb_pilot_maximum_rent": money(row_value(row, "LHA_cap", 0)),
+    }
+
+
 def project_universal_credit_assessable_capital_inputs(row: Any) -> dict[str, Any]:
     return {
         "claim_is_for_joint_claimants": False,
