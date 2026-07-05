@@ -33,8 +33,8 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         coverage["coverage_summary"]["full_household_disposable_income_parity"] is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 20
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 14
+    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 21
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 15
     assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
@@ -92,6 +92,10 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     assert (
         outputs["bch_s"]["status"]
         == "live_oracle_verified_one_child_base_and_brussels_same_age_household_with_known_dg_and_pre_2020_wallonia_issues"
+    )
+    assert (
+        outputs["bpact_s"]["status"]
+        == "live_oracle_verified_under_cap_father_newborn_with_pbe_switch"
     )
     assert outputs["bch_s"]["additional_rulespec_outputs"] == [
         "be:statutes/family_benefits/child_benefit_base_2025"
