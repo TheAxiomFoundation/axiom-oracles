@@ -525,6 +525,7 @@ HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS = {
     "hb_pilot_applicable_amount": {
         "axiom": f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_applicable_amount",
         "pe": "housing_benefit_applicable_amount",
+        "applies": "housing_benefit_applicable_amount_defined",
         "tolerance": 0.01,
     },
 }
@@ -543,6 +544,7 @@ HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS = {
     "hb_pilot_entitlement": {
         "axiom": f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_entitlement",
         "pe": "housing_benefit_entitlement",
+        "applies": "housing_benefit_entitlement_defined",
         "tolerance": 0.01,
     },
 }
