@@ -25,6 +25,8 @@ from axiom_oracles.bridges.efrs_uk import (
     ESA_FINAL_OUTPUTS,
     ESA_REGULATION_118_BASE,
     ESA_TARIFF_INCOME_OUTPUTS,
+    HOUSING_BENEFIT_ENTITLEMENT_BASE,
+    HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS,
     HOUSING_BENEFIT_FINAL_BASE,
     HOUSING_BENEFIT_FINAL_OUTPUTS,
     HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_BASE,
@@ -109,6 +111,7 @@ from axiom_oracles.bridges.efrs_uk import (
     build_dla_final_request,
     build_esa_income_final_request,
     build_esa_income_tariff_income_request,
+    build_housing_benefit_entitlement_request,
     build_housing_benefit_final_request,
     build_housing_benefit_pension_age_tariff_income_request,
     build_housing_benefit_working_age_tariff_income_request,
@@ -2940,6 +2943,129 @@ def test_housing_benefit_final_request_projects_final_inputs():
     ] == {"kind": "bool", "value": True}
 
 
+def test_housing_benefit_applicable_amount_projection_uses_demographics():
+    assert efrs_uk.project_housing_benefit_applicable_amount_inputs(
+        {
+            "is_couple": True,
+            "housing_benefit_any_over_sp_age": False,
+            "eldest_adult_age": 40,
+            "benefits_premiums": 1_040.0,
+        }
+    ) == {
+        "hb_pilot_is_couple": True,
+        "hb_pilot_any_member_pension_age": False,
+        "hb_pilot_eldest_adult_age": 40.0,
+        "hb_pilot_premium_amount": 1_040.0,
+    }
+
+
+def test_housing_benefit_applicable_amount_applies_requires_eligibility():
+    spec = efrs_uk.HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS[
+        "hb_pilot_applicable_amount"
+    ]
+    assert efrs_uk.output_applies(spec, {"housing_benefit_eligible": True})
+    assert not efrs_uk.output_applies(spec, {"housing_benefit_eligible": False})
+
+
+def test_housing_benefit_entitlement_projection_uses_realised_components():
+    assert efrs_uk.project_housing_benefit_entitlement_inputs(
+        {
+            "is_couple": False,
+            "housing_benefit_any_over_sp_age": False,
+            "eldest_adult_age": 40,
+            "benefits_premiums": 0,
+            "housing_benefit_applicable_income": 5_000,
+            "benunit_rent": 5_200,
+            "LHA_eligible": False,
+            "LHA_cap": 0,
+        }
+    ) == {
+        "hb_pilot_is_couple": False,
+        "hb_pilot_any_member_pension_age": False,
+        "hb_pilot_eldest_adult_age": 40.0,
+        "hb_pilot_premium_amount": 0.0,
+        "hb_pilot_number_of_non_dependants": 0,
+        "hb_pilot_non_dependant_gross_weekly_income": 0.0,
+        "hb_pilot_applicable_income": 5_000.0,
+        "hb_pilot_eligible_rent": 5_200.0,
+        "hb_pilot_lha_path_applies": False,
+        "hb_pilot_maximum_rent": 0.0,
+    }
+
+
+def test_housing_benefit_entitlement_applies_excludes_non_dependant_deductions():
+    spec = efrs_uk.HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS["hb_pilot_entitlement"]
+    assert efrs_uk.output_applies(
+        spec,
+        {"housing_benefit_eligible": True, "housing_benefit_non_dep_deductions": 0},
+    )
+    assert not efrs_uk.output_applies(
+        spec,
+        {
+            "housing_benefit_eligible": True,
+            "housing_benefit_non_dep_deductions": 1_040,
+        },
+    )
+    assert not efrs_uk.output_applies(
+        spec,
+        {"housing_benefit_eligible": False, "housing_benefit_non_dep_deductions": 0},
+    )
+
+
+def test_housing_benefit_entitlement_request_projects_entitlement_inputs():
+    request = build_housing_benefit_entitlement_request(
+        pe_data={
+            "persons": [],
+            "person_ids": [],
+            "benunits": [
+                {
+                    "benunit_id": 21,
+                    "housing_benefit_eligible": True,
+                    "housing_benefit_non_dep_deductions": 0,
+                    "is_couple": False,
+                    "housing_benefit_any_over_sp_age": False,
+                    "eldest_adult_age": 40,
+                    "benefits_premiums": 0,
+                    "housing_benefit_applicable_income": 5_000,
+                    "benunit_rent": 5_200,
+                    "LHA_eligible": False,
+                    "LHA_cap": 0,
+                    "housing_benefit_entitlement": 5_179.59,
+                },
+            ],
+            "benunit_ids": [21],
+        },
+        year=2026,
+    )
+
+    assert request["queries"] == [
+        {
+            "entity_id": "benunit_21",
+            "period": {
+                "period_kind": "tax_year",
+                "start": "2026-01-01",
+                "end": "2026-12-31",
+            },
+            "outputs": [
+                HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS["hb_pilot_entitlement"]["axiom"]
+            ],
+        }
+    ]
+    inputs = {
+        record["name"] + ":" + record["entity_id"]: record["value"]
+        for record in request["dataset"]["inputs"]
+    }
+    assert inputs[
+        f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.hb_pilot_applicable_income:benunit_21"
+    ] == {"kind": "decimal", "value": "5000.0"}
+    assert inputs[
+        f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.hb_pilot_eligible_rent:benunit_21"
+    ] == {"kind": "decimal", "value": "5200.0"}
+    assert inputs[
+        f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.hb_pilot_lha_path_applies:benunit_21"
+    ] == {"kind": "bool", "value": False}
+
+
 def test_universal_credit_childcare_element_projection_reverses_rate_and_cap():
     projected = project_universal_credit_childcare_element_inputs(
         {
@@ -4414,10 +4540,14 @@ class hbai_household_net_income(Variable):
     assert by_name["housing_benefit"].surfaces == (
         "housing-benefit-working-age-tariff-income",
         "housing-benefit-pension-age-tariff-income",
+        "housing-benefit-applicable-amount",
+        "housing-benefit-entitlement",
         "housing-benefit-final",
     )
     assert by_name["housing_benefit"].covered_outputs == (
         "housing_benefit_tariff_income",
+        "housing_benefit_applicable_amount",
+        "housing_benefit_entitlement",
         "housing_benefit",
     )
     assert by_name["working_tax_credit"].status == "partial"
