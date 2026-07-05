@@ -2,615 +2,615 @@
  "_comment": "Registry of explanations for current mismatch buckets, keyed by (suite, concept, kind) and optionally disambiguated by `engines` when two reports share a suite slug. The dashboard renders the cause inline next to the disagreement count. Entries only render next to live mismatch buckets, so suites with zero mismatches need no entry; delete entries when their bucket clears.",
  "entries": [
   {
-   "suite": "be-employer-ssc",
    "concept": "be:regulations/social_security/workers/employer_contributions#belgium_employer_social_security_ordinary_worker_contribution",
-   "kind": "amount_difference",
-   "engines": {
-    "left": "euromod",
-    "right": "axiom"
-   },
-   "label": "EUROMOD BE_2025 stale employer SSC FFE rates",
    "description": "EUROMOD BE_2025 returns exactly 26.75% of its own post-uprating gross for the ordinary private-sector employer case. The source-backed ONSS 2025 RuleSpec path returns 26.868876% because the official FFE workbook gives 0.18% for commercial employers with fewer than 20 workers, including wage moderation, while BE_2025 uses 0.06%. The residual is tracked upstream as ec-jrc/JRC-EUROMOD-software-source-code#11.",
-   "fix_owner": "euromod-upstream"
-  },
-  {
-   "suite": "be-worker-pit",
-   "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
-   "kind": "amount_difference",
    "engines": {
     "left": "euromod",
     "right": "axiom"
    },
-   "label": "EUROMOD BE_2025 PIT credit uses uncapped work-bonus A/B amounts",
-   "description": "The 10k Belgium worker PIT residual is the filed JRC EUROMOD BE_2025 Article 289ter/1 issue: BE_2025 computes the refundable low-wage work-bonus tax credit from pre-cap i_tsceerdA_s/i_tsceerdB_s, while the source-backed RuleSpec caps the A/B credit bases by the employee Article 38 contribution before reductions because CIR 92 Article 289ter/1 refers to reductions actually granted. The 30k and 60k worker cases still match.",
    "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12"
+   "kind": "amount_difference",
+   "label": "EUROMOD BE_2025 stale employer SSC FFE rates",
+   "suite": "be-employer-ssc"
   },
   {
-   "suite": "ma-snap-ecps",
-   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
+   "description": "The 10k Belgium worker PIT residual is the filed JRC EUROMOD BE_2025 Article 289ter/1 issue: BE_2025 computes the refundable low-wage work-bonus tax credit from pre-cap i_tsceerdA_s/i_tsceerdB_s, while the source-backed RuleSpec caps the A/B credit bases by the employee Article 38 contribution before reductions because CIR 92 Article 289ter/1 refers to reductions actually granted. The 30k and 60k worker cases still match.",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12",
    "kind": "amount_difference",
-   "label": "PE-imputed MA TAFDC income plus categorical/BBCE input gaps",
+   "label": "EUROMOD BE_2025 PIT credit uses uncapped work-bonus A/B amounts",
+   "suite": "be-worker-pit"
+  },
+  {
+   "concept": "us:statutes/7/2014/u#snap_benefit",
    "description": "65 of 896 MA households differ on benefit amount. Two causes: PolicyEngine imputes MA TAFDC/TANF into SNAP unearned income while Axiom projects only observed ECPS income facts, and PE pays households through a categorical/BBCE path whose TANF-service and authorization facts are not yet available to Axiom's projection. Utilities are not a driver: the FY 2026 heating/cooling SUA is encoded at $914/month and matches PE in every traced residual.",
    "drivers": [
     {
-     "label": "MA TAFDC/TANF missing from Axiom SNAP unearned income",
      "description": "In the Axiom-greater-than-PE residuals, PE computes MA TAFDC and counts it in SNAP unearned income; Axiom does not compute or inject it.",
      "evidence": [
       "PE has positive MA TAFDC/TANF in 31 of the traced mismatching households.",
       "ecps-3317: Axiom $785 vs PE $450.32; PE unearned income includes $11,127.63/year of MA TAFDC.",
       "ecps-3328: Axiom $307 vs PE $23.97; PE MA TAFDC is $9,536/year."
-     ]
+     ],
+     "label": "MA TAFDC/TANF missing from Axiom SNAP unearned income"
     },
     {
-     "label": "Categorical/BBCE path encoded but input-limited",
      "description": "Residuals paired with Axiom-ineligible/$0 vs PE-eligible-positive trace to Axiom categorical outputs being false because TANF-service, EAEDC/TAFDC authorization, and categorical income-standard facts are missing from the ECPS projection. The 106 CMR 365.180(A) rollup is wired (`snap_income_eligible = categorical OR standard`); the gap is inputs, not compose.",
      "evidence": [
       "ecps-3419 and ecps-3716 pass Axiom core, residency, and resource gates but fail standard income with categorical outputs false.",
       "Eligibility mismatches split 39 PE-only / 3 Axiom-only."
-     ]
+     ],
+     "label": "Categorical/BBCE path encoded but input-limited"
     }
    ],
-   "fix_owner": "rulespec-us-ma"
+   "fix_owner": "rulespec-us-ma",
+   "kind": "amount_difference",
+   "label": "PE-imputed MA TAFDC income plus categorical/BBCE input gaps",
+   "suite": "ma-snap-ecps"
   },
   {
-   "suite": "ma-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "39 households are PE-eligible but Axiom-ineligible. The 106 CMR 365.180(A) categorical rollup is encoded and composed, but the traced cases still resolve categorical outputs to false because TANF-service, EAEDC/TAFDC authorization, and gross categorical income-standard facts are missing or source-unresolved in the ECPS projection.",
+   "fix_owner": "rulespec-us-ma",
    "kind": "eligibility_right_only",
    "label": "MA categorical/BBCE facts incomplete",
-   "description": "39 households are PE-eligible but Axiom-ineligible. The 106 CMR 365.180(A) categorical rollup is encoded and composed, but the traced cases still resolve categorical outputs to false because TANF-service, EAEDC/TAFDC authorization, and gross categorical income-standard facts are missing or source-unresolved in the ECPS projection.",
-   "fix_owner": "rulespec-us-ma"
+   "suite": "ma-snap-ecps"
   },
   {
-   "suite": "ma-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "3 households are Axiom-eligible but PE-ineligible. The inspected case is a disabled one-person household at about 210.6% FPG gross / 95.2% FPG net: Axiom passes the federal elderly/disabled net-income path while PE rejects under its MA gross/categorical treatment.",
+   "fix_owner": "rulespec-us-ma",
    "kind": "eligibility_left_only",
    "label": "MA gross-cap treatment divergence",
-   "description": "3 households are Axiom-eligible but PE-ineligible. The inspected case is a disabled one-person household at about 210.6% FPG gross / 95.2% FPG net: Axiom passes the federal elderly/disabled net-income path while PE rejects under its MA gross/categorical treatment.",
-   "fix_owner": "rulespec-us-ma"
+   "suite": "ma-snap-ecps"
   },
   {
-   "suite": "al-snap-ecps",
    "concept": "us:statutes/7/2014/u#snap_benefit",
-   "kind": "amount_difference",
-   "label": "PE-imputed AL TANF income plus small edges",
    "description": "24 of 704 AL households differ on benefit amount. 21 are PE-imputed Alabama TANF counted in SNAP unearned income that Axiom does not project; the rest are one threshold/disqualification edge, one environment-sensitive minimum-benefit case, and one $7.78 residual just over the $7 tolerance.",
    "drivers": [
     {
-     "label": "Alabama TANF missing from Axiom SNAP unearned income",
      "description": "21 of the 22 Axiom-greater-than-PE residuals have positive PE-imputed `al_tanf` in SNAP unearned income.",
      "evidence": [
       "ecps-51206: Axiom $785 vs PE $749.27; PE al_tanf = $4,128/year.",
       "ecps-51308: Axiom $546 vs PE $520.93; PE al_tanf = $3,648/year."
-     ]
+     ],
+     "label": "Alabama TANF missing from Axiom SNAP unearned income"
     },
     {
-     "label": "Non-TANF edges",
      "description": "ecps-51708 is an Axiom-eligible/PE-ineligible disqualification edge with no TANF and PE net income near 41% FPG. ecps-51400 is PE-eligible at $23.97/month under the pinned dashboard runner but $0 in the local environment, so it is an oracle-environment discrepancy rather than an Axiom formula bug. ecps-51859 is a $7.78 amount residual.",
      "evidence": [
       "Pinned runner: policyengine==4.11.0, policyengine-us==1.700.0, policyengine-core==3.26.11.",
       "ecps-51859: Axiom $828 vs PE $835.78."
-     ]
+     ],
+     "label": "Non-TANF edges"
     }
    ],
-   "fix_owner": "rulespec-us-al"
+   "fix_owner": "rulespec-us-al",
+   "kind": "amount_difference",
+   "label": "PE-imputed AL TANF income plus small edges",
+   "suite": "al-snap-ecps"
   },
   {
-   "suite": "al-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "3 households are Axiom-eligible but PE-ineligible, all with household weight 0. Two are TANF interactions where PE-imputed AL TANF pushes net income just over 100% FPG (ecps-51544 at 106.1%, ecps-52446 at 103.5%); ecps-51708 has no TANF and PE net income near 41% FPG, a PE disqualification or categorical-source edge.",
+   "fix_owner": "rulespec-us-al",
    "kind": "eligibility_left_only",
    "label": "Zero-weight TANF and disqualification edges",
-   "description": "3 households are Axiom-eligible but PE-ineligible, all with household weight 0. Two are TANF interactions where PE-imputed AL TANF pushes net income just over 100% FPG (ecps-51544 at 106.1%, ecps-52446 at 103.5%); ecps-51708 has no TANF and PE net income near 41% FPG, a PE disqualification or categorical-source edge.",
-   "fix_owner": "rulespec-us-al"
+   "suite": "al-snap-ecps"
   },
   {
-   "suite": "al-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "1 household is PE-eligible with a positive minimum benefit while Axiom fails the standard net-income gate. The same case returns PE-ineligible/$0 in the local environment, so this is an income/categorical eligibility edge plus a PE-environment reproducibility issue, not a broken minimum-benefit formula.",
+   "fix_owner": "investigation",
    "kind": "eligibility_right_only",
    "label": "Minimum-benefit eligibility edge, environment-sensitive",
-   "description": "1 household is PE-eligible with a positive minimum benefit while Axiom fails the standard net-income gate. The same case returns PE-ineligible/$0 in the local environment, so this is an income/categorical eligibility edge plus a PE-environment reproducibility issue, not a broken minimum-benefit formula.",
-   "fix_owner": "investigation"
+   "suite": "al-snap-ecps"
   },
   {
-   "suite": "tn-snap-ecps",
    "concept": "us:statutes/7/2014/u#snap_benefit",
-   "kind": "amount_difference",
-   "label": "PE-imputed TN Families First income",
    "description": "31 of 852 TN households differ on benefit amount. 30 are Axiom-greater-than-PE with positive PE-imputed Families First/TANF in SNAP unearned income that Axiom does not project. The single PE-greater case (ecps-50388) has no TANF and is an untraced amount edge. The encoded TN utility allowance table is not the driver: PE applies zero SNAP utility allowance in every mismatch case.",
    "drivers": [
     {
-     "label": "Families First missing from Axiom SNAP unearned income",
      "description": "PE includes `tn_ff` in SNAP unearned income; Axiom's ECPS projection has no Families First fact.",
      "evidence": [
       "ecps-49363: Axiom $909 vs PE $733.70; PE tn_ff = $5,652/year.",
       "ecps-49502: Axiom $563 vs PE $429.28; PE tn_ff = $5,652/year.",
       "ecps-50388 (PE-greater): tn_ff and tanf are $0, PE net income about 53.3% FPG."
-     ]
+     ],
+     "label": "Families First missing from Axiom SNAP unearned income"
     },
     {
-     "label": "TN utility table encoded but not safely composable",
      "description": "The SUA/BUA/telephone amounts sit in `regulations/1240-01/04/27/block-1` together with stale SNAP income standards and allotment values, so the block cannot be composed wholesale without overriding current federal FY 2026 values. Real wiring gap, but not the observed residual driver.",
      "evidence": [
       "PE `snap_utility_allowance > 0` in 0 of the TN benefit-mismatch cases."
-     ]
+     ],
+     "label": "TN utility table encoded but not safely composable"
     }
    ],
-   "fix_owner": "rulespec-us-tn"
+   "fix_owner": "rulespec-us-tn",
+   "kind": "amount_difference",
+   "label": "PE-imputed TN Families First income",
+   "suite": "tn-snap-ecps"
   },
   {
-   "suite": "tn-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "5 households are Axiom-eligible but PE-ineligible, all with positive PE-imputed Families First and PE net income between 103.6% and 108.2% FPG. Axiom passes standard income because it does not project Families First into SNAP unearned income. Only ecps-49447 is weighted.",
+   "fix_owner": "rulespec-us-tn",
    "kind": "eligibility_left_only",
    "label": "Families First income pushes PE over the net-income edge",
-   "description": "5 households are Axiom-eligible but PE-ineligible, all with positive PE-imputed Families First and PE net income between 103.6% and 108.2% FPG. Axiom passes standard income because it does not project Families First into SNAP unearned income. Only ecps-49447 is weighted.",
-   "fix_owner": "rulespec-us-tn"
+   "suite": "tn-snap-ecps"
   },
   {
-   "suite": "sc-snap-ecps",
    "concept": "us:statutes/7/2014/u#snap_benefit",
-   "kind": "amount_difference",
-   "label": "PE-imputed SC TANF income plus minimum-benefit categorical cases",
    "description": "61 of 758 SC households differ on benefit amount. The large weighted residuals are PE-imputed `sc_tanf` counted in SNAP unearned income that Axiom does not project. Most of the rest are minimum-benefit cases where PE is eligible at about $23.97/month while Axiom fails the standard net-income and categorical gates. Shelter/utility math is not the driver: traced cases show PE utility allowance and excess-shelter deduction both zero.",
    "drivers": [
     {
-     "label": "SC TANF missing from Axiom SNAP unearned income",
      "description": "Traced high-dollar residuals all show PE adding sc_tanf on top of observed income while Axiom uses only observed ECPS facts.",
      "evidence": [
       "ecps-40496: PE gross income includes sc_tanf = $4,303.43/year.",
       "ecps-40667: PE adds sc_tanf = $5,425.18/year on top of observed SSI.",
       "Traced cases ecps-40496/40667/41488/41512/41554/41761/41881 all have PE snap_utility_allowance = 0."
-     ]
+     ],
+     "label": "SC TANF missing from Axiom SNAP unearned income"
     },
     {
-     "label": "Minimum-benefit cases blocked by SC categorical gates",
      "description": "Weighted traced cases pass Axiom core, residency, resource, and gross-income gates but fail net income and the composed categorical income gate, while PE pays the federal minimum.",
      "evidence": [
       "ecps-40398, ecps-40588, ecps-40900, ecps-41287, ecps-41409, ecps-41604, ecps-41647: Axiom standard-net false and categorical false; PE about $23.97/month."
-     ]
+     ],
+     "label": "Minimum-benefit cases blocked by SC categorical gates"
     }
    ],
-   "fix_owner": "rulespec-us-sc"
+   "fix_owner": "rulespec-us-sc",
+   "kind": "amount_difference",
+   "label": "PE-imputed SC TANF income plus minimum-benefit categorical cases",
+   "suite": "sc-snap-ecps"
   },
   {
-   "suite": "sc-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "29 households are PE-eligible but Axiom-ineligible. The SC source ties expanded categorical eligibility to Family Independence Information and Referral Services with income at or below 130% FPL; PE appears to allow these cases through a broader gross-FPG categorical path (traced PE gross FPG ratios run 1.13 to 1.95). Wiring the broader path into Axiom would be synthetic unless encoder/source review establishes it.",
+   "fix_owner": "rulespec-us-sc",
    "kind": "eligibility_right_only",
    "label": "PE broader categorical path vs SC source",
-   "description": "29 households are PE-eligible but Axiom-ineligible. The SC source ties expanded categorical eligibility to Family Independence Information and Referral Services with income at or below 130% FPL; PE appears to allow these cases through a broader gross-FPG categorical path (traced PE gross FPG ratios run 1.13 to 1.95). Wiring the broader path into Axiom would be synthetic unless encoder/source review establishes it.",
-   "fix_owner": "rulespec-us-sc"
+   "suite": "sc-snap-ecps"
   },
   {
-   "suite": "sc-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "6 households are Axiom-eligible but PE-ineligible, all with household weight 0. PE adds imputed SC TANF to SNAP unearned income and denies (e.g. ecps-40402 at 104.2% FPG net, ecps-40659 at 116.0% FPG net); Axiom uses only observed ECPS income facts and passes.",
+   "fix_owner": "program-coverage",
    "kind": "eligibility_left_only",
    "label": "Zero-weight SC TANF income interaction",
-   "description": "6 households are Axiom-eligible but PE-ineligible, all with household weight 0. PE adds imputed SC TANF to SNAP unearned income and denies (e.g. ecps-40402 at 104.2% FPG net, ecps-40659 at 116.0% FPG net); Axiom uses only observed ECPS income facts and passes.",
-   "fix_owner": "program-coverage"
+   "suite": "sc-snap-ecps"
   },
   {
-   "suite": "nc-snap-ecps",
    "concept": "us:statutes/7/2014/u#snap_benefit",
-   "kind": "amount_difference",
-   "label": "Mostly small residuals; large ones are TANF-on-SSI",
    "description": "40 of 1,366 NC households differ on benefit amount. 31 are within $12 and 34 within $25. Only 2 exceed $100, and both are the cross-state TANF pattern: PE adds imputed `nc_tanf` to SNAP unearned income on top of observed SSI, while Axiom has no TANF fact to project. The earlier large non-TANF residuals were eliminated by projecting the case shelter fact into PE `housing_cost` (79 residuals before the projection fix, 40 after).",
    "drivers": [
     {
-     "label": "TANF-on-SSI residuals",
      "description": "Both over-$100 residuals pair PE-imputed NC TANF with observed SSI.",
      "evidence": [
       "ecps-39544: PE unearned income is SSI $11,928/year plus nc_tanf = $3,264/year.",
       "ecps-40017: PE unearned income is SSI $11,928/year plus nc_tanf = $2,832/year."
-     ]
+     ],
+     "label": "TANF-on-SSI residuals"
     }
    ],
-   "fix_owner": "rulespec-us-nc"
+   "fix_owner": "rulespec-us-nc",
+   "kind": "amount_difference",
+   "label": "Mostly small residuals; large ones are TANF-on-SSI",
+   "suite": "nc-snap-ecps"
   },
   {
-   "suite": "nc-snap-ecps",
    "concept": "us:statutes/7/2014/o#snap_eligible",
+   "description": "12 households are PE-eligible but Axiom-ineligible; 11 have household weight 0. All traced cases are near-threshold categorical-income cases where Axiom applies the FY 2026 SNAP monthly 100% FPL table times the encoded 2.00 multiplier while PE uses an annual FPG ratio. The one weighted case, ecps-39817, has Axiom gross income $7,256.55/month against a $7,192/month Axiom threshold while PE computes an annual FPG ratio of 1.963 and accepts. Resolving it requires an encoder/source decision about which FPG table controls NC's 200% limit.",
+   "fix_owner": "rulespec-us-nc",
    "kind": "eligibility_right_only",
    "label": "Monthly FPL table vs annual FPG ratio at the 200% limit",
-   "description": "12 households are PE-eligible but Axiom-ineligible; 11 have household weight 0. All traced cases are near-threshold categorical-income cases where Axiom applies the FY 2026 SNAP monthly 100% FPL table times the encoded 2.00 multiplier while PE uses an annual FPG ratio. The one weighted case, ecps-39817, has Axiom gross income $7,256.55/month against a $7,192/month Axiom threshold while PE computes an annual FPG ratio of 1.963 and accepts. Resolving it requires an encoder/source decision about which FPG table controls NC's 200% limit.",
-   "fix_owner": "rulespec-us-nc"
+   "suite": "nc-snap-ecps"
   },
   {
-   "suite": "fiit-ecps",
    "concept": "us:tax/federal-income-tax#eitc",
-   "kind": "amount_difference",
-   "label": "Joint-return self-employment deduction entity shape",
    "description": "All 172 remaining federal mismatches (of 299,993 compared values) are EITC: 113 `eitc_earned_income` and 59 `eitc_reduction`, every one a joint return. Axiom's live RuleSpec still shapes 26 USC 1402(a), 1402(b), and 32(c)(2) around aggregate tax-unit self-employment inputs, while PE computes the SE-tax deduction per filer and sums non-dependent filers, which changes the OASDI wage-cap interaction. All other federal surfaces (CTC, standard deduction, tax before credits, capital gains, CDCC, AOTC, capped credits, OASDI/Medicare) match 100%.",
    "drivers": [
     {
-     "label": "Person-level SE tax chain collapsed to the tax unit",
      "description": "Every Axiom `eitc_earned_income` residual value matches an aggregate Section 1402(b)/164(f) model; the per-filer OASDI cap is what PE applies differently.",
      "evidence": [
       "45 of the 113 earned-income residual tax units have PE's Social Security SE taxable income capped below Medicare SE income for at least one filer.",
       "Max absolute diff: $11,439.03 (eitc_earned_income), $2,409.04 (eitc_reduction)."
-     ]
+     ],
+     "label": "Person-level SE tax chain collapsed to the tax unit"
     },
     {
-     "label": "Kept visible pending person-scoped re-encode",
      "description": "Replacing the encoded earned-income chain with PE's helper would hide the entity-shape boundary. Encoder guardrails block new unit-scope formulas composing the stale 1402(a) imports; the staged person-scoped re-encode of 1402(a)/(b), 164(f), and 32(c)(2) has not yet landed.",
      "evidence": [
       "A no-manual 26 USC 1402(a) rerun deferred on unresolved exception branches; a narrower 1402(a)(12) rerun failed validation and was not applied."
-     ]
+     ],
+     "label": "Kept visible pending person-scoped re-encode"
     }
    ],
-   "fix_owner": "rulespec-us"
+   "fix_owner": "rulespec-us",
+   "kind": "amount_difference",
+   "label": "Joint-return self-employment deduction entity shape",
+   "suite": "fiit-ecps"
   },
   {
-   "suite": "co-state-income-tax-ecps",
    "concept": "us:tax/state-income-tax#liability",
+   "description": "Colorado runs end to end through the generated tax bridge with no missing inputs. All 6 remaining amount differences (of 926 tax units) are zero-weight ECPS rows, so the weighted match rate is 100% while the unweighted score is 920/926. Examples: ecps-tax-unit-131265 (+$154.46) and ecps-tax-unit-131530 (-$268.46). They need a component trace, not an output patch; no Python amount override is applied.",
+   "fix_owner": "investigation",
    "kind": "amount_difference",
    "label": "Six zero-weight tax-unit residuals",
-   "description": "Colorado runs end to end through the generated tax bridge with no missing inputs. All 6 remaining amount differences (of 926 tax units) are zero-weight ECPS rows, so the weighted match rate is 100% while the unweighted score is 920/926. Examples: ecps-tax-unit-131265 (+$154.46) and ecps-tax-unit-131530 (-$268.46). They need a component trace, not an output patch; no Python amount override is applied.",
-   "fix_owner": "investigation"
+   "suite": "co-state-income-tax-ecps"
   },
   {
-   "suite": "nyc-income-tax-gap",
    "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
-   "kind": "amount_difference",
-   "label": "Second-band base-amount rounding convention",
    "description": "The 3 mismatches in this synthetic component check are the expected second-band convention difference: Axiom uses the rounded base amounts printed in the NYC IT-201 instructions ($37 joint, $25 head of household, $21 single/separate), while PolicyEngine derives unrounded carry-ins from the first-band rate and threshold ($36.936, $24.624, $20.52). Bracket shapes and rates agree; NYC CDCC components match 5/5.",
-   "fix_owner": "source-vs-pe-convention"
-  },
-  {
-   "suite": "nyc-income-tax-ecps-diagnostic",
-   "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+   "fix_owner": "source-vs-pe-convention",
    "kind": "amount_difference",
    "label": "Second-band base-amount rounding convention",
-   "description": "All 81,197 school-tax rate-reduction mismatches in the full ECPS diagnostic are second-band cases of the same convention difference: Axiom uses the rounded IT-201 base amounts ($37/$25/$21 by filing status) while PE derives unrounded carry-ins ($36.936/$24.624/$20.52), giving per-case differences of $0.06 to $0.48. First-band, over-limit, and zero-or-negative cases all match (56,718/137,915), and the NYC CDCC slice matches 137,915/137,915. This diagnostic compares component formulas with PE upstream inputs, not final NYC liability.",
-   "fix_owner": "source-vs-pe-convention"
+   "suite": "nyc-income-tax-gap"
   },
   {
-   "suite": "uk-tax-benefits-efrs",
+   "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+   "description": "All 81,197 school-tax rate-reduction mismatches in the full ECPS diagnostic are second-band cases of the same convention difference: Axiom uses the rounded IT-201 base amounts ($37/$25/$21 by filing status) while PE derives unrounded carry-ins ($36.936/$24.624/$20.52), giving per-case differences of $0.06 to $0.48. First-band, over-limit, and zero-or-negative cases all match (56,718/137,915), and the NYC CDCC slice matches 137,915/137,915. This diagnostic compares component formulas with PE upstream inputs, not final NYC liability.",
+   "fix_owner": "source-vs-pe-convention",
+   "kind": "amount_difference",
+   "label": "Second-band base-amount rounding convention",
+   "suite": "nyc-income-tax-ecps-diagnostic"
+  },
+  {
    "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
+   "description": "All 43 student-loan mismatches (of 115,710 compared people; the full run compares 3,451,998 values) are cases where PolicyEngine caps the repayment at the positive EFRS `student_loan_balance` while Axiom applies the GOV.UK plan/rate/threshold formula uncapped. Every residual has PE exactly equal to the balance (e.g. person_3512002: Axiom GBP 1,901.53 vs PE = balance GBP 294.12). The cap stays a visible mismatch until it is added through RuleSpec/encoder work; no projection override is applied.",
+   "fix_owner": "rulespec-uk",
    "kind": "amount_difference",
    "label": "Outstanding-balance cap not yet encoded",
-   "description": "All 43 student-loan mismatches (of 115,710 compared people; the full run compares 3,451,998 values) are cases where PolicyEngine caps the repayment at the positive EFRS `student_loan_balance` while Axiom applies the GOV.UK plan/rate/threshold formula uncapped. Every residual has PE exactly equal to the balance (e.g. person_3512002: Axiom GBP 1,901.53 vs PE = balance GBP 294.12). The cap stays a visible mismatch until it is added through RuleSpec/encoder work; no projection override is applied.",
-   "fix_owner": "rulespec-uk"
+   "suite": "uk-tax-benefits-efrs"
   },
   {
-   "suite": "uk-tax-benefits-efrs",
    "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
-   "kind": "amount_difference",
-   "label": "Reported-receipt rows below statutory age gate",
    "description": "The 152 Carer's Allowance residuals are rows where PolicyEngine UK pays from reported Carer's Allowance receipt even though the EFRS person age is under 16. The refreshed Axiom GOV.UK wrapper enforces the source age-16 eligibility gate. The oracle projects positive PE/reported receipt to the statutory 35-hour care condition because current EFRS care_hours is zero on reported-receipt rows, but it does not override the age gate.",
-   "fix_owner": "policyengine-data"
-  },
-  {
-   "suite": "uk-tax-benefits-efrs",
-   "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
+   "fix_owner": "policyengine-data",
    "kind": "amount_difference",
    "label": "Reported-receipt rows below statutory age gate",
-   "description": "The 12 Carer Support Payment residuals mirror the Carer's Allowance pattern: PolicyEngine UK pays from reported receipt on under-16 rows, while the source-backed Axiom wrapper keeps the statutory age-16 gate. The comparison leaves those rows visible rather than projecting age from the PE final award.",
-   "fix_owner": "policyengine-data"
+   "suite": "uk-tax-benefits-efrs"
   },
   {
-   "suite": "uk-tax-benefits-efrs",
+   "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
+   "description": "The 12 Carer Support Payment residuals mirror the Carer's Allowance pattern: PolicyEngine UK pays from reported receipt on under-16 rows, while the source-backed Axiom wrapper keeps the statutory age-16 gate. The comparison leaves those rows visible rather than projecting age from the PE final award.",
+   "fix_owner": "policyengine-data",
+   "kind": "amount_difference",
+   "label": "Reported-receipt rows below statutory age gate",
+   "suite": "uk-tax-benefits-efrs"
+  },
+  {
    "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
+   "description": "The 34 child DLA mobility residuals are children aged 0-2 where PolicyEngine UK has a higher-rate DLA mobility category and pays the weekly mobility component. The GOV.UK child DLA wrapper requires age 3 or over for higher-rate mobility and age 5 or over for lower-rate mobility, so Axiom returns zero for this component.",
+   "fix_owner": "policyengine-data",
    "kind": "amount_difference",
    "label": "PE pays higher mobility before age 3",
-   "description": "The 34 child DLA mobility residuals are children aged 0-2 where PolicyEngine UK has a higher-rate DLA mobility category and pays the weekly mobility component. The GOV.UK child DLA wrapper requires age 3 or over for higher-rate mobility and age 5 or over for lower-rate mobility, so Axiom returns zero for this component.",
-   "fix_owner": "policyengine-data"
+   "suite": "uk-tax-benefits-efrs"
   },
   {
-   "suite": "uk-tax-benefits-efrs",
    "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
+   "description": "The 34 child DLA annual-amount residuals are the annualized effect of the same age 0-2 higher-rate mobility rows. The care component agrees; the annual amount differs because PolicyEngine includes the mobility component while the source-backed Axiom child DLA wrapper applies the GOV.UK mobility age threshold.",
+   "fix_owner": "policyengine-data",
    "kind": "amount_difference",
    "label": "Downstream of under-age mobility component",
-   "description": "The 34 child DLA annual-amount residuals are the annualized effect of the same age 0-2 higher-rate mobility rows. The care component agrees; the annual amount differs because PolicyEngine includes the mobility component while the source-backed Axiom child DLA wrapper applies the GOV.UK mobility age threshold.",
-   "fix_owner": "policyengine-data"
+   "suite": "uk-tax-benefits-efrs"
   },
   {
-   "suite": "nyc-synthetic",
-   "engines": {
-    "left": "policyengine",
-    "right": "taxsim"
-   },
    "concept": "us:tax/federal-income-tax#liability",
-   "kind": "amount_difference",
-   "label": "NBER TAXSIM child/dependent credit gaps",
    "description": "All 4 federal liability mismatches in the PE-vs-TAXSIM check trace to documented TAXSIM modeling gaps, not adapter or projection bugs: TAXSIM does not model the $500 Other Dependent Credit, computes CTC at $1,700/child instead of the statutory $2,000, and omits the refundable ACTC when tax liability is zero. See docs/triage-pe-taxsim-residuals.md for the case-level decomposition.",
-   "fix_owner": "upstream-taxsim"
-  },
-  {
-   "suite": "nyc-synthetic",
    "engines": {
     "left": "policyengine",
     "right": "taxsim"
    },
-   "concept": "us:tax/federal-income-tax#ctc",
+   "fix_owner": "upstream-taxsim",
    "kind": "amount_difference",
    "label": "NBER TAXSIM child/dependent credit gaps",
-   "description": "The 3 CTC mismatches are the credit-level view of the same TAXSIM gaps driving the liability differences: no $500 ODC for adult dependents, $1,700/child instead of $2,000/child when liability can absorb the full non-refundable CTC, and no refundable ACTC at zero liability. PE applies the statutory amounts. See docs/triage-pe-taxsim-residuals.md.",
-   "fix_owner": "upstream-taxsim"
+   "suite": "nyc-synthetic"
   },
   {
-   "suite": "nyc-synthetic",
+   "concept": "us:tax/federal-income-tax#ctc",
+   "description": "The 3 CTC mismatches are the credit-level view of the same TAXSIM gaps driving the liability differences: no $500 ODC for adult dependents, $1,700/child instead of $2,000/child when liability can absorb the full non-refundable CTC, and no refundable ACTC at zero liability. PE applies the statutory amounts. See docs/triage-pe-taxsim-residuals.md.",
+   "engines": {
+    "left": "policyengine",
+    "right": "taxsim"
+   },
+   "fix_owner": "upstream-taxsim",
+   "kind": "amount_difference",
+   "label": "NBER TAXSIM child/dependent credit gaps",
+   "suite": "nyc-synthetic"
+  },
+  {
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "description": "This is the early federal oracle-bridge synthetic run, predating the full fiit-ecps pipeline. 4 of 813 tax units disagree on federal taxable income (diffs $1,534 to $21,106); the tax-before-credits and liability mismatches on the same tax units are downstream of this. The current full ECPS federal run compares taxable income and tax before credits cleanly, so the remaining work is to refresh or retire this legacy report rather than re-trace it.",
    "engines": {
     "left": "axiom",
     "right": "policyengine"
    },
-   "concept": "us:tax/federal-income-tax#taxable_income",
+   "fix_owner": "investigation",
    "kind": "amount_difference",
    "label": "Legacy bridge taxable-income residuals",
-   "description": "This is the early federal oracle-bridge synthetic run, predating the full fiit-ecps pipeline. 4 of 813 tax units disagree on federal taxable income (diffs $1,534 to $21,106); the tax-before-credits and liability mismatches on the same tax units are downstream of this. The current full ECPS federal run compares taxable income and tax before credits cleanly, so the remaining work is to refresh or retire this legacy report rather than re-trace it.",
-   "fix_owner": "investigation"
+   "suite": "nyc-synthetic"
   },
   {
-   "suite": "nyc-synthetic",
+   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "description": "The 4 tax-before-credits mismatches are the same tax units as the taxable-income residuals (ecps-tax-unit-5012, 64926, 68364, 71824); the rate calculation amplifies the upstream taxable-income difference. The current full fiit-ecps run compares this surface cleanly.",
    "engines": {
     "left": "axiom",
     "right": "policyengine"
    },
-   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "fix_owner": "investigation",
    "kind": "amount_difference",
    "label": "Downstream of legacy taxable-income residuals",
-   "description": "The 4 tax-before-credits mismatches are the same tax units as the taxable-income residuals (ecps-tax-unit-5012, 64926, 68364, 71824); the rate calculation amplifies the upstream taxable-income difference. The current full fiit-ecps run compares this surface cleanly.",
-   "fix_owner": "investigation"
+   "suite": "nyc-synthetic"
   },
   {
-   "suite": "ssa-parameters",
    "concept": "us:policies/ssa/contribution-and-benefit-base/2026#contribution_and_benefit_base_under_section_230_of_social_security_act",
-   "kind": "amount_difference",
-   "label": "PolicyEngine 2026 taxable maximum is a Trustees projection",
    "description": "PolicyEngine carries $186,000 for the 2026 OASDI contribution and benefit base, a Trustees-report projection. SSA's announced 2026 base, encoded from the Federal Register determination, is $184,500 ($60,600 x AWI-2024/AWI-1992, rounded to the nearest $300).",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832",
+   "kind": "amount_difference",
+   "label": "PolicyEngine 2026 taxable maximum is a Trustees projection",
+   "suite": "ssa-parameters"
   },
   {
-   "suite": "ssa-parameters",
    "concept": "us:policies/ssa/quarter-of-coverage/2026#quarter_of_coverage_amount",
-   "kind": "amount_difference",
-   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832",
+   "kind": "amount_difference",
+   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
+   "suite": "ssa-parameters"
   },
   {
-   "suite": "ssa-parameters",
    "concept": "us:policies/ssa/pia-bend-points/2026#first_pia_bend_point",
-   "kind": "amount_difference",
-   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832",
+   "kind": "amount_difference",
+   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
+   "suite": "ssa-parameters"
   },
   {
-   "suite": "ssa-parameters",
    "concept": "us:policies/ssa/pia-bend-points/2026#second_pia_bend_point",
-   "kind": "amount_difference",
-   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832",
+   "kind": "amount_difference",
+   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
+   "suite": "ssa-parameters"
   },
   {
-   "suite": "ssa-parameters",
    "concept": "us:policies/ssa/retirement-earnings-test/2026#retirement_earnings_test_lower_annual_exempt_amount",
-   "kind": "amount_difference",
-   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832",
+   "kind": "amount_difference",
+   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
+   "suite": "ssa-parameters"
   },
   {
-   "suite": "ssa-parameters",
    "concept": "us:policies/ssa/retirement-earnings-test/2026#retirement_earnings_test_higher_annual_exempt_amount",
-   "kind": "amount_difference",
-   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
    "description": "PolicyEngine has no transcribed 2026 value for this parameter and projects it by AWI uprating of the 2025 value (unrounded), while the rulespec encodes SSA's announced 2026 determination including the statutory rounding step. The Axiom values match SSA's published 2026 figures exactly.",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8832",
+   "kind": "amount_difference",
+   "label": "PolicyEngine uprates 2025 value; SSA announced 2026 amount differs",
+   "suite": "ssa-parameters"
   },
   {
-   "suite": "ga-health-thresholds",
    "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
-   "kind": "amount_difference",
-   "label": "GA parent/caretaker standard is dollar-based; PolicyEngine carries an FPL approximation",
    "description": "Georgia's parent/caretaker Medicaid standard is published as dollar amounts (the encoding flags georgia_parent_caretaker_standard_uses_dollar_amounts), which the source approximates at 28% FPL + the 5% MAGI disregard (0.33). PolicyEngine carries 0.39 FPL from its 2018-vintage state table. Neither side is wrong per se \u2014 the comparison flags that PE's approximation predates the current published standard.",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8834"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8834",
+   "kind": "amount_difference",
+   "label": "GA parent/caretaker standard is dollar-based; PolicyEngine carries an FPL approximation",
+   "suite": "ga-health-thresholds"
   },
   {
-   "suite": "co-state-supplement",
    "concept": "us-co:regulations/9-ccr-2503-5/3.530#oap_total_monthly_grant_standard",
-   "kind": "amount_difference",
-   "label": "PolicyEngine carries the SSI FBR as Colorado's OAP grant standard",
    "description": "PolicyEngine's gov.states.co.ssa.state_supplement.grant_standard values ($943 in 2024, $967 in 2025) equal the federal SSI benefit rate for those years, but Colorado's Old Age Pension total grant standard is set by state rule above the FBR \u2014 9 CCR 2503-5 sec. 3.530 sets $1,032 effective January 1, 2026. The parameter appears to conflate the OAP standard with the FBR and lacks a 2026 value.",
    "fix_owner": "policyengine-data",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8833"
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8833",
+   "kind": "amount_difference",
+   "label": "PolicyEngine carries the SSI FBR as Colorado's OAP grant standard",
+   "suite": "co-state-supplement"
   },
   {
-   "suite": "ssi-ecps",
    "concept": "us:statutes/42/1382#ssi_benefit",
-   "kind": "amount_difference",
-   "label": "Statutory entitlement vs dataset SSI (take-up, imputed resources, deeming, couples)",
    "description": "Of 3,231 divergences over 41,314 households (92.2% match), the dominant class remains the dataset withholding SSI from statutorily entitled people (take-up seeding, imputed-resource tests, spousal deeming \u2014 all dataset-side). Eligible couples are now paid at half the couple FBR each via a two-ABD-adults approximation; remaining couple noise and 1382c(f) ineligible-spouse deeming (not yet encoded upstream) account for most of the both-pay-differ residue. Dashboard copy shows the first 1,000 mismatches.",
    "drivers": [
     {
-     "label": "Take-up and imputed resources (dataset side)",
-     "description": "The dataset withholds SSI from some entitled people (take-up seed false, or imputed resources above the $2,000/$3,000 limits). Axiom pays the statutory amount; the dataset pays zero."
+     "description": "The dataset withholds SSI from some entitled people (take-up seed false, or imputed resources above the $2,000/$3,000 limits). Axiom pays the statutory amount; the dataset pays zero.",
+     "label": "Take-up and imputed resources (dataset side)"
     },
     {
-     "label": "Spousal deeming not yet encoded",
-     "description": "42 USC 1382c(f) income deeming from an ineligible spouse is outside the v1 composition, so Axiom pays aged/disabled people whose high-earning spouses disqualify them in the dataset."
+     "description": "42 USC 1382c(f) income deeming from an ineligible spouse is outside the v1 composition, so Axiom pays aged/disabled people whose high-earning spouses disqualify them in the dataset.",
+     "label": "Spousal deeming not yet encoded"
     },
     {
-     "label": "Couple approximation edges",
-     "description": "Couples are detected as 'two aged/blind/disabled adults in one household', so unmarried ABD pairs and 3+ ABD households diverge from PolicyEngine's marital-unit treatment."
+     "description": "Couples are detected as 'two aged/blind/disabled adults in one household', so unmarried ABD pairs and 3+ ABD households diverge from PolicyEngine's marital-unit treatment.",
+     "label": "Couple approximation edges"
     }
    ],
-   "fix_owner": "program-coverage"
+   "fix_owner": "program-coverage",
+   "kind": "amount_difference",
+   "label": "Statutory entitlement vs dataset SSI (take-up, imputed resources, deeming, couples)",
+   "suite": "ssi-ecps"
   },
   {
-   "suite": "ny-tanf-ecps",
    "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
+   "description": "58 of 2,288 NY households diverge, in two clean classes. 32 (Axiom pays more, all working households): the encoded 2024-2026 state plan applies a 62% earned income disregard while PolicyEngine carries 50%. 26 (PolicyEngine pays more, all no-earnings renters): the two sides carry different local-agency shelter maximum schedules (PE 277/283/400\u2026 vs the encoded 214/219/309\u2026 by household size), and the difference equals the per-size schedule gap exactly.",
+   "fix_owner": "policyengine-data",
+   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8835",
    "kind": "amount_difference",
    "label": "Earned income disregard rate and shelter schedule differ between the sources",
-   "description": "58 of 2,288 NY households diverge, in two clean classes. 32 (Axiom pays more, all working households): the encoded 2024-2026 state plan applies a 62% earned income disregard while PolicyEngine carries 50%. 26 (PolicyEngine pays more, all no-earnings renters): the two sides carry different local-agency shelter maximum schedules (PE 277/283/400\u2026 vs the encoded 214/219/309\u2026 by household size), and the difference equals the per-size schedule gap exactly.",
-   "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8835",
-   "fix_owner": "policyengine-data"
+   "suite": "ny-tanf-ecps"
   },
   {
-   "suite": "medicaid-magi-co-ecps",
    "concept": "us:regulations/42-cfr/435#adult_eligible",
+   "description": "52 of 694 CO households have an adult PolicyEngine deems expansion-eligible where the composed 435.119 does not. Two drivers: PolicyEngine compares MAGI (taxable Social Security, tax-unit composition) while the projection uses gross cash income over the whole household; and PolicyEngine applies the 138% effective limit (133% + the 435.603(d) disregard) where the composed rule carries the statutory 133% \u2014 the disregard lives in 435.603, outside this composition.",
+   "fix_owner": "program-coverage",
    "kind": "eligibility_right_only",
    "label": "MAGI income definition and the 435.603(d) 5% disregard",
-   "description": "52 of 694 CO households have an adult PolicyEngine deems expansion-eligible where the composed 435.119 does not. Two drivers: PolicyEngine compares MAGI (taxable Social Security, tax-unit composition) while the projection uses gross cash income over the whole household; and PolicyEngine applies the 138% effective limit (133% + the 435.603(d) disregard) where the composed rule carries the statutory 133% \u2014 the disregard lives in 435.603, outside this composition.",
-   "fix_owner": "program-coverage"
+   "suite": "medicaid-magi-co-ecps"
   },
   {
-   "suite": "medicaid-magi-co-ecps",
    "concept": "us:regulations/42-cfr/435#adult_eligible",
+   "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not \u2014 tax-unit household composition and MAGI additions on the PolicyEngine side.",
+   "fix_owner": "program-coverage",
    "kind": "eligibility_left_only",
    "label": "Household-unit and income-definition edges",
-   "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not \u2014 tax-unit household composition and MAGI additions on the PolicyEngine side.",
-   "fix_owner": "program-coverage"
+   "suite": "medicaid-magi-co-ecps"
   },
   {
-   "suite": "be-worker-ssc",
    "concept": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
-   "kind": "amount_difference",
-   "label": "EUROMOD applies the February 2025 work-bonus table to January",
    "description": "The 30k Belgium worker residual is the open JRC EUROMOD BE_2025 timing issue: EUROMOD appears to apply the February-through-December ONSS worker work-bonus table to all 12 months, while Axiom applies the separate January 2025 statutory table for one month and the February table for 11 months.",
    "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5"
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5",
+   "kind": "amount_difference",
+   "label": "EUROMOD applies the February 2025 work-bonus table to January",
+   "suite": "be-worker-ssc"
   },
   {
-   "suite": "be-worker-ssc",
    "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
-   "kind": "amount_difference",
-   "label": "Downstream of the EUROMOD work-bonus timing issue",
    "description": "The net employee-contribution residual is exactly the opposite side of the worker work-bonus residual. The gross 13.07% employee contribution before reductions matches EUROMOD exactly; only the reduction timing differs.",
    "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5"
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5",
+   "kind": "amount_difference",
+   "label": "Downstream of the EUROMOD work-bonus timing issue",
+   "suite": "be-worker-ssc"
   },
   {
-   "suite": "be-family-child-benefit-wallonia-social-supplement",
    "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
-   "kind": "amount_difference",
-   "label": "EUROMOD cumulates indexed Wallonia Article 13 supplement on pre-2020 children",
    "description": "The six older-child residuals are the open JRC EUROMOD BE_2025 transition issue: age-0 new-system Wallonia Article 13 cases match exactly, but pre-2020 children receive an extra annualized 2025-indexed Article 13 supplement in EUROMOD. These residual amounts use the applied 2025 RuleSpec surface in be/statutes/family_benefits/child_benefit_base_2025.yaml and the AVIQ 2025 amount table: 31.09 EUR/month for the middle-income supplement and 68.39 EUR/month for the low-income supplement. The raw Walloon Decree Article 13 statutory amounts remain 25 and 55 EUR/month in be-wal/statutes/family_benefits/amounts.yaml before indexation. Walloon Articles 120, 123, and 128 keep pre-2020 LGAF amounts and bar cumulation with decree supplements.",
    "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9",
+   "kind": "amount_difference",
+   "label": "EUROMOD cumulates indexed Wallonia Article 13 supplement on pre-2020 children",
+   "suite": "be-family-child-benefit-wallonia-social-supplement"
   },
   {
-   "suite": "be-family-child-benefit-base",
    "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
-   "kind": "amount_difference",
-   "engines": {
-    "left": "euromod",
-    "right": "axiom"
-   },
-   "label": "EUROMOD BE_2025 has no DG child-benefit branch",
    "description": "The four German-speaking Community base child-benefit residuals are filed upstream: BE_2025 bch_be returns zero for drgn1=4, while source-backed RuleSpec returns the statutory DG amount of 1,946.55 EUR/year in each entitled one-child case. Brussels, Flanders, and Wallonia base cases still match exactly, so the mismatch is isolated to the missing drgn1=4 bch_be branch.",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
    "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8"
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8",
+   "kind": "amount_difference",
+   "label": "EUROMOD BE_2025 has no DG child-benefit branch",
+   "suite": "be-family-child-benefit-base"
   },
   {
-   "suite": "be-family-birth-allowance",
    "concept": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
-   "kind": "amount_difference",
-   "engines": {
-    "left": "euromod",
-    "right": "axiom"
-   },
-   "label": "EUROMOD BE_2025 has no DG birth-allowance branch",
    "description": "The German-speaking Community newborn residual is filed upstream: BE_2025 bchba_be returns zero for drgn1=4, while source-backed RuleSpec returns the official DG birth premium of 1,376.16 EUR. The same suite still matches Brussels, Flanders, and Wallonia exactly; the mismatch is isolated to the missing drgn1=4 bchba_be branch.",
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13"
-  },
-  {
-   "suite": "be-cadastral-income-indexation",
-   "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
-   "kind": "amount_difference",
    "engines": {
     "left": "euromod",
     "right": "axiom"
    },
-   "label": "EUROMOD BE_2025 leaves indexed cadastral income unrounded",
-   "description": "The EUR 1,000 non-indexed cadastral-income case is filed upstream: BE_2025 tprhm_be computes khooo_s as khooo * 2.2446 and returns 2,244.60, while source-backed RuleSpec applies CIR 92 Article 518 nearest-euro rounding and returns 2,245. The EUR 5,000 exact-multiple control case matches at 11,223.",
    "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/14"
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13",
+   "kind": "amount_difference",
+   "label": "EUROMOD BE_2025 has no DG birth-allowance branch",
+   "suite": "be-family-birth-allowance"
   },
   {
-   "suite": "be-flemish-jobbonus",
-   "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
+   "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
+   "description": "The EUR 1,000 non-indexed cadastral-income case is filed upstream: BE_2025 tprhm_be computes khooo_s as khooo * 2.2446 and returns 2,244.60, while source-backed RuleSpec applies CIR 92 Article 518 nearest-euro rounding and returns 2,245. The EUR 5,000 exact-multiple control case matches at 11,223.",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/14",
    "kind": "amount_difference",
-   "label": "EUROMOD uses older 2025 Flemish jobbonus parameters",
+   "label": "EUROMOD BE_2025 leaves indexed cadastral income unrounded",
+   "suite": "be-cadastral-income-indexation"
+  },
+  {
+   "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
    "description": "Five of seven jobbonus cases differ because BE_2025 bwkrg_be uses 1,800/2,500 EUR thresholds, a 600 EUR maximum, a 20 EUR full-time small-payment threshold, and no 2025 fixed top-up. The source-backed Axiom RuleSpec uses the Flemish Government implementing order consolidated as of 1 January 2025: 2,115/3,114.99 EUR thresholds, 650 EUR maximum, 50 EUR floor/full-time small-payment threshold, a 10 EUR part-time small-payment threshold, and a 50 EUR fixed top-up. The Brussels non-Flanders zero case and tiny part-time suppression case match, so the residual is isolated to the stale amount schedule rather than regional eligibility or the part-time small-payment floor.",
    "drivers": [
     {
-     "label": "Missing 2025 maximum increase and fixed top-up",
      "description": "The two lower-wage full-time Flanders cases return Axiom 700 EUR vs EUROMOD 600 EUR: 650 EUR statutory maximum plus 50 EUR top-up, compared with EUROMOD's older 600 EUR maximum and no top-up. The half-time low-wage case scales the same stale maximum, returning Axiom 375 EUR vs EUROMOD 300 EUR.",
      "evidence": [
       "be-flemish-jobbonus-low-wage-full-time: Axiom 700.00 vs EUROMOD 600.00.",
       "be-flemish-jobbonus-threshold-wage-full-time: Axiom 700.00 vs EUROMOD 600.00.",
       "be-flemish-jobbonus-low-wage-half-time: Axiom 375.00 vs EUROMOD 300.00."
-     ]
+     ],
+     "label": "Missing 2025 maximum increase and fixed top-up"
     },
     {
-     "label": "Older degressive thresholds and floor",
      "description": "The upper-band cases differ by about 169 EUR after bridging EUROMOD yemeq_s into Axiom monthly gross, matching the 2025 threshold/floor/top-up differences filed upstream.",
      "evidence": [
       "be-flemish-jobbonus-upper-band-full-time: Axiom 550.1753 vs EUROMOD 381.1768.",
       "be-flemish-jobbonus-high-wage-full-time: Axiom 222.7513 vs EUROMOD 53.7560."
-     ]
+     ],
+     "label": "Older degressive thresholds and floor"
     },
     {
-     "label": "Part-time small-payment floor still agrees",
      "description": "The tiny part-time case is suppressed to zero by both models, which keeps the upstream residual scoped to stale jobbonus amount parameters rather than the 10 EUR part-time minimum.",
      "evidence": [
       "be-flemish-jobbonus-small-part-time-suppressed: Axiom 0.00 vs EUROMOD 0.00."
-     ]
+     ],
+     "label": "Part-time small-payment floor still agrees"
     }
    ],
    "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10",
+   "kind": "amount_difference",
+   "label": "EUROMOD uses older 2025 Flemish jobbonus parameters",
+   "suite": "be-flemish-jobbonus"
   },
   {
-   "suite": "be-special-social-security-contribution",
    "concept": "be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution",
-   "kind": "amount_difference",
-   "engines": {
-    "left": "euromod",
-    "right": "axiom"
-   },
-   "label": "EUROMOD BE_2025 special-contribution schedule differs from Law of 30 March 1994 Article 108",
    "description": "Four of seven special social-security contribution cases differ because BE_2025 tsceesp_be diverges from Law of 30 March 1994 Article 108. In the joint-assessment cases EUROMOD applies a zero-rate band where Article 108 requires the 1.3% band and then starts 1.3% in the statutory plateau band, so the three joint cases return EUROMOD far below the source-backed RuleSpec (for example joint two-earner 60k/20k: EUROMOD 177.33 vs Axiom 632.39). The single-household 80k case differs by a smaller 12.58 EUR from a mistyped single threshold/cap. The three single low-income cases still match, isolating the residual to the Article 108 schedule typing rather than the base or the household bridge.",
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7"
-  },
-  {
-   "suite": "be-self-employed-ssc",
-   "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
-   "kind": "missing_right",
    "engines": {
     "left": "euromod",
     "right": "axiom"
    },
-   "label": "Self-employed dispatcher rule has no version before 2025-10-01",
-   "description": "Under the post-#68 strict-null engine every self-employed case fails on the Axiom side at period 2025 with `parameter belgium_self_employed_article_13_post_pension_exemption_threshold_base has no value for key 0 at 2025-01-01`. The rulespec-be self-employed contributions module gives eight Article 13/13bis parameters, and the top-level dispatcher belgium_self_employed_selected_annual_social_contribution itself, a single version effective_from 2025-10-01; strict resolution evaluates the dispatcher's referenced parameters eagerly across all branches, so even the four main-activity cases (which mathematically only need the Article 12 thresholds effective from 2018) abort. The pre-#68 lenient engine masked this, which is why the committed 4/7 report was produced. This is an Axiom encoding defect, not the pre-existing secondary/post-pension threshold-allowance residual (JRC #6): the dispatcher and Article 13 amounts should carry an early effective_from (the 811.20 exemption threshold applies from 1 January 2025, not 1 October). Filed as TheAxiomFoundation/rulespec-be#81; the committed report is held pending the effective-date fix and a re-run.",
-   "fix_owner": "rulespec-be",
-   "issue_url": "https://github.com/TheAxiomFoundation/rulespec-be/issues/81"
-  },
-  {
-   "suite": "co-tanf-ecps",
-   "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7",
    "kind": "amount_difference",
-   "label": "Grant-chart composition edges and eligibility-gate differences",
-   "description": "16 of 1,165 CO households diverge: several by ~$35-45/month where the encoded 3.606.1 chart rows and PolicyEngine's caretaker-table-plus-additional-child composition disagree for large or multi-adult units; a few where PolicyEngine's eligibility gates (resources, immigration) deny units the composed slice pays; and one large-household outlier where the composed grant substantially exceeds the chart standard, pending trace.",
-   "fix_owner": "program-coverage"
+   "label": "EUROMOD BE_2025 special-contribution schedule differs from Law of 30 March 1994 Article 108",
+   "suite": "be-special-social-security-contribution"
   },
   {
-   "suite": "ca-tanf-ecps",
+   "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
+   "description": "Under the post-#68 strict-null engine every self-employed case fails on the Axiom side at period 2025 with `parameter belgium_self_employed_article_13_post_pension_exemption_threshold_base has no value for key 0 at 2025-01-01`. The rulespec-be self-employed contributions module gives eight Article 13/13bis parameters, and the top-level dispatcher belgium_self_employed_selected_annual_social_contribution itself, a single version effective_from 2025-10-01; strict resolution evaluates the dispatcher's referenced parameters eagerly across all branches, so even the four main-activity cases (which mathematically only need the Article 12 thresholds effective from 2018) abort. The pre-#68 lenient engine masked this, which is why the committed 4/7 report was produced. This is an Axiom encoding defect, not the pre-existing secondary/post-pension threshold-allowance residual (JRC #6): the dispatcher and Article 13 amounts should carry an early effective_from (the 811.20 exemption threshold applies from 1 January 2025, not 1 October). Filed as TheAxiomFoundation/rulespec-be#81; the committed report is held pending the effective-date fix and a re-run.",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "fix_owner": "rulespec-be",
+   "issue_url": "https://github.com/TheAxiomFoundation/rulespec-be/issues/81",
+   "kind": "missing_right",
+   "label": "Self-employed dispatcher rule has no version before 2025-10-01",
+   "suite": "be-self-employed-ssc"
+  },
+  {
+   "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+   "description": "3 of 1,045 CO households diverge on the current oracle pair (policyengine-us 1.752.2): two cases where PolicyEngine's eligibility gates deny units the composed slice pays \u2014 a two-adult family with a 5-year-old and no income (axiom $284/mo vs PE $0) and a childless single 31-year-old with ~$617/mo earnings (axiom $170/mo vs PE $0, likely a pregnancy-flag projection difference) \u2014 and one six-person multi-adult household where PolicyEngine pays ~$150/mo more than the composed grant, consistent with PE splitting the household into more than one assistance unit. The previous 4 chart-row deltas (~4.8% across sizes) were stale PE grant standards, resolved by refreshing the oracle pins to PE 4.18.9.",
+   "fix_owner": "program-coverage",
+   "kind": "amount_difference",
+   "label": "Eligibility-gate denials and one multi-unit composition edge",
+   "suite": "co-tanf-ecps"
+  },
+  {
    "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
+   "description": "178 of 7,101 CA households diverge in three classes: the exempt MAP schedule is approximated as any-member-receives-SSI (ECPS lacks IHSS/SDI/workers' compensation facts); PolicyEngine applies applicant entry tests and immigration proration outside the recipient-month slice; and disability-based unearned income cannot be split from Social Security in the projection, shifting the $600 DBI threshold.",
+   "fix_owner": "program-coverage",
    "kind": "amount_difference",
    "label": "Exempt-status approximation, applicant tests, and income-source splits",
-   "description": "178 of 7,101 CA households diverge in three classes: the exempt MAP schedule is approximated as any-member-receives-SSI (ECPS lacks IHSS/SDI/workers' compensation facts); PolicyEngine applies applicant entry tests and immigration proration outside the recipient-month slice; and disability-based unearned income cannot be split from Social Security in the projection, shifting the $600 DBI threshold.",
-   "fix_owner": "program-coverage"
+   "suite": "ca-tanf-ecps"
   }
  ]
 }

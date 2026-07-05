@@ -3,61 +3,29 @@
     {
       "category": "cash",
       "comparison": "amount",
-      "comparison_count": 39,
-      "comparison_weight": 2764906.417969,
+      "comparison_count": 1045,
+      "comparison_weight": 2896339.597333,
       "components": [],
       "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
       "description": "CO TANF (Colorado Works) benefit (annualized)",
-      "left_weighted_sum": 2994393654.890625,
-      "match_rate": 89.74359,
-      "match_weight": 2445878.753906,
-      "mismatch_count": 4,
-      "mismatch_weight": 319027.664062,
+      "left_weighted_sum": 712513749.918217,
+      "match_rate": 99.712919,
+      "match_weight": 2894096.896743,
+      "mismatch_count": 3,
+      "mismatch_weight": 2242.70059,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 2857211759.34375,
-      "weighted_difference": 137181895.546875,
-      "weighted_match_rate": 88.461538
+      "right_weighted_sum": 708040694.712477,
+      "weighted_difference": 4473055.20574,
+      "weighted_match_rate": 99.922568
     }
   ],
-  "case_count": 39,
+  "case_count": 1045,
   "cases": [
     {
-      "case_id": "ecps-49619",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 37,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            42
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            38163.76
-          ],
-          "yearly_earned_income_total": 38163.76
-        },
-        "household_weight": 212685.109375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08077",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49679",
+      "case_id": "ecps-49844",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
@@ -69,22 +37,22 @@
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
           "ages": [
-            39,
-            38,
-            0
+            42,
+            44,
+            5
           ],
           "household_size": 3,
           "yearly_earned_income_per_person": [
-            14204.28,
+            0.0,
             0.0,
             0.0
           ],
-          "yearly_earned_income_total": 14204.28
+          "yearly_earned_income_total": 0.0
         },
-        "household_weight": 106342.5546875,
+        "household_weight": 15.827375411987305,
         "population": "enhanced-cps",
         "scope": {
-          "geoid": "08085",
+          "geoid": "08041",
           "type": "census_county"
         }
       },
@@ -92,12 +60,12 @@
         {
           "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
           "description": "CO TANF (Colorado Works) benefit (annualized)",
-          "difference": 360.0,
+          "difference": 3408.0,
           "kind": "amount_difference",
-          "left": 7788.0,
+          "left": 3408.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 7428.0,
+          "right": 0.0,
           "tolerance": 25
         }
       ],
@@ -105,672 +73,7 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-49697",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            49,
-            47,
-            16,
-            13
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            62302.27,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 62302.27
-        },
-        "household_weight": 106342.5546875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08035",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49768",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            37,
-            39
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            73798.43,
-            32799.3
-          ],
-          "yearly_earned_income_total": 106597.73
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08031",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49813",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            59,
-            60
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 106342.5546875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08041",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49829",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 41,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            49,
-            42,
-            7
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            38265.85,
-            655.99,
-            0.0
-          ],
-          "yearly_earned_income_total": 38921.84
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08001",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49845",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            43,
-            59
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            39893.6,
-            0.0
-          ],
-          "yearly_earned_income_total": 39893.6
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08123",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49851",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            55,
-            50,
-            18,
-            17
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            299566.97,
-            71065.16,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 370632.12
-        },
-        "household_weight": 106342.5546875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08125",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49853",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            68,
-            68
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08117",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49865",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            67,
-            71
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            29010.98,
-            0.0
-          ],
-          "yearly_earned_income_total": 29010.98
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08035",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49866",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 37,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            80
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08041",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49899",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            63,
-            60
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            115890.87,
-            0.0
-          ],
-          "yearly_earned_income_total": 115890.87
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08123",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49933",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            34,
-            50
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            109861.27,
-            0.0
-          ],
-          "yearly_earned_income_total": 109861.27
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08123",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-49938",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            38,
-            37
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            66778.41,
-            0.0
-          ],
-          "yearly_earned_income_total": 66778.41
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08041",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50016",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 41,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            39,
-            48,
-            3
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            14204.28,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 14204.28
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08001",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50056",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            30,
-            33,
-            9,
-            3
-          ],
-          "household_size": 4,
-          "pregnant_member_present": true,
-          "yearly_earned_income_per_person": [
-            191135.84,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 191135.84
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08123",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50097",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 37,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            73
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            34848.62
-          ],
-          "yearly_earned_income_total": 34848.62
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08117",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50115",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 41,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            37,
-            35,
-            2
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            108252.65,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 108252.65
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08035",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50138",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            27,
-            13
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            64521.7,
-            0.0
-          ],
-          "yearly_earned_income_total": 64521.7
-        },
-        "household_weight": 106342.5546875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08005",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50149",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            28,
-            29
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            85278.19,
-            109331.01
-          ],
-          "yearly_earned_income_total": 194609.2
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08031",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50181",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            39,
-            45,
-            23,
-            16
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            43278.68,
-            0.0,
-            42486.03,
-            0.0
-          ],
-          "yearly_earned_income_total": 85764.71
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08001",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50191",
+      "case_id": "ecps-50122",
       "left_engine": "axiom",
       "left_errors": [],
       "match_rate": 0.0,
@@ -782,14 +85,15 @@
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
           "ages": [
-            32,
+            23,
+            21,
+            41,
+            40,
             17,
-            14,
-            11,
-            4,
-            1
+            12
           ],
           "household_size": 6,
+          "pregnant_member_present": true,
           "yearly_earned_income_per_person": [
             0.0,
             0.0,
@@ -800,68 +104,34 @@
           ],
           "yearly_earned_income_total": 0.0
         },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08041",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
-          "description": "CO TANF (Colorado Works) benefit (annualized)",
-          "difference": 564.0,
-          "kind": "amount_difference",
-          "left": 12372.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 11808.0,
-          "tolerance": 25
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50241",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            52,
-            60
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            76531.7,
-            142130.31
-          ],
-          "yearly_earned_income_total": 218662.02
-        },
-        "household_weight": 53171.27734375,
+        "household_weight": 0.10588079690933228,
         "population": "enhanced-cps",
         "scope": {
           "geoid": "08059",
           "type": "census_county"
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": -1798.8486328125,
+          "kind": "amount_difference",
+          "left": 9444.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 11242.8486328125,
+          "tolerance": 25
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
     {
-      "case_id": "ecps-50253",
+      "case_id": "ecps-50123",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 0.0,
       "metadata": {
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
@@ -870,303 +140,19 @@
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
         "household_summary": {
           "ages": [
-            85
+            31
           ],
           "household_size": 1,
-          "yearly_earned_income_per_person": [
-            8370.38
-          ],
-          "yearly_earned_income_total": 8370.38
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08037",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50310",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 37,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            23
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            81998.26
-          ],
-          "yearly_earned_income_total": 81998.26
-        },
-        "household_weight": 106342.5546875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08035",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50323",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            37,
-            38,
-            8,
-            6
-          ],
-          "household_size": 4,
           "pregnant_member_present": true,
           "yearly_earned_income_per_person": [
-            0.0,
-            218662.02,
-            0.0,
-            0.0
+            7408.01
           ],
-          "yearly_earned_income_total": 218662.02
+          "yearly_earned_income_total": 7408.01
         },
-        "household_weight": 53171.27734375,
+        "household_weight": 2226.767333984375,
         "population": "enhanced-cps",
         "scope": {
-          "geoid": "08031",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50332",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 37,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            66
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            90138.27
-          ],
-          "yearly_earned_income_total": 90138.27
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08031",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50346",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            54,
-            60,
-            23,
-            22
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            24052.82,
-            54665.5,
-            32799.3,
-            6341.2
-          ],
-          "yearly_earned_income_total": 117858.83
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08041",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50351",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            62,
-            63,
-            13,
-            9
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            102121.27,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 102121.27
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08005",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50362",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 37,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            58
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            10386.45
-          ],
-          "yearly_earned_income_total": 10386.45
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08013",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50373",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 41,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            24,
-            24,
-            23
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            45919.02,
-            61225.36,
-            54665.5
-          ],
-          "yearly_earned_income_total": 161809.89
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08067",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50401",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            52,
-            40,
-            8,
-            7
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08031",
+          "geoid": "08123",
           "type": "census_county"
         }
       },
@@ -1174,273 +160,15 @@
         {
           "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
           "description": "CO TANF (Colorado Works) benefit (annualized)",
-          "difference": 432.0,
+          "difference": 2040.0,
           "kind": "amount_difference",
-          "left": 9456.0,
+          "left": 2040.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 9024.0,
+          "right": 0.0,
           "tolerance": 25
         }
       ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50417",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            30,
-            31,
-            3,
-            0
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            66876.33,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 66876.33
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08069",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50418",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            35,
-            9
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            129010.59,
-            0.0
-          ],
-          "yearly_earned_income_total": 129010.59
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08051",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50419",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 43,
-        "axiom_relations_count": 8,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            28,
-            28,
-            2,
-            0
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 106342.5546875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08013",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
-          "description": "CO TANF (Colorado Works) benefit (annualized)",
-          "difference": 432.0,
-          "kind": "amount_difference",
-          "left": 9456.0,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 9024.0,
-          "tolerance": 25
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50439",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 37,
-        "axiom_relations_count": 2,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            25
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            0.0
-          ],
-          "yearly_earned_income_total": 0.0
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08005",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50442",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            77,
-            77
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            14061.61,
-            0.0
-          ],
-          "yearly_earned_income_total": 14061.61
-        },
-        "household_weight": 159513.828125,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08031",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50448",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 39,
-        "axiom_relations_count": 4,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            72,
-            71
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            20235.88,
-            0.0
-          ],
-          "yearly_earned_income_total": 20235.88
-        },
-        "household_weight": 53171.27734375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08005",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-50451",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 41,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            30,
-            45,
-            2
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            142844.81,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 142844.81
-        },
-        "household_weight": 106342.5546875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "08077",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [],
       "right_engine": "policyengine",
       "right_errors": []
     }
@@ -1458,6 +186,12 @@
       "tolerance": 25
     }
   ],
+  "dashboard_truncation": {
+    "shown_case_rows": 3,
+    "shown_mismatches": 3,
+    "total_case_rows": 1045,
+    "total_mismatches": 3
+  },
   "engines": {
     "left": "axiom",
     "right": "policyengine"
@@ -1467,70 +201,79 @@
   "mismatches": [
     {
       "ages": null,
-      "case_id": "ecps-49679",
+      "case_id": "ecps-49844",
       "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
       "description": "CO TANF (Colorado Works) benefit (annualized)",
-      "difference": 360.0,
+      "difference": 3408.0,
       "kind": "amount_difference",
-      "left": 7788.0,
+      "left": 3408.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 7428.0,
+      "right": 0.0,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
     },
     {
       "ages": null,
-      "case_id": "ecps-50191",
+      "case_id": "ecps-50122",
       "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
       "description": "CO TANF (Colorado Works) benefit (annualized)",
-      "difference": 564.0,
+      "difference": -1798.8486328125,
       "kind": "amount_difference",
-      "left": 12372.0,
+      "left": 9444.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 11808.0,
+      "right": 11242.8486328125,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
     },
     {
       "ages": null,
-      "case_id": "ecps-50401",
+      "case_id": "ecps-50123",
       "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
       "description": "CO TANF (Colorado Works) benefit (annualized)",
-      "difference": 432.0,
+      "difference": 2040.0,
       "kind": "amount_difference",
-      "left": 9456.0,
+      "left": 2040.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 9024.0,
-      "scenario": null,
-      "tolerance": 25,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-50419",
-      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
-      "description": "CO TANF (Colorado Works) benefit (annualized)",
-      "difference": 432.0,
-      "kind": "amount_difference",
-      "left": 9456.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 9024.0,
+      "right": 0.0,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
     }
   ],
   "population": "enhanced-cps",
+  "provenance": {
+    "dataset": {
+      "population": "enhanced-cps",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "8ad01030cc819e20fec9b4f1a85bb82ddd70810e",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-05T20:40:08Z",
+    "generated_by": "scripts/run_comparison.py::co-tanf-ecps",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.752.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us-co",
+        "sha": null
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
   "schema_version": "axiom.comparison_report.v2.1",
   "scope": {
     "geoid": "US",
@@ -1538,7 +281,7 @@
   },
   "suite": "co-tanf-ecps",
   "summary": {
-    "comparison_count": 39,
+    "comparison_count": 1045,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -1549,39 +292,39 @@
       },
       "dispositions_file": null,
       "expired_entries": [],
-      "explained_rate": 89.74359,
+      "explained_rate": 99.712919,
       "orphaned_entries": [],
-      "raw_match_rate": 89.74359,
+      "raw_match_rate": 99.712919,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 4
+      "unexplained_count": 3
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 35,
-    "mismatch_count": 4,
+    "match_count": 1042,
+    "mismatch_count": 3,
     "mismatches_by_concept": [
       {
-        "count": 4,
+        "count": 3,
         "value": "us-co:policies/cdhs/colorado-works#co_tanf_benefit"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 4,
+        "count": 3,
         "value": "amount_difference"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 4,
+        "count": 3,
         "value": null
       }
     ],
     "weighted": {
-      "comparison_weight": 2764906.417969,
-      "match_rate": 88.461538,
-      "match_weight": 2445878.753906,
-      "mismatch_weight": 319027.664062
+      "comparison_weight": 2896339.597333,
+      "match_rate": 99.922568,
+      "match_weight": 2894096.896743,
+      "mismatch_weight": 2242.70059
     }
   }
 }

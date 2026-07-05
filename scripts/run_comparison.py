@@ -1186,14 +1186,17 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
-# PolicyEngine 4.11.0 hard-pins its bundled ECPS manifest at PE-US 1.700.0.
-# Keep the in-repo oracle runner on that certified pair so PE SNAP outputs are
-# reproducible across environments. The axiom-encode subprocess runners above
-# keep their own pins because they are validating the encoder stack.
+# PolicyEngine 4.18.9 certifies its bundled manifest at PE-US 1.752.2.
+# Keep the in-repo oracle runner on that certified pair so PE outputs are
+# reproducible across environments; bump both together when refreshing the
+# oracle (stale pins mean we validate against superseded PE tables — the CO
+# TANF grant standards diverged exactly this way at 1.700.0). The
+# axiom-encode subprocess runners above keep their own pins because they are
+# validating the encoder stack.
 _PE_ORACLE_PINS = (
-    "policyengine==4.11.0",
-    "policyengine-us==1.700.0",
-    "policyengine-core==3.26.11",
+    "policyengine==4.18.9",
+    "policyengine-us==1.752.2",
+    "policyengine-core==3.28.0",
 )
 
 # The compare and sanity subprocesses share this import shim — extracted to
