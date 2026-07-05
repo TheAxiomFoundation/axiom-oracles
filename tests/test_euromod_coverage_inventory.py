@@ -33,8 +33,8 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         coverage["coverage_summary"]["full_household_disposable_income_parity"] is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 18
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 12
+    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 19
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 13
     assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
@@ -101,6 +101,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
     ]
+    assert outputs["ils_tax"]["status"] == "live_oracle_verified_worker_pit_pilot"
     assert outputs["ils_ben"]["status"] == "live_oracle_verified_family_benefit_pilot"
     assert outputs["ils_dispy"]["status"] == "not_mapped"
 

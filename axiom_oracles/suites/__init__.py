@@ -22,7 +22,12 @@ from .be_self_employed import be_self_employed_ssc_cases
 from .be_special_social_security import (
     be_special_social_security_contribution_cases,
 )
-from .be_worker import be_employer_ssc_cases, be_worker_pit_cases, be_worker_ssc_cases
+from .be_worker import (
+    be_employer_ssc_cases,
+    be_worker_pit_cases,
+    be_worker_ssc_cases,
+    be_worker_tax_income_list_cases,
+)
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
 
@@ -32,6 +37,7 @@ def available_suites() -> tuple[str, ...]:
         "nyc-basic",
         "nyc-synthetic",
         "be-worker-pit",
+        "be-worker-tax-income-list",
         "be-worker-ssc",
         "be-employer-ssc",
         "be-self-employed-ssc",
@@ -58,6 +64,8 @@ def load_suite(name: str):
         return nyc_synthetic_cases()
     if name == "be-worker-pit":
         return be_worker_pit_cases()
+    if name == "be-worker-tax-income-list":
+        return be_worker_tax_income_list_cases()
     if name == "be-worker-ssc":
         return be_worker_ssc_cases()
     if name == "be-employer-ssc":
@@ -112,6 +120,7 @@ __all__ = [
     "be_social_assistance_cases",
     "be_worker_pit_cases",
     "be_worker_ssc_cases",
+    "be_worker_tax_income_list_cases",
     "load_suite",
     "nyc_basic_cases",
     "nyc_synthetic_cases",
