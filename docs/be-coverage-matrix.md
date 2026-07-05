@@ -57,7 +57,7 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | 2 | `tscer_be` | on | `tscer_s` (+ component `_s`) | Employer social-security contributions (ONSS/RSZ) | compared (partial) | `be-employer-ssc` (0/2; EUROMOD #11) | — (broaden: structural reductions, ≥20-worker, manual-worker vacation) |
 | 3 | `tscse_be` | on | `tscse_s` | Self-employed social contributions (RD No. 38) | compared (partial) | `be-self-employed-ssc` (4/7; EUROMOD #6) | — (broaden: student/starter/spouse-helper/survivor) |
 | 4 | `tsceesp_be` | on | `tsceesp_s` | Special social-security contribution (household, Law 30.03.1994 art. 108) | compared (partial) | `be-special-social-security-contribution` (3/7; EUROMOD #7) | — (broaden: art. 109 withholding, art. 110 settlement) |
-| 5 | `tscpe_be` | on | `tscpe_s` | Pensioner health/disability + solidarity contributions | **encoded, not compared** (`be/statutes/social_security/chapter_10_special_contributions.yaml`) | — | build `tscpe_s` suite → Law 30.03.1994 ch. 10; ZIV/AMI RD 03.07.1996 |
+| 5 | `tscpe_be` | on | `tscpe_s` | Pensioner health/disability + solidarity contributions | **compared with encoding gaps** (`be/statutes/social_security/non_labour_income_contributions.yaml` — Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%, composed into an annual combined output; **not** `chapter_10_special_contributions.yaml`, which encodes the Law 29.06.1981 art. 38 employer/fringe special contributions) | `be-pensioner-contributions` (1/6 exact; 5 axiom_encoding_gap residuals) | encode art. 191 low-pension **floor** + reconcile art. 68 solidarity base table to 2025 indexation → rulespec-be#89 |
 | 6 | `tci_be` | on | `tci_s` (+ `brv_s`) | Flemish care insurance / social-protection flat premium (zorgverzekering) | compared | `be-flemish-social-protection-premium` (2/2) | — (broaden: Brussels voluntary affiliation, sanctions) |
 | 7 | `tinna_be` | on | `tin_s`, `tinna_s` | Federal PIT — brackets, tax-free amount, credits; writes total `tin_s` | compared (worker pilot only) | `be-worker-pit` (2/3; EUROMOD #12) | — (broaden: full household PIT, joint assessment) |
 | 8 | `tintb_be` | on | `tintasp_s`, marital-quotient, deductions | PIT deductions & marital quotient (CIR 92 arts. 87–89, 131–145) | **partial** (rate_scale, tax_free_amount, tax_reductions_and_credits, joint_assessment encoded; not oracle-decomposed to `tintb`) | (feeds `be-worker-pit`) | broaden PIT decomposition → CIR 92 arts. 86–90, 131–178 |
@@ -83,8 +83,8 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | EUROMOD policy | switch | output | why not active | rulespec-be status | gap → source family |
 |---|---|---|---|---|---|
 | `bun_be` | off | `bun_s` | "PART SIMULATED" but **off**; unemployment income carried from input data | **encoded, not compared** (`be/regulations/unemployment/*` — admission, benefit_amount, minimum_daily, household_status, payable_amount, all with tests) | build `bun_s` suite (switch on) → RD 25.11.1991 (unemployment) |
-| `bsaoa_be` | off | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | compared* via XML overlay: `be-elderly-income-support` registered, **unpublished** → Law 22.03.2001 (GRAPA/IGO) |
-| `byr_be` | n/a | (early retirement) | pension/early-retirement income from data | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | build pension suite → RD No. 50; RD 23.12.1996 |
+| `bsaoa_be` | off (case switch → on) | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | **compared** (published `axiom-euromod-be-elderly-income-support`, 1/1 exact) via per-case XML switch overlay (`bsaoa_be`→on): isolated no-resources senior, EUROMOD `bsaoa_s` = Axiom GRAPA = 18,964.44 → Law 22.03.2001 (GRAPA/IGO). Broaden: cohabiting, delegated resource exclusions, property/capital resources |
+| `byr_be` | n/a | `byr_s` (never emitted) | early-retirement / old-age pension income is a **pure input** to BE_2025. `byr_be` (12 functions, 106 params) carries policy switch **n/a**, not `off`; a live probe forcing it on (same XML overlay as GRAPA) returns **no `byr_s` column** while the run succeeds, so `n/a` is structural — the functions never register in the spine. `poa` (old-age pension) has no computing policy at all | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | conformance exclusion `input_carrying` (`conformance/be.yaml` `be:byr_be`): nothing to compare — unlike `bsaoa_be` (`off`, activatable), no override resurrects `byr_be`. The rulespec-be pension encodings (RD No. 50; RD 23.12.1996) validate via other oracles, not EUROMOD |
 | `tco_be` | off | (commodities) | indirect consumption tax; body is `DefConst`/`DefIl` only (no `OutputVar`); **not oracle-comparable** — see verdict below | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | conformance exclusion `extension_not_available` (RD No. 20 VAT + excise codes) |
 | `yem_be` | off | `yem` | minimum-wage definition (not a benefit) | n/a (definitional) | — |
 
@@ -136,16 +136,30 @@ the EUROMOD matrix.
 
 ## Sanity-check vs the live dashboard
 
-23 published suites, **103 comparisons, 74 exact matches, 100% dispositioned**
-(matches `euromod-be-coverage.json` `dispositioned_parity`). The three
-PIT-decomposition suites — `be-regional-pit-surcharge` (`tinrg_s`),
-`be-local-municipal-pit` (`tinmu_s`), and `be-capital-income-tax` (`tinkt_s`) —
-add 9 comparisons, all exact matches; the two leave suites — `be-maternity-leave`
-(`bmact_s`) and `be-birth-leave` (`bpact_s`) — add 6, all exact with the PBE
-extension switched on. One suite remains **registered but not published** —
-`be-elderly-income-support` (`bsaoa_s`) — so the coverage claim's GRAPA
-"live_verified" is still ahead of the published set (wave item 4). Nothing
-already-compared is marked missing above.
+25 published suites, **110 comparisons, 76 exact matches; explained 95.45%,
+0 unexplained** (matches `euromod-be-coverage.json` `dispositioned_parity`).
+`be-elderly-income-support` (`bsaoa_s`, GRAPA) is now **published** — EUROMOD
+`bsaoa_s` = Axiom GRAPA = 18,964.44, exact, via the per-case `bsaoa_be`→on switch
+overlay. Publishing it also closed the last of a class of pre-existing manifest
+gaps: `be-social-assistance` had a committed dashboard report but no
+`manifest.json` entry (direct-CLI `compare` calls, unlike the registry runner,
+never touch the manifest), so it was folded into the parity rollup yet invisible
+in the dashboard suite selector — now manifested, with a test pin enforcing the
+invariant (the `be-maternity-leave` and `be-birth-leave` entries were restored in
+#158). The three PIT-decomposition suites — `be-regional-pit-surcharge`
+(`tinrg_s`), `be-local-municipal-pit` (`tinmu_s`), and `be-capital-income-tax`
+(`tinkt_s`) — remain 9/9 exact. The new **`be-pensioner-contributions`**
+(`tscpe_s`) suite sweeps an isolated old-age pensioner across the health and
+solidarity thresholds and is 1/6 exact (48k, where both engines' 3.55% health +
+2% solidarity coincide above every threshold); its 5 residuals are the reason
+`explained_rate` is 95.45% rather than 100%. They are two RuleSpec-attributed
+encoding gaps — the article 191 health withholding lacks EUROMOD's low-pension
+floor, and the article 68 solidarity base table (at index factor 1) is a
+different vintage from EUROMOD's 2025-indexed thresholds — dispositioned as
+`axiom_encoding_gap` with AST-checked arithmetic and filed as rulespec-be#89.
+`tscpe_be` therefore stays **in scope but not conformance-covered**
+(`conformance/be.yaml` `suite: null`) until #89 lands. Nothing already-compared
+is marked missing above.
 
 ## Wave plan (gap workers, grouped)
 

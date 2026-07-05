@@ -11,8 +11,8 @@
       "excluded": 19,
       "excluded_by_reason": {
         "extension_not_available": 1,
-        "input_carrying": 2,
-        "not_a_policy": 3,
+        "input_carrying": 3,
+        "not_a_policy": 2,
         "technical": 13
       },
       "unexplained_total": 0,

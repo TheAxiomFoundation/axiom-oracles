@@ -782,3 +782,92 @@ def test_uk_efrs_dashboard_adapter_maps_non_uc_surface():
     assert report["aggregates"][1]["concept"] == (
         "uk:statutes/ukpga/1992/4/1#national_insurance_contribution"
     )
+
+
+# ---------------------------------------------------------------------------
+# Registry ↔ dashboard publish invariants
+#
+# The EUROMOD Belgium lane commits its dashboard reports directly, and the
+# suites that generate them are wired through comparisons/<name>.yaml. A suite
+# that names a dashboard_filename but never lands in dashboard/public/data or
+# in manifest.json is "registered but unpublished" — the exact gap that hid the
+# GRAPA (be-elderly-income-support) and be-social-assistance reports from the
+# dashboard suite selector. These pins fail loudly if that recurs.
+# ---------------------------------------------------------------------------
+
+import yaml  # noqa: E402
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+COMPARISONS_DIR = REPO_ROOT / "comparisons"
+DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
+
+
+def _euromod_be_registry_configs() -> list[dict]:
+    configs: list[dict] = []
+    for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
+        if path.name.endswith(".fixtures.yaml"):
+            continue
+        config = yaml.safe_load(path.read_text())
+        if not isinstance(config, dict):
+            continue
+        runner = config.get("runner") or {}
+        params = runner.get("parameters") or {}
+        if (
+            runner.get("type") == "euromod-synthetic-compare"
+            and params.get("euromod_country") == "BE"
+        ):
+            configs.append(config)
+    return configs
+
+
+def test_euromod_be_registry_reports_are_published_and_manifested():
+    """Every EUROMOD-BE comparison config must have a committed dashboard
+    report AND a manifest entry, so no BE suite is registered-but-unpublished."""
+    manifest = json.loads((DASHBOARD_DATA_DIR / "manifest.json").read_text())
+    manifest_reports = set(manifest["reports"])
+
+    configs = _euromod_be_registry_configs()
+    assert configs, "expected at least one euromod-synthetic-compare BE config"
+
+    for config in configs:
+        filename = config["dashboard"]["filename"]
+        report_path = DASHBOARD_DATA_DIR / filename
+        assert report_path.exists(), (
+            f"{config['name']}: dashboard report {filename} is not committed"
+        )
+        assert filename in manifest_reports, (
+            f"{config['name']}: {filename} is missing from manifest.json"
+        )
+
+
+def test_every_euromod_be_dashboard_report_is_manifested():
+    """Guards the direct-CLI publish gap: any committed axiom-euromod-be-*.json
+    report must appear in manifest.json, else the dashboard cannot load it."""
+    manifest = json.loads((DASHBOARD_DATA_DIR / "manifest.json").read_text())
+    manifest_reports = set(manifest["reports"])
+    committed = {
+        path.name for path in DASHBOARD_DATA_DIR.glob("axiom-euromod-be-*.json")
+    }
+    missing = sorted(committed - manifest_reports)
+    assert not missing, f"committed BE reports absent from manifest.json: {missing}"
+
+
+def test_be_elderly_income_support_registry_config_shape():
+    """Pins the GRAPA config's BE dataset-gating workaround and switch-override
+    contract so a future edit cannot silently drop the template_dataset (which
+    would abort the BE run) or the manual switch semantics."""
+    config = yaml.safe_load(
+        (COMPARISONS_DIR / "be-elderly-income-support.yaml").read_text()
+    )
+    params = config["runner"]["parameters"]
+    assert config["runner"]["type"] == "euromod-synthetic-compare"
+    assert params["suite"] == "be-elderly-income-support"
+    assert params["euromod_country"] == "BE"
+    assert params["euromod_system"] == "BE_2025"
+    # The dataset-name gating workaround: run under a real configuration name,
+    # template rows from the bundled demo dataset.
+    assert params["euromod_dataset"] == "BE_2024_c1_2015_03_e2"
+    assert params["euromod_template_dataset"] == "BE_training_data"
+    assert config["dashboard"]["filename"] == (
+        "axiom-euromod-be-elderly-income-support.json"
+    )

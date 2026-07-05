@@ -16,6 +16,7 @@ from .be_family_benefits import (
 from .be_flemish_jobbonus import be_flemish_jobbonus_cases
 from .be_flemish_social_protection import be_flemish_social_protection_premium_cases
 from .be_maternity_leave import be_maternity_leave_cases
+from .be_pensioner_contributions import be_pensioner_contributions_cases
 from .be_property_tax import (
     be_cadastral_income_indexation_cases,
     be_property_tax_cases,
@@ -85,6 +86,7 @@ def available_suites() -> tuple[str, ...]:
         "be-flemish-social-protection-premium",
         "be-social-assistance",
         "be-elderly-income-support",
+        "be-pensioner-contributions",
         "uk-worker-pit",
         "uk-worker-nic",
         "uk-self-employed-nic",
@@ -152,6 +154,8 @@ def load_suite(name: str):
         return be_social_assistance_cases()
     if name == "be-elderly-income-support":
         return be_elderly_income_support_cases()
+    if name == "be-pensioner-contributions":
+        return be_pensioner_contributions_cases()
     if name == "uk-worker-pit":
         return uk_worker_pit_cases()
     if name == "uk-worker-nic":
@@ -193,6 +197,7 @@ __all__ = [
     "be_flemish_social_protection_premium_cases",
     "be_local_municipal_pit_cases",
     "be_maternity_leave_cases",
+    "be_pensioner_contributions_cases",
     "be_cadastral_income_indexation_cases",
     "be_property_tax_cases",
     "be_regional_pit_surcharge_cases",

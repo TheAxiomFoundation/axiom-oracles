@@ -313,5 +313,10 @@ def test_seeded_belgium_lane_rollup_covers_every_mismatch() -> None:
     rollup = dispositioned_rollup(reports)
     assert rollup["comparison_count"] > 0
     assert rollup["raw_match_rate"] < rollup["explained_rate"]
+    # Every BE mismatch is classified (none unexplained). explained_rate is
+    # below 100 because be-pensioner-contributions carries axiom_encoding_gap
+    # residuals (the tscpe_be article 191 health-floor and article 68
+    # solidarity base-table gaps, rulespec-be#89) — those are classified but
+    # never counted as explained, which is the intended distinction.
     assert rollup["unexplained_count"] == 0
-    assert rollup["explained_rate"] == 100
+    assert rollup["explained_rate"] < 100

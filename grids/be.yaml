@@ -1249,6 +1249,79 @@ case_sets:
         kind: person
         age: 0
         relation: Child
+  be-pensioner-contributions:
+    locale: BE
+    entity: Family
+    entity_id: family
+    outputs:
+    - be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding
+    cases:
+    - id: be-pensioner-tscpe-below-health-18k
+      period: '2025'
+      scenario: isolated-old-age-pensioner-tscpe
+      parameters:
+        yearly_pension_income: 18000.0
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 18000.0
+    - id: be-pensioner-tscpe-health-phase-in-24k9
+      period: '2025'
+      scenario: isolated-old-age-pensioner-tscpe
+      parameters:
+        yearly_pension_income: 24900.0
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 24900.0
+    - id: be-pensioner-tscpe-above-health-30k
+      period: '2025'
+      scenario: isolated-old-age-pensioner-tscpe
+      parameters:
+        yearly_pension_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 30000.0
+    - id: be-pensioner-tscpe-solidarity-phase-in-39k
+      period: '2025'
+      scenario: isolated-old-age-pensioner-tscpe
+      parameters:
+        yearly_pension_income: 39000.0
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 39000.0
+    - id: be-pensioner-tscpe-solidarity-mid-41k
+      period: '2025'
+      scenario: isolated-old-age-pensioner-tscpe
+      parameters:
+        yearly_pension_income: 41000.0
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 41000.0
+    - id: be-pensioner-tscpe-solidarity-top-48k
+      period: '2025'
+      scenario: isolated-old-age-pensioner-tscpe
+      parameters:
+        yearly_pension_income: 48000.0
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 48000.0
   be-property-tax:
     locale: BE
     entity: Property
