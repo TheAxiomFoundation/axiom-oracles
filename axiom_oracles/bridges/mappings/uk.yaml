@@ -2841,6 +2841,21 @@ prefixes:
     program: universal_credit
     mapping_type: not_comparable
     rationale: Composed Family-level UKMOD Universal Credit oracle pipeline; its element, deduction, benefit-cap and award outputs re-wire the separately encoded Welfare Reform Act 2012 section 8 and Universal Credit Regulations 2013 element, taper, capital-tariff and benefit-cap provisions for the UKMOD bsauc_s comparison rather than adding new PolicyEngine UK oracle variables.
+  # Reconciliation guard between the two rulespec-uk Universal Credit award
+  # paths: it re-expresses the compose-spec program
+  # (programs/uk/universal-credit/fy-2026-27.yaml) Welfare Reform Act 2012
+  # section 8(1) balance over the composed pilot pipeline's own section 8
+  # elements and asserts (in its companion test) that the pilot's pre-cap award
+  # equals that balance to the penny, diverging only by the pilot's
+  # deliberately-scoped regulation 72 capital tariff and regulation 18 capital
+  # gate. Its outputs are internal agreement quantities (deltas and a
+  # re-derived section 8(1) balance), not new PolicyEngine UK oracle variables.
+  # Added for rulespec-uk UC award reconciliation (rulespec-uk#79).
+  - legal_id_prefix: uk:policies/universal_credit_award_reconciliation#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Reconciliation guard between the two rulespec-uk Universal Credit award paths; its outputs re-express the compose-spec program's Welfare Reform Act 2012 section 8(1) balance over the composed pilot pipeline's section 8 elements and expose the agreement deltas against the pilot's pre-cap award, rather than adding new PolicyEngine UK oracle variables.
   # Composed single-earner UKMOD self-employed National Insurance oracle
   # pipeline (SSCBA 1992 section 15 Class 4, with section 11 Class 2 shown to
   # contribute nothing after the 6 April 2024 abolition). Its Class 4 outputs
