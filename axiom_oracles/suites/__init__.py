@@ -8,6 +8,7 @@ from .be_family_benefits import (
     be_family_birth_allowance_cases,
     be_family_child_benefit_brussels_same_age_household_cases,
     be_family_child_benefit_base_cases,
+    be_family_child_benefit_income_list_cases,
     be_family_child_benefit_social_supplement_cases,
     be_family_child_benefit_wallonia_social_supplement_cases,
 )
@@ -37,6 +38,7 @@ def available_suites() -> tuple[str, ...]:
         "be-special-social-security-contribution",
         "be-family-birth-allowance",
         "be-family-child-benefit-base",
+        "be-family-child-benefit-income-list",
         "be-family-child-benefit-social-supplement",
         "be-family-child-benefit-brussels-same-age-household",
         "be-family-child-benefit-wallonia-social-supplement",
@@ -68,6 +70,8 @@ def load_suite(name: str):
         return be_family_birth_allowance_cases()
     if name == "be-family-child-benefit-base":
         return be_family_child_benefit_base_cases()
+    if name == "be-family-child-benefit-income-list":
+        return be_family_child_benefit_income_list_cases()
     if name == "be-family-child-benefit-social-supplement":
         return be_family_child_benefit_social_supplement_cases()
     if name == "be-family-child-benefit-brussels-same-age-household":
@@ -96,6 +100,7 @@ __all__ = [
     "be_family_birth_allowance_cases",
     "be_family_child_benefit_brussels_same_age_household_cases",
     "be_family_child_benefit_base_cases",
+    "be_family_child_benefit_income_list_cases",
     "be_family_child_benefit_social_supplement_cases",
     "be_family_child_benefit_wallonia_social_supplement_cases",
     "be_flemish_jobbonus_cases",

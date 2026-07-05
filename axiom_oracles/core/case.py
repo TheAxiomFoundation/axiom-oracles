@@ -201,6 +201,10 @@ class Concepts:
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement"
     )
+    BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT = (
+        "be:policies/euromod_benefit_income_list"
+        "#belgium_euromod_ils_ben_family_benefit_pilot_annual_amount"
+    )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"

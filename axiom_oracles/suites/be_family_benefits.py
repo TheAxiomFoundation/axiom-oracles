@@ -8,6 +8,7 @@ BIRTH_ALLOWANCE_MODULE = "be:statutes/family_benefits/birth_allowance"
 CHILD_BENEFIT_BASE_MODULE = (
     "be:statutes/family_benefits/child_benefit_base_2025"
 )
+EUROMOD_BENEFIT_INCOME_LIST_MODULE = "be:policies/euromod_benefit_income_list"
 
 BRUSSELS_REGION = 1
 FLANDERS_REGION = 2
@@ -19,6 +20,8 @@ GERMAN_SPEAKING_PRE_2025_INDEX_FACTOR = (
     GERMAN_SPEAKING_BIRTH_PREMIUM_2025
     / GERMAN_SPEAKING_BIRTH_PREMIUM_2019
 )
+ILS_BEN_CHILD_SELECTOR_BASE = 1
+ILS_BEN_CHILD_SELECTOR_BRUSSELS_SAME_AGE = 3
 
 
 def be_family_birth_allowance_cases() -> list[Case]:
@@ -182,6 +185,39 @@ def be_family_child_benefit_base_cases() -> list[Case]:
             scenario="german-speaking-community-age-18-higher-education",
             child_age=18,
             higher_education=True,
+        ),
+    ]
+
+
+def be_family_child_benefit_income_list_cases() -> list[Case]:
+    """Belgium family-benefit pilot cases for EUROMOD ils_ben."""
+
+    return [
+        _child_benefit_income_list_base_case(
+            "be-family-child-benefit-income-list-brussels-age-0",
+            region=BRUSSELS_REGION,
+            scenario="ils-ben-brussels-one-child-base",
+            child_age=0,
+        ),
+        _child_benefit_income_list_base_case(
+            "be-family-child-benefit-income-list-flanders-age-13",
+            region=FLANDERS_REGION,
+            scenario="ils-ben-flanders-one-child-base",
+            child_age=13,
+        ),
+        _child_benefit_income_list_base_case(
+            "be-family-child-benefit-income-list-wallonia-age-0",
+            region=WALLONIA_REGION,
+            scenario="ils-ben-wallonia-one-child-base",
+            child_age=0,
+        ),
+        _child_benefit_income_list_brussels_same_age_case(
+            "be-family-child-benefit-income-list-brussels-two-children-age-13-middle-income-single-parent",
+            scenario="ils-ben-brussels-two-same-age-children-age-13-middle-income",
+            child_age=13,
+            child_count=2,
+            single_parent=True,
+            employment_income=4_000,
         ),
     ]
 
@@ -409,6 +445,118 @@ def _child_benefit_social_supplement_case(
     )
 
 
+def _child_benefit_income_list_base_case(
+    case_id: str,
+    *,
+    region: int,
+    scenario: str,
+    child_age: int,
+    higher_education: bool = False,
+) -> Case:
+    axiom_inputs = _child_benefit_base_axiom_inputs(
+        region=region,
+        child_age=child_age,
+        higher_education=higher_education,
+    )
+    include_birth = child_age == 0
+    if include_birth:
+        axiom_inputs.update(
+            _birth_allowance_axiom_inputs(
+                region=region,
+                first_or_multiple=True,
+            )
+        )
+    axiom_inputs.update(
+        _benefit_income_list_axiom_inputs(
+            child_selector=ILS_BEN_CHILD_SELECTOR_BASE,
+            include_birth=include_birth,
+        )
+    )
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "axiom_entity": "Household",
+            "axiom_entity_id": "household",
+            "scenario": scenario,
+            "region_code": region,
+            "child_age_years": child_age,
+            "child_enrolled_in_higher_education": higher_education,
+            "axiom_inputs": axiom_inputs,
+            "euromod_inputs": _child_benefit_base_euromod_inputs(
+                region=region,
+                child_age=child_age,
+                higher_education=higher_education,
+            ),
+        },
+        entities=_child_benefit_base_entities(child_age=child_age),
+        outputs=(Concepts.BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT,),
+    )
+
+
+def _child_benefit_income_list_brussels_same_age_case(
+    case_id: str,
+    *,
+    scenario: str,
+    child_age: int,
+    child_count: int,
+    single_parent: bool,
+    employment_income: float,
+    annual_household_income: float = 12_000,
+    higher_education: bool = False,
+) -> Case:
+    income_input = _child_benefit_base_input(
+        "belgium_child_benefit_brussels_article_9_household_annual_income"
+    )
+    axiom_inputs = _child_benefit_social_supplement_axiom_inputs(
+        child_age=child_age,
+        higher_education=higher_education,
+        annual_household_income=annual_household_income,
+        child_count=child_count,
+        single_parent=single_parent,
+    )
+    axiom_inputs.update(
+        _benefit_income_list_axiom_inputs(
+            child_selector=ILS_BEN_CHILD_SELECTOR_BRUSSELS_SAME_AGE,
+        )
+    )
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "axiom_entity": "Household",
+            "axiom_entity_id": "household",
+            "scenario": scenario,
+            "region_code": BRUSSELS_REGION,
+            "child_age_years": child_age,
+            "child_count": child_count,
+            "same_age_children": True,
+            "single_parent": single_parent,
+            "child_enrolled_in_higher_education": higher_education,
+            "brussels_article_9_household_annual_income": annual_household_income,
+            "axiom_inputs": axiom_inputs,
+            "euromod_inputs": _child_benefit_base_euromod_inputs(
+                region=BRUSSELS_REGION,
+                child_age=child_age,
+                higher_education=higher_education,
+                employment_income=employment_income,
+                single_parent=single_parent,
+                child_count=child_count,
+            ),
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "il_bch_means": [income_input],
+            },
+        },
+        entities=_child_benefit_base_entities(
+            child_age=child_age,
+            child_count=child_count,
+        ),
+        outputs=(Concepts.BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT,),
+    )
+
+
 def _child_benefit_brussels_same_age_household_case(
     case_id: str,
     *,
@@ -621,6 +769,27 @@ def _birth_allowance_axiom_inputs(
     return inputs
 
 
+def _benefit_income_list_axiom_inputs(
+    *,
+    child_selector: int,
+    include_birth: bool = False,
+) -> dict[str, float | int | bool]:
+    return {
+        _benefit_income_list_input(
+            "belgium_euromod_ils_ben_include_birth_allowance_component"
+        ): include_birth,
+        _benefit_income_list_input(
+            "belgium_euromod_ils_ben_supplied_birth_allowance_annual_amount"
+        ): 0,
+        _benefit_income_list_input(
+            "belgium_euromod_ils_ben_child_benefit_component_selector"
+        ): child_selector,
+        _benefit_income_list_input(
+            "belgium_euromod_ils_ben_supplied_child_benefit_annual_amount"
+        ): 0,
+    }
+
+
 def _birth_allowance_entities(
     *,
     existing_child_age: int | None,
@@ -814,3 +983,7 @@ def _birth_allowance_input(name: str) -> str:
 
 def _child_benefit_base_input(name: str) -> str:
     return f"{CHILD_BENEFIT_BASE_MODULE}#input.{name}"
+
+
+def _benefit_income_list_input(name: str) -> str:
+    return f"{EUROMOD_BENEFIT_INCOME_LIST_MODULE}#input.{name}"
