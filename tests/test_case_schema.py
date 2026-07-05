@@ -202,6 +202,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
         Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
         Concepts.BE_BIRTH_LEAVE_TOTAL_COMPENSATION,
+        Concepts.BE_MATERNITY_REST_PERIOD_AMOUNT,
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
@@ -714,6 +715,86 @@ def test_belgium_birth_leave_suite_defines_oracle_concept_and_bridge() -> None:
     assert case.metadata["euromod_inputs"][1]["idpartner"] == 101
     assert case.metadata["euromod_inputs"][2]["idfather"] == 101
     assert case.metadata["euromod_inputs"][2]["idmother"] == 102
+    assert case.metadata["euromod_to_axiom_input_bridge"] == {
+        "yem": {
+            "inputs": [uncapped_daily_input, capped_daily_input],
+            "divide_by": 312,
+        }
+    }
+
+    (bridged_case,) = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [EngineResult("euromod", case.case_id, {"yem": 31_200})],
+    )
+
+    assert bridged_case.metadata["axiom_inputs"][uncapped_daily_input] == 100
+    assert bridged_case.metadata["axiom_inputs"][capped_daily_input] == 100
+    assert bridged_case.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        uncapped_daily_input: 100,
+        capped_daily_input: 100,
+    }
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_maternity_leave_suite_defines_oracle_concept_and_bridge() -> None:
+    cases = load_suite("be-maternity-leave")
+
+    assert len(cases) == 2
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_MATERNITY_REST_PERIOD_AMOUNT,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "maternity-leave-employed-under-cap"
+    }
+    assert {tuple(case.metadata["euromod_switches"]) for case in cases} == {
+        (("PBE", True),)
+    }
+
+    case = cases[0]
+    uncapped_daily_input = (
+        "be:regulations/health_insurance/maternity/indemnity_rates#input."
+        "belgium_maternity_uncapped_lost_daily_remuneration"
+    )
+    capped_daily_input = (
+        "be:regulations/health_insurance/maternity/indemnity_rates#input."
+        "belgium_maternity_lost_daily_remuneration_after_article_113_cap"
+    )
+    first_30_input = (
+        "be:regulations/health_insurance/maternity/indemnity_rates#input."
+        "belgium_maternity_first_30_working_days_count"
+    )
+    after_30_input = (
+        "be:regulations/health_insurance/maternity/indemnity_rates#input."
+        "belgium_maternity_after_30_working_days_count"
+    )
+    uncapped_rate_input = (
+        "be:regulations/health_insurance/maternity/indemnity_rates#input."
+        "belgium_maternity_article_216_uncapped_worker_first_30_days_applies"
+    )
+    assert case.metadata["axiom_inputs"][uncapped_rate_input] is True
+    assert case.metadata["axiom_inputs"][uncapped_daily_input] == pytest.approx(
+        30_000 / 312
+    )
+    assert case.metadata["axiom_inputs"][capped_daily_input] == pytest.approx(
+        30_000 / 312
+    )
+    assert case.metadata["axiom_inputs"][first_30_input] == 30
+    assert case.metadata["axiom_inputs"][after_30_input] == 60
+    assert case.metadata["euromod_inputs"][0]["idperson"] == 101
+    assert case.metadata["euromod_inputs"][0]["dgn"] == 0
+    assert case.metadata["euromod_inputs"][0]["yem"] == 2_500
+    assert case.metadata["euromod_inputs"][2]["idfather"] == 102
+    assert case.metadata["euromod_inputs"][2]["idmother"] == 101
+    assert case.metadata["euromod_inputs"][2]["dmb"] == 1
     assert case.metadata["euromod_to_axiom_input_bridge"] == {
         "yem": {
             "inputs": [uncapped_daily_input, capped_daily_input],
