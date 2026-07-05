@@ -2237,6 +2237,69 @@ mappings:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: Value Added Tax Act 1994 section 26 allowable input tax credit is a firm-level deductible-input output. PolicyEngine UK does not currently expose a firm entity or a registered one-to-one VAT Act oracle surface for this output.
+  # Marriage Allowance (Income Tax Act 2007 s.55B). The final per-person
+  # transferable amount is the transferor's unused personal allowance capped at
+  # 10% of the section 35(1) personal allowance, rounded up to the nearest £10,
+  # and gated on the subsection (2) conditions -- the same quantity PolicyEngine
+  # UK computes as marriage_allowance. Added for UK coverage wave item 9.
+  - legal_id: uk:statutes/ukpga/2007/3/55B#transferable_amount
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: marriage_allowance
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual per-person Marriage Allowance transferable amount as PolicyEngine UK's marriage_allowance variable -- 10% of the section 35(1) personal allowance capped at the transferor's unused personal allowance, rounded up to the nearest £10, awarded only when the section 55B(2) conditions are met. The oracle compares the rules-computed transferable amount before the stochastic take-up draw.
+  - legal_id: uk:statutes/ukpga/2007/3/55B#statutory_transferable_amount
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Intermediate section 55B(4)(b)/(5) figure (10% of the personal allowance rounded up to the nearest £10) before the transferor's unused-personal-allowance cap; PolicyEngine UK exposes only the final capped marriage_allowance, not this pre-cap statutory figure.
+  - legal_id: uk:statutes/ukpga/2007/3/55B#individual_entitled_to_marriage_allowance_tax_reduction
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 55B(1)/(2) entitlement predicate for the Marriage Allowance; PolicyEngine UK folds the equivalent conditions into the marriage_allowance amount rather than exposing a separate boolean entitlement variable.
+  - legal_id: uk:statutes/ukpga/2007/3/55B#appropriate_percentage_of_personal_allowance
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 55B(4)(b) transferable-amount percentage parameter (10%); PolicyEngine UK carries this as the gov.hmrc.income_tax.allowances.marriage_allowance.max parameter and exposes only the composed marriage_allowance amount.
+  - legal_id: uk:statutes/ukpga/2007/3/55B#transferable_amount_rounding_multiple
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 55B(5) rounding-increment parameter (£10); PolicyEngine UK carries this as the gov.hmrc.income_tax.allowances.marriage_allowance.rounding_increment parameter and exposes only the composed marriage_allowance amount.
+  - legal_id: uk:statutes/ukpga/2007/3/55B#transferable_amount_2015_16
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 55B(4)(a) flat transferable amount for tax year 2015-16 (£1,060); PolicyEngine UK simulates from 2023-24 data and does not expose the historic 2015-16 flat figure as a comparable variable.
+
+  # Class 3 voluntary National Insurance (SSCBA 1992 s.13). Class 3 is elective
+  # and PolicyEngine UK models ni_class_3 as a frozen microdata input with no
+  # rules formula, so there is no PolicyEngine rules oracle for these outputs;
+  # UKMOD likewise does not model voluntary Class 3 contributions. Encoded for
+  # statutory completeness with an honest no-oracle verdict. Added for UK
+  # coverage wave item 9.
+  - legal_id: uk:statutes/ukpga/1992/4/13#class_3_weekly_contribution_amount
+    country: uk
+    program: national_insurance
+    mapping_type: not_comparable
+    rationale: SSCBA 1992 s.13(1) flat Class 3 weekly contribution rate. PolicyEngine UK's ni_class_3 is an input variable with no formula (voluntary contributions are taken straight from microdata), so there is no PolicyEngine rules value to compare; UKMOD does not model voluntary Class 3 contributions either. No oracle available.
+  - legal_id: uk:statutes/ukpga/1992/4/13#entitled_to_pay_class_3_contribution
+    country: uk
+    program: national_insurance
+    mapping_type: not_comparable
+    rationale: SSCBA 1992 s.13(1)/(2) predicate for entitlement to pay Class 3 contributions. PolicyEngine UK does not simulate Class 3 eligibility (ni_class_3 is a frozen input); no oracle available.
+  - legal_id: uk:statutes/ukpga/1992/4/13#class_3_contribution_if_elected
+    country: uk
+    program: national_insurance
+    mapping_type: not_comparable
+    rationale: SSCBA 1992 s.13(1) elective Class 3 weekly contribution amount when the contributor chooses to pay. PolicyEngine UK's ni_class_3 is a frozen microdata input with no rules formula, so there is no PolicyEngine rules value to compare; UKMOD does not model voluntary Class 3. No oracle available.
+
 
 prefixes:
   - legal_id_prefix: uk:policies/govuk/council-tax-reduction#

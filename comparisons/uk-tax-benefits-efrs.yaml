@@ -40,6 +40,7 @@ runner:
       - national-insurance-class-4-final
       - national-insurance-final
       - personal-allowance
+      - marriage-allowance
       - income-tax-income-base
       - income-tax-section-10-earned-income
       - income-tax-section-11d-savings-income
