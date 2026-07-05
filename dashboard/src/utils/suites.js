@@ -187,6 +187,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 218,
   },
+  "mn-tanf-ecps": {
+    family: "tanf",
+    jurisdiction: "MN",
+    label: "Minnesota MFIP",
+    region: "us",
+    kind: "household",
+    order: 223,
+  },
   "co-tanf-ecps": {
     family: "tanf",
     jurisdiction: "CO",

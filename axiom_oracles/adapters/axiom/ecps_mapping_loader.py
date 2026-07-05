@@ -249,10 +249,19 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
         if transform == "monthly_flat_then_rate":
             # Countable monthly income where a flat amount is subtracted
             # first and a rate of the remainder is then disregarded
-            # (CalWORKs recipient: (gross - $600) x 50%).
+            # (CalWORKs recipient: (gross - $600) x 50%). With
+            # flat_per_earner, the flat applies once per member with
+            # positive income from from_facts (MFIP's $65 per wage earner).
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
             monthly = float(value) / 12
             flat = float(source.get("flat", 0))
+            if source.get("flat_per_earner"):
+                people = (case_facts or {}).get("__people__") or []
+                earners = sum(
+                    1 for p in people
+                    if any(float(p.get(k, 0) or 0) > 0 for k in from_facts)
+                )
+                flat *= max(1, earners)
             rate = float(source.get("rate", 0))
             return round(max(0.0, (monthly - flat)) * (1 - rate), 2)
 
@@ -286,6 +295,36 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
                 + per_child * max(0, children - 1),
                 2,
             )
+
+        if transform == "table_by_hh_size":
+            # Standard schedules keyed by household size, with an optional
+            # per-additional-person increment beyond max_size and a scalar
+            # multiplier (e.g. MFIP family wage level = 110% of the
+            # transitional standard).
+            people = (case_facts or {}).get("__people__") or []
+            size = max(1, len(people))
+            table = {int(k): float(v) for k, v in (source.get("table") or {}).items()}
+            if not table:
+                return 0.0
+            cap = int(source.get("max_size", max(table)))
+            key = min(size, cap)
+            extra = float(source.get("per_additional", 0)) * max(0, size - cap)
+            return round(
+                (table.get(key, 0.0) + extra) * float(source.get("multiplier", 1)),
+                2,
+            )
+
+        if transform == "sum_is_zero":
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            return float(value) <= 0
+
+        if transform == "sum_positive_and_zero":
+            # True when from_facts sum positive AND zero_facts sum to zero —
+            # e.g. MFIP's "unearned income only" budgeting branch.
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            zero_keys = [_resolve_concept(n) for n in source.get("zero_facts", [])]
+            zero_sum = _gather_facts(zero_keys, case_facts, person_facts, aggregate)
+            return float(value) > 0 and float(zero_sum) <= 0
 
         if transform == "age_below":
             # Person-scope: age fact strictly below source.threshold.

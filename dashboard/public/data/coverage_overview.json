@@ -636,12 +636,12 @@
    {
     "program": "tanf",
     "jurisdiction": "MN",
-    "status": "coverageOnly",
-    "generated": true,
-    "source": "rulespec-us origin/main: policies/dhs/combined-manual (1 rule files)",
+    "status": "executable",
+    "source": "axiom-oracles programs/us-mn/tanf/fy-2026.yaml composing Combined Manual 0022.12 total-grant budgeting",
     "known_non_tanf_gaps": [
-     "encoded upstream; no comparison suite yet"
-    ]
+     "recipient month only; applicant proration and recoupment out of scope"
+    ],
+    "suite": "mn-tanf-ecps"
    },
    {
     "program": "tanf",

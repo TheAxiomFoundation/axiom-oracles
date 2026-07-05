@@ -1167,3 +1167,119 @@ mappings:
       transform: monthly
       aggregate: sum_over_people
       from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME, DIVIDEND_INCOME]
+
+  # ---------------------------------------------------------------------
+  # MN TANF / MFIP (us-mn/tanf program) — Combined Manual 0022.12.
+  # Standards mirror PolicyEngine's transitional standard (cash + food),
+  # 110% family wage level, and $65-per-earner + 50% disregard.
+  # ---------------------------------------------------------------------
+
+  - match: { kind: suffix, value: transitional_standard_for_corresponding_payment_month }
+    scope: household
+    source:
+      kind: derived
+      transform: table_by_hh_size
+      table: { 1: 678, 2: 1114, 3: 1430, 4: 1715, 5: 1982, 6: 2297, 7: 2500, 8: 2759, 9: 3015, 10: 3265 }
+      per_additional: 248
+      max_size: 10
+  - match: { kind: suffix, value: family_wage_level_for_corresponding_payment_month }
+    scope: household
+    source:
+      kind: derived
+      transform: table_by_hh_size
+      table: { 1: 678, 2: 1114, 3: 1430, 4: 1715, 5: 1982, 6: 2297, 7: 2500, 8: 2759, 9: 3015, 10: 3265 }
+      per_additional: 248
+      max_size: 10
+      multiplier: 1.1
+  - match: { kind: suffix, value: mfip_food_portion_amount_under_section_0020_09 }
+    scope: household
+    source:
+      kind: derived
+      transform: table_by_hh_size
+      table: { 1: 247, 2: 453, 3: 652, 4: 829, 5: 1002, 6: 1224, 7: 1333, 8: 1510, 9: 1688, 10: 1869 }
+      per_additional: 182
+      max_size: 10
+  - match: { kind: suffix, value: net_earned_income_in_budget_month }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_flat_then_rate
+      flat: 65
+      flat_per_earner: true
+      rate: 0.5
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: unearned_income_in_budget_month }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: suffix, value: unit_receives_no_income_other_than_mfip }
+    scope: household
+    source:
+      kind: derived
+      transform: sum_is_zero
+      aggregate: sum_over_people
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: suffix, value: unit_receives_unearned_income_only }
+    scope: household
+    source:
+      kind: derived
+      transform: sum_positive_and_zero
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+      zero_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: unit_has_earned_income_only }
+    scope: household
+    source:
+      kind: derived
+      transform: sum_positive_and_zero
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+      zero_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  # Contextually correct: this branch is only reached after the
+  # earned-only test fails, so "has both" reduces to "has earned income".
+  - match: { kind: suffix, value: unit_has_both_earned_and_unearned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: unit_is_applicant_case }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: prorated_benefit_under_section_0022_12_03 }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: recoupment_amount_if_applicable }
+    scope: household
+    source: { kind: constant, value: 0 }
