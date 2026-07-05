@@ -122,6 +122,14 @@
       "source": "comparisons/medicaid-magi-co-ecps.yaml"
     },
     {
+      "suite": "mn-tanf-ecps",
+      "report": "axiom-policyengine-mn-tanf-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-mn"
+      ],
+      "source": "comparisons/mn-tanf-ecps.yaml"
+    },
+    {
       "suite": "nc-snap-ecps",
       "report": "axiom-policyengine-nc-snap-ecps.json",
       "repos": [
