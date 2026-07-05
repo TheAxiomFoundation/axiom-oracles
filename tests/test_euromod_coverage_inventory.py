@@ -91,11 +91,13 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert (
         outputs["bch_s"]["status"]
-        == "live_oracle_verified_one_child_base_with_known_dg_and_pre_2020_wallonia_issues"
+        == "live_oracle_verified_one_child_base_and_brussels_same_age_household_with_known_dg_and_pre_2020_wallonia_issues"
     )
     assert outputs["bch_s"]["additional_rulespec_outputs"] == [
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement",
+        "be:statutes/family_benefits/child_benefit_base_2025"
+        "#belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement",
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
     ]

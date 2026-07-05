@@ -209,6 +209,45 @@ def be_family_child_benefit_social_supplement_cases() -> list[Case]:
     ]
 
 
+def be_family_child_benefit_brussels_same_age_household_cases() -> list[Case]:
+    """Belgium Brussels same-age multi-child household bch_s cases."""
+
+    return [
+        _child_benefit_brussels_same_age_household_case(
+            "be-family-child-benefit-brussels-same-age-household-two-children-age-0-low-income-single-parent",
+            scenario="brussels-low-income-two-same-age-children-under-6-single-parent",
+            child_age=0,
+            child_count=2,
+            single_parent=True,
+            employment_income=500,
+        ),
+        _child_benefit_brussels_same_age_household_case(
+            "be-family-child-benefit-brussels-same-age-household-two-children-age-13-low-income-couple",
+            scenario="brussels-low-income-two-same-age-children-age-13-couple",
+            child_age=13,
+            child_count=2,
+            single_parent=False,
+            employment_income=500,
+        ),
+        _child_benefit_brussels_same_age_household_case(
+            "be-family-child-benefit-brussels-same-age-household-three-children-age-13-low-income-couple",
+            scenario="brussels-low-income-three-same-age-children-age-13-couple",
+            child_age=13,
+            child_count=3,
+            single_parent=False,
+            employment_income=500,
+        ),
+        _child_benefit_brussels_same_age_household_case(
+            "be-family-child-benefit-brussels-same-age-household-two-children-age-0-middle-income-single-parent",
+            scenario="brussels-middle-income-two-same-age-children-under-6-single-parent",
+            child_age=0,
+            child_count=2,
+            single_parent=True,
+            employment_income=4_000,
+        ),
+    ]
+
+
 def be_family_child_benefit_wallonia_social_supplement_cases() -> list[Case]:
     """Belgium Wallonia Article 13 child-benefit cases for EUROMOD BE_2025."""
 
@@ -370,6 +409,64 @@ def _child_benefit_social_supplement_case(
     )
 
 
+def _child_benefit_brussels_same_age_household_case(
+    case_id: str,
+    *,
+    scenario: str,
+    child_age: int,
+    child_count: int,
+    single_parent: bool,
+    employment_income: float,
+    annual_household_income: float = 12_000,
+    higher_education: bool = False,
+) -> Case:
+    income_input = _child_benefit_base_input(
+        "belgium_child_benefit_brussels_article_9_household_annual_income"
+    )
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "axiom_entity": "Household",
+            "axiom_entity_id": "household",
+            "scenario": scenario,
+            "region_code": BRUSSELS_REGION,
+            "child_age_years": child_age,
+            "child_count": child_count,
+            "same_age_children": True,
+            "single_parent": single_parent,
+            "child_enrolled_in_higher_education": higher_education,
+            "brussels_article_9_household_annual_income": annual_household_income,
+            "axiom_inputs": _child_benefit_social_supplement_axiom_inputs(
+                child_age=child_age,
+                higher_education=higher_education,
+                annual_household_income=annual_household_income,
+                child_count=child_count,
+                single_parent=single_parent,
+            ),
+            "euromod_inputs": _child_benefit_base_euromod_inputs(
+                region=BRUSSELS_REGION,
+                child_age=child_age,
+                higher_education=higher_education,
+                employment_income=employment_income,
+                single_parent=single_parent,
+                child_count=child_count,
+            ),
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "il_bch_means": [income_input],
+            },
+        },
+        entities=_child_benefit_base_entities(
+            child_age=child_age,
+            child_count=child_count,
+        ),
+        outputs=(
+            Concepts.BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT,
+        ),
+    )
+
+
 def _child_benefit_wallonia_social_supplement_case(
     case_id: str,
     *,
@@ -421,6 +518,7 @@ def _child_benefit_base_axiom_inputs(
     region: int,
     child_age: int,
     higher_education: bool,
+    household_child_count: int = 1,
 ) -> dict[str, float | int | bool]:
     return {
         _child_benefit_base_input(
@@ -431,7 +529,7 @@ def _child_benefit_base_axiom_inputs(
         ): region,
         _child_benefit_base_input(
             "belgium_family_benefits_child_benefit_household_child_count"
-        ): 1,
+        ): household_child_count,
         _child_benefit_base_input(
             "belgium_family_benefits_child_benefit_child_enrolled_in_higher_education"
         ): higher_education,
@@ -443,11 +541,14 @@ def _child_benefit_social_supplement_axiom_inputs(
     child_age: int,
     higher_education: bool,
     annual_household_income: float,
+    child_count: int = 1,
+    single_parent: bool = True,
 ) -> dict[str, float | int | bool]:
     inputs = _child_benefit_base_axiom_inputs(
         region=BRUSSELS_REGION,
         child_age=child_age,
         higher_education=higher_education,
+        household_child_count=child_count,
     )
     inputs.update(
         {
@@ -456,7 +557,7 @@ def _child_benefit_social_supplement_axiom_inputs(
             ): annual_household_income,
             _child_benefit_base_input(
                 "belgium_child_benefit_brussels_article_9_child_in_single_parent_family"
-            ): True,
+            ): single_parent,
             _child_benefit_base_input(
                 "belgium_child_benefit_brussels_article_9_cadastral_income_cap_exceeded"
             ): False,
@@ -465,8 +566,12 @@ def _child_benefit_social_supplement_axiom_inputs(
     return inputs
 
 
-def _child_benefit_base_entities(*, child_age: int) -> tuple[Entity, ...]:
-    return (
+def _child_benefit_base_entities(
+    *,
+    child_age: int,
+    child_count: int = 1,
+) -> tuple[Entity, ...]:
+    entities = [
         Entity(
             entity_id="head",
             kind="person",
@@ -474,16 +579,21 @@ def _child_benefit_base_entities(*, child_age: int) -> tuple[Entity, ...]:
                 Concepts.PERSON_AGE: 35,
                 Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
             },
-        ),
-        Entity(
-            entity_id="child",
-            kind="person",
-            facts={
-                Concepts.PERSON_AGE: child_age,
-                Concepts.HOUSEHOLD_RELATION: "Child",
-            },
-        ),
-    )
+        )
+    ]
+    for index in range(child_count):
+        entity_id = "child" if child_count == 1 else f"child-{index + 1}"
+        entities.append(
+            Entity(
+                entity_id=entity_id,
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: child_age,
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                },
+            )
+        )
+    return tuple(entities)
 
 
 def _birth_allowance_axiom_inputs(
@@ -588,31 +698,36 @@ def _child_benefit_base_euromod_inputs(
     higher_education: bool,
     employment_income: float = 5_000,
     single_parent: bool = False,
+    child_count: int = 1,
 ) -> list[dict[str, float | int]]:
     mother_id = 101
     child_id = 102
     father_id = 103
     if single_parent:
-        return [
+        rows = [
             _euromod_person_row(
                 mother_id,
                 age=35,
                 region=region,
                 gender=0,
                 employment_income=employment_income,
-            ),
+            )
+        ]
+        rows.extend(
             _euromod_person_row(
-                child_id,
+                child_id + index,
                 age=child_age,
                 region=region,
                 gender=1,
                 mother_id=mother_id,
                 in_education=child_age >= 6 or higher_education,
                 higher_education=higher_education,
-            ),
-        ]
+            )
+            for index in range(child_count)
+        )
+        return rows
 
-    return [
+    rows = [
         _euromod_person_row(
             mother_id,
             age=35,
@@ -630,8 +745,12 @@ def _child_benefit_base_euromod_inputs(
             partner_id=mother_id,
             marital_status=2,
         ),
+    ]
+    child_ids = [child_id]
+    child_ids.extend(range(father_id + 1, father_id + child_count))
+    rows.extend(
         _euromod_person_row(
-            child_id,
+            id_,
             age=child_age,
             region=region,
             gender=1,
@@ -639,8 +758,10 @@ def _child_benefit_base_euromod_inputs(
             father_id=father_id,
             in_education=child_age >= 6 or higher_education,
             higher_education=higher_education,
-        ),
-    ]
+        )
+        for id_ in child_ids
+    )
+    return rows
 
 
 def _euromod_person_row(

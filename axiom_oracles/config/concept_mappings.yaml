@@ -346,6 +346,29 @@ concepts:
           type: country
           geoid: BE
 
+  be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement:
+    description: Belgium Brussels same-age child household child benefit with Article 9 social supplement
+    category: benefits
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE, BE-BRU]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: bch_s
+        scope:
+          type: country
+          geoid: BE
+
   be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement:
     description: Belgium Wallonia child benefit with Article 13 social supplement
     category: benefits
