@@ -245,6 +245,10 @@ class Concepts:
         "be:statutes/social_security/special_contribution"
         "#belgium_special_social_security_article_108_annual_contribution"
     )
+    BE_PENSIONER_HEALTH_AND_SOLIDARITY_CONTRIBUTION = (
+        "be:statutes/social_security/non_labour_income_contributions"
+        "#belgium_pensioner_total_annual_health_and_solidarity_withholding"
+    )
     BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM = (
         "be-vlg:regulations/social_security/flemish_social_protection/premium"
         "#flanders_social_protection_annual_premium"
