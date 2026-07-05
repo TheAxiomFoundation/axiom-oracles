@@ -51,6 +51,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
       "description": "Belgium child benefit base amount",
       "difference": -1946.55,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "german-speaking-community-missing-bch-branch",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -67,6 +72,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
       "description": "Belgium child benefit base amount",
       "difference": -1946.55,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "german-speaking-community-missing-bch-branch",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -83,6 +93,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
       "description": "Belgium child benefit base amount",
       "difference": -1946.55,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "german-speaking-community-missing-bch-branch",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -99,6 +114,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
       "description": "Belgium child benefit base amount",
       "difference": -1946.55,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "german-speaking-community-missing-bch-branch",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -111,11 +131,27 @@
     }
   ],
   "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "be-family-child-benefit-base",
   "summary": {
     "comparison_count": 17,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 4
+      },
+      "dispositions_file": "dispositions/be-family-child-benefit-base.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 76.470588,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 13,

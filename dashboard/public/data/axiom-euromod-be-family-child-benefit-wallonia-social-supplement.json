@@ -51,6 +51,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
       "description": "Belgium Wallonia child benefit with Article 13 social supplement",
       "difference": -820.6799999999998,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wallonia-pre-2020-low-income-indexed-article-13-supplement",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+      },
       "kind": "amount_difference",
       "left": 2730.98,
       "parent": null,
@@ -67,6 +72,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
       "description": "Belgium Wallonia child benefit with Article 13 social supplement",
       "difference": -820.6799999999998,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wallonia-pre-2020-low-income-indexed-article-13-supplement",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+      },
       "kind": "amount_difference",
       "left": 3024.1,
       "parent": null,
@@ -83,6 +93,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
       "description": "Belgium Wallonia child benefit with Article 13 social supplement",
       "difference": -820.6799999999989,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wallonia-pre-2020-low-income-indexed-article-13-supplement",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+      },
       "kind": "amount_difference",
       "left": 3267.61,
       "parent": null,
@@ -99,6 +114,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
       "description": "Belgium Wallonia child benefit with Article 13 social supplement",
       "difference": -373.08000000000015,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wallonia-pre-2020-middle-income-indexed-article-13-supplement",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+      },
       "kind": "amount_difference",
       "left": 1735.18,
       "parent": null,
@@ -115,6 +135,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
       "description": "Belgium Wallonia child benefit with Article 13 social supplement",
       "difference": -373.08000000000015,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wallonia-pre-2020-middle-income-indexed-article-13-supplement",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+      },
       "kind": "amount_difference",
       "left": 1887.8,
       "parent": null,
@@ -131,6 +156,11 @@
       "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
       "description": "Belgium Wallonia child benefit with Article 13 social supplement",
       "difference": -373.0800000000004,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wallonia-pre-2020-middle-income-indexed-article-13-supplement",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9"
+      },
       "kind": "amount_difference",
       "left": 1972.04,
       "parent": null,
@@ -143,11 +173,27 @@
     }
   ],
   "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "be-family-child-benefit-wallonia-social-supplement",
   "summary": {
     "comparison_count": 8,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 6,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/be-family-child-benefit-wallonia-social-supplement.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 25,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 2,

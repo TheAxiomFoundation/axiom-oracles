@@ -430,11 +430,19 @@ export function reportMetric(report) {
     total += agg.comparison_count || 0;
     mismatches += agg.mismatch_count || 0;
   }
+  // The disposition merge (dispositions/<suite>.yaml) stamps the summary
+  // with both rates: raw, and explained — matches plus mismatches carrying
+  // a schema-validated disposition (explained residuals, upstream engine
+  // gaps, bridge artifacts).
+  const dispositioned = report?.summary?.dispositioned || null;
   return {
     total,
     mismatches,
     matched: total - mismatches,
     rate: total > 0 ? ((total - mismatches) / total) * 100 : null,
+    explainedRate:
+      dispositioned && total > 0 ? dispositioned.explained_rate : null,
+    unexplainedCount: dispositioned ? dispositioned.unexplained_count : null,
   };
 }
 

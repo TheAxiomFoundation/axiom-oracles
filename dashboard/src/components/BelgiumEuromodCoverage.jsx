@@ -38,6 +38,12 @@ function compactNumber(value) {
   return Number(value).toLocaleString();
 }
 
+function ratePercent(value) {
+  if (value == null) return "—";
+  const rounded = Math.round(Number(value) * 10) / 10;
+  return `${Number.isInteger(rounded) ? rounded.toFixed(0) : rounded.toFixed(1)}%`;
+}
+
 function plural(value, singular, pluralForm = `${singular}s`) {
   return Number(value) === 1 ? singular : pluralForm;
 }
@@ -236,6 +242,18 @@ export default function BelgiumEuromodCoverage({ coverage, issues }) {
             value={compactNumber(source?.header_columns)}
             label="input columns"
           />
+          {coverage.dispositioned_parity && (
+            <>
+              <Stat
+                value={ratePercent(coverage.dispositioned_parity.raw_match_rate)}
+                label="raw parity"
+              />
+              <Stat
+                value={ratePercent(coverage.dispositioned_parity.explained_rate)}
+                label="explained parity"
+              />
+            </>
+          )}
         </div>
       </section>
 

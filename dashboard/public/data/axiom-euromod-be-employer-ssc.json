@@ -51,6 +51,11 @@
       "concept": "be:regulations/social_security/workers/employer_contributions#belgium_employer_social_security_ordinary_worker_contribution",
       "description": "Belgium employer social-security contribution",
       "difference": -37.62505259117279,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "stale-company-closing-fund-rates",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/11"
+      },
       "kind": "amount_difference",
       "left": 8466.5547024952,
       "parent": null,
@@ -67,6 +72,11 @@
       "concept": "be:regulations/social_security/workers/employer_contributions#belgium_employer_social_security_ordinary_worker_contribution",
       "description": "Belgium employer social-security contribution",
       "difference": -75.25010518234558,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "stale-company-closing-fund-rates",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/11"
+      },
       "kind": "amount_difference",
       "left": 16933.1094049904,
       "parent": null,
@@ -79,11 +89,27 @@
     }
   ],
   "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "be-employer-ssc",
   "summary": {
     "comparison_count": 2,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 2
+      },
+      "dispositions_file": "dispositions/be-employer-ssc.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 0,

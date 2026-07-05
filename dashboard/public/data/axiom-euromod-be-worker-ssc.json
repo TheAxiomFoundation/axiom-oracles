@@ -115,6 +115,11 @@
       "concept": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
       "description": "Belgium employee social-security work-bonus reduction",
       "difference": 17.111497604077158,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "work-bonus-january-2025-timing",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5"
+      },
       "kind": "amount_difference",
       "left": 3079.481497604077,
       "parent": null,
@@ -131,6 +136,11 @@
       "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
       "description": "Belgium employee social-security contribution after work-bonus reduction",
       "difference": -17.11149760407693,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "net-contribution-downstream-of-work-bonus-timing",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5"
+      },
       "kind": "amount_difference",
       "left": 1057.261304699186,
       "parent": null,
@@ -143,11 +153,29 @@
     }
   ],
   "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "be-worker-ssc",
   "summary": {
     "comparison_count": 6,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 2
+      },
+      "dispositions_file": "dispositions/be-worker-ssc.yaml",
+      "expired_entries": [
+        "dataset-uprating-bridge-artifact-resolved"
+      ],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 66.666667,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 4,

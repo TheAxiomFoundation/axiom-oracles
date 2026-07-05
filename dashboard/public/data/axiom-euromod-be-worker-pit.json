@@ -51,6 +51,11 @@
       "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
       "description": "Belgium worker PIT before withholding",
       "difference": -780.367331889955,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "work-bonus-credit-uncapped-ab-bases",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12"
+      },
       "kind": "amount_difference",
       "left": -1504.8488879999998,
       "parent": null,
@@ -63,11 +68,27 @@
     }
   ],
   "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "be-worker-pit",
   "summary": {
     "comparison_count": 3,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 1
+      },
+      "dispositions_file": "dispositions/be-worker-pit.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 66.666667,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 2,

@@ -173,6 +173,22 @@ function RunRow({ report, knownCauses, coverageOverview, isOpen, onToggle, ancho
         </span>
         <span className="run-figures">
           <RunStatus metric={metric} kind={meta.kind} alarms={alarms} />
+          {metric.total > 0 &&
+            metric.explainedRate != null &&
+            metric.mismatches > 0 &&
+            metric.explainedRate - metric.rate > 0.05 && (
+              <span
+                className="mono run-rate-explained"
+                style={{ color: rateColor(metric.explainedRate) }}
+                title="Match rate counting mismatches with schema-validated dispositions (explained residuals, upstream engine gaps, bridge artifacts) as explained"
+              >
+                {formatAgreementRate(
+                  metric.explainedRate,
+                  metric.unexplainedCount ?? 0,
+                )}{" "}
+                explained
+              </span>
+            )}
           {metric.total > 0 && (
             <span
               className="mono run-rate"

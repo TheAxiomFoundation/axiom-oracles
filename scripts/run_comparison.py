@@ -2351,8 +2351,30 @@ def _slim_report_for_dashboard(report: dict) -> dict:
     return slim
 
 
+def _merge_dispositions(report: dict) -> dict:
+    """Join dispositions/<suite>.yaml (when present) into the report.
+
+    Adds the summary `dispositioned` block — raw match rate, explained rate,
+    unexplained count — and annotates classified mismatch rows. Invalid
+    dispositions files raise so a run never writes a report with silently
+    dropped classifications.
+    """
+    try:
+        from axiom_oracles.comparison.dispositions import (
+            apply_dispositions_from_dir,
+        )
+    except ImportError:
+        return report
+    return apply_dispositions_from_dir(
+        report,
+        REPO_ROOT / "dispositions",
+        repo_root=REPO_ROOT,
+    )
+
+
 def _write_dashboard_report(report: dict, filename: str) -> None:
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    report = _merge_dispositions(report)
     target = DASHBOARD_DATA_DIR / filename
     slim = _slim_report_for_dashboard(report)
     truncation = slim.get("dashboard_truncation")
