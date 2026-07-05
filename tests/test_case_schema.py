@@ -201,6 +201,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_EMPLOYER_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
         Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
+        Concepts.BE_BIRTH_LEAVE_TOTAL_COMPENSATION,
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SPECIAL_SOCIAL_SECURITY_CONTRIBUTION,
         Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
@@ -660,6 +661,76 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
             "inputs": [gross_input],
             "divide_by": 12,
         }
+    }
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_birth_leave_suite_defines_oracle_concept_and_bridge() -> None:
+    cases = load_suite("be-birth-leave")
+
+    assert len(cases) == 2
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_BIRTH_LEAVE_TOTAL_COMPENSATION,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
+    assert {case.metadata["scenario"] for case in cases} == {
+        "birth-leave-paternity-under-cap"
+    }
+    assert {tuple(case.metadata["euromod_switches"]) for case in cases} == {
+        (("PBE", True),)
+    }
+
+    case = cases[0]
+    uncapped_daily_input = (
+        "be:regulations/health_insurance/birth_leave/indemnity_rates#input."
+        "belgium_birth_leave_uncapped_lost_daily_remuneration"
+    )
+    capped_daily_input = (
+        "be:regulations/health_insurance/birth_leave/indemnity_rates#input."
+        "belgium_birth_leave_lost_daily_remuneration_after_article_87_cap"
+    )
+    eligible_input = (
+        "be:regulations/health_insurance/birth_leave/indemnity_rates#input."
+        "belgium_birth_leave_eligible_parent"
+    )
+    assert case.metadata["axiom_inputs"][eligible_input] is True
+    assert case.metadata["axiom_inputs"][uncapped_daily_input] == pytest.approx(
+        30_000 / 312
+    )
+    assert case.metadata["axiom_inputs"][capped_daily_input] == pytest.approx(
+        30_000 / 312
+    )
+    assert case.metadata["euromod_inputs"][0]["idperson"] == 101
+    assert case.metadata["euromod_inputs"][0]["dgn"] == 1
+    assert case.metadata["euromod_inputs"][0]["yem"] == 2_500
+    assert case.metadata["euromod_inputs"][1]["idpartner"] == 101
+    assert case.metadata["euromod_inputs"][2]["idfather"] == 101
+    assert case.metadata["euromod_inputs"][2]["idmother"] == 102
+    assert case.metadata["euromod_to_axiom_input_bridge"] == {
+        "yem": {
+            "inputs": [uncapped_daily_input, capped_daily_input],
+            "divide_by": 312,
+        }
+    }
+
+    (bridged_case,) = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [EngineResult("euromod", case.case_id, {"yem": 31_200})],
+    )
+
+    assert bridged_case.metadata["axiom_inputs"][uncapped_daily_input] == 100
+    assert bridged_case.metadata["axiom_inputs"][capped_daily_input] == 100
+    assert bridged_case.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        uncapped_daily_input: 100,
+        capped_daily_input: 100,
     }
     assert {case.period for case in cases} == {"2025"}
 

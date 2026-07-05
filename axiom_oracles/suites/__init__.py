@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .be_birth_leave import be_birth_leave_cases
 from .be_social_assistance import (
     be_elderly_income_support_cases,
     be_social_assistance_cases,
@@ -44,6 +45,7 @@ def available_suites() -> tuple[str, ...]:
         "be-employer-ssc",
         "be-self-employed-ssc",
         "be-special-social-security-contribution",
+        "be-birth-leave",
         "be-family-birth-allowance",
         "be-family-child-benefit-base",
         "be-family-child-benefit-income-list",
@@ -78,6 +80,8 @@ def load_suite(name: str):
         return be_self_employed_ssc_cases()
     if name == "be-special-social-security-contribution":
         return be_special_social_security_contribution_cases()
+    if name == "be-birth-leave":
+        return be_birth_leave_cases()
     if name == "be-family-birth-allowance":
         return be_family_birth_allowance_cases()
     if name == "be-family-child-benefit-base":
@@ -107,6 +111,7 @@ def load_suite(name: str):
 
 __all__ = [
     "available_suites",
+    "be_birth_leave_cases",
     "be_elderly_income_support_cases",
     "be_employer_ssc_cases",
     "be_family_birth_allowance_cases",

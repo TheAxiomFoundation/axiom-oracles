@@ -87,6 +87,17 @@ def _needs_axiom_tax_itemization_choice(concept_ids: tuple[str, ...]) -> bool:
     )
 
 
+def _rulespec_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:
+    imports: list[str] = []
+    for concept_id in concept_ids:
+        module_ref = str(concept_id).split("#", maxsplit=1)[0]
+        if ":" not in module_ref or not module_ref:
+            continue
+        if module_ref not in imports:
+            imports.append(module_ref)
+    return tuple(imports)
+
+
 @click.group()
 def cli() -> None:
     """Axiom program validation and oracle-comparison tools."""
@@ -1017,13 +1028,19 @@ def _build_runner(
             compiled_artifact = (
                 US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
             )
-        program_imports = (
-            _tax_oracle_imports_for_concepts(concept_ids)
-            if axiom_program is None
-            and not wants_snap
-            and _wants_tax(concept_ids)
-            else ()
-        )
+        program_imports = ()
+        generated_program_target = None
+        program_rules = ()
+        if axiom_program is None and not wants_snap:
+            if _wants_tax(concept_ids):
+                program_imports = _tax_oracle_imports_for_concepts(concept_ids)
+                generated_program_target = US_TAX_ORACLE_BRIDGE_TARGET
+                program_rules = _tax_oracle_program_rules_for_concepts(concept_ids)
+            else:
+                program_imports = _rulespec_imports_for_concepts(concept_ids)
+                generated_program_target = (
+                    program_imports[0] if program_imports else None
+                )
         return AxiomRulesRunner(
             program_path=axiom_program,
             compiled_artifact_path=compiled_artifact,
@@ -1031,12 +1048,8 @@ def _build_runner(
             default_entity_id="household" if wants_snap else axiom_entity_id,
             default_entity="Household" if wants_snap else "TaxUnit",
             program_imports=program_imports,
-            program_rules=_tax_oracle_program_rules_for_concepts(concept_ids)
-            if program_imports
-            else (),
-            generated_program_target=US_TAX_ORACLE_BRIDGE_TARGET
-            if program_imports
-            else None,
+            program_rules=program_rules,
+            generated_program_target=generated_program_target,
             prune_unsupported_inputs=bool(program_imports),
             batch_size=axiom_batch_size,
         )

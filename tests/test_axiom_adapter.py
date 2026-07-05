@@ -847,6 +847,29 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     assert "state_withheld_income_tax" in generated_rule_names
 
 
+def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept() -> None:
+    runner = _build_runner(
+        "axiom",
+        "api",
+        None,
+        None,
+        (Concepts.BE_BIRTH_LEAVE_TOTAL_COMPENSATION,),
+        axiom_program=None,
+        axiom_engine_binary=Path("/tmp/axiom-rules"),
+    )
+
+    assert isinstance(runner, AxiomRulesRunner)
+    assert runner.program_imports == (
+        "be:regulations/health_insurance/birth_leave/indemnity_rates",
+    )
+    assert runner.program_rules == ()
+    assert (
+        runner.generated_program_target
+        == "be:regulations/health_insurance/birth_leave/indemnity_rates"
+    )
+    assert runner.prune_unsupported_inputs
+
+
 def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     runner = _build_runner(
         "axiom",
