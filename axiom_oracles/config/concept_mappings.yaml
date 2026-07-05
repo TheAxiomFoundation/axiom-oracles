@@ -553,6 +553,56 @@ concepts:
           type: country
           geoid: BE
 
+  uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_income_tax_liability:
+    description: UK income tax liability (single employee)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.0002
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#uk_nic_pilot_primary_class_1_contribution:
+    description: UK Class 1 employee National Insurance contribution (single employee)
+    category: social_contributions
+    comparison: amount
+    # UKMOD computes the contribution week by week on weekly-rounded
+    # thresholds and sums; Axiom applies the annual statutory formula. The
+    # residual is a small weekly-rounding difference (about £4-£6 across the
+    # grid), so keep an absolute tolerance that absorbs it while still
+    # catching structural encoding gaps.
+    tolerance: 8
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_nic_pilot_primary_class_1_contribution
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: UK
+
   us:statutes/7/2014/u#snap_benefit:
     description: SNAP benefit amount
     category: food

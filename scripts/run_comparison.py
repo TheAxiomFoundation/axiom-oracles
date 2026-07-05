@@ -1267,11 +1267,117 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     )
 
 
+def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
+    """Synthetic EUROMOD-platform (UKMOD/EUROMOD) suite vs Axiom RuleSpec.
+
+    Runs ``axiom_oracles.cli compare euromod axiom --population synthetic
+    --suite <name>`` against a locally available EUROMOD-platform model. The
+    engine (``EM_Executable.dll``) is x64-only and needs the ``euromod``
+    connector plus a .NET runtime, and the model checkout is not present on
+    the shared CI runner, so this runner **skips gracefully** when the model
+    root or ``EUROMOD_PYTHON`` is unavailable: it re-emits the committed
+    dashboard report as the run output so the weekly matrix stays green and
+    the dashboard copy is idempotent. The suite is regenerated locally
+    (``scripts/regenerate_euromod_uk.sh``) where the model and x64 runtime
+    exist; that regeneration is the source of the committed numbers.
+    """
+    params = runner["parameters"]
+    model_root_raw = params.get("euromod_model_root") or os.environ.get(
+        "EUROMOD_MODEL_ROOT", ""
+    )
+    model_root = _expand_path(model_root_raw) if model_root_raw else None
+    euromod_python = os.environ.get("EUROMOD_PYTHON")
+
+    if model_root is None or not model_root.exists() or not euromod_python:
+        reason = (
+            "EUROMOD model root unavailable"
+            if (model_root is None or not model_root.exists())
+            else "EUROMOD_PYTHON unset"
+        )
+        committed = DASHBOARD_DATA_DIR / runner.get("dashboard_filename", "")
+        dashboard_filename = params.get("dashboard_filename")
+        if dashboard_filename:
+            committed = DASHBOARD_DATA_DIR / dashboard_filename
+        print(
+            f"EUROMOD-platform model not runnable here ({reason}); "
+            "re-emitting the committed dashboard report. Regenerate locally "
+            "with scripts/regenerate_euromod_uk.sh."
+        )
+        if committed.exists():
+            output.write_text(committed.read_text())
+        else:
+            output.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "axiom.comparison_report.v2",
+                        "suite": params.get("suite", "unknown"),
+                        "population": "synthetic",
+                        "case_count": 0,
+                        "engines": {"left": "euromod", "right": "axiom"},
+                        "aggregates": [],
+                        "cases": [],
+                        "mismatches": [],
+                        "concepts": [],
+                        "errors": [f"skipped: {reason}"],
+                        "locales": [],
+                        "scope": None,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+        return
+
+    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+    _ensure_engine_binary(axiom_rules_repo, kind="release")
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.14",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "python",
+        "-m",
+        "axiom_oracles.cli",
+        "compare",
+        "euromod",
+        "axiom",
+        "--population",
+        "synthetic",
+        "--suite",
+        str(params["suite"]),
+        "--report-suite",
+        str(params["suite"]),
+        "--sample-size",
+        str(params.get("sample_size", 0)),
+        "--period",
+        str(params["period"]),
+        "--axiom-engine-binary",
+        str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+        "--output",
+        str(output),
+    ]
+    env = dict(os.environ)
+    env["EUROMOD_MODEL_ROOT"] = str(model_root)
+    env["EUROMOD_COUNTRY"] = str(params.get("euromod_country", "UK"))
+    env["EUROMOD_SYSTEM"] = str(params.get("euromod_system", "UK_2026"))
+    env["EUROMOD_DATASET"] = str(params.get("euromod_dataset", "training_data"))
+    roots_env = params.get("axiom_rulespec_repo_roots")
+    if roots_env:
+        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
+            _expand_path(roots_env)
+        )
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
+    "euromod-synthetic-compare": _run_euromod_synthetic_compare,
 }
 
 

@@ -2808,3 +2808,20 @@ prefixes:
     country: uk
     mapping_type: not_comparable
     rationale: PolicyEngine-UK does not model council-level Council Tax Reduction schemes; Kingston upon Thames CTR is grounded to the council's published scheme document.
+
+  # Composed single-employee UKMOD oracle pilot pipelines. These wire the
+  # supplied s10/s23 and s8 stage boundaries from gross employment income so
+  # UKMOD (tin_s, tscee_s) can be compared end to end; their liability and NIC
+  # outputs correspond to the canonical Income Tax Act 2007 and SSCBA 1992
+  # rules that are separately mapped, so the pilot copies are not additional
+  # PolicyEngine oracle variables. Added for rulespec-uk#71.
+  - legal_id_prefix: uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Composed single-employee UKMOD income-tax oracle pipeline; its stage and liability outputs re-wire the separately mapped Income Tax Act 2007 sections 10, 23 and 35 rules for the UKMOD tin_s comparison rather than adding new PolicyEngine UK oracle variables.
+  - legal_id_prefix: uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Composed single-employee UKMOD Class 1 employee National Insurance oracle pipeline; its annual contribution outputs re-wire the separately encoded SSCBA 1992 section 8 percentages for the UKMOD tscee_s comparison rather than adding new PolicyEngine UK oracle variables.

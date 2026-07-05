@@ -510,7 +510,13 @@ class TestUkmodLive:
 
     def test_default_outputs_cover_the_standard_bridge_set(self, runner) -> None:
         results = runner.run_cases([_single_earner("uk-30k", 30_000.0)])
-        assert set(DEFAULT_OUTPUTS) <= set(results[0].values)
+        # ``tscee_net_s`` is a derived output (``tscee_s - tsceerd_s``); UKMOD's
+        # UK systems do not emit ``tsceerd_s`` (the Belgian work-bonus-style
+        # employee-contribution reduction), so the derived column is absent for
+        # UKMOD. Assert every other default bridge output is present.
+        expected = set(DEFAULT_OUTPUTS) - {"tscee_net_s"}
+        assert expected <= set(results[0].values)
+        assert "tsceerd_s" not in results[0].values
 
 
 @pytest.mark.skipif(
