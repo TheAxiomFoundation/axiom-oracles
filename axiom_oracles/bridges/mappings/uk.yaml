@@ -2901,3 +2901,18 @@ prefixes:
     program: child_benefit
     mapping_type: not_comparable
     rationale: Composed Family-level UKMOD Child Benefit oracle pipeline; its enhanced/other weekly rate, child-count, weekly-entitlement and annual-entitlement outputs re-wire the separately mapped SSCBA 1992 section 141 entitlement and SI 2006/965 regulation 2 weekly-rate rules for the UKMOD bch_s comparison (pre-charge Child Benefit reconstructed as bch_s plus the bchrd_s High Income Child Benefit Charge clawback) rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Family-level UKMOD Pension Credit oracle pilot pipeline. It wires the
+  # State Pension Credit Regulations 2002 regulation 6 standard-minimum-guarantee
+  # and additional-amount weekly rates and the State Pension Credit Act 2002
+  # section 2 guarantee credit from supplied pensioner facts so UKMOD (boamt_s)
+  # can be compared end to end. Its standard-minimum-guarantee, additional-
+  # amount, appropriate-minimum-guarantee, guarantee-credit and award outputs
+  # re-wire the separately mapped regulation 6 rate rules and section 2 guarantee
+  # credit for the UKMOD comparison rather than adding new PolicyEngine UK oracle
+  # variables. Added for the M3 Pension Credit family.
+  - legal_id_prefix: uk:policies/pension_credit_composed_award_pipeline#
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Composed Family-level UKMOD Pension Credit oracle pipeline; its standard-minimum-guarantee, severe-disability and carer additional-amount, appropriate-minimum-guarantee, guarantee-credit-condition and weekly award outputs re-wire the separately mapped State Pension Credit Regulations 2002 regulation 6 weekly-rate rules and the State Pension Credit Act 2002 section 2 guarantee credit for the UKMOD boamt_s comparison rather than adding new PolicyEngine UK oracle variables.

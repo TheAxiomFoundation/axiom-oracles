@@ -700,6 +700,285 @@ case_sets:
         age: 40
         relation: HeadOfHousehold
         yearly_earned_income: 160000.0
+  uk-pension-credit:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount
+    cases:
+    - id: uk-pc-single-income0
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 0.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 0.0
+      facts:
+        pension_income: 0.0
+    - id: uk-pc-single-income2000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 2000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 2000.0
+      facts:
+        pension_income: 2000.0
+    - id: uk-pc-single-income6000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 6000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 6000.0
+      facts:
+        pension_income: 6000.0
+    - id: uk-pc-single-income8000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 8000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 8000.0
+      facts:
+        pension_income: 8000.0
+    - id: uk-pc-single-income10000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 10000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 10000.0
+      facts:
+        pension_income: 10000.0
+    - id: uk-pc-single-income12000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 12000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 12000.0
+      facts:
+        pension_income: 12000.0
+    - id: uk-pc-single-income14000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 14000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 14000.0
+      facts:
+        pension_income: 14000.0
+    - id: uk-pc-single-below-pension-age
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: false
+        state_pension_annual: 0.0
+        head_age: 60
+        has_reached_pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 60
+        relation: HeadOfHousehold
+        pension_income: 0.0
+      facts:
+        pension_income: 0.0
+    - id: uk-pc-couple-income0
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: true
+        state_pension_annual: 0.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 0.0
+      - id: partner
+        kind: person
+        age: 66
+        relation: Spouse
+        pension_income: 0.0
+      facts:
+        pension_income: 0.0
+    - id: uk-pc-couple-income6000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: true
+        state_pension_annual: 6000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 6000.0
+      - id: partner
+        kind: person
+        age: 66
+        relation: Spouse
+        pension_income: 0.0
+      facts:
+        pension_income: 6000.0
+    - id: uk-pc-couple-income12000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: true
+        state_pension_annual: 12000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 12000.0
+      - id: partner
+        kind: person
+        age: 66
+        relation: Spouse
+        pension_income: 0.0
+      facts:
+        pension_income: 12000.0
+    - id: uk-pc-couple-income22000
+      period: 2026-04
+      scenario: household-pension-credit
+      parameters:
+        couple: true
+        state_pension_annual: 22000.0
+        head_age: 67
+        has_reached_pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        pension_income: 22000.0
+      - id: partner
+        kind: person
+        age: 66
+        relation: Spouse
+        pension_income: 0.0
+      facts:
+        pension_income: 22000.0
   uk-self-employed-nic:
     locale: UK
     entity: Person

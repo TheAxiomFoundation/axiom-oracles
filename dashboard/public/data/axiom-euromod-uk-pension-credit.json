@@ -1,0 +1,1434 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 12,
+      "comparison_weight": 12,
+      "components": [],
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "left_weighted_sum": 990.407534,
+      "match_rate": 66.666667,
+      "match_weight": 8,
+      "mismatch_count": 4,
+      "mismatch_weight": 4,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1443.777397,
+      "weighted_difference": -453.369863,
+      "weighted_match_rate": 66.666667
+    }
+  ],
+  "case_count": 12,
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "id": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income0",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -238.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income0"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 238.0,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income6000",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -122.93150684931508,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income6000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 122.93150684931508,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income8000",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -84.57534246575347,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income8000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 84.57534246575347,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income12000",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -7.86301369863017,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income12000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 7.86301369863017,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-pension-credit",
+  "summary": {
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 4
+      },
+      "dispositions_file": "dispositions/uk-pension-credit.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 66.666667,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 8,
+    "mismatch_count": 4,
+    "mismatches_by_concept": [
+      {
+        "count": 4,
+        "value": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 4,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 4,
+        "value": "household-pension-credit"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 12,
+      "match_rate": 66.666667,
+      "match_weight": 8,
+      "mismatch_weight": 4
+    }
+  },
+  "cases": [
+    {
+      "case_id": "uk-pc-single-income0",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 0.0
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 0.0,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 0.0
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 0.0
+      },
+      "mismatches": [
+        {
+          "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+          "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+          "difference": -238.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 238.0,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-single-income2000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 38.356164383561634
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 166.66666666666666,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 38.356164383561634
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 2000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-single-income6000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 115.06849315068492
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 500.0,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 115.06849315068492
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 6000.0
+      },
+      "mismatches": [
+        {
+          "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+          "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+          "difference": -122.93150684931508,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 122.93150684931508,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-single-income8000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 153.42465753424653
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 666.6666666666666,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 153.42465753424653
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 8000.0
+      },
+      "mismatches": [
+        {
+          "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+          "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+          "difference": -84.57534246575347,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 84.57534246575347,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-single-income10000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 191.7808219178082
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 833.3333333333334,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 191.7808219178082
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 10000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-single-income12000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 230.13698630136983
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 1000.0,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 230.13698630136983
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 12000.0
+      },
+      "mismatches": [
+        {
+          "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+          "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+          "difference": -7.86301369863017,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 7.86301369863017,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-single-income14000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 268.4931506849315
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 1166.6666666666667,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 268.4931506849315
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 14000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-single-below-pension-age",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": false,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 0.0
+        },
+        "couple": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 0.0,
+            "boactcm": 0.0,
+            "dag": 60,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 0.0
+        },
+        "has_reached_pension_age": false,
+        "head_age": 60,
+        "household_summary": {
+          "ages": [
+            60
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 0.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-couple-income0",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 0.0
+        },
+        "couple": true,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 0.0,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 0.0,
+            "boactcm": 0.0,
+            "dag": 66,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 0,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 0.0
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67,
+            66
+          ],
+          "household_size": 2
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 0.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-couple-income6000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 115.06849315068492
+        },
+        "couple": true,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 500.0,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 0.0,
+            "boactcm": 0.0,
+            "dag": 66,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 0,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 115.06849315068492
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67,
+            66
+          ],
+          "household_size": 2
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 6000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-couple-income12000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 230.13698630136983
+        },
+        "couple": true,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 1000.0,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 0.0,
+            "boactcm": 0.0,
+            "dag": 66,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 0,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 230.13698630136983
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67,
+            66
+          ],
+          "household_size": 2
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 12000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-pc-couple-income22000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_has_reached_pension_age": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_is_couple": true,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_carer_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_number_of_severe_disability_additions": 0,
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 421.917808219178
+        },
+        "couple": true,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 1833.3333333333333,
+            "boactcm": 0.0,
+            "dag": 67,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 1,
+            "boa": 0.0,
+            "boact00": 0.0,
+            "boactcm": 0.0,
+            "dag": 66,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 0,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 5,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "poa00": 0.0,
+            "xhcmomi": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "boact_s": [
+            "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:policies/pension_credit_composed_award_pipeline#input.pc_pilot_state_pension_income_weekly": 421.917808219178
+        },
+        "has_reached_pension_age": true,
+        "head_age": 67,
+        "household_summary": {
+          "ages": [
+            67,
+            66
+          ],
+          "household_size": 2
+        },
+        "locale": "UK",
+        "scenario": "household-pension-credit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "state_pension_annual": 22000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ]
+}

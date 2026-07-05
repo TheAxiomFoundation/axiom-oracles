@@ -955,6 +955,53 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "ukmod-pc-boamt-takeup-transition",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "observed_local",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": null,
+      "summary": "UKMOD's Pension Credit output boamt_s (guarantee credit boamtmm_s + savings credit boamtxp_s, computed inside the bsa_uk social-assistance policy) embeds a take-up and Universal-Credit-transition correction: the take-up estimates $PCGCSCTU = 0.69 (guarantee, or guarantee+savings) and $PCSCTU = 0.37 (savings only) drive an i_rand_tu draw and an i_bsa_noUC / i_bsa_yesUC transition split, so for a hypothetical benefit unit some units are marked as transitioned to Universal Credit and return a zero Pension Credit award that is not the statutory entitlement. The result is deterministic per household composition and batch position (seed 3). Verified live on UKMOD_PUBLIC_B2026.03 (system UK_2026, dataset training_data): a single claimant who has reached state pension age with assessable state pension of 2000/year returns boamt_s 867.50/month (= 1034.17 single standard minimum guarantee - 166.67 assessed state pension) but the identical claimant at 0, 6000 and 8000/year of state pension returns 0; a couple returns 1078.41/month at 6000/year and 578.41 at 12000/year but 0 at 18000. The guarantee-credit income test itself is exact where the award is paid (verified: 1000/month state pension gives 34.17, matching 1034.17 - 1000.00).",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output": "boamt_s"
+      },
+      "attempted_switches": {
+        "random_uk_off": "No effect: the adapter policy-switch override sets the random_uk policy off, but the take-up / UC-transition draw is still applied inside bsa_uk, so the award still zeros (verified: results identical with random_uk on and off across the pensioner grid). This matches the Universal Credit finding (ukmod-uc-bsauc-takeup-correction).",
+        "BTA_uk_off": "No effect for the same reason."
+      },
+      "workaround": {
+        "description": "Compare the composed rulespec-uk Pension Credit guarantee-credit award against the executed boamt_s and classify take-up / UC-transition zeroing as a UKMOD-side artefact, not an Axiom encoding mismatch. Expected outputs are regenerated from executed runs (scripts/regenerate_euromod_uk.sh), so the recorded UKMOD values stay self-consistent with the take-up the model applies to each case. UKMOD reports boamt_s monthly; the adapter divides it by UKMOD's weekly-to-monthly factor (365/7/12) so the comparison is weekly-to-weekly against the pipeline's weekly award. Where the award is paid it matches the guarantee-credit entitlement exactly (single standard minimum guarantee 238.00/week = 1034.17/month, couple 363.25/week = 1578.41/month, less the assessed state pension); the take-up-zeroed points are dispositioned rather than absorbed by tolerance.",
+        "assessable_income": "UKMOD's Pension Credit income test assesses the state pension boact_s (uprated from the boact00 state-pension data input), not a poa private pension; the suite supplies assessable income through boact00 and bridges the assessed boact_s into the pipeline so both engines test the identical income."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "ukmod-pc-savings-credit-nil-on-demo-data",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "observed_local",
+      "classification": "convention_difference",
+      "upstream_url": null,
+      "summary": "UKMOD simulates Pension Credit savings credit (output boamtxp_s, with UK_2026 constants $PCSCThreshSing = 208.07#w, $PCSCMaxSing = 17.96#w, savings-credit withdrawal rate $PCSCwr = 0.40, and an eligibility condition dag >= 65 with qualifying income above the savings-credit threshold), but on the registration-free demo data boamtxp_s returns nil across the groundable pensioner income range. Verified live on UKMOD_PUBLIC_B2026.03 (system UK_2026): a single claimant aged 70 (a pre-6-April-2016 pension-age reacher) with state pension swept from 10,000 to 14,000/year in 200 steps returns boamtxp_s = 0 at every point, because the guarantee credit already tops assessable income to the minimum and the savings-credit population is closed to pre-6-April-2016 reachers. The compared total boamt_s therefore equals its guarantee-credit component boamtmm_s on this data.",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output": "boamtxp_s"
+      },
+      "workaround": {
+        "description": "Scope the composed rulespec-uk pipeline comparison to the guarantee credit (the exercisable regime) and compare against boamt_s, which equals boamtmm_s on the demo data. Savings credit is separately encoded in rulespec-uk (uk/statutes/ukpga/2002/16/3) and remains available for a data configuration that exercises it; its nil value here is a demo-data exercisability limit, not an Axiom encoding gap. The severe-disability and carer additional amounts (encoded in the pipeline from regulation 6(5)/(8)) are similarly not exercised because UKMOD applies the severe-disability premium only when a disability benefit is present in the data (bdisc/bdimb/... > 0), which the hypothetical rows do not carry."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

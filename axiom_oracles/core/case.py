@@ -158,6 +158,17 @@ class Concepts:
         "uk:policies/universal_credit_composed_award_pipeline"
         "#uc_pilot_award_amount"
     )
+    # Composed Pension Credit guarantee-credit award pipeline (rulespec-uk) that
+    # wires the State Pension Credit Act 2002 section 2 standard-minimum-
+    # guarantee, additional-amount, and income-difference stage boundaries from
+    # hypothetical pensioner inputs, so an end-to-end UKMOD comparison (Pension
+    # Credit ``boamt_s``) can run on a shared household grid. The final award is
+    # the weekly guarantee credit, exposed as ``pc_pilot_award_amount`` by
+    # ``uk/policies/pension_credit_composed_award_pipeline.yaml``.
+    UK_HOUSEHOLD_PENSION_CREDIT_AWARD = (
+        "uk:policies/pension_credit_composed_award_pipeline"
+        "#pc_pilot_award_amount"
+    )
     # Composed savings-and-dividend income tax pipeline (rulespec-uk) that wires
     # the section 12/12A/12B/13/13A stage boundaries from gross earned, savings,
     # and dividend income, so an end-to-end UKMOD tin_s comparison can run for
