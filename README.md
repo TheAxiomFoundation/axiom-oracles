@@ -39,6 +39,8 @@ The current implementation includes:
 
 - generic engine result and comparison primitives
 - concept-keyed `Case` and `Entity` objects
+- the shared PolicyEngine/Populace oracle-bridge layer (`axiom_oracles/bridges/`,
+  extracted from axiom-encode — see `axiom_oracles/bridges/README.md`)
 - Enhanced CPS-backed population loading through PolicyEngine microsimulation
 - ACCESS NYC Screening API payload mapper
 - ACCESS NYC API runner
@@ -52,7 +54,7 @@ The current implementation includes:
 
 ## Install
 
-Requires Python 3.14.
+Requires Python 3.13 or newer.
 
 ```bash
 uv pip install -e ".[dev]"

@@ -1,0 +1,6 @@
+prefixes:
+  - legal_id_prefix: "nz:"
+    country: nz
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine NZ is too minimal to serve as a full New Zealand tax-benefit oracle. Axiom NZ outputs are built from official legislation, agency sources, and NZ-specific pinned source oracles; exact PolicyEngine mappings should be added only after a real one-to-one NZ oracle target is implemented and verified.

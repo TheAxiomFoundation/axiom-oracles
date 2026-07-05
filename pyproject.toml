@@ -4,10 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "axiom-oracles"
-version = "0.1.0"
+version = "0.2.0"
 description = "Axiom oracle adapters and cross-engine comparison tooling"
 readme = "README.md"
-requires-python = "==3.14.*"
+# >=3.13 (not ==3.14.*) so axiom-encode — which runs CI on 3.13 — can depend
+# on this package for the shared axiom_oracles.bridges oracle-bridge layer.
+requires-python = ">=3.13"
 dependencies = [
   "click>=8.1",
   "pyyaml>=6.0",
@@ -37,4 +39,4 @@ testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.ruff]
-target-version = "py314"
+target-version = "py313"

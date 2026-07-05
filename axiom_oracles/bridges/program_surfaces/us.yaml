@@ -1,0 +1,2935 @@
+source:
+  repository: PolicyEngine/policyengine-us
+  ref: upstream/main
+  commit: 392a91f0019131497418872dc95de4da9aa3fe9b
+  path: policyengine_us/programs.yaml
+  generated_by: axiom-encode policyengine program surface wiring
+surfaces:
+- country: us
+  program_id: federal_income_tax
+  program_name: Federal income taxes
+  category: Taxes
+  agency: IRS
+  policyengine_status: complete
+  coverage: US
+  variable: income_tax
+  source_type: program
+  axiom_status: wired
+  priority: P1
+  rationale: Axiom encodes federal income tax liability surfaces and the PolicyEngine registry wires the final income-tax
+    comparison target; Populace validation verifies the final federal income-tax surface.
+  populace_validation:
+    status: validated
+    dataset: populace-us-2024 local H5
+    command: >-
+      AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5
+      uv run --with policyengine-us --with policyengine-core==3.26.0
+      --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us]
+      --with numpy --with pandas axiom-encode tax-populace-compare
+      --root /Users/maxghenis/TheAxiomFoundation
+      --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us
+      --axiom-rules-engine-path /Users/maxghenis/TheAxiomFoundation/_worktrees/axiom-rules-engine-derived-versions-20260701
+      --year 2026 --populace-year 2024 --surface income-tax --sample-size 0
+      --fail-on-mismatch --json
+    last_run: '2026-07-01'
+    compared_persons: 160858
+    compared_tax_units: 87519
+    compared_values: 175038
+    mismatch_count: 0
+    outputs:
+    - output: income_tax_refundable_credits
+      compared: 87519
+      mismatches: 0
+      max_abs_diff: 0.0
+    - output: income_tax
+      compared: 87519
+      mismatches: 0
+      max_abs_diff: 0.0009307861328125
+    rationale: Full-population federal income-tax comparison passed with 87,519 tax units and 175,038 output values;
+      observed differences were below configured numeric tolerances.
+- country: us
+  program_id: state_income_tax
+  program_name: State income taxes
+  category: Taxes
+  agency: IRS
+  policyengine_status: complete
+  coverage: US
+  variable: state_income_tax
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's state_income_tax is a cross-jurisdiction aggregation over state-specific income tax laws, refundable credits,
+    and reported-state-tax simulation fallback. It is not itself a single legal provision for RuleSpec legal-ID wiring; compare Axiom
+    against individually encoded state tax variables and component legal outputs instead.
+- country: us
+  program_id: payroll_taxes
+  program_name: Payroll taxes
+  category: Taxes
+  agency: IRS
+  policyengine_status: complete
+  coverage: US
+  variable: employee_payroll_tax
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's employee_payroll_tax aggregates federal employee Social Security, Medicare, additional Medicare, and state
+    employee payroll tax components. Axiom should compare the encoded federal and state components separately rather than claiming a
+    one-to-one RuleSpec legal ID for this aggregate.
+- country: us
+  program_id: snap
+  program_name: SNAP
+  category: Benefits
+  agency: USDA
+  policyengine_status: complete
+  coverage: US
+  variable: snap
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's snap variable is a final simulation benefit surface that can apply reported SNAP, take-up, emergency
+    allotments, and local add-ons. RuleSpec should wire exact SNAP legal outputs such as eligibility, normal allotment, deductions,
+    and state-set parameters instead of this simulation aggregate.
+- country: us
+  program_id: wic
+  program_name: WIC
+  category: Benefits
+  agency: USDA
+  policyengine_status: complete
+  coverage: US
+  variable: wic
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's wic variable combines eligibility, take-up, and modeled package values. RuleSpec should encode and compare
+    the governing WIC eligibility and benefit-value parameters separately when those sources are ingested.
+- country: us
+  program_id: wic
+  program_name: WIC eligibility
+  category: Benefits
+  agency: USDA
+  policyengine_status: complete
+  coverage: US
+  variable: is_wic_eligible
+  source_type: eligibility
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: PolicyBench scores this direct person-level WIC eligibility variable. Axiom encodes 7 CFR 246.7(c)-(e) source
+    predicates for WIC certification, income, adjunctive eligibility, and nutritional risk; PolicyEngine's is_wic_eligible
+    is a simplified final person-level eligibility surface and does not expose the same residency, identity, agency-workflow,
+    and certification-condition boundary as a one-to-one oracle target.
+- country: us
+  program_id: school_meals
+  program_name: Free and reduced school meals
+  category: Benefits
+  agency: USDA
+  policyengine_status: complete
+  coverage: US
+  variable: free_school_meals
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's free_school_meals variable is a modeled annual value from school meal tier and net subsidy assumptions,
+    not a single legal provision. RuleSpec should compare eligibility tiers and subsidy parameters separately.
+- country: us
+  program_id: csfp
+  program_name: Commodity Supplemental Food Program
+  category: Benefits
+  agency: USDA
+  policyengine_status: complete
+  coverage: US
+  variable: csfp
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's CSFP program variable combines eligibility with a modeled annual food-package value parameter. RuleSpec
+    should encode and compare CSFP eligibility and amount parameters separately when source text is available.
+- country: us
+  program_id: fdpir
+  program_name: FDPIR
+  category: Benefits
+  agency: USDA
+  policyengine_status: partial
+  coverage: US
+  variable: fdpir
+  source_type: program
+  axiom_status: input_only
+  priority: P1
+  rationale: PolicyEngine exposes this as an exogenous or input-only program amount rather than a computed law oracle target.
+- country: us
+  program_id: medicaid
+  program_name: Medicaid
+  category: Healthcare
+  agency: HHS
+  policyengine_status: complete
+  coverage: US
+  variable: medicaid
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's medicaid variable reports modeled coverage value through medicaid_cost, not a direct statutory cash
+    benefit or eligibility output. RuleSpec should compare Medicaid eligibility categories, income limits, and state-set parameters
+    separately.
+- country: us
+  program_id: medicaid
+  program_name: Medicaid eligibility
+  category: Healthcare
+  agency: HHS
+  policyengine_status: complete
+  coverage: US
+  variable: is_medicaid_eligible
+  source_type: eligibility
+  axiom_status: wired
+  priority: P1
+  rationale: PolicyBench scores this direct person-level Medicaid eligibility variable. Axiom now wires the federal source-level
+    category composite, optional federal category surfaces, and projected state-set category inputs into a PE-facing eligibility
+    comparison surface.
+  populace_validation:
+    status: validated
+    command: AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5 uv run --with policyengine-us --with policyengine-core==3.26.0 --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us] --with numpy --with pandas axiom-encode medicaid-populace-compare --year 2024 --month 1 --populace-year 2024 --program /Users/maxghenis/TheAxiomFoundation/rulespec-us/us/statutes/42/1396a/a/10.yaml --workspace-root /Users/maxghenis/TheAxiomFoundation --axiom-binary /Users/maxghenis/TheAxiomFoundation/_worktrees/axiom-rules-engine-derived-versions-20260701/target/debug/axiom-rules-engine --eligibility-only --fail-on-mismatch --min-match-rate 1 --max-differences 20
+    dataset: populace-us-2024 local H5
+    last_run: '2026-07-01'
+    rationale: Full-population eligibility-only comparison passed with 160,858 people compared, 160,858 matches, 0 mismatches,
+      and 100.00% match rate across all PE Medicaid categories.
+- country: us
+  program_id: chip
+  program_name: CHIP
+  category: Healthcare
+  agency: HHS
+  policyengine_status: complete
+  coverage: US
+  variable: chip
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P2
+  rationale: PolicyEngine's chip variable reports modeled per-capita CHIP value for eligible people, not a one-to-one legal provision.
+    RuleSpec should compare CHIP eligibility categories, income limits, and state-set parameters separately.
+- country: us
+  program_id: chip
+  program_name: CHIP eligibility
+  category: Healthcare
+  agency: HHS
+  policyengine_status: complete
+  coverage: US
+  variable: is_chip_eligible
+  source_type: eligibility
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyBench scores this direct person-level CHIP eligibility variable, and it is an appropriate final oracle
+    target once Axiom assembles the upstream CHIP category graph. Axiom currently encodes federal CHIP child and
+    targeted-low-income-child source definitions plus mapped state-set income-limit parameters where available, but still
+    needs RuleSpec coverage for the child, standard pregnant, FCEP, and aggregate category paths before Populace comparison.
+- country: us
+  program_id: aca_subsidies
+  program_name: ACA subsidies
+  category: Healthcare
+  agency: ACA
+  policyengine_status: complete
+  coverage: US
+  variable: aca_ptc
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes the governing 26 USC 36B premium-assistance amount and current 2026 applicable-percentage
+    guidance, but PolicyEngine's aca_ptc is a microsimulation program surface combining SLCSP/premium proxies, filer and
+    person-level eligibility gates, take-up, and assignment mechanics. It is therefore not a one-to-one legal RuleSpec
+    output, though source-level ACA PTC outputs remain mapped separately.
+- country: us
+  program_id: tanf
+  program_name: CalWORKs cash benefit
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: CA
+  variable: ca_tanf
+  source_type: state_implementation
+  state: CA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes the WIC 11450 monthly aid payment formula and exact oracle mappings for the shared MAP
+    and resource-limit parameters. PolicyEngine's ca_tanf annual SPM-unit surface also includes PE's demographic,
+    resource, vehicle-value, and immigration-proration graph, so compare legal CalWORKs components separately
+    until a full Axiom program composition and adapter exist.
+- country: us
+  program_id: tanf
+  program_name: Colorado TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: CO
+  variable: co_tanf
+  source_type: state_implementation
+  state: CO
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now has a country-level Colorado Works FY 2026 program bridge for the encoded basic-cash-assistance
+    grant before pregnancy allowance. That bridge remains source-slice coverage, while PolicyEngine's co_tanf
+    is a final monthly benefit variable built from PE's own Colorado Works graph and parameter table; keep as
+    known-not-comparable until the remaining Colorado Works eligibility, allowance, and procedural gates are composed.
+- country: us
+  program_id: tanf
+  program_name: DC TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: DC
+  variable: dc_tanf
+  source_type: state_implementation
+  state: DC
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now has D.C. Code § 4-205.52 source-law coverage for statutory payment tables, adjustment rates,
+    and time-limit reduction parameters. PolicyEngine's dc_tanf remains a composed final monthly benefit surface that
+    also depends on current DHS/state-plan/DCMR payment standards, countable income, eligibility, enrollment, and
+    work-sanction gates; keep known-not-comparable until those current-source components are ingested and composed.
+- country: us
+  program_id: tanf
+  program_name: Illinois TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: IL
+  variable: il_tanf
+  source_type: state_implementation
+  state: IL
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include tested Illinois DHS CSM Manual earned-income-disregard and cash-payment legal
+    slices, including the one-dollar no-issuance threshold and whole-dollar rounding for regular monthly TANF benefits.
+    Those outputs are source-specific legal boundaries, while PolicyEngine's il_tanf final benefit currently omits the
+    no-issuance and rounding behavior and has a known income-eligibility boundary mismatch; compare the encoded legal
+    components separately until PE exposes compatible helpers or the final legal behavior matches.
+- country: us
+  program_id: tanf
+  program_name: NY TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NY
+  variable: ny_tanf
+  source_type: state_implementation
+  state: NY
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now has a country-level New York TANF FY 2026 program bridge over tested State Plan standard-of-need,
+    grant, home-energy, shelter-cap, asset, and income-disregard legal slices. That bridge remains source-slice coverage,
+    while PolicyEngine's ny_tanf is a final annual program variable with its own graph and older parameterization; keep
+    as known-not-comparable until the Axiom shelter table is complete and the final legal behavior matches PE-compatible boundaries.
+- country: us
+  program_id: tanf
+  program_name: Massachusetts TAFDC
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MA
+  variable: ma_tafdc
+  source_type: state_implementation
+  state: MA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now has source-law Massachusetts TAFDC coverage for the tested 106 CMR 704.500 monthly grant calculation
+    plus existing payment-standard, work-expense, child-support, financial-eligibility, and infant-benefit legal slices.
+    PolicyEngine's ma_tafdc is a final annual benefit surface with its own eligibility and income graph, clothing and infant
+    additions, and an EAEDC comparison selector, so keep it known-not-comparable until a full legal program bridge composes
+    the same final boundaries.
+- country: us
+  program_id: tanf
+  program_name: Montana TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MT
+  variable: mt_tanf
+  source_type: state_implementation
+  state: MT
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now encodes ARM 37.78.420's fixed Montana TANF income-standard and payment-standard tables as upstream
+    legal coverage. PolicyEngine's mt_tanf is a final monthly benefit surface using a State Plan/manual FPG-year/rate graph,
+    countable-income calculations, eligibility gates, and no post-employment payment-standard branch, so keep the current
+    ARM slice known-not-comparable until the State Plan/manual versus regulation hierarchy is reconciled and a full legal
+    program composition is encoded.
+- country: us
+  program_id: tanf
+  program_name: North Carolina TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NC
+  variable: nc_tanf
+  source_type: state_implementation
+  state: NC
+  axiom_status: pending_source_ingestion
+  priority: P1
+  rationale: PolicyEngine models this program variable. Axiom now has an official NCDHHS Work First Manual 114 corpus slice
+    for the operational payment calculation, but the upstream statute source, N.C. Gen. Stat. 108A-27.01, is still blocked
+    from unattended ingestion by HTTP 403 on the official NC General Assembly endpoint. Do not encode this surface from the
+    manual alone; first ingest the primary-official statute or approve an official-source workaround, then encode the full
+    Work First benefit graph and add legal-ID oracle mappings.
+- country: us
+  program_id: tanf
+  program_name: New Jersey WFNJ
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NJ
+  variable: nj_wfnj
+  source_type: state_implementation
+  state: NJ
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now has current N.J.A.C. 10:90 source-regulation coverage for WFNJ financial eligibility, payment
+    standards, income exclusions, disregards, and resource-limit slices. PolicyEngine's nj_wfnj is a final SPM-unit
+    benefit variable with its own graph and composition boundaries, so keep this source-regulation coverage known-not-comparable
+    until a full legal WFNJ program bridge composes the final benefit and any exact PE helper mappings are reconciled.
+- country: us
+  program_id: tanf
+  program_name: Texas TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: TX
+  variable: tx_tanf
+  source_type: state_implementation
+  state: TX
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include a Texas TANF FY 2026 program bridge over the HHSC Texas Works Handbook C-111 payment-standard table,
+    A-1340 grant-amount rule, and C-112 first-month proration. The bridge remains incomplete for nonfinancial eligibility, resource,
+    sanction, time-limit, and full income-budget gates, while PolicyEngine's tx_tanf is a final SPM-unit benefit built from PE's broader
+    TANF graph, so this is source-faithful progress but not a one-to-one oracle target yet.
+- country: us
+  program_id: tanf
+  program_name: Washington TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WA
+  variable: wa_tanf
+  source_type: state_implementation
+  state: WA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include tested Washington TANF payment-standard, gross-earned-income-limit,
+    earned-income-deduction, countable-income comparison, and benefit-level legal slices. Those outputs map to
+    PE parameters or adjacent helper/final variables, while PolicyEngine's wa_tanf is a final SPM-unit benefit
+    gated by PE's broader eligibility, resources, immigration, and countable-income graph; do not treat it as a
+    direct one-to-one oracle target until Axiom has an equivalent final Washington TANF adapter.
+- country: us
+  program_id: tanf
+  program_name: Arizona TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: AZ
+  variable: az_tanf
+  source_type: state_implementation
+  state: AZ
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include a runnable us-az/tanf FY 2026 composition over tested Arizona Cash Assistance
+    payment-standard, needy-family, prospective-eligibility, and eligible-no-pay legal slices. The wrapper is source-faithful
+    to the DES FAA5 under-$10 eligible-no-pay issuance branch, while PolicyEngine's az_tanf is a final monthly SPM-unit benefit
+    built from PE's own demographic, immigration, resource, and income graph; do not treat it as a direct one-to-one oracle target
+    until both runtimes expose the same final Arizona Cash Assistance boundary.
+- country: us
+  program_id: tanf
+  program_name: Oklahoma TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: OK
+  variable: ok_tanf
+  source_type: state_implementation
+  state: OK
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Missouri TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MO
+  variable: mo_tanf
+  source_type: state_implementation
+  state: MO
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Pennsylvania TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: PA
+  variable: pa_tanf
+  source_type: state_implementation
+  state: PA
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Maryland TCA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MD
+  variable: md_tca
+  source_type: state_implementation
+  state: MD
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: Primary-source review found that current COMAR 07.03.03.17 still carries the stale November 2013 grant schedule,
+    while Maryland DHS FIA Information Memo 26-13 is the superseding official 2026 TCA/TDAP benefit-increase schedule. Axiom has
+    ingested the governing Maryland Human Services Article provisions, COMAR 07.03.03, and IM 26-13; rulespec-us now encodes the
+    2026 allowable monthly payment table for md_tca_maximum_benefit. Final PE parity for md_tca still needs the remaining governing
+    TCA benefit-calculation, eligibility, and oracle-wiring surfaces before it can be marked wired.
+- country: us
+  program_id: tanf
+  program_name: South Dakota TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: SD
+  variable: sd_tanf
+  source_type: state_implementation
+  state: SD
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Georgia TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: GA
+  variable: ga_tanf
+  source_type: state_implementation
+  state: GA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include tested Georgia TANF assistance-standard, resource-limit, gross/net income eligibility,
+    countable-income, work-deduction, dependent-care-deduction, and benefit-amount legal slices from the DFCS manual and eligibility
+    guidance. Those outputs are source-specific legal boundaries, while PolicyEngine's ga_tanf is a final monthly TANF benefit
+    variable built from PE's own TANF graph and parameter table; do not treat it as a direct one-to-one oracle target until Axiom
+    has an equivalent final Georgia TANF benefit surface or PE exposes compatible helper boundaries.
+- country: us
+  program_id: tanf
+  program_name: Mississippi TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MS
+  variable: ms_tanf
+  source_type: state_implementation
+  state: MS
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Indiana TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: IN
+  variable: in_tanf
+  source_type: state_implementation
+  state: IN
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include tested Indiana DFR cash-assistance standards, maximum-benefit tables, and
+    new-application and ongoing benefit-entitlement legal slices from the TANF manual. Those outputs expose source-local
+    monthly benefit entitlement, minimum-grant, countable-income, and parameter boundaries, while PolicyEngine's in_tanf
+    is a final SPM-unit benefit built from PE's broader eligibility graph; compare the encoded legal components separately
+    until Axiom has an equivalent final PE graph surface or PE exposes compatible helper boundaries.
+- country: us
+  program_id: tanf
+  program_name: Florida TCA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: FL
+  variable: fl_tca
+  source_type: state_implementation
+  state: FL
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include a runnable us-fl/tca FY 2026 composition over DCF ESS manual financial,
+    resource, payment-standard, and benefit-calculation boundaries, with legal-ID oracle mappings for the Florida TCA
+    outputs. The Axiom wrapper still acknowledges final eligibility as incomplete, while PolicyEngine's fl_tca is a
+    final SPM-unit benefit using PE-specific eligibility, income, and payment-standard helpers, so compare the legal
+    components separately until both runtimes expose the same final Florida TCA boundary.
+- country: us
+  program_id: tanf
+  program_name: Maine TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: ME
+  variable: me_tanf
+  source_type: state_implementation
+  state: ME
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now has source-level Maine TANF Rule 125A coverage for current FFY 2022-2026 adult-included
+    and child-only standard-of-need and maximum-grant table mechanics. PolicyEngine's me_tanf is a final SPM-unit
+    benefit graph with older Rule 121A parameter references and no separate child-only/adult-included table boundary,
+    so keep it known-not-comparable until the remaining eligibility, income, resource, and final-benefit graph is
+    encoded and PE exposes or updates matching current-source boundaries.
+- country: us
+  program_id: tanf
+  program_name: Nevada TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NV
+  variable: nv_tanf
+  source_type: state_implementation
+  state: NV
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include tested Nevada E&P Manual A-660.12 TANF cash-benefit, gross-income-test,
+    whole-dollar rounding, $10 minimum-issuance, under-$10 exception, and employment-retention-payment legal slices.
+    PolicyEngine's nv_tanf final benefit computes payment-standard minus countable income and does not expose those
+    source-specific month-level legal boundaries or the Employment Retention Payment as one-to-one oracle targets;
+    tracked in PolicyEngine/policyengine-us#8771.
+- country: us
+  program_id: tanf
+  program_name: Kansas TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: KS
+  variable: ks_tanf
+  source_type: state_implementation
+  state: KS
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include a Kansas TANF FY 2026 program wrapper that composes KEESM 7411
+    budgetary standards with KEESM 7401/7402 cash proration and rounding. The wrapper intentionally remains
+    incomplete for countable income, income/resource eligibility, demographic eligibility, and immigration
+    eligibility, while PolicyEngine-US ks_tanf applies those PE graph gates and a maximum-benefit-minus-countable-income
+    formula. The surface is therefore known and reviewed, but not a one-to-one oracle target yet.
+- country: us
+  program_id: tanf
+  program_name: Hawaii TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: HI
+  variable: hi_tanf
+  source_type: state_implementation
+  state: HI
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes HAR §17-680-12 payment-determination mechanics and classifies that source slice against hi_tanf,
+    but the current RuleSpec surface is not yet a one-to-one final-benefit oracle because PolicyEngine's hi_tanf includes
+    PE eligibility, income, and maximum-benefit graph components beyond this section.
+- country: us
+  program_id: tanf
+  program_name: Delaware TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: DE
+  variable: de_tanf
+  source_type: state_implementation
+  state: DE
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes 16 DE Admin. Code 4008.1.2's TANF gross-income, countable-income, deficit-remainder,
+    and grant-cap mechanics as a source-local legal output. PolicyEngine's de_tanf is a final monthly SPM-unit benefit
+    gated by PE demographic, immigration, resource, standard-of-need, payment-standard, and income helper graphs, so
+    this Delaware source slice is adjacent progress rather than a one-to-one final-benefit oracle.
+- country: us
+  program_id: tanf
+  program_name: Oregon TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: OR
+  variable: or_tanf
+  source_type: state_implementation
+  state: OR
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Minnesota MFIP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MN
+  variable: mn_mfip
+  source_type: state_implementation
+  state: MN
+  axiom_status: wired
+  priority: P1
+  rationale: Axiom encodes the Minnesota Combined Manual MFIP total grant, applicant-proration, recoupment, and cash/food
+    issuance split, with a direct legal-ID mapping from the cash portion issued as cash to PolicyEngine's monthly mn_mfip
+    surface. The RuleSpec module records the higher-authority check against Minnesota Statutes 142G.16, 142G.17, and
+    256P.03 before relying on DHS manual operational procedure.
+  populace_validation:
+    status: validated
+    command: AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5 uv run --extra dev --with /Users/maxghenis/.cache/uv/sdists-v9/path/f08f6e929a1989dd/bP-zFPqTOCCpXVEGGxK3G/policyengine_us-1.751.2-py3-none-any.whl --with policyengine-core==3.26.0 --with '/Users/maxghenis/PolicyEngine/populace/packages/populace-data[us]' --with numpy --with pandas axiom-encode us-populace-compare --root /Users/maxghenis/TheAxiomFoundation --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us --axiom-rules-engine-path /Users/maxghenis/TheAxiomFoundation/axiom-rules-engine --year 2026 --month 1 --populace-year 2024 --variable mn_mfip --state MN --sample-size 0 --max-differences 10 --allow-policyengine-us-version
+    dataset: populace-us-2024 local H5
+    last_run: '2026-07-02'
+    rationale: Full Minnesota Populace run compared 74 eligible person rows across 22 SPM units with 0 mismatches.
+      The comparator skips 2,000 ineligible person rows because the encoded RuleSpec module covers the MFIP grant and
+      cash-issuance calculation after eligibility, while PolicyEngine's final mn_mfip variable is defined only for
+      eligible SPM units.
+- country: us
+  program_id: tanf
+  program_name: Tennessee Families First
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: TN
+  variable: tn_ff
+  source_type: state_implementation
+  state: TN
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: West Virginia WORKS
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WV
+  variable: wv_works
+  source_type: state_implementation
+  state: WV
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Rhode Island WORKS
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: RI
+  variable: ri_works
+  source_type: state_implementation
+  state: RI
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: New Hampshire FANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NH
+  variable: nh_fanf
+  source_type: state_implementation
+  state: NH
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Connecticut TFA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: CT
+  variable: ct_tfa
+  source_type: state_implementation
+  state: CT
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom now has a country-level Connecticut TFA FY 2026 program bridge for the source-grounded
+    standard-of-need, payment-standard, housing-attribution, resource, income, child-support, and high-earnings
+    statute slices. That bridge intentionally remains incomplete for demographic eligibility, immigration
+    eligibility, time-limit exemptions, extensions, and application-vs-recipient income boundaries, while
+    PolicyEngine's ct_tfa is a final monthly SPM-unit benefit built from PE's own graph. Keep as
+    known-not-comparable until the remaining legal gates and shared entity boundary are composed.
+- country: us
+  program_id: tanf
+  program_name: Ohio Works First
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: OH
+  variable: oh_owf
+  source_type: state_implementation
+  state: OH
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Michigan FIP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MI
+  variable: mi_fip
+  source_type: state_implementation
+  state: MI
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Wisconsin Works
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WI
+  variable: wi_works
+  source_type: state_implementation
+  state: WI
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Idaho TAFI
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: ID
+  variable: id_tafi
+  source_type: state_implementation
+  state: ID
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: >-
+    Current official Idaho sources do not support PolicyEngine's id_tafi final-benefit formula as cited. PE references
+    historical Cornell pages for IDAPA 16.03.08.248-.252, but the official current IDAPA 16.03.08 PDF published July 1,
+    2026 only contains TANF sections 100-115 and LIHEAP sections 200-205. Idaho DHW's current TAFI pages substantiate the
+    $309 cap and partial July 2002 household income table, but not the full 60%-earned-income/work-incentive formula or
+    9+/10+/over-10 table PE applies. Treat this as a source-hierarchy conflict rather than an encodeable parity gap until
+    the current upstream Idaho policy source or PE implementation is reconciled.
+- country: us
+  program_id: tanf
+  program_name: Nebraska ADC
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NE
+  variable: ne_adc
+  source_type: state_implementation
+  state: NE
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Arkansas TEA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: AR
+  variable: ar_tea
+  source_type: state_implementation
+  state: AR
+  axiom_status: wired
+  priority: P1
+  rationale: >-
+    Axiom now encodes Arkansas TEA income eligibility standards, earned-income deduction rates, resource limit,
+    maximum payment levels, and the gross-income-trigger payment rule from the Arkansas DHS TEA Manual. Do not treat
+    the final `ar_tea` surface as PE-parity-complete yet: source-law validation found that the DHS manual pays the
+    maximum grant below the $1,026 gross-income trigger, while PolicyEngine currently subtracts countable income in
+    that below-trigger branch; PolicyEngine/policyengine-us#8841 tracks that review. Comparable parameter and helper
+    surfaces are mapped separately.
+  populace_validation:
+    status: blocked
+    dataset: populace-us-2024 local H5
+    command: >-
+      AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5
+      uv run --with policyengine-us --with policyengine-core==3.26.0
+      --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us]
+      --with numpy --with pandas axiom-encode us-populace-compare
+      --root /Users/maxghenis/TheAxiomFoundation
+      --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us
+      --year 2026 --month 1 --populace-year 2024
+      --variable ar_tea --sample-size 0 --max-differences 10
+    rationale: >-
+      Pending PolicyEngine source-law review before running or accepting a final Populace parity result. Current
+      RuleSpec follows Arkansas DHS TEA Manual section 2362: income-eligible units below the gross-income trigger
+      receive the maximum grant, while units at or above the trigger receive the rounded 50% reduced payment.
+- country: us
+  program_id: tanf
+  program_name: Utah FEP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: UT
+  variable: ut_fep
+  source_type: state_implementation
+  state: UT
+  axiom_status: pending_source_ingestion
+  priority: P1
+  rationale: >-
+    Axiom has a source-backed Utah DWS Table 1 payment-standard encoding and oracle mapping for
+    ut_fep_payment_standard. Final ut_fep parity still requires R986-200-239 income and work-expense RuleSpec, but
+    the current Utah Administrative Code R986-200-239 source is not yet present in the local corpus and direct official
+    Utah admin-rules endpoints were inaccessible during source-first verification. Ingest the maximally upstream current
+    Utah source before encoding the remaining income, eligibility, assistance-unit, and benefit-composition rules.
+- country: us
+  program_id: tanf
+  program_name: Kentucky K-TAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: KY
+  variable: ky_ktap
+  source_type: state_implementation
+  state: KY
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: >-
+    Current upstream Kentucky law supports encoding 921 KAR 2:016 and KRS 205.200(2), but PolicyEngine's active 2025
+    ky_ktap payment maximums are sourced from KY FACES rather than a regulatory instrument. Current 921 KAR 2:016 Section
+    9(2)(a) lists payment maximums of $372, $450, $524, $656, $766, $864, and $964 for one through seven-or-more eligible
+    persons, while PE applies lower 2025 values of $242, $293, $341, $426, $498, $562, and $627 from a KY FACES table
+    labeled by number of children. Treat this as a source-hierarchy conflict rather than an encodeable parity gap until
+    the legal authority for the 2025 reduction or the PE implementation is reconciled.
+- country: us
+  program_id: tanf
+  program_name: Alabama TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: AL
+  variable: al_tanf
+  source_type: state_implementation
+  state: AL
+  axiom_status: wired
+  priority: P1
+  rationale: >-
+    Axiom now encodes Alabama TANF payment standards from the 2024 TANF State Plan, the Alabama Administrative Code
+    assistance-payment rule, and the DHR Public Assistance Payment Manual payment-computation slice that aligns most
+    closely to PolicyEngine's simplified al_tanf entitlement calculation. Do not treat the surface as PE-parity-complete:
+    Populace validation is blocked by a source hierarchy conflict where Alabama Admin. Code r. 660-2-2-.24 states a
+    30% earned-income disregard while the DHR payment manual and PolicyEngine use 20%; PolicyEngine/policyengine-us#8840
+    tracks that upstream-law review.
+  populace_validation:
+    status: blocked
+    dataset: populace-us-2024 local H5
+    command: >-
+      AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5
+      uv run --with policyengine-us --with policyengine-core==3.26.0
+      --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us]
+      --with numpy --with pandas axiom-encode us-populace-compare
+      --root /Users/maxghenis/TheAxiomFoundation
+      --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us
+      --year 2026 --month 1 --populace-year 2024
+      --variable al_tanf --sample-size 0 --max-differences 10
+    rationale: >-
+      Pending source-hierarchy resolution before running or accepting a final Populace parity result. Current RuleSpec
+      preserves both the higher Alabama Administrative Code assistance-payment rule and the delegated DHR manual
+      payment-computation rule; PolicyEngine's al_tanf currently follows the DHR manual's 20% work-expense rate and
+      does not expose every final legal payment adjustment boundary.
+- country: us
+  program_id: tanf
+  program_name: Alaska ATAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: AK
+  variable: ak_atap
+  source_type: state_implementation
+  state: AK
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include an Alaska ATAP FY 2026 program bridge over official DPA adult-included
+    standards and tested 7 AAC 45.280, 45.400, 45.470, 45.485, and 45.525 legal slices. The bridge remains incomplete
+    for earned-income deductions, nonfinancial eligibility, low-shelter-cost reduction, and non-adult-included assistance-unit
+    variants, while PolicyEngine's ak_atap is a final monthly SPM-unit benefit built from PE's simplified ATAP graph; keep
+    as known-not-comparable until the remaining legal gates are encoded and a final adapter matches PE-compatible boundaries.
+- country: us
+  program_id: tanf
+  program_name: Iowa FIP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: IA
+  variable: ia_fip
+  source_type: state_implementation
+  state: IA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes Iowa IAC 441-41.28 Family Investment Program need-standard components from the primary
+    regulation. PolicyEngine's ia_fip is a final monthly SPM-unit benefit using PE eligibility, countable-income,
+    payment-standard, and standard-of-need graphs, so the encoded Iowa source mechanics are adjacent coverage rather
+    than a one-to-one final-benefit oracle.
+- country: us
+  program_id: tanf
+  program_name: Louisiana FITAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: LA
+  variable: la_fitap
+  source_type: state_implementation
+  state: LA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: RuleSpec encodes Louisiana FITAP income-limit, flat-grant, 18+ household, minimum-payment, and rounded-deficit
+    legal slices from DCFS B-640. PolicyEngine's la_fitap is a final monthly benefit surface, but currently omits the
+    source's rounded-down deficit and under-$10 no-payment rules, so direct oracle comparison is not one-to-one until
+    PolicyEngine is updated or an adapter targets the same legal boundary.
+- country: us
+  program_id: tanf
+  program_name: New Mexico Works
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NM
+  variable: nm_works
+  source_type: state_implementation
+  state: NM
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: North Dakota TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: ND
+  variable: nd_tanf
+  source_type: state_implementation
+  state: ND
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: South Carolina TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: SC
+  variable: sc_tanf
+  source_type: state_implementation
+  state: SC
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Vermont Reach Up
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: VT
+  variable: vt_reach_up
+  source_type: state_implementation
+  state: VT
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Virginia TANF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: VA
+  variable: va_tanf
+  source_type: state_implementation
+  state: VA
+  axiom_status: pending_rulespec_encoding
+  priority: P1
+  rationale: PolicyEngine models this program variable; Axiom should encode the governing law and add a legal-ID oracle mapping
+    before claiming parity.
+- country: us
+  program_id: tanf
+  program_name: Wyoming POWER
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WY
+  variable: wy_power
+  source_type: state_implementation
+  state: WY
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include tested Wyoming POWER payment-test legal slices for earned-income disregards,
+    deeming, maximum-benefit-level testing, performance-payment calculation, and child-support termination. Those outputs
+    are source-specific DFS manual boundaries, while PolicyEngine's wy_power is a final benefit surface built from PE's
+    TANF graph and parameter table; do not treat it as a direct one-to-one oracle target until Axiom has an equivalent
+    final Wyoming POWER benefit surface or PE exposes compatible helper boundaries.
+- country: us
+  program_id: ccdf
+  program_name: CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: AK
+  variable: ak_ccap
+  source_type: state_implementation
+  state: AK
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Arkansas SRA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: AR
+  variable: ar_sra
+  source_type: state_implementation
+  state: AR
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Alabama CCSP
+  category: Benefits
+  agency: HHS
+  policyengine_status: partial
+  coverage: AL
+  variable: al_ccsp
+  source_type: state_implementation
+  state: AL
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: AZ
+  variable: az_ccap
+  source_type: state_implementation
+  state: AZ
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec encodes Arizona Administrative Code Title 6, Chapter 5 eligibility, activity/need,
+    income, fee-assignment, DES FFY 2026 income-fee schedule, and DES reimbursement-rate source components, with
+    exact oracle mappings for the shared income-limit tables. PolicyEngine's az_ccap is a final monthly subsidy amount
+    that also depends on actual childcare expenses, final eligibility rollup, copay aggregation, maximum reimbursement,
+    and PE-specific proxies, so this program surface is adjacent rather than one-to-one until Axiom has a final Arizona
+    CCAP composition and adapter.
+- country: us
+  program_id: ccdf
+  program_name: CalWORKs childcare
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: CA
+  variable: ca_calworks_child_care
+  source_type: state_implementation
+  state: CA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: CO
+  variable: co_ccap_subsidy
+  source_type: state_implementation
+  state: CO
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Current RuleSpec repos include tested Colorado CCAP low-income eligibility, SMI, FPG, and asset-limit legal slices,
+    with comparable mapping for the SMI helper. PolicyEngine's co_ccap_subsidy is a final modeled subsidy equal to childcare
+    expenses minus a parent fee and is defined for PE's composed eligibility predicate, so it is not a direct one-to-one legal
+    output until Axiom has an equivalent final subsidy composition or PE exposes compatible legal helper boundaries.
+- country: us
+  program_id: ccdf
+  program_name: Care 4 Kids
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: CT
+  variable: ct_c4k
+  source_type: state_implementation
+  state: CT
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: School Readiness
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: FL
+  variable: fl_sr
+  source_type: state_implementation
+  state: FL
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Hawaii Child Care Subsidy
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: HI
+  variable: hi_ccap
+  source_type: state_implementation
+  state: HI
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: IL
+  variable: il_ccap_eligible
+  source_type: state_implementation
+  state: IL
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: ICCP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: ID
+  variable: id_iccp
+  source_type: state_implementation
+  state: ID
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Indiana CCDF
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: IN
+  variable: in_ccdf
+  source_type: state_implementation
+  state: IN
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Kansas CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: KS
+  variable: ks_child_care_subsidies
+  source_type: state_implementation
+  state: KS
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: KY
+  variable: ky_ccap
+  source_type: state_implementation
+  state: KY
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Louisiana CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: LA
+  variable: la_ccap
+  source_type: state_implementation
+  state: LA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Massachusetts CCFA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MA
+  variable: ma_ccfa
+  source_type: state_implementation
+  state: MA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Maryland CCS
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MD
+  variable: md_child_care_subsidies
+  source_type: state_implementation
+  state: MD
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Maine CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: ME
+  variable: me_ccap
+  source_type: state_implementation
+  state: ME
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: CCPP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MS
+  variable: ms_ccpp
+  source_type: state_implementation
+  state: MS
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Iowa CCA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: IA
+  variable: ia_cca
+  source_type: state_implementation
+  state: IA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Minnesota CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MN
+  variable: mn_ccap
+  source_type: state_implementation
+  state: MN
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: New Hampshire CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NH
+  variable: nh_ccap
+  source_type: state_implementation
+  state: NH
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: DC CCSP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: DC
+  variable: dc_ccsp
+  source_type: state_implementation
+  state: DC
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: North Carolina SCCA
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: NC
+  variable: nc_scca
+  source_type: state_implementation
+  state: NC
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Delaware POC
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: DE
+  variable: de_poc
+  source_type: state_implementation
+  state: DE
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Pennsylvania CCW
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: PA
+  variable: pa_ccw
+  source_type: state_implementation
+  state: PA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Rhode Island CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: RI
+  variable: ri_ccap
+  source_type: state_implementation
+  state: RI
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Texas CCS
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: TX
+  variable: tx_ccs
+  source_type: state_implementation
+  state: TX
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Vermont CCFAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: VT
+  variable: vt_ccfap
+  source_type: state_implementation
+  state: VT
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Washington WCCC
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WA
+  variable: wa_wccc
+  source_type: state_implementation
+  state: WA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: West Virginia CCAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WV
+  variable: wv_ccap
+  source_type: state_implementation
+  state: WV
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ccdf
+  program_name: Georgia CAPS
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: GA
+  variable: ga_caps
+  source_type: state_implementation
+  state: GA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes tested Georgia CAPS income-limit, payment-zone, reimbursement-rate, and family-fee legal slices from
+    the Georgia DECAL CAPS manual and appendices. PolicyEngine's `ga_caps` variable is a final modeled subsidy surface, so those
+    source-specific RuleSpec outputs are not one-to-one comparable to the aggregate PE program variable until Axiom has an equivalent
+    final CAPS subsidy surface or PolicyEngine exposes compatible helper boundaries.
+- country: us
+  program_id: head_start
+  program_name: Head Start
+  category: Benefits
+  agency: HHS
+  policyengine_status: partial
+  coverage: US, WA
+  variable: head_start
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes the national 45 CFR 1302.12 Head Start eligibility and enrollment-allowance rules. PolicyEngine's
+    `head_start` variable is a final imputed dollar value using eligibility, take-up, and state spending/enrollment allocation,
+    so the national legal surface is not a one-to-one oracle boundary.
+- country: us
+  program_id: head_start
+  program_name: Head Start eligibility
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: US
+  variable: is_head_start_eligible
+  source_type: eligibility
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes and classifies the national 45 CFR 1302.12 eligibility slices that touch Head Start eligibility,
+    including ordinary paragraph (c) participant eligibility, preschool age, over-income enrollment allowances, Tribal
+    service-area eligibility, and Migrant or Seasonal eligibility. PolicyEngine's `is_head_start_eligible` variable is a
+    direct person-level model surface that does not expose those legal branches and program-administration predicates as a
+    one-to-one RuleSpec oracle boundary.
+- country: us
+  program_id: head_start
+  program_name: Early Head Start eligibility
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: US
+  variable: is_early_head_start_eligible
+  source_type: eligibility
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes and classifies the 45 CFR 1302.12(b)(1) Early Head Start age requirement and the paragraph (c)
+    participant eligibility paths. PolicyEngine's `is_early_head_start_eligible` variable is a direct person-level model
+    surface combining Early Head Start age or pregnancy eligibility with broader model eligibility logic, so the existing
+    source-specific RuleSpec outputs are not a one-to-one oracle boundary.
+- country: us
+  program_id: head_start
+  program_name: ECEAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WA
+  variable: wa_eceap
+  source_type: state_implementation
+  state: WA
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  lifecycle: inactive
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: head_start
+  program_name: Birth to Three ECEAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: WA
+  variable: wa_birth_to_three_eceap
+  source_type: state_implementation
+  state: WA
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  lifecycle: inactive
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: liheap
+  program_name: DC LIHEAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: DC
+  variable: dc_liheap
+  source_type: state_implementation
+  state: DC
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: liheap
+  program_name: Massachusetts LIHEAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: MA
+  variable: ma_liheap
+  source_type: state_implementation
+  state: MA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: liheap
+  program_name: Illinois LIHEAP
+  category: Benefits
+  agency: HHS
+  policyengine_status: complete
+  coverage: IL
+  variable: il_liheap
+  source_type: state_implementation
+  state: IL
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi
+  program_name: SSI
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: US
+  variable: ssi
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes tested SSI federal benefit-rate, income-exclusion, resource-limit, eligibility-branch, blindness,
+    and COLA source-level outputs, including 42 USC 1382(b)(1)'s annual benefit formula. PolicyEngine's final person-level
+    ssi surface also includes broader eligibility, resource, take-up, and modeled administrative assumptions, so compare
+    the encoded legal components separately until Axiom has an equivalent final program-composition surface.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Alaska SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: AK
+  variable: ak_ssp
+  source_type: state_implementation
+  state: AK
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes Alaska DPA's 2026 APA and SSI standards and the source-derived monthly state-supplement payment-standard
+    cells. PolicyEngine's final `ak_ssp` surface also composes eligibility, federal living-arrangement/claim-type facts,
+    countable-income reduction, annualization, and person-level aggregation, so compare encoded payment-standard cells separately
+    until Axiom has the equivalent final benefit-composition surface.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Alabama SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: AL
+  variable: al_ssp
+  source_type: state_implementation
+  state: AL
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes Alabama Administrative Code attachment 660-2-4-.19a monthly state-supplement payment-standard
+    cells and maps those cells to PolicyEngine's Alabama SSP amount parameter. PolicyEngine's final `al_ssp` surface also
+    composes SSI eligibility, payment category, grandfathering, waiver, and skilled-nursing-facility predicates, so compare
+    encoded amount cells separately until Axiom has the equivalent final eligibility and benefit-composition surface.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: California SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: CA
+  variable: ca_state_supplement
+  source_type: state_implementation
+  state: CA
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes California's 2026 SSI/SSP chart amounts from state guidance, including the monthly CA Supplement
+    column. PolicyEngine's `ca_state_supplement` is an annual SPM-unit final amount after subtracting SSI and SSI countable
+    income from a broader California payment-standard graph, so compare encoded chart/payment-standard components separately
+    until Axiom has an equivalent WIC 12200/12204 final benefit composition surface.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Connecticut SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: CT
+  variable: ct_ssp
+  source_type: state_implementation
+  state: CT
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes Conn. Gen. Stat. § 17b-600 plus Connecticut DSS UPM 4005.10, 5030.10,
+    5030.15, 5045.10, 5050.13, 5520.10, 6005, and current Program Standards chart components for
+    resources, income disregards, countable income, income eligibility, benefit calculation, and
+    standards. PolicyEngine's `ct_ssp` is a final SPM-unit amount summed from person-level formulas
+    with different entity and composition boundaries, so compare the mapped legal components
+    separately until Axiom has an equivalent final composition surface.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Colorado SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: CO
+  variable: co_state_supplement
+  source_type: state_implementation
+  state: CO
+  axiom_status: wired
+  priority: P1
+  rationale: >-
+    Colorado AND-CS grant-payment rules are encoded and wired to PolicyEngine's CO state-supplement surface. Populace
+    validation is currently blocked by PolicyEngine-US parameter drift: PE-US 1.751.2 carries the 2025 monthly grant standard
+    of $967 into 2026, while 9 CCR 2503-5 3.546 sets $994 effective January 1, 2026. The upstream PE fix is
+    PolicyEngine/policyengine-us#8807.
+  populace_validation:
+    status: blocked
+    dataset: populace-us-2024 local H5
+    command: >-
+      AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5
+      uv run --with policyengine-us --with policyengine-core==3.26.0
+      --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us]
+      --with numpy --with pandas axiom-encode us-populace-compare
+      --root /Users/maxghenis/TheAxiomFoundation
+      --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us
+      --axiom-rules-engine-path /Users/maxghenis/TheAxiomFoundation/_worktrees/axiom-rules-engine-derived-versions-20260701
+      --year 2026 --month 1 --populace-year 2024
+      --variable co_state_supplement --sample-size 0 --max-differences 10
+    last_run: '2026-07-01'
+    rationale: >-
+      Full Colorado Populace run compared 2,209 people and found 1 mismatch, exactly $27/month: RuleSpec applies
+      the 2026 source-law AND-CS grant standard of $994, while PolicyEngine-US 1.751.2 still uses $967 for 2026.
+      Installing local PE branch codex/co-ssi-2026-params from PolicyEngine/policyengine-us#8807 removes the mismatch;
+      the paired CO OAP/AND-CS Populace run compared 4,418 values with 0 mismatches.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: DC OSSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: DC
+  variable: dc_ossp
+  source_type: state_implementation
+  state: DC
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: >-
+    Axiom encodes POMS SI 01415.058 2026 District payment-level tables and living-arrangement OS-code rules, with
+    upstream source checks against D.C. Code § 4-205.49 and current DC DHCF OSSP payment-level guidance. The encoded
+    RuleSpec outputs map exact monthly state-supplement parameter cells to PolicyEngine, but PolicyEngine's final
+    `dc_ossp` person surface also composes eligibility, living arrangement, countable-income reduction, and person-level
+    couple allocation, so compare encoded payment-level cells separately until Axiom has equivalent final benefit
+    composition.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Delaware SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: DE
+  variable: de_ssp
+  source_type: state_implementation
+  state: DE
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes SSA POMS SI 01415.058 2026 Delaware payment-level tables and living-arrangement OS-code
+    rules, with upstream source context from Delaware Code Title 31 Chapter 5 and Delaware DSSM 13000 state supplement
+    administration rules. The encoded RuleSpec outputs map exact monthly individual and couple state-supplement
+    parameter cells to PolicyEngine, but PolicyEngine's final `de_ssp` person surface also composes eligibility,
+    individual-vs-couple payment selection, SSI countable-income reduction, and person-level couple allocation, so compare
+    encoded payment-level cells separately until Axiom has equivalent final benefit composition.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Florida OSS
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: FL
+  variable: fl_oss
+  source_type: state_implementation
+  state: FL
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes the Florida ESS legal eligibility, source-local OSS payment deficit, and Appendix A-12 standards
+    for Optional State Supplementation. PolicyEngine's `fl_oss` is a person-level modeled wrapper that combines simplified
+    eligibility, SSI-countable-income projection, provider-rate arithmetic, and cap logic rather than exposing the same
+    source-local benefit-computation concepts one-to-one.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Georgia SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: GA
+  variable: ga_ssp
+  source_type: state_implementation
+  state: GA
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes Georgia DFCS Policy 2578 and maps the monthly person-level state supplement amount to
+    `ga_ssp_person`. PolicyEngine's listed program variable `ga_ssp` is an SPM-unit aggregate over person amounts and
+    PE-specific federal living-arrangement/setting inputs, so the aggregate wrapper is reviewed but not a one-to-one legal
+    output.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Idaho AABD
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: ID
+  variable: id_aabd
+  source_type: state_implementation
+  state: ID
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes IDAPA 16.03.05.514 source-law AABD cash-payment maximums and the cash-payment rule from
+    Idaho's administrative rules. PolicyEngine's final `id_aabd` person-level surface additionally composes basic
+    allowances from IDAPA 16.03.05.501 and .512, SSI countable income, living-arrangement exclusions, and per-person
+    couple allocation, so the final variable is reviewed but not one-to-one with the source-level RuleSpec output.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Indiana SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: IN
+  variable: in_ssp
+  source_type: state_implementation
+  state: IN
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes the Indiana Code SAPN personal-needs allowance and facility-resident supplement framework,
+    plus FSSA Medicaid Policy Manual Chapter 5000 SAPN eligibility and benefit-calculation rules. PolicyEngine's final
+    `in_ssp` person-level surface also composes RCAP, and its SAPN subformula uses PolicyEngine SSI/countable-income
+    proxies rather than the manual's budgeted earned and unearned income inputs, so the final aggregate is reviewed but
+    not a one-to-one oracle target.
+  populace_validation:
+    status: pending_validator
+    rationale: Needs either RCAP RuleSpec coverage plus a final `in_ssp` composition, or a narrower Populace adapter for
+      the SAPN source-law budgeted-income inputs before a meaningful full-surface comparison can run.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Massachusetts SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: MA
+  variable: ma_state_supplement
+  source_type: state_implementation
+  state: MA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Maryland PAA
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: MD
+  variable: md_paa
+  source_type: state_implementation
+  state: MD
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Michigan SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: MI
+  variable: mi_ssp
+  source_type: state_implementation
+  state: MI
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: RuleSpec encodes Michigan BEM 660 MDHHS-issued State SSI Payment eligibility and RFT 248 current-law payment
+    cells. PolicyEngine's `mi_ssp` is an SPM-unit aggregate over person-level amounts, category overrides, SSI eligibility,
+    and countable-income reductions, so no single encoded source output is a one-to-one oracle target for the final aggregate.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Maine SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: ME
+  variable: me_ssp
+  source_type: state_implementation
+  state: ME
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Missouri SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: MO
+  variable: mo_ssp
+  source_type: state_implementation
+  state: MO
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Minnesota MSA
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: MN
+  variable: mn_msa
+  source_type: state_implementation
+  state: MN
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: RuleSpec encodes Minnesota Combined Manual 0020.21 MSA assistance-standard source parameters and the generated
+    household-level assistance-standard branch, with PolicyEngine parameter mappings for the comparable current-law cells.
+    PolicyEngine's final `mn_msa` surface composes person-level eligibility, payment categories, countable-income reductions,
+    special-needs amounts, guardian/conservator fees, representative-payee fees, housing assistance, and household aggregation,
+    so no single encoded source output is a one-to-one oracle target for the final aggregate.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Nebraska AABD
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: NE
+  variable: ne_aabd
+  source_type: state_implementation
+  state: NE
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Kansas SSPP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: KS
+  variable: ks_sspp
+  source_type: state_implementation
+  state: KS
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes the Kansas SSPP institutional SSI recipient eligibility and flat monthly payment rules from
+    KHPA Policy No. 2007-05-01 and K.S.A. 39-972, ingested from KDHE and Kansas Revisor official sources. The SSPP
+    minimum-age parameter maps to PolicyEngine as a comparable value (both set age 18). The final benefit is not
+    comparable at a shared date because the corpus source text substantiates the 20.00 dollar amount for the 2006-2007
+    program period, while PolicyEngine's `ks_sspp` pays a later administrative value of 32 effective 2009; the memo's
+    Section XI flags that the benefit level changes after July 2007.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Louisiana OSS
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: LA
+  variable: la_oss
+  source_type: state_implementation
+  state: LA
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Kentucky SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: KY
+  variable: ky_ssp
+  source_type: state_implementation
+  state: KY
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Illinois AABD
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: IL
+  variable: il_aabd
+  source_type: state_implementation
+  state: IL
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Illinois CSMM WAG 25-06-01 grant-adjustment and 11-01-01 personal-allowance components are encoded with
+    PolicyEngine mappings, including a direct oracle for `il_aabd_personal_allowance`. The final `il_aabd` SPM-unit
+    surface composes eligibility, countable income, shelter, utility, and person aggregation that are not yet all exposed
+    as a single one-to-one RuleSpec output.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: New Mexico SSI supplement
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: NM
+  variable: nm_ssi_state_supplement
+  source_type: state_implementation
+  state: NM
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: South Carolina SSI supplement
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: SC
+  variable: sc_ssi_state_supplement
+  source_type: state_implementation
+  state: SC
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Texas SSI supplement
+  category: Benefits
+  agency: SSA
+  policyengine_status: complete
+  coverage: TX
+  variable: tx_ssi_state_supplement
+  source_type: state_implementation
+  state: TX
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ssi_state_supplement
+  program_name: Washington SSP
+  category: Benefits
+  agency: SSA
+  policyengine_status: partial
+  coverage: WA
+  variable: wa_ssp
+  source_type: state_implementation
+  state: WA
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes current WAC 388-478-0055 SSP rate-standard components, including a comparable July 2023
+    medical-institution base amount and an explicit deferred output for post-2024 medical-institution COLA. PolicyEngine's
+    `wa_ssp` is a final person-level wrapper over WAC 388-474 eligibility/category facts and a historical amount schedule,
+    so compare source components separately until WAC 388-474 and the WSR rate history are encoded.
+- country: us
+  program_id: social_security
+  program_name: Social Security
+  category: Benefits
+  agency: SSA
+  policyengine_status: partial
+  coverage: US
+  variable: social_security
+  source_type: program
+  axiom_status: input_only
+  priority: P1
+  rationale: PolicyEngine's social_security program variable aggregates Social Security dependents, disability, retirement, and
+    survivors benefit amounts that are uprated input variables rather than computed benefit-law outputs. RuleSpec should encode and
+    compare source-backed SSA benefit formulas and parameters separately when PE exposes a comparable computed surface.
+- country: us
+  program_id: medicare
+  program_name: Medicare
+  category: Healthcare
+  agency: HHS
+  policyengine_status: complete
+  coverage: US
+  variable: is_medicare_eligible
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom has primary-source 42 USC 426 Medicare entitlement slices plus CMS guidance parameters for the simplified
+    age-65 and 24-month SSDI facts. PolicyEngine's is_medicare_eligible variable is a simplified person-level proxy
+    using only age >= 65 or SSDI months >= 24, and does not expose the statutory section 402 entitlement,
+    railroad-retirement, government-employment application, enrollment, or termination-timing conditions needed for a
+    maximally upstream one-to-one RuleSpec oracle. Track the source-level statutory mappings separately instead of
+    claiming final Medicare PE parity from the guidance bridge.
+- country: us
+  program_id: section_8
+  program_name: Section 8
+  category: Housing
+  agency: HUD
+  policyengine_status: in_progress
+  coverage: unspecified
+  variable: hud_hap
+  source_type: program
+  axiom_status: pe_in_progress
+  priority: P3
+  rationale: PolicyEngine marks this surface in progress, so Axiom tracks it but does not require full oracle wiring yet.
+- country: us
+  program_id: lifeline
+  program_name: Lifeline
+  category: Benefits
+  agency: FCC
+  policyengine_status: complete
+  coverage: US
+  variable: lifeline
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: Axiom encodes federal Lifeline eligibility and support parameters from 47 CFR 54.403 and 54.409, but PolicyEngine's
+    lifeline variable is an annual SPM-unit amount capped by phone plus broadband costs and includes state-specific/Texas supplements.
+    Axiom maps comparable federal parameters separately and classifies source-level eligibility and carrier-support outputs.
+- country: us
+  program_id: acp
+  program_name: Affordable Connectivity Program
+  category: Benefits
+  agency: FCC
+  policyengine_status: complete
+  coverage: US
+  variable: acp
+  source_type: program
+  lifecycle: sunset
+  axiom_status: known_not_comparable
+  priority: P3
+  rationale: Axiom encodes ACP benefit caps, the 200 percent FPG income limit, source-level eligible-household paths, provider
+    receipt constraints, and connected-device reimbursement from 47 CFR 54.1800, 54.1803, and 54.1805. PolicyEngine's acp
+    variable is an annual SPM-unit broadband benefit capped by broadband_cost_after_lifeline and sunset to zero after June
+    2024, so ACP is historical/sunset and should not be prioritized ahead of active current-law surfaces. Axiom maps comparable
+    federal parameters separately and classifies source-level eligibility, provider-support, high-cost-area, and connected-device
+    outputs.
+- country: us
+  program_id: pell_grant
+  program_name: Pell Grant
+  category: Education
+  agency: ED
+  policyengine_status: complete
+  coverage: US
+  variable: pell_grant
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: RuleSpec PR 437 encodes current-law Pell Grant statutory and Department of Education guidance surfaces, including
+    exact mappings for comparable Pell award and poverty-line threshold parameters. Axiom should not claim a one-to-one oracle
+    match for PolicyEngine's final `pell_grant` program aggregate because PolicyEngine composes SAI/EFC-era paths, cost-of-attendance
+    caps, enrollment timing, eligibility-type variables, and simplified program inputs outside a single source-boundary legal
+    output. Compare exact Pell parameters and source-level branch outputs separately.
+- country: us
+  program_id: education_tax_credits
+  program_name: Education tax credits
+  category: Education
+  agency: IRS
+  policyengine_status: complete
+  coverage: US
+  variable: american_opportunity_credit
+  source_type: program
+  axiom_status: wired
+  priority: P1
+  rationale: RuleSpec encodes current-law section 25A education credit surfaces and the PolicyEngine registry maps the American
+    Opportunity Credit, refundable and nonrefundable AOTC components, Lifetime Learning Credit components, and education tax
+    credit aggregate to exact PE variables for supported current-law cases.
+  populace_validation:
+    status: validated
+    command: AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5 uv run --with policyengine-us --with policyengine-core==3.26.0 --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us] --with numpy --with pandas axiom-encode tax-populace-compare --root /Users/maxghenis/TheAxiomFoundation --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us --axiom-rules-engine-path /Users/maxghenis/TheAxiomFoundation/_worktrees/axiom-rules-engine-derived-versions-20260701 --year 2026 --populace-year 2024 --surface aotc --sample-size 0 --fail-on-mismatch --json
+    dataset: populace-us-2024 local H5
+    last_run: '2026-07-01'
+    rationale: Full-population AOTC comparison passed with 160,858 people, 87,519 tax units, 350,076 output values compared,
+      and 0 mismatches across American Opportunity Credit, refundable AOTC, nonrefundable AOTC, and education tax credits.
+- country: us
+  program_id: clean_vehicle_credits
+  program_name: Clean vehicle credits
+  category: Energy
+  agency: IRS
+  policyengine_status: complete
+  coverage: US
+  variable: clean_vehicle_credit
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: RuleSpec PR 436 encodes current-law sections 25E and 30D from the House US Code releasepoint, including source-backed
+    clean-vehicle credit parameters and per-vehicle rules. Axiom still should not claim a final `clean_vehicle_credit` oracle
+    match because section 30D(a)'s tax-unit aggregate is deferred until a taxpayer-to-vehicle relation with raw per-vehicle
+    credit amounts is represented, and PolicyEngine's clean-vehicle variables are tax-unit simplifications rather than the
+    full statutory relation surface.
+- country: us
+  program_id: residential_clean_energy_credit
+  program_name: Residential clean energy credit
+  category: Energy
+  agency: IRS
+  policyengine_status: complete
+  coverage: US
+  variable: residential_clean_energy_credit
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: RuleSpec encodes current-law section 25D residential clean energy credit surfaces. Axiom should not claim a comparable
+    oracle match for PolicyEngine's final `residential_clean_energy_credit` surface because PolicyEngine is stale after Pub.
+    L. 119-21 and still allows post-2025 credits; see PolicyEngine/policyengine-us#8694. Source-level parameters and intermediates
+    remain classified individually in the legal-ID registry.
+- country: us
+  program_id: ira_tax_credits
+  program_name: IRA tax credits
+  category: Energy
+  agency: IRS
+  policyengine_status: complete
+  coverage: US
+  variable: energy_efficient_home_improvement_credit
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: >-
+    RuleSpec PR 428 encodes current-law section 25C, but PolicyEngine's energy_efficient_home_improvement_credit
+    still uses the pre-current-law 2033 in-effect schedule, lacks the section 25C(h) product-identification-number gate,
+    and computes tax-liability limiting through PE's full tax stack rather than the legal boundary inputs exposed in RuleSpec;
+    see PolicyEngine/policyengine-us#8703.
+- country: us
+  program_id: doe_high_efficiency_rebate
+  program_name: DOE high efficiency rebate
+  category: Energy
+  agency: DOE
+  policyengine_status: complete
+  coverage: US
+  variable: high_efficiency_electric_home_rebate
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: >-
+    RuleSpec encodes 42 USC 18795a(c)(3)-(4) item caps, total caps, and project-cost percentage limits, with exact
+    PolicyEngine parameter mappings where PE exposes the same statutory values. The final PE variable collapses those
+    statutory project/entity/rebate concepts into tax-unit expenditure helpers, so Axiom should not claim one-to-one final
+    variable parity until the project/payment aggregation surface is encoded.
+- country: us
+  program_id: doe_efficiency_rebate
+  program_name: DOE efficiency rebate
+  category: Energy
+  agency: DOE
+  policyengine_status: complete
+  coverage: US
+  variable: residential_efficiency_electrification_rebate
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P1
+  rationale: >-
+    RuleSpec encodes 42 USC 18795 HOMES definitions and 42 USC 18795(c)(2) thresholds, modeled/measured caps, and
+    low/moderate-income branches, with exact PolicyEngine parameter mappings where PE exposes the same statutory values.
+    The final PE variable collapses the statutory project, building, portfolio, and anti-combination structure into
+    tax-unit energy-use inputs, so it is not a one-to-one final variable oracle yet.
+- country: us
+  program_id: co_oap
+  program_name: Colorado OAP
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: CO
+  variable: co_oap
+  source_type: program
+  axiom_status: wired
+  priority: P1
+  rationale: >-
+    Colorado OAP grant-payment rules are encoded and wired to PolicyEngine's CO OAP surface. Populace validation
+    is currently blocked by PolicyEngine-US parameter drift: PE-US 1.751.2 carries the 2025 monthly grant standard of
+    $1,005 into 2026, while 9 CCR 2503-5 3.530 sets $1,032 effective January 1, 2026. The upstream PE fix is
+    PolicyEngine/policyengine-us#8807.
+  populace_validation:
+    status: blocked
+    dataset: populace-us-2024 local H5
+    command: >-
+      AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5
+      uv run --with policyengine-us --with policyengine-core==3.26.0
+      --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us]
+      --with numpy --with pandas axiom-encode us-populace-compare
+      --root /Users/maxghenis/TheAxiomFoundation
+      --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us
+      --axiom-rules-engine-path /Users/maxghenis/TheAxiomFoundation/_worktrees/axiom-rules-engine-derived-versions-20260701
+      --year 2026 --month 1 --populace-year 2024
+      --variable co_oap --sample-size 0 --max-differences 10
+    last_run: '2026-07-01'
+    rationale: >-
+      Full Colorado Populace run compared 2,209 people and found 62 mismatches, each exactly $27/month: RuleSpec
+      applies the 2026 source-law OAP grant standard of $1,032, while PolicyEngine-US 1.751.2 still uses $1,005 for 2026.
+      Installing local PE branch codex/co-ssi-2026-params from PolicyEngine/policyengine-us#8807 removes the mismatches;
+      the paired CO OAP/AND-CS Populace run compared 4,418 values with 0 mismatches.
+- country: us
+  program_id: co_chp
+  program_name: Colorado CHP
+  category: Healthcare
+  agency: State
+  policyengine_status: complete
+  coverage: CO
+  variable: co_chp
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P1
+  rationale: PolicyEngine's co_chp variable reports modeled annual expense savings after applying CHP+ eligibility, copay,
+    and medical-expense assumptions. It is not a direct statutory cash benefit or eligibility output. RuleSpec should compare
+    Colorado CHP+ eligibility, income-limit, copay, out-of-pocket, and state-set parameter rules separately.
+- country: us
+  program_id: co_omnisalud
+  program_name: Colorado OmniSalud
+  category: Healthcare
+  agency: State
+  policyengine_status: complete
+  coverage: CO
+  variable: co_omnisalud
+  source_type: program
+  axiom_status: out_of_scope
+  priority: P1
+  rationale: PolicyEngine's co_omnisalud variable reports a modeled annual premium-subsidy value equal to the household's
+    SLCSP premium when eligibility holds. It is not a direct statutory amount. RuleSpec should compare Colorado OmniSalud
+    eligibility, immigration-status, income-limit, program-effect, and premium-assistance component rules separately.
+- country: us
+  program_id: dc_power
+  program_name: DC Power
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: DC
+  variable: dc_power
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: dc_gac
+  program_name: DC GAC
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: DC
+  variable: dc_gac
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_cvrp
+  program_name: California CVRP
+  category: Energy
+  agency: State
+  policyengine_status: complete
+  coverage: CA
+  variable: ca_cvrp
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_capi
+  program_name: California CAPI
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: CA
+  state: CA
+  variable: ca_capi
+  source_type: program
+  axiom_status: wired
+  priority: P2
+  rationale: California CDSS EAS Chapter 49 CAPI benefit determination is encoded in RuleSpec and wired through a
+    person-level final-benefit oracle mapping; coverage promotes this surface to wired when the mapping is present in
+    the scanned RuleSpec checkout, while Populace validation is scoped to cases where PolicyEngine's SPM-unit CAPI
+    surface maps cleanly to a single person-level legal output.
+  populace_validation:
+    status: validated
+    dataset: populace-us-2024 local H5
+    command: >-
+      AXIOM_POPULACE_US_2024_H5=/Users/maxghenis/.codex-artifacts/populace-us-fiscal-refresh-703bd81-no-oos-20260620/artifacts/populace_us_2024.h5
+      uv run --with policyengine-us --with policyengine-core==3.26.0
+      --with /Users/maxghenis/PolicyEngine/populace/packages/populace-data[us]
+      --with numpy --with pandas axiom-encode us-populace-compare
+      --root /Users/maxghenis/TheAxiomFoundation
+      --rulespec-root /Users/maxghenis/TheAxiomFoundation/rulespec-us
+      --axiom-rules-engine-path /Users/maxghenis/TheAxiomFoundation/_worktrees/axiom-rules-engine-derived-versions-20260701
+      --year 2026 --month 1 --populace-year 2024
+      --variable ca_capi --sample-size 0 --json
+    last_run: '2026-07-01'
+    compared_persons: 5378
+    compared_spm_units: 3757
+    compared_values: 5378
+    skipped_cases: 10197
+    mismatch_count: 0
+    outputs:
+    - output: us-ca:regulations/cdss/eas/49/49-055#ca_capi
+      compared: 5378
+      mismatches: 0
+      max_abs_diff: 0.0
+    rationale: >-
+      Full California Populace comparison passed for 5,378 comparable non-couple person cases, with 0 mismatches;
+      10,197 married SPM-unit cases were skipped because PolicyEngine exposes CAPI as an SPM-unit total while the encoded
+      legal output is person-level.
+- country: us
+  program_id: care
+  program_name: California CARE
+  category: Energy
+  agency: State
+  policyengine_status: complete
+  coverage: CA
+  variable: ca_care
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: fera
+  program_name: California FERA
+  category: Energy
+  agency: State
+  policyengine_status: complete
+  coverage: CA
+  variable: ca_fera
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: il_fpp
+  program_name: Illinois Family Planning Program
+  category: Healthcare
+  agency: State
+  policyengine_status: complete
+  coverage: IL
+  variable: il_fpp_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: il_ibccp
+  program_name: Illinois IBCCP
+  category: Healthcare
+  agency: State
+  policyengine_status: complete
+  coverage: IL
+  variable: il_bcc_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: il_hbwd
+  program_name: Illinois HBWD
+  category: Healthcare
+  agency: State
+  policyengine_status: complete
+  coverage: IL
+  variable: il_hbwd
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ms_wd
+  program_name: Mississippi WD
+  category: Healthcare
+  agency: State
+  policyengine_status: complete
+  coverage: MS
+  variable: ms_wd_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: il_ihwap
+  program_name: Illinois IHWAP
+  category: Energy
+  agency: State
+  policyengine_status: complete
+  coverage: IL
+  variable: il_ihwap_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: il_scretd
+  program_name: Illinois SCRETD
+  category: Taxes
+  agency: State
+  policyengine_status: complete
+  coverage: IL
+  variable: il_scretd_deferral_amount
+  source_type: program
+  axiom_status: known_not_comparable
+  priority: P2
+  rationale: Axiom encodes the current Illinois statute's application, qualifying-property, agreement, fund-availability,
+    requested-amount, special-assessment, and 80% equity-cap constraints. PolicyEngine's adjacent output only applies
+    age/income eligibility and caps real-estate taxes by the annual maximum, so this is not a one-to-one oracle surface.
+- country: us
+  program_id: il_ipass_assist
+  program_name: Illinois I-PASS Assist
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: IL
+  variable: il_ipass_assist_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: il_bap
+  program_name: Illinois BAP
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Chicago
+  variable: il_bap_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: il_cta_benefit
+  program_name: Illinois CTA benefit
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Chicago
+  variable: il_cta_benefit
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ne_aabd
+  program_name: Nebraska AABD
+  category: Benefits
+  agency: DHHS
+  policyengine_status: complete
+  coverage: NE
+  variable: ne_aabd
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ne_childcare
+  program_name: Nebraska child care subsidy
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: NE
+  variable: ne_child_care_subsidy
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: mbta_reduced_fare
+  program_name: MBTA reduced fare
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: MA
+  variable: ma_mbta_income_eligible_reduced_fare_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ma_eaedc
+  program_name: Massachusetts EAEDC
+  category: Benefits
+  agency: State
+  policyengine_status: complete
+  coverage: MA
+  variable: ma_eaedc
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: nj_unemployment_insurance
+  program_name: New Jersey Unemployment Insurance
+  category: Benefits
+  agency: NJ Department of Labor and Workforce Development
+  policyengine_status: complete
+  coverage: NJ
+  variable: nj_unemployment_insurance
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ny_drive_clean_rebate
+  program_name: NY Drive Clean Rebate
+  category: Energy
+  agency: State
+  policyengine_status: complete
+  coverage: NY
+  variable: ny_drive_clean_rebate
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: tx_fpp_benefit
+  program_name: Texas FPP
+  category: Healthcare
+  agency: State
+  policyengine_status: complete
+  coverage: TX
+  variable: tx_fpp_benefit
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: pa_uc
+  program_name: Pennsylvania Unemployment Compensation
+  category: Benefits
+  agency: PA Department of Labor & Industry
+  policyengine_status: complete
+  coverage: PA
+  variable: pa_uc
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: tx_dart_benefit
+  program_name: Texas DART
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Dallas County, TX
+  variable: tx_dart_benefit_person
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: tx_harris_rides_subsidy
+  program_name: Harris County Rides Subsidy
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Harris County, TX
+  variable: tx_harris_rides_subsidy
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ez_save
+  program_name: Los Angeles County EZ Save
+  category: Energy
+  agency: Local
+  policyengine_status: complete
+  coverage: Los Angeles County
+  variable: ca_la_ez_save
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: la_infant_supplement
+  program_name: Los Angeles County infant supplement
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Los Angeles County
+  variable: ca_la_infant_supplement
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: la_expectant_parent
+  program_name: Los Angeles County expectant parent payment
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Los Angeles County
+  variable: ca_la_expectant_parent_payment
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: la_general_relief
+  program_name: Los Angeles County General Relief
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Los Angeles County
+  variable: la_general_relief
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_marin_general_relief
+  program_name: Marin County General Relief
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Marin County
+  variable: ca_marin_general_relief
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_oc_general_relief
+  program_name: Orange County General Relief
+  category: Benefits
+  agency: Local
+  policyengine_status: partial
+  coverage: Orange County
+  variable: ca_oc_general_relief
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_riv_general_relief
+  program_name: Riverside County General Relief
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Riverside County
+  variable: ca_riv_general_relief
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_riv_liheap
+  program_name: Riverside County LIHEAP
+  category: Energy
+  agency: Local
+  policyengine_status: complete
+  coverage: Riverside County
+  variable: ca_riv_liheap_eligible
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: share
+  program_name: Riverside County SHARE
+  category: Energy
+  agency: Local
+  policyengine_status: complete
+  coverage: Riverside County
+  variable: ca_riv_share_payment
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P3
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_ala_general_assistance
+  program_name: Alameda County General Assistance
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Alameda County
+  variable: ca_ala_general_assistance
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_smc_general_assistance
+  program_name: San Mateo County General Assistance
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: San Mateo County
+  variable: ca_smc_general_assistance
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_scc_general_assistance
+  program_name: Santa Clara County General Assistance
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Santa Clara County
+  variable: ca_scc_general_assistance
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_cc_general_assistance
+  program_name: Contra Costa County General Assistance
+  category: Benefits
+  agency: Local
+  policyengine_status: complete
+  coverage: Contra Costa County
+  variable: ca_cc_general_assistance
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: ca_sf_caap
+  program_name: San Francisco County Adult Assistance Programs
+  category: Benefits
+  agency: Local
+  policyengine_status: partial
+  coverage: San Francisco County
+  variable: ca_sf_caap
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: nyc_income_tax
+  program_name: NYC income tax
+  category: Taxes
+  agency: Local
+  policyengine_status: complete
+  coverage: New York City
+  variable: nyc_income_tax
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: sf_wftc
+  program_name: San Francisco WFTC
+  category: Taxes
+  agency: Local
+  policyengine_status: complete
+  coverage: San Francisco
+  variable: sf_wftc
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.
+- country: us
+  program_id: montgomery_county_eitc
+  program_name: Montgomery County EITC
+  category: Taxes
+  agency: Local
+  policyengine_status: complete
+  coverage: Montgomery County, MD
+  variable: md_montgomery_eitc_refundable
+  source_type: program
+  axiom_status: deferred_jurisdiction
+  priority: P2
+  rationale: PolicyEngine models this jurisdiction-specific surface, but Axiom is prioritizing national, Colorado, Arizona,
+    and Georgia law before other jurisdictions.

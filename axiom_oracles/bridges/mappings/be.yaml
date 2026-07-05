@@ -1,0 +1,26 @@
+prefixes:
+  - legal_id_prefix: "be:"
+    country: be
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Belgium RuleSpec outputs are validated against Belgium-specific household-level oracles such as EUROMOD and FANTASI, not PolicyEngine. PolicyEngine does not provide a Belgium runtime surface with one-to-one legal-ID targets for these national outputs; exact PolicyEngine mappings should be added only if a real Belgium PolicyEngine oracle target is implemented.
+  - legal_id_prefix: "be-bru:"
+    country: be
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Belgium regional and community RuleSpec outputs are validated against Belgium-specific household-level oracles such as EUROMOD and FANTASI, not PolicyEngine. PolicyEngine does not provide a Belgium runtime surface with one-to-one legal-ID targets for Brussels outputs; exact PolicyEngine mappings should be added only if a real Belgium PolicyEngine oracle target is implemented.
+  - legal_id_prefix: "be-dg:"
+    country: be
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Belgium regional and community RuleSpec outputs are validated against Belgium-specific household-level oracles such as EUROMOD and FANTASI, not PolicyEngine. PolicyEngine does not provide a Belgium runtime surface with one-to-one legal-ID targets for German-speaking Community outputs; exact PolicyEngine mappings should be added only if a real Belgium PolicyEngine oracle target is implemented.
+  - legal_id_prefix: "be-vlg:"
+    country: be
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Belgium regional and community RuleSpec outputs are validated against Belgium-specific household-level oracles such as EUROMOD and FANTASI, not PolicyEngine. PolicyEngine does not provide a Belgium runtime surface with one-to-one legal-ID targets for Flanders outputs; exact PolicyEngine mappings should be added only if a real Belgium PolicyEngine oracle target is implemented.
+  - legal_id_prefix: "be-wal:"
+    country: be
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Belgium regional and community RuleSpec outputs are validated against Belgium-specific household-level oracles such as EUROMOD and FANTASI, not PolicyEngine. PolicyEngine does not provide a Belgium runtime surface with one-to-one legal-ID targets for Wallonia outputs; exact PolicyEngine mappings should be added only if a real Belgium PolicyEngine oracle target is implemented.
