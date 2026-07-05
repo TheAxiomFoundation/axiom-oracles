@@ -210,6 +210,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
+        Concepts.BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT,
     }
 
@@ -891,6 +892,75 @@ def test_belgium_family_child_benefit_social_supplement_suite_defines_oracle_con
     assert age_18.metadata["axiom_inputs"][higher_education_input] is True
     assert age_18.metadata["euromod_inputs"][1]["dec"] == 6
     assert age_18.metadata["euromod_inputs"][1]["xed00"] == 1
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_family_child_benefit_brussels_same_age_household_suite_defines_oracle_concept_and_bridge() -> (
+    None
+):
+    cases = load_suite("be-family-child-benefit-brussels-same-age-household")
+
+    assert len(cases) == 4
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (
+            Concepts.BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT,
+        )
+    }
+    assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
+    assert {case.metadata["scenario"] for case in cases} == {
+        "brussels-low-income-two-same-age-children-under-6-single-parent",
+        "brussels-low-income-two-same-age-children-age-13-couple",
+        "brussels-low-income-three-same-age-children-age-13-couple",
+        "brussels-middle-income-two-same-age-children-under-6-single-parent",
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    two_child_single = by_id[
+        "be-family-child-benefit-brussels-same-age-household-two-children-age-0-low-income-single-parent"
+    ]
+    three_child_couple = by_id[
+        "be-family-child-benefit-brussels-same-age-household-three-children-age-13-low-income-couple"
+    ]
+    child_count_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_family_benefits_child_benefit_household_child_count"
+    )
+    income_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_child_benefit_brussels_article_9_household_annual_income"
+    )
+    single_parent_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_child_benefit_brussels_article_9_child_in_single_parent_family"
+    )
+
+    assert two_child_single.metadata["axiom_inputs"][child_count_input] == 2
+    assert two_child_single.metadata["axiom_inputs"][single_parent_input] is True
+    assert len(two_child_single.entities) == 3
+    assert len(two_child_single.metadata["euromod_inputs"]) == 3
+    assert [row["idperson"] for row in two_child_single.metadata["euromod_inputs"]] == [
+        101,
+        102,
+        103,
+    ]
+    assert (
+        two_child_single.metadata["euromod_to_axiom_input_bridge"]["il_bch_means"]
+        == [income_input]
+    )
+
+    assert three_child_couple.metadata["axiom_inputs"][child_count_input] == 3
+    assert three_child_couple.metadata["axiom_inputs"][single_parent_input] is False
+    assert len(three_child_couple.entities) == 4
+    assert len(three_child_couple.metadata["euromod_inputs"]) == 5
+    assert three_child_couple.metadata["euromod_inputs"][1]["idperson"] == 103
+    assert {row["dag"] for row in three_child_couple.metadata["euromod_inputs"][2:]} == {
+        13
+    }
     assert {case.period for case in cases} == {"2025"}
 
 

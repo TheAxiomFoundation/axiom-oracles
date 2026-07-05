@@ -193,6 +193,10 @@ class Concepts:
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement"
     )
+    BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT = (
+        "be:statutes/family_benefits/child_benefit_base_2025"
+        "#belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement"
+    )
     BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT = (
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement"
