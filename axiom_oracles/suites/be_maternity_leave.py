@@ -9,6 +9,7 @@ BRUSSELS_REGION = 1
 DAILY_WORKING_DAY_DENOMINATOR = 12 * 26
 FIRST_30_WORKING_DAYS = 30
 AFTER_30_WORKING_DAYS = 60
+DAILY_REMUNERATION_CAP_BE_2025 = 183.13
 
 
 def be_maternity_leave_cases() -> list[Case]:
@@ -17,10 +18,20 @@ def be_maternity_leave_cases() -> list[Case]:
     return [
         _maternity_leave_case("be-maternity-leave-mother-30k", 30_000.0),
         _maternity_leave_case("be-maternity-leave-mother-45k", 45_000.0),
+        _maternity_leave_case(
+            "be-maternity-leave-mother-60k-capped",
+            60_000.0,
+            apply_daily_cap=True,
+        ),
     ]
 
 
-def _maternity_leave_case(case_id: str, annual_income: float) -> Case:
+def _maternity_leave_case(
+    case_id: str,
+    annual_income: float,
+    *,
+    apply_daily_cap: bool = False,
+) -> Case:
     uncapped_daily_input = _maternity_input(
         "belgium_maternity_uncapped_lost_daily_remuneration"
     )
@@ -28,12 +39,19 @@ def _maternity_leave_case(case_id: str, annual_income: float) -> Case:
         "belgium_maternity_lost_daily_remuneration_after_article_113_cap"
     )
     daily_income = annual_income / DAILY_WORKING_DAY_DENOMINATOR
+    bridge_inputs = [uncapped_daily_input]
+    if not apply_daily_cap:
+        bridge_inputs.append(capped_daily_input)
     return Case(
         case_id=case_id,
         period="2025",
         metadata={
             **BE_METADATA,
-            "scenario": "maternity-leave-employed-under-cap",
+            "scenario": (
+                "maternity-leave-employed-capped"
+                if apply_daily_cap
+                else "maternity-leave-employed-under-cap"
+            ),
             "yearly_earned_income": annual_income,
             "newborn_child_birth_month": 1,
             "euromod_switches": [("PBE", True)],
@@ -42,7 +60,11 @@ def _maternity_leave_case(case_id: str, annual_income: float) -> Case:
                     "belgium_maternity_article_216_uncapped_worker_first_30_days_applies"
                 ): True,
                 uncapped_daily_input: daily_income,
-                capped_daily_input: daily_income,
+                capped_daily_input: (
+                    DAILY_REMUNERATION_CAP_BE_2025
+                    if apply_daily_cap
+                    else daily_income
+                ),
                 _maternity_input("belgium_maternity_first_30_working_days_count"): (
                     FIRST_30_WORKING_DAYS
                 ),
@@ -53,7 +75,7 @@ def _maternity_leave_case(case_id: str, annual_income: float) -> Case:
             "euromod_inputs": _maternity_euromod_inputs(annual_income),
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": {
-                    "inputs": [uncapped_daily_input, capped_daily_input],
+                    "inputs": bridge_inputs,
                     "divide_by": DAILY_WORKING_DAY_DENOMINATOR,
                 },
             },

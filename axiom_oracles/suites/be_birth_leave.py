@@ -7,6 +7,7 @@ from .be_worker import BE_METADATA, EUROMOD_TO_AXIOM_INPUT_BRIDGE
 BIRTH_LEAVE_MODULE = "be:regulations/health_insurance/birth_leave/indemnity_rates"
 BRUSSELS_REGION = 1
 DAILY_WORKING_DAY_DENOMINATOR = 12 * 26
+DAILY_REMUNERATION_CAP_BE_2025 = 183.13
 
 
 def be_birth_leave_cases() -> list[Case]:
@@ -15,10 +16,20 @@ def be_birth_leave_cases() -> list[Case]:
     return [
         _birth_leave_case("be-birth-leave-father-30k", 30_000.0),
         _birth_leave_case("be-birth-leave-father-45k", 45_000.0),
+        _birth_leave_case(
+            "be-birth-leave-father-60k-capped",
+            60_000.0,
+            apply_daily_cap=True,
+        ),
     ]
 
 
-def _birth_leave_case(case_id: str, annual_income: float) -> Case:
+def _birth_leave_case(
+    case_id: str,
+    annual_income: float,
+    *,
+    apply_daily_cap: bool = False,
+) -> Case:
     uncapped_daily_input = _birth_leave_input(
         "belgium_birth_leave_uncapped_lost_daily_remuneration"
     )
@@ -26,24 +37,35 @@ def _birth_leave_case(case_id: str, annual_income: float) -> Case:
         "belgium_birth_leave_lost_daily_remuneration_after_article_87_cap"
     )
     daily_income = annual_income / DAILY_WORKING_DAY_DENOMINATOR
+    bridge_inputs = [uncapped_daily_input]
+    if not apply_daily_cap:
+        bridge_inputs.append(capped_daily_input)
     return Case(
         case_id=case_id,
         period="2025",
         metadata={
             **BE_METADATA,
-            "scenario": "birth-leave-paternity-under-cap",
+            "scenario": (
+                "birth-leave-paternity-capped"
+                if apply_daily_cap
+                else "birth-leave-paternity-under-cap"
+            ),
             "yearly_earned_income": annual_income,
             "newborn_child_age_years": 0,
             "euromod_switches": [("PBE", True)],
             "axiom_inputs": {
                 _birth_leave_input("belgium_birth_leave_eligible_parent"): True,
                 uncapped_daily_input: daily_income,
-                capped_daily_input: daily_income,
+                capped_daily_input: (
+                    DAILY_REMUNERATION_CAP_BE_2025
+                    if apply_daily_cap
+                    else daily_income
+                ),
             },
             "euromod_inputs": _birth_leave_euromod_inputs(annual_income),
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": {
-                    "inputs": [uncapped_daily_input, capped_daily_input],
+                    "inputs": bridge_inputs,
                     "divide_by": DAILY_WORKING_DAY_DENOMINATOR,
                 },
             },
