@@ -621,6 +621,22 @@ def main() -> int:
     return 0
 
 
+def _euromod_release_from_model_root(model_root: str | None) -> str | None:
+    """Read the EUROMOD-platform release label off the model-root directory name.
+
+    ``EUROMOD_RELEASES_J2.0+`` → ``J2.0+``; ``UKMOD_PUBLIC_B2026.03`` →
+    ``B2026.03``. Returns None when the name carries no recognizable release
+    token so the provenance sub-block omits it rather than guessing.
+    """
+    if not model_root:
+        return None
+    name = _expand_path(model_root).name
+    for prefix in ("EUROMOD_RELEASES_", "UKMOD_PUBLIC_"):
+        if name.startswith(prefix):
+            return name[len(prefix):] or None
+    return None
+
+
 def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     """Assemble the provenance block for a completed comparison run.
 
@@ -649,6 +665,17 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         val = runner.get(key) or params.get(key)
         if val:
             rulespec_paths.append(str(val))
+    # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
+    # whole org directory and names the model country; the encoded rules live in
+    # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
+    # explicitly for provenance (mirrors the affected-map's country → repo map).
+    if runner_type == "euromod-synthetic-compare":
+        roots = params.get("axiom_rulespec_repo_roots")
+        country = params.get("euromod_country")
+        if roots and country:
+            rulespec_paths.append(
+                str(Path(str(roots)) / f"rulespec-{str(country).lower()}")
+            )
     rulespecs = rulespec_provenance(rulespec_paths)
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
@@ -692,6 +719,20 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
+    elif runner_type == "euromod-synthetic-compare":
+        # EUROMOD/UKMOD identity comes straight from the runner params: the
+        # model release is read off the model-root directory name (e.g.
+        # EUROMOD_RELEASES_J2.0+ → "J2.0+", UKMOD_PUBLIC_B2026.03 → "B2026.03"),
+        # and system/dataset are the exact strings the adapter runs under.
+        oracle = {
+            "name": "euromod",
+            "euromod_release": _euromod_release_from_model_root(
+                params.get("euromod_model_root")
+            ),
+            "euromod_country": params.get("euromod_country"),
+            "euromod_system": params.get("euromod_system"),
+            "euromod_dataset": params.get("euromod_dataset"),
+        }
 
     # Dataset identity — reuse the pinned-populace identity (#80/#952) when the
     # report carries one.
@@ -1499,7 +1540,7 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
         "--suite",
         str(params["suite"]),
         "--report-suite",
-        str(params["suite"]),
+        str(params.get("report_suite", params["suite"])),
         "--sample-size",
         str(params.get("sample_size", 0)),
         "--period",

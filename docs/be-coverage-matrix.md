@@ -83,8 +83,8 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | EUROMOD policy | switch | output | why not active | rulespec-be status | gap → source family |
 |---|---|---|---|---|---|
 | `bun_be` | off | `bun_s` | "PART SIMULATED" but **off**; unemployment income carried from input data | **encoded, not compared** (`be/regulations/unemployment/*` — admission, benefit_amount, minimum_daily, household_status, payable_amount, all with tests) | build `bun_s` suite (switch on) → RD 25.11.1991 (unemployment) |
-| `bsaoa_be` | off | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | compared* via XML overlay: `be-elderly-income-support` registered, **unpublished** → Law 22.03.2001 (GRAPA/IGO) |
-| `byr_be` | n/a | (early retirement) | pension/early-retirement income from data | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | build pension suite → RD No. 50; RD 23.12.1996 |
+| `bsaoa_be` | off (case switch → on) | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | **compared** (published `axiom-euromod-be-elderly-income-support`, 1/1 exact) via per-case XML switch overlay (`bsaoa_be`→on): isolated no-resources senior, EUROMOD `bsaoa_s` = Axiom GRAPA = 18,964.44 → Law 22.03.2001 (GRAPA/IGO). Broaden: cohabiting, delegated resource exclusions, property/capital resources |
+| `byr_be` | n/a | `byr_s` (never emitted) | early-retirement / old-age pension income is a **pure input** to BE_2025. `byr_be` (12 functions, 106 params) carries policy switch **n/a**, not `off`; a live probe forcing it on (same XML overlay as GRAPA) returns **no `byr_s` column** while the run succeeds, so `n/a` is structural — the functions never register in the spine. `poa` (old-age pension) has no computing policy at all | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | conformance exclusion `input_carrying` (`conformance/be.yaml` `be:byr_be`): nothing to compare — unlike `bsaoa_be` (`off`, activatable), no override resurrects `byr_be`. The rulespec-be pension encodings (RD No. 50; RD 23.12.1996) validate via other oracles, not EUROMOD |
 | `tco_be` | off | (commodities) | indirect consumption tax; body is `DefConst`/`DefIl` only (no `OutputVar`); **not oracle-comparable** — see verdict below | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | conformance exclusion `extension_not_available` (RD No. 20 VAT + excise codes) |
 | `yem_be` | off | `yem` | minimum-wage definition (not a benefit) | n/a (definitional) | — |
 
@@ -136,15 +136,18 @@ the EUROMOD matrix.
 
 ## Sanity-check vs the live dashboard
 
-23 published suites, **103 comparisons, 74 exact matches, 100% dispositioned**
-(matches `euromod-be-coverage.json` `dispositioned_parity`). The three
-PIT-decomposition suites — `be-regional-pit-surcharge` (`tinrg_s`),
-`be-local-municipal-pit` (`tinmu_s`), and `be-capital-income-tax` (`tinkt_s`) —
-add 9 comparisons, all exact matches; the two leave suites — `be-maternity-leave`
-(`bmact_s`) and `be-birth-leave` (`bpact_s`) — add 6, all exact with the PBE
-extension switched on. One suite remains **registered but not published** —
-`be-elderly-income-support` (`bsaoa_s`) — so the coverage claim's GRAPA
-"live_verified" is still ahead of the published set (wave item 4). Nothing
+24 published suites, **104 comparisons, 75 exact matches, 100% dispositioned**
+(matches `euromod-be-coverage.json` `dispositioned_parity`). `be-elderly-income-support`
+(`bsaoa_s`, GRAPA) is now **published** — EUROMOD `bsaoa_s` = Axiom GRAPA =
+18,964.44, exact, via the per-case `bsaoa_be`→on switch overlay. Publishing it
+also closed the last of a class of pre-existing manifest gaps: `be-social-assistance`
+had a committed dashboard report but no `manifest.json` entry (direct-CLI `compare`
+calls, unlike the registry runner, never touch the manifest), so it was folded into
+the parity rollup yet invisible in the dashboard suite selector — now manifested,
+with a test pin enforcing the invariant (the `be-maternity-leave` and
+`be-birth-leave` entries were restored in #158). The three PIT-decomposition suites
+— `be-regional-pit-surcharge` (`tinrg_s`), `be-local-municipal-pit` (`tinmu_s`),
+and `be-capital-income-tax` (`tinkt_s`) — remain 9/9 exact. Nothing
 already-compared is marked missing above.
 
 ## Wave plan (gap workers, grouped)
