@@ -109,6 +109,12 @@ HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_PROGRAM_PATH = Path(
 HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_BASE = "uk:regulations/uksi/2006/214/29"
 HOUSING_BENEFIT_FINAL_PROGRAM_PATH = Path("policies/govuk/housing-benefit.yaml")
 HOUSING_BENEFIT_FINAL_BASE = "uk:policies/govuk/housing-benefit"
+HOUSING_BENEFIT_ENTITLEMENT_PROGRAM_PATH = Path(
+    "policies/housing_benefit_composed_entitlement_pipeline.yaml"
+)
+HOUSING_BENEFIT_ENTITLEMENT_BASE = (
+    "uk:policies/housing_benefit_composed_entitlement_pipeline"
+)
 UNIVERSAL_CREDIT_PROGRAM_PATH = Path("regulations/uksi/2013/376/36.yaml")
 UNIVERSAL_CREDIT_BASE = "uk:regulations/uksi/2013/376/36"
 UNIVERSAL_CREDIT_REGULATION_18_PROGRAM_PATH = Path("regulations/uksi/2013/376/18.yaml")
@@ -511,6 +517,32 @@ HOUSING_BENEFIT_FINAL_OUTPUTS = {
     "housing_benefit_annual_amount": {
         "axiom": f"{HOUSING_BENEFIT_FINAL_BASE}#housing_benefit_annual_amount",
         "pe": "housing_benefit",
+        "tolerance": 0.01,
+    },
+}
+
+HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS = {
+    "hb_pilot_applicable_amount": {
+        "axiom": f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_applicable_amount",
+        "pe": "housing_benefit_applicable_amount",
+        "tolerance": 0.01,
+    },
+}
+
+HOUSING_BENEFIT_NON_DEPENDANT_DEDUCTIONS_OUTPUTS = {
+    "hb_pilot_non_dependant_deductions": {
+        "axiom": (
+            f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_non_dependant_deductions"
+        ),
+        "pe": "housing_benefit_non_dep_deductions",
+        "tolerance": 0.01,
+    },
+}
+
+HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS = {
+    "hb_pilot_entitlement": {
+        "axiom": f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_entitlement",
+        "pe": "housing_benefit_entitlement",
         "tolerance": 0.01,
     },
 }
