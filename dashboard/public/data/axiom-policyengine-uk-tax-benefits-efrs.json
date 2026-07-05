@@ -9258,6 +9258,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1607.408682861328,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1901.526328125,
@@ -9272,6 +9277,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2700.4449218749996,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 4976.915625,
@@ -9286,6 +9296,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1357.9513281250001,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 3357.951328125,
@@ -9300,6 +9315,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 58.0214581298828,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 236.23927734375,
@@ -9314,6 +9334,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 117.89109374999998,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1939.6733203125,
@@ -9328,6 +9353,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1117.6316162109374,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2281.26796875,
@@ -9342,6 +9372,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 176.91365722656246,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1013.2773046875,
@@ -9356,6 +9391,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 3142.0726562500004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5142.07265625,
@@ -9370,6 +9410,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 661.0753149414063,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1543.42828125,
@@ -9384,6 +9429,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2286.77419921875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 3501.386015625,
@@ -9398,6 +9448,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1420.505197753906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2205.8933203125,
@@ -9412,6 +9467,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 298.46705871582026,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 533.761171875,
@@ -9426,6 +9486,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 430.96830322265623,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1019.20359375,
@@ -9440,6 +9505,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2493.676796875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 4493.676796875,
@@ -9454,6 +9524,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1318.2483789062499,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2501.1277734375,
@@ -9468,6 +9543,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 536.0909179687501,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1353.2115234375,
@@ -9482,6 +9562,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2109.4387060546874,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 4082.968125,
@@ -9496,6 +9581,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 4315.73453125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 6315.73453125,
@@ -9510,6 +9600,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 883.9523681640626,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2354.540625,
@@ -9524,6 +9619,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 343.4878149414062,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1225.84078125,
@@ -9538,6 +9638,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 75.22706542968763,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2048.756484375,
@@ -9552,6 +9657,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1607.408682861328,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1901.526328125,
@@ -9566,6 +9676,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2700.4449218749996,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 4976.915625,
@@ -9580,6 +9695,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1357.9513281250001,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 3357.951328125,
@@ -9594,6 +9714,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 58.0214581298828,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 236.23927734375,
@@ -9608,6 +9733,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 117.89109374999998,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1939.6733203125,
@@ -9622,6 +9752,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1117.6316162109374,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2281.26796875,
@@ -9636,6 +9771,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 176.91365722656246,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1013.2773046875,
@@ -9650,6 +9790,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 3142.0726562500004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5142.07265625,
@@ -9664,6 +9809,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 661.0753149414063,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1543.42828125,
@@ -9678,6 +9828,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2286.77419921875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 3501.386015625,
@@ -9692,6 +9847,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1420.505197753906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2205.8933203125,
@@ -9706,6 +9866,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 298.46705871582026,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 533.761171875,
@@ -9720,6 +9885,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 430.96830322265623,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1019.20359375,
@@ -9734,6 +9904,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2493.676796875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 4493.676796875,
@@ -9748,6 +9923,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1318.2483789062499,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2501.1277734375,
@@ -9762,6 +9942,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 536.0909179687501,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1353.2115234375,
@@ -9776,6 +9961,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 2109.4387060546874,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 4082.968125,
@@ -9790,6 +9980,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 4315.73453125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 6315.73453125,
@@ -9804,6 +9999,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 1476.1948046875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 3476.1948046875,
@@ -9818,6 +10018,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 883.9523681640626,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2354.540625,
@@ -9832,6 +10037,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 343.4878149414062,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 1225.84078125,
@@ -9846,6 +10056,11 @@
       "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
       "description": "UK student loan repayment \u2014 output=student_loan_repayment",
       "difference": 75.22706542968763,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "student-loan-repayment-balance-cap-not-fed-to-axiom",
+        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-uk/issues/77"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 2048.756484375,
@@ -9860,6 +10075,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9874,6 +10094,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9888,6 +10113,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9902,6 +10132,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9916,6 +10151,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9930,6 +10170,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9944,6 +10189,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9958,6 +10208,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9972,6 +10227,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -9986,6 +10246,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10000,6 +10265,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10014,6 +10284,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10028,6 +10303,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10042,6 +10322,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10056,6 +10341,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10070,6 +10360,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10084,6 +10379,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10098,6 +10398,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10112,6 +10417,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10126,6 +10436,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10140,6 +10455,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10154,6 +10474,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10168,6 +10493,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10182,6 +10512,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10196,6 +10531,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10210,6 +10550,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10224,6 +10569,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10238,6 +10588,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10252,6 +10607,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10266,6 +10626,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10280,6 +10645,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10294,6 +10664,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10308,6 +10683,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10322,6 +10702,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10336,6 +10721,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10350,6 +10740,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10364,6 +10759,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10378,6 +10778,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10392,6 +10797,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10406,6 +10816,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10420,6 +10835,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10434,6 +10854,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10448,6 +10873,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10462,6 +10892,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10476,6 +10911,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10490,6 +10930,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10504,6 +10949,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10518,6 +10968,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10532,6 +10987,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10546,6 +11006,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10560,6 +11025,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10574,6 +11044,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10588,6 +11063,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10602,6 +11082,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10616,6 +11101,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10630,6 +11120,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10644,6 +11139,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10658,6 +11158,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10672,6 +11177,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10686,6 +11196,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10700,6 +11215,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10714,6 +11234,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10728,6 +11253,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10742,6 +11272,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10756,6 +11291,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10770,6 +11310,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10784,6 +11329,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10798,6 +11348,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10812,6 +11367,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10826,6 +11386,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10840,6 +11405,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10854,6 +11424,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10868,6 +11443,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10882,6 +11462,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10896,6 +11481,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10910,6 +11500,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10924,6 +11519,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10938,6 +11538,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10952,6 +11557,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10966,6 +11576,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10980,6 +11595,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -10994,6 +11614,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11008,6 +11633,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11022,6 +11652,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11036,6 +11671,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11050,6 +11690,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11064,6 +11709,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11078,6 +11728,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11092,6 +11747,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11106,6 +11766,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11120,6 +11785,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11134,6 +11804,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11148,6 +11823,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11162,6 +11842,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11176,6 +11861,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11190,6 +11880,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11204,6 +11899,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11218,6 +11918,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11232,6 +11937,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11246,6 +11956,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11260,6 +11975,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11274,6 +11994,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11288,6 +12013,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11302,6 +12032,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11316,6 +12051,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11330,6 +12070,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11344,6 +12089,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11358,6 +12108,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11372,6 +12127,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11386,6 +12146,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11400,6 +12165,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11414,6 +12184,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11428,6 +12203,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11442,6 +12222,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11456,6 +12241,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11470,6 +12260,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11484,6 +12279,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11498,6 +12298,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11512,6 +12317,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11526,6 +12336,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11540,6 +12355,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11554,6 +12374,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11568,6 +12393,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11582,6 +12412,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11596,6 +12431,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11610,6 +12450,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11624,6 +12469,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11638,6 +12488,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11652,6 +12507,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11666,6 +12526,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11680,6 +12545,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11694,6 +12564,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11708,6 +12583,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11722,6 +12602,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11736,6 +12621,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11750,6 +12640,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11764,6 +12659,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11778,6 +12678,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11792,6 +12697,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11806,6 +12716,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11820,6 +12735,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11834,6 +12754,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11848,6 +12773,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11862,6 +12792,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11876,6 +12811,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11890,6 +12830,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11904,6 +12849,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11918,6 +12868,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11932,6 +12887,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11946,6 +12906,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11960,6 +12925,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11974,6 +12944,11 @@
       "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
       "description": "UK Carer's Allowance annual amount \u2014 output=carers_allowance_annual_amount",
       "difference": -4495.39990234375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carers-allowance-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -11988,6 +12963,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12002,6 +12982,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12016,6 +13001,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12030,6 +13020,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12044,6 +13039,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12058,6 +13058,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12072,6 +13077,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12086,6 +13096,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12100,6 +13115,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12114,6 +13134,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12128,6 +13153,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12142,6 +13172,11 @@
       "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
       "description": "UK Carer Support Payment annual amount \u2014 output=carer_support_payment_annual_amount",
       "difference": -5103.7998046875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "carer-support-payment-reported-receipt-under-16",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12156,6 +13191,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12170,6 +13210,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12184,6 +13229,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12198,6 +13248,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12212,6 +13267,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12226,6 +13286,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12240,6 +13305,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12254,6 +13324,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12268,6 +13343,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12282,6 +13362,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12296,6 +13381,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12310,6 +13400,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12324,6 +13419,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12338,6 +13438,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12352,6 +13457,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12366,6 +13476,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12380,6 +13495,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12394,6 +13514,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12408,6 +13533,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12422,6 +13552,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12436,6 +13571,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12450,6 +13590,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12464,6 +13609,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12478,6 +13628,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12492,6 +13647,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12506,6 +13666,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12520,6 +13685,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12534,6 +13704,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12548,6 +13723,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12562,6 +13742,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12576,6 +13761,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12590,6 +13780,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12604,6 +13799,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12618,6 +13818,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12632,6 +13837,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12646,6 +13856,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12660,6 +13875,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12674,6 +13894,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12688,6 +13913,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12702,6 +13932,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12716,6 +13951,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12730,6 +13970,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12744,6 +13989,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12758,6 +14008,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12772,6 +14027,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12786,6 +14046,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12800,6 +14065,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12814,6 +14084,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12828,6 +14103,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12842,6 +14122,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12856,6 +14141,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12870,6 +14160,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12884,6 +14179,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12898,6 +14198,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12912,6 +14217,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12926,6 +14236,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12940,6 +14255,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12954,6 +14274,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12968,6 +14293,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -12982,6 +14312,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -12996,6 +14331,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -13010,6 +14350,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -13024,6 +14369,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -13038,6 +14388,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -13052,6 +14407,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -13066,6 +14426,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -13080,6 +14445,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
       "description": "UK child DLA mobility component weekly amount \u2014 output=disability_living_allowance_mobility_weekly_amount",
       "difference": -80.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 0.0,
@@ -13094,6 +14464,11 @@
       "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
       "description": "UK child DLA annual amount \u2014 output=disability_living_allowance_annual_amount",
       "difference": -4160.0001953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+      },
       "issue_url": null,
       "kind": "amount_difference",
       "left": 5959.2,
@@ -13142,7 +14517,7 @@
     "Income Tax Act 2007 section 11D savings-income comparison projects PolicyEngine's taxable_savings_interest_income net of received_allowances_savings_income, then lets savings_starter_rate_income and savings_allowance consume rate-band capacity before the remaining section 11D savings income starts. It uses UK income-tax thresholds and savings rates from PolicyEngine parameters to compare the section 11D band amounts and aggregate savings income tax, with a 25p output tolerance for EFRS float precision in PolicyEngine's savings-income arrays.",
     "Income Tax Act 2007 section 13 dividend-income comparison projects PolicyEngine's dividend tax formula directly: savings after income allowances occupies rate-band capacity before dividends, the used dividend allowance occupies nil-rate dividend band capacity, and the remaining taxed_dividend_income is compared as the section 13 charged amount and aggregate dividend income tax."
   ],
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": {
     "geoid": "UK",
     "type": "country"
@@ -13151,6 +14526,22 @@
   "summary": {
     "alarms": [],
     "comparison_count": 3506191,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 43,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 232
+      },
+      "dispositions_file": "dispositions/uk-tax-benefits-efrs.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 99.992157,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": {},
     "known_policyengine_divergence_count": 0,
