@@ -132,6 +132,15 @@ rules:
         formula: household_income * 0
 """
 
+_CANADA_RULESPEC = """format: rulespec/v1
+rules:
+  - name: federal_tax_on_taxable_income
+    kind: derived
+    versions:
+      - effective_from: '2026-01-01'
+        formula: taxable_income * 0.15
+"""
+
 _UK_VAT_RULESPEC = """format: rulespec/v1
 rules:
   - name: vat_registration_threshold
@@ -630,6 +639,26 @@ def test_belgium_outputs_are_policyengine_non_comparable(tmp_path):
         assert item["status"] == "known_not_comparable"
         assert item["mapping_type"] == "not_comparable"
         assert item["candidate_priority"] == "P4"
+
+
+def test_canada_outputs_are_policyengine_non_comparable(tmp_path):
+    """Canada outputs are not yet backed by one-to-one PolicyEngine targets."""
+    root = tmp_path / "mono" / "rulespec-ca"
+    _write(root / "policies" / "cra" / "t1-2026" / "federal-tax.yaml", _CANADA_RULESPEC)
+
+    report = build_policyengine_coverage_report(root.parent)
+
+    assert report["total_outputs"] == 1
+    assert report["status_counts"] == {"known_not_comparable": 1}
+    item = report["items"][0]
+    assert (
+        item["legal_id"]
+        == "ca:policies/cra/t1-2026/federal-tax#federal_tax_on_taxable_income"
+    )
+    assert item["repo"] == "rulespec-ca"
+    assert item["status"] == "known_not_comparable"
+    assert item["mapping_type"] == "not_comparable"
+    assert item["candidate_priority"] == "P4"
 
 
 def test_monorepo_program_directory_is_not_a_jurisdiction(tmp_path):

@@ -1,0 +1,6 @@
+prefixes:
+  - legal_id_prefix: "ca:"
+    country: ca
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Canada RuleSpec outputs are validated against CRA, Revenu Quebec, and Canada-specific source-grounded tests rather than a PolicyEngine Canada one-to-one oracle surface. PolicyEngine Canada mappings should be added only after exact legal-ID targets are implemented and verified against the current Canada personal income tax and benefits rules.
