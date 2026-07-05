@@ -158,6 +158,14 @@ class Concepts:
         "uk:policies/universal_credit_composed_award_pipeline"
         "#uc_pilot_award_amount"
     )
+    # Composed savings-and-dividend income tax pipeline (rulespec-uk) that wires
+    # the section 12/12A/12B/13/13A stage boundaries from gross earned, savings,
+    # and dividend income, so an end-to-end UKMOD tin_s comparison can run for
+    # savings (yiytx) and dividend (ydvtx) income.
+    UK_SAVINGS_DIVIDEND_INCOME_TAX_LIABILITY = (
+        "uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline"
+        "#uk_svdv_income_tax_liability"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

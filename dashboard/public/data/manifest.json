@@ -59,6 +59,9 @@
     "axiom-policyengine-mn-tanf-ecps.json",
     "axiom-policyengine-ga-tanf-standards.json",
     "axiom-policyengine-ak-atap-standards.json",
-    "axiom-policyengine-tx-tanf-parameters.json"
+    "axiom-policyengine-tx-tanf-parameters.json",
+    "axiom-euromod-uk-income-tax-savings.json",
+    "axiom-euromod-uk-income-tax-dividend.json",
+    "axiom-euromod-uk-income-tax-mixed.json"
   ]
 }

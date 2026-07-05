@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.euromod_issues.v1",
-  "updated_at": "2026-07-04",
+  "updated_at": "2026-07-05",
   "purpose": "Track EUROMOD-platform issues and workarounds that affect household-level Axiom oracle comparisons. Statutory encoding gaps belong in coverage inventories and comparison reports, not in this ledger.",
   "entries": [
     {
@@ -874,6 +874,59 @@
       },
       "workaround": {
         "description": "Classify the exact-16,000 boundary as a reconciled convention difference in dispositions/uk-universal-credit.yaml; the tariff-reduced UKMOD award at the threshold reconciles to the single standard allowance less the tariff income on capital above the 6,000 floor."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "ukmod-b2026-uk-savings-tax-zeroed-by-dividend-income",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "observed_local",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": null,
+      "summary": "In UKMOD_PUBLIC_B2026.03 (system UK_2026), when a taxpayer has both taxable savings income (yiytx) and taxable dividend income (ydvtx), the model grants the savings income a 0% band equal to the dividend income amount, zeroing income tax that the Income Tax Act 2007 sections 11D/12/12A charge on that savings at the savings basic, higher, or additional rate. tin_s for a savings-plus-dividend taxpayer therefore falls short of the statutory liability by (min(savings above the personal savings allowance, dividend income)) times the marginal savings rate. Savings-only and dividend-only cases are unaffected and match the source-grounded RuleSpec to the penny.",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output_variable": "tin_s",
+        "input_variables": [
+          "yem",
+          "yiytx",
+          "ydvtx"
+        ]
+      },
+      "statutory_evidence": {
+        "rule": "Savings income above the starting-rate band and the personal savings allowance is charged at the savings basic/higher/additional rate (ITA 2007 s.11D), independently of any dividend income; the starting rate for savings (s.12) is reduced only by non-savings income, not by dividend income.",
+        "examples": [
+          {
+            "case": "earned 30000, savings 3000, dividend 4000",
+            "ukmod_tin_s": 3862.25,
+            "statutory_liability": 4262.25,
+            "zeroed_savings_tax": 400.0
+          },
+          {
+            "case": "earned 60000, savings 5000, dividend 3000",
+            "ukmod_tin_s": 12925.75,
+            "statutory_liability": 14125.75,
+            "zeroed_savings_tax": 1200.0
+          },
+          {
+            "case": "earned 150000, savings 10000, dividend 20000",
+            "ukmod_tin_s": 61376.25,
+            "statutory_liability": 65876.25,
+            "zeroed_savings_tax": 4500.0
+          }
+        ],
+        "source_urls": [
+          "https://www.legislation.gov.uk/ukpga/2007/3/section/11D",
+          "https://www.legislation.gov.uk/ukpga/2007/3/section/12"
+        ]
+      },
+      "workaround": {
+        "description": "Restrict the exact-match UKMOD savings/dividend income-tax oracle to savings-only (uk-income-tax-savings) and dividend-only (uk-income-tax-dividend) cases, which UKMOD computes correctly. Keep the mixed savings-and-dividend cases (uk-income-tax-mixed) in the grid with dispositions (dispositions/uk-income-tax-mixed.yaml) that reconcile each residual as this upstream engine gap; do not weaken the source-grounded RuleSpec savings-tax computation to match UKMOD."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false

@@ -33,6 +33,11 @@ from .be_worker import (
 )
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
+from .uk_income_tax import (
+    uk_income_tax_dividend_cases,
+    uk_income_tax_mixed_cases,
+    uk_income_tax_savings_cases,
+)
 from .uk_self_employed import (
     uk_employer_secondary_nic_cases,
     uk_self_employed_nic_cases,
@@ -74,6 +79,9 @@ def available_suites() -> tuple[str, ...]:
         "uk-self-employed-nic",
         "uk-employer-nic",
         "uk-universal-credit",
+        "uk-income-tax-savings",
+        "uk-income-tax-dividend",
+        "uk-income-tax-mixed",
     )
 
 
@@ -134,6 +142,12 @@ def load_suite(name: str):
         return uk_employer_secondary_nic_cases()
     if name == "uk-universal-credit":
         return uk_universal_credit_cases()
+    if name == "uk-income-tax-savings":
+        return uk_income_tax_savings_cases()
+    if name == "uk-income-tax-dividend":
+        return uk_income_tax_dividend_cases()
+    if name == "uk-income-tax-mixed":
+        return uk_income_tax_mixed_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -164,6 +178,9 @@ __all__ = [
     "nyc_basic_cases",
     "nyc_synthetic_cases",
     "uk_employer_secondary_nic_cases",
+    "uk_income_tax_dividend_cases",
+    "uk_income_tax_mixed_cases",
+    "uk_income_tax_savings_cases",
     "uk_self_employed_nic_cases",
     "uk_universal_credit_cases",
     "uk_worker_nic_cases",

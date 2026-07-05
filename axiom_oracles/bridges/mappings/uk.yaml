@@ -2863,3 +2863,19 @@ prefixes:
     program: tax
     mapping_type: not_comparable
     rationale: Composed single-employment UKMOD employer (secondary) Class 1 National Insurance oracle pipeline; it charges the encoded SSCBA 1992 section 9 15% secondary percentage on earnings above the supplied secondary threshold for the UKMOD tscer_s comparison rather than adding a new PolicyEngine UK oracle variable, and it does not model the employer-level employment allowance offset.
+
+  # Composed single-individual UKMOD savings-and-dividend income-tax oracle
+  # pipeline. It wires the Income Tax Act 2007 section 12/12A/12B starting-rate
+  # and savings-nil-rate, section 11D savings rates, section 13/13A dividend
+  # allowance and rates, and the section 16 highest-part ordering from gross
+  # earned, savings and dividend income so UKMOD (tin_s, with savings supplied
+  # as yiytx and dividends as ydvtx) can be compared end to end. Its stage,
+  # band and liability outputs re-wire the separately mapped Income Tax Act 2007
+  # sections 8, 10, 11D, 12, 12A, 12B, 13, 13A, 16 and 35 rules for the UKMOD
+  # comparison rather than adding new PolicyEngine UK oracle variables. Added
+  # for the M1 income-tax savings/dividend family.
+  - legal_id_prefix: uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Composed single-individual UKMOD savings-and-dividend income-tax oracle pipeline; its stage, band and liability outputs re-wire the separately mapped Income Tax Act 2007 sections 8, 10, 11D, 12, 12A, 12B, 13, 13A, 16 and 35 rules for the UKMOD tin_s comparison (savings supplied as yiytx, dividends as ydvtx) rather than adding new PolicyEngine UK oracle variables.
