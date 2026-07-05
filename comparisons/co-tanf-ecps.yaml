@@ -3,15 +3,12 @@
 name: co-tanf-ecps
 title: Colorado TANF -- Axiom vs PolicyEngine
 description: >-
-  Compares the monthly NY TANF (Family Assistance) grant from the composed
-  us-co/tanf program (state plan 2024-2026 standard of need, home energy
-  allowances, with-children shelter allowance, and earned income
-  disregards) against PolicyEngine's ny_tanf on Enhanced CPS households in
-  Colorado. Known parameter divergences the suite is expected to surface:
-  the encoded state plan's 62% earned income disregard vs PolicyEngine's
-  50%, and different local-agency shelter maximum schedules. Refresh the
-  rulespec root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-ny/ ~/.axiom-oracles/roots/rulespec-us-co/
+  Compares the monthly Colorado Works basic cash assistance grant from the
+  composed us-co/tanf program (9 CCR 2503-6 grant standard chart, need
+  standard, and earned income disregards) against PolicyEngine's co_tanf
+  on Enhanced CPS households in Colorado. Refresh the rulespec root after
+  pulling ~/rulespec-us with:
+  rsync -a --delete --exclude .axiom ~/rulespec-us/us-co/ ~/.axiom-oracles/roots/rulespec-us-co/
 
 runner:
   type: axiom-oracles-compare

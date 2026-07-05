@@ -153,6 +153,10 @@ def evaluate_rulespec_text(text: str, source: str = "<rulespec>") -> dict[str, f
 
 
 def evaluate_rulespec_parameters(path: Path) -> dict[str, float]:
+    # The monorepo nests federal law under us/; older checkouts kept these
+    # files at the repo root.
+    if not path.exists():
+        path = RULESPEC_ROOT / "us" / path.relative_to(RULESPEC_ROOT)
     return evaluate_rulespec_text(path.read_text(), source=path.name)
 
 
