@@ -5,6 +5,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Literal
 
+from ..bridges.population import POPULACE_PINS as _CERTIFIED_POPULACE_PINS
 from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
 
@@ -42,29 +43,23 @@ class PopulacePin:
 # Content pins for the ``populace://`` artifacts this repo resolves, keyed by
 # ``(repo_id, filename)``. WITHOUT a pin the resolver falls back to HF-latest
 # (``main``), which is exactly the failure this table exists to prevent:
+# HF-latest for policyengine/populace-us currently points at the sparse L0
+# refit that zeroes untargeted input bases (PolicyEngine/populace#278), so a
+# weekly comparison following latest would silently score Axiom against ~$0
+# bases and report spurious agreement.
 #
-#   HF-latest for policyengine/populace-us currently points at the sparse L0
-#   refit (``populace-us-2024-sparse-l0-refit-57k-71a0887-national-only-*``),
-#   which zeroes untargeted input bases — IRA/HSA/self-employed-pension/
-#   childcare and ~80 other engine inputs are dead in that artifact
-#   (PolicyEngine/populace#278). A weekly comparison following latest would
-#   silently score Axiom against ~$0 bases and report spurious agreement.
-#
-# The pin below is the DENSE release certified in PolicyEngine bundle
-# 4.18.6/4.18.7 against policyengine-us 1.729.0 — the last artifact known to
-# carry live input bases across every surface the oracle matrix exercises.
-#
-# UPGRADE NOTE: #278 was closed 2026-07-02 by pipeline-fix PR
-# PolicyEngine/populace#279, but the rebuilt (dense, non-sparse) release is not
-# yet published. Re-pin `revision` + `sha256` to that release once it lands AND
-# is certified in a PolicyEngine bundle — do not repin to a bare ``main`` sha,
-# and do not repin to a sparse artifact. Verify the new sha256 against the HF
-# LFS pointer (`get_hf_file_metadata(...).etag`) before committing.
+# The certified pin values (revision + sha256) are owned by ONE shared
+# definition: ``axiom_oracles.bridges.population.POPULACE_PINS`` — the same
+# table the axiom-encode harnesses consume. Re-pins (e.g. once the post-#279
+# dense-parity release is published AND certified in a PolicyEngine bundle)
+# happen there; this module just re-keys the shared table by
+# ``(repo_id, filename)`` for the ``populace://`` resolver below.
 POPULACE_PINS: dict[tuple[str, str], PopulacePin] = {
-    ("policyengine/populace-us", "populace_us_2024.h5"): PopulacePin(
-        revision="populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
-        sha256="16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f",
-    ),
+    (pin.repo_id, pin.filename): PopulacePin(
+        revision=pin.revision,
+        sha256=pin.sha256,
+    )
+    for pin in _CERTIFIED_POPULACE_PINS.values()
 }
 
 

@@ -1,0 +1,2810 @@
+mappings:
+  - legal_id: uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount
+    country: uk
+    program: council_tax_reduction
+    mapping_type: direct_variable
+    policyengine_variable: council_tax_reduction
+    entity: household
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual household Council Tax Reduction amount as PolicyEngine UK's final council_tax_reduction variable, including supported national schemes and the reported-benefit fallback for unsupported schemes.
+
+  - legal_id: uk:statutes/ukpga/2007/3/10#income_charged_at_basic_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: basic_rate_earned_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax earned-income amount charged at the basic rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+
+  - legal_id: uk:statutes/ukpga/2007/3/10#income_charged_at_higher_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: higher_rate_earned_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax earned-income amount charged at the higher rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+
+  - legal_id: uk:statutes/ukpga/2007/3/10#income_charged_at_additional_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: add_rate_earned_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax earned-income amount charged at the additional rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+
+  - legal_id: uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_basic_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: basic_rate_earned_income_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax on earned income charged at the basic rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+
+  - legal_id: uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_higher_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: higher_rate_earned_income_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax on earned income charged at the higher rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+
+  - legal_id: uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_additional_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: add_rate_earned_income_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax on earned income charged at the additional rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+
+  - legal_id: uk:statutes/ukpga/2007/3/10#income_tax_on_section_10_income
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: earned_income_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax on ordinary earned income under section 10, with Scottish-rate rows excluded because PolicyEngine branches earned_income_tax to Scotland-specific rates.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#savings_income_charged_at_savings_basic_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: basic_rate_savings_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK savings income amount charged at the savings basic rate after starting-rate and savings nil-rate amounts are removed.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#savings_income_charged_at_savings_higher_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: higher_rate_savings_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK savings income amount charged at the savings higher rate after starting-rate and savings nil-rate amounts are removed.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#savings_income_charged_at_savings_additional_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: add_rate_savings_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK savings income amount charged at the savings additional rate after starting-rate and savings nil-rate amounts are removed.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#savings_income_charged_under_section_11d
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxed_savings_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same aggregate savings income charged under section 11D after PolicyEngine's starting-rate and savings nil-rate deductions.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#income_tax_on_section_11d_savings_income
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: savings_income_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax on savings income charged at the savings basic, higher, and additional rates.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#tax_on_savings_income_charged_at_savings_basic_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate tax helper for section 11D savings basic-rate income; PolicyEngine UK exposes the aggregate savings_income_tax rather than per-rate savings tax variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#tax_on_savings_income_charged_at_savings_higher_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate tax helper for section 11D savings higher-rate income; PolicyEngine UK exposes the aggregate savings_income_tax rather than per-rate savings tax variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/11D#tax_on_savings_income_charged_at_savings_additional_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate tax helper for section 11D savings additional-rate income; PolicyEngine UK exposes the aggregate savings_income_tax rather than per-rate savings tax variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#dividend_income_charged_under_section_13
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxed_dividend_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK dividend income remaining for dividend-rate taxation after personal allowances and the dividend allowance.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#income_tax_on_section_13_dividend_income
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: dividend_income_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax on dividend income charged at the dividend ordinary, upper, and additional rates.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#dividend_income_charged_at_dividend_ordinary_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate dividend income helper for section 13; PolicyEngine UK exposes aggregate taxed_dividend_income and dividend_income_tax, not per-rate dividend-income variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#dividend_income_charged_at_dividend_upper_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate dividend income helper for section 13; PolicyEngine UK exposes aggregate taxed_dividend_income and dividend_income_tax, not per-rate dividend-income variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#dividend_income_charged_at_dividend_additional_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate dividend income helper for section 13; PolicyEngine UK exposes aggregate taxed_dividend_income and dividend_income_tax, not per-rate dividend-income variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#tax_on_dividend_income_charged_at_dividend_ordinary_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate tax helper for section 13 dividend ordinary-rate income; PolicyEngine UK exposes the aggregate dividend_income_tax rather than per-rate dividend tax variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#tax_on_dividend_income_charged_at_dividend_upper_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate tax helper for section 13 dividend upper-rate income; PolicyEngine UK exposes the aggregate dividend_income_tax rather than per-rate dividend tax variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/13#tax_on_dividend_income_charged_at_dividend_additional_rate
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Per-rate tax helper for section 13 dividend additional-rate income; PolicyEngine UK exposes the aggregate dividend_income_tax rather than per-rate dividend tax variables.
+
+  - legal_id: uk:statutes/ukpga/2007/3/23#total_income
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: total_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax total-income component sum before personal allowances.
+
+  - legal_id: uk:statutes/ukpga/2007/3/23#net_income
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: adjusted_net_income
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax adjusted net income after reliefs and before allowances.
+
+  - legal_id: uk:statutes/ukpga/2007/3/23#income_tax_liability
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: income_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final UK income tax liability after reductions and listed tax additions.
+
+  - legal_id: uk:statutes/ukpga/2007/3/23#income_remaining_after_allowances
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: UK income tax step-control value with no one-to-one PolicyEngine UK oracle variable.
+
+  - legal_id: uk:statutes/ukpga/2007/3/23#tax_left_after_reductions
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: UK income tax intermediate value before listed additions with no one-to-one PolicyEngine UK oracle variable.
+
+  - legal_id: uk:statutes/ukpga/2007/3/23#net_income_zero_amount
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Generated statutory zero constant rather than a PolicyEngine UK variable or parameter.
+
+  - legal_id: uk:statutes/ukpga/2007/3/35#personal_allowance_base_amount
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.income_tax.allowances.personal_allowance.amount
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax personal allowance base amount.
+
+  - legal_id: uk:statutes/ukpga/2007/3/35#adjusted_net_income_reduction_threshold
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.income_tax.allowances.personal_allowance.maximum_ANI
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same adjusted net income threshold above which the UK personal allowance is reduced.
+
+  - legal_id: uk:statutes/ukpga/2007/3/35#excess_income_reduction_fraction
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.income_tax.allowances.personal_allowance.reduction_rate
+    period: year
+    comparison: rate
+    rationale: Same UK personal allowance taper rate.
+
+  - legal_id: uk:statutes/ukpga/2007/3/35#personal_allowance
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: personal_allowance
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same UK income tax personal allowance output.
+
+  - legal_id: uk:statutes/ukpga/1992/4/8#main_primary_percentage
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.national_insurance.class_1.rates.employee.main
+    period: week
+    comparison: rate
+    rationale: Same Class 1 employee main primary contribution percentage.
+
+  - legal_id: uk:statutes/ukpga/1992/4/8#additional_primary_percentage
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.national_insurance.class_1.rates.employee.additional
+    period: week
+    comparison: rate
+    rationale: Same Class 1 employee additional primary contribution percentage.
+
+  - legal_id: uk:statutes/ukpga/1992/4/1#national_insurance_contribution
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: national_insurance
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final annual person-level National Insurance contribution aggregate after the UK Populace adapter supplies PolicyEngine UK's Class 1, Class 2, Class 3, and final Class 4 contribution amounts.
+
+  - legal_id: uk:statutes/ukpga/1992/4/8#primary_class_1_contribution
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ni_class_1_employee
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same employee Class 1 NI aggregate after the UK Populace adapter projects weekly section 8 inputs, PolicyEngine ni_liable, and converts PolicyEngine's annual output to a weekly value.
+
+  - legal_id: uk:statutes/ukpga/1992/4/8#main_primary_class_1_contribution
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ni_class_1_employee_primary
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same main-band employee Class 1 NI component after the UK Populace adapter projects weekly section 8 inputs and compares on PolicyEngine ni_liable rows.
+
+  - legal_id: uk:statutes/ukpga/1992/4/8#additional_primary_class_1_contribution
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ni_class_1_employee_additional
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same additional-band employee Class 1 NI component after the UK Populace adapter projects weekly section 8 inputs and compares on PolicyEngine ni_liable rows.
+
+  - legal_id: uk:statutes/ukpga/1992/4/15#lower_profits_limit
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.national_insurance.class_4.thresholds.lower_profits_limit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Class 4 lower profits limit for self-employed profits.
+
+  - legal_id: uk:statutes/ukpga/1992/4/15#upper_profits_limit
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.national_insurance.class_4.thresholds.upper_profits_limit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Class 4 upper profits limit for self-employed profits.
+
+  - legal_id: uk:statutes/ukpga/1992/4/15#main_class_4_percentage
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.national_insurance.class_4.rates.main
+    period: year
+    comparison: rate
+    rationale: Same Class 4 main contribution percentage.
+
+  - legal_id: uk:statutes/ukpga/1992/4/15#additional_class_4_percentage
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.national_insurance.class_4.rates.additional
+    period: year
+    comparison: rate
+    rationale: Same Class 4 additional contribution percentage.
+
+  - legal_id: uk:statutes/ukpga/1992/4/15#main_class_4_contribution
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ni_class_4_main
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same main-band Class 4 NI component after the UK Populace adapter projects annual section 15 profits and compares on PolicyEngine ni_liable rows.
+
+  - legal_id: uk:statutes/ukpga/1992/4/15#additional_class_4_contribution
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 15 additional-band Class 4 contribution before the annual maximum; PolicyEngine UK exposes ni_class_4_main and final ni_class_4, but not a separate additional-band component.
+
+  - legal_id: uk:statutes/ukpga/1992/4/15#class_4_contribution_before_annual_maximum
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 15 aggregate Class 4 contribution before Regulation 100's annual maximum; PolicyEngine UK exposes final ni_class_4 after the annual maximum rather than this pre-maximum subtotal.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_one
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step One is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_two
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Two is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_four_value
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Four's raw value is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_four_amount
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Four's nonnegative amount is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_case_1_applies
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Case 1 is a statutory branch predicate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this legal judgment output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_case_2_applies
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Case 2 is a statutory branch predicate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this legal judgment output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_case_3_applies
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Case 3 is a statutory branch predicate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this legal judgment output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_five
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Five is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_six
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Six is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_seven
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Seven is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_eight
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Eight is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum_step_nine
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 100 Step Nine is a statutory intermediate for calculating the Class 4 annual maximum; PolicyEngine UK exposes the final annual maximum, not this step output.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ni_class_4_maximum
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Regulation 100 Class 4 annual maximum after the UK Populace adapter projects annual primary Class 1, Class 4 main-rate, and profits inputs.
+
+  - legal_id: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ni_class_4
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final Class 4 NI contribution after applying Regulation 100's annual maximum.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#plan_1_annual_income_threshold
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.student_loans.thresholds.plan_1
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Plan 1 annual student-loan repayment threshold.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#plan_2_annual_income_threshold
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.student_loans.thresholds.plan_2
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Plan 2 annual student-loan repayment threshold.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#plan_4_annual_income_threshold
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.student_loans.thresholds.plan_4
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Plan 4 annual student-loan repayment threshold.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#plan_5_annual_income_threshold
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.student_loans.thresholds.plan_5
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Plan 5 annual student-loan repayment threshold.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#postgraduate_loan_annual_income_threshold
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.student_loans.thresholds.postgraduate
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Postgraduate Loan annual repayment threshold.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#undergraduate_plan_repayment_rate
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.student_loans.repayment_rate
+    period: year
+    comparison: rate
+    rationale: Same student-loan repayment rate for undergraduate Plans 1, 2, 4, and 5.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#postgraduate_loan_repayment_rate
+    country: uk
+    program: tax
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.student_loans.postgraduate_repayment_rate
+    period: year
+    comparison: rate
+    rationale: Same Postgraduate Loan repayment rate.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#student_loan_repayment_rate
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: student_loan_repayment_rate
+    entity: person
+    period: year
+    comparison: rate
+    rationale: Same person-level student-loan repayment rate selected from the person's loan plan.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#student_loan_repayment
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: student_loan_repayment
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same modelled annual student-loan repayment from adjusted net income, loan plan, threshold, and rate.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#student_loan_repayments
+    country: uk
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: student_loan_repayments
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same wrapper variable for annual student-loan repayments; in local Populace this may be supplied as reported input data, but the PolicyEngine formula delegates to student_loan_repayment.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#listed_student_loan_plan_applies
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Axiom helper indicating whether a statutory repayment-plan branch applies; PolicyEngine UK exposes the student_loan_plan enum input rather than this boolean predicate.
+
+  - legal_id: uk:policies/govuk/student-loan-repayments#student_loan_annual_income_threshold
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Axiom helper selecting the applicable repayment threshold from the person's loan plan; PolicyEngine UK applies the same parameter selection inside student_loan_repayment rather than exposing this selected threshold as a variable.
+
+  - legal_id: uk:regulations/uksi/2006/965/2#child_benefit_enhanced_weekly_rate
+    country: uk
+    program: child_benefit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.child_benefit.amount.eldest
+    aliases:
+      - uk:regulations/uksi/2006/965/2#child_benefit_weekly_rate
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same eldest or enhanced child benefit weekly amount. Companion tests exercise it through the branch-selected weekly rate output.
+
+  - legal_id: uk:regulations/uksi/2006/965/2#child_benefit_other_weekly_rate
+    country: uk
+    program: child_benefit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.child_benefit.amount.additional
+    aliases:
+      - uk:regulations/uksi/2006/965/2#child_benefit_weekly_rate
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same additional or other-child child benefit weekly amount. Companion tests exercise it through the branch-selected weekly rate output.
+
+  - legal_id: uk:regulations/uksi/2006/965/2#child_benefit_weekly_rate
+    country: uk
+    program: child_benefit
+    mapping_type: direct_variable
+    policyengine_variable: child_benefit_respective_amount
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same branch-selected statutory child benefit weekly amount for a child or qualifying young person.
+
+  - legal_id: uk:statutes/ukpga/1992/4/141#child_benefit_weekly_entitlement
+    country: uk
+    program: child_benefit
+    mapping_type: direct_variable
+    policyengine_variable: child_benefit_entitlement
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    result_multiplier: 0.019230769230769232
+    rationale: Same Child Benefit entitlement amount before PolicyEngine UK's would_claim_child_benefit take-up gate, with PolicyEngine's annual entitlement converted to a weekly amount.
+
+  - legal_id: uk:statutes/ukpga/1992/4/141#child_benefit_weekly_rate_for_responsible_child_or_qualifying_young_person
+    country: uk
+    program: child_benefit
+    mapping_type: direct_variable
+    policyengine_variable: child_benefit_respective_amount
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    result_multiplier: 0.019230769230769232
+    rationale: Same per-child Child Benefit weekly rate for a responsible child or qualifying young person, with PolicyEngine's annual child_benefit_respective_amount converted to a weekly amount.
+
+  - legal_id: uk:policies/govuk/child-benefit#child_benefit_weekly_amount
+    country: uk
+    program: child_benefit
+    mapping_type: direct_variable
+    policyengine_variable: child_benefit
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    result_multiplier: 0.019230769230769232
+    rationale: Same final gross Child Benefit receipt for the benefit unit, with PolicyEngine UK's annual child_benefit converted to a weekly amount after the would_claim_child_benefit gate.
+
+  - legal_id: uk:policies/govuk/universal-credit#universal_credit_annual_amount
+    country: uk
+    program: universal_credit
+    mapping_type: direct_variable
+    policyengine_variable: universal_credit
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final annual Universal Credit receipt for the benefit unit after PolicyEngine UK's would_claim_uc gate and benefit-cap reduction.
+
+  - legal_id: uk:policies/govuk/pension-credit#pension_credit_annual_amount
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: pension_credit
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final annual Pension Credit receipt for the benefit unit after PolicyEngine UK's would_claim_pc gate over pension_credit_entitlement.
+
+  - legal_id: uk:regulations/uksi/2002/1792/6#standard_minimum_guarantee_with_partner
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.minimum_guarantee.COUPLE
+    aliases:
+      - uk:regulations/uksi/2002/1792/6#standard_minimum_guarantee
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Pension Credit guarantee credit minimum guarantee for a claimant with a partner. Companion tests exercise it through the branch-selected standard minimum guarantee output.
+
+  - legal_id: uk:regulations/uksi/2002/1792/6#standard_minimum_guarantee_no_partner
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.minimum_guarantee.SINGLE
+    aliases:
+      - uk:regulations/uksi/2002/1792/6#standard_minimum_guarantee
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Pension Credit guarantee credit minimum guarantee for a claimant without a partner. Companion tests exercise the same branch-selected standard minimum guarantee surface.
+
+  - legal_id: uk:regulations/uksi/2002/1792/6#standard_minimum_guarantee
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: standard_minimum_guarantee
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Pension Credit standard minimum guarantee output.
+
+  - legal_id: uk:regulations/uksi/2002/1792/6#severe_disability_additional_amount_single
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.severe_disability.addition
+    aliases:
+      - uk:regulations/uksi/2002/1792/6#severe_disability_additional_amount
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same per-person Pension Credit severe disability addition. Companion tests exercise severe-disability additions through the branch-selected additional amount output.
+
+  - legal_id: uk:regulations/uksi/2002/1792/6#severe_disability_additional_amount
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: severe_disability_minimum_guarantee_addition
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Pension Credit severe disability addition output after applying claimant circumstances.
+
+  - legal_id: uk:regulations/uksi/2002/1792/6#carer_additional_amount_per_partner
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.carer.addition
+    aliases:
+      - uk:regulations/uksi/2002/1792/6#carer_additional_amount
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Pension Credit carer addition amount. Companion tests exercise it through the branch-selected carer additional amount output.
+
+  - legal_id: uk:regulations/uksi/2002/1792/6#carer_additional_amount
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: carer_minimum_guarantee_addition
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Pension Credit carer addition output after applying claimant circumstances.
+
+  - legal_id: uk:regulations/uksi/2002/1792/schedule/IIA#child_or_qualifying_young_person_weekly_amount
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.child.addition
+    aliases:
+      - uk:regulations/uksi/2002/1792/schedule/IIA#additional_amount_applicable
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same standard weekly Pension Credit child or qualifying-young-person addition. Companion tests exercise it through the aggregate Schedule IIA amount.
+
+  - legal_id: uk:regulations/uksi/2002/1792/schedule/IIA#first_child_or_qualifying_young_person_born_before_6_april_2017_weekly_amount
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.child.first.addition
+    aliases:
+      - uk:regulations/uksi/2002/1792/schedule/IIA#additional_amount_applicable
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Pension Credit amount for the eldest responsible child or qualifying young person born before 6 April 2017. Companion tests exercise it through the aggregate Schedule IIA amount.
+
+  - legal_id: uk:regulations/uksi/2002/1792/schedule/IIA#disabled_child_or_qualifying_young_person_further_weekly_amount
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.child.disability.addition
+    aliases:
+      - uk:regulations/uksi/2002/1792/schedule/IIA#additional_amount_applicable
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same further weekly Pension Credit amount for a disabled child or qualifying young person. Companion tests exercise it through the aggregate Schedule IIA amount.
+
+  - legal_id: uk:regulations/uksi/2002/1792/schedule/IIA#severely_disabled_child_or_qualifying_young_person_further_weekly_amount
+    country: uk
+    program: pension_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pension_credit.guarantee_credit.child.disability.severe.addition
+    aliases:
+      - uk:regulations/uksi/2002/1792/schedule/IIA#additional_amount_applicable
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same further weekly Pension Credit amount for a severely disabled child or qualifying young person. Companion tests exercise it through the aggregate Schedule IIA amount.
+
+  - legal_id: uk:regulations/uksi/2002/1792/schedule/IIA#additional_amount_applicable
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: child_minimum_guarantee_addition
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    candidate_priority: P2
+    rationale: Same Pension Credit child-related addition after the UK Populace adapter projects PolicyEngine's child count, pre-2017 eldest-child flag, and disability buckets into Schedule IIA inputs and converts PolicyEngine's annual output to a weekly amount.
+
+  - legal_id: uk:regulations/uksi/2002/2005/schedule/2#wtc_basic_element_amount
+    country: uk
+    program: working_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.working_tax_credit.elements.basic
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Working Tax Credit basic element maximum rate in Schedule 2.
+
+  - legal_id: uk:regulations/uksi/2002/2005/schedule/2#wtc_disabled_element_amount
+    country: uk
+    program: working_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.working_tax_credit.elements.disabled
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Working Tax Credit disability element maximum rate in Schedule 2.
+
+  - legal_id: uk:regulations/uksi/2002/2005/schedule/2#schedule_2_row_3_maximum_annual_rate
+    country: uk
+    program: working_tax_credit
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.tax_credits.working_tax_credit.elements.worker
+    candidate_priority: P2
+    rationale: Official Schedule 2 states GBP 1,015 for the 30 hour element, but current PE-UK derives GBP 1,010.22 for 2024 from a stale uprated worker-element parameter instead of the direct Schedule 2 amount.
+
+  - legal_id: uk:regulations/uksi/2002/2005/schedule/2#wtc_second_adult_element_amount
+    country: uk
+    program: working_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.working_tax_credit.elements.couple
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Working Tax Credit second-adult/couple element maximum rate in Schedule 2.
+
+  - legal_id: uk:regulations/uksi/2002/2005/schedule/2#wtc_lone_parent_element_amount
+    country: uk
+    program: working_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.working_tax_credit.elements.lone_parent
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Working Tax Credit lone-parent element maximum rate in Schedule 2.
+
+  - legal_id: uk:regulations/uksi/2002/2005/schedule/2#wtc_severely_disabled_element_amount
+    country: uk
+    program: working_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.working_tax_credit.elements.severely_disabled
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Working Tax Credit severe disability element maximum rate in Schedule 2.
+
+  - legal_id: uk:regulations/uksi/2002/2007/7#ctc_family_element_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.family_element
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Child Tax Credit family element amount in Regulation 7.
+
+  - legal_id: uk:regulations/uksi/2024/247/3#ctc_individual_element_substituted_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.child_element
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Child Tax Credit individual child or qualifying young person element amount substituted into Regulation 7 by the 2024 up-rating regulations.
+
+  - legal_id: uk:regulations/uksi/2024/247/3#ctc_individual_element_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.child_element
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Child Tax Credit individual child or qualifying young person element amount after applying the 2024 up-rating substitution.
+
+  - legal_id: uk:regulations/uksi/2024/247/3#ctc_disabled_child_element_substituted_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.dis_child_element
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Child Tax Credit disabled-child element amount substituted into Regulation 7 by the 2024 up-rating regulations.
+
+  - legal_id: uk:regulations/uksi/2024/247/3#ctc_disabled_child_element_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.dis_child_element
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Child Tax Credit disabled-child element amount after applying the 2024 up-rating substitution.
+
+  - legal_id: uk:regulations/uksi/2024/247/3#ctc_severely_disabled_child_rate_substituted_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.severe_dis_child_element
+    candidate_priority: P2
+    rationale: Regulation 7 states a total severe-disabled-child rate, while PolicyEngine stores only the additional severe-disabled layer paid on top of the disabled-child element.
+
+  - legal_id: uk:regulations/uksi/2024/247/3#ctc_severely_disabled_child_rate_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.severe_dis_child_element
+    candidate_priority: P2
+    rationale: Regulation 7 states a total severe-disabled-child rate, while PolicyEngine stores only the additional severe-disabled layer paid on top of the disabled-child element.
+
+  - legal_id: uk:regulations/uksi/2024/247/3#ctc_severely_disabled_child_additional_amount
+    country: uk
+    program: child_tax_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.tax_credits.child_tax_credit.elements.severe_dis_child_element
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual additional Child Tax Credit severe-disabled-child layer after deriving the PolicyEngine-shape value as the severe-disabled total rate minus the disabled-child element.
+
+  - legal_id: uk:statutes/ukpga/2014/28/1#tax_free_childcare_top_up_payment_rate
+    country: uk
+    program: tax_free_childcare
+    mapping_type: not_comparable
+    policyengine_parameter: gov.hmrc.tax_free_childcare.contribution.rate
+    candidate_priority: P2
+    rationale: Section 1 states the top-up payment as 25 percent of a qualifying payment, while PolicyEngine stores the government's 20 percent share of total household plus government contributions.
+
+  - legal_id: uk:statutes/ukpga/2014/28/21#tax_free_childcare_top_up_element_rate
+    country: uk
+    program: tax_free_childcare
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.tax_free_childcare.contribution.rate
+    period: year
+    comparison: rate
+    rationale: Same Tax-Free Childcare government contribution share after deriving the PolicyEngine-shape top-up element from Section 21.
+
+  - legal_id: uk:regulations/uksi/2015/448/15#tax_free_childcare_maximum_adjusted_net_income
+    country: uk
+    program: tax_free_childcare
+    mapping_type: parameter_value
+    policyengine_parameter: gov.hmrc.tax_free_childcare.income.income_limit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual individual adjusted-net-income limit for Tax-Free Childcare eligibility.
+
+  - legal_id: uk:regulations/uksi/2005/3061/5#sure_start_maternity_grant_amount
+    country: uk
+    program: ssmg
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.ssmg.rate
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same Sure Start Maternity Grant amount payable when the regulation's entitlement conditions are satisfied.
+
+  - legal_id: uk:regulations/uksi/2004/692/schedule/1#colour_tv_licence_general_form_issue_fee
+    country: uk
+    program: tv_licence
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dcms.bbc.tv_licence.colour
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual colour TV licence General Form issue fee used by PolicyEngine UK's TV licence and free-TV-licence-value formulas.
+
+  - legal_id: uk:regulations/ssi/2020/351/20#scottish_child_payment_weekly_amount
+    country: uk
+    program: scottish_child_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.social_security_scotland.scottish_child_payment.amount
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Scottish Child Payment amount payable in respect of an eligible child.
+
+  - legal_id: uk:regulations/ssi/2020/351/18#scottish_child_payment_maximum_child_age
+    country: uk
+    program: scottish_child_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.social_security_scotland.scottish_child_payment.max_age
+    period: year
+    unit: year
+    comparison: number
+    rationale: Regulation 18 requires the child to be under 16; PolicyEngine stores the same threshold as the maximum child age parameter.
+
+  - legal_id: uk:policies/govuk/scottish-child-payment#scottish_child_payment_weeks_in_year
+    country: uk
+    program: scottish_child_payment
+    mapping_type: not_comparable
+    comparable: false
+    candidate_priority: P4
+    rationale: Source-backed annualization helper for the policy-level final amount wrapper; PolicyEngine exposes the final annual Scottish Child Payment variable and the weekly amount parameter, not this multiplication factor as a separate oracle target.
+
+  - legal_id: uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount
+    country: uk
+    program: scottish_child_payment
+    mapping_type: direct_variable
+    policyengine_variable: scottish_child_payment
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Final annual Scottish Child Payment output is the same PolicyEngine UK variable after eligibility and take-up gates.
+
+  - legal_id: uk:regulations/ssi/2023/302/5#carer_support_payment_minimum_weekly_care_hours
+    country: uk
+    program: carer_support_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.social_security_scotland.carer_support_payment.min_hours
+    period: week
+    unit: hour
+    comparison: number
+    rationale: Regulation 5(2) treats regular and substantial care as at least 35 hours in an award week; PolicyEngine stores the same weekly care-hours threshold.
+
+  - legal_id: uk:regulations/ssi/2023/302/16#carer_support_payment_weekly_rate
+    country: uk
+    program: carer_support_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.social_security_scotland.carer_support_payment.rate
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Carer Support Payment rate payable before any overlapping-benefit reduction.
+
+  - legal_id: uk:regulations/ssi/2023/302/16#scottish_carer_supplement_weekly_rate
+    country: uk
+    program: carer_support_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.social_security_scotland.carer_support_payment.supplement
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Scottish Carer Supplement amount paid on top of Carer Support Payment.
+
+  - legal_id: uk:policies/govuk/carer-support-payment#carer_support_payment_weeks_in_year
+    country: uk
+    program: carer_support_payment
+    mapping_type: not_comparable
+    comparable: false
+    candidate_priority: P4
+    rationale: Source-backed annualization helper for the policy-level final amount wrapper; PolicyEngine exposes the final annual Carer Support Payment variable and the weekly rate parameters, not this multiplication factor as a separate oracle target.
+
+  - legal_id: uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount
+    country: uk
+    program: carer_support_payment
+    mapping_type: direct_variable
+    policyengine_variable: carer_support_payment
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Final annual Carer Support Payment output is the same PolicyEngine UK variable after Scotland, effective-date, and care/reporting gates.
+
+  - legal_id: uk:statutes/ukpga/2022/38/1#means_tested_additional_payment_total
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.treasury.cost_of_living_support.means_tested_households.amount
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same 2022-23 total means-tested Cost-of-Living Payments, aggregating the GBP 326 and GBP 324 single payments stated in section 1.
+
+  - legal_id: uk:statutes/ukpga/2022/38/1#first_means_tested_additional_payment_amount
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: not_comparable
+    rationale: Section 1 states this first 2022-23 instalment separately, while PolicyEngine UK stores the annual aggregate means-tested Cost-of-Living Payment amount rather than individual instalments.
+
+  - legal_id: uk:statutes/ukpga/2022/38/1#second_means_tested_additional_payment_amount
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: not_comparable
+    rationale: Section 1 states this second 2022-23 instalment separately, while PolicyEngine UK stores the annual aggregate means-tested Cost-of-Living Payment amount rather than individual instalments.
+
+  - legal_id: uk:statutes/ukpga/2022/38/5#disability_additional_payment_amount
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.treasury.cost_of_living_support.disabled.amount
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same one-off Disability Cost-of-Living Payment amount for 2022-23.
+
+  - legal_id: uk:statutes/ukpga/2023/7/1#means_tested_additional_payment_total
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.treasury.cost_of_living_support.means_tested_households.amount
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same 2023-24 total means-tested Cost-of-Living Payments, aggregating the GBP 301, GBP 300, and GBP 299 single payments stated in section 1.
+
+  - legal_id: uk:statutes/ukpga/2023/7/1#first_means_tested_additional_payment_amount
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: not_comparable
+    rationale: Section 1 states this first 2023-24 instalment separately, while PolicyEngine UK stores the annual aggregate means-tested Cost-of-Living Payment amount rather than individual instalments.
+
+  - legal_id: uk:statutes/ukpga/2023/7/1#second_means_tested_additional_payment_amount
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: not_comparable
+    rationale: Section 1 states this second 2023-24 instalment separately, while PolicyEngine UK stores the annual aggregate means-tested Cost-of-Living Payment amount rather than individual instalments.
+
+  - legal_id: uk:statutes/ukpga/2023/7/1#third_means_tested_additional_payment_amount
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: not_comparable
+    rationale: Section 1 states this third 2023-24 instalment separately, while PolicyEngine UK stores the annual aggregate means-tested Cost-of-Living Payment amount rather than individual instalments.
+
+  - legal_id: uk:statutes/ukpga/2023/7/5#disability_additional_payment_amount
+    country: uk
+    program: cost_of_living_support_payment
+    mapping_type: parameter_value
+    policyengine_parameter: gov.treasury.cost_of_living_support.disabled.amount
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same one-off Disability Cost-of-Living Payment amount for 2023-24.
+
+  - legal_id: uk:regulations/uksi/2013/377/24#pip_daily_living_standard_weekly_rate
+    country: uk
+    program: pip
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pip.daily_living.standard
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Personal Independence Payment daily-living standard rate in Regulation 24.
+
+  - legal_id: uk:regulations/uksi/2013/377/24#pip_daily_living_enhanced_weekly_rate
+    country: uk
+    program: pip
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pip.daily_living.enhanced
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Personal Independence Payment daily-living enhanced rate in Regulation 24.
+
+  - legal_id: uk:regulations/uksi/2013/377/24#pip_mobility_standard_weekly_rate
+    country: uk
+    program: pip
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pip.mobility.standard
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Personal Independence Payment mobility standard rate in Regulation 24.
+
+  - legal_id: uk:regulations/uksi/2013/377/24#pip_mobility_enhanced_weekly_rate
+    country: uk
+    program: pip
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.pip.mobility.enhanced
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Personal Independence Payment mobility enhanced rate in Regulation 24.
+
+  - legal_id: uk:statutes/ukpga/2012/5/78#pip_daily_living_enhanced_rate_entitlement
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: receives_enhanced_pip_dl
+    entity: person
+    period: week
+    comparison: boolean
+    rationale: Same enhanced daily-living PIP category indicator, with PolicyEngine UK treating the PIP daily-living category as a person input.
+
+  - legal_id: uk:statutes/ukpga/2012/5/78#pip_daily_living_standard_rate_entitlement
+    country: uk
+    program: pip
+    mapping_type: not_comparable
+    rationale: PolicyEngine UK accepts the PIP daily-living category as an input and exposes enhanced daily-living receipt, but it does not expose a separate standard-rate daily-living entitlement output.
+
+  - legal_id: uk:statutes/ukpga/2012/5/78#pip_daily_living_component_weekly_amount
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: pip_dl
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same PIP daily-living component amount after selecting the standard, enhanced, or nil rate; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:statutes/ukpga/2012/5/79#pip_mobility_standard_rate_entitlement
+    country: uk
+    program: pip
+    mapping_type: not_comparable
+    rationale: PolicyEngine UK accepts the PIP mobility category as an input, but it does not expose a separate standard-rate mobility entitlement output.
+
+  - legal_id: uk:statutes/ukpga/2012/5/79#pip_mobility_enhanced_rate_entitlement
+    country: uk
+    program: pip
+    mapping_type: not_comparable
+    rationale: PolicyEngine UK accepts the PIP mobility category as an input, but it does not expose a separate enhanced-rate mobility entitlement output.
+
+  - legal_id: uk:statutes/ukpga/2012/5/79#pip_mobility_component_weekly_amount
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: pip_m
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same PIP mobility component amount after selecting the standard, enhanced, or nil rate; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:statutes/ukpga/2012/5/77#personal_independence_payment_weekly_amount
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: pip
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Personal Independence Payment total as the sum of daily-living and mobility components; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_self_care_higher_substituted_amount
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.self_care.higher
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance highest-rate care component amount substituted by Article 14 of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_self_care_middle_substituted_amount
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.self_care.middle
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance middle-rate care component amount substituted by Article 14 of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_self_care_lower_substituted_amount
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.self_care.lower
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance lowest-rate care component amount substituted by Article 14 of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_mobility_higher_substituted_amount
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.mobility.higher
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance higher-rate mobility component amount substituted by Article 14 of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_mobility_lower_substituted_amount
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.mobility.lower
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance lower-rate mobility component amount substituted by Article 14 of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_self_care_higher_weekly_rate
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.self_care.higher
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance highest-rate care component amount after applying the Article 14 substitution.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_self_care_middle_weekly_rate
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.self_care.middle
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance middle-rate care component amount after applying the Article 14 substitution.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_self_care_lower_weekly_rate
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.self_care.lower
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance lowest-rate care component amount after applying the Article 14 substitution.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_mobility_higher_weekly_rate
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.mobility.higher
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance higher-rate mobility component amount after applying the Article 14 substitution.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/14#dla_mobility_lower_weekly_rate
+    country: uk
+    program: dla
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.dla.mobility.lower
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Disability Living Allowance lower-rate mobility component amount after applying the Article 14 substitution.
+
+  - legal_id: uk:policies/govuk/disability-living-allowance#disability_living_allowance_self_care_weekly_amount
+    country: uk
+    program: dla
+    mapping_type: direct_variable
+    policyengine_variable: dla_sc
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Disability Living Allowance self-care component after selecting the higher, middle, lower, or nil category; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:policies/govuk/disability-living-allowance#disability_living_allowance_mobility_weekly_amount
+    country: uk
+    program: dla
+    mapping_type: direct_variable
+    policyengine_variable: dla_m
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Disability Living Allowance mobility component after selecting the higher, lower, or nil category; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:policies/govuk/disability-living-allowance#disability_living_allowance_weeks_in_year
+    country: uk
+    program: dla
+    mapping_type: not_comparable
+    comparable: false
+    candidate_priority: P4
+    rationale: Source-backed annualization helper for the policy-level final amount wrapper; PolicyEngine exposes the final annual Disability Living Allowance variable and weekly component rates, not this multiplication factor as a separate oracle target.
+
+  - legal_id: uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount
+    country: uk
+    program: dla
+    mapping_type: direct_variable
+    policyengine_variable: dla
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Disability Living Allowance total as the sum of annual self-care and mobility components.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/4#category_a_basic_retirement_pension_substituted_amount
+    country: uk
+    program: state_pension
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.state_pension.basic_state_pension.amount
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Category A basic retirement pension amount substituted into section 44(4) by Article 4 of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/4#category_a_basic_retirement_pension_weekly_rate
+    country: uk
+    program: state_pension
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.state_pension.basic_state_pension.amount
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Category A basic retirement pension amount after applying the Article 4 substitution.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/6#full_new_state_pension_substituted_amount
+    country: uk
+    program: state_pension
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.state_pension.new_state_pension.amount
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly full new State Pension amount substituted into regulation 1A of the State Pension Regulations 2015 by Article 6 of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/article/6#full_new_state_pension_weekly_rate
+    country: uk
+    program: state_pension
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.state_pension.new_state_pension.amount
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly full new State Pension amount after applying the Article 6 substitution.
+
+  - legal_id: uk:policies/govuk/state-pension#current_state_pension_flat_weekly_amount
+    country: uk
+    program: state_pension
+    mapping_type: not_comparable
+    rationale: PolicyEngine UK exposes basic_state_pension and new_state_pension separately; this policy wrapper output selects the current flat component for either current State Pension type and has no one-to-one PolicyEngine variable.
+
+  - legal_id: uk:policies/govuk/state-pension#additional_state_pension_weekly_amount
+    country: uk
+    program: state_pension
+    mapping_type: direct_variable
+    policyengine_variable: additional_state_pension
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    result_multiplier: 0.019230769230769232
+    rationale: Same additional or protected State Pension amount above the dataset-year basic or new State Pension ceiling, with PolicyEngine UK's annual additional_state_pension converted to a weekly amount.
+
+  - legal_id: uk:policies/govuk/state-pension#state_pension_weekly_amount
+    country: uk
+    program: state_pension
+    mapping_type: direct_variable
+    policyengine_variable: state_pension
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    result_multiplier: 0.019230769230769232
+    rationale: Same final gross State Pension receipt for the person, with PolicyEngine UK's annual state_pension converted to a weekly amount after the reported dataset-year pension and current-rate proration wrapper.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#attendance_allowance_higher_weekly_rate
+    country: uk
+    program: attendance_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.attendance_allowance.higher
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly higher Attendance Allowance rate in Schedule 1 Part III of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#attendance_allowance_lower_weekly_rate
+    country: uk
+    program: attendance_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.attendance_allowance.lower
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly lower Attendance Allowance rate in Schedule 1 Part III of the 2026 up-rating order.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#severe_disablement_allowance_basic_weekly_rate
+    country: uk
+    program: sda
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.sda.maximum
+    candidate_priority: P2
+    rationale: Schedule 1 Part III states the basic Severe Disablement Allowance row separately, while PolicyEngine stores a maximum SDA rate including the highest age-related addition.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#sda_age_related_addition_higher_weekly_rate
+    country: uk
+    program: sda
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.sda.maximum
+    candidate_priority: P2
+    rationale: Schedule 1 Part III states the highest SDA age-related addition separately, while PolicyEngine stores a combined maximum SDA rate.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#sda_age_related_addition_middle_weekly_rate
+    country: uk
+    program: sda
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.sda.maximum
+    candidate_priority: P2
+    rationale: Schedule 1 Part III states the middle SDA age-related addition separately, while PolicyEngine stores a combined maximum SDA rate and does not expose this branch as a separate parameter.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#sda_age_related_addition_lower_weekly_rate
+    country: uk
+    program: sda
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.sda.maximum
+    candidate_priority: P2
+    rationale: Schedule 1 Part III states the lower SDA age-related addition separately, while PolicyEngine stores a combined maximum SDA rate and does not expose this branch as a separate parameter.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#severe_disablement_allowance_maximum_weekly_rate
+    country: uk
+    program: sda
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.sda.maximum
+    related_legal_ids:
+      - uk:regulations/uksi/2026/148/schedule/1#severe_disablement_allowance_basic_weekly_rate
+      - uk:regulations/uksi/2026/148/schedule/1#sda_age_related_addition_higher_weekly_rate
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly maximum Severe Disablement Allowance rate after deriving PolicyEngine's maximum-rate shape as the basic SDA row plus the highest age-related addition.
+
+  - legal_id: uk:policies/govuk/severe-disablement-allowance#severe_disablement_allowance_weeks_in_year
+    country: uk
+    program: sda
+    mapping_type: not_comparable
+    comparable: false
+    candidate_priority: P4
+    rationale: Source-backed annualization helper for the policy-level final amount wrapper; PolicyEngine exposes the final annual Severe Disablement Allowance variable and the weekly maximum rate parameter, not this multiplication factor as a separate oracle target.
+
+  - legal_id: uk:policies/govuk/severe-disablement-allowance#severe_disablement_allowance_annual_amount
+    country: uk
+    program: sda
+    mapping_type: direct_variable
+    policyengine_variable: sda
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Final annual Severe Disablement Allowance output is the same PolicyEngine UK variable over reported SDA receipt.
+
+  - legal_id: uk:regulations/uksi/2026/148/schedule/1#carers_allowance_weekly_rate
+    country: uk
+    program: carers_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.carers_allowance.rate
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same weekly Carer's Allowance rate in Schedule 1 Part III of the 2026 up-rating order.
+
+  - legal_id: uk:policies/govuk/carers-allowance#carers_allowance_minimum_weekly_care_hours
+    country: uk
+    program: carers_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.carers_allowance.min_hours
+    period: week
+    unit: hour
+    comparison: count
+    rationale: Same minimum weekly care-hours threshold for Carer's Allowance.
+
+  - legal_id: uk:policies/govuk/carers-allowance#carers_allowance_weeks_in_year
+    country: uk
+    program: carers_allowance
+    mapping_type: not_comparable
+    comparable: false
+    candidate_priority: P4
+    rationale: Source-backed annualization helper for the policy-level final amount wrapper; PolicyEngine exposes the final annual Carer's Allowance variable and the weekly rate parameter, not this multiplication factor as a separate oracle target.
+
+  - legal_id: uk:policies/govuk/carers-allowance#carers_allowance_annual_amount
+    country: uk
+    program: carers_allowance
+    mapping_type: direct_variable
+    policyengine_variable: carers_allowance
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final annual Carer's Allowance amount after PolicyEngine UK's care-hours or reported-receipt gate and Scotland Carer Support Payment replacement gate.
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_under_80_standard_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.lower
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same ordinary annual Winter Fuel Payment amount for a person below age 80 in Regulation 3(1).
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_under_80_shared_or_residential_care_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.lower
+    candidate_priority: P2
+    rationale: Regulation 3(2) states a GBP 100 shared-household or residential-care branch for a person below age 80, while PolicyEngine stores only ordinary lower and higher Winter Fuel Payment amounts.
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_under_80_partner_80_relevant_benefit_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.higher
+    candidate_priority: P2
+    rationale: Regulation 3(3) states a GBP 300 partner-age-80 branch for a person below age 80 with a relevant benefit, while PolicyEngine's higher amount parameter is not branch-specific.
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_age_80_standard_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.higher
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same ordinary annual Winter Fuel Payment amount for a person aged 80 or over in Regulation 3(4).
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_age_80_shared_under_80_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.lower
+    candidate_priority: P2
+    rationale: Regulation 3(5) states a GBP 200 shared-household branch for a person aged 80 or over, while PolicyEngine stores only ordinary lower and higher Winter Fuel Payment amounts.
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_age_80_shared_80_or_residential_care_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: not_comparable
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.higher
+    candidate_priority: P2
+    rationale: Regulation 3(6) states a GBP 150 shared-household or residential-care branch for a person aged 80 or over, while PolicyEngine stores only ordinary lower and higher Winter Fuel Payment amounts.
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_higher_age_requirement
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.winter_fuel_payment.eligibility.higher_age_requirement
+    period: year
+    unit: year
+    comparison: count
+    rationale: Same age-80 threshold used by Regulation 3 to select the ordinary higher Winter Fuel Payment amount.
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_lower_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.lower
+    related_legal_ids:
+      - uk:regulations/uksi/2025/969/3#winter_fuel_payment_under_80_standard_amount
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same PE-shaped ordinary lower Winter Fuel Payment amount derived from Regulation 3(1).
+
+  - legal_id: uk:regulations/uksi/2025/969/3#winter_fuel_payment_higher_amount
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.winter_fuel_payment.amount.higher
+    related_legal_ids:
+      - uk:regulations/uksi/2025/969/3#winter_fuel_payment_age_80_standard_amount
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same PE-shaped ordinary higher Winter Fuel Payment amount derived from Regulation 3(4).
+
+  - legal_id: uk:regulations/uksi/2002/1792/15#capital_deemed_weekly_income
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: pension_credit_deemed_income
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Pension Credit deemed income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit pension_credit_assessable_capital into the Regulation 15 claimant-capital leaf and converts PolicyEngine's annual output to a weekly amount.
+
+  - legal_id: uk:regulations/uksi/2008/794/118#capital_tariff_weekly_income
+    country: uk
+    program: employment_and_support_allowance
+    mapping_type: direct_variable
+    policyengine_variable: esa_income_tariff_income
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same income-related ESA tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit esa_income_assessable_capital into the Regulation 118 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+
+  - legal_id: uk:policies/govuk/esa-income#income_related_esa_annual_amount
+    country: uk
+    program: employment_and_support_allowance
+    mapping_type: direct_variable
+    policyengine_variable: esa_income
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final annual income-related ESA amount after PolicyEngine UK's capital-test eligibility gate and tariff-income reduction over reported ESA.
+
+  - legal_id: uk:regulations/uksi/1996/207/116#capital_tariff_weekly_income
+    country: uk
+    program: jobseekers_allowance
+    mapping_type: direct_variable
+    policyengine_variable: jsa_income_tariff_income
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same income-based JSA tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit jsa_income_assessable_capital into the Regulation 116 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+
+  - legal_id: uk:regulations/uksi/1987/1967/53#capital_tariff_weekly_income
+    country: uk
+    program: income_support
+    mapping_type: direct_variable
+    policyengine_variable: income_support_tariff_income
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Income Support tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit income_support_assessable_capital into the Regulation 53 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+
+  - legal_id: uk:regulations/uksi/2006/213/52#capital_tariff_weekly_income
+    country: uk
+    program: housing_benefit
+    mapping_type: direct_variable
+    policyengine_variable: housing_benefit_tariff_income
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same working-age Housing Benefit tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit housing_benefit_assessable_capital into the Regulation 52 claimant-capital leaf, sets the prescribed-circumstances branch false because PolicyEngine does not expose that legal predicate, limits comparison to non-pension-age rows with capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+
+  - legal_id: uk:regulations/uksi/2006/214/29#capital_tariff_weekly_income
+    country: uk
+    program: housing_benefit
+    mapping_type: direct_variable
+    policyengine_variable: housing_benefit_tariff_income
+    entity: benunit
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same pension-age Housing Benefit tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit housing_benefit_assessable_capital into the Regulation 29 claimant-capital leaf, projects the regulation 44(2) capital-disregard exception false because PolicyEngine applies capital exclusions upstream, limits comparison to pension-age rows without guarantee credit, and converts PolicyEngine's annual output to a weekly amount.
+
+  - legal_id: uk:policies/govuk/housing-benefit#housing_benefit_annual_amount
+    country: uk
+    program: housing_benefit
+    mapping_type: direct_variable
+    policyengine_variable: housing_benefit
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same final annual Housing Benefit amount after PolicyEngine UK's would-claim gate and benefit-cap reduction over pre-cap Housing Benefit.
+
+  - legal_id: uk:statutes/ukpga/2002/16/1#qualifying_age
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: state_pension_age
+    entity: person
+    period: day
+    unit: year
+    comparison: count
+    candidate_priority: P3
+    rationale: State Pension Credit Act section 1 defines a source-level qualifying age at day granularity. The UK Populace oracle supplies PolicyEngine UK's state_pension_age to both statutory pensionable-age leaves on a representative day, matching the modern equalized-age surface exposed by PolicyEngine.
+
+  - legal_id: uk:statutes/ukpga/2002/16/1#claimant_has_attained_qualifying_age
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: is_SP_age
+    entity: person
+    period: day
+    comparison: boolean
+    candidate_priority: P3
+    rationale: State Pension Credit Act section 1 tests whether the claimant has attained the statutory qualifying age at day granularity. The UK Populace oracle compares RuleSpec's judgment output to PolicyEngine UK's annual is_SP_age predicate after supplying the same age and state_pension_age projection used for qualifying_age.
+
+  - legal_id: uk:statutes/ukpga/2002/16/2#guarantee_credit
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: guarantee_credit
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    candidate_priority: P2
+    rationale: Same annual State Pension Credit guarantee credit amount. The Populace oracle projects claimant income from PolicyEngine's pension_credit_income, appropriate minimum guarantee from minimum_guarantee, and entitlement from is_guarantee_credit_eligible.
+
+  - legal_id: uk:statutes/ukpga/2002/16/2#appropriate_minimum_guarantee
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: minimum_guarantee
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    candidate_priority: P3
+    rationale: Same annual State Pension Credit appropriate minimum guarantee, after the Populace oracle projects PolicyEngine's standard_minimum_guarantee and positive additional amount decomposition into the section 2 formula.
+
+  - legal_id: uk:statutes/ukpga/2002/16/2#guarantee_credit_condition_satisfied
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Source-law income condition for State Pension Credit Act section 2. PolicyEngine UK exposes is_guarantee_credit_eligible, but that combines this income condition with section 1 entitlement predicates and is not a one-to-one match.
+
+  - legal_id: uk:statutes/ukpga/2002/16/3#savings_credit
+    country: uk
+    program: pension_credit
+    mapping_type: direct_variable
+    policyengine_variable: savings_credit
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    candidate_priority: P2
+    rationale: Same annual Pension Credit savings credit amount. The Populace oracle projects section 3 inputs from PolicyEngine's savings-credit income, claimant income, minimum-guarantee, standard-minimum-guarantee, and prescribed threshold/rate parameters.
+
+  - legal_id: uk:statutes/ukpga/2002/16/3#maximum_savings_credit
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Source-law intermediate for State Pension Credit Act section 3. PolicyEngine UK exposes the final savings_credit amount, but not the section 3 maximum savings credit as a separate one-to-one variable.
+
+  - legal_id: uk:statutes/ukpga/2002/16/3#amount_a_for_savings_credit
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Source-law intermediate for State Pension Credit Act section 3 amount A. PolicyEngine UK exposes the final savings_credit amount, but not amount A separately.
+
+  - legal_id: uk:statutes/ukpga/2002/16/3#amount_b_for_savings_credit
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Source-law intermediate for State Pension Credit Act section 3 amount B. PolicyEngine UK exposes the final savings_credit amount, but not amount B separately.
+
+  - legal_id: uk:statutes/ukpga/2002/16/3#savings_credit_second_condition_satisfied
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Source-law entitlement predicate under State Pension Credit Act section 3(2). PolicyEngine UK has an eligibility variable, but it combines age and income conditions and is not a one-to-one match for this second condition.
+
+  - legal_id: uk:statutes/ukpga/2012/5/8#universal_credit_award_amount
+    country: uk
+    program: universal_credit
+    mapping_type: derived_expression
+    expression: max(uc_maximum_amount - uc_income_reduction, 0)
+    entity: benunit
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Welfare Reform Act 2012 section 8 computes the award as the positive difference between the maximum amount and prescribed income deductions. PolicyEngine UK's universal_credit_pre_benefit_cap also applies the stochastic would_claim_uc take-up gate, so the Populace oracle compares the equivalent pre-take-up expression from uc_maximum_amount and uc_income_reduction.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#standard_allowance_single_under_25_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.standard_allowance.amount.SINGLE_YOUNG
+    aliases:
+      - uk:regulations/uksi/2013/376/36#standard_allowance_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit standard allowance for a single claimant aged under 25. Companion tests exercise it through the branch-selected standard allowance output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#standard_allowance_single_25_or_over_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.standard_allowance.amount.SINGLE_OLD
+    aliases:
+      - uk:regulations/uksi/2013/376/36#standard_allowance_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit standard allowance for a single claimant aged 25 or over. Companion tests exercise it through the branch-selected standard allowance output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#standard_allowance_joint_both_under_25_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.standard_allowance.amount.COUPLE_YOUNG
+    aliases:
+      - uk:regulations/uksi/2013/376/36#standard_allowance_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit standard allowance for joint claimants both aged under 25. Companion tests exercise it through the branch-selected standard allowance output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#standard_allowance_joint_either_25_or_over_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.standard_allowance.amount.COUPLE_OLD
+    aliases:
+      - uk:regulations/uksi/2013/376/36#standard_allowance_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit standard allowance for joint claimants where either is aged 25 or over. Companion tests exercise it through the branch-selected standard allowance output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#first_child_element_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.child.first.higher_amount
+    aliases:
+      - uk:regulations/uksi/2013/376/36#child_element_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit first-child child element amount. Companion tests exercise it through the branch-selected child element output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#second_and_subsequent_child_element_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.child.amount
+    aliases:
+      - uk:regulations/uksi/2013/376/36#child_element_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit second and subsequent child element amount. Companion tests exercise it through the branch-selected child element output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#disabled_child_lower_rate_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.child.disabled.amount
+    aliases:
+      - uk:regulations/uksi/2013/376/36#disabled_child_additional_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit lower disabled-child addition amount. Companion tests exercise it through the branch-selected disabled-child addition output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#disabled_child_higher_rate_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.child.severely_disabled.amount
+    aliases:
+      - uk:regulations/uksi/2013/376/36#disabled_child_additional_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit higher disabled-child addition amount. Companion tests exercise it through the branch-selected disabled-child addition output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#lcwra_ordinary_claimant_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.disabled.amount
+    aliases:
+      - uk:regulations/uksi/2013/376/36#lcwra_element_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit standard limited capability for work and work-related activity element amount. Companion tests exercise it through the branch-selected LCWRA element output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#carer_element_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.carer.amount
+    aliases:
+      - uk:regulations/uksi/2013/376/36#carer_element
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit carer element amount. Companion tests exercise it through the branch-selected carer element output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#childcare_costs_element_one_child_maximum_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.childcare.cap.1
+    aliases:
+      - uk:regulations/uksi/2013/376/36#childcare_costs_element_maximum_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit maximum childcare costs element for one child. Companion tests exercise it through the branch-selected childcare cap output.
+
+  - legal_id: uk:regulations/uksi/2013/376/36#childcare_costs_element_two_or_more_children_maximum_amount
+    country: uk
+    program: universal_credit
+    mapping_type: parameter_value
+    policyengine_parameter: gov.dwp.universal_credit.elements.childcare.cap.2
+    aliases:
+      - uk:regulations/uksi/2013/376/36#childcare_costs_element_maximum_amount
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit maximum childcare costs element for two or more children. Companion tests exercise it through the branch-selected childcare cap output.
+
+  - legal_id: uk:regulations/uksi/2013/376/72#capital_tariff_monthly_income
+    country: uk
+    program: universal_credit
+    mapping_type: direct_variable
+    policyengine_variable: uc_tariff_income
+    entity: benunit
+    period: month
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit assessed capital to the Regulation 72 capital leaf and converts PolicyEngine's annual output to a monthly amount.
+
+  - legal_id: uk:regulations/uksi/2013/376/18#claimant_capital_for_prescribed_capital_limit
+    country: uk
+    program: universal_credit
+    mapping_type: direct_variable
+    policyengine_variable: uc_assessable_capital
+    entity: benunit
+    period: day
+    unit: GBP
+    comparison: money
+    rationale: Same Universal Credit assessable capital stock after the UK Populace adapter projects PolicyEngine's benefit-unit uc_assessable_capital into the Regulation 18 claimant-capital leaf, with other-member inclusion set to zero because PolicyEngine already resolves household capital allocation, reported-capital overrides, and exclusions upstream.
+
+  - legal_id: uk:regulations/uksi/2013/376/32#work_condition_met_for_assessment_period
+    country: uk
+    program: universal_credit
+    mapping_type: direct_variable
+    policyengine_variable: uc_childcare_work_condition
+    entity: benunit
+    period: month
+    unit: bool
+    comparison: bool
+    rationale: Same Universal Credit childcare work-condition predicate, with the Populace oracle projecting person-level adult work status into the Regulation 32 claimant and other-member work leaves.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#amount_included_under_section_10_responsibility_for_children_and_young_persons
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_child_element
+    candidate_priority: P4
+    rationale: The Universal Credit program wrapper composes child and disabled-child amounts across benefit-unit children. PolicyEngine UK exposes adjacent child element variables and parameters, while the Populace oracle currently compares the constituent source-law outputs rather than this program-boundary aggregate.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#amount_included_under_section_11_housing_costs
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_housing_costs_element
+    candidate_priority: P4
+    rationale: The Universal Credit program wrapper adds renter and owner-occupier housing-cost schedule outputs from the encoded regulations. PolicyEngine UK exposes downstream UC housing outcomes rather than this WRA 2012 section 11 bridge as a one-to-one oracle surface.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#amount_included_under_section_12_other_particular_needs_or_circumstances
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_maximum_amount
+    candidate_priority: P4
+    rationale: The Universal Credit program wrapper combines LCWRA, carer, and childcare element bridges. PolicyEngine UK exposes nearby element outputs, but there is not yet a tested program-boundary oracle adapter for this section 12 composite.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#carer_element
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_carer_element
+    candidate_priority: P4
+    rationale: The program wrapper's carer element output is a branch-selected program amount backed by Regulation 36 parameter rows already mapped at the source-law level. PolicyEngine UK stores the parameter branches rather than this program-output boundary.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#child_element_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_child_element
+    candidate_priority: P4
+    rationale: The program wrapper's child element amount is a branch-selected program amount backed by Regulation 36 parameter rows already mapped at the source-law level. PolicyEngine UK stores the parameter branches rather than this program-output boundary.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#childcare_costs_element_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_childcare_element
+    candidate_priority: P4
+    rationale: The Universal Credit program wrapper computes a childcare element bridge from relevant childcare charges and caps. PolicyEngine UK exposes adjacent childcare element outcomes, but the current oracle surface does not test this program-boundary calculation one-to-one.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#childcare_costs_element_maximum_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_maximum_childcare_element_amount
+    candidate_priority: P4
+    rationale: The program wrapper's childcare maximum amount is a branch-selected program amount backed by Regulation 36 childcare cap parameter rows already mapped at the source-law level. PolicyEngine UK stores the parameter branches rather than this program-output boundary.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#disabled_child_additional_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_individual_disabled_child_element
+    candidate_priority: P4
+    rationale: The program wrapper's disabled child additional amount is a branch-selected program amount backed by Regulation 36 parameter rows already mapped at the source-law level. PolicyEngine UK stores the parameter branches rather than this program-output boundary.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#lcwra_element_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_LCWRA_element
+    candidate_priority: P4
+    rationale: The program wrapper's LCWRA element amount is a branch-selected program amount backed by Regulation 36 parameter rows already mapped at the source-law level. PolicyEngine UK stores the parameter branches rather than this program-output boundary.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#standard_allowance_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_standard_allowance
+    candidate_priority: P4
+    rationale: The program wrapper's standard allowance amount is a branch-selected program amount backed by Regulation 36 parameter rows already mapped at the source-law level. PolicyEngine UK stores the parameter branches rather than this program-output boundary.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#universal_credit_award_amount
+    country: uk
+    program: universal_credit
+    mapping_type: derived_expression
+    expression: max(uc_maximum_amount - uc_income_reduction, 0)
+    entity: benunit
+    period: month
+    unit: GBP
+    comparison: money
+    tested_by_legal_ids:
+      - uk:statutes/ukpga/2012/5/8#universal_credit_award_amount
+    rationale: Same WRA 2012 section 8 award formula as the source-law mapping, comparing the pre-take-up and pre-benefit-cap expression from uc_maximum_amount and uc_income_reduction.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#universal_credit_award_deduction_from_maximum_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_income_reduction
+    candidate_priority: P4
+    rationale: The Universal Credit program wrapper sums prescribed earned and unearned income deductions. PolicyEngine UK exposes adjacent income-reduction outputs, but there is not yet a tested Populace adapter for this program-boundary deduction composite.
+
+  - legal_id: uk:programs/universal-credit/fy-2026-27#universal_credit_maximum_amount
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    policyengine_variable: uc_maximum_amount
+    candidate_priority: P4
+    rationale: The Universal Credit program wrapper computes the WRA 2012 section 8 maximum amount from standard allowance, child, housing, and particular-needs components. PolicyEngine UK exposes adjacent component and maximum-amount variables, but this wrapper output is not currently tested as a one-to-one oracle surface.
+
+  - legal_id: uk:statutes/ukpga/1994/23/2#standard_rate_of_vat
+    country: uk
+    program: vat
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Value Added Tax Act 1994 section 2 is encoded for Axiom firm-level VAT microsimulation. PolicyEngine UK does not currently expose a firm entity or a registered one-to-one VAT Act oracle surface for this output.
+
+  - legal_id: uk:statutes/ukpga/1994/23/24#output_tax_on_standard_rated_taxable_supplies
+    country: uk
+    program: vat
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Value Added Tax Act 1994 section 24 output tax is a firm-level VAT accounting helper. PolicyEngine UK does not currently expose a firm entity or a registered one-to-one VAT Act oracle surface for this output.
+
+  - legal_id: uk:statutes/ukpga/1994/23/24#input_tax_on_standard_rated_business_purchases
+    country: uk
+    program: vat
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Value Added Tax Act 1994 section 24 input tax is a firm-level deductible-purchase helper. PolicyEngine UK does not currently expose a firm entity or a registered one-to-one VAT Act oracle surface for this output.
+
+  - legal_id: uk:statutes/ukpga/1994/23/25#net_vat_liability_after_input_tax_credit
+    country: uk
+    program: vat
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Value Added Tax Act 1994 section 25 net VAT liability is a firm-level accounting output after input tax credit. PolicyEngine UK does not currently expose a firm entity or a registered one-to-one VAT Act oracle surface for this output.
+
+  - legal_id: uk:statutes/ukpga/1994/23/26#allowable_input_tax_credit
+    country: uk
+    program: vat
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Value Added Tax Act 1994 section 26 allowable input tax credit is a firm-level deductible-input output. PolicyEngine UK does not currently expose a firm entity or a registered one-to-one VAT Act oracle surface for this output.
+
+prefixes:
+  - legal_id_prefix: uk:policies/govuk/council-tax-reduction#
+    country: uk
+    program: council_tax_reduction
+    mapping_type: not_comparable
+    rationale: Council Tax Reduction helper outputs expose source-law scheme selection, capital, excess-income, taper, and simulated-award mechanics; PolicyEngine UK exposes the final household council_tax_reduction variable rather than these helpers one-to-one.
+
+  - legal_id_prefix: uk:policies/govuk/vat#
+    country: uk
+    program: vat
+    mapping_type: not_comparable
+    rationale: GOV.UK VAT policy outputs are firm-level registration, output-tax, input-tax, and net-liability rules; PolicyEngine UK does not currently expose a firm entity or one-to-one VAT variables for these outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2006/46/382#
+    country: uk
+    program: companies_act
+    mapping_type: not_comparable
+    rationale: Companies Act 2006 section 382 outputs are firm-level accounting thresholds and small-company qualification predicates. PolicyEngine UK models household tax-benefit rules and does not expose a firm entity or one-to-one Companies Act oracle surface for these outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2018/12/157#
+    country: uk
+    program: data_protection
+    mapping_type: not_comparable
+    rationale: Data Protection Act 2018 section 157 outputs are UK GDPR penalty-cap fixed amounts, turnover percentages, turnover amounts, and maximum-penalty amounts. PolicyEngine UK models household tax-benefit rules and does not expose enforcement-penalty or undertaking-turnover oracle surfaces for these outputs.
+
+  - legal_id_prefix: uk-kingston-upon-thames:policies/kingston-upon-thames/council-tax-reduction#
+    country: uk
+    program: council_tax_reduction
+    mapping_type: not_comparable
+    rationale: Kingston upon Thames Council Tax Reduction outputs are jurisdiction-specific local-scheme RuleSpec surfaces; the released PolicyEngine UK oracle does not yet expose this draft local CTR scheme one-to-one.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/35#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: UK personal allowance helper outputs not listed above are legal entitlement or rounding intermediates that PolicyEngine UK does not expose as one-to-one oracle variables or parameters.
+
+  - legal_id_prefix: uk:regulations/uksi/2006/965/2#
+    country: uk
+    program: child_benefit
+    mapping_type: not_comparable
+    rationale: Child Benefit helper outputs not listed above are payability, relationship-coordination, or specified-benefit predicates that PolicyEngine UK does not expose as one-to-one oracle variables or parameters.
+
+  - legal_id_prefix: uk:statutes/ukpga/1992/4/141#
+    country: uk
+    program: child_benefit
+    mapping_type: not_comparable
+    rationale: Child Benefit section 141 helper outputs not listed above are responsibility, child-counting, or weekly entitlement predicates that PolicyEngine UK does not expose as one-to-one oracle variables or parameters.
+
+  - legal_id_prefix: uk:policies/govuk/child-benefit#
+    country: uk
+    program: child_benefit
+    mapping_type: not_comparable
+    rationale: Child Benefit final receipt helper outputs not listed above are Axiom-side period conversion and projected receipt-gate helpers rather than separate PolicyEngine UK oracle variables.
+
+  - legal_id_prefix: uk:policies/govuk/state-pension#
+    country: uk
+    program: state_pension
+    mapping_type: not_comparable
+    rationale: State Pension final receipt helper outputs not listed above are Axiom-side type-selection and dataset-year proration helpers rather than separate PolicyEngine UK oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2002/1792/6#
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Pension Credit helper outputs not listed above are remand-prisoner, tax-credit cessation, nil substitution, or branch-control intermediates that PolicyEngine UK does not expose as one-to-one oracle variables or parameters.
+
+  - legal_id_prefix: uk:regulations/uksi/2002/1792/schedule/IIA#
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Pension Credit Schedule IIA helper outputs not listed above are responsibility, absence, disability, or aggregation intermediates that PolicyEngine UK does not expose as one-to-one oracle variables or parameters.
+
+  - legal_id_prefix: uk:regulations/uksi/2002/1792/15#
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Pension Credit Regulation 15 helper outputs not listed above are capital-to-deemed-income parameters or branch-control predicates that PolicyEngine UK does not expose as one-to-one oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2008/794/118#
+    country: uk
+    program: employment_and_support_allowance
+    mapping_type: not_comparable
+    rationale: ESA Regulation 118 helper outputs not listed above are capital-to-tariff-income parameters, upper-limit predicates, or prescribed-accommodation branch controls that PolicyEngine UK does not expose as one-to-one oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/1996/207/116#
+    country: uk
+    program: jobseekers_allowance
+    mapping_type: not_comparable
+    rationale: JSA Regulation 116 helper outputs not listed above are capital-to-tariff-income parameters, upper-limit predicates, or prescribed-accommodation branch controls that PolicyEngine UK does not expose as one-to-one oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/1987/1967/53#
+    country: uk
+    program: income_support
+    mapping_type: not_comparable
+    rationale: Income Support Regulation 53 helper outputs not listed above are capital-to-tariff-income parameters, upper-limit predicates, or prescribed-accommodation branch controls that PolicyEngine UK does not expose as one-to-one oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2006/213/52#
+    country: uk
+    program: housing_benefit
+    mapping_type: not_comparable
+    rationale: Housing Benefit Regulation 52 helper outputs not listed above are working-age capital-to-tariff-income parameters, upper-limit predicates, or prescribed-circumstances branch controls that PolicyEngine UK does not expose as one-to-one oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2006/214/29#
+    country: uk
+    program: housing_benefit
+    mapping_type: not_comparable
+    rationale: Pension-age Housing Benefit Regulation 29 helper outputs not listed above are capital-to-tariff-income parameters or capital-disregard predicates that PolicyEngine UK does not expose as one-to-one oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/36#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit helper outputs not listed above are statutory amount variants that PolicyEngine UK does not expose as one-to-one oracle parameters in the current model, including the protected pre-2026 LCWRA amount.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/schedule/4/paragraph/
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit Schedule 4 housing-cost calculation helpers are source-level rent, bedroom, contribution, cap, and under-occupation intermediates; PolicyEngine UK exposes downstream UC housing element and award results rather than each statutory helper one-to-one.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/schedule/5/paragraph/
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit Schedule 5 owner-occupier housing-cost helpers are source-level relevant-payment, qualifying-period, and service-charge intermediates; PolicyEngine UK exposes downstream UC housing element and award results rather than each statutory helper one-to-one.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/schedule/10/paragraph/
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit Schedule 10 premises predicates are source-level housing occupation conditions used by Schedule 4 calculations; PolicyEngine UK does not expose them as one-to-one oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/1#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 1 names and commencement labels are source metadata, not PolicyEngine UK variables or parameters.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/4#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 4 responsibility-for-child predicates are source-level relationship and absence tests; PolicyEngine UK exposes downstream benefit-unit composition and award results rather than these legal predicates one-to-one.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/5#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 5 qualifying-young-person education and training predicates are source-level status tests, not one-to-one PolicyEngine UK oracle outputs.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/18#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 18 prescribed capital limit helpers are claim-composition and capital-limit intermediates; PolicyEngine UK exposes final Universal Credit entitlement effects rather than these source predicates separately.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/22#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 22 income deduction, work allowance, and taper helpers are source-level award-calculation intermediates; PolicyEngine UK does not expose each statutory helper as a one-to-one oracle variable or parameter.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/24#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 24 child and disabled-child inclusion predicates are source-level element gating rules; PolicyEngine UK exposes computed child elements rather than these legal helpers separately.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/26#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 26 housing-cost schedule routing and shared-ownership predicates are source-level housing element conditions not exposed as one-to-one PolicyEngine UK oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/27#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 27 LCWRA element inclusion is a source-level award component gate; PolicyEngine UK exposes downstream element amounts rather than this legal helper separately.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/29#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 29 carer element inclusion predicates are source-level gates not exposed as one-to-one PolicyEngine UK oracle variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/31#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 31 childcare cost element inclusion is a source-level gate; PolicyEngine UK exposes downstream element amounts rather than this predicate separately.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/32#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Remaining Universal Credit regulation 32 paid-work, treated-as-in-work, and unable-to-provide-childcare helper predicates are source-level childcare work-condition inputs not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/33#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 33 childcare charge responsibility, work-purpose, and late-reporting predicates are source-level conditions not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/34#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 34 relevant childcare charge and reimbursement helpers are source-level element calculation intermediates; PolicyEngine UK does not expose each helper one-to-one.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/46#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 46 income-versus-capital treatment helpers are source-level classification and threshold tests not exposed as one-to-one PolicyEngine UK oracle outputs.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/47#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 47 beneficial-interest share presumptions are source-level capital attribution rules not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/48#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 48 schedule 10 capital disregard period helpers are source-level disregard mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/schedule/4/
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit Schedule 4 renter housing-cost helper outputs are source-level rent payment, bedroom allocation, housing cost contribution, private and social rent calculation, under-occupancy, and specified-renter mechanics; PolicyEngine UK exposes downstream Universal Credit housing outcomes rather than these schedule-level legal helpers one-to-one.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/schedule/5/
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit Schedule 5 owner-occupier housing-cost helper outputs are source-level relevant-payment, qualifying-period, earned-income exclusion, and service-charge monthly-equivalent mechanics; PolicyEngine UK exposes downstream Universal Credit housing outcomes rather than these schedule-level legal helpers one-to-one.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/schedule/10/
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit Schedule 10 capital-disregard premises helpers are source-level capital disregard mechanics not exposed as one-to-one PolicyEngine UK oracle variables or parameters.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/54#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 54 earned-income estimate helpers are source-level assessment-period mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/62#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 62 gainful self-employment, minimum-income-floor, and surplus-income helpers are source-level earned-income mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/66#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 66 unearned-income description and overlapping-benefit adjustment helpers are source-level income classification mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/72#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Remaining Universal Credit regulation 72 tariff-income helpers are source-level capital-to-income conversion mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/77#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 77 company-owner and intermediary-income helpers are source-level capital and earnings attribution mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/80A#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 80A benefit-cap case and limit helpers are source-level cap selection mechanics; PolicyEngine UK exposes benefit cap effects rather than each statutory selector separately.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/88#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 88 expected-hours helpers are source-level conditionality mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/2#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 2 claim-making predicates are source-level claim administration rules not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/3#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 3 joint-claim predicates are source-level claim structure rules not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/4#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 4 age-condition helpers are source-level eligibility predicates not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/5#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 5 financial-condition and capital-threshold predicates are source-level eligibility mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/8#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 8 award-calculation structure helpers are source-level calculation control rules not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/9#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 9 standard allowance structure is implemented through regulation 36 amount parameters and downstream award calculations, not as a separate PolicyEngine UK oracle output.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/10#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 10 child and disabled-child amount structure is implemented through regulation 36 amount parameters and downstream award calculations, not as separate section-level PolicyEngine UK outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/11#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 11 housing amount structure is implemented through detailed housing rules and downstream award calculations, not as a one-to-one PolicyEngine UK output.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/12#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 12 prescribed-needs amount structure is implemented through regulations and downstream award calculations, not as separate section-level PolicyEngine UK outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/13#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 13 work-related requirement powers are conditionality predicates, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/14#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 14 claimant-commitment acceptance is a source-level administration predicate not exposed as a one-to-one PolicyEngine UK variable.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/15#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 15 work-focused interview requirements are conditionality rules, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/16#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 16 work-preparation and health-assessment requirements are conditionality rules, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/17#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 17 work-search requirements are conditionality rules, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/18#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 18 work-availability requirements are conditionality rules, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/19#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 19 claimant-group and carer predicates are conditionality rules, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/20#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 20 work-focused-interview-only group rules are conditionality rules, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/21#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 21 work-focused-interview and preparation group rules are conditionality rules, not one-to-one PolicyEngine UK benefit calculation outputs.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/23#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 23 sanctions and compliance-condition helpers are source-level conditionality mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/24#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 24 sanction reduction helpers are source-level conditionality mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/25#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 25 hardship payment helpers are source-level payment administration mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/26#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 26 higher-level sanction helpers are source-level conditionality mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/27#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 27 other sanction helpers are source-level conditionality mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:statutes/ukpga/2012/5/40#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Welfare Reform Act 2012 section 40 interpretation helpers are source-level definitions and administration rules not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/81#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 81 benefit-cap reduction steps are source-level cap mechanics; PolicyEngine UK exposes the capped award effect rather than the statutory excess and reduction amounts separately.
+
+  - legal_id_prefix: uk:regulations/uksi/2013/376/82#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 82 earnings and grace-period exception helpers are source-level cap exception mechanics not exposed as one-to-one PolicyEngine UK variables.
+
+  - legal_id_prefix: uk:regulations/uksi/2015/621/4#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: The National Minimum Wage Regulations 2015 regulation 4 hourly rate is a rate instrument referenced by the regulation 82 earnings exception; PolicyEngine UK carries it as a parameter rather than a variable.
+
+  - legal_id_prefix: uk:policies/govuk/carers-allowance#
+    country: uk
+    program: carers_allowance
+    mapping_type: not_comparable
+    rationale: Weekly carer's allowance helpers (entitlement gate, weekly amount, earnings limit, minimum care hours) are source-level steps under the annual amount, which remains the comparable PolicyEngine UK variable.
+
+  - legal_id_prefix: uk:policies/govuk/carer-support-payment#
+    country: uk
+    program: carer_support_payment
+    mapping_type: not_comparable
+    rationale: Weekly carer support payment helpers are source-level steps under the annual amount, which remains the comparable PolicyEngine UK variable.
+
+  - legal_id_prefix: uk:policies/govuk/disability-living-allowance#
+    country: uk
+    program: dla
+    mapping_type: not_comparable
+    rationale: Weekly DLA component helpers are source-level steps under the annual amount, which remains the comparable PolicyEngine UK variable.
+
+  - legal_id_prefix: uk:policies/govuk/pension-credit#
+    country: uk
+    program: pension_credit
+    mapping_type: not_comparable
+    rationale: Guarantee credit top-up helpers are source-level steps; PolicyEngine UK exposes pension credit as a combined award rather than the weekly guarantee top-up separately.
+
+  - legal_id_prefix: uk:policies/govuk/scottish-child-payment#
+    country: uk
+    program: scottish_child_payment
+    mapping_type: not_comparable
+    rationale: Per-child weekly Scottish child payment helpers are source-level steps under the annual amount, which remains the comparable PolicyEngine UK variable.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/8#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 8 outputs are the statutory dividend rate percentages; PolicyEngine UK carries these in its parameter tree rather than as simulated variables, and parameter-level comparisons for this section are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/10#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 10 outputs not listed above are the basic and higher rate limit parameters; PolicyEngine UK carries these in its parameter tree rather than as simulated variables, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/12#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 12 starting rate for savings outputs are intra-section band helpers and the statutory limit parameter; PolicyEngine UK computes savings income tax within combined band variables rather than exposing these steps one-to-one.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/12A#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 12A savings nil rate outputs are intra-section applicability predicates and band helpers; PolicyEngine UK applies the personal savings allowance within combined savings tax variables rather than exposing these steps one-to-one.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/12B#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 12B outputs are the savings allowance determination predicates and amount parameters; PolicyEngine UK carries the allowance amounts in its parameter tree and applies them inside savings tax variables, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/13A#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 13A dividend nil rate outputs are intra-section band helpers and the dividend allowance parameter; PolicyEngine UK applies the dividend allowance inside dividend tax variables, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2007/3/16#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Section 16 outputs are ordering predicates that fix the highest-part treatment of savings and dividend income; PolicyEngine UK hard-codes this ordering inside its band variables rather than exposing it.
+
+  - legal_id_prefix: uk:statutes/ukpga/2021/26/5#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Finance Act 2021 section 5 outputs are the frozen personal allowance and basic rate limit amounts; PolicyEngine UK carries these in its parameter tree rather than as simulated variables, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2023/1/5#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Finance Act 2023 section 5 outputs are the extended freeze amounts and an uprating-disapplied predicate; PolicyEngine UK carries the amounts in its parameter tree rather than as simulated variables, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2026/11/1#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: The Finance Act 2026 section 1 output is the annual charge-to-tax predicate, a legal applicability gate that PolicyEngine UK does not expose as an oracle variable.
+
+  - legal_id_prefix: uk:statutes/ukpga/2026/11/2#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Finance Act 2026 section 2 outputs are the main income tax rate percentages; PolicyEngine UK carries these in its parameter tree rather than as simulated variables, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2026/11/3#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Finance Act 2026 section 3 outputs are the default and savings rate percentages; PolicyEngine UK carries these in its parameter tree rather than as simulated variables, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:statutes/ukpga/2026/11/9#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: The Finance Act 2026 section 9 output is the starting rate limit for savings amount; PolicyEngine UK carries this in its parameter tree rather than as a simulated variable, and parameter-level comparisons are not yet registered.
+
+  - legal_id_prefix: uk:regulations/uksi/2001/1004/10#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Regulation 10 outputs are the National Insurance earnings limits and thresholds; PolicyEngine UK carries these in its parameter tree rather than as simulated variables, and parameter-level comparisons are not yet registered.
+  # Council-level schemes are outside PolicyEngine-UK's model; exact
+  # mappings take precedence. Added for rulespec-uk#43.
+  - legal_id_prefix: "uk-kingston-upon-thames:"
+    country: uk
+    mapping_type: not_comparable
+    rationale: PolicyEngine-UK does not model council-level Council Tax Reduction schemes; Kingston upon Thames CTR is grounded to the council's published scheme document.

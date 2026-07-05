@@ -51,8 +51,11 @@ sha256-verified inside axiom-encode; axiom-encode#952). The harness emits a
 `dataset_identity` block in its `--json` output; the dashboard adapter threads
 it onto the generated v2 report so a checked-in report records which pinned
 artifact produced it. This is the FIIT lane of the A9 runner unification — one
-runner, one schema, one dashboard, with the ~17k LOC oracle bridge left in
-axiom-encode.
+runner, one schema, one dashboard. The ~19k LOC oracle bridge itself now lives
+in this repo as `axiom_oracles/bridges/` (axiom-encode re-exports it as thin
+shims); this runner still shells out to the encoder CLI in a pinned
+PolicyEngine environment, and pointing it at the in-repo package is a
+follow-up.
 
 Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 `rulespec_remote`. Required `parameters`: `sample_size`, `year`, `surface`.
