@@ -63,6 +63,8 @@
     "axiom-euromod-uk-income-tax-savings.json",
     "axiom-euromod-uk-income-tax-dividend.json",
     "axiom-euromod-uk-income-tax-mixed.json",
-    "axiom-euromod-uk-income-tax-scottish.json"
+    "axiom-euromod-uk-income-tax-scottish.json",
+    "axiom-euromod-be-maternity-leave.json",
+    "axiom-euromod-be-birth-leave.json"
   ]
 }

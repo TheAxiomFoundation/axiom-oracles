@@ -57,6 +57,7 @@ export const FAMILY_LABELS = {
   be_personal_income_tax: "Belgium personal income tax",
   be_social_security: "Belgium social security",
   be_social_assistance: "Belgium social assistance",
+  be_health_insurance: "Belgium health insurance",
 };
 
 const SUITE_OVERRIDES = {
@@ -339,6 +340,22 @@ const SUITE_OVERRIDES = {
     region: "be",
     kind: "household",
     order: 530,
+  },
+  "be-maternity-leave": {
+    family: "be_health_insurance",
+    jurisdiction: "BE",
+    label: "Belgium maternity leave indemnity",
+    region: "be",
+    kind: "household",
+    order: 540,
+  },
+  "be-birth-leave": {
+    family: "be_health_insurance",
+    jurisdiction: "BE",
+    label: "Belgium birth leave compensation",
+    region: "be",
+    kind: "household",
+    order: 541,
   },
   "uk-worker-pit": {
     family: "uk_income_tax",
