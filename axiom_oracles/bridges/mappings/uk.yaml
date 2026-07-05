@@ -1817,6 +1817,38 @@ mappings:
     comparison: money
     rationale: Same final annual Housing Benefit amount after PolicyEngine UK's would-claim gate and benefit-cap reduction over pre-cap Housing Benefit.
 
+  - legal_id: uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_applicable_amount
+    country: uk
+    program: housing_benefit
+    mapping_type: direct_variable
+    policyengine_variable: housing_benefit_applicable_amount
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Housing Benefit applicable amount (regulation 22 and Schedule 3 paragraph 1 personal allowance by family type and age band, plus premiums) after the UK EFRS bridge projects PolicyEngine's family type, eldest-adult age, any-member-pension-age and benefits_premiums into the composed pipeline, limited to benefit units passing PolicyEngine's housing_benefit_eligible gate.
+
+  - legal_id: uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement
+    country: uk
+    program: housing_benefit
+    mapping_type: direct_variable
+    policyengine_variable: housing_benefit_entitlement
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual Housing Benefit entitlement (regulation 70 / regulation 50 appropriate maximum housing benefit after the regulation 71 / regulation 51 65 per cent taper, capped at the maximum rent (LHA)) after the UK EFRS bridge projects PolicyEngine's applicable income, eligible rent and LHA cap into the composed pipeline, limited to eligible benefit units without a non-dependant deduction (99.4% of the Housing Benefit caseload by weight); PolicyEngine derives the non-dependant deduction from a household-composition aggregation the Family-level pipeline does not reproduce.
+
+  - legal_id: uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_non_dependant_deductions
+    country: uk
+    program: housing_benefit
+    mapping_type: not_comparable
+    entity: benunit
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: The composed pipeline computes the annual non-dependant deduction as the regulation 74 / regulation 55 income-banded amount per non-dependant times the number of non-dependants, but PolicyEngine derives housing_benefit_non_dep_deductions from a household-composition aggregation (household total minus benefit-unit total) that is not recoverable from a Family count and representative income, so the band table is exercised in the pipeline's companion tests rather than a running EFRS surface.
+
   - legal_id: uk:statutes/ukpga/2002/16/1#qualifying_age
     country: uk
     program: pension_credit
@@ -2899,6 +2931,12 @@ prefixes:
   # benefit cap) for the UKMOD comparison rather than adding new PolicyEngine
   # UK oracle variables. Added for rulespec-uk composed UC award pipeline
   # (axiom-oracles#128).
+  - legal_id_prefix: uk:policies/housing_benefit_composed_entitlement_pipeline#
+    country: uk
+    program: housing_benefit
+    mapping_type: not_comparable
+    rationale: Composed Family-level Housing Benefit entitlement pipeline; its personal-allowance, non-dependant-deduction-band, taper and intermediate outputs not listed above re-wire the separately encoded Housing Benefit Regulations 2006 regulation 22 / 70 / 71 / 74 and Schedule 3 provisions for the composed applicable-amount and entitlement comparison rather than adding new PolicyEngine UK oracle variables.
+
   - legal_id_prefix: uk:policies/universal_credit_composed_award_pipeline#
     country: uk
     program: universal_credit
