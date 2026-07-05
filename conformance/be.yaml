@@ -1,0 +1,620 @@
+# axiom_oracles.conformance.v1 — GENERATED universe facts + committed scope decisions.
+# Rows (policy id, oracle_policy_name, output_vars) are regenerated from the oracle
+# model spine by scripts/generate_conformance_universe.py — do NOT hand-edit those.
+# in_scope / exclusion_reason / suite / note ARE hand-authored decisions the generator
+# preserves; edit those here. CI fails if the generated facts drift from the model.
+schema: axiom_oracles.conformance.v1
+jurisdiction: be
+oracle:
+  model: EUROMOD
+  release: J2.0
+  system: BE_2025
+  country: BE
+  backend: euromod
+  label: EUROMOD_J2.0/BE_2025
+policies:
+  - id: be:ConstDef_be
+    oracle_policy_name: ConstDef_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:ILDef_be
+    oracle_policy_name: ILDef_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:ILsDef_be
+    oracle_policy_name: ILsDef_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:ILsUDBDef_be
+    oracle_policy_name: ILsUDBDef_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:InitVars_be
+    oracle_policy_name: InitVars_be
+    oracle_policy_type: def
+    output_vars:
+      - yiy_s
+      - bsa_s
+      - bls_s
+      - xccfd_s
+      - bed_s
+      - kivhooo_s
+      - yig_s
+      - biv_s
+      - bit_s
+      - yiviy01_s
+      - poa_s
+      - ddppr_s
+      - ddp_s
+    in_scope: false
+    internal_only_vars:
+      - temp_rand_ind
+      - temp_rand_ind2
+      - lnu
+      - liwmy_a
+      - yempv_a
+      - yem_a
+      - n/a
+      - amoyl
+    exclusion_reason: input_carrying
+    note: Initialises input variables consumed by later policies (writes bsa_s/bls_s/etc. as inputs),
+      not a computed instrument.
+  - id: be:SetDefault_be
+    oracle_policy_name: SetDefault_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - xhl00
+      - xed00
+    exclusion_reason: technical
+  - id: be:TUDef_be
+    oracle_policy_name: TUDef_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:TransLMA_be
+    oracle_policy_name: TransLMA_be
+    oracle_policy_type: def
+    output_vars:
+      - lmcee_s
+      - bwkmceemy_s
+      - yemmwmy_s
+      - lhwsr_s
+      - lmcse_s
+      - bwkmcsemy_s
+      - ysemwmy_s
+    in_scope: false
+    internal_only_vars:
+      - lma
+      - yem_a
+      - lhw_a
+      - yemmy_a
+    exclusion_reason: input_carrying
+    note: Labour-market-transition module, switched off; the XML comment says 'DO NOT SWITCH ON; ONLY
+      WORKS WITH THE [transition data]'. Carries transition inputs, not a distinct benefit/tax.
+  - id: be:bch_be
+    oracle_policy_name: bch_be
+    oracle_policy_type: ben
+    output_vars:
+      - bch_s
+      - sin01_s
+      - sin04_s
+      - sin10_s
+      - sin15_s
+      - sin11_s
+      - sin13_s
+    in_scope: true
+    internal_only_vars:
+      - n/a
+      - i_dchor01
+      - dchor01
+      - i_bch_fl_ind
+      - i_bch_fl_old
+      - i_bch_fl_new
+      - i_bch_wal_ind
+      - i_bch_wal_old
+      - i_bch_wal_new
+      - i_bch_br_ind
+      - i_bch_br_old
+      - i_bch_br_new
+      - i_bch_br_new_20
+      - i_bch_br_kho
+      - i_bch_fl_ind_fam
+    suite: be-family-child-benefit-base
+  - id: be:bchba_be
+    oracle_policy_name: bchba_be
+    oracle_policy_type: ben
+    output_vars:
+      - sin01_s
+      - bchba_s
+    in_scope: true
+    suite: be-family-birth-allowance
+  - id: be:bed_be
+    oracle_policy_name: bed_be
+    oracle_policy_type: ben
+    output_vars:
+      - sin07_s
+      - sin06_s
+      - sin05_s
+      - sin42_s
+      - sin43_s
+      - sin03_s
+      - sin02_s
+      - sin44_s
+      - sin45_s
+      - sin46_s
+      - sin47_s
+      - bed_s
+      - sin50_s
+      - sin40_s
+      - sin08_s
+      - sin48_s
+      - sin49_s
+      - sin14_s
+      - sin15_s
+      - sin16_s
+      - sin17_s
+    in_scope: true
+    internal_only_vars:
+      - i_bed_fl_be
+      - i_bed_fl_frac_be_BCH
+      - i_bed_fl_type_be_BCH
+      - i_bed_fl_points_be
+      - i_bed_fl_Y_be
+      - i_bed_fl_cat_be
+      - i_bed_FL_max_be
+      - i_bed_fl_min_be
+      - i_bed_fr_be
+      - i_bed_fr_min_be
+      - i_bed_fr_max_spec_be
+      - i_bed_fr_max_postsec_be
+      - i_bed_fr_max_sec_be
+      - n/a
+      - i_bed_fr_bsaY_be
+      - i_bed_fr_cat_be
+      - i_bed_fr_Y_be
+      - i_bed_FL_max_be_BCH
+      - i_bed_fl_min_be_BCH
+      - i_bed_fl_type_be
+      - i_bed_fl_frac_be
+      - i_bed_fl_repY_be
+    suite: null
+    note: 'BEN: study allowances (Flemish + French Community, 147 functions); not yet encoded in rulespec-be,
+      no live suite.'
+  - id: be:bfapl_be
+    oracle_policy_name: bfapl_be
+    oracle_policy_type: ben
+    output_vars:
+      - bfapl_s
+    in_scope: true
+    internal_only_vars:
+      - i_lpb
+      - i_elparent_bfapl
+      - i_amount_fulltime
+      - i_amount_halftime
+      - i_amount_fifthtime
+      - bfapl
+      - i_amount_tenthtime
+      - i_elchild_bfapl_year0
+      - i_nelchildren_bfapl_year0
+      - i_agemonths_bfapl_year0
+      - i_durmonths_bfapl_year0
+    suite: null
+    note: 'BEN: parental-leave allowance (RVA/ONEM career-break); not encoded, no live suite.'
+  - id: be:bmact_be
+    oracle_policy_name: bmact_be
+    oracle_policy_type: ben
+    output_vars:
+      - bmact_s
+    in_scope: true
+    internal_only_vars:
+      - i_elparent
+      - i_durdays_em
+      - i_agedays
+      - i_nelchildren
+      - i_elchild
+      - i_yempv
+      - i_amount_em
+      - i_amount_un
+      - i_amount_se
+      - i_elparent_em
+      - i_elparent_un
+      - i_elparent_se
+      - i_durdays_se
+      - i_durdays_temp
+    suite: null
+    note: 'BEN: maternity-leave indemnity; suite be-maternity-leave is registered but NOT in the published
+      dashboard set — counts as not covered until a live report exists.'
+  - id: be:bpact_be
+    oracle_policy_name: bpact_be
+    oracle_policy_type: ben
+    output_vars:
+      - bpact_s
+    in_scope: true
+    internal_only_vars:
+      - i_elparent_bpact
+      - i_amount_bpact
+    suite: null
+    note: 'BEN: paternity/birth-leave compensation; suite be-birth-leave is registered but NOT published
+      — counts as not covered until live.'
+  - id: be:bsa_be
+    oracle_policy_name: bsa_be
+    oracle_policy_type: ben
+    output_vars:
+      - bsa_s
+      - yiviy_s
+      - yivpr_s
+      - bsaen_s
+      - sin01_s
+      - bsamt01_s
+      - bsamt03_s
+      - sin03_s
+      - bsamt02_s
+      - bsamt04_s
+    in_scope: true
+    internal_only_vars:
+      - ISSPI_s
+      - nparents
+      - i_bsa_sort
+      - nchildren
+    suite: be-social-assistance
+  - id: be:bsaoa_be
+    oracle_policy_name: bsaoa_be
+    oracle_policy_type: ben
+    output_vars:
+      - yiviy01_s
+      - yivpr01_s
+      - bsaoa_s
+      - yeaoamn_s
+    in_scope: false
+    exclusion_reason: not_a_policy
+    note: Elderly income guarantee (GRAPA/IGO); switched OFF by default ('TO BE SWITCHED ON MANUALLY,
+      otherwise from data'). The registered be-elderly-income-support suite is unpublished; with the policy
+      off, the oracle simulates nothing here in a default BE_2025 run.
+  - id: be:bun_be
+    oracle_policy_name: bun_be
+    oracle_policy_type: ben
+    output_vars:
+      - yempv_s
+      - bun_s
+    in_scope: false
+    internal_only_vars:
+      - i_bunmw
+      - i_bunel
+      - i_bunpw01
+      - i_bunpw02
+      - i_lunmy
+      - bun
+      - i_bunft
+    exclusion_reason: not_a_policy
+    note: Unemployment benefit marked 'PART SIMULATED' but switched OFF in BE_2025 — unemployment income
+      is carried from the input data, so the oracle simulates no computed amount in a default run.
+  - id: be:bwkrg_be
+    oracle_policy_name: bwkrg_be
+    oracle_policy_type: ben
+    output_vars:
+      - bwkrg_s
+    in_scope: true
+    suite: be-flemish-jobbonus
+  - id: be:byr_be
+    oracle_policy_name: byr_be
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: Early-retirement benefit; switch n/a and writes no output — pension/early-retirement income
+      is taken from the input data.
+  - id: be:hhot_switch_be
+    oracle_policy_name: hhot_switch_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:neg_be
+    oracle_policy_name: neg_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - yse
+    exclusion_reason: technical
+  - id: be:output_std_be
+    oracle_policy_name: output_std_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:output_std_hh_be
+    oracle_policy_name: output_std_hh_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:random_be
+    oracle_policy_name: random_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - temp_rand
+      - temp_rand_ind
+      - i_ntu_bsaoa
+      - i_ntu_bsaoa_ind
+      - i_ntu_bir
+      - i_ntu_bir_ind
+      - i_ntu_bha
+      - i_ntu_bha_ind
+      - temp_rand2
+      - temp_rand_ind2
+      - i_mc_rand_1
+      - i_mc_rand_2
+      - i_mc_rand_3
+      - i_lma1
+      - i_lma2
+      - i_lmamy
+    exclusion_reason: technical
+  - id: be:tci_be
+    oracle_policy_name: tci_be
+    oracle_policy_type: sic
+    output_vars:
+      - tci_s
+      - brv_s
+      - kivhooo_s
+      - sin01_s
+    in_scope: true
+    suite: be-flemish-social-protection-premium
+  - id: be:tco_be
+    oracle_policy_name: tco_be
+    oracle_policy_type: tax
+    output_vars: []
+    in_scope: false
+    exclusion_reason: extension_not_available
+    note: Indirect consumption tax (VAT/excise). In BE_2025 its body is 15 DefConst/DefIl functions with
+      no OutputVar and no compute function, and the public EUROMOD_RELEASES_J2.0+ ships no consumption-tax
+      extension (no CT_X* add-on computes VAT/excise) and no COICOP expenditure microdata. So the oracle
+      cannot simulate a comparable amount; the policy would be a real tax only with the absent extension.
+      Verdict recorded in euromod_be_coverage.json (tco_be.conformance), axiom-oracles#144.
+  - id: be:tinfe_be
+    oracle_policy_name: tinfe_be
+    oracle_policy_type: tax
+    output_vars:
+      - tintcly_s
+      - tintcch_s
+      - sin17_s
+      - tin_s
+      - tintami_s
+      - sin26_s
+      - sin27_s
+      - tintcmg_s
+      - sin20_s
+      - sin18_s
+      - sin22_s
+    in_scope: true
+    internal_only_vars:
+      - n/a
+    suite: null
+    note: 'TAX: PIT fiscal expenditures (childcare, service vouchers, donations); partially encoded, no
+      dedicated live suite.'
+  - id: be:tinkt_be
+    oracle_policy_name: tinkt_be
+    oracle_policy_type: tax
+    output_vars:
+      - tinkt_s
+    in_scope: true
+    suite: null
+    note: 'TAX: capital income tax (separately-taxed movable income); encoded (movable_withholding) but
+      supplied as 0 in the pilot, no live suite.'
+  - id: be:tinmu_be
+    oracle_policy_name: tinmu_be
+    oracle_policy_type: tax
+    output_vars:
+      - tinmu_s
+      - tin_s
+    in_scope: true
+    suite: null
+    note: 'TAX: municipal PIT surcharge (communal centimes); encoded (communal_additions) but not compared
+      by a live suite.'
+  - id: be:tinna_be
+    oracle_policy_name: tinna_be
+    oracle_policy_type: tax
+    output_vars:
+      - tints_s
+      - tintcri_s
+      - tinna_s
+      - tin_s
+      - tintatb_s
+      - tintatb01_s
+      - tintatc_s
+      - tintatc01_s
+      - sin08_s
+    in_scope: true
+    internal_only_vars:
+      - tmp_tinna
+      - n/a
+      - tmp_reduc_gen
+      - tmp_reduc_bun
+      - temp_tintatb_notused
+      - tmp_tintcri_extra
+    suite: be-worker-pit
+  - id: be:tinrg_be
+    oracle_policy_name: tinrg_be
+    oracle_policy_type: tax
+    output_vars:
+      - tinrg_s
+      - tinrg01_s
+      - tin_s
+    in_scope: true
+    suite: null
+    note: 'TAX: regional PIT surcharges; partially encoded (communal additions / regional autonomy factor),
+      no dedicated live suite.'
+  - id: be:tintace_be
+    oracle_policy_name: tintace_be
+    oracle_policy_type: tax
+    output_vars:
+      - tintace_s
+    in_scope: true
+    suite: null
+    note: 'TAX: PIT professional-expense forfait; encoded (article_51_forfaits), exercised only via the
+      worker pilot, no dedicated live suite.'
+  - id: be:tintb_be
+    oracle_policy_name: tintb_be
+    oracle_policy_type: tax
+    output_vars:
+      - tintasp_s
+      - tintals_s
+      - tintami_s
+      - tintcmg_s
+      - sin03_s
+      - sin04_s
+      - sin01_s
+      - sin02_s
+      - sin05_s
+      - sin06_s
+      - tintadt_s
+      - sin30_s
+      - sin31_s
+      - sin32_s
+      - sin33_s
+      - xccfd_s
+    in_scope: true
+    internal_only_vars:
+      - n/a
+      - kivho
+    suite: null
+    note: 'TAX: PIT deductions & marital quotient; partially encoded, not oracle-decomposed to tintb.
+      Distinct policy from the covered tinna PIT.'
+  - id: be:tprhm_be
+    oracle_policy_name: tprhm_be
+    oracle_policy_type: tax
+    output_vars:
+      - tprhm_s
+      - tprhmtr_s
+    in_scope: true
+    suite: be-property-tax
+  - id: be:tscee_be
+    oracle_policy_name: tscee_be
+    oracle_policy_type: sic
+    output_vars:
+      - yem01_s
+      - tsceepi_s
+      - tsceehl_s
+      - tsceedi_s
+      - tsceeui_s
+      - tscee_s
+      - tscdb_s
+      - yemeq_s
+      - tsceerd_s
+      - tsceerdwb02B_s
+    in_scope: true
+    internal_only_vars:
+      - wbhours_s
+      - i_tsceerdB_s
+      - n/a
+      - i_tsceerdA_s
+    suite: be-worker-ssc
+  - id: be:tsceesp_be
+    oracle_policy_name: tsceesp_be
+    oracle_policy_type: sic
+    output_vars:
+      - tsceesp_s
+    in_scope: true
+    internal_only_vars:
+      - n/a
+    suite: be-special-social-security-contribution
+  - id: be:tscer_be
+    oracle_policy_name: tscer_be
+    oracle_policy_type: sic
+    output_vars:
+      - tscersf_s
+      - tscerui_s
+      - tscerei_s
+      - tscerhe_s
+      - tscerpi_s
+      - tscerhl_s
+      - tscerfa_s
+      - tscerdc_s
+      - tscer00_s
+      - sin02_s
+      - sin03_s
+      - sin04_s
+      - tscerrd_s
+      - tscer_s
+    in_scope: true
+    internal_only_vars:
+      - n/a
+    suite: be-employer-ssc
+  - id: be:tscpe_be
+    oracle_policy_name: tscpe_be
+    oracle_policy_type: sic
+    output_vars:
+      - tscpe_s
+    in_scope: true
+    suite: null
+    note: 'SIC: pensioner health/disability + solidarity contribution; encoded (chapter_10_special_contributions)
+      but no live oracle suite.'
+  - id: be:tscse_be
+    oracle_policy_name: tscse_be
+    oracle_policy_type: sic
+    output_vars:
+      - tscse_s
+    in_scope: true
+    suite: be-self-employed-ssc
+  - id: be:uprate_be
+    oracle_policy_name: uprate_be
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: be:yem_be
+    oracle_policy_name: yem_be
+    oracle_policy_type: inc
+    output_vars:
+      - yem02_s
+      - yem03_s
+      - yem04_s
+      - yem01_s
+    in_scope: false
+    internal_only_vars:
+      - yem
+    exclusion_reason: technical
+    note: Minimum-wage definition (Type inc, switched off in BE_2025); a definitional input, not a benefit
+      or tax the oracle pays out.
+  - id: be:yemcomp_be
+    oracle_policy_name: yemcomp_be
+    oracle_policy_type: ben
+    output_vars:
+      - yemmw_s
+      - bwkmcee_s
+    in_scope: true
+    internal_only_vars:
+      - i_bwkmcee_s
+    suite: null
+    note: 'BEN: Covid-19 temporary-unemployment wage compensation (employees); switch-on but a historical
+      crisis scheme. Carried in scope pending an explicit exclusion decision (issue being filed) rather
+      than silently excluded.'
+  - id: be:ysecomp_be
+    oracle_policy_name: ysecomp_be
+    oracle_policy_type: ben
+    output_vars:
+      - bwkmcse_s
+      - bwkmcse01_s
+      - bwkmcse02_s
+    in_scope: true
+    internal_only_vars:
+      - i_bwkmcse01_s
+      - i_bwkmcse02_s
+    suite: null
+    note: 'BEN: Covid-19 wage compensation (self-employed bridging right); switch-on but historical. Carried
+      in scope pending the same exclusion decision.'

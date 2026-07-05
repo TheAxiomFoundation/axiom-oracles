@@ -1,0 +1,963 @@
+# axiom_oracles.conformance.v1 — GENERATED universe facts + committed scope decisions.
+# Rows (policy id, oracle_policy_name, output_vars) are regenerated from the oracle
+# model spine by scripts/generate_conformance_universe.py — do NOT hand-edit those.
+# in_scope / exclusion_reason / suite / note ARE hand-authored decisions the generator
+# preserves; edit those here. CI fails if the generated facts drift from the model.
+schema: axiom_oracles.conformance.v1
+jurisdiction: uk
+oracle:
+  model: UKMOD_PUBLIC
+  release: B2026.03
+  system: UK_2026
+  country: UK
+  backend: euromod
+  label: UKMOD_PUBLIC_B2026.03/UK_2026
+policies:
+  - id: uk:BTA_uk
+    oracle_policy_name: BTA_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - i_rand_tu
+    exclusion_reason: takeup_adjustment
+  - id: uk:ConstDef_uk
+    oracle_policy_name: ConstDef_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: technical
+  - id: uk:FYADefault_uk
+    oracle_policy_name: FYADefault_uk
+    oracle_policy_type: inc
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - glfya1
+      - n/a
+    exclusion_reason: technical
+  - id: uk:FYA_uk
+    oracle_policy_name: FYA_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - glfya1
+      - n/a
+    exclusion_reason: technical
+  - id: uk:ILDef_uk
+    oracle_policy_name: ILDef_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:ILSDef_uk
+    oracle_policy_name: ILSDef_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:ILSUDBDef_uk
+    oracle_policy_name: ILSUDBDef_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:InitVars_uk
+    oracle_policy_name: InitVars_uk
+    oracle_policy_type: def
+    output_vars:
+      - yselo_s
+      - ychot_s
+      - ychmp_s
+      - tinsa_s
+      - sin01_s
+      - sin03_s
+      - sin02_s
+      - sin04_s
+      - bsauc_s
+      - tpcee_s
+      - sin05_s
+    in_scope: false
+    internal_only_vars:
+      - yot01
+      - ydgchmp_s
+      - yptmp
+      - i_ptype_elderly
+      - i_ftype_hh_nChildren
+      - i_ftype_hh_wE
+      - i_ftype_hh_nEarners
+      - i_ftype_hh_lp
+      - i_ftype_hh_ymum
+      - i_ftype_hh_disab
+      - i_ftype_hh_nAdults
+      - i_ftype_hh_nPensionAge
+      - i_ftype_hh_nkidsu5
+    exclusion_reason: input_carrying
+  - id: uk:Output_init_uk
+    oracle_policy_name: Output_init_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - ntax
+      - mntr_earns
+      - mntr_ypp
+      - mntr_yprtx
+      - mntr_other
+      - mntr_yiytx
+    exclusion_reason: technical
+  - id: uk:Output_std_hh_uk
+    oracle_policy_name: Output_std_hh_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:Output_std_uk
+    oracle_policy_name: Output_std_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:PAA_uk
+    oracle_policy_name: PAA_uk
+    oracle_policy_type: ben
+    output_vars:
+      - boact_s
+    in_scope: true
+    internal_only_vars:
+      - boactcm
+      - yem
+      - lhw00
+      - yse
+      - lhw01
+      - tpceepx
+      - lim
+      - liwwh
+      - lhw
+    suite: null
+    note: 'Switchable state-pension-age adjustment policy (Type marked ben in the spine, Comment ''DEF:
+      Pension age adjustment''); writes boact_s. Kept in scope as an uncovered surface.'
+  - id: uk:SetDefault_uk
+    oracle_policy_name: SetDefault_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - dhr
+    exclusion_reason: technical
+  - id: uk:TUDef_uk
+    oracle_policy_name: TUDef_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:Uprate_uk
+    oracle_policy_name: Uprate_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:UseHBAI_uk
+    oracle_policy_name: UseHBAI_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - yem
+      - yse
+      - dwt
+      - ypp
+      - yot01
+      - yds
+      - yiynt
+      - ypr
+      - yiytx
+      - yittx
+      - ydvtx
+      - yptmp
+      - ypt
+      - yptot
+      - yprtx
+      - yiy_yprtx
+      - yiy
+    exclusion_reason: technical
+  - id: uk:bcap_uk
+    oracle_policy_name: bcap_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bsadi02_s
+      - brd_s
+      - brduc_s
+    in_scope: true
+    internal_only_vars:
+      - i_bcap_finalAmt
+      - i_bcap_NoExempt
+      - i_bcap_AmtCap
+      - n/a
+    suite: null
+  - id: uk:bch_uk
+    oracle_policy_name: bch_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bch_s
+    in_scope: true
+    suite: null
+  - id: uk:bched01_uk
+    oracle_policy_name: bched01_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bched01_s
+    in_scope: true
+    internal_only_vars:
+      - i_bched01a
+      - i_bched01b
+      - i_bched01c
+      - i_bched01d
+      - i_UC_means_earned_adj
+      - n/a
+      - sel2_s
+    suite: null
+  - id: uk:bched02_uk
+    oracle_policy_name: bched02_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bched02_s
+    in_scope: true
+    suite: null
+  - id: uk:bchht_uk
+    oracle_policy_name: bchht_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bchht_s
+    in_scope: true
+    internal_only_vars:
+      - i_bdisc00
+      - i_bdisc01
+      - i_bdiscwa00
+      - i_bdiscwa01
+    suite: null
+  - id: uk:bchmt01_uk
+    oracle_policy_name: bchmt01_uk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: 'Scottish Child Payment bridging payments: every function n/a in UK_2026 — the transitional
+      bridging scheme has ended.'
+  - id: uk:bchmt_uk
+    oracle_policy_name: bchmt_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bchmt_s
+    in_scope: true
+    suite: null
+  - id: uk:bchrd_uk
+    oracle_policy_name: bchrd_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bch_s
+      - bchrd_s
+    in_scope: true
+    suite: null
+  - id: uk:bcrdicm_uk
+    oracle_policy_name: bcrdicm_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bcrdicm_s
+    in_scope: true
+    internal_only_vars:
+      - i_bcrdi
+    suite: null
+  - id: uk:bdi_uk
+    oracle_policy_name: bdi_uk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - ddipd
+      - bdimbwa
+      - bdimb
+      - bdioa
+      - bdiscwa
+      - bdisc
+      - receive_pip_s
+      - i_idchilddisability
+      - i_idchilddis2
+    exclusion_reason: not_a_policy
+    note: Adjusts existing disability-benefit inputs (bdisc/bdimb/…) rather than computing a distinct
+      instrument; its only near-output (receive_pip_s) is an imputed-input flag, not a payable amount.
+  - id: uk:bdisc_uk
+    oracle_policy_name: bdisc_uk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - bdisc
+    exclusion_reason: not_a_policy
+    note: Adjusts the number of DLA recipients post-2011 (a recipient reweighting), not a distinct payable
+      benefit; writes no queryable _s output in UK_2026.
+  - id: uk:bho_uk
+    oracle_policy_name: bho_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bwkmtcmyn_s
+      - ydg03_s
+      - yiviy03_s
+      - ymn01_s
+      - bho_s
+    in_scope: true
+    internal_only_vars:
+      - i_bho_FamPremium
+      - i_bho_FamDisChildPremium
+      - i_bho_DisPremium1
+      - i_bho_SevDisPremium
+      - i_bho_CarerPremium
+      - i_bho_DisPremium2
+      - i_bho_PersAllow
+      - i_bho_DisPremium3
+      - i_bho_prelimAmt
+      - i_bho_EligEarnsDisregard
+      - i_bho_EligChildCareDisregard1
+      - i_bho_EligChildCareDisregard2
+      - i_bho_RespHousCosts
+      - i_bho_EligHousCosts
+      - i_bho_Deductions
+      - i_bho_maxHousBen
+      - i_bho_noUC
+      - i_bho_s_orig
+      - i_bho_grptu
+      - i_bho_turtob
+      - i_bho_s_ftu
+      - i_bho_probtu
+      - i_bho_noUC_ind
+      - i_bho_grptr
+      - i_bho_trrtob
+      - i_bho_probtrback
+      - i_bho_probtr
+      - i_bho_yesUC
+      - i_excess_nRooms
+    suite: null
+  - id: uk:bhosc01_uk
+    oracle_policy_name: bhosc01_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bhosc01_s
+    in_scope: true
+    suite: null
+  - id: uk:bmact_uk
+    oracle_policy_name: bmact_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bmact_s
+    in_scope: true
+    internal_only_vars:
+      - i_elparent_bmact
+      - i_elchild_bmact
+      - i_nelchildren_bmact
+      - i_ageweeks_bmact
+      - i_durweeks_bmact
+      - i_durweeks_bmact2
+      - i_yempv_bmact
+      - i_bmact
+    suite: null
+    note: UKMOD Country Report marks Statutory Maternity Pay 'not simulated in the baseline', but the
+      UK_2026 policy is switch-on and writes bmact_s; kept in scope as an uncovered surface.
+  - id: uk:bmamt01_uk
+    oracle_policy_name: bmamt01_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bmamt01_s
+    in_scope: true
+    suite: null
+  - id: uk:bmamt_uk
+    oracle_policy_name: bmamt_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bmamt_s
+    in_scope: true
+    suite: null
+  - id: uk:bmanc_uk
+    oracle_policy_name: bmanc_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bmanc_s
+    in_scope: true
+    internal_only_vars:
+      - i_elparent_bmanc
+      - i_elchild_bmanc
+      - i_nelchildren_bmanc
+      - i_ageweeks_bmanc
+      - i_durweeks_bmanc
+      - i_yempv_bmanc
+      - i_bmanc
+    suite: null
+    note: UKMOD Country Report marks Maternity Allowance 'not simulated in the baseline', but the UK_2026
+      policy is switch-on and writes bmanc_s; kept in scope as an uncovered surface.
+  - id: uk:bmascmt01_uk
+    oracle_policy_name: bmascmt01_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bmascmt01_s
+    in_scope: true
+    suite: null
+  - id: uk:bmascmt_uk
+    oracle_policy_name: bmascmt_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bmascmt_s
+    in_scope: true
+    internal_only_vars:
+      - i_bmascmt01_s
+      - i_bmascmt04_s
+      - i_bmascmt03_s
+      - i_bmascmt02_s
+    suite: null
+  - id: uk:bmu_uk
+    oracle_policy_name: bmu_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bwkmtcmyn_s
+      - ydg03_s
+      - ymn01_s
+      - bmu_s
+    in_scope: false
+    internal_only_vars:
+      - i_bmu_nBabies
+      - i_bmu_FamPremium
+      - i_bmu_EligDisPremium1
+      - i_bmu_EligSevDisPremium
+      - i_bmu_EligCarerPremium
+      - i_bmu_EligDisPremium2
+      - i_bmu_PersAllow
+      - i_bmu_DisPremium
+      - i_bmu_EligEarnsDisregard
+      - i_bmu_EligChildCareDisregard1
+      - i_bmu_EligChildCareDisregard2
+      - i_bmu_RespHousCosts
+      - i_bmu_Deductions1
+      - i_bmu_Deductions2
+      - i_bmu_maxAmt
+      - i_ctrEligLB1
+      - i_ctrEligUC1
+      - i_bmu_s_orig
+      - i_bmu_grptu
+      - i_bmu_turtob
+      - i_bmu_s_ftu
+      - i_bmu_probtu
+      - i_bmu_PersAllowUC
+      - i_bmu_prelimAmt
+      - i_bmu_ws
+      - i_bmu_tmu
+      - i_ctrEligLB2
+      - i_ctrEligLB
+      - i_ctrEligUC2
+      - i_ctrEligUC
+    exclusion_reason: unobservable_boundary
+    note: 'UKMOD Country Report §2.5.6: Council Tax Reduction is a deliberately simplified national scheme;
+      post-2013 local heterogeneity is ''not reflected''. The applicable amount (i_bmu_prelimAmt) and
+      non-dependant deductions (i_bmu_Deductions2) are i_-locals absent from VARCONFIG; only bmu_s/ymn01_s
+      are queryable, so no non-degenerate comparison is possible. rulespec-uk encodes the SI 2012/2885
+      pension-age prescribed scheme taking exactly those internals as inputs.'
+  - id: uk:boact_uk
+    oracle_policy_name: boact_uk
+    oracle_policy_type: ben
+    output_vars:
+      - boact_s
+    in_scope: true
+    suite: null
+  - id: uk:boaht_uk
+    oracle_policy_name: boaht_uk
+    oracle_policy_type: ben
+    output_vars:
+      - boaht_s
+    in_scope: true
+    suite: null
+  - id: uk:bpact_uk
+    oracle_policy_name: bpact_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bpact_s
+    in_scope: true
+    internal_only_vars:
+      - i_elparent_bpact
+      - i_yempv_bpact
+      - i_bpact
+    suite: null
+    note: UKMOD Country Report marks Statutory Paternity Pay 'not simulated in the baseline', but the
+      UK_2026 policy is switch-on and writes bpact_s; kept in scope as an uncovered surface, not excluded.
+  - id: uk:bsa_uk
+    oracle_policy_name: bsa_uk
+    oracle_policy_type: ben
+    output_vars:
+      - ydg01_s
+      - yiviy01_s
+      - bunmt_s
+      - bsa_s
+      - boamtmm_s
+      - boamtxp_s
+      - bfamt_s
+      - boamt_s
+    in_scope: true
+    internal_only_vars:
+      - i_bsa_EligDisPremium
+      - i_bsa_SevDisPremium
+      - i_bsa_CarerPremium
+      - i_bsa_DisPremium
+      - i_bsa_PremiumBenUnit
+      - i_bsa_prelimAmt1
+      - i_bsa_prelimAmt2
+      - i_bsa_prelimGC1
+      - i_bsa_ThreshSC
+      - i_bsa_maxSC
+      - i_bsa_prelimAmt3
+      - i_bsa_prelimAmt4
+      - i_bsa_EligSC
+      - i_bsa_prelimSC
+      - i_bsa_RespHousCosts
+      - i_bsa_EligHousCosts
+      - i_bsa_DeductHousCosts1
+      - i_bsa_DeductHousCosts2
+      - i_bsa_prelimAmt5
+      - i_bsa_prelimAmt6
+      - i_bsa_prelimPC
+      - i_bsa_PersAllow
+      - i_bsa_boamtmm_noUC
+      - i_bsa_boamtxp_noUC
+      - i_bsa_noUC
+      - i_bsa_s_orig
+      - i_bsa_grptu
+      - i_bsa_turtob
+      - i_bsa_s_ftu
+      - i_bsa_probtu
+      - i_bsa_trrtob
+      - i_bsa_probtrback
+      - i_bsa_probtr
+      - i_bsa_yesUC
+      - i_boamt_grptr
+      - i_boamtmm_trrtob
+      - i_boamtmm_probtrback
+      - i_boamtmm_probtr
+      - i_bsa_boamtmm_yesUC
+      - i_boamtxp_trrtob
+      - i_boamtxp_probtrback
+      - i_boamtxp_probtr
+      - i_bsa_boamtxp_yesUC
+      - i_boamtmm_turob
+      - i_boamtmm_probtu
+      - i_boamtxp_turob
+      - i_boamtxp_probtu
+      - afc_s
+    suite: null
+  - id: uk:bsadi_uk
+    oracle_policy_name: bsadi_uk
+    oracle_policy_type: ben
+    output_vars:
+      - ydg01_s
+      - bsadi00_s
+      - bsadi01_s
+      - bsadi_s
+      - bsa_s
+    in_scope: true
+    internal_only_vars:
+      - i_bsadi_EligSevDisPremium
+      - i_bsadi_EligCarerPremium
+      - i_bsadi_EligDisPremium
+      - i_bsadi_PersAllow
+      - i_bsadi_DisPremium
+      - i_bsadi_prelimAmt1
+      - i_bsadi_Elig
+      - i_bsadi_prelimAmt2
+      - i_bsadi_RespHousCosts
+      - i_bsadi_EligHousCosts
+      - i_bsadi_Deductions1
+      - i_bsadi_Deductions2
+      - i_bsadi_prelimAmt3
+      - i_bsadi_noUC
+      - i_bsadi_trrtob
+      - i_bsadi_probtrback
+      - i_bsadi_probtr
+      - i_bsadi_yesUC
+      - i_bsadi_grptu
+      - i_bsadi_turtob
+      - i_bsadi_s_ftu
+      - i_bsadi_probtu
+    suite: null
+  - id: uk:bsaec_uk
+    oracle_policy_name: bsaec_uk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: 'Cost of Living Payment: every function n/a in UK_2026 — the one-off payments have ended.'
+  - id: uk:bsauc_uk
+    oracle_policy_name: bsauc_uk
+    oracle_policy_type: ben
+    output_vars:
+      - ydg02_s
+      - yiviy02_s
+      - bsauc_s
+    in_scope: true
+    internal_only_vars:
+      - i_bsauc_AmtFam
+      - i_bsauc_AmtChild
+      - i_bsauc_AmtDisAdult
+      - i_bsauc_AmtCarer
+      - i_bsauc_AmtChildCare
+      - i_bsauc_RespHousCosts
+      - i_bsauc_Deductions2
+      - i_bsauc_maxHousBen
+      - i_bsauc_prelimAmt
+      - i_bsauc_Disregards1
+      - i_bsauc_Disregards2
+      - i_bsauc_stdAllow
+      - i_bsauc_RespChild
+      - i_bsauc_Deductions1
+      - i_smi
+      - i_bsauc_Elig1
+      - i_bsauc_Elig2
+      - i_bsauc_Elig3
+      - i_bsauc_Elig
+      - i_mif_nic
+      - i_mif
+      - i_mif_stax1
+      - i_mif_py
+      - i_mif_stax2
+      - i_mif_sey
+      - i_mif_nety
+      - i_bsauc_nety
+      - n/a
+      - i_bsauc_grptu
+      - i_bsauc_turtob
+      - i_bsauc_probtuback
+      - i_bsauc_probtu
+      - i_bsauc_s_ptu
+      - seriously_ill_s
+    suite: uk-universal-credit
+  - id: uk:bunct_uk
+    oracle_policy_name: bunct_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bunct_s
+      - liwmy_s
+      - yempv_s
+    in_scope: true
+    internal_only_vars:
+      - i_bunct_IncDisregard
+    suite: null
+  - id: uk:bwkmt_bfamt_uk
+    oracle_policy_name: bwkmt_bfamt_uk
+    oracle_policy_type: ben
+    output_vars:
+      - bwkmtcm_s
+      - ydg04_s
+      - bfamt_s
+      - bwkmt_s
+      - bfamttm_s
+    in_scope: true
+    internal_only_vars:
+      - i_bwkmt_bfamt_Disab
+      - i_bwkmt_ChildCare
+      - i_bwkmt_maxAmt
+      - i_bwkmt_maxAmt_plusChildCare
+      - i_bfamt_Elig
+      - i_bfamt_AmtFamily
+      - i_bfamt_AmtChild
+      - i_bwkmt_bfamt_Amt
+      - i_bwkmt_bfamt_withdrawnAmt
+      - i_bfamt_withdrawnAmt
+      - i_bfamt_s_ftu
+      - i_bwkmt_allocatedAmt
+      - i_bwkmt_notWorking
+      - i_bwkmt_s_ftu
+      - i_bwkmt_noUC
+      - i_bfamt_noUC
+      - n/a
+      - i_bfamt_grptu
+      - i_bfamt_turtob
+      - i_bfamt_probtu
+      - i_bwkmt_grptu
+      - i_bwkmt_turtob
+      - i_bwkmt_probtu
+      - i_bfamt_trrtob
+      - i_bfamt_probtrback
+      - i_bfamt_probtr
+      - i_bfamt_yesUC
+      - i_bwkmt_trrtob
+      - i_bwkmt_probtrback
+      - i_bwkmt_probtr
+      - i_bwkmt_yesUC
+    suite: null
+  - id: uk:cjrs_uk
+    oracle_policy_name: cjrs_uk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: 'Coronavirus Job Retention Scheme 2020/21: every function is switched n/a in UK_2026 (produces
+      no output) — a dormant historical module.'
+  - id: uk:countries_uk
+    oracle_policy_name: countries_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:covshocks_benreceipt_uk
+    oracle_policy_name: covshocks_benreceipt_uk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: 'Covid-19 receipt shocks 2020/21: every function n/a in UK_2026 — dormant historical module.'
+  - id: uk:lha_uk
+    oracle_policy_name: lha_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - i_lha30
+    exclusion_reason: technical
+  - id: uk:mif_uk
+    oracle_policy_name: mif_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - i_mif_exempt
+      - i_mif_h
+      - i_mif_y
+    exclusion_reason: technical
+  - id: uk:neg_uk
+    oracle_policy_name: neg_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - yse
+      - i_yse0
+    exclusion_reason: technical
+  - id: uk:random_uk
+    oracle_policy_name: random_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - i_rand_dla
+      - i_rand_uc
+      - n/a
+      - i_rand_un
+      - i_rand_uclcw
+      - i_rand_bdis
+    exclusion_reason: technical
+  - id: uk:seiss_uk
+    oracle_policy_name: seiss_uk
+    oracle_policy_type: inc
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - n/a
+    exclusion_reason: not_a_policy
+    note: 'Self-employment Income Support Scheme 2020/21: every function n/a in UK_2026 — dormant historical
+      module.'
+  - id: uk:tco_calcadjusted_uk
+    oracle_policy_name: tco_calcadjusted_uk
+    oracle_policy_type: ben
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - tco_adj_ta_02131
+      - tco_adj_ta_02111
+      - tco_adj_ta_02121
+      - tco_adj_ta_02122
+      - tco_adj_ta_02211
+      - tco_adj_ta_02212
+      - tco_adj_ta_04531
+      - tco_adj_tv_02211
+      - tco_adj_ta_07221
+      - tco_adj_tt
+      - tco_adj_ta_02213
+    exclusion_reason: unobservable_boundary
+    note: 'Indirect-tax TCO extension: writes tco_adj_* figures inflated to national accounts, none in
+      VARCONFIG; not per-case queryable.'
+  - id: uk:tco_calcbase_uk
+    oracle_policy_name: tco_calcbase_uk
+    oracle_policy_type: tax
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - tco_ta_07221
+    exclusion_reason: unobservable_boundary
+    note: 'Indirect-tax (excise/VAT) TCO extension: writes internal tco_ta_* consumption-tax bases that
+      are not _s outputs and not in VARCONFIG; not a per-case queryable instrument. Out of scope for the
+      direct-tax/benefit conformance surface.'
+  - id: uk:tco_calcprelim_uk
+    oracle_policy_name: tco_calcprelim_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:tco_ce_uk
+    oracle_policy_name: tco_ce_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - adjfact_x1
+      - bsav
+      - adjfact_x2
+    exclusion_reason: technical
+  - id: uk:tco_cq_uk
+    oracle_policy_name: tco_cq_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - adjfact_x
+    exclusion_reason: technical
+  - id: uk:tco_cy_uk
+    oracle_policy_name: tco_cy_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - adjfact_x
+    exclusion_reason: technical
+  - id: uk:tco_paraminit_uk
+    oracle_policy_name: tco_paraminit_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    exclusion_reason: technical
+  - id: uk:tin_uk
+    oracle_policy_name: tin_uk
+    oracle_policy_type: tax
+    output_vars:
+      - tints_s
+      - tin_s
+      - tin12_s
+      - tin11_s
+      - tin00_s
+      - tinsa_s
+    in_scope: true
+    internal_only_vars:
+      - i_tin_prelim_rUK
+      - i_tin_prelimMCA
+      - i_tin_finalMCA
+      - i_tin_unusedMCA
+      - i_tin_unusedPTA2
+      - i_tin_transferablePTA
+      - i_tin_unusedPTA1
+      - i_tin_prelim_Sc
+      - i_tin_reducedMCA
+      - i_taxabley
+      - i_tin_prelim_disc_Wl
+      - i_tin_gross_NSND
+      - i_tin_allowances
+      - i_tin_allow_NSND
+      - i_tin_allow_sav
+      - tax_nsnd_s
+      - tax_sav_s
+      - i_tin_allow_div
+      - tax_div_s
+      - i_thresh_high
+      - n/a
+      - i_tin_prelim_Wl
+      - i_tax_band
+      - i_tinty_NSND
+      - i_tinty_sav
+      - i_tinty_div
+      - tinsea_s
+      - tinpa_s
+      - i_taxabley_NSND
+      - i_taxabley_pNSND
+      - i_rtinta_s
+      - i_taxabley_sav
+      - i_taxabley_psav
+      - i_r2tinta_s
+      - tinda_s
+      - i_taxabley_div
+      - i_tintsS_s
+      - i_tintsD_s
+    suite: uk-worker-pit
+  - id: uk:tinta_uk
+    oracle_policy_name: tinta_uk
+    oracle_policy_type: tax
+    output_vars:
+      - tinta_s
+    in_scope: true
+    internal_only_vars:
+      - i_tinta_IncExcess2
+      - i_tinta_PersAllow
+    suite: null
+  - id: uk:tpcee_uk
+    oracle_policy_name: tpcee_uk
+    oracle_policy_type: def
+    output_vars:
+      - tpcee_s
+    in_scope: false
+    exclusion_reason: input_carrying
+  - id: uk:tscee_tscse_uk
+    oracle_policy_name: tscee_tscse_uk
+    oracle_policy_type: sic
+    output_vars:
+      - tscee_s
+      - tscse_s
+    in_scope: true
+    internal_only_vars:
+      - i_NIcl1_empl_bwPTandUEL
+      - i_NIcl1_empl_aboveUEL
+      - n/a
+      - i_ni4lpl
+      - i_ni4upl
+      - i_combined_bwLPLandUPL
+      - i_combined_net
+      - i_semp_inc_bwLPLandUPL
+      - i_semp_inc_addrate
+      - i_NI1cl4_semp_bwLPLandUPL
+      - i_NI1cl4_semp_addrate
+      - i_NI2cl4_semp_aboveLPL
+      - i_NI3cl4_semp_aboveUPL
+      - i_NI3cl4_semp_belowUPL
+      - i_yse
+    suite: uk-worker-nic
+  - id: uk:tscer_uk
+    oracle_policy_name: tscer_uk
+    oracle_policy_type: sic
+    output_vars:
+      - tscer_s
+    in_scope: true
+    internal_only_vars:
+      - n/a
+    suite: uk-employer-nic
+  - id: uk:ukpovertyline_uk
+    oracle_policy_name: ukpovertyline_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - eqScaleBHC
+      - eqDispyBHC
+      - i_ukpovertylineBHC
+      - i_ukpovertylineAHC
+      - eqDispyAHC
+      - eqScaleAHC
+    exclusion_reason: technical
+  - id: uk:yem_uk
+    oracle_policy_name: yem_uk
+    oracle_policy_type: def
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - i_hourlywage
+      - yem
+    exclusion_reason: technical

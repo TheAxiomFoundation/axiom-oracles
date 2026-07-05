@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { loadOracleData, buildNWayData } from "../utils/data";
 import { suiteRegion } from "../utils/suites";
 import OverviewHero from "./OverviewHero";
+import ConformanceCard from "./ConformanceCard";
 import BelgiumEuromodCoverage from "./BelgiumEuromodCoverage";
 import CoverageRegister from "./CoverageRegister";
 import RuleVerification from "./RuleVerification";
@@ -82,6 +83,26 @@ export default function DashboardContent() {
   const [error, setError] = useState(null);
   const [jurisdiction, setJurisdiction] = useState("us");
 
+  // Deep-link the active jurisdiction via ?jurisdiction=uk|be|us (also accepts
+  // #uk), so a conformance card can be linked to directly. Read once on mount.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = (
+      params.get("jurisdiction") || window.location.hash.replace("#", "")
+    ).toLowerCase();
+    if (COUNTRIES.some((c) => c.id === fromUrl)) {
+      setJurisdiction(fromUrl);
+    }
+  }, []);
+
+  // Keep the URL query in sync when the toggle changes, without a navigation.
+  const changeJurisdiction = (next) => {
+    setJurisdiction(next);
+    const url = new URL(window.location.href);
+    url.searchParams.set("jurisdiction", next);
+    window.history.replaceState(null, "", url);
+  };
+
   useEffect(() => {
     loadOracleData("")
       .then(setData)
@@ -105,7 +126,7 @@ export default function DashboardContent() {
       <>
         <TopBar
           jurisdiction={jurisdiction}
-          onJurisdictionChange={setJurisdiction}
+          onJurisdictionChange={changeJurisdiction}
         />
         <main style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px" }}>
           <div className="page-intro">
@@ -123,7 +144,7 @@ export default function DashboardContent() {
       <>
         <TopBar
           jurisdiction={jurisdiction}
-          onJurisdictionChange={setJurisdiction}
+          onJurisdictionChange={changeJurisdiction}
         />
         <main style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px" }}>
           <div className="page-intro">
@@ -147,7 +168,7 @@ export default function DashboardContent() {
     <>
       <TopBar
         jurisdiction={jurisdiction}
-        onJurisdictionChange={setJurisdiction}
+        onJurisdictionChange={changeJurisdiction}
       />
       <main
         className="page-main"
@@ -160,6 +181,8 @@ export default function DashboardContent() {
         <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
           {isBelgium ? (
             <>
+              <ConformanceCard region={jurisdiction} />
+
               <BelgiumEuromodCoverage
                 coverage={data.euromodCoverage}
                 issues={data.euromodIssues}
@@ -229,6 +252,8 @@ export default function DashboardContent() {
           ) : (
             <>
               <OverviewHero reports={withData} />
+
+              <ConformanceCard region={jurisdiction} />
 
               <CoverageRegister
                 reports={withData}
