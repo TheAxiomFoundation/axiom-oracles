@@ -2777,9 +2777,9 @@ def test_pip_final_request_projects_final_inputs():
                 "end": "2027-04-05",
             },
             "outputs": [
-                PIP_FINAL_OUTPUTS["pip_daily_living_component_weekly_amount"]["axiom"],
-                PIP_FINAL_OUTPUTS["pip_mobility_component_weekly_amount"]["axiom"],
-                PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_amount"][
+                PIP_FINAL_OUTPUTS["pip_daily_living_weekly_amount"]["axiom"],
+                PIP_FINAL_OUTPUTS["pip_mobility_weekly_amount"]["axiom"],
+                PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_total"][
                     "axiom"
                 ],
                 PIP_FINAL_OUTPUTS["receives_enhanced_daily_living_component"]["axiom"],
@@ -5422,13 +5422,13 @@ def test_compare_outputs_compares_pip_final_components_total_and_enhanced_receip
             "personal-independence-payment-final": [
                 {
                     "outputs": {
-                        PIP_FINAL_OUTPUTS["pip_daily_living_component_weekly_amount"][
+                        PIP_FINAL_OUTPUTS["pip_daily_living_weekly_amount"][
                             "axiom"
                         ]: decimal_output(114.60),
-                        PIP_FINAL_OUTPUTS["pip_mobility_component_weekly_amount"][
+                        PIP_FINAL_OUTPUTS["pip_mobility_weekly_amount"][
                             "axiom"
                         ]: decimal_output(80.00),
-                        PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_amount"][
+                        PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_total"][
                             "axiom"
                         ]: decimal_output(194.60),
                         PIP_FINAL_OUTPUTS["receives_enhanced_daily_living_component"][

@@ -835,20 +835,20 @@ DLA_FINAL_OUTPUTS = {
 }
 
 PIP_FINAL_OUTPUTS = {
-    "pip_daily_living_component_weekly_amount": {
-        "axiom": f"{PIP_FINAL_BASE}#pip_daily_living_component_weekly_amount",
+    "pip_daily_living_weekly_amount": {
+        "axiom": f"{PIP_FINAL_BASE}#pip_daily_living_weekly_amount",
         "pe": "pip_dl",
         "pe_transform": "annual_to_weekly",
         "tolerance": 0.01,
     },
-    "pip_mobility_component_weekly_amount": {
-        "axiom": f"{PIP_FINAL_BASE}#pip_mobility_component_weekly_amount",
+    "pip_mobility_weekly_amount": {
+        "axiom": f"{PIP_FINAL_BASE}#pip_mobility_weekly_amount",
         "pe": "pip_m",
         "pe_transform": "annual_to_weekly",
         "tolerance": 0.01,
     },
-    "personal_independence_payment_weekly_amount": {
-        "axiom": f"{PIP_FINAL_BASE}#personal_independence_payment_weekly_amount",
+    "personal_independence_payment_weekly_total": {
+        "axiom": f"{PIP_FINAL_BASE}#personal_independence_payment_weekly_total",
         "pe": "pip",
         "pe_transform": "annual_to_weekly",
         "tolerance": 0.01,
