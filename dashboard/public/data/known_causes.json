@@ -571,6 +571,32 @@
    "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
   },
   {
+   "suite": "be-special-social-security-contribution",
+   "concept": "be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution",
+   "kind": "amount_difference",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "label": "EUROMOD BE_2025 special-contribution schedule differs from Law of 30 March 1994 Article 108",
+   "description": "Four of seven special social-security contribution cases differ because BE_2025 tsceesp_be diverges from Law of 30 March 1994 Article 108. In the joint-assessment cases EUROMOD applies a zero-rate band where Article 108 requires the 1.3% band and then starts 1.3% in the statutory plateau band, so the three joint cases return EUROMOD far below the source-backed RuleSpec (for example joint two-earner 60k/20k: EUROMOD 177.33 vs Axiom 632.39). The single-household 80k case differs by a smaller 12.58 EUR from a mistyped single threshold/cap. The three single low-income cases still match, isolating the residual to the Article 108 schedule typing rather than the base or the household bridge.",
+   "fix_owner": "euromod-upstream",
+   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7"
+  },
+  {
+   "suite": "be-self-employed-ssc",
+   "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
+   "kind": "missing_right",
+   "engines": {
+    "left": "euromod",
+    "right": "axiom"
+   },
+   "label": "Self-employed dispatcher rule has no version before 2025-10-01",
+   "description": "Under the post-#68 strict-null engine every self-employed case fails on the Axiom side at period 2025 with `parameter belgium_self_employed_article_13_post_pension_exemption_threshold_base has no value for key 0 at 2025-01-01`. The rulespec-be self-employed contributions module gives eight Article 13/13bis parameters, and the top-level dispatcher belgium_self_employed_selected_annual_social_contribution itself, a single version effective_from 2025-10-01; strict resolution evaluates the dispatcher's referenced parameters eagerly across all branches, so even the four main-activity cases (which mathematically only need the Article 12 thresholds effective from 2018) abort. The pre-#68 lenient engine masked this, which is why the committed 4/7 report was produced. This is an Axiom encoding defect, not the pre-existing secondary/post-pension threshold-allowance residual (JRC #6): the dispatcher and Article 13 amounts should carry an early effective_from (the 811.20 exemption threshold applies from 1 January 2025, not 1 October). Filed as TheAxiomFoundation/rulespec-be#81; the committed report is held pending the effective-date fix and a re-run.",
+   "fix_owner": "rulespec-be",
+   "issue_url": "https://github.com/TheAxiomFoundation/rulespec-be/issues/81"
+  },
+  {
    "suite": "co-tanf-ecps",
    "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
    "kind": "amount_difference",

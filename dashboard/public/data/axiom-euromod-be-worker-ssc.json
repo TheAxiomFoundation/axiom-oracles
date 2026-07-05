@@ -8,7 +8,7 @@
       "components": [],
       "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_article_38_contribution_before_reductions",
       "description": "Belgium employee social-security contribution before worker reductions",
-      "left_weighted_sum": 11763,
+      "left_weighted_sum": 12410.228407,
       "match_rate": 100,
       "match_weight": 2,
       "mismatch_count": 0,
@@ -17,7 +17,7 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 11763,
+      "right_weighted_sum": 12410.228407,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     },
@@ -29,7 +29,7 @@
       "components": [],
       "concept": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
       "description": "Belgium employee social-security work-bonus reduction",
-      "left_weighted_sum": 3398.52,
+      "left_weighted_sum": 3079.481498,
       "match_rate": 50,
       "match_weight": 1,
       "mismatch_count": 1,
@@ -38,8 +38,8 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 3386.87,
-      "weighted_difference": 11.65,
+      "right_weighted_sum": 3062.37,
+      "weighted_difference": 17.111498,
       "weighted_match_rate": 50
     },
     {
@@ -50,7 +50,7 @@
       "components": [],
       "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
       "description": "Belgium employee social-security contribution after work-bonus reduction",
-      "left_weighted_sum": 8364.48,
+      "left_weighted_sum": 9330.746909,
       "match_rate": 50,
       "match_weight": 1,
       "mismatch_count": 1,
@@ -59,8 +59,8 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 8376.13,
-      "weighted_difference": -11.65,
+      "right_weighted_sum": 9347.858407,
+      "weighted_difference": -17.111498,
       "weighted_match_rate": 50
     }
   ],
@@ -114,13 +114,13 @@
       "case_id": "be-worker-ssc-30k",
       "concept": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
       "description": "Belgium employee social-security work-bonus reduction",
-      "difference": 11.649999999999636,
+      "difference": 17.111497604077158,
       "kind": "amount_difference",
-      "left": 3398.5199999999995,
+      "left": 3079.481497604077,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0.001,
-      "right": 3386.87,
+      "right": 3062.37,
       "scenario": "single-worker-ssc",
       "tolerance": 1,
       "yearly_earned_income": 30000.0
@@ -130,13 +130,13 @@
       "case_id": "be-worker-ssc-30k",
       "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
       "description": "Belgium employee social-security contribution after work-bonus reduction",
-      "difference": -11.64999999999975,
+      "difference": -17.11149760407693,
       "kind": "amount_difference",
-      "left": 522.4800000000002,
+      "left": 1057.261304699186,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0.001,
-      "right": 534.13,
+      "right": 1074.372802303263,
       "scenario": "single-worker-ssc",
       "tolerance": 1,
       "yearly_earned_income": 30000.0
@@ -191,10 +191,10 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 30000.0,
+          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 31650.67178502879,
           "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_supplied_other_worker_reduction": 0,
           "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_supplied_work_bonus_reduction": 0,
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 25862.068965517246
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551
         },
         "euromod_inputs": [
           {
@@ -224,8 +224,8 @@
           ]
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 30000.0,
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 25862.068965517246
+          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 31650.67178502879,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551
         },
         "household_summary": {
           "ages": [
@@ -249,23 +249,23 @@
         {
           "concept": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
           "description": "Belgium employee social-security work-bonus reduction",
-          "difference": 11.649999999999636,
+          "difference": 17.111497604077158,
           "kind": "amount_difference",
-          "left": 3398.5199999999995,
+          "left": 3079.481497604077,
           "parent": null,
           "relative_tolerance": 0.001,
-          "right": 3386.87,
+          "right": 3062.37,
           "tolerance": 1
         },
         {
           "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
           "description": "Belgium employee social-security contribution after work-bonus reduction",
-          "difference": -11.64999999999975,
+          "difference": -17.11149760407693,
           "kind": "amount_difference",
-          "left": 522.4800000000002,
+          "left": 1057.261304699186,
           "parent": null,
           "relative_tolerance": 0.001,
-          "right": 534.13,
+          "right": 1074.372802303263,
           "tolerance": 1
         }
       ],
@@ -281,10 +281,10 @@
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
-          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 60000.0,
+          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 63301.34357005758,
           "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_supplied_other_worker_reduction": 0,
           "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_supplied_work_bonus_reduction": 0,
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 51724.13793103449
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 54570.12376729102
         },
         "euromod_inputs": [
           {
@@ -314,8 +314,8 @@
           ]
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 60000.0,
-          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 51724.13793103449
+          "be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base": 63301.34357005758,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 54570.12376729102
         },
         "household_summary": {
           "ages": [
