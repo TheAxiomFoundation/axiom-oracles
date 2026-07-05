@@ -671,6 +671,34 @@ concepts:
           type: country
           geoid: UK
 
+  uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#uk_svdv_income_tax_liability:
+    description: UK income tax liability on earned, savings and dividend income (single individual)
+    category: tax
+    comparison: amount
+    # Savings-only and dividend-only cases reproduce UKMOD tin_s to the penny;
+    # the mixed savings-and-dividend cases (uk-income-tax-mixed) are
+    # dispositioned against a UKMOD platform bug that zeroes savings tax when
+    # dividend income is present (dispositions/uk-income-tax-mixed.yaml). Keep a
+    # narrow tolerance so structural encoding gaps are still caught.
+    tolerance: 1
+    relative_tolerance: 0.0002
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_svdv_income_tax_liability
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: UK
+
   us:statutes/7/2014/u#snap_benefit:
     description: SNAP benefit amount
     category: food

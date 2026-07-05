@@ -26,7 +26,15 @@ cd "$(dirname "$0")/.."
 : "${AXIOM_RULESPEC_REPO_ROOTS:=$HOME/TheAxiomFoundation}"
 export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT AXIOM_RULESPEC_REPO_ROOTS
 
-for name in uk-worker-pit-ukmod uk-worker-nic-ukmod uk-universal-credit-ukmod; do
+for name in \
+  uk-worker-pit-ukmod \
+  uk-worker-nic-ukmod \
+  uk-self-employed-nic-ukmod \
+  uk-employer-nic-ukmod \
+  uk-universal-credit-ukmod \
+  uk-income-tax-savings-ukmod \
+  uk-income-tax-dividend-ukmod \
+  uk-income-tax-mixed-ukmod; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

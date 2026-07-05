@@ -1,0 +1,64 @@
+schema: axiom_oracles.dispositions.v1
+suite: uk-income-tax-mixed
+updated: "2026-07-05"
+entries:
+  - id: ukmod-zeroes-savings-tax-when-dividends-present
+    concept: uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#uk_svdv_income_tax_liability
+    case_selector:
+      case_ids:
+        - uk-it-mixed-e30k-s3k-d4k
+        - uk-it-mixed-e60k-s5k-d3k
+        - uk-it-mixed-e150k-s10k-d20k
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        UKMOD_PUBLIC_B2026.03 (system UK_2026) grants savings income a 0% band
+        equal to the taxpayer's dividend income when both are present, zeroing
+        income tax that the Income Tax Act 2007 sections 11D/12/12A charge on
+        that savings at the savings basic/higher/additional rate. The savings
+        starting rate (s.12) is reduced only by non-savings income, never by
+        dividend income, so the source-grounded RuleSpec taxes the savings
+        correctly. tin_s therefore falls short of the statutory liability by
+        min(savings above the personal savings allowance, dividend income)
+        times the marginal savings rate. Each residual below reconciles the
+        UKMOD tin_s to the statutory RuleSpec liability by adding back that
+        wrongly-zeroed savings tax.
+      arithmetic:
+        # e30k-s3k-d4k: PSA 1,000; 2,000 savings at 20% wrongly zeroed
+        # (dividend 4,000 >= 2,000). UKMOD 3,862.25 + 400 = 4,262.25.
+        - expression: "3486.00 + 376.25"
+          equals: 3862.25
+          tolerance: 0.005
+        - expression: "2000 * 0.20"
+          equals: 400.0
+          tolerance: 0.005
+        - expression: "3862.25 + 400.0"
+          equals: 4262.25
+          tolerance: 0.005
+        # e60k-s5k-d3k: PSA 500; savings 4,500 at 40%, but only min(4,500,
+        # 3,000)=3,000 wrongly zeroed. UKMOD taxes 1,500 at 40% = 600.
+        # 11,432 earned + 600 savings + 893.75 dividend = 12,925.75.
+        - expression: "11432.00 + 600.00 + 893.75"
+          equals: 12925.75
+          tolerance: 0.005
+        - expression: "3000 * 0.40"
+          equals: 1200.0
+          tolerance: 0.005
+        - expression: "12925.75 + 1200.0"
+          equals: 14125.75
+          tolerance: 0.005
+        # e150k-s10k-d20k: PSA 0; 10,000 savings at 45% wrongly zeroed
+        # (dividend 20,000 >= 10,000). UKMOD 61,376.25 + 4,500 = 65,876.25.
+        - expression: "53703.00 + 7673.25"
+          equals: 61376.25
+          tolerance: 0.005
+        - expression: "10000 * 0.45"
+          equals: 4500.0
+          tolerance: 0.005
+        - expression: "61376.25 + 4500.0"
+          equals: 65876.25
+          tolerance: 0.005
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-b2026-uk-savings-tax-zeroed-by-dividend-income
+    expires_on_source_change: true

@@ -247,6 +247,30 @@
       "source": "comparisons/uk-employer-nic-ukmod.yaml"
     },
     {
+      "suite": "uk-income-tax-dividend",
+      "report": "axiom-euromod-uk-income-tax-dividend.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-income-tax-dividend-ukmod.yaml"
+    },
+    {
+      "suite": "uk-income-tax-mixed",
+      "report": "axiom-euromod-uk-income-tax-mixed.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-income-tax-mixed-ukmod.yaml"
+    },
+    {
+      "suite": "uk-income-tax-savings",
+      "report": "axiom-euromod-uk-income-tax-savings.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-income-tax-savings-ukmod.yaml"
+    },
+    {
       "suite": "uk-self-employed-nic",
       "report": "axiom-euromod-uk-self-employed-nic.json",
       "repos": [

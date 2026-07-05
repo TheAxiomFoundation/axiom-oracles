@@ -71,6 +71,222 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 360000.0
+  uk-income-tax-dividend:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#uk_svdv_income_tax_liability
+    cases:
+    - id: uk-it-dividend-e20k-d2k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 20000.0
+        yearly_savings_income: 0.0
+        yearly_dividend_income: 2000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000.0
+        interest_income: 0.0
+        dividend_income: 2000.0
+    - id: uk-it-dividend-e30k-d4k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 30000.0
+        yearly_savings_income: 0.0
+        yearly_dividend_income: 4000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+        interest_income: 0.0
+        dividend_income: 4000.0
+    - id: uk-it-dividend-e45k-d6k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 45000.0
+        yearly_savings_income: 0.0
+        yearly_dividend_income: 6000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
+        interest_income: 0.0
+        dividend_income: 6000.0
+    - id: uk-it-dividend-e130k-d10k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 130000.0
+        yearly_savings_income: 0.0
+        yearly_dividend_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 130000.0
+        interest_income: 0.0
+        dividend_income: 10000.0
+    - id: uk-it-dividend-e200k-d20k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 200000.0
+        yearly_savings_income: 0.0
+        yearly_dividend_income: 20000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 200000.0
+        interest_income: 0.0
+        dividend_income: 20000.0
+  uk-income-tax-mixed:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#uk_svdv_income_tax_liability
+    cases:
+    - id: uk-it-mixed-e30k-s3k-d4k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 30000.0
+        yearly_savings_income: 3000.0
+        yearly_dividend_income: 4000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+        interest_income: 3000.0
+        dividend_income: 4000.0
+    - id: uk-it-mixed-e60k-s5k-d3k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 60000.0
+        yearly_savings_income: 5000.0
+        yearly_dividend_income: 3000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
+        interest_income: 5000.0
+        dividend_income: 3000.0
+    - id: uk-it-mixed-e150k-s10k-d20k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 150000.0
+        yearly_savings_income: 10000.0
+        yearly_dividend_income: 20000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 150000.0
+        interest_income: 10000.0
+        dividend_income: 20000.0
+  uk-income-tax-savings:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#uk_svdv_income_tax_liability
+    cases:
+    - id: uk-it-savings-e20k-s2k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 20000.0
+        yearly_savings_income: 2000.0
+        yearly_dividend_income: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000.0
+        interest_income: 2000.0
+        dividend_income: 0.0
+    - id: uk-it-savings-e30k-s3k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 30000.0
+        yearly_savings_income: 3000.0
+        yearly_dividend_income: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+        interest_income: 3000.0
+        dividend_income: 0.0
+    - id: uk-it-savings-e45k-s6k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 45000.0
+        yearly_savings_income: 6000.0
+        yearly_dividend_income: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
+        interest_income: 6000.0
+        dividend_income: 0.0
+    - id: uk-it-savings-e80k-s5k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 80000.0
+        yearly_savings_income: 5000.0
+        yearly_dividend_income: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 80000.0
+        interest_income: 5000.0
+        dividend_income: 0.0
+    - id: uk-it-savings-e150k-s10k
+      period: '2026'
+      scenario: single-person-savings-dividend
+      parameters:
+        yearly_earned_income: 150000.0
+        yearly_savings_income: 10000.0
+        yearly_dividend_income: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 150000.0
+        interest_income: 10000.0
+        dividend_income: 0.0
   uk-self-employed-nic:
     locale: UK
     entity: Person
