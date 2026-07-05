@@ -1,0 +1,962 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: us
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  nyc-basic:
+    locale: US-NY-NYC
+    cases:
+    - id: nyc-single-adult-20k
+      period: 2026-05
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-adult-35k
+      period: 2026-05
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 35000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 1500
+    - id: nyc-single-parent-30k-child5
+      period: 2026-05
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000
+      - id: child
+        kind: person
+        age: 5
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 750
+    - id: nyc-parent-40k-toddler
+      period: 2026-05
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000
+      - id: child
+        kind: person
+        age: 2
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 1000
+  nyc-synthetic:
+    locale: US-NY-NYC
+    cases:
+    - id: nyc-single-adult-0k
+      period: 2026-05
+      scenario: single-adult
+      parameters:
+        yearly_earned_income: 0
+        ages:
+        - 40
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-adult-10k
+      period: 2026-05
+      scenario: single-adult
+      parameters:
+        yearly_earned_income: 10000
+        ages:
+        - 40
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 10000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-adult-20k
+      period: 2026-05
+      scenario: single-adult
+      parameters:
+        yearly_earned_income: 20000
+        ages:
+        - 40
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-adult-30k
+      period: 2026-05
+      scenario: single-adult
+      parameters:
+        yearly_earned_income: 30000
+        ages:
+        - 40
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-adult-40k
+      period: 2026-05
+      scenario: single-adult
+      parameters:
+        yearly_earned_income: 40000
+        ages:
+        - 40
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-adult-60k
+      period: 2026-05
+      scenario: single-adult
+      parameters:
+        yearly_earned_income: 60000
+        ages:
+        - 40
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-senior-0k
+      period: 2026-05
+      scenario: senior
+      parameters:
+        yearly_earned_income: 0
+        ages:
+        - 65
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-senior-15k
+      period: 2026-05
+      scenario: senior
+      parameters:
+        yearly_earned_income: 15000
+        ages:
+        - 65
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+        yearly_earned_income: 15000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-senior-25k
+      period: 2026-05
+      scenario: senior
+      parameters:
+        yearly_earned_income: 25000
+        ages:
+        - 65
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+        yearly_earned_income: 25000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-senior-35k
+      period: 2026-05
+      scenario: senior
+      parameters:
+        yearly_earned_income: 35000
+        ages:
+        - 65
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+        yearly_earned_income: 35000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-senior-50k
+      period: 2026-05
+      scenario: senior
+      parameters:
+        yearly_earned_income: 50000
+        ages:
+        - 65
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+        yearly_earned_income: 50000
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-infant-0k
+      period: 2026-05
+      scenario: single-parent-infant
+      parameters:
+        yearly_earned_income: 0
+        ages:
+        - 30
+        - 0
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+      - id: child-1
+        kind: person
+        age: 0
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-infant-15k
+      period: 2026-05
+      scenario: single-parent-infant
+      parameters:
+        yearly_earned_income: 15000
+        ages:
+        - 30
+        - 0
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 15000
+      - id: child-1
+        kind: person
+        age: 0
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-infant-30k
+      period: 2026-05
+      scenario: single-parent-infant
+      parameters:
+        yearly_earned_income: 30000
+        ages:
+        - 30
+        - 0
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000
+      - id: child-1
+        kind: person
+        age: 0
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-infant-45k
+      period: 2026-05
+      scenario: single-parent-infant
+      parameters:
+        yearly_earned_income: 45000
+        ages:
+        - 30
+        - 0
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000
+      - id: child-1
+        kind: person
+        age: 0
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-infant-70k
+      period: 2026-05
+      scenario: single-parent-infant
+      parameters:
+        yearly_earned_income: 70000
+        ages:
+        - 30
+        - 0
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 70000
+      - id: child-1
+        kind: person
+        age: 0
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-infant-100k
+      period: 2026-05
+      scenario: single-parent-infant
+      parameters:
+        yearly_earned_income: 100000
+        ages:
+        - 30
+        - 0
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000
+      - id: child-1
+        kind: person
+        age: 0
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-toddler-0k
+      period: 2026-05
+      scenario: single-parent-toddler
+      parameters:
+        yearly_earned_income: 0
+        ages:
+        - 30
+        - 2
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+      - id: child-1
+        kind: person
+        age: 2
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-toddler-15k
+      period: 2026-05
+      scenario: single-parent-toddler
+      parameters:
+        yearly_earned_income: 15000
+        ages:
+        - 30
+        - 2
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 15000
+      - id: child-1
+        kind: person
+        age: 2
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-toddler-30k
+      period: 2026-05
+      scenario: single-parent-toddler
+      parameters:
+        yearly_earned_income: 30000
+        ages:
+        - 30
+        - 2
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000
+      - id: child-1
+        kind: person
+        age: 2
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-toddler-40k
+      period: 2026-05
+      scenario: single-parent-toddler
+      parameters:
+        yearly_earned_income: 40000
+        ages:
+        - 30
+        - 2
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000
+      - id: child-1
+        kind: person
+        age: 2
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-toddler-55k
+      period: 2026-05
+      scenario: single-parent-toddler
+      parameters:
+        yearly_earned_income: 55000
+        ages:
+        - 30
+        - 2
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 55000
+      - id: child-1
+        kind: person
+        age: 2
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-toddler-80k
+      period: 2026-05
+      scenario: single-parent-toddler
+      parameters:
+        yearly_earned_income: 80000
+        ages:
+        - 30
+        - 2
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 80000
+      - id: child-1
+        kind: person
+        age: 2
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-child-0k
+      period: 2026-05
+      scenario: single-parent-child
+      parameters:
+        yearly_earned_income: 0
+        ages:
+        - 30
+        - 5
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+      - id: child-1
+        kind: person
+        age: 5
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-child-15k
+      period: 2026-05
+      scenario: single-parent-child
+      parameters:
+        yearly_earned_income: 15000
+        ages:
+        - 30
+        - 5
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 15000
+      - id: child-1
+        kind: person
+        age: 5
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-child-30k
+      period: 2026-05
+      scenario: single-parent-child
+      parameters:
+        yearly_earned_income: 30000
+        ages:
+        - 30
+        - 5
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000
+      - id: child-1
+        kind: person
+        age: 5
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-child-40k
+      period: 2026-05
+      scenario: single-parent-child
+      parameters:
+        yearly_earned_income: 40000
+        ages:
+        - 30
+        - 5
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000
+      - id: child-1
+        kind: person
+        age: 5
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-child-55k
+      period: 2026-05
+      scenario: single-parent-child
+      parameters:
+        yearly_earned_income: 55000
+        ages:
+        - 30
+        - 5
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 55000
+      - id: child-1
+        kind: person
+        age: 5
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-child-80k
+      period: 2026-05
+      scenario: single-parent-child
+      parameters:
+        yearly_earned_income: 80000
+        ages:
+        - 30
+        - 5
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 80000
+      - id: child-1
+        kind: person
+        age: 5
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-teen-0k
+      period: 2026-05
+      scenario: single-parent-teen
+      parameters:
+        yearly_earned_income: 0
+        ages:
+        - 30
+        - 17
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+      - id: child-1
+        kind: person
+        age: 17
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-teen-20k
+      period: 2026-05
+      scenario: single-parent-teen
+      parameters:
+        yearly_earned_income: 20000
+        ages:
+        - 30
+        - 17
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000
+      - id: child-1
+        kind: person
+        age: 17
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-teen-40k
+      period: 2026-05
+      scenario: single-parent-teen
+      parameters:
+        yearly_earned_income: 40000
+        ages:
+        - 30
+        - 17
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000
+      - id: child-1
+        kind: person
+        age: 17
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-teen-55k
+      period: 2026-05
+      scenario: single-parent-teen
+      parameters:
+        yearly_earned_income: 55000
+        ages:
+        - 30
+        - 17
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 55000
+      - id: child-1
+        kind: person
+        age: 17
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-teen-80k
+      period: 2026-05
+      scenario: single-parent-teen
+      parameters:
+        yearly_earned_income: 80000
+        ages:
+        - 30
+        - 17
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 80000
+      - id: child-1
+        kind: person
+        age: 17
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-single-parent-teen-120k
+      period: 2026-05
+      scenario: single-parent-teen
+      parameters:
+        yearly_earned_income: 120000
+        ages:
+        - 30
+        - 17
+        pregnant_head: false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000
+      - id: child-1
+        kind: person
+        age: 17
+        relation: Child
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-pregnant-adult-0k
+      period: 2026-05
+      scenario: pregnant-adult
+      parameters:
+        yearly_earned_income: 0
+        ages:
+        - 30
+        pregnant_head: true
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+        pregnant: true
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-pregnant-adult-15k
+      period: 2026-05
+      scenario: pregnant-adult
+      parameters:
+        yearly_earned_income: 15000
+        ages:
+        - 30
+        pregnant_head: true
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 15000
+        pregnant: true
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-pregnant-adult-25k
+      period: 2026-05
+      scenario: pregnant-adult
+      parameters:
+        yearly_earned_income: 25000
+        ages:
+        - 30
+        pregnant_head: true
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 25000
+        pregnant: true
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-pregnant-adult-40k
+      period: 2026-05
+      scenario: pregnant-adult
+      parameters:
+        yearly_earned_income: 40000
+        ages:
+        - 30
+        pregnant_head: true
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000
+        pregnant: true
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500
+    - id: nyc-pregnant-adult-60k
+      period: 2026-05
+      scenario: pregnant-adult
+      parameters:
+        yearly_earned_income: 60000
+        ages:
+        - 30
+        pregnant_head: true
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000
+        pregnant: true
+      facts:
+        state_code: NY
+        living_renting: true
+        living_owner: false
+        cash_on_hand: 500

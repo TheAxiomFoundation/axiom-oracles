@@ -1,0 +1,2420 @@
+# SUGGESTED boundary cases — GENERATED; NOT adopted, NOT loaded by load_grids().
+# Regenerate with: uv run python scripts/generate_boundary_cases.py
+# Each case probes one statutory threshold from the axiom-corpus concept
+# registry. probe.value is intentionally null: read it from the named
+# PolicyEngine parameter, set period, then promote into the adopted grid.
+# See grids/README.md (boundary-case generator).
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: us
+generated_from:
+  registry: axiom-corpus concepts/data/us.yaml
+  generator: scripts/generate_boundary_cases.py
+  note: SUGGESTED threshold-straddling cases; not adopted. Each case's probe.value is unresolved — fill
+    it from the named PolicyEngine parameter, set period, then promote into grids/us.yaml if warranted.
+case_sets:
+  boundary-doe_efficiency_rebate:
+    cases:
+    - id: us-boundary-low-or-moderate-income-higher-modeled-amount-cap-below
+      period: null
+      scenario: boundary-low-or-moderate-income-higher-modeled-amount-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#low_or_moderate_income_higher_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.high
+        side: below
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-low-or-moderate-income-higher-modeled-amount-cap-above
+      period: null
+      scenario: boundary-low-or-moderate-income-higher-modeled-amount-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#low_or_moderate_income_higher_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.high
+        side: above
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-low-or-moderate-income-lower-modeled-amount-cap-below
+      period: null
+      scenario: boundary-low-or-moderate-income-lower-modeled-amount-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#low_or_moderate_income_lower_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.medium
+        side: below
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-low-or-moderate-income-lower-modeled-amount-cap-above
+      period: null
+      scenario: boundary-low-or-moderate-income-lower-modeled-amount-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#low_or_moderate_income_lower_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.medium
+        side: above
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-measured-savings-threshold-below
+      period: null
+      scenario: boundary-measured-savings-threshold-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#measured_savings_threshold
+        parameter: gov.doe.residential_efficiency_electrification_rebate.threshold.low
+        side: below
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Rate
+    - id: us-boundary-measured-savings-threshold-above
+      period: null
+      scenario: boundary-measured-savings-threshold-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#measured_savings_threshold
+        parameter: gov.doe.residential_efficiency_electrification_rebate.threshold.low
+        side: above
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Rate
+    - id: us-boundary-modeled-savings-higher-threshold-below
+      period: null
+      scenario: boundary-modeled-savings-higher-threshold-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#modeled_savings_higher_threshold
+        parameter: gov.doe.residential_efficiency_electrification_rebate.threshold.high
+        side: below
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Rate
+    - id: us-boundary-modeled-savings-higher-threshold-above
+      period: null
+      scenario: boundary-modeled-savings-higher-threshold-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#modeled_savings_higher_threshold
+        parameter: gov.doe.residential_efficiency_electrification_rebate.threshold.high
+        side: above
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Rate
+    - id: us-boundary-modeled-savings-lower-threshold-below
+      period: null
+      scenario: boundary-modeled-savings-lower-threshold-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#modeled_savings_lower_threshold
+        parameter: gov.doe.residential_efficiency_electrification_rebate.threshold.medium
+        side: below
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Rate
+    - id: us-boundary-modeled-savings-lower-threshold-above
+      period: null
+      scenario: boundary-modeled-savings-lower-threshold-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#modeled_savings_lower_threshold
+        parameter: gov.doe.residential_efficiency_electrification_rebate.threshold.medium
+        side: above
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Rate
+    - id: us-boundary-standard-single-family-higher-modeled-amount-cap-below
+      period: null
+      scenario: boundary-standard-single-family-higher-modeled-amount-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#standard_single_family_higher_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.high
+        side: below
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-standard-single-family-higher-modeled-amount-cap-above
+      period: null
+      scenario: boundary-standard-single-family-higher-modeled-amount-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#standard_single_family_higher_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.high
+        side: above
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-standard-single-family-lower-modeled-amount-cap-below
+      period: null
+      scenario: boundary-standard-single-family-lower-modeled-amount-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#standard_single_family_lower_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.medium
+        side: below
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-standard-single-family-lower-modeled-amount-cap-above
+      period: null
+      scenario: boundary-standard-single-family-lower-modeled-amount-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795/c/2#standard_single_family_lower_modeled_amount_cap
+        parameter: gov.doe.residential_efficiency_electrification_rebate.cap.medium
+        side: above
+        value: null
+        program: doe_efficiency_rebate
+        dtype: Money
+        unit: USD
+  boundary-doe_high_efficiency_rebate:
+    cases:
+    - id: us-boundary-electric-load-service-center-upgrade-rebate-cap-below
+      period: null
+      scenario: boundary-electric-load-service-center-upgrade-rebate-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#electric_load_service_center_upgrade_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.electric_load_service_center_upgrade
+        side: below
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-electric-load-service-center-upgrade-rebate-cap-above
+      period: null
+      scenario: boundary-electric-load-service-center-upgrade-rebate-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#electric_load_service_center_upgrade_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.electric_load_service_center_upgrade
+        side: above
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-electric-stove-cooktop-range-oven-or-heat-pump-clothes-dryer-rebate-cap-below
+      period: null
+      scenario: boundary-electric-stove-cooktop-range-oven-or-heat-pump-clothes-dryer-rebate-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#electric_stove_cooktop_range_oven_or_heat_pump_clothes_dryer_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.electric_stove_cooktop_range_or_oven
+        side: below
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-electric-stove-cooktop-range-oven-or-heat-pump-clothes-dryer-rebate-cap-above
+      period: null
+      scenario: boundary-electric-stove-cooktop-range-oven-or-heat-pump-clothes-dryer-rebate-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#electric_stove_cooktop_range_oven_or_heat_pump_clothes_dryer_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.electric_stove_cooktop_range_or_oven
+        side: above
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-electric-wiring-rebate-cap-below
+      period: null
+      scenario: boundary-electric-wiring-rebate-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#electric_wiring_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.electric_wiring
+        side: below
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-electric-wiring-rebate-cap-above
+      period: null
+      scenario: boundary-electric-wiring-rebate-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#electric_wiring_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.electric_wiring
+        side: above
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-eligible-entity-multiple-rebate-total-cap-below
+      period: null
+      scenario: boundary-eligible-entity-multiple-rebate-total-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#eligible_entity_multiple_rebate_total_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.total
+        side: below
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-eligible-entity-multiple-rebate-total-cap-above
+      period: null
+      scenario: boundary-eligible-entity-multiple-rebate-total-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#eligible_entity_multiple_rebate_total_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.total
+        side: above
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-heat-pump-space-heating-or-cooling-rebate-cap-below
+      period: null
+      scenario: boundary-heat-pump-space-heating-or-cooling-rebate-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#heat_pump_space_heating_or_cooling_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.heat_pump
+        side: below
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-heat-pump-space-heating-or-cooling-rebate-cap-above
+      period: null
+      scenario: boundary-heat-pump-space-heating-or-cooling-rebate-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#heat_pump_space_heating_or_cooling_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.heat_pump
+        side: above
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-heat-pump-water-heater-rebate-cap-below
+      period: null
+      scenario: boundary-heat-pump-water-heater-rebate-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#heat_pump_water_heater_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.heat_pump_water_heater
+        side: below
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-heat-pump-water-heater-rebate-cap-above
+      period: null
+      scenario: boundary-heat-pump-water-heater-rebate-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#heat_pump_water_heater_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.heat_pump_water_heater
+        side: above
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-insulation-air-sealing-and-ventilation-rebate-cap-below
+      period: null
+      scenario: boundary-insulation-air-sealing-and-ventilation-rebate-cap-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#insulation_air_sealing_and_ventilation_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.insulation_air_sealing_ventilation
+        side: below
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+    - id: us-boundary-insulation-air-sealing-and-ventilation-rebate-cap-above
+      period: null
+      scenario: boundary-insulation-air-sealing-and-ventilation-rebate-cap-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/18795a/c/3#insulation_air_sealing_and_ventilation_rebate_cap
+        parameter: gov.doe.high_efficiency_electric_home_rebate.cap.insulation_air_sealing_ventilation
+        side: above
+        value: null
+        program: doe_high_efficiency_rebate
+        dtype: Money
+        unit: USD
+  boundary-head_start:
+    cases:
+    - id: us-boundary-early-head-start-age-threshold-years-below
+      period: null
+      scenario: boundary-early-head-start-age-threshold-years-below
+      entity: Person
+      probe:
+        concept: us:regulations/45-cfr/1302/12/b#early_head_start_age_threshold_years
+        parameter: gov.hhs.head_start.early_head_start.age_limit
+        side: below
+        value: null
+        program: head_start
+        dtype: Integer
+    - id: us-boundary-early-head-start-age-threshold-years-above
+      period: null
+      scenario: boundary-early-head-start-age-threshold-years-above
+      entity: Person
+      probe:
+        concept: us:regulations/45-cfr/1302/12/b#early_head_start_age_threshold_years
+        parameter: gov.hhs.head_start.early_head_start.age_limit
+        side: above
+        value: null
+        program: head_start
+        dtype: Integer
+    - id: us-boundary-head-start-preschool-age-threshold-years-below
+      period: null
+      scenario: boundary-head-start-preschool-age-threshold-years-below
+      entity: Person
+      probe:
+        concept: us:regulations/45-cfr/1302/12/b#head_start_preschool_age_threshold_years
+        parameter: gov.hhs.head_start.age_range
+        side: below
+        value: null
+        program: head_start
+        dtype: Integer
+    - id: us-boundary-head-start-preschool-age-threshold-years-above
+      period: null
+      scenario: boundary-head-start-preschool-age-threshold-years-above
+      entity: Person
+      probe:
+        concept: us:regulations/45-cfr/1302/12/b#head_start_preschool_age_threshold_years
+        parameter: gov.hhs.head_start.age_range
+        side: above
+        value: null
+        program: head_start
+        dtype: Integer
+  boundary-lifeline:
+    cases:
+    - id: us-boundary-tribal-lands-support-amount-cap-below
+      period: null
+      scenario: boundary-tribal-lands-support-amount-cap-below
+      entity: Person
+      probe:
+        concept: us:regulations/47-cfr/54/403#tribal_lands_support_amount_cap
+        parameter: gov.fcc.lifeline.amount.rural_tribal_supplement
+        side: below
+        value: null
+        program: lifeline
+        dtype: Money
+        unit: USD
+    - id: us-boundary-tribal-lands-support-amount-cap-above
+      period: null
+      scenario: boundary-tribal-lands-support-amount-cap-above
+      entity: Person
+      probe:
+        concept: us:regulations/47-cfr/54/403#tribal_lands_support_amount_cap
+        parameter: gov.fcc.lifeline.amount.rural_tribal_supplement
+        side: above
+        value: null
+        program: lifeline
+        dtype: Money
+        unit: USD
+    - id: us-boundary-lifeline-income-limit-ratio-below
+      period: null
+      scenario: boundary-lifeline-income-limit-ratio-below
+      entity: Person
+      probe:
+        concept: us:regulations/47-cfr/54/409#lifeline_income_limit_ratio
+        parameter: gov.fcc.lifeline.fpg_limit
+        side: below
+        value: null
+        program: lifeline
+        dtype: Rate
+    - id: us-boundary-lifeline-income-limit-ratio-above
+      period: null
+      scenario: boundary-lifeline-income-limit-ratio-above
+      entity: Person
+      probe:
+        concept: us:regulations/47-cfr/54/409#lifeline_income_limit_ratio
+        parameter: gov.fcc.lifeline.fpg_limit
+        side: above
+        value: null
+        program: lifeline
+        dtype: Rate
+  boundary-medicaid:
+    cases:
+    - id: us-boundary-state-plan-child-age-threshold-below
+      period: null
+      scenario: boundary-state-plan-child-age-threshold-below
+      entity: Person
+      probe:
+        concept: us:regulations/42-cfr/435/603/f#state_plan_child_age_threshold
+        parameter: gov.hhs.medicaid.household.child_age_limit.non_student
+        side: below
+        value: null
+        program: medicaid
+        dtype: Count
+    - id: us-boundary-state-plan-child-age-threshold-above
+      period: null
+      scenario: boundary-state-plan-child-age-threshold-above
+      entity: Person
+      probe:
+        concept: us:regulations/42-cfr/435/603/f#state_plan_child_age_threshold
+        parameter: gov.hhs.medicaid.household.child_age_limit.non_student
+        side: above
+        value: null
+        program: medicaid
+        dtype: Count
+    - id: us-boundary-state-plan-full-time-student-age-threshold-below
+      period: null
+      scenario: boundary-state-plan-full-time-student-age-threshold-below
+      entity: Person
+      probe:
+        concept: us:regulations/42-cfr/435/603/f#state_plan_full_time_student_age_threshold
+        parameter: gov.hhs.medicaid.household.child_age_limit.student
+        side: below
+        value: null
+        program: medicaid
+        dtype: Count
+    - id: us-boundary-state-plan-full-time-student-age-threshold-above
+      period: null
+      scenario: boundary-state-plan-full-time-student-age-threshold-above
+      entity: Person
+      probe:
+        concept: us:regulations/42-cfr/435/603/f#state_plan_full_time_student_age_threshold
+        parameter: gov.hhs.medicaid.household.child_age_limit.student
+        side: above
+        value: null
+        program: medicaid
+        dtype: Count
+  boundary-medicare:
+    cases:
+    - id: us-boundary-attained-age-threshold-below
+      period: null
+      scenario: boundary-attained-age-threshold-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/426/a/1#attained_age_threshold
+        parameter: gov.hhs.medicare.eligibility.min_age
+        side: below
+        value: null
+        program: medicare
+        dtype: Count
+    - id: us-boundary-attained-age-threshold-above
+      period: null
+      scenario: boundary-attained-age-threshold-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/426/a/1#attained_age_threshold
+        parameter: gov.hhs.medicare.eligibility.min_age
+        side: above
+        value: null
+        program: medicare
+        dtype: Count
+    - id: us-boundary-age-attainment-threshold-below
+      period: null
+      scenario: boundary-age-attainment-threshold-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/426/b/1#age_attainment_threshold
+        parameter: gov.hhs.medicare.eligibility.min_age
+        side: below
+        value: null
+        program: medicare
+        dtype: Integer
+    - id: us-boundary-age-attainment-threshold-above
+      period: null
+      scenario: boundary-age-attainment-threshold-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/426/b/1#age_attainment_threshold
+        parameter: gov.hhs.medicare.eligibility.min_age
+        side: above
+        value: null
+        program: medicare
+        dtype: Integer
+    - id: us-boundary-disability-related-benefit-entitlement-calendar-month-threshold-below
+      period: null
+      scenario: boundary-disability-related-benefit-entitlement-calendar-month-threshold-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/426/b/2#disability_related_benefit_entitlement_calendar_month_threshold
+        parameter: gov.hhs.medicare.eligibility.min_months_receiving_social_security_disability
+        side: below
+        value: null
+        program: medicare
+        dtype: Count
+    - id: us-boundary-disability-related-benefit-entitlement-calendar-month-threshold-above
+      period: null
+      scenario: boundary-disability-related-benefit-entitlement-calendar-month-threshold-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/426/b/2#disability_related_benefit_entitlement_calendar_month_threshold
+        parameter: gov.hhs.medicare.eligibility.min_months_receiving_social_security_disability
+        side: above
+        value: null
+        program: medicare
+        dtype: Count
+  boundary-ssi:
+    cases:
+    - id: us-boundary-couple-or-living-with-spouse-resource-limit-below
+      period: null
+      scenario: boundary-couple-or-living-with-spouse-resource-limit-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382/a/3#couple_or_living_with_spouse_resource_limit
+        parameter: gov.ssa.ssi.eligibility.resources.limit.couple
+        side: below
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-couple-or-living-with-spouse-resource-limit-above
+      period: null
+      scenario: boundary-couple-or-living-with-spouse-resource-limit-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382/a/3#couple_or_living_with_spouse_resource_limit
+        parameter: gov.ssa.ssi.eligibility.resources.limit.couple
+        side: above
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-individual-no-spouse-resource-limit-below
+      period: null
+      scenario: boundary-individual-no-spouse-resource-limit-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382/a/3#individual_no_spouse_resource_limit
+        parameter: gov.ssa.ssi.eligibility.resources.limit.individual
+        side: below
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-individual-no-spouse-resource-limit-above
+      period: null
+      scenario: boundary-individual-no-spouse-resource-limit-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382/a/3#individual_no_spouse_resource_limit
+        parameter: gov.ssa.ssi.eligibility.resources.limit.individual
+        side: above
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-annual-general-income-exclusion-limit-below
+      period: null
+      scenario: boundary-annual-general-income-exclusion-limit-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382a/b/2#annual_general_income_exclusion_limit
+        parameter: gov.ssa.ssi.income.exclusions.general
+        side: below
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-annual-general-income-exclusion-limit-above
+      period: null
+      scenario: boundary-annual-general-income-exclusion-limit-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382a/b/2#annual_general_income_exclusion_limit
+        parameter: gov.ssa.ssi.income.exclusions.general
+        side: above
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-annual-earned-income-initial-exclusion-limit-below
+      period: null
+      scenario: boundary-annual-earned-income-initial-exclusion-limit-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382a/b/4#annual_earned_income_initial_exclusion_limit
+        parameter: gov.ssa.ssi.income.exclusions.earned
+        side: below
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-annual-earned-income-initial-exclusion-limit-above
+      period: null
+      scenario: boundary-annual-earned-income-initial-exclusion-limit-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382a/b/4#annual_earned_income_initial_exclusion_limit
+        parameter: gov.ssa.ssi.income.exclusions.earned
+        side: above
+        value: null
+        program: ssi
+        dtype: Money
+        unit: USD
+    - id: us-boundary-aged-age-threshold-years-below
+      period: null
+      scenario: boundary-aged-age-threshold-years-below
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382c/a/1#aged_age_threshold_years
+        parameter: gov.ssa.ssi.eligibility.aged_threshold
+        side: below
+        value: null
+        program: ssi
+        dtype: Count
+    - id: us-boundary-aged-age-threshold-years-above
+      period: null
+      scenario: boundary-aged-age-threshold-years-above
+      entity: Person
+      probe:
+        concept: us:statutes/42/1382c/a/1#aged_age_threshold_years
+        parameter: gov.ssa.ssi.eligibility.aged_threshold
+        side: above
+        value: null
+        program: ssi
+        dtype: Count
+  boundary-tax:
+    cases:
+    - id: us-boundary-amt-exemption-phaseout-start-below
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-exemption-phaseout-start-above
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-exemption-phaseout-start-joint-below
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start_joint
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-exemption-phaseout-start-joint-above
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start_joint
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-exemption-phaseout-start-separate-below
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-separate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start_separate
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-exemption-phaseout-start-separate-above
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-separate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start_separate
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-exemption-phaseout-start-unmarried-below
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-unmarried-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start_unmarried
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-exemption-phaseout-start-unmarried-above
+      period: null
+      scenario: boundary-amt-exemption-phaseout-start-unmarried-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_exemption_phaseout_start_unmarried
+        parameter: gov.irs.income.amt.exemption.phase_out.start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-twenty-eight-percent-threshold-all-other-below
+      period: null
+      scenario: boundary-amt-twenty-eight-percent-threshold-all-other-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_twenty_eight_percent_threshold_all_other
+        parameter: gov.irs.income.amt.brackets.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-amt-twenty-eight-percent-threshold-all-other-above
+      period: null
+      scenario: boundary-amt-twenty-eight-percent-threshold-all-other-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/alternative-minimum-tax#amt_twenty_eight_percent_threshold_all_other
+        parameter: gov.irs.income.amt.brackets.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-below
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-above
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-head-of-household-below
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-head-of-household-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_head_of_household
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-head-of-household-above
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-head-of-household-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_head_of_household
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-joint-below
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_joint
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-joint-above
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_joint
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-separate-below
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-separate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_separate
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-separate-above
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-separate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_separate
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-single-below
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-single-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_single
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-fifteen-percent-threshold-single-above
+      period: null
+      scenario: boundary-capital-gains-fifteen-percent-threshold-single-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_fifteen_percent_threshold_single
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-below
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-above
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-head-of-household-below
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-head-of-household-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_head_of_household
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-head-of-household-above
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-head-of-household-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_head_of_household
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-joint-below
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_joint
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-joint-above
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_joint
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-separate-below
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-separate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_separate
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-separate-above
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-separate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_separate
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-single-below
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-single-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_single
+        parameter: gov.irs.capital_gains.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-capital-gains-zero-rate-threshold-single-above
+      period: null
+      scenario: boundary-capital-gains-zero-rate-threshold-single-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/capital-gains#capital_gains_zero_rate_threshold_single
+        parameter: gov.irs.capital_gains.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-eitc-threshold-phaseout-amounts-other-below
+      period: null
+      scenario: boundary-eitc-threshold-phaseout-amounts-other-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/earned-income-credit#eitc_threshold_phaseout_amounts_other
+        parameter: gov.irs.credits.eitc.phase_out.start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-eitc-threshold-phaseout-amounts-other-above
+      period: null
+      scenario: boundary-eitc-threshold-phaseout-amounts-other-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/earned-income-credit#eitc_threshold_phaseout_amounts_other
+        parameter: gov.irs.credits.eitc.phase_out.start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-1-rate-below
+      period: null
+      scenario: boundary-income-tax-bracket-1-rate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_1_rate
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-1-rate-above
+      period: null
+      scenario: boundary-income-tax-bracket-1-rate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_1_rate
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-1-threshold-below
+      period: null
+      scenario: boundary-income-tax-bracket-1-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_1_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-1-threshold-above
+      period: null
+      scenario: boundary-income-tax-bracket-1-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_1_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-2-rate-below
+      period: null
+      scenario: boundary-income-tax-bracket-2-rate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_2_rate
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-2-rate-above
+      period: null
+      scenario: boundary-income-tax-bracket-2-rate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_2_rate
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-2-threshold-below
+      period: null
+      scenario: boundary-income-tax-bracket-2-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_2_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-2-threshold-above
+      period: null
+      scenario: boundary-income-tax-bracket-2-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_2_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-3-rate-below
+      period: null
+      scenario: boundary-income-tax-bracket-3-rate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_3_rate
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-3-rate-above
+      period: null
+      scenario: boundary-income-tax-bracket-3-rate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_3_rate
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-3-threshold-below
+      period: null
+      scenario: boundary-income-tax-bracket-3-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_3_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-3-threshold-above
+      period: null
+      scenario: boundary-income-tax-bracket-3-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_3_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-4-rate-below
+      period: null
+      scenario: boundary-income-tax-bracket-4-rate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_4_rate
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-4-rate-above
+      period: null
+      scenario: boundary-income-tax-bracket-4-rate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_4_rate
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-4-threshold-below
+      period: null
+      scenario: boundary-income-tax-bracket-4-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_4_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-4-threshold-above
+      period: null
+      scenario: boundary-income-tax-bracket-4-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_4_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-5-rate-below
+      period: null
+      scenario: boundary-income-tax-bracket-5-rate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_5_rate
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-5-rate-above
+      period: null
+      scenario: boundary-income-tax-bracket-5-rate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_5_rate
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-5-threshold-below
+      period: null
+      scenario: boundary-income-tax-bracket-5-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_5_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-5-threshold-above
+      period: null
+      scenario: boundary-income-tax-bracket-5-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_5_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-6-rate-below
+      period: null
+      scenario: boundary-income-tax-bracket-6-rate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_6_rate
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-6-rate-above
+      period: null
+      scenario: boundary-income-tax-bracket-6-rate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_6_rate
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-6-threshold-below
+      period: null
+      scenario: boundary-income-tax-bracket-6-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_6_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-6-threshold-above
+      period: null
+      scenario: boundary-income-tax-bracket-6-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_6_threshold
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-7-rate-below
+      period: null
+      scenario: boundary-income-tax-bracket-7-rate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_7_rate
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-7-rate-above
+      period: null
+      scenario: boundary-income-tax-bracket-7-rate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_7_rate
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-rates-below
+      period: null
+      scenario: boundary-income-tax-bracket-rates-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_rates
+        parameter: gov.irs.income.bracket.rates
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-rates-above
+      period: null
+      scenario: boundary-income-tax-bracket-rates-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_rates
+        parameter: gov.irs.income.bracket.rates
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-income-tax-bracket-thresholds-head-of-household-below
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-head-of-household-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_head_of_household
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-thresholds-head-of-household-above
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-head-of-household-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_head_of_household
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-thresholds-joint-below
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_joint
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-thresholds-joint-above
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_joint
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-thresholds-separate-below
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-separate-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_separate
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-thresholds-separate-above
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-separate-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_separate
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-thresholds-single-below
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-single-below
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_single
+        parameter: gov.irs.income.bracket.thresholds
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-income-tax-bracket-thresholds-single-above
+      period: null
+      scenario: boundary-income-tax-bracket-thresholds-single-above
+      entity: TaxUnit
+      probe:
+        concept: us:policies/irs/rev-proc-2025-32/income-tax-brackets#income_tax_bracket_thresholds_single
+        parameter: gov.irs.income.bracket.thresholds
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-married-separate-capital-loss-limit-below
+      period: null
+      scenario: boundary-married-separate-capital-loss-limit-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1211#married_separate_capital_loss_limit
+        parameter: gov.irs.ald.loss.capital.max
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-married-separate-capital-loss-limit-above
+      period: null
+      scenario: boundary-married-separate-capital-loss-limit-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1211#married_separate_capital_loss_limit
+        parameter: gov.irs.ald.loss.capital.max
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-other-taxpayer-capital-loss-limit-below
+      period: null
+      scenario: boundary-other-taxpayer-capital-loss-limit-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1211#other_taxpayer_capital_loss_limit
+        parameter: gov.irs.ald.loss.capital.max
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-other-taxpayer-capital-loss-limit-above
+      period: null
+      scenario: boundary-other-taxpayer-capital-loss-limit-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1211#other_taxpayer_capital_loss_limit
+        parameter: gov.irs.ald.loss.capital.max
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-joint-threshold-below
+      period: null
+      scenario: boundary-additional-medicare-self-employment-joint-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_joint_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-joint-threshold-above
+      period: null
+      scenario: boundary-additional-medicare-self-employment-joint-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_joint_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-other-threshold-below
+      period: null
+      scenario: boundary-additional-medicare-self-employment-other-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_other_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-other-threshold-above
+      period: null
+      scenario: boundary-additional-medicare-self-employment-other-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_other_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-separate-threshold-below
+      period: null
+      scenario: boundary-additional-medicare-self-employment-separate-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_separate_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-separate-threshold-above
+      period: null
+      scenario: boundary-additional-medicare-self-employment-separate-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_separate_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-threshold-below
+      period: null
+      scenario: boundary-additional-medicare-self-employment-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-self-employment-threshold-above
+      period: null
+      scenario: boundary-additional-medicare-self-employment-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1401#additional_medicare_self_employment_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-self-employment-income-inclusion-threshold-below
+      period: null
+      scenario: boundary-self-employment-income-inclusion-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1402/b#self_employment_income_inclusion_threshold
+        parameter: gov.irs.self_employment.net_earnings_exemption
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-self-employment-income-inclusion-threshold-above
+      period: null
+      scenario: boundary-self-employment-income-inclusion-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1402/b#self_employment_income_inclusion_threshold
+        parameter: gov.irs.self_employment.net_earnings_exemption
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-amount-below
+      period: null
+      scenario: boundary-niit-threshold-amount-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_amount
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-amount-above
+      period: null
+      scenario: boundary-niit-threshold-amount-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_amount
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-joint-below
+      period: null
+      scenario: boundary-niit-threshold-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_joint
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-joint-above
+      period: null
+      scenario: boundary-niit-threshold-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_joint
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-other-below
+      period: null
+      scenario: boundary-niit-threshold-other-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_other
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-other-above
+      period: null
+      scenario: boundary-niit-threshold-other-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_other
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-separate-below
+      period: null
+      scenario: boundary-niit-threshold-separate-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_separate
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-niit-threshold-separate-above
+      period: null
+      scenario: boundary-niit-threshold-separate-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/1411#niit_threshold_separate
+        parameter: gov.irs.investment.net_investment_income_tax.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-senior-deduction-age-threshold-below
+      period: null
+      scenario: boundary-senior-deduction-age-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/151#senior_deduction_age_threshold
+        parameter: gov.irs.deductions.standard.aged_or_blind.age_threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-senior-deduction-age-threshold-above
+      period: null
+      scenario: boundary-senior-deduction-age-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/151#senior_deduction_age_threshold
+        parameter: gov.irs.deductions.standard.aged_or_blind.age_threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-senior-deduction-phaseout-threshold-joint-below
+      period: null
+      scenario: boundary-senior-deduction-phaseout-threshold-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/151#senior_deduction_phaseout_threshold_joint
+        parameter: gov.irs.deductions.senior_deduction.phase_out_rate.joint
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-senior-deduction-phaseout-threshold-joint-above
+      period: null
+      scenario: boundary-senior-deduction-phaseout-threshold-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/151#senior_deduction_phaseout_threshold_joint
+        parameter: gov.irs.deductions.senior_deduction.phase_out_rate.joint
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-senior-deduction-phaseout-threshold-other-below
+      period: null
+      scenario: boundary-senior-deduction-phaseout-threshold-other-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/151#senior_deduction_phaseout_threshold_other
+        parameter: gov.irs.deductions.senior_deduction.phase_out_rate.other
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-senior-deduction-phaseout-threshold-other-above
+      period: null
+      scenario: boundary-senior-deduction-phaseout-threshold-other-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/151#senior_deduction_phaseout_threshold_other
+        parameter: gov.irs.deductions.senior_deduction.phase_out_rate.other
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-active-qbi-minimum-threshold-base-below
+      period: null
+      scenario: boundary-active-qbi-minimum-threshold-base-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/199A#active_qbi_minimum_threshold_base
+        parameter: gov.irs.deductions.qbi.deduction_floor.amount
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-active-qbi-minimum-threshold-base-above
+      period: null
+      scenario: boundary-active-qbi-minimum-threshold-base-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/199A#active_qbi_minimum_threshold_base
+        parameter: gov.irs.deductions.qbi.deduction_floor.amount
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-cdcc-child-age-limit-below
+      period: null
+      scenario: boundary-cdcc-child-age-limit-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_child_age_limit
+        parameter: gov.irs.credits.cdcc.eligibility.child_age
+        side: below
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-cdcc-child-age-limit-above
+      period: null
+      scenario: boundary-cdcc-child-age-limit-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_child_age_limit
+        parameter: gov.irs.credits.cdcc.eligibility.child_age
+        side: above
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-cdcc-first-phaseout-floor-below
+      period: null
+      scenario: boundary-cdcc-first-phaseout-floor-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_first_phaseout_floor
+        parameter: gov.irs.credits.cdcc.phase_out.min
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-cdcc-first-phaseout-floor-above
+      period: null
+      scenario: boundary-cdcc-first-phaseout-floor-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_first_phaseout_floor
+        parameter: gov.irs.credits.cdcc.phase_out.min
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-cdcc-first-phaseout-start-below
+      period: null
+      scenario: boundary-cdcc-first-phaseout-start-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_first_phaseout_start
+        parameter: gov.irs.credits.cdcc.phase_out.start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-cdcc-first-phaseout-start-above
+      period: null
+      scenario: boundary-cdcc-first-phaseout-start-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_first_phaseout_start
+        parameter: gov.irs.credits.cdcc.phase_out.start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-cdcc-second-phaseout-floor-below
+      period: null
+      scenario: boundary-cdcc-second-phaseout-floor-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_second_phaseout_floor
+        parameter: gov.irs.credits.cdcc.phase_out.amended_structure.second_min
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-cdcc-second-phaseout-floor-above
+      period: null
+      scenario: boundary-cdcc-second-phaseout-floor-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_second_phaseout_floor
+        parameter: gov.irs.credits.cdcc.phase_out.amended_structure.second_min
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-cdcc-second-phaseout-start-joint-below
+      period: null
+      scenario: boundary-cdcc-second-phaseout-start-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_second_phaseout_start_joint
+        parameter: gov.irs.credits.cdcc.phase_out.amended_structure.second_start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-cdcc-second-phaseout-start-joint-above
+      period: null
+      scenario: boundary-cdcc-second-phaseout-start-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_second_phaseout_start_joint
+        parameter: gov.irs.credits.cdcc.phase_out.amended_structure.second_start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-cdcc-second-phaseout-start-other-below
+      period: null
+      scenario: boundary-cdcc-second-phaseout-start-other-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_second_phaseout_start_other
+        parameter: gov.irs.credits.cdcc.phase_out.amended_structure.second_start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-cdcc-second-phaseout-start-other-above
+      period: null
+      scenario: boundary-cdcc-second-phaseout-start-other-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/21#cdcc_second_phaseout_start_other
+        parameter: gov.irs.credits.cdcc.phase_out.amended_structure.second_start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-age-threshold-below
+      period: null
+      scenario: boundary-section-22-age-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_age_threshold
+        parameter: gov.irs.credits.elderly_or_disabled.age
+        side: below
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-section-22-age-threshold-above
+      period: null
+      scenario: boundary-section-22-age-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_age_threshold
+        parameter: gov.irs.credits.elderly_or_disabled.age
+        side: above
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-section-22-phaseout-threshold-below
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-phaseout-threshold-above
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-phaseout-threshold-joint-below
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold_joint
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-phaseout-threshold-joint-above
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold_joint
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-phaseout-threshold-separate-below
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-separate-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold_separate
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-phaseout-threshold-separate-above
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-separate-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold_separate
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-phaseout-threshold-single-below
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-single-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold_single
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-section-22-phaseout-threshold-single-above
+      period: null
+      scenario: boundary-section-22-phaseout-threshold-single-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/22#section_22_phaseout_threshold_single
+        parameter: gov.irs.credits.elderly_or_disabled.phase_out.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-ctc-refundable-phase-in-threshold-below
+      period: null
+      scenario: boundary-ctc-refundable-phase-in-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/24/d#ctc_refundable_phase_in_threshold
+        parameter: gov.irs.credits.ctc.refundable.phase_in.threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-ctc-refundable-phase-in-threshold-above
+      period: null
+      scenario: boundary-ctc-refundable-phase-in-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/24/d#ctc_refundable_phase_in_threshold
+        parameter: gov.irs.credits.ctc.refundable.phase_in.threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-education-credit-phaseout-start-below
+      period: null
+      scenario: boundary-education-credit-phaseout-start-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#education_credit_phaseout_start
+        parameter: gov.irs.credits.education.phase_out.start
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-education-credit-phaseout-start-above
+      period: null
+      scenario: boundary-education-credit-phaseout-start-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#education_credit_phaseout_start
+        parameter: gov.irs.credits.education.phase_out.start
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-education-credit-phaseout-start-joint-below
+      period: null
+      scenario: boundary-education-credit-phaseout-start-joint-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#education_credit_phaseout_start_joint
+        parameter: gov.irs.credits.education.phase_out.start.joint
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-education-credit-phaseout-start-joint-above
+      period: null
+      scenario: boundary-education-credit-phaseout-start-joint-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#education_credit_phaseout_start_joint
+        parameter: gov.irs.credits.education.phase_out.start.joint
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-education-credit-phaseout-start-single-below
+      period: null
+      scenario: boundary-education-credit-phaseout-start-single-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#education_credit_phaseout_start_single
+        parameter: gov.irs.credits.education.phase_out.start.single
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-education-credit-phaseout-start-single-above
+      period: null
+      scenario: boundary-education-credit-phaseout-start-single-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#education_credit_phaseout_start_single
+        parameter: gov.irs.credits.education.phase_out.start.single
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-llc-expense-limit-below
+      period: null
+      scenario: boundary-llc-expense-limit-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#llc_expense_limit
+        parameter: gov.irs.credits.education.lifetime_learning_credit.expense_limit
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-llc-expense-limit-above
+      period: null
+      scenario: boundary-llc-expense-limit-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25A#llc_expense_limit
+        parameter: gov.irs.credits.education.lifetime_learning_credit.expense_limit
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-savers-credit-age-threshold-below
+      period: null
+      scenario: boundary-savers-credit-age-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_age_threshold
+        parameter: gov.irs.credits.retirement_saving.age_threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-savers-credit-age-threshold-above
+      period: null
+      scenario: boundary-savers-credit-age-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_age_threshold
+        parameter: gov.irs.credits.retirement_saving.age_threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Integer
+    - id: us-boundary-savers-credit-contribution-cap-below
+      period: null
+      scenario: boundary-savers-credit-contribution-cap-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_contribution_cap
+        parameter: gov.irs.credits.retirement_saving.contributions_cap
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-savers-credit-contribution-cap-above
+      period: null
+      scenario: boundary-savers-credit-contribution-cap-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_contribution_cap
+        parameter: gov.irs.credits.retirement_saving.contributions_cap
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-savers-credit-head-of-household-threshold-fraction-below
+      period: null
+      scenario: boundary-savers-credit-head-of-household-threshold-fraction-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_head_of_household_threshold_fraction
+        parameter: gov.irs.credits.retirement_saving.rate.threshold_adjustment
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-savers-credit-head-of-household-threshold-fraction-above
+      period: null
+      scenario: boundary-savers-credit-head-of-household-threshold-fraction-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_head_of_household_threshold_fraction
+        parameter: gov.irs.credits.retirement_saving.rate.threshold_adjustment
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-savers-credit-other-return-threshold-fraction-below
+      period: null
+      scenario: boundary-savers-credit-other-return-threshold-fraction-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_other_return_threshold_fraction
+        parameter: gov.irs.credits.retirement_saving.rate.threshold_adjustment
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-savers-credit-other-return-threshold-fraction-above
+      period: null
+      scenario: boundary-savers-credit-other-return-threshold-fraction-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_other_return_threshold_fraction
+        parameter: gov.irs.credits.retirement_saving.rate.threshold_adjustment
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-savers-credit-threshold-multiplier-below
+      period: null
+      scenario: boundary-savers-credit-threshold-multiplier-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_threshold_multiplier
+        parameter: gov.irs.credits.retirement_saving.rate.threshold_adjustment
+        side: below
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-savers-credit-threshold-multiplier-above
+      period: null
+      scenario: boundary-savers-credit-threshold-multiplier-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/25B#savers_credit_threshold_multiplier
+        parameter: gov.irs.credits.retirement_saving.rate.threshold_adjustment
+        side: above
+        value: null
+        program: tax
+        dtype: Rate
+    - id: us-boundary-additional-medicare-wage-tax-joint-threshold-below
+      period: null
+      scenario: boundary-additional-medicare-wage-tax-joint-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3101/b/2#additional_medicare_wage_tax_joint_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-wage-tax-joint-threshold-above
+      period: null
+      scenario: boundary-additional-medicare-wage-tax-joint-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3101/b/2#additional_medicare_wage_tax_joint_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-wage-tax-other-threshold-below
+      period: null
+      scenario: boundary-additional-medicare-wage-tax-other-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3101/b/2#additional_medicare_wage_tax_other_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-wage-tax-other-threshold-above
+      period: null
+      scenario: boundary-additional-medicare-wage-tax-other-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3101/b/2#additional_medicare_wage_tax_other_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-wage-tax-threshold-below
+      period: null
+      scenario: boundary-additional-medicare-wage-tax-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3101/b/2#additional_medicare_wage_tax_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-additional-medicare-wage-tax-threshold-above
+      period: null
+      scenario: boundary-additional-medicare-wage-tax-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3101/b/2#additional_medicare_wage_tax_threshold
+        parameter: gov.irs.payroll.medicare.additional.exclusion
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-annual-remuneration-wage-base-limit-below
+      period: null
+      scenario: boundary-annual-remuneration-wage-base-limit-below
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3306/b/1#annual_remuneration_wage_base_limit
+        parameter: gov.irs.payroll.federal_unemployment.taxable_wage_base
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
+    - id: us-boundary-annual-remuneration-wage-base-limit-above
+      period: null
+      scenario: boundary-annual-remuneration-wage-base-limit-above
+      entity: TaxUnit
+      probe:
+        concept: us:statutes/26/3306/b/1#annual_remuneration_wage_base_limit
+        parameter: gov.irs.payroll.federal_unemployment.taxable_wage_base
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: USD
