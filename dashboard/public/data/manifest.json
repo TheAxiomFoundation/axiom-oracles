@@ -64,6 +64,9 @@
     "axiom-euromod-uk-income-tax-dividend.json",
     "axiom-euromod-uk-income-tax-mixed.json",
     "axiom-euromod-uk-income-tax-scottish.json",
-    "axiom-euromod-uk-child-benefit.json"
+    "axiom-euromod-uk-child-benefit.json",
+    "axiom-euromod-be-regional-pit-surcharge.json",
+    "axiom-euromod-be-local-municipal-pit.json",
+    "axiom-euromod-be-capital-income-tax.json"
   ]
 }

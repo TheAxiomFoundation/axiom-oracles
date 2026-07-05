@@ -30,6 +30,30 @@
       "source": "comparisons/az-snap-ecps.yaml"
     },
     {
+      "suite": "be-capital-income-tax",
+      "report": "axiom-euromod-be-capital-income-tax.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-capital-income-tax.yaml"
+    },
+    {
+      "suite": "be-local-municipal-pit",
+      "report": "axiom-euromod-be-local-municipal-pit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-local-municipal-pit.yaml"
+    },
+    {
+      "suite": "be-regional-pit-surcharge",
+      "report": "axiom-euromod-be-regional-pit-surcharge.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-regional-pit-surcharge.yaml"
+    },
+    {
       "suite": "ca-snap-ecps",
       "report": "axiom-policyengine-ca-snap-ecps.json",
       "repos": [

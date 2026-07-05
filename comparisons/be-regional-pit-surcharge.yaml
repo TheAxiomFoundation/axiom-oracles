@@ -1,0 +1,42 @@
+name: be-regional-pit-surcharge
+title: Belgium regional PIT additional tax (tinrg) — Axiom vs EUROMOD
+description: >-
+  Compares the regional personal-income-tax additional tax encoded in Axiom
+  RuleSpec (special financing law of 16 January 1989 article 5/2, the reduced
+  State tax multiplied by the region's additional-tax percentage) against
+  EUROMOD Belgium tinrg_s on a synthetic single-earner grid at 40k gross, one
+  case per region (Brussels-Capital, Flanders, Wallonia). EUROMOD levies the
+  regional additional tax at 32.591% (Brussels) or 33.257% (Flanders and
+  Wallonia) on the reduced State tax; the cases supply that same region rate to
+  the encoded mechanism and bridge the engine's own reduced State tax (tinna_s)
+  so both engines levy the identical rate on the identical base. The region is
+  set via the drgn1 input (1 Brussels, 2 Flanders, 3 Wallonia). EUROMOD runs the
+  registration-free public model (EUROMOD_RELEASES_J2.0+, system BE_2025) under
+  the real dataset-configuration name BE_2024_c1_2015_03_e2 (the dataset-name
+  gating workaround; no licensed microdata is read) with input rows templated
+  from the bundled BE_training_data schema. This suite runs where the x64
+  EUROMOD runtime and model checkout are available; on runners without them the
+  registry re-emits the committed dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: be-regional-pit-surcharge
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: BE
+    euromod_system: BE_2025
+    euromod_dataset: BE_2024_c1_2015_03_e2
+    euromod_template_dataset: BE_training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-be-regional-pit-surcharge.json
+
+artifacts:
+  report_basename: axiom-euromod-be-regional-pit-surcharge
+
+dashboard:
+  filename: axiom-euromod-be-regional-pit-surcharge.json
+  suite: be-regional-pit-surcharge

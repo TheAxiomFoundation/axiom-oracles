@@ -1514,6 +1514,19 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     env["EUROMOD_COUNTRY"] = str(params.get("euromod_country", "UK"))
     env["EUROMOD_SYSTEM"] = str(params.get("euromod_system", "UK_2026"))
     env["EUROMOD_DATASET"] = str(params.get("euromod_dataset", "training_data"))
+    # EUROMOD releases gate content on real dataset-configuration names; the BE
+    # spine templates its input rows from the bundled BE_training_data schema
+    # while running under the real BE_2024_c1_2015_03_e2 configuration name (the
+    # dataset-name gating workaround; no licensed microdata is read).
+    template_dataset = params.get("euromod_template_dataset")
+    if template_dataset:
+        env["EUROMOD_TEMPLATE_DATASET"] = str(template_dataset)
+    country_code = params.get("euromod_country_code")
+    if country_code is not None:
+        env["EUROMOD_COUNTRY_CODE"] = str(country_code)
+    policy_switches = params.get("euromod_policy_switch_overrides")
+    if policy_switches:
+        env["EUROMOD_POLICY_SWITCHES"] = str(policy_switches)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
         env["AXIOM_RULESPEC_REPO_ROOTS"] = str(

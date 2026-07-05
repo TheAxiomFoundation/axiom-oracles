@@ -297,6 +297,31 @@ class Concepts:
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"
     )
+    # Regional PIT additional tax (tinrg_be): the reduced State tax defined by
+    # the special financing law article 5/2 multiplied by a supplied regional
+    # additional-tax percentage. The reduced-tax base is a supplied stage
+    # boundary; the case pins it from the engine so both sides levy the region's
+    # rate on the identical base.
+    BE_REGIONAL_ADDITIONAL_TAX = (
+        "be:statutes/income_tax/individual/regional_surcharge"
+        "#belgium_pit_regional_additional_tax"
+    )
+    # Local/municipal PIT additional tax (tinmu_be): the communal additional
+    # centimes on the cumulative State-plus-regional tax. The base (reduced State
+    # tax plus the regional additional tax) is supplied as two stage boundaries
+    # pinned from the engine's tinna_s and tinrg_s, because EUROMOD applies tinmu
+    # to tin_s after tinrg.
+    BE_LOCAL_COMMUNAL_ADDITIONAL_TAX = (
+        "be:statutes/income_tax/individual/regional_surcharge"
+        "#belgium_pit_local_municipal_additional_tax"
+    )
+    # Separately-taxed capital-income tax (tinkt_be): taxable movable income at
+    # the article 269 general 30% rate. The taxable movable income is a supplied
+    # stage boundary pinned from the engine's post-uprating yiy_s.
+    BE_CAPITAL_INCOME_SEPARATE_TAX = (
+        "be:statutes/income_tax/movable_withholding/rates"
+        "#belgium_capital_income_separate_tax"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
