@@ -1,0 +1,136 @@
+# Belgium coverage matrix — EUROMOD BE_2025 vs rulespec-be vs axiom-oracles
+
+Authoritative per-policy coverage of the EUROMOD Belgium `BE_2025` model surface
+against the `rulespec-be` encoded surface and the `axiom-oracles` cross-engine
+comparison suites. This gates the Belgium encoding wave: a row's status tells a
+worker whether the instrument is unencoded, encoded-but-unvalidated, or already
+oracle-compared.
+
+- **EUROMOD facts** are parsed from the model itself:
+  `EUROMOD_RELEASES_J2.0+/XMLParam/Countries/BE/BE.xml`, system `BE_2025`
+  (SystemID `98820bac-c53d-4fac-8abf-96e0b43d29eb`), sha256
+  `71b63c3662d35a5a633003e69a0bb7a7dfed27532d8c38b4de9f12327136afaf`. Switch
+  status, function counts, and output variables are read from the XML, not from
+  memory of what EUROMOD "probably" models.
+- **rulespec-be** inventory is from `main` (HEAD `206f110`), `.yaml` modules only.
+- **axiom-oracles** suites are the 18 published `dashboard/public/data/axiom-euromod-be-*.json`
+  plus 3 registered-but-unpublished suites; per-case counts read from those JSONs.
+
+## Denominator (from the XML)
+
+`BE_2025` has **43 policy nodes**, switch counts `{on: 32, off: 7, switch: 3,
+n/a: 1}` (identical to `dashboard/public/data/euromod-be-coverage.json`). Of the
+43, **13 are technical/definitional** (`def` type: SetDefault, uprate, ConstDef,
+ILsDef, ILsUDBDef, ILDef, random, TUDef, InitVars, neg, hhot_switch,
+output_std, output_std_hh) and are not benefit/tax instruments. The remaining 30
+are computing policies (`sic`/`tax`/`ben`/`inc`).
+
+**SIMULATED** here = switch `on` (or `switch`, i.e. extension-gated) AND the
+policy computes an `_s` output from inputs via `ArithOp`/`BenCalc`/`SchedCalc`/
+`Allocate`/`Elig` functions. **Passthrough/off** = present in the spine but not
+active in a default `BE_2025` run (income taken from the input data, or gated on
+an add-on): `bun_be`, `byr_be`, `bsaoa_be`, `yem_be`, `tco_be`.
+
+## No bundled BE country report
+
+This release's `Documentation/` folder ships add-on notes, FAQs, the data
+codebook (`EM_data_codebook_J2.0+.xlsm`), and the policy-parameters workbook
+(`EUROMOD policy parameters J2.0+.xlsx`) — **no per-country policy report** for
+Belgium. Gap ordering below is therefore **reasoned** (by whether the policy is
+switched on, its structural breadth = function count, and the known fiscal
+weight of the instrument class), explicitly **not** cited to a country report.
+
+## Status legend
+
+- **compared** — encoded in rulespec-be AND an axiom-oracles suite live-compares it to the EUROMOD output.
+- **compared*** — suite exists and is registered (concept mapping present), but **not** in the 18 published dashboard JSONs.
+- **encoded, not compared** — a real rulespec-be module (statutory content + companion test) exists, but no EUROMOD oracle suite.
+- **partial** — some sub-surface encoded, large parts not.
+- **NOT ENCODED** — no rulespec-be module.
+
+## Matrix — SIMULATED BE_2025 policies
+
+| # | EUROMOD policy | switch | main output(s) | what it does | rulespec-be status | suite (cases match/total) | gap → Belgian legal source family |
+|---|---|---|---|---|---|---|---|
+| 1 | `tscee_be` | on | `tscee_s`, `tsceerd_s`, `yemeq_s` | Employee social-security contributions (13.07%) + work-bonus reduction | compared (partial) | `be-worker-ssc` (4/6 across 3 concepts) | — (broaden: special regimes, manual workers) |
+| 2 | `tscer_be` | on | `tscer_s` (+ component `_s`) | Employer social-security contributions (ONSS/RSZ) | compared (partial) | `be-employer-ssc` (0/2; EUROMOD #11) | — (broaden: structural reductions, ≥20-worker, manual-worker vacation) |
+| 3 | `tscse_be` | on | `tscse_s` | Self-employed social contributions (RD No. 38) | compared (partial) | `be-self-employed-ssc` (4/7; EUROMOD #6) | — (broaden: student/starter/spouse-helper/survivor) |
+| 4 | `tsceesp_be` | on | `tsceesp_s` | Special social-security contribution (household, Law 30.03.1994 art. 108) | compared (partial) | `be-special-social-security-contribution` (3/7; EUROMOD #7) | — (broaden: art. 109 withholding, art. 110 settlement) |
+| 5 | `tscpe_be` | on | `tscpe_s` | Pensioner health/disability + solidarity contributions | **encoded, not compared** (`be/statutes/social_security/chapter_10_special_contributions.yaml`) | — | build `tscpe_s` suite → Law 30.03.1994 ch. 10; ZIV/AMI RD 03.07.1996 |
+| 6 | `tci_be` | on | `tci_s` (+ `brv_s`) | Flemish care insurance / social-protection flat premium (zorgverzekering) | compared | `be-flemish-social-protection-premium` (2/2) | — (broaden: Brussels voluntary affiliation, sanctions) |
+| 7 | `tinna_be` | on | `tin_s`, `tinna_s` | Federal PIT — brackets, tax-free amount, credits; writes total `tin_s` | compared (worker pilot only) | `be-worker-pit` (2/3; EUROMOD #12) | — (broaden: full household PIT, joint assessment) |
+| 8 | `tintb_be` | on | `tintasp_s`, marital-quotient, deductions | PIT deductions & marital quotient (CIR 92 arts. 87–89, 131–145) | **partial** (rate_scale, tax_free_amount, tax_reductions_and_credits, joint_assessment encoded; not oracle-decomposed to `tintb`) | (feeds `be-worker-pit`) | broaden PIT decomposition → CIR 92 arts. 86–90, 131–178 |
+| 9 | `tinfe_be` | on | `tintcch_s`, `tin_s`, fiscal-expenditure reductions | PIT fiscal expenditures — childcare, service vouchers, pensions, donations reductions (CIR 92 arts. 145/1 ff.) | **partial** (tax_reductions_and_credits.yaml encodes some; most fiscal-expenditure reductions not encoded) | — | encode remaining PIT reductions → CIR 92 arts. 145/1–145/48, regional decrees |
+| 10 | `tinrg_be` | on | `tinrg_s`, `tin_s` | Regional PIT surcharges / reductions (post-6th-state-reform regional additional %) | **partial** (`communal_additions.yaml`; regional PIT autonomy factor in pilot) | (feeds `be-worker-pit`) | encode regional PIT → Special Financing Law 16.01.1989 / 06.01.2014; regional decrees |
+| 11 | `tinmu_be` | on | `tinmu_s`, `tin_s` | Municipal/local PIT surcharge (communal additional centimes on PIT) | **encoded** (`communal_additions.yaml`) — not compared | (feeds `be-worker-pit`) | build local-PIT suite → CIR 92 arts. 465–470bis |
+| 12 | `tintace_be` | on | `tintace_s` | PIT professional-expense deduction (forfait) | encoded (`article_51_forfaits.yaml`) — compared via pilot | (feeds `be-worker-pit`) | — |
+| 13 | `tinkt_be` | on | `tinkt_s` | Capital income tax (separately-taxed movable income) | **encoded, not compared** (`movable_withholding/rates.yaml`, `movable_income.yaml`) | — (supplied as 0 in `ils_tax` pilot) | build `tinkt_s` suite → CIR 92 arts. 17–22, 171, 269 |
+| 14 | `tprhm_be` | on | `tprhm_s`, `khooo_s` | Advance levy on immovable property (précompte immobilier) + indexed cadastral income | compared (2 concepts) | `be-property-tax` (3/3), `be-cadastral-income-indexation` (1/2; EUROMOD #14) | — (broaden: art. 15 remission, regional reductions, BE HOME) |
+| 15 | `bch_be` | on | `bch_s` | Monthly child benefit — 4 regions × base/supplement/rank (Growth Package / groeipakket / AGF) | compared (base + BXL/WAL supplements) | `be-family-child-benefit-*` (5 suites: base 13/17 #8, BXL same-age 4/4, BXL supp 3/3, WAL supp 2/8 #9) | — (broaden: orphan/disability/single-parent supplements, mixed-age rank) |
+| 16 | `bchba_be` | on | `bchba_s` | Regional birth allowance / starting amount (4 regions) | compared | `be-family-birth-allowance` (6/7; EUROMOD #13) | — (broaden: multiple-birth, payment recipient) |
+| 17 | `bsa_be` | on | `bsa_s` | Social-integration income support (leefloon / revenu d'intégration, CPAS/OCMW) | compared (partial) | `be-social-assistance` (2/2) | — (broaden: itemized/cohabitant resources, earned-income disregards) |
+| 18 | `bed_be` | on | `bed_s` | Study allowances — Flemish (school/study toelage) + French Community grants (147 functions) | **NOT ENCODED** | — | **encode from scratch** → Flemish Codex Secundair/Hoger Onderwijs + FWB décret allocations d'études |
+| 19 | `bwkrg_be` | on | `bwkrg_s` | Flemish jobbonus (low-wage employment top-up) | compared | `be-flemish-jobbonus` (2/7; EUROMOD #10) | — (broaden: part-time/partial-year, frontier workers) |
+| 20 | `yemcomp_be` | on | `bwkmcee_s`, `yemmw_s` | Covid-19 temporary-unemployment wage compensation (employees) | **NOT ENCODED** | — | (low priority; historical) → RD 30.03.2020 + ONEM temp-unemployment Covid measures |
+| 21 | `ysecomp_be` | on | `bwkmcse_s` | Covid-19 wage compensation (self-employed bridging right / droit passerelle) | **NOT ENCODED** | — | (low priority; historical) → Law 23.03.2020 crisis bridging right |
+| 22 | `bmact_be` | switch | `bmact_s` | Maternity-leave indemnity (rest period 82%/75%, RD 03.07.1996 art. 216) | compared* (registered, unpublished) | `be-maternity-leave` (not in dashboard set) | publish suite; broaden self-employed/unemployed maternity |
+| 23 | `bpact_be` | switch | `bpact_s` | Paternity/birth-leave compensation (3 employer days + 82%, RD 03.07.1996 art. 223bis) | compared* (registered, unpublished) | `be-birth-leave` (not in dashboard set) | publish suite; broaden eligibility/scheduling |
+| 24 | `bfapl_be` | switch | `bfapl_s` | Parental-leave allowance (RVA/ONEM career-break interruption benefit) | **NOT ENCODED** | — | encode → RD 29.10.1997 (parental leave) + RD 02.01.1991 career-break |
+
+## Passthrough / off in a default BE_2025 run (income from data or add-on-gated)
+
+| EUROMOD policy | switch | output | why not active | rulespec-be status | gap → source family |
+|---|---|---|---|---|---|
+| `bun_be` | off | `bun_s` | "PART SIMULATED" but **off**; unemployment income carried from input data | **encoded, not compared** (`be/regulations/unemployment/*` — admission, benefit_amount, minimum_daily, household_status, payable_amount, all with tests) | build `bun_s` suite (switch on) → RD 25.11.1991 (unemployment) |
+| `bsaoa_be` | off | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | compared* via XML overlay: `be-elderly-income-support` registered, **unpublished** → Law 22.03.2001 (GRAPA/IGO) |
+| `byr_be` | n/a | (early retirement) | pension/early-retirement income from data | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | build pension suite → RD No. 50; RD 23.12.1996 |
+| `tco_be` | off | (commodities) | indirect consumption tax; needs BTA/consumption extension; body is `DefConst`/`DefIl` only | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | build indirect-tax suite → RD No. 20 (VAT); excise codes |
+| `yem_be` | off | `yem` | minimum-wage definition (not a benefit) | n/a (definitional) | — |
+
+## Encoded in rulespec-be with NO EUROMOD BE_2025 counterpart (out of scope for this oracle)
+
+These are real encoded surfaces but EUROMOD BE_2025 does not simulate them, so
+they cannot be EUROMOD-compared: regional **gift tax**, **inheritance tax**, and
+**vehicle taxes** (`be-bru`/`be-vlg`/`be-wal`), Brussels **housing allowances**
+and **social-housing rental**, **disability allowances** (`be/statutes/disability`),
+**incapacity/invalidity indemnity** (`be/regulations/health_insurance/incapacity`),
+**company car** benefit-in-kind, **mobility budget**, **non-labour-income
+contributions**, and the **guaranteed family benefits / LGAF** transition
+surfaces. They belong in a PolicyEngine/TAXSIM-style oracle or unit tests, not
+the EUROMOD matrix.
+
+## Sanity-check vs the live dashboard
+
+18 published suites, **88 comparisons, 59 exact matches, 100% dispositioned**
+(matches `euromod-be-coverage.json` `dispositioned_parity`). Three suites are
+**registered but not published** — `be-maternity-leave` (`bmact_s`),
+`be-birth-leave` (`bpact_s`), `be-elderly-income-support` (`bsaoa_s`) — so the
+coverage claim's "live_verified" for maternity/birth-leave/GRAPA is **not**
+reflected in the dashboard JSON set. Nothing already-compared is marked missing
+above.
+
+## Wave plan (gap workers, grouped)
+
+Ordered by reasoned fiscal/population importance (labeled reasoned — no country report):
+
+1. **PIT decomposition** (`tinna`/`tinfe`/`tintb`/`tinrg`/`tinmu`/`tinkt`) →
+   CIR 92 (arts. 130–178 rate/credits; 145/1 ff. fiscal expenditures; 465–470bis
+   communal; 17–22/171/269 movable) + Special Financing Law regional %. Highest
+   weight; largest EUROMOD surface (`tinfe`+`tintb`+`tinna` = 209 functions).
+2. **Study allowances** (`bed_be`, `bed_s`) → Flemish Onderwijs codex +
+   Fédération Wallonie-Bruxelles décret allocations d'études. Fully unencoded,
+   147 EUROMOD functions.
+3. **Unemployment** (`bun_be`, `bun_s`; switch on) → RD 25.11.1991. Encoded,
+   never oracle-compared; core working-age transfer.
+4. **Pensions / GRAPA / early-retirement** (`byr_be`, `bsaoa_be`) → RD No. 50 +
+   RD 23.12.1996 (pensions); Law 22.03.2001 (GRAPA). Publish the registered
+   `be-elderly-income-support` suite; build a pension suite.
+5. **Pensioner & special contributions** (`tscpe_be`, `tscpe_s`) → Law
+   30.03.1994 ch. 10 + ZIV/AMI RD 03.07.1996.
+6. **Leave suites already coded — publish** (`bmact_s`, `bpact_s`) + encode
+   parental leave (`bfapl_be`, `bfapl_s`) → RD 03.07.1996 arts. 216/223bis;
+   RD 29.10.1997.
+7. **Indirect tax** (`tco_be`) → RD No. 20 (VAT) + excise codes; needs the
+   consumption-tax extension in EUROMOD.
+8. **Covid schemes** (`yemcomp`/`ysecomp`) → historical crisis measures; lowest
+   priority.
