@@ -125,6 +125,17 @@ class Concepts:
     # encoding exists; UKMOD/EUROMOD outputs bridge to these).
     UK_INCOME_TAX = "uk:statutes/ukpga/2007/3/23#income_tax_liability"
     UK_EMPLOYEE_NIC = "uk:tax/national-insurance#employee_contributions"
+    # Composed single-employee pilot pipelines (rulespec-uk) that wire the
+    # supplied s10/s23 and s8 stage boundaries from gross employment income,
+    # so an end-to-end UKMOD comparison (tin_s, tscee_s) can run.
+    UK_WORKER_INCOME_TAX_LIABILITY = (
+        "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
+        "#uk_pit_pilot_income_tax_liability"
+    )
+    UK_WORKER_CLASS_1_EMPLOYEE_NIC = (
+        "uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline"
+        "#uk_nic_pilot_primary_class_1_contribution"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

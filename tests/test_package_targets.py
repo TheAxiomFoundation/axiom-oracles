@@ -16,6 +16,7 @@ from axiom_oracles.cli import (
 from axiom_oracles.comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
+    mappings_by_concept,
 )
 from axiom_oracles.core.case import Case, Concepts, Entity
 from axiom_oracles.core.geography import GeographyScope
@@ -436,6 +437,73 @@ def test_euromod_bridge_overwrites_employer_ssc_base() -> None:
     assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
         contribution_input: 31_651.0,
     }
+
+
+def test_uk_worker_pit_suite_shape() -> None:
+    cases = load_suite("uk-worker-pit")
+    assert [case.case_id for case in cases] == [
+        "uk-worker-pit-30k",
+        "uk-worker-pit-45k",
+        "uk-worker-pit-60k",
+        "uk-worker-pit-130k",
+        "uk-worker-pit-360k",
+    ]
+    assert {case.period for case in cases} == {"2026"}
+    for case in cases:
+        assert case.locale == "UK"
+        assert case.scope == GeographyScope(type="country", geoid="UK")
+        assert case.outputs == (Concepts.UK_WORKER_INCOME_TAX_LIABILITY,)
+    income_input = (
+        "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input."
+        "uk_pit_pilot_annual_employment_income"
+    )
+    assert cases[0].metadata["axiom_inputs"][income_input] == 30_000.0
+
+
+def test_uk_worker_nic_suite_shape() -> None:
+    cases = load_suite("uk-worker-nic")
+    assert [case.case_id for case in cases] == [
+        "uk-worker-nic-30k",
+        "uk-worker-nic-45k",
+        "uk-worker-nic-60k",
+        "uk-worker-nic-130k",
+        "uk-worker-nic-360k",
+    ]
+    assert {case.period for case in cases} == {"2026"}
+    for case in cases:
+        assert case.outputs == (Concepts.UK_WORKER_CLASS_1_EMPLOYEE_NIC,)
+
+
+def test_uk_worker_pit_bridge_overwrites_gross_income_input() -> None:
+    [case] = load_suite("uk-worker-pit")[:1]
+    income_input = (
+        "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input."
+        "uk_pit_pilot_annual_employment_income"
+    )
+
+    assert _euromod_to_axiom_bridge_outputs([case]) == ["yem"]
+
+    [bridged] = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [EngineResult("euromod", case.case_id, {"yem": 30_990.0})],
+    )
+
+    assert bridged.metadata["axiom_inputs"][income_input] == 30_990.0
+    assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        income_input: 30_990.0,
+    }
+
+
+def test_uk_worker_concept_mappings_pair_axiom_and_euromod() -> None:
+    by_concept = mappings_by_concept()
+    pit = by_concept[Concepts.UK_WORKER_INCOME_TAX_LIABILITY]
+    assert pit.target_for_engine("axiom") == "uk_pit_pilot_income_tax_liability"
+    assert pit.target_for_engine("euromod") == "tin_s"
+    assert "UK" in pit.locales
+    nic = by_concept[Concepts.UK_WORKER_CLASS_1_EMPLOYEE_NIC]
+    assert nic.target_for_engine("axiom") == "uk_nic_pilot_primary_class_1_contribution"
+    assert nic.target_for_engine("euromod") == "tscee_s"
+    assert "UK" in nic.locales
 
 
 def test_axiom_runner_aliases_qualified_input_refs_to_bare_slots() -> None:

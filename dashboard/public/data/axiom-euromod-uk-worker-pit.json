@@ -1,0 +1,370 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 5,
+      "comparison_weight": 5,
+      "components": [],
+      "concept": "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_income_tax_liability",
+      "description": "UK income tax liability (single employee)",
+      "left_weighted_sum": 214310,
+      "match_rate": 100,
+      "match_weight": 5,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 214310,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 5,
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK income tax liability (single employee)",
+      "id": "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_income_tax_liability",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0002,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": null,
+  "suite": "uk-worker-pit",
+  "summary": {
+    "comparison_count": 5,
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 5,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 5,
+      "match_rate": 100,
+      "match_weight": 5,
+      "mismatch_weight": 0
+    }
+  },
+  "cases": [
+    {
+      "case_id": "uk-worker-pit-30k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 30000.0,
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_supplied_section_24_reliefs": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "yem": 2500.0,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 30000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            30000.0
+          ],
+          "yearly_earned_income_total": 30000.0
+        },
+        "locale": "UK",
+        "scenario": "single-worker-pit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_earned_income": 30000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-worker-pit-45k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 45000.0,
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_supplied_section_24_reliefs": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "yem": 3750.0,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 45000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            45000.0
+          ],
+          "yearly_earned_income_total": 45000.0
+        },
+        "locale": "UK",
+        "scenario": "single-worker-pit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_earned_income": 45000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-worker-pit-60k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 60000.0,
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_supplied_section_24_reliefs": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "yem": 5000.0,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 60000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            60000.0
+          ],
+          "yearly_earned_income_total": 60000.0
+        },
+        "locale": "UK",
+        "scenario": "single-worker-pit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_earned_income": 60000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-worker-pit-130k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 130000.0,
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_supplied_section_24_reliefs": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "yem": 10833.333333333334,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 130000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            130000.0
+          ],
+          "yearly_earned_income_total": 130000.0
+        },
+        "locale": "UK",
+        "scenario": "single-worker-pit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_earned_income": 130000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-worker-pit-360k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 360000.0,
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_supplied_section_24_reliefs": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "yem": 30000.0,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.uk_pit_pilot_annual_employment_income": 360000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            360000.0
+          ],
+          "yearly_earned_income_total": 360000.0
+        },
+        "locale": "UK",
+        "scenario": "single-worker-pit",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_earned_income": 360000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ]
+}

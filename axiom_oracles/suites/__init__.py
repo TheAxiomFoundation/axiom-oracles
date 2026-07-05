@@ -33,6 +33,10 @@ from .be_worker import (
 )
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
+from .uk_worker import (
+    uk_worker_nic_cases,
+    uk_worker_pit_cases,
+)
 
 
 def available_suites() -> tuple[str, ...]:
@@ -60,6 +64,8 @@ def available_suites() -> tuple[str, ...]:
         "be-flemish-social-protection-premium",
         "be-social-assistance",
         "be-elderly-income-support",
+        "uk-worker-pit",
+        "uk-worker-nic",
     )
 
 
@@ -110,6 +116,10 @@ def load_suite(name: str):
         return be_social_assistance_cases()
     if name == "be-elderly-income-support":
         return be_elderly_income_support_cases()
+    if name == "uk-worker-pit":
+        return uk_worker_pit_cases()
+    if name == "uk-worker-nic":
+        return uk_worker_nic_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -139,4 +149,6 @@ __all__ = [
     "load_suite",
     "nyc_basic_cases",
     "nyc_synthetic_cases",
+    "uk_worker_nic_cases",
+    "uk_worker_pit_cases",
 ]
