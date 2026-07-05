@@ -351,18 +351,6 @@
    "fix_owner": "investigation"
   },
   {
-   "suite": "nyc-synthetic",
-   "engines": {
-    "left": "axiom",
-    "right": "policyengine"
-   },
-   "concept": "us:tax/federal-income-tax#liability",
-   "kind": "amount_difference",
-   "label": "Downstream of legacy taxable-income residuals",
-   "description": "The 4 liability mismatches are the same tax units as the taxable-income residuals (ecps-tax-unit-5012, 64926, 68364, 71824) — liability differences track tax-before-credits almost exactly, so no separate credit-stage cause is indicated. The current full fiit-ecps run compares federal surfaces cleanly except the documented EITC entity-shape residuals.",
-   "fix_owner": "investigation"
-  },
-  {
    "suite": "ssa-parameters",
    "concept": "us:policies/ssa/contribution-and-benefit-base/2026#contribution_and_benefit_base_under_section_230_of_social_security_act",
    "kind": "amount_difference",
@@ -421,7 +409,7 @@
    "concept": "us-ga:policies/cms/georgia-medicaid-chip-bhp-eligibility-levels#georgia_parent_caretaker_adults_medicaid_fpl_limit",
    "kind": "amount_difference",
    "label": "GA parent/caretaker standard is dollar-based; PolicyEngine carries an FPL approximation",
-   "description": "Georgia's parent/caretaker Medicaid standard is published as dollar amounts (the encoding flags georgia_parent_caretaker_standard_uses_dollar_amounts), which the source approximates at 28% FPL + the 5% MAGI disregard (0.33). PolicyEngine carries 0.39 FPL from its 2018-vintage state table. Neither side is wrong per se — the comparison flags that PE's approximation predates the current published standard.",
+   "description": "Georgia's parent/caretaker Medicaid standard is published as dollar amounts (the encoding flags georgia_parent_caretaker_standard_uses_dollar_amounts), which the source approximates at 28% FPL + the 5% MAGI disregard (0.33). PolicyEngine carries 0.39 FPL from its 2018-vintage state table. Neither side is wrong per se \u2014 the comparison flags that PE's approximation predates the current published standard.",
    "fix_owner": "policyengine-data",
    "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8834"
   },
@@ -430,7 +418,7 @@
    "concept": "us-co:regulations/9-ccr-2503-5/3.530#oap_total_monthly_grant_standard",
    "kind": "amount_difference",
    "label": "PolicyEngine carries the SSI FBR as Colorado's OAP grant standard",
-   "description": "PolicyEngine's gov.states.co.ssa.state_supplement.grant_standard values ($943 in 2024, $967 in 2025) equal the federal SSI benefit rate for those years, but Colorado's Old Age Pension total grant standard is set by state rule above the FBR — 9 CCR 2503-5 sec. 3.530 sets $1,032 effective January 1, 2026. The parameter appears to conflate the OAP standard with the FBR and lacks a 2026 value.",
+   "description": "PolicyEngine's gov.states.co.ssa.state_supplement.grant_standard values ($943 in 2024, $967 in 2025) equal the federal SSI benefit rate for those years, but Colorado's Old Age Pension total grant standard is set by state rule above the FBR \u2014 9 CCR 2503-5 sec. 3.530 sets $1,032 effective January 1, 2026. The parameter appears to conflate the OAP standard with the FBR and lacks a 2026 value.",
    "fix_owner": "policyengine-data",
    "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8833"
   },
@@ -439,7 +427,7 @@
    "concept": "us:statutes/42/1382#ssi_benefit",
    "kind": "amount_difference",
    "label": "Statutory entitlement vs dataset SSI (take-up, imputed resources, deeming, couples)",
-   "description": "Of 3,231 divergences over 41,314 households (92.2% match), the dominant class remains the dataset withholding SSI from statutorily entitled people (take-up seeding, imputed-resource tests, spousal deeming — all dataset-side). Eligible couples are now paid at half the couple FBR each via a two-ABD-adults approximation; remaining couple noise and 1382c(f) ineligible-spouse deeming (not yet encoded upstream) account for most of the both-pay-differ residue. Dashboard copy shows the first 1,000 mismatches.",
+   "description": "Of 3,231 divergences over 41,314 households (92.2% match), the dominant class remains the dataset withholding SSI from statutorily entitled people (take-up seeding, imputed-resource tests, spousal deeming \u2014 all dataset-side). Eligible couples are now paid at half the couple FBR each via a two-ABD-adults approximation; remaining couple noise and 1382c(f) ineligible-spouse deeming (not yet encoded upstream) account for most of the both-pay-differ residue. Dashboard copy shows the first 1,000 mismatches.",
    "drivers": [
     {
      "label": "Take-up and imputed resources (dataset side)",
@@ -461,7 +449,7 @@
    "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
    "kind": "amount_difference",
    "label": "Earned income disregard rate and shelter schedule differ between the sources",
-   "description": "58 of 2,288 NY households diverge, in two clean classes. 32 (Axiom pays more, all working households): the encoded 2024-2026 state plan applies a 62% earned income disregard while PolicyEngine carries 50%. 26 (PolicyEngine pays more, all no-earnings renters): the two sides carry different local-agency shelter maximum schedules (PE 277/283/400… vs the encoded 214/219/309… by household size), and the difference equals the per-size schedule gap exactly.",
+   "description": "58 of 2,288 NY households diverge, in two clean classes. 32 (Axiom pays more, all working households): the encoded 2024-2026 state plan applies a 62% earned income disregard while PolicyEngine carries 50%. 26 (PolicyEngine pays more, all no-earnings renters): the two sides carry different local-agency shelter maximum schedules (PE 277/283/400\u2026 vs the encoded 214/219/309\u2026 by household size), and the difference equals the per-size schedule gap exactly.",
    "issue_url": "https://github.com/PolicyEngine/policyengine-us/issues/8835",
    "fix_owner": "policyengine-data"
   },
@@ -470,7 +458,7 @@
    "concept": "us:regulations/42-cfr/435#adult_eligible",
    "kind": "eligibility_right_only",
    "label": "MAGI income definition and the 435.603(d) 5% disregard",
-   "description": "52 of 694 CO households have an adult PolicyEngine deems expansion-eligible where the composed 435.119 does not. Two drivers: PolicyEngine compares MAGI (taxable Social Security, tax-unit composition) while the projection uses gross cash income over the whole household; and PolicyEngine applies the 138% effective limit (133% + the 435.603(d) disregard) where the composed rule carries the statutory 133% — the disregard lives in 435.603, outside this composition.",
+   "description": "52 of 694 CO households have an adult PolicyEngine deems expansion-eligible where the composed 435.119 does not. Two drivers: PolicyEngine compares MAGI (taxable Social Security, tax-unit composition) while the projection uses gross cash income over the whole household; and PolicyEngine applies the 138% effective limit (133% + the 435.603(d) disregard) where the composed rule carries the statutory 133% \u2014 the disregard lives in 435.603, outside this composition.",
    "fix_owner": "program-coverage"
   },
   {
@@ -478,7 +466,7 @@
    "concept": "us:regulations/42-cfr/435#adult_eligible",
    "kind": "eligibility_left_only",
    "label": "Household-unit and income-definition edges",
-   "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not — tax-unit household composition and MAGI additions on the PolicyEngine side.",
+   "description": "4 cases where the composed rule finds an eligible adult and PolicyEngine does not \u2014 tax-unit household composition and MAGI additions on the PolicyEngine side.",
    "fix_owner": "program-coverage"
   },
   {
@@ -581,6 +569,14 @@
    ],
    "fix_owner": "euromod-upstream",
    "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+  },
+  {
+   "suite": "co-tanf-ecps",
+   "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+   "kind": "amount_difference",
+   "label": "Grant-chart composition edges and eligibility-gate differences",
+   "description": "16 of 1,165 CO households diverge: several by ~$35-45/month where the encoded 3.606.1 chart rows and PolicyEngine's caretaker-table-plus-additional-child composition disagree for large or multi-adult units; a few where PolicyEngine's eligibility gates (resources, immigration) deny units the composed slice pays; and one large-household outlier where the composed grant substantially exceeds the chart standard, pending trace.",
+   "fix_owner": "program-coverage"
   }
  ]
 }

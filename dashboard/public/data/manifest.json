@@ -49,6 +49,7 @@
     "axiom-euromod-be-family-child-benefit-brussels-same-age-household.json",
     "axiom-euromod-be-family-child-benefit-income-list.json",
     "axiom-euromod-be-family-child-benefit-wallonia-social-supplement.json",
-    "axiom-euromod-be-special-social-security-contribution.json"
+    "axiom-euromod-be-special-social-security-contribution.json",
+    "axiom-policyengine-co-tanf-ecps.json"
   ]
 }

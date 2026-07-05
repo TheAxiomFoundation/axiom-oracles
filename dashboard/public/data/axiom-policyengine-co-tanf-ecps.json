@@ -1,0 +1,1173 @@
+{
+  "aggregates": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1165,
+      "comparison_weight": 2403882.524569,
+      "components": [],
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "left_weighted_sum": 671702645.851951,
+      "match_rate": 98.626609,
+      "match_weight": 2363742.64769,
+      "mismatch_count": 16,
+      "mismatch_weight": 40139.87688,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 187041026.60482,
+      "weighted_difference": 484661619.247131,
+      "weighted_match_rate": 98.330206
+    }
+  ],
+  "case_count": 1165,
+  "cases": [
+    {
+      "case_id": "ecps-43300",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 47,
+        "axiom_relations_count": 12,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            44,
+            48,
+            21,
+            17,
+            9,
+            4
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 371.60540771484375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 504.0,
+          "kind": "amount_difference",
+          "left": 11124.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 10620.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-99670",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 43,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            35,
+            13,
+            13,
+            4
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            6559.86,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 6559.86
+        },
+        "household_weight": 1418.756591796875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 412.75390625,
+          "kind": "amount_difference",
+          "left": 6876.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6463.24609375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-155973",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 49,
+        "axiom_relations_count": 14,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            44,
+            31,
+            13,
+            11,
+            10,
+            7,
+            5
+          ],
+          "household_size": 7,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 1334.0458984375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 7332.0,
+          "kind": "amount_difference",
+          "left": 7332.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-156063",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 47,
+        "axiom_relations_count": 12,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            49,
+            49,
+            22,
+            16,
+            14,
+            11
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            9621.13,
+            0.0,
+            1311.97,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 10933.1
+        },
+        "household_weight": 1578.94482421875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 7512.0,
+          "kind": "amount_difference",
+          "left": 7512.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-156359",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 41,
+        "axiom_relations_count": 6,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            44,
+            18,
+            16
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            9293.14,
+            4373.24
+          ],
+          "yearly_earned_income_total": 13666.38
+        },
+        "household_weight": 191.79690551757812,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 3276.0,
+          "kind": "amount_difference",
+          "left": 3276.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-156639",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 43,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            31,
+            6,
+            5,
+            4
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            6450.53,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 6450.53
+        },
+        "household_weight": 0.448654443025589,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 412.6748046875,
+          "kind": "amount_difference",
+          "left": 6912.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6499.3251953125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1043300",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 47,
+        "axiom_relations_count": 12,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            44,
+            48,
+            21,
+            17,
+            9,
+            4
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 11342.2998046875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 34572.0,
+          "kind": "amount_difference",
+          "left": 45192.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 10620.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1043322",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 41,
+        "axiom_relations_count": 6,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            47,
+            18,
+            10
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            2621.65,
+            0.0
+          ],
+          "yearly_earned_income_total": 2621.65
+        },
+        "household_weight": 7073.36767578125,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 349.14404296875,
+          "kind": "amount_difference",
+          "left": 6912.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6562.85595703125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1043451",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 43,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            51,
+            18,
+            18,
+            9
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            13108.24,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 13108.24
+        },
+        "household_weight": 6583.34619140625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 3360.0,
+          "kind": "amount_difference",
+          "left": 3360.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1043760",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 45,
+        "axiom_relations_count": 10,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            52,
+            40,
+            25,
+            8,
+            7
+          ],
+          "household_size": 5,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 0.2021680474281311,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 432.0,
+          "kind": "amount_difference",
+          "left": 9456.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 9024.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1099255",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 43,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            42,
+            38,
+            11,
+            8
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            62540.01,
+            44013.12,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 106553.13
+        },
+        "household_weight": 18.991926193237305,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 5220.0,
+          "kind": "amount_difference",
+          "left": 5220.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1099412",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 47,
+        "axiom_relations_count": 12,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            36,
+            18,
+            15,
+            14,
+            11,
+            7
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            21803.81,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 21803.81
+        },
+        "household_weight": 1078.0604248046875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 5484.0,
+          "kind": "amount_difference",
+          "left": 5484.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1099440",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 41,
+        "axiom_relations_count": 6,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            39,
+            10,
+            7
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            1635.29,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 1635.29
+        },
+        "household_weight": 741.2875366210938,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 335.64453125,
+          "kind": "amount_difference",
+          "left": 6900.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6564.35546875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1099856",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 43,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            39,
+            42,
+            7,
+            5
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            103827.66,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 103827.66
+        },
+        "household_weight": 6819.435546875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 4308.0,
+          "kind": "amount_difference",
+          "left": 4308.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1155973",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 49,
+        "axiom_relations_count": 14,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            44,
+            31,
+            13,
+            11,
+            10,
+            7,
+            5
+          ],
+          "household_size": 7,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 1241.6053466796875,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 7344.0,
+          "kind": "amount_difference",
+          "left": 7344.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-1156598",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 43,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            58,
+            50,
+            17,
+            15
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            1090.19,
+            0.0
+          ],
+          "yearly_earned_income_total": 1090.19
+        },
+        "household_weight": 345.6819763183594,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+          "description": "CO TANF (Colorado Works) benefit (annualized)",
+          "difference": 421.517578125,
+          "kind": "amount_difference",
+          "left": 6720.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6298.482421875,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "id": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 25
+    }
+  ],
+  "dashboard_truncation": {
+    "shown_case_rows": 16,
+    "shown_mismatches": 16,
+    "total_case_rows": 1165,
+    "total_mismatches": 16
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "ecps-43300",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 504.0,
+      "kind": "amount_difference",
+      "left": 11124.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 10620.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-99670",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 412.75390625,
+      "kind": "amount_difference",
+      "left": 6876.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6463.24609375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-155973",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 7332.0,
+      "kind": "amount_difference",
+      "left": 7332.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-156063",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 7512.0,
+      "kind": "amount_difference",
+      "left": 7512.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-156359",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 3276.0,
+      "kind": "amount_difference",
+      "left": 3276.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-156639",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 412.6748046875,
+      "kind": "amount_difference",
+      "left": 6912.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6499.3251953125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1043300",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 34572.0,
+      "kind": "amount_difference",
+      "left": 45192.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 10620.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1043322",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 349.14404296875,
+      "kind": "amount_difference",
+      "left": 6912.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6562.85595703125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1043451",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 3360.0,
+      "kind": "amount_difference",
+      "left": 3360.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1043760",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 432.0,
+      "kind": "amount_difference",
+      "left": 9456.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 9024.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1099255",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 5220.0,
+      "kind": "amount_difference",
+      "left": 5220.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1099412",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 5484.0,
+      "kind": "amount_difference",
+      "left": 5484.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1099440",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 335.64453125,
+      "kind": "amount_difference",
+      "left": 6900.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6564.35546875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1099856",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 4308.0,
+      "kind": "amount_difference",
+      "left": 4308.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1155973",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 7344.0,
+      "kind": "amount_difference",
+      "left": 7344.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-1156598",
+      "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
+      "description": "CO TANF (Colorado Works) benefit (annualized)",
+      "difference": 421.517578125,
+      "kind": "amount_difference",
+      "left": 6720.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6298.482421875,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "enhanced-cps",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "US",
+    "type": "country"
+  },
+  "suite": "co-tanf-ecps",
+  "summary": {
+    "comparison_count": 1165,
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 1149,
+    "mismatch_count": 16,
+    "mismatches_by_concept": [
+      {
+        "count": 16,
+        "value": "us-co:policies/cdhs/colorado-works#co_tanf_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 16,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 16,
+        "value": null
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 2403882.524569,
+      "match_rate": 98.330206,
+      "match_weight": 2363742.64769,
+      "mismatch_weight": 40139.87688
+    }
+  }
+}

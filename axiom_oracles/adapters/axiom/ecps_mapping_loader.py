@@ -219,6 +219,64 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             countable_earned = earned_after_initial / 2
             return round(countable_unearned + countable_earned, 2)
 
+        if transform == "count_age_below":
+            people = (case_facts or {}).get("__people__") or []
+            threshold = float(source.get("threshold", 0))
+            return sum(
+                1 for p in people
+                if float(p.get(Concepts.PERSON_AGE, 0) or 0) < threshold
+            )
+
+        if transform == "count_age_at_least":
+            people = (case_facts or {}).get("__people__") or []
+            threshold = float(source.get("threshold", 0))
+            cap = source.get("cap")
+            count = sum(
+                1 for p in people
+                if float(p.get(Concepts.PERSON_AGE, 0) or 0) >= threshold
+            )
+            return min(count, int(cap)) if cap is not None else count
+
+        if transform == "monthly_rate_plus_flat":
+            # Earned income disregard shaped as rate x monthly income + flat,
+            # capped at the income itself (a disregard can't exceed income).
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            monthly = float(value) / 12
+            rate = float(source.get("rate", 0))
+            flat = float(source.get("flat", 0))
+            return round(min(monthly, monthly * rate + flat), 2)
+
+        if transform == "monthly_countable_after_exclusion":
+            # Countable monthly income after a rate + flat exclusion.
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            monthly = float(value) / 12
+            rate = float(source.get("rate", 0))
+            flat = float(source.get("flat", 0))
+            return round(max(0.0, monthly - (monthly * rate + flat)), 2)
+
+        if transform == "adult_table_plus_per_child":
+            # Standard tables keyed by capped adult count with a per-child
+            # add-on beyond the first child (Colorado Works need standards).
+            people = (case_facts or {}).get("__people__") or []
+            adults = sum(
+                1 for p in people
+                if float(p.get(Concepts.PERSON_AGE, 0) or 0) >= 18
+            )
+            children = sum(
+                1 for p in people
+                if float(p.get(Concepts.PERSON_AGE, 0) or 0) < 18
+            )
+            table = {int(k): float(v) for k, v in (source.get("table") or {}).items()}
+            if not table:
+                return 0.0
+            key = min(adults, max(table))
+            per_child = float(source.get("per_child", 0))
+            return round(
+                table.get(key, 0.0)
+                + per_child * max(0, children - 1),
+                2,
+            )
+
         if transform == "age_below":
             # Person-scope: age fact strictly below source.threshold.
             facts = person_facts or {}

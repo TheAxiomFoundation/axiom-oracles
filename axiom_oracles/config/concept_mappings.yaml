@@ -756,6 +756,16 @@ concepts:
       axiom: wa_tanf_annual_benefit
       policyengine: wa_tanf
 
+  us-co:policies/cdhs/colorado-works#co_tanf_benefit:
+    description: CO TANF (Colorado Works) benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: co_tanf_annual_benefit
+      policyengine: co_tanf
+
   us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit:
     description: NY TANF benefit (annualized)
     category: cash

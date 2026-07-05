@@ -177,6 +177,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 210,
   },
+  "co-tanf-ecps": {
+    family: "tanf",
+    jurisdiction: "CO",
+    label: "Colorado Works TANF",
+    region: "us",
+    kind: "household",
+    order: 219,
+  },
   "co-tanf-coverage": {
     family: "tanf",
     jurisdiction: "CO",

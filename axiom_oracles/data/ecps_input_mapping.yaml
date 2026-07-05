@@ -981,3 +981,150 @@ mappings:
   - match: { kind: suffix, value: person_can_spend_down_to_state_selected_living_arrangement_standard }
     scope: person
     source: { kind: constant, value: false }
+
+  # ---------------------------------------------------------------------
+  # CO TANF (us-co/tanf program) — Colorado Works basic cash assistance.
+  # Steady-state recipient month: application/redetermination flags off,
+  # disregards mirror the 67% + $90 exclusion PolicyEngine carries.
+  # ---------------------------------------------------------------------
+
+  - match: { kind: suffix, value: number_of_caretakers_in_assistance_unit }
+    scope: household
+    source: { kind: derived, transform: count_age_at_least, threshold: 18, cap: 2 }
+  - match: { kind: suffix, value: number_of_children_in_assistance_unit }
+    scope: household
+    source: { kind: derived, transform: count_age_below, threshold: 18 }
+  - match: { kind: suffix, value: need_standard_for_household_size }
+    scope: household
+    source:
+      kind: derived
+      transform: adult_table_plus_per_child
+      table: { 0: 977, 1: 1065, 2: 1155 }
+      per_child: 67
+
+  - match: { kind: substring, value: gross_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: substring, value: countable_unearned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: substring, value: unearned_income_received }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: substring, value: countable_gross_unearned_income_after_disregards }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+
+  - match: { kind: substring, value: earned_income_disregards }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_rate_plus_flat
+      rate: 0.67
+      flat: 90
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: substring, value: countable_gross_earned_income_after_disregards }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_countable_after_exclusion
+      rate: 0.67
+      flat: 90
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: countable_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_countable_after_exclusion
+      rate: 0.67
+      flat: 90
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: countable_income_for_basic_cash_assistance }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+
+  # Steady-state recipient month.
+  - match: { kind: substring, value: is_application }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: application_month }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: currently_receiving_basic_cash_assistance }
+    scope: household
+    source: { kind: constant, value: true }
+  - match: { kind: substring, value: first_certification_period }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: redetermination_new_certification_period }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: earned_income_is_new_source }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: assistance_unit_found_ineligible }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: substring, value: reports_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: certification_period_month_number }
+    scope: household
+    source: { kind: constant, value: 2 }
+  - match: { kind: suffix, value: client_is_pregnant_parent }
+    scope: person
+    source: { kind: fact, name: PREGNANT, default: false, cast: bool }
+  - match: { kind: suffix, value: month_is_not_after_month_in_which_pregnancy_ends }
+    scope: person
+    source: { kind: fact, name: PREGNANT, default: false, cast: bool }

@@ -216,15 +216,12 @@
    {
     "program": "tanf",
     "jurisdiction": "CO",
-    "status": "executableCoverage",
-    "source": "axiom-programs/us-co/tanf/fy-2026.yaml + rulespec-us-co/policies/cdhs/colorado-works/basic-cash-assistance.yaml",
+    "status": "executable",
+    "source": "axiom-oracles programs/us-co/tanf/fy-2026.yaml composing policies/cdhs/colorado-works + 9 CCR 2503-6 3.606 standards",
     "known_non_tanf_gaps": [
-     "axiom-programs now exposes an executable monthly Colorado Works `tanf_benefit` for the encoded basic-cash-assistance slice",
-     "the package composes current-law standards, earned-income disregards, countable income, authorized grant, and pregnancy allowance via a runtime pregnant-parent relation",
-     "not directly comparable to the current PolicyEngine Colorado TANF output surface",
-     "PE grant-standard table needs a current-year update before direct alignment is meaningful",
-     "full TANF enrollment/demographic/take-up eligibility remains outside this package"
-    ]
+     "steady-state recipient month compared; application-month proration and redetermination paths out of scope"
+    ],
+    "suite": "co-tanf-ecps"
    },
    {
     "program": "snap",

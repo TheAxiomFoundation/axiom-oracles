@@ -1,0 +1,69 @@
+# Colorado Works TANF -- FY 2026
+#
+# This package exposes the encoded Colorado Works basic cash assistance
+# calculation slice. The source law lives in rulespec-us-co; this wrapper only
+# assembles a reusable program-facing benefit output.
+
+program: us-co/tanf
+period: 2026-01
+
+outputs:
+  # Annualized for the oracle harness (PolicyEngine co_tanf is YEAR).
+  - co_tanf_annual_benefit
+
+acknowledged_incomplete:
+  - co_tanf_annual_benefit
+  - tanf_benefit
+
+scope:
+  state:
+    - policies/cdhs/colorado-works/basic-cash-assistance
+
+transformations:
+  - pattern: data_relation
+    name: member_of_household
+    arity: 2
+    source: axiom-oracles ECPS projection household membership
+
+  - pattern: data_relation
+    name: pregnant_parent_of_tanf_unit
+    arity: 2
+    source: axiom-programs/us-co/tanf/fy-2026 runtime pregnant-parent membership
+
+  - pattern: derived_formula
+    name: colorado_works_basic_cash_assistance_grant
+    effective_from: '2026-01-01'
+    entity: TanfUnit
+    dtype: Money
+    period: Month
+    unit: USD
+    source: axiom-programs/us-co/tanf/fy-2026 benefit composition
+    formula: |-
+      colorado_works_basic_cash_assistance_grant_before_pregnancy_allowance
+      + sum_where(
+        pregnant_parent_of_tanf_unit,
+        basic_cash_assistance_pregnancy_allowance,
+        basic_cash_assistance_pregnancy_allowance_eligible
+      )
+
+  - pattern: derived_formula
+    name: tanf_benefit
+    effective_from: '2026-01-01'
+    entity: TanfUnit
+    dtype: Money
+    period: Month
+    unit: USD
+    source: axiom-programs/us-co/tanf/fy-2026 benefit composition
+    formula: |-
+      colorado_works_basic_cash_assistance_grant
+
+  - pattern: derived_formula
+    name: co_tanf_annual_benefit
+    effective_from: '2026-01-01'
+    entity: Household
+    dtype: Money
+    period: Year
+    unit: USD
+    source: axiom-oracles programs/us-co/tanf oracle output
+    formula: |-
+      if household_has_minor_or_pregnant_member: colorado_works_basic_cash_assistance_grant * 12 else: 0
