@@ -57,6 +57,8 @@ NATIONAL_INSURANCE_REGULATION_100_PROGRAM_PATH = Path(
 NATIONAL_INSURANCE_REGULATION_100_BASE = "uk:regulations/uksi/2001/1004/100"
 PERSONAL_ALLOWANCE_PROGRAM_PATH = Path("statutes/ukpga/2007/3/35.yaml")
 PERSONAL_ALLOWANCE_BASE = "uk:statutes/ukpga/2007/3/35"
+MARRIAGE_ALLOWANCE_PROGRAM_PATH = Path("statutes/ukpga/2007/3/55B.yaml")
+MARRIAGE_ALLOWANCE_BASE = "uk:statutes/ukpga/2007/3/55B"
 INCOME_TAX_SECTION_10_PROGRAM_PATH = Path("statutes/ukpga/2007/3/10.yaml")
 INCOME_TAX_SECTION_10_BASE = "uk:statutes/ukpga/2007/3/10"
 INCOME_TAX_SECTION_11D_PROGRAM_PATH = Path("statutes/ukpga/2007/3/11D.yaml")
@@ -148,6 +150,13 @@ PERSONAL_ALLOWANCE_OUTPUTS = {
     "personal_allowance": {
         "axiom": f"{PERSONAL_ALLOWANCE_BASE}#personal_allowance",
         "pe": "personal_allowance",
+    },
+}
+
+MARRIAGE_ALLOWANCE_OUTPUTS = {
+    "transferable_amount": {
+        "axiom": f"{MARRIAGE_ALLOWANCE_BASE}#transferable_amount",
+        "pe": "marriage_allowance",
     },
 }
 
@@ -857,6 +866,16 @@ SURFACE_SPECS = {
         pe_variables=(
             "adjusted_net_income",
             "gift_aid_grossed_up",
+            "personal_allowance",
+        ),
+    ),
+    "marriage-allowance": UKEFRSSurfaceSpec(
+        program=MARRIAGE_ALLOWANCE_PROGRAM_PATH,
+        entity="person",
+        outputs=MARRIAGE_ALLOWANCE_OUTPUTS,
+        pe_variables=(
+            "marriage_allowance",
+            "partners_unused_personal_allowance",
             "personal_allowance",
         ),
     ),
@@ -4052,6 +4071,8 @@ def build_axiom_request(
         return build_national_insurance_final_request(pe_data=pe_data, year=year)
     if surface == "personal-allowance":
         return build_personal_allowance_request(pe_data=pe_data, year=year)
+    if surface == "marriage-allowance":
+        return build_marriage_allowance_request(pe_data=pe_data, year=year)
     if surface == "income-tax-income-base":
         return build_income_tax_income_base_request(pe_data=pe_data, year=year)
     if surface == "income-tax-section-10-earned-income":
@@ -4371,6 +4392,60 @@ def build_personal_allowance_request(
                 "period": interval,
                 "outputs": [
                     spec["axiom"] for spec in PERSONAL_ALLOWANCE_OUTPUTS.values()
+                ],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
+def project_marriage_allowance_inputs(row: Any) -> dict[str, Any]:
+    # Rows are pre-filtered to people PolicyEngine UK awards a positive
+    # marriage_allowance to (see rows_for_surface). PolicyEngine only awards a
+    # positive amount when the transferor is the eligible gaining party under
+    # ITA 2007 s.55B(2), so on this population every subsection (2) condition is
+    # satisfied. The transferable amount is then the transferor's unused
+    # personal allowance capped at 10% of the s.35(1) personal allowance,
+    # rounded up to the nearest GBP 10 -- exactly PolicyEngine's marriage_allowance.
+    personal_allowance = money(row_value(row, "personal_allowance", 0))
+    partners_unused = money(row_value(row, "partners_unused_personal_allowance", 0))
+    return {
+        "individual_is_the_gaining_party_under_a_section_55c_election": True,
+        "individual_not_liable_above_basic_rate": True,
+        "individual_meets_section_56_residence_requirement": True,
+        "neither_party_claims_married_couples_allowance": True,
+        "personal_allowance_specified_in_section_35_1": personal_allowance,
+        "relinquishing_partner_unused_personal_allowance": max(0.0, partners_unused),
+    }
+
+
+def build_marriage_allowance_request(
+    *, pe_data: dict[str, Any], year: int
+) -> dict[str, Any]:
+    interval = tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "marriage-allowance"):
+        entity_id = person_entity_id(int(row_value(row, "person_id")))
+        for name, value in project_marriage_allowance_inputs(row).items():
+            inputs.append(
+                input_record(
+                    f"{MARRIAGE_ALLOWANCE_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                )
+            )
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [
+                    spec["axiom"] for spec in MARRIAGE_ALLOWANCE_OUTPUTS.values()
                 ],
             }
         )
@@ -6634,6 +6709,12 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
             row
             for row in benunits
             if money(row_value(row, "uc_maximum_childcare_element_amount", 0)) > 0
+        ]
+    if surface == "marriage-allowance":
+        return [
+            row
+            for row in persons
+            if money(row_value(row, "marriage_allowance", 0)) > 0
         ]
     if SURFACE_SPECS[surface].entity == "benunit":
         return benunits
