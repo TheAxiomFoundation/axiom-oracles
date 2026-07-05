@@ -27157,6 +27157,490 @@ mappings:
     candidate_priority: P4
     rationale: Axiom exposes the household-level work-expense allowance deduction allowed by R986-200-239 when the gross-income test is satisfied. PolicyEngine exposes person-level earned income after the work-expense allowance, not this household aggregate deduction as a one-to-one oracle target.
 
+  # 42 USC Title II OASDI benefit-formula outputs (rulespec-us#541) — not comparable
+  - legal_id: us:statutes/42/415/a#first_pia_formula_factor
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level PIA bend-point formula's first marginal rate factor as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#second_pia_formula_factor
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level PIA bend-point formula's second marginal rate factor as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#third_pia_formula_factor
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level PIA bend-point formula's third marginal rate factor as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#pia_rounding_multiple
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level PIA rounding-down multiple as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#aime_in_first_pia_segment
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level AIME amount falling in the first PIA bend-point segment as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#aime_in_second_pia_segment
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level AIME amount falling in the second PIA bend-point segment as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#aime_in_third_pia_segment
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level AIME amount falling in the third PIA bend-point segment as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#unrounded_primary_insurance_amount
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(a) source-level pre-rounding Primary Insurance Amount as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/a#primary_insurance_amount
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: 'RuleSpec''s Primary Insurance Amount output is the statutory 42 USC 415(a) formula result. PolicyEngine-US''s nearest surface is ss_pia, which computes PIA from ss_aime via the same bend-point formula, but the comparison is not one-to-one: ss_aime is itself overridable by the ss_aime_input survey field, and the Social Security retirement benefit in microdata is populated from the reported value (social_security_retirement_reported) rather than derived end-to-end from a computed PIA, so this output remains classified not_comparable.'
+
+  - legal_id: us:statutes/42/415/b#old_age_benefit_computation_year_dropout_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level number of low-earning years dropped from the AIME computation as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#minimum_benefit_computation_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level statutory minimum count of computation years as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#months_per_benefit_computation_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level months-per-year conversion constant for benefit computation years as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#aime_rounding_multiple
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level AIME rounding-down multiple as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#elapsed_years_baseline_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level baseline calendar year used to count elapsed years as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#elapsed_years_for_old_age_benefit_computation
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level elapsed-years count used to derive the benefit computation years as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#old_age_benefit_computation_year_count
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level final count of benefit computation years after dropout as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#indexed_creditable_earnings_for_computation_base_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level indexed creditable earnings for the wage-indexing computation base year as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#old_age_benefit_computation_year_earnings_total
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(b) source-level summed indexed earnings across the benefit computation years as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/b#average_indexed_monthly_earnings
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: 'RuleSpec''s Average Indexed Monthly Earnings output is the statutory 42 USC 415(b) wage-indexing formula result. PolicyEngine-US''s nearest surface is ss_aime, which computes AIME from indexed earnings history via the same top-N-years formula, but the comparison is not one-to-one: ss_aime is directly overridable by the ss_aime_input survey field when provided, and the Social Security retirement benefit in microdata is populated from the reported value (social_security_retirement_reported) rather than derived end-to-end from a computed AIME, so this output remains classified not_comparable.'
+
+  - legal_id: us:statutes/42/415/i#cola_pia_rounding_multiple
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(i) source-level PIA rounding-down multiple applied after a cost-of-living increase as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/i#unrounded_pia_after_cost_of_living_increase
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(i) source-level pre-rounding PIA after applying the annual cost-of-living increase as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/415/i#primary_insurance_amount_after_cost_of_living_increase
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 415(i) source-level post-COLA, post-rounding Primary Insurance Amount as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#old_age_early_retirement_age_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level whole-year component of the early (age-62) retirement age as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#months_per_retirement_age_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level months-per-year conversion constant for retirement age arithmetic as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_increase_months_per_transition_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level monthly increment applied per birth-year cohort during a normal-retirement-age transition as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#old_age_early_retirement_age_calendar_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level calendar year used to key the early-retirement-age table as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_tier_one_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level normal retirement age, in years, for the first birth-year tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_tier_three_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level normal retirement age, in years, for the third birth-year tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_tier_five_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level normal retirement age, in years, for the fifth birth-year tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_tier_two_start_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level first birth year of the second normal-retirement-age transition tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_tier_two_end_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level last birth year of the second normal-retirement-age transition tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_tier_four_start_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level first birth year of the fourth normal-retirement-age transition tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_tier_four_end_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level last birth year of the fourth normal-retirement-age transition tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_total_months
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level normal retirement age expressed as a total month count as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_year_component
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level whole-year component of the normal retirement age as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/416/l#retirement_age_month_component
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 416(l) source-level residual-month component of the normal retirement age as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_first_tier_reduction_month_limit
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level month-count ceiling for the first-tier early-claiming reduction rate as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_reduction_one_percent_as_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level 1-percent constant expressed as a decimal rate for the reduction formula as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_first_tier_reduction_percent_numerator
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level numerator of the first-tier monthly reduction percentage as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_first_tier_reduction_percent_denominator
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level denominator of the first-tier monthly reduction percentage as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_additional_reduction_percent_numerator
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level numerator of the additional (beyond first-tier) monthly reduction percentage as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_additional_reduction_percent_denominator
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level denominator of the additional (beyond first-tier) monthly reduction percentage as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_reduction_rounding_multiple
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level rounding multiple applied to the early-claiming reduction amount as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_early_claiming_reduction_months
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level total months of early claiming subject to reduction as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_first_tier_reduction_months
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level months of early claiming allocated to the first reduction tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_additional_reduction_months
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level months of early claiming allocated to the additional reduction tier as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_early_claiming_reduction_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level combined early-claiming reduction rate across both tiers as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#unrounded_old_age_early_claiming_reduction_amount
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level pre-rounding early-claiming reduction dollar amount as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_early_claiming_reduction_amount
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(q) source-level post-rounding early-claiming reduction dollar amount as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/q#old_age_insurance_benefit_after_early_claiming_reduction
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This RuleSpec output applies a claiming-age adjustment (early-claiming reduction or delayed retirement credit) to derive a claimed benefit amount from the PIA. PolicyEngine-US has no claimed-benefit-from-PIA-by-claiming-age surface in microdata -- the retirement benefit is the reported value (social_security_retirement_reported) rather than a derived claiming-age-adjusted amount, so this output is not comparable.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_ceiling_age_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level age ceiling beyond which delayed retirement credits no longer accrue as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#months_per_year_402w
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level months-per-year conversion constant used in the delayed retirement credit formula as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_one_percent_as_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level 1-percent constant expressed as a decimal rate for the credit formula as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_age_ceiling_months
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level delayed retirement credit age ceiling expressed in months as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_before_1979_monthly_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level monthly delayed retirement credit rate for the pre-1979 cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_1979_to_1986_monthly_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level monthly delayed retirement credit rate for the 1979-1986 cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_transition_denominator
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level denominator of the transitional delayed retirement credit rate formula as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_transition_rate_increment
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level per-cohort rate increment during the transitional delayed retirement credit period as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_after_2004_monthly_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level monthly delayed retirement credit rate for the post-2004 cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#old_age_insurance_benefit_eligibility_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level calendar year of old-age insurance benefit eligibility used to select the applicable credit cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#drc_first_transition_start_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level first birth year of the initial delayed-retirement-credit transition cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#drc_second_transition_start_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level first birth year of the second delayed-retirement-credit transition cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#drc_final_start_year
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level first birth year of the final (post-transition) delayed-retirement-credit cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_applicable_monthly_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level monthly delayed retirement credit rate selected for the individual's cohort as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_increment_months
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level number of months of delayed claiming eligible for the credit as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_total_rate
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level total delayed retirement credit rate across all eligible months as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#delayed_retirement_credit_increase_amount
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(w) source-level dollar increase to the benefit from the delayed retirement credit as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/w#old_age_insurance_benefit_after_delayed_retirement_credit
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This RuleSpec output applies a claiming-age adjustment (early-claiming reduction or delayed retirement credit) to derive a claimed benefit amount from the PIA. PolicyEngine-US has no claimed-benefit-from-PIA-by-claiming-age surface in microdata -- the retirement benefit is the reported value (social_security_retirement_reported) rather than a derived claiming-age-adjusted amount, so this output is not comparable.
+
+  - legal_id: us:policies/ssa/cola/2026#social_security_cola_2026_applicable_increase_percentage
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This RuleSpec output is the 2026 Social Security cost-of-living adjustment percentage applied under 42 USC 415(i) to claimed benefits. PolicyEngine-US has no claimed-benefit-from-PIA-by-claiming-age surface in microdata -- the retirement benefit is the reported value (social_security_retirement_reported), so this application-level COLA percentage is not comparable as a one-to-one oracle output.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
