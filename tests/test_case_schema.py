@@ -209,6 +209,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_IMMOVABLE_WITHHOLDING_GROSS_WITH_SUPPLIED_CENTIMES,
         Concepts.BE_FAMILY_BIRTH_ALLOWANCE,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
+        Concepts.BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT,
@@ -892,6 +893,57 @@ def test_belgium_family_child_benefit_social_supplement_suite_defines_oracle_con
     assert age_18.metadata["axiom_inputs"][higher_education_input] is True
     assert age_18.metadata["euromod_inputs"][1]["dec"] == 6
     assert age_18.metadata["euromod_inputs"][1]["xed00"] == 1
+    assert {case.period for case in cases} == {"2025"}
+
+
+def test_belgium_family_child_benefit_income_list_suite_defines_oracle_concept_and_bridge() -> (
+    None
+):
+    cases = load_suite("be-family-child-benefit-income-list")
+
+    assert len(cases) == 4
+    assert {case.locale for case in cases} == {"BE"}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
+    assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
+    assert {case.metadata["scenario"] for case in cases} == {
+        "ils-ben-brussels-one-child-base",
+        "ils-ben-flanders-one-child-base",
+        "ils-ben-wallonia-one-child-base",
+        "ils-ben-brussels-two-same-age-children-age-13-middle-income",
+    }
+
+    by_id = {case.case_id: case for case in cases}
+    selector_input = (
+        "be:policies/euromod_benefit_income_list#input."
+        "belgium_euromod_ils_ben_child_benefit_component_selector"
+    )
+    birth_include_input = (
+        "be:policies/euromod_benefit_income_list#input."
+        "belgium_euromod_ils_ben_include_birth_allowance_component"
+    )
+    income_input = (
+        "be:statutes/family_benefits/child_benefit_base_2025#input."
+        "belgium_child_benefit_brussels_article_9_household_annual_income"
+    )
+
+    brussels_base = by_id["be-family-child-benefit-income-list-brussels-age-0"]
+    brussels_same_age = by_id[
+        "be-family-child-benefit-income-list-brussels-two-children-age-13-middle-income-single-parent"
+    ]
+    assert brussels_base.metadata["axiom_inputs"][selector_input] == 1
+    assert brussels_base.metadata["axiom_inputs"][birth_include_input] is True
+    assert brussels_same_age.metadata["axiom_inputs"][selector_input] == 3
+    assert brussels_same_age.metadata["child_count"] == 2
+    assert (
+        brussels_same_age.metadata["euromod_to_axiom_input_bridge"]["il_bch_means"]
+        == [income_input]
+    )
     assert {case.period for case in cases} == {"2025"}
 
 
