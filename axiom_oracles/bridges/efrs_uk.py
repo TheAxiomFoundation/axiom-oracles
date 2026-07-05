@@ -5219,6 +5219,113 @@ def build_housing_benefit_final_request(
     }
 
 
+def build_housing_benefit_applicable_amount_request(
+    *, pe_data: dict[str, Any], year: int
+) -> dict[str, Any]:
+    interval = tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "housing-benefit-applicable-amount"):
+        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
+        for name, value in project_housing_benefit_applicable_amount_inputs(row).items():
+            inputs.append(
+                input_record(
+                    f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                )
+            )
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [
+                    spec["axiom"]
+                    for spec in HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS.values()
+                ],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
+def build_housing_benefit_non_dependant_deductions_request(
+    *, pe_data: dict[str, Any], year: int
+) -> dict[str, Any]:
+    interval = tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "housing-benefit-non-dependant-deductions"):
+        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
+        for name, value in project_housing_benefit_non_dependant_deductions_inputs(
+            row
+        ).items():
+            inputs.append(
+                input_record(
+                    f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                )
+            )
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [
+                    spec["axiom"]
+                    for spec in HOUSING_BENEFIT_NON_DEPENDANT_DEDUCTIONS_OUTPUTS.values()
+                ],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
+def build_housing_benefit_entitlement_request(
+    *, pe_data: dict[str, Any], year: int
+) -> dict[str, Any]:
+    interval = tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "housing-benefit-entitlement"):
+        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
+        for name, value in project_housing_benefit_entitlement_inputs(row).items():
+            inputs.append(
+                input_record(
+                    f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                )
+            )
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [
+                    spec["axiom"]
+                    for spec in HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS.values()
+                ],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
 def build_state_pension_credit_guarantee_credit_request(
     *, pe_data: dict[str, Any], year: int
 ) -> dict[str, Any]:
