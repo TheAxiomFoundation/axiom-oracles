@@ -34,6 +34,14 @@ jobs:
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check
 
+      - name: Validate canonical case grids are up to date
+        run: uv run scripts/extract_grids.py --check
+
+      - name: Validate boundary-case suggestions are up to date
+        # No-op-clean when the axiom-corpus checkout is absent (the committed
+        # suggestions stand alone); enforces determinism when it is present.
+        run: uv run scripts/generate_boundary_cases.py --check
+
       - name: Test
         run: uv run pytest -q
 

@@ -34,6 +34,26 @@ artifacts:
   report_basename: axiom-policyengine-<slug>
 ```
 
+## Referencing a canonical case set
+
+Synthetic-suite comparisons (the EUROMOD/UKMOD triangulations) run a named case
+set rather than a population. That case set is canonicalised in
+`grids/<jurisdiction>.yaml` — the same skeleton every engine in the
+jurisdiction runs (see `grids/README.md`). Instead of inlining cases, a
+comparison references the grid set:
+
+```yaml
+runner:
+  parameters:
+    grid_case_set: uk:uk-worker-pit   # or bare 'uk-worker-pit' (globally unique)
+```
+
+`axiom_oracles.grids.resolve_grid_case_set(reference)` resolves it. The suite
+factory in `axiom_oracles/suites/` still derives the per-engine projections from
+that skeleton, so a config points at the canonical case list without duplicating
+it. Suite-specific one-off cases can still be added inline alongside a referenced
+set for a probe that does not belong in the shared grid.
+
 ## Supported runners
 
 ### `axiom-encode-tax-ecps-compare`

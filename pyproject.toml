@@ -2,6 +2,19 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+# Ship the canonical grids next to the package so load_grids() resolves them in
+# a wheel install too (its default root is <dist-root>/grids, matching the
+# source layout). Adopted grids only; the *.suggested.yaml proposals are dev
+# artifacts and stay out of the wheel.
+packages = ["axiom_oracles"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"grids/us.yaml" = "grids/us.yaml"
+"grids/be.yaml" = "grids/be.yaml"
+"grids/uk.yaml" = "grids/uk.yaml"
+"grids/README.md" = "grids/README.md"
+
 [project]
 name = "axiom-oracles"
 version = "0.2.0"

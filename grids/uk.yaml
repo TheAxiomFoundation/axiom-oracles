@@ -1,0 +1,135 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: uk
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  uk-worker-nic:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#uk_nic_pilot_primary_class_1_contribution
+    cases:
+    - id: uk-worker-nic-30k
+      period: '2026'
+      scenario: single-worker-nic
+      parameters:
+        yearly_earned_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+    - id: uk-worker-nic-45k
+      period: '2026'
+      scenario: single-worker-nic
+      parameters:
+        yearly_earned_income: 45000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
+    - id: uk-worker-nic-60k
+      period: '2026'
+      scenario: single-worker-nic
+      parameters:
+        yearly_earned_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
+    - id: uk-worker-nic-130k
+      period: '2026'
+      scenario: single-worker-nic
+      parameters:
+        yearly_earned_income: 130000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 130000.0
+    - id: uk-worker-nic-360k
+      period: '2026'
+      scenario: single-worker-nic
+      parameters:
+        yearly_earned_income: 360000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 360000.0
+  uk-worker-pit:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_income_tax_liability
+    cases:
+    - id: uk-worker-pit-30k
+      period: '2026'
+      scenario: single-worker-pit
+      parameters:
+        yearly_earned_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+    - id: uk-worker-pit-45k
+      period: '2026'
+      scenario: single-worker-pit
+      parameters:
+        yearly_earned_income: 45000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
+    - id: uk-worker-pit-60k
+      period: '2026'
+      scenario: single-worker-pit
+      parameters:
+        yearly_earned_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
+    - id: uk-worker-pit-130k
+      period: '2026'
+      scenario: single-worker-pit
+      parameters:
+        yearly_earned_income: 130000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 130000.0
+    - id: uk-worker-pit-360k
+      period: '2026'
+      scenario: single-worker-pit
+      parameters:
+        yearly_earned_income: 360000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 360000.0
