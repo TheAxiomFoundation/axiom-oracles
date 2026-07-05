@@ -6938,6 +6938,15 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
             or money(row_value(row, "housing_benefit_pre_benefit_cap", 0)) > 0
             or money(row_value(row, "benefit_cap_reduction", 0)) > 0
         ]
+    if surface in (
+        "housing-benefit-applicable-amount",
+        "housing-benefit-entitlement",
+    ):
+        return [
+            row
+            for row in benunits
+            if bool(row_value(row, "housing_benefit_eligible", False))
+        ]
     if surface == "universal-credit-lcwra-element":
         return [
             row for row in benunits if money(row_value(row, "uc_LCWRA_element", 0)) > 0
