@@ -84,8 +84,42 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | `bun_be` | off | `bun_s` | "PART SIMULATED" but **off**; unemployment income carried from input data | **encoded, not compared** (`be/regulations/unemployment/*` — admission, benefit_amount, minimum_daily, household_status, payable_amount, all with tests) | build `bun_s` suite (switch on) → RD 25.11.1991 (unemployment) |
 | `bsaoa_be` | off | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | compared* via XML overlay: `be-elderly-income-support` registered, **unpublished** → Law 22.03.2001 (GRAPA/IGO) |
 | `byr_be` | n/a | (early retirement) | pension/early-retirement income from data | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | build pension suite → RD No. 50; RD 23.12.1996 |
-| `tco_be` | off | (commodities) | indirect consumption tax; needs BTA/consumption extension; body is `DefConst`/`DefIl` only | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | build indirect-tax suite → RD No. 20 (VAT); excise codes |
+| `tco_be` | off | (commodities) | indirect consumption tax; body is `DefConst`/`DefIl` only (no `OutputVar`); **not oracle-comparable** — see verdict below | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | conformance exclusion `extension_not_available` (RD No. 20 VAT + excise codes) |
 | `yem_be` | off | `yem` | minimum-wage definition (not a benefit) | n/a (definitional) | — |
+
+## `tco_be` indirect-tax verdict — conformance exclusion `extension_not_available`
+
+Probed live against `EUROMOD_RELEASES_J2.0+` through the `euromod` connector
+(0.2.18). **`tco_be` cannot be oracle-compared through the public release.** It
+is a conformance exclusion, not a buildable suite:
+
+- **Body is definitional only.** In `BE_2025`, `tco_be` is 15 functions — 6
+  `DefConst` + 9 `DefIl` — with **no `OutputVar` parameter and no computational
+  function** (`ArithOp`/`BenCalc`). It assigns COICOP-category VAT rate constants
+  (`$tco_t_std`/`red1`/`red2`/`zero` mapped onto ~500 COICOP items via
+  `$tco_t_0xxxx`) and declares consumption income lists. Force-switching it on
+  (the connector's `policy_switch_overrides` path) therefore emits **no tax
+  variable** — there is nothing to compare against `be/regulations/vat/rates.yaml`
+  or `be/statutes/excise/rates.yaml`.
+- **The compute add-ons ship, but not for Belgium.** J2.0+ *does* bundle the
+  Indirect Tax Extension add-ons `CT_XBASE`, `CT_XCES`, `CT_XCIS`, `CT_XCQ`.
+  Their systems cover **DE, ES, IT, HR, EE, LT, LV only** — **no BE system in any
+  of them.** At country level, BE registers `BTA` (take-up), `TCA` (compliance),
+  `CIA` (consumption-*inflation* uprating), and the `HHoT`/`BELMOD` extensions —
+  **none compute VAT/excise.** (The earlier "needs BTA/consumption extension"
+  note conflated `BTA` take-up with indirect tax; corrected here.)
+- **Data prerequisite also absent.** The `DefConst` gate on
+  `Run_Cond GetDataCOICOPVersion=2003`, and the shipped BE demo dataset
+  `BE_training_data` carries **zero COICOP expenditure columns**, so the rate
+  constants never bind on the public data.
+
+**What would enable it:** a Belgium consumption-tax extension system in the
+`CT_X*` add-ons (or an equivalent BE indirect-tax add-on) supplying the
+expenditure × rate compute functions plus an `OutputVar` (e.g. `tco_s`), together
+with COICOP-coded household expenditure microdata (HBS/HFCS) at
+`GetDataCOICOPVersion=2003`. None of these ship in the public release; the JRC
+Indirect Tax Tool covering BE is not part of it. Recorded in
+`euromod_be_coverage.json` (`tco_be.conformance`).
 
 ## Encoded in rulespec-be with NO EUROMOD BE_2025 counterpart (out of scope for this oracle)
 
@@ -130,7 +164,9 @@ Ordered by reasoned fiscal/population importance (labeled reasoned — no countr
 6. **Leave suites already coded — publish** (`bmact_s`, `bpact_s`) + encode
    parental leave (`bfapl_be`, `bfapl_s`) → RD 03.07.1996 arts. 216/223bis;
    RD 29.10.1997.
-7. **Indirect tax** (`tco_be`) → RD No. 20 (VAT) + excise codes; needs the
-   consumption-tax extension in EUROMOD.
+7. **Indirect tax** (`tco_be`) → RD No. 20 (VAT) + excise codes. **Resolved as a
+   conformance exclusion (`extension_not_available`), not a buildable suite** —
+   see the `tco_be` verdict above. Revisit only if a Belgium consumption-tax
+   extension + COICOP microdata ship in a future EUROMOD release.
 8. **Covid schemes** (`yemcomp`/`ysecomp`) → historical crisis measures; lowest
    priority.
