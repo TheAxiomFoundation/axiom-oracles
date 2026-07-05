@@ -108,6 +108,49 @@ case_sets:
       entities:
       - id: property
         kind: property
+  be-capital-income-tax:
+    locale: BE
+    entity: Person
+    entity_id: head
+    outputs:
+    - be:statutes/income_tax/movable_withholding/rates#belgium_capital_income_separate_tax
+    cases:
+    - id: be-capital-income-tax-2k
+      period: '2025'
+      scenario: capital-income-separate-tax
+      parameters:
+        euromod_region: 2
+        yearly_movable_income: 2000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        interest_income: 2000.0
+    - id: be-capital-income-tax-10k
+      period: '2025'
+      scenario: capital-income-separate-tax
+      parameters:
+        euromod_region: 2
+        yearly_movable_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        interest_income: 10000.0
+    - id: be-capital-income-tax-50k
+      period: '2025'
+      scenario: capital-income-separate-tax
+      parameters:
+        euromod_region: 2
+        yearly_movable_income: 50000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        interest_income: 50000.0
   be-elderly-income-support:
     locale: BE
     entity: Person
@@ -1084,6 +1127,52 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 0.0
+  be-local-municipal-pit:
+    locale: BE
+    entity: Person
+    entity_id: head
+    outputs:
+    - be:statutes/income_tax/individual/regional_surcharge#belgium_pit_local_municipal_additional_tax
+    cases:
+    - id: be-local-pit-brussels-40k
+      period: '2025'
+      scenario: single-worker-local-municipal-pit
+      parameters:
+        euromod_region: 1
+        yearly_earned_income: 40000.0
+        supplied_communal_rate: 0.062
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+    - id: be-local-pit-flanders-40k
+      period: '2025'
+      scenario: single-worker-local-municipal-pit
+      parameters:
+        euromod_region: 2
+        yearly_earned_income: 40000.0
+        supplied_communal_rate: 0.0717
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+    - id: be-local-pit-wallonia-40k
+      period: '2025'
+      scenario: single-worker-local-municipal-pit
+      parameters:
+        euromod_region: 3
+        yearly_earned_income: 40000.0
+        supplied_communal_rate: 0.0792
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
   be-maternity-leave:
     locale: BE
     entity: Person
@@ -1194,6 +1283,52 @@ case_sets:
       entities:
       - id: property
         kind: property
+  be-regional-pit-surcharge:
+    locale: BE
+    entity: Person
+    entity_id: head
+    outputs:
+    - be:statutes/income_tax/individual/regional_surcharge#belgium_pit_regional_additional_tax
+    cases:
+    - id: be-regional-pit-brussels-40k
+      period: '2025'
+      scenario: single-worker-regional-pit-surcharge
+      parameters:
+        euromod_region: 1
+        yearly_earned_income: 40000.0
+        supplied_regional_rate: 0.32591
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+    - id: be-regional-pit-flanders-40k
+      period: '2025'
+      scenario: single-worker-regional-pit-surcharge
+      parameters:
+        euromod_region: 2
+        yearly_earned_income: 40000.0
+        supplied_regional_rate: 0.33257
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+    - id: be-regional-pit-wallonia-40k
+      period: '2025'
+      scenario: single-worker-regional-pit-surcharge
+      parameters:
+        euromod_region: 3
+        yearly_earned_income: 40000.0
+        supplied_regional_rate: 0.33257
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
   be-self-employed-ssc:
     locale: BE
     entity: Person

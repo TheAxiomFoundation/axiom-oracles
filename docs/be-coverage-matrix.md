@@ -13,7 +13,7 @@ oracle-compared.
   status, function counts, and output variables are read from the XML, not from
   memory of what EUROMOD "probably" models.
 - **rulespec-be** inventory is from `main` (HEAD `206f110`), `.yaml` modules only.
-- **axiom-oracles** suites are the 18 published `dashboard/public/data/axiom-euromod-be-*.json`
+- **axiom-oracles** suites are the 21 published `dashboard/public/data/axiom-euromod-be-*.json`
   plus 3 registered-but-unpublished suites; per-case counts read from those JSONs.
 
 ## Denominator (from the XML)
@@ -43,7 +43,7 @@ weight of the instrument class), explicitly **not** cited to a country report.
 ## Status legend
 
 - **compared** — encoded in rulespec-be AND an axiom-oracles suite live-compares it to the EUROMOD output.
-- **compared*** — suite exists and is registered (concept mapping present), but **not** in the 18 published dashboard JSONs.
+- **compared*** — suite exists and is registered (concept mapping present), but **not** in the published dashboard JSONs.
 - **encoded, not compared** — a real rulespec-be module (statutory content + companion test) exists, but no EUROMOD oracle suite.
 - **partial** — some sub-surface encoded, large parts not.
 - **NOT ENCODED** — no rulespec-be module.
@@ -61,10 +61,10 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | 7 | `tinna_be` | on | `tin_s`, `tinna_s` | Federal PIT — brackets, tax-free amount, credits; writes total `tin_s` | compared (worker pilot only) | `be-worker-pit` (2/3; EUROMOD #12) | — (broaden: full household PIT, joint assessment) |
 | 8 | `tintb_be` | on | `tintasp_s`, marital-quotient, deductions | PIT deductions & marital quotient (CIR 92 arts. 87–89, 131–145) | **partial** (rate_scale, tax_free_amount, tax_reductions_and_credits, joint_assessment encoded; not oracle-decomposed to `tintb`) | (feeds `be-worker-pit`) | broaden PIT decomposition → CIR 92 arts. 86–90, 131–178 |
 | 9 | `tinfe_be` | on | `tintcch_s`, `tin_s`, fiscal-expenditure reductions | PIT fiscal expenditures — childcare, service vouchers, pensions, donations reductions (CIR 92 arts. 145/1 ff.) | **partial** (tax_reductions_and_credits.yaml encodes some; most fiscal-expenditure reductions not encoded) | — | encode remaining PIT reductions → CIR 92 arts. 145/1–145/48, regional decrees |
-| 10 | `tinrg_be` | on | `tinrg_s`, `tin_s` | Regional PIT surcharges / reductions (post-6th-state-reform regional additional %) | **partial** (`communal_additions.yaml`; regional PIT autonomy factor in pilot) | (feeds `be-worker-pit`) | encode regional PIT → Special Financing Law 16.01.1989 / 06.01.2014; regional decrees |
-| 11 | `tinmu_be` | on | `tinmu_s`, `tin_s` | Municipal/local PIT surcharge (communal additional centimes on PIT) | **encoded** (`communal_additions.yaml`) — not compared | (feeds `be-worker-pit`) | build local-PIT suite → CIR 92 arts. 465–470bis |
+| 10 | `tinrg_be` | on | `tinrg_s`, `tin_s` | Regional PIT surcharges / reductions (post-6th-state-reform regional additional %) | compared (`regional_surcharge.yaml`: reduced-state-tax base × supplied regional rate) | `be-regional-pit-surcharge` (3/3; BXL/FL/WAL) | — (broaden: regional reductions/credits, regional bracket structure) |
+| 11 | `tinmu_be` | on | `tinmu_s`, `tin_s` | Municipal/local PIT surcharge (communal additional centimes on PIT) | compared (`regional_surcharge.yaml`: state+regional net of `tinfe` reductions × supplied communal rate; `communal_additions.yaml` base mechanics) | `be-local-municipal-pit` (3/3; BXL/FL/WAL) | — (broaden: municipality-specific centimes tables, agglomeration additions) |
 | 12 | `tintace_be` | on | `tintace_s` | PIT professional-expense deduction (forfait) | encoded (`article_51_forfaits.yaml`) — compared via pilot | (feeds `be-worker-pit`) | — |
-| 13 | `tinkt_be` | on | `tinkt_s` | Capital income tax (separately-taxed movable income) | **encoded, not compared** (`movable_withholding/rates.yaml`, `movable_income.yaml`) | — (supplied as 0 in `ils_tax` pilot) | build `tinkt_s` suite → CIR 92 arts. 17–22, 171, 269 |
+| 13 | `tinkt_be` | on | `tinkt_s` | Capital income tax (separately-taxed movable income) | compared (`movable_withholding/rates.yaml`: taxable movable income × art. 269 30%) | `be-capital-income-tax` (3/3; 2k/10k/50k) | — (broaden: art. 171 reduced/special rates, globalization choice) |
 | 14 | `tprhm_be` | on | `tprhm_s`, `khooo_s` | Advance levy on immovable property (précompte immobilier) + indexed cadastral income | compared (2 concepts) | `be-property-tax` (3/3), `be-cadastral-income-indexation` (1/2; EUROMOD #14) | — (broaden: art. 15 remission, regional reductions, BE HOME) |
 | 15 | `bch_be` | on | `bch_s` | Monthly child benefit — 4 regions × base/supplement/rank (Growth Package / groeipakket / AGF) | compared (base + BXL/WAL supplements) | `be-family-child-benefit-*` (5 suites: base 13/17 #8, BXL same-age 4/4, BXL supp 3/3, WAL supp 2/8 #9) | — (broaden: orphan/disability/single-parent supplements, mixed-age rank) |
 | 16 | `bchba_be` | on | `bchba_s` | Regional birth allowance / starting amount (4 regions) | compared | `be-family-birth-allowance` (6/7; EUROMOD #13) | — (broaden: multiple-birth, payment recipient) |
@@ -135,13 +135,15 @@ the EUROMOD matrix.
 
 ## Sanity-check vs the live dashboard
 
-18 published suites, **88 comparisons, 59 exact matches, 100% dispositioned**
-(matches `euromod-be-coverage.json` `dispositioned_parity`). Three suites are
-**registered but not published** — `be-maternity-leave` (`bmact_s`),
-`be-birth-leave` (`bpact_s`), `be-elderly-income-support` (`bsaoa_s`) — so the
-coverage claim's "live_verified" for maternity/birth-leave/GRAPA is **not**
-reflected in the dashboard JSON set. Nothing already-compared is marked missing
-above.
+21 published suites, **97 comparisons, 68 exact matches, 100% dispositioned**
+(matches `euromod-be-coverage.json` `dispositioned_parity`). The three new
+PIT-decomposition suites — `be-regional-pit-surcharge` (`tinrg_s`),
+`be-local-municipal-pit` (`tinmu_s`), and `be-capital-income-tax` (`tinkt_s`) —
+add 9 comparisons, all exact matches. Three further suites are **registered but
+not published** — `be-maternity-leave` (`bmact_s`), `be-birth-leave`
+(`bpact_s`), `be-elderly-income-support` (`bsaoa_s`) — so the coverage claim's
+"live_verified" for maternity/birth-leave/GRAPA is **not** reflected in the
+dashboard JSON set. Nothing already-compared is marked missing above.
 
 ## Wave plan (gap workers, grouped)
 

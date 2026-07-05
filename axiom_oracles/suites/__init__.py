@@ -20,6 +20,11 @@ from .be_property_tax import (
     be_cadastral_income_indexation_cases,
     be_property_tax_cases,
 )
+from .be_regional_local_capital import (
+    be_capital_income_tax_cases,
+    be_local_municipal_pit_cases,
+    be_regional_pit_surcharge_cases,
+)
 from .be_self_employed import be_self_employed_ssc_cases
 from .be_special_social_security import (
     be_special_social_security_contribution_cases,
@@ -74,6 +79,9 @@ def available_suites() -> tuple[str, ...]:
         "be-flemish-jobbonus",
         "be-cadastral-income-indexation",
         "be-property-tax",
+        "be-regional-pit-surcharge",
+        "be-local-municipal-pit",
+        "be-capital-income-tax",
         "be-flemish-social-protection-premium",
         "be-social-assistance",
         "be-elderly-income-support",
@@ -132,6 +140,12 @@ def load_suite(name: str):
         return be_cadastral_income_indexation_cases()
     if name == "be-property-tax":
         return be_property_tax_cases()
+    if name == "be-regional-pit-surcharge":
+        return be_regional_pit_surcharge_cases()
+    if name == "be-local-municipal-pit":
+        return be_local_municipal_pit_cases()
+    if name == "be-capital-income-tax":
+        return be_capital_income_tax_cases()
     if name == "be-flemish-social-protection-premium":
         return be_flemish_social_protection_premium_cases()
     if name == "be-social-assistance":
@@ -166,6 +180,7 @@ def load_suite(name: str):
 __all__ = [
     "available_suites",
     "be_birth_leave_cases",
+    "be_capital_income_tax_cases",
     "be_elderly_income_support_cases",
     "be_employer_ssc_cases",
     "be_family_birth_allowance_cases",
@@ -176,9 +191,11 @@ __all__ = [
     "be_family_child_benefit_wallonia_social_supplement_cases",
     "be_flemish_jobbonus_cases",
     "be_flemish_social_protection_premium_cases",
+    "be_local_municipal_pit_cases",
     "be_maternity_leave_cases",
     "be_cadastral_income_indexation_cases",
     "be_property_tax_cases",
+    "be_regional_pit_surcharge_cases",
     "be_self_employed_ssc_cases",
     "be_special_social_security_contribution_cases",
     "be_social_assistance_cases",

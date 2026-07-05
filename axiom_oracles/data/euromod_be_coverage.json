@@ -792,6 +792,7 @@
     "suites": [
       "be-birth-leave",
       "be-cadastral-income-indexation",
+      "be-capital-income-tax",
       "be-employer-ssc",
       "be-family-birth-allowance",
       "be-family-child-benefit-base",
@@ -801,8 +802,10 @@
       "be-family-child-benefit-wallonia-social-supplement",
       "be-flemish-jobbonus",
       "be-flemish-social-protection-premium",
+      "be-local-municipal-pit",
       "be-maternity-leave",
       "be-property-tax",
+      "be-regional-pit-surcharge",
       "be-self-employed-ssc",
       "be-social-assistance",
       "be-special-social-security-contribution",
@@ -811,9 +814,9 @@
       "be-worker-ssc",
       "be-worker-tax-income-list"
     ],
-    "comparison_count": 94,
-    "match_count": 65,
-    "raw_match_rate": 69.148936,
+    "comparison_count": 103,
+    "match_count": 74,
+    "raw_match_rate": 71.844660,
     "explained_rate": 100,
     "unexplained_count": 0,
     "note": "Raw = exact per-comparison matches across the committed be-* dashboard suites. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from dispositions/<suite>.yaml."

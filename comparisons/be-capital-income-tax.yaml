@@ -1,0 +1,39 @@
+name: be-capital-income-tax
+title: Belgium separately-taxed capital-income tax (tinkt) — Axiom vs EUROMOD
+description: >-
+  Compares the separately-taxed capital-income tax encoded in Axiom RuleSpec
+  (CIR 1992 article 171 separate taxation and article 269 section 1 item 1
+  general 30% rate, on taxable movable income) against EUROMOD Belgium tinkt_s
+  on a synthetic movable-income-only grid at 2k / 10k / 50k of annual movable
+  income. EUROMOD computes tinkt_s as yiy_s * 0.30; the cases pin the engine's
+  post-uprating movable income (yiy_s) so both engines apply the identical 30%
+  rate to the identical base. EUROMOD runs the registration-free public model
+  (EUROMOD_RELEASES_J2.0+, system BE_2025) under the real dataset-configuration
+  name BE_2024_c1_2015_03_e2 (the dataset-name gating workaround; no licensed
+  microdata is read) with input rows templated from the bundled BE_training_data
+  schema. This suite runs where the x64 EUROMOD runtime and model checkout are
+  available; on runners without them the registry re-emits the committed
+  dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: be-capital-income-tax
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: BE
+    euromod_system: BE_2025
+    euromod_dataset: BE_2024_c1_2015_03_e2
+    euromod_template_dataset: BE_training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-be-capital-income-tax.json
+
+artifacts:
+  report_basename: axiom-euromod-be-capital-income-tax
+
+dashboard:
+  filename: axiom-euromod-be-capital-income-tax.json
+  suite: be-capital-income-tax

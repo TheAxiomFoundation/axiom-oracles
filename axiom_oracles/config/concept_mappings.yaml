@@ -461,6 +461,75 @@ concepts:
           type: country
           geoid: BE
 
+  be:statutes/income_tax/individual/regional_surcharge#belgium_pit_regional_additional_tax:
+    description: Belgium regional PIT additional tax (tinrg)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_regional_additional_tax
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tinrg_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/regional_surcharge#belgium_pit_local_municipal_additional_tax:
+    description: Belgium local/municipal PIT additional tax (tinmu)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_local_municipal_additional_tax
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tinmu_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/movable_withholding/rates#belgium_capital_income_separate_tax:
+    description: Belgium separately-taxed capital-income tax (tinkt)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_capital_income_separate_tax
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tinkt_s
+        scope:
+          type: country
+          geoid: BE
+
   be:statutes/social_integration/payable_amount#belgium_social_integration_income_support_annual_amount:
     description: Belgium social integration income support
     category: benefits

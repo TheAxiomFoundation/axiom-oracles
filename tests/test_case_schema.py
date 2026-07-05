@@ -217,6 +217,9 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT,
+        Concepts.BE_REGIONAL_ADDITIONAL_TAX,
+        Concepts.BE_LOCAL_COMMUNAL_ADDITIONAL_TAX,
+        Concepts.BE_CAPITAL_INCOME_SEPARATE_TAX,
     }
 
     assert (

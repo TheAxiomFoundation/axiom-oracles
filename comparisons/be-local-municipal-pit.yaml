@@ -1,0 +1,45 @@
+name: be-local-municipal-pit
+title: Belgium local/municipal PIT additional tax (tinmu) — Axiom vs EUROMOD
+description: >-
+  Compares the communal additional PIT (municipal centimes) encoded in Axiom
+  RuleSpec (CIR 1992 article 466) against EUROMOD Belgium tinmu_s on a synthetic
+  single-earner grid at 40k gross, one case per region so the three average
+  communal rates are exercised (Brussels 6.2%, Flanders 7.17%, Wallonia 7.92%).
+  EUROMOD levies tinmu on the cumulative tin_s after the regional additional tax
+  (tinrg, order 44) and the PIT fiscal-expenditure reductions (tinfe, order 45,
+  which subtracts the low-wage work-bonus tax reduction tintcly_s and the
+  childcare reduction tintcch_s); the cases pin the engine's reduced State tax
+  (tinna_s), regional additional tax (tinrg_s), and those two fiscal reductions
+  so the encoded base is reduced State tax plus regional tax net of the
+  reductions, exactly as EUROMOD levies tinmu, and supply the region's average
+  communal rate. The region is set via the drgn1 input (1 Brussels, 2 Flanders,
+  3 Wallonia). EUROMOD runs the registration-free public model
+  (EUROMOD_RELEASES_J2.0+, system BE_2025) under the real dataset-configuration
+  name BE_2024_c1_2015_03_e2 (the dataset-name gating workaround; no licensed
+  microdata is read) with input rows templated from the bundled BE_training_data
+  schema. This suite runs where the x64 EUROMOD runtime and model checkout are
+  available; on runners without them the registry re-emits the committed
+  dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: be-local-municipal-pit
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: BE
+    euromod_system: BE_2025
+    euromod_dataset: BE_2024_c1_2015_03_e2
+    euromod_template_dataset: BE_training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-be-local-municipal-pit.json
+
+artifacts:
+  report_basename: axiom-euromod-be-local-municipal-pit
+
+dashboard:
+  filename: axiom-euromod-be-local-municipal-pit.json
+  suite: be-local-municipal-pit
