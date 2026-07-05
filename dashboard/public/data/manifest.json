@@ -67,6 +67,8 @@
     "axiom-euromod-uk-child-benefit.json",
     "axiom-euromod-be-regional-pit-surcharge.json",
     "axiom-euromod-be-local-municipal-pit.json",
-    "axiom-euromod-be-capital-income-tax.json"
+    "axiom-euromod-be-capital-income-tax.json",
+    "axiom-euromod-be-maternity-leave.json",
+    "axiom-euromod-be-birth-leave.json"
   ]
 }

@@ -13,8 +13,9 @@ oracle-compared.
   status, function counts, and output variables are read from the XML, not from
   memory of what EUROMOD "probably" models.
 - **rulespec-be** inventory is from `main` (HEAD `206f110`), `.yaml` modules only.
-- **axiom-oracles** suites are the 21 published `dashboard/public/data/axiom-euromod-be-*.json`
-  plus 3 registered-but-unpublished suites; per-case counts read from those JSONs.
+- **axiom-oracles** suites are the 23 published `dashboard/public/data/axiom-euromod-be-*.json`
+  plus 1 registered-but-unpublished suite (`be-elderly-income-support`); per-case
+  counts read from those JSONs.
 
 ## Denominator (from the XML)
 
@@ -73,9 +74,9 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | 19 | `bwkrg_be` | on | `bwkrg_s` | Flemish jobbonus (low-wage employment top-up) | compared | `be-flemish-jobbonus` (2/7; EUROMOD #10) | — (broaden: part-time/partial-year, frontier workers) |
 | 20 | `yemcomp_be` | on | `bwkmcee_s`, `yemmw_s` | Covid-19 temporary-unemployment wage compensation (employees) | **NOT ENCODED** | — | (low priority; historical) → RD 30.03.2020 + ONEM temp-unemployment Covid measures |
 | 21 | `ysecomp_be` | on | `bwkmcse_s` | Covid-19 wage compensation (self-employed bridging right / droit passerelle) | **NOT ENCODED** | — | (low priority; historical) → Law 23.03.2020 crisis bridging right |
-| 22 | `bmact_be` | switch | `bmact_s` | Maternity-leave indemnity (rest period 82%/75%, RD 03.07.1996 art. 216) | compared* (registered, unpublished) | `be-maternity-leave` (not in dashboard set) | publish suite; broaden self-employed/unemployed maternity |
-| 23 | `bpact_be` | switch | `bpact_s` | Paternity/birth-leave compensation (3 employer days + 82%, RD 03.07.1996 art. 223bis) | compared* (registered, unpublished) | `be-birth-leave` (not in dashboard set) | publish suite; broaden eligibility/scheduling |
-| 24 | `bfapl_be` | switch | `bfapl_s` | Parental-leave allowance (RVA/ONEM career-break interruption benefit) | **NOT ENCODED** | — | encode → RD 29.10.1997 (parental leave) + RD 02.01.1991 career-break |
+| 22 | `bmact_be` | PBE | `bmact_s` | Maternity-leave indemnity (rest period 82%/75%, RD 03.07.1996 art. 216) | compared | `be-maternity-leave` (3/3; PBE=on) | — (broaden self-employed/unemployed maternity) |
+| 23 | `bpact_be` | PBE | `bpact_s` | Paternity/birth-leave compensation (3 employer days + 82%, RD 03.07.1996 art. 223bis) | compared | `be-birth-leave` (3/3; PBE=on) | — (broaden eligibility/scheduling) |
+| 24 | `bfapl_be` | PBE | `bfapl_s` | Parental-leave allowance (RVA/ONEM career-break interruption benefit) | **encoded, not compared** (`be/regulations/career_break/parental_leave/allowance_amounts.yaml`) | — (EUROMOD `bfapl_be` unreachable via HHoT: the `lpb` parental-leave-months input is absent from the BE demo schema, so `bfapl_s` stays 0 for every synthetic case) | broaden lone-parent/age-50 amounts; regional variants; PolicyEngine-style oracle |
 
 ## Passthrough / off in a default BE_2025 run (income from data or add-on-gated)
 
@@ -135,15 +136,16 @@ the EUROMOD matrix.
 
 ## Sanity-check vs the live dashboard
 
-21 published suites, **97 comparisons, 68 exact matches, 100% dispositioned**
-(matches `euromod-be-coverage.json` `dispositioned_parity`). The three new
+23 published suites, **103 comparisons, 74 exact matches, 100% dispositioned**
+(matches `euromod-be-coverage.json` `dispositioned_parity`). The three
 PIT-decomposition suites — `be-regional-pit-surcharge` (`tinrg_s`),
 `be-local-municipal-pit` (`tinmu_s`), and `be-capital-income-tax` (`tinkt_s`) —
-add 9 comparisons, all exact matches. Three further suites are **registered but
-not published** — `be-maternity-leave` (`bmact_s`), `be-birth-leave`
-(`bpact_s`), `be-elderly-income-support` (`bsaoa_s`) — so the coverage claim's
-"live_verified" for maternity/birth-leave/GRAPA is **not** reflected in the
-dashboard JSON set. Nothing already-compared is marked missing above.
+add 9 comparisons, all exact matches; the two leave suites — `be-maternity-leave`
+(`bmact_s`) and `be-birth-leave` (`bpact_s`) — add 6, all exact with the PBE
+extension switched on. One suite remains **registered but not published** —
+`be-elderly-income-support` (`bsaoa_s`) — so the coverage claim's GRAPA
+"live_verified" is still ahead of the published set (wave item 4). Nothing
+already-compared is marked missing above.
 
 ## Wave plan (gap workers, grouped)
 
@@ -163,9 +165,14 @@ Ordered by reasoned fiscal/population importance (labeled reasoned — no countr
    `be-elderly-income-support` suite; build a pension suite.
 5. **Pensioner & special contributions** (`tscpe_be`, `tscpe_s`) → Law
    30.03.1994 ch. 10 + ZIV/AMI RD 03.07.1996.
-6. **Leave suites already coded — publish** (`bmact_s`, `bpact_s`) + encode
-   parental leave (`bfapl_be`, `bfapl_s`) → RD 03.07.1996 arts. 216/223bis;
-   RD 29.10.1997.
+6. **Leave suites — DONE.** `bmact_s` and `bpact_s` published (3/3 each, PBE on);
+   parental leave `bfapl_be` encoded from RD 29.10.1997 (durations 4/8/20/40mo) +
+   RD 02.01.1991 (amounts 508.92/254.46/86.32/43.16 EUR) at
+   `be/regulations/career_break/parental_leave/allowance_amounts.yaml`. No
+   `bfapl_s` oracle: EUROMOD `bfapl_be` needs the `lpb` input, absent from the BE
+   HHoT demo schema, so `bfapl_s` is 0 for every synthetic case. Remaining:
+   broaden self-employed/unemployed maternity, lone-parent/age-50 parental amounts,
+   regional variants → RD 03.07.1996 arts. 216/223bis.
 7. **Indirect tax** (`tco_be`) → RD No. 20 (VAT) + excise codes. **Resolved as a
    conformance exclusion (`extension_not_available`), not a buildable suite** —
    see the `tco_be` verdict above. Revisit only if a Belgium consumption-tax
