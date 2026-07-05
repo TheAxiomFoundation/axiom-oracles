@@ -2825,3 +2825,19 @@ prefixes:
     program: tax
     mapping_type: not_comparable
     rationale: Composed single-employee UKMOD Class 1 employee National Insurance oracle pipeline; its annual contribution outputs re-wire the separately encoded SSCBA 1992 section 8 percentages for the UKMOD tscee_s comparison rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Family-level UKMOD Universal Credit oracle pilot pipeline. It
+  # wires the supplied Welfare Reform Act 2012 section 8 maximum-amount and
+  # deduction stage boundaries from raw household facts so UKMOD (bsauc_s) can
+  # be compared end to end; its element, deduction and award outputs re-wire
+  # the separately encoded Universal Credit Regulations 2013 provisions
+  # (standard allowance, child/LCWRA/carer/childcare/housing elements,
+  # regulation 22 taper, regulation 72 capital tariff, regulation 80A/81
+  # benefit cap) for the UKMOD comparison rather than adding new PolicyEngine
+  # UK oracle variables. Added for rulespec-uk composed UC award pipeline
+  # (axiom-oracles#128).
+  - legal_id_prefix: uk:policies/universal_credit_composed_award_pipeline#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Composed Family-level UKMOD Universal Credit oracle pipeline; its element, deduction, benefit-cap and award outputs re-wire the separately encoded Welfare Reform Act 2012 section 8 and Universal Credit Regulations 2013 element, taper, capital-tariff and benefit-cap provisions for the UKMOD bsauc_s comparison rather than adding new PolicyEngine UK oracle variables.
