@@ -37,6 +37,7 @@ from .uk_self_employed import (
     uk_employer_secondary_nic_cases,
     uk_self_employed_nic_cases,
 )
+from .uk_universal_credit import uk_universal_credit_cases
 from .uk_worker import (
     uk_worker_nic_cases,
     uk_worker_pit_cases,
@@ -72,6 +73,7 @@ def available_suites() -> tuple[str, ...]:
         "uk-worker-nic",
         "uk-self-employed-nic",
         "uk-employer-nic",
+        "uk-universal-credit",
     )
 
 
@@ -130,6 +132,8 @@ def load_suite(name: str):
         return uk_self_employed_nic_cases()
     if name == "uk-employer-nic":
         return uk_employer_secondary_nic_cases()
+    if name == "uk-universal-credit":
+        return uk_universal_credit_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -161,6 +165,7 @@ __all__ = [
     "nyc_synthetic_cases",
     "uk_employer_secondary_nic_cases",
     "uk_self_employed_nic_cases",
+    "uk_universal_credit_cases",
     "uk_worker_nic_cases",
     "uk_worker_pit_cases",
 ]

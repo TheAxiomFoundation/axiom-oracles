@@ -69,6 +69,107 @@ def _single_earner(case_id: str, annual_income: float) -> Case:
     )
 
 
+def _uc_adult_row(idperson, *, partner_id=0, couple=False, is_head=True,
+                  tenure=1, monthly_rent=0.0, capital=0.0):
+    return {
+        "idhh": 1,
+        "idperson": idperson,
+        "idpartner": partner_id,
+        "idmother": 0,
+        "idfather": 0,
+        "drgn1": 2,
+        "dct": 15,
+        "dwt": 1_000.0,
+        "dag": 35 if is_head else 34,
+        "dgn": 1 if is_head else 0,
+        "dms": 2 if couple else 1,
+        "dhr": 1 if is_head else 0,
+        "dec": 0,
+        "ddi": 0,
+        "les": 0,
+        "lhw": 0,
+        "loc": 5,
+        "amrtn": tenure,
+        "yem": 0.0,
+        "yse": 0.0,
+        "yiy": 0.0,
+        "poa": 0.0,
+        "xhcrt": monthly_rent,
+        "afc": capital,
+    }
+
+
+def _uc_child_row(idperson, age, mother_id):
+    return {
+        "idhh": 1,
+        "idperson": idperson,
+        "idpartner": 0,
+        "idmother": mother_id,
+        "idfather": 0,
+        "drgn1": 2,
+        "dct": 15,
+        "dwt": 1_000.0,
+        "dag": age,
+        "dgn": 1,
+        "dms": 1,
+        "dhr": 0,
+        "dec": 2,
+        "ddi": 0,
+        "les": 6,
+        "lhw": 0,
+        "loc": 5,
+        "amrtn": 5,
+        "yem": 0.0,
+        "yse": 0.0,
+        "yiy": 0.0,
+        "poa": 0.0,
+        "xhcrt": 0.0,
+        "afc": 0.0,
+    }
+
+
+def _uc_single_adult(case_id: str) -> Case:
+    return Case(
+        case_id=case_id,
+        period="2026-04",
+        metadata={"euromod_inputs": [_uc_adult_row(101, tenure=1)]},
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 35},
+            ),
+        ),
+    )
+
+
+def _uc_couple_two_children(case_id: str, *, monthly_rent: float) -> Case:
+    return Case(
+        case_id=case_id,
+        period="2026-04",
+        metadata={
+            "euromod_inputs": [
+                _uc_adult_row(
+                    101, partner_id=102, couple=True, is_head=True,
+                    tenure=5, monthly_rent=monthly_rent,
+                ),
+                _uc_adult_row(
+                    102, partner_id=101, couple=True, is_head=False, tenure=5,
+                ),
+                _uc_child_row(103, 8, 101),
+                _uc_child_row(104, 5, 101),
+            ]
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 35},
+            ),
+        ),
+    )
+
+
 class TestProjection:
     def test_single_earner_projects_monthly_amounts(self) -> None:
         rows = euromod_input_rows(
@@ -517,6 +618,37 @@ class TestUkmodLive:
         expected = set(DEFAULT_OUTPUTS) - {"tscee_net_s"}
         assert expected <= set(results[0].values)
         assert "tsceerd_s" not in results[0].values
+
+    def test_universal_credit_household_award_aggregates_over_the_benefit_unit(
+        self, runner
+    ) -> None:
+        # A couple with two children and a social-renter housing element is one
+        # UKMOD benefit unit; the award ``bsauc_s`` is monthly and the adapter
+        # annualizes it. Each element is a UC 2026-27 statutory amount: couple
+        # standard allowance 666.97, first child 351.88, subsequent child
+        # 303.94, and the full rent as the social-renter housing element. The
+        # award composes these over the whole household, so it far exceeds the
+        # single-adult award and moves with the benefit-unit composition. Each
+        # case is run on its own (one household per batch) so the award is the
+        # full entitlement rather than a batch-position draw of UKMOD's benefit
+        # take-up correction (see euromod_issues.json
+        # ukmod-uc-bsauc-takeup-correction).
+        single_award = runner.run_cases(
+            [_uc_single_adult("uc-single")], variables=["bsauc_s"]
+        )[0].values["bsauc_s"]
+        household_award = runner.run_cases(
+            [_uc_couple_two_children("uc-couple-2c", monthly_rent=900.0)],
+            variables=["bsauc_s"],
+        )[0].values["bsauc_s"]
+        # Single adult standard allowance: 424.90/month annualized.
+        assert single_award == pytest.approx(424.90 * 12, abs=1.0)
+        # Couple + two children + 900/month housing: strictly larger, and at
+        # least the couple standard allowance plus two child elements plus the
+        # housing element (annualized), allowing for the earnings taper being
+        # zero here.
+        assert household_award > single_award
+        floor = (666.97 + 351.88 + 303.94 + 900.0) * 12
+        assert household_award == pytest.approx(floor, abs=1.0)
 
 
 @pytest.mark.skipif(

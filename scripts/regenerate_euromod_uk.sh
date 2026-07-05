@@ -14,8 +14,9 @@
 #   - EUROMOD_PYTHON: an x86_64 interpreter with `euromod` installed
 #   - DOTNET_ROOT: an x64 .NET runtime
 #   - AXIOM_RULESPEC_REPO_ROOTS reaching rulespec-uk with the composed pilot
-#     pipelines (uk/statutes/income_tax/individual/pilot_worker_oracle_pipeline
-#     and uk/statutes/social_security/workers/pilot_worker_class_1_nic_pipeline)
+#     pipelines (uk/statutes/income_tax/individual/pilot_worker_oracle_pipeline,
+#     uk/statutes/social_security/workers/pilot_worker_class_1_nic_pipeline, and
+#     uk/policies/universal_credit_composed_award_pipeline)
 set -e
 cd "$(dirname "$0")/.."
 
@@ -25,7 +26,7 @@ cd "$(dirname "$0")/.."
 : "${AXIOM_RULESPEC_REPO_ROOTS:=$HOME/TheAxiomFoundation}"
 export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT AXIOM_RULESPEC_REPO_ROOTS
 
-for name in uk-worker-pit-ukmod uk-worker-nic-ukmod; do
+for name in uk-worker-pit-ukmod uk-worker-nic-ukmod uk-universal-credit-ukmod; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

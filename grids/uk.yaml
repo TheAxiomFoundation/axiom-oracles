@@ -133,6 +133,605 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         self_employment_income: 360000.0
+  uk-universal-credit:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    cases:
+    - id: uk-uc-single-owner
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 0.0
+    - id: uk-uc-single-renter
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: renter
+        monthly_rent: 600.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 7200.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-owner
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-renter
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 0
+        tenure: renter
+        monthly_rent: 750.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 9000.0
+        cash_on_hand: 0.0
+    - id: uk-uc-single-1child-renter
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 1
+        tenure: renter
+        monthly_rent: 750.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 9000.0
+        cash_on_hand: 0.0
+    - id: uk-uc-single-2child-renter
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 2
+        tenure: renter
+        monthly_rent: 850.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 10200.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-2child-owner
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 2
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-2child-renter
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 2
+        tenure: renter
+        monthly_rent: 900.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 10800.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-3child-renter
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 3
+        tenure: renter
+        monthly_rent: 1000.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      - id: child3
+        kind: person
+        age: 4
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 12000.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-2child-renter-earn0
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 2
+        tenure: renter
+        monthly_rent: 900.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 10800.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-2child-renter-earn15000
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 2
+        tenure: renter
+        monthly_rent: 900.0
+        head_annual_earnings: 15000.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 15000.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 10800.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-2child-renter-earn30000
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 2
+        tenure: renter
+        monthly_rent: 900.0
+        head_annual_earnings: 30000.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 10800.0
+        cash_on_hand: 0.0
+    - id: uk-uc-couple-2child-renter-earn45000
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 2
+        children: 2
+        tenure: renter
+        monthly_rent: 900.0
+        head_annual_earnings: 45000.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      facts:
+        living_renting: true
+        rent_paid: 10800.0
+        cash_on_hand: 0.0
+    - id: uk-uc-single-owner-capital0
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 0.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 0.0
+    - id: uk-uc-single-owner-capital6000
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 6000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 6000.0
+    - id: uk-uc-single-owner-capital6250
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 6250.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 6250.0
+    - id: uk-uc-single-owner-capital10000
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 10000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 10000.0
+    - id: uk-uc-single-owner-capital16000
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 16000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 16000.0
+    - id: uk-uc-single-owner-capital20000
+      period: 2026-04
+      scenario: household-universal-credit
+      parameters:
+        adults: 1
+        children: 0
+        tenure: owner
+        monthly_rent: 0.0
+        head_annual_earnings: 0.0
+        capital: 20000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_owner: true
+        rent_paid: 0.0
+        cash_on_hand: 20000.0
   uk-worker-nic:
     locale: UK
     entity: Person
