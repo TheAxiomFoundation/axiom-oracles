@@ -4208,6 +4208,18 @@ def build_axiom_request(
         )
     if surface == "housing-benefit-final":
         return build_housing_benefit_final_request(pe_data=pe_data, year=year)
+    if surface == "housing-benefit-applicable-amount":
+        return build_housing_benefit_applicable_amount_request(
+            pe_data=pe_data,
+            year=year,
+        )
+    if surface == "housing-benefit-non-dependant-deductions":
+        return build_housing_benefit_non_dependant_deductions_request(
+            pe_data=pe_data,
+            year=year,
+        )
+    if surface == "housing-benefit-entitlement":
+        return build_housing_benefit_entitlement_request(pe_data=pe_data, year=year)
     if surface == "universal-credit-childcare-element":
         return build_universal_credit_childcare_element_request(
             pe_data=pe_data,
