@@ -1,0 +1,352 @@
+# SUGGESTED boundary cases — GENERATED; NOT adopted, NOT loaded by load_grids().
+# Regenerate with: uv run python scripts/generate_boundary_cases.py
+# Each case probes one statutory threshold from the axiom-corpus concept
+# registry. probe.value is intentionally null: read it from the named
+# PolicyEngine parameter, set period, then promote into the adopted grid.
+# See grids/README.md (boundary-case generator).
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: uk
+generated_from:
+  registry: axiom-corpus concepts/data/uk.yaml
+  generator: scripts/generate_boundary_cases.py
+  note: SUGGESTED threshold-straddling cases; not adopted. Each case's probe.value is unresolved — fill
+    it from the named PolicyEngine parameter, set period, then promote into grids/uk.yaml if warranted.
+case_sets:
+  boundary-tax:
+    cases:
+    - id: uk-boundary-plan-1-annual-income-threshold-below
+      period: null
+      scenario: boundary-plan-1-annual-income-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_1_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_1
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-plan-1-annual-income-threshold-above
+      period: null
+      scenario: boundary-plan-1-annual-income-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_1_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_1
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-plan-2-annual-income-threshold-below
+      period: null
+      scenario: boundary-plan-2-annual-income-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_2_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_2
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-plan-2-annual-income-threshold-above
+      period: null
+      scenario: boundary-plan-2-annual-income-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_2_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_2
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-plan-4-annual-income-threshold-below
+      period: null
+      scenario: boundary-plan-4-annual-income-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_4_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_4
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-plan-4-annual-income-threshold-above
+      period: null
+      scenario: boundary-plan-4-annual-income-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_4_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_4
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-plan-5-annual-income-threshold-below
+      period: null
+      scenario: boundary-plan-5-annual-income-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_5_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_5
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-plan-5-annual-income-threshold-above
+      period: null
+      scenario: boundary-plan-5-annual-income-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#plan_5_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.plan_5
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-postgraduate-loan-annual-income-threshold-below
+      period: null
+      scenario: boundary-postgraduate-loan-annual-income-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#postgraduate_loan_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.postgraduate
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-postgraduate-loan-annual-income-threshold-above
+      period: null
+      scenario: boundary-postgraduate-loan-annual-income-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:policies/govuk/student-loan-repayments#postgraduate_loan_annual_income_threshold
+        parameter: gov.hmrc.student_loans.thresholds.postgraduate
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-lower-earnings-limit-below
+      period: null
+      scenario: boundary-lower-earnings-limit-below
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#lower_earnings_limit
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.lower_earnings_limit
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-lower-earnings-limit-above
+      period: null
+      scenario: boundary-lower-earnings-limit-above
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#lower_earnings_limit
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.lower_earnings_limit
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-primary-threshold-below
+      period: null
+      scenario: boundary-primary-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#primary_threshold
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.primary_threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-primary-threshold-above
+      period: null
+      scenario: boundary-primary-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#primary_threshold
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.primary_threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-secondary-threshold-below
+      period: null
+      scenario: boundary-secondary-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#secondary_threshold
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.secondary_threshold
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-secondary-threshold-above
+      period: null
+      scenario: boundary-secondary-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#secondary_threshold
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.secondary_threshold
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-upper-earnings-limit-below
+      period: null
+      scenario: boundary-upper-earnings-limit-below
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#upper_earnings_limit
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.upper_earnings_limit
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-upper-earnings-limit-above
+      period: null
+      scenario: boundary-upper-earnings-limit-above
+      entity: TaxUnit
+      probe:
+        concept: uk:regulations/uksi/2001/1004/10#upper_earnings_limit
+        parameter: gov.hmrc.national_insurance.class_1.thresholds.upper_earnings_limit
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-lower-profits-limit-below
+      period: null
+      scenario: boundary-lower-profits-limit-below
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/1992/4/15#lower_profits_limit
+        parameter: gov.hmrc.national_insurance.class_4.thresholds.lower_profits_limit
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-lower-profits-limit-above
+      period: null
+      scenario: boundary-lower-profits-limit-above
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/1992/4/15#lower_profits_limit
+        parameter: gov.hmrc.national_insurance.class_4.thresholds.lower_profits_limit
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-upper-profits-limit-below
+      period: null
+      scenario: boundary-upper-profits-limit-below
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/1992/4/15#upper_profits_limit
+        parameter: gov.hmrc.national_insurance.class_4.thresholds.upper_profits_limit
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-upper-profits-limit-above
+      period: null
+      scenario: boundary-upper-profits-limit-above
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/1992/4/15#upper_profits_limit
+        parameter: gov.hmrc.national_insurance.class_4.thresholds.upper_profits_limit
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-basic-rate-limit-below
+      period: null
+      scenario: boundary-basic-rate-limit-below
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/2007/3/10#basic_rate_limit
+        parameter: gov.hmrc.income_tax.rates.uk
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-basic-rate-limit-above
+      period: null
+      scenario: boundary-basic-rate-limit-above
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/2007/3/10#basic_rate_limit
+        parameter: gov.hmrc.income_tax.rates.uk
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-higher-rate-limit-below
+      period: null
+      scenario: boundary-higher-rate-limit-below
+      entity: Person
+      probe:
+        concept: uk:statutes/ukpga/2007/3/10#higher_rate_limit
+        parameter: gov.hmrc.income_tax.rates.uk
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-higher-rate-limit-above
+      period: null
+      scenario: boundary-higher-rate-limit-above
+      entity: Person
+      probe:
+        concept: uk:statutes/ukpga/2007/3/10#higher_rate_limit
+        parameter: gov.hmrc.income_tax.rates.uk
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-adjusted-net-income-reduction-threshold-below
+      period: null
+      scenario: boundary-adjusted-net-income-reduction-threshold-below
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/2007/3/35#adjusted_net_income_reduction_threshold
+        parameter: gov.hmrc.income_tax.allowances.personal_allowance.maximum_ANI
+        side: below
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
+    - id: uk-boundary-adjusted-net-income-reduction-threshold-above
+      period: null
+      scenario: boundary-adjusted-net-income-reduction-threshold-above
+      entity: TaxUnit
+      probe:
+        concept: uk:statutes/ukpga/2007/3/35#adjusted_net_income_reduction_threshold
+        parameter: gov.hmrc.income_tax.allowances.personal_allowance.maximum_ANI
+        side: above
+        value: null
+        program: tax
+        dtype: Money
+        unit: GBP
