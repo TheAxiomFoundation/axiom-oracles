@@ -31,6 +31,9 @@ jobs:
       - name: Validate per-rule verification KPI data
         run: uv run scripts/check_rule_verification.py
 
+      - name: Validate mismatch dispositions
+        run: uv run scripts/apply_dispositions.py --check
+
       - name: Test
         run: uv run pytest -q
 

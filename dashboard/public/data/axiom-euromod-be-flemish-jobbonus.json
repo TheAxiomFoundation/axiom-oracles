@@ -51,6 +51,11 @@
       "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
       "description": "Belgium Flemish jobbonus",
       "difference": 100.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "stale-maximum-and-missing-2025-top-up-full-time",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+      },
       "kind": "amount_difference",
       "left": 700.0,
       "parent": null,
@@ -67,6 +72,11 @@
       "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
       "description": "Belgium Flemish jobbonus",
       "difference": 100.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "stale-maximum-and-missing-2025-top-up-full-time",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+      },
       "kind": "amount_difference",
       "left": 700.0,
       "parent": null,
@@ -83,6 +93,11 @@
       "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
       "description": "Belgium Flemish jobbonus",
       "difference": 168.99850175283802,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "stale-degressive-thresholds-upper-band",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+      },
       "kind": "amount_difference",
       "left": 550.1752838032716,
       "parent": null,
@@ -99,6 +114,11 @@
       "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
       "description": "Belgium Flemish jobbonus",
       "difference": 168.99522751266952,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "stale-degressive-thresholds-upper-band",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+      },
       "kind": "amount_difference",
       "left": 222.7512669593568,
       "parent": null,
@@ -115,6 +135,11 @@
       "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
       "description": "Belgium Flemish jobbonus",
       "difference": 75.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "stale-maximum-and-unscaled-top-up-half-time",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+      },
       "kind": "amount_difference",
       "left": 375.0,
       "parent": null,
@@ -127,11 +152,27 @@
     }
   ],
   "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "be-flemish-jobbonus",
   "summary": {
     "comparison_count": 7,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 5
+      },
+      "dispositions_file": "dispositions/be-flemish-jobbonus.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 28.571429,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 2,

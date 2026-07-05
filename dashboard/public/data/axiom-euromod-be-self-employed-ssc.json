@@ -51,6 +51,11 @@
       "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
       "description": "Belgium self-employed social-security contribution",
       "difference": 385.75999999999993,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "secondary-below-threshold-charged-quarterly-minimum",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/6"
+      },
       "kind": "amount_difference",
       "left": 385.75999999999993,
       "parent": null,
@@ -67,6 +72,11 @@
       "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
       "description": "Belgium self-employed social-security contribution",
       "difference": -385.76079999999956,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "secondary-threshold-treated-as-allowance",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/6"
+      },
       "kind": "amount_difference",
       "left": 1777.0351053103009,
       "parent": null,
@@ -83,6 +93,11 @@
       "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
       "description": "Belgium self-employed social-security contribution",
       "difference": -553.23597,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "post-pension-threshold-treated-as-allowance",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/6"
+      },
       "kind": "amount_difference",
       "left": 997.6469474664107,
       "parent": null,
@@ -95,11 +110,27 @@
     }
   ],
   "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "be-self-employed-ssc",
   "summary": {
     "comparison_count": 7,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 3
+      },
+      "dispositions_file": "dispositions/be-self-employed-ssc.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 57.142857,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 4,

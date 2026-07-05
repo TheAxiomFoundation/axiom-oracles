@@ -775,5 +775,33 @@
     "Expand be-special-social-security-contribution beyond the Article 108 annual assessment oracle cases to Article 109 payroll withholding, Article 110 settlement/refund, special worker categories, and Article 107 income construction from composed PIT variables; keep the filed EUROMOD Article 108 schedule residual visible until upstream issue #7 is resolved.",
     "Expand tprhm_s from the current supplied-centimes gross bridge to regional reductions and local centime lookup while keeping EUROMOD issue #14 visible for upstream cadastral-income rounding.",
     "Expand bwkrg_s from the current full-time and low-wage/small-payment part-time Flemish jobbonus probes to remaining part-time and partial-year cases after upstream issue #10 is resolved or a version-specific EUROMOD expectation is documented."
-  ]
+  ],
+  "dispositioned_parity": {
+    "suites": [
+      "be-cadastral-income-indexation",
+      "be-employer-ssc",
+      "be-family-birth-allowance",
+      "be-family-child-benefit-base",
+      "be-family-child-benefit-brussels-same-age-household",
+      "be-family-child-benefit-income-list",
+      "be-family-child-benefit-social-supplement",
+      "be-family-child-benefit-wallonia-social-supplement",
+      "be-flemish-jobbonus",
+      "be-flemish-social-protection-premium",
+      "be-property-tax",
+      "be-self-employed-ssc",
+      "be-social-assistance",
+      "be-special-social-security-contribution",
+      "be-worker-disposable-income-list",
+      "be-worker-pit",
+      "be-worker-ssc",
+      "be-worker-tax-income-list"
+    ],
+    "comparison_count": 88,
+    "match_count": 59,
+    "raw_match_rate": 67.045455,
+    "explained_rate": 100,
+    "unexplained_count": 0,
+    "note": "Raw = exact per-comparison matches across the committed be-* dashboard suites. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from dispositions/<suite>.yaml."
+  }
 }
