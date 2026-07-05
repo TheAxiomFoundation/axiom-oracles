@@ -207,6 +207,22 @@
       "source": "comparisons/tn-snap-ecps.yaml"
     },
     {
+      "suite": "uk-employer-nic",
+      "report": "axiom-euromod-uk-employer-nic.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-employer-nic-ukmod.yaml"
+    },
+    {
+      "suite": "uk-self-employed-nic",
+      "report": "axiom-euromod-uk-self-employed-nic.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-self-employed-nic-ukmod.yaml"
+    },
+    {
       "suite": "uk-tax-benefits-efrs",
       "report": "axiom-policyengine-uk-tax-benefits-efrs.json",
       "repos": [

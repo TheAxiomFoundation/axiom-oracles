@@ -64,7 +64,7 @@ def test_expected_jurisdictions_present() -> None:
 
 @pytest.mark.parametrize(
     "jurisdiction,expected_sets,expected_cases",
-    [("us", 2, 44), ("be", 21, 91), ("uk", 2, 10)],
+    [("us", 2, 44), ("be", 21, 91), ("uk", 4, 20)],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
     grid = load_grid(jurisdiction)
@@ -129,7 +129,12 @@ def test_uk_grid_is_present_and_covers_the_worker_suites() -> None:
         pytest.skip("UK worker suites not present in this checkout")
 
     grid = load_grid("uk")
-    for suite_name in ("uk-worker-pit", "uk-worker-nic"):
+    for suite_name in (
+        "uk-worker-pit",
+        "uk-worker-nic",
+        "uk-self-employed-nic",
+        "uk-employer-nic",
+    ):
         case_set = grid.case_set(suite_name)
         assert case_set is not None, f"grids/uk.yaml missing {suite_name!r}"
         live_cases = load_suite(suite_name)

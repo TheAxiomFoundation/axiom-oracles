@@ -2841,3 +2841,25 @@ prefixes:
     program: universal_credit
     mapping_type: not_comparable
     rationale: Composed Family-level UKMOD Universal Credit oracle pipeline; its element, deduction, benefit-cap and award outputs re-wire the separately encoded Welfare Reform Act 2012 section 8 and Universal Credit Regulations 2013 element, taper, capital-tariff and benefit-cap provisions for the UKMOD bsauc_s comparison rather than adding new PolicyEngine UK oracle variables.
+  # Composed single-earner UKMOD self-employed National Insurance oracle
+  # pipeline (SSCBA 1992 section 15 Class 4, with section 11 Class 2 shown to
+  # contribute nothing after the 6 April 2024 abolition). Its Class 4 outputs
+  # re-wire the separately mapped section 15 rules for the UKMOD tscse_s
+  # comparison rather than adding new PolicyEngine UK oracle variables. Added
+  # for the M1 self-employed/employer NIC family.
+  - legal_id_prefix: uk:statutes/social_security/workers/pilot_worker_self_employed_nic_pipeline#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Composed single-earner UKMOD self-employed National Insurance oracle pipeline; its Class 4 outputs re-wire the separately mapped SSCBA 1992 section 15 Class 4 rules (and show the section 11 Class 2 amount payable is nil after the 6 April 2024 abolition) for the UKMOD tscse_s comparison rather than adding new PolicyEngine UK oracle variables.
+  # Composed single-employment UKMOD employer (secondary) Class 1 National
+  # Insurance oracle pipeline (SSCBA 1992 section 9, 15% secondary percentage
+  # on earnings above the supplied secondary threshold). Its contribution
+  # output is the UKMOD tscer_s comparison target; the employment allowance is
+  # an employer-level offset not modelled per employee. Added for the M1
+  # self-employed/employer NIC family.
+  - legal_id_prefix: uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Composed single-employment UKMOD employer (secondary) Class 1 National Insurance oracle pipeline; it charges the encoded SSCBA 1992 section 9 15% secondary percentage on earnings above the supplied secondary threshold for the UKMOD tscer_s comparison rather than adding a new PolicyEngine UK oracle variable, and it does not model the employer-level employment allowance offset.
