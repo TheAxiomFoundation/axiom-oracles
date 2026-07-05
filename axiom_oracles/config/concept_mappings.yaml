@@ -612,6 +612,23 @@ concepts:
     # residual (Class 2 is nil after the 6 April 2024 abolition). Keep a small
     # absolute tolerance to absorb float noise while catching encoding gaps.
     tolerance: 2
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_nic_pilot_se_self_employed_contribution
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tscse_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount:
     description: UK Universal Credit household award (hypothetical benefit unit)
     category: benefits
@@ -632,13 +649,12 @@ concepts:
       geoid: UK
     targets:
       axiom:
-        name: uk_nic_pilot_se_self_employed_contribution
         name: uc_pilot_award_amount
         scope:
           type: country
           geoid: UK
       euromod:
-        name: tscse_s
+        name: bsauc_s
         scope:
           type: country
           geoid: UK
@@ -666,7 +682,6 @@ concepts:
           geoid: UK
       euromod:
         name: tscer_s
-        name: bsauc_s
         scope:
           type: country
           geoid: UK
