@@ -1128,3 +1128,42 @@ mappings:
   - match: { kind: suffix, value: month_is_not_after_month_in_which_pregnancy_ends }
     scope: person
     source: { kind: fact, name: PREGNANT, default: false, cast: bool }
+
+  # ---------------------------------------------------------------------
+  # CA TANF / CalWORKs (us-ca/tanf program) — recipient-month slice.
+  # Region 1 is the seventeen higher-MAP counties (by county FIPS);
+  # exempt units approximated as any-member-receives-SSI.
+  # ---------------------------------------------------------------------
+
+  - match: { kind: suffix, value: persons_on_aid }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+  - match: { kind: suffix, value: assistance_unit_is_exempt }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      aggregate: sum_over_people
+      from_facts: [SSI_BENEFITS]
+  - match: { kind: suffix, value: household_in_ca_map_region_1 }
+    scope: household
+    source:
+      kind: derived
+      transform: scope_geoid_in
+      geoids: ["06001","06013","06037","06041","06053","06055","06059","06073","06075","06079","06081","06083","06085","06087","06095","06097","06111"]
+  - match: { kind: suffix, value: ca_countable_earned_income_after_disregard }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_flat_then_rate
+      flat: 600
+      rate: 0.5
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: ca_countable_other_unearned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME, DIVIDEND_INCOME]

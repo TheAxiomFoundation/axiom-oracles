@@ -246,6 +246,16 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             flat = float(source.get("flat", 0))
             return round(min(monthly, monthly * rate + flat), 2)
 
+        if transform == "monthly_flat_then_rate":
+            # Countable monthly income where a flat amount is subtracted
+            # first and a rate of the remainder is then disregarded
+            # (CalWORKs recipient: (gross - $600) x 50%).
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            monthly = float(value) / 12
+            flat = float(source.get("flat", 0))
+            rate = float(source.get("rate", 0))
+            return round(max(0.0, (monthly - flat)) * (1 - rate), 2)
+
         if transform == "monthly_countable_after_exclusion":
             # Countable monthly income after a rate + flat exclusion.
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)

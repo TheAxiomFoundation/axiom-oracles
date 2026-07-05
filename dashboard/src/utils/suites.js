@@ -179,6 +179,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 210,
   },
+  "ca-tanf-ecps": {
+    family: "tanf",
+    jurisdiction: "CA",
+    label: "California CalWORKs",
+    region: "us",
+    kind: "household",
+    order: 218,
+  },
   "co-tanf-ecps": {
     family: "tanf",
     jurisdiction: "CO",

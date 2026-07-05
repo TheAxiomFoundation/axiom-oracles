@@ -875,6 +875,16 @@ concepts:
       axiom: wa_tanf_annual_benefit
       policyengine: wa_tanf
 
+  us-ca:policies/cdss/calworks#ca_tanf_benefit:
+    description: CA CalWORKs benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: ca_tanf_annual_benefit
+      policyengine: ca_tanf
+
   us-co:policies/cdhs/colorado-works#co_tanf_benefit:
     description: CO TANF (Colorado Works) benefit (annualized)
     category: cash

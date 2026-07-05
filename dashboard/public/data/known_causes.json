@@ -603,6 +603,14 @@
    "label": "Grant-chart composition edges and eligibility-gate differences",
    "description": "16 of 1,165 CO households diverge: several by ~$35-45/month where the encoded 3.606.1 chart rows and PolicyEngine's caretaker-table-plus-additional-child composition disagree for large or multi-adult units; a few where PolicyEngine's eligibility gates (resources, immigration) deny units the composed slice pays; and one large-household outlier where the composed grant substantially exceeds the chart standard, pending trace.",
    "fix_owner": "program-coverage"
+  },
+  {
+   "suite": "ca-tanf-ecps",
+   "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
+   "kind": "amount_difference",
+   "label": "Exempt-status approximation, applicant tests, and income-source splits",
+   "description": "178 of 7,101 CA households diverge in three classes: the exempt MAP schedule is approximated as any-member-receives-SSI (ECPS lacks IHSS/SDI/workers' compensation facts); PolicyEngine applies applicant entry tests and immigration proration outside the recipient-month slice; and disability-based unearned income cannot be split from Social Security in the projection, shifting the $600 DBI threshold.",
+   "fix_owner": "program-coverage"
   }
  ]
 }

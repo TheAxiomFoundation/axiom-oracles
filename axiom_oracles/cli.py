@@ -1031,7 +1031,15 @@ def _build_runner(
         program_imports = ()
         generated_program_target = None
         program_rules = ()
-        if axiom_program is None and not wants_snap:
+        # An explicitly provided compiled artifact fully defines the program
+        # (compose already resolved its imports); deriving imports from the
+        # concept ids here would flip prune_unsupported_inputs and strip the
+        # generic ECPS input records the artifact needs.
+        if (
+            axiom_program is None
+            and not wants_snap
+            and axiom_compiled_program is None
+        ):
             if _wants_tax(concept_ids):
                 program_imports = _tax_oracle_imports_for_concepts(concept_ids)
                 generated_program_target = US_TAX_ORACLE_BRIDGE_TARGET

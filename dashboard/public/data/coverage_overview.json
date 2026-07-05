@@ -606,12 +606,12 @@
    {
     "program": "tanf",
     "jurisdiction": "CA",
-    "status": "coverageOnly",
-    "generated": true,
-    "source": "rulespec-us origin/main: policies/cdss/calworks (9 rule files)",
+    "status": "executable",
+    "source": "axiom-oracles programs/us-ca/tanf/fy-2026.yaml composing W&I 11450 MAP schedules (regions 1/2, exempt/non-exempt)",
     "known_non_tanf_gaps": [
-     "encoded upstream; no comparison suite yet"
-    ]
+     "recipient month only; applicant MBSAC/MAP tests, immigration proration, and DBI splits out of scope"
+    ],
+    "suite": "ca-tanf-ecps"
    },
    {
     "program": "tanf",
