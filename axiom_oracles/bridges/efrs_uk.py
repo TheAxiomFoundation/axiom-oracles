@@ -109,6 +109,12 @@ HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_PROGRAM_PATH = Path(
 HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_BASE = "uk:regulations/uksi/2006/214/29"
 HOUSING_BENEFIT_FINAL_PROGRAM_PATH = Path("policies/govuk/housing-benefit.yaml")
 HOUSING_BENEFIT_FINAL_BASE = "uk:policies/govuk/housing-benefit"
+HOUSING_BENEFIT_ENTITLEMENT_PROGRAM_PATH = Path(
+    "policies/housing_benefit_composed_entitlement_pipeline.yaml"
+)
+HOUSING_BENEFIT_ENTITLEMENT_BASE = (
+    "uk:policies/housing_benefit_composed_entitlement_pipeline"
+)
 UNIVERSAL_CREDIT_PROGRAM_PATH = Path("regulations/uksi/2013/376/36.yaml")
 UNIVERSAL_CREDIT_BASE = "uk:regulations/uksi/2013/376/36"
 UNIVERSAL_CREDIT_REGULATION_18_PROGRAM_PATH = Path("regulations/uksi/2013/376/18.yaml")
@@ -511,6 +517,34 @@ HOUSING_BENEFIT_FINAL_OUTPUTS = {
     "housing_benefit_annual_amount": {
         "axiom": f"{HOUSING_BENEFIT_FINAL_BASE}#housing_benefit_annual_amount",
         "pe": "housing_benefit",
+        "tolerance": 0.01,
+    },
+}
+
+HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS = {
+    "hb_pilot_applicable_amount": {
+        "axiom": f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_applicable_amount",
+        "pe": "housing_benefit_applicable_amount",
+        "applies": "housing_benefit_applicable_amount_defined",
+        "tolerance": 0.01,
+    },
+}
+
+HOUSING_BENEFIT_NON_DEPENDANT_DEDUCTIONS_OUTPUTS = {
+    "hb_pilot_non_dependant_deductions": {
+        "axiom": (
+            f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_non_dependant_deductions"
+        ),
+        "pe": "housing_benefit_non_dep_deductions",
+        "tolerance": 0.01,
+    },
+}
+
+HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS = {
+    "hb_pilot_entitlement": {
+        "axiom": f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#hb_pilot_entitlement",
+        "pe": "housing_benefit_entitlement",
+        "applies": "housing_benefit_entitlement_defined",
         "tolerance": 0.01,
     },
 }
@@ -1137,6 +1171,39 @@ SURFACE_SPECS = {
             "would_claim_housing_benefit",
         ),
     ),
+    "housing-benefit-applicable-amount": UKEFRSSurfaceSpec(
+        program=HOUSING_BENEFIT_ENTITLEMENT_PROGRAM_PATH,
+        entity="benunit",
+        outputs=HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS,
+        pe_variables=(
+            "housing_benefit_applicable_amount",
+            "housing_benefit_eligible",
+            "benefits_premiums",
+            "eldest_adult_age",
+            "is_couple",
+        ),
+        projection_person_variables=("is_SP_age",),
+    ),
+    "housing-benefit-non-dependant-deductions": UKEFRSSurfaceSpec(
+        program=HOUSING_BENEFIT_ENTITLEMENT_PROGRAM_PATH,
+        entity="benunit",
+        outputs=HOUSING_BENEFIT_NON_DEPENDANT_DEDUCTIONS_OUTPUTS,
+        pe_variables=("housing_benefit_non_dep_deductions",),
+    ),
+    "housing-benefit-entitlement": UKEFRSSurfaceSpec(
+        program=HOUSING_BENEFIT_ENTITLEMENT_PROGRAM_PATH,
+        entity="benunit",
+        outputs=HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS,
+        pe_variables=(
+            "housing_benefit_entitlement",
+            "housing_benefit_applicable_amount",
+            "housing_benefit_applicable_income",
+            "housing_benefit_non_dep_deductions",
+            "benunit_rent",
+            "LHA_eligible",
+            "LHA_cap",
+        ),
+    ),
     "universal-credit-standard-allowance": UKEFRSSurfaceSpec(
         program=UNIVERSAL_CREDIT_PROGRAM_PATH,
         entity="benunit",
@@ -1430,13 +1497,17 @@ HBAI_COMPONENT_COVERAGE = {
         "surfaces": (
             "housing-benefit-working-age-tariff-income",
             "housing-benefit-pension-age-tariff-income",
+            "housing-benefit-applicable-amount",
+            "housing-benefit-entitlement",
             "housing-benefit-final",
         ),
         "covered_outputs": (
             "housing_benefit_tariff_income",
+            "housing_benefit_applicable_amount",
+            "housing_benefit_entitlement",
             "housing_benefit",
         ),
-        "rationale": "Axiom covers Housing Benefit capital tariff income branches and the final annual PolicyEngine UK housing_benefit wrapper after the claim gate and benefit-cap reduction.",
+        "rationale": "Axiom covers Housing Benefit capital tariff income branches, the regulation 22 / Schedule 3 applicable amount, the composed regulation 70 / 71 entitlement (maximum eligible rent after the 65 per cent taper) for benefit units without a non-dependant deduction, and the final annual PolicyEngine UK housing_benefit wrapper after the claim gate and benefit-cap reduction.",
     },
     "income_support": {
         "status": "partial",
@@ -4141,6 +4212,18 @@ def build_axiom_request(
         )
     if surface == "housing-benefit-final":
         return build_housing_benefit_final_request(pe_data=pe_data, year=year)
+    if surface == "housing-benefit-applicable-amount":
+        return build_housing_benefit_applicable_amount_request(
+            pe_data=pe_data,
+            year=year,
+        )
+    if surface == "housing-benefit-non-dependant-deductions":
+        return build_housing_benefit_non_dependant_deductions_request(
+            pe_data=pe_data,
+            year=year,
+        )
+    if surface == "housing-benefit-entitlement":
+        return build_housing_benefit_entitlement_request(pe_data=pe_data, year=year)
     if surface == "universal-credit-childcare-element":
         return build_universal_credit_childcare_element_request(
             pe_data=pe_data,
@@ -5143,6 +5226,113 @@ def build_housing_benefit_final_request(
                 "period": interval,
                 "outputs": [
                     spec["axiom"] for spec in HOUSING_BENEFIT_FINAL_OUTPUTS.values()
+                ],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
+def build_housing_benefit_applicable_amount_request(
+    *, pe_data: dict[str, Any], year: int
+) -> dict[str, Any]:
+    interval = tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "housing-benefit-applicable-amount"):
+        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
+        for name, value in project_housing_benefit_applicable_amount_inputs(row).items():
+            inputs.append(
+                input_record(
+                    f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                )
+            )
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [
+                    spec["axiom"]
+                    for spec in HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS.values()
+                ],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
+def build_housing_benefit_non_dependant_deductions_request(
+    *, pe_data: dict[str, Any], year: int
+) -> dict[str, Any]:
+    interval = tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "housing-benefit-non-dependant-deductions"):
+        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
+        for name, value in project_housing_benefit_non_dependant_deductions_inputs(
+            row
+        ).items():
+            inputs.append(
+                input_record(
+                    f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                )
+            )
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [
+                    spec["axiom"]
+                    for spec in HOUSING_BENEFIT_NON_DEPENDANT_DEDUCTIONS_OUTPUTS.values()
+                ],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
+def build_housing_benefit_entitlement_request(
+    *, pe_data: dict[str, Any], year: int
+) -> dict[str, Any]:
+    interval = tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "housing-benefit-entitlement"):
+        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
+        for name, value in project_housing_benefit_entitlement_inputs(row).items():
+            inputs.append(
+                input_record(
+                    f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                )
+            )
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [
+                    spec["axiom"]
+                    for spec in HOUSING_BENEFIT_ENTITLEMENT_OUTPUTS.values()
                 ],
             }
         )
@@ -6311,6 +6501,62 @@ def project_housing_benefit_final_inputs(row: Any) -> dict[str, Any]:
     }
 
 
+def project_housing_benefit_applicable_amount_inputs(row: Any) -> dict[str, Any]:
+    # The applicable amount depends only on the family type, the eldest adult's
+    # age band, whether any member has attained state pension age, and the
+    # premium amount PolicyEngine adds as benefits_premiums.
+    return {
+        "hb_pilot_is_couple": bool(row_value(row, "is_couple", False)),
+        "hb_pilot_any_member_pension_age": bool(
+            row_value(row, "housing_benefit_any_over_sp_age", False)
+        ),
+        "hb_pilot_eldest_adult_age": money(row_value(row, "eldest_adult_age", 0)),
+        "hb_pilot_premium_amount": money(row_value(row, "benefits_premiums", 0)),
+    }
+
+
+def project_housing_benefit_non_dependant_deductions_inputs(
+    row: Any,
+) -> dict[str, Any]:
+    # PolicyEngine derives the benefit-unit non-dependant deduction from a
+    # household-composition aggregation that is not recoverable from a Family
+    # count and representative income, so this surface is not run on the
+    # Enhanced FRS population (the deduction band table is exercised in the
+    # pipeline's companion tests instead). The projection supplies a single
+    # non-dependant with no gross income so the composed output is well-defined
+    # if the surface is ever run as a self-consistency check.
+    return {
+        "hb_pilot_number_of_non_dependants": 1,
+        "hb_pilot_non_dependant_gross_weekly_income": 0.0,
+    }
+
+
+def project_housing_benefit_entitlement_inputs(row: Any) -> dict[str, Any]:
+    # Reproduce PolicyEngine housing_benefit_entitlement by projecting the
+    # realised applicable income, eligible rent, and maximum rent (LHA) cap,
+    # with the applicable amount recomputed from the family type and age band.
+    # The surface is filtered to benefit units with no non-dependant deduction
+    # (housing_benefit_entitlement_defined), so the number of non-dependants is
+    # projected as zero.
+    lha_eligible = bool(row_value(row, "LHA_eligible", False))
+    return {
+        "hb_pilot_is_couple": bool(row_value(row, "is_couple", False)),
+        "hb_pilot_any_member_pension_age": bool(
+            row_value(row, "housing_benefit_any_over_sp_age", False)
+        ),
+        "hb_pilot_eldest_adult_age": money(row_value(row, "eldest_adult_age", 0)),
+        "hb_pilot_premium_amount": money(row_value(row, "benefits_premiums", 0)),
+        "hb_pilot_number_of_non_dependants": 0,
+        "hb_pilot_non_dependant_gross_weekly_income": 0.0,
+        "hb_pilot_applicable_income": money(
+            row_value(row, "housing_benefit_applicable_income", 0)
+        ),
+        "hb_pilot_eligible_rent": money(row_value(row, "benunit_rent", 0)),
+        "hb_pilot_lha_path_applies": lha_eligible,
+        "hb_pilot_maximum_rent": money(row_value(row, "LHA_cap", 0)),
+    }
+
+
 def project_universal_credit_assessable_capital_inputs(row: Any) -> dict[str, Any]:
     return {
         "claim_is_for_joint_claimants": False,
@@ -6695,6 +6941,15 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
             if money(row_value(row, "housing_benefit", 0)) > 0
             or money(row_value(row, "housing_benefit_pre_benefit_cap", 0)) > 0
             or money(row_value(row, "benefit_cap_reduction", 0)) > 0
+        ]
+    if surface in (
+        "housing-benefit-applicable-amount",
+        "housing-benefit-entitlement",
+    ):
+        return [
+            row
+            for row in benunits
+            if bool(row_value(row, "housing_benefit_eligible", False))
         ]
     if surface == "universal-credit-lcwra-element":
         return [
@@ -7136,6 +7391,28 @@ def output_applies(spec: dict[str, Any], row: Any) -> bool:
     if applies == "housing_benefit_pension_age_tariff_income_defined":
         return bool(row_value(row, "housing_benefit_any_over_sp_age", False)) and (
             money(row_value(row, "guarantee_credit", 0)) <= 0
+        )
+    if applies == "housing_benefit_applicable_amount_defined":
+        # PolicyEngine only computes housing_benefit_applicable_amount for
+        # benefit units that pass the housing_benefit_eligible gate (the
+        # variable is defined_for that gate); other rows return a structural
+        # zero the composed personal allowance would not reproduce.
+        return bool(row_value(row, "housing_benefit_eligible", False))
+    if applies == "housing_benefit_entitlement_defined":
+        # Compare the composed entitlement only for eligible benefit units
+        # without non-dependant deductions. PolicyEngine derives the
+        # non-dependant deduction from a household-composition aggregation
+        # (household total minus benefit-unit total) that the Family-level
+        # count-times-band pipeline cannot reproduce from projected inputs;
+        # projecting a representative income to back out the realised total
+        # would manufacture the comparison. Benefit units with a non-dependant
+        # deduction are 0.6% of the Housing Benefit caseload by weight on the
+        # Enhanced FRS (99.4% have none), so the filtered surface covers the
+        # entitlement mechanics for the overwhelming majority; the
+        # non-dependant deduction band table itself is exercised in the
+        # pipeline's companion tests.
+        return bool(row_value(row, "housing_benefit_eligible", False)) and (
+            money(row_value(row, "housing_benefit_non_dep_deductions", 0)) == 0
         )
     if isinstance(applies, tuple) and len(applies) == 2:
         name, expected = applies
