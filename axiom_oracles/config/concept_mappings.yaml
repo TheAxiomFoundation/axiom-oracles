@@ -659,6 +659,44 @@ concepts:
           type: country
           geoid: UK
 
+  uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement:
+    description: UK Child Benefit annual entitlement (gross, pre-charge; family by child count)
+    category: benefits
+    comparison: amount
+    # Axiom encodes the gross SSCBA 1992 s.141 entitlement (SI 2006/965 weekly
+    # rates annualised over 52 benefit weeks). UKMOD's bch_s is Child Benefit
+    # net of the High Income Child Benefit Charge, which UKMOD applies as the
+    # separate bchrd_uk clawback (bchrd_s) and nets back into bch_s; summing the
+    # euromod target list bch_s + bchrd_s reconstructs the same gross pre-charge
+    # amount. The High Income Child Benefit Charge itself is not corpus-encoded
+    # on the Axiom side (rulespec-uk#75), so the comparison is gross-to-gross.
+    # UKMOD annualises the weekly rate over 52.14 weeks while Axiom uses 52, a
+    # systematic ~0.27% convention residual: dividing UKMOD's gross by 52.14 and
+    # Axiom's by 52 both recover the same statutory weekly rates (27.05, 44.95,
+    # 62.85), so the difference is a weeks-per-year convention, not an encoding
+    # gap. A 0.3% relative tolerance absorbs it while still catching structural
+    # gaps, and a £1 absolute floor covers float noise on the smallest amounts.
+    tolerance: 1
+    relative_tolerance: 0.003
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_cb_pilot_annual_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name:
+          - bch_s
+          - bchrd_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#uk_nic_pilot_er_secondary_class_1_contribution:
     description: UK employer secondary Class 1 National Insurance contribution (single employment)
     category: social_contributions

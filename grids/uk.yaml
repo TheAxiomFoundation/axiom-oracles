@@ -9,6 +9,313 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  uk-child-benefit:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement
+    cases:
+    - id: uk-child-benefit-1c-20k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 1
+        head_annual_earnings: 20000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+    - id: uk-child-benefit-1c-70k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 1
+        head_annual_earnings: 70000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 70000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+    - id: uk-child-benefit-1c-80k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 1
+        head_annual_earnings: 80000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 80000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+    - id: uk-child-benefit-1c-90k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 1
+        head_annual_earnings: 90000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 90000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+    - id: uk-child-benefit-2c-20k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 2
+        head_annual_earnings: 20000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+    - id: uk-child-benefit-2c-70k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 2
+        head_annual_earnings: 70000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 70000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+    - id: uk-child-benefit-2c-80k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 2
+        head_annual_earnings: 80000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 80000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+    - id: uk-child-benefit-2c-90k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 2
+        head_annual_earnings: 90000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 90000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+    - id: uk-child-benefit-3c-20k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 3
+        head_annual_earnings: 20000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      - id: child3
+        kind: person
+        age: 4
+        relation: Child
+    - id: uk-child-benefit-3c-70k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 3
+        head_annual_earnings: 70000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 70000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      - id: child3
+        kind: person
+        age: 4
+        relation: Child
+    - id: uk-child-benefit-3c-80k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 3
+        head_annual_earnings: 80000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 80000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      - id: child3
+        kind: person
+        age: 4
+        relation: Child
+    - id: uk-child-benefit-3c-90k
+      period: '2026'
+      scenario: single-parent-child-benefit
+      parameters:
+        children: 3
+        head_annual_earnings: 90000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 90000.0
+      - id: child1
+        kind: person
+        age: 10
+        relation: Child
+      - id: child2
+        kind: person
+        age: 7
+        relation: Child
+      - id: child3
+        kind: person
+        age: 4
+        relation: Child
   uk-employer-nic:
     locale: UK
     entity: Person

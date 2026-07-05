@@ -239,6 +239,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "uk-child-benefit",
+      "report": "axiom-euromod-uk-child-benefit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-child-benefit-ukmod.yaml"
+    },
+    {
       "suite": "uk-employer-nic",
       "report": "axiom-euromod-uk-employer-nic.json",
       "repos": [
