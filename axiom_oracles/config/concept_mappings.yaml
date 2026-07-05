@@ -415,6 +415,29 @@ concepts:
           type: country
           geoid: BE
 
+  be:policies/euromod_tax_income_list#belgium_euromod_ils_tax_worker_pit_pilot_annual_amount:
+    description: Belgium EUROMOD ils_tax worker PIT pilot aggregate
+    category: taxes
+    comparison: amount
+    tolerance: 15
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_euromod_ils_tax_worker_pit_pilot_annual_amount
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: ils_tax
+        scope:
+          type: country
+          geoid: BE
+
   be:statutes/social_integration/payable_amount#belgium_social_integration_income_support_annual_amount:
     description: Belgium social integration income support
     category: benefits
