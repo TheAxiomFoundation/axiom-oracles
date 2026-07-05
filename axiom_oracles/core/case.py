@@ -209,6 +209,10 @@ class Concepts:
         "be:policies/euromod_tax_income_list"
         "#belgium_euromod_ils_tax_worker_pit_pilot_annual_amount"
     )
+    BE_EUROMOD_ILS_DISPY_WORKER_PIT_SIC_PILOT = (
+        "be:policies/euromod_disposable_income_list"
+        "#belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount"
+    )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"
         "#belgium_worker_article_17_uncapped_component_contribution"

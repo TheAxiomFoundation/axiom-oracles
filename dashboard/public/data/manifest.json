@@ -36,6 +36,7 @@
     "axiom-policyengine-medicaid-magi-co-ecps.json",
     "axiom-euromod-be-worker-pit.json",
     "axiom-euromod-be-worker-tax-income-list.json",
+    "axiom-euromod-be-worker-disposable-income-list.json",
     "axiom-euromod-be-worker-ssc.json",
     "axiom-euromod-be-employer-ssc.json",
     "axiom-euromod-be-self-employed-ssc.json",

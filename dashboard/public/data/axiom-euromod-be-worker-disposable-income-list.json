@@ -1,0 +1,242 @@
+{
+  "aggregates": [
+    {
+      "category": "disposable_income",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "be:policies/euromod_disposable_income_list#belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount",
+      "description": "Belgium EUROMOD ils_dispy worker PIT and social-insurance pilot aggregate",
+      "left_weighted_sum": 68076.123789,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 68088.666674,
+      "weighted_difference": -12.542885,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 2,
+  "concepts": [
+    {
+      "category": "disposable_income",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium EUROMOD ils_dispy worker PIT and social-insurance pilot aggregate",
+      "id": "be:policies/euromod_disposable_income_list#belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 15
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "euromod"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": null,
+  "suite": "be-worker-disposable-income-list",
+  "summary": {
+    "comparison_count": 2,
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 2,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 2,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_weight": 0
+    }
+  },
+  "cases": [
+    {
+      "case_id": "be-worker-disposable-income-list-30k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_inputs": {
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_benefit_annual_amount": 0,
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_original_income_annual_amount": 31650.67178502879,
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_other_social_insurance_contribution_annual_amount": 0,
+          "be:policies/euromod_tax_income_list#input.belgium_euromod_ils_tax_include_pit_component": true,
+          "be:policies/euromod_tax_income_list#input.belgium_euromod_ils_tax_supplied_capital_income_tax_annual_amount": 0,
+          "be:policies/euromod_tax_income_list#input.belgium_euromod_ils_tax_supplied_property_tax_annual_amount": 0,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 31650.67178502879,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate": 0,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income": 24663.415480329604,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_110_retained_or_supplement_paid": 0,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_household_has_article_106_person": true,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_joint_assessment": false
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 2500.0,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "il_taxabley": [
+            "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income"
+          ],
+          "yem": [
+            "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_original_income_annual_amount",
+            "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+          ],
+          "yemeq_s": [
+            "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_original_income_annual_amount": 31650.67178502879,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 31650.67178502879,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income": 24663.415480329604
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            30000.0
+          ],
+          "yearly_earned_income_total": 30000.0
+        },
+        "locale": "BE",
+        "scenario": "single-worker-disposable-income-list",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 30000.0
+      },
+      "mismatches": [],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-worker-disposable-income-list-55k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_inputs": {
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_benefit_annual_amount": 0,
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_original_income_annual_amount": 58026.23160588612,
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_other_social_insurance_contribution_annual_amount": 0,
+          "be:policies/euromod_tax_income_list#input.belgium_euromod_ils_tax_include_pit_component": true,
+          "be:policies/euromod_tax_income_list#input.belgium_euromod_ils_tax_supplied_capital_income_tax_annual_amount": 0,
+          "be:policies/euromod_tax_income_list#input.belgium_euromod_ils_tax_supplied_property_tax_annual_amount": 0,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 50022.6134533501,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 58026.23160588612,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate": 0,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income": 44512.2081349968,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_110_retained_or_supplement_paid": 0,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_household_has_article_106_person": true,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_joint_assessment": false
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 4583.333333333333,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "il_taxabley": [
+            "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income"
+          ],
+          "yem": [
+            "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_original_income_annual_amount",
+            "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+          ],
+          "yemeq_s": [
+            "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:policies/euromod_disposable_income_list#input.belgium_euromod_ils_dispy_supplied_original_income_annual_amount": 58026.23160588612,
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 50022.6134533501,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 58026.23160588612,
+          "be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income": 44512.2081349968
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            55000.0
+          ],
+          "yearly_earned_income_total": 55000.0
+        },
+        "locale": "BE",
+        "scenario": "single-worker-disposable-income-list",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 55000.0
+      },
+      "mismatches": [],
+      "right_engine": "euromod",
+      "right_errors": []
+    }
+  ]
+}

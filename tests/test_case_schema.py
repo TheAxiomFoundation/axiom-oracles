@@ -211,6 +211,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_FAMILY_CHILD_BENEFIT_BASE,
         Concepts.BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT,
         Concepts.BE_EUROMOD_ILS_TAX_WORKER_PIT_PILOT,
+        Concepts.BE_EUROMOD_ILS_DISPY_WORKER_PIT_SIC_PILOT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT,
         Concepts.BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT,
@@ -268,11 +269,16 @@ def test_nyc_synthetic_suite_has_triage_metadata() -> None:
 def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     pit_cases = load_suite("be-worker-pit")
     tax_income_list_cases = load_suite("be-worker-tax-income-list")
+    disposable_income_list_cases = load_suite("be-worker-disposable-income-list")
     ssc_cases = load_suite("be-worker-ssc")
     employer_ssc_cases = load_suite("be-employer-ssc")
 
     worker_cases = (
-        pit_cases + tax_income_list_cases + ssc_cases + employer_ssc_cases
+        pit_cases
+        + tax_income_list_cases
+        + disposable_income_list_cases
+        + ssc_cases
+        + employer_ssc_cases
     )
 
     assert {case.locale for case in worker_cases} == {"BE"}
@@ -294,6 +300,16 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         30_000,
         60_000,
     ]
+    assert {case.outputs for case in disposable_income_list_cases} == {
+        (Concepts.BE_EUROMOD_ILS_DISPY_WORKER_PIT_SIC_PILOT,)
+    }
+    assert [
+        case.metadata["yearly_earned_income"]
+        for case in disposable_income_list_cases
+    ] == [
+        30_000,
+        55_000,
+    ]
     assert {case.outputs for case in ssc_cases} == {
         (
             Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
@@ -314,8 +330,16 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         for case in tax_income_list_cases
     )
     assert all(
+        case.metadata["axiom_entity"] == "Household"
+        for case in disposable_income_list_cases
+    )
+    assert all(
         case.metadata["axiom_entity_id"] == "household"
         for case in tax_income_list_cases
+    )
+    assert all(
+        case.metadata["axiom_entity_id"] == "household"
+        for case in disposable_income_list_cases
     )
     assert all(
         case.metadata["axiom_entity"] == "Person" for case in employer_ssc_cases
@@ -330,6 +354,11 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     assert all(
         "#input." in key
         for case in tax_income_list_cases
+        for key in case.metadata["axiom_inputs"]
+    )
+    assert all(
+        "#input." in key
+        for case in disposable_income_list_cases
         for key in case.metadata["axiom_inputs"]
     )
     assert all(
@@ -355,17 +384,60 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         "be:policies/euromod_tax_income_list#input."
         "belgium_euromod_ils_tax_supplied_property_tax_annual_amount"
     )
+    original_income_input = (
+        "be:policies/euromod_disposable_income_list#input."
+        "belgium_euromod_ils_dispy_supplied_original_income_annual_amount"
+    )
+    benefit_input = (
+        "be:policies/euromod_disposable_income_list#input."
+        "belgium_euromod_ils_dispy_supplied_benefit_annual_amount"
+    )
+    other_sic_input = (
+        "be:policies/euromod_disposable_income_list#input."
+        "belgium_euromod_ils_dispy_supplied_other_social_insurance_contribution_annual_amount"
+    )
+    remuneration_input = (
+        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input."
+        "belgium_pit_article_23_worker_remuneration"
+    )
+    special_contribution_income_input = (
+        "be:statutes/social_security/special_contribution#input."
+        "belgium_special_social_security_article_107_household_income"
+    )
     assert all(
         case.metadata["axiom_inputs"][include_input] is True
-        for case in tax_income_list_cases
+        for case in tax_income_list_cases + disposable_income_list_cases
     )
     assert all(
         case.metadata["axiom_inputs"][capital_input] == 0
-        for case in tax_income_list_cases
+        for case in tax_income_list_cases + disposable_income_list_cases
     )
     assert all(
         case.metadata["axiom_inputs"][property_input] == 0
-        for case in tax_income_list_cases
+        for case in tax_income_list_cases + disposable_income_list_cases
+    )
+    assert all(
+        case.metadata["axiom_inputs"][original_income_input]
+        == case.metadata["yearly_earned_income"]
+        for case in disposable_income_list_cases
+    )
+    assert all(
+        case.metadata["axiom_inputs"][benefit_input] == 0
+        for case in disposable_income_list_cases
+    )
+    assert all(
+        case.metadata["axiom_inputs"][other_sic_input] == 0
+        for case in disposable_income_list_cases
+    )
+    assert all(
+        case.metadata["euromod_to_axiom_input_bridge"]["yem"]
+        == [original_income_input, remuneration_input]
+        for case in disposable_income_list_cases
+    )
+    assert all(
+        case.metadata["euromod_to_axiom_input_bridge"]["il_taxabley"]
+        == [special_contribution_income_input]
+        for case in disposable_income_list_cases
     )
 
 
