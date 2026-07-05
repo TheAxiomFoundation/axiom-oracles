@@ -287,6 +287,112 @@ case_sets:
         yearly_earned_income: 150000.0
         interest_income: 10000.0
         dividend_income: 0.0
+  uk-income-tax-scottish:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/income_tax/individual/scottish_income_tax_oracle_pipeline#uk_scotpit_income_tax_liability
+    cases:
+    - id: uk-it-scottish-e14k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 14000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 14000.0
+    - id: uk-it-scottish-e20k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 20000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000.0
+    - id: uk-it-scottish-e30k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+    - id: uk-it-scottish-e45k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 45000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
+    - id: uk-it-scottish-e50k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 50000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 50000.0
+    - id: uk-it-scottish-e75k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 75000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 75000.0
+    - id: uk-it-scottish-e100k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: uk-it-scottish-e130k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 130000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 130000.0
+    - id: uk-it-scottish-e160k
+      period: '2026'
+      scenario: single-person-scottish-earned
+      parameters:
+        yearly_earned_income: 160000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 160000.0
   uk-self-employed-nic:
     locale: UK
     entity: Person

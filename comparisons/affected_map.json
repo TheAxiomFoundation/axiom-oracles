@@ -271,6 +271,14 @@
       "source": "comparisons/uk-income-tax-savings-ukmod.yaml"
     },
     {
+      "suite": "uk-income-tax-scottish",
+      "report": "axiom-euromod-uk-income-tax-scottish.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-income-tax-scottish-ukmod.yaml"
+    },
+    {
       "suite": "uk-self-employed-nic",
       "report": "axiom-euromod-uk-self-employed-nic.json",
       "repos": [
