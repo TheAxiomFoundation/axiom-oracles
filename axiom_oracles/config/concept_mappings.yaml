@@ -11,6 +11,14 @@ targets:
     scope:
       type: country
       geoid: US
+  taxcalc:
+    scope:
+      type: country
+      geoid: US
+  yale_taxsim:
+    scope:
+      type: country
+      geoid: US
   prd:
     scope:
       type: country
@@ -488,6 +496,7 @@ concepts:
     tolerance: 15
     priority: high
     components:
+      - us:tax/federal-income-tax#agi
       - us:tax/federal-income-tax#standard_deduction
       - us:tax/federal-income-tax#taxable_income
       - us:tax/federal-income-tax#tax_before_credits
@@ -506,6 +515,8 @@ concepts:
       axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
       taxsim: fiitax
+      taxcalc: iitax
+      yale_taxsim: liab_iit_net
 
   us:tax/federal-income-tax#standard_deduction:
     description: Federal standard deduction
@@ -517,6 +528,19 @@ concepts:
       axiom: us:policies/irs/rev-proc-2025-32/standard-deduction#standard_deduction
       policyengine: standard_deduction
       taxsim: v13
+      taxcalc: standard
+      yale_taxsim: std_ded
+
+  us:tax/federal-income-tax#agi:
+    description: Federal adjusted gross income
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      policyengine: adjusted_gross_income
+      taxcalc: c00100
+      yale_taxsim: agi
 
   us:tax/federal-income-tax#taxable_income:
     description: Federal taxable income
@@ -528,6 +552,8 @@ concepts:
       axiom: us:tax/oracle-bridge#taxable_income
       policyengine: taxable_income
       taxsim: v18
+      taxcalc: c04800
+      yale_taxsim: txbl_inc
 
   us:tax/federal-income-tax#tax_before_credits:
     description: Federal tax before credits
@@ -536,9 +562,11 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:statutes/26/1/j#income_tax_main_rates
-      policyengine: income_tax_main_rates
-      taxsim: v19
+      axiom: us:tax/oracle-bridge#income_tax_before_credits
+      policyengine: [income_tax_main_rates, capital_gains_tax]
+      taxsim: v28
+      taxcalc: taxbc
+      yale_taxsim: liab_bc
 
   us:tax/federal-income-tax#nonrefundable_credits:
     description: Federal capped nonrefundable credits
@@ -560,6 +588,8 @@ concepts:
       axiom: us:statutes/26/32#eitc
       policyengine: eitc
       taxsim: v25
+      taxcalc: eitc
+      yale_taxsim: eitc
 
   us:tax/federal-income-tax#ctc:
     description: Child Tax Credit value
@@ -570,7 +600,8 @@ concepts:
     targets:
       axiom: us:tax/oracle-bridge#ctc_value
       policyengine: ctc_value
-      taxsim: v22
+      taxcalc: ctc_total
+      yale_taxsim: [ctc_nonref, ctc_ref]
 
   us:tax/federal-income-tax#cdcc:
     description: Child and Dependent Care Credit
@@ -602,6 +633,8 @@ concepts:
       axiom: us:statutes/26/55#alternative_minimum_tax
       policyengine: alternative_minimum_tax
       taxsim: v27
+      taxcalc: c09600
+      yale_taxsim: liab_amt
 
   us:tax/federal-income-tax#capital_gain:
     description: Federal capital gain definitions

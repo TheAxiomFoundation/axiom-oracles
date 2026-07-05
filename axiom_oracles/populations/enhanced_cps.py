@@ -198,7 +198,7 @@ class EnhancedCpsCaseLoader:
             if not people:
                 continue
             metadata = {
-                "population": "enhanced-cps",
+                "population": "populace",
                 "dataset": dataset,
                 "household_weight": household.weight,
                 **({"scope": household_scope.as_dict()} if household_scope else {}),
@@ -211,7 +211,7 @@ class EnhancedCpsCaseLoader:
                 ]
                 cases.append(
                     Case(
-                        case_id=f"ecps-{household.household_id}",
+                        case_id=f"populace-{household.household_id}",
                         period=period,
                         facts={
                             Concepts.CASH_ON_HAND: 0,
@@ -229,7 +229,7 @@ class EnhancedCpsCaseLoader:
             for tax_unit_id, tax_unit_people in people_by_tax_unit.items():
                 cases.append(
                     Case(
-                        case_id=f"ecps-tax-unit-{tax_unit_id}",
+                        case_id=f"populace-tax-unit-{tax_unit_id}",
                         period=period,
                         facts={Concepts.CASH_ON_HAND: 0},
                         entities=tuple(

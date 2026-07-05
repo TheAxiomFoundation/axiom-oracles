@@ -39,7 +39,7 @@ The current implementation includes:
 
 - generic engine result and comparison primitives
 - concept-keyed `Case` and `Entity` objects
-- Enhanced CPS-backed population loading through PolicyEngine microsimulation
+- Populace-backed population loading through PolicyEngine.py
 - ACCESS NYC Screening API payload mapper
 - ACCESS NYC API runner
 - ACCESS NYC static Drools audit checks
@@ -68,6 +68,13 @@ Install the TAXSIM extra only when running local TAXSIM comparisons:
 
 ```bash
 uv pip install -e ".[taxsim,dev]"
+```
+
+Install the PSL Tax-Calculator extra only when running local `taxcalc`
+comparisons:
+
+```bash
+uv pip install -e ".[taxcalc,dev]"
 ```
 
 Install the ACCESS NYC Python extra only when running the local Python
@@ -126,9 +133,9 @@ Then run the generic comparison CLI:
 axiom-oracles compare accessnyc policyengine
 ```
 
-By default this uses the Enhanced CPS population, resolves the target
-geographic intersection automatically, and samples 50 households. For ACCESS NYC
-vs PolicyEngine, that means the NYC Enhanced CPS-derived dataset:
+By default this uses the Populace population, resolves the target geographic
+intersection automatically, and samples 50 households. For ACCESS NYC vs
+PolicyEngine, the current geography exception is the NYC city file:
 
 ```text
 hf://policyengine/policyengine-us-data/cities/NYC.h5
@@ -150,12 +157,12 @@ axiom-oracles compare accessnyc policyengine \
   --sample-size 250 \
   --accessnyc-mode python \
   --accessnyc-python-path /path/to/benefits-screening-api \
-  --output reports/accessnyc-policyengine-ecps.json
+  --output reports/accessnyc-policyengine-populace.json
 ```
 
-`--population enhanced-cps` is the default validation path. `--suite` is only
-used for `--population synthetic`, which is intended for targeted regression
-and boundary probes:
+`--population populace` is the default validation path. Use `--sample-size 0`
+for full-population runs. `--suite` is only used for `--population synthetic`,
+which is intended for targeted regression and boundary probes:
 
 ```bash
 axiom-oracles compare accessnyc policyengine \
@@ -176,7 +183,7 @@ Parent concepts compare only the parent output unless `--include-components` is
 supplied. For example, `--concept us:tax/federal-income-tax#liability` compares
 federal liability only; add `--include-components` when you also want mapped
 breakdowns like standard deduction, taxable income, EITC, CTC, and AMT.
-Use `--axiom-batch-size` to tune large RuleSpec runs over the full Enhanced CPS
+Use `--axiom-batch-size` to tune large RuleSpec runs over the full Populace
 population; the default favors bounded Rust execution over maximum throughput.
 Use `--comparison-batch-size` to tune how many cases are prepared, executed, and
 accumulated per pass. JSON reports written with `--output` stream per-case rows
@@ -191,17 +198,27 @@ The report also includes a `schema_version`, left/right engine names, concept
 tolerances and priorities, and `mismatches_by_kind` so downstream apps can render
 the same report without duplicating comparison logic.
 
-TAXSIM and PRD are exposed as package adapters rather than separate comparison
-systems. The TAXSIM adapter projects thin `Case` objects to TAXSIM rows from
-period, geography, age, relation, and earned-income facts, while still accepting
-explicit `metadata["taxsim_input"]` rows for hand-authored fixtures. The bundled
-TAXSIM executable currently supports tax years through 2024, so comparisons
-involving TAXSIM default to tax year 2024 unless `--period` is supplied. PRD
-cases carry an external PRD household object in `metadata["prd_household"]` or
-use a mapper. The adapters normalize those package outputs to the same
-`EngineResult` shape consumed by the comparator. `compare policyengine taxsim`
-defaults to the explicit tax concept intersection (`fiitax` and `siitax` with a
-$15 tolerance), while
+TAXSIM, PSL Tax-Calculator, Yale Tax-Simulator, and PRD are exposed as package
+or command adapters rather than separate comparison systems. The TAXSIM adapter
+projects thin `Case` objects to TAXSIM rows from period, geography, age,
+relation, and earned-income facts, while still accepting explicit
+`metadata["taxsim_input"]` rows for hand-authored fixtures. The bundled TAXSIM
+executable currently supports tax years through 2024, so comparisons involving
+TAXSIM default to tax year 2024 unless `--period` is supplied. The PSL
+Tax-Calculator adapter projects comparable rows into the `taxcalc` package's
+`Records` API or accepts explicit `metadata["taxcalc_input"]` rows. It forces
+EITC and ACTC full-claiming so reports compare legal entitlement outputs rather
+than Tax-Calculator's take-up simulation. TAXSIM's `v22` output is not mapped to
+the canonical total CTC concept because the bundled runner reports capped
+nonrefundable CTC there in current-law years. The Yale Tax-Simulator adapter
+writes bridge CSV input rows and invokes the command named by
+`YALE_TAXSIM_COMMAND` from `YALE_TAXSIM_REPO`; the command must read
+`AXIOM_ORACLES_YALE_INPUT`, write `AXIOM_ORACLES_YALE_OUTPUT`, and may inspect
+`AXIOM_ORACLES_YALE_VARIABLES`. PRD cases carry an external PRD household object
+in `metadata["prd_household"]` or use a mapper. The adapters normalize those
+package outputs to the same `EngineResult` shape consumed by the comparator.
+`compare policyengine taxsim` defaults to the explicit tax concept intersection
+(`fiitax` and `siitax` with a $15 tolerance), while
 `compare policyengine prd` currently maps the PRD SNAP value output to
 PolicyEngine `snap`.
 
@@ -216,7 +233,7 @@ binary and compares its outputs through the same concept mapping layer:
 
 ```bash
 axiom-oracles compare axiom policyengine \
-  --population enhanced-cps \
+  --population populace \
   --category tax \
   --period 2026 \
   --axiom-program /path/to/rulespec-us/statutes/26/6401.yaml
@@ -224,7 +241,7 @@ axiom-oracles compare axiom policyengine \
 
 Cases must carry Axiom runtime inputs in `metadata["axiom_inputs"]` or as
 case facts keyed by absolute `#input.` RuleSpec references. The adapter does not
-invent missing legal inputs; incomplete ECPS projections are reported as Axiom
+invent missing legal inputs; incomplete Populace projections are reported as Axiom
 execution errors in the comparison report.
 
 Local Drools execution is not currently available from the public
@@ -302,7 +319,7 @@ The enhanced CPS is retired for every scope populace can serve; the one
 remaining eCPS-derived path is the NYC per-city file, because populace-us
 carries no place/county geography yet (PolicyEngine/populace#204) — it
 retires the moment the populace spine grows place grain. Override any run
-with `--ecps-dataset` (CLI) or `ecps_dataset` (comparison config
+with `--populace-dataset` (CLI) or `populace_dataset` (comparison config
 parameters); an override to a different `populace://…@revision` reference
 carries its own pin, and unpinned references resolve at HF-latest.
 

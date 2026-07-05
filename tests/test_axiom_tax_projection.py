@@ -67,12 +67,56 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     assert by_key[
         (
             "tax_unit",
+            "us:statutes/26/63#input."
+            "individual_who_does_not_elect_to_itemize_deductions_for_taxable_year",
+        )
+    ] is True
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/63#input."
+            "individual_makes_election_to_itemize_deductions_for_taxable_year",
+        )
+    ] is False
+    assert by_key[
+        (
+            "tax_unit",
             "us:statutes/26/32/c/2#input."
             "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income",
         )
     ] == 70_000
     assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/32/c/2#input."
+            "employee_compensation_includible_in_gross_income",
+        )
+    ] == 70_000
+    assert by_key[
         ("tax_unit", "us:statutes/26/32/c/2#input.pension_or_annuity_amounts_received")
+    ] == 0
+    assert by_key[
+        ("tax_unit", "us:statutes/26/32/c/2#input.pension_or_annuity_amount")
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/32/c/2#input."
+            "nonresident_alien_income_not_connected_with_united_states_business",
+        )
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/32/c/2#input.penal_institution_service_compensation",
+        )
+    ] == 0
+    assert by_key[
+        (
+            "tax_unit",
+            "us:statutes/26/32/c/2#input."
+            "subsidized_state_work_activity_service_compensation",
+        )
     ] == 0
     assert by_key[
         ("person-3", "us:tax/federal-income-tax#input.is_tax_unit_dependent")
@@ -369,7 +413,6 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
     } == {
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
-        ("person-3", "tax_unit"),
     }
     assert {
         tuple(record["tuple"])
@@ -381,7 +424,7 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         ("person-1", "tax_unit"),
         ("person-2", "tax_unit"),
     }
-    assert len(projected.metadata["axiom_relations"]) == 29
+    assert len(projected.metadata["axiom_relations"]) == 27
     assert "axiom_input_record_overlays" not in projected.metadata
     assert "axiom_result_selection" not in projected.metadata
 
@@ -625,10 +668,7 @@ def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qb
             "person_self_employment_income_for_qbid",
         )
     ] == 2_004.071
-    assert qbi_relation_rows == {
-        ("person-1", "tax_unit"),
-        ("person-2", "tax_unit"),
-    }
+    assert qbi_relation_rows == {("person-1", "tax_unit")}
     assert "person_adjusted_earnings_for_eitc" in generated_rules_by_name
     assert "person_self_employment_tax_ald_for_qbid" in generated_rules_by_name
     assert "self_employment_tax_ald_for_agi" in generated_rules_by_name
@@ -698,6 +738,16 @@ def test_axiom_tax_projection_floors_eitc_adjusted_earnings_per_filer() -> None:
             "formula"
         ]
     )
+    assert "max(0" not in (
+        generated_rules_by_name[
+            "person_net_earnings_from_self_employment_after_self_employment_tax_deduction"
+        ]["versions"][0]["formula"]
+    )
+    assert " < 0" in (
+        generated_rules_by_name[
+            "person_has_net_earnings_from_self_employment_after_self_employment_tax_deduction"
+        ]["versions"][0]["formula"]
+    )
     assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
         generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
             0
@@ -705,7 +755,7 @@ def test_axiom_tax_projection_floors_eitc_adjusted_earnings_per_filer() -> None:
     )
 
 
-def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> None:
+def test_axiom_tax_projection_uses_filer_social_security_for_section_86() -> None:
     case = Case(
         case_id="dependent-social-security",
         period="2026",
@@ -717,6 +767,7 @@ def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> 
                     Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
                     Concepts.PERSON_AGE: 59,
                     Concepts.SELF_EMPLOYMENT_INCOME: 60_000,
+                    Concepts.SOCIAL_SECURITY_BENEFITS: 1_000,
                 },
             ),
             Entity(
@@ -743,7 +794,7 @@ def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> 
             "us:statutes/26/86#input."
             "title_II_monthly_benefits_received_during_taxable_year",
         )
-    ] == 5_500
+    ] == 1_000
 
 
 def test_axiom_tax_projection_uses_tax_unit_wages_for_ctc_payroll_tax() -> None:
@@ -814,9 +865,6 @@ def test_axiom_tax_projection_uses_tax_unit_wages_for_ctc_payroll_tax() -> None:
         == "us:tax/oracle-bridge#relation.payroll_member_of_tax_unit"
     } == {
         ("person-1", "tax_unit"),
-        ("person-2", "tax_unit"),
-        ("person-3", "tax_unit"),
-        ("person-4", "tax_unit"),
     }
 
     generated_rules_by_name = {
@@ -1048,6 +1096,13 @@ def test_axiom_tax_projection_does_not_treat_high_income_disabled_adult_as_head_
     }
 
     assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 0
+    assert by_key[
+        (
+            "person-2",
+            "us:statutes/26/152/c#input."
+            "individual_is_permanently_and_totally_disabled",
+        )
+    ] is True
 
 
 def test_axiom_tax_projection_infers_head_of_household_for_qualifying_child() -> None:
@@ -1158,8 +1213,10 @@ def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi()
                     Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
                     Concepts.PERSON_AGE: 45,
                     Concepts.YEARLY_EARNED_INCOME: 100_000,
+                    Concepts.INTEREST_INCOME: 700,
                     Concepts.DIVIDEND_INCOME: 1_000,
                     Concepts.QUALIFIED_DIVIDEND_INCOME: 600,
+                    Concepts.RENTAL_INCOME: 350,
                     Concepts.SHORT_TERM_CAPITAL_GAINS: 100,
                     Concepts.LONG_TERM_CAPITAL_GAINS: 200,
                 },
@@ -1185,22 +1242,34 @@ def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi()
         for record in projected.metadata["axiom_input_records"]
     }
 
-    assert by_key[("tax_unit", "us:statutes/26/1411#input.dividend_income")] == 1_500
+    assert by_key[("tax_unit", "us:statutes/26/1411#input.dividend_income")] == 1_000
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.qualified_dividend_income")
-    ] == 900
+    ] == 600
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.short_term_capital_gains")
-    ] == 140
+    ] == 100
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.long_term_capital_gains")
-    ] == 250
+    ] == 200
     assert by_key[
         (
             "tax_unit",
             "us:tax/oracle-bridge#input.filer_dividend_income",
         )
     ] == 1_000
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/oracle-bridge#input.filer_taxable_interest_income",
+        )
+    ] == 700
+    assert by_key[
+        (
+            "tax_unit",
+            "us:tax/oracle-bridge#input.filer_rental_income",
+        )
+    ] == 350
     assert by_key[
         (
             "tax_unit",
@@ -1221,21 +1290,21 @@ def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi()
             "us:tax/oracle-bridge#input."
             "capital_gains_tax_qualified_dividend_income",
         )
-    ] == 900
+    ] == 600
     assert by_key[
         (
             "tax_unit",
             "us:tax/oracle-bridge#input."
             "capital_gains_tax_short_term_capital_gains",
         )
-    ] == 140
+    ] == 100
     assert by_key[
         (
             "tax_unit",
             "us:tax/oracle-bridge#input."
             "capital_gains_tax_long_term_capital_gains",
         )
-    ] == 250
+    ] == 200
 
 
 def test_axiom_tax_projection_uses_oldest_adults_as_filers() -> None:

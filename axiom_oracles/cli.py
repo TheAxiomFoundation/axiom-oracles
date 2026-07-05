@@ -28,7 +28,12 @@ from .adapters.axiom import (
 from .adapters.euromod import EuromodPlatformRunner
 from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
+from .adapters.taxcalc import TaxCalcPackageRunner, attach_taxcalc_inputs
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
+from .adapters.yale_taxsim import (
+    YaleTaxSimulatorRunner,
+    attach_yale_taxsim_inputs,
+)
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -240,13 +245,31 @@ def sanity_check(
 @click.argument(
     "left",
     type=click.Choice(
-        ["accessnyc", "policyengine", "axiom", "taxsim", "prd", "euromod"]
+        [
+            "accessnyc",
+            "policyengine",
+            "axiom",
+            "taxsim",
+            "taxcalc",
+            "yale_taxsim",
+            "prd",
+            "euromod",
+        ]
     ),
 )
 @click.argument(
     "right",
     type=click.Choice(
-        ["accessnyc", "policyengine", "axiom", "taxsim", "prd", "euromod"]
+        [
+            "accessnyc",
+            "policyengine",
+            "axiom",
+            "taxsim",
+            "taxcalc",
+            "yale_taxsim",
+            "prd",
+            "euromod",
+        ]
     ),
 )
 @click.option(
@@ -262,15 +285,14 @@ def sanity_check(
     "--report-suite",
     default=None,
     help=(
-        "Suite label written into the comparison report. ECPS comparisons "
-        "have no synthetic suite, so without this the report is labeled "
-        "'nyc-synthetic' regardless of what it compared."
+        "Suite label written into the comparison report. Populace comparisons "
+        "default to 'populace'; synthetic comparisons default to the suite name."
     ),
 )
 @click.option(
     "--population",
-    type=click.Choice(["enhanced-cps", "synthetic"]),
-    default="enhanced-cps",
+    type=click.Choice(["populace", "synthetic"]),
+    default="populace",
     show_default=True,
     help="Validation population source.",
 )
@@ -291,14 +313,18 @@ def sanity_check(
     ),
 )
 @click.option(
-    "--ecps-dataset",
+    "--populace-dataset",
     type=click.Path(dir_okay=False),
     help=(
-        "Override the population dataset (path, hf:// URL, or populace:// "
-        "dataset-repo reference). Defaults to the certified populace-us "
-        "artifact; NYC scopes keep their dedicated file until populace "
-        "grows place geography."
+        "Override the Populace dataset (path, hf:// URL, or populace:// "
+        "dataset-repo reference). Defaults to the certified populace-us artifact."
     ),
+)
+@click.option(
+    "--ecps-dataset",
+    type=click.Path(dir_okay=False),
+    hidden=True,
+    help="Deprecated alias for --populace-dataset.",
 )
 @click.option(
     "--concept",
@@ -380,7 +406,7 @@ def sanity_check(
     "--jurisdiction-fips",
     default=None,
     help=(
-        "Two-digit FIPS prefix used to filter ECPS households for this "
+        "Two-digit FIPS prefix used to filter Populace households for this "
         "comparison (e.g. `06` for California, `08` for Colorado). When "
         "unset, the harness applies its legacy Colorado-only SNAP filter."
     ),
@@ -407,6 +433,7 @@ def compare(
     population: str,
     sample_size: int,
     period: str | None,
+    populace_dataset: str | None,
     ecps_dataset: str | None,
     concepts: tuple[str, ...],
     categories: tuple[str, ...],
@@ -443,7 +470,7 @@ def compare(
             scope=comparison_scope,
             period=period,
             sample_size=sample_size,
-            ecps_dataset=ecps_dataset,
+            populace_dataset=populace_dataset or ecps_dataset,
             categories=categories,
             concepts=concepts,
         )
@@ -515,7 +542,8 @@ def compare(
         stream_case_rows = output_path is not None or not json_output
         with tempfile.TemporaryDirectory(prefix="axiom-oracles-report-") as report_dir:
             accumulator = ComparisonReportAccumulator(
-                suite_name=report_suite or suite_name,
+                suite_name=report_suite
+                or ("populace" if population == "populace" else suite_name),
                 population=population,
                 locales=case_locales,
                 scope=comparison_scope,
@@ -808,16 +836,16 @@ def _load_population_cases(
     scope: GeographyScope | None,
     period: str,
     sample_size: int,
-    ecps_dataset: str | None,
+    populace_dataset: str | None,
     categories: tuple[str, ...] = (),
     concepts: tuple[str, ...] = (),
 ) -> list[Case]:
-    if population == "enhanced-cps":
+    if population == "populace":
         return load_enhanced_cps_cases(
             scope=scope,
             period=period,
             sample_size=sample_size or None,
-            dataset=ecps_dataset,
+            dataset=populace_dataset,
             case_unit=_enhanced_cps_case_unit(categories, concepts),
         )
     if population == "synthetic":
@@ -867,6 +895,10 @@ def _prepare_cases_for_engines(
     prepared = cases
     if "taxsim" in engines:
         prepared = attach_taxsim_inputs(prepared)
+    if "taxcalc" in engines:
+        prepared = attach_taxcalc_inputs(prepared)
+    if "yale_taxsim" in engines:
+        prepared = attach_yale_taxsim_inputs(prepared)
     if (
         "axiom" in engines
         and axiom_program is None
@@ -1042,6 +1074,10 @@ def _build_runner(
         )
     if engine == "taxsim":
         return TaxsimPackageRunner()
+    if engine == "taxcalc":
+        return TaxCalcPackageRunner()
+    if engine == "yale_taxsim":
+        return YaleTaxSimulatorRunner.from_environment()
     if engine == "prd":
         return PrdPackageRunner()
     if engine == "euromod":
@@ -1101,13 +1137,18 @@ def _parse_euromod_switches(
 
 
 def _tax_oracle_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:
-    if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
-        return tuple(
-            import_ref
-            for import_ref in US_TAX_ORACLE_IMPORTS
-            if import_ref != "us:statutes/26/1411"
-        )
-    return US_TAX_ORACLE_IMPORTS
+    del concept_ids
+    bridge_owned_imports = {
+        "us:statutes/26/164/f",
+        "us:statutes/26/1401",
+        "us:statutes/26/1402/a",
+        "us:statutes/26/1411",
+    }
+    return tuple(
+        import_ref
+        for import_ref in US_TAX_ORACLE_IMPORTS
+        if import_ref not in bridge_owned_imports
+    )
 
 
 def _tax_oracle_program_rules_for_concepts(

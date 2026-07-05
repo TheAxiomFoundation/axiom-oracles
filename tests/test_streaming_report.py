@@ -43,7 +43,7 @@ def test_streaming_report_matches_in_memory_report(tmp_path) -> None:
     )
     expected = build_comparison_report(
         suite_name="tax",
-        population="enhanced-cps",
+        population="populace",
         locales={"US"},
         scope=None,
         cases=cases,
@@ -54,7 +54,7 @@ def test_streaming_report_matches_in_memory_report(tmp_path) -> None:
     case_rows_path = tmp_path / "cases.jsonl"
     accumulator = ComparisonReportAccumulator(
         suite_name="tax",
-        population="enhanced-cps",
+        population="populace",
         locales={"US"},
         scope=None,
         mappings=[mapping],

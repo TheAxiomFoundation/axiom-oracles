@@ -181,8 +181,8 @@ def test_loader_projects_sampled_ecps_households_to_cases() -> None:
 
     assert sims[0].dataset == NYC_ENHANCED_CPS_DATASET
     assert sims[0].subsample_size == 2
-    assert [case.case_id for case in cases] == ["ecps-101", "ecps-202"]
-    assert cases[0].metadata["population"] == "enhanced-cps"
+    assert [case.case_id for case in cases] == ["populace-101", "populace-202"]
+    assert cases[0].metadata["population"] == "populace"
     assert cases[0].metadata["household_weight"] == 12.5
     assert cases[0].scope == GeographyScope(type="census_place", geoid="3651000")
     assert cases[0].entities[0].facts[Concepts.HOUSEHOLD_RELATION] == (
@@ -202,8 +202,8 @@ def test_loader_can_project_sampled_ecps_tax_units_to_cases() -> None:
     )
 
     assert [case.case_id for case in cases] == [
-        "ecps-tax-unit-1001",
-        "ecps-tax-unit-2002",
+        "populace-tax-unit-1001",
+        "populace-tax-unit-2002",
     ]
     assert cases[0].metadata["case_unit"] == "tax_unit"
     assert cases[0].metadata["household_id"] == 101
@@ -230,7 +230,7 @@ def test_loader_skips_geographically_unresolvable_records() -> None:
         period="2026",
     )
 
-    assert [case.case_id for case in cases] == ["ecps-202"]
+    assert [case.case_id for case in cases] == ["populace-202"]
 
 
 def test_scope_from_geography_combines_state_and_county_components() -> None:

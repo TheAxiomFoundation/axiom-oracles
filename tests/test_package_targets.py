@@ -4,6 +4,8 @@ from axiom_oracles.adapters.axiom.runner import _input_record_names
 from axiom_oracles.adapters.euromod import EuromodPlatformRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
+from axiom_oracles.adapters.taxcalc import TaxCalcPackageRunner
+from axiom_oracles.adapters.yale_taxsim import YaleTaxSimulatorRunner
 from axiom_oracles.cli import (
     _apply_euromod_to_axiom_input_bridge,
     _build_runner,
@@ -47,6 +49,16 @@ def test_package_targets_have_us_scope_and_intersect_with_accessnyc() -> None:
         type="country",
         geoid="US",
     )
+    assert comparison_scope_for_targets("policyengine", "taxcalc") == GeographyScope(
+        type="country",
+        geoid="US",
+    )
+    assert comparison_scope_for_targets(
+        "policyengine", "yale_taxsim"
+    ) == GeographyScope(
+        type="country",
+        geoid="US",
+    )
 
 
 def test_prd_defaults_to_mapped_policyengine_intersection() -> None:
@@ -60,6 +72,8 @@ def test_prd_defaults_to_mapped_policyengine_intersection() -> None:
 
 def test_cli_builds_package_target_runners() -> None:
     taxsim = _build_runner("taxsim", "api", None, None, ())
+    taxcalc = _build_runner("taxcalc", "api", None, None, ())
+    yale_taxsim = _build_runner("yale_taxsim", "api", None, None, ())
     prd = _build_runner("prd", "api", None, None, ())
     policyengine_for_taxsim = _build_runner(
         "policyengine",
@@ -71,8 +85,56 @@ def test_cli_builds_package_target_runners() -> None:
     )
 
     assert isinstance(taxsim, TaxsimPackageRunner)
+    assert isinstance(taxcalc, TaxCalcPackageRunner)
+    assert isinstance(yale_taxsim, YaleTaxSimulatorRunner)
     assert isinstance(prd, PrdPackageRunner)
     assert isinstance(policyengine_for_taxsim, PolicyEngineTaxsimRunner)
+
+
+def test_tax_calculator_targets_default_to_mapped_tax_intersections() -> None:
+    taxcalc_concepts = {
+        mapping.concept_id
+        for mapping in comparable_mappings("taxcalc", "policyengine")
+    }
+    taxcalc_component_concepts = {
+        mapping.concept_id
+        for mapping in comparable_mappings(
+            "taxcalc",
+            "policyengine",
+            concepts={Concepts.AGI},
+        )
+    }
+    yale_concepts = {
+        mapping.concept_id
+        for mapping in comparable_mappings("yale_taxsim", "policyengine")
+    }
+    yale_component_concepts = {
+        mapping.concept_id
+        for mapping in comparable_mappings(
+            "yale_taxsim",
+            "policyengine",
+            concepts={Concepts.AGI},
+        )
+    }
+
+    assert Concepts.FEDERAL_INCOME_TAX in taxcalc_concepts
+    assert Concepts.AGI in taxcalc_component_concepts
+    assert Concepts.FEDERAL_INCOME_TAX in yale_concepts
+    assert Concepts.AGI in yale_component_concepts
+
+
+def test_taxsim_total_ctc_is_not_mapped_to_nonrefundable_taxsim_column() -> None:
+    component_concepts = {
+        mapping.concept_id
+        for mapping in comparable_mappings(
+            "taxcalc",
+            "taxsim",
+            concepts={Concepts.FEDERAL_INCOME_TAX},
+            include_components=True,
+        )
+    }
+
+    assert Concepts.CTC not in component_concepts
 
 
 def test_cli_passes_axiom_batch_size_to_runner() -> None:
@@ -123,17 +185,28 @@ def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
                 facts={
                     Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
                     Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 50_000,
                 },
             ),
         ),
     )
 
     [taxsim_case] = _prepare_cases_for_engines([case], {"policyengine", "taxsim"})
+    [taxcalc_case] = _prepare_cases_for_engines([case], {"policyengine", "taxcalc"})
+    [yale_case] = _prepare_cases_for_engines(
+        [case], {"policyengine", "yale_taxsim"}
+    )
     [pe_case] = _prepare_cases_for_engines([case], {"policyengine", "prd"})
 
     assert taxsim_case.metadata["taxsim_input"]["taxsimid"] == 1
     assert taxsim_case.metadata["taxsim_input"]["state"] == 33
+    assert taxcalc_case.metadata["taxcalc_input"]["RECID"] == 1
+    assert taxcalc_case.metadata["taxcalc_input"]["e00200"] == 50_000
+    assert yale_case.metadata["yale_taxsim_input"]["id"] == "case-1"
+    assert yale_case.metadata["yale_taxsim_input"]["wages"] == 50_000
     assert "taxsim_input" not in pe_case.metadata
+    assert "taxcalc_input" not in pe_case.metadata
+    assert "yale_taxsim_input" not in pe_case.metadata
 
 
 def test_cli_prepares_axiom_tax_inputs_for_generated_tax_program() -> None:
@@ -373,7 +446,7 @@ def test_synthetic_population_honors_requested_period_and_sample_size() -> None:
         scope=GeographyScope(type="country", geoid="US"),
         period="2024",
         sample_size=3,
-        ecps_dataset=None,
+        populace_dataset=None,
     )
 
     assert len(cases) == 3

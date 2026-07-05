@@ -149,6 +149,30 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         formula="0.50",
     ),
     _generated_parameter_rule(
+        "self_employment_oasdi_tax_rate",
+        dtype="Rate",
+        source="26 USC 1401(a)",
+        formula="0.124",
+    ),
+    _generated_parameter_rule(
+        "self_employment_hospital_insurance_tax_rate",
+        dtype="Rate",
+        source="26 USC 1401(b)(1)",
+        formula="0.029",
+    ),
+    _generated_parameter_rule(
+        "self_employment_tax_deduction_fraction",
+        dtype="Rate",
+        source="26 USC 164(f)(1)",
+        formula="0.50",
+    ),
+    _generated_parameter_rule(
+        "self_employment_tax_equivalent_deduction_fraction",
+        dtype="Rate",
+        source="26 USC 1402(a)(12)(B)",
+        formula="0.50",
+    ),
+    _generated_parameter_rule(
         "social_security_wage_base",
         dtype="Money",
         unit="USD",
@@ -687,7 +711,10 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="26 USC 24(d)(1)(A), resolved through 26 USC 24(h)",
-        formula="ctc_credit_without_subsection_and_26a_limit",
+        formula=(
+            "ctc_refundable_child_amount "
+            "* ctc_qualifying_children_under_subsection_h"
+        ),
     ),
     _generated_tax_unit_rule(
         "ctc_refundable_foreign_income_eligible",
@@ -714,33 +741,27 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="26 USC 24(d)(1), resolved through 26 USC 24(h)",
-        formula="max(0, ctc_credit_without_subsection_and_26a_limit - refundable_ctc)",
+        formula="aggregate_subpart_c_credits_without_subsection",
     ),
     _generated_tax_unit_rule(
         "ctc_value",
         dtype="Money",
         unit="USD",
         source="Oracle comparison bridge matching PolicyEngine's realized CTC value",
-        formula=(
-            "min("
-            "ctc_credit_without_subsection_and_26a_limit, "
-            "ctc_refundable_limitation_increase_amount"
-            ")"
-        ),
-    ),
-    _generated_tax_unit_rule(
-        "self_employment_income",
-        dtype="Money",
-        unit="USD",
-        source="Oracle composition bridge applying 26 USC 1402(a) before 26 USC 1401",
-        formula="max(0, net_earnings_from_self_employment)",
+        formula="non_refundable_ctc + refundable_ctc",
     ),
     _generated_tax_unit_rule(
         "self_employment_1401_taxes",
         dtype="Money",
         unit="USD",
         source="Oracle composition bridge exposing 26 USC 1401(a) and (b)(1) taxes for 26 USC 24(d)(2)",
-        formula="self_employment_oasdi_tax + self_employment_hospital_insurance_tax",
+        formula=(
+            "sum_where("
+            "business_income_of_tax_unit, "
+            "person_self_employment_1401_tax_before_additional_medicare, "
+            "person_has_self_employment_1401_tax_before_additional_medicare"
+            ")"
+        ),
     ),
     _generated_tax_unit_rule(
         "self_employment_tax_ald",
@@ -768,6 +789,22 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         unit="USD",
         source="Oracle comparison bridge matching PolicyEngine adjusted earnings from leaf income facts",
         formula="taxable_earned_income_under_section_32",
+    ),
+    _generated_tax_unit_rule(
+        "eitc_relevant_investment_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge matching Tax-Calculator's 26 USC 32(i) disqualified-income inputs",
+        formula=(
+            "filer_taxable_interest_income "
+            "+ tax_exempt_interest_received_or_accrued "
+            "+ filer_dividend_income "
+            "+ max("
+            "0, "
+            "filer_short_term_capital_gains + filer_long_term_capital_gains"
+            ") "
+            "+ max(0, filer_rental_income)"
+        ),
     ),
     _generated_tax_unit_rule(
         "additional_senior_deduction_eligible_count",
@@ -1052,6 +1089,12 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         ),
     ),
     _generated_person_rule(
+        "person_has_self_employment_1401_tax_before_additional_medicare",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying positive 26 USC 1401(a) and (b)(1) self-employment taxes",
+        formula="person_self_employment_1401_tax_before_additional_medicare > 0",
+    ),
+    _generated_person_rule(
         "person_self_employment_tax_ald_for_qbid",
         dtype="Money",
         unit="USD",
@@ -1059,6 +1102,25 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         formula=(
             "person_self_employment_1401_tax_before_additional_medicare "
             "* self_employment_tax_deduction_fraction"
+        ),
+    ),
+    _generated_person_rule(
+        "person_net_earnings_from_self_employment_after_self_employment_tax_deduction",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 164(f) to person-level self-employment earnings for 26 USC 32(c)(2)",
+        formula=(
+            "person_self_employment_income_for_qbid "
+            "- person_self_employment_tax_ald_for_qbid"
+        ),
+    ),
+    _generated_person_rule(
+        "person_has_net_earnings_from_self_employment_after_self_employment_tax_deduction",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying nonzero self-employment earnings after 26 USC 164(f)",
+        formula=(
+            "person_net_earnings_from_self_employment_after_self_employment_tax_deduction > 0 "
+            "or person_net_earnings_from_self_employment_after_self_employment_tax_deduction < 0"
         ),
     ),
     _generated_person_rule(
@@ -1133,6 +1195,19 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "business_income_of_tax_unit, "
             "person_self_employment_tax_ald_for_qbid, "
             "person_has_self_employment_tax_ald_for_qbid"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge exposing 26 USC 32(c)(2) self-employment earnings after 26 USC 164(f)",
+        formula=(
+            "sum_where("
+            "business_income_of_tax_unit, "
+            "person_net_earnings_from_self_employment_after_self_employment_tax_deduction, "
+            "person_has_net_earnings_from_self_employment_after_self_employment_tax_deduction"
             ")"
         ),
     ),
@@ -2819,7 +2894,6 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "individual_makes_election_to_itemize_deductions_for_taxable_year",
     "individual_is_nonresident_alien",
     "individual_is_noncitizen_territory_resident",
-    "individual_who_does_not_elect_to_itemize_deductions_for_taxable_year",
     "international_social_security_agreement_under_section_233_in_effect",
     "is_dependent_under_section_152_a_1",
     "is_dependent_under_section_152_disregarding_listed_subsections",
@@ -3240,6 +3314,12 @@ _INPUT_REF_OVERRIDES.update(
 )
 _INPUT_REF_OVERRIDES.update(
     {
+        name: f"us:statutes/26/32#input.{name}"
+        for name in ("eitc_relevant_investment_income",)
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
         name: f"us:statutes/26/1402/a#input.{name}"
         for name in (
             "partnership_section_702_a_8_income_or_loss",
@@ -3319,10 +3399,15 @@ _INPUT_REF_OVERRIDES.update(
     {
         name: f"us:statutes/26/32/c/2#input.{name}"
         for name in (
+            "employee_compensation_includible_in_gross_income",
             "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income",
+            "pension_or_annuity_amount",
             "pension_or_annuity_amounts_received",
+            "nonresident_alien_income_not_connected_with_united_states_business",
             "amounts_to_which_section_871_a_applies",
+            "penal_institution_service_compensation",
             "amounts_received_for_services_while_inmate_at_penal_institution",
+            "subsidized_state_work_activity_service_compensation",
             "subsidized_state_work_activity_amounts_received",
             "taxpayer_elects_to_treat_section_112_excluded_amounts_as_earned_income",
         )
@@ -3440,21 +3525,21 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
     capital_gains_tax_qualified_dividends = _sum_concept(
-        people,
+        earners,
         Concepts.QUALIFIED_DIVIDEND_INCOME,
     )
     capital_gains_tax_short_capital_gains = _sum_concept(
-        people,
+        earners,
         Concepts.SHORT_TERM_CAPITAL_GAINS,
     )
     capital_gains_tax_long_capital_gains = _sum_concept(
-        people,
+        earners,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
-    tax_unit_dividends = _sum_concept(people, Concepts.DIVIDEND_INCOME)
-    tax_unit_interest = _sum_concept(people, Concepts.INTEREST_INCOME)
+    tax_unit_dividends = filer_dividends
+    tax_unit_interest = filer_interest
     filer_pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
-    social_security = _sum_concept(people, Concepts.SOCIAL_SECURITY_BENEFITS)
+    social_security = _sum_concept(earners, Concepts.SOCIAL_SECURITY_BENEFITS)
     filer_unemployment = _sum_concept(
         earners,
         Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
@@ -3484,6 +3569,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "filing_status": filing_status,
         "filing_status_is_joint_return": spouse is not None,
         "individual_is_unmarried_and_not_surviving_spouse": spouse is None,
+        "individual_who_does_not_elect_to_itemize_deductions_for_taxable_year": True,
         "is_estate_or_trust": False,
         "is_colorado_tax_unit": _is_colorado_case(case),
         "is_individual": True,
@@ -3513,10 +3599,15 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "taxpayer_married_at_close_of_taxable_year": spouse is not None,
         "taxpayer_married_at_time_of_spouse_death": spouse is not None,
         "trust_all_unexpired_interests_devoted_to_section_170_c_2_B_purposes": False,
+        "employee_compensation_includible_in_gross_income": wages,
         "wages": wages,
         "wages_paid_to_individual_for_section_1401_a": wages,
         "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
+        "pension_or_annuity_amount": 0,
+        "nonresident_alien_income_not_connected_with_united_states_business": 0,
+        "penal_institution_service_compensation": 0,
+        "subsidized_state_work_activity_service_compensation": 0,
         # Investment / unearned income — projected from Case concepts.
         "dividend_income": tax_unit_dividends,
         "qualified_dividend_income": capital_gains_tax_qualified_dividends,
@@ -3797,7 +3888,9 @@ def _section_152c_person_inputs(
             is_child_or_descendant
         ),
         "individual_is_sibling_stepsibling_or_descendant_of_such_relative": False,
-        "individual_is_permanently_and_totally_disabled": False,
+        "individual_is_permanently_and_totally_disabled": bool(
+            person.fact(Concepts.DISABLED, False)
+        ),
         "individual_is_younger_than_taxpayer": age < _age(head),
         "individual_age_at_close_of_calendar_year": age,
         "individual_is_student": False,
@@ -3844,7 +3937,9 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
     records = []
     for relation_ref in _RELATION_REFS:
         if relation_ref in {
+            "us:tax/oracle-bridge#relation.business_income_of_tax_unit",
             "us:tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
+            "us:tax/oracle-bridge#relation.payroll_member_of_tax_unit",
             "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
         }:
             relation_people = tax_filers

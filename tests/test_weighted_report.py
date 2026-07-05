@@ -39,7 +39,7 @@ def test_comparison_report_includes_weighted_summary_and_concept_aggregates() ->
 
     report = _comparison_report(
         suite_name="auto",
-        population="enhanced-cps",
+        population="populace",
         locales={"US-NY-NYC"},
         scope=None,
         cases=cases,

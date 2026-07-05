@@ -3,7 +3,7 @@ from axiom_oracles.cli import _echo_comparison_report
 
 def test_cli_report_output_omits_successful_cases(capsys) -> None:
     report = {
-        "population": "enhanced-cps",
+        "population": "populace",
         "suite": "nyc-synthetic",
         "case_count": 2,
         "locales": [],
@@ -42,7 +42,7 @@ def test_cli_report_output_omits_successful_cases(capsys) -> None:
 
 def test_cli_report_output_caps_mismatches_without_case_rows(capsys) -> None:
     report = {
-        "population": "enhanced-cps",
+        "population": "populace",
         "suite": "tax",
         "case_count": 55,
         "locales": [],

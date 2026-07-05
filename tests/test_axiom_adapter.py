@@ -806,6 +806,10 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
 
     assert isinstance(runner, AxiomRulesRunner)
     assert runner.program_imports
+    assert "us:statutes/26/1411" not in runner.program_imports
+    assert "us:statutes/26/164/f" not in runner.program_imports
+    assert "us:statutes/26/1401" not in runner.program_imports
+    assert "us:statutes/26/1402/a" not in runner.program_imports
     assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     assert runner.prune_unsupported_inputs
@@ -822,25 +826,48 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     generated_rules_by_name = {
         rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
-    assert "self_employment_income" in generated_rule_names
+    assert "self_employment_income" not in generated_rule_names
+    assert "self_employment_oasdi_tax_rate" in generated_rule_names
+    assert "self_employment_hospital_insurance_tax_rate" in generated_rule_names
+    assert "self_employment_tax_deduction_fraction" in generated_rule_names
+    assert "self_employment_tax_equivalent_deduction_fraction" in generated_rule_names
     assert "self_employment_1401_taxes" in generated_rule_names
     assert "self_employment_tax_ald" in generated_rule_names
+    assert (
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction"
+        in generated_rule_names
+    )
     assert "taxable_earned_income_under_section_32" in generated_rule_names
+    assert "eitc_relevant_investment_income" in generated_rule_names
     assert "earned_income" not in generated_rule_names
     assert (
-        generated_rules_by_name["self_employment_income"]["versions"][0]["formula"]
-        == "max(0, net_earnings_from_self_employment)"
+        generated_rules_by_name["eitc_relevant_investment_income"]["versions"][0][
+            "formula"
+        ]
+        == "filer_taxable_interest_income + tax_exempt_interest_received_or_accrued + filer_dividend_income + max(0, filer_short_term_capital_gains + filer_long_term_capital_gains) + max(0, filer_rental_income)"
+    )
+    assert "sum_where(business_income_of_tax_unit" in (
+        generated_rules_by_name["self_employment_1401_taxes"]["versions"][0][
+            "formula"
+        ]
     )
     assert "additional_senior_deduction" in generated_rule_names
     assert "additional_senior_deduction_magi" in generated_rule_names
     assert "ctc_value" in generated_rule_names
     assert (
         generated_rules_by_name["ctc_value"]["versions"][0]["formula"]
-        == "min(ctc_credit_without_subsection_and_26a_limit, ctc_refundable_limitation_increase_amount)"
+        == "non_refundable_ctc + refundable_ctc"
+    )
+    assert "ctc_refundable_child_amount" in (
+        generated_rules_by_name["ctc_refundable_cap"]["versions"][0]["formula"]
     )
     assert "business_income_of_tax_unit" in generated_rule_names
     assert "business_income_for_qbid" in generated_rule_names
     assert "person_adjusted_earnings_for_eitc" in generated_rule_names
+    assert (
+        "person_net_earnings_from_self_employment_after_self_employment_tax_deduction"
+        in generated_rule_names
+    )
     assert "qualified_business_income_deduction_phaseout_rate" in generated_rule_names
     assert "qualified_business_income_deduction" in generated_rule_names
     assert "state_income_tax" in generated_rule_names
@@ -861,12 +888,11 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     assert isinstance(runner, AxiomRulesRunner)
     assert runner.program_imports
     assert "us:statutes/26/1411" not in runner.program_imports
+    assert "us:statutes/26/164/f" not in runner.program_imports
+    assert "us:statutes/26/1401" not in runner.program_imports
+    assert "us:statutes/26/1402/a" not in runner.program_imports
     assert set(runner.program_imports).issubset(set(US_TAX_ORACLE_IMPORTS))
-    assert runner.program_rules == tuple(
-        rule
-        for rule in US_TAX_ORACLE_PROGRAM_RULES
-        if rule["name"] != "self_employment_income"
-    )
+    assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     generated_rule_names = {
         rule["name"] for rule in runner.program_rules
