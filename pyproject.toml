@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "axiom-oracles"
-version = "0.2.0"
+version = "0.2.1"
 description = "Axiom oracle adapters and cross-engine comparison tooling"
 readme = "README.md"
 # >=3.13 (not ==3.14.*) so axiom-encode — which runs CI on 3.13 — can depend
