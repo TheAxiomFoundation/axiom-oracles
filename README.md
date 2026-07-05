@@ -211,12 +211,19 @@ EITC and ACTC full-claiming so reports compare legal entitlement outputs rather
 than Tax-Calculator's take-up simulation. TAXSIM's `v22` output is not mapped to
 the canonical total CTC concept because the bundled runner reports capped
 nonrefundable CTC there in current-law years. The Yale Tax-Simulator adapter
-writes bridge CSV input rows and invokes the command named by
-`YALE_TAXSIM_COMMAND` from `YALE_TAXSIM_REPO`; the command must read
-`AXIOM_ORACLES_YALE_INPUT`, write `AXIOM_ORACLES_YALE_OUTPUT`, and may inspect
-`AXIOM_ORACLES_YALE_VARIABLES`. PRD cases carry an external PRD household object
-in `metadata["prd_household"]` or use a mapper. The adapters normalize those
-package outputs to the same `EngineResult` shape consumed by the comparator.
+writes bridge CSV input rows and invokes either `YALE_TAXSIM_COMMAND` or, when
+`YALE_TAXSIM_REPO` is set, the packaged R bridge. Yale's repository does not
+auto-install its R package requirements; install them from that checkout with
+`Rscript -e 'options(repos=c(CRAN="https://cloud.r-project.org"));
+install.packages(readLines("requirements.txt"))'`. The packaged bridge also
+requires `YALE_TAXSIM_MACRO_ROOT` pointing at a Macro-Projections interface
+directory containing `historical.csv` and `projections.csv`, then calls Yale's
+own baseline tax-law builder and `do_taxes()` functions. A custom
+`YALE_TAXSIM_COMMAND` must read `AXIOM_ORACLES_YALE_INPUT`, write
+`AXIOM_ORACLES_YALE_OUTPUT`, and may inspect `AXIOM_ORACLES_YALE_VARIABLES`.
+PRD cases carry an external PRD household object in `metadata["prd_household"]`
+or use a mapper. The adapters normalize those package outputs to the same
+`EngineResult` shape consumed by the comparator.
 `compare policyengine taxsim` defaults to the explicit tax concept intersection
 (`fiitax` and `siitax` with a $15 tolerance), while
 `compare policyengine prd` currently maps the PRD SNAP value output to

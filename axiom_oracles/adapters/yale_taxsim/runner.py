@@ -43,8 +43,14 @@ class YaleTaxSimulatorRunner(EngineAdapter):
 
     @classmethod
     def from_environment(cls) -> YaleTaxSimulatorRunner:
+        command: str | list[str] | None = os.environ.get("YALE_TAXSIM_COMMAND")
+        if not command and os.environ.get("YALE_TAXSIM_REPO"):
+            command = [
+                "Rscript",
+                str(Path(__file__).with_name("yale_taxsim_bridge.R")),
+            ]
         return cls(
-            command=os.environ.get("YALE_TAXSIM_COMMAND"),
+            command=command,
             cwd=os.environ.get("YALE_TAXSIM_REPO"),
         )
 
@@ -101,9 +107,11 @@ class YaleTaxSimulatorRunner(EngineAdapter):
 
         if not self.command:
             raise RuntimeError(
-                "Yale Tax-Simulator needs YALE_TAXSIM_COMMAND or a runner=... "
-                "test double. The command receives AXIOM_ORACLES_YALE_INPUT, "
-                "AXIOM_ORACLES_YALE_OUTPUT, and AXIOM_ORACLES_YALE_VARIABLES."
+                "Yale Tax-Simulator needs YALE_TAXSIM_REPO, "
+                "YALE_TAXSIM_MACRO_ROOT, and either the packaged bridge or "
+                "YALE_TAXSIM_COMMAND. The command receives "
+                "AXIOM_ORACLES_YALE_INPUT, AXIOM_ORACLES_YALE_OUTPUT, and "
+                "AXIOM_ORACLES_YALE_VARIABLES."
             )
 
         with tempfile.TemporaryDirectory(prefix="axiom-yale-taxsim-") as tmpdir:

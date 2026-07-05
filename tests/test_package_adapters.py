@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -516,6 +517,31 @@ with open(os.environ["AXIOM_ORACLES_YALE_OUTPUT"], "w", newline="") as f:
     )
 
     assert results[0].values == {"liab_iit_net": 100, "agi": 50_000}
+
+
+def test_yale_taxsim_runner_defaults_to_packaged_bridge(monkeypatch) -> None:
+    monkeypatch.setenv("YALE_TAXSIM_REPO", "/tmp/yale-taxsim")
+    monkeypatch.delenv("YALE_TAXSIM_COMMAND", raising=False)
+
+    runner = YaleTaxSimulatorRunner.from_environment()
+
+    assert runner.cwd == Path("/tmp/yale-taxsim")
+    assert runner.command == [
+        "Rscript",
+        str(
+            Path("axiom_oracles/adapters/yale_taxsim/yale_taxsim_bridge.R")
+            .resolve()
+        ),
+    ]
+
+
+def test_yale_taxsim_runner_honors_explicit_command(monkeypatch) -> None:
+    monkeypatch.setenv("YALE_TAXSIM_REPO", "/tmp/yale-taxsim")
+    monkeypatch.setenv("YALE_TAXSIM_COMMAND", "Rscript custom.R")
+
+    runner = YaleTaxSimulatorRunner.from_environment()
+
+    assert runner.command == "Rscript custom.R"
 
 
 def test_prd_package_runner_wraps_external_prd_households() -> None:
