@@ -27634,6 +27634,20 @@ mappings:
     candidate_priority: P4
     rationale: This RuleSpec output applies a claiming-age adjustment (early-claiming reduction or delayed retirement credit) to derive a claimed benefit amount from the PIA. PolicyEngine-US has no claimed-benefit-from-PIA-by-claiming-age surface in microdata -- the retirement benefit is the reported value (social_security_retirement_reported) rather than a derived claiming-age-adjusted amount, so this output is not comparable.
 
+  - legal_id: us:statutes/42/402/a#old_age_insurance_benefit_minimum_age_years
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RuleSpec exposes the 42 USC 402(a)(2) source-level minimum-age (62) threshold for old-age insurance benefit entitlement as an intermediate statutory derivation; PolicyEngine computes the final PIA/AIME/benefit without surfacing this per-segment/per-threshold helper as a one-to-one oracle output. The comparison oracle for this chain is the populace_dynamics Social Security model, not PolicyEngine.
+
+  - legal_id: us:statutes/42/402/a#individual_is_entitled_to_old_age_insurance_benefit
+    country: us
+    program: social_security
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This RuleSpec output is the 42 USC 402(a) old-age insurance benefit entitlement predicate (fully insured, attained age 62, and application filed or prior disability-benefit entitlement). PolicyEngine-US has no old-age-insurance-benefit entitlement surface in microdata -- the retirement benefit is the reported value (social_security_retirement_reported) rather than a computed statutory entitlement determination, so this entitlement predicate is not comparable as a one-to-one oracle output.
+
   - legal_id: us:policies/ssa/cola/2026#social_security_cola_2026_applicable_increase_percentage
     country: us
     program: social_security
