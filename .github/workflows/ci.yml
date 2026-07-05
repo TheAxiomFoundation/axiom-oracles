@@ -48,6 +48,20 @@ jobs:
       - name: Vacuous-verification gate (oracle-backed + freshness)
         run: uv run scripts/check_vacuous_gate.py --check
 
+      - name: Validate conformance universes (drift vs oracle model spine)
+        # No-op-clean when the model checkouts are absent (the committed
+        # universes stand alone); enforces determinism when they are present.
+        run: uv run scripts/generate_conformance_universe.py --all --check
+
+      - name: Validate conformance scoreboard is up to date
+        run: uv run scripts/conformance_scoreboard.py --check
+
+      - name: Conformance ratchets (covered up; unexplained/axiom-gap down)
+        run: uv run scripts/conformance_ratchet.py --check
+
+      - name: Validate conformance burn-down series is up to date
+        run: uv run scripts/conformance_burndown.py --check
+
       - name: Test
         run: uv run pytest -q
 

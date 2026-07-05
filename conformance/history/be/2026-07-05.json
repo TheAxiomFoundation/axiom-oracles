@@ -1,0 +1,13 @@
+{
+  "schema": "axiom_oracles.conformance_snapshot.v1",
+  "date": "2026-07-05",
+  "jurisdiction": "be",
+  "oracle": "EUROMOD_J2.0/BE_2025",
+  "policies_in_scope": 24,
+  "covered": 11,
+  "covered_pct": 45.8333,
+  "excluded": 19,
+  "unexplained_total": 0,
+  "axiom_attributed_open": 0,
+  "conformant": false
+}
