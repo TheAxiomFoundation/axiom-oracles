@@ -11,6 +11,17 @@
 # axiom_formula (optional) combines rules from the same file — e.g. Medicaid
 # effective limits are raw FPL limit + the 5% MAGI disregard, mirroring how
 # PolicyEngine stores the effective limit.
+#
+# This file is NOT a single-runner comparison config: it declares a *list* of
+# parameter-oracle suites consumed by scripts/run_parameter_comparisons.py, not
+# by run_comparison.py's runner registry. The explicit `kind` marker below is
+# what makes that first-class — `run_comparison.py --list`, the affected-map
+# generator, and the vacuous-verification gate all key off `kind` instead of
+# the old heuristic of "no `name:` key means non-registry" (the #73 --list
+# KeyError patch). Recognized in place; no relocation needed.
+
+schema: axiom_oracles.parameter_suite_list.v1
+kind: parameter-suite-list
 
 period: "2026-01-01"
 

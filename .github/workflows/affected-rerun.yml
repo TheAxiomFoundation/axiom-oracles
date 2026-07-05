@@ -1,0 +1,217 @@
+name: Affected suite rerun
+
+# Reruns ONLY the comparison suites whose rules have changed since their report
+# was last generated, on a 6-hourly cadence (plus repository_dispatch, so a
+# rulespec repo can trigger it on push). The weekly full matrix
+# (comparisons.yml) stays the backstop; this keeps the reports fresh between
+# weekly runs without paying for the whole matrix every 6 hours.
+#
+# Selection is deterministic and committed:
+#   comparisons/affected_map.json   suite → affected rulespec repos
+#   report provenance.rulespecs     the SHA each report last ran against
+#   scripts/select_affected_suites  diffs current repo HEADs vs those SHAs
+#
+# See scripts/select_affected_suites.py and comparisons/README.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_all:
+        description: "Rerun every mapped suite regardless of freshness"
+        required: false
+        default: "false"
+  repository_dispatch:
+    types: [rulespec-updated]
+  schedule:
+    # Every 6 hours, offset from the weekly Monday 06:00 full matrix.
+    - cron: "30 */6 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: affected-rerun
+  cancel-in-progress: false
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+      count: ${{ steps.select.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Resolve affected rulespec repo HEADs
+        id: heads
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Union every repo named in the affected map, then ask the GitHub API
+          # for each one's default-branch HEAD. Repos the token can't read are
+          # simply omitted (the selector treats a missing HEAD as "cannot prove
+          # stale", so the weekly matrix still covers them).
+          python3 - <<'PY' > repos.txt
+          import json
+          from pathlib import Path
+          m = json.loads(Path("comparisons/affected_map.json").read_text())
+          repos = sorted({r for e in m["suites"] for r in e.get("repos", [])})
+          print("\n".join(repos))
+          PY
+          echo "{}" > heads.json
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          heads = {}
+          for repo in Path("repos.txt").read_text().split():
+              try:
+                  out = subprocess.run(
+                      ["gh", "api", f"repos/{repo}", "--jq", ".default_branch"],
+                      capture_output=True, text=True, check=True,
+                  ).stdout.strip()
+                  sha = subprocess.run(
+                      ["gh", "api", f"repos/{repo}/commits/{out}", "--jq", ".sha"],
+                      capture_output=True, text=True, check=True,
+                  ).stdout.strip()
+                  if sha:
+                      heads[repo] = sha
+              except subprocess.CalledProcessError:
+                  print(f"skip {repo}: not readable with this token")
+          Path("heads.json").write_text(json.dumps(heads, indent=2))
+          print(json.dumps(heads, indent=2))
+          PY
+
+      - name: Select stale-affected suites
+        id: select
+        run: |
+          if [ "${{ inputs.force_all }}" = "true" ]; then
+            matrix=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path("comparisons/affected_map.json").read_text())
+          names = [e["suite"] for e in m["suites"] if e.get("repos")]
+          print(json.dumps({"include": [{"name": n} for n in names]}))
+          PY
+          )
+          else
+            matrix=$(python3 scripts/select_affected_suites.py \
+              --heads-json heads.json --format matrix)
+          fi
+          count=$(python3 -c "import json,sys; print(len(json.loads(sys.argv[1])['include']))" "$matrix")
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "Selected $count suite(s) to rerun:" >> "$GITHUB_STEP_SUMMARY"
+          python3 -c "import json,sys; [print('-',x['name']) for x in json.loads(sys.argv[1])['include']]" "$matrix" >> "$GITHUB_STEP_SUMMARY" || true
+
+  rerun:
+    needs: select
+    if: needs.select.outputs.count != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.select.outputs.matrix) }}
+    steps:
+      - name: Checkout axiom-oracles
+        uses: actions/checkout@v4
+        with:
+          path: axiom-oracles
+          # Pin the default branch explicitly so the commit step pushes to a
+          # real branch (schedule/repository_dispatch would otherwise leave a
+          # detached HEAD, breaking the pull/push below).
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Checkout axiom-encode
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-encode
+          path: axiom-encode
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout axiom-rules
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules
+          path: axiom-rules
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            axiom-rules/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('axiom-rules/Cargo.lock') }}
+          restore-keys: |
+            cargo-${{ runner.os }}-
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install orchestrator deps + axiom-oracles
+        working-directory: axiom-oracles
+        run: uv pip install --system -e '.[policyengine]'
+
+      - name: Cache pinned populace-us artifact (HF hub cache)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: >-
+            populace-hf-${{ runner.os }}-${{
+              hashFiles('axiom-oracles/axiom_oracles/populations/enhanced_cps.py')
+            }}
+          restore-keys: |
+            populace-hf-${{ runner.os }}-
+
+      - name: Rerun comparison (affected)
+        env:
+          AXIOM_ENCODE_REPO: ${{ github.workspace }}/axiom-encode
+          AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
+          # Stamp the refreshed report as an affected-rerun (provenance.run_kind).
+          AXIOM_ORACLES_RUN_KIND: affected-rerun
+        working-directory: axiom-oracles
+        run: |
+          ln -sfn "$AXIOM_ENCODE_REPO" "$HOME/axiom-encode"
+          ln -sfn "$AXIOM_RULES_REPO" "$HOME/axiom-rules"
+          python3 scripts/run_comparison.py ${{ matrix.name }} --summary
+
+      - name: Refresh freshness data
+        working-directory: axiom-oracles
+        run: |
+          python3 scripts/check_vacuous_gate.py || true
+
+      - name: Commit refreshed report
+        working-directory: axiom-oracles
+        run: |
+          if git diff --quiet -- dashboard/public/data/; then
+            echo "no report changes for ${{ matrix.name }}"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard/public/data/
+          git commit -m "data: refresh ${{ matrix.name }} (affected rerun $(date +%Y-%m-%d))"
+          # Serialize commits across the matrix: rebase onto any sibling push.
+          branch="${{ github.event.repository.default_branch }}"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin "$branch" && \
+              git push origin "HEAD:$branch" && break || sleep $((RANDOM % 10 + 5))
+          done
