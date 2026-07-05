@@ -37,7 +37,10 @@ SubprocessRun = Callable[..., "subprocess.CompletedProcess[Any]"]
 
 #: Outputs returned when a comparison does not name variables explicitly:
 #: simulated income tax, employee social contributions, the standard
-#: income lists, and the engine's post-uprating employment income.
+#: income lists, and the engine's post-uprating employment income. Program
+#: outputs beyond this cross-country set (e.g. UKMOD Universal Credit
+#: ``bsauc_s``) are named explicitly by the comparison through the concept
+#: mapping, so they are not carried in the default bridge set.
 DEFAULT_OUTPUTS: tuple[str, ...] = (
     "tin_s",
     "tscee_s",
@@ -53,14 +56,20 @@ DERIVED_OUTPUTS: dict[str, tuple[str, ...]] = {
 }
 
 # Most EUROMOD monetary outputs are monthly and need annualization for Axiom
-# concepts. Belgium property-tax outputs are already annual-law amounts in
-# BE_2025: the model applies annual cadastral-income tests (for example
-# ``khooo<=745#y``), and the raw ``tprhm_s`` value is the annual levy.
+# concepts. Two kinds of output are kept as the engine emits them:
+#   - Belgium property-tax outputs are already annual-law amounts in BE_2025:
+#     the model applies annual cadastral-income tests (for example
+#     ``khooo<=745#y``) and the raw ``tprhm_s`` value is the annual levy.
+#   - The UKMOD Universal Credit award ``bsauc_s`` is a monthly assessment-
+#     period amount whose Axiom counterpart (the composed pilot's
+#     ``uc_pilot_award_amount``) is also monthly, so the comparison is
+#     monthly-to-monthly and the UKMOD award is left un-annualized.
 NON_ANNUALIZED_OUTPUTS: frozenset[str] = frozenset(
     {
         "khooo_s",
         "tprhm_s",
         "tprhmtr_s",
+        "bsauc_s",
     }
 )
 

@@ -808,6 +808,75 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "ukmod-uc-bsauc-takeup-correction",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "observed_local",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": null,
+      "summary": "UKMOD's Universal Credit output bsauc_s embeds a benefit take-up correction: the DEF policies BTA_uk and random_uk seed a per-benefit-unit take-up draw (i_rand_tu) that bsauc_uk gates the award on (for example the condition i_bsauc_grptu = 3 & (i_rand_tu#1 <= $ISTUNoChild)). For a hypothetical household the draw can mark the benefit unit as a non-taker and return a zero award that is not the statutory entitlement. The result is deterministic per household composition and batch position (the draw is seeded by idhh), so an earnings sweep or a composition ladder shows individual points collapsing to zero while their neighbours return the full award. Verified live on UKMOD_PUBLIC_B2026.03: a couple with two children and 900/month rent returns 15298.20/year at zero earnings but 0 at 15000 and 30000 earnings; single parent with one child returns 8746.08/year at batch position 1 but 0 at position 3 for the identical household.",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output": "bsauc_s"
+      },
+      "attempted_switches": {
+        "BTA_uk_off": "No effect: the adapter policy-switch override sets the BTA_uk policy off, but the take-up draw is initialised in InitVars_uk (always on) and gated inside bsauc_uk, so the award still zeros.",
+        "random_uk_off": "No effect for the same reason.",
+        "TUDef_uk_off": "Breaks the run: TUDef_uk defines the benefit assessment units, so UC cannot be computed without it.",
+        "per_case_isolation": "Removes the batch-position dependence (each case runs as idhh=1) but not the earnings/composition dependence, because the take-up group assignment still marks some benefit units as non-takers."
+      },
+      "workaround": {
+        "description": "Compare the composed rulespec-uk UC award against the executed bsauc_s and classify take-up-driven zeroing as a UKMOD-side artefact, not an Axiom encoding mismatch. Expected outputs are regenerated from executed runs (scripts/regenerate_euromod_uk.sh), so the recorded UKMOD values stay self-consistent with the take-up the model applies to each case. The comparison is monthly-to-monthly (bsauc_s is left un-annualized). Below the benefit cap the composition and capital families return clean statutory entitlements that match the Axiom award to the penny (verified monthly: single 424.90, couple 666.97, single+1child+rent 1526.78, and a capital tariff of 4.35 per 250 above 6000); the take-up-zeroed points are dispositioned rather than absorbed by tolerance."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "ukmod-uc-benefit-cap-not-applied",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "observed_local",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": null,
+      "summary": "UKMOD does not apply the regulation 80A/81 benefit cap to Universal Credit for hypothetical benefit units in UK_2026: the award rises one-for-one with rent with no plateau (verified across a rent sweep for a couple with two children: 500/month rent -> 1774.85, 1000 -> 2274.85, ..., 3000 -> 4274.85). The composed rulespec-uk pipeline applies the cap (22,020/year outside Greater London = 1,835/month), so awards above the cap diverge by exactly the UKMOD uncapped award less the cap. UKMOD ships a benefit-cap policy (bcap_uk) but it does not bind for these synthetic households (the cap has an earnings/grace-period exemption path).",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output": "bsauc_s"
+      },
+      "workaround": {
+        "description": "Classify awards above the regulation 80A cap as an upstream UKMOD benefit-cap gap in dispositions/uk-universal-credit.yaml, with the arithmetic reconciling the UKMOD uncapped maximum against the capped Axiom award. Below-cap cases match to the penny."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "ukmod-uc-capital-upper-limit-boundary",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "observed_local",
+      "classification": "convention_difference",
+      "upstream_url": null,
+      "summary": "At exactly 16,000 of capital the Universal Credit upper-limit boundary is applied differently: UKMOD uses a strict > 16,000 limit and still pays a tariff-reduced award (251.30/month for a single owner-occupier at 16,000), while the composed rulespec-uk pipeline ends entitlement at capital >= 16,000 (regulation 18 encoded as a >= gate) and returns nil. Only the exact-threshold case differs; capital of 6,000, 6,250 and 10,000 match on both sides and 20,000 is nil on both.",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output": "bsauc_s"
+      },
+      "workaround": {
+        "description": "Classify the exact-16,000 boundary as a reconciled convention difference in dispositions/uk-universal-credit.yaml; the tariff-reduced UKMOD award at the threshold reconciles to the single standard allowance less the tariff income on capital above the 6,000 floor."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

@@ -231,6 +231,14 @@
       "source": "comparisons/uk-tax-benefits-efrs.yaml"
     },
     {
+      "suite": "uk-universal-credit",
+      "report": "axiom-euromod-uk-universal-credit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-universal-credit-ukmod.yaml"
+    },
+    {
       "suite": "uk-universal-credit-efrs",
       "report": "axiom-policyengine-uk-universal-credit-efrs.json",
       "repos": [

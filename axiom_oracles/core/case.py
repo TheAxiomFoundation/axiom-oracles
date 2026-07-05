@@ -146,6 +146,18 @@ class Concepts:
         "uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline"
         "#uk_nic_pilot_er_secondary_class_1_contribution"
     )
+    # Composed household Universal Credit pilot pipeline (rulespec-uk#72, merged)
+    # that wires the supplied standard-allowance, child, LCWRA, carer, housing,
+    # childcare, work-allowance, income-taper, capital/tariff, and benefit-cap
+    # stage boundaries from hypothetical household inputs, so an end-to-end
+    # UKMOD comparison (UC award ``bsauc_s``) can run on a shared household
+    # grid. The final award is the Welfare Reform Act 2012 section 8(1) monthly
+    # amount, exposed as ``uc_pilot_award_amount`` by
+    # ``uk/policies/universal_credit_composed_award_pipeline.yaml``.
+    UK_HOUSEHOLD_UNIVERSAL_CREDIT_AWARD = (
+        "uk:policies/universal_credit_composed_award_pipeline"
+        "#uc_pilot_award_amount"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

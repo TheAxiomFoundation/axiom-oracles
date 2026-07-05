@@ -1,0 +1,282 @@
+schema: axiom_oracles.dispositions.v1
+suite: uk-universal-credit
+updated: "2026-07-05"
+# Below the benefit cap the composed rulespec-uk Universal Credit award matches
+# UKMOD bsauc_s to the penny (single, couple, couple+rent, single+1child, and
+# the capital tariff below the limit). The residual rows fall into three
+# explained groups: UKMOD's benefit take-up correction zeroing a hypothetical
+# benefit unit, UKMOD not applying the regulation 80A benefit cap, the UC
+# net-earnings taper leaving a small NIC-rounding residual, and the capital
+# upper-limit boundary convention. All are UKMOD-side or reconciled-convention,
+# not Axiom encoding gaps.
+entries:
+  # --- UKMOD benefit take-up correction zeroes the award -------------------
+  - id: takeup-correction-zeroes-couple-owner
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-owner
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        UKMOD's benefit take-up correction (policies BTA_uk and random_uk seed
+        a per-benefit-unit take-up draw i_rand_tu, gated in bsauc_uk) marks this
+        hypothetical benefit unit as a non-taker and returns a zero award rather
+        than the statutory entitlement. The Axiom pipeline computes the couple
+        standard allowance (666.97/month) as the full entitlement. Turning off
+        the take-up policies does not suppress the draw (initialised in
+        InitVars_uk), so this is a UKMOD modelling behaviour for hypothetical
+        households, not an Axiom encoding gap.
+      arithmetic:
+        - expression: "666.97 - 666.97"
+          equals: 0.0
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-bsauc-takeup-correction
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 666.97
+  - id: takeup-correction-zeroes-couple-2child-owner
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-2child-owner
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        UKMOD's benefit take-up correction returns a zero award for this
+        hypothetical benefit unit (couple with two children, owner-occupier) in
+        place of the statutory entitlement, which the Axiom pipeline computes as
+        the couple standard allowance plus two child elements
+        (666.97 + 351.88 + 303.94 = 1,322.79/month). Take-up is a UKMOD
+        modelling behaviour, not an Axiom encoding gap.
+      arithmetic:
+        - expression: "666.97 + 351.88 + 303.94"
+          equals: 1322.79
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-bsauc-takeup-correction
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 1322.79
+  - id: takeup-correction-zeroes-earn15000
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-2child-renter-earn15000
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        UKMOD's benefit take-up correction returns a zero award for this earner
+        benefit unit (couple, two children, social renter, 15,000 gross annual
+        earnings), so the taper is not exercised on the UKMOD side. The Axiom
+        award applies the couple maximum (2,222.79/month) less the 55% taper on
+        net earnings above the couple-with-housing work allowance (427/month):
+        net earnings 1,193.30/month give a deduction of 421.4650 and an award of
+        1,801.325/month. Take-up is a UKMOD modelling behaviour, not an Axiom
+        encoding gap.
+      arithmetic:
+        - expression: "2222.79 - 0.55 * (1193.30 - 427)"
+          equals: 1801.325
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-bsauc-takeup-correction
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 1801.325
+  - id: takeup-correction-zeroes-earn30000
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-2child-renter-earn30000
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        UKMOD's benefit take-up correction returns a zero award for this earner
+        benefit unit (couple, two children, social renter, 30,000 gross annual
+        earnings). The Axiom award applies the couple maximum (2,222.79/month)
+        less the 55% taper on net earnings above the work allowance (427/month):
+        net earnings 2,093.325/month give a deduction of 916.464 and an award of
+        1,306.325/month. Take-up is a UKMOD modelling behaviour, not an Axiom
+        encoding gap.
+      arithmetic:
+        - expression: "2222.79 - 0.55 * (2093.30 - 427)"
+          equals: 1306.325
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-bsauc-takeup-correction
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 1306.3250000000003
+  - id: takeup-correction-zeroes-single-owner-capital0
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-single-owner-capital0
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        UKMOD's benefit take-up correction returns a zero award for this
+        hypothetical benefit unit (single owner-occupier, no capital) in place
+        of the single standard allowance (424.90/month) the Axiom pipeline
+        computes. The identical single owner-occupier at 6,000 capital returns
+        the full 424.90 on both sides, so the zero here is the take-up draw, not
+        the capital test. Take-up is a UKMOD modelling behaviour, not an Axiom
+        encoding gap.
+      arithmetic:
+        - expression: "424.90 - 424.90"
+          equals: 0.0
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-bsauc-takeup-correction
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 424.9
+  # --- UKMOD does not apply the regulation 80A benefit cap ------------------
+  - id: benefit-cap-not-applied-single-2child
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-single-2child-renter
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The Axiom pipeline applies the regulation 80A benefit cap (22,020/year
+        for a single claimant outside Greater London = 1,835/month), capping
+        this award at 1,835. UKMOD does not apply the benefit cap to this
+        hypothetical benefit unit: its award rises one-for-one with rent with no
+        plateau (verified across a rent sweep), so it returns the uncapped
+        maximum of 1,930.72/month. The cap difference is therefore exactly the
+        UKMOD uncapped award less the cap.
+      arithmetic:
+        - expression: "1930.72 - 1835.0"
+          equals: 95.72
+        - expression: "22020 / 12"
+          equals: 1835.0
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-benefit-cap-not-applied
+    expires_on_source_change: true
+    pinned:
+      left: 1930.72
+      right: 1835.0
+  - id: benefit-cap-not-applied-couple-2child-renter
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-2child-renter
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The Axiom pipeline caps this couple award at the regulation 80A cap
+        (22,020/year outside Greater London = 1,835/month). UKMOD does not apply
+        the benefit cap and returns the uncapped maximum: couple standard
+        allowance 666.97 + first child 351.88 + subsequent child 303.94 + rent
+        900 = 2,222.79/month.
+      arithmetic:
+        - expression: "666.97 + 351.88 + 303.94 + 900"
+          equals: 2222.79
+        - expression: "2222.79 - 1835.0"
+          equals: 387.79
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-benefit-cap-not-applied
+    expires_on_source_change: true
+    pinned:
+      left: 2222.79
+      right: 1835.0
+  - id: benefit-cap-not-applied-couple-2child-renter-earn0
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-2child-renter-earn0
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Same benefit unit and composition as uk-uc-couple-2child-renter with
+        earnings held at zero; the Axiom award is capped at 1,835/month while
+        UKMOD returns the uncapped maximum 2,222.79/month because it does not
+        apply the regulation 80A benefit cap.
+      arithmetic:
+        - expression: "666.97 + 351.88 + 303.94 + 900"
+          equals: 2222.79
+        - expression: "2222.79 - 1835.0"
+          equals: 387.79
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-benefit-cap-not-applied
+    expires_on_source_change: true
+    pinned:
+      left: 2222.79
+      right: 1835.0
+  - id: benefit-cap-not-applied-couple-3child-renter
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-3child-renter
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The Axiom pipeline caps this couple + three children award at the
+        regulation 80A cap (1,835/month). UKMOD does not apply the benefit cap
+        and returns the uncapped maximum: couple standard allowance 666.97 +
+        first child 351.88 + two subsequent children 2 x 303.94 + rent 1,000 =
+        2,626.73/month. Both engines give every child a full element (the
+        two-child limit was revoked from 6 April 2026), so the third child adds
+        the subsequent-child rate.
+      arithmetic:
+        - expression: "666.97 + 351.88 + 303.94 + 303.94 + 1000"
+          equals: 2626.73
+        - expression: "2626.73 - 1835.0"
+          equals: 791.73
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-benefit-cap-not-applied
+    expires_on_source_change: true
+    pinned:
+      left: 2626.73
+      right: 1835.0
+  # --- UC net-earnings taper: NIC weekly-rounding residual ------------------
+  - id: net-earnings-taper-nic-rounding-earn45000
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-couple-2child-renter-earn45000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Universal Credit tapers net earned income. The Axiom pipeline is
+        supplied net-of-tax-and-NIC monthly earnings computed with the annual
+        2026-27 formula (45,000 gross less 6,486 income tax and 2,594.40 NIC =
+        35,919.60/year = 2,993.30/month), giving a couple award of
+        2,222.79 - 0.55 x (2,993.30 - 427) = 811.325/month. UKMOD nets earnings
+        through its own tin_uk and tscee_tscse_uk policies, which compute NIC
+        week by week on weekly-rounded thresholds, so its net earnings and hence
+        its award differ by the same small weekly-rounding residual the
+        single-employee NIC suite shows. The residual is 11.73/month.
+      arithmetic:
+        - expression: "2222.79 - 0.55 * (2993.30 - 427)"
+          equals: 811.325
+        - expression: "811.3250000000002 - 799.5969047619046"
+          equals: 11.728
+          tolerance: 0.01
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-bsauc-takeup-correction
+    expires_on_source_change: true
+    pinned:
+      left: 799.5969047619046
+      right: 811.3250000000002
+  # --- Capital upper-limit boundary convention -----------------------------
+  - id: capital-upper-limit-boundary-16000
+    concept: uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount
+    case_id: uk-uc-single-owner-capital16000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        At exactly 16,000 of capital the two engines apply the upper-limit
+        boundary differently. The Axiom pipeline ends entitlement when capital
+        is greater than or equal to 16,000 (regulation 18 encoded as a
+        >= gate), returning nil. UKMOD applies a strict > 16,000 limit, so at
+        exactly 16,000 it still pays a tariff-reduced award: the single standard
+        allowance 424.90 less tariff income of 4.35 per 250 of the 10,000 of
+        capital above the 6,000 floor (40 bands x 4.35 = 174.00) gives
+        250.90/month, matching UKMOD's 251.30 within the tariff-band rounding.
+        Only the exact-threshold case is affected; capital of 6,000, 6,250 and
+        10,000 match on both sides and 20,000 is nil on both.
+      arithmetic:
+        - expression: "424.90 - (16000 - 6000) / 250 * 4.35"
+          equals: 250.90
+          tolerance: 0.5
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-uc-capital-upper-limit-boundary
+    expires_on_source_change: true
+    pinned:
+      left: 251.29999999999998
+      right: 0.0
