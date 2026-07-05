@@ -686,6 +686,32 @@ concepts:
           type: country
           geoid: UK
 
+  uk:statutes/income_tax/individual/scottish_income_tax_oracle_pipeline#uk_scotpit_income_tax_liability:
+    description: Scottish income tax liability on non-savings non-dividend (earned) income (single Scottish taxpayer)
+    category: tax
+    comparison: amount
+    # UKMOD UK_2026 reproduces the Scottish Rate Resolution 2026-27 liability to
+    # the penny when the household is routed to Scotland via drgn1=12. Keep a
+    # narrow tolerance so structural encoding gaps are still caught.
+    tolerance: 1
+    relative_tolerance: 0.0002
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_scotpit_income_tax_liability
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#uk_svdv_income_tax_liability:
     description: UK income tax liability on earned, savings and dividend income (single individual)
     category: tax

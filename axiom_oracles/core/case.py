@@ -166,6 +166,15 @@ class Concepts:
         "uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline"
         "#uk_svdv_income_tax_liability"
     )
+    # Composed Scottish non-savings non-dividend income tax pipeline
+    # (rulespec-uk) that wires the Scottish Rate Resolution 2026-27 bands and
+    # the section 35 personal allowance from gross earned income, so an
+    # end-to-end UKMOD tin_s comparison can run for a Scottish taxpayer
+    # (region routed to Scotland via drgn1=12).
+    UK_SCOTTISH_INCOME_TAX_LIABILITY = (
+        "uk:statutes/income_tax/individual/scottish_income_tax_oracle_pipeline"
+        "#uk_scotpit_income_tax_liability"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

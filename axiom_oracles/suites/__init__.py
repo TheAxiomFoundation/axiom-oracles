@@ -37,6 +37,7 @@ from .uk_income_tax import (
     uk_income_tax_dividend_cases,
     uk_income_tax_mixed_cases,
     uk_income_tax_savings_cases,
+    uk_income_tax_scottish_cases,
 )
 from .uk_self_employed import (
     uk_employer_secondary_nic_cases,
@@ -79,6 +80,7 @@ def available_suites() -> tuple[str, ...]:
         "uk-self-employed-nic",
         "uk-employer-nic",
         "uk-universal-credit",
+        "uk-income-tax-scottish",
         "uk-income-tax-savings",
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",
@@ -142,6 +144,8 @@ def load_suite(name: str):
         return uk_employer_secondary_nic_cases()
     if name == "uk-universal-credit":
         return uk_universal_credit_cases()
+    if name == "uk-income-tax-scottish":
+        return uk_income_tax_scottish_cases()
     if name == "uk-income-tax-savings":
         return uk_income_tax_savings_cases()
     if name == "uk-income-tax-dividend":
@@ -181,6 +185,7 @@ __all__ = [
     "uk_income_tax_dividend_cases",
     "uk_income_tax_mixed_cases",
     "uk_income_tax_savings_cases",
+    "uk_income_tax_scottish_cases",
     "uk_self_employed_nic_cases",
     "uk_universal_credit_cases",
     "uk_worker_nic_cases",

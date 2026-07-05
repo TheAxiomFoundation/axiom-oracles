@@ -2879,3 +2879,8 @@ prefixes:
     program: tax
     mapping_type: not_comparable
     rationale: Composed single-individual UKMOD savings-and-dividend income-tax oracle pipeline; its stage, band and liability outputs re-wire the separately mapped Income Tax Act 2007 sections 8, 10, 11D, 12, 12A, 12B, 13, 13A, 16 and 35 rules for the UKMOD tin_s comparison (savings supplied as yiytx, dividends as ydvtx) rather than adding new PolicyEngine UK oracle variables.
+  - legal_id_prefix: uk:statutes/income_tax/individual/scottish_income_tax_oracle_pipeline#
+    country: uk
+    program: tax
+    mapping_type: not_comparable
+    rationale: Composed single-individual UKMOD Scottish non-savings non-dividend income-tax oracle pipeline; its band and liability outputs apply the Scottish Rate Resolution 2026-27 rates (Income Tax Act 2007 section 11A charged via Scotland Act 1998 section 80C, with the section 35 personal allowance) for the UKMOD tin_s comparison on a Scottish taxpayer (drgn1=12) rather than adding new PolicyEngine UK oracle variables — PolicyEngine's Populace oracle compares only the ordinary non-Scottish UK-rate branch.
