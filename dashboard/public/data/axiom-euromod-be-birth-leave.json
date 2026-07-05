@@ -1,0 +1,495 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "be:regulations/health_insurance/birth_leave/indemnity_rates#belgium_birth_leave_total_compensation_amount",
+      "description": "Belgium birth-leave worker compensation",
+      "left_weighted_sum": 7457.671882,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 7457.671882,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 3,
+  "cases": [
+    {
+      "case_id": "be-birth-leave-father-30k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_eligible_parent": true,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap": 101.44446084945125,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration": 101.44446084945125
+        },
+        "euromod_inputs": [
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 35,
+            "dgn": 1,
+            "dms": 2,
+            "drgn1": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 0,
+            "liwwh21_h": 18,
+            "liwwh33_h": 24,
+            "liwwh42_h": 5,
+            "loc": 5,
+            "poa": 0,
+            "yem": 2500.0,
+            "yemmy": 12,
+            "yse": 0,
+            "ysemy": 0
+          },
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 35,
+            "dgn": 0,
+            "dms": 2,
+            "drgn1": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yse": 0,
+            "ysemy": 0
+          },
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 1,
+            "idfather": 101,
+            "idmother": 102,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yse": 0,
+            "ysemy": 0
+          }
+        ],
+        "euromod_switches": [
+          [
+            "PBE",
+            true
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": {
+            "divide_by": 312,
+            "inputs": [
+              "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration",
+              "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap": 101.44446084945125,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration": 101.44446084945125
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            35,
+            0
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            30000.0
+          ],
+          "yearly_earned_income_total": 30000.0
+        },
+        "locale": "BE",
+        "newborn_child_age_years": 0,
+        "scenario": "birth-leave-paternity-under-cap",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 30000.0
+      },
+      "mismatches": [],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-birth-leave-father-45k",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_eligible_parent": true,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap": 152.16669127417686,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration": 152.16669127417686
+        },
+        "euromod_inputs": [
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 35,
+            "dgn": 1,
+            "dms": 2,
+            "drgn1": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 0,
+            "liwwh21_h": 18,
+            "liwwh33_h": 24,
+            "liwwh42_h": 5,
+            "loc": 5,
+            "poa": 0,
+            "yem": 3750.0,
+            "yemmy": 12,
+            "yse": 0,
+            "ysemy": 0
+          },
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 35,
+            "dgn": 0,
+            "dms": 2,
+            "drgn1": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yse": 0,
+            "ysemy": 0
+          },
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 1,
+            "idfather": 101,
+            "idmother": 102,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yse": 0,
+            "ysemy": 0
+          }
+        ],
+        "euromod_switches": [
+          [
+            "PBE",
+            true
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": {
+            "divide_by": 312,
+            "inputs": [
+              "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration",
+              "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap": 152.16669127417686,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration": 152.16669127417686
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            35,
+            0
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            45000.0
+          ],
+          "yearly_earned_income_total": 45000.0
+        },
+        "locale": "BE",
+        "newborn_child_age_years": 0,
+        "scenario": "birth-leave-paternity-under-cap",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 45000.0
+      },
+      "mismatches": [],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-birth-leave-father-60k-capped",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_eligible_parent": true,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap": 183.13,
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration": 202.8889216989025
+        },
+        "euromod_inputs": [
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 35,
+            "dgn": 1,
+            "dms": 2,
+            "drgn1": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 0,
+            "liwwh21_h": 18,
+            "liwwh33_h": 24,
+            "liwwh42_h": 5,
+            "loc": 5,
+            "poa": 0,
+            "yem": 5000.0,
+            "yemmy": 12,
+            "yse": 0,
+            "ysemy": 0
+          },
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 35,
+            "dgn": 0,
+            "dms": 2,
+            "drgn1": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yse": 0,
+            "ysemy": 0
+          },
+          {
+            "bun": 0,
+            "byr": 0,
+            "dag": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 1,
+            "idfather": 101,
+            "idmother": 102,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "liwwh21_h": 0,
+            "liwwh33_h": 0,
+            "liwwh42_h": 0,
+            "loc": 5,
+            "poa": 0,
+            "yem": 0,
+            "yemmy": 0,
+            "yse": 0,
+            "ysemy": 0
+          }
+        ],
+        "euromod_switches": [
+          [
+            "PBE",
+            true
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": {
+            "divide_by": 312,
+            "inputs": [
+              "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration": 202.8889216989025
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            35,
+            0
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            60000.0
+          ],
+          "yearly_earned_income_total": 60000.0
+        },
+        "locale": "BE",
+        "newborn_child_age_years": 0,
+        "scenario": "birth-leave-paternity-capped",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 60000.0
+      },
+      "mismatches": [],
+      "right_engine": "euromod",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium birth-leave worker compensation",
+      "id": "be:regulations/health_insurance/birth_leave/indemnity_rates#belgium_birth_leave_total_compensation_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "euromod"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "be-birth-leave",
+  "summary": {
+    "comparison_count": 3,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 3,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 3,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_weight": 0
+    }
+  }
+}
