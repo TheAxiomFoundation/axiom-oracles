@@ -229,6 +229,8 @@ class TestSubprocessContract:
             variables=[
                 Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
                 Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
+                Concepts.UK_INCOME_TAX,
+                Concepts.UK_EMPLOYEE_NIC,
                 "yem",
             ],
         )

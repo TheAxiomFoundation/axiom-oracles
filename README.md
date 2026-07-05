@@ -306,8 +306,9 @@ see no coverage until those imputation stages land
 (PolicyEngine/populace#225).
 
 For the CLI, `axiom-oracles compare euromod axiom ...` reads
-`EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,
-`EUROMOD_DATASET`, and `EUROMOD_PYTHON` from the environment.
+`EUROMOD_MODEL_ROOT` (or `UKMOD_MODEL_ROOT` for UKMOD),
+`EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`, `EUROMOD_DATASET`, and
+`EUROMOD_PYTHON` from the environment.
 
 ## Thin Case Schema
 

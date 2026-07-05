@@ -25,6 +25,50 @@ targets:
       geoid: "3651000"
 
 concepts:
+  uk:statutes/ukpga/2007/3/23#income_tax_liability:
+    description: UK income tax liability
+    category: tax
+    comparison: amount
+    tolerance: 15
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk:statutes/ukpga/2007/3/worker_oracle_pipeline#income_tax_liability
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:statutes/ukpga/1992/4/8#primary_class_1_contribution:
+    description: UK employee National Insurance contribution
+    category: social_contributions
+    comparison: amount
+    tolerance: 15
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk:statutes/ukpga/1992/4/worker_oracle_pipeline#primary_class_1_contribution
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: UK
+
   be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_federal_and_local_tax_before_withholding:
     description: Belgium worker PIT before withholding
     category: tax

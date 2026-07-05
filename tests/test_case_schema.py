@@ -206,6 +206,30 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
     )
 
 
+def test_uk_euromod_concepts_are_locale_filtered() -> None:
+    mappings = comparable_mappings(
+        "axiom",
+        "euromod",
+        load_program_mappings(),
+        locales={"UK"},
+    )
+
+    assert {mapping.concept_id for mapping in mappings} == {
+        Concepts.UK_INCOME_TAX,
+        Concepts.UK_EMPLOYEE_NIC,
+    }
+
+    assert (
+        comparable_mappings(
+            "axiom",
+            "euromod",
+            load_program_mappings(),
+            locales={"US-NY-NYC"},
+        )
+        == []
+    )
+
+
 def test_accessnyc_targets_are_scope_filtered() -> None:
     mappings = comparable_mappings(
         "accessnyc",
@@ -261,6 +285,38 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     assert all(case.metadata["axiom_entity"] == "Person" for case in pit_cases)
     assert all("#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"])
     assert all("#input." in key for case in ssc_cases for key in case.metadata["axiom_inputs"])
+
+
+def test_uk_worker_suites_define_oracle_concepts_and_inputs() -> None:
+    pit_cases = load_suite("uk-worker-pit")
+    nic_cases = load_suite("uk-worker-nic")
+
+    assert [case.case_id for case in pit_cases] == [
+        "uk-worker-pit-30k",
+        "uk-worker-pit-45k",
+        "uk-worker-pit-60k",
+        "uk-worker-pit-130k",
+        "uk-worker-pit-360k",
+    ]
+    assert {case.locale for case in pit_cases + nic_cases} == {"UK"}
+    assert {case.scope for case in pit_cases + nic_cases} == {
+        GeographyScope(type="country", geoid="UK")
+    }
+    assert {case.outputs for case in pit_cases} == {
+        (Concepts.UK_INCOME_TAX,)
+    }
+    assert {case.outputs for case in nic_cases} == {
+        (Concepts.UK_EMPLOYEE_NIC,)
+    }
+    assert all(case.metadata["axiom_entity"] == "Person" for case in pit_cases)
+    assert all("#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"])
+    assert all("#input." in key for case in nic_cases for key in case.metadata["axiom_inputs"])
+    assert all(
+        case.metadata["euromod_to_axiom_input_bridge"] == {
+            "yem": list(case.metadata["axiom_inputs"])
+        }
+        for case in pit_cases + nic_cases
+    )
 
 
 def test_accessnyc_python_runner_discovers_local_rule_codes(tmp_path) -> None:

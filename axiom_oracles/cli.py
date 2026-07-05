@@ -1021,13 +1021,15 @@ def _build_runner(
     if engine == "prd":
         return PrdPackageRunner()
     if engine == "euromod":
-        model_root = os.environ.get("EUROMOD_MODEL_ROOT")
+        model_root = os.environ.get("EUROMOD_MODEL_ROOT") or os.environ.get(
+            "UKMOD_MODEL_ROOT"
+        )
         if not model_root:
             raise click.ClickException(
-                "The euromod engine needs EUROMOD_MODEL_ROOT (a UKMOD or "
-                "EUROMOD model directory), plus EUROMOD_COUNTRY and "
-                "EUROMOD_SYSTEM; EUROMOD_PYTHON names the execution "
-                "environment interpreter."
+                "The euromod engine needs EUROMOD_MODEL_ROOT or "
+                "UKMOD_MODEL_ROOT (a UKMOD or EUROMOD model directory), plus "
+                "EUROMOD_COUNTRY and EUROMOD_SYSTEM; EUROMOD_PYTHON names "
+                "the execution environment interpreter."
             )
         return EuromodPlatformRunner(
             model_root=model_root,

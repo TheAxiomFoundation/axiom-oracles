@@ -3,10 +3,18 @@ from __future__ import annotations
 from .be_worker import be_worker_pit_cases, be_worker_ssc_cases
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
+from .uk_worker import uk_worker_nic_cases, uk_worker_pit_cases
 
 
 def available_suites() -> tuple[str, ...]:
-    return ("nyc-basic", "nyc-synthetic", "be-worker-pit", "be-worker-ssc")
+    return (
+        "nyc-basic",
+        "nyc-synthetic",
+        "be-worker-pit",
+        "be-worker-ssc",
+        "uk-worker-pit",
+        "uk-worker-nic",
+    )
 
 
 def load_suite(name: str):
@@ -18,6 +26,10 @@ def load_suite(name: str):
         return be_worker_pit_cases()
     if name == "be-worker-ssc":
         return be_worker_ssc_cases()
+    if name == "uk-worker-pit":
+        return uk_worker_pit_cases()
+    if name == "uk-worker-nic":
+        return uk_worker_nic_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -28,4 +40,6 @@ __all__ = [
     "load_suite",
     "nyc_basic_cases",
     "nyc_synthetic_cases",
+    "uk_worker_nic_cases",
+    "uk_worker_pit_cases",
 ]

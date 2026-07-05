@@ -124,7 +124,7 @@ class Concepts:
     # EUROMOD-platform oracle concepts (durable RuleSpec ids where the
     # encoding exists; UKMOD/EUROMOD outputs bridge to these).
     UK_INCOME_TAX = "uk:statutes/ukpga/2007/3/23#income_tax_liability"
-    UK_EMPLOYEE_NIC = "uk:tax/national-insurance#employee_contributions"
+    UK_EMPLOYEE_NIC = "uk:statutes/ukpga/1992/4/8#primary_class_1_contribution"
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

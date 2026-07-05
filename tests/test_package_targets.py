@@ -106,6 +106,19 @@ def test_cli_builds_euromod_runner_from_environment(monkeypatch) -> None:
     assert runner.template_dataset == "BE_training_data"
 
 
+def test_cli_builds_ukmod_runner_from_dedicated_environment(monkeypatch) -> None:
+    monkeypatch.delenv("EUROMOD_MODEL_ROOT", raising=False)
+    monkeypatch.setenv("UKMOD_MODEL_ROOT", "/tmp/ukmod")
+
+    runner = _build_runner("euromod", "api", None, None, ())
+
+    assert isinstance(runner, EuromodPlatformRunner)
+    assert runner.model_root.as_posix() == "/tmp/ukmod"
+    assert runner.country == "UK"
+    assert runner.system == "UK_2025"
+    assert runner.dataset == "training_data"
+
+
 def test_cli_prepares_taxsim_cases_only_when_taxsim_is_compared() -> None:
     case = Case(
         case_id="case-1",
