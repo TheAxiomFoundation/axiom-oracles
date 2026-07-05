@@ -158,13 +158,19 @@ def evaluate_rulespec_parameters(path: Path) -> dict[str, float]:
 
 def policyengine_value(parameters, accessor: str, period: str = PERIOD) -> float:
     """Resolve a PE parameter accessor like ``a.b.c`` or ``a.b[1].threshold``."""
-    bracket = re.match(r"^(?P<path>[\w.]+)\[(?P<index>\d+)\]\.threshold$", accessor)
+    bracket = re.match(
+        r"^(?P<path>[\w.]+)\[(?P<index>\d+)\]\.(?P<field>threshold|amount)$",
+        accessor,
+    )
     if bracket:
         node = parameters
         for part in bracket.group("path").split("."):
             node = node.children[part]
         scale = node(period)
-        return float(scale.thresholds[int(bracket.group("index"))])
+        index = int(bracket.group("index"))
+        if bracket.group("field") == "threshold":
+            return float(scale.thresholds[index])
+        return float(scale.amounts[index])
     node = parameters
     for part in accessor.split("."):
         node = node.children[part]

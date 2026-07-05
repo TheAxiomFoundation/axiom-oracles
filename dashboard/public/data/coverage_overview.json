@@ -586,12 +586,12 @@
    {
     "program": "tanf",
     "jurisdiction": "AK",
-    "status": "coverageOnly",
-    "generated": true,
+    "status": "parameter",
     "source": "rulespec-us origin/main: policies/dpa/atap, regulations/aac/title-7 (9 rule files)",
     "known_non_tanf_gaps": [
-     "encoded upstream; no comparison suite yet"
-    ]
+     "AK ATAP 2026 adult-included need standards verified (3/3); household-level suite pending (thin manual slice)"
+    ],
+    "suite": "ak-atap-standards"
    },
    {
     "program": "tanf",
@@ -616,12 +616,12 @@
    {
     "program": "tanf",
     "jurisdiction": "GA",
-    "status": "coverageOnly",
-    "generated": true,
+    "status": "parameter",
     "source": "rulespec-us origin/main: policies/dfcs/tanf (10 rule files)",
     "known_non_tanf_gaps": [
-     "encoded upstream; no comparison suite yet"
-    ]
+     "GA DFCS Appendix A standards verified against PolicyEngine (8/8); household-level suite pending (thin manual slice)"
+    ],
+    "suite": "ga-tanf-standards"
    },
    {
     "program": "tanf",
@@ -646,12 +646,12 @@
    {
     "program": "tanf",
     "jurisdiction": "TX",
-    "status": "coverageOnly",
-    "generated": true,
+    "status": "parameter",
     "source": "rulespec-us origin/main: policies/hhs/texas-works-handbook (1 rule files)",
     "known_non_tanf_gaps": [
-     "encoded upstream; no comparison suite yet"
-    ]
+     "TX budgetary/recognizable needs parameters verified (4/4); household-level suite pending (thin manual slice)"
+    ],
+    "suite": "tx-tanf-parameters"
    },
    {
     "program": "tanf",

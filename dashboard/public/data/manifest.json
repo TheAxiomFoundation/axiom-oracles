@@ -56,6 +56,9 @@
     "axiom-euromod-be-special-social-security-contribution.json",
     "axiom-policyengine-co-tanf-ecps.json",
     "axiom-policyengine-ca-tanf-ecps.json",
-    "axiom-policyengine-mn-tanf-ecps.json"
+    "axiom-policyengine-mn-tanf-ecps.json",
+    "axiom-policyengine-ga-tanf-standards.json",
+    "axiom-policyengine-ak-atap-standards.json",
+    "axiom-policyengine-tx-tanf-parameters.json"
   ]
 }

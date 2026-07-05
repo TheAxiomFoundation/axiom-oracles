@@ -10,7 +10,9 @@
 #
 # axiom_formula (optional) combines rules from the same file — e.g. Medicaid
 # effective limits are raw FPL limit + the 5% MAGI disregard, mirroring how
-# PolicyEngine stores the effective limit.
+# PolicyEngine stores the effective limit. (The disregard itself moved to
+# the shared us:policies/cms/medicaid-chip-bhp-eligibility-levels module
+# upstream, so it appears here as the 0.05 literal.)
 #
 # This file is NOT a single-runner comparison config: it declares a *list* of
 # parameter-oracle suites consumed by scripts/run_parameter_comparisons.py, not
@@ -32,27 +34,27 @@ suites:
     comparisons:
       - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
         rule: georgia_children_medicaid_ages_0_to_1_fpl_limit
-        axiom_formula: georgia_children_medicaid_ages_0_to_1_fpl_limit + magi_fpl_disregard_rate
+        axiom_formula: georgia_children_medicaid_ages_0_to_1_fpl_limit + 0.05
         description: Children Medicaid ages 0-1 FPL limit
         pe: gov.hhs.medicaid.eligibility.categories.infant.income_limit.GA
       - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
         rule: georgia_children_medicaid_ages_1_to_5_fpl_limit
-        axiom_formula: georgia_children_medicaid_ages_1_to_5_fpl_limit + magi_fpl_disregard_rate
+        axiom_formula: georgia_children_medicaid_ages_1_to_5_fpl_limit + 0.05
         description: Children Medicaid ages 1-5 FPL limit
         pe: gov.hhs.medicaid.eligibility.categories.young_child.income_limit.GA
       - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
         rule: georgia_children_medicaid_ages_6_to_18_fpl_limit
-        axiom_formula: georgia_children_medicaid_ages_6_to_18_fpl_limit + magi_fpl_disregard_rate
+        axiom_formula: georgia_children_medicaid_ages_6_to_18_fpl_limit + 0.05
         description: Children Medicaid ages 6-18 FPL limit
         pe: gov.hhs.medicaid.eligibility.categories.older_child.income_limit.GA
       - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
         rule: georgia_pregnant_women_medicaid_fpl_limit
-        axiom_formula: georgia_pregnant_women_medicaid_fpl_limit + magi_fpl_disregard_rate
+        axiom_formula: georgia_pregnant_women_medicaid_fpl_limit + 0.05
         description: Pregnant women Medicaid FPL limit
         pe: gov.hhs.medicaid.eligibility.categories.pregnant.income_limit.GA
       - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
         rule: georgia_parent_caretaker_adults_medicaid_fpl_limit
-        axiom_formula: georgia_parent_caretaker_adults_medicaid_fpl_limit + magi_fpl_disregard_rate
+        axiom_formula: georgia_parent_caretaker_adults_medicaid_fpl_limit + 0.05
         description: Parent / caretaker adult Medicaid FPL limit
         pe: gov.hhs.medicaid.eligibility.categories.parent.income_limit.GA
 
@@ -160,3 +162,89 @@ suites:
         rule: lifeline_income_limit_ratio
         description: Lifeline income limit (share of federal poverty guidelines)
         pe: gov.fcc.lifeline.fpg_limit
+
+  - suite: ga-tanf-standards
+    category: cash
+    locales: [GA]
+    comparisons:
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: standard_of_need
+        key: 1
+        description: GA TANF standard of need, family of 1
+        pe: gov.states.ga.dfcs.tanf.financial_standards.standard_of_need.base.1
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: standard_of_need
+        key: 3
+        description: GA TANF standard of need, family of 3
+        pe: gov.states.ga.dfcs.tanf.financial_standards.standard_of_need.base.3
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: standard_of_need
+        key: 6
+        description: GA TANF standard of need, family of 6
+        pe: gov.states.ga.dfcs.tanf.financial_standards.standard_of_need.base.6
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: family_maximum_tanf
+        key: 1
+        description: GA TANF family maximum, family of 1
+        pe: gov.states.ga.dfcs.tanf.financial_standards.family_maximum.base.1
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: family_maximum_tanf
+        key: 3
+        description: GA TANF family maximum, family of 3
+        pe: gov.states.ga.dfcs.tanf.financial_standards.family_maximum.base.3
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: family_maximum_tanf
+        key: 6
+        description: GA TANF family maximum, family of 6
+        pe: gov.states.ga.dfcs.tanf.financial_standards.family_maximum.base.6
+      - file: us-ga/policies/dfcs/tanf/1615/block-5.yaml
+        rule: standard_work_deduction_amount
+        description: GA TANF standard work deduction
+        pe: gov.states.ga.dfcs.tanf.income.deductions.work_expense
+      - file: us-ga/policies/dfcs/tanf/appendix-a/block-3.yaml
+        rule: assistance_unit_limit
+        description: GA TANF assistance unit resource limit
+        pe: gov.states.ga.dfcs.tanf.resources.limit
+
+  - suite: ak-atap-standards
+    category: cash
+    locales: [AK]
+    comparisons:
+      - file: us-ak/policies/dpa/atap/standards/2026/adult-included.yaml
+        rule: adult_included_need_standard_by_family_size
+        key: 2
+        description: AK ATAP need standard, family of 2 (adult included)
+        pe: gov.states.ak.dpa.atap.need_standard.amount.2
+      - file: us-ak/policies/dpa/atap/standards/2026/adult-included.yaml
+        rule: adult_included_need_standard_by_family_size
+        key: 5
+        description: AK ATAP need standard, family of 5 (adult included)
+        pe: gov.states.ak.dpa.atap.need_standard.amount.5
+      - file: us-ak/policies/dpa/atap/standards/2026/adult-included.yaml
+        rule: adult_included_need_standard_by_family_size
+        key: 8
+        description: AK ATAP need standard, family of 8 (adult included)
+        pe: gov.states.ak.dpa.atap.need_standard.amount.8
+
+  - suite: tx-tanf-parameters
+    category: cash
+    locales: [TX]
+    comparisons:
+      - file: us-tx/policies/hhs/texas-works-handbook/c-110-tanf/block-2.yaml
+        rule: recognizable_need_percentage
+        description: TX TANF recognizable needs rate
+        pe: gov.states.tx.tanf.needs_standard.recognizable_needs.rate
+      - file: us-tx/policies/hhs/texas-works-handbook/a-1340-income-limits/block-16.yaml
+        rule: tanf_minimum_grant_amount
+        description: TX TANF minimum grant
+        pe: gov.states.tx.tanf.minimum_grant
+      - file: us-tx/policies/hhs/texas-works-handbook/c-110-tanf/block-2.yaml
+        rule: non_caretaker_budgetary_need_by_family_size
+        key: 1
+        description: TX TANF budgetary need, non-caretaker family of 1
+        pe: gov.states.tx.tanf.needs_standard.budgetary_needs.non_caretaker[1].amount
+      - file: us-tx/policies/hhs/texas-works-handbook/c-110-tanf/block-2.yaml
+        rule: non_caretaker_budgetary_need_by_family_size
+        key: 3
+        description: TX TANF budgetary need, non-caretaker family of 3
+        pe: gov.states.tx.tanf.needs_standard.budgetary_needs.non_caretaker[3].amount

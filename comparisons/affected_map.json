@@ -4,6 +4,14 @@
   "owner": "TheAxiomFoundation",
   "suites": [
     {
+      "suite": "ak-atap-standards",
+      "report": "axiom-policyengine-ak-atap-standards.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-ak"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
       "suite": "al-snap-ecps",
       "report": "axiom-policyengine-al-snap-ecps.json",
       "repos": [
@@ -91,6 +99,14 @@
     {
       "suite": "ga-health-thresholds",
       "report": "axiom-policyengine-ga-health-thresholds.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-ga"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "ga-tanf-standards",
+      "report": "axiom-policyengine-ga-tanf-standards.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us-ga"
       ],
@@ -213,6 +229,14 @@
         "TheAxiomFoundation/rulespec-us-tn"
       ],
       "source": "comparisons/tn-snap-ecps.yaml"
+    },
+    {
+      "suite": "tx-tanf-parameters",
+      "report": "axiom-policyengine-tx-tanf-parameters.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-tx"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "uk-employer-nic",
