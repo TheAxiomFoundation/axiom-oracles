@@ -60,8 +60,8 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | 5 | `tscpe_be` | on | `tscpe_s` | Pensioner health/disability + solidarity contributions | **compared with encoding gaps** (`be/statutes/social_security/non_labour_income_contributions.yaml` — Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%, composed into an annual combined output; **not** `chapter_10_special_contributions.yaml`, which encodes the Law 29.06.1981 art. 38 employer/fringe special contributions) | `be-pensioner-contributions` (1/6 exact; 5 axiom_encoding_gap residuals) | encode art. 191 low-pension **floor** + reconcile art. 68 solidarity base table to 2025 indexation → rulespec-be#89 |
 | 6 | `tci_be` | on | `tci_s` (+ `brv_s`) | Flemish care insurance / social-protection flat premium (zorgverzekering) | compared | `be-flemish-social-protection-premium` (2/2) | — (broaden: Brussels voluntary affiliation, sanctions) |
 | 7 | `tinna_be` | on | `tin_s`, `tinna_s` | Federal PIT — brackets, tax-free amount, credits; writes total `tin_s` | compared (worker pilot only) | `be-worker-pit` (2/3; EUROMOD #12) | — (broaden: full household PIT, joint assessment) |
-| 8 | `tintb_be` | on | `tintasp_s`, marital-quotient, deductions | PIT deductions & marital quotient (CIR 92 arts. 87–89, 131–145) | **partial** (rate_scale, tax_free_amount, tax_reductions_and_credits, joint_assessment encoded; not oracle-decomposed to `tintb`) | (feeds `be-worker-pit`) | broaden PIT decomposition → CIR 92 arts. 86–90, 131–178 |
-| 9 | `tinfe_be` | on | `tintcch_s`, `tin_s`, fiscal-expenditure reductions | PIT fiscal expenditures — childcare, service vouchers, pensions, donations reductions (CIR 92 arts. 145/1 ff.) | **partial** (tax_reductions_and_credits.yaml encodes some; most fiscal-expenditure reductions not encoded) | — | encode remaining PIT reductions → CIR 92 arts. 145/1–145/48, regional decrees |
+| 8 | `tintb_be` | on | `tintasp_s`, marital-quotient, deductions | PIT deductions & marital quotient (CIR 92 arts. 87–89, 131–145) | compared (marital quotient) | `be-marital-quotient` (0/3 raw, 100% explained; single-earner-couple Article 87) | — (`tintasp_s`/`tintami_s` not emitted by EUROMOD, so only the `tin_s` couple total is comparable; the composed slice reproduces `tin_s` once the SSC + Article 51 forfait base reductions are added, exact at 60k) |
+| 9 | `tinfe_be` | on | `tintcch_s`, `tin_s`, fiscal-expenditure reductions | PIT fiscal expenditures — childcare, service vouchers, pensions, donations reductions (CIR 92 arts. 145/1 ff.) | **partial** (tax_reductions_and_credits.yaml encodes childcare 145/35, pension savings 145/8, donations 145/33, domestic-employee 145/34, adoption 145/48, legal-protection 145/49; service vouchers not encoded) | — (not EUROMOD-comparable) | **Service vouchers** (titres-services/dienstencheques) absent from BE_2025 entirely; `tintcch_s` childcare stays 0 for any constructible synthetic household (data-driven, not input-driven). Only `tintcly_s` (289ter/1 work-bonus reduction) is drivable and is already covered by `be-worker-pit`. Encode remaining reductions → CIR 92 arts. 145/1–145/48 + regional decrees, unit-test-only |
 | 10 | `tinrg_be` | on | `tinrg_s`, `tin_s` | Regional PIT surcharges / reductions (post-6th-state-reform regional additional %) | compared (`regional_surcharge.yaml`: reduced-state-tax base × supplied regional rate) | `be-regional-pit-surcharge` (3/3; BXL/FL/WAL) | — (broaden: regional reductions/credits, regional bracket structure) |
 | 11 | `tinmu_be` | on | `tinmu_s`, `tin_s` | Municipal/local PIT surcharge (communal additional centimes on PIT) | compared (`regional_surcharge.yaml`: state+regional net of `tinfe` reductions × supplied communal rate; `communal_additions.yaml` base mechanics) | `be-local-municipal-pit` (3/3; BXL/FL/WAL) | — (broaden: municipality-specific centimes tables, agglomeration additions) |
 | 12 | `tintace_be` | on | `tintace_s` | PIT professional-expense deduction (forfait) | encoded (`article_51_forfaits.yaml`) — compared via pilot | (feeds `be-worker-pit`) | — |
@@ -136,7 +136,7 @@ the EUROMOD matrix.
 
 ## Sanity-check vs the live dashboard
 
-25 published suites, **110 comparisons, 76 exact matches; explained 95.45%,
+26 published suites, **113 comparisons, 76 exact matches; explained 95.58%,
 0 unexplained** (matches `euromod-be-coverage.json` `dispositioned_parity`).
 `be-elderly-income-support` (`bsaoa_s`, GRAPA) is now **published** — EUROMOD
 `bsaoa_s` = Axiom GRAPA = 18,964.44, exact, via the per-case `bsaoa_be`→on switch
@@ -148,18 +148,22 @@ in the dashboard suite selector — now manifested, with a test pin enforcing th
 invariant (the `be-maternity-leave` and `be-birth-leave` entries were restored in
 #158). The three PIT-decomposition suites — `be-regional-pit-surcharge`
 (`tinrg_s`), `be-local-municipal-pit` (`tinmu_s`), and `be-capital-income-tax`
-(`tinkt_s`) — remain 9/9 exact. The new **`be-pensioner-contributions`**
+(`tinkt_s`) — remain 9/9 exact. The **`be-marital-quotient`** (`tintb_be` Article
+87) suite adds 3 comparisons, all explained residuals: the composed couple slice
+supplies professional income before the 13.07% employee social security and
+Article 51 forfait base reductions EUROMOD applies, and reproduces `tin_s` to the
+cent at 60k once those are added (the 30k residual is the refundable 289ter/1
+work-bonus credit). The **`be-pensioner-contributions`**
 (`tscpe_s`) suite sweeps an isolated old-age pensioner across the health and
 solidarity thresholds and is 1/6 exact (48k, where both engines' 3.55% health +
 2% solidarity coincide above every threshold); its 5 residuals are the reason
-`explained_rate` is 95.45% rather than 100%. They are two RuleSpec-attributed
-encoding gaps — the article 191 health withholding lacks EUROMOD's low-pension
-floor, and the article 68 solidarity base table (at index factor 1) is a
-different vintage from EUROMOD's 2025-indexed thresholds — dispositioned as
-`axiom_encoding_gap` with AST-checked arithmetic and filed as rulespec-be#89.
-`tscpe_be` therefore stays **in scope but not conformance-covered**
-(`conformance/be.yaml` `suite: null`) until #89 lands. Nothing already-compared
-is marked missing above.
+`explained_rate` is below 100% — two RuleSpec-attributed encoding gaps
+(the article 191 health withholding lacks EUROMOD's low-pension floor, and the
+article 68 solidarity base table at index factor 1 is a different vintage from
+EUROMOD's 2025-indexed thresholds), dispositioned as `axiom_encoding_gap` with
+AST-checked arithmetic and filed as rulespec-be#89. `tscpe_be` therefore stays
+**in scope but not conformance-covered** (`conformance/be.yaml` `suite: null`)
+until #89 lands. Nothing already-compared is marked missing above.
 
 ## Wave plan (gap workers, grouped)
 

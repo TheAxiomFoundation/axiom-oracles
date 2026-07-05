@@ -54,6 +54,14 @@
       "source": "comparisons/be-local-municipal-pit.yaml"
     },
     {
+      "suite": "be-marital-quotient",
+      "report": "axiom-euromod-be-marital-quotient.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-marital-quotient.yaml"
+    },
+    {
       "suite": "be-pensioner-contributions",
       "report": "axiom-euromod-be-pensioner-contributions.json",
       "repos": [

@@ -11,6 +11,8 @@ BE_METADATA = {
     "axiom_entity_id": "head",
 }
 PIT_MODULE = "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
+COUPLE_PIT_MODULE = "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
+JOINT_ASSESSMENT_MODULE = "be:statutes/income_tax/individual/joint_assessment"
 SSC_MODULE = "be:regulations/social_security/workers/employee_contributions"
 EMPLOYER_SSC_MODULE = "be:regulations/social_security/workers/employer_contributions"
 WORK_BONUS_MODULE = "be:regulations/social_security/workers/work_bonus"
@@ -31,6 +33,28 @@ def be_worker_pit_cases() -> list[Case]:
         _single_worker_pit_case("be-worker-pit-10k", 10_000.0),
         _single_worker_pit_case("be-worker-pit-30k", 30_000.0),
         _single_worker_pit_case("be-worker-pit-60k", 60_000.0),
+    ]
+
+
+def be_marital_quotient_cases() -> list[Case]:
+    """Single-earner married-couple Belgium PIT cases for the EUROMOD BE_2025 oracle.
+
+    These exercise the CIR 1992 Article 87 marital quotient (huwelijksquotiënt /
+    quotient conjugal): when only one spouse has professional income, 30% of it
+    (capped at the indexed 13,460 EUR) is imputed to the zero-income spouse, and
+    each spouse is then taxed separately on their own post-imputation share with
+    their own tax-free amount. The composed
+    ``couple_pit_oracle_pipeline`` output is compared to the EUROMOD ``tin_s``
+    household aggregate (the runner sums both members' tax). Because the whole
+    household income belongs to spouse A, the ``yem`` bridge feeds the engine's
+    post-uprating gross into spouse A's Article 89 post-exclusion professional
+    income; spouse B's income boundary is pinned at 0.
+    """
+
+    return [
+        _single_earner_couple_pit_case("be-marital-quotient-30k", 30_000.0),
+        _single_earner_couple_pit_case("be-marital-quotient-45k", 45_000.0),
+        _single_earner_couple_pit_case("be-marital-quotient-60k", 60_000.0),
     ]
 
 
@@ -306,8 +330,109 @@ def _single_worker_case(
     )
 
 
+def _single_earner_couple_pit_case(case_id: str, annual_income: float) -> Case:
+    """One married couple; only spouse A has professional income.
+
+    Spouse A's Article 89 post-exclusion professional income is the bridged
+    boundary (fed the engine's post-uprating gross ``yem``); spouse B is pinned
+    at 0. The Article 126 joint-assessment flags select an ordinary joint
+    assessment, and the Article 87/88 no-tax-increase guard is satisfied, so the
+    Article 87 one-earner marital quotient applies. Local additions are supplied
+    at 0 so the composed federal-plus-local output is comparable to EUROMOD
+    ``tin_s``.
+    """
+
+    spouse_a_income_input = _joint_assessment_input(
+        "belgium_pit_spouse_a_professional_income_after_article_89_exclusions"
+    )
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "axiom_entity": "TaxUnit",
+            "axiom_entity_id": "taxunit",
+            "scenario": "single-earner-married-couple-marital-quotient",
+            "yearly_earned_income": annual_income,
+            "axiom_inputs": {
+                spouse_a_income_input: annual_income,
+                _joint_assessment_input(
+                    "belgium_pit_spouse_b_professional_income_after_article_89_exclusions"
+                ): 0,
+                _joint_assessment_input(
+                    "belgium_pit_spouse_a_convention_exempt_professional_income_not_counted_for_other_tax"
+                ): 0,
+                _joint_assessment_input(
+                    "belgium_pit_spouse_b_convention_exempt_professional_income_not_counted_for_other_tax"
+                ): 0,
+                _joint_assessment_input(
+                    "belgium_pit_article_126_married_or_legal_cohabiting"
+                ): True,
+                _joint_assessment_input(
+                    "belgium_pit_article_126_year_of_marriage_or_legal_cohabitation_declaration"
+                ): False,
+                _joint_assessment_input(
+                    "belgium_pit_article_126_legal_cohabitants_marry_after_prior_year_declaration"
+                ): False,
+                _joint_assessment_input(
+                    "belgium_pit_article_126_factual_separation_effective_for_entire_taxable_period_after_separation_year"
+                ): False,
+                _joint_assessment_input(
+                    "belgium_pit_article_126_year_of_marriage_dissolution_legal_separation_or_cohabitation_cessation"
+                ): False,
+                _joint_assessment_input(
+                    "belgium_pit_article_126_dissolution_by_death"
+                ): False,
+                _joint_assessment_input(
+                    "belgium_pit_article_126_survivor_or_heirs_joint_assessment_election_made"
+                ): False,
+                _joint_assessment_input(
+                    "belgium_pit_article_87_88_no_tax_increase_condition_met"
+                ): True,
+                _couple_pit_input("belgium_pit_couple_communal_additional_tax_rate"): 0,
+                _couple_pit_input(
+                    "belgium_pit_couple_agglomeration_additional_tax_rate"
+                ): 0,
+            },
+            "euromod_inputs": _single_earner_couple_euromod_rows(annual_income),
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "yem": [spouse_a_income_input],
+            },
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 35,
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.YEARLY_EARNED_INCOME: annual_income,
+                },
+            ),
+            Entity(
+                entity_id="spouse",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 35,
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.YEARLY_EARNED_INCOME: 0.0,
+                },
+            ),
+        ),
+        outputs=(Concepts.BE_MARITAL_QUOTIENT_COUPLE_PIT_BEFORE_WITHHOLDING,),
+    )
+
+
 def _pit_input(name: str) -> str:
     return f"{PIT_MODULE}#input.{name}"
+
+
+def _joint_assessment_input(name: str) -> str:
+    return f"{JOINT_ASSESSMENT_MODULE}#input.{name}"
+
+
+def _couple_pit_input(name: str) -> str:
+    return f"{COUPLE_PIT_MODULE}#input.{name}"
 
 
 def _ssc_input(name: str) -> str:
@@ -349,3 +474,52 @@ def _euromod_worker_input(annual_income: float) -> dict[str, float | int]:
         "yem": annual_income / 12,
         "yemmy": 12 if employed else 0,
     }
+
+
+def _single_earner_couple_euromod_rows(
+    annual_income: float,
+) -> list[dict[str, float | int]]:
+    """Two married adults in one household; only the head has employment income.
+
+    ``dms`` = 2 marks both as married and ``idpartner`` links them, so EUROMOD
+    establishes the joint assessment and applies the marital quotient. The
+    zero-income spouse is not employed (``les`` = 0).
+    """
+
+    head = {
+        "idhh": 1,
+        "idperson": 101,
+        "idpartner": 102,
+        "idmother": 0,
+        "idfather": 0,
+        "dag": 35,
+        "dgn": 1,
+        "dms": 2,
+        "les": 3,
+        "lfs": 15,
+        "lhw": 38,
+        "liwmy": 12,
+        "liwwh": 120,
+        "loc": 5,
+        "yem": annual_income / 12,
+        "yemmy": 12,
+    }
+    spouse = {
+        "idhh": 1,
+        "idperson": 102,
+        "idpartner": 101,
+        "idmother": 0,
+        "idfather": 0,
+        "dag": 35,
+        "dgn": 0,
+        "dms": 2,
+        "les": 0,
+        "lfs": 0,
+        "lhw": 0,
+        "liwmy": 0,
+        "liwwh": 0,
+        "loc": 5,
+        "yem": 0.0,
+        "yemmy": 0,
+    }
+    return [head, spouse]
