@@ -9,6 +9,130 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  uk-employer-nic:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#uk_nic_pilot_er_secondary_class_1_contribution
+    cases:
+    - id: uk-employer-nic-30k
+      period: '2026'
+      scenario: single-employer-secondary-nic
+      parameters:
+        yearly_earned_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+    - id: uk-employer-nic-45k
+      period: '2026'
+      scenario: single-employer-secondary-nic
+      parameters:
+        yearly_earned_income: 45000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
+    - id: uk-employer-nic-60k
+      period: '2026'
+      scenario: single-employer-secondary-nic
+      parameters:
+        yearly_earned_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
+    - id: uk-employer-nic-130k
+      period: '2026'
+      scenario: single-employer-secondary-nic
+      parameters:
+        yearly_earned_income: 130000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 130000.0
+    - id: uk-employer-nic-360k
+      period: '2026'
+      scenario: single-employer-secondary-nic
+      parameters:
+        yearly_earned_income: 360000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 360000.0
+  uk-self-employed-nic:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/social_security/workers/pilot_worker_self_employed_nic_pipeline#uk_nic_pilot_se_self_employed_contribution
+    cases:
+    - id: uk-self-employed-nic-30k
+      period: '2026'
+      scenario: single-self-employed-nic
+      parameters:
+        yearly_self_employment_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 30000.0
+    - id: uk-self-employed-nic-45k
+      period: '2026'
+      scenario: single-self-employed-nic
+      parameters:
+        yearly_self_employment_income: 45000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 45000.0
+    - id: uk-self-employed-nic-60k
+      period: '2026'
+      scenario: single-self-employed-nic
+      parameters:
+        yearly_self_employment_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 60000.0
+    - id: uk-self-employed-nic-130k
+      period: '2026'
+      scenario: single-self-employed-nic
+      parameters:
+        yearly_self_employment_income: 130000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 130000.0
+    - id: uk-self-employed-nic-360k
+      period: '2026'
+      scenario: single-self-employed-nic
+      parameters:
+        yearly_self_employment_income: 360000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 360000.0
   uk-worker-nic:
     locale: UK
     entity: Person

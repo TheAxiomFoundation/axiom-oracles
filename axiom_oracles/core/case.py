@@ -136,6 +136,16 @@ class Concepts:
         "uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline"
         "#uk_nic_pilot_primary_class_1_contribution"
     )
+    # Composed self-employed (Class 4 + Class 2) and employer secondary Class 1
+    # pilot pipelines for the UKMOD tscse_s and tscer_s comparisons.
+    UK_WORKER_SELF_EMPLOYED_NIC = (
+        "uk:statutes/social_security/workers/pilot_worker_self_employed_nic_pipeline"
+        "#uk_nic_pilot_se_self_employed_contribution"
+    )
+    UK_WORKER_EMPLOYER_SECONDARY_NIC = (
+        "uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline"
+        "#uk_nic_pilot_er_secondary_class_1_contribution"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"
