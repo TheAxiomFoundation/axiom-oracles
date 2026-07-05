@@ -5,7 +5,10 @@ description: >-
   capital, childcare, and final-award surfaces encoded in Axiom RuleSpec against
   PolicyEngine UK on the Enhanced FRS population. Known PolicyEngine UK 2026
   forecast-indexed rate divergences are retained as visible difference rows and
-  labeled separately from true Axiom mismatches.
+  labeled separately from true Axiom mismatches. The take-up-inclusive
+  universal-credit-final wrapper stays excluded (its rulespec was retired
+  upstream); see excluded_surfaces below. The projection-safe pre-take-up final
+  award is already compared here via universal-credit-award.
 
 runner:
   type: axiom-encode-uk-efrs-compare
@@ -47,3 +50,17 @@ dashboard:
   filename: axiom-policyengine-uk-universal-credit-efrs.json
   suite: uk-universal-credit-efrs
   known_policyengine_divergence_detail_limit: 25
+
+# Documented exclusion read by the conformance harness. Verified 2026-07-05.
+excluded_surfaces:
+  - surface: universal-credit-final
+    pe_variable: universal_credit
+    reason: rulespec_retired
+    detail: >-
+      uk/policies/govuk/universal-credit.yaml deleted in rulespec-uk 829ab1a
+      ("retire PolicyEngine model wrappers via axiom-encode retire",
+      2026-06-10). would_claim_uc / universal_credit_pre_benefit_cap /
+      benefit_cap_reduction are available in the shared population and consumed
+      by the bridge, but the take-up-and-cap-inclusive final wrapper no longer
+      exists, so the surface raises "RuleSpec not found". The pre-take-up final
+      award is compared via universal-credit-award (uc_award_before_takeup).
