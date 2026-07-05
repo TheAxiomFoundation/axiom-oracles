@@ -1497,13 +1497,17 @@ HBAI_COMPONENT_COVERAGE = {
         "surfaces": (
             "housing-benefit-working-age-tariff-income",
             "housing-benefit-pension-age-tariff-income",
+            "housing-benefit-applicable-amount",
+            "housing-benefit-entitlement",
             "housing-benefit-final",
         ),
         "covered_outputs": (
             "housing_benefit_tariff_income",
+            "housing_benefit_applicable_amount",
+            "housing_benefit_entitlement",
             "housing_benefit",
         ),
-        "rationale": "Axiom covers Housing Benefit capital tariff income branches and the final annual PolicyEngine UK housing_benefit wrapper after the claim gate and benefit-cap reduction.",
+        "rationale": "Axiom covers Housing Benefit capital tariff income branches, the regulation 22 / Schedule 3 applicable amount, the composed regulation 70 / 71 entitlement (maximum eligible rent after the 65 per cent taper) for benefit units without a non-dependant deduction, and the final annual PolicyEngine UK housing_benefit wrapper after the claim gate and benefit-cap reduction.",
     },
     "income_support": {
         "status": "partial",

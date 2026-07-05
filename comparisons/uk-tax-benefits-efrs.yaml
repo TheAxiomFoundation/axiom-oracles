@@ -2,9 +2,10 @@ name: uk-tax-benefits-efrs
 title: UK tax and benefits — Axiom vs PolicyEngine
 description: >-
   Compares merged UK RuleSpec tax, National Insurance, Child Benefit, State
-  Pension Credit, tariff-income, student-loan, Carer's Allowance, and final
-  Carer Support Payment, Scottish Child Payment, and child Disability Living
-  Allowance surfaces against PolicyEngine UK on the Enhanced FRS population.
+  Pension Credit, tariff-income, Housing Benefit applicable-amount and
+  entitlement, student-loan, Carer's Allowance, and final Carer Support
+  Payment, Scottish Child Payment, and child Disability Living Allowance
+  surfaces against PolicyEngine UK on the Enhanced FRS population.
   Six final-wrapper surfaces (Child Benefit, State Pension, Pension Credit, ESA
   income, Housing Benefit, Severe Disablement Allowance) stay excluded — the
   take-up (would_claim_*) and reported-ceiling (*_reported) columns they need
@@ -58,6 +59,8 @@ runner:
       - income-support-tariff-income
       - housing-benefit-working-age-tariff-income
       - housing-benefit-pension-age-tariff-income
+      - housing-benefit-applicable-amount
+      - housing-benefit-entitlement
       - student-loan-repayment
       - carers-allowance-final
       - carer-support-payment-final
