@@ -95,11 +95,11 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert (
         outputs["bmact_s"]["status"]
-        == "live_oracle_verified_employed_under_cap_mother_newborn_with_pbe_switch"
+        == "live_oracle_verified_employed_mother_newborn_with_pbe_switch"
     )
     assert (
         outputs["bpact_s"]["status"]
-        == "live_oracle_verified_under_cap_father_newborn_with_pbe_switch"
+        == "live_oracle_verified_father_newborn_with_pbe_switch"
     )
     assert outputs["bch_s"]["additional_rulespec_outputs"] == [
         "be:statutes/family_benefits/child_benefit_base_2025"

@@ -669,7 +669,7 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
 def test_belgium_birth_leave_suite_defines_oracle_concept_and_bridge() -> None:
     cases = load_suite("be-birth-leave")
 
-    assert len(cases) == 2
+    assert len(cases) == 3
     assert {case.locale for case in cases} == {"BE"}
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
@@ -683,7 +683,8 @@ def test_belgium_birth_leave_suite_defines_oracle_concept_and_bridge() -> None:
         "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
     )
     assert {case.metadata["scenario"] for case in cases} == {
-        "birth-leave-paternity-under-cap"
+        "birth-leave-paternity-under-cap",
+        "birth-leave-paternity-capped",
     }
     assert {tuple(case.metadata["euromod_switches"]) for case in cases} == {
         (("PBE", True),)
@@ -733,13 +734,42 @@ def test_belgium_birth_leave_suite_defines_oracle_concept_and_bridge() -> None:
         uncapped_daily_input: 100,
         capped_daily_input: 100,
     }
+    capped_case = cases[2]
+    assert capped_case.case_id == "be-birth-leave-father-60k-capped"
+    assert capped_case.metadata["axiom_inputs"][uncapped_daily_input] == pytest.approx(
+        60_000 / 312
+    )
+    assert capped_case.metadata["axiom_inputs"][capped_daily_input] == pytest.approx(
+        183.13
+    )
+    assert capped_case.metadata["euromod_to_axiom_input_bridge"] == {
+        "yem": {
+            "inputs": [uncapped_daily_input],
+            "divide_by": 312,
+        }
+    }
+
+    (bridged_capped_case,) = _apply_euromod_to_axiom_input_bridge(
+        [capped_case],
+        [EngineResult("euromod", capped_case.case_id, {"yem": 63_024})],
+    )
+
+    assert bridged_capped_case.metadata["axiom_inputs"][
+        uncapped_daily_input
+    ] == pytest.approx(202)
+    assert bridged_capped_case.metadata["axiom_inputs"][
+        capped_daily_input
+    ] == pytest.approx(183.13)
+    assert bridged_capped_case.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        uncapped_daily_input: 202,
+    }
     assert {case.period for case in cases} == {"2025"}
 
 
 def test_belgium_maternity_leave_suite_defines_oracle_concept_and_bridge() -> None:
     cases = load_suite("be-maternity-leave")
 
-    assert len(cases) == 2
+    assert len(cases) == 3
     assert {case.locale for case in cases} == {"BE"}
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
@@ -753,7 +783,8 @@ def test_belgium_maternity_leave_suite_defines_oracle_concept_and_bridge() -> No
         "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
     )
     assert {case.metadata["scenario"] for case in cases} == {
-        "maternity-leave-employed-under-cap"
+        "maternity-leave-employed-under-cap",
+        "maternity-leave-employed-capped",
     }
     assert {tuple(case.metadata["euromod_switches"]) for case in cases} == {
         (("PBE", True),)
@@ -812,6 +843,35 @@ def test_belgium_maternity_leave_suite_defines_oracle_concept_and_bridge() -> No
     assert bridged_case.metadata["euromod_to_axiom_input_bridge_applied"] == {
         uncapped_daily_input: 100,
         capped_daily_input: 100,
+    }
+    capped_case = cases[2]
+    assert capped_case.case_id == "be-maternity-leave-mother-60k-capped"
+    assert capped_case.metadata["axiom_inputs"][uncapped_daily_input] == pytest.approx(
+        60_000 / 312
+    )
+    assert capped_case.metadata["axiom_inputs"][capped_daily_input] == pytest.approx(
+        183.13
+    )
+    assert capped_case.metadata["euromod_to_axiom_input_bridge"] == {
+        "yem": {
+            "inputs": [uncapped_daily_input],
+            "divide_by": 312,
+        }
+    }
+
+    (bridged_capped_case,) = _apply_euromod_to_axiom_input_bridge(
+        [capped_case],
+        [EngineResult("euromod", capped_case.case_id, {"yem": 63_024})],
+    )
+
+    assert bridged_capped_case.metadata["axiom_inputs"][
+        uncapped_daily_input
+    ] == pytest.approx(202)
+    assert bridged_capped_case.metadata["axiom_inputs"][
+        capped_daily_input
+    ] == pytest.approx(183.13)
+    assert bridged_capped_case.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        uncapped_daily_input: 202,
     }
     assert {case.period for case in cases} == {"2025"}
 
