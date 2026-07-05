@@ -1310,6 +1310,65 @@ mappings:
     comparison: money
     rationale: Same Personal Independence Payment total as the sum of daily-living and mobility components; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
 
+  - legal_id: uk:policies/govuk/personal-independence-payment#pip_daily_living_weekly_amount
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: pip_dl
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Personal Independence Payment daily-living component after selecting the standard, enhanced, or nil Regulation 24 rate from the frozen award category; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:policies/govuk/personal-independence-payment#pip_mobility_weekly_amount
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: pip_m
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Personal Independence Payment mobility component after selecting the standard, enhanced, or nil Regulation 24 rate from the frozen award category; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:policies/govuk/personal-independence-payment#personal_independence_payment_weekly_total
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: pip
+    entity: person
+    period: week
+    unit: GBP
+    comparison: money
+    rationale: Same Personal Independence Payment total as the sum of daily-living and mobility components; the UK oracle converts PolicyEngine UK's annual value to a weekly amount for comparison.
+
+  - legal_id: uk:policies/govuk/personal-independence-payment#receives_enhanced_daily_living_component
+    country: uk
+    program: pip
+    mapping_type: direct_variable
+    policyengine_variable: receives_enhanced_pip_dl
+    entity: person
+    period: week
+    comparison: boolean
+    rationale: Same enhanced daily-living receipt indicator, with PolicyEngine UK treating the PIP daily-living award category as a person input.
+
+  - legal_id: uk:policies/govuk/personal-independence-payment#personal_independence_payment_annual_amount
+    country: uk
+    program: pip
+    mapping_type: not_comparable
+    comparable: false
+    candidate_priority: P4
+    rationale: Annualization of the weekly Personal Independence Payment total for a final-amount wrapper; the UK oracle compares the weekly total against PolicyEngine UK's annual pip divided by 52, so this annual restatement is not a separate oracle target.
+
+  - legal_id: uk:policies/govuk/personal-independence-payment#personal_independence_payment_weeks_in_year
+    country: uk
+    program: pip
+    mapping_type: not_comparable
+    comparable: false
+    candidate_priority: P4
+    rationale: Source-backed annualization helper for the policy-level final amount wrapper; PolicyEngine exposes the final Personal Independence Payment variable and weekly component rates, not this multiplication factor as a separate oracle target.
+
   - legal_id: uk:regulations/uksi/2026/148/article/14#dla_self_care_higher_substituted_amount
     country: uk
     program: dla
