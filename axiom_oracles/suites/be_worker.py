@@ -15,6 +15,8 @@ SSC_MODULE = "be:regulations/social_security/workers/employee_contributions"
 EMPLOYER_SSC_MODULE = "be:regulations/social_security/workers/employer_contributions"
 WORK_BONUS_MODULE = "be:regulations/social_security/workers/work_bonus"
 EUROMOD_TAX_INCOME_LIST_MODULE = "be:policies/euromod_tax_income_list"
+EUROMOD_DISPOSABLE_INCOME_LIST_MODULE = "be:policies/euromod_disposable_income_list"
+SPECIAL_CONTRIBUTION_MODULE = "be:statutes/social_security/special_contribution"
 EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 WORK_BONUS_REFERENCE_INPUT = (
     f"{WORK_BONUS_MODULE}#input."
@@ -38,6 +40,21 @@ def be_worker_tax_income_list_cases() -> list[Case]:
     return [
         _single_worker_tax_income_list_case("be-worker-tax-income-list-30k", 30_000.0),
         _single_worker_tax_income_list_case("be-worker-tax-income-list-60k", 60_000.0),
+    ]
+
+
+def be_worker_disposable_income_list_cases() -> list[Case]:
+    """Single-worker Belgium disposable-income cases for EUROMOD BE_2025."""
+
+    return [
+        _single_worker_disposable_income_list_case(
+            "be-worker-disposable-income-list-30k",
+            30_000.0,
+        ),
+        _single_worker_disposable_income_list_case(
+            "be-worker-disposable-income-list-55k",
+            55_000.0,
+        ),
     ]
 
 
@@ -123,6 +140,72 @@ def _single_worker_tax_income_list_case(case_id: str, annual_income: float) -> C
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": [remuneration_input],
                 "yemeq_s": [WORK_BONUS_REFERENCE_INPUT],
+            },
+        },
+    )
+
+
+def _single_worker_disposable_income_list_case(
+    case_id: str,
+    annual_income: float,
+) -> Case:
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
+    original_income_input = _disposable_income_list_input(
+        "belgium_euromod_ils_dispy_supplied_original_income_annual_amount"
+    )
+    special_contribution_income_input = _special_contribution_input(
+        "belgium_special_social_security_article_107_household_income"
+    )
+    return _single_worker_case(
+        case_id,
+        annual_income,
+        output=Concepts.BE_EUROMOD_ILS_DISPY_WORKER_PIT_SIC_PILOT,
+        axiom_inputs={
+            original_income_input: annual_income,
+            _disposable_income_list_input(
+                "belgium_euromod_ils_dispy_supplied_benefit_annual_amount"
+            ): 0,
+            _disposable_income_list_input(
+                "belgium_euromod_ils_dispy_supplied_other_social_insurance_contribution_annual_amount"
+            ): 0,
+            remuneration_input: annual_income,
+            WORK_BONUS_REFERENCE_INPUT: 0,
+            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
+            ): 0,
+            _pit_input(
+                "belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies"
+            ): False,
+            _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
+            _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
+            _tax_income_list_input("belgium_euromod_ils_tax_include_pit_component"): True,
+            _tax_income_list_input(
+                "belgium_euromod_ils_tax_supplied_capital_income_tax_annual_amount"
+            ): 0,
+            _tax_income_list_input(
+                "belgium_euromod_ils_tax_supplied_property_tax_annual_amount"
+            ): 0,
+            _special_contribution_input(
+                "belgium_special_social_security_household_has_article_106_person"
+            ): True,
+            _special_contribution_input(
+                "belgium_special_social_security_joint_assessment"
+            ): False,
+            special_contribution_income_input: annual_income,
+            _special_contribution_input(
+                "belgium_special_social_security_article_110_retained_or_supplement_paid"
+            ): 0,
+        },
+        metadata_extra={
+            "axiom_entity": "Household",
+            "axiom_entity_id": "household",
+            "scenario": "single-worker-disposable-income-list",
+            "yearly_earned_income": annual_income,
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "yem": [original_income_input, remuneration_input],
+                "yemeq_s": [WORK_BONUS_REFERENCE_INPUT],
+                "il_taxabley": [special_contribution_income_input],
             },
         },
     )
@@ -237,6 +320,14 @@ def _employer_ssc_input(name: str) -> str:
 
 def _tax_income_list_input(name: str) -> str:
     return f"{EUROMOD_TAX_INCOME_LIST_MODULE}#input.{name}"
+
+
+def _disposable_income_list_input(name: str) -> str:
+    return f"{EUROMOD_DISPOSABLE_INCOME_LIST_MODULE}#input.{name}"
+
+
+def _special_contribution_input(name: str) -> str:
+    return f"{SPECIAL_CONTRIBUTION_MODULE}#input.{name}"
 
 
 def _euromod_worker_input(annual_income: float) -> dict[str, float | int]:

@@ -438,6 +438,29 @@ concepts:
           type: country
           geoid: BE
 
+  be:policies/euromod_disposable_income_list#belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount:
+    description: Belgium EUROMOD ils_dispy worker PIT and social-insurance pilot aggregate
+    category: disposable_income
+    comparison: amount
+    tolerance: 15
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: BE
+
   be:statutes/social_integration/payable_amount#belgium_social_integration_income_support_annual_amount:
     description: Belgium social integration income support
     category: benefits
