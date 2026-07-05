@@ -152,9 +152,7 @@ SDA_FINAL_BASE = "uk:policies/govuk/severe-disablement-allowance"
 DLA_FINAL_PROGRAM_PATH = Path("policies/govuk/disability-living-allowance.yaml")
 DLA_FINAL_BASE = "uk:policies/govuk/disability-living-allowance"
 PIP_FINAL_PROGRAM_PATH = Path("policies/govuk/personal-independence-payment.yaml")
-PIP_STATUTE_77_BASE = "uk:statutes/ukpga/2012/5/77"
-PIP_STATUTE_78_BASE = "uk:statutes/ukpga/2012/5/78"
-PIP_STATUTE_79_BASE = "uk:statutes/ukpga/2012/5/79"
+PIP_FINAL_BASE = "uk:policies/govuk/personal-independence-payment"
 
 PERSONAL_ALLOWANCE_OUTPUTS = {
     "personal_allowance": {
@@ -838,25 +836,25 @@ DLA_FINAL_OUTPUTS = {
 
 PIP_FINAL_OUTPUTS = {
     "pip_daily_living_component_weekly_amount": {
-        "axiom": f"{PIP_STATUTE_78_BASE}#pip_daily_living_component_weekly_amount",
+        "axiom": f"{PIP_FINAL_BASE}#pip_daily_living_component_weekly_amount",
         "pe": "pip_dl",
         "pe_transform": "annual_to_weekly",
         "tolerance": 0.01,
     },
     "pip_mobility_component_weekly_amount": {
-        "axiom": f"{PIP_STATUTE_79_BASE}#pip_mobility_component_weekly_amount",
+        "axiom": f"{PIP_FINAL_BASE}#pip_mobility_component_weekly_amount",
         "pe": "pip_m",
         "pe_transform": "annual_to_weekly",
         "tolerance": 0.01,
     },
     "personal_independence_payment_weekly_amount": {
-        "axiom": f"{PIP_STATUTE_77_BASE}#personal_independence_payment_weekly_amount",
+        "axiom": f"{PIP_FINAL_BASE}#personal_independence_payment_weekly_amount",
         "pe": "pip",
         "pe_transform": "annual_to_weekly",
         "tolerance": 0.01,
     },
-    "pip_daily_living_enhanced_rate_entitlement": {
-        "axiom": f"{PIP_STATUTE_78_BASE}#pip_daily_living_enhanced_rate_entitlement",
+    "receives_enhanced_daily_living_component": {
+        "axiom": f"{PIP_FINAL_BASE}#receives_enhanced_daily_living_component",
         "pe": "receives_enhanced_pip_dl",
         "tolerance": 0.01,
     },
@@ -6742,43 +6740,29 @@ def project_sda_final_inputs(row: Any) -> dict[str, Any]:
 
 
 def project_pip_final_inputs(row: Any) -> dict[str, Any]:
-    """Project PolicyEngine UK's frozen PIP category inputs into the Welfare
-    Reform Act 2012 sections 78 and 79 entitlement leaves.
+    """Project PolicyEngine UK's frozen PIP award categories into the compare
+    wrapper's daily-living and mobility rate-band leaves.
 
     PolicyEngine UK treats the daily-living and mobility award categories
     (``pip_dl_category``/``pip_m_category``: STANDARD/ENHANCED/NONE) as person
-    inputs and applies the Regulation 24 rate to them, with no eligibility
-    formula. The commensurable comparison is therefore rate-application given
-    category: the enhanced category maps to the severely-limited limb, the
-    standard category to the limited limb, and both entitlement limbs require
-    the required-period condition. The mobility component additionally requires
-    the prescribed-age condition, which PolicyEngine's category input already
-    encodes implicitly (a nonzero mobility category means the age condition is
-    met), so it is projected true whenever a mobility component is awarded.
+    inputs and applies the Regulation 24 weekly rate to them, with no
+    eligibility formula and no take-up gate. The compare wrapper mirrors the
+    Welfare Reform Act 2012 sections 78 and 79 rate selection from the same
+    frozen award band, so the commensurable comparison is rate application given
+    category: the enhanced category selects the enhanced weekly rate, the
+    standard category the standard weekly rate, and NONE a nil amount.
     """
     daily_living_category = enum_name(row_value(row, "pip_dl_category", "NONE")).upper()
     mobility_category = enum_name(row_value(row, "pip_m_category", "NONE")).upper()
-    daily_living_enhanced = daily_living_category == "ENHANCED"
-    daily_living_standard = daily_living_category == "STANDARD"
-    daily_living_awarded = daily_living_enhanced or daily_living_standard
-    mobility_enhanced = mobility_category == "ENHANCED"
-    mobility_standard = mobility_category == "STANDARD"
-    mobility_awarded = mobility_enhanced or mobility_standard
     return {
-        f"{PIP_STATUTE_78_BASE}#input."
-        "ability_to_carry_out_daily_living_activities_is_limited_by_physical_or_mental_condition": daily_living_awarded,
-        f"{PIP_STATUTE_78_BASE}#input."
-        "ability_to_carry_out_daily_living_activities_is_severely_limited_by_physical_or_mental_condition": daily_living_enhanced,
-        f"{PIP_STATUTE_78_BASE}#input."
-        "required_period_condition_met_for_daily_living_component": daily_living_awarded,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "person_is_of_or_over_age_prescribed_for_mobility_component": mobility_awarded,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "ability_to_carry_out_mobility_activities_is_limited_by_physical_or_mental_condition": mobility_awarded,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "ability_to_carry_out_mobility_activities_is_severely_limited_by_physical_or_mental_condition": mobility_enhanced,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "required_period_condition_met_for_mobility_component": mobility_awarded,
+        f"{PIP_FINAL_BASE}#input.daily_living_is_enhanced_rate": daily_living_category
+        == "ENHANCED",
+        f"{PIP_FINAL_BASE}#input.daily_living_is_standard_rate": daily_living_category
+        == "STANDARD",
+        f"{PIP_FINAL_BASE}#input.mobility_is_enhanced_rate": mobility_category
+        == "ENHANCED",
+        f"{PIP_FINAL_BASE}#input.mobility_is_standard_rate": mobility_category
+        == "STANDARD",
     }
 
 
@@ -7305,19 +7289,18 @@ def compare_outputs(
             "included in the final comparison.",
             "PolicyEngine-aligned Personal Independence Payment final comparison "
             "projects PolicyEngine UK's frozen daily-living and mobility award "
-            "categories into the Welfare Reform Act 2012 sections 78 and 79 "
-            "entitlement leaves — enhanced maps to the severely-limited limb, "
-            "standard to the limited limb, both requiring the required-period "
-            "condition, and the mobility age condition is projected true when a "
-            "mobility component is awarded. It then compares the resulting "
-            "weekly daily-living and mobility components, the aggregate weekly "
-            "Personal Independence Payment, and enhanced daily-living receipt "
-            "against PolicyEngine's annual pip_dl, pip_m, and pip divided by 52 "
-            "and its receives_enhanced_pip_dl boolean. PolicyEngine models PIP "
-            "as rate-from-frozen-category with no eligibility formula and no "
-            "take-up gate, so descriptor scoring, residence, and hospital or "
-            "care-home suspensions remain outside this rate-application "
-            "comparison.",
+            "categories into the compare wrapper's rate-band leaves — enhanced "
+            "selects the enhanced Regulation 24 weekly rate, standard the "
+            "standard weekly rate, and NONE a nil amount, mirroring the Welfare "
+            "Reform Act 2012 sections 78 and 79 rate selection. It then compares "
+            "the resulting weekly daily-living and mobility components, the "
+            "aggregate weekly Personal Independence Payment, and enhanced "
+            "daily-living receipt against PolicyEngine's annual pip_dl, pip_m, "
+            "and pip divided by 52 and its receives_enhanced_pip_dl boolean. "
+            "PolicyEngine models PIP as rate-from-frozen-category with no "
+            "eligibility formula and no take-up gate, so descriptor scoring, "
+            "residence, and hospital or care-home suspensions remain outside "
+            "this rate-application comparison.",
             "When a local UK .h5 predates the PolicyEngine UK disability "
             "category-input migration, the oracle derives PIP, DLA, and "
             "Attendance Allowance category inputs in memory from reported "

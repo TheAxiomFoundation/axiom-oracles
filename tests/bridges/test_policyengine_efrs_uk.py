@@ -67,9 +67,8 @@ from axiom_oracles.bridges.efrs_uk import (
     PERSONAL_ALLOWANCE_BASE,
     PERSONAL_ALLOWANCE_OUTPUTS,
     PERSONAL_ALLOWANCE_PROGRAM_PATH,
+    PIP_FINAL_BASE,
     PIP_FINAL_OUTPUTS,
-    PIP_STATUTE_78_BASE,
-    PIP_STATUTE_79_BASE,
     SCOTTISH_CHILD_PAYMENT_FINAL_BASE,
     SCOTTISH_CHILD_PAYMENT_FINAL_OUTPUTS,
     SDA_FINAL_BASE,
@@ -2722,32 +2721,20 @@ def test_dla_final_request_projects_final_inputs():
     ] == {"kind": "bool", "value": True}
 
 
-def test_pip_final_projection_maps_categories_to_statutory_leaves():
+def test_pip_final_projection_maps_categories_to_rate_band_leaves():
     from axiom_oracles.bridges.efrs_uk import project_pip_final_inputs
 
-    enhanced = project_pip_final_inputs(
+    mixed = project_pip_final_inputs(
         {"pip_dl_category": "ENHANCED", "pip_m_category": "STANDARD"}
     )
-    assert enhanced == {
-        f"{PIP_STATUTE_78_BASE}#input."
-        "ability_to_carry_out_daily_living_activities_is_limited_by_physical_or_mental_condition": True,
-        f"{PIP_STATUTE_78_BASE}#input."
-        "ability_to_carry_out_daily_living_activities_is_severely_limited_by_physical_or_mental_condition": True,
-        f"{PIP_STATUTE_78_BASE}#input."
-        "required_period_condition_met_for_daily_living_component": True,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "person_is_of_or_over_age_prescribed_for_mobility_component": True,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "ability_to_carry_out_mobility_activities_is_limited_by_physical_or_mental_condition": True,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "ability_to_carry_out_mobility_activities_is_severely_limited_by_physical_or_mental_condition": False,
-        f"{PIP_STATUTE_79_BASE}#input."
-        "required_period_condition_met_for_mobility_component": True,
+    assert mixed == {
+        f"{PIP_FINAL_BASE}#input.daily_living_is_enhanced_rate": True,
+        f"{PIP_FINAL_BASE}#input.daily_living_is_standard_rate": False,
+        f"{PIP_FINAL_BASE}#input.mobility_is_enhanced_rate": False,
+        f"{PIP_FINAL_BASE}#input.mobility_is_standard_rate": True,
     }
 
-    nil = project_pip_final_inputs(
-        {"pip_dl_category": "NONE", "pip_m_category": "NONE"}
-    )
+    nil = project_pip_final_inputs({"pip_dl_category": "NONE", "pip_m_category": "NONE"})
     assert all(value is False for value in nil.values())
 
 
@@ -2795,7 +2782,7 @@ def test_pip_final_request_projects_final_inputs():
                 PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_amount"][
                     "axiom"
                 ],
-                PIP_FINAL_OUTPUTS["pip_daily_living_enhanced_rate_entitlement"]["axiom"],
+                PIP_FINAL_OUTPUTS["receives_enhanced_daily_living_component"]["axiom"],
             ],
         }
     ]
@@ -2803,15 +2790,14 @@ def test_pip_final_request_projects_final_inputs():
         record["name"] + ":" + record["entity_id"]: record["value"]
         for record in request["dataset"]["inputs"]
     }
-    assert inputs[
-        f"{PIP_STATUTE_78_BASE}#input."
-        "ability_to_carry_out_daily_living_activities_is_severely_limited_by_physical_or_mental_condition"
-        ":person_2"
-    ] == {"kind": "bool", "value": True}
-    assert inputs[
-        f"{PIP_STATUTE_79_BASE}#input."
-        "person_is_of_or_over_age_prescribed_for_mobility_component:person_2"
-    ] == {"kind": "bool", "value": True}
+    assert inputs[f"{PIP_FINAL_BASE}#input.daily_living_is_enhanced_rate:person_2"] == {
+        "kind": "bool",
+        "value": True,
+    }
+    assert inputs[f"{PIP_FINAL_BASE}#input.mobility_is_enhanced_rate:person_2"] == {
+        "kind": "bool",
+        "value": True,
+    }
 
 
 def test_pension_credit_final_projection_uses_entitlement_components():
@@ -5445,7 +5431,7 @@ def test_compare_outputs_compares_pip_final_components_total_and_enhanced_receip
                         PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_amount"][
                             "axiom"
                         ]: decimal_output(194.60),
-                        PIP_FINAL_OUTPUTS["pip_daily_living_enhanced_rate_entitlement"][
+                        PIP_FINAL_OUTPUTS["receives_enhanced_daily_living_component"][
                             "axiom"
                         ]: judgment_output(True),
                     }
