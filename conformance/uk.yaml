@@ -294,6 +294,16 @@ policies:
     internal_only_vars:
       - i_bcrdi
     suite: null
+    note: 'BEN: Scottish Carer''s Allowance Supplement (from Sept 2018). The UK_2026 policy is switch=on
+      and computes a distinct payable instrument bcrdicm_s = the flat weekly supplement $CASupW, gated
+      on being a Carer''s Allowance recipient in Scotland (Elig_Cond (bcrdi>0) & (drgn1=12)); it then
+      sums bcrdi + bcrdicm_s into i_bcrdi for downstream means tests. It is a genuine comparable surface
+      (a flat supplement on a Scottish-carer case), NOT input-carrying — distinct from the boact_uk/PAA_uk
+      uprating- passthrough exclusions. Two properties bound its comparability: (i) eligibility keys off
+      bcrdi, the reported Carer''s Allowance data input, so a synthetic case must supply bcrdi>0 for the
+      supplement to fire; (ii) it is a devolved Scotland-only payment. Axiom has no Scottish CA Supplement
+      suite and rulespec-uk does not encode it (no Social Security (Scotland) Act 2018 CAS surface). Next-wave
+      uncovered surface (evidence: UK.xml UK_2026 bcrdicm_uk function body).'
   - id: uk:bdi_uk
     oracle_policy_name: bdi_uk
     oracle_policy_type: ben
@@ -363,6 +373,22 @@ policies:
       - i_bho_yesUC
       - i_excess_nRooms
     suite: null
+    note: 'BEN: Housing Benefit. The UK_2026 policy is switch=on and computes the full HB entitlement
+      bho_s from statute: applicable amount (personal allowances i_bho_PersAllow by age/couple/lone-parent
+      status + disability/carer/family premiums + child element with the two-child limit), the means test
+      ymn01_s, the 65% taper of excess income over the applicable amount, maximum HB = eligible rent (xhcrt
+      + xhcsc) less non-dependant deductions, and the size-criteria (bedroom-tax) 14%/25% reduction for
+      i_excess_nRooms excess rooms. This is a genuine benefit-unit comparable surface: rulespec-uk encodes
+      the composed HB entitlement pipeline (housing_benefit_composed_entitlement_pipeline, rulespec-uk#83),
+      so bho_s is the parity target on synthetic HHoT renter cases (rent/tenure supplied through the projection
+      layer''s xhcrt/xhcsc + amrtn, bedroom counts through amrrm/bhoro). Like UC/PC/ir-ESA, bho_s embeds
+      UKMOD''s take-up correction (the "fully random" and "based on observed take-up" functions are switch-type
+      and the observed path gates on the bho data input, absent on synthetic households) and a UC-transition
+      that can zero a would-be award away from statutory entitlement; the clean pre-correction value is
+      i_bho_noUC. Those points need take-up/UC-transition dispositions (upstream_engine_gap, as in uk-universal-credit
+      and uk-pension-credit; take-up recharacterization per or#168/or#170). Next-wave uncovered surface
+      pending a bho_s comparison built against the #83 pipeline (evidence: UK.xml UK_2026 bho_uk function
+      body).'
   - id: uk:bhosc01_uk
     oracle_policy_name: bhosc01_uk
     oracle_policy_type: ben
@@ -370,6 +396,16 @@ policies:
       - bhosc01_s
     in_scope: true
     suite: null
+    note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. The UK_2026 policy
+      is switch=on and computes a distinct payable bhosc01_s: for a Scottish social renter (amrtn=5 &
+      drgn1=12 & dhr=1) subject to the bedroom tax it pays back the size-criteria reduction (14% of (xhcrt
+      + xhcsc) for one excess room, 25% for more), gated on being on HB (bho_s>0) or UC (bsauc_s>0), plus
+      a benefit- cap top-up limited to housing costs xhc_hbai. It is a real comparable surface, but three
+      properties make it a later-wave target than bho_uk: (i) it is fully downstream of bho_s/bsauc_s
+      and the excess-room count i_excess_nRooms, so it can only be compared once the HB/UC housing surfaces
+      are covered; (ii) it is devolved Scotland-only (Discretionary Housing Payments (Scotland) Regulations);
+      (iii) rulespec-uk does not encode Scottish DHP bedroom-tax mitigation. Next-wave uncovered surface,
+      sequenced after bho_uk (evidence: UK.xml UK_2026 bhosc01_uk function body).'
   - id: uk:bmact_uk
     oracle_policy_name: bmact_uk
     oracle_policy_type: ben
@@ -517,6 +553,20 @@ policies:
       - boaht_s
     in_scope: true
     suite: null
+    note: 'BEN: Pensioner''s annual heating allowance (Winter Fuel Payment). The UK_2026 policy is switch=on
+      and computes a distinct payable boaht_s at benefit-unit level: a base amount if anyone in the unit
+      is of state-pension age ($WFA, with an additional $WFAAdd80 where anyone is 80+), on separate England/Wales
+      (drgn1!=12) and Scotland (drgn1=12, $WFASc/$WFAAdd80Sc) branches from 2025, then allocated across
+      pension-age members. It reflects the 2024/25 means-testing reform: every BenCalc comp_Cond now carries
+      il_toty < amount#3 ($WFCBThresh) so the payment is withdrawn above the income claw-back threshold
+      — the policy is no longer a universal pensioner payment. It is a genuine comparable surface (a household
+      age + income-threshold gate on synthetic pensioner cases; no leave-spell or receipt-history column
+      required). rulespec-uk encodes the England/Wales amounts in the Social Fund Winter Fuel Payment
+      Regulations 2025 (SI 2025/969 reg 3: GBP 200 under-80, GBP 300 at-80), matching UKMOD''s $WFA (200)
+      + $WFAAdd80 (100). Uncovered because there is not yet a composed winter-fuel award pipeline wiring
+      the means-test gate + age branches into a boaht_s parity target; the encoded reg-3 amounts are the
+      building block. Next-wave uncovered surface (evidence: UK.xml UK_2026 boaht_uk function body and
+      ConstDef_uk $WFA/$WFAAdd80/$WFASc/$WFCBThresh).'
   - id: uk:bpact_uk
     oracle_policy_name: bpact_uk
     oracle_policy_type: ben
@@ -641,6 +691,19 @@ policies:
       - i_bsadi_s_ftu
       - i_bsadi_probtu
     suite: null
+    note: 'BEN: Social Assistance (income-related Employment and Support Allowance). The UK_2026 policy
+      is switch=on and computes the full ir-ESA entitlement bsadi_s from statute: applicable amount (personal
+      allowances i_bsadi_PersAllow + severe-disability/carer/enhanced-disability premiums), the limited-
+      capability-for-work eligibility gate (ddipd/ddi02 with a capital and hours test), the means deduction
+      il_IS_means, housing-cost non-dependant deductions, and the Support/WRAG additional components ($ESAsup/$ESAwra
+      into bsadi00_s/bsadi01_s), netted against contributory ESA (bdict02). It is a genuine benefit-unit
+      comparable surface (a disability + income + housing case; the LCW status is supplied through ddipd,
+      a documented input flag rather than a receipt-history spell). Like bho_uk/UC/PC, bsadi_s embeds
+      UKMOD''s take-up correction (switch-type "fully random" + observed-take-up functions, the latter
+      gating on the bsadi data input) and a UC-transition that can zero the award away from statutory
+      entitlement; the clean pre-transition value is i_bsadi_noUC. Those points need take-up/UC-transition
+      dispositions (upstream_engine_gap; recharacterization per or#168/or#170). rulespec-uk does not yet
+      encode ir-ESA. Next-wave uncovered surface (evidence: UK.xml UK_2026 bsadi_uk function body).'
   - id: uk:bsaec_uk
     oracle_policy_name: bsaec_uk
     oracle_policy_type: ben
@@ -705,6 +768,19 @@ policies:
     internal_only_vars:
       - i_bunct_IncDisregard
     suite: null
+    note: 'BEN: Contributory unemployment benefit (contribution-based Jobseeker''s Allowance). The UK_2026
+      policy is switch=on and, once eligible, computes a distinct payable bunct_s from statute (age-banded
+      rate $JSARate1824/$JSARate withdrawn pound-for-pound against the pension/earnings disregard base
+      i_bunct_IncDisregard) — so it is NOT input-carrying. But eligibility is data-gated on the reported
+      benefit-receipt input: the "eligibility fully simulated" Elig function is switch=OFF (its own comment
+      warns it "will SEVERELY overestimate eligibility"), and the active path derives the qualifying-months
+      variable liwmy_s from (bunct>0) receipt or an (les=5) unemployment status plus a liwwh work-history
+      threshold, then gates the final Elig on liwmy_s>=$UB_QperMin. On a synthetic HHoT case with no bunct
+      receipt and no liwwh/liwmy employment-history column, bunct_s cannot fire from statute alone. So
+      it is comparable only for cases that supply the receipt/history inputs (testing UKMOD''s rate and
+      withdrawal arithmetic, not its eligibility). rulespec-uk does not encode contributory JSA. Next-wave
+      uncovered surface, comparable only under supplied-receipt cases (evidence: UK.xml UK_2026 bunct_uk
+      function body; switch states on the eligibility functions).'
   - id: uk:bwkmt_bfamt_uk
     oracle_policy_name: bwkmt_bfamt_uk
     oracle_policy_type: ben
@@ -748,6 +824,18 @@ policies:
       - i_bwkmt_probtr
       - i_bwkmt_yesUC
     suite: null
+    note: 'BEN: Tax credits (Working Tax Credit and Child Tax Credit). The UK_2026 policy is switch=on
+      and computes the full legacy tax-credit entitlements from statute: WTC bwkmt_s (basic + couple/lone-parent
+      + 30-hour + disability + childcare elements i_bwkmt_ChildCare, capped 70% of xcc) and CTC bfamt_s
+      (family + per-child elements with the two-child limit), jointly income-tested with the shared taper
+      and withdrawal (i_bwkmt_bfamt_withdrawnAmt). These are genuine benefit-unit comparable surfaces
+      computed from ordinary inputs (hours lhw, income, children nDepChInTu, childcare xcc, disability
+      il_disab). Like bho_uk/ir-ESA, both outputs carry UKMOD''s take-up correction (switch-type "fully
+      random" + observed- take-up functions gating on the bwkmt/bfamt data inputs) and a UC-transition
+      that can zero the award away from statutory entitlement; the clean pre-transition values are i_bwkmt_noUC/i_bfamt_noUC.
+      Those points need take-up/UC-transition dispositions (upstream_engine_gap; recharacterization per
+      or#168/or#170). rulespec-uk does not yet encode WTC/CTC (legacy tax credits are being wound down
+      into UC). Next-wave uncovered surface (evidence: UK.xml UK_2026 bwkmt_bfamt_uk function body).'
   - id: uk:cjrs_uk
     oracle_policy_name: cjrs_uk
     oracle_policy_type: ben
@@ -953,6 +1041,19 @@ policies:
       - i_tinta_IncExcess2
       - i_tinta_PersAllow
     suite: null
+    note: 'TAX: Personal tax allowance. The UK_2026 policy is switch=on and computes the final personal
+      allowance tinta_s = preliminary allowance $ITPerAll less the income-limit taper (half of taxable
+      income il_tinty in excess of $ITAllLim, floored at zero) — i.e. the Income Tax Act 2007 s.35(1)-(3)
+      allowance with its adjusted-net-income withdrawal. This is a genuine, cleanly comparable surface:
+      it needs only an income sweep on a single individual (no household structure, receipt history, or
+      take-up draw), so it is the most directly gradable of the uncovered UK surfaces. rulespec-uk already
+      encodes exactly this computation — uk_pit_pilot_personal_allowance in pilot_worker_oracle_pipeline
+      is ceil(max(0, personal_allowance_base_amount - max(0, adjusted_net_income - 100000)/2)) against
+      ITA 2007 s.35 — but it is currently an intermediate of the composed worker-PIT pipeline (feeding
+      uk-worker-pit on the final liability tin_s), not exposed as a standalone tinta_s parity target.
+      Uncovered until a personal-allowance comparison surfaces uk_pit_pilot_personal_allowance against
+      tinta_s directly. Ready next-wave target (evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk
+      s.35 encoding).'
   - id: uk:tpcee_uk
     oracle_policy_name: tpcee_uk
     oracle_policy_type: def
