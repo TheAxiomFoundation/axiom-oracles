@@ -1705,9 +1705,17 @@ def test_axiom_tax_projection_computes_itemized_leaves_and_colorado_tax_wiring()
             "adjusted_gross_income_determined_without_regard_to_sections_86_85_c_135_137_221_911_931_933"
         ]["versions"][0]["formula"]
     )
+    # The 39-22-104(3)(p) addback reaches only the section 63
+    # itemized-or-standard deduction, not the other current-law deductions.
     assert (
-        "current_law_deductions_if_not_itemizing"
+        "standard_deduction"
         in generated_rules_by_name["co_taxable_income_deductions_for_addback"][
+            "versions"
+        ][0]["formula"]
+    )
+    assert (
+        "current_law_deductions"
+        not in generated_rules_by_name["co_taxable_income_deductions_for_addback"][
             "versions"
         ][0]["formula"]
     )

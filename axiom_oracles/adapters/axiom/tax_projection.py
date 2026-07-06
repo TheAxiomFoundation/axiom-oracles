@@ -2237,10 +2237,13 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="C.R.S. 39-22-104(3)(p), federal deductions subject to Colorado addback",
+        # The addback reaches only the section 63 itemized-or-standard
+        # deduction; the other current-law deductions (199A, 170(p), tips,
+        # overtime, car-loan interest, senior bonus) stay out of it.
         formula=(
             "if individual_makes_election_to_itemize_deductions_for_taxable_year: "
-            "current_law_deductions_if_itemizing "
-            "else: current_law_deductions_if_not_itemizing"
+            "itemized_taxable_income_deductions "
+            "else: standard_deduction"
         ),
     ),
     _generated_tax_unit_rule(
@@ -3425,6 +3428,22 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
     return replace(case, metadata=metadata)
 
 
+def _sum_dividends(entities) -> float:
+    """Total dividends, never less than the qualified split.
+
+    ECPS rows sometimes carry only the qualified-dividend leaf; qualified
+    dividends are a subset of total dividends, so the ordinary total is at
+    least the qualified amount.
+    """
+    return sum(
+        max(
+            _number(entity.fact(Concepts.DIVIDEND_INCOME, 0)),
+            _number(entity.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
+        )
+        for entity in entities
+    )
+
+
 def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, Any]]:
     head, spouse = _tax_filers(people)
     dependents = _tax_dependents(people, head, spouse)
@@ -3433,7 +3452,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     # Investment / unearned income pulled from the Case so Axiom matches what
     # PolicyEngine and TAXSIM see.
     earners = [person for person in (head, spouse) if person is not None]
-    filer_dividends = _sum_concept(earners, Concepts.DIVIDEND_INCOME)
+    filer_dividends = _sum_dividends(earners)
     filer_interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
     filer_short_capital_gains = _sum_concept(
         earners,
@@ -3455,7 +3474,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         people,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
-    tax_unit_dividends = _sum_concept(people, Concepts.DIVIDEND_INCOME)
+    tax_unit_dividends = _sum_dividends(people)
     tax_unit_interest = _sum_concept(people, Concepts.INTEREST_INCOME)
     filer_pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
     social_security = _sum_concept(people, Concepts.SOCIAL_SECURITY_BENEFITS)

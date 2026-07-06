@@ -366,3 +366,27 @@ def test_generic_input_record_to_dict_emits_scalar_value_spec() -> None:
     assert payload["value"] == {"kind": "bool", "value": True}
     assert payload["entity"] == "Household"
     assert payload["interval"] == interval
+
+
+def test_generic_input_record_coerces_bool_into_decimal_slot() -> None:
+    # A bool default reaching a numeric slot (dtype disagreement between the
+    # value heuristic and the compiled rule) must serialize as 0/1, not
+    # crash Decimal("False"). Regression for TN SNAP's
+    # existing_balance_still_owed_in_application_month.
+    interval = {"start": "2026-01-01", "end": "2026-01-31"}
+    absent = GenericInputRecord(
+        name="existing_balance_still_owed",
+        entity="Household",
+        entity_id="hh-1",
+        value=False,
+        dtype="Decimal",
+    )
+    present = GenericInputRecord(
+        name="existing_balance_still_owed",
+        entity="Household",
+        entity_id="hh-1",
+        value=True,
+        dtype="Decimal",
+    )
+    assert absent.to_dict(interval)["value"] == {"kind": "decimal", "value": "0"}
+    assert present.to_dict(interval)["value"] == {"kind": "decimal", "value": "1"}

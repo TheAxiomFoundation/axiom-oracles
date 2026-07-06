@@ -21,13 +21,12 @@ runner:
     period: 2026-01
     population: enhanced-cps
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/axiom-programs/us-fl/snap/fy-2026.yaml
+    axiom_program: $HOME/rulespec-us/programs/us-fl/snap/fy-2026.yaml
     axiom_composed_program: /tmp/fl-snap-composed.yaml
     axiom_compiled_program: /tmp/fl-snap-compiled.json
     axiom_rulespec_repo_roots: $HOME
     rulespec_roots:
       - $HOME/rulespec-us
-      - $HOME/rulespec-us-fl
     jurisdiction_fips: "12"
 
 artifacts:

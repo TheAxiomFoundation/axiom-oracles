@@ -298,6 +298,13 @@ def _scalar_value(value: Any, dtype: str) -> dict[str, Any]:
         return {"kind": "bool", "value": bool(value)}
     if dtype == "Integer":
         return {"kind": "integer", "value": int(value)}
+    # A bool reaching a numeric slot means the value default was chosen with
+    # a different (heuristic) dtype inference than the compiled rule's
+    # authoritative Decimal — the slot is genuinely numeric and the input is
+    # absent, so False→0 / True→1. (Seen on TN SNAP's
+    # existing_balance_still_owed_in_application_month: no prior claim → 0.)
+    if isinstance(value, bool):
+        value = int(value)
     # Default to decimal — money/decimal both use the same wrapper. The
     # engine's decimal parser rejects scientific notation, and str() emits
     # it for small floats (str(0.000098) == '9.8e-05'), so format through

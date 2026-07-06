@@ -15,8 +15,7 @@
       "suite": "al-snap-ecps",
       "report": "axiom-policyengine-al-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-al"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/al-snap-ecps.yaml"
     },
@@ -163,8 +162,7 @@
       "suite": "fl-snap-ecps",
       "report": "axiom-policyengine-fl-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-fl"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/fl-snap-ecps.yaml"
     },
@@ -196,8 +194,7 @@
       "suite": "ma-snap-ecps",
       "report": "axiom-policyengine-ma-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ma"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ma-snap-ecps.yaml"
     },
@@ -221,8 +218,7 @@
       "suite": "nc-snap-ecps",
       "report": "axiom-policyengine-nc-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-nc"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/nc-snap-ecps.yaml"
     },
@@ -272,8 +268,7 @@
       "suite": "sc-snap-ecps",
       "report": "axiom-policyengine-sc-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-sc"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/sc-snap-ecps.yaml"
     },
@@ -305,8 +300,7 @@
       "suite": "tn-snap-ecps",
       "report": "axiom-policyengine-tn-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-tn"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/tn-snap-ecps.yaml"
     },

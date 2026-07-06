@@ -51,7 +51,6 @@
    "fix_owner": "rulespec-us-ma",
    "kind": "amount_difference",
    "label": "PE-imputed MA TAFDC income plus categorical/BBCE input gaps",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "ma-snap-ecps"
   },
   {
@@ -60,7 +59,6 @@
    "fix_owner": "rulespec-us-ma",
    "kind": "eligibility_right_only",
    "label": "MA categorical/BBCE facts incomplete",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "ma-snap-ecps"
   },
   {
@@ -69,7 +67,6 @@
    "fix_owner": "rulespec-us-ma",
    "kind": "eligibility_left_only",
    "label": "MA gross-cap treatment divergence",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "ma-snap-ecps"
   },
   {
@@ -96,7 +93,6 @@
    "fix_owner": "rulespec-us-al",
    "kind": "amount_difference",
    "label": "PE-imputed AL TANF income plus small edges",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "al-snap-ecps"
   },
   {
@@ -105,7 +101,6 @@
    "fix_owner": "rulespec-us-al",
    "kind": "eligibility_left_only",
    "label": "Zero-weight TANF and disqualification edges",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "al-snap-ecps"
   },
   {
@@ -114,7 +109,6 @@
    "fix_owner": "investigation",
    "kind": "eligibility_right_only",
    "label": "Minimum-benefit eligibility edge, environment-sensitive",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "al-snap-ecps"
   },
   {
@@ -141,7 +135,6 @@
    "fix_owner": "rulespec-us-tn",
    "kind": "amount_difference",
    "label": "PE-imputed TN Families First income",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "tn-snap-ecps"
   },
   {
@@ -150,7 +143,6 @@
    "fix_owner": "rulespec-us-tn",
    "kind": "eligibility_left_only",
    "label": "Families First income pushes PE over the net-income edge",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "tn-snap-ecps"
   },
   {
@@ -177,7 +169,6 @@
    "fix_owner": "rulespec-us-sc",
    "kind": "amount_difference",
    "label": "PE-imputed SC TANF income plus minimum-benefit categorical cases",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "sc-snap-ecps"
   },
   {
@@ -186,7 +177,6 @@
    "fix_owner": "rulespec-us-sc",
    "kind": "eligibility_right_only",
    "label": "PE broader categorical path vs SC source",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "sc-snap-ecps"
   },
   {
@@ -195,7 +185,6 @@
    "fix_owner": "program-coverage",
    "kind": "eligibility_left_only",
    "label": "Zero-weight SC TANF income interaction",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "sc-snap-ecps"
   },
   {
@@ -214,7 +203,6 @@
    "fix_owner": "rulespec-us-nc",
    "kind": "amount_difference",
    "label": "Mostly small residuals; large ones are TANF-on-SSI",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "nc-snap-ecps"
   },
   {
@@ -223,7 +211,6 @@
    "fix_owner": "rulespec-us-nc",
    "kind": "eligibility_right_only",
    "label": "Monthly FPL table vs annual FPG ratio at the 200% limit",
-   "staleness_note": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
    "suite": "nc-snap-ecps"
   },
   {
@@ -253,10 +240,10 @@
   },
   {
    "concept": "us:tax/state-income-tax#liability",
-   "description": "134 of 1,201 Colorado tax units diverge on the refreshed oracle pair (policyengine 4.18.9 / policyengine-us 1.752.2; population grew from 926 to 1,201 units). Three classes: (1) 24 childless filers aged 18-24 \u2014 Colorado's HB21-1311 extension of the state EITC via the ARPA IRC 32(n)(1) mechanics is explicitly deferred in the encoding (39-22-123.5(2.7) deferred_outputs: federal mechanics not in copied context), so the composed program pays no credit where PolicyEngine does; encoder-side gap. (2) ~78 units with AGI above the $300k deduction-addback threshold diverge by a constant ~$17.60 = 4.4% x $400 (axiom high): one $400 federal-boundary item newly modeled or revalued in PE 1.752.2 vs the bridge's policyengine 4.4.4-era generated constants; addback caps (12k/16k/300k) verified identical; under trace, owner oracles-bridge. (3) ~30 family-credit composition edges (CO CTC / family affordability / EITC-adjacent), largest -$1,107 on an infant household. The suite previously read 920/926 on the stale 1.700.0 oracle.",
+   "description": "31 of 1,201 Colorado tax units diverge on the PE 4.18.9 oracle pair. 24 are childless filers aged 18-24: Colorado's HB21-1311 state-EITC extension via the ARPA IRC 32(n)(1) mechanics is explicitly deferred in the encoding (39-22-123.5(2.7) deferred_outputs), so the composed program pays no credit where PolicyEngine does \u2014 encoder-side gap. The remaining 7 are family-credit and subtraction composition edges (CO CTC / family affordability / EITC-adjacent; largest -$1,107 on an infant household). Two earlier classes were fixed in the bridge: the 39-22-104(3)(p) addback base wrongly included non-section-63 deductions (OBBBA car-loan interest etc.), and tax units carrying only a qualified-dividend leaf lost that income from axiom AGI.",
    "fix_owner": "oracles-bridge",
    "kind": "amount_difference",
-   "label": "Young-childless EITC (deferred branch), $400 high-earner boundary constant, family-credit edges",
+   "label": "Deferred young-childless EITC branch; 7 family-credit edges",
    "suite": "co-state-income-tax-ecps"
   },
   {
@@ -619,43 +606,46 @@
   },
   {
    "concept": "us:statutes/7/2014/u#snap_benefit",
-   "description": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
-   "fix_owner": "axiom-programs/axiom-encode",
+   "description": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
+   "fix_owner": "axiom-encode",
    "kind": "stale_run",
    "label": "SNAP regeneration blocked on rulespec restructure",
+   "staleness_note": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
    "suite": "az-snap-ecps"
   },
   {
    "concept": "us:statutes/7/2014/u#snap_benefit",
-   "description": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
-   "fix_owner": "axiom-programs/axiom-encode",
+   "description": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
+   "fix_owner": "axiom-encode",
    "kind": "stale_run",
    "label": "SNAP regeneration blocked on rulespec restructure",
-   "suite": "fl-snap-ecps"
-  },
-  {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
-   "description": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
-   "fix_owner": "axiom-programs/axiom-encode",
-   "kind": "stale_run",
-   "label": "SNAP regeneration blocked on rulespec restructure",
-   "suite": "ny-snap-ecps"
-  },
-  {
-   "concept": "us:statutes/7/2014/u#snap_benefit",
-   "description": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
-   "fix_owner": "axiom-programs/axiom-encode",
-   "kind": "stale_run",
-   "label": "SNAP regeneration blocked on rulespec restructure",
+   "staleness_note": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
    "suite": "or-snap-ecps"
   },
   {
    "concept": "us:statutes/7/2014/u#snap_benefit",
-   "description": "Blocked on the rulespec child-fragment restructure (#488): the SNAP earned-income deduction rate moved to us:statutes/7/2014/e/2/B and downstream compose specs / the axiom-encode harness still reference the pre-restructure layout, so regenerating on current law either fails or zeroes axiom eligibility. Report shows the last run on the pre-restructure corpus (policyengine-us 1.700.0 oracle) until the compose specs in axiom-programs and the axiom-encode pin are updated.",
-   "fix_owner": "axiom-programs/axiom-encode",
+   "description": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
+   "fix_owner": "axiom-encode",
    "kind": "stale_run",
    "label": "SNAP regeneration blocked on rulespec restructure",
+   "staleness_note": "Blocked: no compose spec in rulespec-us programs/ and no axiom-encode snap-harness jurisdiction config exists for this state, so the suite cannot regenerate against the restructured corpus. Report shows the last good run. Owner: encoder team (add the state compose spec or harness config).",
    "suite": "ut-snap-ecps"
+  },
+  {
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "description": "No SNAP compose spec exists at rulespec-us programs/us-fl/snap/ \u2014 Florida was never migrated into the monorepo (the archived axiom-programs had no FL spec either). Suite config points at the monorepo path for when a spec lands; until then it cannot compose. Owner: encoder team.",
+   "fix_owner": "axiom-encode",
+   "kind": "stale_run",
+   "label": "SNAP suite blocked",
+   "suite": "fl-snap-ecps"
+  },
+  {
+   "concept": "us:statutes/7/2014/u#snap_benefit",
+   "description": "Blocked by an upstream entity mismatch after the 7 CFR 273.9 restructure: the axiom-encode SNAP harness composes the NY state tree, where us-ny:regulations/18-nycrr/387/12/f/3/v/a#snap_standard_utility_allowance binds to the federal us:statutes/.../273/9#snap_standard_utility_allowance_state_option but their derived entities differ, so compile fails. Report shows the last good run. Owner: encoder team (reconcile the NY SUA entity with the federal state-option hook).",
+   "fix_owner": "axiom-encode",
+   "kind": "stale_run",
+   "label": "SNAP suite blocked",
+   "suite": "ny-snap-ecps"
   }
  ]
 }
