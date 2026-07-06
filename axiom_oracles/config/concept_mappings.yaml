@@ -811,6 +811,47 @@ concepts:
           type: country
           geoid: UK
 
+  uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement_net_of_charge:
+    description: UK Child Benefit annual entitlement net of the High Income Child Benefit Charge (family by child count and adjusted net income)
+    category: benefits
+    comparison: amount
+    # Axiom now encodes the High Income Child Benefit Charge (ITEPA 2003
+    # ss.681B-681H, corpus-grounded via axiom-corpus#221) on top of the gross
+    # SSCBA 1992 s.141 entitlement, and nets it off to a post-charge Child
+    # Benefit. This surface compares that net amount directly against UKMOD's
+    # paid Child Benefit bch_s alone: UKMOD applies the charge as the separate
+    # bchrd_uk clawback (bchrd_s) and nets it back into bch_s, so UKMOD's bch_s
+    # is already net of the clawback. Where the gross surface above sums
+    # [bch_s, bchrd_s] to reconstruct the pre-charge amount, this surface takes
+    # bch_s on its own — the two sides now both apply the charge, so no add-back
+    # is needed (rulespec-uk#75 closed). The Axiom side is driven by a supplied
+    # adjusted net income for the liable person; the suite's income sweep crosses
+    # the taper (£20k / £70k / £80k / £90k) so bch_s falls from the full
+    # entitlement to zero as the charge ramps to 100%. UKMOD annualises the
+    # weekly rate over 52.14 weeks while Axiom uses 52, the same systematic
+    # ~0.27% weeks-per-year convention residual as the gross surface; a 0.3%
+    # relative tolerance absorbs it while still catching structural gaps, and a
+    # £1 absolute floor covers float noise (including the near-zero net amounts
+    # at and beyond the full-clawback point).
+    tolerance: 1
+    relative_tolerance: 0.003
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_cb_pilot_annual_entitlement_net_of_charge
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bch_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount:
     description: UK Pension Credit household award (hypothetical pensioner benefit unit)
     category: benefits

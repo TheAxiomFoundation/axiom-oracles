@@ -37,12 +37,23 @@ Verified UKMOD conventions (executed against UKMOD_PUBLIC_B2026.03, UK_2026):
   x bch_s``, capped at ``bch_s``, and nets ``bchrd_s`` back into ``bch_s``. For
   UK_2026 the threshold is £60,000 with full clawback at £80,000 (verified: a
   one-child family at £70,000 has exactly 50% clawed back; at £80,000 the whole
-  entitlement is clawed back). The charge is not encoded on the Axiom side (its
-  ITEPA 2003 s.681B-H provisions are not in the corpus, rulespec-uk#75), so the
-  comparison bridges to UKMOD's pre-charge Child Benefit: the concept's euromod
-  target is the list ``[bch_s, bchrd_s]``, whose sum reconstructs the gross
-  entitlement (invariant to income: £1,410.46 for one child at every income
-  point, split between a paid ``bch_s`` and a clawed-back ``bchrd_s``).
+  entitlement is clawed back). The charge is now encoded on the Axiom side
+  (ITEPA 2003 ss.681B-681H, corpus-grounded via axiom-corpus#221 and
+  rulespec-uk#84), so this suite exposes two surfaces over the same grid:
+
+  * the gross, pre-charge comparison (``UK_CHILD_BENEFIT_ENTITLEMENT`` ->
+    ``uk_cb_pilot_annual_entitlement``), whose euromod target is the list
+    ``[bch_s, bchrd_s]``, summed to reconstruct the pre-charge amount (invariant
+    to income: £1,410.46 for one child at every income point, split between a
+    paid ``bch_s`` and a clawed-back ``bchrd_s``); and
+  * the net-of-charge comparison (``UK_CHILD_BENEFIT_NET_OF_CHARGE`` ->
+    ``uk_cb_pilot_annual_entitlement_net_of_charge``), whose euromod target is
+    ``bch_s`` alone — UKMOD's paid Child Benefit after it nets the ``bchrd_s``
+    clawback back into ``bch_s``. Both sides now apply the charge, so the net
+    surface compares directly with no add-back (this closes rulespec-uk#75).
+    Driven by the supplied adjusted net income, ``bch_s`` falls from the full
+    entitlement (£20k, below threshold) through 50% (£70k) to zero (£80k and
+    £90k, at and past full clawback).
 
 - Unlike the means-tested benefits (Universal Credit, Housing Benefit, Income
   Support, tax credits), Child Benefit does NOT consume UKMOD's stochastic
@@ -140,12 +151,22 @@ def _child_benefit_case(
             "head_annual_earnings": annual_income,
             "axiom_inputs": {
                 _cb_input("uk_cb_pilot_supplied_number_of_children"): children,
+                # The liable person's adjusted net income drives the High Income
+                # Child Benefit Charge taper (ITEPA 2003 ss.681B-681C). The
+                # single parent is the only adult, so their annual employment
+                # income is the adjusted net income for this slice; the sweep
+                # crosses the £60,000 threshold and the £80,000 full-clawback
+                # point, so the net surface exercises the taper end to end.
+                _cb_input("uk_cb_pilot_supplied_adjusted_net_income"): annual_income,
             },
             "euromod_inputs": rows,
             "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
         },
         entities=_entities(children=children, head_annual_income=annual_income),
-        outputs=(Concepts.UK_CHILD_BENEFIT_ENTITLEMENT,),
+        outputs=(
+            Concepts.UK_CHILD_BENEFIT_ENTITLEMENT,
+            Concepts.UK_CHILD_BENEFIT_NET_OF_CHARGE,
+        ),
     )
 
 

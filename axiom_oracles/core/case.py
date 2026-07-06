@@ -197,6 +197,17 @@ class Concepts:
         "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline"
         "#uk_cb_pilot_annual_entitlement"
     )
+    # Same composed Child Benefit pipeline, net of the High Income Child Benefit
+    # Charge (ITEPA 2003 ss.681B-681H, now corpus-encoded via axiom-corpus#221
+    # and rulespec-uk#84). The charge is netted off the s.141 gross entitlement
+    # to a post-charge amount, so this compares directly against UKMOD's paid
+    # bch_s alone (UKMOD nets its separately-reported bchrd_s clawback into
+    # bch_s), rather than reconstructing the pre-charge amount as bch_s + bchrd_s.
+    # This is the net-of-charge surface that closes rulespec-uk#75.
+    UK_CHILD_BENEFIT_NET_OF_CHARGE = (
+        "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline"
+        "#uk_cb_pilot_annual_entitlement_net_of_charge"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"
