@@ -516,90 +516,260 @@ a.register-tile:hover {
   flex-shrink: 0;
 }
 
-/* ── SNAP comparison panel ── */
-.snapx-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
-  gap: 4px 20px;
+/* ── Coverage register: verification ledger ── */
+.lg-body {
+  gap: 22px;
 }
-.snapx-row {
+.lg-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lg-grouphead {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.lg-grouptitle {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+.lg-rule {
+  flex: 1;
+  border-top: 1px solid var(--hairline);
+  transform: translateY(-3px);
+}
+.lg-groupnote {
+  font-size: 10.5px;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+
+/* Ledger lines: label ···· rate [sliver] */
+.lg-lines {
   display: grid;
-  grid-template-columns: 26px 1fr 52px 34px;
-  align-items: center;
-  gap: 8px;
+  gap: 3px 28px;
+}
+.lg-lines-wide {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.lg-lines-snap {
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+}
+.lg-line {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
   padding: 2px 4px;
   margin: 0 -4px;
-  border-radius: 5px;
+  border-radius: 4px;
   text-decoration: none;
-  color: var(--ink-soft);
-  line-height: 1;
+  color: inherit;
+  line-height: 1.35;
 }
-a.snapx-row:hover {
+a.lg-line:hover,
+a.lg-entry:hover {
   background: var(--paper-elevated);
 }
-.snapx-code {
-  font-size: 11px;
-}
-.snapx-bar {
-  display: block;
-  height: 7px;
-  border-radius: 4px;
-  background: var(--hairline);
+.lg-label {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
-.snapx-fill {
-  display: block;
-  height: 100%;
-  border-radius: 4px;
-  border: none;
-}
-.snapx-bar-stale .snapx-fill {
-  opacity: 0.45;
-}
-.snapx-rate {
+.lg-label-code {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
   font-size: 11px;
-  text-align: right;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+.lg-leader {
+  flex: 1;
+  min-width: 12px;
+  border-bottom: 1px dotted var(--hairline-strong);
+  transform: translateY(-3px);
+}
+.lg-rate {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-size: 14px;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
-.snapx-stale {
-  font-size: 9px;
+.lg-rate-diverging {
+  color: var(--warn);
+}
+.lg-rate-attention {
+  color: var(--bad);
+}
+.lg-rate-word {
+  font-size: 10.5px;
+  font-weight: 500;
   color: var(--ink-mute);
-  margin-left: 1px;
 }
-.snapx-count {
-  font-size: 10px;
+.lg-marks sup {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-size: 9.5px;
   color: var(--ink-mute);
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
-.snapx-encoded {
+.lg-marks {
+  margin-left: -4px;
+  min-width: 8px;
+}
+
+/* The signature: red ink measures disagreement. */
+.lg-sliver-track {
+  display: inline-block;
+  width: 64px;
+  flex: 0 0 64px;
+  height: 8px;
+  align-self: center;
+  position: relative;
+}
+.lg-sliver {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 1px;
+  height: 6px;
+  border-radius: 1px;
+  background: var(--bad);
+  opacity: 0.55;
+}
+
+.lg-encoded {
   font-size: 10.5px;
   color: var(--ink-mute);
   letter-spacing: 0.02em;
 }
-.snapx-strip {
+.lg-ring {
+  opacity: 0.8;
+}
+
+/* SNAP spine: 51 uniform cells, one row. */
+.lg-spine {
   display: flex;
   align-items: center;
   gap: 2px;
   flex-wrap: wrap;
+  padding-top: 2px;
 }
-.snapx-cell {
+.lg-spine-cell {
   display: inline-block;
-  width: 10px;
-  height: 13px;
-  border-radius: 2.5px;
-  border: 1px solid var(--hairline);
+  width: 11px;
+  height: 5px;
+  border-radius: 1.5px;
 }
-.snapx-strip-note {
-  font-family: var(--font-mono), "JetBrains Mono", monospace;
+.lg-spine-measured {
+  background: var(--ink-soft);
+}
+.lg-spine-stale {
+  background: var(--ink-soft);
+  opacity: 0.35;
+}
+.lg-spine-encoded {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--hairline-strong);
+}
+.lg-spine-gap {
+  background: var(--hairline);
+  opacity: 0.6;
+}
+.lg-spine-note {
   font-size: 9.5px;
   color: var(--ink-mute);
-  margin-left: 6px;
+  margin-left: 8px;
 }
-.register-chip .tile-code {
-  font-weight: 500;
+
+/* State-program rows: label ···· CO 99.7 · WA 100 · … ○ +6 */
+.lg-staterows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.lg-staterow {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.lg-staterow-label {
+  flex: 0 0 228px;
+  max-width: 228px;
+}
+.lg-staterow-entries {
+  display: flex;
+  align-items: baseline;
+  gap: 4px 16px;
+  flex-wrap: wrap;
+}
+.lg-entry {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 1px 4px;
+  margin: -1px -4px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.lg-entry .lg-rate {
+  font-size: 12.5px;
+}
+.lg-entry .lg-sliver-track {
+  width: 26px;
+  flex-basis: 26px;
+}
+.lg-entry-encoded {
   font-size: 10.5px;
   color: var(--ink-mute);
+}
+
+.lg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+.lg-legend-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.lg-legend-rate {
+  font-size: 12px;
+}
+.lg-legend-sliver {
+  position: static;
+  width: 18px;
+  height: 6px;
+  align-self: center;
+}
+@media (max-width: 640px) {
+  .lg-groupnote {
+    display: none;
+  }
+  .lg-staterow {
+    flex-direction: column;
+    gap: 3px;
+  }
+  .lg-staterow-label {
+    flex-basis: auto;
+    max-width: none;
+  }
+  .lg-lines-wide,
+  .lg-lines-snap {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Belgium EUROMOD coverage ── */

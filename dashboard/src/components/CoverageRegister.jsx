@@ -1,9 +1,8 @@
 "use client";
 
-import { formatPct, formatAgreementRate, engineLabel } from "../utils/format";
+import { formatPct, engineLabel } from "../utils/format";
 import {
   US_STATE_NAMES,
-  JURISDICTION_LABELS,
   FAMILY_LABELS,
   suiteMeta,
   reportMetric,
@@ -14,23 +13,20 @@ import {
 } from "../utils/suites";
 
 /**
- * The coverage register — one glance answers "where is Axiom verified, and
- * where are the gaps?"
+ * The coverage register — a verification ledger. One glance answers
+ * "where is Axiom verified, and where does it disagree?"
  *
- * Rows are program families; cells are jurisdictions. A tile is:
- *  - tinted with its agreement rate when verification runs exist,
- *  - outlined when the program is encoded but not yet measured,
- *  - hatched when nothing is encoded there yet.
+ * One vocabulary throughout: a measured surface is a ledger line — label,
+ * dotted leader, agreement rate in tabular numerals — followed by a red
+ * sliver whose LENGTH is the share of checks that disagree (square-root
+ * scale, so a 0.3% residual is visible and a 12% divergence is loud).
+ * Clean agreement is quiet ink; the only color on the page is
+ * disagreement. Encoded-but-unmeasured surfaces are a muted ○ list;
+ * blocked last-good runs carry †; parameter-only checks carry ᵖ.
  *
- * A cell aggregates every oracle Axiom was checked against there (e.g. a
- * federal-income-tax cell can combine PolicyEngine and TAXSIM runs); the
- * tooltip breaks the rate out per oracle.
- *
- * The register targets a single screen: nationwide single-cell families
- * flow together as one chip strip, encoded-only masses collapse to a
- * "+N states encoded" chip, and SNAP renders as a ranked comparison
- * panel whose 51-cell micro-strip keeps remaining work as visible as
- * finished work.
+ * Three groups: nationwide programs, the SNAP state ledger (the deepest
+ * comparison, with a 51-cell spine keeping remaining work visible), and
+ * per-state programs.
  */
 
 const STATE_ORDER = Object.keys(US_STATE_NAMES);
@@ -48,13 +44,17 @@ function buildCells(reports) {
   const cells = new Map();
   for (const report of reports || []) {
     if (!isAxiomPair(report)) continue;
-    if (!(report.aggregates || []).length && !(report.summary?.alarms || []).length)
+    if (
+      !(report.aggregates || []).length &&
+      !(report.summary?.alarms || []).length
+    )
       continue;
     const meta = suiteMeta(report.suite);
     const key = `${meta.family}::${meta.jurisdiction}`;
     if (!cells.has(key)) cells.set(key, []);
     cells.get(key).push({
       meta,
+      suite: report.suite,
       metric: reportMetric(report),
       oracle: otherOracle(report),
       anchor: runAnchor(report),
@@ -91,44 +91,10 @@ function buildCells(reports) {
   return out;
 }
 
-function cellTile(cell) {
-  if (cell.kind === "parameter") {
-    return {
-      status: "parameter",
-      note:
-        cell.combined.total > 0
-          ? formatAgreementRate(cell.combined.rate, cell.combined.mismatches)
-          : "parameters",
-    };
-  }
-  if (cell.kind === "coverage") return { status: "encoded", note: "encoded" };
-  if (cell.kind === "diagnostic") return { status: "diagnostic", note: "diagnostic" };
-  return {
-    status: rateStatus(cell.combined.rate),
-    note: formatAgreementRate(cell.combined.rate, cell.combined.mismatches),
-  };
-}
-
-function cellTitle(cell) {
-  if (!cell.runs.length) {
-    return `${cell.meta.label} — encoded, not yet verified${cell.source ? `\n${cell.source}` : ""}`;
-  }
-  const lines = cell.runs.map((r) => {
-    const oracle = engineLabel(r.oracle);
-    if (r.metric.total > 0) {
-      return `vs ${oracle}: ${formatPct(r.metric.rate, 1)} agreement over ${r.metric.total.toLocaleString()} checks`;
-    }
-    return `vs ${oracle}: no case-level comparison yet`;
-  });
-  return `${cell.meta.label}\n${lines.join("\n")}`;
-}
-
 // Row order for program families that only exist as coverage entries (no
 // comparison run yet), aligned with the suite orders in utils/suites.js.
 const FAMILY_FALLBACK_ORDER = {
   federal_income_tax: 10,
-  canada_personal_income_tax: 12,
-  canada_family_benefits: 14,
   social_security: 20,
   ssi: 25,
   state_ssi_supplement: 26,
@@ -151,31 +117,28 @@ const FAMILY_FALLBACK_ORDER = {
 };
 
 function coverageRegion(program) {
+  if (program.jurisdiction === "UK") return "uk";
   if (program.jurisdiction === "CAN") return "ca";
-  return program.jurisdiction === "UK" ? "uk" : "us";
+  return "us";
 }
 
 /**
  * Programs the corpus has encoded but no comparison suite exercises yet.
- * They render as outlined "encoded" cells so the register distinguishes
+ * They render as muted ○ entries so the register distinguishes
  * "not compared yet" from "not encoded".
  */
 function addCoverageOnlyCells(cells, coveragePrograms, region) {
   for (const program of coveragePrograms || []) {
-    if (!program.program || program.program === "snap") continue; // snap → state strip
+    if (!program.program || program.program === "snap") continue; // snap → spine
     if (coverageRegion(program) !== region) continue;
     const key = `${program.program}::${program.jurisdiction}`;
     if (cells.has(key)) continue;
     const label = FAMILY_LABELS[program.program] || program.program;
-    const jurisdictionLabel = JURISDICTION_LABELS[program.jurisdiction] || program.jurisdiction;
     cells.set(key, {
       meta: {
         family: program.program,
         jurisdiction: program.jurisdiction,
-        label:
-          program.jurisdiction && !["US", "UK"].includes(program.jurisdiction)
-            ? `${jurisdictionLabel} ${label}`
-            : label,
+        label,
         order: FAMILY_FALLBACK_ORDER[program.program] ?? 450,
         kind: program.status === "parameter" ? "parameter" : "coverage",
       },
@@ -188,43 +151,168 @@ function addCoverageOnlyCells(cells, coveragePrograms, region) {
   }
 }
 
-function Tile({ jurisdiction, title, tile, anchor, wide = false }) {
-  const status = tile?.status || "gap";
-  const body = (
-    <>
-      <span className="tile-code">{jurisdiction}</span>
-      {tile?.note && <span className="tile-rate">{tile.note}</span>}
-    </>
-  );
-  const cls = `register-tile tile-${status}${wide ? " register-tile-wide" : ""}`;
-  if (anchor) {
-    return (
-      <a className={cls} href={`#${anchor}`} title={title}>
-        {body}
-      </a>
-    );
-  }
-  return (
-    <span className={cls} title={title}>
-      {body}
-    </span>
-  );
-}
-
-/**
- * The SNAP comparison panel: every measured state as a ranked agreement
- * bar (rate, blocked-run marker, household count), an encoded-not-yet-
- * measured line, and a one-row micro-strip of all 51 jurisdictions so
- * remaining work stays as visible as finished work without four wrapped
- * rows of tiles.
- */
-function SnapPanel({ reports, coveragePrograms, knownCauses }) {
-  const staleBySuite = new Map(
+function staleMapFrom(knownCauses) {
+  return new Map(
     (knownCauses || [])
       .filter((c) => c && (c.kind === "stale_run" || c.staleness_note))
       .map((c) => [c.suite, c.staleness_note || c.description || ""]),
   );
+}
 
+/**
+ * Disagreement sliver width as a share of its track. Square-root scale
+ * over the mismatch share: a 0.3% residual is visible, a 12% divergence
+ * is loud, 100% fills the track. Zero disagreement draws nothing —
+ * clean is quiet.
+ */
+function sliverWidth(rate) {
+  if (rate == null || rate >= 100) return 0;
+  const mismatch = Math.min(100, Math.max(0, 100 - rate));
+  return Math.max(4, Math.round(Math.sqrt(mismatch) * 10));
+}
+
+function cellTooltip(cell, staleNote) {
+  const lines = [cell.meta.label];
+  for (const r of cell.runs) {
+    const oracle = engineLabel(r.oracle);
+    if (r.metric.total > 0) {
+      lines.push(
+        `vs ${oracle}: ${formatPct(r.metric.rate, 1)} agreement over ${r.metric.total.toLocaleString()} checks` +
+          (r.metric.mismatches
+            ? ` (${r.metric.mismatches.toLocaleString()} disagree)`
+            : ""),
+      );
+    } else {
+      lines.push(`vs ${oracle}: no case-level comparison yet`);
+    }
+  }
+  if (!cell.runs.length) lines.push("encoded, not yet measured");
+  if (cell.kind === "parameter") lines.push("parameter check, not household-level");
+  if (cell.kind === "diagnostic") lines.push("diagnostic run, outside headline numbers");
+  if (staleNote) lines.push(`Last-good run — regeneration blocked. ${staleNote}`);
+  return lines.join("\n");
+}
+
+/** The rate figure: quiet ink when healthy, colored only when it needs eyes. */
+function Rate({ rate, kind }) {
+  if (kind === "diagnostic")
+    return <span className="lg-rate lg-rate-word">diag</span>;
+  if (rate == null) return <span className="lg-rate lg-rate-word">—</span>;
+  const status = rateStatus(rate);
+  return (
+    <span className={`lg-rate${status !== "verified" ? ` lg-rate-${status}` : ""}`}>
+      {formatPct(rate, 1).replace("%", "")}
+    </span>
+  );
+}
+
+function Sliver({ rate }) {
+  const w = sliverWidth(rate);
+  return (
+    <span className="lg-sliver-track" aria-hidden="true">
+      {w > 0 && <span className="lg-sliver" style={{ width: `${w}%` }} />}
+    </span>
+  );
+}
+
+function Marks({ stale, kind }) {
+  return (
+    <span className="lg-marks">
+      {kind === "parameter" && <sup title="parameter check">ᵖ</sup>}
+      {stale && <sup title="last-good run — regeneration blocked">†</sup>}
+    </span>
+  );
+}
+
+/** One ledger line: label ···· rate [sliver]. */
+function LedgerLine({ label, cell, staleNote }) {
+  const inner = (
+    <>
+      <span className="lg-label">{label}</span>
+      <span className="lg-leader" aria-hidden="true" />
+      <Rate rate={cell.combined.rate} kind={cell.kind} />
+      <Marks stale={Boolean(staleNote)} kind={cell.kind} />
+      <Sliver rate={cell.kind === "diagnostic" ? null : cell.combined.rate} />
+    </>
+  );
+  const title = cellTooltip(cell, staleNote);
+  return cell.anchor ? (
+    <a className="lg-line" href={`#${cell.anchor}`} title={title}>
+      {inner}
+    </a>
+  ) : (
+    <span className="lg-line" title={title}>
+      {inner}
+    </span>
+  );
+}
+
+/** Muted ○ list of encoded-but-unmeasured surfaces. */
+function EncodedList({ items, title }) {
+  if (!items.length) return null;
+  return (
+    <div className="lg-encoded mono" title={title}>
+      <span className="lg-ring" aria-hidden="true">
+        ○
+      </span>{" "}
+      encoded, not yet measured · {items.join(" · ")}
+    </div>
+  );
+}
+
+function GroupHead({ title, note }) {
+  return (
+    <div className="lg-grouphead">
+      <span className="lg-grouptitle">{title}</span>
+      <span className="lg-rule" aria-hidden="true" />
+      {note && <span className="mono lg-groupnote">{note}</span>}
+    </div>
+  );
+}
+
+/* ── Nationwide ────────────────────────────────────────────────────── */
+
+function NationwideGroup({ singles, staleBySuite }) {
+  const measured = [];
+  const encoded = [];
+  for (const [family, cells] of singles) {
+    const cell = cells[0];
+    const label = FAMILY_LABELS[family] || cell.meta.label || family;
+    if (cell.runs.length > 0) {
+      const staleNote = cell.runs
+        .map((r) => staleBySuite.get(r.suite ?? r.meta?.suite))
+        .find(Boolean);
+      measured.push({ family, label, cell, staleNote });
+    } else {
+      encoded.push(label.replace(/ \(.*\)$/, ""));
+    }
+  }
+  measured.sort((a, b) => a.cell.meta.order - b.cell.meta.order);
+
+  return (
+    <div className="lg-group">
+      <GroupHead
+        title="Nationwide"
+        note={`${measured.length} measured · ${encoded.length} encoded`}
+      />
+      <div className="lg-lines lg-lines-wide">
+        {measured.map(({ family, label, cell, staleNote }) => (
+          <LedgerLine
+            key={family}
+            label={label}
+            cell={cell}
+            staleNote={staleNote}
+          />
+        ))}
+      </div>
+      <EncodedList items={encoded} />
+    </div>
+  );
+}
+
+/* ── SNAP ──────────────────────────────────────────────────────────── */
+
+function SnapGroup({ reports, coveragePrograms, staleBySuite }) {
   const measured = new Map();
   for (const report of reports || []) {
     if (!isAxiomPair(report)) continue;
@@ -255,35 +343,22 @@ function SnapPanel({ reports, coveragePrograms, knownCauses }) {
   const encodedSet = new Set(encoded);
 
   const ranked = [...measured.values()].sort(
-    (a, b) => (b.rate ?? -1) - (a.rate ?? -1),
+    (a, b) =>
+      (b.rate ?? -1) - (a.rate ?? -1) ||
+      Number(Boolean(a.staleNote)) - Number(Boolean(b.staleNote)) ||
+      a.abbr.localeCompare(b.abbr),
   );
-  const verified = ranked.filter(
-    (s) => rateStatus(s.rate) === "verified",
-  ).length;
-  const remaining = STATE_ORDER.filter(
-    (abbr) => !measured.has(abbr) && !encodedSet.has(abbr),
-  ).length;
-
-  const compactCases = (n) =>
-    n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+  const remaining = STATE_ORDER.length - measured.size - encoded.length;
+  const totalChecks = ranked.reduce((n, s) => n + s.total, 0);
 
   return (
-    <div className="register-row">
-      <div className="register-rowhead">
-        <span className="register-rowlabel">{FAMILY_LABELS.snap}</span>
-        <span className="mono register-rowcount">
-          {ranked.length} of {STATE_ORDER.length} states measured · {verified}{" "}
-          verified
-          {ranked.length > verified &&
-            ` · ${ranked.length - verified} diverging`}
-          {encoded.length > 0 && ` · ${encoded.length} encoded`}
-          {remaining > 0 && ` · ${remaining} remaining`}
-        </span>
-      </div>
-
-      <div className="snapx-grid">
+    <div className="lg-group">
+      <GroupHead
+        title="SNAP, state by state"
+        note={`${ranked.length} of ${STATE_ORDER.length} measured · ${totalChecks.toLocaleString()} checks`}
+      />
+      <div className="lg-lines lg-lines-snap">
         {ranked.map((s) => {
-          const status = rateStatus(s.rate);
           const title = [
             `${US_STATE_NAMES[s.abbr]} SNAP vs ${s.oracle}`,
             `${formatPct(s.rate, 1)} agreement over ${s.total.toLocaleString()} checks (${s.cases.toLocaleString()} households)`,
@@ -293,171 +368,149 @@ function SnapPanel({ reports, coveragePrograms, knownCauses }) {
           ]
             .filter(Boolean)
             .join("\n");
-          const body = (
+          const inner = (
             <>
-              <span className="tile-code snapx-code">{s.abbr}</span>
-              <span
-                className={`snapx-bar${s.staleNote ? " snapx-bar-stale" : ""}`}
-              >
-                <span
-                  className={`snapx-fill tile-${status}`}
-                  style={{ width: `${Math.max(3, s.rate ?? 0)}%` }}
-                />
-              </span>
-              <span className="mono snapx-rate">
-                {formatPct(s.rate, 1)}
-                {s.staleNote && <sup className="snapx-stale">†</sup>}
-              </span>
-              <span className="mono snapx-count">{compactCases(s.cases)}</span>
+              <span className="lg-label lg-label-code">{s.abbr}</span>
+              <span className="lg-leader" aria-hidden="true" />
+              <Rate rate={s.rate} kind="household" />
+              <Marks stale={Boolean(s.staleNote)} kind="household" />
+              <Sliver rate={s.rate} />
             </>
           );
           return s.anchor ? (
-            <a
-              key={s.abbr}
-              className="snapx-row"
-              href={`#${s.anchor}`}
-              title={title}
-            >
-              {body}
+            <a key={s.abbr} className="lg-line" href={`#${s.anchor}`} title={title}>
+              {inner}
             </a>
           ) : (
-            <span key={s.abbr} className="snapx-row" title={title}>
-              {body}
+            <span key={s.abbr} className="lg-line" title={title}>
+              {inner}
             </span>
           );
         })}
       </div>
-
-      {encoded.length > 0 && (
-        <div className="mono snapx-encoded">
-          encoded, not yet measured · {encoded.join(" · ")}
-        </div>
-      )}
-
-      <div className="snapx-strip" aria-label="All-states SNAP status">
+      <EncodedList items={encoded} />
+      <div className="lg-spine" aria-label="All-states SNAP status">
         {STATE_ORDER.map((abbr) => {
           const s = measured.get(abbr);
-          const status = s
-            ? rateStatus(s.rate)
+          const cls = s
+            ? s.staleNote
+              ? "lg-spine-stale"
+              : "lg-spine-measured"
             : encodedSet.has(abbr)
-              ? "encoded"
-              : "gap";
+              ? "lg-spine-encoded"
+              : "lg-spine-gap";
           const title = s
             ? `${US_STATE_NAMES[abbr]} — ${formatPct(s.rate, 1)}${s.staleNote ? " (last-good, blocked)" : ""}`
             : encodedSet.has(abbr)
               ? `${US_STATE_NAMES[abbr]} — encoded, not yet measured`
               : `${US_STATE_NAMES[abbr]} — not encoded yet`;
-          return (
-            <span
-              key={abbr}
-              className={`snapx-cell tile-${status}`}
-              title={title}
-            />
-          );
+          return <span key={abbr} className={`lg-spine-cell ${cls}`} title={title} />;
         })}
-        <span className="snapx-strip-note">
-          {ranked.length + encoded.length} of {STATE_ORDER.length}
+        <span className="mono lg-spine-note">
+          {remaining} states not yet encoded
         </span>
       </div>
     </div>
   );
 }
 
-// Above this many encoded-only cells, a family row collapses them into a
-// single "+N states encoded" chip — 48 identical outline tiles say nothing
-// four tiles and a count don't.
-const ENCODED_COLLAPSE_THRESHOLD = 4;
+/* ── State programs ────────────────────────────────────────────────── */
 
-function FamilyRow({ family, cells }) {
-  const measured = cells.filter(
-    (cell) => cell.runs.length > 0 || cell.kind !== "coverage",
-  );
-  const encodedOnly = cells.filter(
-    (cell) => cell.runs.length === 0 && cell.kind === "coverage",
-  );
-  const collapse = encodedOnly.length > ENCODED_COLLAPSE_THRESHOLD;
-  const shown = collapse ? measured : cells;
-  const encodedCodes = encodedOnly
-    .map((cell) => cell.meta.jurisdiction || cell.meta.label)
+function StateProgramRow({ family, cells, staleBySuite }) {
+  const measured = cells
+    .filter((c) => c.runs.length > 0 || c.kind === "diagnostic")
+    .sort(
+      (a, b) =>
+        (b.combined.rate ?? -1) - (a.combined.rate ?? -1) ||
+        (KIND_RANK[a.kind] ?? 9) - (KIND_RANK[b.kind] ?? 9) ||
+        String(a.meta.jurisdiction).localeCompare(String(b.meta.jurisdiction)),
+    );
+  const encoded = cells
+    .filter((c) => c.runs.length === 0 && c.kind !== "diagnostic")
+    .map((c) => c.meta.jurisdiction || c.meta.label)
     .sort();
 
-  return (
-    <div className="register-row">
-      <div className="register-rowhead">
-        <span className="register-rowlabel">
-          {FAMILY_LABELS[family] || cells[0]?.meta?.label || family}
-        </span>
-      </div>
-      <div className="register-grid">
-        {shown.map((cell) => (
-          <Tile
-            key={`${cell.meta.family}-${cell.meta.jurisdiction}`}
-            jurisdiction={cell.meta.jurisdiction || cell.meta.label}
-            wide
-            tile={cellTile(cell)}
-            anchor={cell.anchor}
-            title={cellTitle(cell)}
-          />
-        ))}
-        {collapse && (
-          <span
-            className="register-tile register-tile-wide tile-encoded register-chip"
-            title={`Encoded, not yet measured:\n${encodedCodes.join(", ")}`}
-          >
-            <span className="tile-code">
-              +{encodedOnly.length} states encoded
-            </span>
-          </span>
-        )}
-      </div>
-    </div>
-  );
-}
+  const label = FAMILY_LABELS[family] || cells[0]?.meta?.label || family;
 
-/**
- * Families with a single nationwide cell (federal income tax, Medicare,
- * Pell…) don't need a labeled row each — thirteen rows of one "US" tile
- * was most of the register's height. They flow together as one strip of
- * program chips, ordered like the rows they replace.
- */
-function NationwideStrip({ singles }) {
   return (
-    <div className="register-row">
-      <div className="register-rowhead">
-        <span className="register-rowlabel">Nationwide programs</span>
-        <span className="mono register-rowcount">
-          {singles.length} programs · one jurisdiction each
-        </span>
-      </div>
-      <div className="register-grid">
-        {singles.map(([family, cells]) => {
-          const cell = cells[0];
-          const label = FAMILY_LABELS[family] || cell.meta.label || family;
-          return (
-            <Tile
-              key={family}
-              jurisdiction={label}
-              wide
-              tile={cellTile(cell)}
-              anchor={cell.anchor}
-              title={cellTitle(cell)}
-            />
+    <div className="lg-staterow">
+      <span className="lg-label lg-staterow-label" title={label}>
+        {label}
+      </span>
+      <span className="lg-staterow-entries">
+        {measured.map((cell) => {
+          const staleNote = cell.runs
+            .map((r) => staleBySuite.get(r.suite))
+            .find(Boolean);
+          const inner = (
+            <>
+              <span className="lg-label-code">
+                {cell.meta.jurisdiction || cell.meta.label}
+              </span>{" "}
+              <Rate rate={cell.combined.rate} kind={cell.kind} />
+              <Marks stale={Boolean(staleNote)} kind={cell.kind} />
+              <Sliver
+                rate={cell.kind === "diagnostic" ? null : cell.combined.rate}
+              />
+            </>
+          );
+          const title = cellTooltip(cell, staleNote);
+          return cell.anchor ? (
+            <a
+              key={cell.meta.jurisdiction || cell.meta.label}
+              className="lg-entry"
+              href={`#${cell.anchor}`}
+              title={title}
+            >
+              {inner}
+            </a>
+          ) : (
+            <span
+              key={cell.meta.jurisdiction || cell.meta.label}
+              className="lg-entry"
+              title={title}
+            >
+              {inner}
+            </span>
           );
         })}
-      </div>
+        {encoded.length > 0 && (
+          <span
+            className="mono lg-entry-encoded"
+            title={`Encoded, not yet measured:\n${encoded.join(", ")}`}
+          >
+            ○ {encoded.length <= 3 ? encoded.join(" · ") : `+${encoded.length}`}
+          </span>
+        )}
+      </span>
     </div>
   );
 }
 
-const LEGEND = [
-  { status: "verified", label: "Verified — engines agree on 90%+ of checks" },
-  { status: "diverging", label: "Diverging — 70–90% agreement, under triage" },
-  { status: "attention", label: "Needs attention — below 70% agreement" },
-  { status: "encoded", label: "Encoded, not yet verified" },
-  { status: "parameter", label: "Parameter check only" },
-  { status: "diagnostic", label: "Diagnostic run" },
-  { status: "gap", label: "Not encoded yet" },
-];
+/* ── Legend ────────────────────────────────────────────────────────── */
+
+function Legend() {
+  return (
+    <div className="lg-legend mono">
+      <span className="lg-legend-item">
+        <span className="lg-rate lg-legend-rate">97.4</span> agreement rate
+      </span>
+      <span className="lg-legend-item">
+        <span className="lg-sliver lg-legend-sliver" /> share of checks that
+        disagree
+      </span>
+      <span className="lg-legend-item">
+        <sup>†</sup> last-good run, regeneration blocked
+      </span>
+      <span className="lg-legend-item">
+        <sup>ᵖ</sup> parameter check only
+      </span>
+      <span className="lg-legend-item">○ encoded, not yet measured</span>
+    </div>
+  );
+}
+
+/* ── Register ──────────────────────────────────────────────────────── */
 
 export default function CoverageRegister({
   reports,
@@ -469,9 +522,11 @@ export default function CoverageRegister({
   addCoverageOnlyCells(cells, coverageOverview?.axiom?.programs, region);
   if (cells.size === 0) return null;
 
+  const staleBySuite = staleMapFrom(knownCauses);
+
   const families = new Map();
   for (const cell of cells.values()) {
-    if (cell.meta.family === "snap") continue; // rendered as the state strip
+    if (cell.meta.family === "snap") continue; // rendered as its own group
     if (!families.has(cell.meta.family)) families.set(cell.meta.family, []);
     families.get(cell.meta.family).push(cell);
   }
@@ -480,14 +535,9 @@ export default function CoverageRegister({
       Math.min(...a[1].map((c) => c.meta.order)) -
       Math.min(...b[1].map((c) => c.meta.order)),
   );
-
+  const singles = familyRows.filter(([, c]) => c.length === 1);
+  const multis = familyRows.filter(([, c]) => c.length > 1);
   const hasSnap = [...cells.values()].some((c) => c.meta.family === "snap");
-  const usedStatuses = new Set();
-  // Hatched "not encoded" tiles only appear on the 50-state SNAP strip.
-  if (region === "us" && hasSnap) usedStatuses.add("gap");
-  for (const cell of cells.values()) {
-    usedStatuses.add(cellTile(cell).status);
-  }
 
   return (
     <section className="card-flat">
@@ -495,41 +545,37 @@ export default function CoverageRegister({
         <div>
           <div className="section-eyebrow">Coverage register</div>
           <div className="section-title">
-            What is encoded, what is verified, and what remains
+            What is encoded, what is verified, and what disagrees
           </div>
         </div>
       </div>
-      <div className="register-body">
-        {/* Single-jurisdiction families flow together as one strip; families
-            with several jurisdictions keep their own row. The strip leads
-            (it opens with federal income tax), then SNAP, then the rest. */}
-        {(() => {
-          const singles = familyRows.filter(([, c]) => c.length === 1);
-          const multis = familyRows.filter(([, c]) => c.length > 1);
-          return (
-            <>
-              {singles.length > 0 && <NationwideStrip singles={singles} />}
-              {region === "us" && hasSnap && (
-                <SnapPanel
-                  reports={reports}
-                  coveragePrograms={coverageOverview?.axiom?.programs}
-                  knownCauses={knownCauses}
-                />
-              )}
+      <div className="register-body lg-body">
+        {singles.length > 0 && (
+          <NationwideGroup singles={singles} staleBySuite={staleBySuite} />
+        )}
+        {region === "us" && hasSnap && (
+          <SnapGroup
+            reports={reports}
+            coveragePrograms={coverageOverview?.axiom?.programs}
+            staleBySuite={staleBySuite}
+          />
+        )}
+        {multis.length > 0 && (
+          <div className="lg-group">
+            <GroupHead title="State programs" />
+            <div className="lg-staterows">
               {multis.map(([family, familyCells]) => (
-                <FamilyRow key={family} family={family} cells={familyCells} />
+                <StateProgramRow
+                  key={family}
+                  family={family}
+                  cells={familyCells}
+                  staleBySuite={staleBySuite}
+                />
               ))}
-            </>
-          );
-        })()}
-        <div className="register-legend">
-          {LEGEND.filter((l) => usedStatuses.has(l.status)).map((l) => (
-            <span key={l.status} className="register-legend-item">
-              <span className={`register-swatch tile-${l.status}`} />
-              {l.label}
-            </span>
-          ))}
-        </div>
+            </div>
+          </div>
+        )}
+        <Legend />
       </div>
     </section>
   );
