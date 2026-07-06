@@ -592,7 +592,7 @@
       "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T19:44:58Z",
+    "generated_at": "2026-07-06T20:09:45Z",
     "generated_by": "scripts/run_comparison.py::uk-statutory-maternity-pay-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -604,7 +604,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "804515d3bb6881469e1e5dfce06cc91a6f3d422f"
+        "sha": "0b93d81852f5395e53ca0a6841604f29678d86ef"
       }
     ],
     "run_kind": "manual",
