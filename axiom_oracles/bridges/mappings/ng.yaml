@@ -1,0 +1,6 @@
+prefixes:
+  - legal_id_prefix: "ng:"
+    country: ng
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine's Nigeria model encodes the pre-reform Personal Income Tax Act regime (2023 snapshot) and cannot serve as an oracle for Axiom Nigeria outputs, which are built from the Nigeria Tax Act 2025 (Official Gazette No. 117, Vol. 112) effective for the 2026 year of assessment. No executable Nigeria household oracle is publicly distributed (Nigeria is not a SOUTHMOD country). Exact mappings should be added only after a real one-to-one Nigeria oracle target is implemented and verified.
