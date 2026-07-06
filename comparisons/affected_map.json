@@ -419,6 +419,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "uk-benefit-cap",
+      "report": "axiom-euromod-uk-benefit-cap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-benefit-cap-ukmod.yaml"
+    },
+    {
       "suite": "uk-best-start-foods",
       "report": "axiom-euromod-uk-best-start-foods.json",
       "repos": [
@@ -577,6 +585,14 @@
         "TheAxiomFoundation/rulespec-uk"
       ],
       "source": "comparisons/uk-universal-credit-efrs.yaml"
+    },
+    {
+      "suite": "uk-winter-fuel",
+      "report": "axiom-euromod-uk-winter-fuel.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-winter-fuel-ukmod.yaml"
     },
     {
       "suite": "uk-worker-nic",

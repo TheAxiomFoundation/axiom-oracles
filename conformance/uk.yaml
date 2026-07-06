@@ -204,23 +204,28 @@ policies:
       - i_bcap_NoExempt
       - i_bcap_AmtCap
       - n/a
-    suite: null
+    suite: uk-benefit-cap
     note: 'BEN: benefit cap on Housing Benefit and Universal Credit (UC Regs 2013 reg 80A/81). bcap_uk
       computes the cap reduction, not a benefit: brd_s reduces the legacy-benefit stack (i_bcap_finalAmt
       = (bsa_s+bsadi_s+bho_s+bwkmt_s+bfamt_s) - brd_s) and brduc_s reduces UC (i_bcap_finalAmt += bsauc_s
       - brduc_s), each capped at the relevant award and gated by the reg-80A annual limits (single GBP
-      14,753 / couple-or-lone-parent GBP 22,020, London GBP 16,967 / 25,323) via amount#2/#4. Crucially,
-      bcap_uk writes brd_s/brduc_s/bsadi02_s but does NOT write back into bsauc_s or bho_s: UKMOD reports
-      the UNCAPPED award and carries the cap effect only in the separate reduction outputs (verified:
-      no bcap_uk function outputs bsauc_s in UK_2026). Axiom encodes the UC benefit cap (reg 80A limits
-      + reg 81 reduction: rulespec-uk uk/regulations/uksi/2013/376/80A and /81, whose output universal_credit_award_benefit_cap_reduction
-      is the direct analog of UKMOD brduc_s) and applies it INSIDE the composed UC award before the s.8(1)
-      award. So the uk-universal-credit suite''s bsauc_s comparison surfaces the reporting divergence
-      as an upstream_engine_gap (UKMOD does not apply the cap to hypothetical benefit units), but no live
-      suite yet compares bcap_uk''s own reduction output against Axiom''s reg-81 reduction. Uncovered
-      until a dedicated benefit-cap surface maps UKMOD brduc_s to universal_credit_award_benefit_cap_reduction
-      (and brd_s to a legacy-benefit reduction, unencoded — the Axiom UC pilot is UC-only); requires the
-      x64 UKMOD runtime to regenerate the report (rulespec-uk#57).'
+      14,753 / couple-or-lone-parent GBP 22,020, London GBP 16,967 / 25,323) via amount#2/#4. bcap_uk
+      writes brd_s/brduc_s/bsadi02_s but does NOT write back into bsauc_s or bho_s: UKMOD reports the
+      UNCAPPED award and carries the cap effect only in the separate reduction outputs (verified: no
+      bcap_uk function outputs bsauc_s in UK_2026). The uk-benefit-cap suite covers the UC reduction
+      output brduc_s against the composed UC pilot''s uc_pilot_benefit_cap_reduction (the direct analog
+      of the reg-80A/81 reduction: rulespec-uk uk/regulations/uksi/2013/376/80A and /81, applied inside
+      universal_credit_composed_award_pipeline). It matches 7/7 on the single-no-child cases (UKMOD''s cap
+      base il_bencap equals bsauc_s when child benefit is nil, to a <= GBP 0.17/month weekly-rounding
+      residual absorbed by the GBP 1 tolerance) and the nil-reduction cases (earnings-exempt, and the
+      couple-no-child unit that matches no UKMOD UC-cap branch — i_bcap_AmtCap covers only
+      couple/lone-parent-with-child and single-no-child). The grid is deliberately single-no-child: a
+      with-children unit would diverge because UKMOD''s il_bencap sums bsauc_s + child benefit (bch_s) +
+      other welfare while the single-benefit UC pilot base is UC-only, so the pilot reduction would be
+      smaller by exactly the monthly child benefit. That is a known Axiom cap-base scope boundary (the
+      UC-only pilot does not add non-UC welfare to the reg-81 excess), not a defect in the reg-80A/81
+      reduction the pilot encodes, so it is documented here rather than compared. brd_s (the legacy-benefit
+      reduction) likewise stays uncovered — the Axiom UC pilot is UC-only. Runs on the x64 UKMOD runtime.'
   - id: uk:bch_uk
     oracle_policy_name: bch_uk
     oracle_policy_type: ben
@@ -701,21 +706,24 @@ policies:
     output_vars:
       - boaht_s
     in_scope: true
-    suite: null
+    suite: uk-winter-fuel
     note: 'BEN: Pensioner''s annual heating allowance (Winter Fuel Payment). The UK_2026 policy is switch=on
       and computes a distinct payable boaht_s at benefit-unit level: a base amount if anyone in the unit
       is of state-pension age ($WFA, with an additional $WFAAdd80 where anyone is 80+), on separate England/Wales
       (drgn1!=12) and Scotland (drgn1=12, $WFASc/$WFAAdd80Sc) branches from 2025, then allocated across
       pension-age members. It reflects the 2024/25 means-testing reform: every BenCalc comp_Cond now carries
-      il_toty < amount#3 ($WFCBThresh) so the payment is withdrawn above the income claw-back threshold
-      — the policy is no longer a universal pensioner payment. It is a genuine comparable surface (a household
-      age + income-threshold gate on synthetic pensioner cases; no leave-spell or receipt-history column
-      required). rulespec-uk encodes the England/Wales amounts in the Social Fund Winter Fuel Payment
-      Regulations 2025 (SI 2025/969 reg 3: GBP 200 under-80, GBP 300 at-80), matching UKMOD''s $WFA (200)
-      + $WFAAdd80 (100). Uncovered because there is not yet a composed winter-fuel award pipeline wiring
-      the means-test gate + age branches into a boaht_s parity target; the encoded reg-3 amounts are the
-      building block. Next-wave uncovered surface (evidence: UK.xml UK_2026 boaht_uk function body and
-      ConstDef_uk $WFA/$WFAAdd80/$WFASc/$WFCBThresh).'
+      il_toty < amount#3 ($WFCBThresh, GBP 35,000/year) so the payment is withdrawn above the income claw-back
+      threshold — the policy is no longer a universal pensioner payment. The uk-winter-fuel suite covers it
+      for England and Wales against the composed rulespec-uk winter_fuel_payment_composed_award_pipeline
+      (Social Fund Winter Fuel Payment Regulations 2025 (SI 2025/969) reg 3: GBP 200 under-80, GBP 300 at-80,
+      matching UKMOD''s $WFA 200 + $WFAAdd80 100), on a pensioner grid crossing the under-80/80+ tiers and
+      the GBP 35,000 recovery threshold, matching boaht_s exactly (7/7): the award is a household amount that
+      does not scale with the pension-age member count (verified: couple both under-80 = GBP 200, couple one
+      80+ = GBP 300; UKMOD allocates it per member and the adapter sums and annualizes), and Winter Fuel does
+      not draw UKMOD''s stochastic take-up correction, so the surface is a clean deterministic comparable.
+      Scotland (drgn1=12, $WFASc 211 / $WFAAdd80Sc giving GBP 211/317) runs a higher devolved instrument
+      (Pension Age Winter Heating Payment, not SI 2025/969) that Axiom does not encode, so it is out of scope
+      for this England-and-Wales surface. Runs on the x64 UKMOD runtime.'
   - id: uk:bpact_uk
     oracle_policy_name: bpact_uk
     oracle_policy_type: ben

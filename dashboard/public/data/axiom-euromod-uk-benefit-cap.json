@@ -1,0 +1,815 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 7,
+      "comparison_weight": 7,
+      "components": [],
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_benefit_cap_reduction",
+      "description": "UK Universal Credit benefit-cap reduction (regulation 80A/81)",
+      "left_weighted_sum": 1197.1,
+      "match_rate": 100,
+      "match_weight": 7,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1197.433333,
+      "weighted_difference": -0.333333,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 7,
+  "cases": [
+    {
+      "case_id": "uk-bcap-single-rent600",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "adults": 1,
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_capital": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_childcare_charges_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_earned_income_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_either_aged_25_or_over": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_exempt_from_benefit_cap": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_has_lcwra": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_couple": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_gainfully_self_employed": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_minimum_income_floor_notional_deduction_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_carer_elements": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_children_in_childcare": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_higher_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_lower_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_non_dependants": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_responsible_children": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_rent_monthly": 600.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_resident_in_greater_london": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_unearned_income_monthly": 0.0
+        },
+        "children": 0,
+        "earnings_exempt": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 600.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 0.0,
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "UK",
+        "london": false,
+        "monthly_rent": 600.0,
+        "scenario": "household-benefit-cap",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "uc_cap_branch_absent": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-bcap-single-rent900",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "adults": 1,
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_capital": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_childcare_charges_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_earned_income_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_either_aged_25_or_over": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_exempt_from_benefit_cap": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_has_lcwra": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_couple": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_gainfully_self_employed": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_minimum_income_floor_notional_deduction_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_carer_elements": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_children_in_childcare": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_higher_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_lower_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_non_dependants": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_responsible_children": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_rent_monthly": 900.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_resident_in_greater_london": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_unearned_income_monthly": 0.0
+        },
+        "children": 0,
+        "earnings_exempt": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 900.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 0.0,
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "UK",
+        "london": false,
+        "monthly_rent": 900.0,
+        "scenario": "household-benefit-cap",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "uc_cap_branch_absent": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-bcap-single-rent1100",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "adults": 1,
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_capital": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_childcare_charges_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_earned_income_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_either_aged_25_or_over": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_exempt_from_benefit_cap": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_has_lcwra": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_couple": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_gainfully_self_employed": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_minimum_income_floor_notional_deduction_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_carer_elements": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_children_in_childcare": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_higher_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_lower_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_non_dependants": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_responsible_children": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_rent_monthly": 1100.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_resident_in_greater_london": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_unearned_income_monthly": 0.0
+        },
+        "children": 0,
+        "earnings_exempt": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 1100.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 0.0,
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "UK",
+        "london": false,
+        "monthly_rent": 1100.0,
+        "scenario": "household-benefit-cap",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "uc_cap_branch_absent": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-bcap-single-rent1300",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "adults": 1,
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_capital": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_childcare_charges_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_earned_income_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_either_aged_25_or_over": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_exempt_from_benefit_cap": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_has_lcwra": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_couple": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_gainfully_self_employed": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_minimum_income_floor_notional_deduction_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_carer_elements": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_children_in_childcare": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_higher_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_lower_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_non_dependants": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_responsible_children": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_rent_monthly": 1300.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_resident_in_greater_london": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_unearned_income_monthly": 0.0
+        },
+        "children": 0,
+        "earnings_exempt": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 1300.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 0.0,
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "UK",
+        "london": false,
+        "monthly_rent": 1300.0,
+        "scenario": "household-benefit-cap",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "uc_cap_branch_absent": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-bcap-single-rent1300-london",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "adults": 1,
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_capital": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_childcare_charges_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_earned_income_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_either_aged_25_or_over": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_exempt_from_benefit_cap": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_has_lcwra": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_couple": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_gainfully_self_employed": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_minimum_income_floor_notional_deduction_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_carer_elements": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_children_in_childcare": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_higher_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_lower_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_non_dependants": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_responsible_children": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_rent_monthly": 1300.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_resident_in_greater_london": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_unearned_income_monthly": 0.0
+        },
+        "children": 0,
+        "earnings_exempt": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 8,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 1300.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 0.0,
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "UK",
+        "london": true,
+        "monthly_rent": 1300.0,
+        "scenario": "household-benefit-cap",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "uc_cap_branch_absent": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-bcap-single-rent1300-earn12000-exempt",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "adults": 1,
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_capital": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_childcare_charges_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_earned_income_monthly": 1000.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_either_aged_25_or_over": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_exempt_from_benefit_cap": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_has_lcwra": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_couple": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_gainfully_self_employed": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_minimum_income_floor_notional_deduction_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_carer_elements": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_children_in_childcare": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_higher_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_lower_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_non_dependants": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_responsible_children": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_rent_monthly": 1300.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_resident_in_greater_london": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_unearned_income_monthly": 0.0
+        },
+        "children": 0,
+        "earnings_exempt": true,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 40,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 1300.0,
+            "yem": 1000.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 12000.0,
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            12000.0
+          ],
+          "yearly_earned_income_total": 12000.0
+        },
+        "locale": "UK",
+        "london": false,
+        "monthly_rent": 1300.0,
+        "scenario": "household-benefit-cap",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "uc_cap_branch_absent": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-bcap-couple-no-child-rent1500-uncapped",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "adults": 2,
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_capital": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_childcare_charges_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_earned_income_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_either_aged_25_or_over": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_exempt_from_benefit_cap": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_has_lcwra": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_couple": true,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_is_gainfully_self_employed": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_minimum_income_floor_notional_deduction_monthly": 0.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_carer_elements": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_children_in_childcare": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_higher_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_disabled_children_lower_rate": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_non_dependants": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_number_of_responsible_children": 0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_rent_monthly": 1500.0,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_resident_in_greater_london": false,
+          "uk:policies/universal_credit_composed_award_pipeline#input.uc_pilot_unearned_income_monthly": 0.0
+        },
+        "children": 0,
+        "earnings_exempt": false,
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 35,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 0,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 1500.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "dag": 34,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 0,
+            "dms": 2,
+            "drgn1": 2,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 0,
+            "lhw": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "head_annual_earnings": 0.0,
+        "household_summary": {
+          "ages": [
+            35,
+            34
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "UK",
+        "london": false,
+        "monthly_rent": 1500.0,
+        "scenario": "household-benefit-cap",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "uc_cap_branch_absent": true
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK Universal Credit benefit-cap reduction (regulation 80A/81)",
+      "id": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_benefit_cap_reduction",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-06T23:47:43Z",
+    "generated_by": "scripts/run_comparison.py::uk-benefit-cap-ukmod",
+    "oracle": {
+      "euromod_country": "UK",
+      "euromod_dataset": "training_data",
+      "euromod_release": "B2026.03",
+      "euromod_system": "UK_2026",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": "17fc102363f7a9a32a2751e9f8cf92d5bdc1c79c"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-benefit-cap",
+  "summary": {
+    "comparison_count": 7,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 7,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 7,
+      "match_rate": 100,
+      "match_weight": 7,
+      "mismatch_weight": 0
+    }
+  }
+}

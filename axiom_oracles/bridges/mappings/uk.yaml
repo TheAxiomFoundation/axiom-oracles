@@ -3121,6 +3121,20 @@ prefixes:
     mapping_type: not_comparable
     rationale: Composed Family-level UKMOD Pension Credit oracle pipeline; its standard-minimum-guarantee, severe-disability and carer additional-amount, appropriate-minimum-guarantee, guarantee-credit-condition and weekly award outputs re-wire the separately mapped State Pension Credit Regulations 2002 regulation 6 weekly-rate rules and the State Pension Credit Act 2002 section 2 guarantee credit for the UKMOD boamt_s comparison rather than adding new PolicyEngine UK oracle variables.
 
+  # Composed Family-level UKMOD Winter Fuel Payment oracle pipeline (England and
+  # Wales; Social Fund Winter Fuel Payment Regulations 2025 (SI 2025/969)
+  # regulation 3(1)/3(4)). Its household-amount, pre-means-test-award and award
+  # outputs re-wire the separately mapped reg-3 standard amounts (already mapped
+  # to gov.dwp.winter_fuel_payment.amount above) with the pension-age member and
+  # income-recovery means-test gates for the UKMOD boaht_s comparison rather than
+  # adding new PolicyEngine UK oracle variables. Added for the UKMOD Winter Fuel
+  # parity surface (uk-winter-fuel).
+  - legal_id_prefix: uk:policies/winter_fuel_payment_composed_award_pipeline#
+    country: uk
+    program: winter_fuel_allowance
+    mapping_type: not_comparable
+    rationale: Composed Family-level UKMOD Winter Fuel Payment oracle pipeline; its household-amount, pre-means-test-award and award outputs re-wire the separately mapped Social Fund Winter Fuel Payment Regulations 2025 regulation 3 standard amounts with the pension-age member and income-recovery means-test gates for the UKMOD boaht_s comparison rather than adding new PolicyEngine UK oracle variables.
+
   # Composed Person-level UKMOD Statutory Maternity Pay oracle pipeline (SSCBA 1992
   # Part XII ss.164-166/171). Its earnings-related-rate, prescribed-rate, lower-
   # earnings-limit, maternity-pay-period, normal-weekly-earnings, entitlement,
