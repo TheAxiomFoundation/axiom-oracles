@@ -5,14 +5,13 @@
     {
       "jurisdiction": "be",
       "oracle": "EUROMOD_J2.0/BE_2025",
-      "policies_in_scope": 24,
-      "covered": 13,
-      "covered_pct": 54.1667,
-      "excluded": 19,
+      "policies_in_scope": 25,
+      "covered": 21,
+      "covered_pct": 84.0,
+      "excluded": 18,
       "excluded_by_reason": {
         "extension_not_available": 1,
         "input_carrying": 3,
-        "not_a_policy": 1,
         "oracle_dataset_lacks_input": 1,
         "technical": 13
       },
@@ -22,31 +21,24 @@
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
-        "bed_be",
-        "bmact_be",
-        "bpact_be",
         "tinfe_be",
-        "tinkt_be",
-        "tinmu_be",
-        "tinrg_be",
         "tintace_be",
-        "tintb_be",
         "yemcomp_be",
         "ysecomp_be"
       ],
       "blocking_reasons": [
-        "11 of 24 in-scope policies are not covered by a live suite: bed_be, bmact_be, bpact_be, tinfe_be, tinkt_be, tinmu_be, tinrg_be, tintace_be, tintb_be, yemcomp_be, ysecomp_be"
+        "4 of 25 in-scope policies are not covered by a live suite: tinfe_be, tintace_be, yemcomp_be, ysecomp_be"
       ]
     },
     {
       "jurisdiction": "uk",
       "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
-      "policies_in_scope": 29,
-      "covered": 4,
-      "covered_pct": 13.7931,
-      "excluded": 38,
+      "policies_in_scope": 27,
+      "covered": 6,
+      "covered_pct": 22.2222,
+      "excluded": 40,
       "excluded_by_reason": {
-        "input_carrying": 2,
+        "input_carrying": 4,
         "not_a_policy": 7,
         "takeup_adjustment": 1,
         "technical": 25,
@@ -54,13 +46,11 @@
       },
       "unexplained_total": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 9,
+      "oracle_attributed": 13,
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
-        "PAA_uk",
         "bcap_uk",
-        "bch_uk",
         "bched01_uk",
         "bched02_uk",
         "bchht_uk",
@@ -75,17 +65,15 @@
         "bmanc_uk",
         "bmascmt01_uk",
         "bmascmt_uk",
-        "boact_uk",
         "boaht_uk",
         "bpact_uk",
-        "bsa_uk",
         "bsadi_uk",
         "bunct_uk",
         "bwkmt_bfamt_uk",
         "tinta_uk"
       ],
       "blocking_reasons": [
-        "25 of 29 in-scope policies are not covered by a live suite: PAA_uk, bcap_uk, bch_uk, bched01_uk, bched02_uk, bchht_uk, bchmt_uk, bchrd_uk, bcrdicm_uk, bho_uk, bhosc01_uk, bmact_uk, bmamt01_uk, bmamt_uk, bmanc_uk, bmascmt01_uk, bmascmt_uk, boact_uk, boaht_uk, bpact_uk, bsa_uk, bsadi_uk, bunct_uk, bwkmt_bfamt_uk, tinta_uk"
+        "21 of 27 in-scope policies are not covered by a live suite: bcap_uk, bched01_uk, bched02_uk, bchht_uk, bchmt_uk, bchrd_uk, bcrdicm_uk, bho_uk, bhosc01_uk, bmact_uk, bmamt01_uk, bmamt_uk, bmanc_uk, bmascmt01_uk, bmascmt_uk, boaht_uk, bpact_uk, bsadi_uk, bunct_uk, bwkmt_bfamt_uk, tinta_uk"
       ]
     }
   ]
