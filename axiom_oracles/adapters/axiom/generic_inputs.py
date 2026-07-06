@@ -472,13 +472,14 @@ def attach_generic_inputs(
     program = compiled.get("program", compiled)
 
     # If the caller didn't pass a mapping, resolve one from the default YAML.
-    # The mapping table itself is data (axiom_oracles/data/ecps_input_mapping.yaml);
-    # this just picks the entries that match the program's specific slots.
+    # The mapping table itself is data
+    # (axiom_oracles/data/populace_input_mapping.yaml); this just picks the
+    # entries that match the program's specific slots.
     if ecps_mapping is None and load_default_mapping:
         try:
-            from .ecps_mapping_loader import load_ecps_mapping_for_program
+            from .populace_mapping_loader import load_populace_mapping_for_program
 
-            ecps_mapping = load_ecps_mapping_for_program(program)
+            ecps_mapping = load_populace_mapping_for_program(program)
         except Exception:
             ecps_mapping = None
 
