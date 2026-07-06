@@ -28,6 +28,7 @@ from .adapters.axiom import (
 from .adapters.euromod import EuromodPlatformRunner
 from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
+from .adapters.taxcalc import TaxCalcPackageRunner, attach_taxcalc_inputs
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
@@ -251,13 +252,13 @@ def sanity_check(
 @click.argument(
     "left",
     type=click.Choice(
-        ["accessnyc", "policyengine", "axiom", "taxsim", "prd", "euromod"]
+        ["accessnyc", "policyengine", "axiom", "taxsim", "taxcalc", "prd", "euromod"]
     ),
 )
 @click.argument(
     "right",
     type=click.Choice(
-        ["accessnyc", "policyengine", "axiom", "taxsim", "prd", "euromod"]
+        ["accessnyc", "policyengine", "axiom", "taxsim", "taxcalc", "prd", "euromod"]
     ),
 )
 @click.option(
@@ -878,6 +879,8 @@ def _prepare_cases_for_engines(
     prepared = cases
     if "taxsim" in engines:
         prepared = attach_taxsim_inputs(prepared)
+    if "taxcalc" in engines:
+        prepared = attach_taxcalc_inputs(prepared)
     if (
         "axiom" in engines
         and axiom_program is None
@@ -1063,6 +1066,8 @@ def _build_runner(
         )
     if engine == "taxsim":
         return TaxsimPackageRunner()
+    if engine == "taxcalc":
+        return TaxCalcPackageRunner()
     if engine == "prd":
         return PrdPackageRunner()
     if engine == "euromod":
