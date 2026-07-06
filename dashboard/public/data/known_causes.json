@@ -686,6 +686,14 @@
    "kind": "amount_difference",
    "label": "EITC residuals after the generated re-encode",
    "suite": "fiit-ecps"
+  },
+  {
+   "concept": "us-az:policies/des/faa5#az_tanf_benefit",
+   "description": "4 of 1,341 AZ households diverge, all zero-income families paying the full A1 standard, axiom ~1.4% higher (annual deltas $37-52). The composed chain carries the unrounded annual standard divided by 12 while PolicyEngine appears to round the monthly standard down \u2014 a rounding-convention check against the DES FAA5 A1/A2 table decides which side to adjust.",
+   "fix_owner": "triage",
+   "kind": "amount_difference",
+   "label": "A1 payment-standard rounding convention",
+   "suite": "az-tanf-ecps"
   }
  ]
 }

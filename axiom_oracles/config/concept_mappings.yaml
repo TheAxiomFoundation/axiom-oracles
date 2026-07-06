@@ -1457,6 +1457,16 @@ concepts:
       axiom: wa_tanf_annual_benefit
       policyengine: wa_tanf
 
+  us-az:policies/des/faa5#az_tanf_benefit:
+    description: AZ Cash Assistance benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: az_tanf_annual_cash_benefit
+      policyengine: az_tanf
+
   us-mn:policies/dhs/combined-manual#mn_mfip_benefit:
     description: MN MFIP cash benefit (annualized)
     category: cash

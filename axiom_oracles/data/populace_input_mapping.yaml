@@ -1284,3 +1284,130 @@ mappings:
   - match: { kind: suffix, value: recoupment_amount_if_applicable }
     scope: household
     source: { kind: constant, value: 0 }
+
+  # ---------------------------------------------------------------------
+  # AZ Cash Assistance (us-az/tanf program) — DES FAA5 needy-family and
+  # payment-standard path. The module budgets in ANNUAL terms (the A1/A2
+  # standard is annual; the bridge divides by 12), so income inputs are
+  # annual sums. The base-year FPL is the 1992 poverty guideline the A1
+  # standard is expressed against; current FPL is the 2026 guideline.
+  # ---------------------------------------------------------------------
+
+  - match: { kind: suffix, value: caretaker_relative_family_earned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: sum
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: caretaker_relative_family_unearned_income }
+    scope: household
+    source:
+      kind: derived
+      transform: sum
+      aggregate: sum_over_people
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: suffix, value: gross_countable_income }
+    scope: household
+    source:
+      kind: derived
+      transform: sum
+      aggregate: sum_over_people
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: suffix, value: ca_earned_income_deductions }
+    scope: household
+    source:
+      kind: derived
+      transform: annual_flat_plus_rate_of_remainder
+      flat: 90
+      flat_per_earner: true
+      rate: 0.3
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  - match: { kind: suffix, value: current_federal_poverty_level_for_caretaker_relative_family_size }
+    scope: household
+    source:
+      kind: derived
+      transform: table_by_hh_size
+      table: { 1: 15960 }
+      per_additional: 5680
+      max_size: 1
+  - match: { kind: suffix, value: federal_poverty_level_for_payment_standard_base_year }
+    scope: household
+    source:
+      kind: derived
+      transform: table_by_hh_size
+      table: { 1: 6810 }
+      per_additional: 2380
+      max_size: 1
+  - match: { kind: suffix, value: budgetary_unit_has_obligation_to_pay_shelter_cost }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [RENT_PAID]
+  - match: { kind: suffix, value: caretaker_relative_is_parent_or_nonparent_caretaker_relative_applying_for_self_and_child }
+    scope: household
+    source: { kind: constant, value: true }
+  - match: { kind: suffix, value: all_members_of_caretaker_relative_family_registered_to_case }
+    scope: household
+    source: { kind: constant, value: true }
+  - match: { kind: suffix, value: adult_caretaker_is_nonparent_caretaker_relative_applying_for_child_only }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: kinship_care_case }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: kinship_foster_care_case }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: kinship_foster_care_child_only_case }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: legal_permanent_guardian_case }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: tribal_tanf_budgetary_unit_for_which_ca_needy_family_test_is_not_conducted }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: case_change_has_occurred }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: budgetary_unit_has_shelter_cost_obligation_but_fails_to_provide_verification }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: participant_in_military_receives_basic_allowance_for_housing }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: participant_is_on_lease_and_resides_in_government_subsidized_housing_unit }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: participant_with_shelter_cost_obligation_is_in_foreclosure_and_mortgage_company_accepts_back_payments }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: participant_works_in_exchange_for_rent }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: shelter_costs_paid_by_third_party_for_fewer_than_three_months }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: regular_benefit_amount }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: suffix, value: supplemental_benefit_amount }
+    scope: household
+    source: { kind: constant, value: 0 }

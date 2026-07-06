@@ -270,6 +270,27 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             rate = float(source.get("rate", 0))
             return round(max(0.0, (monthly - flat)) * (1 - rate), 2)
 
+        if transform == "annual_flat_plus_rate_of_remainder":
+            # Annualized deduction total where a flat monthly amount applies
+            # per earner and a rate of the remaining earned income is then
+            # deducted (Arizona cash assistance: $90 cost-of-employment per
+            # earner plus the 30% earned income deduction). Returns the
+            # DEDUCTION amount, not the countable remainder.
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            monthly = float(value) / 12
+            flat = float(source.get("flat", 0))
+            if source.get("flat_per_earner"):
+                people = (case_facts or {}).get("__people__") or []
+                earners = sum(
+                    1 for p in people
+                    if any(float(p.get(k, 0) or 0) > 0 for k in from_facts)
+                )
+                flat *= earners
+            flat = min(flat, monthly)
+            rate = float(source.get("rate", 0))
+            deduction_monthly = flat + max(0.0, monthly - flat) * rate
+            return round(deduction_monthly * 12, 2)
+
         if transform == "monthly_countable_after_exclusion":
             # Countable monthly income after a rate + flat exclusion.
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)

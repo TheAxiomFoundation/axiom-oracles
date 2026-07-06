@@ -53,6 +53,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "az-tanf-ecps",
+      "report": "axiom-policyengine-az-tanf-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-az"
+      ],
+      "source": "comparisons/az-tanf-ecps.yaml"
+    },
+    {
       "suite": "be-article-51-forfait",
       "report": "axiom-euromod-be-article-51-forfait.json",
       "repos": [

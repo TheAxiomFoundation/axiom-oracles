@@ -288,6 +288,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 218,
   },
+  "az-tanf-ecps": {
+    family: "tanf",
+    jurisdiction: "AZ",
+    label: "Arizona Cash Assistance",
+    region: "us",
+    kind: "household",
+    order: 217,
+  },
   "mn-tanf-ecps": {
     family: "tanf",
     jurisdiction: "MN",
