@@ -4,7 +4,7 @@ import { useState } from "react";
 import { engineLabel, mismatchKindLabel } from "../utils/format";
 import {
   FAMILY_LABELS,
-  US_STATE_NAMES,
+  JURISDICTION_LABELS,
   suiteMeta,
   suiteLabel,
   isAxiomPair,
@@ -116,17 +116,21 @@ function LedgerRow({ row }) {
 function programGapLabel(program) {
   const family = FAMILY_LABELS[program.program] || program.program;
   const j = program.jurisdiction;
-  const place = US_STATE_NAMES[j] || j;
+  const place = JURISDICTION_LABELS[j] || j;
   return j && j !== "US" && j !== "UK" ? `${place} ${family}` : family;
+}
+
+function programRegion(program) {
+  if (program.jurisdiction === "UK") return "uk";
+  if (program.jurisdiction === "BE") return "be";
+  if (program.jurisdiction === "CAN") return "ca";
+  return "us";
 }
 
 function DocumentedGaps({ coveragePrograms, region }) {
   const withGaps = (coveragePrograms || [])
     .filter((p) => (p.known_non_tanf_gaps || []).length > 0)
-    .filter((p) => {
-      const isUK = p.jurisdiction === "UK";
-      return region === "uk" ? isUK : !isUK;
-    });
+    .filter((p) => programRegion(p) === region);
   if (!withGaps.length) return null;
 
   return (

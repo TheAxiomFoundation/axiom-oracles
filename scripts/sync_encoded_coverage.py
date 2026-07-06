@@ -2,10 +2,10 @@
 """Regenerate encoded-program coverage from upstream corpus git trees.
 
 Local corpus checkouts drift hundreds of commits behind origin/main, so this
-script reads ``git ls-tree origin/main`` (after a fetch) for every rulespec
-repo under ~, classifies rule files into (program family, jurisdiction)
-buckets, and rewrites the *generated* entries in
-``dashboard/public/data/coverage_overview.json``'s ``axiom.programs`` list.
+script reads ``git ls-tree origin/main`` (after a fetch) for upstream rulespec
+repos, classifies rule files into (program family, jurisdiction) buckets, and
+rewrites the *generated* entries in ``dashboard/public/data/coverage_overview.json``'s
+``axiom.programs`` list.
 
 Hand-curated entries (anything without ``"generated": true``) are preserved
 and take precedence: a generated entry is only added for (family,
@@ -136,7 +136,7 @@ GENERIC_STATE_RULES = [
 ]
 
 SKIP_DIRS = re.compile(
-    r"(^|/)(\.axiom|artifacts|_compose|\.github|programs|tests)(/|$)"
+    r"(^|/)(\.axiom|artifacts|_compose|\.github|programs|sources|tests)(/|$)"
     r"|^known-[a-z-]+\.yaml$"
 )
 
@@ -192,22 +192,40 @@ def classify(path: str):
     return None
 
 
+CANADA_RULES = [
+    (
+        r"^policies/(cra/benefits-2026|esdc/benefits-2026)/",
+        ("canada_family_benefits", "CAN"),
+    ),
+    (
+        r"^policies/(cra|revenu-quebec)/",
+        ("canada_personal_income_tax", "CAN"),
+    ),
+]
+
+
+def classify_canada(path: str):
+    for pattern, hit in CANADA_RULES:
+        if re.search(pattern, path):
+            return hit
+    return None
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-fetch", action="store_true")
     args = parser.parse_args()
+
+    buckets: dict[tuple[str, str], dict] = defaultdict(
+        lambda: {"count": 0, "areas": set(), "repos": set()}
+    )
+    unclassified: dict[str, int] = defaultdict(int)
 
     # Upstream rulespec-us is a monorepo: us/ holds federal law, us-xx/ holds
     # each state's tree. The standalone rulespec-us-xx checkouts under ~ are
     # historical worktrees of the same content — reading only the monorepo
     # avoids double counting.
     repo = Path.home() / "rulespec-us"
-
-    buckets: dict[tuple[str, str], dict] = defaultdict(
-        lambda: {"count": 0, "areas": set()}
-    )
-    unclassified: dict[str, int] = defaultdict(int)
-
     for path in rule_files(repo, fetch=not args.no_fetch):
         hit = classify(path)
         if hit is None:
@@ -217,6 +235,19 @@ def main() -> None:
         bucket = buckets[(family, jurisdiction)]
         bucket["count"] += 1
         bucket["areas"].add("/".join(path.split("/")[1:4]))
+        bucket["repos"].add("rulespec-us")
+
+    canada_repo = Path.home() / "rulespec-ca"
+    for path in rule_files(canada_repo, fetch=not args.no_fetch):
+        hit = classify_canada(path)
+        if hit is None:
+            unclassified[f"rulespec-ca:{'/'.join(path.split('/')[:3])}"] += 1
+            continue
+        family, jurisdiction = hit
+        bucket = buckets[(family, jurisdiction)]
+        bucket["count"] += 1
+        bucket["areas"].add("/".join(path.split("/")[:3]))
+        bucket["repos"].add("rulespec-ca")
 
     data = json.loads(COVERAGE_PATH.read_text())
     programs = data["axiom"]["programs"]
@@ -233,13 +264,14 @@ def main() -> None:
         areas = ", ".join(sorted(bucket["areas"]))
         if len(areas) > 160:
             areas = areas[:157] + "…"
+        repos = ", ".join(sorted(bucket["repos"]))
         programs.append(
             {
                 "program": family,
                 "jurisdiction": jurisdiction,
                 "status": "coverageOnly",
                 "generated": True,
-                "source": f"rulespec-us origin/main: {areas} ({bucket['count']} rule files)",
+                "source": f"{repos} origin/main: {areas} ({bucket['count']} rule files)",
                 "known_non_tanf_gaps": [
                     "encoded upstream; no comparison suite yet",
                 ],

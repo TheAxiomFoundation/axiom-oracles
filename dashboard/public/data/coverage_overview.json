@@ -384,6 +384,26 @@
     "suite": "tx-tanf-parameters"
    },
    {
+    "program": "canada_family_benefits",
+    "jurisdiction": "CAN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-ca origin/main: policies/cra/benefits-2026, policies/esdc/benefits-2026 (3 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "canada_personal_income_tax",
+    "jurisdiction": "CAN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-ca origin/main: policies/cra/t1-2025, policies/cra/t4127-2026, policies/cra/tax-rates-2026, policies/cra/td1-2026, policies/revenu-quebec/source-deductions-2026, policies/re\u2026 (100 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
     "program": "childcare_assistance",
     "jurisdiction": "AZ",
     "status": "coverageOnly",

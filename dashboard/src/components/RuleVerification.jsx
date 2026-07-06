@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { formatPct } from "../utils/format";
-import { FAMILY_LABELS, US_STATE_NAMES } from "../utils/suites";
+import { FAMILY_LABELS, JURISDICTION_LABELS } from "../utils/suites";
 
 /**
  * Per-rule verification status (Phase-A item A7).
@@ -37,10 +37,7 @@ function familyLabel(family) {
 
 function jurisdictionLabel(code) {
   if (!code || code === "unclassified") return "Unclassified";
-  if (code === "US") return "Federal (US)";
-  if (code === "UK") return "United Kingdom";
-  if (code === "NYC") return "New York City";
-  return US_STATE_NAMES[code] || code;
+  return JURISDICTION_LABELS[code] || code;
 }
 
 // Rate → semantic tone for the small inline bars. Grounding/manifest read as
