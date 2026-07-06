@@ -334,6 +334,56 @@
     "suite": "ssi-ecps"
    },
    {
+    "program": "tanf",
+    "jurisdiction": "AK",
+    "status": "parameter",
+    "source": "rulespec-us origin/main: policies/dpa/atap, regulations/aac/title-7 (9 rule files)",
+    "known_non_tanf_gaps": [
+     "AK ATAP 2026 adult-included need standards verified (3/3); household-level suite pending (thin manual slice)"
+    ],
+    "suite": "ak-atap-standards"
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "CA",
+    "status": "executable",
+    "source": "axiom-oracles programs/us-ca/tanf/fy-2026.yaml composing W&I 11450 MAP schedules (regions 1/2, exempt/non-exempt)",
+    "known_non_tanf_gaps": [
+     "recipient month only; applicant MBSAC/MAP tests, immigration proration, and DBI splits out of scope"
+    ],
+    "suite": "ca-tanf-ecps"
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "GA",
+    "status": "parameter",
+    "source": "rulespec-us origin/main: policies/dfcs/tanf (10 rule files)",
+    "known_non_tanf_gaps": [
+     "GA DFCS Appendix A standards verified against PolicyEngine (8/8); household-level suite pending (thin manual slice)"
+    ],
+    "suite": "ga-tanf-standards"
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "MN",
+    "status": "executable",
+    "source": "axiom-oracles programs/us-mn/tanf/fy-2026.yaml composing Combined Manual 0022.12 total-grant budgeting",
+    "known_non_tanf_gaps": [
+     "recipient month only; applicant proration and recoupment out of scope"
+    ],
+    "suite": "mn-tanf-ecps"
+   },
+   {
+    "program": "tanf",
+    "jurisdiction": "TX",
+    "status": "parameter",
+    "source": "rulespec-us origin/main: policies/hhs/texas-works-handbook (1 rule files)",
+    "known_non_tanf_gaps": [
+     "TX budgetary/recognizable needs parameters verified (4/4); household-level suite pending (thin manual slice)"
+    ],
+    "suite": "tx-tanf-parameters"
+   },
+   {
     "program": "childcare_assistance",
     "jurisdiction": "AZ",
     "status": "coverageOnly",
@@ -405,10 +455,500 @@
    },
    {
     "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "AK",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/alaska-chip-eligibility.yaml, policies/cms/alaska-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "AL",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/alabama-chip-eligibility.yaml, policies/cms/alabama-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "AR",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/arkansas-chip-eligibility.yaml, policies/cms/arkansas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "AZ",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/arizona-chip-eligibility.yaml, policies/cms/arizona-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "CA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/california-chip-eligibility.yaml, policies/cms/california-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "CT",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/connecticut-chip-eligibility.yaml, policies/cms/connecticut-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "DC",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/district-of-columbia-chip-eligibility.yaml, policies/cms/district-of-columbia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "DE",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/delaware-chip-eligibility.yaml, policies/cms/delaware-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "FL",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/florida-chip-eligibility.yaml, policies/cms/florida-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
     "jurisdiction": "GA",
     "status": "coverageOnly",
     "generated": true,
-    "source": "rulespec-us origin/main: policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml (1 rule files)",
+    "source": "rulespec-us origin/main: policies/cms/georgia-chip-eligibility.yaml, policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "HI",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/hawaii-chip-eligibility.yaml, policies/cms/hawaii-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "IA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/iowa-chip-eligibility.yaml, policies/cms/iowa-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "ID",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/idaho-chip-eligibility.yaml, policies/cms/idaho-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "IL",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/illinois-chip-eligibility.yaml, policies/cms/illinois-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "IN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/indiana-chip-eligibility.yaml, policies/cms/indiana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "KS",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/kansas-chip-eligibility.yaml, policies/cms/kansas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "KY",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/kentucky-chip-eligibility.yaml, policies/cms/kentucky-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "LA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/louisiana-chip-eligibility.yaml, policies/cms/louisiana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "MA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/massachusetts-chip-eligibility.yaml, policies/cms/massachusetts-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "MD",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/maryland-chip-eligibility.yaml, policies/cms/maryland-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "ME",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/maine-chip-eligibility.yaml, policies/cms/maine-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "MI",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/michigan-chip-eligibility.yaml, policies/cms/michigan-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "MN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/minnesota-chip-eligibility.yaml, policies/cms/minnesota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "MO",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/missouri-chip-eligibility.yaml, policies/cms/missouri-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "MS",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/mississippi-chip-eligibility.yaml, policies/cms/mississippi-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "MT",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/montana-chip-eligibility.yaml, policies/cms/montana-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "NC",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/north-carolina-chip-eligibility.yaml, policies/cms/north-carolina-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "ND",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/north-dakota-chip-eligibility.yaml, policies/cms/north-dakota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "NE",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/nebraska-chip-eligibility.yaml, policies/cms/nebraska-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "NH",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/new-hampshire-chip-eligibility.yaml, policies/cms/new-hampshire-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "NJ",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/new-jersey-chip-eligibility.yaml, policies/cms/new-jersey-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "NM",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/new-mexico-chip-eligibility.yaml, policies/cms/new-mexico-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "NV",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/nevada-chip-eligibility.yaml, policies/cms/nevada-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "NY",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/new-york-chip-eligibility.yaml, policies/cms/new-york-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "OH",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/ohio-chip-eligibility.yaml, policies/cms/ohio-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "OK",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/oklahoma-chip-eligibility.yaml, policies/cms/oklahoma-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "OR",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/oregon-chip-eligibility.yaml, policies/cms/oregon-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "PA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/pennsylvania-chip-eligibility.yaml, policies/cms/pennsylvania-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "RI",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/rhode-island-chip-eligibility.yaml, policies/cms/rhode-island-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "SC",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/south-carolina-chip-eligibility.yaml, policies/cms/south-carolina-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "SD",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/south-dakota-chip-eligibility.yaml, policies/cms/south-dakota-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "TN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/tennessee-chip-eligibility.yaml, policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "TX",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/texas-chip-eligibility.yaml, policies/cms/texas-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "UT",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/utah-chip-eligibility.yaml, policies/cms/utah-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "VA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/virginia-chip-eligibility.yaml, policies/cms/virginia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "VT",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/vermont-chip-eligibility.yaml, policies/cms/vermont-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "WA",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/washington-chip-eligibility.yaml, policies/cms/washington-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "WI",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/wisconsin-chip-eligibility.yaml, policies/cms/wisconsin-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "WV",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/west-virginia-chip-eligibility.yaml, policies/cms/west-virginia-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_chip_bhp_thresholds",
+    "jurisdiction": "WY",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/cms/wyoming-chip-eligibility.yaml, policies/cms/wyoming-medicaid-chip-bhp-eligibility-levels.yaml (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -419,6 +959,16 @@
     "status": "coverageOnly",
     "generated": true,
     "source": "rulespec-us origin/main: policies/dfcs/medicaid (1 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "medicaid_eligibility_groups",
+    "jurisdiction": "IN",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/fssa/medicaid-policy-manual (2 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -489,6 +1039,16 @@
     "status": "coverageOnly",
     "generated": true,
     "source": "rulespec-us origin/main: policies/dfr/snap-tanf-program-policy-manual (7 rule files)",
+    "known_non_tanf_gaps": [
+     "encoded upstream; no comparison suite yet"
+    ]
+   },
+   {
+    "program": "snap",
+    "jurisdiction": "UT",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dws/eligibility-manual (1 rule files)",
     "known_non_tanf_gaps": [
      "encoded upstream; no comparison suite yet"
     ]
@@ -585,13 +1145,13 @@
    },
    {
     "program": "tanf",
-    "jurisdiction": "AK",
-    "status": "parameter",
-    "source": "rulespec-us origin/main: policies/dpa/atap, regulations/aac/title-7 (9 rule files)",
+    "jurisdiction": "AL",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dhr/tanf (1 rule files)",
     "known_non_tanf_gaps": [
-     "AK ATAP 2026 adult-included need standards verified (3/3); household-level suite pending (thin manual slice)"
-    ],
-    "suite": "ak-atap-standards"
+     "encoded upstream; no comparison suite yet"
+    ]
    },
    {
     "program": "tanf",
@@ -605,26 +1165,6 @@
    },
    {
     "program": "tanf",
-    "jurisdiction": "CA",
-    "status": "executable",
-    "source": "axiom-oracles programs/us-ca/tanf/fy-2026.yaml composing W&I 11450 MAP schedules (regions 1/2, exempt/non-exempt)",
-    "known_non_tanf_gaps": [
-     "recipient month only; applicant MBSAC/MAP tests, immigration proration, and DBI splits out of scope"
-    ],
-    "suite": "ca-tanf-ecps"
-   },
-   {
-    "program": "tanf",
-    "jurisdiction": "GA",
-    "status": "parameter",
-    "source": "rulespec-us origin/main: policies/dfcs/tanf (10 rule files)",
-    "known_non_tanf_gaps": [
-     "GA DFCS Appendix A standards verified against PolicyEngine (8/8); household-level suite pending (thin manual slice)"
-    ],
-    "suite": "ga-tanf-standards"
-   },
-   {
-    "program": "tanf",
     "jurisdiction": "KS",
     "status": "coverageOnly",
     "generated": true,
@@ -635,23 +1175,23 @@
    },
    {
     "program": "tanf",
-    "jurisdiction": "MN",
-    "status": "executable",
-    "source": "axiom-oracles programs/us-mn/tanf/fy-2026.yaml composing Combined Manual 0022.12 total-grant budgeting",
+    "jurisdiction": "MD",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: policies/dhs/fia (1 rule files)",
     "known_non_tanf_gaps": [
-     "recipient month only; applicant proration and recoupment out of scope"
-    ],
-    "suite": "mn-tanf-ecps"
+     "encoded upstream; no comparison suite yet"
+    ]
    },
    {
     "program": "tanf",
-    "jurisdiction": "TX",
-    "status": "parameter",
-    "source": "rulespec-us origin/main: policies/hhs/texas-works-handbook (1 rule files)",
+    "jurisdiction": "ME",
+    "status": "coverageOnly",
+    "generated": true,
+    "source": "rulespec-us origin/main: regulations/dhhs/ofi (1 rule files)",
     "known_non_tanf_gaps": [
-     "TX budgetary/recognizable needs parameters verified (4/4); household-level suite pending (thin manual slice)"
-    ],
-    "suite": "tx-tanf-parameters"
+     "encoded upstream; no comparison suite yet"
+    ]
    },
    {
     "program": "tanf",
