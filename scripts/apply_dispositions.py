@@ -16,6 +16,8 @@ Usage:
 arithmetic that does not reconcile, dangling source paths) or when a
 checked-in report or coverage rollup no longer matches what the merge would
 produce. Reports whose suite has no dispositions file are left untouched.
+Reports that already merged dispositions before trimming stored mismatch
+examples keep that precomputed full-run disposition block.
 """
 
 from __future__ import annotations
@@ -110,6 +112,10 @@ def _merge_reports(
             if str(suite).startswith("be-"):
                 be_reports.append(report)
             continue
+        if _is_premerged_slim_report(report):
+            if str(suite).startswith("be-"):
+                be_reports.append(report)
+            continue
         merged = apply_dispositions(
             report,
             dispositions,
@@ -131,6 +137,26 @@ def _merge_reports(
             print(f"Updated {path.relative_to(REPO_ROOT)}")
             changed = True
     return problems, be_reports, changed
+
+
+def _is_premerged_slim_report(report: dict) -> bool:
+    """Whether a report merged dispositions before trimming mismatch rows.
+
+    Some population diagnostics keep aggregate counts over the full run while
+    storing only a bounded sample of mismatch examples for the dashboard. For
+    those reports, applying dispositions after the trim would undercount the
+    full-run explained residuals, so the generator writes the v2.1 report with a
+    precomputed ``summary.dispositioned`` block.
+    """
+
+    summary = report.get("summary") or {}
+    if report.get("schema_version") != "axiom.comparison_report.v2.1":
+        return False
+    if not isinstance(summary.get("dispositioned"), dict):
+        return False
+    stored = summary.get("stored_mismatch_example_count")
+    mismatch_count = summary.get("mismatch_count") or 0
+    return isinstance(stored, int) and stored < mismatch_count
 
 
 def _refresh_be_rollup(

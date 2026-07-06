@@ -30,6 +30,8 @@ from typing import Any
 
 from policyengine_us import Microsimulation
 
+from axiom_oracles.comparison.dispositions import apply_dispositions_from_dir
+
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
@@ -475,7 +477,6 @@ def _build_report(
 ) -> dict[str, Any]:
     all_rows = [row for group in comparison_groups for row in group]
     mismatches_all = [row for row in all_rows if not row["matches"]]
-    visible_mismatches = mismatches_all[:mismatch_limit]
 
     aggregates = []
     concepts = []
@@ -525,7 +526,7 @@ def _build_report(
         )
 
     cases = []
-    for row in visible_mismatches:
+    for row in mismatches_all:
         mismatch = {
             "case_id": row["case_id"],
             "concept": row["concept"],
@@ -564,7 +565,7 @@ def _build_report(
     ]
     diagnostics = _diagnostics(all_rows)
 
-    return {
+    report = {
         "schema_version": "axiom.comparison_report.v2",
         "suite": SUITE,
         "population": "enhanced-cps",
@@ -588,7 +589,7 @@ def _build_report(
                 "scenario": row["component"],
                 "tolerance": TOLERANCE,
             }
-            for row in visible_mismatches
+            for row in mismatches_all
         ],
         "errors": [],
         "summary": {
@@ -628,7 +629,7 @@ def _build_report(
                     "code": "stored_mismatch_examples_limited",
                     "severity": "info",
                     "message": (
-                        f"Stored {len(visible_mismatches):,} mismatch examples "
+                        f"Stored {min(len(mismatches_all), mismatch_limit):,} mismatch examples "
                         f"out of {mismatch_count:,}; aggregate counts use the "
                         "full run."
                     ),
@@ -646,7 +647,9 @@ def _build_report(
             "mismatches_by_scenario": mismatches_by_scenario,
             "diagnostics": diagnostics,
             "sample_size": sample_size,
-            "stored_mismatch_example_count": len(visible_mismatches),
+            "stored_mismatch_example_count": min(
+                len(mismatches_all), mismatch_limit
+            ),
             "weighted": {
                 "comparison_weight": compared,
                 "match_rate": (match_count / compared * 100) if compared else 100.0,
@@ -655,6 +658,51 @@ def _build_report(
             },
         },
     }
+    report = _merge_dispositions(report)
+    return _limit_mismatch_examples(report, mismatch_limit)
+
+
+def _merge_dispositions(report: dict[str, Any]) -> dict[str, Any]:
+    return apply_dispositions_from_dir(
+        report,
+        REPO_ROOT / "dispositions",
+        repo_root=REPO_ROOT,
+    )
+
+
+def _limit_mismatch_examples(
+    report: dict[str, Any],
+    mismatch_limit: int,
+) -> dict[str, Any]:
+    if mismatch_limit < 0:
+        return report
+    limited = dict(report)
+    visible_ids = {
+        row.get("case_id") for row in (report.get("mismatches") or [])[:mismatch_limit]
+    }
+    limited["mismatches"] = (report.get("mismatches") or [])[:mismatch_limit]
+    limited["cases"] = [
+        row
+        for row in (report.get("cases") or [])
+        if row.get("case_id") in visible_ids
+    ]
+    summary = dict(report.get("summary") or {})
+    summary["stored_mismatch_example_count"] = len(limited["mismatches"])
+    alarms = []
+    for alarm in summary.get("alarms") or []:
+        if alarm.get("code") != "stored_mismatch_examples_limited":
+            alarms.append(alarm)
+            continue
+        updated = dict(alarm)
+        mismatch_count = summary.get("mismatch_count") or 0
+        updated["message"] = (
+            f"Stored {len(limited['mismatches']):,} mismatch examples "
+            f"out of {mismatch_count:,}; aggregate counts use the full run."
+        )
+        alarms.append(updated)
+    summary["alarms"] = alarms
+    limited["summary"] = summary
+    return limited
 
 
 def _diagnostics(rows: list[dict[str, Any]]) -> dict[str, Any]:
