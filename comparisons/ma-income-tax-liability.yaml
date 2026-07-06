@@ -7,8 +7,8 @@
 #
 # PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
 # supported law year (2024) because the pinned binary abandons 2026; the
-# 2024-to-2026 indexation vintage is recorded in
-# dispositions/ma-income-tax-liability.yaml rather than absorbed by tolerance.
+# flat 5 per cent rate and section 3(b) exemptions are identical in 2024 and
+# 2026, so the pipeline matches both oracles exactly and needs no disposition.
 #
 # Run locally:
 #   uv run python scripts/run_comparison.py ma-income-tax-liability

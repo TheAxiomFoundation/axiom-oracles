@@ -7,8 +7,8 @@
 #
 # PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
 # supported law year (2024) because the pinned binary abandons 2026; the
-# 2024-to-2026 indexation vintage is recorded in
-# dispositions/il-income-tax-liability.yaml rather than absorbed by tolerance.
+# 2024-to-2026 exemption-indexation residual stays within the relative
+# tolerance (flat 4.95 per cent rate), so no mismatch rows are produced.
 #
 # Run locally:
 #   uv run python scripts/run_comparison.py il-income-tax-liability
