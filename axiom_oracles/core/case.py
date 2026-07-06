@@ -167,6 +167,31 @@ class Concepts:
         "uk:policies/universal_credit_composed_award_pipeline"
         "#uc_pilot_award_amount"
     )
+    # Benefit-cap reduction of the Universal Credit award (UC Regulations 2013
+    # regulation 80A/81), the monthly amount by which the section 8(1) award is
+    # reduced when total welfare benefits exceed the regulation-80A relevant
+    # amount. Exposed as ``uc_pilot_benefit_cap_reduction`` by the composed UC
+    # pipeline; it is the direct analog of UKMOD's separate ``brduc_s`` output
+    # (UKMOD carries the cap effect in ``brduc_s`` and reports the uncapped
+    # ``bsauc_s``, so the reduction is compared on its own rather than through
+    # the award).
+    UK_HOUSEHOLD_BENEFIT_CAP_UC_REDUCTION = (
+        "uk:policies/universal_credit_composed_award_pipeline"
+        "#uc_pilot_benefit_cap_reduction"
+    )
+    # Composed Winter Fuel Payment award pipeline (rulespec-uk) that wires the
+    # Social Fund Winter Fuel Payment Regulations 2025 (SI 2025/969) regulation 3
+    # England-and-Wales standard amounts (£200 under-80, £300 at-80) with the
+    # pension-age member count, the unit-level 80+ tier, and the 2025/26
+    # income-recovery means-test gate supplied as inputs, so an end-to-end UKMOD
+    # comparison (Winter Fuel ``boaht_s``) can run on a shared pensioner grid.
+    # The final award is the annual household amount, exposed as
+    # ``wfp_pilot_award_amount`` by
+    # ``uk/policies/winter_fuel_payment_composed_award_pipeline.yaml``.
+    UK_HOUSEHOLD_WINTER_FUEL_PAYMENT_AWARD = (
+        "uk:policies/winter_fuel_payment_composed_award_pipeline"
+        "#wfp_pilot_award_amount"
+    )
     # Composed Pension Credit guarantee-credit award pipeline (rulespec-uk) that
     # wires the State Pension Credit Act 2002 section 2 standard-minimum-
     # guarantee, additional-amount, and income-difference stage boundaries from

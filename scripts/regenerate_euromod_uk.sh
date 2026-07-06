@@ -32,6 +32,8 @@ for name in \
   uk-self-employed-nic-ukmod \
   uk-employer-nic-ukmod \
   uk-universal-credit-ukmod \
+  uk-benefit-cap-ukmod \
+  uk-winter-fuel-ukmod \
   uk-child-benefit-ukmod \
   uk-housing-benefit-ukmod \
   uk-income-tax-savings-ukmod \

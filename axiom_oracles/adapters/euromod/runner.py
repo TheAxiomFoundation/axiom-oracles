@@ -70,6 +70,11 @@ NON_ANNUALIZED_OUTPUTS: frozenset[str] = frozenset(
         "tprhm_s",
         "tprhmtr_s",
         "bsauc_s",
+        # UKMOD's UC benefit-cap reduction ``brduc_s`` is a monthly assessment-
+        # period amount whose Axiom counterpart (the composed pilot's
+        # ``uc_pilot_benefit_cap_reduction``) is also monthly, so the comparison
+        # is monthly-to-monthly and the reduction is left un-annualized.
+        "brduc_s",
     }
 )
 

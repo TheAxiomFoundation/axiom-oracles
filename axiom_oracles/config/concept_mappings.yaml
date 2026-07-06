@@ -896,6 +896,76 @@ concepts:
           type: country
           geoid: UK
 
+  uk:policies/universal_credit_composed_award_pipeline#uc_pilot_benefit_cap_reduction:
+    description: UK Universal Credit benefit-cap reduction (regulation 80A/81)
+    category: benefits
+    comparison: amount
+    # UKMOD carries the benefit cap in a SEPARATE output brduc_s and reports the
+    # UNCAPPED bsauc_s (verified: no bcap_uk function writes back into bsauc_s),
+    # so the reg-80A/81 reduction is compared on its own against the composed UC
+    # pilot's uc_pilot_benefit_cap_reduction rather than through the award. Both
+    # are monthly assessment-period amounts, so the comparison is monthly-to-
+    # monthly (brduc_s is carried in the adapter's NON_ANNUALIZED_OUTPUTS). An
+    # absolute tolerance to the pound catches structural encoding gaps while
+    # absorbing UKMOD's weekly-stored cap constants (weekly * 52 / 12) versus the
+    # pipeline's annual-limit / 12 (a <= £0.17/month convention residual on the
+    # single-no-child cases; penny-exact on the couple-with-children national
+    # case). The child-benefit-in-cap-base divergence (UKMOD's il_bencap sums
+    # bsauc_s + bch_s + other welfare; the UC-only pilot base omits non-UC
+    # benefits) is classified per case as an Axiom-attributed cap-base scope gap,
+    # not absorbed by tolerance.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uc_pilot_benefit_cap_reduction
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: brduc_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount:
+    description: UK Winter Fuel Payment household award (England and Wales)
+    category: benefits
+    comparison: amount
+    # UKMOD reports the Winter Fuel Payment boaht_s as a monthly per-member amount
+    # allocated across the benefit unit's pension-age members; the adapter sums it
+    # across the benefit unit and annualizes (× 12), so the compared value is the
+    # annual household award and the composed pilot's annual wfp_pilot_award_amount
+    # is compared annual-to-annual (boaht_s is left in the default annualization
+    # set). The award is a household amount (£200 under-80, £300 at-80, England and
+    # Wales, SI 2025/969 reg 3) that does not scale with the pension-age member
+    # count, gated on a pension-age member and the £35,000-a-year income-recovery
+    # means test. Winter Fuel does not draw UKMOD's stochastic take-up correction,
+    # so the surface matches exactly; an absolute tolerance to the pound guards the
+    # comparison. Scotland (drgn1=12, £211/£317) runs a different devolved
+    # instrument and is out of scope for this England-and-Wales surface.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: wfp_pilot_award_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: boaht_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement:
     description: UK Child Benefit annual entitlement (gross, pre-charge; family by child count)
     category: benefits

@@ -9,6 +9,193 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  uk-benefit-cap:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/universal_credit_composed_award_pipeline#uc_pilot_benefit_cap_reduction
+    cases:
+    - id: uk-bcap-single-rent600
+      period: 2026-04
+      scenario: household-benefit-cap
+      parameters:
+        adults: 1
+        children: 0
+        monthly_rent: 600.0
+        london: false
+        head_annual_earnings: 0.0
+        earnings_exempt: false
+        uc_cap_branch_absent: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 7200.0
+    - id: uk-bcap-single-rent900
+      period: 2026-04
+      scenario: household-benefit-cap
+      parameters:
+        adults: 1
+        children: 0
+        monthly_rent: 900.0
+        london: false
+        head_annual_earnings: 0.0
+        earnings_exempt: false
+        uc_cap_branch_absent: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 10800.0
+    - id: uk-bcap-single-rent1100
+      period: 2026-04
+      scenario: household-benefit-cap
+      parameters:
+        adults: 1
+        children: 0
+        monthly_rent: 1100.0
+        london: false
+        head_annual_earnings: 0.0
+        earnings_exempt: false
+        uc_cap_branch_absent: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 13200.0
+    - id: uk-bcap-single-rent1300
+      period: 2026-04
+      scenario: household-benefit-cap
+      parameters:
+        adults: 1
+        children: 0
+        monthly_rent: 1300.0
+        london: false
+        head_annual_earnings: 0.0
+        earnings_exempt: false
+        uc_cap_branch_absent: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 15600.0
+    - id: uk-bcap-single-rent1300-london
+      period: 2026-04
+      scenario: household-benefit-cap
+      parameters:
+        adults: 1
+        children: 0
+        monthly_rent: 1300.0
+        london: true
+        head_annual_earnings: 0.0
+        earnings_exempt: false
+        uc_cap_branch_absent: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 15600.0
+    - id: uk-bcap-single-rent1300-earn12000-exempt
+      period: 2026-04
+      scenario: household-benefit-cap
+      parameters:
+        adults: 1
+        children: 0
+        monthly_rent: 1300.0
+        london: false
+        head_annual_earnings: 12000.0
+        earnings_exempt: true
+        uc_cap_branch_absent: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000.0
+      facts:
+        living_renting: true
+        rent_paid: 15600.0
+    - id: uk-bcap-couple-no-child-rent1500-uncapped
+      period: 2026-04
+      scenario: household-benefit-cap
+      parameters:
+        adults: 2
+        children: 0
+        monthly_rent: 1500.0
+        london: false
+        head_annual_earnings: 0.0
+        earnings_exempt: false
+        uc_cap_branch_absent: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 34
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 18000.0
   uk-best-start-foods:
     locale: UK
     entity: Person
@@ -2331,6 +2518,191 @@ case_sets:
         living_owner: true
         rent_paid: 0.0
         cash_on_hand: 20000.0
+  uk-winter-fuel:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount
+    cases:
+    - id: uk-wfp-single-under80
+      period: '2026-04-06'
+      scenario: household-winter-fuel-payment
+      parameters:
+        couple: false
+        any_80: false
+        annual_income: 0.0
+        head_age: 67
+        has_pension_age_member: true
+        income_below_threshold: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        age: 67
+        yearly_earned_income: 0.0
+    - id: uk-wfp-single-age80
+      period: '2026-04-06'
+      scenario: household-winter-fuel-payment
+      parameters:
+        couple: false
+        any_80: true
+        annual_income: 0.0
+        head_age: 82
+        has_pension_age_member: true
+        income_below_threshold: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 82
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        age: 82
+        yearly_earned_income: 0.0
+    - id: uk-wfp-couple-under80
+      period: '2026-04-06'
+      scenario: household-winter-fuel-payment
+      parameters:
+        couple: true
+        any_80: false
+        annual_income: 0.0
+        head_age: 67
+        has_pension_age_member: true
+        income_below_threshold: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 66
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        age: 67
+        yearly_earned_income: 0.0
+    - id: uk-wfp-couple-one-age80
+      period: '2026-04-06'
+      scenario: household-winter-fuel-payment
+      parameters:
+        couple: true
+        any_80: true
+        annual_income: 0.0
+        head_age: 82
+        has_pension_age_member: true
+        income_below_threshold: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 82
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 66
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        age: 82
+        yearly_earned_income: 0.0
+    - id: uk-wfp-single-income30000-below-threshold
+      period: '2026-04-06'
+      scenario: household-winter-fuel-payment
+      parameters:
+        couple: false
+        any_80: false
+        annual_income: 30000.0
+        head_age: 67
+        has_pension_age_member: true
+        income_below_threshold: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+      facts:
+        age: 67
+        yearly_earned_income: 30000.0
+    - id: uk-wfp-single-income42000-above-threshold
+      period: '2026-04-06'
+      scenario: household-winter-fuel-payment
+      parameters:
+        couple: false
+        any_80: false
+        annual_income: 42000.0
+        head_age: 67
+        has_pension_age_member: true
+        income_below_threshold: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 67
+        relation: HeadOfHousehold
+        yearly_earned_income: 42000.0
+      facts:
+        age: 67
+        yearly_earned_income: 42000.0
+    - id: uk-wfp-single-below-pension-age
+      period: '2026-04-06'
+      scenario: household-winter-fuel-payment
+      parameters:
+        couple: false
+        any_80: false
+        annual_income: 0.0
+        head_age: 60
+        has_pension_age_member: false
+        income_below_threshold: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 60
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        age: 60
+        yearly_earned_income: 0.0
   uk-worker-nic:
     locale: UK
     entity: Person
