@@ -107,7 +107,7 @@ PE suite.
 | 12 | **Housing Benefit** | 14 (1.5) | 1 | `housing_benefit` (after `would_claim_housing_benefit`) | **partial** — only capital tariff-income encoded (uksi/2006/213 reg.52 + 2006/214 reg.29); no applicable amount / max rent / taper / final award (wrapper retired) | **compared (tariff only)** — `uk-tax-benefits-efrs` compares `housing_benefit_tariff_income`. Final `housing-benefit-final` surface coded-but-excluded | encode applicable amount + LHA/max-rent + taper → HB Regs 2006 (uksi/2006/213 & /214), full |
 | 13 | **Stamp Duty Land Tax** | 11 (0.5) | 1 | `stamp_duty_land_tax` | NOT ENCODED | — | encode → FA 2003 Pt 4 |
 | 14 | **Attendance Allowance** | 9 (1.7) | 2 | `attendance_allowance` (category frozen FRS input) | **partial (rates)** — only 2026 rates (Up-rating Order Sch.1); no eligibility/final formula | **compared (rates)** — 2 AA rate params `parameter_value`; no final AA variable compared | encode eligibility + final → SSCBA 1992 s.64–67; build AA suite |
-| 15 | **Student loan repayments** | 9 (5.9) | 1 | `student_loan_repayments` / `student_loan_repayment` | ENCODED end-to-end — plan thresholds+rates (GOV.UK-sourced) → `student_loan_repayments` | **compared** — `uk-tax-benefits-efrs` (`student_loan_repayment(_rate)`, `student_loan_repayments`) — 43 edge mismatches | — (add statutory citations; the encoding is guidance-only) |
+| 15 | **Student loan repayments** | 9 (5.9) | 1 | `student_loan_repayments` / `student_loan_repayment` | ENCODED end-to-end — plan thresholds+rates (GOV.UK-sourced) + outstanding-balance cap → `student_loan_repayments` | **compared** — `uk-tax-benefits-efrs` (`student_loan_repayment(_rate)`, `student_loan_repayments`) — **100% match** (the 43 near-end-of-loan mismatches resolved once the EFRS bridge fed `student_loan_balance` into the balance cap; rulespec-uk#77 + oracles#147) | — (upstream-source-checked against SI 2009/470) |
 | 16 | **DLA** | 6 (1.0) | 2 | `dla` = `dla_sc`+`dla_m` (category frozen FRS input) | ENCODED (child DLA + rates) — GOV.UK + Up-rating Order art.14 → `disability_living_allowance_annual_amount` | **compared** — `uk-tax-benefits-efrs` (`disability-living-allowance-final`: `dla`/`dla_sc`/`dla_m` + care/mobility components) — 68 mismatches (weekly-rate edge cases) | — (distinguish adult legacy DLA; resolve mismatches) |
 | 17 | **ESA (contributory)** | 6 (0.7) | 3 | `esa_contrib` (reported passthrough) | NOT ENCODED (contrib ESA) | — | (low priority; passthrough) → WRA 2007 Pt 1 |
 | 18 | **Pension Credit** | 5 (1.3) | 1 | `pension_credit` = Guarantee + Savings (after `would_claim_pc`) | ENCODED (Guarantee close to end-to-end) — SPCA 2002 ss.1–3 + uksi/2002/1792 reg.6/15/Sch.IIA; **Savings Credit mechanics encoded (s.3) but not wired to final** | **compared (components)** — `uk-tax-benefits-efrs` compares `guarantee_credit`, `savings_credit`, `standard_minimum_guarantee`, severe-disab/carer/child additions, `pension_credit_deemed_income`, `is_SP_age`/`state_pension_age`. **Final `pension_credit` coded-but-excluded** (`pension-credit-final`) | build final suite; wire Savings Credit → SPCA 2002 s.3; uksi/2002/1792 |
@@ -149,9 +149,11 @@ cannot be PE-compared: **Companies Act 2006 s.382** (small-company test),
 ## Sanity-check vs the live dashboard
 
 Two PE suites publish. `uk-tax-benefits-efrs`: **177,608 cases, 3,506,191
-comparisons, 275 mismatches (99.9922% match)** across 51 concepts; mismatches
-concentrate in Carer's Allowance (152), DLA (68), student loan (43), Carer
-Support Payment (12). `uk-universal-credit-efrs`: **177,608 cases, 750,298
+comparisons, 232 mismatches (99.9934% match)** across 51 concepts; mismatches
+concentrate in Carer's Allowance (152), DLA (68), Carer Support Payment (12)
+(the 43 student-loan mismatches resolved once the EFRS bridge fed
+`student_loan_balance` into the balance cap; rulespec-uk#77 + oracles#147).
+`uk-universal-credit-efrs`: **177,608 cases, 750,298
 comparisons, 0 mismatches (100%)** across 26 concepts. Cross-referencing the 151
 `comparable` rulespec outputs against the 77 running concept ids: **48 comparable
 outputs are live-compared today**; **103 are encoded-and-comparable but not yet

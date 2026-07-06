@@ -687,6 +687,8 @@ def test_student_loan_repayment_projection_uses_policyengine_plan_enum():
         "loan_plan_is_plan_5": False,
         "loan_plan_is_postgraduate": False,
         "annual_income_before_tax_and_other_deductions": 40_000,
+        "outstanding_student_loan_balance": 0,
+        "outstanding_student_loan_balance_is_known": False,
     }
 
     assert project_student_loan_repayment_inputs(
@@ -701,6 +703,8 @@ def test_student_loan_repayment_projection_uses_policyengine_plan_enum():
         "loan_plan_is_plan_5": False,
         "loan_plan_is_postgraduate": True,
         "annual_income_before_tax_and_other_deductions": 35_000,
+        "outstanding_student_loan_balance": 0,
+        "outstanding_student_loan_balance_is_known": False,
     }
 
     assert project_student_loan_repayment_inputs(
@@ -715,7 +719,43 @@ def test_student_loan_repayment_projection_uses_policyengine_plan_enum():
         "loan_plan_is_plan_5": False,
         "loan_plan_is_postgraduate": False,
         "annual_income_before_tax_and_other_deductions": 100_000,
+        "outstanding_student_loan_balance": 0,
+        "outstanding_student_loan_balance_is_known": False,
     }
+
+
+def test_student_loan_repayment_projection_feeds_outstanding_balance_and_gate():
+    # A positive PolicyEngine student_loan_balance is fed through as the cap and
+    # marks the balance known, mirroring PolicyEngine UK's
+    # where(balance > 0, min(scheduled, balance), scheduled).
+    assert project_student_loan_repayment_inputs(
+        {
+            "student_loan_plan": "StudentLoanPlan.PLAN_1",
+            "adjusted_net_income": 40_000,
+            "student_loan_balance": 294.12,
+        }
+    ) == {
+        "loan_plan_is_plan_1": True,
+        "loan_plan_is_plan_2": False,
+        "loan_plan_is_plan_4": False,
+        "loan_plan_is_plan_5": False,
+        "loan_plan_is_postgraduate": False,
+        "annual_income_before_tax_and_other_deductions": 40_000,
+        "outstanding_student_loan_balance": 294.12,
+        "outstanding_student_loan_balance_is_known": True,
+    }
+
+    # A zero (or absent/NaN -> 0) balance leaves the repayment uncapped: the
+    # gate is False and no cap is applied.
+    projected = project_student_loan_repayment_inputs(
+        {
+            "student_loan_plan": "StudentLoanPlan.PLAN_1",
+            "adjusted_net_income": 40_000,
+            "student_loan_balance": 0,
+        }
+    )
+    assert projected["outstanding_student_loan_balance"] == 0
+    assert projected["outstanding_student_loan_balance_is_known"] is False
 
 
 def test_student_loan_repayment_request_projects_plan_inputs():
@@ -783,6 +823,16 @@ def test_student_loan_repayment_request_projects_plan_inputs():
             "person_7",
             period,
             {"kind": "decimal", "value": "40000.0"},
+        ),
+        f"{STUDENT_LOAN_REPAYMENT_BASE}#input.outstanding_student_loan_balance": (
+            "person_7",
+            period,
+            {"kind": "decimal", "value": "0.0"},
+        ),
+        f"{STUDENT_LOAN_REPAYMENT_BASE}#input.outstanding_student_loan_balance_is_known": (
+            "person_7",
+            period,
+            {"kind": "bool", "value": False},
         ),
     }
 
@@ -4095,6 +4145,7 @@ def test_policyengine_variables_for_surfaces_deduplicates_person_variables():
     )
     assert policyengine_person_variables_for_surfaces(["student-loan-repayment"]) == (
         "adjusted_net_income",
+        "student_loan_balance",
         "student_loan_plan",
         "student_loan_repayment",
     )

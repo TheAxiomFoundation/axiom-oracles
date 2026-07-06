@@ -1377,6 +1377,7 @@ SURFACE_SPECS = {
         pe_variables=(
             "adjusted_net_income",
             "student_loan_plan",
+            "student_loan_balance",
             "student_loan_repayment",
         ),
     ),
@@ -6663,6 +6664,14 @@ def project_universal_credit_work_allowance_inputs(row: Any) -> dict[str, Any]:
 
 def project_student_loan_repayment_inputs(row: Any) -> dict[str, Any]:
     plan = enum_name(row_value(row, "student_loan_plan", "NONE")).upper()
+    # PolicyEngine UK caps the repayment at the outstanding balance only when
+    # that balance is positive (student_loan_balance defaults to 0, i.e.
+    # "not provided -> uncapped"): where(balance > 0, min(scheduled, balance),
+    # scheduled). Feed the same balance and gate into the Axiom encoding so its
+    # capped student_loan_repayment matches PolicyEngine on the shared EFRS
+    # population instead of returning the uncapped scheduled deduction
+    # (oracles#147; rulespec-uk#77).
+    outstanding_balance = money(row_value(row, "student_loan_balance", 0))
     return {
         "loan_plan_is_plan_1": plan == "PLAN_1",
         "loan_plan_is_plan_2": plan == "PLAN_2",
@@ -6677,6 +6686,8 @@ def project_student_loan_repayment_inputs(row: Any) -> dict[str, Any]:
         "annual_income_before_tax_and_other_deductions": money(
             row_value(row, "adjusted_net_income", 0)
         ),
+        "outstanding_student_loan_balance": outstanding_balance,
+        "outstanding_student_loan_balance_is_known": outstanding_balance > 0,
     }
 
 
