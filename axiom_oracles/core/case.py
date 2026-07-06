@@ -304,6 +304,10 @@ class Concepts:
         "be:statutes/family_benefits/child_benefit_base_2025"
         "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement"
     )
+    BE_STUDY_ALLOWANCE = (
+        "be:statutes/education/study_allowance_routing"
+        "#belgium_study_allowance_annual_amount"
+    )
     BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT = (
         "be:policies/euromod_benefit_income_list"
         "#belgium_euromod_ils_ben_family_benefit_pilot_annual_amount"

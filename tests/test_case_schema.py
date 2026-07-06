@@ -223,6 +223,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_REGIONAL_ADDITIONAL_TAX,
         Concepts.BE_LOCAL_COMMUNAL_ADDITIONAL_TAX,
         Concepts.BE_CAPITAL_INCOME_SEPARATE_TAX,
+        Concepts.BE_STUDY_ALLOWANCE,
     }
 
     assert (
