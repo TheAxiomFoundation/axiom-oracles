@@ -11,11 +11,27 @@ model definition. Two backends live here.
   registry) and *internal-only* locals (absent from ``VARCONFIG``). A pure XML
   parse — no engine, no .NET, no licensed data — so it is CI-friendly.
 
-* :class:`PolicyEngineUniverseBackend` is a documented stub that enumerates
-  variables-with-formulas from a pinned ``policyengine-uk`` checkout. It exists
-  so a ``pe-uk`` universe becomes reproducible the moment the scoper wiring
-  lands; it is intentionally not exercised by the committed UK universe (which
-  is UKMOD).
+* :class:`PolicyEngineUniverseBackend` enumerates PolicyEngine-UK's *simulated*
+  surface from a pinned ``policyengine-uk`` checkout — the PolicyEngine analogue
+  of the EUROMOD policy list. It instantiates the checkout's
+  ``CountryTaxBenefitSystem`` (no microdata, no engine run — just the variable
+  registry) and, for each PE-UK **program** in a declared spine (the fiscal
+  instruments PE-UK models, one row per program like UKMOD's ``<Policy>`` list),
+  reads from code which of the program's bound output variables carry a
+  ``formula`` and which are pure inputs. The formula body of each is inspected to
+  split the four PE-UK simulation kinds the UK coverage matrix documents
+  (``docs/uk-coverage-matrix.md``): *rules-simulated* (a ``def formula`` computes
+  entitlement from parameters + circumstances), *rate-from-frozen-input-category*
+  (a rate table over a frozen ``*_category`` FRS input — comparable on rates
+  only), *reported-ceiling* (reads a ``*_reported`` amount, never computes the
+  statutory maximum), and *pure-input* (no formula at all). The program→variable
+  binding is the spine (structural, like the EUROMOD policy names); every scored
+  fact — variable existence, formula presence, kind — is read from the checkout's
+  code and the drift ``--check`` fails if the committed universe diverges. The
+  package version is pinned in the universe header from the checkout's
+  ``pyproject.toml``. This is CI-friendly the same way the EUROMOD backend is: it
+  needs the checkout present (and importable), and ``--check`` is a clean no-op
+  when it is absent.
 
 The classification *heuristic* below only proposes a default scope; the
 authoritative ``in_scope``/``exclusion_reason`` decision lives in the committed
@@ -307,33 +323,304 @@ def raw_to_universe_policy(
     )
 
 
+#: PolicyEngine-UK simulation kinds, read from a variable's formula body. These
+#: are the four kinds the UK coverage matrix (docs/uk-coverage-matrix.md)
+#: distinguishes — PE-UK's variable tree is not simply "computed vs input".
+PE_KIND_RULES = "rules"  # def formula computes entitlement/liability from statute
+PE_KIND_RATE = "rate_from_category"  # rate table over a frozen *_category input
+PE_KIND_REPORTED = "reported_ceiling"  # reads a *_reported amount, no statutory max
+PE_KIND_INPUT = "pure_input"  # no formula: value straight from microdata
+
+
+@dataclass(frozen=True)
+class PolicyEngineProgram:
+    """One PolicyEngine-UK program (a fiscal instrument) in the enumeration spine.
+
+    The spine is the PE analogue of the EUROMOD ``<Policy>`` list: the set of
+    instruments PE-UK models, one row per program. ``name`` is the program's
+    canonical PE-UK output variable (the id the universe row keys on); ``outputs``
+    are all the PE-UK output variables that carry the program's statutory surface,
+    in priority order (the queryable set is whichever of these the code gives a
+    formula). The binding is structural; the *facts* (which of ``outputs`` have a
+    formula, and each one's kind) are read from the checkout's code, never here.
+    """
+
+    name: str
+    outputs: tuple[str, ...]
+
+
+#: The PolicyEngine-UK program spine — the fiscal instruments PE-UK simulates,
+#: ordered by the coverage matrix's 2026 fiscal weight. One row per program; each
+#: names the PE-UK output variable(s) carrying its statutory surface. The
+#: generator confirms every listed variable exists in the pinned checkout's
+#: tax-benefit system (a missing/renamed variable fails the drift check) and
+#: reads each one's simulation kind from its formula — so this list is the
+#: *grouping*, and the checkout's code is the *ground truth* for every scored
+#: fact. Sourced by enumerating PE-UK's ``variables/**`` formula surface (matrix
+#: provenance §"Denominators"); it is NOT the self-reported ``programs.yaml``
+#: registry, which drifts from code.
+PE_UK_PROGRAM_SPINE: tuple[PolicyEngineProgram, ...] = (
+    PolicyEngineProgram("vat", ("vat",)),
+    PolicyEngineProgram("income_tax", ("income_tax", "personal_allowance")),
+    PolicyEngineProgram(
+        "national_insurance",
+        (
+            "national_insurance",
+            "ni_class_1_employee_primary",
+            "ni_class_1_employee_additional",
+            "ni_class_4_main",
+            "ni_class_4_maximum",
+            "ni_class_2",
+        ),
+    ),
+    PolicyEngineProgram("state_pension", ("state_pension",)),
+    PolicyEngineProgram("universal_credit", ("universal_credit",)),
+    PolicyEngineProgram("council_tax", ("council_tax",)),
+    PolicyEngineProgram("business_rates", ("business_rates",)),
+    PolicyEngineProgram("pip", ("pip", "pip_dl", "pip_m")),
+    PolicyEngineProgram("capital_gains_tax", ("capital_gains_tax",)),
+    PolicyEngineProgram("fuel_duty", ("fuel_duty",)),
+    PolicyEngineProgram(
+        "child_benefit",
+        ("child_benefit", "child_benefit_respective_amount", "child_benefit_entitlement"),
+    ),
+    PolicyEngineProgram(
+        "housing_benefit", ("housing_benefit", "housing_benefit_applicable_amount")
+    ),
+    PolicyEngineProgram("stamp_duty_land_tax", ("stamp_duty_land_tax",)),
+    PolicyEngineProgram("attendance_allowance", ("attendance_allowance",)),
+    PolicyEngineProgram(
+        "student_loan_repayments", ("student_loan_repayments", "student_loan_repayment")
+    ),
+    PolicyEngineProgram("dla", ("dla", "dla_sc", "dla_m")),
+    PolicyEngineProgram("esa_contrib", ("esa_contrib",)),
+    PolicyEngineProgram(
+        "pension_credit", ("pension_credit", "guarantee_credit", "savings_credit")
+    ),
+    PolicyEngineProgram("carers_allowance", ("carers_allowance",)),
+    PolicyEngineProgram("council_tax_benefit", ("council_tax_benefit",)),
+    PolicyEngineProgram("marriage_allowance", ("marriage_allowance",)),
+    PolicyEngineProgram("esa_income", ("esa_income",)),
+    PolicyEngineProgram("winter_fuel_allowance", ("winter_fuel_allowance",)),
+    PolicyEngineProgram("incapacity_benefit", ("incapacity_benefit", "afcs", "iidb")),
+    PolicyEngineProgram("scottish_child_payment", ("scottish_child_payment",)),
+    PolicyEngineProgram("tax_free_childcare", ("tax_free_childcare",)),
+    PolicyEngineProgram("carer_support_payment", ("carer_support_payment",)),
+    PolicyEngineProgram("council_tax_reduction", ("council_tax_reduction",)),
+    PolicyEngineProgram(
+        "legacy_means_tested",
+        ("jsa_income", "income_support", "working_tax_credit", "child_tax_credit"),
+    ),
+    PolicyEngineProgram(
+        "lbtt_ltt", ("land_and_buildings_transaction_tax", "land_transaction_tax")
+    ),
+    PolicyEngineProgram("sda", ("sda",)),
+    PolicyEngineProgram("ssmg", ("ssmg",)),
+    PolicyEngineProgram("tv_licence", ("tv_licence", "free_tv_licence_value")),
+)
+
+
+def _pe_variable_kind(name: str, index: "PolicyEngineVariableIndex") -> str:
+    """Read one PE-UK variable's simulation kind from its formula, or pure input.
+
+    The kind is derived from the formula source the way the coverage matrix
+    classifies it: a formula that reads a ``*_reported`` amount is a
+    reported-ceiling passthrough; one that reads a ``*_category`` frozen input is
+    a rate-from-category surface; any other formula is a rules engine; no formula
+    is a pure microdata input. A conservative textual test on the formula body,
+    matching the matrix's own method (grep of the formula source).
+    """
+    if not index.has_formula(name):
+        return PE_KIND_INPUT
+    source = index.formula_source(name)
+    if "_reported" in source:
+        return PE_KIND_REPORTED
+    if "_category" in source:
+        return PE_KIND_RATE
+    return PE_KIND_RULES
+
+
+class PolicyEngineVariableIndex:
+    """The code-derived variable surface of a pinned ``policyengine-uk`` checkout.
+
+    Instantiates the checkout's ``CountryTaxBenefitSystem`` (importing the package
+    *from the checkout*, so facts come from that exact tree, not any other
+    installed copy) and exposes, per variable name: whether it carries a formula
+    (PE-UK computes it) and, if so, its formula source (to classify the kind). No
+    microdata is loaded and no simulation is run — building the tax-benefit system
+    only reads the variable registry, so this is cheap and deterministic.
+    """
+
+    def __init__(self, checkout: Path, package: str) -> None:
+        self.checkout = checkout
+        self.package = package
+        self._formula_source: dict[str, str] = {}
+        self._has_formula: dict[str, bool] = {}
+        self._variables: set[str] = set()
+        self._loaded = False
+
+    def _load(self) -> None:
+        if self._loaded:
+            return
+        import importlib
+        import inspect
+        import sys
+
+        checkout = str(self.checkout)
+        # Import the package FROM the pinned checkout: prepend its path and drop
+        # any already-imported copy so a differently-versioned installed package
+        # cannot shadow the tree we are pinning facts to.
+        inserted = checkout not in sys.path
+        if inserted:
+            sys.path.insert(0, checkout)
+        stale = [m for m in sys.modules if m == self.package or m.startswith(self.package + ".")]
+        saved = {m: sys.modules.pop(m) for m in stale}
+        try:
+            pkg = importlib.import_module(self.package)
+            pkg_file = getattr(pkg, "__file__", "") or ""
+            if checkout not in str(Path(pkg_file).resolve()):
+                raise RuntimeError(
+                    f"imported {self.package} from {pkg_file!r}, not the pinned "
+                    f"checkout {checkout!r}; refusing to enumerate facts from the "
+                    "wrong tree. Ensure the checkout path is importable and its "
+                    "dependencies are installed."
+                )
+            tbs = pkg.CountryTaxBenefitSystem()
+            for var_name, variable in tbs.variables.items():
+                self._variables.add(var_name)
+                formulas = getattr(variable, "formulas", None)
+                has_formula = bool(formulas) and len(formulas) > 0
+                self._has_formula[var_name] = has_formula
+                if has_formula:
+                    sources: list[str] = []
+                    for formula in formulas.values():
+                        try:
+                            sources.append(inspect.getsource(formula))
+                        except (OSError, TypeError):
+                            continue
+                    self._formula_source[var_name] = "\n".join(sources)
+        finally:
+            # Restore whatever module state we displaced (leave the pinned import
+            # in place for the caller's process life; tests re-import cleanly).
+            for name, module in saved.items():
+                sys.modules.setdefault(name, module)
+        self._loaded = True
+
+    def exists(self, name: str) -> bool:
+        self._load()
+        return name in self._variables
+
+    def has_formula(self, name: str) -> bool:
+        self._load()
+        return self._has_formula.get(name, False)
+
+    def formula_source(self, name: str) -> str:
+        self._load()
+        return self._formula_source.get(name, "")
+
+
 class PolicyEngineUniverseBackend:
-    """Enumerate variables-with-formulas from a pinned ``policyengine-uk`` checkout.
+    """Enumerate PolicyEngine-UK's simulated surface from a pinned checkout.
 
-    Documented TODO hook. A ``pe-uk`` universe is being scoped concurrently; this
-    backend makes that matrix reproducible without duplicating the scoper's row
-    decisions. It enumerates the *facts* (which variables have formulas, i.e.
-    which the model computes rather than takes as input) from a pinned checkout,
-    the PolicyEngine analogue of the EUROMOD policy list.
+    The PolicyEngine analogue of :class:`EuromodUniverseBackend`: instead of
+    parsing a EUROMOD country XML it reads the checkout's ``CountryTaxBenefitSystem``
+    variable registry and walks the declared program spine
+    (:data:`PE_UK_PROGRAM_SPINE`), producing one :class:`RawPolicy` per program.
 
-    Not wired into the committed UK universe (which is UKMOD-backed). Raising
-    here keeps the stub honest: it advertises the exact contract a caller must
-    satisfy rather than silently returning an empty universe that would look
-    like "0 policies, all covered".
+    For each program it derives, purely from the checkout's code:
+
+    * ``queryable_outputs`` — the program's bound output variables that carry a
+      formula (the surfaces PE-UK actually computes, so a comparison can bind to
+      them). Ordered as the spine lists them.
+    * ``internal_outputs`` — bound outputs that are pure microdata inputs (no
+      formula): the evidence for classifying an input-carrying passthrough.
+    * ``policy_type`` — the program's simulation kind (``rules`` /
+      ``rate_from_category`` / ``reported_ceiling`` / ``pure_input``), read from
+      the primary computed output's formula. This is the fact the committed
+      universe's ``comparability``/``exclusion_reason`` decision is reviewed
+      against, the PE parallel of the EUROMOD policy ``Type``.
+
+    The scope decision (``in_scope``/``exclusion_reason``/``suite``/``comparability``)
+    is a committed decision preserved across regenerations, exactly as for the
+    EUROMOD backend; this backend only supplies the regenerated facts.
     """
 
     backend = "policyengine"
 
-    def __init__(self, checkout: str | Path, package: str = "policyengine_uk") -> None:
+    def __init__(
+        self,
+        checkout: str | Path,
+        package: str = "policyengine_uk",
+        spine: tuple[PolicyEngineProgram, ...] = PE_UK_PROGRAM_SPINE,
+    ) -> None:
         self.checkout = Path(checkout).expanduser()
         self.package = package
+        self.spine = spine
+        self._index = PolicyEngineVariableIndex(self.checkout, package)
 
-    def raw_policies(self) -> list[RawPolicy]:  # pragma: no cover - documented stub
-        raise NotImplementedError(
-            "PolicyEngineUniverseBackend is a documented TODO hook. To enumerate "
-            "the pe-uk universe, walk the pinned policyengine-uk checkout at "
-            f"{self.checkout} for Variable subclasses that define a `formula` "
-            "(model-computed outputs) versus input variables, and map each to a "
-            "RawPolicy. The pe-uk universe is being scoped concurrently; wire "
-            "this in behind conformance/pe-uk.yaml when that lands."
+    def pinned_version(self) -> str:
+        """Read the pinned package version from the checkout's ``pyproject.toml``.
+
+        A fact from the checkout, not memory — it stamps the universe header so a
+        conformance claim is scoped to ``policyengine-uk@<version>``, never a
+        floating latest.
+        """
+        pyproject = self.checkout / "pyproject.toml"
+        if not pyproject.exists():
+            raise FileNotFoundError(
+                f"pyproject.toml not found at {pyproject}; cannot pin the "
+                "policyengine-uk version for the universe header."
+            )
+        for line in pyproject.read_text().splitlines():
+            stripped = line.strip()
+            if stripped.startswith("version"):
+                # version = "2.89.2"
+                _, _, rhs = stripped.partition("=")
+                return rhs.strip().strip('"').strip("'")
+        raise ValueError(
+            f"no `version = \"…\"` line in {pyproject}; cannot pin the "
+            "policyengine-uk version."
         )
+
+    def raw_policies(self) -> list[RawPolicy]:
+        """Enumerate every program in the spine with its code-derived output facts."""
+        policies: list[RawPolicy] = []
+        for program in self.spine:
+            present = [v for v in program.outputs if self._index.exists(v)]
+            missing = [v for v in program.outputs if not self._index.exists(v)]
+            if missing:
+                # A spine variable vanished/renamed in the checkout: fail loudly so
+                # the drift check forces a spine review rather than silently
+                # dropping the program's surface.
+                raise ValueError(
+                    f"PolicyEngine-UK program {program.name!r}: spine output "
+                    f"variable(s) {missing} not found in the pinned checkout's "
+                    "tax-benefit system. The model renamed or removed them — "
+                    "update PE_UK_PROGRAM_SPINE (a scope review) and regenerate."
+                )
+            queryable = [v for v in present if self._index.has_formula(v)]
+            internal = [v for v in present if not self._index.has_formula(v)]
+            # Program kind = the kind of its primary COMPUTED output (first bound
+            # output that carries a formula), else pure input. rules dominates
+            # rate/reported when a program mixes surfaces (its statutory engine is
+            # what a full comparison binds to).
+            kinds = [_pe_variable_kind(v, self._index) for v in queryable]
+            if PE_KIND_RULES in kinds:
+                policy_type = PE_KIND_RULES
+            elif PE_KIND_RATE in kinds:
+                policy_type = PE_KIND_RATE
+            elif PE_KIND_REPORTED in kinds:
+                policy_type = PE_KIND_REPORTED
+            else:
+                policy_type = PE_KIND_INPUT
+            policies.append(
+                RawPolicy(
+                    name=program.name,
+                    policy_type=policy_type,
+                    switch=None,
+                    all_outputs=tuple(program.outputs),
+                    queryable_outputs=tuple(queryable),
+                    internal_outputs=tuple(internal),
+                )
+            )
+        return policies
