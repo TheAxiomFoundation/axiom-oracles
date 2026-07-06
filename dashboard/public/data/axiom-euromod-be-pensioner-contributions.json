@@ -390,10 +390,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "c6cc389a8f5e7238019e4fa06849325fad9acd46",
+      "axiom_rules_engine_sha": "10b7f0c1de2b68142bbdcf0519a2380f997bbaf9",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T01:25:49Z",
+    "generated_at": "2026-07-06T16:01:37Z",
     "generated_by": "scripts/run_comparison.py::be-pensioner-contributions",
     "oracle": {
       "euromod_country": "BE",
@@ -405,10 +405,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": "f4c580557e3f4f7f273042906ab12f94313fd247"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -424,14 +424,8 @@
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": "dispositions/be-pensioner-contributions.yaml",
-      "expired_entries": [
-        "health-floor-missing-below-euromod-floor",
-        "health-floor-and-solidarity-base-phase-in",
-        "solidarity-base-table-above-health-30k",
-        "solidarity-base-table-phase-in-39k",
-        "solidarity-base-table-mid-41k"
-      ],
+      "dispositions_file": null,
+      "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 100,
