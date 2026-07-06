@@ -132,6 +132,15 @@ class Concepts:
         "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
         "#uk_pit_pilot_income_tax_liability"
     )
+    # The Income Tax Act 2007 section 35 personal allowance exposed as a named
+    # step of the same composed worker-PIT pipeline (the preliminary allowance
+    # less the section 35(2)-(3) income-limit taper), compared against UKMOD's
+    # final personal allowance ``tinta_s`` on a pure single-individual income
+    # sweep (axiom-oracles#190).
+    UK_PERSONAL_ALLOWANCE = (
+        "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
+        "#uk_pit_pilot_personal_allowance"
+    )
     UK_WORKER_CLASS_1_EMPLOYEE_NIC = (
         "uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline"
         "#uk_nic_pilot_primary_class_1_contribution"
