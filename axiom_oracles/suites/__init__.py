@@ -36,6 +36,7 @@ from .be_worker import (
     be_article_51_forfait_cases,
     be_employer_ssc_cases,
     be_marital_quotient_cases,
+    be_pit_work_bonus_credit_cases,
     be_worker_disposable_income_list_cases,
     be_worker_pit_cases,
     be_worker_ssc_cases,
@@ -68,6 +69,7 @@ def available_suites() -> tuple[str, ...]:
         "nyc-synthetic",
         "be-worker-pit",
         "be-article-51-forfait",
+        "be-work-bonus-credit",
         "be-marital-quotient",
         "be-worker-tax-income-list",
         "be-worker-disposable-income-list",
@@ -118,6 +120,8 @@ def load_suite(name: str):
         return be_worker_pit_cases()
     if name == "be-article-51-forfait":
         return be_article_51_forfait_cases()
+    if name == "be-work-bonus-credit":
+        return be_pit_work_bonus_credit_cases()
     if name == "be-marital-quotient":
         return be_marital_quotient_cases()
     if name == "be-worker-tax-income-list":
@@ -215,6 +219,7 @@ __all__ = [
     "be_local_municipal_pit_cases",
     "be_maternity_leave_cases",
     "be_pensioner_contributions_cases",
+    "be_pit_work_bonus_credit_cases",
     "be_cadastral_income_indexation_cases",
     "be_property_tax_cases",
     "be_regional_pit_surcharge_cases",

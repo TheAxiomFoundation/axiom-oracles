@@ -87,6 +87,33 @@ def be_article_51_forfait_cases() -> list[Case]:
     ]
 
 
+def be_pit_work_bonus_credit_cases() -> list[Case]:
+    """Single-worker Belgium Article 289ter/1 work-bonus tax-credit cases.
+
+    Isolates the refundable low-wage work-bonus credit ``tintcly_s`` — the
+    ``tinfe_be`` fiscal-expenditure component EUROMOD BE_2025 labels the earned-
+    income (EITC-style) credit — as its own comparison surface. It is otherwise
+    exercised only folded into the composed ``tin_s`` worker-PIT liability. The
+    encoded ``belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit``
+    computes the CIR 1992 Article 289ter/1 credit from the ONSS full-year equal-
+    month work-bonus A/B amounts capped by the employee contributions actually
+    granted; EUROMOD BE_2025 ``tintcly_s`` computes the same credit from the
+    UNCAPPED ``i_tsceerdA_s`` / ``i_tsceerdB_s`` bases (the sole difference).
+    Both are bridged on the engine's post-uprating gross (``yem``).
+
+    The sweep spans the credit region: the 10k / 14k cases are low-wage, where the
+    uncapped-versus-granted base difference is visible (ec-jrc issue #12); the 30k
+    / 45k cases sit where the credit tapers and the bases coincide.
+    """
+
+    return [
+        _single_worker_work_bonus_credit_case("be-work-bonus-credit-10k", 10_000.0),
+        _single_worker_work_bonus_credit_case("be-work-bonus-credit-14k", 14_000.0),
+        _single_worker_work_bonus_credit_case("be-work-bonus-credit-30k", 30_000.0),
+        _single_worker_work_bonus_credit_case("be-work-bonus-credit-45k", 45_000.0),
+    ]
+
+
 def be_worker_tax_income_list_cases() -> list[Case]:
     """Single-worker Belgium tax-list cases for the EUROMOD BE_2025 oracle."""
 
@@ -180,6 +207,36 @@ def _single_worker_forfait_case(case_id: str, annual_income: float) -> Case:
         },
         metadata_extra={
             "scenario": "single-worker-article-51-forfait",
+            "yearly_earned_income": annual_income,
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "yem": [remuneration_input],
+                "yemeq_s": [WORK_BONUS_REFERENCE_INPUT],
+            },
+        },
+    )
+
+
+def _single_worker_work_bonus_credit_case(case_id: str, annual_income: float) -> Case:
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
+    return _single_worker_case(
+        case_id,
+        annual_income,
+        output=Concepts.BE_ARTICLE_289TER1_WORK_BONUS_CREDIT,
+        axiom_inputs={
+            remuneration_input: annual_income,
+            WORK_BONUS_REFERENCE_INPUT: 0,
+            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
+            ): 0,
+            _pit_input(
+                "belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies"
+            ): False,
+            _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
+            _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
+        },
+        metadata_extra={
+            "scenario": "single-worker-work-bonus-credit",
             "yearly_earned_income": annual_income,
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": [remuneration_input],

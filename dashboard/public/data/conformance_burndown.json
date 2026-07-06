@@ -16,12 +16,12 @@
       {
         "date": "2026-07-06",
         "in_scope": 23,
-        "covered": 22,
-        "uncovered": 1,
+        "covered": 23,
+        "uncovered": 0,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 1,
-        "conformant": false
+        "gap": 0,
+        "conformant": true
       }
     ],
     "uk": [
