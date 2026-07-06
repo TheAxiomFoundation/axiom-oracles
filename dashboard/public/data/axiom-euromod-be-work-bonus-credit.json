@@ -1,0 +1,475 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit",
+      "description": "Belgium Article 289ter/1 low-wage work-bonus tax credit (tintcly)",
+      "left_weighted_sum": 4346.923835,
+      "match_rate": 50,
+      "match_weight": 2,
+      "mismatch_count": 2,
+      "mismatch_weight": 2,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 3075.959991,
+      "weighted_difference": 1270.963844,
+      "weighted_match_rate": 50
+    }
+  ],
+  "case_count": 4,
+  "cases": [
+    {
+      "case_id": "be-work-bonus-credit-10k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 9095.020627881837,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 10550.22392834293,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 833.3333333333334,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+          ],
+          "yemeq_s": [
+            "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 9095.020627881837,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 10550.22392834293
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            10000.0
+          ],
+          "yearly_earned_income_total": 10000.0
+        },
+        "locale": "BE",
+        "scenario": "single-worker-work-bonus-credit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 10000.0
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit",
+          "description": "Belgium Article 289ter/1 low-wage work-bonus tax credit (tintcly)",
+          "difference": 780.367331889955,
+          "kind": "amount_difference",
+          "left": 1504.8488879999998,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 724.4815561100447,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-work-bonus-credit-14k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 12733.028879034573,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 14770.313499680102,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 1166.6666666666667,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+          ],
+          "yemeq_s": [
+            "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 12733.028879034573,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 14770.313499680102
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            14000.0
+          ],
+          "yearly_earned_income_total": 14000.0
+        },
+        "locale": "BE",
+        "scenario": "single-worker-work-bonus-credit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 14000.0
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit",
+          "description": "Belgium Article 289ter/1 low-wage work-bonus tax credit (tintcly)",
+          "difference": 490.57470944593706,
+          "kind": "amount_difference",
+          "left": 1504.8488879999998,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 1014.2741785540627,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-work-bonus-credit-30k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 31650.67178502879,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 2500.0,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+          ],
+          "yemeq_s": [
+            "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 27285.06188364551,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 31650.67178502879
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            30000.0
+          ],
+          "yearly_earned_income_total": 30000.0
+        },
+        "locale": "BE",
+        "scenario": "single-worker-work-bonus-credit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 30000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-work-bonus-credit-45k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 40927.59282546826,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 47476.00767754318,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian": 0,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies": false,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 3750.0,
+            "yemmy": 12
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+          ],
+          "yemeq_s": [
+            "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 40927.59282546826,
+          "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 47476.00767754318
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            45000.0
+          ],
+          "yearly_earned_income_total": 45000.0
+        },
+        "locale": "BE",
+        "scenario": "single-worker-work-bonus-credit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 45000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium Article 289ter/1 low-wage work-bonus tax credit (tintcly)",
+      "id": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-work-bonus-credit-10k",
+      "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit",
+      "description": "Belgium Article 289ter/1 low-wage work-bonus tax credit (tintcly)",
+      "difference": 780.367331889955,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "work-bonus-credit-uncapped-ab-bases-10k",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12"
+      },
+      "kind": "amount_difference",
+      "left": 1504.8488879999998,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 724.4815561100447,
+      "scenario": "single-worker-work-bonus-credit",
+      "tolerance": 1,
+      "yearly_earned_income": 10000.0
+    },
+    {
+      "ages": null,
+      "case_id": "be-work-bonus-credit-14k",
+      "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit",
+      "description": "Belgium Article 289ter/1 low-wage work-bonus tax credit (tintcly)",
+      "difference": 490.57470944593706,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "work-bonus-credit-uncapped-ab-bases-14k",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12"
+      },
+      "kind": "amount_difference",
+      "left": 1504.8488879999998,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 1014.2741785540627,
+      "scenario": "single-worker-work-bonus-credit",
+      "tolerance": 1,
+      "yearly_earned_income": 14000.0
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-06T12:52:18Z",
+    "generated_by": "scripts/run_comparison.py::be-work-bonus-credit",
+    "oracle": {
+      "euromod_country": "BE",
+      "euromod_dataset": "BE_2024_c1_2015_03_e2",
+      "euromod_release": "J2.0+",
+      "euromod_system": "BE_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-be",
+        "sha": "4089efe22d849c7c2dbe9062a4e7c98a501e28b0"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "be-work-bonus-credit",
+  "summary": {
+    "comparison_count": 4,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 2
+      },
+      "dispositions_file": "dispositions/be-work-bonus-credit.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 50,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 2,
+    "mismatch_count": 2,
+    "mismatches_by_concept": [
+      {
+        "count": 2,
+        "value": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 2,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 2,
+        "value": "single-worker-work-bonus-credit"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 4,
+      "match_rate": 50,
+      "match_weight": 2,
+      "mismatch_weight": 2
+    }
+  }
+}

@@ -800,6 +800,7 @@
   ],
   "dispositioned_parity": {
     "suites": [
+      "be-article-51-forfait",
       "be-birth-leave",
       "be-cadastral-income-indexation",
       "be-capital-income-tax",
@@ -824,14 +825,15 @@
       "be-special-social-security-contribution",
       "be-study-allowance",
       "be-unemployment",
+      "be-work-bonus-credit",
       "be-worker-disposable-income-list",
       "be-worker-pit",
       "be-worker-ssc",
       "be-worker-tax-income-list"
     ],
-    "comparison_count": 123,
-    "match_count": 87,
-    "raw_match_rate": 70.731707,
+    "comparison_count": 132,
+    "match_count": 94,
+    "raw_match_rate": 71.212121,
     "explained_rate": 100,
     "unexplained_count": 0,
     "note": "Raw = exact per-comparison matches across the committed be-* dashboard suites. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from dispositions/<suite>.yaml."

@@ -9,6 +9,68 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  be-article-51-forfait:
+    locale: BE
+    entity: Person
+    entity_id: head
+    outputs:
+    - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_worker_forfait_professional_expenses
+    cases:
+    - id: be-article-51-forfait-12k
+      period: '2025'
+      scenario: single-worker-article-51-forfait
+      parameters:
+        yearly_earned_income: 12000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000.0
+    - id: be-article-51-forfait-22k
+      period: '2025'
+      scenario: single-worker-article-51-forfait
+      parameters:
+        yearly_earned_income: 22000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 22000.0
+    - id: be-article-51-forfait-27k
+      period: '2025'
+      scenario: single-worker-article-51-forfait
+      parameters:
+        yearly_earned_income: 27000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 27000.0
+    - id: be-article-51-forfait-35k
+      period: '2025'
+      scenario: single-worker-article-51-forfait
+      parameters:
+        yearly_earned_income: 35000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 35000.0
+    - id: be-article-51-forfait-60k
+      period: '2025'
+      scenario: single-worker-article-51-forfait
+      parameters:
+        yearly_earned_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
   be-birth-leave:
     locale: BE
     entity: Person
@@ -1767,6 +1829,57 @@ case_sets:
         kind: person
         age: 40
         relation: HeadOfHousehold
+  be-work-bonus-credit:
+    locale: BE
+    entity: Person
+    entity_id: head
+    outputs:
+    - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit
+    cases:
+    - id: be-work-bonus-credit-10k
+      period: '2025'
+      scenario: single-worker-work-bonus-credit
+      parameters:
+        yearly_earned_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 10000.0
+    - id: be-work-bonus-credit-14k
+      period: '2025'
+      scenario: single-worker-work-bonus-credit
+      parameters:
+        yearly_earned_income: 14000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 14000.0
+    - id: be-work-bonus-credit-30k
+      period: '2025'
+      scenario: single-worker-work-bonus-credit
+      parameters:
+        yearly_earned_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 30000.0
+    - id: be-work-bonus-credit-45k
+      period: '2025'
+      scenario: single-worker-work-bonus-credit
+      parameters:
+        yearly_earned_income: 45000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000.0
   be-worker-disposable-income-list:
     locale: BE
     entity: Household

@@ -195,6 +195,8 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
 
     assert {mapping.concept_id for mapping in mappings} == {
         Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
+        Concepts.BE_ARTICLE_51_EMPLOYEE_FORFAIT,
+        Concepts.BE_ARTICLE_289TER1_WORK_BONUS_CREDIT,
         Concepts.BE_MARITAL_QUOTIENT_COUPLE_PIT_BEFORE_WITHHOLDING,
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
         Concepts.BE_EMPLOYEE_WORK_BONUS_REDUCTION,

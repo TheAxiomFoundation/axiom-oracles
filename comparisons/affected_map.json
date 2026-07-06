@@ -30,6 +30,14 @@
       "source": "comparisons/az-snap-ecps.yaml"
     },
     {
+      "suite": "be-article-51-forfait",
+      "report": "axiom-euromod-be-article-51-forfait.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-article-51-forfait.yaml"
+    },
+    {
       "suite": "be-capital-income-tax",
       "report": "axiom-euromod-be-capital-income-tax.json",
       "repos": [
@@ -84,6 +92,14 @@
         "TheAxiomFoundation/rulespec-be"
       ],
       "source": "comparisons/be-study-allowance.yaml"
+    },
+    {
+      "suite": "be-work-bonus-credit",
+      "report": "axiom-euromod-be-work-bonus-credit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-work-bonus-credit.yaml"
     },
     {
       "suite": "ca-snap-ecps",
