@@ -1106,7 +1106,16 @@ concepts:
     parent: us:tax/federal-income-tax#liability
     targets:
       axiom: us:statutes/26/1/j#income_tax_main_rates
-      policyengine: income_tax_main_rates
+      # Tax-Calculator's `taxbc` is regular tax before credits including the
+      # Schedule D preferential-rate worksheet, so it must be compared against
+      # PolicyEngine's ordinary-bracket tax PLUS its separate capital-gains tax.
+      # PE's `income_tax_main_rates` alone excludes capital gains (it subtracts
+      # `capital_gains_excluded_from_taxable_income` before applying brackets);
+      # `income_tax_before_credits = main_rates + capital_gains_tax + AMT`. The
+      # comparator sums a list target, so [main_rates, capital_gains_tax] equals
+      # `taxbc`. AMT is excluded because `taxbc` excludes it too (Tax-Calculator
+      # adds `c09600` separately); the AMT concept maps `taxcalc: c09600` alone.
+      policyengine: [income_tax_main_rates, capital_gains_tax]
       taxsim: v19
       taxcalc: taxbc
 

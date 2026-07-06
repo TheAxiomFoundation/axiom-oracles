@@ -278,6 +278,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "taxcalc-fiit-ecps",
+      "report": "taxcalc-policyengine-fiit-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/taxcalc-fiit-ecps.yaml"
+    },
+    {
       "suite": "tn-snap-ecps",
       "report": "axiom-policyengine-tn-snap-ecps.json",
       "repos": [
