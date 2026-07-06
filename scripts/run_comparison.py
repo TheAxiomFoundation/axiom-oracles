@@ -699,6 +699,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.88.56"),
         }
+    elif runner_type == "uk-council-tax-reduction-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
         oracle = {
@@ -1646,6 +1651,44 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     output.write_text(source.read_text())
 
 
+def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
+    """Council Tax Reduction grid: rulespec-uk pension-age scheme vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_council_tax_reduction.py, which runs a
+    synthetic England pensioner-household grid through PolicyEngine-UK 2.89.2 and
+    the encoded SI 2012/2885 England pension-age scheme (evaluated through the
+    axiom rules engine over PolicyEngine's own applicable amount / applicable
+    income / non-dependant deductions / council_tax liability / savings), then
+    writes one v2 report. On a runner without a PolicyEngine-UK environment or a
+    built axiom rules engine, the committed dashboard report is reused, exactly
+    like the state income-tax grid.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_council_tax_reduction.py"
+    basename = "axiom-policyengine-uk-council-tax-reduction"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"CTR grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -1653,6 +1696,7 @@ RUNNERS = {
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
+    "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,
 }
 
 

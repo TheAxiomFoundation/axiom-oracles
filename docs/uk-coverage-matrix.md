@@ -71,7 +71,11 @@ EUROMOD Belgium scoper).
   (`uk-tax-benefits-efrs`, `uk-universal-credit-efrs`) on the same
   `enhanced_frs_2023_24` population at 2026, PE-UK `2.88.56` / core `3.26.11`.
   The six `uk-*-ukmod` suites target **UKMOD/EUROMOD, not PolicyEngine** —
-  excluded from this matrix except as noted.
+  excluded from this matrix except as noted. The `uk-pe` **conformance
+  universe** (`conformance/uk-pe.yaml`, #188) pins PolicyEngine-UK **2.89.2**;
+  where a program's PE behaviour differs between the running-suite pin
+  (2.88.56) and the universe pin (2.89.2) — notably Council Tax Reduction,
+  present only from ≥2.89.2 — the row cites the 2.89.2 behaviour.
 
 ## Status legend
 
@@ -121,7 +125,7 @@ PE suite.
 | 26 | **Scottish Child Payment** | 0.5 (0.4) | 1 | `scottish_child_payment` (after `would_claim_scp`) | ENCODED end-to-end — ssi/2020/351 reg.18/20 → `scottish_child_payment_annual_amount` | **compared** — `uk-tax-benefits-efrs` (`scottish-child-payment-final`) — 0 mismatches | — |
 | 27 | **Tax-Free Childcare** | 0.4 (0.6) | 1 | `tax_free_childcare` (after `would_claim_tfc`) | **partial** — top-up rate + element + income ceiling (Childcare Payments Act 2014 ss.1/21 + uksi/2015/448 reg.15); no final cap/payment formula | **compared (params)** — 2 TFC params `parameter_value`; rate framing mismatch (`not_comparable`: statute 25% vs PE 20%) | encode final top-up + annual cap → Childcare Payments Act 2014; build TFC suite |
 | 28 | **Carer Support Payment (Scotland)** | 0.4 (0.1) | 1 (hybrid) | `carer_support_payment` (Scotland CA replacement, ≥2025) | ENCODED end-to-end — ssi/2023/302 reg.5/16 → `carer_support_payment_annual_amount` | **compared** — `uk-tax-benefits-efrs` (`carer-support-payment-final`) — 12 mismatches | — (resolve mismatches) |
-| 29 | **Council Tax Reduction (current)** | n/a (PE var absent) | — | **`council_tax_reduction` does NOT exist in PE-UK TBS** (only legacy `council_tax_benefit`) | ENCODED — England pension-age (`council-tax-reduction.yaml`) + Kingston local scheme (`kingston…council-tax-reduction`, 19 rules) | **AMBIGUOUS** — `council_tax_reduction` is `direct_variable`-mapped, but the target PE variable is not in PE-UK; no CTR surface runs. Populace-adapter/reported fallback only | **encode-and-compare blocked on PE side**: PE-UK must add a `council_tax_reduction` variable (issue #1769 national core + council schemes) → LGFA 1992 s.13A + Sch.1A; council CTR schemes |
+| 29 | **Council Tax Reduction (current)** | n/a (input-tested) | 1 (rules) | `council_tax_reduction` (household; = `council_tax_benefit` over benunit heads) — **now present in PE-UK ≥2.89.2** (#1769 national core + #1771 Kingston, both MERGED) | ENCODED — England pension-age (`council-tax-reduction.yaml`, SI 2012/2885 Sch.1) + Kingston working-age local scheme (`kingston…council-tax-reduction`, 19 rules) | **encoded, not compared** — `council_tax_reduction` is `direct_variable`-mapped (bridges/mappings/uk.yaml) to the now-present PE variable; no EFRS CTR surface in a running suite yet. Commensurable: PE's England-pensioner path (`england.council_tax_reduction.pensioners`: max_support 1, capital_limit £16,000, withdrawal 0.20) matches SI 2012/2885 penny-for-penny on a synthetic pension-age grid (verified, PE-UK 2.89.2). `council_tax` is a supplied input on **both** sides (PE `council_tax_reduction_maximum_eligible_liability` = `council_tax`; rulespec `council_tax_liability_for_year` input) | build EFRS `council-tax-reduction` surface projecting PE's applicable-amount/applicable-income/non-dep/`council_tax`/`savings` into the rulespec supplied inputs (the `uk_pension_credit` bridge pattern) → LGFA 1992 s.13A + Sch.1A; SI 2012/2885; council CTR schemes |
 | 30 | **JSA (income) / IS / WTC / CTC** | 0.0 (migrated) | 1/3 | `jsa_income`, `income_support`, `working_tax_credit`, `child_tax_credit` | IS/JSA: only capital-tariff (uksi/1987/1967 reg.53; 1996/207 reg.116). WTC/CTC: only element rate tables (uksi/2002/2005 Sch.2; 2002/2007 reg.7; 2024/247) — no taper/final | **compared (tariff/rates only)** — `income_support_tariff_income`, `jsa_income_tariff_income` `direct_variable`; WTC/CTC element params `parameter_value` (incl. a documented £1,015-vs-£1,010.22 PE bug) | low fiscal priority (all £0 in 2026, UC migration); encode taper if needed → JSA Regs 1996 / IS Regs 1987 / WTC & CTC Regs 2002 |
 | 31 | **LBTT (Scotland) / LTT (Wales)** | 0.2 / 0.1 | 1 | `land_and_buildings_transaction_tax`, `land_transaction_tax` | NOT ENCODED | — | encode → LTT(S)A 2013 / LTTA(W) 2017 |
 | 32 | **SDA** | 0.05 (0.01) | 3 | `sda` (reported passthrough × max rate) | **partial (rate)** — basic+age rates (Up-rating Order Sch.1); wrapper retired | **compared (rate)** — `sda` `direct_variable` (single rate) + `not_comparable` age-band rows; the `severe-disablement-allowance-final` bridge surface was removed (rulespec retired in 829ab1a) | (closed legacy benefit; low priority) → SSCBA 1992 s.68 |
@@ -202,11 +206,20 @@ suite; "PE-blocked" = PolicyEngine-UK must add the variable first.
    compares UK-branch only. Encode Scottish (+Welsh) rate tables and add the
    Scottish comparison branch. → Scotland Act 2016; Welsh Rates (Wales Act 2014).
 
-6. **Council Tax Reduction** (**PE-blocked** + encode) — rulespec has CTR
-   (England pension-age + Kingston); PE-UK has **no `council_tax_reduction`
-   variable** (only legacy `council_tax_benefit`). PolicyEngine must implement
-   CTR (issue #1769 national core + council schemes) before this can compare. →
-   LGFA 1992 s.13A + Sch.1A.
+6. **Council Tax Reduction** (**unblocked** — build EFRS surface) — rulespec has
+   CTR (England pension-age SI 2012/2885 + Kingston working-age); PE-UK gained a
+   `council_tax_reduction` variable in **≥2.89.2** (#1769 national core + #1771
+   Kingston, both MERGED), so the earlier PE-side block is resolved. The
+   `england.council_tax_reduction.pensioners` path is parameter-identical to
+   SI 2012/2885 (max_support 1, capital_limit £16,000, withdrawal 0.20) and
+   matches the rulespec England pension-age award penny-for-penny on a synthetic
+   grid (verified, PE-UK 2.89.2); it does **not** inherit the #1794 Housing
+   Benefit earnings-disregard defect (CTR's `council_tax_reduction_applicable_income`
+   applies no earnings disregard and never calls
+   `housing_benefit_applicable_income_disregard`). Remaining work is the EFRS
+   `council-tax-reduction` surface (bridging PE's applicable-amount/-income,
+   non-dep deductions, `council_tax`, and `savings` into the rulespec supplied
+   inputs) → LGFA 1992 s.13A + Sch.1A; SI 2012/2885.
 
 7. **Attendance Allowance + Winter Fuel + Tax-Free Childcare finals**
    (encode+compare) — each has rate params compared but no eligibility/final
