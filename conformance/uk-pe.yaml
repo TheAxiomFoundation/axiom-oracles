@@ -103,10 +103,20 @@ policies:
     output_vars:
       - council_tax_reduction
     in_scope: true
-    suite: null
-    note: In-scope uncovered — council_tax_reduction now HAS a formula in PE-UK 2.89.2 (the matrix ambiguity
-      at HEAD 45eb181c, where the variable was absent, is resolved on this pin); rulespec encodes England
-      pension-age + council schemes but no CTR suite runs yet (matrix row 29 → LGFA 1992 s.13A + Sch.1A).
+    suite: uk-council-tax-reduction
+    note: 'Covered by the uk-council-tax-reduction case-grid suite. council_tax_reduction gained a formula
+      in PE-UK 2.89.2 (#1769 national core + #1771 Kingston, both merged), resolving the matrix ambiguity
+      at HEAD 45eb181c where the variable was absent. The suite compares PE-UK''s England pension-age path
+      (gov.local_authorities.england.council_tax_reduction.pensioners: max-support 1, capital limit 16000,
+      withdrawal 0.20) against the rulespec SI 2012/2885 England pension-age scheme
+      (uk/policies/govuk/council-tax-reduction.yaml) on a synthetic pensioner grid, bridging PE''s own
+      applicable amount / applicable income / non-dependant deductions / council_tax liability / savings
+      into the rulespec supplied inputs (the uk-pension-credit bridge pattern). council_tax is a supplied
+      input on both sides, so the schemes are commensurable; all 11 cases match to the penny (the taper
+      interior, the capital screen, single and couple), residuals sub-0.001 (PE float32), inside tolerance.
+      The England pension-age income test does not inherit the #1794 Housing Benefit earnings-disregard
+      defect — council_tax_reduction_applicable_income applies no earnings disregard. matrix row 29 → LGFA
+      1992 s.13A + Sch.1A; SI 2012/2885.'
   - id: uk-pe:dla
     oracle_policy_name: dla
     oracle_policy_type: rate_from_category

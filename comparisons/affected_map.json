@@ -353,6 +353,14 @@
       "source": "comparisons/uk-child-benefit-ukmod.yaml"
     },
     {
+      "suite": "uk-council-tax-reduction",
+      "report": "axiom-policyengine-uk-council-tax-reduction.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-council-tax-reduction.yaml"
+    },
+    {
       "suite": "uk-employer-nic",
       "report": "axiom-euromod-uk-employer-nic.json",
       "repos": [

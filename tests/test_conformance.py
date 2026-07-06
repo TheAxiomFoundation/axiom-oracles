@@ -394,12 +394,23 @@ def test_uk_pe_council_tax_reduction_is_in_scope_on_this_pin():
 
 
 def test_uk_pe_covered_programs_name_a_live_pe_suite():
-    """Every covered program points at one of the two live PE-UK EFRS suites."""
+    """Every covered program points at a live PolicyEngine-UK suite.
+
+    Two are population EFRS suites (uk-tax-benefits-efrs, uk-universal-credit-efrs);
+    uk-council-tax-reduction is a synthetic pensioner case-grid comparing the
+    SI 2012/2885 England pension-age scheme against PE-UK's council_tax_reduction
+    (present from 2.89.2).
+    """
     universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
+    live_pe_suites = {
+        "uk-tax-benefits-efrs",
+        "uk-universal-credit-efrs",
+        "uk-council-tax-reduction",
+    }
     covered_suites = {
         p.suite for p in universe.in_scope() if p.suite is not None
     }
-    assert covered_suites <= {"uk-tax-benefits-efrs", "uk-universal-credit-efrs"}
+    assert covered_suites <= live_pe_suites
     # The task's named covered additions are all present and suite-bound.
     by_name = universe.by_name()
     for program in (
@@ -417,6 +428,8 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
             "uk-tax-benefits-efrs",
             "uk-universal-credit-efrs",
         }, program
+    # Council Tax Reduction is covered by its case-grid suite.
+    assert by_name["council_tax_reduction"].suite == "uk-council-tax-reduction"
 
 
 def test_serialize_is_stable_roundtrip():

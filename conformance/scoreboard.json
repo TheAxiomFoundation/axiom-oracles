@@ -72,8 +72,8 @@
       "jurisdiction": "uk-pe",
       "oracle": "policyengine-uk_2.89.2/uk",
       "policies_in_scope": 25,
-      "covered": 13,
-      "covered_pct": 52.0,
+      "covered": 14,
+      "covered_pct": 56.0,
       "excluded": 8,
       "excluded_by_reason": {
         "input_carrying": 8
@@ -87,7 +87,6 @@
         "attendance_allowance",
         "business_rates",
         "capital_gains_tax",
-        "council_tax_reduction",
         "fuel_duty",
         "lbtt_ltt",
         "legacy_means_tested",
@@ -98,7 +97,7 @@
         "winter_fuel_allowance"
       ],
       "blocking_reasons": [
-        "12 of 25 in-scope policies are not covered by a live suite: attendance_allowance, business_rates, capital_gains_tax, council_tax_reduction, fuel_duty, lbtt_ltt, legacy_means_tested, state_pension, tax_free_childcare, tv_licence, vat, winter_fuel_allowance"
+        "11 of 25 in-scope policies are not covered by a live suite: attendance_allowance, business_rates, capital_gains_tax, fuel_duty, lbtt_ltt, legacy_means_tested, state_pension, tax_free_childcare, tv_licence, vat, winter_fuel_allowance"
       ]
     }
   ]

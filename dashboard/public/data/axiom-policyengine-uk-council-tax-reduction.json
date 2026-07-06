@@ -1,0 +1,228 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "uk-council-tax-reduction",
+  "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+  "population": "case-grid",
+  "validation_year": 2026,
+  "locales": [
+    "UK"
+  ],
+  "scope": {
+    "type": "country",
+    "geoid": "UK"
+  },
+  "engines": {
+    "axiom": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+    "policyengine": "council_tax_reduction"
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 2e-07
+  },
+  "case_count": 11,
+  "summary": {
+    "comparison_count": 11,
+    "match_count": 11,
+    "mismatch_count": 0,
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "policyengine_matches": 11,
+    "weighted": {
+      "comparison_weight": 11,
+      "match_weight": 11,
+      "mismatch_weight": 0,
+      "match_rate": 100.0
+    },
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "error_count": 0,
+    "errors_by_engine": []
+  },
+  "mismatches": [],
+  "errors": [],
+  "cases": [
+    {
+      "case_id": "ctr-pa-single-full-below-aa",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "full-award-income-below-applicable-amount",
+      "couple": false,
+      "council_tax_liability": 1800.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 4000.0,
+      "household_capital": 0.0,
+      "axiom": 1800.0,
+      "policyengine": 1800.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-full-income-at-aa",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "full-award-income-near-applicable-amount",
+      "couple": false,
+      "council_tax_liability": 1800.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 12914.0,
+      "household_capital": 0.0,
+      "axiom": 1800.0,
+      "policyengine": 1800.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-taper-interior-a",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "taper-interior",
+      "couple": false,
+      "council_tax_liability": 3000.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 17163.599609375,
+      "household_capital": 0.0,
+      "axiom": 2229.680078125,
+      "policyengine": 2229.68017578125,
+      "axiom_vs_policyengine": {
+        "difference": -9.765625009094947e-05,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-taper-interior-b",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "taper-interior",
+      "couple": false,
+      "council_tax_liability": 3000.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 22645.19921875,
+      "household_capital": 0.0,
+      "axiom": 1133.36015625,
+      "policyengine": 1133.360107421875,
+      "axiom_vs_policyengine": {
+        "difference": 4.8828125045474735e-05,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-taper-interior-c",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "taper-interior",
+      "couple": false,
+      "council_tax_liability": 2500.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 18514.0,
+      "household_capital": 0.0,
+      "axiom": 1459.6,
+      "policyengine": 1459.5999755859375,
+      "axiom_vs_policyengine": {
+        "difference": 2.441406240905053e-05,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-taper-to-zero",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "taper-exhausts-award",
+      "couple": false,
+      "council_tax_liability": 1800.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 28114.0,
+      "household_capital": 0.0,
+      "axiom": 0.0,
+      "policyengine": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-capital-at-limit",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "capital-at-limit-eligible",
+      "couple": false,
+      "council_tax_liability": 1800.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 4000.0,
+      "household_capital": 16000.0,
+      "axiom": 1800.0,
+      "policyengine": 1800.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-capital-over-limit",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "capital-over-limit-excluded",
+      "couple": false,
+      "council_tax_liability": 1800.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 4000.0,
+      "household_capital": 20000.0,
+      "axiom": 0.0,
+      "policyengine": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-single-high-council-tax",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "full-award-high-liability",
+      "couple": false,
+      "council_tax_liability": 2600.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 8000.0,
+      "household_capital": 0.0,
+      "axiom": 2600.0,
+      "policyengine": 2600.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-couple-full-below-aa",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "couple-full-award",
+      "couple": true,
+      "council_tax_liability": 2200.0,
+      "applicable_amount": 19934.19921875,
+      "applicable_income": 6000.0,
+      "household_capital": 0.0,
+      "axiom": 2200.0,
+      "policyengine": 2200.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "ctr-pa-couple-taper-interior",
+      "concept": "uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount",
+      "scenario": "couple-taper-interior",
+      "couple": true,
+      "council_tax_liability": 2400.0,
+      "applicable_amount": 19934.19921875,
+      "applicable_income": 21966.0,
+      "household_capital": 0.0,
+      "axiom": 1993.63984375,
+      "policyengine": 1993.639892578125,
+      "axiom_vs_policyengine": {
+        "difference": -4.8828125045474735e-05,
+        "match": true
+      }
+    }
+  ],
+  "provenance": {
+    "generated": "2026-07-06",
+    "generator": "scripts/generate_uk_council_tax_reduction.py",
+    "axiom_engine": "axiom rules engine over rulespec-uk uk/policies/govuk/council-tax-reduction.yaml",
+    "policyengine_uk": "2.89.2",
+    "commensurability": "PolicyEngine-UK England pension-age Council Tax Reduction (gov.local_authorities.england.council_tax_reduction.pensioners: max-support 1, capital limit 16000, withdrawal 0.20) vs the SI 2012/2885 prescribed pension-age scheme; council_tax liability is a supplied input on both sides. PolicyEngine's computed applicable amount, applicable income and non-dependant deductions are bridged into the rulespec supplied inputs."
+  }
+}
