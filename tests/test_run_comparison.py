@@ -871,3 +871,86 @@ def test_be_elderly_income_support_registry_config_shape():
     assert config["dashboard"]["filename"] == (
         "axiom-euromod-be-elderly-income-support.json"
     )
+
+
+# ---------------------------------------------------------------------------
+# UK fiscal-year eval-date invariant
+#
+# UK tax-benefit law (FA rates, Scottish Rate Resolution bands, NIC thresholds,
+# benefit upratings) commences on the 6 April fiscal-year boundary, and UKMOD's
+# UK_<year> system represents that fiscal year. The Axiom engine selects a
+# parameter version by period.start (effective_from <= start; period.end is
+# ignored), so a bare-year "2026" period — which _period_for_case resolves to a
+# 1 January start — evaluates the Axiom side on the value live the previous
+# January, not the fiscal-year vintage. Today that is harmless only because no
+# compared parameter steps between 1 January and 6 April; a future April-6 rate
+# change (e.g. the Class 3 NIC weekly rate) would silently be read at its old
+# value with a Jan-1 start. This guard fails loudly if any UK suite regresses to
+# a pre-fiscal-year (January) start, so the eval date stays fiscal-correct.
+# ---------------------------------------------------------------------------
+
+
+def _euromod_uk_registry_configs() -> list[dict]:
+    configs: list[dict] = []
+    for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
+        if path.name.endswith(".fixtures.yaml"):
+            continue
+        config = yaml.safe_load(path.read_text())
+        if not isinstance(config, dict):
+            continue
+        runner = config.get("runner") or {}
+        params = runner.get("parameters") or {}
+        if (
+            runner.get("type") == "euromod-synthetic-compare"
+            and params.get("euromod_country") == "UK"
+        ):
+            configs.append(config)
+    return configs
+
+
+def _system_year(euromod_system: str) -> int:
+    """Parse the fiscal year off a EUROMOD-platform system name (UK_2026 -> 2026)."""
+    digits = "".join(ch for ch in str(euromod_system) if ch.isdigit())
+    assert len(digits) == 4, f"cannot read a 4-digit year from system {euromod_system!r}"
+    return int(digits)
+
+
+def test_uk_euromod_suites_evaluate_on_or_after_the_fiscal_boundary():
+    """Every UK euromod-synthetic-compare suite must evaluate the Axiom side on
+    or after 6 April of its system year — never on the bare-year 1 January start.
+
+    The check runs the real ``_period_for_case`` resolver (the one the axiom
+    adapter feeds the engine), so it pins the actual eval instant the engine
+    would key parameter versions off, not a reimplementation. Annual (tax_year)
+    suites must start exactly on the 6 April fiscal boundary; monthly benefit
+    suites (UC/PC assessment periods) start on 1 April, which is still inside the
+    fiscal year and past the 1 January regression this guard forbids.
+    """
+    from datetime import date
+
+    from axiom_oracles.adapters.axiom.runner import _period_for_case
+    from axiom_oracles.core.case import Case
+
+    configs = _euromod_uk_registry_configs()
+    assert configs, "expected at least one euromod-synthetic-compare UK config"
+
+    for config in configs:
+        params = config["runner"]["parameters"]
+        name = config.get("name", params.get("suite", "?"))
+        year = _system_year(params["euromod_system"])
+        resolved = _period_for_case(Case(case_id="guard", period=str(params["period"])))
+        start = date.fromisoformat(resolved["start"])
+        fiscal_start = date(year, 4, 6)
+
+        assert start >= date(year, 4, 1), (
+            f"{name}: Axiom eval start {start.isoformat()} is before the "
+            f"{year} fiscal year — a bare-year period resolves to a 1 January "
+            f"start and reads the pre-April parameter vintage. Use an explicit "
+            f"fiscal-year period (e.g. '{year}-04-06')."
+        )
+        if resolved["period_kind"] == "tax_year":
+            assert start == fiscal_start, (
+                f"{name}: annual suite must evaluate on the 6 April fiscal "
+                f"boundary; resolved start is {start.isoformat()}. Set "
+                f"period: '{year}-04-06'."
+            )
