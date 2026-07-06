@@ -22,19 +22,6 @@ runner:
     suite: uk-employer-nic
     population: synthetic
     sample_size: 0
-    # Defensive batch isolation: the EUROMOD engine runs every case in one
-    # run_cases invocation per comparison batch, so cases sharing a batch can
-    # contaminate each other by position (a household can return a wrong value
-    # at some batch positions but the correct value alone — the batch-position
-    # adapter bug first isolated on be-study-allowance,
-    # euromod-be-2025-bed-study-allowance-batch-position-contamination). This
-    # instrument is deterministic — it carries no stochastic take-up draw, so
-    # identical households return identical values regardless of batch size
-    # (verified on representative suites: EUROMOD-left values are batch-
-    # invariant, and N=10 identical households return one value). Batch size 1
-    # is therefore neutral where uncontaminated and corrective where
-    # contaminated. Remove once the adapter fix lands.
-    comparison_batch_size: 1
     period: 2026
     euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
     euromod_country: UK

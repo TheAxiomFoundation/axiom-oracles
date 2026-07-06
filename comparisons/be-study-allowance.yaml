@@ -23,7 +23,10 @@ description: >-
   to lose bed_s at every batch position after the first
   (euromod-be-2025-bed-study-allowance-batch-position-contamination in
   euromod_issues.json). Per-household runs give every case the solo draw
-  (0.283, passes) that produced these anchors. EUROMOD runs the
+  (0.283, passes) that produced these anchors, and euromod_constant_overrides
+  pins both community take-up rates to 1.0 so the comparison stays on the
+  statutory amounts even if a model update moves the take-up rate below the
+  solo draw. EUROMOD runs the
   registration-free public model (EUROMOD_RELEASES_J2.0+, system BE_2025) under
   the real dataset-configuration name BE_2024_c1_2015_03_e2 (the dataset-name
   gating workaround; no licensed microdata is read) with input rows templated
@@ -44,6 +47,10 @@ runner:
     euromod_system: BE_2025
     euromod_dataset: BE_2024_c1_2015_03_e2
     euromod_template_dataset: BE_training_data
+    # Neutralize bed_be's stochastic non-take-up correction: with take-up at
+    # 1.0 the correction keeps bed_s on every draw, so the engine output is
+    # the statutory allowance rather than a take-up lottery realization.
+    euromod_constant_overrides: $bed_FlTakeUp=1.0,$bed_FrTakeUp=1.0
     axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
     dashboard_filename: axiom-euromod-be-study-allowance.json
 

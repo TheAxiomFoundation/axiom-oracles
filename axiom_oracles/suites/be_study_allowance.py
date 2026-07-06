@@ -39,7 +39,10 @@ def be_study_allowance_cases() -> list[Case]:
     adapter executes each household as its own engine run, so every case sees
     draw #1 (0.283 — passes) exactly like the solo runs that produced these
     anchors, whatever the batch size (see euromod_issues.json
-    euromod-be-2025-bed-study-allowance-batch-position-contamination).
+    euromod-be-2025-bed-study-allowance-batch-position-contamination). The
+    comparison config additionally pins both community take-up rates to 1.0
+    (``euromod_constant_overrides``), so the anchors stay statutory even if a
+    model update moves take-up below the solo draw.
 
     Brussels remains out of scope: its ninety-ten community split keys on
     the same per-household draw (``temp_rand_ind < 0.9``), which is a

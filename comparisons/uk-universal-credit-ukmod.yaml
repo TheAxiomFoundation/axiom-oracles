@@ -35,17 +35,20 @@ runner:
     suite: uk-universal-credit
     population: synthetic
     sample_size: 0
-    # NB: comparison_batch_size is intentionally NOT pinned to 1 here. Unlike the
-    # deterministic tax/benefit suites, UKMOD's Universal Credit output bsauc_s
-    # carries a STOCHASTIC per-row take-up draw (i_rand_tu), so identical
-    # households receive different awards purely by batch position (verified:
-    # ten identical couple-owner households in one run return
-    # [666.97,666.97,0,666.97,666.97,0,0,666.97,666.97,666.97]). Batch size 1
-    # does not fix this — it only partially resolves the take-up zeros (three of
-    # five clear, two persist by draw) — so the committed report is one
-    # realization (all cases in one batch), with the take-up zeros dispositioned
-    # (euromod_issues.json#ukmod-uc-bsauc-takeup-correction). A future adapter
-    # fix that forces 100% take-up would make this suite deterministic.
+    # NB on take-up: UKMOD's Universal Credit output bsauc_s carries a
+    # STOCHASTIC per-row take-up draw (i_rand_tu) — identical households in
+    # one engine run used to receive different awards purely by batch position
+    # (ten identical couple-owner households returned
+    # [666.97,666.97,0,666.97,666.97,0,0,666.97,666.97,666.97]). The adapter
+    # now runs every household as its own engine run, so each case
+    # reproducibly gets its solo draw: WHICH cases zero is stable, but a
+    # non-taking solo draw still zeroes the award (not the statutory
+    # entitlement; euromod_issues.json#ukmod-uc-bsauc-takeup-correction). The
+    # committed report predates per-household isolation and records the old
+    # single-batch realization; the next regeneration re-records under solo
+    # draws. To compare statutory entitlements instead, set
+    # euromod_constant_overrides to pin the $ISTU* take-up rates to 1.0 — a
+    # deliberate regeneration for the suite owner.
     # The composed UC pipeline parameters are effective from 2026-04-01 for
     # assessment periods commencing on/after 6 April 2026, so the Axiom side
     # evaluates in the April 2026 monthly assessment period. UKMOD resolves the

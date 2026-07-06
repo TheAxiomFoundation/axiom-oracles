@@ -285,6 +285,45 @@ class TestSubprocessContract:
         assert "<Name>BE_2024</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>off</Switch>" in patched
         assert "<Name>BE_2025</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>on</Switch>" in patched
 
+    def test_constant_patch_targets_named_system_and_group_only(self) -> None:
+        xml = """
+<CountryConfig>
+  <System>
+    <Name>BE_2024</Name>
+    <Policy><Function><Name>DefConst</Name>
+      <Parameter><Name>$bed_FlTakeUp</Name><Value><![CDATA[0.31]]></Value><Group /></Parameter>
+    </Function></Policy>
+  </System>
+  <System>
+    <Name>BE_2025</Name>
+    <Policy><Function><Name>DefConst</Name>
+      <Parameter><Name>$bed_FlTakeUp</Name><Value><![CDATA[0.31]]></Value><Group /></Parameter>
+      <Parameter><Name>$f_cpi</Name><Value><![CDATA[1.0]]></Value><Group>2024</Group></Parameter>
+      <Parameter><Name>$f_cpi</Name><Value><![CDATA[1.1]]></Value><Group>2025</Group></Parameter>
+    </Function></Policy>
+  </System>
+</CountryConfig>
+"""
+
+        patched = euromod_worker._patch_constants(
+            xml,
+            system="BE_2025",
+            overrides=[("$bed_FlTakeUp", "", "1.0"), ("$f_cpi", "2025", "2.0")],
+        )
+
+        be_2024 = patched[: patched.find("<Name>BE_2025</Name>")]
+        be_2025 = patched[patched.find("<Name>BE_2025</Name>") :]
+        assert "<![CDATA[0.31]]>" in be_2024  # other system untouched
+        assert "<![CDATA[0.31]]>" not in be_2025
+        assert "<Name>$bed_FlTakeUp</Name><Value><![CDATA[1.0]]>" in be_2025
+        assert "<Value><![CDATA[1.0]]></Value><Group>2024</Group>" in be_2025
+        assert "<Value><![CDATA[2.0]]></Value><Group>2025</Group>" in be_2025
+
+        with pytest.raises(ValueError, match="was not found"):
+            euromod_worker._patch_constants(
+                xml, system="BE_2025", overrides=[("$missing", "", "1.0")]
+            )
+
     def test_results_group_by_case_and_annualize(self) -> None:
         payload = {
             "columns": ["tin_s"],
@@ -620,6 +659,56 @@ class TestSubprocessContract:
         assert results[1].values == {}
         assert "no output rows" in results[1].errors[0]
 
+    def test_mixed_case_constant_overrides_return_errors(self) -> None:
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="BE",
+            system="BE_2025",
+            subprocess_run=lambda *_args, **_kwargs: pytest.fail(
+                "mixed constant overrides should not execute"
+            ),
+        )
+        cases = [
+            Case(
+                case_id="default",
+                period="2025",
+                metadata={"euromod_inputs": [{"idhh": 1}]},
+            ),
+            Case(
+                case_id="full-takeup",
+                period="2025",
+                metadata={
+                    "euromod_inputs": [{"idhh": 2}],
+                    "euromod_constant_overrides": {"$bed_FlTakeUp": "1.0"},
+                },
+            ),
+        ]
+
+        results = runner.run_cases(cases, variables=["bed_s"])
+
+        assert all(result.values == {} for result in results)
+        assert "constant overrides" in results[0].errors[0]
+
+    def test_constant_overrides_normalize_groups_and_values(self) -> None:
+        from axiom_oracles.adapters.euromod.runner import (
+            _normalize_constant_overrides,
+        )
+
+        assert _normalize_constant_overrides(None) == ()
+        assert _normalize_constant_overrides({"$bed_FlTakeUp": 1.0}) == (
+            ("$bed_FlTakeUp", "", "1.0"),
+        )
+        assert _normalize_constant_overrides({"$f_cpi": ("2022", 1000)}) == (
+            ("$f_cpi", "2022", "1000"),
+        )
+        assert _normalize_constant_overrides(
+            [("$a", 1), ("$b", "2024", 2.5)]
+        ) == (("$a", "", "1"), ("$b", "2024", "2.5"))
+        with pytest.raises(ValueError, match="non-empty strings"):
+            _normalize_constant_overrides({"": 1.0})
+        with pytest.raises(ValueError, match="numeric or string value"):
+            _normalize_constant_overrides({"$a": None})
+
     def test_mixed_case_policy_switch_overrides_return_errors(self) -> None:
         runner = EuromodPlatformRunner(
             model_root="/nonexistent",
@@ -672,7 +761,17 @@ class TestBatchPositionIsolation:
 
     STUB_ENGINE = textwrap.dedent(
         '''
-        """Stub euromod connector: benefit only for the frame's first household."""
+        """Stub euromod connector: benefit only for the frame's first household.
+
+        Reads the ``$stub_bonus`` DefConst value out of the (possibly
+        overlay-patched) country XML and adds it to the benefit, so tests
+        can assert constant overrides land in the model the engine loads —
+        the same mechanism the real worker uses.
+        """
+
+        import re
+        from pathlib import Path
+
 
         class _Simulation:
             def __init__(self, output):
@@ -681,11 +780,16 @@ class TestBatchPositionIsolation:
         class _System:
             name = "BE_2025"
 
+            def __init__(self, bonus):
+                self._bonus = bonus
+
             def run(self, frame, dataset, switches=()):
                 output = frame[["idhh", "idperson", "yem"]].copy()
                 first_household = int(frame.iloc[0]["idhh"])
                 output["ben_s"] = [
-                    100.0 + float(row.yem) if int(row.idhh) == first_household else 0.0
+                    100.0 + float(row.yem) + self._bonus
+                    if int(row.idhh) == first_household
+                    else 0.0
                     for row in frame.itertuples()
                 ]
                 return _Simulation(output)
@@ -693,13 +797,47 @@ class TestBatchPositionIsolation:
         class _Country:
             name = "BE"
 
-            def __init__(self):
-                self.systems = [_System()]
+            def __init__(self, bonus):
+                self.systems = [_System(bonus)]
 
         class Model:
             def __init__(self, model_root):
-                self.countries = [_Country()]
+                xml_path = (
+                    Path(model_root) / "XMLParam" / "Countries" / "BE" / "BE.xml"
+                )
+                bonus = 0.0
+                if xml_path.exists():
+                    match = re.search(
+                        r"<Name>\\$stub_bonus</Name>.*?<Value><!\\[CDATA\\[(.*?)\\]\\]></Value>",
+                        xml_path.read_text(encoding="utf-8"),
+                        re.S,
+                    )
+                    if match:
+                        bonus = float(match.group(1))
+                self.countries = [_Country(bonus)]
         '''
+    )
+
+    STUB_COUNTRY_XML = textwrap.dedent(
+        """\
+        <CountryConfig>
+          <System>
+            <Name>BE_2025</Name>
+            <Policy>
+              <Name>stub_be</Name>
+              <Switch>on</Switch>
+              <Function>
+                <Name>DefConst</Name>
+                <Parameter>
+                  <Name>$stub_bonus</Name>
+                  <Value><![CDATA[0]]></Value>
+                  <Group />
+                </Parameter>
+              </Function>
+            </Policy>
+          </System>
+        </CountryConfig>
+        """
     )
 
     @pytest.fixture()
@@ -708,6 +846,11 @@ class TestBatchPositionIsolation:
         (model_root / "Input").mkdir(parents=True)
         (model_root / "Input" / "training_data.txt").write_text(
             "idhh\tidperson\tyem\tdag\n", encoding="utf-8"
+        )
+        country_dir = model_root / "XMLParam" / "Countries" / "BE"
+        country_dir.mkdir(parents=True)
+        (country_dir / "BE.xml").write_text(
+            self.STUB_COUNTRY_XML, encoding="utf-8"
         )
         stub_dir = tmp_path / "stub-site"
         stub_dir.mkdir()
@@ -759,6 +902,50 @@ class TestBatchPositionIsolation:
         by_case_forward = {r.household_id: r.values["ben_s"] for r in forward}
         by_case_reversed = {r.household_id: r.values["ben_s"] for r in reversed_back}
         assert by_case_forward == pytest.approx(by_case_reversed)
+
+    def test_constant_overrides_reach_the_engine_run(
+        self, lottery_model_root: Path
+    ) -> None:
+        runner = EuromodPlatformRunner(
+            model_root=lottery_model_root,
+            country="BE",
+            system="BE_2025",
+            dataset="training_data",
+            constant_overrides={"$stub_bonus": 7},
+            python_executable=sys.executable,
+        )
+
+        [result] = runner.run_cases(
+            [_single_earner("case-12000", 12_000.0)], variables=["ben_s"]
+        )
+
+        # (100 + 1,000 monthly yem + 7 bonus) x 12
+        assert result.values["ben_s"] == pytest.approx(1_284.0 + 12_000.0)
+
+    def test_case_metadata_constant_overrides_merge_over_runner_defaults(
+        self, lottery_model_root: Path
+    ) -> None:
+        runner = EuromodPlatformRunner(
+            model_root=lottery_model_root,
+            country="BE",
+            system="BE_2025",
+            dataset="training_data",
+            constant_overrides={"$stub_bonus": 7},
+            python_executable=sys.executable,
+        )
+        case = Case(
+            case_id="override-case",
+            period="2025",
+            metadata={
+                "euromod_inputs": [{"idhh": 1, "idperson": 101, "yem": 1_000.0}],
+                "euromod_constant_overrides": {"$stub_bonus": 50},
+            },
+        )
+
+        [result] = runner.run_cases([case], variables=["ben_s"])
+
+        # (100 + 1,000 + the case's 50, not the runner's 7) x 12
+        assert result.values["ben_s"] == pytest.approx(13_800.0)
 
 
 @pytest.mark.skipif(

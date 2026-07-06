@@ -98,6 +98,10 @@ _WEEKS_PER_MONTH = 365.0 / 7.0 / 12.0
 
 SwitchSetting = tuple[str, bool]
 PolicySwitchOverride = tuple[str, bool]
+#: (constant name, group number or "", value) — EM constants are overridden
+#: by name and optional group (uprating factors group by year; DefConst
+#: policy constants usually carry no group).
+ConstantOverride = tuple[str, str, str]
 
 
 class EuromodPlatformRunner(EngineAdapter):
@@ -130,6 +134,18 @@ class EuromodPlatformRunner(EngineAdapter):
             for every run, as ``("policy_name", enabled)`` pairs. This is for
             policies that EUROMOD marks as manually switched off in the system
             XML and cannot be enabled through extension switches.
+        constant_overrides: Model constants to overwrite for every run.
+            The worker patches each named parameter's ``<Value>`` inside the
+            simulated system's XML block on a temporary overlay of the model
+            directory (the euromod connector's ``constantsToOverwrite``
+            kwarg silently ignores DefConst policy constants, so the overlay
+            is the mechanism that provably lands). Accepts a mapping of
+            ``{"$name": value}`` (or ``{"$name": (group, value)}`` when only
+            parameters carrying that ``<Group>`` should be patched) or a
+            sequence of ``(name, value)`` / ``(name, group, value)`` tuples.
+            The standing use is neutralizing stochastic take-up corrections
+            (e.g. ``{"$bed_FlTakeUp": 1.0}``) so benefit outputs are the
+            statutory entitlement instead of a take-up draw.
         python_executable: Interpreter for the EUROMOD execution
             environment; defaults to ``$EUROMOD_PYTHON`` then
             ``sys.executable``.
@@ -155,6 +171,7 @@ class EuromodPlatformRunner(EngineAdapter):
         policy_switch_overrides: (
             list[PolicySwitchOverride] | tuple[PolicySwitchOverride, ...] | None
         ) = None,
+        constant_overrides: Any = None,
         python_executable: str | Path | None = None,
         dotnet_root: str | Path | None = None,
         timeout: float = 900.0,
@@ -170,6 +187,7 @@ class EuromodPlatformRunner(EngineAdapter):
         self.annualize_outputs = annualize_outputs
         self.switches = _normalize_switches(switches)
         self.policy_switch_overrides = _normalize_switches(policy_switch_overrides)
+        self.constant_overrides = _normalize_constant_overrides(constant_overrides)
         self.python_executable = str(
             python_executable
             or os.environ.get("EUROMOD_PYTHON")
@@ -209,6 +227,10 @@ class EuromodPlatformRunner(EngineAdapter):
                 cases,
                 self.policy_switch_overrides,
             )
+            constant_overrides = _constant_overrides_for_cases(
+                cases,
+                self.constant_overrides,
+            )
         except ValueError as error:
             return [
                 EngineResult(
@@ -235,6 +257,7 @@ class EuromodPlatformRunner(EngineAdapter):
             worker_outputs,
             switches,
             policy_switch_overrides,
+            constant_overrides,
         )
         if "error" in payload:
             error = (payload["error"],)
@@ -313,6 +336,7 @@ class EuromodPlatformRunner(EngineAdapter):
         outputs: list[str],
         switches: tuple[SwitchSetting, ...],
         policy_switch_overrides: tuple[PolicySwitchOverride, ...],
+        constant_overrides: tuple[ConstantOverride, ...] = (),
     ) -> dict:
         """Invoke the subprocess worker and return its JSON payload."""
         job = {
@@ -325,6 +349,7 @@ class EuromodPlatformRunner(EngineAdapter):
             "outputs": outputs,
             "switches": list(switches),
             "policy_switch_overrides": list(policy_switch_overrides),
+            "constant_overrides": [list(override) for override in constant_overrides],
         }
         worker = Path(__file__).parent / "_runner.py"
         env = dict(os.environ)
@@ -392,6 +417,83 @@ def _policy_switch_overrides_for_cases(
         metadata_key="euromod_policy_switch_overrides",
         setting_label="EUROMOD policy switch overrides",
     )
+
+
+def _constant_overrides_for_cases(
+    cases: list[Case],
+    base_overrides: tuple[ConstantOverride, ...],
+) -> tuple[ConstantOverride, ...]:
+    case_overrides = {
+        _normalize_constant_overrides(
+            case.metadata.get("euromod_constant_overrides")
+        )
+        for case in cases
+    }
+    if not case_overrides:
+        return base_overrides
+    if len(case_overrides) > 1:
+        raise ValueError(
+            "Cases in one EUROMOD batch require incompatible constant "
+            "overrides metadata['euromod_constant_overrides']; split the run "
+            "by override set."
+        )
+    merged: dict[tuple[str, str], str] = {
+        (name, group): value for name, group, value in base_overrides
+    }
+    for name, group, value in next(iter(case_overrides)):
+        merged[(name, group)] = value
+    return tuple(
+        (name, group, value) for (name, group), value in merged.items()
+    )
+
+
+def _normalize_constant_overrides(value: Any) -> tuple[ConstantOverride, ...]:
+    """Normalize constant overrides to ``(name, group, value)`` string tuples.
+
+    Accepts a mapping of ``{name: value}`` or ``{name: (group, value)}``, or
+    a sequence of ``(name, value)`` / ``(name, group, value)`` items. Values
+    become strings because the engine's ``constantsToOverwrite`` takes string
+    values; an empty group targets ungrouped constants.
+    """
+    if value is None:
+        return ()
+    if isinstance(value, dict):
+        raw_items: list[Any] = []
+        for name, payload in value.items():
+            if isinstance(payload, (list, tuple)):
+                raw_items.append((name, *payload))
+            else:
+                raw_items.append((name, payload))
+    elif isinstance(value, (list, tuple)):
+        raw_items = list(value)
+    else:
+        raise ValueError(
+            "EUROMOD constant overrides must be a mapping or a sequence of "
+            "(name, value) or (name, group, value) items."
+        )
+
+    overrides: list[ConstantOverride] = []
+    for item in raw_items:
+        if not isinstance(item, (list, tuple)) or len(item) not in (2, 3):
+            raise ValueError(
+                "EUROMOD constant overrides must be (name, value) or "
+                "(name, group, value) items."
+            )
+        if len(item) == 2:
+            name, group, raw = item[0], "", item[1]
+        else:
+            name, group, raw = item
+        if not isinstance(name, str) or not name:
+            raise ValueError(
+                "EUROMOD constant override names must be non-empty strings."
+            )
+        if raw is None or isinstance(raw, bool):
+            raise ValueError(
+                f"EUROMOD constant override {name!r} needs a numeric or "
+                "string value."
+            )
+        overrides.append((name, str(group or ""), str(raw)))
+    return tuple(overrides)
 
 
 def _settings_for_cases(

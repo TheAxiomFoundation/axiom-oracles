@@ -93,6 +93,14 @@ semantics; the rows are ours.
   own engine run — every case reproduces its solo baseline at any batch
   size (issue ledger:
   `euromod-be-2025-bed-study-allowance-batch-position-contamination`).
+- **Take-up neutralization**: where a benefit's solo draw still marks
+  non-take (UKMOD Pension Credit) or take-up rates could drift under the
+  solo draw (Belgium `bed_s`), pin the take-up constants to 1.0 with
+  `euromod_constant_overrides` (comparison parameter → env
+  `EUROMOD_CONSTANT_OVERRIDES`, `$name=value` pairs). The worker patches
+  the DefConst values into the system XML on the model overlay; the
+  connector's `constantsToOverwrite` kwarg does not reach DefConst
+  constants.
 
 ## 6. Wiring a new country (the Belgium pattern, PR #75)
 
