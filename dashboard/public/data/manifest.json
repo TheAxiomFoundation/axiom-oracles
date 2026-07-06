@@ -98,6 +98,7 @@
     "axiom-policyengine-ak-apa-state-supplement.json",
     "axiom-policyengine-mi-ssp-payments.json",
     "axiom-policyengine-ca-capi-limits.json",
-    "axiom-policyengine-az-tanf-ecps.json"
+    "axiom-policyengine-az-tanf-ecps.json",
+    "axiom-policyengine-ks-tanf-ecps.json"
   ]
 }

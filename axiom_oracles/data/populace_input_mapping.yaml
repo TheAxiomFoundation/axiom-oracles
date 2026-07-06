@@ -1411,3 +1411,66 @@ mappings:
   - match: { kind: suffix, value: supplemental_benefit_amount }
     scope: household
     source: { kind: constant, value: 0 }
+
+  # ---------------------------------------------------------------------
+  # KS TANF (us-ks/tanf program) — KEESM 7410 budgetary standards.
+  # PolicyEngine 1.752's combined payment-standard table equals the KEESM
+  # basic allowance plus shelter group I (92) at the table-I (100%)
+  # percentage, so the comparison fixes group I and a day-1 full month.
+  # (Earlier PE releases used group IV/V's 135 — version-sensitive.)
+  # ---------------------------------------------------------------------
+
+  - match: { kind: suffix, value: assistance_plan_person_count }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+  - match: { kind: suffix, value: all_persons_in_home_in_same_assistance_plan }
+    scope: household
+    source: { kind: constant, value: true }
+  - match: { kind: suffix, value: shelter_group_v_applies }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: shelter_group_i_applies }
+    scope: household
+    source: { kind: constant, value: true }
+  - match: { kind: suffix, value: shelter_group_ii_applies }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: shelter_group_iii_applies }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: shelter_group_iv_applies }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: shared_living_arrangement_with_person_not_in_budget_plan }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: shared_living_arrangement_is_commercial_bona_fide_landlord_tenant }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: specialized_living_commercial_board_room_or_room_only_arrangement }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: only_excluded_person_is_qualifying_ssi_recipient_or_joint_custody_child }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: application_day_of_month }
+    scope: household
+    source: { kind: constant, value: 1 }
+  - match: { kind: suffix, value: days_in_month }
+    scope: household
+    source: { kind: constant, value: 30 }
+  - match: { kind: suffix, value: assistance_reinstated_after_required_information_or_cooperation_provided_in_month_following_closure }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: assistance_suspended_and_reinstated_in_month_following_one_month_suspension }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: cash_application_filed_in_response_to_sanction_notice_with_cooperation_within_45_days_and_received_in_month_following_closure }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: cash_review_or_application_returned_in_month_following_end_of_review_period }
+    scope: household
+    source: { kind: constant, value: false }
+  - match: { kind: suffix, value: tanf_case_reopened_in_month_following_effective_date_of_closure }
+    scope: household
+    source: { kind: constant, value: false }

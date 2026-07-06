@@ -240,6 +240,15 @@
       "source": "comparisons/il-income-tax-liability.yaml"
     },
     {
+      "suite": "ks-tanf-ecps",
+      "report": "axiom-policyengine-ks-tanf-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-ks"
+      ],
+      "source": "comparisons/ks-tanf-ecps.yaml"
+    },
+    {
       "suite": "lifeline-parameters",
       "report": "axiom-policyengine-lifeline-parameters.json",
       "repos": [

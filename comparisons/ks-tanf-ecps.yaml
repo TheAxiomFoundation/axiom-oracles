@@ -1,0 +1,39 @@
+# Kansas TANF maximum benefit -- Axiom vs PolicyEngine on Enhanced CPS.
+
+name: ks-tanf-ecps
+title: Kansas TANF maximum benefit -- Axiom vs PolicyEngine
+description: >-
+  Compares the composed KEESM 7410 maximum-benefit standard (basic
+  allowance plus energy supplement plus county shelter group, fixed at
+  group V / table-I percentage to match PolicyEngine's single combined
+  table) against PolicyEngine's ks_tanf_maximum_benefit on Enhanced CPS
+  households in Kansas. The countable-income path is not yet encoded, so
+  this scores the standards composition, not end-to-end eligibility.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    suite: ks-tanf-ecps
+    concepts:
+      - us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    jurisdiction_fips: "20"
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-oracles/programs/us-ks/tanf/fy-2026.yaml
+    axiom_composed_program: /tmp/ks-tanf-composed.yaml
+    axiom_compiled_program: /tmp/ks-tanf-compiled.json
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
+    rulespec_roots:
+      - $HOME/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-ks-tanf-ecps
+
+dashboard:
+  filename: axiom-policyengine-ks-tanf-ecps.json
+  suite: ks-tanf-ecps

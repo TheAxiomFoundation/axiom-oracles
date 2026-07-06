@@ -694,6 +694,14 @@
    "kind": "amount_difference",
    "label": "A1 payment-standard rounding convention",
    "suite": "az-tanf-ecps"
+  },
+  {
+   "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
+   "description": "855 of 861 match. The 6 residuals are unit-composition: PolicyEngine sizes the standard by SPM unit while the composed program uses the full household, and in these homes the SPM unit is one member smaller (one case forms no unit at all). Scope: this suite scores the KEESM 7410 standards composition (basic allowance + shelter group) against ks_tanf_maximum_benefit \u2014 the countable-income path is not yet encoded. The comparison fixes shelter group I to match PolicyEngine 1.752's convention; earlier PE releases used group IV/V's higher shelter allowance, so this pin is version-sensitive.",
+   "fix_owner": "program-coverage",
+   "kind": "amount_difference",
+   "label": "Household vs SPM-unit sizing; scope note",
+   "suite": "ks-tanf-ecps"
   }
  ]
 }

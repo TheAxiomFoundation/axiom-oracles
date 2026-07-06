@@ -288,6 +288,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 218,
   },
+  "ks-tanf-ecps": {
+    family: "tanf",
+    jurisdiction: "KS",
+    label: "Kansas TANF maximum benefit",
+    region: "us",
+    kind: "household",
+    order: 216,
+  },
   "az-tanf-ecps": {
     family: "tanf",
     jurisdiction: "AZ",
