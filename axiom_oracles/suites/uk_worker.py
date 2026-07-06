@@ -18,7 +18,11 @@ EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 # every rate/threshold is imported from a grounded module (Finance Act 2026
 # main rates, s10/s35 limits). 2025-26 and 2026-27 share frozen thresholds and
 # rates, so UKMOD UK_2025 and UK_2026 return identical values for these cases.
-UK_WORKER_PERIOD = "2026"
+# The period is the 2026-27 UK tax year, keyed to its 6 April start so the
+# engine (which selects parameter versions by period.start) reads the
+# fiscal-year vintage. The synthetic runner overrides this from the comparison
+# config, which pins the same 2026-04-06 start.
+UK_WORKER_PERIOD = "2026-04-06"
 
 # Single-employee gross-employment-income grid. 130k and 360k exercise full
 # personal-allowance withdrawal and the additional rate; 60k+ exercise the

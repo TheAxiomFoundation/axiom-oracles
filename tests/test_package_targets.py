@@ -448,7 +448,10 @@ def test_uk_worker_pit_suite_shape() -> None:
         "uk-worker-pit-130k",
         "uk-worker-pit-360k",
     ]
-    assert {case.period for case in cases} == {"2026"}
+    # The 2026-27 UK tax year, keyed to its 6 April fiscal start so the engine
+    # reads the fiscal-year parameter vintage (it selects versions by
+    # period.start) rather than the value live the previous 1 January.
+    assert {case.period for case in cases} == {"2026-04-06"}
     for case in cases:
         assert case.locale == "UK"
         assert case.scope == GeographyScope(type="country", geoid="UK")
@@ -469,7 +472,7 @@ def test_uk_worker_nic_suite_shape() -> None:
         "uk-worker-nic-130k",
         "uk-worker-nic-360k",
     ]
-    assert {case.period for case in cases} == {"2026"}
+    assert {case.period for case in cases} == {"2026-04-06"}
     for case in cases:
         assert case.outputs == (Concepts.UK_WORKER_CLASS_1_EMPLOYEE_NIC,)
 

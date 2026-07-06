@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 from calendar import monthrange
 from collections.abc import Callable, Mapping
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
@@ -947,6 +947,25 @@ def _looks_like_axiom_input_ref(value: Any) -> bool:
 def _period_for_case(case: Case) -> dict[str, str]:
     text = str(case.period)
     year = int(text.split("-", maxsplit=1)[0])
+    # A full ISO date (``YYYY-MM-DD``) names a fiscal year that STARTS on that
+    # exact day and runs for one year: e.g. ``2026-04-06`` is the UK 2026-27 tax
+    # year, 6 Apr 2026 - 5 Apr 2027. The engine keys parameter-version selection
+    # off ``period.start`` (``effective_from <= start``; ignores ``end``), so a
+    # UK suite must start ON the 6 April fiscal boundary to read the fiscal-year
+    # vintage rather than the value live on the preceding 1 January. The bare-
+    # year branch below (start 1 Jan) predates a rate that steps on 6 April,
+    # which is why UK fiscal-law suites pass the explicit start date instead.
+    if len(text) == 10 and text[4] == "-" and text[7] == "-":
+        month = int(text[5:7])
+        day = int(text[8:10])
+        start = date(year, month, day)
+        end = date(year + 1, month, day) - timedelta(days=1)
+        return {
+            "period_kind": "tax_year",
+            "start": start.isoformat(),
+            "end": end.isoformat(),
+            "name": f"{year:04d}-{(year + 1) % 100:02d}",
+        }
     if len(text) >= 7 and text[4] == "-":
         month = int(text[5:7])
         last_day = monthrange(year, month)[1]

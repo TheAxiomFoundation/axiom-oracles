@@ -29,7 +29,12 @@ runner:
     suite: uk-income-tax-scottish
     population: synthetic
     sample_size: 0
-    period: 2026
+    # UK fiscal-year law takes effect 6 April; the engine keys parameter
+    # versions off period.start, so the Axiom side evaluates on the 2026-27
+    # tax-year boundary (6 Apr 2026 - 5 Apr 2027) rather than the value live on
+    # 1 January. UKMOD resolves the policy year from euromod_system (UK_2026)
+    # and ignores the case period.
+    period: 2026-04-06
     euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
     euromod_country: UK
     euromod_system: UK_2026
