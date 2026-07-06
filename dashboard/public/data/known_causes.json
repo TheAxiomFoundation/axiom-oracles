@@ -646,6 +646,30 @@
    "kind": "stale_run",
    "label": "SNAP suite blocked",
    "suite": "ny-snap-ecps"
+  },
+  {
+   "concept": "us-tn:policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels#tennessee_children_medicaid_ages_1_to_5_effective_fpl_limit",
+   "description": "12 of 196 effective FPL limits diverge across 49 states. Two classes: (1) child-band values where PolicyEngine carries a single combined limit or a different table vintage than the CMS eligibility-levels card the corpus encodes (TN all bands vs a flat 2.16, ND child bands 1.75 vs 2.05, IA infant 3.80 vs 3.05); (2) pregnant-women limits in AK/NV/RI/WA where PolicyEngine's pregnant category appears to include CHIP unborn-child/pregnancy coverage on top of Medicaid (e.g. RI 1.95 vs 2.58). Each needs a one-off check against the current CMS card to assign the fix to PE data or the encoder.",
+   "fix_owner": "triage",
+   "kind": "amount_difference",
+   "label": "CMS-card vs PolicyEngine table vintages; pregnant category scope",
+   "suite": "medicaid-thresholds-states"
+  },
+  {
+   "concept": "us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_maximum_grant_base@1",
+   "description": "All 8 Maine comparisons diverge by two consistent ratios (standard of need ~1.35x, maximum grant ~1.43x, PolicyEngine higher): the encoded chapter 331 rule 125-A table and PolicyEngine's amounts are one benefit-increase apart (Maine re-linked grants upward in recent sessions). One check against the current DHHS rule decides whether the encoder needs the newer table or PolicyEngine is ahead of adopted rule text.",
+   "fix_owner": "triage",
+   "kind": "amount_difference",
+   "label": "Maine TANF table vintage",
+   "suite": "me-tanf-standards"
+  },
+  {
+   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
+   "description": "All 5 comparisons diverge by a uniform ~2.6% with axiom higher: the corpus encodes Maryland's IM-26-13 memo (the FY2026 TCA/TDAP benefit increase) while the parameter runner's PolicyEngine build carries the prior-year table. The newer certified oracle pin may already include the increase \u2014 re-check after the runner venv catches up, else file upstream.",
+   "fix_owner": "policyengine",
+   "kind": "amount_difference",
+   "label": "MD TCA 2026 increase not yet in PolicyEngine",
+   "suite": "md-tca-payments"
   }
  ]
 }

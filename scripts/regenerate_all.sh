@@ -10,6 +10,7 @@ cd "$(dirname "$0")/.."
 
 (cd scripts && ../.venv/bin/python run_ssa_parameter_comparison.py)
 (cd scripts && ../.venv/bin/python run_parameter_comparisons.py)
+(cd scripts && ../.venv/bin/python run_medicaid_thresholds_comparison.py)
 
 for suite in fiit-ecps co-state-income-tax-ecps ssi-ecps ny-tanf-ecps \
              wa-tanf-ecps co-tanf-ecps ca-tanf-ecps mn-tanf-ecps medicaid-magi-co-ecps \

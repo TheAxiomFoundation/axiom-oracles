@@ -79,11 +79,18 @@
     "taxcalc-policyengine-fiit-ecps.json",
     "axiom-euromod-be-article-51-forfait.json",
     "axiom-euromod-be-work-bonus-credit.json",
+<<<<<<< HEAD
     "axiom-euromod-uk-statutory-maternity-pay.json",
     "axiom-euromod-uk-maternity-allowance.json",
     "axiom-euromod-uk-statutory-paternity-pay.json",
     "axiom-policyengine-taxsim-ma-income-tax-liability.json",
     "axiom-policyengine-taxsim-ny-income-tax-liability.json",
     "axiom-policyengine-taxsim-il-income-tax-liability.json"
+=======
+    "axiom-policyengine-md-tca-payments.json",
+    "axiom-policyengine-me-tanf-standards.json",
+    "axiom-policyengine-al-tanf-payment-standards.json",
+    "axiom-policyengine-az-tanf-deductions.json"
+>>>>>>> 0b890b4 (oracles: close the coverage audit's scoreable gaps; refresh all suites)
   ]
 }

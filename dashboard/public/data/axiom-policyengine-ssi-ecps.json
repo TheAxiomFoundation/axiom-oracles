@@ -62980,7 +62980,7 @@
       "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T03:53:17Z",
+    "generated_at": "2026-07-06T20:23:20Z",
     "generated_by": "scripts/run_comparison.py::ssi-ecps",
     "oracle": {
       "name": "policyengine",

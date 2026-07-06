@@ -20,6 +20,14 @@
       "source": "comparisons/al-snap-ecps.yaml"
     },
     {
+      "suite": "al-tanf-payment-standards",
+      "report": "axiom-policyengine-al-tanf-payment-standards.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-al"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
       "suite": "az-snap-ecps",
       "report": "axiom-policyengine-az-snap-ecps.json",
       "repos": [
@@ -27,6 +35,14 @@
         "TheAxiomFoundation/rulespec-us-az"
       ],
       "source": "comparisons/az-snap-ecps.yaml"
+    },
+    {
+      "suite": "az-tanf-deductions",
+      "report": "axiom-policyengine-az-tanf-deductions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-az"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "be-article-51-forfait",
@@ -221,6 +237,22 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ma-snap-ecps.yaml"
+    },
+    {
+      "suite": "md-tca-payments",
+      "report": "axiom-policyengine-md-tca-payments.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-md"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "me-tanf-standards",
+      "report": "axiom-policyengine-me-tanf-standards.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-me"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "medicaid-magi-co-ecps",

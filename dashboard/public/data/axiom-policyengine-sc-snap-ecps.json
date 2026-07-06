@@ -10234,7 +10234,7 @@
       "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T15:10:14Z",
+    "generated_at": "2026-07-06T21:06:57Z",
     "generated_by": "scripts/run_comparison.py::sc-snap-ecps",
     "oracle": {
       "name": "policyengine",
@@ -10244,7 +10244,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "09960abf54c265201e62a6d6df9e266851b0fb6e"
+        "sha": "a0bcc5a39fa57f02f0c75c9d4a9e6bfd8670c58c"
       }
     ],
     "run_kind": "manual",

@@ -2124,7 +2124,7 @@
       "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T15:18:50Z",
+    "generated_at": "2026-07-06T20:13:29Z",
     "generated_by": "scripts/run_comparison.py::co-state-income-tax-ecps",
     "oracle": {
       "name": "policyengine",

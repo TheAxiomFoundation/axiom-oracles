@@ -255,10 +255,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "8ad01030cc819e20fec9b4f1a85bb82ddd70810e",
+      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-05T20:40:08Z",
+    "generated_at": "2026-07-06T20:34:17Z",
     "generated_by": "scripts/run_comparison.py::co-tanf-ecps",
     "oracle": {
       "name": "policyengine",

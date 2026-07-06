@@ -248,3 +248,110 @@ suites:
         key: 3
         description: TX TANF budgetary need, non-caretaker family of 3
         pe: gov.states.tx.tanf.needs_standard.budgetary_needs.non_caretaker[3].amount
+  - suite: md-tca-payments
+    category: cash
+    locales: [MD]
+    comparisons:
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 1
+        description: MD TCA allowable monthly payment, household of 1
+        pe: gov.states.md.tca.maximum_benefit.main.1
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 3
+        description: MD TCA allowable monthly payment, household of 3
+        pe: gov.states.md.tca.maximum_benefit.main.3
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 6
+        description: MD TCA allowable monthly payment, household of 6
+        pe: gov.states.md.tca.maximum_benefit.main.6
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 10
+        description: MD TCA allowable monthly payment, household of 10
+        pe: gov.states.md.tca.maximum_benefit.main.10
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 21
+        description: MD TCA allowable monthly payment, household of 21
+        pe: gov.states.md.tca.maximum_benefit.main.21
+  - suite: me-tanf-standards
+    category: cash
+    locales: [ME]
+    comparisons:
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_base
+        key: 1
+        description: ME TANF standard of need, unit of 1 (adult included)
+        pe: gov.states.me.dhhs.tanf.standard_of_need.amount.1
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_base
+        key: 4
+        description: ME TANF standard of need, unit of 4 (adult included)
+        pe: gov.states.me.dhhs.tanf.standard_of_need.amount.4
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_base
+        key: 8
+        description: ME TANF standard of need, unit of 8 (adult included)
+        pe: gov.states.me.dhhs.tanf.standard_of_need.amount.8
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_add_member
+        description: ME TANF standard of need, each additional member
+        pe: gov.states.me.dhhs.tanf.standard_of_need.additional_person
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_base
+        key: 1
+        description: ME TANF maximum grant, unit of 1 (adult included)
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.amount.1
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_base
+        key: 4
+        description: ME TANF maximum grant, unit of 4 (adult included)
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.amount.4
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_base
+        key: 8
+        description: ME TANF maximum grant, unit of 8 (adult included)
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.amount.8
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_add_member
+        description: ME TANF maximum grant, each additional member
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.additional_person
+  - suite: al-tanf-payment-standards
+    category: cash
+    locales: [AL]
+    comparisons:
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 1
+        description: AL TANF monthly payment standard, unit of 1
+        pe: gov.states.al.dhs.tanf.payment_standard.1
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 3
+        description: AL TANF monthly payment standard, unit of 3
+        pe: gov.states.al.dhs.tanf.payment_standard.3
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 6
+        description: AL TANF monthly payment standard, unit of 6
+        pe: gov.states.al.dhs.tanf.payment_standard.6
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 10
+        description: AL TANF monthly payment standard, unit of 10
+        pe: gov.states.al.dhs.tanf.payment_standard.10
+  - suite: az-tanf-deductions
+    category: cash
+    locales: [AZ]
+    comparisons:
+      - file: us-az/policies/des/faa5/ca-benefit-determination/earned-income-deduction.yaml
+        rule: ca_earned_income_deduction_rate
+        description: AZ cash assistance earned income deduction rate
+        pe: gov.states.az.hhs.tanf.income.deductions.percentage
+      - file: us-az/policies/des/faa5/ca-benefit-determination/cost-of-employment-deduction.yaml
+        rule: cost_of_employment_monthly_deduction_amount
+        description: AZ cash assistance cost-of-employment monthly deduction
+        pe: gov.states.az.hhs.tanf.income.deductions.flat
