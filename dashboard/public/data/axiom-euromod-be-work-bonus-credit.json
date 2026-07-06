@@ -401,10 +401,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "10b7f0c1de2b68142bbdcf0519a2380f997bbaf9",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T12:52:18Z",
+    "generated_at": "2026-07-06T20:22:08Z",
     "generated_by": "scripts/run_comparison.py::be-work-bonus-credit",
     "oracle": {
       "euromod_country": "BE",
@@ -416,10 +416,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": "4089efe22d849c7c2dbe9062a4e7c98a501e28b0"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
