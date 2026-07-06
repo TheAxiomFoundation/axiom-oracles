@@ -63,8 +63,20 @@ oracle's own model spine — **never from memory**:
   present in VARCONFIG is a **queryable** comparison surface; an `i_`-prefixed
   local or a non-registry name is **internal only** — recorded as evidence for
   an `unobservable_boundary` or `technical` classification.
-* **PolicyEngine** (`PolicyEngineUniverseBackend`) is a documented hook that
-  enumerates variables-with-formulas from a pinned `policyengine-uk` checkout.
+* **PolicyEngine** (`PolicyEngineUniverseBackend`) enumerates PolicyEngine-UK's
+  *simulated* surface from a pinned `policyengine-uk` checkout — the PE analogue
+  of the EUROMOD policy list. It instantiates the checkout's
+  `CountryTaxBenefitSystem` (variable registry only, no microdata/engine run) and,
+  for each **program** in a declared spine (`PE_UK_PROGRAM_SPINE` — the fiscal
+  instruments PE-UK models, one row per program), reads from code which of the
+  program's bound output variables carry a `formula`. It classifies each into the
+  four PE-UK simulation kinds the coverage matrix documents (rules-simulated /
+  rate-from-frozen-input / reported-ceiling / pure-input) by inspecting the
+  formula body: pure-input and reported-ceiling passthroughs map to
+  `input_carrying` exclusions with per-row notes; rate-from-category rows are
+  in-scope with a `rate_only` comparability note. The header pins the exact
+  `policyengine-uk` version from the checkout's `pyproject.toml`. Backs the
+  committed `uk-pe` universe (a distinct oracle from the UKMOD-backed `uk`).
 
 The generator overwrites the **facts** (`output_vars`, `oracle_policy_type`,
 `internal_only_vars`) and **preserves the decisions** (`in_scope`,
@@ -102,8 +114,11 @@ has more than one kind of simulated output, so an in-scope row carries a
 | `ceiling_only` | The oracle reads a `*_reported` input amount and applies only a capital/tariff screen or flat multiply, never computing the maximum from statute (PE-UK `jsa_income`/`esa_income`/`sda`). |
 
 The UKMOD/EUROMOD universes are all `full` (they compare complete statutory
-outputs); the `policyengine` backend sets `rate_only`/`ceiling_only` for the
-PE-UK kinds when the `pe-uk` universe is seeded.
+outputs); the committed `uk-pe` universe sets `rate_only` for the PE-UK
+rate-from-category kinds (PIP/DLA, and the hybrid Carer's Allowance / Carer
+Support Payment amount surfaces), while pure-input and reported-ceiling
+passthroughs are excluded `input_carrying` rather than carried as in-scope
+`ceiling_only` rows.
 
 ## Adopting a new jurisdiction
 

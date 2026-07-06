@@ -36,6 +36,8 @@ from axiom_oracles.conformance.schema import (  # noqa: E402
 )
 from axiom_oracles.conformance.universe import (  # noqa: E402
     EuromodUniverseBackend,
+    PE_UK_PROGRAM_SPINE,
+    PolicyEngineUniverseBackend,
     _is_queryable_output,
     propose_scope,
     RawPolicy,
@@ -278,7 +280,7 @@ def test_propose_scope_defaults_are_conservative():
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("jurisdiction", ["uk", "be"])
+@pytest.mark.parametrize("jurisdiction", ["uk", "be", "uk-pe"])
 def test_committed_universe_parses_and_validates(jurisdiction):
     path = CONFORMANCE_DIR / f"{jurisdiction}.yaml"
     universe = parse_universe(path)
@@ -328,6 +330,93 @@ def test_be_universe_excludes_bfapl_dataset_lacks_input_with_probe_pointer():
     assert bfapl.note is not None
     assert "lpb" in bfapl.note
     assert "rulespec-be#86" in bfapl.note
+
+
+# ---------------------------------------------------------------------------
+# Committed pe-uk universe (PolicyEngine-UK oracle)
+# ---------------------------------------------------------------------------
+
+
+def test_uk_pe_universe_is_policyengine_backed_and_version_pinned():
+    """The pe-uk universe is defined against a pinned policyengine-uk version, so
+    a conformance claim is scoped to one release, not a floating latest."""
+    universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
+    assert universe.jurisdiction == "uk-pe"
+    assert universe.oracle.backend == "policyengine"
+    assert universe.oracle.model == "policyengine-uk"
+    # release is a real pinned semver (e.g. 2.89.2), never the placeholder.
+    assert universe.oracle.release not in {"", "TODO", "checkout"}
+    assert universe.oracle.release[0].isdigit()
+    assert universe.validate() == []
+
+
+def test_uk_pe_rate_from_category_programs_carry_rate_only_comparability():
+    """PIP/DLA apply a rate table over a frozen *_category input, so they are
+    in-scope but comparable on rates only — the note records the standard."""
+    universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
+    by_name = universe.by_name()
+    for program in ("pip", "dla"):
+        row = by_name[program]
+        assert row.in_scope is True
+        assert row.comparability == "rate_only"
+        assert row.note and "rates-given-category" in row.note
+
+
+def test_uk_pe_reported_ceiling_and_pure_input_excluded_as_input_carrying():
+    """The reported-ceiling and pure-input passthroughs (no statutory surface a
+    comparison can bind) are excluded with input_carrying + a per-row note."""
+    universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
+    by_name = universe.by_name()
+    for program in (
+        "council_tax",
+        "stamp_duty_land_tax",
+        "esa_contrib",
+        "incapacity_benefit",
+        "council_tax_benefit",
+        "esa_income",
+        "sda",
+        "ssmg",
+    ):
+        row = by_name[program]
+        assert row.in_scope is False, program
+        assert row.exclusion_reason == "input_carrying", program
+        assert row.note, f"{program} needs a per-row note"
+
+
+def test_uk_pe_council_tax_reduction_is_in_scope_on_this_pin():
+    """council_tax_reduction gained a formula in the pinned policyengine-uk, so it
+    is an in-scope (uncovered) program — the matrix's PE-side ambiguity resolved."""
+    universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
+    ctr = universe.by_name()["council_tax_reduction"]
+    assert ctr.in_scope is True
+    assert ctr.exclusion_reason is None
+    assert "council_tax_reduction" in ctr.output_vars
+
+
+def test_uk_pe_covered_programs_name_a_live_pe_suite():
+    """Every covered program points at one of the two live PE-UK EFRS suites."""
+    universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
+    covered_suites = {
+        p.suite for p in universe.in_scope() if p.suite is not None
+    }
+    assert covered_suites <= {"uk-tax-benefits-efrs", "uk-universal-credit-efrs"}
+    # The task's named covered additions are all present and suite-bound.
+    by_name = universe.by_name()
+    for program in (
+        "income_tax",
+        "national_insurance",
+        "universal_credit",
+        "housing_benefit",
+        "pip",
+        "dla",
+        "marriage_allowance",
+        "carers_allowance",
+        "carer_support_payment",
+    ):
+        assert by_name[program].suite in {
+            "uk-tax-benefits-efrs",
+            "uk-universal-credit-efrs",
+        }, program
 
 
 def test_serialize_is_stable_roundtrip():
@@ -380,6 +469,82 @@ def test_ukmod_generated_facts_match_committed_universe():
     universe = gen.generate_universe("uk", _UKMOD_ROOT)
     committed = parse_universe(CONFORMANCE_DIR / "uk.yaml")
     assert serialize(universe) == serialize(committed)
+
+
+# ---------------------------------------------------------------------------
+# Live policyengine-uk backend (skipped when the package is not importable)
+# ---------------------------------------------------------------------------
+
+
+def _policyengine_uk_checkout():
+    """A checkout root to enumerate from: the package's own install dir's parent
+    (its repo root), which carries pyproject.toml alongside the package."""
+    import policyengine_uk  # type: ignore
+
+    return Path(policyengine_uk.__file__).resolve().parents[1]
+
+
+def _importable_pe_uk_matches_pin() -> bool:
+    """True only when policyengine_uk is importable AND its version equals the
+    committed uk-pe universe's pinned release. The spine is pinned to that exact
+    version (variables are added/removed across releases — e.g.
+    council_tax_reduction gained a formula after 2.88.52), so enumerating against
+    a different importable copy is a version mismatch, not a test target. Same
+    version-gating the drift --check applies."""
+    import importlib.util
+
+    if importlib.util.find_spec("policyengine_uk") is None:
+        return False
+    try:
+        pinned = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml").oracle.release
+        present = PolicyEngineUniverseBackend(
+            checkout=_policyengine_uk_checkout()
+        ).pinned_version()
+    except Exception:
+        return False
+    return present == pinned
+
+
+@pytest.mark.skipif(
+    not _importable_pe_uk_matches_pin(),
+    reason="importable policyengine_uk version does not match the pinned uk-pe release",
+)
+def test_policyengine_backend_enumerates_program_spine_from_code():
+    """The backend reads each program's simulation kind from the checkout's code:
+    income_tax computes (rules), council_tax is a pure input, pip is a rate table
+    over a frozen category. Facts, not memory."""
+    backend = PolicyEngineUniverseBackend(checkout=_policyengine_uk_checkout())
+    by_name = {p.name: p for p in backend.raw_policies()}
+    # One RawPolicy per spine program.
+    assert len(by_name) == len(PE_UK_PROGRAM_SPINE)
+    # income_tax is a rules engine with a queryable computed output.
+    assert by_name["income_tax"].policy_type == "rules"
+    assert "income_tax" in by_name["income_tax"].queryable_outputs
+    # council_tax is a pure input: no queryable (formula-bearing) output, and the
+    # variable is recorded as internal-only evidence.
+    assert by_name["council_tax"].queryable_outputs == ()
+    assert "council_tax" in by_name["council_tax"].internal_outputs
+    assert by_name["council_tax"].policy_type == "pure_input"
+    # A version can be pinned from the checkout's pyproject.toml.
+    assert backend.pinned_version()[0].isdigit()
+
+
+@pytest.mark.skipif(
+    __import__("importlib.util", fromlist=["util"]).find_spec("policyengine_uk")
+    is None,
+    reason="policyengine_uk not importable on this runner",
+)
+def test_policyengine_backend_raises_on_missing_spine_variable():
+    """A spine variable absent from the checkout must fail loudly (a drift signal),
+    not silently drop the program's surface."""
+    from axiom_oracles.conformance.universe import PolicyEngineProgram
+
+    backend = PolicyEngineUniverseBackend(
+        checkout=_policyengine_uk_checkout(),
+        spine=(PolicyEngineProgram("ghost", ("a_variable_that_does_not_exist",)),),
+    )
+    with pytest.raises(ValueError, match="not found in the pinned checkout"):
+        backend.raw_policies()
 
 
 # ---------------------------------------------------------------------------
@@ -519,6 +684,60 @@ def test_scoreboard_open_rulespec_issue_counts_as_axiom_attributed():
     # The linked OPEN rulespec issue makes this Axiom-attributed despite the
     # upstream_engine_gap label.
     assert board.axiom_attributed_open == 1
+    assert board.conformant is False
+
+
+def test_scoreboard_shared_report_counts_residual_once():
+    """N in-scope policies covered by ONE report must count that report's mismatch
+    signals once toward the headline — the PE-UK case (12 programs share
+    uk-tax-benefits-efrs). Summing per-policy would multiply the residual N-fold
+    and, if it were unexplained/axiom-attributed, inflate the conformance
+    predicate and the ratchet. The per-policy drill-down still shows each row's
+    report stats."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="shared"),
+        _in_scope(id="tx:b", oracle_policy_name="b", suite="shared"),
+        _in_scope(id="tx:c", oracle_policy_name="c", suite="shared"),
+    ])
+    dispositioned = {
+        "raw_match_rate": 60.0,
+        "explained_rate": 100.0,
+        "unexplained_count": 0,
+        "counts": {
+            "upstream_engine_gap": 5,
+            "axiom_encoding_gap": 0,
+            "bridge_artifact": 0,
+            "explained_residual": 0,
+            "unexplained": 0,
+        },
+    }
+    reports = [_report("shared", comparisons=10, matches=5, dispositioned=dispositioned)]
+    board, scores = score_jurisdiction(universe, reports)
+    assert board.covered == 3
+    # 5 upstream gaps counted ONCE, not 3× = 15.
+    assert board.oracle_attributed == 5
+    assert board.unexplained_total == 0
+    assert board.axiom_attributed_open == 0
+    assert board.conformant is True
+    # Each covered drill-down row still reports the shared report's stats.
+    covered_rows = [s for s in scores if s.covered]
+    assert len(covered_rows) == 3
+    assert all(s.oracle_attributed == 5 for s in covered_rows)
+
+
+def test_scoreboard_shared_report_unexplained_counts_once_and_blocks_once():
+    """The dedup must apply to the gating signals too: a shared report with 2
+    unexplained mismatches contributes 2 (not 2×N) — otherwise the ratchet floor
+    would move by a phantom multiple."""
+    universe = _universe([
+        _in_scope(id="tx:a", oracle_policy_name="a", suite="shared"),
+        _in_scope(id="tx:b", oracle_policy_name="b", suite="shared"),
+    ])
+    # 10 comparisons, 8 matches, no dispositions → 2 unexplained on the report.
+    reports = [_report("shared", comparisons=10, matches=8)]
+    board, _ = score_jurisdiction(universe, reports)
+    assert board.covered == 2
+    assert board.unexplained_total == 2  # once, not 4
     assert board.conformant is False
 
 

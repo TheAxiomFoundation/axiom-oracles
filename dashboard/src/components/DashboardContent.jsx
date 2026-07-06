@@ -258,6 +258,13 @@ export default function DashboardContent() {
 
               <ConformanceCard region={jurisdiction} />
 
+              {/* The UK has two oracle universes: UKMOD (region "uk", above) and
+                  PolicyEngine-UK (region "uk-pe"). Render the PE-UK conformance
+                  card alongside so "parity vs PE-UK" is a scoreboard badge like
+                  Belgium's. The card no-ops when its jurisdiction is absent from
+                  the scoreboard, so this is safe for us/be. */}
+              {jurisdiction === "uk" && <ConformanceCard region="uk-pe" />}
+
               <CoverageRegister
                 reports={withData}
                 coverageOverview={data.coverageOverview}
