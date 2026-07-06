@@ -44,6 +44,17 @@ runner:
     suite: uk-pension-credit
     population: synthetic
     sample_size: 0
+    # NB: comparison_batch_size is intentionally NOT pinned to 1 here. UKMOD's
+    # Pension Credit output boamt_s carries a STOCHASTIC per-row take-up /
+    # UC-transition draw (i_rand_tu), and at batch size 1 this suite is
+    # DEGENERATE: an isolated pensioner always draws non-take, so every case —
+    # including a zero-income pensioner entitled to the full 238.00/week —
+    # returns 0.0 (verified). The awards only appear in multi-household batches,
+    # and identical households then receive different awards by position
+    # (income0 x10 in one run -> [0,238,0,0,238,0,0,238,238,238]). The committed
+    # report is therefore one realization, with the take-up zeros dispositioned
+    # (euromod_issues.json#ukmod-pc-boamt-takeup-transition). A future adapter
+    # fix that forces 100% take-up would make this suite deterministic.
     # The composed Pension Credit pipeline parameters are effective from
     # 2026-04-01, so the Axiom side evaluates in the April 2026 period. UKMOD
     # resolves the policy year from euromod_system (UK_2026) and ignores the
