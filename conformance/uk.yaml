@@ -205,6 +205,22 @@ policies:
       - i_bcap_AmtCap
       - n/a
     suite: null
+    note: 'BEN: benefit cap on Housing Benefit and Universal Credit (UC Regs 2013 reg 80A/81). bcap_uk
+      computes the cap reduction, not a benefit: brd_s reduces the legacy-benefit stack (i_bcap_finalAmt
+      = (bsa_s+bsadi_s+bho_s+bwkmt_s+bfamt_s) - brd_s) and brduc_s reduces UC (i_bcap_finalAmt += bsauc_s
+      - brduc_s), each capped at the relevant award and gated by the reg-80A annual limits (single GBP
+      14,753 / couple-or-lone-parent GBP 22,020, London GBP 16,967 / 25,323) via amount#2/#4. Crucially,
+      bcap_uk writes brd_s/brduc_s/bsadi02_s but does NOT write back into bsauc_s or bho_s: UKMOD reports
+      the UNCAPPED award and carries the cap effect only in the separate reduction outputs (verified:
+      no bcap_uk function outputs bsauc_s in UK_2026). Axiom encodes the UC benefit cap (reg 80A limits
+      + reg 81 reduction: rulespec-uk uk/regulations/uksi/2013/376/80A and /81, whose output universal_credit_award_benefit_cap_reduction
+      is the direct analog of UKMOD brduc_s) and applies it INSIDE the composed UC award before the s.8(1)
+      award. So the uk-universal-credit suite''s bsauc_s comparison surfaces the reporting divergence
+      as an upstream_engine_gap (UKMOD does not apply the cap to hypothetical benefit units), but no live
+      suite yet compares bcap_uk''s own reduction output against Axiom''s reg-81 reduction. Uncovered
+      until a dedicated benefit-cap surface maps UKMOD brduc_s to universal_credit_award_benefit_cap_reduction
+      (and brd_s to a legacy-benefit reduction, unencoded — the Axiom UC pilot is UC-only); requires the
+      x64 UKMOD runtime to regenerate the report (rulespec-uk#57).'
   - id: uk:bch_uk
     oracle_policy_name: bch_uk
     oracle_policy_type: ben
@@ -215,10 +231,13 @@ policies:
     note: 'BEN: Child Benefit. The uk-child-benefit suite live-compares the composed UK Child Benefit
       pipeline (SSCBA 1992 s.141 with the SI 2006/965 reg.2 enhanced GBP 27.05 / other GBP 17.90 weekly
       rates, annualised over 52 weeks) against UKMOD''s pre-charge Child Benefit on a single-parent grid
-      (one/two/three children x 20k/70k/80k/90k straddling the HICBC taper), matching 12/12. The comparison
-      bridges to UKMOD by summing paid bch_s and the separately-reported charge clawback bchrd_s (the
-      HICBC, ITEPA 2003 s.681B-H, is not in the Axiom corpus — rulespec-uk#75 — so the netted pre-charge
-      Child Benefit is the parity target). The ~0.27% 52-vs-52.14-weeks convention residual is inside
+      (one/two/three children x 20k/70k/80k/90k straddling the HICBC taper), matching 12/12. The gross
+      surface bridges to UKMOD by summing paid bch_s and the separately-reported charge clawback bchrd_s
+      (UKMOD policy bchrd_uk nets the clawback into bch_s), so the summed [bch_s, bchrd_s] reconstructs
+      the gross pre-charge entitlement — the parity target. The HICBC (ITEPA 2003 ss.681B-681H) is now
+      corpus-grounded (axiom-corpus#221) and encoded on the Axiom side (rulespec-uk#84 closed #75), so
+      the suite also wires a net-of-charge surface (bch_s alone vs Axiom''s post-charge amount); the committed
+      report exercises the gross bridge surface. The ~0.27% 52-vs-52.14-weeks convention residual is inside
       tolerance; all cases recover the same statutory weekly rates. bch_s is the compared surface, so
       bch_uk is covered.'
   - id: uk:bched01_uk
@@ -236,6 +255,15 @@ policies:
       - n/a
       - sel2_s
     suite: null
+    note: 'BEN: Free School Meals (UKMOD comment "BEN: Free School Meals"), not a Child Benefit education-age
+      extension despite the bch* prefix. bched01_s is a passported, means-tested devolved benefit: eligibility
+      passports off receipt of other means-tested awards (bsa_s, bunmt_s, bsadi_s, bfamt_s/bwkmt_s with
+      il_TC_means thresholds, bsauc_s with i_UC_means_earned_adj, boamtmm_s) crossed with primary/secondary
+      age bands and region (drgn1=12 Scotland, drgn1=13 NI), valued at $BFSMprim / $BFSMsec and scaled
+      by the take-up factors $BFSMPrUnTakeUp/$BFSMPrMtTakeUp/$BFSMScMtTakeUp. Not encoded in Axiom (no
+      FSM pipeline in rulespec-uk), and the synthetic UK grids run drgn1=2, so no current case activates
+      it. Uncovered until Free School Meals is encoded in Axiom and a passported surface with matching
+      region/passporting inputs is built; out of scope for the child-benefit + benefit-cap lane.'
   - id: uk:bched02_uk
     oracle_policy_name: bched02_uk
     oracle_policy_type: ben
@@ -243,6 +271,13 @@ policies:
       - bched02_s
     in_scope: true
     suite: null
+    note: 'BEN: School Clothing Grant (UKMOD comment "BEN: School Clothing Grant"), not a Child Benefit
+      education-age extension despite the bch* prefix. bched02_s passports off the same means-tested awards
+      as bched01_uk (bsa_s/bunmt_s/bsadi_s/bfamt_s/bwkmt_s/bsauc_s/boamtmm_s) for dependent children aged
+      12-18 (dec!=6, dec!=0) at the secondary grant rate $BScSCGsec. A passported devolved payment, not
+      encoded in Axiom; the synthetic UK grids run drgn1=2 so no current case activates it. Uncovered
+      until the School Clothing Grant is encoded in Axiom and a passported surface is built; out of scope
+      for the child-benefit + benefit-cap lane.'
   - id: uk:bchht_uk
     oracle_policy_name: bchht_uk
     oracle_policy_type: ben
@@ -255,6 +290,13 @@ policies:
       - i_bdiscwa00
       - i_bdiscwa01
     suite: null
+    note: 'BEN: Child Winter Heating Assistance (Scotland) (UKMOD comment "BEN: Child Winter Heating Assistance
+      (Scotland)"), not a Child Benefit household/HICBC test component despite the bch* prefix. bchht_s
+      is a devolved Scottish disability payment: paid at $SCWHA to a child under 18 in Scotland (drgn1=12)
+      whose highest-rate DLA/PIP care indicator (i_bdisc01 or i_bdiscwa01) reaches $DLACareHigh*0.95.
+      Not encoded in Axiom, and the synthetic UK grids run drgn1=2 with no disability inputs, so no current
+      case activates it. Uncovered until Child Winter Heating Assistance is encoded in Axiom and a Scotland/disability
+      surface is built; out of scope for the child-benefit + benefit-cap lane.'
   - id: uk:bchmt01_uk
     oracle_policy_name: bchmt01_uk
     oracle_policy_type: ben
@@ -272,6 +314,16 @@ policies:
       - bchmt_s
     in_scope: true
     suite: null
+    note: 'BEN: Scottish Child Payment (UKMOD comment "BEN: Child Payment (Scotland)"), not a Child Benefit
+      means-test variant despite the bch* prefix (distinct from the excluded bchmt01_uk SCP bridging scheme).
+      bchmt_s is a devolved Scotland-only (drgn1=12) means-tested payment: eligibility passports off il_bchmt
+      (the summed qualifying awards boamt_s+bsadi_s+bunmt_s+bsa_s+bwkmt_s+bfamt_s+bsauc_s) with dependent
+      children in the benefit unit, and the final BenCalc consumes UKMOD''s stochastic take-up draw (i_rand_tu<=$SCPTU6to15y,
+      switch=switch) so the reported bchmt_s is take-up-adjusted away from the statutory entitlement —
+      the same take-up-draw exposure documented for bsauc_s. Not encoded in Axiom, and the synthetic UK
+      grids run drgn1=2, so no current case activates it. Uncovered until the Scottish Child Payment is
+      encoded in Axiom and a Scotland surface (with the take-up draw pinned, as for the UC/PC suites)
+      is built; out of scope for the child-benefit + benefit-cap lane.'
   - id: uk:bchrd_uk
     oracle_policy_name: bchrd_uk
     oracle_policy_type: ben
@@ -279,12 +331,18 @@ policies:
       - bch_s
       - bchrd_s
     in_scope: true
-    suite: null
+    suite: uk-child-benefit
     note: 'BEN: Reduce child benefit (from 2013) — the High Income Child Benefit Charge clawback (ITEPA
-      2003 s.681B-H). Its distinct output bchrd_s is not compared by any published suite: the HICBC is
-      not in the Axiom corpus (rulespec-uk#75), so the uk-child-benefit suite bridges bchrd_s OUT (sums
-      it back into bch_s to recover the pre-charge entitlement) rather than comparing it. Uncovered until
-      the HICBC taper is encoded and a bchrd_s comparison surface is built; blocked on rulespec-uk#75.'
+      2003 ss.681B-681H). bchrd_uk computes bchrd_s = ((adjusted_net_income - $ITCBthresh)/200)*1% * bch_s,
+      capped at bch_s, then nets bchrd_s back into bch_s (UK_2026: threshold GBP 60,000, full clawback
+      at GBP 80,000). The uk-child-benefit suite live-compares the composed Axiom Child Benefit pipeline
+      against UKMOD''s gross pre-charge entitlement whose euromod target is the summed list [bch_s, bchrd_s]
+      — so bchrd_uk''s distinct output bchrd_s is exercised as a summand of the compared surface (matching
+      12/12 on the single-parent grid whose income sweep 20k/70k/80k/90k straddles the taper). The HICBC
+      is now corpus-grounded (axiom-corpus#221) and encoded on the Axiom side (rulespec-uk#84 closed #75),
+      so a direct net-of-charge surface (bch_s alone vs Axiom''s post-charge entitlement) is wired into
+      the suite too; the committed report exercises the gross bridge surface, which already consumes bchrd_s.
+      bchrd_s is a compared surface, so bchrd_uk is covered — mirroring bch_uk.'
   - id: uk:bcrdicm_uk
     oracle_policy_name: bcrdicm_uk
     oracle_policy_type: ben
