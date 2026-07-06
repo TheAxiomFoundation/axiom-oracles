@@ -6605,6 +6605,19 @@ def project_housing_benefit_entitlement_inputs(row: Any) -> dict[str, Any]:
     # The surface is filtered to benefit units with no non-dependant deduction
     # (housing_benefit_entitlement_defined), so the number of non-dependants is
     # projected as zero.
+    #
+    # Earnings-disregard scope (axiom-oracles#159/#165): hb_pilot_applicable_income
+    # is projected DIRECTLY from PE's housing_benefit_applicable_income rather than
+    # recomputed, so the earnings-disregard step is inherited, not independently
+    # compared. Reconciliation verdict (#165): PE's flat/stacked disregard is an
+    # UNINTENDED over-disregard, not a documented simplification — PE sums the
+    # single/couple/lone-parent base AND the worker disregard, whereas SI 2006/213
+    # Sch 4 gives one highest-applicable base (£5/£10/£20/£25) plus the £17.10 para-17
+    # additional; the £37.10 worker amount already embeds the £20 higher base, so
+    # workers are over-disregarded (eFRS: ~63.5k benunits, ~£32M/yr excess HB).
+    # Filed upstream as PolicyEngine/policyengine-uk#1794. Until PE fixes it, the
+    # earnings-disregard component of applicable income stays out of scope of this
+    # comparison (it is an upstream_engine_gap, not an Axiom encoding gap).
     lha_eligible = bool(row_value(row, "LHA_eligible", False))
     return {
         "hb_pilot_is_couple": bool(row_value(row, "is_couple", False)),
