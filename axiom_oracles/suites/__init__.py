@@ -33,6 +33,7 @@ from .be_special_social_security import (
 )
 from .be_unemployment import be_unemployment_cases
 from .be_worker import (
+    be_article_51_forfait_cases,
     be_employer_ssc_cases,
     be_marital_quotient_cases,
     be_worker_disposable_income_list_cases,
@@ -66,6 +67,7 @@ def available_suites() -> tuple[str, ...]:
         "nyc-basic",
         "nyc-synthetic",
         "be-worker-pit",
+        "be-article-51-forfait",
         "be-marital-quotient",
         "be-worker-tax-income-list",
         "be-worker-disposable-income-list",
@@ -114,6 +116,8 @@ def load_suite(name: str):
         return nyc_synthetic_cases()
     if name == "be-worker-pit":
         return be_worker_pit_cases()
+    if name == "be-article-51-forfait":
+        return be_article_51_forfait_cases()
     if name == "be-marital-quotient":
         return be_marital_quotient_cases()
     if name == "be-worker-tax-income-list":
@@ -195,6 +199,7 @@ def load_suite(name: str):
 
 __all__ = [
     "available_suites",
+    "be_article_51_forfait_cases",
     "be_birth_leave_cases",
     "be_capital_income_tax_cases",
     "be_elderly_income_support_cases",

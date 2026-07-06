@@ -76,6 +76,7 @@
     "axiom-euromod-be-marital-quotient.json",
     "axiom-euromod-be-unemployment.json",
     "axiom-euromod-be-study-allowance.json",
-    "taxcalc-policyengine-fiit-ecps.json"
+    "taxcalc-policyengine-fiit-ecps.json",
+    "axiom-euromod-be-article-51-forfait.json"
   ]
 }

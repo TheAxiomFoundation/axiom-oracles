@@ -58,6 +58,35 @@ def be_marital_quotient_cases() -> list[Case]:
     ]
 
 
+def be_article_51_forfait_cases() -> list[Case]:
+    """Single-worker Belgium Article 51 professional-expense forfait cases.
+
+    Isolates the CIR 1992 Article 51 employee forfait ``tintace_s`` as its own
+    comparison surface (it is otherwise exercised only as a base reduction inside
+    the composed ``tin_s`` worker-PIT/marital-quotient pipelines). EUROMOD
+    BE_2025 computes ``tintace_s = min(0.30 * il_netYem, 5930)`` where
+    ``il_netYem`` is employment income after ordinary employee social security;
+    the encoded ``belgium_pit_pilot_worker_forfait_professional_expenses`` applies
+    the identical Article 51 employee rate (30%) and indexed cap (5,930 EUR) to
+    the pipeline's own post-employee-SSC remuneration. Both engines therefore
+    apply the same rate and cap to the same statutory base, bridged on the
+    engine's post-uprating gross (``yem``).
+
+    The sweep crosses the forfait cap: the 30% rate binds below a post-SSC base of
+    ~19,767 EUR (0.30 * 19,766.67 = 5,930) and the cap binds above it. The 12k and
+    22k cases sit on the rate side, 35k/60k on the cap side, and 27k straddles the
+    crossover once ordinary employee SSC (13.07%) is netted out.
+    """
+
+    return [
+        _single_worker_forfait_case("be-article-51-forfait-12k", 12_000.0),
+        _single_worker_forfait_case("be-article-51-forfait-22k", 22_000.0),
+        _single_worker_forfait_case("be-article-51-forfait-27k", 27_000.0),
+        _single_worker_forfait_case("be-article-51-forfait-35k", 35_000.0),
+        _single_worker_forfait_case("be-article-51-forfait-60k", 60_000.0),
+    ]
+
+
 def be_worker_tax_income_list_cases() -> list[Case]:
     """Single-worker Belgium tax-list cases for the EUROMOD BE_2025 oracle."""
 
@@ -121,6 +150,36 @@ def _single_worker_pit_case(case_id: str, annual_income: float) -> Case:
         },
         metadata_extra={
             "scenario": "single-worker-pit",
+            "yearly_earned_income": annual_income,
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "yem": [remuneration_input],
+                "yemeq_s": [WORK_BONUS_REFERENCE_INPUT],
+            },
+        },
+    )
+
+
+def _single_worker_forfait_case(case_id: str, annual_income: float) -> Case:
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
+    return _single_worker_case(
+        case_id,
+        annual_income,
+        output=Concepts.BE_ARTICLE_51_EMPLOYEE_FORFAIT,
+        axiom_inputs={
+            remuneration_input: annual_income,
+            WORK_BONUS_REFERENCE_INPUT: 0,
+            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
+            ): 0,
+            _pit_input(
+                "belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies"
+            ): False,
+            _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
+            _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
+        },
+        metadata_extra={
+            "scenario": "single-worker-article-51-forfait",
             "yearly_earned_income": annual_income,
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": [remuneration_input],

@@ -489,14 +489,14 @@ policies:
     output_vars:
       - tintace_s
     in_scope: true
-    suite: null
-    note: 'TAX: PIT professional-expense forfait (article_51_forfaits). Exercised as a base reduction
-      inside the composed worker PIT (be-worker-pit) and marital-quotient (be-marital-quotient) pipelines,
-      where its 13.07%-SSC-then-Article-51 base reduction is what lets tin_s reconcile with EUROMOD —
-      but no published suite compares tintace_s as its own surface. Per the harness rule (covered = a
-      live report comparing THIS policy''s output), a forfait exercised only through a composed tin_s
-      does not count as covered; tintace_be needs a dedicated tintace_s comparison surface. Uncovered
-      until built.'
+    suite: be-article-51-forfait
+    note: 'TAX: PIT professional-expense forfait (article_51_forfaits). The be-article-51-forfait suite
+      live-compares tintace_s as its own surface on a five-point single-worker earnings sweep (12k / 22k
+      / 27k / 35k / 60k) that straddles the indexed forfait cap. EUROMOD BE_2025 computes
+      tintace_s = min(0.30 * il_netYem, 5930) on employment income after ordinary employee SSC; the
+      encoded belgium_pit_pilot_worker_forfait_professional_expenses applies the identical Article 51
+      employee rate (30%) and indexed cap (5,930 EUR) to the pipeline''s own post-employee-SSC
+      remuneration, bridged on the engine''s post-uprating gross (yem). Matches EUROMOD exactly (5/5).'
   - id: be:tintb_be
     oracle_policy_name: tintb_be
     oracle_policy_type: tax

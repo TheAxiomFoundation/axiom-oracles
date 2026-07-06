@@ -216,6 +216,10 @@ class Concepts:
         "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
         "#belgium_pit_pilot_federal_and_local_tax_before_withholding"
     )
+    BE_ARTICLE_51_EMPLOYEE_FORFAIT = (
+        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
+        "#belgium_pit_pilot_worker_forfait_professional_expenses"
+    )
     BE_MARITAL_QUOTIENT_COUPLE_PIT_BEFORE_WITHHOLDING = (
         "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
         "#belgium_pit_couple_federal_and_local_tax_before_withholding"
