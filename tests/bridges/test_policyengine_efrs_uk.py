@@ -67,6 +67,8 @@ from axiom_oracles.bridges.efrs_uk import (
     PERSONAL_ALLOWANCE_BASE,
     PERSONAL_ALLOWANCE_OUTPUTS,
     PERSONAL_ALLOWANCE_PROGRAM_PATH,
+    PIP_FINAL_BASE,
+    PIP_FINAL_OUTPUTS,
     SCOTTISH_CHILD_PAYMENT_FINAL_BASE,
     SCOTTISH_CHILD_PAYMENT_FINAL_OUTPUTS,
     SDA_FINAL_BASE,
@@ -109,6 +111,7 @@ from axiom_oracles.bridges.efrs_uk import (
     build_child_benefit_final_request,
     build_child_benefit_request,
     build_dla_final_request,
+    build_pip_final_request,
     build_esa_income_final_request,
     build_esa_income_tariff_income_request,
     build_housing_benefit_entitlement_request,
@@ -2718,6 +2721,85 @@ def test_dla_final_request_projects_final_inputs():
     ] == {"kind": "bool", "value": True}
 
 
+def test_pip_final_projection_maps_categories_to_rate_band_leaves():
+    from axiom_oracles.bridges.efrs_uk import project_pip_final_inputs
+
+    mixed = project_pip_final_inputs(
+        {"pip_dl_category": "ENHANCED", "pip_m_category": "STANDARD"}
+    )
+    assert mixed == {
+        f"{PIP_FINAL_BASE}#input.daily_living_is_enhanced_rate": True,
+        f"{PIP_FINAL_BASE}#input.daily_living_is_standard_rate": False,
+        f"{PIP_FINAL_BASE}#input.mobility_is_enhanced_rate": False,
+        f"{PIP_FINAL_BASE}#input.mobility_is_standard_rate": True,
+    }
+
+    nil = project_pip_final_inputs({"pip_dl_category": "NONE", "pip_m_category": "NONE"})
+    assert all(value is False for value in nil.values())
+
+
+def test_pip_final_request_projects_final_inputs():
+    request = build_pip_final_request(
+        pe_data={
+            "persons": [
+                {
+                    "person_id": 1,
+                    "pip": 0,
+                    "pip_dl": 0,
+                    "pip_m": 0,
+                    "pip_dl_category": "NONE",
+                    "pip_m_category": "NONE",
+                    "receives_enhanced_pip_dl": False,
+                },
+                {
+                    "person_id": 2,
+                    "pip": 10_119.20,
+                    "pip_dl": 5_959.20,
+                    "pip_m": 4_160.00,
+                    "pip_dl_category": "ENHANCED",
+                    "pip_m_category": "ENHANCED",
+                    "receives_enhanced_pip_dl": True,
+                },
+            ],
+            "person_ids": [1, 2],
+            "benunits": [],
+            "benunit_ids": [],
+        },
+        year=2026,
+    )
+
+    assert request["queries"] == [
+        {
+            "entity_id": "person_2",
+            "period": {
+                "period_kind": "tax_year",
+                "start": "2026-04-06",
+                "end": "2027-04-05",
+            },
+            "outputs": [
+                PIP_FINAL_OUTPUTS["pip_daily_living_weekly_amount"]["axiom"],
+                PIP_FINAL_OUTPUTS["pip_mobility_weekly_amount"]["axiom"],
+                PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_total"][
+                    "axiom"
+                ],
+                PIP_FINAL_OUTPUTS["receives_enhanced_daily_living_component"]["axiom"],
+            ],
+        }
+    ]
+    inputs = {
+        record["name"] + ":" + record["entity_id"]: record["value"]
+        for record in request["dataset"]["inputs"]
+    }
+    assert inputs[f"{PIP_FINAL_BASE}#input.daily_living_is_enhanced_rate:person_2"] == {
+        "kind": "bool",
+        "value": True,
+    }
+    assert inputs[f"{PIP_FINAL_BASE}#input.mobility_is_enhanced_rate:person_2"] == {
+        "kind": "bool",
+        "value": True,
+    }
+
+
 def test_pension_credit_final_projection_uses_entitlement_components():
     assert project_pension_credit_final_inputs(
         {
@@ -5314,6 +5396,53 @@ def test_compare_outputs_compares_dla_final_components_and_annual_amount():
     )
 
     assert report.compared_values == 3
+    assert report.mismatches == []
+    assert report.oracle_divergences == []
+
+
+def test_compare_outputs_compares_pip_final_components_total_and_enhanced_receipt():
+    report = compare_outputs(
+        pe_data={
+            "persons": [
+                {
+                    "person_id": 2,
+                    "pip": 10_119.20,
+                    "pip_dl": 5_959.20,
+                    "pip_m": 4_160.00,
+                    "pip_dl_category": "ENHANCED",
+                    "pip_m_category": "ENHANCED",
+                    "receives_enhanced_pip_dl": True,
+                },
+            ],
+            "person_ids": [2],
+            "benunits": [],
+            "benunit_ids": [],
+        },
+        axiom_outputs_by_surface={
+            "personal-independence-payment-final": [
+                {
+                    "outputs": {
+                        PIP_FINAL_OUTPUTS["pip_daily_living_weekly_amount"][
+                            "axiom"
+                        ]: decimal_output(114.60),
+                        PIP_FINAL_OUTPUTS["pip_mobility_weekly_amount"][
+                            "axiom"
+                        ]: decimal_output(80.00),
+                        PIP_FINAL_OUTPUTS["personal_independence_payment_weekly_total"][
+                            "axiom"
+                        ]: decimal_output(194.60),
+                        PIP_FINAL_OUTPUTS["receives_enhanced_daily_living_component"][
+                            "axiom"
+                        ]: judgment_output(True),
+                    }
+                }
+            ]
+        },
+        tolerance=0.01,
+        relative_tolerance=2e-7,
+    )
+
+    assert report.compared_values == 4
     assert report.mismatches == []
     assert report.oracle_divergences == []
 

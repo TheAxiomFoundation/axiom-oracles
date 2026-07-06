@@ -151,6 +151,8 @@ SDA_FINAL_PROGRAM_PATH = Path("policies/govuk/severe-disablement-allowance.yaml"
 SDA_FINAL_BASE = "uk:policies/govuk/severe-disablement-allowance"
 DLA_FINAL_PROGRAM_PATH = Path("policies/govuk/disability-living-allowance.yaml")
 DLA_FINAL_BASE = "uk:policies/govuk/disability-living-allowance"
+PIP_FINAL_PROGRAM_PATH = Path("policies/govuk/personal-independence-payment.yaml")
+PIP_FINAL_BASE = "uk:policies/govuk/personal-independence-payment"
 
 PERSONAL_ALLOWANCE_OUTPUTS = {
     "personal_allowance": {
@@ -832,6 +834,32 @@ DLA_FINAL_OUTPUTS = {
     },
 }
 
+PIP_FINAL_OUTPUTS = {
+    "pip_daily_living_weekly_amount": {
+        "axiom": f"{PIP_FINAL_BASE}#pip_daily_living_weekly_amount",
+        "pe": "pip_dl",
+        "pe_transform": "annual_to_weekly",
+        "tolerance": 0.01,
+    },
+    "pip_mobility_weekly_amount": {
+        "axiom": f"{PIP_FINAL_BASE}#pip_mobility_weekly_amount",
+        "pe": "pip_m",
+        "pe_transform": "annual_to_weekly",
+        "tolerance": 0.01,
+    },
+    "personal_independence_payment_weekly_total": {
+        "axiom": f"{PIP_FINAL_BASE}#personal_independence_payment_weekly_total",
+        "pe": "pip",
+        "pe_transform": "annual_to_weekly",
+        "tolerance": 0.01,
+    },
+    "receives_enhanced_daily_living_component": {
+        "axiom": f"{PIP_FINAL_BASE}#receives_enhanced_daily_living_component",
+        "pe": "receives_enhanced_pip_dl",
+        "tolerance": 0.01,
+    },
+}
+
 
 @dataclass(frozen=True)
 class UKEFRSSurfaceSpec:
@@ -1407,6 +1435,19 @@ SURFACE_SPECS = {
             "dla_m_category",
             "dla_sc",
             "dla_sc_category",
+        ),
+    ),
+    "personal-independence-payment-final": UKEFRSSurfaceSpec(
+        program=PIP_FINAL_PROGRAM_PATH,
+        entity="person",
+        outputs=PIP_FINAL_OUTPUTS,
+        pe_variables=(
+            "pip",
+            "pip_dl",
+            "pip_dl_category",
+            "pip_m",
+            "pip_m_category",
+            "receives_enhanced_pip_dl",
         ),
     ),
 }
@@ -4281,6 +4322,8 @@ def build_axiom_request(
         return build_sda_final_request(pe_data=pe_data, year=year)
     if surface == "disability-living-allowance-final":
         return build_dla_final_request(pe_data=pe_data, year=year)
+    if surface == "personal-independence-payment-final":
+        return build_pip_final_request(pe_data=pe_data, year=year)
     if surface in UNIVERSAL_CREDIT_REGULATION_36_SURFACES:
         return build_universal_credit_request(
             pe_data=pe_data,
@@ -5971,6 +6014,29 @@ def build_dla_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, 
     }
 
 
+def build_pip_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+    interval = uk_tax_year_interval(year)
+    inputs: list[dict[str, Any]] = []
+    queries: list[dict[str, Any]] = []
+    for row in rows_for_surface(pe_data, "personal-independence-payment-final"):
+        entity_id = person_entity_id(int(row_value(row, "person_id")))
+        for name, value in project_pip_final_inputs(row).items():
+            inputs.append(input_record(name, entity_id, interval, value))
+        queries.append(
+            {
+                "entity_id": entity_id,
+                "period": interval,
+                "outputs": [spec["axiom"] for spec in PIP_FINAL_OUTPUTS.values()],
+            }
+        )
+
+    return {
+        "mode": "explain",
+        "dataset": {"inputs": inputs, "relations": []},
+        "queries": queries,
+    }
+
+
 def project_personal_allowance_inputs(row: Any) -> dict[str, Any]:
     adjusted_net_income = money(row_value(row, "adjusted_net_income"))
     gift_aid_grossed_up = money(row_value(row, "gift_aid_grossed_up", 0))
@@ -6673,6 +6739,33 @@ def project_sda_final_inputs(row: Any) -> dict[str, Any]:
     }
 
 
+def project_pip_final_inputs(row: Any) -> dict[str, Any]:
+    """Project PolicyEngine UK's frozen PIP award categories into the compare
+    wrapper's daily-living and mobility rate-band leaves.
+
+    PolicyEngine UK treats the daily-living and mobility award categories
+    (``pip_dl_category``/``pip_m_category``: STANDARD/ENHANCED/NONE) as person
+    inputs and applies the Regulation 24 weekly rate to them, with no
+    eligibility formula and no take-up gate. The compare wrapper mirrors the
+    Welfare Reform Act 2012 sections 78 and 79 rate selection from the same
+    frozen award band, so the commensurable comparison is rate application given
+    category: the enhanced category selects the enhanced weekly rate, the
+    standard category the standard weekly rate, and NONE a nil amount.
+    """
+    daily_living_category = enum_name(row_value(row, "pip_dl_category", "NONE")).upper()
+    mobility_category = enum_name(row_value(row, "pip_m_category", "NONE")).upper()
+    return {
+        f"{PIP_FINAL_BASE}#input.daily_living_is_enhanced_rate": daily_living_category
+        == "ENHANCED",
+        f"{PIP_FINAL_BASE}#input.daily_living_is_standard_rate": daily_living_category
+        == "STANDARD",
+        f"{PIP_FINAL_BASE}#input.mobility_is_enhanced_rate": mobility_category
+        == "ENHANCED",
+        f"{PIP_FINAL_BASE}#input.mobility_is_standard_rate": mobility_category
+        == "STANDARD",
+    }
+
+
 def project_dla_final_inputs(row: Any) -> dict[str, Any]:
     self_care_category = enum_name(row_value(row, "dla_sc_category", "NONE")).upper()
     mobility_category = enum_name(row_value(row, "dla_m_category", "NONE")).upper()
@@ -6918,6 +7011,16 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
                 != "NONE"
                 or enum_name(row_value(row, "dla_m_category", "NONE")).upper() != "NONE"
             )
+        ]
+    if surface == "personal-independence-payment-final":
+        return [
+            row
+            for row in persons
+            if money(row_value(row, "pip", 0)) > 0
+            or money(row_value(row, "pip_dl", 0)) > 0
+            or money(row_value(row, "pip_m", 0)) > 0
+            or enum_name(row_value(row, "pip_dl_category", "NONE")).upper() != "NONE"
+            or enum_name(row_value(row, "pip_m_category", "NONE")).upper() != "NONE"
         ]
     if surface == "pension-credit-final":
         return [
@@ -7184,6 +7287,20 @@ def compare_outputs(
             "aggregate. Adult legacy DLA rows are outside this GOV.UK child "
             "DLA wrapper and are treated as missing coverage rather than "
             "included in the final comparison.",
+            "PolicyEngine-aligned Personal Independence Payment final comparison "
+            "projects PolicyEngine UK's frozen daily-living and mobility award "
+            "categories into the compare wrapper's rate-band leaves — enhanced "
+            "selects the enhanced Regulation 24 weekly rate, standard the "
+            "standard weekly rate, and NONE a nil amount, mirroring the Welfare "
+            "Reform Act 2012 sections 78 and 79 rate selection. It then compares "
+            "the resulting weekly daily-living and mobility components, the "
+            "aggregate weekly Personal Independence Payment, and enhanced "
+            "daily-living receipt against PolicyEngine's annual pip_dl, pip_m, "
+            "and pip divided by 52 and its receives_enhanced_pip_dl boolean. "
+            "PolicyEngine models PIP as rate-from-frozen-category with no "
+            "eligibility formula and no take-up gate, so descriptor scoring, "
+            "residence, and hospital or care-home suspensions remain outside "
+            "this rate-application comparison.",
             "When a local UK .h5 predates the PolicyEngine UK disability "
             "category-input migration, the oracle derives PIP, DLA, and "
             "Attendance Allowance category inputs in memory from reported "
