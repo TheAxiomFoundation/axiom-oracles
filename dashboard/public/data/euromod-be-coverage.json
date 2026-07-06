@@ -60,7 +60,7 @@
     }
   },
   "coverage_summary": {
-    "current_oracle_output_targets": 22,
+    "current_oracle_output_targets": 23,
     "live_verified_oracle_output_targets": 16,
     "prepared_oracle_output_targets": 0,
     "full_household_disposable_income_parity": false,
@@ -207,6 +207,14 @@
       "status": "live_oracle_verified_isolated_no_resources_with_policy_switch_override",
       "evidence": "RuleSpec now exposes a dense-executable GRAPA annual output that composes Article 6 selected maximum amount, Article 7 resources, and Article 11 resource reduction. axiom-oracles maps that concept to EUROMOD bsaoa_s and adds a BE_2025 isolated-senior no-resources suite case using EUROMOD's 2025 current monthly Cat2 amount, 1,580.37 EUR, as a supplied current-amount bridge. The 2026-07-03 live comparison temporarily patches the BE_2025 bsaoa_be policy switch on in a model XML overlay and returns EUROMOD bsaoa_s = 18,964.44 and Axiom belgium_grapa_income_guarantee_for_elderly_annual_amount = 18,964.44.",
       "remaining_gap": "Broader GRAPA parity still needs current-amount source ingestion, detailed delegated resource exclusions, property and capital resource calculations, cohabiting cases, and administrative eligibility surfaces."
+    },
+    {
+      "euromod_variable": "bun_s",
+      "meaning": "ordinary unemployment benefit (PART SIMULATED; bun_be switched on per run)",
+      "rulespec_output": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+      "rulespec_module": "be/regulations/unemployment/pilot_oracle_pipeline.yaml",
+      "status": "live_oracle_dispositioned",
+      "note": "bun_be ships off (PART SIMULATED); switched on via euromod_policy_switch_overrides. EUROMOD bun_s = 0.65 x min(post-uprating prior monthly wage, 3432.38 EUR/month) for the ordinary first spell month (stored /12; bridge annualises x12). The composed RuleSpec pilot returns the RD 25.11.1991 Article 111 A1 daily-cap-bound monthly payable. Four first-month single cases: all dispositioned upstream_engine_gap (EUROMOD stylised monthly highwage cap vs statutory Article 111 daily cap A1, no Article 115 floor, no Article 114 degressivity)."
     },
     {
       "euromod_variable": "bmact_s",
@@ -381,10 +389,11 @@
         "be/regulations/unemployment/benefit_amount.yaml",
         "be/regulations/unemployment/payable_amount.yaml",
         "be/regulations/pensions/workers/retirement_and_survivor.yaml",
-        "be-vlg/regulations/employment/jobbonus.yaml"
+        "be-vlg/regulations/employment/jobbonus.yaml",
+        "be/regulations/unemployment/pilot_oracle_pipeline.yaml"
       ],
-      "status": "partial_statutory_coverage_jobbonus_oracle_compared",
-      "oracle_status": "bwkrg_s live-compares seven Flemish jobbonus worker cases: the Brussels non-Flanders zero case and tiny part-time suppression case match, while four full-time Flanders cases and one low-wage half-time case expose EUROMOD issue #10 because BE_2025 bwkrg_be uses older jobbonus thresholds, a 600 EUR maximum, and no 2025 fixed top-up. Unemployment, early-retirement, study-allowance, Covid wage-compensation, and broader working-age benefit parity remain unmapped or unverified."
+      "status": "partial_statutory_coverage_unemployment_and_jobbonus_oracle_dispositioned",
+      "oracle_status": "bun_s now live-compares four ordinary first-month single unemployment cases with bun_be switched on per run (BE_2025 ships it off, PART SIMULATED). All four are dispositioned as upstream_engine_gap: EUROMOD computes 0.65 x min(prior monthly wage, a stylised 3432.38 EUR/month highwage cap) with no Article 115 household-status daily floor and no Article 114 degressivity schedule, while the source-backed RuleSpec applies the RD 25.11.1991 Article 111 A1 92.3956 EUR/day cap, the Article 114 first-period 65 percent rate, and the Article 115 floors. bwkrg_s live-compares seven Flemish jobbonus worker cases: the Brussels non-Flanders zero case and tiny part-time suppression case match, while four full-time Flanders cases and one low-wage half-time case expose EUROMOD issue #10 because BE_2025 bwkrg_be uses older jobbonus thresholds, a 600 EUR maximum, and no 2025 fixed top-up. Unemployment, early-retirement, study-allowance, Covid wage-compensation, and broader working-age benefit parity remain unmapped or unverified."
     },
     {
       "domain": "leave_disability_and_health_insurance",
@@ -800,15 +809,16 @@
       "be-self-employed-ssc",
       "be-social-assistance",
       "be-special-social-security-contribution",
+      "be-unemployment",
       "be-worker-disposable-income-list",
       "be-worker-pit",
       "be-worker-ssc",
       "be-worker-tax-income-list"
     ],
-    "comparison_count": 113,
+    "comparison_count": 117,
     "match_count": 76,
-    "raw_match_rate": 67.256637,
-    "explained_rate": 95.575221,
+    "raw_match_rate": 64.957265,
+    "explained_rate": 95.726496,
     "unexplained_count": 0,
     "note": "Raw = exact per-comparison matches across the committed be-* dashboard suites. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from dispositions/<suite>.yaml."
   }

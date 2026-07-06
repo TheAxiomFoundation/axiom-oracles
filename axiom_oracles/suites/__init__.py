@@ -30,6 +30,7 @@ from .be_self_employed import be_self_employed_ssc_cases
 from .be_special_social_security import (
     be_special_social_security_contribution_cases,
 )
+from .be_unemployment import be_unemployment_cases
 from .be_worker import (
     be_employer_ssc_cases,
     be_marital_quotient_cases,
@@ -88,6 +89,7 @@ def available_suites() -> tuple[str, ...]:
         "be-flemish-social-protection-premium",
         "be-social-assistance",
         "be-elderly-income-support",
+        "be-unemployment",
         "be-pensioner-contributions",
         "uk-worker-pit",
         "uk-worker-nic",
@@ -158,6 +160,8 @@ def load_suite(name: str):
         return be_social_assistance_cases()
     if name == "be-elderly-income-support":
         return be_elderly_income_support_cases()
+    if name == "be-unemployment":
+        return be_unemployment_cases()
     if name == "be-pensioner-contributions":
         return be_pensioner_contributions_cases()
     if name == "uk-worker-pit":
@@ -208,6 +212,7 @@ __all__ = [
     "be_self_employed_ssc_cases",
     "be_special_social_security_contribution_cases",
     "be_social_assistance_cases",
+    "be_unemployment_cases",
     "be_worker_disposable_income_list_cases",
     "be_worker_pit_cases",
     "be_worker_ssc_cases",

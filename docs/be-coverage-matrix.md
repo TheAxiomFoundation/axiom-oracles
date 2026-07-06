@@ -13,7 +13,7 @@ oracle-compared.
   status, function counts, and output variables are read from the XML, not from
   memory of what EUROMOD "probably" models.
 - **rulespec-be** inventory is from `main` (HEAD `206f110`), `.yaml` modules only.
-- **axiom-oracles** suites are the 23 published `dashboard/public/data/axiom-euromod-be-*.json`
+- **axiom-oracles** suites are the 24 published `dashboard/public/data/axiom-euromod-be-*.json`
   plus 1 registered-but-unpublished suite (`be-elderly-income-support`); per-case
   counts read from those JSONs.
 
@@ -82,11 +82,43 @@ weight of the instrument class), explicitly **not** cited to a country report.
 
 | EUROMOD policy | switch | output | why not active | rulespec-be status | gap → source family |
 |---|---|---|---|---|---|
-| `bun_be` | off | `bun_s` | "PART SIMULATED" but **off**; unemployment income carried from input data | **encoded, not compared** (`be/regulations/unemployment/*` — admission, benefit_amount, minimum_daily, household_status, payable_amount, all with tests) | build `bun_s` suite (switch on) → RD 25.11.1991 (unemployment) |
+| `bun_be` | off → **switched on per run** | `bun_s` | "PART SIMULATED" and shipped **off** (unemployment income carried from input data); **activated per run** via `euromod_policy_switch_overrides` for hypothetical cases — see verdict below | **compared (dispositioned)** — `be-unemployment` (0/4 exact, **4/4 dispositioned** `upstream_engine_gap`); composed pilot `be/regulations/unemployment/pilot_oracle_pipeline.yaml` | — (broaden: household-status partner-income branches, Article 114 degressivity phases 2/3, temporary unemployment) |
 | `bsaoa_be` | off (case switch → on) | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | **compared** (published `axiom-euromod-be-elderly-income-support`, 1/1 exact) via per-case XML switch overlay (`bsaoa_be`→on): isolated no-resources senior, EUROMOD `bsaoa_s` = Axiom GRAPA = 18,964.44 → Law 22.03.2001 (GRAPA/IGO). Broaden: cohabiting, delegated resource exclusions, property/capital resources |
 | `byr_be` | n/a | `byr_s` (never emitted) | early-retirement / old-age pension income is a **pure input** to BE_2025. `byr_be` (12 functions, 106 params) carries policy switch **n/a**, not `off`; a live probe forcing it on (same XML overlay as GRAPA) returns **no `byr_s` column** while the run succeeds, so `n/a` is structural — the functions never register in the spine. `poa` (old-age pension) has no computing policy at all | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | conformance exclusion `input_carrying` (`conformance/be.yaml` `be:byr_be`): nothing to compare — unlike `bsaoa_be` (`off`, activatable), no override resurrects `byr_be`. The rulespec-be pension encodings (RD No. 50; RD 23.12.1996) validate via other oracles, not EUROMOD |
 | `tco_be` | off | (commodities) | indirect consumption tax; body is `DefConst`/`DefIl` only (no `OutputVar`); **not oracle-comparable** — see verdict below | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | conformance exclusion `extension_not_available` (RD No. 20 VAT + excise codes) |
 | `yem_be` | off | `yem` | minimum-wage definition (not a benefit) | n/a (definitional) | — |
+
+## `bun_be` activation verdict (ambiguity resolved) — `be-unemployment` suite live
+
+The flagged ambiguity — whether `bun_be` (PART SIMULATED, switched **off** in
+`BE_2025`) can be activated per run and what it then computes — is **resolved:
+`bun_be` is activatable**. Its policy block carries a policy-level
+`<Switch>off</Switch>` before its 22 computing functions (13 `BenCalc`, 3
+`Elig`, 4 `ArithOp`, 1 `DefVar`, 1 `DefConst`), which the EUROMOD connector's
+`policy_switch_overrides` machinery flips to `on` in a model overlay (the same
+mechanism `be-elderly-income-support` uses for `bsaoa_be`). Every input it needs
+is present in the `BE_training_data` schema (`bun`, `dag`, `liwmy`, `liwwh`,
+`yivwg`/`yempv`, `lunmy`, `dms`), so this is **not** an
+`oracle_dataset_lacks_input` exclusion — the suite is buildable and is built
+(`be-unemployment`).
+
+When switched on, `bun_s` for the ordinary first spell month equals
+`0.65 × min(post-uprating prior monthly wage, 3432.38 EUR/month highwage cap)`,
+stored divided by twelve; the oracle bridge annualizes it (×12) to recover a
+monthly benefit. Household status (`i_bunft` 1/2/3 = family-charge / isolated /
+cohabiting) selects distinct replacement rates and per-day min/max, and
+`i_lunmy` (months in spell) drives a spell-cumulative degressivity across three
+phases (period rates 0.65 / 0.60 / 0.60). **Semantically `bun_s` is a stylised
+proxy, not the statute:** it caps the prior *monthly* wage at a stylised
+3432.38 EUR figure (vs the RD 25.11.1991 Article 111 daily cap A1 = 92.3956
+EUR/day), applies no Article 115 household-status daily floor on the ordinary
+path at realistic wages, and carries no Article 114 degressivity schedule beyond
+the round period rates. The composed pilot returns the Article 111 A1 cap-bound
+monthly payable (92.3956 × 0.65 × 26 = 1561.49 EUR); EUROMOD returns
+1645.83–2231.05 EUR across the prior-wage sweep (rising until its highwage cap
+binds). All four cases are dispositioned `upstream_engine_gap` with AST-checked
+reconciling arithmetic, filed as
+`axiom_oracles/data/euromod_issues.json#euromod-be-2025-unemployment-simplified-bun-s`.
 
 ## `tco_be` indirect-tax verdict — conformance exclusion `extension_not_available`
 
@@ -136,8 +168,9 @@ the EUROMOD matrix.
 
 ## Sanity-check vs the live dashboard
 
-26 published suites, **113 comparisons, 76 exact matches; explained 95.58%,
-0 unexplained** (matches `euromod-be-coverage.json` `dispositioned_parity`).
+27 published suites, **117 comparisons, 76 exact matches; explained 95.73%,
+0 unexplained** (matches `euromod-be-coverage.json` `dispositioned_parity`; the
+new `be-unemployment` adds 4 comparisons, all dispositioned `upstream_engine_gap`).
 `be-elderly-income-support` (`bsaoa_s`, GRAPA) is now **published** — EUROMOD
 `bsaoa_s` = Axiom GRAPA = 18,964.44, exact, via the per-case `bsaoa_be`→on switch
 overlay. Publishing it also closed the last of a class of pre-existing manifest
@@ -176,7 +209,12 @@ Ordered by reasoned fiscal/population importance (labeled reasoned — no countr
 2. **Study allowances** (`bed_be`, `bed_s`) → Flemish Onderwijs codex +
    Fédération Wallonie-Bruxelles décret allocations d'études. Fully unencoded,
    147 EUROMOD functions.
-3. **Unemployment** (`bun_be`, `bun_s`; switch on) → RD 25.11.1991. Encoded,
+3. ~~**Unemployment** (`bun_be`, `bun_s`; switch on) → RD 25.11.1991.~~
+   **DONE** — `be-unemployment` suite live (switch on per run), 4/4 dispositioned
+   `upstream_engine_gap` (EUROMOD stylised `bun_s` vs statute Article 111/114/115).
+   Broaden: household-status partner-income branches, degressivity phases 2/3,
+   temporary unemployment. Original note:
+   Encoded,
    never oracle-compared; core working-age transfer.
 4. **Pensions / GRAPA / early-retirement** (`byr_be`, `bsaoa_be`) → RD No. 50 +
    RD 23.12.1996 (pensions); Law 22.03.2001 (GRAPA). Publish the registered

@@ -5,19 +5,19 @@
     {
       "jurisdiction": "be",
       "oracle": "EUROMOD_J2.0/BE_2025",
-      "policies_in_scope": 24,
-      "covered": 11,
-      "covered_pct": 45.8333,
-      "excluded": 19,
+      "policies_in_scope": 25,
+      "covered": 12,
+      "covered_pct": 48.0,
+      "excluded": 18,
       "excluded_by_reason": {
         "extension_not_available": 1,
         "input_carrying": 3,
-        "not_a_policy": 2,
+        "not_a_policy": 1,
         "technical": 13
       },
       "unexplained_total": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 22,
+      "oracle_attributed": 26,
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
@@ -36,7 +36,7 @@
         "ysecomp_be"
       ],
       "blocking_reasons": [
-        "13 of 24 in-scope policies are not covered by a live suite: bed_be, bfapl_be, bmact_be, bpact_be, tinfe_be, tinkt_be, tinmu_be, tinrg_be, tintace_be, tintb_be, tscpe_be, yemcomp_be, ysecomp_be"
+        "13 of 25 in-scope policies are not covered by a live suite: bed_be, bfapl_be, bmact_be, bpact_be, tinfe_be, tinkt_be, tinmu_be, tinrg_be, tintace_be, tintb_be, tscpe_be, yemcomp_be, ysecomp_be"
       ]
     },
     {

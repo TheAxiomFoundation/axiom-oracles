@@ -621,6 +621,29 @@ concepts:
           type: country
           geoid: BE
 
+  be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount:
+    description: Belgium ordinary unemployment benefit (monthly)
+    category: benefits
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_unemployment_ordinary_pilot_monthly_payable_amount
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: bun_s
+        scope:
+          type: country
+          geoid: BE
+
   be:regulations/health_insurance/birth_leave/indemnity_rates#belgium_birth_leave_total_compensation_amount:
     description: Belgium birth-leave worker compensation
     category: benefits

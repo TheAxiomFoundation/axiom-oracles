@@ -244,6 +244,10 @@ class Concepts:
         "be:statutes/income_guarantee_for_elderly/payable_amount"
         "#belgium_grapa_income_guarantee_for_elderly_annual_amount"
     )
+    BE_UNEMPLOYMENT_ORDINARY_BENEFIT = (
+        "be:regulations/unemployment/pilot_oracle_pipeline"
+        "#belgium_unemployment_ordinary_pilot_monthly_payable_amount"
+    )
     BE_BIRTH_LEAVE_TOTAL_COMPENSATION = (
         "be:regulations/health_insurance/birth_leave/indemnity_rates"
         "#belgium_birth_leave_total_compensation_amount"

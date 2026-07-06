@@ -1,0 +1,530 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+      "description": "Belgium ordinary unemployment benefit (monthly)",
+      "left_weighted_sum": 6245.94256,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_count": 4,
+      "mismatch_weight": 4,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 7991.469265,
+      "weighted_difference": -1745.526705,
+      "weighted_match_rate": 0
+    }
+  ],
+  "case_count": 4,
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium ordinary unemployment benefit (monthly)",
+      "id": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "euromod"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-unemployment-single-2400",
+      "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+      "description": "Belgium ordinary unemployment benefit (monthly)",
+      "difference": -84.34929282149687,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "highwage-cap-vs-article-111-daily-cap-2400"
+      },
+      "kind": "amount_difference",
+      "left": 1561.48564,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 1645.834932821497,
+      "scenario": "single-ordinary-first-month-unemployment",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-unemployment-single-2800",
+      "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+      "description": "Belgium ordinary unemployment benefit (monthly)",
+      "difference": -358.6551149584134,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "highwage-cap-vs-article-111-daily-cap-2800"
+      },
+      "kind": "amount_difference",
+      "left": 1561.48564,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 1920.1407549584135,
+      "scenario": "single-ordinary-first-month-unemployment",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-unemployment-single-3200",
+      "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+      "description": "Belgium ordinary unemployment benefit (monthly)",
+      "difference": -632.9609370953292,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "highwage-cap-vs-article-111-daily-cap-3200"
+      },
+      "kind": "amount_difference",
+      "left": 1561.48564,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 2194.4465770953293,
+      "scenario": "single-ordinary-first-month-unemployment",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "be-unemployment-single-3600",
+      "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+      "description": "Belgium ordinary unemployment benefit (monthly)",
+      "difference": -669.5613599999999,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "highwage-cap-binds-vs-article-111-daily-cap-3600"
+      },
+      "kind": "amount_difference",
+      "left": 1561.48564,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 2231.047,
+      "scenario": "single-ordinary-first-month-unemployment",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "be-unemployment",
+  "summary": {
+    "comparison_count": 4,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 4
+      },
+      "dispositions_file": "dispositions/be-unemployment.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 0,
+    "mismatch_count": 4,
+    "mismatches_by_concept": [
+      {
+        "count": 4,
+        "value": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 4,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 4,
+        "value": "single-ordinary-first-month-unemployment"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 4,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_weight": 4
+    }
+  },
+  "cases": [
+    {
+      "case_id": "be-unemployment-single-2400",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_article_111_wage_cap_selector": 1,
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 97.38668241547319,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_household_status_code": 2,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_indemnification_month_number": 1,
+          "be:regulations/unemployment/payable_amount#input.belgium_unemployment_monthly_compensable_days": 26
+        },
+        "euromod_inputs": [
+          {
+            "bun": 1,
+            "dag": 40,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "liwmy": 48,
+            "liwwh": 40,
+            "loc": 5,
+            "lunmy": 1,
+            "poa": 0,
+            "yem": 0,
+            "yempv": 2400.0,
+            "yivwg": 13.846153846153845,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "bun_be",
+            true
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yempv_s": {
+            "divide_by": 312,
+            "inputs": [
+              "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 97.38668241547319
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "BE",
+        "prior_monthly_wage": 2400.0,
+        "scenario": "single-ordinary-first-month-unemployment",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+          "description": "Belgium ordinary unemployment benefit (monthly)",
+          "difference": -84.34929282149687,
+          "kind": "amount_difference",
+          "left": 1561.48564,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 1645.834932821497,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-unemployment-single-2800",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_article_111_wage_cap_selector": 1,
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 113.6177961513854,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_household_status_code": 2,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_indemnification_month_number": 1,
+          "be:regulations/unemployment/payable_amount#input.belgium_unemployment_monthly_compensable_days": 26
+        },
+        "euromod_inputs": [
+          {
+            "bun": 1,
+            "dag": 40,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "liwmy": 48,
+            "liwwh": 40,
+            "loc": 5,
+            "lunmy": 1,
+            "poa": 0,
+            "yem": 0,
+            "yempv": 2800.0,
+            "yivwg": 16.153846153846153,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "bun_be",
+            true
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yempv_s": {
+            "divide_by": 312,
+            "inputs": [
+              "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 113.6177961513854
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "BE",
+        "prior_monthly_wage": 2800.0,
+        "scenario": "single-ordinary-first-month-unemployment",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+          "description": "Belgium ordinary unemployment benefit (monthly)",
+          "difference": -358.6551149584134,
+          "kind": "amount_difference",
+          "left": 1561.48564,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 1920.1407549584135,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-unemployment-single-3200",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_article_111_wage_cap_selector": 1,
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 129.8489098872976,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_household_status_code": 2,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_indemnification_month_number": 1,
+          "be:regulations/unemployment/payable_amount#input.belgium_unemployment_monthly_compensable_days": 26
+        },
+        "euromod_inputs": [
+          {
+            "bun": 1,
+            "dag": 40,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "liwmy": 48,
+            "liwwh": 40,
+            "loc": 5,
+            "lunmy": 1,
+            "poa": 0,
+            "yem": 0,
+            "yempv": 3200.0,
+            "yivwg": 18.46153846153846,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "bun_be",
+            true
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yempv_s": {
+            "divide_by": 312,
+            "inputs": [
+              "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 129.8489098872976
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "BE",
+        "prior_monthly_wage": 3200.0,
+        "scenario": "single-ordinary-first-month-unemployment",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+          "description": "Belgium ordinary unemployment benefit (monthly)",
+          "difference": -632.9609370953292,
+          "kind": "amount_difference",
+          "left": 1561.48564,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 2194.4465770953293,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-unemployment-single-3600",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_article_111_wage_cap_selector": 1,
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 146.0800236232098,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_household_status_code": 2,
+          "be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_indemnification_month_number": 1,
+          "be:regulations/unemployment/payable_amount#input.belgium_unemployment_monthly_compensable_days": 26
+        },
+        "euromod_inputs": [
+          {
+            "bun": 1,
+            "dag": 40,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lhw": 0,
+            "liwmy": 48,
+            "liwwh": 40,
+            "loc": 5,
+            "lunmy": 1,
+            "poa": 0,
+            "yem": 0,
+            "yempv": 3600.0,
+            "yivwg": 20.769230769230766,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "bun_be",
+            true
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yempv_s": {
+            "divide_by": 312,
+            "inputs": [
+              "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage": 146.0800236232098
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "BE",
+        "prior_monthly_wage": 3600.0,
+        "scenario": "single-ordinary-first-month-unemployment",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
+          "description": "Belgium ordinary unemployment benefit (monthly)",
+          "difference": -669.5613599999999,
+          "kind": "amount_difference",
+          "left": 1561.48564,
+          "parent": null,
+          "relative_tolerance": 0.001,
+          "right": 2231.047,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "euromod",
+      "right_errors": []
+    }
+  ]
+}
