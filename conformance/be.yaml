@@ -568,14 +568,14 @@ policies:
     output_vars:
       - tscpe_s
     in_scope: true
-    suite: null
+    suite: be-pensioner-contributions
     note: 'SIC: pensioner health/disability + solidarity contribution; encoded in non_labour_income_contributions.yaml
       (Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%), NOT chapter_10_special_contributions
       (that is the Law 29.06.1981 art. 38 employer/fringe special contributions). The be-pensioner-contributions
-      suite live-compares tscpe_s (1/6 exact) but two RuleSpec-attributed encoding gaps remain open —
-      the art. 191 health withholding lacks EUROMOD''s low-pension floor and the art. 68 solidarity base
-      table is a different vintage from EUROMOD''s 2025-indexed thresholds (rulespec-be#89). Stays uncovered
-      (suite: null) until #89 lands and the axiom_encoding_gap residuals clear.'
+      suite live-compares tscpe_s and matches EUROMOD exactly (6/6). rulespec-be#89 encoded the art. 191
+      low-pension health floor and carried the indexed 2025 art. 68 solidarity thresholds, both grounded in
+      the Service federal des Pensions 2025 withholding tables, clearing the two axiom_encoding_gap residuals
+      that previously held this uncovered.'
   - id: be:tscse_be
     oracle_policy_name: tscse_be
     oracle_policy_type: sic

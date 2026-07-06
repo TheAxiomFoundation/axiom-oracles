@@ -5,7 +5,7 @@ _comment: Conformance ratchets — monotonic floors/ceilings enforced by scripts
   with `uv run scripts/conformance_ratchet.py` after a genuine improvement; the gate refuses regressions.
 ratchets:
 - jurisdiction: be
-  covered_min: 12
+  covered_min: 13
   unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 25
