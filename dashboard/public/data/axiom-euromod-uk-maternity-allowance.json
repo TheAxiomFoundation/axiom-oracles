@@ -1,0 +1,419 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#uk_ma_pilot_total_entitlement",
+      "description": "UK Maternity Allowance annual entitlement (self-employed lone mother by weekly earnings)",
+      "left_weighted_sum": 32894.262295,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 32894.262295,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 3,
+  "cases": [
+    {
+      "case_id": "uk-ma-9k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings": 172.13114754098362,
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_earnings_threshold_weekly": 30.0,
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_maternity_allowance_period_weeks": 39.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 30,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 1,
+            "dmb": 0,
+            "dms": 1,
+            "drgn1": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 1,
+            "lfs": 15,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yse": 750.0,
+            "ysemy": 12
+          },
+          {
+            "dag": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dmb": 1,
+            "dms": 1,
+            "drgn1": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yse": 0.0,
+            "ysemy": 0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": {
+            "divide_by": 52.285714285714285,
+            "inputs": [
+              "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings": 172.13114754098362
+        },
+        "household_summary": {
+          "ages": [
+            30
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "self-employed-lone-mother-maternity-allowance",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_self_employment_income": 9000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-ma-15k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings": 286.88524590163934,
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_earnings_threshold_weekly": 30.0,
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_maternity_allowance_period_weeks": 39.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 30,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 1,
+            "dmb": 0,
+            "dms": 1,
+            "drgn1": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 1,
+            "lfs": 15,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yse": 1250.0,
+            "ysemy": 12
+          },
+          {
+            "dag": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dmb": 1,
+            "dms": 1,
+            "drgn1": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yse": 0.0,
+            "ysemy": 0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": {
+            "divide_by": 52.285714285714285,
+            "inputs": [
+              "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings": 286.88524590163934
+        },
+        "household_summary": {
+          "ages": [
+            30
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "self-employed-lone-mother-maternity-allowance",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_self_employment_income": 15000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-ma-25k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings": 478.14207650273227,
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_earnings_threshold_weekly": 30.0,
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_maternity_allowance_period_weeks": 39.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 30,
+            "dec": 0,
+            "dgn": 0,
+            "dhr": 1,
+            "dmb": 0,
+            "dms": 1,
+            "drgn1": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 1,
+            "lfs": 15,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yse": 2083.3333333333335,
+            "ysemy": 12
+          },
+          {
+            "dag": 0,
+            "dec": 2,
+            "dgn": 1,
+            "dhr": 0,
+            "dmb": 1,
+            "dms": 1,
+            "drgn1": 1,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yse": 0.0,
+            "ysemy": 0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": {
+            "divide_by": 52.285714285714285,
+            "inputs": [
+              "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#input.uk_ma_pilot_supplied_average_weekly_earnings": 478.14207650273227
+        },
+        "household_summary": {
+          "ages": [
+            30
+          ],
+          "household_size": 1
+        },
+        "locale": "UK",
+        "scenario": "self-employed-lone-mother-maternity-allowance",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        },
+        "yearly_self_employment_income": 25000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK Maternity Allowance annual entitlement (self-employed lone mother by weekly earnings)",
+      "id": "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#uk_ma_pilot_total_entitlement",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-06T19:45:07Z",
+    "generated_by": "scripts/run_comparison.py::uk-maternity-allowance-ukmod",
+    "oracle": {
+      "euromod_country": "UK",
+      "euromod_dataset": "training_data",
+      "euromod_release": "B2026.03",
+      "euromod_system": "UK_2026",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": "804515d3bb6881469e1e5dfce06cc91a6f3d422f"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-maternity-allowance",
+  "summary": {
+    "comparison_count": 3,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 3,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 3,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_weight": 0
+    }
+  }
+}

@@ -948,6 +948,102 @@ concepts:
           type: country
           geoid: UK
 
+  uk:statutes/statutory_maternity_pay/pilot_statutory_maternity_pay_oracle_pipeline#uk_smp_pilot_total_entitlement:
+    description: UK Statutory Maternity Pay annual entitlement (lone mother by weekly earnings)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk SMP pilot applies the SSCBA 1992 Part XII
+    # earnings-related rate (90% of normal weekly earnings, grounded in s.166)
+    # across the prescribed 39-week maternity pay period. UKMOD bmact_uk pays the
+    # same earnings-related rate over the whole period for a hypothetical
+    # maternity case (the flat prescribed rate binds only where 90% of weekly
+    # earnings falls below it, which is below the lower earnings limit), so the
+    # annual amount is 0.9 x weekly x 39 on both sides. The input bridge feeds the
+    # pilot the same weekly earnings UKMOD used (annualised yem / (12 x 30.5 / 7)),
+    # so the surfaces reconstruct each other exactly; an absolute tolerance to the
+    # pound covers float noise on the monthly-to-annual and weekly conversions.
+    # bmact_uk does not consume the stochastic take-up draw i_rand_tu, so no
+    # take-up artefact affects the comparison.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_smp_pilot_total_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bmact_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#uk_ma_pilot_total_entitlement:
+    description: UK Maternity Allowance annual entitlement (self-employed lone mother by weekly earnings)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk Maternity Allowance pilot applies the SSCBA 1992
+    # s.35A rate (90% of average weekly earnings, grounded in s.35A) across the
+    # 39-week maternity allowance period. Maternity Allowance is payable only
+    # where Statutory Maternity Pay is not (bmact_s = 0), so the case is a
+    # self-employed lone mother (yse > 0, yem = 0): UKMOD bmanc_uk pays 0.9 x
+    # weekly x 39 from the self-employment earnings above the £30 threshold. The
+    # input bridge feeds the pilot the same weekly self-employment earnings UKMOD
+    # used (annualised yse / (12 x 30.5 / 7)), so the surfaces reconstruct each
+    # other exactly; an absolute tolerance to the pound covers float noise.
+    # bmanc_uk does not consume the stochastic take-up draw.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_ma_pilot_total_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bmanc_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:statutes/statutory_paternity_pay/pilot_statutory_paternity_pay_oracle_pipeline#uk_spp_pilot_total_entitlement:
+    description: UK Statutory Paternity Pay annual entitlement (lone father by weekly earnings)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk SPP pilot applies the SSCBA 1992 Part 12ZA
+    # earnings-related rate across the 2-week statutory paternity pay period
+    # (s.171ZE). UKMOD bpact_uk pays the same earnings-related rate over the
+    # period for a hypothetical paternity case, so the amount is 0.9 x weekly x 2
+    # on both sides. The input bridge feeds the pilot the same weekly earnings
+    # UKMOD used (annualised yem / (12 x 30.5 / 7)), so the surfaces reconstruct
+    # each other exactly; an absolute tolerance to the pound covers float noise.
+    # bpact_uk does not consume the stochastic take-up draw.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_spp_pilot_total_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bpact_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount:
     description: UK Pension Credit household award (hypothetical pensioner benefit unit)
     category: benefits

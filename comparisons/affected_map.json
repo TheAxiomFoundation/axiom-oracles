@@ -401,6 +401,14 @@
       "source": "comparisons/uk-income-tax-scottish-ukmod.yaml"
     },
     {
+      "suite": "uk-maternity-allowance",
+      "report": "axiom-euromod-uk-maternity-allowance.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-maternity-allowance-ukmod.yaml"
+    },
+    {
       "suite": "uk-pension-credit",
       "report": "axiom-euromod-uk-pension-credit.json",
       "repos": [
@@ -415,6 +423,22 @@
         "TheAxiomFoundation/rulespec-uk"
       ],
       "source": "comparisons/uk-self-employed-nic-ukmod.yaml"
+    },
+    {
+      "suite": "uk-statutory-maternity-pay",
+      "report": "axiom-euromod-uk-statutory-maternity-pay.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-statutory-maternity-pay-ukmod.yaml"
+    },
+    {
+      "suite": "uk-statutory-paternity-pay",
+      "report": "axiom-euromod-uk-statutory-paternity-pay.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-statutory-paternity-pay-ukmod.yaml"
     },
     {
       "suite": "uk-tax-benefits-efrs",

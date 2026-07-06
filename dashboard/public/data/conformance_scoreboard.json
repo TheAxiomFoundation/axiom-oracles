@@ -26,14 +26,14 @@
     {
       "jurisdiction": "uk",
       "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
-      "policies_in_scope": 27,
-      "covered": 7,
-      "covered_pct": 25.9259,
-      "excluded": 40,
+      "policies_in_scope": 26,
+      "covered": 9,
+      "covered_pct": 34.6154,
+      "excluded": 41,
       "excluded_by_reason": {
         "input_carrying": 4,
         "not_a_policy": 7,
-        "takeup_adjustment": 1,
+        "takeup_adjustment": 2,
         "technical": 25,
         "unobservable_boundary": 3
       },
@@ -48,32 +48,29 @@
         "bched02_uk",
         "bchht_uk",
         "bchmt_uk",
+        "bchrd_uk",
         "bcrdicm_uk",
         "bho_uk",
         "bhosc01_uk",
-        "bmact_uk",
         "bmamt01_uk",
         "bmamt_uk",
-        "bmanc_uk",
         "bmascmt01_uk",
-        "bmascmt_uk",
         "boaht_uk",
-        "bpact_uk",
         "bsadi_uk",
         "bunct_uk",
         "bwkmt_bfamt_uk",
         "tinta_uk"
       ],
       "blocking_reasons": [
-        "20 of 27 in-scope policies are not covered by a live suite: bcap_uk, bched01_uk, bched02_uk, bchht_uk, bchmt_uk, bcrdicm_uk, bho_uk, bhosc01_uk, bmact_uk, bmamt01_uk, bmamt_uk, bmanc_uk, bmascmt01_uk, bmascmt_uk, boaht_uk, bpact_uk, bsadi_uk, bunct_uk, bwkmt_bfamt_uk, tinta_uk"
+        "17 of 26 in-scope policies are not covered by a live suite: bcap_uk, bched01_uk, bched02_uk, bchht_uk, bchmt_uk, bchrd_uk, bcrdicm_uk, bho_uk, bhosc01_uk, bmamt01_uk, bmamt_uk, bmascmt01_uk, boaht_uk, bsadi_uk, bunct_uk, bwkmt_bfamt_uk, tinta_uk"
       ]
     },
     {
       "jurisdiction": "uk-pe",
       "oracle": "policyengine-uk_2.89.2/uk",
       "policies_in_scope": 25,
-      "covered": 14,
-      "covered_pct": 56.0,
+      "covered": 13,
+      "covered_pct": 52.0,
       "excluded": 8,
       "excluded_by_reason": {
         "input_carrying": 8
@@ -87,6 +84,7 @@
         "attendance_allowance",
         "business_rates",
         "capital_gains_tax",
+        "council_tax_reduction",
         "fuel_duty",
         "lbtt_ltt",
         "legacy_means_tested",
@@ -97,7 +95,7 @@
         "winter_fuel_allowance"
       ],
       "blocking_reasons": [
-        "11 of 25 in-scope policies are not covered by a live suite: attendance_allowance, business_rates, capital_gains_tax, fuel_duty, lbtt_ltt, legacy_means_tested, state_pension, tax_free_childcare, tv_licence, vat, winter_fuel_allowance"
+        "12 of 25 in-scope policies are not covered by a live suite: attendance_allowance, business_rates, capital_gains_tax, council_tax_reduction, fuel_duty, lbtt_ltt, legacy_means_tested, state_pension, tax_free_childcare, tv_licence, vat, winter_fuel_allowance"
       ]
     }
   ]

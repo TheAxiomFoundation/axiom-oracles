@@ -701,6 +701,58 @@ case_sets:
         age: 40
         relation: HeadOfHousehold
         yearly_earned_income: 160000.0
+  uk-maternity-allowance:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#uk_ma_pilot_total_entitlement
+    cases:
+    - id: uk-ma-9k
+      period: '2026'
+      scenario: self-employed-lone-mother-maternity-allowance
+      parameters:
+        yearly_self_employment_income: 9000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: uk-ma-15k
+      period: '2026'
+      scenario: self-employed-lone-mother-maternity-allowance
+      parameters:
+        yearly_self_employment_income: 15000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: uk-ma-25k
+      period: '2026'
+      scenario: self-employed-lone-mother-maternity-allowance
+      parameters:
+        yearly_self_employment_income: 25000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
   uk-pension-credit:
     locale: UK
     entity: Family
@@ -1042,6 +1094,180 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         self_employment_income: 360000.0
+  uk-statutory-maternity-pay:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/statutory_maternity_pay/pilot_statutory_maternity_pay_oracle_pipeline#uk_smp_pilot_total_entitlement
+    cases:
+    - id: uk-smp-6k
+      period: '2026'
+      scenario: lone-mother-statutory-maternity-pay
+      parameters:
+        yearly_earned_income: 6000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 6000.0
+    - id: uk-smp-8k
+      period: '2026'
+      scenario: lone-mother-statutory-maternity-pay
+      parameters:
+        yearly_earned_income: 8000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 8000.0
+    - id: uk-smp-12k
+      period: '2026'
+      scenario: lone-mother-statutory-maternity-pay
+      parameters:
+        yearly_earned_income: 12000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000.0
+    - id: uk-smp-25k
+      period: '2026'
+      scenario: lone-mother-statutory-maternity-pay
+      parameters:
+        yearly_earned_income: 25000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 25000.0
+    - id: uk-smp-40k
+      period: '2026'
+      scenario: lone-mother-statutory-maternity-pay
+      parameters:
+        yearly_earned_income: 40000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+  uk-statutory-paternity-pay:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/statutory_paternity_pay/pilot_statutory_paternity_pay_oracle_pipeline#uk_spp_pilot_total_entitlement
+    cases:
+    - id: uk-spp-6k
+      period: '2026'
+      scenario: lone-father-statutory-paternity-pay
+      parameters:
+        yearly_earned_income: 6000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 32
+        relation: HeadOfHousehold
+        yearly_earned_income: 6000.0
+    - id: uk-spp-8k
+      period: '2026'
+      scenario: lone-father-statutory-paternity-pay
+      parameters:
+        yearly_earned_income: 8000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 32
+        relation: HeadOfHousehold
+        yearly_earned_income: 8000.0
+    - id: uk-spp-12k
+      period: '2026'
+      scenario: lone-father-statutory-paternity-pay
+      parameters:
+        yearly_earned_income: 12000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 32
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000.0
+    - id: uk-spp-25k
+      period: '2026'
+      scenario: lone-father-statutory-paternity-pay
+      parameters:
+        yearly_earned_income: 25000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 32
+        relation: HeadOfHousehold
+        yearly_earned_income: 25000.0
+    - id: uk-spp-40k
+      period: '2026'
+      scenario: lone-father-statutory-paternity-pay
+      parameters:
+        yearly_earned_income: 40000.0
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 32
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
   uk-universal-credit:
     locale: UK
     entity: Family
