@@ -2,8 +2,8 @@ import argparse
 
 import pytest
 
-import axiom_oracles.bridges.ecps_tax as ecps_tax
-from axiom_oracles.bridges.ecps_tax import (
+import axiom_oracles.bridges.tax_populace as tax_populace
+from axiom_oracles.bridges.tax_populace import (
     AOTC_BASE,
     AOTC_OUTPUTS,
     CAPITAL_GAINS_BASE,
@@ -114,7 +114,7 @@ def test_person_entity_id_is_stable_and_namespaced():
 
 
 def test_scalar_value_formats_scientific_float_as_decimal_literal():
-    value = ecps_tax.scalar_value(1.105810581991662e-11)
+    value = tax_populace.scalar_value(1.105810581991662e-11)
 
     assert value == {
         "kind": "decimal",
@@ -124,7 +124,7 @@ def test_scalar_value_formats_scientific_float_as_decimal_literal():
 
 
 def test_scalar_value_keeps_plain_float_literal_format():
-    assert ecps_tax.scalar_value(184500.0) == {
+    assert tax_populace.scalar_value(184500.0) == {
         "kind": "decimal",
         "value": "184500.0",
     }
@@ -184,7 +184,7 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
 
     def fake_run(cmd, **kwargs):
         if len(cmd) >= 6 and cmd[:3] == ["git", "-C", str(rulespec_root)]:
-            return ecps_tax.subprocess.CompletedProcess(
+            return tax_populace.subprocess.CompletedProcess(
                 cmd,
                 0,
                 stdout="https://github.com/TheAxiomFoundation/rulespec-uk.git\n",
@@ -193,12 +193,12 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
         if "compile" in cmd:
             compiled_programs.append(cmd[cmd.index("--program") + 1])
             compile_env_roots.extend(
-                kwargs["env"]["AXIOM_RULESPEC_REPO_ROOTS"].split(ecps_tax.os.pathsep)
+                kwargs["env"]["AXIOM_RULESPEC_REPO_ROOTS"].split(tax_populace.os.pathsep)
             )
             output_path = cmd[cmd.index("--output") + 1]
             with open(output_path, "w") as artifact:
                 artifact.write(
-                    ecps_tax.json.dumps(
+                    tax_populace.json.dumps(
                         {
                             "program": {
                                 "parameters": [],
@@ -213,13 +213,13 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
                         }
                     )
                 )
-            return ecps_tax.subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+            return tax_populace.subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
         if "run-compiled" in cmd:
-            runtime_requests.append(ecps_tax.json.loads(kwargs["input"]))
-            return ecps_tax.subprocess.CompletedProcess(
+            runtime_requests.append(tax_populace.json.loads(kwargs["input"]))
+            return tax_populace.subprocess.CompletedProcess(
                 cmd,
                 0,
-                stdout=ecps_tax.json.dumps(
+                stdout=tax_populace.json.dumps(
                     {
                         "results": [
                             {
@@ -240,9 +240,9 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
             )
         raise AssertionError(f"unexpected command: {cmd}")
 
-    monkeypatch.setattr(ecps_tax.subprocess, "run", fake_run)
+    monkeypatch.setattr(tax_populace.subprocess, "run", fake_run)
 
-    results = ecps_tax.run_axiom_program(
+    results = tax_populace.run_axiom_program(
         program=program,
         request={
             "mode": "explain",
@@ -1810,7 +1810,7 @@ def test_output_number_maps_axiom_judgments_to_boolean_numbers():
 
 def test_tax_ecps_parser_documents_full_sample_size():
     parser = argparse.ArgumentParser()
-    ecps_tax.configure_parser(parser)
+    tax_populace.configure_parser(parser)
 
     sample_size_help = next(
         action.help for action in parser._actions if action.dest == "sample_size"
@@ -1957,7 +1957,7 @@ def test_tax_unit_positive_weight_mask_requires_person_household_tables():
 
 def test_compare_outputs_reports_max_relative_diff_for_large_float_noise():
     pd = pytest.importorskip("pandas")
-    report = ecps_tax.compare_outputs(
+    report = tax_populace.compare_outputs(
         pe_data={
             "tax_units": pd.DataFrame(
                 [
@@ -2312,7 +2312,7 @@ def test_build_medicare_payroll_request_uses_projected_fica_wages():
 
 
 def test_policyengine_variables_for_payroll_surface_are_person_scoped():
-    tax_unit_variables, person_variables = ecps_tax.policyengine_variables_for_surfaces(
+    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
         ["employee-medicare"]
     )
 
@@ -2327,7 +2327,7 @@ def test_policyengine_variables_for_payroll_surface_are_person_scoped():
 
 
 def test_policyengine_variables_for_positive_ctc_payroll_surface_selects_ctc():
-    tax_unit_variables, person_variables = ecps_tax.policyengine_variables_for_surfaces(
+    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
         ["employee-oasdi"],
         positive_ctc_only=True,
     )
@@ -2338,18 +2338,18 @@ def test_policyengine_variables_for_positive_ctc_payroll_surface_selects_ctc():
 
 
 def test_policyengine_variables_for_non_payroll_surfaces_use_legacy_sets():
-    assert ecps_tax.policyengine_variables_for_surfaces(["ctc"]) == (
-        ecps_tax.PE_TAX_UNIT_VARIABLES,
-        ecps_tax.PE_PERSON_VARIABLES,
+    assert tax_populace.policyengine_variables_for_surfaces(["ctc"]) == (
+        tax_populace.PE_TAX_UNIT_VARIABLES,
+        tax_populace.PE_PERSON_VARIABLES,
     )
-    assert ecps_tax.policyengine_variables_for_surfaces(["employee-oasdi", "ctc"]) == (
-        ecps_tax.PE_TAX_UNIT_VARIABLES,
-        ecps_tax.PE_PERSON_VARIABLES,
+    assert tax_populace.policyengine_variables_for_surfaces(["employee-oasdi", "ctc"]) == (
+        tax_populace.PE_TAX_UNIT_VARIABLES,
+        tax_populace.PE_PERSON_VARIABLES,
     )
 
 
 def test_policyengine_variables_for_tax_before_credits_include_main_rates_inputs():
-    tax_unit_variables, person_variables = ecps_tax.policyengine_variables_for_surfaces(
+    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
         ["tax-before-credits"]
     )
 
@@ -2358,7 +2358,7 @@ def test_policyengine_variables_for_tax_before_credits_include_main_rates_inputs
     assert "unrecaptured_section_1250_gain" in tax_unit_variables
     assert "long_term_capital_gains" in person_variables
     assert "qualified_dividend_income" in person_variables
-    assert person_variables == ecps_tax.PE_PERSON_VARIABLES
+    assert person_variables == tax_populace.PE_PERSON_VARIABLES
 
 
 def test_taxable_oasdi_wages_come_from_axiom_3121_results():
@@ -2467,8 +2467,8 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         "tax_unit_ids": [1],
         "person_ids": [7],
     }
-    monkeypatch.setattr(ecps_tax, "require_numpy", lambda: None)
-    monkeypatch.setattr(ecps_tax, "require_policyengine_versions", lambda **_: None)
+    monkeypatch.setattr(tax_populace, "require_numpy", lambda: None)
+    monkeypatch.setattr(tax_populace, "require_policyengine_versions", lambda **_: None)
 
     def fake_load_policyengine_tax_data(**kwargs):
         assert kwargs["tax_unit_variables"] == ()
@@ -2482,7 +2482,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         return pe_data
 
     monkeypatch.setattr(
-        ecps_tax, "load_policyengine_tax_data", fake_load_policyengine_tax_data
+        tax_populace, "load_policyengine_tax_data", fake_load_policyengine_tax_data
     )
 
     calls = []
@@ -2536,7 +2536,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
             }
         ]
 
-    monkeypatch.setattr(ecps_tax, "run_axiom_program", fake_run_axiom_program)
+    monkeypatch.setattr(tax_populace, "run_axiom_program", fake_run_axiom_program)
 
     report = compare_tax_ecps(
         workspace_root=tmp_path,
@@ -2566,7 +2566,7 @@ def test_policyengine_version_guard_rejects_old_us_version(monkeypatch):
             return "1.722.99"
         raise AssertionError(package)
 
-    monkeypatch.setattr(ecps_tax, "version", fake_version)
+    monkeypatch.setattr(tax_populace, "version", fake_version)
 
     with pytest.raises(SystemExit, match="policyengine-us>="):
         require_policyengine_versions()
@@ -2578,7 +2578,7 @@ def test_policyengine_version_guard_allows_newer_us_version(monkeypatch):
             return "1.739.2"
         raise AssertionError(package)
 
-    monkeypatch.setattr(ecps_tax, "version", fake_version)
+    monkeypatch.setattr(tax_populace, "version", fake_version)
 
     require_policyengine_versions()
 
@@ -2589,7 +2589,7 @@ def test_policyengine_version_guard_allows_local_us_override(monkeypatch):
             return "1.722.99"
         raise AssertionError(package)
 
-    monkeypatch.setattr(ecps_tax, "version", fake_version)
+    monkeypatch.setattr(tax_populace, "version", fake_version)
 
     require_policyengine_versions(allow_policyengine_us_version=True)
 
@@ -2601,6 +2601,6 @@ def test_policyengine_data_certification_override_not_required_for_populace():
 def test_policyengine_data_certification_override_noop_for_populace(monkeypatch):
     monkeypatch.delenv("POLICYENGINE_SKIP_COUNTRY_IMPORTS", raising=False)
 
-    ecps_tax._install_policyengine_data_certification_override()
+    tax_populace._install_policyengine_data_certification_override()
 
-    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in ecps_tax.os.environ
+    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_populace.os.environ

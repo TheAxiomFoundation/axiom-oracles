@@ -12,8 +12,8 @@ from pathlib import Path
 
 import pytest
 
-from axiom_oracles.adapters.axiom.ecps_mapping_loader import (
-    load_ecps_mapping_for_program,
+from axiom_oracles.adapters.axiom.populace_mapping_loader import (
+    load_populace_mapping_for_program,
 )
 from axiom_oracles.core.case import Concepts
 
@@ -82,7 +82,7 @@ def test_loader_resolves_only_matching_slots(custom_yaml: Path) -> None:
     program = _program(
         ["household_size", "monthly_income", "member_is_us_citizen", "unrelated_slot"]
     )
-    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+    mapping = load_populace_mapping_for_program(program, mapping_path=custom_yaml)
     assert set(mapping) == {
         "household_size",
         "monthly_income",
@@ -92,14 +92,14 @@ def test_loader_resolves_only_matching_slots(custom_yaml: Path) -> None:
 
 def test_hh_size_uses_people_list(custom_yaml: Path) -> None:
     program = _program(["household_size"])
-    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+    mapping = load_populace_mapping_for_program(program, mapping_path=custom_yaml)
     case_facts = {"__people__": [{}, {}, {}]}
     assert mapping["household_size"](case_facts, None) == 3
 
 
 def test_monthly_aggregation_sums_over_people(custom_yaml: Path) -> None:
     program = _program(["monthly_income"])
-    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+    mapping = load_populace_mapping_for_program(program, mapping_path=custom_yaml)
     case_facts = {
         "__people__": [
             {Concepts.YEARLY_EARNED_INCOME: 24000},
@@ -111,20 +111,20 @@ def test_monthly_aggregation_sums_over_people(custom_yaml: Path) -> None:
 
 def test_constant_source_ignores_facts(custom_yaml: Path) -> None:
     program = _program(["member_is_us_citizen"])
-    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+    mapping = load_populace_mapping_for_program(program, mapping_path=custom_yaml)
     assert mapping["member_is_us_citizen"]({}, {}) is True
 
 
 def test_fact_source_reads_person_scope_and_casts(custom_yaml: Path) -> None:
     program = _program(["member_age"])
-    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+    mapping = load_populace_mapping_for_program(program, mapping_path=custom_yaml)
     value = mapping["member_age"]({}, {Concepts.PERSON_AGE: 30.0})
     assert value == 30 and isinstance(value, int)
 
 
 def test_scope_geoid_in_reads_case_metadata(custom_yaml: Path) -> None:
     program = _program(["in_target_county"])
-    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+    mapping = load_populace_mapping_for_program(program, mapping_path=custom_yaml)
 
     assert (
         mapping["in_target_county"](
@@ -146,7 +146,7 @@ def test_all_people_any_positive_requires_each_person_to_have_a_listed_fact(
     custom_yaml: Path,
 ) -> None:
     program = _program(["all_people_with_assistance"])
-    mapping = load_ecps_mapping_for_program(program, mapping_path=custom_yaml)
+    mapping = load_populace_mapping_for_program(program, mapping_path=custom_yaml)
 
     assert (
         mapping["all_people_with_assistance"](
@@ -190,7 +190,7 @@ def test_default_yaml_loads_against_ca_program(tmp_path: Path) -> None:
             "state_agency_rounds_thirty_percent_net_income_up",
         ]
     )
-    mapping = load_ecps_mapping_for_program(program)
+    mapping = load_populace_mapping_for_program(program)
     assert {
         "household_size",
         "member_age",
@@ -211,7 +211,7 @@ def test_default_yaml_maps_snap_income_slots_separately() -> None:
             "state_agency_rounds_thirty_percent_net_income_up",
         ]
     )
-    mapping = load_ecps_mapping_for_program(program)
+    mapping = load_populace_mapping_for_program(program)
     case_facts = {
         "__people__": [
             {
@@ -240,7 +240,7 @@ def test_default_yaml_maps_snap_income_slots_separately() -> None:
 
 def test_default_yaml_maps_ecps_snap_cases_as_non_initial_months() -> None:
     program = _program(["household_initial_month"])
-    mapping = load_ecps_mapping_for_program(program)
+    mapping = load_populace_mapping_for_program(program)
 
     assert mapping["household_initial_month"]({}, None) is False
 
@@ -257,7 +257,7 @@ def test_default_yaml_maps_snap_utility_allowance_projection_assumptions() -> No
             "state_agency_mandates_use_of_standard_utility_allowances_under_paragraph_g",
         ]
     )
-    mapping = load_ecps_mapping_for_program(program)
+    mapping = load_populace_mapping_for_program(program)
 
     assert (
         mapping[
@@ -303,7 +303,7 @@ def test_default_yaml_maps_ma_categorical_assistance_inputs() -> None:
             "all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc",
         ]
     )
-    mapping = load_ecps_mapping_for_program(program)
+    mapping = load_populace_mapping_for_program(program)
     mixed_case = {
         "__people__": [
             {Concepts.SSI_BENEFITS: 1},
@@ -325,4 +325,29 @@ def test_default_yaml_maps_ma_categorical_assistance_inputs() -> None:
             "all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc"
         ](mixed_case, None)
         is True
+    )
+
+
+def test_deprecated_ecps_mapping_loader_alias_resolves_to_populace_loader() -> None:
+    # The loader was renamed ecps_mapping_loader -> populace_mapping_loader
+    # (axiom-oracles#74). The old module path and the old
+    # load_ecps_mapping_for_program name must still work (same object) and warn.
+    import importlib
+    import warnings
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        with pytest.raises(DeprecationWarning):
+            importlib.import_module(
+                "axiom_oracles.adapters.axiom.ecps_mapping_loader"
+            )
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        legacy = importlib.import_module(
+            "axiom_oracles.adapters.axiom.ecps_mapping_loader"
+        )
+
+    assert (
+        legacy.load_ecps_mapping_for_program is load_populace_mapping_for_program
     )

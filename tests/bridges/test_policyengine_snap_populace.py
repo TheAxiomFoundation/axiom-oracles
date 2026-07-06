@@ -5,8 +5,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from axiom_oracles.bridges import ecps_snap
-from axiom_oracles.bridges.ecps_snap import (
+from axiom_oracles.bridges import snap_populace
+from axiom_oracles.bridges.snap_populace import (
     COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
     JURISDICTION_CONFIGS,
     Period,
@@ -51,11 +51,11 @@ def test_axiom_rules_env_prioritizes_active_rulespec_worktree(monkeypatch, tmp_p
     program.write_text("format: rulespec/v1\nrules: []\n", encoding="utf-8")
     monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(stale_repo))
 
-    env = ecps_snap.axiom_rules_env(program, workspace)
+    env = snap_populace.axiom_rules_env(program, workspace)
 
     roots = [
         Path(root)
-        for root in env["AXIOM_RULESPEC_REPO_ROOTS"].split(ecps_snap.os.pathsep)
+        for root in env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep)
     ]
     assert roots[0] == active_repo.resolve()
     assert stale_repo.resolve() in roots
@@ -168,7 +168,7 @@ def test_california_projectors_use_california_snap_input_surface():
     assert project_utility_allowance_type(config, "LUA", "") == {
         "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": False
     }
-    assert ecps_snap.medical_expenses_for_deduction(150) == 185
+    assert snap_populace.medical_expenses_for_deduction(150) == 185
 
 
 def test_run_axiom_cases_uses_configured_california_member_entity(
@@ -178,15 +178,15 @@ def test_run_axiom_cases_uses_configured_california_member_entity(
 
     def fake_run(cmd, **kwargs):
         assert "run-compiled" in cmd
-        runtime_requests.append(ecps_snap.json.loads(kwargs["input"]))
-        return ecps_snap.subprocess.CompletedProcess(
+        runtime_requests.append(snap_populace.json.loads(kwargs["input"]))
+        return snap_populace.subprocess.CompletedProcess(
             cmd,
             0,
-            stdout=ecps_snap.json.dumps({"results": [{"outputs": {}}]}),
+            stdout=snap_populace.json.dumps({"results": [{"outputs": {}}]}),
             stderr="",
         )
 
-    monkeypatch.setattr(ecps_snap.subprocess, "run", fake_run)
+    monkeypatch.setattr(snap_populace.subprocess, "run", fake_run)
     period = Period(
         label="2026-01",
         year=2026,
