@@ -822,16 +822,17 @@
       "be-self-employed-ssc",
       "be-social-assistance",
       "be-special-social-security-contribution",
+      "be-study-allowance",
       "be-unemployment",
       "be-worker-disposable-income-list",
       "be-worker-pit",
       "be-worker-ssc",
       "be-worker-tax-income-list"
     ],
-    "comparison_count": 117,
-    "match_count": 76,
-    "raw_match_rate": 64.957265,
-    "explained_rate": 95.726496,
+    "comparison_count": 123,
+    "match_count": 82,
+    "raw_match_rate": 66.666667,
+    "explained_rate": 95.934959,
     "unexplained_count": 0,
     "note": "Raw = exact per-comparison matches across the committed be-* dashboard suites. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from dispositions/<suite>.yaml."
   }
