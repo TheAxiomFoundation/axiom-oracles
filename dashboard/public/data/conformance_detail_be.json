@@ -204,8 +204,8 @@
     {
       "id": "be:bfapl_be",
       "oracle_policy_name": "bfapl_be",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_dataset_lacks_input",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -216,8 +216,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "BEN: parental-leave allowance (RVA/ONEM career-break); not encoded, no live suite.",
-      "status": "uncovered"
+      "note": "BEN: parental-leave allowance (RVA/ONEM career-break), encoded in rulespec-be#86 (RD 29.10.1997 durations + RD 02.01.1991 amounts). EUROMOD bfapl_be simulates it and writes bfapl_s, but the lpb parental-leave-months input column is absent from the BE HHoT demo dataset schema, so bfapl_s stays 0 for every synthetic case under the registration-free setup \u2014 the only achievable comparison is vacuous (0 == 0). Probe evidence: exhaustive leave-lane input sweep in axiom-oracles#150/#158, lpb absence recorded in docs/be-coverage-matrix.md; lineage rulespec-be#86 / axiom-oracles#160.",
+      "status": "excluded:oracle_dataset_lacks_input"
     },
     {
       "id": "be:bmact_be",
