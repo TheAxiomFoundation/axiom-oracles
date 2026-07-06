@@ -379,6 +379,314 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 360000.0
+  uk-housing-benefit:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement
+    cases:
+    - id: uk-hb-single-under25-renter
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 22
+        monthly_rent: 500.0
+        head_annual_earnings: 0.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 22
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 6000.0
+        yearly_earned_income: 0.0
+    - id: uk-hb-single-renter
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 40
+        monthly_rent: 550.0
+        head_annual_earnings: 0.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 6600.0
+        yearly_earned_income: 0.0
+    - id: uk-hb-couple-renter
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: true
+        head_age: 40
+        monthly_rent: 650.0
+        head_annual_earnings: 0.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 38
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 7800.0
+        yearly_earned_income: 0.0
+    - id: uk-hb-single-renter-earn0
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 40
+        monthly_rent: 550.0
+        head_annual_earnings: 0.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 6600.0
+        yearly_earned_income: 0.0
+    - id: uk-hb-single-renter-earn6000
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 40
+        monthly_rent: 550.0
+        head_annual_earnings: 6000.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 6000.0
+      facts:
+        living_renting: true
+        rent_paid: 6600.0
+        yearly_earned_income: 6000.0
+    - id: uk-hb-single-renter-earn10000
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 40
+        monthly_rent: 550.0
+        head_annual_earnings: 10000.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 10000.0
+      facts:
+        living_renting: true
+        rent_paid: 6600.0
+        yearly_earned_income: 10000.0
+    - id: uk-hb-single-renter-earn14000
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 40
+        monthly_rent: 550.0
+        head_annual_earnings: 14000.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 14000.0
+      facts:
+        living_renting: true
+        rent_paid: 6600.0
+        yearly_earned_income: 14000.0
+    - id: uk-hb-single-renter-earn18000
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 40
+        monthly_rent: 550.0
+        head_annual_earnings: 18000.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 18000.0
+      facts:
+        living_renting: true
+        rent_paid: 6600.0
+        yearly_earned_income: 18000.0
+    - id: uk-hb-couple-renter-1nondep
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: true
+        head_age: 40
+        monthly_rent: 750.0
+        head_annual_earnings: 0.0
+        number_of_non_dependants: 1
+        non_dependant_gross_weekly_income: 300.0
+        pension_age: false
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 38
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 9000.0
+        yearly_earned_income: 0.0
+    - id: uk-hb-single-pension-age-renter
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: false
+        head_age: 70
+        monthly_rent: 550.0
+        head_annual_earnings: 0.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 6600.0
+        yearly_earned_income: 0.0
+    - id: uk-hb-couple-pension-age-renter
+      period: 2026-04
+      scenario: household-housing-benefit
+      parameters:
+        couple: true
+        head_age: 70
+        monthly_rent: 650.0
+        head_annual_earnings: 0.0
+        number_of_non_dependants: 0
+        non_dependant_gross_weekly_income: 0.0
+        pension_age: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: partner
+        kind: person
+        age: 68
+        relation: Spouse
+        yearly_earned_income: 0.0
+      facts:
+        living_renting: true
+        rent_paid: 7800.0
+        yearly_earned_income: 0.0
   uk-income-tax-dividend:
     locale: UK
     entity: Person
