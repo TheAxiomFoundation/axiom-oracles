@@ -53,7 +53,7 @@ except Exception:
 
 from axiom_oracles.adapters.policyengine.runner import PolicyEngineRunner  # noqa: E402
 from axiom_oracles.core.geography import GeographyScope  # noqa: E402
-from axiom_oracles.populations.enhanced_cps import load_enhanced_cps_cases  # noqa: E402
+from axiom_oracles.populations.populace_us import load_populace_us_cases  # noqa: E402
 
 
 DEFAULT_VARIABLES = [
@@ -84,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--variable", action="append", dest="variables")
     args = parser.parse_args(argv)
 
-    cases = load_enhanced_cps_cases(
+    cases = load_populace_us_cases(
         period="2026-01",
         sample_size=args.sample_size,
         scope=GeographyScope(type="census_state", geoid=args.fips),

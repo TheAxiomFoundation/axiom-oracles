@@ -56,7 +56,7 @@ try:
 except Exception:
     pass
 
-from axiom_oracles.populations.enhanced_cps import load_enhanced_cps_cases  # noqa: E402
+from axiom_oracles.populations.populace_us import load_populace_us_cases  # noqa: E402
 from axiom_oracles.core.geography import GeographyScope  # noqa: E402
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner  # noqa: E402
 from axiom_oracles.adapters.axiom.generic_inputs import attach_generic_inputs  # noqa: E402
@@ -105,7 +105,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    cases = load_enhanced_cps_cases(
+    cases = load_populace_us_cases(
         period="2026-01",
         sample_size=args.sample_size,
         scope=GeographyScope(type="census_state", geoid=args.fips),

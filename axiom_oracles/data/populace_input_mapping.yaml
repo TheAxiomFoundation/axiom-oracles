@@ -1,13 +1,14 @@
-# ECPS-to-input mapping table — data, not code.
+# Populace-to-input mapping table — data, not code.
 #
 # Each entry declares HOW a single input slot in a compiled program gets
-# populated from ECPS facts on a Case. The generic projector
+# populated from population facts on a Case (the population is the certified
+# populace-us artifact — axiom-oracles#74). The generic projector
 # (axiom_oracles.adapters.axiom.generic_inputs) reads this table at startup,
-# builds an EcpsMapping, and applies it to every compiled program it runs.
+# builds an input mapping, and applies it to every compiled program it runs.
 #
 # Adding a new program comparison no longer requires Python: extend this
-# table with the slot names the new program declares, point each at an
-# ECPS fact (or a constant / derived value), and the generic projector
+# table with the slot names the new program declares, point each at a
+# population fact (or a constant / derived value), and the generic projector
 # handles the rest. Tracked as the "data, not code" follow-up under #26.
 #
 # Match rules:

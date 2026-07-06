@@ -5,17 +5,17 @@ import pytest
 
 from axiom_oracles.core.case import Concepts
 from axiom_oracles.core.geography import GeographyScope
-from axiom_oracles.populations.enhanced_cps import (
+from axiom_oracles.populations.populace_us import (
     NYC_ENHANCED_CPS_DATASET,
     POPULACE_PINS,
     POPULACE_US_DATASET,
-    EnhancedCpsCaseLoader,
     PopulacePin,
+    PopulaceUsCaseLoader,
     _clean_number,
     _resolve_populace_dataset,
     _scope_from_geography,
     dataset_for_scope,
-    load_enhanced_cps_cases,
+    load_populace_us_cases,
 )
 
 
@@ -172,7 +172,7 @@ def test_loader_projects_sampled_ecps_households_to_cases() -> None:
         sims.append(sim)
         return sim
 
-    cases = load_enhanced_cps_cases(
+    cases = load_populace_us_cases(
         scope=GeographyScope(type="census_place", geoid="3651000"),
         period="2026-05",
         sample_size=2,
@@ -194,7 +194,7 @@ def test_loader_projects_sampled_ecps_households_to_cases() -> None:
 
 
 def test_loader_can_project_sampled_ecps_tax_units_to_cases() -> None:
-    cases = load_enhanced_cps_cases(
+    cases = load_populace_us_cases(
         period="2026",
         sample_size=2,
         case_unit="tax_unit",
@@ -217,7 +217,7 @@ def test_loader_can_project_sampled_ecps_tax_units_to_cases() -> None:
 
 
 def test_loader_skips_geographically_unresolvable_records() -> None:
-    loader = EnhancedCpsCaseLoader(
+    loader = PopulaceUsCaseLoader(
         dataset="memory://fake",
         microsimulation_factory=lambda dataset: FakeMicrosimulation(
             dataset,
@@ -251,6 +251,35 @@ def test_scope_from_geography_combines_state_and_county_components() -> None:
 
 def test_clean_number_treats_unknown_as_missing() -> None:
     assert _clean_number("UNKNOWN") == 0
+
+
+def test_deprecated_enhanced_cps_aliases_resolve_to_the_populace_loader() -> None:
+    # The module was renamed enhanced_cps -> populace_us (axiom-oracles#74).
+    # External callers may still use the old module path and names; they must
+    # resolve to the SAME objects and emit a DeprecationWarning, so encode (and
+    # any other consumer) migrates independently without behaviour change.
+    import warnings
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        with pytest.raises(DeprecationWarning):
+            import importlib
+
+            importlib.import_module("axiom_oracles.populations.enhanced_cps")
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        import importlib
+
+        legacy = importlib.import_module("axiom_oracles.populations.enhanced_cps")
+
+    assert legacy.load_enhanced_cps_cases is load_populace_us_cases
+    assert legacy.EnhancedCpsCaseLoader is PopulaceUsCaseLoader
+    # The package __init__ re-exports both the new and the aliased names.
+    from axiom_oracles import populations
+
+    assert populations.load_enhanced_cps_cases is load_populace_us_cases
+    assert populations.load_populace_us_cases is load_populace_us_cases
 
 
 class FakeSeries:

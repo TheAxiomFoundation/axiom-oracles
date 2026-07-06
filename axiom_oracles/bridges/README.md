@@ -23,8 +23,8 @@ modules — passing them is the copy-fidelity contract.
 | Module | Origin (in axiom-encode) | What it does |
 |---|---|---|
 | `population.py` | `oracles/policyengine/population.py` | Pinned Populace artifact loading (`PopulacePin`, `POPULACE_PINS`, `load_populace_dataset`) — sha256-verified HF downloads, env overrides, unpinned escape hatch |
-| `ecps_tax.py` | `oracles/policyengine/ecps_tax.py` | Federal income tax population comparison (Axiom RuleSpec vs PolicyEngine over pinned Populace) |
-| `ecps_snap.py` | `oracles/policyengine/ecps_snap.py` | SNAP population comparison harness |
+| `tax_populace.py` | `oracles/policyengine/ecps_tax.py` | Federal income tax population comparison (Axiom RuleSpec vs PolicyEngine over pinned Populace). Renamed from `ecps_tax.py` — the data is populace-us, not Enhanced CPS (axiom-oracles#74); `ecps_tax.py` remains as a deprecation-alias shim |
+| `snap_populace.py` | `oracles/policyengine/ecps_snap.py` | SNAP population comparison harness. Renamed from `ecps_snap.py`; `ecps_snap.py` remains as a deprecation-alias shim |
 | `us_populace.py` | `oracles/policyengine/us_populace.py` | Generic US variable population comparison |
 | `medicaid_populace.py` | `oracles/policyengine/medicaid_populace.py` | Medicaid/MAGI population comparison |
 | `efrs_uk.py` | `oracles/policyengine/efrs_uk.py` | UK tax/benefit population comparison (EFRS) |
@@ -48,17 +48,23 @@ lazy):
   `load_populace_dataset`, `resolve_populace_pin`, `PolicyEngineMapping`,
   `PolicyEngineOracleRegistry`, `PolicyEngineOracleCoverage`,
   `load_policyengine_registry`.
-- The comparison modules (`ecps_tax`, `ecps_snap`, `us_populace`,
+- The comparison modules (`tax_populace`, `snap_populace`, `us_populace`,
   `medicaid_populace`, `efrs_uk`, `coverage`, `adapters`, `registry`,
   `population`, `snapscreener`) are imported explicitly, e.g.
-  `from axiom_oracles.bridges import ecps_tax`. Their module-level surfaces
+  `from axiom_oracles.bridges import tax_populace`. Their module-level surfaces
   mirror the encoder originals name-for-name; the encoder re-exports them as
   shims, so a symbol rename here is a breaking change for both repos.
+- `tax_populace` and `snap_populace` were renamed from `ecps_tax` / `ecps_snap`
+  (axiom-oracles#74 — every data path resolves the certified populace-us
+  artifact, never Enhanced CPS). The old module paths remain as deprecation
+  shims that re-export the renamed modules (and swap themselves into
+  `sys.modules`, so encode's own `ecps_tax` / `ecps_snap` shims keep working);
+  they emit a `DeprecationWarning`. Import the new names in new code.
 
 `POPULACE_PINS` in `population.py` is the single certified pin table for
-`populace://` artifacts. `axiom_oracles.populations.enhanced_cps` derives its
-`(repo_id, filename)`-keyed pin table from it, so a re-pin lands in exactly
-one place.
+`populace://` artifacts. `axiom_oracles.populations.populace_us` (formerly
+`enhanced_cps`) derives its `(repo_id, filename)`-keyed pin table from it, so a
+re-pin lands in exactly one place.
 
 Underscored helpers inside modules (including all of `rulespec_paths.py`) are
 implementation detail shared with the encoder copy, not API.
@@ -68,7 +74,7 @@ implementation detail shared with the encoder copy, not API.
 - **axiom-encode** re-exports these modules under
   `axiom_encode.oracles.policyengine.*` (thin shims), keeping its CLI and
   import paths unchanged.
-- **axiom-oracles** itself: `populations/enhanced_cps.py` (pin table) and,
+- **axiom-oracles** itself: `populations/populace_us.py` (pin table) and,
   as follow-ups, the `axiom-encode-*` comparison runners in
   `scripts/run_comparison.py`, which today still shell out to the encoder CLI
   in a separate pinned environment.

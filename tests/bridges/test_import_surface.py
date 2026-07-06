@@ -5,11 +5,18 @@ huggingface-hub, or numpy installed (heavy dependencies are lazy, imported
 inside functions), and the documented public names must exist. axiom-encode
 re-exports these modules as thin shims, so a name disappearing here breaks
 the encoder's import paths and CLI — this test is the tripwire.
+
+The federal-tax and SNAP bridges were renamed ``ecps_tax`` -> ``tax_populace``
+and ``ecps_snap`` -> ``snap_populace`` (axiom-oracles#74). The old paths remain
+as deprecation shims — encode's shims swap them into ``sys.modules`` — so both
+the new module names (in ``MODULES``) and the old ones (in
+``DEPRECATED_MODULE_ALIASES``) are asserted here.
 """
 
 from __future__ import annotations
 
 import importlib
+import warnings
 from pathlib import Path
 
 import pytest
@@ -18,8 +25,6 @@ MODULES = [
     "axiom_oracles.bridges",
     "axiom_oracles.bridges.adapters",
     "axiom_oracles.bridges.coverage",
-    "axiom_oracles.bridges.ecps_snap",
-    "axiom_oracles.bridges.ecps_tax",
     "axiom_oracles.bridges.efrs_uk",
     "axiom_oracles.bridges.jurisdiction",
     "axiom_oracles.bridges.medicaid_populace",
@@ -27,9 +32,19 @@ MODULES = [
     "axiom_oracles.bridges.registry",
     "axiom_oracles.bridges.repo_routing",
     "axiom_oracles.bridges.rulespec_paths",
+    "axiom_oracles.bridges.snap_populace",
     "axiom_oracles.bridges.snapscreener",
+    "axiom_oracles.bridges.tax_populace",
     "axiom_oracles.bridges.us_populace",
 ]
+
+#: Deprecated module paths that must still import (encode's shims target these
+#: via ``sys.modules``). Importing each emits a DeprecationWarning and resolves
+#: to the renamed module object.
+DEPRECATED_MODULE_ALIASES = {
+    "axiom_oracles.bridges.ecps_snap": "axiom_oracles.bridges.snap_populace",
+    "axiom_oracles.bridges.ecps_tax": "axiom_oracles.bridges.tax_populace",
+}
 
 #: Names the package __init__ promises (see bridges/README.md).
 PACKAGE_EXPORTS = [
@@ -54,7 +69,7 @@ MODULE_SURFACE = {
         "PolicyEngineUSVarAdapter",
         "get_pe_us_var_adapter",
     ],
-    "axiom_oracles.bridges.ecps_tax": [
+    "axiom_oracles.bridges.tax_populace": [
         "DEFAULT_US_POPULACE_YEAR",
     ],
     "axiom_oracles.bridges.population": [
@@ -83,6 +98,31 @@ def test_module_imports(module_name: str) -> None:
     importlib.import_module(module_name)
 
 
+@pytest.mark.parametrize(
+    ("deprecated", "target"), sorted(DEPRECATED_MODULE_ALIASES.items())
+)
+def test_deprecated_bridge_module_aliases_still_import(
+    deprecated: str, target: str
+) -> None:
+    """Old ecps_* bridge paths must resolve to the renamed module and warn.
+
+    encode's shims do ``sys.modules[...] = axiom_oracles.bridges.ecps_tax``, so
+    the old path must import, emit a DeprecationWarning, and be the *same*
+    module object as the renamed bridge — otherwise encode's monkeypatch
+    targets and attribute access would silently diverge.
+    """
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        with pytest.raises(DeprecationWarning):
+            importlib.import_module(deprecated)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        legacy = importlib.import_module(deprecated)
+        renamed = importlib.import_module(target)
+    assert legacy is renamed
+
+
 def test_package_exports() -> None:
     bridges = importlib.import_module("axiom_oracles.bridges")
     missing = [name for name in PACKAGE_EXPORTS if not hasattr(bridges, name)]
@@ -106,15 +146,15 @@ def test_shared_case_types_are_core_types() -> None:
     assert bridges.Entity is core_case.Entity
 
 
-def test_enhanced_cps_pins_derive_from_bridge_pins() -> None:
+def test_populace_us_pins_derive_from_bridge_pins() -> None:
     """The populace:// pin table re-keys the shared certified pin table."""
     bridge_population = importlib.import_module("axiom_oracles.bridges.population")
-    enhanced_cps = importlib.import_module("axiom_oracles.populations.enhanced_cps")
+    populace_us = importlib.import_module("axiom_oracles.populations.populace_us")
     for pin in bridge_population.POPULACE_PINS.values():
-        derived = enhanced_cps.POPULACE_PINS[(pin.repo_id, pin.filename)]
+        derived = populace_us.POPULACE_PINS[(pin.repo_id, pin.filename)]
         assert derived.revision == pin.revision
         assert derived.sha256 == pin.sha256
-    assert len(enhanced_cps.POPULACE_PINS) == len(bridge_population.POPULACE_PINS)
+    assert len(populace_us.POPULACE_PINS) == len(bridge_population.POPULACE_PINS)
 
 
 def test_packaged_data_files_present() -> None:

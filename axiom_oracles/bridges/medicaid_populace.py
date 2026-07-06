@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .ecps_snap import (
+from .snap_populace import (
     Period,
     axiom_rules_env,
     compile_program,

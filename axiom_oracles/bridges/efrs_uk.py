@@ -21,7 +21,7 @@ from typing import Any, Callable
 
 import yaml
 
-from .ecps_tax import (
+from .tax_populace import (
     _version_tuple,
     input_record,
     money,

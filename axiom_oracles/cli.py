@@ -45,7 +45,7 @@ from .comparison.report import (
 from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
-from .populations import load_enhanced_cps_cases
+from .populations import load_populace_us_cases
 from .suites import available_suites, load_suite
 
 
@@ -825,12 +825,12 @@ def _load_population_cases(
     concepts: tuple[str, ...] = (),
 ) -> list[Case]:
     if population == "enhanced-cps":
-        return load_enhanced_cps_cases(
+        return load_populace_us_cases(
             scope=scope,
             period=period,
             sample_size=sample_size or None,
             dataset=ecps_dataset,
-            case_unit=_enhanced_cps_case_unit(categories, concepts),
+            case_unit=_populace_us_case_unit(categories, concepts),
         )
     if population == "synthetic":
         cases = [
@@ -843,7 +843,7 @@ def _load_population_cases(
     raise click.ClickException(f"Unknown population '{population}'.")
 
 
-def _enhanced_cps_case_unit(
+def _populace_us_case_unit(
     categories: tuple[str, ...],
     concepts: tuple[str, ...],
 ) -> str:
