@@ -45,6 +45,18 @@
         "gap": 21,
         "conformant": false
       }
+    ],
+    "uk-pe": [
+      {
+        "date": "2026-07-06",
+        "in_scope": 25,
+        "covered": 13,
+        "uncovered": 12,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 12,
+        "conformant": false
+      }
     ]
   }
 }

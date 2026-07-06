@@ -1,0 +1,13 @@
+{
+  "schema": "axiom_oracles.conformance_snapshot.v1",
+  "date": "2026-07-06",
+  "jurisdiction": "uk-pe",
+  "oracle": "policyengine-uk_2.89.2/uk",
+  "policies_in_scope": 25,
+  "covered": 13,
+  "covered_pct": 52.0,
+  "excluded": 8,
+  "unexplained_total": 0,
+  "axiom_attributed_open": 0,
+  "conformant": false
+}

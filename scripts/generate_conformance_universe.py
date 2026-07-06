@@ -45,6 +45,7 @@ from axiom_oracles.conformance.loader import (  # noqa: E402
 )
 from axiom_oracles.conformance.universe import (  # noqa: E402
     EuromodUniverseBackend,
+    PolicyEngineUniverseBackend,
     raw_to_universe_policy,
 )
 
@@ -77,20 +78,20 @@ JURISDICTIONS: dict[str, dict] = {
         "env_roots": ("EUROMOD_MODEL_ROOT",),
         "default_root": "$HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+",
     },
-    "pe-uk": {
-        "implemented": False,
+    "uk-pe": {
+        "implemented": True,
         "backend": "policyengine",
         "country": "UK",
         "model": "policyengine-uk",
-        "release": "TODO",
+        # release is read from the checkout's pyproject.toml at generation time so
+        # the header pins the exact policyengine-uk version enumerated (a fact from
+        # the checkout, never a floating latest). This literal is the fallback for
+        # error text only; the generator overrides it from pinned_version().
+        "release": "checkout",
         "system": "uk",
+        "package": "policyengine_uk",
         "env_roots": ("POLICYENGINE_UK_CHECKOUT",),
         "default_root": "$HOME/PolicyEngine/policyengine-uk",
-        "todo": (
-            "pe-uk universe is being scoped concurrently. Implement "
-            "PolicyEngineUniverseBackend.raw_policies() against a pinned "
-            "policyengine-uk checkout, then seed conformance/pe-uk.yaml."
-        ),
     },
 }
 
@@ -120,19 +121,27 @@ def _rel(path: Path) -> str:
 def generate_universe(jurisdiction: str, model_root: Path) -> Universe:
     """Regenerate one jurisdiction's universe (facts fresh, decisions preserved)."""
     config = JURISDICTIONS[jurisdiction]
-    if config["backend"] != "euromod":
-        raise NotImplementedError(
-            f"{jurisdiction}: only the euromod backend is implemented; "
-            f"{config['backend']} is a documented TODO hook"
+    release = config["release"]
+    if config["backend"] == "euromod":
+        backend = EuromodUniverseBackend(
+            model_root=model_root,
+            country=config["country"],
+            system=config["system"],
         )
-    backend = EuromodUniverseBackend(
-        model_root=model_root,
-        country=config["country"],
-        system=config["system"],
-    )
+    elif config["backend"] == "policyengine":
+        backend = PolicyEngineUniverseBackend(
+            checkout=model_root,
+            package=config.get("package", "policyengine_uk"),
+        )
+        # Pin the exact version enumerated, read from the checkout (not memory).
+        release = backend.pinned_version()
+    else:
+        raise NotImplementedError(
+            f"{jurisdiction}: unknown backend {config['backend']!r}"
+        )
     oracle = OracleIdentity(
         model=config["model"],
-        release=config["release"],
+        release=release,
         system=config["system"],
         country=config["country"],
         backend=config["backend"],
@@ -182,7 +191,46 @@ def _process(
         )
         return 2
 
-    universe = generate_universe(jurisdiction, root)
+    # The policyengine backend pins by VERSION, not by a release-stamped path the
+    # way the euromod default_root does (UKMOD_PUBLIC_B2026.03). So when a
+    # checkout is present but its version differs from the committed universe
+    # header's release, it is not the pinned oracle — during --check treat that
+    # like an absent checkout (no-op clean), so a runner that happens to have a
+    # different policyengine-uk checked out cannot spuriously fail the drift gate.
+    if check and config["backend"] == "policyengine":
+        committed = parse_if_exists(output_path)
+        if committed is not None:
+            try:
+                present_version = PolicyEngineUniverseBackend(
+                    checkout=root, package=config.get("package", "policyengine_uk")
+                ).pinned_version()
+            except (FileNotFoundError, ValueError):
+                present_version = None
+            if present_version and present_version != committed.oracle.release:
+                print(
+                    f"conformance[{jurisdiction}] --check: checkout at {root} is "
+                    f"policyengine-uk@{present_version}, not the pinned "
+                    f"{committed.oracle.release}; committed universe left unverified "
+                    "this run (no-op clean — pin a matching checkout to enforce)."
+                )
+                return 0
+
+    try:
+        universe = generate_universe(jurisdiction, root)
+    except ImportError as exc:
+        # The policyengine backend imports the pinned checkout; a runner that has
+        # the directory but not the package's installed dependencies cannot
+        # enumerate. During --check this is the same clean no-op as an absent
+        # checkout (the committed universe stands alone); a write run must fail.
+        if check and config["backend"] == "policyengine":
+            print(
+                f"conformance[{jurisdiction}] --check: checkout present at {root} "
+                f"but {config.get('package', 'the package')} is not importable "
+                f"({exc}); committed universe left unverified this run (no-op clean)."
+            )
+            return 0
+        raise
+
     problems = universe.validate()
     serialized = serialize(universe)
 
