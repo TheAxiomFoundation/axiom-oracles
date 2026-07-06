@@ -35,6 +35,17 @@ runner:
     suite: uk-universal-credit
     population: synthetic
     sample_size: 0
+    # NB: comparison_batch_size is intentionally NOT pinned to 1 here. Unlike the
+    # deterministic tax/benefit suites, UKMOD's Universal Credit output bsauc_s
+    # carries a STOCHASTIC per-row take-up draw (i_rand_tu), so identical
+    # households receive different awards purely by batch position (verified:
+    # ten identical couple-owner households in one run return
+    # [666.97,666.97,0,666.97,666.97,0,0,666.97,666.97,666.97]). Batch size 1
+    # does not fix this — it only partially resolves the take-up zeros (three of
+    # five clear, two persist by draw) — so the committed report is one
+    # realization (all cases in one batch), with the take-up zeros dispositioned
+    # (euromod_issues.json#ukmod-uc-bsauc-takeup-correction). A future adapter
+    # fix that forces 100% take-up would make this suite deterministic.
     # The composed UC pipeline parameters are effective from 2026-04-01 for
     # assessment periods commencing on/after 6 April 2026, so the Axiom side
     # evaluates in the April 2026 monthly assessment period. UKMOD resolves the

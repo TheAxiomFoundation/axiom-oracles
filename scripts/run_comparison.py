@@ -1550,6 +1550,21 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    # Cross-engine batch isolation. The EUROMOD engine runs every case in one
+    # `run_cases` invocation per comparison batch, so cases that share a batch
+    # can contaminate each other (deterministic instruments: a household zeroes
+    # at certain batch positions but returns the correct value alone — the
+    # batch-position adapter bug; means-tested instruments: UKMOD's stochastic
+    # take-up draw i_rand_tu assigns take/non-take per row, so the zeroed set is
+    # not reproducible). Comparison configs pin `comparison_batch_size` to make
+    # the run deterministic where batch size 1 is clean (see each config's
+    # comment); it is NOT set for the UKMOD means-tested suites, where batch
+    # size 1 is degenerate (Pension Credit) or only partially resolves the
+    # stochastic take-up zeros (Universal Credit) — those record one realization
+    # until the adapter forces 100% take-up.
+    comparison_batch_size = params.get("comparison_batch_size")
+    if comparison_batch_size is not None:
+        cmd.extend(["--comparison-batch-size", str(comparison_batch_size)])
     env = dict(os.environ)
     env["EUROMOD_MODEL_ROOT"] = str(model_root)
     env["EUROMOD_COUNTRY"] = str(params.get("euromod_country", "UK"))

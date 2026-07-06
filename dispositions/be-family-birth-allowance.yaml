@@ -16,7 +16,12 @@ entries:
         and Wallonia newborn cases in the same suite match exactly. The
         source-backed RuleSpec returns the official DG birth premium of
         1376.16 EUR (Article 30 premium of 1144 EUR before indexation,
-        current amount from the Ostbelgien family-benefits surface).
+        current amount from the Ostbelgien family-benefits surface). Verified
+        deterministic (2026-07-05 batch-size-1 audit): the DG zero persists at
+        --comparison-batch-size 1 and across ten identical DG households in one
+        run (all 0.0), while the Brussels control pays bchba_s=1367.74 in
+        isolation — a genuine regional coverage gap, not batch-position
+        contamination.
       upstream_url: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13
       sources:
         - axiom_oracles/data/euromod_issues.json#euromod-be-2025-dg-birth-allowance-zero

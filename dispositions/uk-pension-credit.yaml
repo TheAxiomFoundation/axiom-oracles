@@ -4,15 +4,24 @@ updated: "2026-07-05"
 # The composed rulespec-uk Pension Credit guarantee-credit award matches UKMOD
 # boamt_s to the penny wherever UKMOD pays the award: the single standard
 # minimum guarantee 238.00/week and couple 363.25/week, less the assessed state
-# pension boact_s, floored at zero (verified weekly: single at 2000/year of
-# state pension = 199.65, single at 10000 = 46.24, and the four couple cases and
-# the two above-guarantee / below-pension-age nil cases). The residual rows are
-# all take-up / Universal-Credit-transition zeroing: UKMOD's Pension Credit
-# take-up correction marks a hypothetical benefit unit as transitioned to
-# Universal Credit and returns a zero Pension Credit award away from the
-# statutory entitlement. This is a UKMOD-side modelling behaviour, not an Axiom
-# encoding gap (verified: switching random_uk off leaves the result unchanged,
-# the same finding as the Universal Credit suite).
+# pension boact_s, floored at zero. The residual zeroed rows are UKMOD's Pension
+# Credit take-up / Universal-Credit-transition correction returning a zero award
+# away from the statutory entitlement. This is a UKMOD-side modelling behaviour,
+# not an Axiom encoding gap.
+#
+# CORRECTED 2026-07-05 (batch-size-1 integrity audit): the take-up draw is
+# STOCHASTIC per row, not deterministic per composition. The earlier per-case
+# claims that "the identical claimant at 2000 and 10000 returns the matching
+# guarantee credit, so the zero here is the transition draw not the income test"
+# were a single non-reproducible realization (all cases in one batch). Verified
+# live on UKMOD_PUBLIC_B2026.03: at --comparison-batch-size 1 EVERY case zeros
+# (including a zero-income single pensioner entitled to the full 238.00/week),
+# and ten byte-for-byte identical copies of that household in one run return
+# [0, 238, 0, 0, 238, 0, 0, 238, 238, 238] — identical facts, different awards by
+# position. Batch size 1 is therefore degenerate for this instrument, not a fix.
+# The pinned values below record the committed single-batch realization; the
+# dispositions remain upstream_engine_gap because Axiom's entitlement is exact
+# wherever a unit takes up (see euromod_issues.json#ukmod-pc-boamt-takeup-transition).
 entries:
   # --- UKMOD take-up / UC-transition correction zeroes the award ------------
   - id: takeup-transition-zeroes-single-income0
@@ -23,13 +32,16 @@ entries:
     evidence:
       mechanism: >-
         UKMOD's Pension Credit take-up / Universal-Credit-transition correction
-        (take-up estimate $PCGCSCTU = 0.69, applied through the i_rand_tu draw
-        and the i_bsa_noUC / i_bsa_yesUC split inside bsa_uk) marks this
-        hypothetical single pensioner (reached state pension age, no assessable
-        income) as transitioned to Universal Credit and returns a zero Pension
-        Credit award. The Axiom pipeline computes the full single standard
-        minimum guarantee of 238.00/week. Switching the random_uk policy off
-        does not suppress the draw (verified — results identical), so this is a
+        (take-up estimate $PCGCSCTU = 0.69, applied through the stochastic
+        i_rand_tu draw and the i_bsa_noUC / i_bsa_yesUC split inside bsa_uk)
+        marks this hypothetical single pensioner (reached state pension age, no
+        assessable income) as a non-taker / transitioned to Universal Credit and
+        returns a zero Pension Credit award. The Axiom pipeline computes the full
+        single standard minimum guarantee of 238.00/week, which UKMOD pays
+        whenever this unit draws take-up. Switching the random_uk policy off does
+        not suppress the draw (verified — results identical), and the draw is
+        stochastic per row rather than composition-determined (verified by
+        batch-size-1 and identical-copy runs; see suite header), so this is a
         UKMOD modelling behaviour for hypothetical benefit units, not an Axiom
         encoding gap.
       arithmetic:
@@ -50,12 +62,14 @@ entries:
       mechanism: >-
         UKMOD returns a zero Pension Credit award for this single pensioner with
         6,000/year of state pension (assessed as boact_s 500.00/month = 115.07/
-        week) because of the take-up / Universal-Credit-transition correction.
-        The Axiom guarantee credit is the single standard minimum guarantee less
-        the assessed weekly state pension: 238.00 - 115.068493 = 122.931507/week.
-        The identical single pensioner at 2,000 and 10,000/year of state pension
-        returns the matching guarantee credit on both engines, so the zero here
-        is the transition draw, not the income test.
+        week) because of the stochastic take-up / Universal-Credit-transition
+        draw. The Axiom guarantee credit is the single standard minimum guarantee
+        less the assessed weekly state pension: 238.00 - 115.068493 =
+        122.931507/week, which UKMOD pays whenever this unit draws take-up. The
+        zero is a draw, not the income test: at --comparison-batch-size 1 every
+        case in the suite zeros, and identical copies of an entitled household in
+        one run receive different awards purely by position (see the suite header
+        and euromod_issues.json#ukmod-pc-boamt-takeup-transition).
       arithmetic:
         - expression: "238.00 - 500.00 * 7 * 12 / 365"
           equals: 122.931507
@@ -75,11 +89,11 @@ entries:
       mechanism: >-
         UKMOD returns a zero Pension Credit award for this single pensioner with
         8,000/year of state pension (assessed as boact_s 666.67/month = 153.42/
-        week) because of the take-up / Universal-Credit-transition correction.
-        The Axiom guarantee credit is 238.00 - 153.424658 = 84.575342/week. The
-        neighbouring single pensioner at 10,000/year returns a matching award on
-        both engines, so the zero here is the transition draw, not the income
-        test.
+        week) because of the stochastic take-up / Universal-Credit-transition
+        draw. The Axiom guarantee credit is 238.00 - 153.424658 = 84.575342/week,
+        which UKMOD pays whenever this unit draws take-up. The zero is a draw, not
+        the income test (verified by batch-size-1 and identical-copy runs; see the
+        suite header and euromod_issues.json#ukmod-pc-boamt-takeup-transition).
       arithmetic:
         - expression: "238.00 - 666.666667 * 7 * 12 / 365"
           equals: 84.575342
@@ -99,12 +113,14 @@ entries:
       mechanism: >-
         UKMOD returns a zero Pension Credit award for this single pensioner with
         12,000/year of state pension (assessed as boact_s 1,000.00/month =
-        230.14/week) because of the take-up / Universal-Credit-transition
-        correction. The Axiom guarantee credit is 238.00 - 230.136986 =
+        230.14/week) because of the stochastic take-up / Universal-Credit-
+        transition draw. The Axiom guarantee credit is 238.00 - 230.136986 =
         7.863014/week (the assessable income is just below the single guarantee,
-        so a small guarantee credit remains). Switching random_uk off does not
-        suppress the draw, so the zero is a UKMOD modelling behaviour, not an
-        Axiom encoding gap.
+        so a small guarantee credit remains), which UKMOD pays whenever this unit
+        draws take-up. Switching random_uk off does not suppress the draw, and the
+        draw is stochastic per row (verified by batch-size-1 and identical-copy
+        runs; see suite header), so the zero is a UKMOD modelling behaviour, not
+        an Axiom encoding gap.
       arithmetic:
         - expression: "238.00 - 1000.00 * 7 * 12 / 365"
           equals: 7.863014
