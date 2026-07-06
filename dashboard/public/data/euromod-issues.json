@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.euromod_issues.v1",
-  "updated_at": "2026-07-05",
+  "updated_at": "2026-07-06",
   "purpose": "Track EUROMOD-platform issues and workarounds that affect household-level Axiom oracle comparisons. Statutory encoding gaps belong in coverage inventories and comparison reports, not in this ledger.",
   "entries": [
     {
@@ -29,7 +29,7 @@
       "id": "euromod-be-real-config-bsa-is-literal-yes",
       "jurisdiction": "BE",
       "system": "BE_2025",
-      "status": "observed_local",
+      "status": "not_reproduced_live",
       "classification": "euromod_engine_or_model_issue",
       "upstream_url": null,
       "summary": "Running Belgium BE_2025 under the real SILC dataset configuration names can abort in bsa_be/DefConst/IsLiteral because the literal token yes is parsed as an unknown variable.",
@@ -42,7 +42,8 @@
           "BE_2024_c1_2015_03_e2"
         ],
         "euromod_connector": "0.1.20a0",
-        "dotnet": "10.0.301 osx-x64"
+        "dotnet": "10.0.301 osx-x64",
+        "reproduction_note": "Not reproduced in the 2026-07-05 live sweep: BE_2025 under BE_2024_c1_2015_03_e2 (same model root, connector, and dotnet) ran clean for the employee-SSC, PIT, and six-household study-allowance tests, while BE_training_data still aborts at parameter preparation (jrc-euromod-4-be-training-data-income-list-prep). The be-study-allowance comparison and the live Belgium tests run under the real configuration name."
       },
       "workaround": {
         "dataset": "BE_training_data",
@@ -828,7 +829,7 @@
         "BTA_uk_off": "No effect: the adapter policy-switch override sets the BTA_uk policy off, but the take-up draw is initialised in InitVars_uk (always on) and gated inside bsauc_uk, so the award still zeros.",
         "random_uk_off": "No effect for the same reason.",
         "TUDef_uk_off": "Breaks the run: TUDef_uk defines the benefit assessment units, so UC cannot be computed without it.",
-        "per_case_isolation": "Does NOT stabilise the result (corrected 2026-07-05). Running each case alone (idhh=1, --comparison-batch-size 1) does not remove the take-up draw and does not resolve to a stable earnings/composition pattern: three of the five all-in-one-batch take-up zeros resolve to the full award at batch size 1 while two persist, and running identical households one-per-batch still yields different awards, because the draw is stochastic per row rather than a reproducible per-household rule. Batch size 1 is therefore not a fix for this instrument; the only per-household-deterministic UKMOD configuration would force 100% take-up (disable the i_rand_tu gate), which the exposed policy switches (BTA_uk, random_uk) do not achieve."
+        "per_case_isolation": "Does NOT stabilise the result (corrected 2026-07-05). Running each case alone (idhh=1, --comparison-batch-size 1) does not remove the take-up draw and does not resolve to a stable earnings/composition pattern: three of the five all-in-one-batch take-up zeros resolve to the full award at batch size 1 while two persist, and running identical households one-per-batch still yields different awards, because the draw is stochastic per row rather than a reproducible per-household rule. Batch size 1 is therefore not a fix for this instrument; the only per-household-deterministic UKMOD configuration would force 100% take-up (disable the i_rand_tu gate), which the exposed policy switches (BTA_uk, random_uk) do not achieve. Update (per-household adapter isolation, 2026-07-06): the worker now runs every household as its own engine run, so each case reproducibly gets its solo draw sequence — WHICH cases zero is now stable across runs, batch sizes, and batch compositions (no more realization-by-batch). This stabilises the recorded realization; it does not recover the statutory entitlement for cases whose solo draw marks non-take. Forcing 100% take-up now has a working mechanism: the adapter's euromod_constant_overrides patches DefConst values (e.g. the take-up rates) into the system XML on the model overlay — the connector's constantsToOverwrite kwarg silently ignores DefConst constants. Adopting it for this suite is a deliberate regeneration (values flip from take-up realizations to statutory entitlements), tracked for the suite owner."
       },
       "workaround": {
         "description": "Compare the composed rulespec-uk UC award against the executed bsauc_s and classify take-up-driven zeroing as a UKMOD-side stochastic artefact, not an Axiom encoding mismatch. Because the take-up draw is not reproducible per household, the committed dashboard report is one realization: it records the take-up zeros produced by running the whole suite in a single batch, dispositioned by pinned value. The comparison is monthly-to-monthly (bsauc_s is left un-annualized). Where a unit takes up, the composition and capital families return clean statutory entitlements that match the Axiom award to the penny (verified monthly: single 424.90, couple 666.97, single+1child+rent 1526.78, and a capital tariff of 4.35 per 250 above 6000); the take-up-zeroed points are dispositioned rather than absorbed by tolerance. A future adapter fix that forces 100% take-up (see the batch-position adapter-fix task) would make this suite deterministic and let the take-up zeros be dropped; batch size 1 alone does not (three of five zeros resolve, two persist by draw)."
@@ -974,7 +975,7 @@
       "attempted_switches": {
         "random_uk_off": "No effect on the zeroing: setting random_uk off leaves the take-up / UC-transition draw active inside bsa_uk (verified: results identical with random_uk on and off). This does NOT establish deterministic take-up behaviour — it only shows the exposed switch does not disable the i_rand_tu draw.",
         "BTA_uk_off": "No effect for the same reason.",
-        "per_case_isolation": "Batch size 1 is degenerate here (corrected 2026-07-05): an isolated Pension Credit household always draws non-take, so every case returns 0.0 at --comparison-batch-size 1. Unlike a pure batch-position contamination, batch size 1 does not recover the entitlement for this instrument; the only per-household-deterministic configuration would force 100% take-up (disable the i_rand_tu gate)."
+        "per_case_isolation": "Batch size 1 is degenerate here (corrected 2026-07-05): an isolated Pension Credit household always draws non-take, so every case returns 0.0 at --comparison-batch-size 1. Unlike a pure batch-position contamination, batch size 1 does not recover the entitlement for this instrument; the only per-household-deterministic configuration would force 100% take-up (disable the i_rand_tu gate). Update (per-household adapter isolation, 2026-07-06): the worker now runs every household as its own engine run, so each case reproducibly gets its solo draw sequence — WHICH cases zero is now stable across runs, batch sizes, and batch compositions (no more realization-by-batch). This stabilises the recorded realization; it does not recover the statutory entitlement for cases whose solo draw marks non-take. Forcing 100% take-up now has a working mechanism: the adapter's euromod_constant_overrides patches DefConst values (e.g. the take-up rates) into the system XML on the model overlay — the connector's constantsToOverwrite kwarg silently ignores DefConst constants. Adopting it for this suite is a deliberate regeneration (values flip from take-up realizations to statutory entitlements), tracked for the suite owner."
       },
       "workaround": {
         "description": "Compare the composed rulespec-uk Pension Credit guarantee-credit award against the executed boamt_s and classify take-up / UC-transition zeroing as a UKMOD-side stochastic artefact, not an Axiom encoding mismatch. Because the draw is not reproducible per household, the committed dashboard report is one realization: it records the take-up zeros produced by running the whole pensioner grid in a single batch, dispositioned by pinned value. UKMOD reports boamt_s monthly; the adapter divides it by UKMOD's weekly-to-monthly factor (365/7/12) so the comparison is weekly-to-weekly against the pipeline's weekly award. Where a unit takes up, the paid boamt_s matches the guarantee-credit entitlement exactly (single standard minimum guarantee 238.00/week = 1034.17/month, couple 363.25/week = 1578.41/month, less the assessed state pension); the take-up-zeroed points are dispositioned rather than absorbed by tolerance. A future adapter fix that forces 100% take-up would make this suite deterministic; batch size 1 alone makes it degenerate (all zero) and is not a fix.",
@@ -1097,17 +1098,28 @@
       "id": "euromod-be-2025-bed-study-allowance-batch-position-contamination",
       "jurisdiction": "BE",
       "system": "BE_2025",
-      "status": "observed_local",
+      "status": "root_caused_adapter_resolved",
       "classification": "euromod_engine_batch_determinism_issue",
-      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues",
-      "summary": "The Belgium BE_2025 study-allowance policy bed_be returns different bed_s for an identical student household depending on the batch position of that household within a single engine run. The same Flanders higher-education case returns bed_s=3046.30 when run alone or first in a batch but 0.0 at later positions, regardless of the other households present. Assigning disjoint idperson blocks per household reduces but does not remove the effect, so it is not solely an idperson family-relation collision; a second-order dependency on the whole submitted dataframe remains. The study-allowance oracle suite therefore runs one household per engine subprocess call (comparison batch size 1), under which every case is deterministic and matches the encoded surface exactly (6/6).",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/15",
+      "summary": "Root-caused: the Belgium BE_2025 spine's random_be policy seeds one pseudo-random stream (RandSeed seed=1) and draws one uniform per household in dataset order (temp_rand at TAX_UNIT tu_household_be, broadcast per person as temp_rand_ind/temp_rand_ind2); bed_be's non-take-up correction then keeps bed_s only when the household's draw is at or below the 0.31 take-up rate ($bed_FlTakeUp/$bed_FrTakeUp). The correction's Run_Cond !IsUsedDatabase gate matches only be_????_hhot dataset names, so it is active under the real configuration name the dataset-name-gating workaround runs with (BE_2024_c1_2015_03_e2). Draw #1 is 0.283072 and passes, so single-household runs are deterministic and correct; in a shared engine run the household at batch position k consumes draw k (observed draws 2-6: 0.680979, 0.945983, 0.562359, 0.654378, 0.792175 — all above 0.31), zeroing bed_s at every position after the first. Disjoint idperson blocks cannot help: the draw is positional, not id-keyed. The earlier observation that unique idperson blocks 'reduced' the effect was the separate family-relation id-collision bug; this take-up lottery is the residual mechanism. The same positional-draw mechanism explains the 2026-07-05 batch-size-1 integrity audit's identical-household spreads in UKMOD (i_rand_tu): the draw sequence is consumed by row, so identical rows at different positions get different draws.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "dataset": "BE_2024_c1_2015_03_e2",
         "template_dataset": "BE_training_data",
-        "note": "Identical single-household runs are stable (four repeated runs of the Wallonia yem=200 case all return 869.21); only multi-household batches are affected."
+        "note": "Identical single-household runs are stable (four repeated runs of the Wallonia yem=200 case all return 869.21); only multi-household batches were affected, and only through the batch position. Verified by requesting temp_rand_ind2 as an output column: in a six-household run the draws are exactly the seed-1 sequence by position, and after the per-household adapter fix every household reports draw 0.283072.",
+        "draws_seed1_by_batch_position": [
+          0.283072,
+          0.680979,
+          0.945983,
+          0.562359,
+          0.654378,
+          0.792175
+        ]
       },
-      "counts_as_axiom_gap": false
+      "counts_as_axiom_gap": false,
+      "workaround": {
+        "description": "Resolved in the adapter: the worker subprocess loads the model once and runs each household as its own engine run, so every case consumes the solo draw sequence exactly like the single-household runs that anchored the suite — results are independent of batch size, order, and composition (regression: tests/test_euromod_adapter.py::TestBatchPositionIsolation hermetically, plus the live six-case single-batch anchors test; live rerun matches all six anchors with every household at draw 0.283072). comparison_batch_size pins are no longer needed for engine-run isolation. The residual fragility (solo correctness riding on draw #1 = 0.283 sitting below the 0.31 take-up rate) is closed too: the adapter now supports constant overrides — the worker patches the named DefConst parameter values into the system XML on the model overlay, because the euromod connector's constantsToOverwrite kwarg silently ignores DefConst constants (verified live: the kwarg at take-up 0.0 changed nothing, the overlay at 0.0 zeroes every bed_s) — and the be-study-allowance comparison pins $bed_FlTakeUp/$bed_FrTakeUp to 1.0, so the engine output is the statutory allowance for any draw. Upstream enhancement filed: household-keyed draws — rand as a function of (seed, idhh, draw counter) instead of a shared positional stream — would make batched runs composition-invariant at any scale (ec-jrc#15)."
+      }
     }
   ]
 }

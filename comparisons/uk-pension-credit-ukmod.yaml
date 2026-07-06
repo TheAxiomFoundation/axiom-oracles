@@ -44,17 +44,22 @@ runner:
     suite: uk-pension-credit
     population: synthetic
     sample_size: 0
-    # NB: comparison_batch_size is intentionally NOT pinned to 1 here. UKMOD's
-    # Pension Credit output boamt_s carries a STOCHASTIC per-row take-up /
-    # UC-transition draw (i_rand_tu), and at batch size 1 this suite is
-    # DEGENERATE: an isolated pensioner always draws non-take, so every case —
-    # including a zero-income pensioner entitled to the full 238.00/week —
-    # returns 0.0 (verified). The awards only appear in multi-household batches,
-    # and identical households then receive different awards by position
-    # (income0 x10 in one run -> [0,238,0,0,238,0,0,238,238,238]). The committed
-    # report is therefore one realization, with the take-up zeros dispositioned
-    # (euromod_issues.json#ukmod-pc-boamt-takeup-transition). A future adapter
-    # fix that forces 100% take-up would make this suite deterministic.
+    # NB on take-up: UKMOD's Pension Credit output boamt_s carries a
+    # STOCHASTIC per-row take-up / UC-transition draw (i_rand_tu) whose SOLO
+    # draw is non-take: an isolated pensioner always returns 0.0, even a
+    # zero-income pensioner entitled to the full 238.00/week (verified).
+    # Awards only appeared in multi-household engine runs, by position
+    # (income0 x10 in one run -> [0,238,0,0,238,0,0,238,238,238]). The
+    # adapter now runs every household as its own engine run, so a fresh
+    # regeneration would deterministically record 0.0 for every case —
+    # deterministic but degenerate (no paid points to verify the income test
+    # against; euromod_issues.json#ukmod-pc-boamt-takeup-transition). The
+    # committed report predates per-household isolation and keeps the old
+    # single-batch realization with its dispositioned zeros. Before the next
+    # regeneration this suite should pin the PC take-up rates
+    # ($PCGCSCTU/$PCSCTU) to 1.0 via euromod_constant_overrides so the
+    # engine returns statutory entitlements — a deliberate change for the
+    # suite owner.
     # The composed Pension Credit pipeline parameters are effective from
     # 2026-04-01, so the Axiom side evaluates in the April 2026 period. UKMOD
     # resolves the policy year from euromod_system (UK_2026) and ignores the

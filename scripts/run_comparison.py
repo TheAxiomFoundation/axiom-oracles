@@ -1574,18 +1574,17 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
-    # Cross-engine batch isolation. The EUROMOD engine runs every case in one
-    # `run_cases` invocation per comparison batch, so cases that share a batch
-    # can contaminate each other (deterministic instruments: a household zeroes
-    # at certain batch positions but returns the correct value alone — the
-    # batch-position adapter bug; means-tested instruments: UKMOD's stochastic
-    # take-up draw i_rand_tu assigns take/non-take per row, so the zeroed set is
-    # not reproducible). Comparison configs pin `comparison_batch_size` to make
-    # the run deterministic where batch size 1 is clean (see each config's
-    # comment); it is NOT set for the UKMOD means-tested suites, where batch
-    # size 1 is degenerate (Pension Credit) or only partially resolves the
-    # stochastic take-up zeros (Universal Credit) — those record one realization
-    # until the adapter forces 100% take-up.
+    # Cross-engine batch isolation is the adapter's job: the worker loads the
+    # model once per batch but runs every household as its own engine run, so
+    # results are batch-size/order/composition-independent by construction
+    # (EUROMOD-platform spines consume fixed-seed random draws per household
+    # in dataset order — the retired batch-position contamination). Configs
+    # therefore no longer pin `comparison_batch_size`; the passthrough stays
+    # for report-accumulation sizing. Stochastic take-up instruments (UKMOD
+    # UC/Pension Credit) now record their solo-draw realization every run —
+    # deterministic, but not the statutory entitlement where the solo draw
+    # marks non-take; `euromod_constant_overrides` can force take-up rates to
+    # 1.0 where a suite wants statutory values.
     comparison_batch_size = params.get("comparison_batch_size")
     if comparison_batch_size is not None:
         cmd.extend(["--comparison-batch-size", str(comparison_batch_size)])
@@ -1607,6 +1606,9 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     policy_switches = params.get("euromod_policy_switch_overrides")
     if policy_switches:
         env["EUROMOD_POLICY_SWITCHES"] = str(policy_switches)
+    constant_overrides = params.get("euromod_constant_overrides")
+    if constant_overrides:
+        env["EUROMOD_CONSTANT_OVERRIDES"] = str(constant_overrides)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
         env["AXIOM_RULESPEC_REPO_ROOTS"] = str(

@@ -28,12 +28,26 @@ def be_study_allowance_cases() -> list[Case]:
     module's supplied region and community amounts to the value the EUROMOD
     BE_2025 anchors verified for that household, so the axiom routing output
     (``belgium_study_allowance_annual_amount``) should equal the EUROMOD
-    ``bed_s`` value exactly. Study allowances are a Community competence, so
-    only the Flanders and Wallonia routes are deterministic on hypothetical
-    data; Brussels applies a random ninety-ten split and a non-take-up
-    correction gated on ``Run_Cond !IsUsedDatabase``, which never fires for
-    synthetic households (see ``study_allowance_routing.yaml``), so Brussels
-    is out of scope for this suite.
+    ``bed_s`` value exactly.
+
+    Determinism: BE_2025 applies a stochastic non-take-up correction to
+    ``bed_s`` (``random_be`` draws one seeded uniform per household in
+    dataset order; ``bed_be`` keeps the allowance only when the draw is at
+    or below the 0.31 take-up rate). Its ``Run_Cond !IsUsedDatabase``
+    gate matches the ``be_????_hhot`` dataset names only, so the correction
+    IS active under the real configuration name this suite runs with. The
+    adapter executes each household as its own engine run, so every case sees
+    draw #1 (0.283 — passes) exactly like the solo runs that produced these
+    anchors, whatever the batch size (see euromod_issues.json
+    euromod-be-2025-bed-study-allowance-batch-position-contamination). The
+    comparison config additionally pins both community take-up rates to 1.0
+    (``euromod_constant_overrides``), so the anchors stay statutory even if a
+    model update moves take-up below the solo draw.
+
+    Brussels remains out of scope: its ninety-ten community split keys on
+    the same per-household draw (``temp_rand_ind < 0.9``), which is a
+    modeling device rather than a statutory amount, so no Brussels case can
+    anchor an encoded surface.
     """
 
     return [
@@ -259,11 +273,10 @@ def _euromod_household_inputs(
 
     ``id_base`` gives each case a disjoint ``idperson`` block. EUROMOD's
     family-relation resolution (``idmother``/``idfather``/``idpartner``) keys
-    on ``idperson`` values that must be unique across every row in a run;
-    reusing the same ids across cases corrupts results when more than one case
-    shares a EUROMOD subprocess call. The comparison additionally runs one case
-    per subprocess (``--comparison-batch-size 1``) so the suite is robust
-    either way.
+    on ``idperson`` values, so ids stay unique across the suite as
+    defense-in-depth even though the adapter now runs every household as its
+    own engine run (which also removed the batch-position take-up lottery —
+    see the module docstring).
     """
 
     father_id = id_base + 1

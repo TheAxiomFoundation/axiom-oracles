@@ -1094,8 +1094,40 @@ def _build_runner(
                 os.environ.get("EUROMOD_POLICY_SWITCHES"),
                 "EUROMOD_POLICY_SWITCHES",
             ),
+            constant_overrides=_parse_euromod_constant_overrides(
+                os.environ.get("EUROMOD_CONSTANT_OVERRIDES"),
+            ),
         )
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
+
+
+def _parse_euromod_constant_overrides(
+    raw: str | None,
+) -> tuple[tuple[str, str, str], ...]:
+    """Parse ``$name=value`` pairs, comma-separated; ``$name@group=value``
+    targets a grouped constant (e.g. an uprating factor's year group)."""
+    if not raw:
+        return ()
+    overrides: list[tuple[str, str, str]] = []
+    for entry in raw.split(","):
+        if not entry.strip():
+            continue
+        if "=" not in entry:
+            raise click.ClickException(
+                "EUROMOD_CONSTANT_OVERRIDES entries must be name=value pairs "
+                "(name@group=value for grouped constants)."
+            )
+        name, value = entry.split("=", 1)
+        name = name.strip()
+        group = ""
+        if "@" in name:
+            name, group = name.split("@", 1)
+        if not name:
+            raise click.ClickException(
+                "EUROMOD_CONSTANT_OVERRIDES entries need a constant name."
+            )
+        overrides.append((name, group.strip(), value.strip()))
+    return tuple(overrides)
 
 
 def _parse_euromod_switches(

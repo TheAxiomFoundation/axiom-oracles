@@ -15,6 +15,19 @@ template built from the model's own dataset header (UKMOD's demo schema
 has ~22 columns, EUROMOD's ~273 — the template makes one projection serve
 both). The engine prints progress chatter to stdout, so results travel
 through the result file, never stdout.
+
+The model is loaded once per subprocess but **each household runs through
+its own engine run**. EUROMOD-platform models are not row-independent
+across households: policy spines seed pseudo-random streams and consume
+one draw per household *in dataset order* (e.g. Belgium's ``random_be``
+``RandSeed seed=1`` feeds the ``bed_be`` non-take-up correction, UKMOD's
+``random_uk`` feeds the Universal Credit take-up gate), so in a shared
+run a household's outputs depend on its batch position — every position
+after the first can silently zero a benefit. Running one household per
+engine run gives every household the draws of a solo run, making results
+independent of batch composition by construction. A household whose run
+raises is reported in ``household_errors`` without poisoning the rest of
+the batch; model-load failures still fail the whole job.
 """
 
 from __future__ import annotations
@@ -33,13 +46,26 @@ def _fail(path: Path, message: str) -> None:
 
 
 @contextmanager
-def _model_root_with_policy_switch_overrides(
+def _model_root_with_overrides(
     model_root: Path,
     country: str,
     system: str,
-    overrides: list[tuple[str, bool]],
+    policy_switch_overrides: list[tuple[str, bool]],
+    constant_overrides: list[tuple[str, str, str]],
 ):
-    if not overrides:
+    """Yield a model root whose country XML carries the requested overrides.
+
+    Policy switches and constant values are patched into the named system's
+    XML block on a symlink overlay of the model directory; the source model
+    is never modified. Constant overrides rewrite parameter ``<Value>``s in
+    place (DefConst policy constants such as take-up rates) — the euromod
+    connector's ``constantsToOverwrite`` kwarg reaches only the uprating
+    constants registry and silently ignores DefConst names, so the overlay
+    is the mechanism that provably lands (verified live: overriding
+    ``$bed_FlTakeUp`` to 0.0 zeroes every bed_s; the connector kwarg left
+    them untouched).
+    """
+    if not policy_switch_overrides and not constant_overrides:
         yield model_root
         return
 
@@ -52,11 +78,19 @@ def _model_root_with_policy_switch_overrides(
         source_xml_path = (
             model_root / "XMLParam" / "Countries" / country / f"{country}.xml"
         )
-        patched_xml = _patch_policy_switches(
-            source_xml_path.read_text(encoding="utf-8-sig"),
-            system=system,
-            overrides=overrides,
-        )
+        patched_xml = source_xml_path.read_text(encoding="utf-8-sig")
+        if policy_switch_overrides:
+            patched_xml = _patch_policy_switches(
+                patched_xml,
+                system=system,
+                overrides=policy_switch_overrides,
+            )
+        if constant_overrides:
+            patched_xml = _patch_constants(
+                patched_xml,
+                system=system,
+                overrides=constant_overrides,
+            )
         xml_path.write_text(patched_xml, encoding="utf-8")
         yield patched_root
 
@@ -124,6 +158,93 @@ def _patch_policy_switches(
     return f"{xml[:system_start]}{system_xml}{xml[system_end:]}"
 
 
+def _patch_constants(
+    xml: str,
+    *,
+    system: str,
+    overrides: list[tuple[str, str, str]],
+) -> str:
+    system_name = f"<Name>{system}</Name>"
+    system_name_at = xml.find(system_name)
+    if system_name_at < 0:
+        raise ValueError(f"EUROMOD system {system!r} was not found in country XML.")
+    system_start = xml.rfind("<System>", 0, system_name_at)
+    system_end = xml.find("</System>", system_name_at)
+    if system_start < 0 or system_end < 0:
+        raise ValueError(f"EUROMOD system {system!r} has no complete XML block.")
+    system_end += len("</System>")
+
+    system_xml = xml[system_start:system_end]
+    for name, group, value in overrides:
+        system_xml = _patch_constant(
+            system_xml,
+            name=name,
+            group=group,
+            value=value,
+            system=system,
+        )
+    return f"{xml[:system_start]}{system_xml}{xml[system_end:]}"
+
+
+def _patch_constant(
+    system_xml: str,
+    *,
+    name: str,
+    group: str,
+    value: str,
+    system: str,
+) -> str:
+    """Rewrite every ``<Parameter>`` named ``name`` to carry ``value``.
+
+    Matches parameter definitions (e.g. DefConst constants); when ``group``
+    is non-empty only parameters carrying that ``<Group>`` are patched.
+    Raises if nothing matches so a misspelled constant cannot silently
+    leave the model unchanged.
+    """
+    marker = f"<Name>{name}</Name>"
+    patched = 0
+    search_from = 0
+    while True:
+        name_at = system_xml.find(marker, search_from)
+        if name_at < 0:
+            break
+        search_from = name_at + len(marker)
+        parameter_start = system_xml.rfind("<Parameter>", 0, name_at)
+        parameter_end = system_xml.find("</Parameter>", name_at)
+        if parameter_start < 0 or parameter_end < 0:
+            continue
+        # The name must belong to this parameter, not a function or policy
+        # further up the block.
+        function_start = system_xml.rfind("<Function>", 0, name_at)
+        if function_start > parameter_start:
+            continue
+        parameter_end += len("</Parameter>")
+        parameter_xml = system_xml[parameter_start:parameter_end]
+        if group and f"<Group>{group}</Group>" not in parameter_xml:
+            continue
+        value_start = parameter_xml.find("<Value><![CDATA[")
+        value_end = parameter_xml.find("]]></Value>", value_start)
+        if value_start < 0 or value_end < 0:
+            continue
+        value_start += len("<Value><![CDATA[")
+        patched_parameter = (
+            f"{parameter_xml[:value_start]}{value}{parameter_xml[value_end:]}"
+        )
+        system_xml = (
+            f"{system_xml[:parameter_start]}{patched_parameter}"
+            f"{system_xml[parameter_end:]}"
+        )
+        search_from += len(patched_parameter) - len(parameter_xml)
+        patched += 1
+    if not patched:
+        raise ValueError(
+            f"EUROMOD constant {name!r}"
+            + (f" (group {group!r})" if group else "")
+            + f" was not found in system {system!r}."
+        )
+    return system_xml
+
+
 def _patch_policy_switch(
     system_xml: str,
     *,
@@ -167,6 +288,18 @@ def _patch_policy_switch(
     return f"{system_xml[:policy_start]}{patched_policy}{system_xml[policy_end:]}"
 
 
+def _rows_by_household(rows: list) -> dict:
+    """Group input rows by ``idhh``, preserving first-appearance order.
+
+    Each group becomes its own engine run so no household's outputs can
+    depend on which other households share the job (see module docstring).
+    """
+    groups: dict = {}
+    for row in rows:
+        groups.setdefault(int(row["idhh"]), []).append(row)
+    return groups
+
+
 def main() -> None:
     job_path, result_path = Path(sys.argv[1]), Path(sys.argv[2])
     job = json.loads(job_path.read_text(encoding="utf-8"))
@@ -193,15 +326,14 @@ def main() -> None:
     header = [name.strip() for name in header if name.strip()]
 
     template = {name: 0.0 for name in header}
-    frame_rows = []
-    for row in job["rows"]:
-        filled = dict(template)
-        for key, value in row.items():
-            if key in filled:
-                filled[key] = value
-        frame_rows.append(filled)
-    frame = pd.DataFrame(frame_rows, columns=header)
+    households = _rows_by_household(job["rows"])
 
+    requested = job.get("outputs") or []
+    columns = None
+    missing: list = []
+    idhh: list = []
+    values: dict = {}
+    household_errors: dict = {}
     try:
         switches = [
             (str(name), bool(enabled)) for name, enabled in job.get("switches", [])
@@ -210,28 +342,61 @@ def main() -> None:
             (str(name), bool(enabled))
             for name, enabled in job.get("policy_switch_overrides", [])
         ]
-        with _model_root_with_policy_switch_overrides(
+        constant_overrides = [
+            (str(name), str(group), str(value))
+            for name, group, value in job.get("constant_overrides", [])
+        ]
+        with _model_root_with_overrides(
             model_root,
             country=str(job["country"]),
             system=str(job["system"]),
-            overrides=policy_switch_overrides,
+            policy_switch_overrides=policy_switch_overrides,
+            constant_overrides=constant_overrides,
         ) as run_model_root:
             model = Model(str(run_model_root))
             country = [c for c in model.countries if c.name == job["country"]][0]
             system = [s for s in country.systems if s.name == job["system"]][0]
-            output = system.run(frame, job["dataset"], switches=switches).outputs[0]
+            for household, household_rows in households.items():
+                frame_rows = []
+                for row in household_rows:
+                    filled = dict(template)
+                    for key, value in row.items():
+                        if key in filled:
+                            filled[key] = value
+                    frame_rows.append(filled)
+                frame = pd.DataFrame(frame_rows, columns=header)
+                try:
+                    output = system.run(
+                        frame, job["dataset"], switches=switches
+                    ).outputs[0]
+                except Exception as error:  # noqa: BLE001 - isolate the household
+                    household_errors[str(household)] = (
+                        f"{type(error).__name__}: {error}"
+                    )
+                    continue
+                if columns is None:
+                    missing = [name for name in requested if name not in output.columns]
+                    columns = [name for name in requested if name in output.columns]
+                    values = {name: [] for name in columns}
+                idhh.extend(int(value) for value in output["idhh"].tolist())
+                for name in columns:
+                    values[name].extend(output[name].tolist())
     except Exception as error:  # noqa: BLE001 - report, never crash silently
         _fail(result_path, f"{type(error).__name__}: {error}")
         return
 
-    requested = job.get("outputs") or []
-    missing = [name for name in requested if name not in output.columns]
-    present = [name for name in requested if name in output.columns]
+    if households and columns is None and household_errors:
+        # Every household failed; a shared cause (bad dataset, broken model)
+        # reads better as one job-level error than N copies of it.
+        _fail(result_path, next(iter(household_errors.values())))
+        return
+
     payload = {
-        "columns": present,
+        "columns": columns or [],
         "missing": missing,
-        "idhh": [int(value) for value in output["idhh"].tolist()],
-        "values": {name: output[name].tolist() for name in present},
+        "idhh": idhh,
+        "values": values,
+        "household_errors": household_errors,
     }
     result_path.write_text(json.dumps(payload), encoding="utf-8")
 
