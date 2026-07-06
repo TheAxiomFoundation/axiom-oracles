@@ -1,0 +1,40 @@
+# Massachusetts composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
+# on a modest case grid (single and married filers at incomes that cross the
+# state's brackets). The Axiom side is the composed rulespec-us pipeline
+# us-ma/policies/income_tax/pilot_liability_pipeline, evaluated through the
+# axiom rules engine (its liabilities are the engine-verified companion-test
+# fixtures). Massachusetts is flat 5 per cent Part B rate plus the 4 per cent s.4(d) surtax.
+#
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 indexation vintage is recorded in
+# dispositions/ma-income-tax-liability.yaml rather than absorbed by tolerance.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py ma-income-tax-liability
+
+name: ma-income-tax-liability
+title: Massachusetts income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Massachusetts income-tax liability pipeline encoded in Axiom
+  RuleSpec (us-ma/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (ma_income_tax) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
+  single and married filers crossing the state's brackets.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: MA
+    period: "2026"
+    taxsim_law_year: 2024
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the composed pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ma-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ma-income-tax-liability.json
+  suite: ma-income-tax-liability

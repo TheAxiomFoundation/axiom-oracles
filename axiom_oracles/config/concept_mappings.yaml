@@ -1474,3 +1474,106 @@ concepts:
       accessnyc:
         code: S2R022
         locales: [US-NY-NYC]
+
+  us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability:
+    description: California personal income tax liability (resident wage earner; RTC 17041 bracket tax less RTC 17054 personal exemption credit)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ca_income_tax_before_refundable_credits, the
+    # exact statutory analog of this core (RTC 17041 bracket tax less the RTC
+    # 17054 nonrefundable exemption credit); the pipeline reproduces it to the
+    # cent across the grid. PolicyEngine's final ca_income_tax additionally nets
+    # the refundable CalEITC and Young Child Tax Credit, which this core
+    # excludes, and TAXSIM's 2024 law year uses the 2024 FTB-indexed brackets;
+    # both are dispositioned in dispositions/ca-income-tax-liability.yaml. The
+    # small absolute + relative tolerance catches structural bracket errors.
+    tolerance: 5
+    relative_tolerance: 0.02
+    priority: high
+    locales: [US-CA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ca_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ca_income_tax_before_refundable_credits
+      taxsim: siitax
+
+  us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability:
+    description: Illinois individual income tax liability (flat 4.95 per cent on base income after the standard exemption)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine il_income_tax_before_refundable_credits, the
+    # exact statutory analog of this core (4.95 per cent on base income after the
+    # standard exemption); the pipeline reproduces it to the cent across the
+    # grid. PolicyEngine's final il_income_tax additionally adds the use tax and
+    # nets the refundable Illinois EITC, which this core excludes, and TAXSIM's
+    # 2024 law year uses the smaller 2024 exemption (2,775); both are
+    # dispositioned in dispositions/il-income-tax-liability.yaml.
+    tolerance: 5
+    relative_tolerance: 0.02
+    priority: high
+    locales: [US-IL]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: il_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: il_income_tax_before_refundable_credits
+      taxsim: siitax
+
+  us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability:
+    description: Massachusetts Part B income tax liability (flat 5 per cent plus the 4 per cent section 4(d) surtax)
+    category: tax
+    comparison: amount
+    # Flat-rate state; PolicyEngine ma_income_tax at 2026 and TAXSIM's 2024 law
+    # year both apply the same 5 per cent rate and equal exemptions, so the
+    # pipeline reproduces both to the dollar for the flat cases. A tight
+    # absolute tolerance catches structural encoding gaps.
+    tolerance: 1
+    priority: high
+    locales: [US-MA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ma_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ma_income_tax
+      taxsim: siitax
+
+  us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability:
+    description: New York personal income tax liability (resident; Tax Law s.601 bracket tax plus the s.601(d) supplemental recapture)
+    category: tax
+    comparison: amount
+    # PolicyEngine ny_income_tax at 2026 and this pipeline share the DTF-indexed
+    # brackets and standard deduction and the section 601(d) supplemental
+    # recapture, so they reproduce to the dollar; TAXSIM's 2024 law year differs
+    # by the bracket indexation between 2024 and 2026. Dispositioned in
+    # dispositions/ny-income-tax-liability.yaml.
+    tolerance: 5
+    relative_tolerance: 0.02
+    priority: high
+    locales: [US-NY]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ny_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ny_income_tax
+      taxsim: siitax

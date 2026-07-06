@@ -1,0 +1,134 @@
+{
+  "schema_version": "axiom-oracles/state-income-tax-liability/v1",
+  "suite": "ca-income-tax-liability",
+  "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+  "population": "case-grid",
+  "validation_year": 2026,
+  "taxsim_law_year": 2024,
+  "engines": {
+    "axiom": "us-ca:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "ca_income_tax_before_refundable_credits",
+    "taxsim": "siitax"
+  },
+  "tolerance": {
+    "absolute": 5.0,
+    "relative": 0.02
+  },
+  "case_count": 6,
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_2024_match_rate": 0.0,
+    "policyengine_matches": 6,
+    "taxsim_2024_matches": 0
+  },
+  "cases": [
+    {
+      "case_id": "ca-single-30000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "filing_status": "single",
+      "employment_income": 30000.0,
+      "axiom": 216.11175341179944,
+      "policyengine": 216.1117401123047,
+      "taxsim_2024": 185.05,
+      "axiom_vs_policyengine": {
+        "difference": 1.3299494753482577e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 31.06175341179943,
+        "match": false
+      }
+    },
+    {
+      "case_id": "ca-single-60000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "filing_status": "single",
+      "employment_income": 60000.0,
+      "axiom": 1602.8589174250637,
+      "policyengine": 1602.85888671875,
+      "taxsim_2024": 1693.41,
+      "axiom_vs_policyengine": {
+        "difference": 3.070631373702781e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -90.55108257493634,
+        "match": false
+      }
+    },
+    {
+      "case_id": "ca-single-150000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "filing_status": "single",
+      "employment_income": 150000.0,
+      "axiom": 9620.80174126074,
+      "policyengine": 9620.8017578125,
+      "taxsim_2024": 9825.39,
+      "axiom_vs_policyengine": {
+        "difference": -1.655175947234966e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -204.5882587392589,
+        "match": false
+      }
+    },
+    {
+      "case_id": "ca-married-60000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "filing_status": "married",
+      "employment_income": 60000.0,
+      "axiom": 432.2235068235989,
+      "policyengine": 432.2234802246094,
+      "taxsim_2024": 459.81,
+      "axiom_vs_policyengine": {
+        "difference": 2.6598989506965154e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -27.58649317640112,
+        "match": false
+      }
+    },
+    {
+      "case_id": "ca-married-120000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "filing_status": "married",
+      "employment_income": 120000.0,
+      "axiom": 3205.7178348501275,
+      "policyengine": 3205.7177734375,
+      "taxsim_2024": 3386.82,
+      "axiom_vs_policyengine": {
+        "difference": 6.141262747405563e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -181.1021651498727,
+        "match": false
+      }
+    },
+    {
+      "case_id": "ca-married-300000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "filing_status": "married",
+      "employment_income": 300000.0,
+      "axiom": 19241.60348252148,
+      "policyengine": 19241.603515625,
+      "taxsim_2024": 19650.79,
+      "axiom_vs_policyengine": {
+        "difference": -3.310351894469932e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -409.1865174785198,
+        "match": false
+      }
+    }
+  ],
+  "provenance": {
+    "generated": "2026-07-06",
+    "generator": "scripts/generate_state_income_tax_liability.py",
+    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
+    "note": "TAXSIM leg run at its latest supported law year 2024; the 2024-to-2026 indexation vintage is recorded in the disposition."
+  }
+}

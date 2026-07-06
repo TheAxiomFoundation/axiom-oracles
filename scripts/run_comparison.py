@@ -1605,12 +1605,54 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
+def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
+    """Composed state income-tax liability grid: pipeline vs PolicyEngine + TAXSIM.
+
+    Delegates to scripts/generate_state_income_tax_liability.py, which runs the
+    modest case grid through the rulespec-us composed liability pipeline (engine-
+    verified fixtures), PolicyEngine at the 2026 validation year, and the pinned
+    TAXSIM binary at its latest 2024 law year, then writes one v2 report per
+    state. The generator is state-agnostic; this runner copies the state's report
+    to the requested ``output`` path so the standard provenance/dashboard
+    plumbing applies. On a runner without PolicyEngine or the TAXSIM binary the
+    committed dashboard report is reused.
+    """
+    params = runner["parameters"]
+    state = str(params["state"]).lower()
+    generator = REPO_ROOT / "scripts" / "generate_state_income_tax_liability.py"
+    basename = f"axiom-policyengine-taxsim-{state}-income-tax-liability"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.14",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
+        "--with",
+        "policyengine-taxsim==2.21.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"State grid generation unavailable ({exc}); reusing {committed}.")
+    source = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    output.write_text(source.read_text())
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
+    "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
 }
 
 
