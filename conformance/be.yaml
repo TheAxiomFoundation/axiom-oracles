@@ -188,9 +188,15 @@ policies:
       - i_bed_fl_type_be
       - i_bed_fl_frac_be
       - i_bed_fl_repY_be
-    suite: null
-    note: 'BEN: study allowances (Flemish + French Community, 147 functions); not yet encoded in rulespec-be,
-      no live suite.'
+    suite: be-study-allowance
+    note: 'BEN: study allowances (Flemish + French Community, 147 functions). The be-study-allowance suite
+      live-compares bed_s region-routed to the Flemish study-financing decree of 8 June 2007 / Groeipakket
+      decree of 27 April 2018 or the French-Community decree of 18 November 2021, and matches EUROMOD
+      exactly (6/6, axiom-oracles#167). bed_be''s stochastic non-take-up correction IS active under the
+      real dataset-configuration name (its !IsUsedDatabase gate matches only be_????_hhot dataset names),
+      so the suite runs each household as its own engine run (axiom-oracles#168) and pins $bed_FlTakeUp/$bed_FrTakeUp
+      to 1.0 via euromod_constant_overrides to hold bed_s on the statutory amount. Brussels'' random 90/10
+      split stays out of scope on hypothetical data.'
   - id: be:bfapl_be
     oracle_policy_name: bfapl_be
     oracle_policy_type: ben
@@ -237,9 +243,9 @@ policies:
       - i_elparent_se
       - i_durdays_se
       - i_durdays_temp
-    suite: null
-    note: 'BEN: maternity-leave indemnity; suite be-maternity-leave is registered but NOT in the published
-      dashboard set — counts as not covered until a live report exists.'
+    suite: be-maternity-leave
+    note: 'BEN: maternity-leave indemnity. The be-maternity-leave suite live-compares bmact_s and matches
+      EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.'
   - id: be:bpact_be
     oracle_policy_name: bpact_be
     oracle_policy_type: ben
@@ -249,9 +255,9 @@ policies:
     internal_only_vars:
       - i_elparent_bpact
       - i_amount_bpact
-    suite: null
-    note: 'BEN: paternity/birth-leave compensation; suite be-birth-leave is registered but NOT published
-      — counts as not covered until live.'
+    suite: be-birth-leave
+    note: 'BEN: paternity/birth-leave compensation. The be-birth-leave suite live-compares bpact_s and
+      matches EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.'
   - id: be:bsa_be
     oracle_policy_name: bsa_be
     oracle_policy_type: ben
@@ -281,11 +287,15 @@ policies:
       - yivpr01_s
       - bsaoa_s
       - yeaoamn_s
-    in_scope: false
-    exclusion_reason: not_a_policy
-    note: Elderly income guarantee (GRAPA/IGO); switched OFF by default ('TO BE SWITCHED ON MANUALLY,
-      otherwise from data'). The registered be-elderly-income-support suite is unpublished; with the policy
-      off, the oracle simulates nothing here in a default BE_2025 run.
+    in_scope: true
+    suite: be-elderly-income-support
+    note: Elderly income guarantee (GRAPA/IGO). Marked 'TO BE SWITCHED ON MANUALLY, otherwise from data'
+      in BE_2025, so it is off in a default run, but activatable per run via euromod_policy_switch_overrides
+      [(bsaoa_be, True)] (the bun_be precedent — the adapter patches the model XML; no extension switch
+      enables it). The be-elderly-income-support suite switches bsaoa_be on and live-compares bsaoa_s
+      (garantie de revenus aux personnes agees) against the composed RuleSpec payable amount, matching
+      EUROMOD exactly (1/1). Now covered; the prior not_a_policy exclusion is superseded by the published
+      activated suite.
   - id: be:bun_be
     oracle_policy_name: bun_be
     oracle_policy_type: ben
@@ -425,9 +435,9 @@ policies:
     output_vars:
       - tinkt_s
     in_scope: true
-    suite: null
-    note: 'TAX: capital income tax (separately-taxed movable income); encoded (movable_withholding) but
-      supplied as 0 in the pilot, no live suite.'
+    suite: be-capital-income-tax
+    note: 'TAX: separately-taxed movable/capital income tax. The be-capital-income-tax suite live-compares
+      tinkt_s (movable_withholding) and matches EUROMOD exactly (3/3).'
   - id: be:tinmu_be
     oracle_policy_name: tinmu_be
     oracle_policy_type: tax
@@ -435,9 +445,9 @@ policies:
       - tinmu_s
       - tin_s
     in_scope: true
-    suite: null
-    note: 'TAX: municipal PIT surcharge (communal centimes); encoded (communal_additions) but not compared
-      by a live suite.'
+    suite: be-local-municipal-pit
+    note: 'TAX: municipal PIT surcharge (communal centimes). The be-local-municipal-pit suite live-compares
+      tinmu_s (communal_additions) and matches EUROMOD exactly (3/3).'
   - id: be:tinna_be
     oracle_policy_name: tinna_be
     oracle_policy_type: tax
@@ -468,9 +478,11 @@ policies:
       - tinrg01_s
       - tin_s
     in_scope: true
-    suite: null
-    note: 'TAX: regional PIT surcharges; partially encoded (communal additions / regional autonomy factor),
-      no dedicated live suite.'
+    suite: be-regional-pit-surcharge
+    note: 'TAX: regional PIT additional tax. The be-regional-pit-surcharge suite live-compares tinrg_s
+      (special financing law of 16 January 1989 article 5/2 — the reduced State tax times the region''s
+      additional-tax percentage, 32.591% Brussels / 33.257% Flanders and Wallonia) and matches EUROMOD
+      exactly (3/3, one case per region).'
   - id: be:tintace_be
     oracle_policy_name: tintace_be
     oracle_policy_type: tax
@@ -478,8 +490,13 @@ policies:
       - tintace_s
     in_scope: true
     suite: null
-    note: 'TAX: PIT professional-expense forfait; encoded (article_51_forfaits), exercised only via the
-      worker pilot, no dedicated live suite.'
+    note: 'TAX: PIT professional-expense forfait (article_51_forfaits). Exercised as a base reduction
+      inside the composed worker PIT (be-worker-pit) and marital-quotient (be-marital-quotient) pipelines,
+      where its 13.07%-SSC-then-Article-51 base reduction is what lets tin_s reconcile with EUROMOD —
+      but no published suite compares tintace_s as its own surface. Per the harness rule (covered = a
+      live report comparing THIS policy''s output), a forfait exercised only through a composed tin_s
+      does not count as covered; tintace_be needs a dedicated tintace_s comparison surface. Uncovered
+      until built.'
   - id: be:tintb_be
     oracle_policy_name: tintb_be
     oracle_policy_type: tax
@@ -504,9 +521,15 @@ policies:
     internal_only_vars:
       - n/a
       - kivho
-    suite: null
-    note: 'TAX: PIT deductions & marital quotient; partially encoded, not oracle-decomposed to tintb.
-      Distinct policy from the covered tinna PIT.'
+    suite: be-marital-quotient
+    note: 'TAX: PIT deductions & marital quotient — a distinct policy from the covered tinna worker PIT.
+      The be-marital-quotient suite live-compares the CIR 1992 Article 87 marital quotient (quotient conjugal
+      — 30% of the single earner''s professional income, capped at the indexed 13,460 EUR, imputed to
+      the zero-income spouse and taxed separately through the Article 130 scale) against EUROMOD tin_s
+      on a single-earner married-couple grid at 30k/45k/60k. The three cases are dispositioned as explained
+      residuals (upstream_engine_gap) with the 13.07% SSC + Article 51 forfait decomposition, exact at
+      60k; zero unexplained and zero Axiom-attributed, so the surface is covered and conformant for this
+      policy.'
   - id: be:tprhm_be
     oracle_policy_name: tprhm_be
     oracle_policy_type: tax
@@ -578,9 +601,9 @@ policies:
       (Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%), NOT chapter_10_special_contributions
       (that is the Law 29.06.1981 art. 38 employer/fringe special contributions). The be-pensioner-contributions
       suite live-compares tscpe_s and matches EUROMOD exactly (6/6). rulespec-be#89 encoded the art. 191
-      low-pension health floor and carried the indexed 2025 art. 68 solidarity thresholds, both grounded in
-      the Service federal des Pensions 2025 withholding tables, clearing the two axiom_encoding_gap residuals
-      that previously held this uncovered.'
+      low-pension health floor and carried the indexed 2025 art. 68 solidarity thresholds, both grounded
+      in the Service federal des Pensions 2025 withholding tables, clearing the two axiom_encoding_gap
+      residuals that previously held this uncovered.'
   - id: be:tscse_be
     oracle_policy_name: tscse_be
     oracle_policy_type: sic

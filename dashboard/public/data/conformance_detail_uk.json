@@ -204,8 +204,8 @@
     {
       "id": "uk:PAA_uk",
       "oracle_policy_name": "PAA_uk",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "input_carrying",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -216,8 +216,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "Switchable state-pension-age adjustment policy (Type marked ben in the spine, Comment 'DEF: Pension age adjustment'); writes boact_s. Kept in scope as an uncovered surface.",
-      "status": "uncovered"
+      "note": "State-pension-age adjustment (Comment 'DEF: Pension age adjustment - changes in earnings and pensions due to increase in the state pension age'; Type ben but a switch-type toggle). Its functions only *adjust input variables* for the SPA-rise counterfactual: for people below state pension age it subtracts the observed state pension (formula (-boact_s) into boact_s), swaps observed earnings/hours/ self-employment for imputed values (yem := yemiv, lhw00 := lhwiv00, yse := yseiv, output_add_var each), and re-derives lhw. It computes no distinct payable instrument \u2014 boact_s is written only to zero it out pre-SPA, not to pay a benefit. This is input-carrying (the InitVars pattern), not a scored surface; reclassified from the initial seed's in-scope guess (evidence: UK.xml UK_2026 PAA_uk function body).",
+      "status": "excluded:input_carrying"
     },
     {
       "id": "uk:SetDefault_uk",
@@ -314,18 +314,18 @@
       "oracle_policy_name": "bch_uk",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "suite": "uk-child-benefit",
+      "covered": true,
+      "comparisons": 12,
+      "matches": 12,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "BEN: Child Benefit. The uk-child-benefit suite live-compares the composed UK Child Benefit pipeline (SSCBA 1992 s.141 with the SI 2006/965 reg.2 enhanced GBP 27.05 / other GBP 17.90 weekly rates, annualised over 52 weeks) against UKMOD's pre-charge Child Benefit on a single-parent grid (one/two/three children x 20k/70k/80k/90k straddling the HICBC taper), matching 12/12. The comparison bridges to UKMOD by summing paid bch_s and the separately-reported charge clawback bchrd_s (the HICBC, ITEPA 2003 s.681B-H, is not in the Axiom corpus \u2014 rulespec-uk#75 \u2014 so the netted pre-charge Child Benefit is the parity target). The ~0.27% 52-vs-52.14-weeks convention residual is inside tolerance; all cases recover the same statutory weekly rates. bch_s is the compared surface, so bch_uk is covered.",
+      "status": "conformant"
     },
     {
       "id": "uk:bched01_uk",
@@ -432,7 +432,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
+      "note": "BEN: Reduce child benefit (from 2013) \u2014 the High Income Child Benefit Charge clawback (ITEPA 2003 s.681B-H). Its distinct output bchrd_s is not compared by any published suite: the HICBC is not in the Axiom corpus (rulespec-uk#75), so the uk-child-benefit suite bridges bchrd_s OUT (sums it back into bch_s to recover the pre-charge entitlement) rather than comparing it. Uncovered until the HICBC taper is encoded and a bchrd_s comparison surface is built; blocked on rulespec-uk#75.",
       "status": "uncovered"
     },
     {
@@ -540,7 +540,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "UKMOD Country Report marks Statutory Maternity Pay 'not simulated in the baseline', but the UK_2026 policy is switch-on and writes bmact_s; kept in scope as an uncovered surface.",
+      "note": "BEN: Statutory Maternity Pay. The UKMOD Comment says \"(not simulated in the baseline)\", but the UK_2026 policy is switch=on and computes bmact_s from ordinary demographic/earnings inputs \u2014 female (dgn=0) with a newborn (dag<1, baby-months dmb), earnings above the SMP lower-earnings-limit ($SMPlel), working hours (liwwh>6), and previous earnings i_yempv_bmact \u2014 with the 90%/flat-rate SMP formula over i_durweeks_bmact2. No maternity-leave-spell column is required, so it IS comparable on synthetic HHoT cases. Kept in scope as a genuine uncovered surface (not excluded): Axiom has no SMP suite yet and rulespec-uk does not encode SMP (docs/uk-coverage-matrix.md). Next-wave worklist. (Distinct from the bfapl_be dataset-blocked case, whose activating leave column is genuinely absent from its schema.)",
       "status": "uncovered"
     },
     {
@@ -594,7 +594,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "UKMOD Country Report marks Maternity Allowance 'not simulated in the baseline', but the UK_2026 policy is switch-on and writes bmanc_s; kept in scope as an uncovered surface.",
+      "note": "BEN: Maternity Allowance. The UKMOD Comment says \"(not simulated in the baseline)\", but the UK_2026 policy is switch=on and computes bmanc_s from ordinary demographic/earnings inputs (eligible parent, newborn age-weeks, duration weeks, previous earnings i_yempv_bmanc) \u2014 no leave-spell column is required, so it IS comparable on synthetic HHoT cases. Kept in scope as a genuine uncovered surface (not excluded): Axiom has no MA suite yet and rulespec-uk does not encode MA (docs/uk-coverage-matrix.md). Next-wave worklist, not a dataset-blocked or vacuous comparison.",
       "status": "uncovered"
     },
     {
@@ -654,8 +654,8 @@
     {
       "id": "uk:boact_uk",
       "oracle_policy_name": "boact_uk",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "input_carrying",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -666,8 +666,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "State Pension (contributory). UKMOD does not compute the state pension from contribution records \u2014 its whole UK_2026 body is boact_s = boact00 * (SPSingle/SPSingle0): it takes the reported state- pension data input boact00 and applies an uprating factor. This is an uprating passthrough of a data input, computing no distinct entitlement from statute, so it is input-carrying, not a scored surface. Confirmed by the uk-pension-credit suite, whose live worker verifies \"the boact_uk policy only uprates the boact00 state-pension data input\" and feeds boact_s as an income-test input rather than a parity target. Reclassified from the initial seed's in-scope guess (evidence: UK.xml UK_2026 boact_uk body).",
+      "status": "excluded:input_carrying"
     },
     {
       "id": "uk:boaht_uk",
@@ -702,7 +702,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "UKMOD Country Report marks Statutory Paternity Pay 'not simulated in the baseline', but the UK_2026 policy is switch-on and writes bpact_s; kept in scope as an uncovered surface, not excluded.",
+      "note": "BEN: Statutory Paternity Pay. The UKMOD Comment says \"(not simulated in the baseline)\", but the UK_2026 policy is switch=on and computes bpact_s from ordinary inputs (eligible parent, previous earnings i_yempv_bpact) \u2014 no leave-spell column is required, so it IS comparable on synthetic HHoT cases. Kept in scope as a genuine uncovered surface (not excluded): Axiom has no SPP suite yet and rulespec-uk does not encode SPP (docs/uk-coverage-matrix.md). Next-wave worklist, not a vacuous or dataset-blocked comparison.",
       "status": "uncovered"
     },
     {
@@ -710,18 +710,18 @@
       "oracle_policy_name": "bsa_uk",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "suite": "uk-pension-credit",
+      "covered": true,
+      "comparisons": 12,
+      "matches": 8,
+      "raw_match_rate": 66.666667,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 4,
+      "bridge_artifacts": 0,
+      "note": "BEN: Social Assistance (income-based JSA, Income Support and Pension Credit). UKMOD computes Pension Credit inside this policy \u2014 boamt_s = guarantee credit boamtmm_s + savings credit boamtxp_s. The uk-pension-credit suite live-compares boamt_s against the composed RuleSpec guarantee-credit award (State Pension Credit Act 2002 s.2 + SPC Regs 2002 reg.6 standard-minimum-guarantee) on a single/couple pensioner grid crossing the guarantee level; the standard minimum guarantee matches to the penny (single 238.00/wk, couple 363.25/wk). boamt_s embeds a take-up / UC-transition correction that can zero a hypothetical award away from entitlement (ukmod-pc-boamt-takeup-transition); those points are dispositioned upstream_engine_gap, so unexplained=0 and Axiom-attributed=0 and the surface is covered. (JSA/IS legs of bsa_uk are separate uncovered surfaces; Pension Credit boamt_s is the compared one.)",
+      "status": "conformant"
     },
     {
       "id": "uk:bsadi_uk",
