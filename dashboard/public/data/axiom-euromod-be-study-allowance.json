@@ -23,48 +23,6 @@
     }
   ],
   "case_count": 6,
-  "concepts": [
-    {
-      "category": "benefits",
-      "comparison": "amount",
-      "components": [],
-      "description": "Belgium study allowance, region-routed to the Flemish or French-Community amount",
-      "id": "be:statutes/education/study_allowance_routing#belgium_study_allowance_annual_amount",
-      "parent": null,
-      "priority": "high",
-      "relative_tolerance": 0.001,
-      "tolerance": 1
-    }
-  ],
-  "engines": {
-    "left": "euromod",
-    "right": "axiom"
-  },
-  "errors": [],
-  "locales": [
-    "BE"
-  ],
-  "mismatches": [],
-  "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
-  "scope": null,
-  "suite": "be-study-allowance",
-  "summary": {
-    "comparison_count": 6,
-    "error_count": 0,
-    "errors_by_engine": [],
-    "match_count": 6,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
-    "weighted": {
-      "comparison_weight": 6,
-      "match_rate": 100,
-      "match_weight": 6,
-      "mismatch_weight": 0
-    }
-  },
   "cases": [
     {
       "case_id": "be-study-allowance-flanders-higher-education-full",
@@ -492,5 +450,90 @@
       "right_engine": "axiom",
       "right_errors": []
     }
-  ]
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium study allowance, region-routed to the Flemish or French-Community amount",
+      "id": "be:statutes/education/study_allowance_routing#belgium_study_allowance_annual_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.001,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-06T11:12:46Z",
+    "generated_by": "scripts/run_comparison.py::be-study-allowance",
+    "oracle": {
+      "euromod_country": "BE",
+      "euromod_dataset": "BE_2024_c1_2015_03_e2",
+      "euromod_release": "J2.0+",
+      "euromod_system": "BE_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-be",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "be-study-allowance",
+  "summary": {
+    "comparison_count": 6,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 6,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 6,
+      "match_rate": 100,
+      "match_weight": 6,
+      "mismatch_weight": 0
+    }
+  }
 }
