@@ -27,8 +27,8 @@
       "jurisdiction": "uk",
       "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
       "policies_in_scope": 26,
-      "covered": 10,
-      "covered_pct": 38.4615,
+      "covered": 13,
+      "covered_pct": 50.0,
       "excluded": 41,
       "excluded_by_reason": {
         "input_carrying": 4,
@@ -51,9 +51,6 @@
         "bcrdicm_uk",
         "bho_uk",
         "bhosc01_uk",
-        "bmamt01_uk",
-        "bmamt_uk",
-        "bmascmt01_uk",
         "boaht_uk",
         "bsadi_uk",
         "bunct_uk",
@@ -61,7 +58,7 @@
         "tinta_uk"
       ],
       "blocking_reasons": [
-        "16 of 26 in-scope policies are not covered by a live suite: bcap_uk, bched01_uk, bched02_uk, bchht_uk, bchmt_uk, bcrdicm_uk, bho_uk, bhosc01_uk, bmamt01_uk, bmamt_uk, bmascmt01_uk, boaht_uk, bsadi_uk, bunct_uk, bwkmt_bfamt_uk, tinta_uk"
+        "13 of 26 in-scope policies are not covered by a live suite: bcap_uk, bched01_uk, bched02_uk, bchht_uk, bchmt_uk, bcrdicm_uk, bho_uk, bhosc01_uk, boaht_uk, bsadi_uk, bunct_uk, bwkmt_bfamt_uk, tinta_uk"
       ]
     },
     {

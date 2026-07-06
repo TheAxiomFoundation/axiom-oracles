@@ -1071,6 +1071,107 @@ concepts:
           type: country
           geoid: UK
 
+  uk:regulations/uksi/2005/3061/pilot_sure_start_maternity_grant_oracle_pipeline#uk_ssmg_pilot_annual_entitlement:
+    description: UK Sure Start Maternity Grant (passported lone parent with a newborn)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk pilot exposes the £500 Sure Start Maternity Grant
+    # lump sum (SI 2005/3061 reg.5, $BSurMaG 500#y) as a Person-level annual
+    # entitlement. UKMOD bmamt_uk pays the same £500 to a
+    # passported family with a child under one and no other dependent children;
+    # the passport gates on a qualifying means-tested benefit in payment, so the
+    # case passports onto Universal Credit (bsauc_s>0) with the UC take-up
+    # constants pinned to 1.0 through the comparison's euromod_constant_overrides
+    # (axiom-oracles#168). bmamt_uk itself does not consume the stochastic take-up
+    # draw i_rand_tu, so once UC is in payment the £500 grant is deterministic.
+    # It is an already-annual lump sum, so both sides match to the penny.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_ssmg_pilot_annual_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bmamt_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:regulations/uksi/2005/3262/pilot_healthy_start_oracle_pipeline#uk_hs_pilot_annual_entitlement:
+    description: UK Healthy Start annual entitlement (passported lone parent, rest of UK)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk Healthy Start pilot annualises the determined
+    # weekly voucher value (SI 2005/3262 reg.8, floored at £3.10; £8.50/week for a
+    # child under one, £4.25 otherwise — supplied as the UKMOD $HSFood
+    # determination) over 52 benefit weeks. UKMOD bmamt01_uk is the same weekly
+    # value annualised over its 365/7 calendar-week convention, so the composed
+    # 52-week figure sits about 0.27% below UKMOD (£442.00 against £443.21 for a
+    # newborn); a 0.3% relative tolerance absorbs that convention residual while
+    # both sides recover the same £8.50 / £4.25 weekly value. The grant passports
+    # off Universal Credit in payment (bsauc_s>0, take-up pinned on through the
+    # comparison's euromod_constant_overrides); bmamt01_uk does not consume the
+    # stochastic take-up draw i_rand_tu.
+    tolerance: 1
+    relative_tolerance: 0.003
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_hs_pilot_annual_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bmamt01_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:regulations/ssi/2019/193/pilot_best_start_foods_oracle_pipeline#uk_bsf_pilot_annual_entitlement:
+    description: UK Best Start Foods annual entitlement (passported lone parent, Scotland)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk Best Start Foods pilot annualises the SSI 2019/193
+    # reg.13 weekly value (£11.20/week doubled rate for a child under one,
+    # £5.60/week basic rate ages one to three) over 52 benefit weeks. UKMOD
+    # bmascmt01_uk is the same weekly value annualised over its 365/7 calendar-
+    # week convention, so the composed 52-week figure sits about 0.27% below
+    # UKMOD (£582.40 against £584.00 for a newborn); a 0.3% relative tolerance
+    # absorbs that convention residual while both sides recover the same £11.20 /
+    # £5.60 statutory weekly rate. Best Start Foods requires Scottish residence
+    # (drgn1=12) and passports off Universal Credit in payment (bsauc_s>0, take-up
+    # pinned on through the comparison's euromod_constant_overrides). Unlike its
+    # sibling Best Start Grant (bmascmt_uk, excluded), Best Start Foods does not
+    # consume the stochastic take-up draw i_rand_tu.
+    tolerance: 1
+    relative_tolerance: 0.003
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_bsf_pilot_annual_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bmascmt01_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount:
     description: UK Pension Credit household award (hypothetical pensioner benefit unit)
     category: benefits

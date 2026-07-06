@@ -9,6 +9,43 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  uk-best-start-foods:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:regulations/ssi/2019/193/pilot_best_start_foods_oracle_pipeline#uk_bsf_pilot_annual_entitlement
+    cases:
+    - id: uk-best-start-foods-passported-newborn
+      period: 2026-04
+      scenario: passported-best-start-foods
+      parameters:
+        child_age: 0
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 0
+        relation: Child
+    - id: uk-best-start-foods-passported-toddler
+      period: 2026-04
+      scenario: passported-best-start-foods
+      parameters:
+        child_age: 2
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 2
+        relation: Child
   uk-child-benefit:
     locale: UK
     entity: Family
@@ -379,6 +416,43 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 360000.0
+  uk-healthy-start:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:regulations/uksi/2005/3262/pilot_healthy_start_oracle_pipeline#uk_hs_pilot_annual_entitlement
+    cases:
+    - id: uk-healthy-start-passported-newborn
+      period: 2026-04
+      scenario: passported-healthy-start
+      parameters:
+        child_age: 0
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 0
+        relation: Child
+    - id: uk-healthy-start-passported-toddler
+      period: 2026-04
+      scenario: passported-healthy-start
+      parameters:
+        child_age: 2
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 2
+        relation: Child
   uk-housing-benefit:
     locale: UK
     entity: Family
@@ -1638,6 +1712,26 @@ case_sets:
         age: 32
         relation: HeadOfHousehold
         yearly_earned_income: 40000.0
+  uk-sure-start-maternity-grant:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:regulations/uksi/2005/3061/pilot_sure_start_maternity_grant_oracle_pipeline#uk_ssmg_pilot_annual_entitlement
+    cases:
+    - id: uk-ssmg-passported-newborn
+      period: 2026-04
+      scenario: passported-lone-parent-sure-start-maternity-grant
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      - id: child1
+        kind: person
+        age: 0
+        relation: Child
   uk-universal-credit:
     locale: UK
     entity: Family

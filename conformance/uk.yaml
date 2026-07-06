@@ -541,31 +541,33 @@ policies:
     output_vars:
       - bmamt01_s
     in_scope: true
-    suite: null
+    suite: uk-healthy-start
     note: 'BEN: Healthy Start food voucher (rest of UK). Unlike the statutory-pay policies this is a passported
       means-tested payment: the Elig_Cond requires a qualifying means-tested benefit in payment (bsa_s>0
       | bunmt_s>0 | boamt_s>0 | bfamt_s>0 | bsauc_s>0 ...), and the amount is $HSFood (£4.25/week per
-      eligible child, 2026-27) for a child under the threshold age. Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026:
-      for a zero-earnings lone parent with a newborn who is passported onto Universal Credit (bsauc_s>0,
-      take-up gate off), bmamt01_s=£443.21. It does NOT consume the stochastic i_rand_tu take-up draw,
-      so it is a deterministic passported surface. In scope and coverable via a passported case (UC in
-      payment); next-wave worklist, held out of this statutory-pay suite whose cases are single-earner
-      households with no passporting benefit.'
+      eligible child, doubled to £8.50/week for a child under one, 2026-27). Confirmed computable against
+      UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings lone parent with a newborn who is passported
+      onto Universal Credit (bsauc_s>0, take-up pinned on via euromod_constant_overrides $ISTUNochild/$ISTUChild=1.0),
+      bmamt01_s=£443.21. It does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic
+      passported surface. Now COVERED by the uk-healthy-start suite (2 cases, 2/2 match): the composed
+      rulespec-uk pilot (SI 2005/3262 reg.8) annualises the determined weekly value over 52 benefit weeks,
+      about 0.27% below UKMOD''s 365/7 convention, within the 0.3% relative tolerance.'
   - id: uk:bmamt_uk
     oracle_policy_name: bmamt_uk
     oracle_policy_type: ben
     output_vars:
       - bmamt_s
     in_scope: true
-    suite: null
+    suite: uk-sure-start-maternity-grant
     note: 'BEN: Sure Start Maternity Grant (rest of UK). Passported means-tested lump sum: the Elig_Cond
       requires a qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0
       ...) and a child under 1 with no other dependent children, paying $BSurMaG (£500, 2026-27). Confirmed
       computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings lone parent with a newborn
-      passported onto Universal Credit (bsauc_s>0, take-up gate off), bmamt_s=£500.00 (= $BSurMaG). It
-      does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic passported surface.
-      In scope and coverable via a passported case (UC in payment); next-wave worklist, held out of this
-      statutory-pay suite whose cases are single-earner households with no passporting benefit.'
+      passported onto Universal Credit (bsauc_s>0, take-up pinned on via euromod_constant_overrides $ISTUNochild/$ISTUChild=1.0),
+      bmamt_s=£500.00 (= $BSurMaG). It does NOT consume the stochastic i_rand_tu take-up draw, so it is
+      a deterministic passported surface. Now COVERED by the uk-sure-start-maternity-grant suite (1 case,
+      1/1 match): the composed rulespec-uk pilot (SI 2005/3061 reg.5) exposes the £500 lump sum as a Person-level
+      annual entitlement, matching to the penny.'
   - id: uk:bmanc_uk
     oracle_policy_name: bmanc_uk
     oracle_policy_type: ben
@@ -596,16 +598,18 @@ policies:
     output_vars:
       - bmascmt01_s
     in_scope: true
-    suite: null
+    suite: uk-best-start-foods
     note: 'BEN: Best Start Foods (Scotland). Passported means-tested payment: the Elig_Cond requires a
       qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0 ...) AND
       Scottish residence (drgn1=12), paying $BScBSF0 (£11.20/week under 1) or $BScBSF1to2 (£5.60/week
-      ages 1-2), 2026-27. Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings
+      ages 1-3), 2026-27. Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings
       lone parent in Scotland (drgn1=12) with a newborn passported onto Universal Credit (bsauc_s>0, take-up
-      gate off), bmascmt01_s=£584.00. Unlike its sibling bmascmt_uk (Best Start Grant), Best Start Foods
-      does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic passported surface.
-      In scope and coverable via a passported Scottish case; next-wave worklist, held out of this statutory-pay
-      suite whose cases are single-earner rest-of-UK households with no passporting benefit.'
+      pinned on via euromod_constant_overrides $ISTUNochild/$ISTUChild=1.0), bmascmt01_s=£584.00. Unlike
+      its sibling bmascmt_uk (Best Start Grant), Best Start Foods does NOT consume the stochastic i_rand_tu
+      take-up draw, so it is a deterministic passported surface. Now COVERED by the uk-best-start-foods
+      suite (2 cases, 2/2 match): the composed rulespec-uk pilot (SSI 2019/193 reg.13, £5.60 basic rate
+      per SSI 2026/170) annualises the weekly value over 52 benefit weeks, about 0.27% below UKMOD''s
+      365/7 convention, within the 0.3% relative tolerance.'
   - id: uk:bmascmt_uk
     oracle_policy_name: bmascmt_uk
     oracle_policy_type: ben

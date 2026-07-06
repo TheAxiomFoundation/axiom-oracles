@@ -246,6 +246,34 @@ class Concepts:
         "uk:statutes/statutory_paternity_pay/pilot_statutory_paternity_pay_oracle_pipeline"
         "#uk_spp_pilot_total_entitlement"
     )
+    # Passported maternity/food grants. Each gates on a qualifying means-tested
+    # benefit in payment (in the UKMOD comparison, Universal Credit bsauc_s>0
+    # with the take-up draw pinned on) and, once passported, pays a deterministic
+    # statutory amount UKMOD reports as bmamt_s / bmamt01_s / bmascmt01_s.
+    #
+    # Sure Start Maternity Grant: the £500 lump sum a passported family with a
+    # child under one and no other dependent children receives (SI 2005/3061
+    # reg.5). The composed pilot exposes it as a Person-level annual entitlement
+    # (the reg.5 parameter itself is entity-less, so it does not project onto the
+    # comparison's Person entity) that reconstructs the UKMOD bmamt_s.
+    UK_SURE_START_MATERNITY_GRANT = (
+        "uk:regulations/uksi/2005/3061/pilot_sure_start_maternity_grant_oracle_pipeline"
+        "#uk_ssmg_pilot_annual_entitlement"
+    )
+    # Healthy Start (rest of UK): the composed pilot annualises the determined
+    # weekly voucher value (SI 2005/3262 reg.8, £8.50/week for a child under one)
+    # to the annual bmamt01_s, over 52 benefit weeks (0.27% below UKMOD's 365/7).
+    UK_HEALTHY_START = (
+        "uk:regulations/uksi/2005/3262/pilot_healthy_start_oracle_pipeline"
+        "#uk_hs_pilot_annual_entitlement"
+    )
+    # Best Start Foods (Scotland): the composed pilot annualises the SSI 2019/193
+    # reg.13 weekly value (£11.20/week doubled rate under one, £5.60 basic ages
+    # one to three) to the annual bmascmt01_s, over 52 benefit weeks.
+    UK_BEST_START_FOODS = (
+        "uk:regulations/ssi/2019/193/pilot_best_start_foods_oracle_pipeline"
+        "#uk_bsf_pilot_annual_entitlement"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"
