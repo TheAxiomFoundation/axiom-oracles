@@ -69,10 +69,6 @@ INCOME_TAX_SECTION_23_PROGRAM_PATH = Path("statutes/ukpga/2007/3/23.yaml")
 INCOME_TAX_SECTION_23_BASE = "uk:statutes/ukpga/2007/3/23"
 CHILD_BENEFIT_PROGRAM_PATH = Path("regulations/uksi/2006/965/2.yaml")
 CHILD_BENEFIT_BASE = "uk:regulations/uksi/2006/965/2"
-CHILD_BENEFIT_SECTION_141_PROGRAM_PATH = Path("statutes/ukpga/1992/4/141.yaml")
-CHILD_BENEFIT_SECTION_141_BASE = "uk:statutes/ukpga/1992/4/141"
-CHILD_BENEFIT_FINAL_PROGRAM_PATH = Path("policies/govuk/child-benefit.yaml")
-CHILD_BENEFIT_FINAL_BASE = "uk:policies/govuk/child-benefit"
 BENEFIT_CAP_REGULATION_80A_PROGRAM_PATH = Path("regulations/uksi/2013/376/80A.yaml")
 BENEFIT_CAP_REGULATION_80A_BASE = "uk:regulations/uksi/2013/376/80A"
 STATE_PENSION_CREDIT_SECTION_1_PROGRAM_PATH = Path("statutes/ukpga/2002/16/1.yaml")
@@ -81,8 +77,6 @@ STATE_PENSION_CREDIT_SECTION_2_PROGRAM_PATH = Path("statutes/ukpga/2002/16/2.yam
 STATE_PENSION_CREDIT_SECTION_2_BASE = "uk:statutes/ukpga/2002/16/2"
 STATE_PENSION_CREDIT_SECTION_3_PROGRAM_PATH = Path("statutes/ukpga/2002/16/3.yaml")
 STATE_PENSION_CREDIT_SECTION_3_BASE = "uk:statutes/ukpga/2002/16/3"
-STATE_PENSION_FINAL_PROGRAM_PATH = Path("policies/govuk/state-pension.yaml")
-STATE_PENSION_FINAL_BASE = "uk:policies/govuk/state-pension"
 PENSION_CREDIT_PROGRAM_PATH = Path("regulations/uksi/2002/1792/6.yaml")
 PENSION_CREDIT_BASE = "uk:regulations/uksi/2002/1792/6"
 PENSION_CREDIT_SCHEDULE_IIA_PROGRAM_PATH = Path(
@@ -91,12 +85,8 @@ PENSION_CREDIT_SCHEDULE_IIA_PROGRAM_PATH = Path(
 PENSION_CREDIT_SCHEDULE_IIA_BASE = "uk:regulations/uksi/2002/1792/schedule/IIA"
 PENSION_CREDIT_REGULATION_15_PROGRAM_PATH = Path("regulations/uksi/2002/1792/15.yaml")
 PENSION_CREDIT_REGULATION_15_BASE = "uk:regulations/uksi/2002/1792/15"
-PENSION_CREDIT_FINAL_PROGRAM_PATH = Path("policies/govuk/pension-credit.yaml")
-PENSION_CREDIT_FINAL_BASE = "uk:policies/govuk/pension-credit"
 ESA_REGULATION_118_PROGRAM_PATH = Path("regulations/uksi/2008/794/118.yaml")
 ESA_REGULATION_118_BASE = "uk:regulations/uksi/2008/794/118"
-ESA_FINAL_PROGRAM_PATH = Path("policies/govuk/esa-income.yaml")
-ESA_FINAL_BASE = "uk:policies/govuk/esa-income"
 JSA_REGULATION_116_PROGRAM_PATH = Path("regulations/uksi/1996/207/116.yaml")
 JSA_REGULATION_116_BASE = "uk:regulations/uksi/1996/207/116"
 INCOME_SUPPORT_REGULATION_53_PROGRAM_PATH = Path("regulations/uksi/1987/1967/53.yaml")
@@ -107,8 +97,6 @@ HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_PROGRAM_PATH = Path(
     "regulations/uksi/2006/214/29.yaml"
 )
 HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_BASE = "uk:regulations/uksi/2006/214/29"
-HOUSING_BENEFIT_FINAL_PROGRAM_PATH = Path("policies/govuk/housing-benefit.yaml")
-HOUSING_BENEFIT_FINAL_BASE = "uk:policies/govuk/housing-benefit"
 HOUSING_BENEFIT_ENTITLEMENT_PROGRAM_PATH = Path(
     "policies/housing_benefit_composed_entitlement_pipeline.yaml"
 )
@@ -127,8 +115,6 @@ UNIVERSAL_CREDIT_REGULATION_34_PROGRAM_PATH = Path("regulations/uksi/2013/376/34
 UNIVERSAL_CREDIT_REGULATION_34_BASE = "uk:regulations/uksi/2013/376/34"
 UNIVERSAL_CREDIT_REGULATION_72_PROGRAM_PATH = Path("regulations/uksi/2013/376/72.yaml")
 UNIVERSAL_CREDIT_REGULATION_72_BASE = "uk:regulations/uksi/2013/376/72"
-UNIVERSAL_CREDIT_FINAL_PROGRAM_PATH = Path("policies/govuk/universal-credit.yaml")
-UNIVERSAL_CREDIT_FINAL_BASE = "uk:policies/govuk/universal-credit"
 WELFARE_REFORM_ACT_SECTION_8_PROGRAM_PATH = Path("statutes/ukpga/2012/5/8.yaml")
 WELFARE_REFORM_ACT_SECTION_8_BASE = "uk:statutes/ukpga/2012/5/8"
 WELFARE_REFORM_ACT_SECTION_11_PROGRAM_PATH = Path("statutes/ukpga/2012/5/11.yaml")
@@ -147,8 +133,6 @@ SCOTTISH_CHILD_PAYMENT_FINAL_PROGRAM_PATH = Path(
     "policies/govuk/scottish-child-payment.yaml"
 )
 SCOTTISH_CHILD_PAYMENT_FINAL_BASE = "uk:policies/govuk/scottish-child-payment"
-SDA_FINAL_PROGRAM_PATH = Path("policies/govuk/severe-disablement-allowance.yaml")
-SDA_FINAL_BASE = "uk:policies/govuk/severe-disablement-allowance"
 DLA_FINAL_PROGRAM_PATH = Path("policies/govuk/disability-living-allowance.yaml")
 DLA_FINAL_BASE = "uk:policies/govuk/disability-living-allowance"
 PIP_FINAL_PROGRAM_PATH = Path("policies/govuk/personal-independence-payment.yaml")
@@ -349,13 +333,6 @@ CHILD_BENEFIT_OUTPUTS = {
     },
 }
 
-CHILD_BENEFIT_FINAL_OUTPUTS = {
-    "child_benefit_weekly_amount": {
-        "axiom": f"{CHILD_BENEFIT_FINAL_BASE}#child_benefit_weekly_amount",
-        "pe": "child_benefit",
-        "pe_transform": "annual_to_weekly",
-    },
-}
 
 BENEFIT_CAP_RELEVANT_AMOUNT_OUTPUTS = {
     "benefit_cap_relevant_amount": {
@@ -402,14 +379,6 @@ STATE_PENSION_CREDIT_SAVINGS_CREDIT_OUTPUTS = {
     },
 }
 
-STATE_PENSION_FINAL_OUTPUTS = {
-    "state_pension_weekly_amount": {
-        "axiom": f"{STATE_PENSION_FINAL_BASE}#state_pension_weekly_amount",
-        "pe": "state_pension",
-        "pe_transform": "annual_to_weekly",
-        "tolerance": 0.01,
-    },
-}
 
 PENSION_CREDIT_OUTPUTS = {
     "standard_minimum_guarantee": {
@@ -447,13 +416,6 @@ PENSION_CREDIT_DEEMED_INCOME_OUTPUTS = {
     },
 }
 
-PENSION_CREDIT_FINAL_OUTPUTS = {
-    "pension_credit_annual_amount": {
-        "axiom": f"{PENSION_CREDIT_FINAL_BASE}#pension_credit_annual_amount",
-        "pe": "pension_credit",
-        "tolerance": 0.01,
-    },
-}
 
 ESA_TARIFF_INCOME_OUTPUTS = {
     "capital_tariff_weekly_income": {
@@ -465,13 +427,6 @@ ESA_TARIFF_INCOME_OUTPUTS = {
     },
 }
 
-ESA_FINAL_OUTPUTS = {
-    "income_related_esa_annual_amount": {
-        "axiom": f"{ESA_FINAL_BASE}#income_related_esa_annual_amount",
-        "pe": "esa_income",
-        "tolerance": 0.01,
-    },
-}
 
 JSA_TARIFF_INCOME_OUTPUTS = {
     "capital_tariff_weekly_income": {
@@ -515,13 +470,6 @@ HOUSING_BENEFIT_PENSION_AGE_TARIFF_INCOME_OUTPUTS = {
     },
 }
 
-HOUSING_BENEFIT_FINAL_OUTPUTS = {
-    "housing_benefit_annual_amount": {
-        "axiom": f"{HOUSING_BENEFIT_FINAL_BASE}#housing_benefit_annual_amount",
-        "pe": "housing_benefit",
-        "tolerance": 0.01,
-    },
-}
 
 HOUSING_BENEFIT_APPLICABLE_AMOUNT_OUTPUTS = {
     "hb_pilot_applicable_amount": {
@@ -683,13 +631,6 @@ UNIVERSAL_CREDIT_AWARD_OUTPUTS = {
     },
 }
 
-UNIVERSAL_CREDIT_FINAL_OUTPUTS = {
-    "universal_credit_annual_amount": {
-        "axiom": f"{UNIVERSAL_CREDIT_FINAL_BASE}#universal_credit_annual_amount",
-        "pe": "universal_credit",
-        "tolerance": 0.01,
-    },
-}
 
 UNIVERSAL_CREDIT_HOUSING_COSTS_OUTPUTS = {
     "section_11_amount_for_accommodation_payments": {
@@ -807,12 +748,6 @@ SCOTTISH_CHILD_PAYMENT_FINAL_OUTPUTS = {
     },
 }
 
-SDA_FINAL_OUTPUTS = {
-    "severe_disablement_allowance_annual_amount": {
-        "axiom": (f"{SDA_FINAL_BASE}#severe_disablement_allowance_annual_amount"),
-        "pe": "sda",
-    },
-}
 
 DLA_FINAL_OUTPUTS = {
     "disability_living_allowance_self_care_weekly_amount": {
@@ -1010,20 +945,6 @@ SURFACE_SPECS = {
             "child_benefit_respective_amount",
         ),
     ),
-    "child-benefit-final": UKEFRSSurfaceSpec(
-        program=CHILD_BENEFIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=CHILD_BENEFIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "child_benefit",
-            "child_benefit_entitlement",
-            "would_claim_child_benefit",
-        ),
-        projection_person_variables=(
-            "child_benefit_child_index",
-            "child_benefit_respective_amount",
-        ),
-    ),
     "benefit-cap-relevant-amount": UKEFRSSurfaceSpec(
         program=BENEFIT_CAP_REGULATION_80A_PROGRAM_PATH,
         entity="benunit",
@@ -1072,16 +993,6 @@ SURFACE_SPECS = {
             "standard_minimum_guarantee",
         ),
     ),
-    "state-pension-final": UKEFRSSurfaceSpec(
-        program=STATE_PENSION_FINAL_PROGRAM_PATH,
-        entity="person",
-        outputs=STATE_PENSION_FINAL_OUTPUTS,
-        pe_variables=(
-            "state_pension",
-            "state_pension_reported",
-            "state_pension_type",
-        ),
-    ),
     "pension-credit": UKEFRSSurfaceSpec(
         program=PENSION_CREDIT_PROGRAM_PATH,
         entity="benunit",
@@ -1118,16 +1029,6 @@ SURFACE_SPECS = {
             "pension_credit_deemed_income",
         ),
     ),
-    "pension-credit-final": UKEFRSSurfaceSpec(
-        program=PENSION_CREDIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=PENSION_CREDIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "pension_credit",
-            "pension_credit_entitlement",
-            "would_claim_pc",
-        ),
-    ),
     "esa-income-tariff-income": UKEFRSSurfaceSpec(
         program=ESA_REGULATION_118_PROGRAM_PATH,
         entity="benunit",
@@ -1136,17 +1037,6 @@ SURFACE_SPECS = {
             "esa_income_assessable_capital",
             "esa_income_tariff_income",
         ),
-    ),
-    "esa-income-final": UKEFRSSurfaceSpec(
-        program=ESA_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=ESA_FINAL_OUTPUTS,
-        pe_variables=(
-            "esa_income",
-            "esa_income_eligible",
-            "esa_income_tariff_income",
-        ),
-        projection_person_variables=("esa_income_reported",),
     ),
     "jsa-income-tariff-income": UKEFRSSurfaceSpec(
         program=JSA_REGULATION_116_PROGRAM_PATH,
@@ -1187,17 +1077,6 @@ SURFACE_SPECS = {
             "housing_benefit_tariff_income",
         ),
         projection_person_variables=("is_SP_age",),
-    ),
-    "housing-benefit-final": UKEFRSSurfaceSpec(
-        program=HOUSING_BENEFIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=HOUSING_BENEFIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "benefit_cap_reduction",
-            "housing_benefit",
-            "housing_benefit_pre_benefit_cap",
-            "would_claim_housing_benefit",
-        ),
     ),
     "housing-benefit-applicable-amount": UKEFRSSurfaceSpec(
         program=HOUSING_BENEFIT_ENTITLEMENT_PROGRAM_PATH,
@@ -1309,17 +1188,6 @@ SURFACE_SPECS = {
             "uc_standard_allowance",
         ),
     ),
-    "universal-credit-final": UKEFRSSurfaceSpec(
-        program=UNIVERSAL_CREDIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=UNIVERSAL_CREDIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "benefit_cap_reduction",
-            "universal_credit",
-            "universal_credit_pre_benefit_cap",
-            "would_claim_uc",
-        ),
-    ),
     "universal-credit-housing-costs": UKEFRSSurfaceSpec(
         program=WELFARE_REFORM_ACT_SECTION_11_PROGRAM_PATH,
         entity="benunit",
@@ -1416,15 +1284,6 @@ SURFACE_SPECS = {
             "would_claim_scp",
         ),
     ),
-    "severe-disablement-allowance-final": UKEFRSSurfaceSpec(
-        program=SDA_FINAL_PROGRAM_PATH,
-        entity="person",
-        outputs=SDA_FINAL_OUTPUTS,
-        pe_variables=(
-            "sda",
-            "sda_reported",
-        ),
-    ),
     "disability-living-allowance-final": UKEFRSSurfaceSpec(
         program=DLA_FINAL_PROGRAM_PATH,
         entity="person",
@@ -1519,37 +1378,34 @@ HBAI_COMPONENT_COVERAGE = {
         "rationale": "Axiom covers employee Class 1 National Insurance, the main-rate Class 4 self-employed contribution, final Class 4 after Regulation 100's annual maximum, and the final annual PolicyEngine UK national_insurance aggregate of Class 1, Class 2, Class 3, and Class 4 contributions.",
     },
     "child_benefit": {
-        "status": "exact",
-        "surfaces": ("child-benefit", "child-benefit-final"),
+        "status": "partial",
+        "surfaces": ("child-benefit",),
         "covered_outputs": (
             "child_benefit_respective_amount",
             "child_benefit_entitlement",
-            "child_benefit",
         ),
-        "rationale": "Axiom covers per-child Child Benefit rates, section 141 weekly entitlement, and the final gross benefit-unit Child Benefit receipt after PolicyEngine UK's would_claim_child_benefit gate.",
+        "rationale": "Axiom covers per-child Child Benefit rates and section 141 weekly entitlement; the final gross benefit-unit child_benefit wrapper was retired upstream (rulespec-uk 829ab1a), so its bridge surface was removed and the take-up-gated receipt is not compared.",
     },
     "esa_income": {
-        "status": "exact",
-        "surfaces": ("esa-income-tariff-income", "esa-income-final"),
-        "covered_outputs": ("esa_income_tariff_income", "esa_income"),
-        "rationale": "Axiom covers capital tariff income used inside income-related ESA and the final annual PolicyEngine UK esa_income wrapper over reported ESA, tariff income, and the eligibility gate.",
+        "status": "partial",
+        "surfaces": ("esa-income-tariff-income",),
+        "covered_outputs": ("esa_income_tariff_income",),
+        "rationale": "Axiom covers capital tariff income used inside income-related ESA; the final annual esa_income wrapper was retired upstream (rulespec-uk 829ab1a), so the reported-award-and-gate composition is not compared.",
     },
     "housing_benefit": {
-        "status": "exact",
+        "status": "partial",
         "surfaces": (
             "housing-benefit-working-age-tariff-income",
             "housing-benefit-pension-age-tariff-income",
             "housing-benefit-applicable-amount",
             "housing-benefit-entitlement",
-            "housing-benefit-final",
         ),
         "covered_outputs": (
             "housing_benefit_tariff_income",
             "housing_benefit_applicable_amount",
             "housing_benefit_entitlement",
-            "housing_benefit",
         ),
-        "rationale": "Axiom covers Housing Benefit capital tariff income branches, the regulation 22 / Schedule 3 applicable amount, the composed regulation 70 / 71 entitlement (maximum eligible rent after the 65 per cent taper) for benefit units without a non-dependant deduction, and the final annual PolicyEngine UK housing_benefit wrapper after the claim gate and benefit-cap reduction.",
+        "rationale": "Axiom covers Housing Benefit capital tariff income branches, the regulation 22 / Schedule 3 applicable amount, and the composed regulation 70 / 71 entitlement (maximum eligible rent after the 65 per cent taper) for benefit units without a non-dependant deduction; the final annual housing_benefit wrapper (claim gate and benefit-cap reduction) was retired upstream (rulespec-uk 829ab1a), so it is not compared.",
     },
     "income_support": {
         "status": "partial",
@@ -1564,14 +1420,13 @@ HBAI_COMPONENT_COVERAGE = {
         "rationale": "Axiom covers capital tariff income used inside income-based JSA, not the final JSA HBAI amount.",
     },
     "pension_credit": {
-        "status": "exact",
+        "status": "partial",
         "surfaces": (
             "state-pension-credit-guarantee-credit",
             "state-pension-credit-savings-credit",
             "pension-credit",
             "pension-credit-child-addition",
             "pension-credit-deemed-income",
-            "pension-credit-final",
         ),
         "covered_outputs": (
             "guarantee_credit",
@@ -1581,22 +1436,20 @@ HBAI_COMPONENT_COVERAGE = {
             "carer_minimum_guarantee_addition",
             "child_minimum_guarantee_addition",
             "pension_credit_deemed_income",
-            "pension_credit",
         ),
-        "rationale": "Axiom covers major Pension Credit rates, additions, deemed-income components, and the final annual PolicyEngine UK pension_credit wrapper after the would_claim_pc gate.",
+        "rationale": "Axiom covers major Pension Credit rates, additions, and deemed-income components; the final annual pension_credit wrapper is not compared because rulespec-uk 60501ec re-grounded pension-credit.yaml away from the bridge's I/O contract (it now outputs guarantee_credit_annual_amount with no take-up gate).",
     },
     "state_pension": {
-        "status": "exact",
-        "surfaces": ("state-pension-rates", "state-pension-final"),
+        "status": "partial",
+        "surfaces": ("state-pension-rates",),
         "covered_outputs": (
             "basic_state_pension",
             "new_state_pension",
-            "state_pension",
         ),
-        "rationale": "Axiom covers the basic and full new State Pension weekly rates plus the final PolicyEngine UK state_pension receipt wrapper, which prorates reported dataset-year State Pension by current and data-year basic or new State Pension flat-rate ceilings.",
+        "rationale": "Axiom covers the basic and full new State Pension weekly rates; the reported-receipt proration wrapper is not compared because rulespec-uk 60501ec re-grounded state-pension.yaml to accrual-based amounts that expose none of the bridge's reported-passthrough input slots.",
     },
     "universal_credit": {
-        "status": "exact",
+        "status": "partial",
         "surfaces": (
             "universal-credit-standard-allowance",
             "universal-credit-child-element",
@@ -1611,7 +1464,6 @@ HBAI_COMPONENT_COVERAGE = {
             "universal-credit-income-deduction",
             "universal-credit-assessable-capital",
             "universal-credit-tariff-income",
-            "universal-credit-final",
         ),
         "covered_outputs": (
             "uc_standard_allowance",
@@ -1627,9 +1479,8 @@ HBAI_COMPONENT_COVERAGE = {
             "uc_work_allowance",
             "uc_assessable_capital",
             "uc_tariff_income",
-            "universal_credit",
         ),
-        "rationale": "Axiom covers many Universal Credit legal elements, the award-before-take-up expression, and the final annual PolicyEngine UK universal_credit wrapper after the would_claim_uc gate and benefit-cap reduction.",
+        "rationale": "Axiom covers many Universal Credit legal elements and the award-before-take-up expression; the take-up-and-cap-inclusive final universal_credit wrapper was retired upstream (rulespec-uk 829ab1a), so only the pre-take-up award is compared via universal-credit-award.",
     },
     "student_loan_repayments": {
         "status": "partial",
@@ -1709,13 +1560,10 @@ HBAI_COMPONENT_COVERAGE = {
         "rationale": "Axiom covers the weekly Carer's Allowance rate and the final annual PolicyEngine UK carers_allowance wrapper, including the care-hours or reported-receipt gate and the Scotland Carer Support Payment replacement gate.",
     },
     "sda": {
-        "status": "exact",
-        "surfaces": (
-            "severe-disablement-allowance-rates",
-            "severe-disablement-allowance-final",
-        ),
+        "status": "partial",
+        "surfaces": ("severe-disablement-allowance-rates",),
         "covered_outputs": ("sda",),
-        "rationale": "Axiom covers the Severe Disablement Allowance maximum weekly rate and the final annual PolicyEngine UK sda wrapper over reported receipt.",
+        "rationale": "Axiom covers the Severe Disablement Allowance maximum weekly rate; the final annual sda wrapper over reported receipt was retired upstream (rulespec-uk 829ab1a), so it is not compared.",
     },
     "ssmg": {
         "status": "partial",
@@ -4196,8 +4044,6 @@ def build_axiom_request(
         return build_income_tax_section_13_request(pe_data=pe_data, year=year)
     if surface == "child-benefit":
         return build_child_benefit_request(pe_data=pe_data, year=year)
-    if surface == "child-benefit-final":
-        return build_child_benefit_final_request(pe_data=pe_data, year=year)
     if surface == "benefit-cap-relevant-amount":
         return build_benefit_cap_relevant_amount_request(
             pe_data=pe_data,
@@ -4218,8 +4064,6 @@ def build_axiom_request(
             pe_data=pe_data,
             year=year,
         )
-    if surface == "state-pension-final":
-        return build_state_pension_final_request(pe_data=pe_data, year=year)
     if surface == "pension-credit":
         return build_pension_credit_request(pe_data=pe_data, year=year)
     if surface == "pension-credit-child-addition":
@@ -4229,12 +4073,8 @@ def build_axiom_request(
             pe_data=pe_data,
             year=year,
         )
-    if surface == "pension-credit-final":
-        return build_pension_credit_final_request(pe_data=pe_data, year=year)
     if surface == "esa-income-tariff-income":
         return build_esa_income_tariff_income_request(pe_data=pe_data, year=year)
-    if surface == "esa-income-final":
-        return build_esa_income_final_request(pe_data=pe_data, year=year)
     if surface == "jsa-income-tariff-income":
         return build_jsa_income_tariff_income_request(pe_data=pe_data, year=year)
     if surface == "income-support-tariff-income":
@@ -4252,8 +4092,6 @@ def build_axiom_request(
             pe_data=pe_data,
             year=year,
         )
-    if surface == "housing-benefit-final":
-        return build_housing_benefit_final_request(pe_data=pe_data, year=year)
     if surface == "housing-benefit-applicable-amount":
         return build_housing_benefit_applicable_amount_request(
             pe_data=pe_data,
@@ -4278,8 +4116,6 @@ def build_axiom_request(
         )
     if surface == "universal-credit-award":
         return build_universal_credit_award_request(pe_data=pe_data, year=year)
-    if surface == "universal-credit-final":
-        return build_universal_credit_final_request(pe_data=pe_data, year=year)
     if surface == "universal-credit-housing-costs":
         return build_universal_credit_housing_costs_request(
             pe_data=pe_data,
@@ -4319,8 +4155,6 @@ def build_axiom_request(
             pe_data=pe_data,
             year=year,
         )
-    if surface == "severe-disablement-allowance-final":
-        return build_sda_final_request(pe_data=pe_data, year=year)
     if surface == "disability-living-allowance-final":
         return build_dla_final_request(pe_data=pe_data, year=year)
     if surface == "personal-independence-payment-final":
@@ -4794,75 +4628,6 @@ def build_child_benefit_request(
     }
 
 
-def build_child_benefit_final_request(
-    *, pe_data: dict[str, Any], year: int
-) -> dict[str, Any]:
-    interval = benefit_week_interval(year)
-    inputs: list[dict[str, Any]] = []
-    relations: list[dict[str, Any]] = []
-    queries: list[dict[str, Any]] = []
-    child_rows_by_benunit = child_benefit_person_rows_by_benunit(pe_data)
-    for row in rows_for_surface(pe_data, "child-benefit-final"):
-        benunit_id = int(row_value(row, "benunit_id"))
-        entity_id = benunit_entity_id(benunit_id)
-        inputs.append(
-            input_record(
-                f"{CHILD_BENEFIT_FINAL_BASE}#input.would_claim_child_benefit",
-                entity_id,
-                interval,
-                bool(row_value(row, "would_claim_child_benefit", True)),
-            )
-        )
-        for child_row in child_rows_by_benunit.get(benunit_id, []):
-            person_id = int(row_value(child_row, "person_id"))
-            person_id_text = person_entity_id(person_id)
-            relations.append(
-                {
-                    "name": (
-                        f"{CHILD_BENEFIT_SECTION_141_BASE}#relation."
-                        "child_benefit_children_or_qualifying_young_persons_for_whom_person_responsible"
-                    ),
-                    "tuple": [person_id_text, entity_id],
-                    "interval": interval,
-                }
-            )
-            inputs.append(
-                input_record(
-                    (
-                        f"{CHILD_BENEFIT_SECTION_141_BASE}"
-                        "#input.is_child_or_qualifying_young_person_for_child_benefit"
-                    ),
-                    person_id_text,
-                    interval,
-                    True,
-                )
-            )
-            for name, value in project_child_benefit_inputs(child_row).items():
-                inputs.append(
-                    input_record(
-                        f"{CHILD_BENEFIT_BASE}#input.{name}",
-                        person_id_text,
-                        interval,
-                        value,
-                    )
-                )
-        queries.append(
-            {
-                "entity_id": entity_id,
-                "period": interval,
-                "outputs": [
-                    spec["axiom"] for spec in CHILD_BENEFIT_FINAL_OUTPUTS.values()
-                ],
-            }
-        )
-
-    return {
-        "mode": "explain",
-        "dataset": {"inputs": inputs, "relations": relations},
-        "queries": queries,
-    }
-
-
 def build_benefit_cap_relevant_amount_request(
     *, pe_data: dict[str, Any], year: int
 ) -> dict[str, Any]:
@@ -4924,47 +4689,6 @@ def build_state_pension_credit_qualifying_age_request(
                 "outputs": [
                     spec["axiom"]
                     for spec in STATE_PENSION_CREDIT_QUALIFYING_AGE_OUTPUTS.values()
-                ],
-            }
-        )
-
-    return {
-        "mode": "explain",
-        "dataset": {"inputs": inputs, "relations": []},
-        "queries": queries,
-    }
-
-
-def build_state_pension_final_request(
-    *, pe_data: dict[str, Any], year: int
-) -> dict[str, Any]:
-    interval = benefit_week_interval(year)
-    parameters = policyengine_uk_state_pension_parameters(
-        year=year,
-        data_year=int(pe_data.get("data_year") or year),
-    )
-    inputs: list[dict[str, Any]] = []
-    queries: list[dict[str, Any]] = []
-    for row in rows_for_surface(pe_data, "state-pension-final"):
-        entity_id = person_entity_id(int(row_value(row, "person_id")))
-        for name, value in project_state_pension_final_inputs(
-            row,
-            parameters=parameters,
-        ).items():
-            inputs.append(
-                input_record(
-                    f"{STATE_PENSION_FINAL_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        queries.append(
-            {
-                "entity_id": entity_id,
-                "period": interval,
-                "outputs": [
-                    spec["axiom"] for spec in STATE_PENSION_FINAL_OUTPUTS.values()
                 ],
             }
         )
@@ -5116,40 +4840,6 @@ def build_legacy_weekly_tariff_income_request(
     }
 
 
-def build_pension_credit_final_request(
-    *, pe_data: dict[str, Any], year: int
-) -> dict[str, Any]:
-    interval = tax_year_interval(year)
-    inputs: list[dict[str, Any]] = []
-    queries: list[dict[str, Any]] = []
-    for row in rows_for_surface(pe_data, "pension-credit-final"):
-        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_pension_credit_final_inputs(row).items():
-            inputs.append(
-                input_record(
-                    f"{PENSION_CREDIT_FINAL_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        queries.append(
-            {
-                "entity_id": entity_id,
-                "period": interval,
-                "outputs": [
-                    spec["axiom"] for spec in PENSION_CREDIT_FINAL_OUTPUTS.values()
-                ],
-            }
-        )
-
-    return {
-        "mode": "explain",
-        "dataset": {"inputs": inputs, "relations": []},
-        "queries": queries,
-    }
-
-
 def build_esa_income_tariff_income_request(
     *, pe_data: dict[str, Any], year: int
 ) -> dict[str, Any]:
@@ -5161,38 +4851,6 @@ def build_esa_income_tariff_income_request(
         outputs=ESA_TARIFF_INCOME_OUTPUTS,
         project_inputs=project_esa_income_tariff_income_inputs,
     )
-
-
-def build_esa_income_final_request(
-    *, pe_data: dict[str, Any], year: int
-) -> dict[str, Any]:
-    interval = tax_year_interval(year)
-    inputs: list[dict[str, Any]] = []
-    queries: list[dict[str, Any]] = []
-    for row in rows_for_surface(pe_data, "esa-income-final"):
-        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_esa_income_final_inputs(row).items():
-            inputs.append(
-                input_record(
-                    f"{ESA_FINAL_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        queries.append(
-            {
-                "entity_id": entity_id,
-                "period": interval,
-                "outputs": [spec["axiom"] for spec in ESA_FINAL_OUTPUTS.values()],
-            }
-        )
-
-    return {
-        "mode": "explain",
-        "dataset": {"inputs": inputs, "relations": []},
-        "queries": queries,
-    }
 
 
 def build_jsa_income_tariff_income_request(
@@ -5245,40 +4903,6 @@ def build_housing_benefit_pension_age_tariff_income_request(
         outputs=HOUSING_BENEFIT_PENSION_AGE_TARIFF_INCOME_OUTPUTS,
         project_inputs=project_housing_benefit_pension_age_tariff_income_inputs,
     )
-
-
-def build_housing_benefit_final_request(
-    *, pe_data: dict[str, Any], year: int
-) -> dict[str, Any]:
-    interval = tax_year_interval(year)
-    inputs: list[dict[str, Any]] = []
-    queries: list[dict[str, Any]] = []
-    for row in rows_for_surface(pe_data, "housing-benefit-final"):
-        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_housing_benefit_final_inputs(row).items():
-            inputs.append(
-                input_record(
-                    f"{HOUSING_BENEFIT_FINAL_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        queries.append(
-            {
-                "entity_id": entity_id,
-                "period": interval,
-                "outputs": [
-                    spec["axiom"] for spec in HOUSING_BENEFIT_FINAL_OUTPUTS.values()
-                ],
-            }
-        )
-
-    return {
-        "mode": "explain",
-        "dataset": {"inputs": inputs, "relations": []},
-        "queries": queries,
-    }
 
 
 def build_housing_benefit_applicable_amount_request(
@@ -5587,40 +5211,6 @@ def build_universal_credit_award_request(
                 "period": interval,
                 "outputs": [
                     spec["axiom"] for spec in UNIVERSAL_CREDIT_AWARD_OUTPUTS.values()
-                ],
-            }
-        )
-
-    return {
-        "mode": "explain",
-        "dataset": {"inputs": inputs, "relations": []},
-        "queries": queries,
-    }
-
-
-def build_universal_credit_final_request(
-    *, pe_data: dict[str, Any], year: int
-) -> dict[str, Any]:
-    interval = tax_year_interval(year)
-    inputs: list[dict[str, Any]] = []
-    queries: list[dict[str, Any]] = []
-    for row in rows_for_surface(pe_data, "universal-credit-final"):
-        entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_universal_credit_final_inputs(row).items():
-            inputs.append(
-                input_record(
-                    f"{UNIVERSAL_CREDIT_FINAL_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        queries.append(
-            {
-                "entity_id": entity_id,
-                "period": interval,
-                "outputs": [
-                    spec["axiom"] for spec in UNIVERSAL_CREDIT_FINAL_OUTPUTS.values()
                 ],
             }
         )
@@ -5955,36 +5545,6 @@ def build_scottish_child_payment_final_request(
     }
 
 
-def build_sda_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
-    interval = uk_tax_year_interval(year)
-    inputs: list[dict[str, Any]] = []
-    queries: list[dict[str, Any]] = []
-    for row in rows_for_surface(pe_data, "severe-disablement-allowance-final"):
-        entity_id = person_entity_id(int(row_value(row, "person_id")))
-        for name, value in project_sda_final_inputs(row).items():
-            inputs.append(
-                input_record(
-                    f"{SDA_FINAL_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        queries.append(
-            {
-                "entity_id": entity_id,
-                "period": interval,
-                "outputs": [spec["axiom"] for spec in SDA_FINAL_OUTPUTS.values()],
-            }
-        )
-
-    return {
-        "mode": "explain",
-        "dataset": {"inputs": inputs, "relations": []},
-        "queries": queries,
-    }
-
-
 def build_dla_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
     interval = uk_tax_year_interval(year)
     inputs: list[dict[str, Any]] = []
@@ -6192,27 +5752,6 @@ def project_child_benefit_inputs(row: Any) -> dict[str, Any]:
     }
 
 
-def child_benefit_person_rows_by_benunit(
-    pe_data: dict[str, Any],
-) -> dict[int, list[dict[str, Any]]]:
-    grouped: dict[int, list[dict[str, Any]]] = {}
-    for row in pe_data.get("all_persons") or pe_data["persons"]:
-        if money(row_value(row, "child_benefit_respective_amount", 0)) <= 0:
-            continue
-        benunit_id = row_value(row, "person_benunit_id")
-        if benunit_id is None:
-            continue
-        grouped.setdefault(int(benunit_id), []).append(row)
-    for rows in grouped.values():
-        rows.sort(
-            key=lambda item: (
-                int(row_value(item, "child_benefit_child_index", 999_999)),
-                int(row_value(item, "person_id")),
-            )
-        )
-    return grouped
-
-
 def project_national_insurance_class_4_inputs(row: Any) -> dict[str, Any]:
     profits = money(row_value(row, "self_employment_income", 0)) - money(
         row_value(row, "ni_class_1_employee", 0)
@@ -6283,37 +5822,6 @@ def project_state_pension_credit_qualifying_age_inputs(row: Any) -> dict[str, An
     }
 
 
-def project_state_pension_final_inputs(
-    row: Any,
-    *,
-    parameters: dict[str, float],
-) -> dict[str, Any]:
-    current_type = enum_name(row_value(row, "state_pension_type", "")).upper()
-    data_year_type = enum_name(
-        row_value(row, "state_pension_type_data_year", "")
-    ).upper()
-    return {
-        "current_state_pension_type_is_basic": current_type == "BASIC",
-        "current_state_pension_type_is_new": current_type == "NEW",
-        "data_year_state_pension_type_is_basic": data_year_type == "BASIC",
-        "data_year_state_pension_type_is_new": data_year_type == "NEW",
-        "reported_state_pension_weekly_amount_in_data_year": money(
-            row_value(row, "state_pension_reported_data_year", 0)
-        )
-        / WEEKS_IN_YEAR,
-        "data_year_basic_state_pension_weekly_rate": parameters[
-            "data_year_basic_state_pension_weekly_rate"
-        ],
-        "data_year_full_new_state_pension_weekly_rate": parameters[
-            "data_year_full_new_state_pension_weekly_rate"
-        ],
-        "state_pension_abolished_by_policy": False,
-        "state_pension_policy_uprating_factor": parameters[
-            "state_pension_policy_uprating_factor"
-        ],
-    }
-
-
 def project_national_insurance_final_inputs(row: Any) -> dict[str, Any]:
     return {
         "primary_class_1_contribution_for_year": money(
@@ -6353,17 +5861,6 @@ def project_universal_credit_award_inputs(row: Any) -> dict[str, Any]:
             "uc_income_reduction"
         ),
         "unearned_income_deduction_calculated_in_prescribed_manner": 0.0,
-    }
-
-
-def project_universal_credit_final_inputs(row: Any) -> dict[str, Any]:
-    return {
-        "universal_credit_pre_benefit_cap_for_year": money(
-            row_value(row, "universal_credit_pre_benefit_cap", 0)
-        ),
-        "benefit_cap_reduction_for_year": money(
-            row_value(row, "benefit_cap_reduction", 0)
-        ),
     }
 
 
@@ -6554,20 +6051,6 @@ def project_housing_benefit_pension_age_tariff_income_inputs(
     }
 
 
-def project_housing_benefit_final_inputs(row: Any) -> dict[str, Any]:
-    return {
-        "housing_benefit_pre_benefit_cap_for_year": money(
-            row_value(row, "housing_benefit_pre_benefit_cap", 0)
-        ),
-        "benefit_cap_reduction_for_year": money(
-            row_value(row, "benefit_cap_reduction", 0)
-        ),
-        "would_claim_housing_benefit": bool_row_value(
-            row, "would_claim_housing_benefit", False
-        ),
-    }
-
-
 def project_housing_benefit_applicable_amount_inputs(row: Any) -> dict[str, Any]:
     # The applicable amount depends only on the family type, the eldest adult's
     # age band, whether any member has attained state pension age, and the
@@ -6755,14 +6238,6 @@ def project_scottish_child_payment_final_inputs(row: Any) -> dict[str, Any]:
     }
 
 
-def project_sda_final_inputs(row: Any) -> dict[str, Any]:
-    return {
-        "reported_severe_disablement_allowance_for_year": money(
-            row_value(row, "sda_reported", 0)
-        ),
-    }
-
-
 def project_pip_final_inputs(row: Any) -> dict[str, Any]:
     """Project PolicyEngine UK's frozen PIP award categories into the compare
     wrapper's daily-living and mobility rate-band leaves.
@@ -6805,31 +6280,6 @@ def project_dla_final_inputs(row: Any) -> dict[str, Any]:
         "mobility_component_is_higher_rate": mobility_category
         in {"HIGHER", "HIGHEST", "HIGH"},
         "mobility_component_is_lower_rate": mobility_category in {"LOWER", "LOW"},
-    }
-
-
-def project_pension_credit_final_inputs(row: Any) -> dict[str, Any]:
-    return {
-        "pension_credit_entitlement_for_year": money(
-            row_value(row, "pension_credit_entitlement", 0)
-        ),
-        "person_or_partner_would_claim_pension_credit": bool_row_value(
-            row, "would_claim_pc", False
-        ),
-    }
-
-
-def project_esa_income_final_inputs(row: Any) -> dict[str, Any]:
-    return {
-        "reported_income_related_esa_for_year": money(
-            row_value(row, "esa_income_reported_for_year", 0)
-        ),
-        "income_related_esa_tariff_income_for_year": money(
-            row_value(row, "esa_income_tariff_income", 0)
-        ),
-        "income_related_esa_eligible": bool_row_value(
-            row, "esa_income_eligible", False
-        ),
     }
 
 
@@ -6924,20 +6374,6 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
             for row in persons
             if money(row_value(row, "child_benefit_respective_amount", 0)) > 0
         ]
-    if surface == "child-benefit-final":
-        return [
-            row
-            for row in pe_data.get("benunits", [])
-            if money(row_value(row, "child_benefit_entitlement", 0)) > 0
-            or money(row_value(row, "child_benefit", 0)) > 0
-        ]
-    if surface == "state-pension-final":
-        return [
-            row
-            for row in persons
-            if money(row_value(row, "state_pension", 0)) > 0
-            or money(row_value(row, "state_pension_reported_data_year", 0)) > 0
-        ]
     if surface in {"national-insurance-class-4", "national-insurance-class-4-final"}:
         return [
             row
@@ -6978,14 +6414,6 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
             for row in benunits
             if money(row_value(row, "uc_standard_allowance", 0)) > 0
         ]
-    if surface == "universal-credit-final":
-        return [
-            row
-            for row in benunits
-            if money(row_value(row, "universal_credit", 0)) > 0
-            or money(row_value(row, "universal_credit_pre_benefit_cap", 0)) > 0
-            or money(row_value(row, "benefit_cap_reduction", 0)) > 0
-        ]
     if surface == "carers-allowance-final":
         return [
             row
@@ -7015,13 +6443,6 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
             or bool_row_value(row, "is_scp_eligible", False)
             or bool_row_value(row, "would_claim_scp", False)
         ]
-    if surface == "severe-disablement-allowance-final":
-        return [
-            row
-            for row in persons
-            if money(row_value(row, "sda", 0)) > 0
-            or money(row_value(row, "sda_reported", 0)) > 0
-        ]
     if surface == "disability-living-allowance-final":
         return [
             row
@@ -7045,29 +6466,6 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
             or money(row_value(row, "pip_m", 0)) > 0
             or enum_name(row_value(row, "pip_dl_category", "NONE")).upper() != "NONE"
             or enum_name(row_value(row, "pip_m_category", "NONE")).upper() != "NONE"
-        ]
-    if surface == "pension-credit-final":
-        return [
-            row
-            for row in benunits
-            if money(row_value(row, "pension_credit", 0)) > 0
-            or money(row_value(row, "pension_credit_entitlement", 0)) > 0
-        ]
-    if surface == "esa-income-final":
-        return [
-            row
-            for row in benunits
-            if money(row_value(row, "esa_income", 0)) > 0
-            or money(row_value(row, "esa_income_reported_for_year", 0)) > 0
-            or money(row_value(row, "esa_income_tariff_income", 0)) > 0
-        ]
-    if surface == "housing-benefit-final":
-        return [
-            row
-            for row in benunits
-            if money(row_value(row, "housing_benefit", 0)) > 0
-            or money(row_value(row, "housing_benefit_pre_benefit_cap", 0)) > 0
-            or money(row_value(row, "benefit_cap_reduction", 0)) > 0
         ]
     if surface in (
         "housing-benefit-applicable-amount",
@@ -7924,27 +7322,6 @@ def policyengine_uk_class_4_parameters(year: int) -> dict[str, float]:
         "upper_profits_limit": money(class_4.thresholds.upper_profits_limit),
         "main_class_4_percentage": float(class_4.rates.main),
         "additional_class_4_percentage": float(class_4.rates.additional),
-    }
-
-
-def policyengine_uk_state_pension_parameters(
-    *, year: int, data_year: int
-) -> dict[str, float]:
-    require_policyengine_uk_versions()
-    try:
-        from policyengine_uk import CountryTaxBenefitSystem
-    except ImportError as exc:  # pragma: no cover - optional runtime dependency
-        raise SystemExit(policyengine_uk_install_message()) from exc
-
-    state_pension = CountryTaxBenefitSystem().parameters.gov.dwp.state_pension
-    return {
-        "data_year_basic_state_pension_weekly_rate": money(
-            state_pension.basic_state_pension.amount(data_year)
-        ),
-        "data_year_full_new_state_pension_weekly_rate": money(
-            state_pension.new_state_pension.amount(data_year)
-        ),
-        "state_pension_policy_uprating_factor": 1.0,
     }
 
 

@@ -7,14 +7,13 @@ description: >-
   Payment, Scottish Child Payment, child Disability Living Allowance, and
   Personal Independence Payment surfaces against PolicyEngine UK on the
   Enhanced FRS population.
-  Six final-wrapper surfaces (Child Benefit, State Pension, Pension Credit, ESA
-  income, Housing Benefit, Severe Disablement Allowance) stay excluded — the
-  take-up (would_claim_*) and reported-ceiling (*_reported) columns they need
-  are present in the shared EFRS population, but no rulespec these engines can
-  compare on RULES exists on rulespec-uk main (91cecab): five wrappers were
-  retired and two survivors were re-grounded away from the bridge's I/O
-  contract. Per-surface reasons are recorded in excluded_surfaces below (read by
-  the conformance harness), so this is a documented exclusion, not a silent one.
+  Six retired final-wrapper surfaces (Child Benefit, State Pension, Pension
+  Credit, ESA income, Housing Benefit, Severe Disablement Allowance) are no
+  longer coded in the bridge: rulespec-uk deleted five wrappers (829ab1a,
+  2026-06-10) and re-grounded the two survivors away from the bridge's I/O
+  contract (60501ec); their composed-pipeline re-encodings are compared via
+  their own surfaces and suites. Per-surface history:
+  docs/uk-coverage-matrix.md.
 
 runner:
   type: axiom-encode-uk-efrs-compare
@@ -79,76 +78,3 @@ dashboard:
   parent_category: tax-benefits
   parent_description: UK tax and benefit EFRS surfaces
   known_policyengine_divergence_detail_limit: 25
-
-# Documented exclusions read by the conformance harness. These final-wrapper
-# surfaces are coded in axiom_oracles/bridges/efrs_uk.py (SURFACE_SPECS) and the
-# take-up / reported-ceiling columns they consume are in the shared EFRS
-# population, but they are NOT in `surfaces:` above because no rulespec they can
-# compare on rules exists on rulespec-uk main (91cecab). Verified 2026-07-05.
-# reason codes:
-#   rulespec_retired  — final-wrapper .yaml deleted upstream; only atomic
-#                       statute/regulation modules survive (already compared).
-#   rulespec_reground — wrapper survives but was re-grounded in ingested GOV.UK
-#                       sources, changing its I/O contract so the bridge inputs
-#                       no longer resolve and the compared output is a different
-#                       statutory quantity than PE's reported-passthrough final.
-excluded_surfaces:
-  - surface: child-benefit-final
-    pe_variable: child_benefit
-    reason: rulespec_retired
-    detail: >-
-      uk/policies/govuk/child-benefit.yaml deleted in rulespec-uk 829ab1a
-      ("retire PolicyEngine model wrappers via axiom-encode retire",
-      2026-06-10). would_claim_child_benefit is available and consumed by the
-      bridge, but the final wrapper no longer exists so the surface raises
-      "RuleSpec not found". Atomic child_benefit_respective_amount /
-      child_benefit_entitlement remain compared via the child-benefit surface.
-  - surface: state-pension-final
-    pe_variable: state_pension
-    reason: rulespec_reground
-    detail: >-
-      uk/policies/govuk/state-pension.yaml survives but was re-grounded in
-      GOV.UK guidance (rulespec-uk 60501ec, 2026-06-10). It now computes
-      state_pension_weekly_amount from qualifying-year counts and statutory
-      rates and exposes none of the bridge input slots
-      (current_state_pension_type_is_basic,
-      reported_state_pension_weekly_amount_in_data_year), so compilation fails.
-      PE-UK's state_pension is a reported-ceiling passthrough (pro-rated
-      state_pension_reported); comparing a statutory-accrual rule against a
-      microdata passthrough is not a fair rules comparison.
-  - surface: pension-credit-final
-    pe_variable: pension_credit
-    reason: rulespec_reground
-    detail: >-
-      uk/policies/govuk/pension-credit.yaml survives but was re-grounded
-      (rulespec-uk 60501ec). It now outputs guarantee_credit_annual_amount
-      (guarantee credit only, no savings credit, no take-up gate) rather than
-      the pension_credit_annual_amount the bridge queries, and exposes none of
-      the bridge inputs (person_or_partner_would_claim_pension_credit,
-      pension_credit_entitlement_for_year). would_claim_pc is available in the
-      population; the rulespec simply no longer consumes it.
-  - surface: esa-income-final
-    pe_variable: esa_income
-    reason: rulespec_retired
-    detail: >-
-      uk/policies/govuk/esa-income.yaml deleted in rulespec-uk 829ab1a.
-      esa_income_reported / esa_income_tariff_income are available and consumed
-      by the bridge, but the final wrapper no longer exists. The atomic capital
-      tariff income remains compared via esa-income-tariff-income.
-  - surface: housing-benefit-final
-    pe_variable: housing_benefit
-    reason: rulespec_retired
-    detail: >-
-      uk/policies/govuk/housing-benefit.yaml deleted in rulespec-uk 829ab1a.
-      would_claim_housing_benefit / benefit_cap_reduction are available and
-      consumed by the bridge, but the final wrapper no longer exists. The
-      atomic capital tariff income remains compared via the two
-      housing-benefit-*-tariff-income surfaces.
-  - surface: severe-disablement-allowance-final
-    pe_variable: sda
-    reason: rulespec_retired
-    detail: >-
-      uk/policies/govuk/severe-disablement-allowance.yaml deleted in rulespec-uk
-      829ab1a. sda_reported is available and consumed by the bridge, but the
-      final wrapper no longer exists (closed legacy benefit; the sda rate
-      parameter is compared elsewhere).
