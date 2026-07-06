@@ -202,6 +202,7 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_EMPLOYER_SOCIAL_CONTRIBUTIONS,
         Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,
         Concepts.BE_INCOME_GUARANTEE_FOR_ELDERLY,
+        Concepts.BE_UNEMPLOYMENT_ORDINARY_BENEFIT,
         Concepts.BE_BIRTH_LEAVE_TOTAL_COMPENSATION,
         Concepts.BE_MATERNITY_REST_PERIOD_AMOUNT,
         Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,

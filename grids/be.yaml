@@ -1683,6 +1683,65 @@ case_sets:
         age: 35
         relation: Spouse
         yearly_earned_income: 20000.0
+  be-unemployment:
+    locale: BE
+    entity: Person
+    entity_id: head
+    outputs:
+    - be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount
+    cases:
+    - id: be-unemployment-single-2400
+      period: '2025'
+      scenario: single-ordinary-first-month-unemployment
+      parameters:
+        prior_monthly_wage: 2400.0
+        euromod_policy_switch_overrides:
+        - - bun_be
+          - true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: be-unemployment-single-2800
+      period: '2025'
+      scenario: single-ordinary-first-month-unemployment
+      parameters:
+        prior_monthly_wage: 2800.0
+        euromod_policy_switch_overrides:
+        - - bun_be
+          - true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: be-unemployment-single-3200
+      period: '2025'
+      scenario: single-ordinary-first-month-unemployment
+      parameters:
+        prior_monthly_wage: 3200.0
+        euromod_policy_switch_overrides:
+        - - bun_be
+          - true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: be-unemployment-single-3600
+      period: '2025'
+      scenario: single-ordinary-first-month-unemployment
+      parameters:
+        prior_monthly_wage: 3600.0
+        euromod_policy_switch_overrides:
+        - - bun_be
+          - true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
   be-worker-disposable-income-list:
     locale: BE
     entity: Household

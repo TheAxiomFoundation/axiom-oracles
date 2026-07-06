@@ -287,7 +287,7 @@ policies:
     output_vars:
       - yempv_s
       - bun_s
-    in_scope: false
+    in_scope: true
     internal_only_vars:
       - i_bunmw
       - i_bunel
@@ -296,9 +296,12 @@ policies:
       - i_lunmy
       - bun
       - i_bunft
-    exclusion_reason: not_a_policy
-    note: Unemployment benefit marked 'PART SIMULATED' but switched OFF in BE_2025 — unemployment income
-      is carried from the input data, so the oracle simulates no computed amount in a default run.
+    suite: be-unemployment
+    note: Unemployment benefit marked 'PART SIMULATED' and switched OFF in BE_2025 (unemployment income
+      carried from input data in a default run), but activatable per run via euromod_policy_switch_overrides
+      (the bsaoa_be precedent) for hypothetical cases. The be-unemployment suite switches bun_be on and
+      compares bun_s against the composed RD 25.11.1991 pilot; all four cases are dispositioned upstream_engine_gap
+      (EUROMOD's stylised bun_s vs the statute's Article 111/114/115 amounts).
   - id: be:bwkrg_be
     oracle_policy_name: bwkrg_be
     oracle_policy_type: ben
@@ -314,13 +317,12 @@ policies:
     internal_only_vars:
       - n/a
     exclusion_reason: input_carrying
-    note: Early-retirement benefit (12 functions, 106 params) carrying policy switch n/a in BE_2025,
-      not off. A live probe forcing byr_be on via the model-XML switch overlay (same mechanism as
-      GRAPA bsaoa_be) returns no byr_s column while the run succeeds, so n/a is structural — the
-      functions never register in the spine and no override resurrects them. poa (old-age pension) has
-      no computing policy at all; both flow as pure input into ils_ben and disposable income. The
-      rulespec-be worker-pension encoding (retirement_and_survivor.yaml; RD No. 50, RD 23.12.1996)
-      validates via other oracles, not EUROMOD.
+    note: Early-retirement benefit (12 functions, 106 params) carrying policy switch n/a in BE_2025, not
+      off. A live probe forcing byr_be on via the model-XML switch overlay (same mechanism as GRAPA bsaoa_be)
+      returns no byr_s column while the run succeeds, so n/a is structural — the functions never register
+      in the spine and no override resurrects them. poa (old-age pension) has no computing policy at all;
+      both flow as pure input into ils_ben and disposable income. The rulespec-be worker-pension encoding
+      (retirement_and_survivor.yaml; RD No. 50, RD 23.12.1996) validates via other oracles, not EUROMOD.
   - id: be:hhot_switch_be
     oracle_policy_name: hhot_switch_be
     oracle_policy_type: def
@@ -567,13 +569,12 @@ policies:
       - tscpe_s
     in_scope: true
     suite: null
-    note: 'SIC: pensioner health/disability + solidarity contribution; encoded in
-      non_labour_income_contributions.yaml (Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191
-      health 3.55%), NOT chapter_10_special_contributions (that is the Law 29.06.1981 art. 38
-      employer/fringe special contributions). The be-pensioner-contributions suite live-compares
-      tscpe_s (1/6 exact) but two RuleSpec-attributed encoding gaps remain open — the art. 191 health
-      withholding lacks EUROMOD''s low-pension floor and the art. 68 solidarity base table is a
-      different vintage from EUROMOD''s 2025-indexed thresholds (rulespec-be#89). Stays uncovered
+    note: 'SIC: pensioner health/disability + solidarity contribution; encoded in non_labour_income_contributions.yaml
+      (Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%), NOT chapter_10_special_contributions
+      (that is the Law 29.06.1981 art. 38 employer/fringe special contributions). The be-pensioner-contributions
+      suite live-compares tscpe_s (1/6 exact) but two RuleSpec-attributed encoding gaps remain open —
+      the art. 191 health withholding lacks EUROMOD''s low-pension floor and the art. 68 solidarity base
+      table is a different vintage from EUROMOD''s 2025-indexed thresholds (rulespec-be#89). Stays uncovered
       (suite: null) until #89 lands and the axiom_encoding_gap residuals clear.'
   - id: be:tscse_be
     oracle_policy_name: tscse_be

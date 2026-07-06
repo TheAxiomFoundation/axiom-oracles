@@ -1002,6 +1002,95 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-unemployment-simplified-bun-s",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_pending",
+      "classification": "euromod_model_structural_simplification",
+      "upstream_url": null,
+      "summary": "The Belgium BE_2025 unemployment policy bun_be (labelled PART SIMULATED and shipped switched off) computes bun_s as a stylised proxy rather than the statutory Royal Decree of 25 November 1991 benefit. When switched on for hypothetical cases, bun_s for the ordinary first spell month equals 0.65 x min(post-uprating prior monthly wage, a 3432.38 EUR/month highwage cap) / 12 (the /12 is an internal EUROMOD scaling; the oracle bridge annualises bun_s by x12 to recover a monthly benefit). Three structural differences from the encoded statute: (1) EUROMOD caps the prior MONTHLY wage at a stylised 3432.38 EUR/month highwage figure, while Article 111 caps the prior DAILY wage at 92.3956 EUR/day (limit A1); (2) EUROMOD applies no Article 115 household-status daily minimum floor on the ordinary path in these cases; (3) EUROMOD carries no Article 114 degressivity phase schedule beyond the round period rates. The rate itself (0.65 for the first period) matches Article 114. The composed RuleSpec pilot returns the Article 111 A1 cap-bound monthly payable 1561.48564 EUR (92.3956 x 0.65 x 26), while EUROMOD returns 1645.83-2231.05 EUR across the prior-wage sweep, rising until its highwage cap binds.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bun_be",
+        "policy_switch_override": "bun_be=on",
+        "suite": "be-unemployment",
+        "period": "2025",
+        "cases": [
+          {
+            "case_id": "be-unemployment-single-2400",
+            "prior_monthly_wage": 2400.0,
+            "euromod_post_uprating_prior_monthly_wage": 2532.0537,
+            "euromod_bun_s_annualized_monthly_benefit": 1645.8349,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 84.3493
+          },
+          {
+            "case_id": "be-unemployment-single-2800",
+            "prior_monthly_wage": 2800.0,
+            "euromod_post_uprating_prior_monthly_wage": 2954.0627,
+            "euromod_bun_s_annualized_monthly_benefit": 1920.1408,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 358.6551
+          },
+          {
+            "case_id": "be-unemployment-single-3200",
+            "prior_monthly_wage": 3200.0,
+            "euromod_post_uprating_prior_monthly_wage": 3376.0717,
+            "euromod_bun_s_annualized_monthly_benefit": 2194.4466,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 632.9609
+          },
+          {
+            "case_id": "be-unemployment-single-3600",
+            "prior_monthly_wage": 3600.0,
+            "euromod_post_uprating_prior_monthly_wage": 3798.0806,
+            "euromod_bun_s_annualized_monthly_benefit": 2231.047,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 669.5614
+          }
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/regulations/unemployment/pilot_oracle_pipeline.yaml",
+        "composed_from": [
+          "be/regulations/unemployment/benefit_amount.yaml",
+          "be/regulations/unemployment/minimum_daily_amounts.yaml",
+          "be/regulations/unemployment/payable_amount.yaml",
+          "be/regulations/unemployment/household_status.yaml"
+        ],
+        "corpus_citation_paths": [
+          "be/regulation/arrete/1991/11/25/1991013192/article/111",
+          "be/regulation/arrete/1991/11/25/1991013192/article/114",
+          "be/regulation/arrete/1991/11/25/1991013192/article/115"
+        ],
+        "statutory_parameters": {
+          "article_111_a1_daily_wage_cap_eur": 92.3956,
+          "article_114_first_three_months_replacement_rate": 0.65,
+          "article_115_isolated_first_six_months_daily_minimum_eur": 34.94,
+          "compensable_days_per_month": 26
+        },
+        "euromod_xml_observed_parameters": {
+          "refwage_monthly_floor": "2111.89#m",
+          "highwage_monthly_cap": "3432.38#m",
+          "rate_period1": 0.65,
+          "rate_period2": 0.6,
+          "rate_period3": 0.6,
+          "period1_max_isolated": "85.81#s",
+          "period1_min_isolated": "55.29#s",
+          "internal_scaling": "bun_s = accumulated benefit / 12"
+        }
+      },
+      "workaround": {
+        "description": "Keep the residual visible in the household-level oracle report. The RuleSpec pilot follows the Royal Decree of 25 November 1991 Articles 111, 114, and 115; do not alter it toward EUROMOD's simplified bun_be while the structural simplification stands. bun_be must be switched on per run via euromod_policy_switch_overrides because BE_2025 ships it off with unemployment income carried from input data."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

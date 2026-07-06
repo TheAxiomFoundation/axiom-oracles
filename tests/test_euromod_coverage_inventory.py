@@ -33,9 +33,10 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         coverage["coverage_summary"]["full_household_disposable_income_parity"] is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 22
+    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 23
     assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 16
     assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
+    assert outputs["bun_s"]["status"] == "live_oracle_dispositioned"
     assert outputs["tscee_s"]["status"] == (
         "live_oracle_verified_gross_regular_worker_slice"
     )
