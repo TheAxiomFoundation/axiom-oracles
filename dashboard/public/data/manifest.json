@@ -74,6 +74,7 @@
     "axiom-euromod-be-elderly-income-support.json",
     "axiom-euromod-be-pensioner-contributions.json",
     "axiom-euromod-be-marital-quotient.json",
-    "axiom-euromod-be-unemployment.json"
+    "axiom-euromod-be-unemployment.json",
+    "axiom-euromod-be-study-allowance.json"
   ]
 }

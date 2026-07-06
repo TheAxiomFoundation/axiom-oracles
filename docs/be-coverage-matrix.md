@@ -13,7 +13,7 @@ oracle-compared.
   status, function counts, and output variables are read from the XML, not from
   memory of what EUROMOD "probably" models.
 - **rulespec-be** inventory is from `main` (HEAD `206f110`), `.yaml` modules only.
-- **axiom-oracles** suites are the 24 published `dashboard/public/data/axiom-euromod-be-*.json`
+- **axiom-oracles** suites are the 25 published `dashboard/public/data/axiom-euromod-be-*.json`
   plus 1 registered-but-unpublished suite (`be-elderly-income-support`); per-case
   counts read from those JSONs.
 
@@ -70,7 +70,7 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | 15 | `bch_be` | on | `bch_s` | Monthly child benefit — 4 regions × base/supplement/rank (Growth Package / groeipakket / AGF) | compared (base + BXL/WAL supplements) | `be-family-child-benefit-*` (5 suites: base 13/17 #8, BXL same-age 4/4, BXL supp 3/3, WAL supp 2/8 #9) | — (broaden: orphan/disability/single-parent supplements, mixed-age rank) |
 | 16 | `bchba_be` | on | `bchba_s` | Regional birth allowance / starting amount (4 regions) | compared | `be-family-birth-allowance` (6/7; EUROMOD #13) | — (broaden: multiple-birth, payment recipient) |
 | 17 | `bsa_be` | on | `bsa_s` | Social-integration income support (leefloon / revenu d'intégration, CPAS/OCMW) | compared (partial) | `be-social-assistance` (2/2) | — (broaden: itemized/cohabitant resources, earned-income disregards) |
-| 18 | `bed_be` | on | `bed_s` | Study allowances — Flemish (school/study toelage) + French Community grants (147 functions) | **NOT ENCODED** | — | **encode from scratch** → Flemish Codex Secundair/Hoger Onderwijs + FWB décret allocations d'études |
+| 18 | `bed_be` | on | `bed_s` | Study allowances — Flemish (school/study toelage) + French Community grants (147 functions) | **encoded** (`be-vlg/statutes/education/study_grant`, `be-vlg/statutes/education/school_allowance`, `be-wal/statutes/education/study_allowance`, `be/statutes/education/study_allowance_routing`) | `be-study-allowance` (6/6; batch-size 1) | — (broaden: Brussels random split + non-take-up, intern/kot amounts, disability points) |
 | 19 | `bwkrg_be` | on | `bwkrg_s` | Flemish jobbonus (low-wage employment top-up) | compared | `be-flemish-jobbonus` (2/7; EUROMOD #10) | — (broaden: part-time/partial-year, frontier workers) |
 | 20 | `yemcomp_be` | on | `bwkmcee_s`, `yemmw_s` | Covid-19 temporary-unemployment wage compensation (employees) | **NOT ENCODED** | — | (low priority; historical) → RD 30.03.2020 + ONEM temp-unemployment Covid measures |
 | 21 | `ysecomp_be` | on | `bwkmcse_s` | Covid-19 wage compensation (self-employed bridging right / droit passerelle) | **NOT ENCODED** | — | (low priority; historical) → Law 23.03.2020 crisis bridging right |
@@ -168,9 +168,9 @@ the EUROMOD matrix.
 
 ## Sanity-check vs the live dashboard
 
-27 published suites, **117 comparisons, 76 exact matches; explained 95.73%,
+28 published suites, **123 comparisons, 82 exact matches; explained 95.93%,
 0 unexplained** (matches `euromod-be-coverage.json` `dispositioned_parity`; the
-new `be-unemployment` adds 4 comparisons, all dispositioned `upstream_engine_gap`).
+new `be-study-allowance` adds 6 comparisons, all exact matches).
 `be-elderly-income-support` (`bsaoa_s`, GRAPA) is now **published** — EUROMOD
 `bsaoa_s` = Axiom GRAPA = 18,964.44, exact, via the per-case `bsaoa_be`→on switch
 overlay. Publishing it also closed the last of a class of pre-existing manifest

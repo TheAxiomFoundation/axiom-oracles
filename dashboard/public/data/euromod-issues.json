@@ -1091,6 +1091,22 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-bed-study-allowance-batch-position-contamination",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "observed_local",
+      "classification": "euromod_engine_batch_determinism_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues",
+      "summary": "The Belgium BE_2025 study-allowance policy bed_be returns different bed_s for an identical student household depending on the batch position of that household within a single engine run. The same Flanders higher-education case returns bed_s=3046.30 when run alone or first in a batch but 0.0 at later positions, regardless of the other households present. Assigning disjoint idperson blocks per household reduces but does not remove the effect, so it is not solely an idperson family-relation collision; a second-order dependency on the whole submitted dataframe remains. The study-allowance oracle suite therefore runs one household per engine subprocess call (comparison batch size 1), under which every case is deterministic and matches the encoded surface exactly (6/6).",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "note": "Identical single-household runs are stable (four repeated runs of the Wallonia yem=200 case all return 869.21); only multi-household batches are affected."
+      },
+      "counts_as_axiom_gap": false
     }
   ]
 }

@@ -1683,6 +1683,31 @@ case_sets:
         age: 35
         relation: Spouse
         yearly_earned_income: 20000.0
+  be-study-allowance:
+    locale: BE
+    entity: Person
+    entity_id: head
+    outputs:
+    - be:statutes/education/study_allowance_routing#belgium_study_allowance_annual_amount
+    cases:
+    - id: be-study-allowance-flanders-higher-education-full
+      period: '2025'
+      scenario: flanders-higher-education-low-income-full-amount
+    - id: be-study-allowance-flanders-higher-education-intermediate
+      period: '2025'
+      scenario: flanders-higher-education-intermediate-band
+    - id: be-study-allowance-flanders-secondary-full
+      period: '2025'
+      scenario: flanders-secondary-full-amount
+    - id: be-study-allowance-wallonia-higher-education
+      period: '2025'
+      scenario: wallonia-higher-education-nonzero
+    - id: be-study-allowance-flanders-higher-education-above-threshold
+      period: '2025'
+      scenario: flanders-higher-education-above-income-threshold
+    - id: be-study-allowance-wallonia-above-threshold
+      period: '2025'
+      scenario: wallonia-above-income-threshold
   be-unemployment:
     locale: BE
     entity: Person

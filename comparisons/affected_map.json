@@ -78,6 +78,14 @@
       "source": "comparisons/be-regional-pit-surcharge.yaml"
     },
     {
+      "suite": "be-study-allowance",
+      "report": "axiom-euromod-be-study-allowance.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-study-allowance.yaml"
+    },
+    {
       "suite": "ca-snap-ecps",
       "report": "axiom-policyengine-ca-snap-ecps.json",
       "repos": [

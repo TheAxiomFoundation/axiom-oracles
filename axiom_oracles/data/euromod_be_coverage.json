@@ -60,8 +60,8 @@
     }
   },
   "coverage_summary": {
-    "current_oracle_output_targets": 23,
-    "live_verified_oracle_output_targets": 16,
+    "current_oracle_output_targets": 24,
+    "live_verified_oracle_output_targets": 17,
     "prepared_oracle_output_targets": 0,
     "full_household_disposable_income_parity": false,
     "rule_percentage": null,
@@ -268,6 +268,19 @@
       "rulespec_module": null,
       "status": "oracle_anchor_not_target_output",
       "remaining_gap": "Used to align comparisons on EUROMOD's own post-uprating gross; not a RuleSpec parity target."
+    },
+    {
+      "euromod_variable": "bed_s",
+      "meaning": "study allowance (Flemish study grant and school allowance; French-Community allocation d'etudes), region-routed",
+      "rulespec_output": "be:statutes/education/study_allowance_routing#belgium_study_allowance_annual_amount",
+      "rulespec_module": "be/statutes/education/study_allowance_routing.yaml",
+      "status": "live_oracle_verified_flanders_higher_secondary_and_wallonia_with_known_batch_position_euromod_issue",
+      "evidence": "The region-routing module selects the Flemish or French-Community study allowance by drgn1. Six single-household BE_2025 cases (one EUROMOD subprocess each) match bed_s exactly: Flanders higher-education full 3046.30 and intermediate 2092.30, Flanders secondary 1139.56, Wallonia higher-education 869.21, and Flanders and Wallonia above-threshold zeros. The Flemish study grant, Flemish school allowance, and French-Community allocation surfaces supply the routed amounts. Brussels' random ninety-ten split and the non-take-up correction are gated on Run_Cond !IsUsedDatabase and do not run on hypothetical data.",
+      "additional_rulespec_outputs": [
+        "be-vlg:statutes/education/study_grant#study_grant_allowance",
+        "be-vlg:statutes/education/school_allowance#flanders_school_allowance_amount",
+        "be-wal:statutes/education/study_allowance#study_allowance_allocation_amount"
+      ]
     }
   ],
   "domain_coverage": [
