@@ -27901,6 +27901,20 @@ mappings:
     candidate_priority: P4
     rationale: Source-level structural predicate or intermediate from California personal exemption credit (RTC 17054). PolicyEngine composes final California income tax, credits, and exemptions from indexed current-year parameters and does not expose this statutory intermediate as a one-to-one variable.
 
+  # New York Tax Law Article 22 (personal income tax core) — TAX 601/614
+  - legal_id: us-ny:statutes/TAX/601#ny_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This RuleSpec output is the New York Tax Law section 601 resident income-tax-before-credits concept. Section 601's rate schedule is inflation-indexed by New York State annually, so this output is declared as a deferred output to import from the current-year authority rather than an executable value; PolicyEngine exposes the indexed, composed ny_income_tax_before_credits variable. It becomes directly comparable once the composed current-year output is encoded.
+  - legal_id: us-ny:statutes/TAX/614#ny_standard_deduction
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This RuleSpec output is the New York Tax Law section 614 standard-deduction concept. The standard deduction is inflation-indexed by New York State annually, so this output is declared as a deferred output to import from the current-year authority rather than an executable value; PolicyEngine exposes the indexed ny_standard_deduction variable. It becomes directly comparable once the composed current-year output is encoded.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
