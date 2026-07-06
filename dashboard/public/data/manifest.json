@@ -82,6 +82,7 @@
     "axiom-euromod-uk-statutory-maternity-pay.json",
     "axiom-euromod-uk-maternity-allowance.json",
     "axiom-euromod-uk-statutory-paternity-pay.json",
-    "axiom-policyengine-taxsim-ma-income-tax-liability.json"
+    "axiom-policyengine-taxsim-ma-income-tax-liability.json",
+    "axiom-policyengine-taxsim-ny-income-tax-liability.json"
   ]
 }
