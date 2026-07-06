@@ -1,0 +1,43 @@
+name: uk-statutory-maternity-pay-ukmod
+title: UK Statutory Maternity Pay — Axiom vs UKMOD
+description: >-
+  Compares the composed UK Statutory Maternity Pay pipeline encoded in Axiom
+  RuleSpec (Social Security Contributions and Benefits Act 1992 Part XII: the
+  s.166 earnings-related rate of 90% of normal weekly earnings, across the
+  prescribed 39-week maternity pay period, above the s.164 lower earnings limit)
+  against CeMPA's UKMOD Statutory Maternity Pay (bmact_s) on a synthetic
+  lone-mother earnings sweep (annual gross 6k / 8k / 12k / 25k / 40k). UKMOD
+  bmact_uk pays the earnings-related rate over the whole maternity pay period for
+  a hypothetical maternity case, so the annual amount is 0.9 x weekly earnings x
+  39 on both sides, where the weekly figure is UKMOD's yem/30.5*7 monthly-to-
+  weekly proxy; the input bridge feeds the pilot the same weekly earnings UKMOD
+  used (annualised yem / (12 x 30.5 / 7)) so the surfaces reconstruct each other.
+  Below the £130 lower earnings limit (annual gross 6k) both sides return zero.
+  Statutory Maternity Pay does not consume UKMOD's stochastic take-up draw, so the
+  take-up correction cannot zero a hypothetical recipient's award. UKMOD runs the
+  registration-free public model (UKMOD_PUBLIC_B2026.03, system UK_2026, dataset
+  training_data). This suite runs where the x64 UKMOD runtime and model checkout
+  are available; on runners without them it re-emits the committed dashboard
+  report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-statutory-maternity-pay
+    population: synthetic
+    sample_size: 0
+    period: 2026-04-06
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-statutory-maternity-pay.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-statutory-maternity-pay
+
+dashboard:
+  filename: axiom-euromod-uk-statutory-maternity-pay.json
+  suite: uk-statutory-maternity-pay

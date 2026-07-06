@@ -208,6 +208,22 @@ class Concepts:
         "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline"
         "#uk_cb_pilot_annual_entitlement_net_of_charge"
     )
+    # Statutory-pay / maternity stack. Each composed pilot reconstructs the live
+    # UKMOD UK_2026 output (bmact_s / bmanc_s / bpact_s) from a supplied weekly
+    # earnings figure: 0.9 x normal weekly earnings x the paid-period weeks, the
+    # earnings-related limb UKMOD applies for the hypothetical case.
+    UK_STATUTORY_MATERNITY_PAY = (
+        "uk:statutes/statutory_maternity_pay/pilot_statutory_maternity_pay_oracle_pipeline"
+        "#uk_smp_pilot_total_entitlement"
+    )
+    UK_MATERNITY_ALLOWANCE = (
+        "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline"
+        "#uk_ma_pilot_total_entitlement"
+    )
+    UK_STATUTORY_PATERNITY_PAY = (
+        "uk:statutes/statutory_paternity_pay/pilot_statutory_paternity_pay_oracle_pipeline"
+        "#uk_spp_pilot_total_entitlement"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

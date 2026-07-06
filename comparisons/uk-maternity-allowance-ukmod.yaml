@@ -1,0 +1,41 @@
+name: uk-maternity-allowance-ukmod
+title: UK Maternity Allowance — Axiom vs UKMOD
+description: >-
+  Compares the composed UK Maternity Allowance pipeline encoded in Axiom RuleSpec
+  (Social Security Contributions and Benefits Act 1992 Part II: the s.35A rate of
+  90% of average weekly earnings, across the 39-week maternity allowance period,
+  above the s.35 maternity-allowance earnings threshold) against CeMPA's UKMOD
+  Maternity Allowance (bmanc_s) on a synthetic self-employed lone-mother earnings
+  sweep (annual self-employment 9k / 15k / 25k). Maternity Allowance is payable
+  only where Statutory Maternity Pay is not (bmact_s = 0), so the recipient is
+  self-employed (yse > 0, yem = 0): UKMOD bmanc_uk pays 0.9 x weekly x 39 from the
+  self-employment earnings above the £30 threshold, where the weekly figure is
+  UKMOD's yse/30.5*7 proxy; the input bridge feeds the pilot the same weekly
+  earnings UKMOD used (annualised yse / (12 x 30.5 / 7)) so the surfaces
+  reconstruct each other. Maternity Allowance does not consume UKMOD's stochastic
+  take-up draw. UKMOD runs the registration-free public model
+  (UKMOD_PUBLIC_B2026.03, system UK_2026, dataset training_data). This suite runs
+  where the x64 UKMOD runtime and model checkout are available; on runners without
+  them it re-emits the committed dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-maternity-allowance
+    population: synthetic
+    sample_size: 0
+    period: 2026-04-06
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-maternity-allowance.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-maternity-allowance
+
+dashboard:
+  filename: axiom-euromod-uk-maternity-allowance.json
+  suite: uk-maternity-allowance

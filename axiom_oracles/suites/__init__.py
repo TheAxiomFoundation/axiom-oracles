@@ -56,6 +56,11 @@ from .uk_self_employed import (
 )
 from .uk_child_benefit import uk_child_benefit_cases
 from .uk_pension_credit import uk_pension_credit_cases
+from .uk_statutory_pay import (
+    uk_maternity_allowance_cases,
+    uk_statutory_maternity_pay_cases,
+    uk_statutory_paternity_pay_cases,
+)
 from .uk_universal_credit import uk_universal_credit_cases
 from .uk_worker import (
     uk_worker_nic_cases,
@@ -105,6 +110,9 @@ def available_suites() -> tuple[str, ...]:
         "uk-pension-credit",
         "uk-income-tax-scottish",
         "uk-child-benefit",
+        "uk-statutory-maternity-pay",
+        "uk-maternity-allowance",
+        "uk-statutory-paternity-pay",
         "uk-income-tax-savings",
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",
@@ -192,6 +200,12 @@ def load_suite(name: str):
         return uk_income_tax_scottish_cases()
     if name == "uk-child-benefit":
         return uk_child_benefit_cases()
+    if name == "uk-statutory-maternity-pay":
+        return uk_statutory_maternity_pay_cases()
+    if name == "uk-maternity-allowance":
+        return uk_maternity_allowance_cases()
+    if name == "uk-statutory-paternity-pay":
+        return uk_statutory_paternity_pay_cases()
     if name == "uk-income-tax-savings":
         return uk_income_tax_savings_cases()
     if name == "uk-income-tax-dividend":
@@ -236,7 +250,10 @@ __all__ = [
     "nyc_basic_cases",
     "nyc_synthetic_cases",
     "uk_child_benefit_cases",
+    "uk_maternity_allowance_cases",
     "uk_pension_credit_cases",
+    "uk_statutory_maternity_pay_cases",
+    "uk_statutory_paternity_pay_cases",
     "uk_employer_secondary_nic_cases",
     "uk_income_tax_dividend_cases",
     "uk_income_tax_mixed_cases",

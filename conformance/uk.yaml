@@ -479,16 +479,18 @@ policies:
       - i_durweeks_bmact2
       - i_yempv_bmact
       - i_bmact
-    suite: null
+    suite: uk-statutory-maternity-pay
     note: 'BEN: Statutory Maternity Pay. The UKMOD Comment says "(not simulated in the baseline)", but
       the UK_2026 policy is switch=on and computes bmact_s from ordinary demographic/earnings inputs —
       female (dgn=0) with a newborn (dag<1, baby-months dmb), earnings above the SMP lower-earnings-limit
       ($SMPlel), working hours (liwwh>6), and previous earnings i_yempv_bmact — with the 90%/flat-rate
-      SMP formula over i_durweeks_bmact2. No maternity-leave-spell column is required, so it IS comparable
-      on synthetic HHoT cases. Kept in scope as a genuine uncovered surface (not excluded): Axiom has
-      no SMP suite yet and rulespec-uk does not encode SMP (docs/uk-coverage-matrix.md). Next-wave worklist.
-      (Distinct from the bfapl_be dataset-blocked case, whose activating leave column is genuinely absent
-      from its schema.)'
+      SMP formula over i_durweeks_bmact2. Confirmed empirically against UKMOD_PUBLIC_B2026.03/UK_2026:
+      bmact_s is nonzero and earnings-responsive on synthetic HHoT cases (lone mother, annual gross £8k->£5,370.49,
+      £25k->£16,782.79, below the £130 LEL->£0), reconstructed exactly by the composed rulespec-uk SMP
+      pipeline (SSCBA 1992 Part XII ss.164-166). Now COVERED by the uk-statutory-maternity-pay suite (5
+      cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the full 39-week period for
+      the HHoT case rather than the flat prescribed rate. bmact_uk does not consume the stochastic take-up
+      draw i_rand_tu.'
   - id: uk:bmamt01_uk
     oracle_policy_name: bmamt01_uk
     oracle_policy_type: ben
@@ -496,6 +498,15 @@ policies:
       - bmamt01_s
     in_scope: true
     suite: null
+    note: 'BEN: Healthy Start food voucher (rest of UK). Unlike the statutory-pay policies this is a passported
+      means-tested payment: the Elig_Cond requires a qualifying means-tested benefit in payment (bsa_s>0
+      | bunmt_s>0 | boamt_s>0 | bfamt_s>0 | bsauc_s>0 ...), and the amount is $HSFood (£4.25/week per
+      eligible child, 2026-27) for a child under the threshold age. Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026:
+      for a zero-earnings lone parent with a newborn who is passported onto Universal Credit (bsauc_s>0,
+      take-up gate off), bmamt01_s=£443.21. It does NOT consume the stochastic i_rand_tu take-up draw,
+      so it is a deterministic passported surface. In scope and coverable via a passported case (UC in
+      payment); next-wave worklist, held out of this statutory-pay suite whose cases are single-earner
+      households with no passporting benefit.'
   - id: uk:bmamt_uk
     oracle_policy_name: bmamt_uk
     oracle_policy_type: ben
@@ -503,6 +514,14 @@ policies:
       - bmamt_s
     in_scope: true
     suite: null
+    note: 'BEN: Sure Start Maternity Grant (rest of UK). Passported means-tested lump sum: the Elig_Cond
+      requires a qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0
+      ...) and a child under 1 with no other dependent children, paying $BSurMaG (£500, 2026-27). Confirmed
+      computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings lone parent with a newborn
+      passported onto Universal Credit (bsauc_s>0, take-up gate off), bmamt_s=£500.00 (= $BSurMaG). It
+      does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic passported surface.
+      In scope and coverable via a passported case (UC in payment); next-wave worklist, held out of this
+      statutory-pay suite whose cases are single-earner households with no passporting benefit.'
   - id: uk:bmanc_uk
     oracle_policy_name: bmanc_uk
     oracle_policy_type: ben
@@ -517,13 +536,16 @@ policies:
       - i_durweeks_bmanc
       - i_yempv_bmanc
       - i_bmanc
-    suite: null
+    suite: uk-maternity-allowance
     note: 'BEN: Maternity Allowance. The UKMOD Comment says "(not simulated in the baseline)", but the
       UK_2026 policy is switch=on and computes bmanc_s from ordinary demographic/earnings inputs (eligible
-      parent, newborn age-weeks, duration weeks, previous earnings i_yempv_bmanc) — no leave-spell column
-      is required, so it IS comparable on synthetic HHoT cases. Kept in scope as a genuine uncovered surface
-      (not excluded): Axiom has no MA suite yet and rulespec-uk does not encode MA (docs/uk-coverage-matrix.md).
-      Next-wave worklist, not a dataset-blocked or vacuous comparison.'
+      parent, newborn age-weeks, duration weeks, previous earnings i_yempv_bmanc). Maternity Allowance
+      is payable only where Statutory Maternity Pay is not (Comp_Cond requires bmact_s=0), so it is exercised
+      with a self-employed lone mother (yse>0, yem=0). Confirmed empirically against UKMOD_PUBLIC_B2026.03/UK_2026:
+      bmanc_s is nonzero and earnings-responsive (self-employment £9k->£6,041.80, £15k->£10,069.67), reconstructed
+      exactly by the composed rulespec-uk MA pipeline (SSCBA 1992 Part II ss.35/35A/35B). Now COVERED
+      by the uk-maternity-allowance suite (3 cases, 3/3 match). bmanc_uk does not consume the stochastic
+      take-up draw.'
   - id: uk:bmascmt01_uk
     oracle_policy_name: bmascmt01_uk
     oracle_policy_type: ben
@@ -531,18 +553,39 @@ policies:
       - bmascmt01_s
     in_scope: true
     suite: null
+    note: 'BEN: Best Start Foods (Scotland). Passported means-tested payment: the Elig_Cond requires a
+      qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0 ...) AND
+      Scottish residence (drgn1=12), paying $BScBSF0 (£11.20/week under 1) or $BScBSF1to2 (£5.60/week
+      ages 1-2), 2026-27. Confirmed computable against UKMOD_PUBLIC_B2026.03/UK_2026: for a zero-earnings
+      lone parent in Scotland (drgn1=12) with a newborn passported onto Universal Credit (bsauc_s>0, take-up
+      gate off), bmascmt01_s=£584.00. Unlike its sibling bmascmt_uk (Best Start Grant), Best Start Foods
+      does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic passported surface.
+      In scope and coverable via a passported Scottish case; next-wave worklist, held out of this statutory-pay
+      suite whose cases are single-earner rest-of-UK households with no passporting benefit.'
   - id: uk:bmascmt_uk
     oracle_policy_name: bmascmt_uk
     oracle_policy_type: ben
     output_vars:
       - bmascmt_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bmascmt01_s
       - i_bmascmt04_s
       - i_bmascmt03_s
       - i_bmascmt02_s
-    suite: null
+    exclusion_reason: takeup_adjustment
+    note: 'BEN: Best Start Grant (Scotland — Pregnancy and Baby, Early Learning, School Age payments).
+      RECATEGORIZED to takeup_adjustment on probe evidence. Each component BenCalc gates the award on
+      the stochastic per-benefit-unit take-up draw i_rand_tu (Comp_Cond i_rand_tu<=$BSGfirst / $BSGsec
+      / $BSGearly / $BSGschool, with $BSGfirst commented "Take-up estimate: Best Start Grant pregnancy
+      and baby take-up"), the same random-draw device UKMOD applies to Universal Credit (see BTA_uk /
+      random_uk and euromod_issues.json ukmod-uc-bsauc-takeup-stochastic-zeroing). Verified live against
+      UKMOD_PUBLIC_B2026.03/UK_2026: for a passported Scottish lone parent (bsauc_s>0, take-up gate off)
+      bmascmt_s=£0.00 — the draw does not pass — whereas overriding the take-up constants ($BSGfirst..
+      = 1) recovers the deterministic statutory amount bmascmt_s=£796.65 (= $BScStGFirstbaby). Because
+      the baseline award is a stochastic draw, not a reproducible per-household statutory result, this
+      is a take-up-adjustment surface (like the excluded BTA_uk), not a clean arithmetic oracle. Distinct
+      from the sibling bmascmt01_uk (Best Start Foods), which has no take-up gate and stays in scope.'
   - id: uk:bmu_uk
     oracle_policy_name: bmu_uk
     oracle_policy_type: ben
@@ -635,13 +678,15 @@ policies:
       - i_elparent_bpact
       - i_yempv_bpact
       - i_bpact
-    suite: null
+    suite: uk-statutory-paternity-pay
     note: 'BEN: Statutory Paternity Pay. The UKMOD Comment says "(not simulated in the baseline)", but
       the UK_2026 policy is switch=on and computes bpact_s from ordinary inputs (eligible parent, previous
-      earnings i_yempv_bpact) — no leave-spell column is required, so it IS comparable on synthetic HHoT
-      cases. Kept in scope as a genuine uncovered surface (not excluded): Axiom has no SPP suite yet and
-      rulespec-uk does not encode SPP (docs/uk-coverage-matrix.md). Next-wave worklist, not a vacuous
-      or dataset-blocked comparison.'
+      earnings i_yempv_bpact). Confirmed empirically against UKMOD_PUBLIC_B2026.03/UK_2026: bpact_s is
+      nonzero and earnings-responsive on synthetic HHoT cases (lone father, annual gross £8k->£275.41,
+      £25k->£860.66, below the £130 LEL->£0), reconstructed exactly by the composed rulespec-uk SPP pipeline
+      (SSCBA 1992 Part 12ZA ss.171ZA/171ZE/171ZJ). Now COVERED by the uk-statutory-paternity-pay suite
+      (5 cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the 2-week period for the
+      HHoT case. bpact_uk does not consume the stochastic take-up draw.'
   - id: uk:bsa_uk
     oracle_policy_name: bsa_uk
     oracle_policy_type: ben

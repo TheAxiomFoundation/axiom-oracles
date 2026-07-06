@@ -3103,3 +3103,41 @@ prefixes:
     program: pension_credit
     mapping_type: not_comparable
     rationale: Composed Family-level UKMOD Pension Credit oracle pipeline; its standard-minimum-guarantee, severe-disability and carer additional-amount, appropriate-minimum-guarantee, guarantee-credit-condition and weekly award outputs re-wire the separately mapped State Pension Credit Regulations 2002 regulation 6 weekly-rate rules and the State Pension Credit Act 2002 section 2 guarantee credit for the UKMOD boamt_s comparison rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Person-level UKMOD Statutory Maternity Pay oracle pipeline (SSCBA 1992
+  # Part XII ss.164-166/171). Its earnings-related-rate, prescribed-rate, lower-
+  # earnings-limit, maternity-pay-period, normal-weekly-earnings, entitlement,
+  # weekly-amount and total-entitlement outputs reconstruct the UKMOD bmact_s
+  # earnings-related award from a supplied weekly earnings figure for the UKMOD
+  # comparison rather than adding new PolicyEngine UK oracle variables (PolicyEngine
+  # UK models statutory maternity pay as an input-carried amount, not a composed
+  # entitlement pipeline). Added for the statutory-pay/maternity family.
+  - legal_id_prefix: uk:statutes/statutory_maternity_pay/pilot_statutory_maternity_pay_oracle_pipeline#
+    country: uk
+    program: statutory_maternity_pay
+    mapping_type: not_comparable
+    rationale: Composed Person-level UKMOD Statutory Maternity Pay oracle pipeline; its earnings-related-rate, prescribed-weekly-standard-rate, lower-earnings-limit, maternity-pay-period, normal-weekly-earnings, entitlement, weekly-amount and total-entitlement outputs reconstruct the UKMOD bmact_s earnings-related award (0.9 x normal weekly earnings x 39 weeks, grounded in SSCBA 1992 s.166) from a supplied weekly earnings figure for the UKMOD bmact_s comparison rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Person-level UKMOD Maternity Allowance oracle pipeline (SSCBA 1992
+  # Part II ss.35/35A/35B). Its earnings-related-rate, earnings-threshold, period,
+  # average-weekly-earnings, entitlement, weekly-amount and total-entitlement
+  # outputs reconstruct the UKMOD bmanc_s earnings-related award (payable only where
+  # SMP is not) for the UKMOD comparison rather than adding new PolicyEngine UK
+  # oracle variables. Added for the statutory-pay/maternity family.
+  - legal_id_prefix: uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline#
+    country: uk
+    program: maternity_allowance
+    mapping_type: not_comparable
+    rationale: Composed Person-level UKMOD Maternity Allowance oracle pipeline; its earnings-related-rate, earnings-threshold, maternity-allowance-period, average-weekly-earnings, entitlement, weekly-amount and total-entitlement outputs reconstruct the UKMOD bmanc_s earnings-related award (0.9 x average weekly earnings x 39 weeks, grounded in SSCBA 1992 s.35A; payable only where Statutory Maternity Pay is not) for the UKMOD bmanc_s comparison rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Person-level UKMOD Statutory Paternity Pay oracle pipeline (SSCBA 1992
+  # Part 12ZA ss.171ZA/171ZE/171ZJ). Its earnings-related-rate, lower-earnings-
+  # limit, paternity-pay-period, normal-weekly-earnings, entitlement, weekly-amount
+  # and total-entitlement outputs reconstruct the UKMOD bpact_s earnings-related
+  # award for the UKMOD comparison rather than adding new PolicyEngine UK oracle
+  # variables. Added for the statutory-pay/maternity family.
+  - legal_id_prefix: uk:statutes/statutory_paternity_pay/pilot_statutory_paternity_pay_oracle_pipeline#
+    country: uk
+    program: statutory_paternity_pay
+    mapping_type: not_comparable
+    rationale: Composed Person-level UKMOD Statutory Paternity Pay oracle pipeline; its earnings-related-rate, lower-earnings-limit, paternity-pay-period, normal-weekly-earnings, entitlement, weekly-amount and total-entitlement outputs reconstruct the UKMOD bpact_s earnings-related award (0.9 x normal weekly earnings x 2 weeks, grounded in SSCBA 1992 s.171ZE) for the UKMOD bpact_s comparison rather than adding new PolicyEngine UK oracle variables.
