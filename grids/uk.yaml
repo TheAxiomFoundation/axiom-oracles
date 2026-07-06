@@ -15,6 +15,7 @@ case_sets:
     entity_id: benefit_unit
     outputs:
     - uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement
+    - uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline#uk_cb_pilot_annual_entitlement_net_of_charge
     cases:
     - id: uk-child-benefit-1c-20k
       period: '2026'
