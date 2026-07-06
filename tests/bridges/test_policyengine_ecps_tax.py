@@ -723,11 +723,12 @@ def test_eitc_projection_uses_ecps_income_and_demographic_inputs():
         contexts=contexts,
     )
     assert earned_income_inputs == {
-        "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income": 18_000,
-        "pension_or_annuity_amounts_received": 0,
-        "amounts_to_which_section_871_a_applies": 0,
-        "amounts_received_for_services_while_inmate_at_penal_institution": 0,
-        "subsidized_state_work_activity_amounts_received": 0,
+        "employee_compensation_includible_in_gross_income": 18_000,
+            "net_earnings_from_self_employment_after_self_employment_tax_deduction": 0.0,
+        "pension_or_annuity_amount": 0,
+        "nonresident_alien_income_not_connected_with_united_states_business": 0,
+        "penal_institution_service_compensation": 0,
+        "subsidized_state_work_activity_service_compensation": 0,
         "taxpayer_elects_to_treat_section_112_excluded_amounts_as_earned_income": False,
     }
     assert (
@@ -797,7 +798,7 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
             persons=persons,
             contexts=contexts,
         )[
-            "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income"
+            "employee_compensation_includible_in_gross_income"
         ]
         == 0
     )
@@ -871,11 +872,14 @@ def test_eitc_projection_sends_self_employment_to_section_1402_not_earned_income
         persons=persons,
         contexts=contexts,
     ) == {
-        "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income": 23_000,
-        "pension_or_annuity_amounts_received": 0,
-        "amounts_to_which_section_871_a_applies": 0,
-        "amounts_received_for_services_while_inmate_at_penal_institution": 0,
-        "subsidized_state_work_activity_amounts_received": 0,
+        "employee_compensation_includible_in_gross_income": 23_000,
+            "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
+                3_647.825
+            ),
+        "pension_or_annuity_amount": 0,
+        "nonresident_alien_income_not_connected_with_united_states_business": 0,
+        "penal_institution_service_compensation": 0,
+        "subsidized_state_work_activity_service_compensation": 0,
         "taxpayer_elects_to_treat_section_112_excluded_amounts_as_earned_income": False,
     }
     assert project_section_1402_a_tax_unit_inputs(
@@ -1098,7 +1102,7 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
     )
     assert (
         input_values[
-            f"{SECTION_32_C_2_BASE}#input.wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income"
+            f"{SECTION_32_C_2_BASE}#input.employee_compensation_includible_in_gross_income"
         ]
         == "18000.0"
     )

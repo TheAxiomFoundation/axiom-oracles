@@ -240,10 +240,10 @@
   },
   {
    "concept": "us:tax/state-income-tax#liability",
-   "description": "Colorado runs end to end through the generated tax bridge with no missing inputs. All 6 remaining amount differences (of 926 tax units) are zero-weight ECPS rows, so the weighted match rate is 100% while the unweighted score is 920/926. Examples: ecps-tax-unit-131265 (+$154.46) and ecps-tax-unit-131530 (-$268.46). They need a component trace, not an output patch; no Python amount override is applied.",
-   "fix_owner": "investigation",
+   "description": "134 of 1,201 Colorado tax units diverge on the refreshed oracle pair (policyengine 4.18.9 / policyengine-us 1.752.2; population grew from 926 to 1,201 units). Three classes: (1) 24 childless filers aged 18-24 \u2014 Colorado's HB21-1311 extension of the state EITC via the ARPA IRC 32(n)(1) mechanics is explicitly deferred in the encoding (39-22-123.5(2.7) deferred_outputs: federal mechanics not in copied context), so the composed program pays no credit where PolicyEngine does; encoder-side gap. (2) ~78 units with AGI above the $300k deduction-addback threshold diverge by a constant ~$17.60 = 4.4% x $400 (axiom high): one $400 federal-boundary item newly modeled or revalued in PE 1.752.2 vs the bridge's policyengine 4.4.4-era generated constants; addback caps (12k/16k/300k) verified identical; under trace, owner oracles-bridge. (3) ~30 family-credit composition edges (CO CTC / family affordability / EITC-adjacent), largest -$1,107 on an infant household. The suite previously read 920/926 on the stale 1.700.0 oracle.",
+   "fix_owner": "oracles-bridge",
    "kind": "amount_difference",
-   "label": "Six zero-weight tax-unit residuals",
+   "label": "Young-childless EITC (deferred branch), $400 high-earner boundary constant, family-credit edges",
    "suite": "co-state-income-tax-ecps"
   },
   {

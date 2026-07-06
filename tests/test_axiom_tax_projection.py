@@ -68,11 +68,11 @@ def test_axiom_tax_projection_maps_family_inputs_and_relations() -> None:
         (
             "tax_unit",
             "us:statutes/26/32/c/2#input."
-            "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income",
+            "employee_compensation_includible_in_gross_income",
         )
     ] == 70_000
     assert by_key[
-        ("tax_unit", "us:statutes/26/32/c/2#input.pension_or_annuity_amounts_received")
+        ("tax_unit", "us:statutes/26/32/c/2#input.pension_or_annuity_amount")
     ] == 0
     assert by_key[
         ("person-3", "us:tax/federal-income-tax#input.is_tax_unit_dependent")

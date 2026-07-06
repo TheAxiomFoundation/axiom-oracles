@@ -120,6 +120,10 @@ US_TAX_ORACLE_IMPORTS = (
     "us:statutes/26/164/f",
     "us:statutes/26/1401",
     "us:statutes/26/1402/a",
+    # 1402(a)(12) lives in a child fragment; the engine resolves rule names
+    # only from explicitly imported modules, so the parent import alone
+    # leaves self_employment_tax_equivalent_deduction_fraction unbound.
+    "us:statutes/26/1402/a/12",
     "us:statutes/26/1411",
     "us:statutes/26/3101/a",
     "us:statutes/26/3101/b/1",
@@ -2900,8 +2904,8 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "annuity_income",
     "aotc_prior_year_election_count",
     "american_employer_foreign_affiliate_equivalent_3121l_taxes",
-    "amounts_received_for_services_while_inmate_at_penal_institution",
-    "amounts_to_which_section_871_a_applies",
+    "penal_institution_service_compensation",
+    "nonresident_alien_income_not_connected_with_united_states_business",
     "auto_loan_interest_deduction",
     "casualty_loss_deduction",
     "capital_gains_28_percent_rate_gain",
@@ -2954,7 +2958,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "overtime_income_deduction",
     "passive_activity_business_income",
     "passenger_vehicle_loan_interest_paid_or_accrued",
-    "pension_or_annuity_amounts_received",
+    "pension_or_annuity_amount",
     "pension_annuity_disability_benefits_received",
     "qualified_dividend_income",
     "qualified_plan_distributions",
@@ -3009,7 +3013,7 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "tax_imposed_by_chapter_before_cdcc",
     "taxpayer_earned_income_for_cdcc",
     "state_sales_tax",
-    "subsidized_state_work_activity_amounts_received",
+    "subsidized_state_work_activity_service_compensation",
     "tip_income_deduction",
     "trustee_to_trustee_transfer_or_rollover_distribution_portion",
     "undistributed_net_investment_income",
@@ -3319,11 +3323,11 @@ _INPUT_REF_OVERRIDES.update(
     {
         name: f"us:statutes/26/32/c/2#input.{name}"
         for name in (
-            "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income",
-            "pension_or_annuity_amounts_received",
-            "amounts_to_which_section_871_a_applies",
-            "amounts_received_for_services_while_inmate_at_penal_institution",
-            "subsidized_state_work_activity_amounts_received",
+            "employee_compensation_includible_in_gross_income",
+            "pension_or_annuity_amount",
+            "nonresident_alien_income_not_connected_with_united_states_business",
+            "penal_institution_service_compensation",
+            "subsidized_state_work_activity_service_compensation",
             "taxpayer_elects_to_treat_section_112_excluded_amounts_as_earned_income",
         )
     }
@@ -3515,7 +3519,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "trust_all_unexpired_interests_devoted_to_section_170_c_2_B_purposes": False,
         "wages": wages,
         "wages_paid_to_individual_for_section_1401_a": wages,
-        "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income": wages,
+        "employee_compensation_includible_in_gross_income": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
         # Investment / unearned income — projected from Case concepts.
         "dividend_income": tax_unit_dividends,
@@ -3543,6 +3547,12 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "real_estate_taxes": _number(case.fact(Concepts.PROPERTY_TAX_PAID, 0)),
         "self_employment_trade_or_business_deductions": 0,
         "self_employment_trade_or_business_gross_income": self_employment,
+        # 26 USC 32(c)(2)(A)(ii): NESE determined with regard to the
+        # 164(f)/1402(a)(12) deduction (one-half of the combined
+        # 1401(a)+(b)(1) rates).
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
+            max(0.0, self_employment) * (1 - 0.5 * (0.124 + 0.029))
+        ),
         "alaska_permanent_fund_dividend_eligible_person_count": _alaska_permanent_fund_dividend_eligible_person_count(
             case,
             people,

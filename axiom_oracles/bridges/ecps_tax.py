@@ -2246,16 +2246,34 @@ def project_section_32_c_2_tax_unit_inputs(
     persons: list[Any],
     contexts: list[PersonProjectionContext],
 ) -> dict[str, Any]:
+    # 26 USC 32(c)(2)(A)(ii): net earnings from self-employment determined
+    # with regard to the 164(f)/1402(a)(12) deduction — NESE net of one-half
+    # of the combined 1401(a)+(b)(1) rates.
+    seca_deduction_fraction = 0.5 * (0.124 + 0.029)
+    net_earnings_after_deduction = sum(
+        max(
+            0.0,
+            money(person.get("self_employment_income_before_lsr", 0))
+            + money(person.get("sstb_self_employment_income_before_lsr", 0))
+            + money(person.get("farm_operations_income", 0))
+            + money(person.get("partnership_se_income", 0)),
+        )
+        for person, context in zip(persons, contexts, strict=True)
+        if context.is_head or context.is_spouse
+    ) * (1 - seca_deduction_fraction)
     return {
-        "wages_salaries_tips_and_other_employee_compensation_includible_in_gross_income": sum(
+        "employee_compensation_includible_in_gross_income": sum(
             money(person.get("employment_income_before_lsr", 0))
             for person, context in zip(persons, contexts, strict=True)
             if context.is_head or context.is_spouse
         ),
-        "pension_or_annuity_amounts_received": 0,
-        "amounts_to_which_section_871_a_applies": 0,
-        "amounts_received_for_services_while_inmate_at_penal_institution": 0,
-        "subsidized_state_work_activity_amounts_received": 0,
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
+            net_earnings_after_deduction
+        ),
+        "pension_or_annuity_amount": 0,
+        "nonresident_alien_income_not_connected_with_united_states_business": 0,
+        "penal_institution_service_compensation": 0,
+        "subsidized_state_work_activity_service_compensation": 0,
         "taxpayer_elects_to_treat_section_112_excluded_amounts_as_earned_income": False,
     }
 
