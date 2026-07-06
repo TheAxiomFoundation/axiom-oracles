@@ -11,11 +11,12 @@ description: >-
   and the isolated article 68 solidarity brackets (3225.74/3325.48/3572.77/3610
   per month). Single-pensioner old-age-only households neutralize the EUROMOD
   individual-vs-rulespec-Family entity difference and the poa+psu-vs-full-pension
-  scope difference, isolating two genuine structural divergences that are
-  dispositioned in dispositions/be-pensioner-contributions.yaml: EUROMOD's health
-  floor (rulespec article 191 withholds 3.55% on the whole pension) and EUROMOD's
-  2025-indexed solidarity thresholds vs the rulespec article 68 base table at
-  index factor 1. EUROMOD runs the registration-free public model
+  scope difference. The suite matches EUROMOD exactly across every case (6/6)
+  since rulespec-be#89 encoded the article 191 low-pension health floor and
+  carried the indexed 2025 article 68 solidarity thresholds, both grounded in the
+  Service federal des Pensions 2025 withholding tables; the earlier residuals that
+  were dispositioned as axiom encoding gaps have cleared. EUROMOD runs the
+  registration-free public model
   (EUROMOD_RELEASES_J2.0+, system BE_2025) under the real dataset-configuration
   name BE_2024_c1_2015_03_e2 with rows templated from BE_training_data; pension
   income is carried at face value (poa is not uprated), so no yem bridge applies.

@@ -9,17 +9,17 @@
       "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
       "description": "Belgium pensioner health/disability and solidarity contribution",
       "left_weighted_sum": 7776.8,
-      "match_rate": 16.666667,
-      "match_weight": 1,
-      "mismatch_count": 5,
-      "mismatch_weight": 5,
+      "match_rate": 100,
+      "match_weight": 6,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 10789.95,
-      "weighted_difference": -3013.15,
-      "weighted_match_rate": 16.666667
+      "right_weighted_sum": 7776.8,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
     }
   ],
   "case_count": 6,
@@ -28,7 +28,7 @@
       "case_id": "be-pensioner-tscpe-below-health-18k",
       "left_engine": "euromod",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Family",
         "axiom_entity_id": "family",
@@ -76,19 +76,7 @@
         },
         "yearly_pension_income": 18000.0
       },
-      "mismatches": [
-        {
-          "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-          "description": "Belgium pensioner health/disability and solidarity contribution",
-          "difference": -639.0,
-          "kind": "amount_difference",
-          "left": 0.0,
-          "parent": null,
-          "relative_tolerance": 0.001,
-          "right": 639.0,
-          "tolerance": 1
-        }
-      ],
+      "mismatches": [],
       "right_engine": "axiom",
       "right_errors": []
     },
@@ -96,7 +84,7 @@
       "case_id": "be-pensioner-tscpe-health-phase-in-24k9",
       "left_engine": "euromod",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Family",
         "axiom_entity_id": "family",
@@ -144,19 +132,7 @@
         },
         "yearly_pension_income": 24900.0
       },
-      "mismatches": [
-        {
-          "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-          "description": "Belgium pensioner health/disability and solidarity contribution",
-          "difference": -934.7100000000003,
-          "kind": "amount_difference",
-          "left": 447.2399999999998,
-          "parent": null,
-          "relative_tolerance": 0.001,
-          "right": 1381.95,
-          "tolerance": 1
-        }
-      ],
+      "mismatches": [],
       "right_engine": "axiom",
       "right_errors": []
     },
@@ -164,7 +140,7 @@
       "case_id": "be-pensioner-tscpe-above-health-30k",
       "left_engine": "euromod",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Family",
         "axiom_entity_id": "family",
@@ -212,19 +188,7 @@
         },
         "yearly_pension_income": 30000.0
       },
-      "mismatches": [
-        {
-          "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-          "description": "Belgium pensioner health/disability and solidarity contribution",
-          "difference": -600.0000000000002,
-          "kind": "amount_difference",
-          "left": 1064.9999999999998,
-          "parent": null,
-          "relative_tolerance": 0.001,
-          "right": 1665.0,
-          "tolerance": 1
-        }
-      ],
+      "mismatches": [],
       "right_engine": "axiom",
       "right_errors": []
     },
@@ -232,7 +196,7 @@
       "case_id": "be-pensioner-tscpe-solidarity-phase-in-39k",
       "left_engine": "euromod",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Family",
         "axiom_entity_id": "family",
@@ -280,19 +244,7 @@
         },
         "yearly_pension_income": 39000.0
       },
-      "mismatches": [
-        {
-          "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-          "description": "Belgium pensioner health/disability and solidarity contribution",
-          "difference": -634.4399999999989,
-          "kind": "amount_difference",
-          "left": 1530.060000000001,
-          "parent": null,
-          "relative_tolerance": 0.001,
-          "right": 2164.5,
-          "tolerance": 1
-        }
-      ],
+      "mismatches": [],
       "right_engine": "axiom",
       "right_errors": []
     },
@@ -300,7 +252,7 @@
       "case_id": "be-pensioner-tscpe-solidarity-mid-41k",
       "left_engine": "euromod",
       "left_errors": [],
-      "match_rate": 0.0,
+      "match_rate": 100.0,
       "metadata": {
         "axiom_entity": "Family",
         "axiom_entity_id": "family",
@@ -348,19 +300,7 @@
         },
         "yearly_pension_income": 41000.0
       },
-      "mismatches": [
-        {
-          "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-          "description": "Belgium pensioner health/disability and solidarity contribution",
-          "difference": -205.0,
-          "kind": "amount_difference",
-          "left": 2070.5,
-          "parent": null,
-          "relative_tolerance": 0.001,
-          "right": 2275.5,
-          "tolerance": 1
-        }
-      ],
+      "mismatches": [],
       "right_engine": "axiom",
       "right_errors": []
     },
@@ -442,113 +382,7 @@
   "locales": [
     "BE"
   ],
-  "mismatches": [
-    {
-      "ages": null,
-      "case_id": "be-pensioner-tscpe-below-health-18k",
-      "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-      "description": "Belgium pensioner health/disability and solidarity contribution",
-      "difference": -639.0,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "health-floor-missing-below-euromod-floor",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-be/issues/89"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0.001,
-      "right": 639.0,
-      "scenario": "isolated-old-age-pensioner-tscpe",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "be-pensioner-tscpe-health-phase-in-24k9",
-      "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-      "description": "Belgium pensioner health/disability and solidarity contribution",
-      "difference": -934.7100000000003,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "health-floor-and-solidarity-base-phase-in",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-be/issues/89"
-      },
-      "kind": "amount_difference",
-      "left": 447.2399999999998,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0.001,
-      "right": 1381.95,
-      "scenario": "isolated-old-age-pensioner-tscpe",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "be-pensioner-tscpe-above-health-30k",
-      "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-      "description": "Belgium pensioner health/disability and solidarity contribution",
-      "difference": -600.0000000000002,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "solidarity-base-table-above-health-30k",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-be/issues/89"
-      },
-      "kind": "amount_difference",
-      "left": 1064.9999999999998,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0.001,
-      "right": 1665.0,
-      "scenario": "isolated-old-age-pensioner-tscpe",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "be-pensioner-tscpe-solidarity-phase-in-39k",
-      "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-      "description": "Belgium pensioner health/disability and solidarity contribution",
-      "difference": -634.4399999999989,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "solidarity-base-table-phase-in-39k",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-be/issues/89"
-      },
-      "kind": "amount_difference",
-      "left": 1530.060000000001,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0.001,
-      "right": 2164.5,
-      "scenario": "isolated-old-age-pensioner-tscpe",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "be-pensioner-tscpe-solidarity-mid-41k",
-      "concept": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding",
-      "description": "Belgium pensioner health/disability and solidarity contribution",
-      "difference": -205.0,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "solidarity-base-table-mid-41k",
-        "linked_issue": "https://github.com/TheAxiomFoundation/rulespec-be/issues/89"
-      },
-      "kind": "amount_difference",
-      "left": 2070.5,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0.001,
-      "right": 2275.5,
-      "scenario": "isolated-old-age-pensioner-tscpe",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    }
-  ],
+  "mismatches": [],
   "population": "synthetic",
   "provenance": {
     "dataset": {
@@ -556,10 +390,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "c6cc389a8f5e7238019e4fa06849325fad9acd46",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-05T23:32:01Z",
+    "generated_at": "2026-07-06T01:25:49Z",
     "generated_by": "scripts/run_comparison.py::be-pensioner-contributions",
     "oracle": {
       "euromod_country": "BE",
@@ -571,7 +405,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": "849ffded47afc7fa5b1018626809287afba9dd53"
+        "sha": "f4c580557e3f4f7f273042906ab12f94313fd247"
       }
     ],
     "run_kind": "manual",
@@ -584,47 +418,38 @@
     "comparison_count": 6,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 5,
+        "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
       "dispositions_file": "dispositions/be-pensioner-contributions.yaml",
-      "expired_entries": [],
-      "explained_rate": 16.666667,
+      "expired_entries": [
+        "health-floor-missing-below-euromod-floor",
+        "health-floor-and-solidarity-base-phase-in",
+        "solidarity-base-table-above-health-30k",
+        "solidarity-base-table-phase-in-39k",
+        "solidarity-base-table-mid-41k"
+      ],
+      "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 16.666667,
+      "raw_match_rate": 100,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 1,
-    "mismatch_count": 5,
-    "mismatches_by_concept": [
-      {
-        "count": 5,
-        "value": "be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding"
-      }
-    ],
-    "mismatches_by_kind": [
-      {
-        "count": 5,
-        "value": "amount_difference"
-      }
-    ],
-    "mismatches_by_scenario": [
-      {
-        "count": 5,
-        "value": "isolated-old-age-pensioner-tscpe"
-      }
-    ],
+    "match_count": 6,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
     "weighted": {
       "comparison_weight": 6,
-      "match_rate": 16.666667,
-      "match_weight": 1,
-      "mismatch_weight": 5
+      "match_rate": 100,
+      "match_weight": 6,
+      "mismatch_weight": 0
     }
   }
 }

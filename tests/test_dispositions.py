@@ -313,10 +313,11 @@ def test_seeded_belgium_lane_rollup_covers_every_mismatch() -> None:
     rollup = dispositioned_rollup(reports)
     assert rollup["comparison_count"] > 0
     assert rollup["raw_match_rate"] < rollup["explained_rate"]
-    # Every BE mismatch is classified (none unexplained). explained_rate is
-    # below 100 because be-pensioner-contributions carries axiom_encoding_gap
-    # residuals (the tscpe_be article 191 health-floor and article 68
-    # solidarity base-table gaps, rulespec-be#89) — those are classified but
-    # never counted as explained, which is the intended distinction.
+    # Every BE mismatch is classified (none unexplained). explained_rate is now
+    # 100: the be-pensioner-contributions suite that once carried the tscpe_be
+    # axiom_encoding_gap residuals (the article 191 health-floor and article 68
+    # solidarity base-table gaps, rulespec-be#89) now matches EUROMOD exactly
+    # (6/6), so no BE mismatch remains to classify. raw_match_rate stays below
+    # explained because other BE suites still carry dispositioned residuals.
     assert rollup["unexplained_count"] == 0
-    assert rollup["explained_rate"] < 100
+    assert rollup["explained_rate"] == 100
