@@ -13,7 +13,7 @@ from typing import Any
 import yaml
 
 from .adapters import PolicyEngineUSVarAdapter, get_pe_us_var_adapter
-from .ecps_tax import (
+from .tax_populace import (
     array,
     bool_value,
     input_record,
