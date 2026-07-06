@@ -1,0 +1,6 @@
+prefixes:
+  - legal_id_prefix: "gh:"
+    country: gh
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine has no Ghana model and cannot serve as a Ghana tax-benefit oracle. Axiom Ghana outputs are built from official Ghana legislation (Income Tax Act 2015, Act 896, as amended) and GRA/LEAP sources; the intended household oracle is GHAMOD (UNU-WIDER SOUTHMOD), which attaches once the model-and-data bundle clears licensing. Exact PolicyEngine mappings should be added only after a real one-to-one Ghana oracle target is implemented and verified.
