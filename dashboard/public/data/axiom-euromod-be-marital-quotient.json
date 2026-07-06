@@ -1,0 +1,480 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+      "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+      "left_weighted_sum": 10224.289511,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_count": 3,
+      "mismatch_weight": 3,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 22112.593127,
+      "weighted_difference": -11888.303616,
+      "weighted_match_rate": 0
+    }
+  ],
+  "case_count": 3,
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+      "id": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 15
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-marital-quotient-30k",
+      "concept": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+      "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+      "difference": -3575.17669438576,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "couple-slice-omits-ssc-forfait-and-refundable-credit-30k"
+      },
+      "kind": "amount_difference",
+      "left": -808.5753436467967,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 2766.6013507389634,
+      "scenario": "single-earner-married-couple-marital-quotient",
+      "tolerance": 15,
+      "yearly_earned_income": 30000.0
+    },
+    {
+      "ages": null,
+      "case_id": "be-marital-quotient-45k",
+      "concept": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+      "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+      "difference": -3516.6534317783508,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "couple-slice-base-omits-ssc-and-forfait-45k"
+      },
+      "kind": "amount_difference",
+      "left": 3484.260716878077,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 7000.914148656428,
+      "scenario": "single-earner-married-couple-marital-quotient",
+      "tolerance": 15,
+      "yearly_earned_income": 45000.0
+    },
+    {
+      "ages": null,
+      "case_id": "be-marital-quotient-60k",
+      "concept": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+      "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+      "difference": -4796.473490315609,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "couple-slice-base-omits-ssc-and-forfait-60k"
+      },
+      "kind": "amount_difference",
+      "left": 7548.604137323547,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 12345.077627639155,
+      "scenario": "single-earner-married-couple-marital-quotient",
+      "tolerance": 15,
+      "yearly_earned_income": 60000.0
+    }
+  ],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "be-marital-quotient",
+  "summary": {
+    "comparison_count": 3,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 3,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/be-marital-quotient.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 0,
+    "mismatch_count": 3,
+    "mismatches_by_concept": [
+      {
+        "count": 3,
+        "value": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 3,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 3,
+        "value": "single-earner-married-couple-marital-quotient"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 3,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_weight": 3
+    }
+  },
+  "cases": [
+    {
+      "case_id": "be-marital-quotient-30k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "TaxUnit",
+        "axiom_entity_id": "taxunit",
+        "axiom_inputs": {
+          "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_communal_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_dissolution_by_death": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_factual_separation_effective_for_entire_taxable_period_after_separation_year": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_legal_cohabitants_marry_after_prior_year_declaration": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_married_or_legal_cohabiting": true,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_survivor_or_heirs_joint_assessment_election_made": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_year_of_marriage_dissolution_legal_separation_or_cohabitation_cessation": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_year_of_marriage_or_legal_cohabitation_declaration": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_87_88_no_tax_increase_condition_met": true,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_convention_exempt_professional_income_not_counted_for_other_tax": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions": 31650.67178502879,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_convention_exempt_professional_income_not_counted_for_other_tax": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_professional_income_after_article_89_exclusions": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 2,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 2500.0,
+            "yemmy": 12
+          },
+          {
+            "dag": 35,
+            "dgn": 0,
+            "dms": 2,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 0.0,
+            "yemmy": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions": 31650.67178502879
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            35
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            30000.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 30000.0
+        },
+        "locale": "BE",
+        "scenario": "single-earner-married-couple-marital-quotient",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 30000.0
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+          "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+          "difference": -3575.17669438576,
+          "kind": "amount_difference",
+          "left": -808.5753436467967,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 2766.6013507389634,
+          "tolerance": 15
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-marital-quotient-45k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "TaxUnit",
+        "axiom_entity_id": "taxunit",
+        "axiom_inputs": {
+          "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_communal_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_dissolution_by_death": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_factual_separation_effective_for_entire_taxable_period_after_separation_year": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_legal_cohabitants_marry_after_prior_year_declaration": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_married_or_legal_cohabiting": true,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_survivor_or_heirs_joint_assessment_election_made": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_year_of_marriage_dissolution_legal_separation_or_cohabitation_cessation": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_year_of_marriage_or_legal_cohabitation_declaration": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_87_88_no_tax_increase_condition_met": true,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_convention_exempt_professional_income_not_counted_for_other_tax": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions": 47476.00767754318,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_convention_exempt_professional_income_not_counted_for_other_tax": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_professional_income_after_article_89_exclusions": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 2,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 3750.0,
+            "yemmy": 12
+          },
+          {
+            "dag": 35,
+            "dgn": 0,
+            "dms": 2,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 0.0,
+            "yemmy": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions": 47476.00767754318
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            35
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            45000.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 45000.0
+        },
+        "locale": "BE",
+        "scenario": "single-earner-married-couple-marital-quotient",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 45000.0
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+          "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+          "difference": -3516.6534317783508,
+          "kind": "amount_difference",
+          "left": 3484.260716878077,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 7000.914148656428,
+          "tolerance": 15
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-marital-quotient-60k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "TaxUnit",
+        "axiom_entity_id": "taxunit",
+        "axiom_inputs": {
+          "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_agglomeration_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_communal_additional_tax_rate": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_dissolution_by_death": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_factual_separation_effective_for_entire_taxable_period_after_separation_year": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_legal_cohabitants_marry_after_prior_year_declaration": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_married_or_legal_cohabiting": true,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_survivor_or_heirs_joint_assessment_election_made": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_year_of_marriage_dissolution_legal_separation_or_cohabitation_cessation": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_year_of_marriage_or_legal_cohabitation_declaration": false,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_87_88_no_tax_increase_condition_met": true,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_convention_exempt_professional_income_not_counted_for_other_tax": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions": 63301.34357005758,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_convention_exempt_professional_income_not_counted_for_other_tax": 0,
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_professional_income_after_article_89_exclusions": 0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dms": 2,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "les": 3,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "yem": 5000.0,
+            "yemmy": 12
+          },
+          {
+            "dag": 35,
+            "dgn": 0,
+            "dms": 2,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "les": 0,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "yem": 0.0,
+            "yemmy": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions": 63301.34357005758
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            35
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            60000.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 60000.0
+        },
+        "locale": "BE",
+        "scenario": "single-earner-married-couple-marital-quotient",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 60000.0
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+          "description": "Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)",
+          "difference": -4796.473490315609,
+          "kind": "amount_difference",
+          "left": 7548.604137323547,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 12345.077627639155,
+          "tolerance": 15
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ]
+}

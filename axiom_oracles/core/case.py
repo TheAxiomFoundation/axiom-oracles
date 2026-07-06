@@ -205,6 +205,10 @@ class Concepts:
         "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
         "#belgium_pit_pilot_federal_and_local_tax_before_withholding"
     )
+    BE_MARITAL_QUOTIENT_COUPLE_PIT_BEFORE_WITHHOLDING = (
+        "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
+        "#belgium_pit_couple_federal_and_local_tax_before_withholding"
+    )
     BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS = (
         "be:regulations/social_security/workers/employee_contributions"
         "#belgium_employee_social_security_ordinary_worker_contribution"
