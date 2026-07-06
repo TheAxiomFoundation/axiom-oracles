@@ -192,8 +192,11 @@ policies:
     note: 'BEN: study allowances (Flemish + French Community, 147 functions). The be-study-allowance suite
       live-compares bed_s region-routed to the Flemish study-financing decree of 8 June 2007 / Groeipakket
       decree of 27 April 2018 or the French-Community decree of 18 November 2021, and matches EUROMOD
-      exactly (6/6, axiom-oracles#167). Brussels'' random 90/10 split and non-take-up correction are gated
-      on !IsUsedDatabase and stay out of scope on hypothetical data.'
+      exactly (6/6, axiom-oracles#167). bed_be''s stochastic non-take-up correction IS active under the
+      real dataset-configuration name (its !IsUsedDatabase gate matches only be_????_hhot dataset names),
+      so the suite runs each household as its own engine run (axiom-oracles#168) and pins $bed_FlTakeUp/$bed_FrTakeUp
+      to 1.0 via euromod_constant_overrides to hold bed_s on the statutory amount. Brussels'' random 90/10
+      split stays out of scope on hypothetical data.'
   - id: be:bfapl_be
     oracle_policy_name: bfapl_be
     oracle_policy_type: ben
