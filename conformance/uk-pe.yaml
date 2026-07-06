@@ -1,0 +1,353 @@
+# axiom_oracles.conformance.v1 — GENERATED universe facts + committed scope decisions.
+# Rows (policy id, oracle_policy_name, output_vars) are regenerated from the oracle
+# model spine by scripts/generate_conformance_universe.py — do NOT hand-edit those.
+# in_scope / exclusion_reason / suite / note ARE hand-authored decisions the generator
+# preserves; edit those here. CI fails if the generated facts drift from the model.
+schema: axiom_oracles.conformance.v1
+jurisdiction: uk-pe
+oracle:
+  model: policyengine-uk
+  release: 2.89.2
+  system: uk
+  country: UK
+  backend: policyengine
+  label: policyengine-uk_2.89.2/uk
+policies:
+  - id: uk-pe:attendance_allowance
+    oracle_policy_name: attendance_allowance
+    oracle_policy_type: rate_from_category
+    output_vars:
+      - attendance_allowance
+    in_scope: true
+    suite: null
+    comparability: rate_only
+    note: rates-given-category — PE-UK applies the AA rate table over a frozen aa_category FRS input.
+      In-scope uncovered — the rate params are compared in the matrix but no AA program surface runs in
+      either PE suite yet (matrix row 14 → SSCBA 1992 s.64-67).
+  - id: uk-pe:business_rates
+    oracle_policy_name: business_rates
+    oracle_policy_type: rules
+    output_vars:
+      - business_rates
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes business_rates but rulespec has not encoded it and no suite
+      runs (matrix row 7 → LGFA 1988 Pt III multiplier + reliefs).
+  - id: uk-pe:capital_gains_tax
+    oracle_policy_name: capital_gains_tax
+    oracle_policy_type: rules
+    output_vars:
+      - capital_gains_tax
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes capital_gains_tax but rulespec has not encoded it and no
+      suite runs (matrix row 9 → TCGA 1992; FA rate schedule).
+  - id: uk-pe:carer_support_payment
+    oracle_policy_name: carer_support_payment
+    oracle_policy_type: reported_ceiling
+    output_vars:
+      - carer_support_payment
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+    comparability: rate_only
+    note: rates-given-category — the carer-support-payment-final suite compares the rules-computed entitlement
+      amount (carer_support_payment_annual_amount); PE-UK's carer_support_payment (the Scotland CA replacement,
+      ≥2025) is a hybrid amount-or-reported variable, so the bound comparison is the rate/amount given
+      the award, not the full eligibility rule (matrix row 28).
+  - id: uk-pe:carers_allowance
+    oracle_policy_name: carers_allowance
+    oracle_policy_type: reported_ceiling
+    output_vars:
+      - carers_allowance
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+    comparability: rate_only
+    note: rates-given-category — the carers-allowance-final suite compares the rules-computed entitlement
+      amount (carers_allowance_annual_amount); PE-UK's carers_allowance variable is a hybrid (care-hours
+      test OR reported fallback, zeroed in Scotland ≥2025), so the bound comparison is the rate/amount
+      given the award, not the full hours-eligibility rule (matrix row 19).
+  - id: uk-pe:child_benefit
+    oracle_policy_name: child_benefit
+    oracle_policy_type: rules
+    output_vars:
+      - child_benefit_respective_amount
+    in_scope: true
+    internal_only_vars:
+      - child_benefit
+      - child_benefit_entitlement
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:council_tax
+    oracle_policy_name: council_tax
+    oracle_policy_type: pure_input
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - council_tax
+    exclusion_reason: input_carrying
+    note: 'PE-UK carries council_tax as a reported FRS liability (no formula): it applies no bands/valuation
+      and computes no statutory charge, so there is no simulated surface to compare. In-scope uncovered
+      on the rulespec side once PE adds a computed base (matrix row 6 → LGFA 1992 Pt I).'
+  - id: uk-pe:council_tax_benefit
+    oracle_policy_name: council_tax_benefit
+    oracle_policy_type: reported_ceiling
+    output_vars:
+      - council_tax_benefit
+    in_scope: false
+    exclusion_reason: input_carrying
+    note: 'Legacy pre-2013 Council Tax Benefit: PE-UK reads a *_reported amount and applies only a passthrough,
+      never computing the abolished scheme''s award from statute. The current-scheme analogue is council_tax_reduction
+      (a distinct in-scope program). Not a comparable statutory surface (matrix row 20).'
+  - id: uk-pe:council_tax_reduction
+    oracle_policy_name: council_tax_reduction
+    oracle_policy_type: rules
+    output_vars:
+      - council_tax_reduction
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — council_tax_reduction now HAS a formula in PE-UK 2.89.2 (the matrix ambiguity
+      at HEAD 45eb181c, where the variable was absent, is resolved on this pin); rulespec encodes England
+      pension-age + council schemes but no CTR suite runs yet (matrix row 29 → LGFA 1992 s.13A + Sch.1A).
+  - id: uk-pe:dla
+    oracle_policy_name: dla
+    oracle_policy_type: rate_from_category
+    output_vars:
+      - dla_sc
+      - dla_m
+    in_scope: true
+    internal_only_vars:
+      - dla
+    suite: uk-tax-benefits-efrs
+    comparability: rate_only
+    note: rates-given-category — PE-UK applies the DLA care/mobility rate tables over a frozen dla_sc_category/dla_m_category
+      FRS input, so the comparison binds the rate schedule, not the award-eligibility rules. Compared
+      via disability-living-allowance-final (matrix row 16).
+  - id: uk-pe:esa_contrib
+    oracle_policy_name: esa_contrib
+    oracle_policy_type: pure_input
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - esa_contrib
+    exclusion_reason: input_carrying
+    note: Contributory ESA is a pure reported passthrough in PE-UK (no formula) — the value carries the
+      FRS-reported award, computing no WRAG/support components. Nothing statutory to compare (matrix row
+      17 → WRA 2007 Pt 1).
+  - id: uk-pe:esa_income
+    oracle_policy_name: esa_income
+    oracle_policy_type: reported_ceiling
+    output_vars:
+      - esa_income
+    in_scope: false
+    exclusion_reason: input_carrying
+    note: 'Income-related ESA: PE-UK reads esa_income_reported and applies only a capital/tariff screen,
+      never computing WRAG/support components or the means-test award from statute. The tariff-income
+      helper alone is compared in uk-tax-benefits-efrs, but the program-level award is a reported ceiling
+      — no statutory maximum to bind (matrix row 23 → ESA Regs 2008).'
+  - id: uk-pe:fuel_duty
+    oracle_policy_name: fuel_duty
+    oracle_policy_type: rules
+    output_vars:
+      - fuel_duty
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes fuel_duty but rulespec has not encoded it and no suite runs
+      (matrix row 10 → HODA 1979 rates).
+  - id: uk-pe:housing_benefit
+    oracle_policy_name: housing_benefit
+    oracle_policy_type: rules
+    output_vars:
+      - housing_benefit
+      - housing_benefit_applicable_amount
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:incapacity_benefit
+    oracle_policy_name: incapacity_benefit
+    oracle_policy_type: pure_input
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - incapacity_benefit
+      - afcs
+      - iidb
+    exclusion_reason: input_carrying
+    note: Incapacity Benefit, Armed Forces Compensation Scheme (afcs) and Industrial Injuries Disablement
+      Benefit (iidb) are pure reported passthroughs in PE-UK (no formulas) — legacy/closed benefits carried
+      from microdata, computing no entitlement. Nothing statutory to compare (matrix row 25).
+  - id: uk-pe:income_tax
+    oracle_policy_name: income_tax
+    oracle_policy_type: rules
+    output_vars:
+      - income_tax
+      - personal_allowance
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:lbtt_ltt
+    oracle_policy_name: lbtt_ltt
+    oracle_policy_type: rules
+    output_vars:
+      - land_and_buildings_transaction_tax
+      - land_transaction_tax
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes the Scottish LBTT and Welsh LTT transaction taxes but rulespec
+      has not encoded them and no suite runs (matrix row 31 → LTT(S)A 2013 / LTTA(W) 2017).
+  - id: uk-pe:legacy_means_tested
+    oracle_policy_name: legacy_means_tested
+    oracle_policy_type: rules
+    output_vars:
+      - jsa_income
+      - income_support
+    in_scope: true
+    internal_only_vars:
+      - working_tax_credit
+      - child_tax_credit
+    suite: null
+    note: In-scope uncovered — PE-UK computes income_support and applies a tariff screen to jsa_income;
+      WTC/CTC are reported inputs. All £0 in 2026 under UC migration; only tariff/rate helpers are compared,
+      no final award surface runs (matrix row 30).
+  - id: uk-pe:marriage_allowance
+    oracle_policy_name: marriage_allowance
+    oracle_policy_type: rules
+    output_vars:
+      - marriage_allowance
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:national_insurance
+    oracle_policy_name: national_insurance
+    oracle_policy_type: rules
+    output_vars:
+      - ni_class_1_employee_primary
+      - ni_class_1_employee_additional
+      - ni_class_4_main
+      - ni_class_4_maximum
+      - ni_class_2
+    in_scope: true
+    internal_only_vars:
+      - national_insurance
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:pension_credit
+    oracle_policy_name: pension_credit
+    oracle_policy_type: rules
+    output_vars:
+      - pension_credit
+      - guarantee_credit
+      - savings_credit
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:pip
+    oracle_policy_name: pip
+    oracle_policy_type: rate_from_category
+    output_vars:
+      - pip_dl
+      - pip_m
+    in_scope: true
+    internal_only_vars:
+      - pip
+    suite: uk-tax-benefits-efrs
+    comparability: rate_only
+    note: rates-given-category — PE-UK applies the PIP daily-living/mobility rate tables over a frozen
+      pip_dl_category/pip_m_category FRS input, so the comparison binds the rate schedule, not the award-eligibility
+      rules. Compared via personal-independence-payment-final (matrix row 8).
+  - id: uk-pe:scottish_child_payment
+    oracle_policy_name: scottish_child_payment
+    oracle_policy_type: rules
+    output_vars:
+      - scottish_child_payment
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:sda
+    oracle_policy_name: sda
+    oracle_policy_type: reported_ceiling
+    output_vars:
+      - sda
+    in_scope: false
+    exclusion_reason: input_carrying
+    note: 'Severe Disablement Allowance (closed legacy benefit): PE-UK reads sda_reported and multiplies
+      by a max rate, computing no eligibility from statute. Only the rate parameter is compared in the
+      matrix; the program award is a reported ceiling (matrix row 32 → SSCBA 1992 s.68).'
+  - id: uk-pe:ssmg
+    oracle_policy_name: ssmg
+    oracle_policy_type: reported_ceiling
+    output_vars:
+      - ssmg
+    in_scope: false
+    exclusion_reason: input_carrying
+    note: 'Sure Start Maternity Grant: PE-UK reads ssmg_reported and multiplies by the £500 rate, computing
+      no eligibility from statute. Only the rate parameter is compared in the matrix; the program award
+      is a reported ceiling (matrix row 33 → uksi/2005/3061).'
+  - id: uk-pe:stamp_duty_land_tax
+    oracle_policy_name: stamp_duty_land_tax
+    oracle_policy_type: pure_input
+    output_vars: []
+    in_scope: false
+    internal_only_vars:
+      - stamp_duty_land_tax
+    exclusion_reason: input_carrying
+    note: PE-UK takes stamp_duty_land_tax straight from microdata (no formula) — the SDLT tier liability
+      is a reported input, not a computed surface. The residential/non-residential SDLT transaction sub-variables
+      (sdlt_on_*_property_transactions) exist and compute, but no program output binds them to a comparison
+      (matrix row 13 → FA 2003 Pt 4).
+  - id: uk-pe:state_pension
+    oracle_policy_name: state_pension
+    oracle_policy_type: rules
+    output_vars:
+      - state_pension
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes state_pension (basic+new+additional) from accrual rules,
+      but no final suite runs; the state-pension bridge surface was removed when rulespec re-grounded
+      to accrual basis (matrix row 4 → Pensions Act 2014).
+  - id: uk-pe:student_loan_repayments
+    oracle_policy_name: student_loan_repayments
+    oracle_policy_type: rules
+    output_vars:
+      - student_loan_repayments
+      - student_loan_repayment
+    in_scope: true
+    suite: uk-tax-benefits-efrs
+  - id: uk-pe:tax_free_childcare
+    oracle_policy_name: tax_free_childcare
+    oracle_policy_type: rules
+    output_vars:
+      - tax_free_childcare
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes tax_free_childcare but only the top-up rate/ceiling params
+      are compared; no final payment surface runs, and PE frames the rate as 20% vs statute 25% (matrix
+      row 27 → Childcare Payments Act 2014).
+  - id: uk-pe:tv_licence
+    oracle_policy_name: tv_licence
+    oracle_policy_type: rules
+    output_vars:
+      - tv_licence
+      - free_tv_licence_value
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes tv_licence and free_tv_licence_value but only the fee parameter
+      is compared; no over-75/concession final surface runs (matrix row 34 → uksi/2004/692).
+  - id: uk-pe:universal_credit
+    oracle_policy_name: universal_credit
+    oracle_policy_type: rules
+    output_vars:
+      - universal_credit
+    in_scope: true
+    suite: uk-universal-credit-efrs
+  - id: uk-pe:vat
+    oracle_policy_name: vat
+    oracle_policy_type: rules
+    output_vars:
+      - vat
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes vat (output/input/net) but no PE VAT oracle surface runs;
+      rulespec has a rate-only shell. The largest indirect-tax gap (matrix row 1 → VATA 1994 Sch.7A-9).
+  - id: uk-pe:winter_fuel_allowance
+    oracle_policy_name: winter_fuel_allowance
+    oracle_policy_type: rules
+    output_vars:
+      - winter_fuel_allowance
+    in_scope: true
+    suite: null
+    note: In-scope uncovered — PE-UK computes winter_fuel_allowance (2024 PC-only restriction, zeroed
+      in Scotland) but only rate params are compared; no final WFA program surface runs (matrix row 24
+      → uksi/2025/969; Scotland PAWHP separate).
