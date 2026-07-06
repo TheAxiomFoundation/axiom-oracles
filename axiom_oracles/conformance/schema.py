@@ -50,6 +50,19 @@ CONFORMANCE_SCHEMA_VERSION = "axiom_oracles.conformance.v1"
 #:   EUROMOD BE ``tco_be`` indirect tax — 15 ``DefConst``/``DefIl`` functions, no
 #:   compute function, no consumption-tax extension in ``EUROMOD_RELEASES_J2.0+``
 #:   (axiom-oracles#144). Requires a ``note`` recording the verdict.
+#: - ``oracle_dataset_lacks_input``: the oracle DOES simulate the policy and its
+#:   outputs ARE observable (a queryable ``_s`` surface), but the input that
+#:   *activates* it is absent from the public dataset's schema, so under the
+#:   registration-free setup the policy can never trigger and the only achievable
+#:   comparison is vacuous (0 == 0). Distinct from ``unobservable_boundary`` (the
+#:   policy computes but the comparison *boundary* is engine-internal) and from
+#:   ``extension_not_available`` (the compute content itself is not in the public
+#:   release). Canonical case: EUROMOD BE ``bfapl_be`` parental-leave allowance —
+#:   encoded verbatim in rulespec-be (RD 29.10.1997 / RD 02.01.1991) but the
+#:   ``lpb`` parental-leave-months input column is absent from the BE HHoT demo
+#:   dataset schema, so ``bfapl_s`` stays 0 for every synthetic case (probe
+#:   lineage: rulespec-be#86, axiom-oracles#150/#158, axiom-oracles#160). Requires
+#:   a ``note`` recording the absent input and the probe evidence pointer.
 EXCLUSION_REASONS: tuple[str, ...] = (
     "input_carrying",
     "technical",
@@ -57,6 +70,7 @@ EXCLUSION_REASONS: tuple[str, ...] = (
     "not_a_policy",
     "unobservable_boundary",
     "extension_not_available",
+    "oracle_dataset_lacks_input",
 )
 
 ExclusionReason = Literal[
@@ -66,6 +80,7 @@ ExclusionReason = Literal[
     "not_a_policy",
     "unobservable_boundary",
     "extension_not_available",
+    "oracle_dataset_lacks_input",
 ]
 
 #: Comparability of an *in-scope* policy's output surface — how faithfully a
@@ -173,6 +188,11 @@ class UniversePolicy:
                 problems.append(
                     f"{self.id}: extension_not_available requires a `note` "
                     "recording the verdict (which extension/microdata is absent)"
+                )
+            if self.exclusion_reason == "oracle_dataset_lacks_input" and not self.note:
+                problems.append(
+                    f"{self.id}: oracle_dataset_lacks_input requires a `note` naming "
+                    "the absent activating input and the probe evidence pointer"
                 )
             # comparability is an in-scope concept; an excluded row must not carry
             # a non-default value (it would be meaningless).

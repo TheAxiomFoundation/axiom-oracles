@@ -102,6 +102,58 @@ def test_extension_not_available_requires_a_note():
     assert replace(row, note="no CT extension in the public release").validate() == []
 
 
+def test_oracle_dataset_lacks_input_is_a_valid_exclusion_reason():
+    assert "oracle_dataset_lacks_input" in EXCLUSION_REASONS
+
+
+def _bfapl_row(**kw) -> UniversePolicy:
+    """The bfapl_be shape: an observable `_s` surface excluded because its
+    activating input is absent from the dataset schema."""
+    base = dict(
+        id="be:bfapl_be",
+        oracle_policy_name="bfapl_be",
+        output_vars=("bfapl_s",),
+        in_scope=False,
+        exclusion_reason="oracle_dataset_lacks_input",
+    )
+    base.update(kw)
+    return UniversePolicy(**base)
+
+
+def test_oracle_dataset_lacks_input_requires_a_note():
+    """The reason is only meaningful with the absent input + probe pointer named."""
+    row = _bfapl_row()
+    assert any(
+        "oracle_dataset_lacks_input requires a `note`" in p for p in row.validate()
+    )
+    # With a note naming the absent input it validates.
+    assert replace(row, note="lpb input absent from BE HHoT schema; see #160").validate() == []
+
+
+def test_oracle_dataset_lacks_input_keeps_the_observable_output_var():
+    """Unlike extension_not_available (no OutputVar), this reason carries a real
+    queryable surface — the whole point is the output IS observable, just never
+    non-zero. The row must still validate as excluded (an output_var on an
+    out-of-scope row is fine; only in-scope rows REQUIRE one)."""
+    row = _bfapl_row(note="lpb absent; probe lineage rulespec-be#86 / #150 / #160")
+    assert row.output_vars == ("bfapl_s",)
+    assert row.in_scope is False
+    assert row.validate() == []
+
+
+def test_mutating_dataset_lacks_input_to_an_unknown_reason_still_fails_validation():
+    """NEGATIVE: the closed-enum gate must bite even for a well-formed row — swap
+    the (valid) new reason for a typo/unknown one and validation must reject it,
+    proving oracle_dataset_lacks_input was admitted by widening the enum, not by
+    weakening the check."""
+    valid = _bfapl_row(note="lpb absent; #160")
+    assert valid.validate() == []
+    bogus = replace(valid, exclusion_reason="oracle_dataset_lacks_inputt")  # typo
+    problems = bogus.validate()
+    assert any("not one of" in p for p in problems)
+    assert "oracle_dataset_lacks_input" in ", ".join(problems)  # enum listed in msg
+
+
 def test_in_scope_comparability_must_be_a_known_kind():
     # Default is full and valid.
     assert _in_scope().comparability == "full"
@@ -260,6 +312,22 @@ def test_be_universe_marks_tco_extension_not_available():
     assert tco.in_scope is False
     assert tco.exclusion_reason == "extension_not_available"
     assert tco.note and "extension" in tco.note.lower()
+
+
+def test_be_universe_excludes_bfapl_dataset_lacks_input_with_probe_pointer():
+    """bfapl_be simulates + writes bfapl_s but the lpb activating input is absent
+    from the BE HHoT demo schema, so it is excluded as oracle_dataset_lacks_input
+    with the probe evidence pointer recorded in its note."""
+    universe = parse_universe(CONFORMANCE_DIR / "be.yaml")
+    bfapl = universe.by_name()["bfapl_be"]
+    assert bfapl.in_scope is False
+    assert bfapl.exclusion_reason == "oracle_dataset_lacks_input"
+    # The observable surface is retained (the reason's defining property).
+    assert "bfapl_s" in bfapl.output_vars
+    # The note names the absent input and the probe lineage.
+    assert bfapl.note is not None
+    assert "lpb" in bfapl.note
+    assert "rulespec-be#86" in bfapl.note
 
 
 def test_serialize_is_stable_roundtrip():
@@ -463,14 +531,29 @@ def test_scoreboard_excluded_breakdown_by_reason():
         UniversePolicy(id="tx:f", oracle_policy_name="f", output_vars=("f_s",),
                        in_scope=False, exclusion_reason="unobservable_boundary",
                        note="cited"),
+        # An oracle_dataset_lacks_input row carries a real output_var but is still
+        # excluded — the breakdown must pick it up under its own reason.
+        UniversePolicy(id="tx:g", oracle_policy_name="g", output_vars=("g_s",),
+                       in_scope=False, exclusion_reason="oracle_dataset_lacks_input",
+                       note="activating input absent"),
     ])
     board, _ = score_jurisdiction(universe, [])
-    assert board.excluded == 3
+    assert board.excluded == 4
     assert board.excluded_by_reason == {
-        "takeup_adjustment": 1, "technical": 1, "unobservable_boundary": 1,
+        "oracle_dataset_lacks_input": 1, "takeup_adjustment": 1,
+        "technical": 1, "unobservable_boundary": 1,
     }
     # Excluded policies are never counted as covered.
     assert board.covered == 0 and board.policies_in_scope == 0
+
+
+def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():
+    """The live BE scoreboard's excluded-by-reason breakdown surfaces the new
+    class (regression guard against the reason silently vanishing from the join)."""
+    import yaml as _yaml  # noqa: F401  (json already imported at module top)
+    scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
+    be = next(j for j in scoreboard["jurisdictions"] if j["jurisdiction"] == "be")
+    assert be["excluded_by_reason"].get("oracle_dataset_lacks_input") == 1
 
 
 # ---------------------------------------------------------------------------
