@@ -24,8 +24,13 @@ import {
  *
  * A cell aggregates every oracle Axiom was checked against there (e.g. a
  * federal-income-tax cell can combine PolicyEngine and TAXSIM runs); the
- * tooltip breaks the rate out per oracle. The SNAP row deliberately shows
- * all 50 states + DC so remaining work is as visible as finished work.
+ * tooltip breaks the rate out per oracle.
+ *
+ * The register targets a single screen: nationwide single-cell families
+ * flow together as one chip strip, encoded-only masses collapse to a
+ * "+N states encoded" chip, and SNAP renders as a ranked comparison
+ * panel whose 51-cell micro-strip keeps remaining work as visible as
+ * finished work.
  */
 
 const STATE_ORDER = Object.keys(US_STATE_NAMES);
@@ -206,67 +211,176 @@ function Tile({ jurisdiction, title, tile, anchor, wide = false }) {
   );
 }
 
-function SnapRow({ cells, coveragePrograms }) {
-  const measured = new Map();
-  for (const cell of cells.values()) {
-    if (cell.meta.family === "snap" && cell.meta.jurisdiction) {
-      measured.set(cell.meta.jurisdiction, cell);
-    }
-  }
-  const encoded = new Set(
-    (coveragePrograms || [])
-      .filter((p) => p.program === "snap" && p.jurisdiction)
-      .map((p) => p.jurisdiction),
+/**
+ * The SNAP comparison panel: every measured state as a ranked agreement
+ * bar (rate, blocked-run marker, household count), an encoded-not-yet-
+ * measured line, and a one-row micro-strip of all 51 jurisdictions so
+ * remaining work stays as visible as finished work without four wrapped
+ * rows of tiles.
+ */
+function SnapPanel({ reports, coveragePrograms, knownCauses }) {
+  const staleBySuite = new Map(
+    (knownCauses || [])
+      .filter((c) => c && (c.kind === "stale_run" || c.staleness_note))
+      .map((c) => [c.suite, c.staleness_note || c.description || ""]),
   );
 
-  let verified = 0;
-  const tiles = STATE_ORDER.map((abbr) => {
-    const cell = measured.get(abbr);
-    if (cell) {
-      const tile = cellTile(cell);
-      if (tile.status === "verified") verified += 1;
-      return { abbr, tile, anchor: cell.anchor, title: cellTitle(cell) };
-    }
-    if (encoded.has(abbr)) {
-      return {
-        abbr,
-        tile: { status: "encoded", note: "encoded" },
-        title: `${US_STATE_NAMES[abbr]} SNAP — encoded, not yet verified`,
-      };
-    }
-    return {
-      abbr,
-      tile: null,
-      title: `${US_STATE_NAMES[abbr]} SNAP — not encoded yet`,
-    };
-  });
+  const measured = new Map();
+  for (const report of reports || []) {
+    if (!isAxiomPair(report)) continue;
+    const meta = suiteMeta(report.suite);
+    if (meta.family !== "snap" || !meta.jurisdiction) continue;
+    if (!(report.aggregates || []).length) continue;
+    const metric = reportMetric(report);
+    measured.set(meta.jurisdiction, {
+      abbr: meta.jurisdiction,
+      rate: metric.rate,
+      total: metric.total,
+      cases: report.case_count || 0,
+      anchor: runAnchor(report),
+      oracle: engineLabel(otherOracle(report)),
+      staleNote: staleBySuite.get(report.suite),
+    });
+  }
+
+  const encoded = (coveragePrograms || [])
+    .filter(
+      (p) =>
+        p.program === "snap" &&
+        p.jurisdiction &&
+        !measured.has(p.jurisdiction),
+    )
+    .map((p) => p.jurisdiction)
+    .sort();
+  const encodedSet = new Set(encoded);
+
+  const ranked = [...measured.values()].sort(
+    (a, b) => (b.rate ?? -1) - (a.rate ?? -1),
+  );
+  const verified = ranked.filter(
+    (s) => rateStatus(s.rate) === "verified",
+  ).length;
+  const remaining = STATE_ORDER.filter(
+    (abbr) => !measured.has(abbr) && !encodedSet.has(abbr),
+  ).length;
+
+  const compactCases = (n) =>
+    n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
 
   return (
     <div className="register-row">
       <div className="register-rowhead">
         <span className="register-rowlabel">{FAMILY_LABELS.snap}</span>
         <span className="mono register-rowcount">
-          {verified} of {STATE_ORDER.length} states verified
-          {measured.size > verified &&
-            ` · ${measured.size - verified} diverging`}
+          {ranked.length} of {STATE_ORDER.length} states measured · {verified}{" "}
+          verified
+          {ranked.length > verified &&
+            ` · ${ranked.length - verified} diverging`}
+          {encoded.length > 0 && ` · ${encoded.length} encoded`}
+          {remaining > 0 && ` · ${remaining} remaining`}
         </span>
       </div>
-      <div className="register-grid">
-        {tiles.map(({ abbr, tile, title, anchor }) => (
-          <Tile
-            key={abbr}
-            jurisdiction={abbr}
-            tile={tile}
-            title={title}
-            anchor={anchor}
-          />
-        ))}
+
+      <div className="snapx-grid">
+        {ranked.map((s) => {
+          const status = rateStatus(s.rate);
+          const title = [
+            `${US_STATE_NAMES[s.abbr]} SNAP vs ${s.oracle}`,
+            `${formatPct(s.rate, 1)} agreement over ${s.total.toLocaleString()} checks (${s.cases.toLocaleString()} households)`,
+            s.staleNote
+              ? `Last-good run — regeneration blocked. ${s.staleNote}`
+              : null,
+          ]
+            .filter(Boolean)
+            .join("\n");
+          const body = (
+            <>
+              <span className="tile-code snapx-code">{s.abbr}</span>
+              <span
+                className={`snapx-bar${s.staleNote ? " snapx-bar-stale" : ""}`}
+              >
+                <span
+                  className={`snapx-fill tile-${status}`}
+                  style={{ width: `${Math.max(3, s.rate ?? 0)}%` }}
+                />
+              </span>
+              <span className="mono snapx-rate">
+                {formatPct(s.rate, 1)}
+                {s.staleNote && <sup className="snapx-stale">†</sup>}
+              </span>
+              <span className="mono snapx-count">{compactCases(s.cases)}</span>
+            </>
+          );
+          return s.anchor ? (
+            <a
+              key={s.abbr}
+              className="snapx-row"
+              href={`#${s.anchor}`}
+              title={title}
+            >
+              {body}
+            </a>
+          ) : (
+            <span key={s.abbr} className="snapx-row" title={title}>
+              {body}
+            </span>
+          );
+        })}
+      </div>
+
+      {encoded.length > 0 && (
+        <div className="mono snapx-encoded">
+          encoded, not yet measured · {encoded.join(" · ")}
+        </div>
+      )}
+
+      <div className="snapx-strip" aria-label="All-states SNAP status">
+        {STATE_ORDER.map((abbr) => {
+          const s = measured.get(abbr);
+          const status = s
+            ? rateStatus(s.rate)
+            : encodedSet.has(abbr)
+              ? "encoded"
+              : "gap";
+          const title = s
+            ? `${US_STATE_NAMES[abbr]} — ${formatPct(s.rate, 1)}${s.staleNote ? " (last-good, blocked)" : ""}`
+            : encodedSet.has(abbr)
+              ? `${US_STATE_NAMES[abbr]} — encoded, not yet measured`
+              : `${US_STATE_NAMES[abbr]} — not encoded yet`;
+          return (
+            <span
+              key={abbr}
+              className={`snapx-cell tile-${status}`}
+              title={title}
+            />
+          );
+        })}
+        <span className="snapx-strip-note">
+          {ranked.length + encoded.length} of {STATE_ORDER.length}
+        </span>
       </div>
     </div>
   );
 }
 
+// Above this many encoded-only cells, a family row collapses them into a
+// single "+N states encoded" chip — 48 identical outline tiles say nothing
+// four tiles and a count don't.
+const ENCODED_COLLAPSE_THRESHOLD = 4;
+
 function FamilyRow({ family, cells }) {
+  const measured = cells.filter(
+    (cell) => cell.runs.length > 0 || cell.kind !== "coverage",
+  );
+  const encodedOnly = cells.filter(
+    (cell) => cell.runs.length === 0 && cell.kind === "coverage",
+  );
+  const collapse = encodedOnly.length > ENCODED_COLLAPSE_THRESHOLD;
+  const shown = collapse ? measured : cells;
+  const encodedCodes = encodedOnly
+    .map((cell) => cell.meta.jurisdiction || cell.meta.label)
+    .sort();
+
   return (
     <div className="register-row">
       <div className="register-rowhead">
@@ -275,7 +389,7 @@ function FamilyRow({ family, cells }) {
         </span>
       </div>
       <div className="register-grid">
-        {cells.map((cell) => (
+        {shown.map((cell) => (
           <Tile
             key={`${cell.meta.family}-${cell.meta.jurisdiction}`}
             jurisdiction={cell.meta.jurisdiction || cell.meta.label}
@@ -285,6 +399,51 @@ function FamilyRow({ family, cells }) {
             title={cellTitle(cell)}
           />
         ))}
+        {collapse && (
+          <span
+            className="register-tile register-tile-wide tile-encoded register-chip"
+            title={`Encoded, not yet measured:\n${encodedCodes.join(", ")}`}
+          >
+            <span className="tile-code">
+              +{encodedOnly.length} states encoded
+            </span>
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Families with a single nationwide cell (federal income tax, Medicare,
+ * Pell…) don't need a labeled row each — thirteen rows of one "US" tile
+ * was most of the register's height. They flow together as one strip of
+ * program chips, ordered like the rows they replace.
+ */
+function NationwideStrip({ singles }) {
+  return (
+    <div className="register-row">
+      <div className="register-rowhead">
+        <span className="register-rowlabel">Nationwide programs</span>
+        <span className="mono register-rowcount">
+          {singles.length} programs · one jurisdiction each
+        </span>
+      </div>
+      <div className="register-grid">
+        {singles.map(([family, cells]) => {
+          const cell = cells[0];
+          const label = FAMILY_LABELS[family] || cell.meta.label || family;
+          return (
+            <Tile
+              key={family}
+              jurisdiction={label}
+              wide
+              tile={cellTile(cell)}
+              anchor={cell.anchor}
+              title={cellTitle(cell)}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -300,7 +459,12 @@ const LEGEND = [
   { status: "gap", label: "Not encoded yet" },
 ];
 
-export default function CoverageRegister({ reports, coverageOverview, region }) {
+export default function CoverageRegister({
+  reports,
+  coverageOverview,
+  region,
+  knownCauses,
+}) {
   const cells = buildCells(reports);
   addCoverageOnlyCells(cells, coverageOverview?.axiom?.programs, region);
   if (cells.size === 0) return null;
@@ -336,24 +500,28 @@ export default function CoverageRegister({ reports, coverageOverview, region }) 
         </div>
       </div>
       <div className="register-body">
-        {/* Families ordered before SNAP (order < 100, i.e. federal income
-            tax) render above the state strip; the rest follow it. */}
-        {familyRows
-          .filter(([, c]) => Math.min(...c.map((x) => x.meta.order)) < 100)
-          .map(([family, familyCells]) => (
-            <FamilyRow key={family} family={family} cells={familyCells} />
-          ))}
-        {region === "us" && hasSnap && (
-          <SnapRow
-            cells={cells}
-            coveragePrograms={coverageOverview?.axiom?.programs}
-          />
-        )}
-        {familyRows
-          .filter(([, c]) => Math.min(...c.map((x) => x.meta.order)) >= 100)
-          .map(([family, familyCells]) => (
-            <FamilyRow key={family} family={family} cells={familyCells} />
-          ))}
+        {/* Single-jurisdiction families flow together as one strip; families
+            with several jurisdictions keep their own row. The strip leads
+            (it opens with federal income tax), then SNAP, then the rest. */}
+        {(() => {
+          const singles = familyRows.filter(([, c]) => c.length === 1);
+          const multis = familyRows.filter(([, c]) => c.length > 1);
+          return (
+            <>
+              {singles.length > 0 && <NationwideStrip singles={singles} />}
+              {region === "us" && hasSnap && (
+                <SnapPanel
+                  reports={reports}
+                  coveragePrograms={coverageOverview?.axiom?.programs}
+                  knownCauses={knownCauses}
+                />
+              )}
+              {multis.map(([family, familyCells]) => (
+                <FamilyRow key={family} family={family} cells={familyCells} />
+              ))}
+            </>
+          );
+        })()}
         <div className="register-legend">
           {LEGEND.filter((l) => usedStatuses.has(l.status)).map((l) => (
             <span key={l.status} className="register-legend-item">

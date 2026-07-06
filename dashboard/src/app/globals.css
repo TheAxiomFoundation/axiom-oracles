@@ -516,6 +516,92 @@ a.register-tile:hover {
   flex-shrink: 0;
 }
 
+/* ── SNAP comparison panel ── */
+.snapx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 4px 20px;
+}
+.snapx-row {
+  display: grid;
+  grid-template-columns: 26px 1fr 52px 34px;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px;
+  margin: 0 -4px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  line-height: 1;
+}
+a.snapx-row:hover {
+  background: var(--paper-elevated);
+}
+.snapx-code {
+  font-size: 11px;
+}
+.snapx-bar {
+  display: block;
+  height: 7px;
+  border-radius: 4px;
+  background: var(--hairline);
+  overflow: hidden;
+}
+.snapx-fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  border: none;
+}
+.snapx-bar-stale .snapx-fill {
+  opacity: 0.45;
+}
+.snapx-rate {
+  font-size: 11px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.snapx-stale {
+  font-size: 9px;
+  color: var(--ink-mute);
+  margin-left: 1px;
+}
+.snapx-count {
+  font-size: 10px;
+  color: var(--ink-mute);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.snapx-encoded {
+  font-size: 10.5px;
+  color: var(--ink-mute);
+  letter-spacing: 0.02em;
+}
+.snapx-strip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.snapx-cell {
+  display: inline-block;
+  width: 10px;
+  height: 13px;
+  border-radius: 2.5px;
+  border: 1px solid var(--hairline);
+}
+.snapx-strip-note {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  color: var(--ink-mute);
+  margin-left: 6px;
+}
+.register-chip .tile-code {
+  font-weight: 500;
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+
 /* ── Belgium EUROMOD coverage ── */
 .be-page {
   display: flex;

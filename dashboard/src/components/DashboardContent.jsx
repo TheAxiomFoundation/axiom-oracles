@@ -269,6 +269,7 @@ export default function DashboardContent() {
                 reports={withData}
                 coverageOverview={data.coverageOverview}
                 region={jurisdiction}
+                knownCauses={data.knownCauses || []}
               />
 
               {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
