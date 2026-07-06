@@ -67,10 +67,6 @@ INCOME_TAX_SECTION_23_PROGRAM_PATH = Path("statutes/ukpga/2007/3/23.yaml")
 INCOME_TAX_SECTION_23_BASE = "uk:statutes/ukpga/2007/3/23"
 CHILD_BENEFIT_PROGRAM_PATH = Path("regulations/uksi/2006/965/2.yaml")
 CHILD_BENEFIT_BASE = "uk:regulations/uksi/2006/965/2"
-CHILD_BENEFIT_SECTION_141_PROGRAM_PATH = Path("statutes/ukpga/1992/4/141.yaml")
-CHILD_BENEFIT_SECTION_141_BASE = "uk:statutes/ukpga/1992/4/141"
-CHILD_BENEFIT_FINAL_PROGRAM_PATH = Path("policies/govuk/child-benefit.yaml")
-CHILD_BENEFIT_FINAL_BASE = "uk:policies/govuk/child-benefit"
 BENEFIT_CAP_REGULATION_80A_PROGRAM_PATH = Path("regulations/uksi/2013/376/80A.yaml")
 BENEFIT_CAP_REGULATION_80A_BASE = "uk:regulations/uksi/2013/376/80A"
 STATE_PENSION_CREDIT_SECTION_1_PROGRAM_PATH = Path("statutes/ukpga/2002/16/1.yaml")
@@ -79,8 +75,6 @@ STATE_PENSION_CREDIT_SECTION_2_PROGRAM_PATH = Path("statutes/ukpga/2002/16/2.yam
 STATE_PENSION_CREDIT_SECTION_2_BASE = "uk:statutes/ukpga/2002/16/2"
 STATE_PENSION_CREDIT_SECTION_3_PROGRAM_PATH = Path("statutes/ukpga/2002/16/3.yaml")
 STATE_PENSION_CREDIT_SECTION_3_BASE = "uk:statutes/ukpga/2002/16/3"
-STATE_PENSION_FINAL_PROGRAM_PATH = Path("policies/govuk/state-pension.yaml")
-STATE_PENSION_FINAL_BASE = "uk:policies/govuk/state-pension"
 PENSION_CREDIT_PROGRAM_PATH = Path("regulations/uksi/2002/1792/6.yaml")
 PENSION_CREDIT_BASE = "uk:regulations/uksi/2002/1792/6"
 PENSION_CREDIT_SCHEDULE_IIA_PROGRAM_PATH = Path(
@@ -89,12 +83,8 @@ PENSION_CREDIT_SCHEDULE_IIA_PROGRAM_PATH = Path(
 PENSION_CREDIT_SCHEDULE_IIA_BASE = "uk:regulations/uksi/2002/1792/schedule/IIA"
 PENSION_CREDIT_REGULATION_15_PROGRAM_PATH = Path("regulations/uksi/2002/1792/15.yaml")
 PENSION_CREDIT_REGULATION_15_BASE = "uk:regulations/uksi/2002/1792/15"
-PENSION_CREDIT_FINAL_PROGRAM_PATH = Path("policies/govuk/pension-credit.yaml")
-PENSION_CREDIT_FINAL_BASE = "uk:policies/govuk/pension-credit"
 ESA_REGULATION_118_PROGRAM_PATH = Path("regulations/uksi/2008/794/118.yaml")
 ESA_REGULATION_118_BASE = "uk:regulations/uksi/2008/794/118"
-ESA_FINAL_PROGRAM_PATH = Path("policies/govuk/esa-income.yaml")
-ESA_FINAL_BASE = "uk:policies/govuk/esa-income"
 JSA_REGULATION_116_PROGRAM_PATH = Path("regulations/uksi/1996/207/116.yaml")
 JSA_REGULATION_116_BASE = "uk:regulations/uksi/1996/207/116"
 INCOME_SUPPORT_REGULATION_53_PROGRAM_PATH = Path("regulations/uksi/1987/1967/53.yaml")
@@ -105,8 +95,6 @@ HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_PROGRAM_PATH = Path(
     "regulations/uksi/2006/214/29.yaml"
 )
 HOUSING_BENEFIT_PENSION_AGE_REGULATION_29_BASE = "uk:regulations/uksi/2006/214/29"
-HOUSING_BENEFIT_FINAL_PROGRAM_PATH = Path("policies/govuk/housing-benefit.yaml")
-HOUSING_BENEFIT_FINAL_BASE = "uk:policies/govuk/housing-benefit"
 UNIVERSAL_CREDIT_PROGRAM_PATH = Path("regulations/uksi/2013/376/36.yaml")
 UNIVERSAL_CREDIT_BASE = "uk:regulations/uksi/2013/376/36"
 UNIVERSAL_CREDIT_REGULATION_18_PROGRAM_PATH = Path("regulations/uksi/2013/376/18.yaml")
@@ -119,8 +107,6 @@ UNIVERSAL_CREDIT_REGULATION_34_PROGRAM_PATH = Path("regulations/uksi/2013/376/34
 UNIVERSAL_CREDIT_REGULATION_34_BASE = "uk:regulations/uksi/2013/376/34"
 UNIVERSAL_CREDIT_REGULATION_72_PROGRAM_PATH = Path("regulations/uksi/2013/376/72.yaml")
 UNIVERSAL_CREDIT_REGULATION_72_BASE = "uk:regulations/uksi/2013/376/72"
-UNIVERSAL_CREDIT_FINAL_PROGRAM_PATH = Path("policies/govuk/universal-credit.yaml")
-UNIVERSAL_CREDIT_FINAL_BASE = "uk:policies/govuk/universal-credit"
 WELFARE_REFORM_ACT_SECTION_8_PROGRAM_PATH = Path("statutes/ukpga/2012/5/8.yaml")
 WELFARE_REFORM_ACT_SECTION_8_BASE = "uk:statutes/ukpga/2012/5/8"
 WELFARE_REFORM_ACT_SECTION_11_PROGRAM_PATH = Path("statutes/ukpga/2012/5/11.yaml")
@@ -139,8 +125,6 @@ SCOTTISH_CHILD_PAYMENT_FINAL_PROGRAM_PATH = Path(
     "policies/govuk/scottish-child-payment.yaml"
 )
 SCOTTISH_CHILD_PAYMENT_FINAL_BASE = "uk:policies/govuk/scottish-child-payment"
-SDA_FINAL_PROGRAM_PATH = Path("policies/govuk/severe-disablement-allowance.yaml")
-SDA_FINAL_BASE = "uk:policies/govuk/severe-disablement-allowance"
 DLA_FINAL_PROGRAM_PATH = Path("policies/govuk/disability-living-allowance.yaml")
 DLA_FINAL_BASE = "uk:policies/govuk/disability-living-allowance"
 
@@ -332,14 +316,6 @@ CHILD_BENEFIT_OUTPUTS = {
     },
 }
 
-CHILD_BENEFIT_FINAL_OUTPUTS = {
-    "child_benefit_weekly_amount": {
-        "axiom": f"{CHILD_BENEFIT_FINAL_BASE}#child_benefit_weekly_amount",
-        "pe": "child_benefit",
-        "pe_transform": "annual_to_weekly",
-    },
-}
-
 BENEFIT_CAP_RELEVANT_AMOUNT_OUTPUTS = {
     "benefit_cap_relevant_amount": {
         "axiom": f"{BENEFIT_CAP_REGULATION_80A_BASE}#benefit_cap_relevant_amount",
@@ -385,15 +361,6 @@ STATE_PENSION_CREDIT_SAVINGS_CREDIT_OUTPUTS = {
     },
 }
 
-STATE_PENSION_FINAL_OUTPUTS = {
-    "state_pension_weekly_amount": {
-        "axiom": f"{STATE_PENSION_FINAL_BASE}#state_pension_weekly_amount",
-        "pe": "state_pension",
-        "pe_transform": "annual_to_weekly",
-        "tolerance": 0.01,
-    },
-}
-
 PENSION_CREDIT_OUTPUTS = {
     "standard_minimum_guarantee": {
         "axiom": f"{PENSION_CREDIT_BASE}#standard_minimum_guarantee",
@@ -430,14 +397,6 @@ PENSION_CREDIT_DEEMED_INCOME_OUTPUTS = {
     },
 }
 
-PENSION_CREDIT_FINAL_OUTPUTS = {
-    "pension_credit_annual_amount": {
-        "axiom": f"{PENSION_CREDIT_FINAL_BASE}#pension_credit_annual_amount",
-        "pe": "pension_credit",
-        "tolerance": 0.01,
-    },
-}
-
 ESA_TARIFF_INCOME_OUTPUTS = {
     "capital_tariff_weekly_income": {
         "axiom": f"{ESA_REGULATION_118_BASE}#capital_tariff_weekly_income",
@@ -445,14 +404,6 @@ ESA_TARIFF_INCOME_OUTPUTS = {
         "pe_transform": "annual_to_weekly",
         "capital_pe": "esa_income_assessable_capital",
         "applies": "legacy_capital_tariff_income_defined",
-    },
-}
-
-ESA_FINAL_OUTPUTS = {
-    "income_related_esa_annual_amount": {
-        "axiom": f"{ESA_FINAL_BASE}#income_related_esa_annual_amount",
-        "pe": "esa_income",
-        "tolerance": 0.01,
     },
 }
 
@@ -495,14 +446,6 @@ HOUSING_BENEFIT_PENSION_AGE_TARIFF_INCOME_OUTPUTS = {
         "pe": "housing_benefit_tariff_income",
         "pe_transform": "annual_to_weekly",
         "applies": "housing_benefit_pension_age_tariff_income_defined",
-    },
-}
-
-HOUSING_BENEFIT_FINAL_OUTPUTS = {
-    "housing_benefit_annual_amount": {
-        "axiom": f"{HOUSING_BENEFIT_FINAL_BASE}#housing_benefit_annual_amount",
-        "pe": "housing_benefit",
-        "tolerance": 0.01,
     },
 }
 
@@ -638,14 +581,6 @@ UNIVERSAL_CREDIT_AWARD_OUTPUTS = {
     },
 }
 
-UNIVERSAL_CREDIT_FINAL_OUTPUTS = {
-    "universal_credit_annual_amount": {
-        "axiom": f"{UNIVERSAL_CREDIT_FINAL_BASE}#universal_credit_annual_amount",
-        "pe": "universal_credit",
-        "tolerance": 0.01,
-    },
-}
-
 UNIVERSAL_CREDIT_HOUSING_COSTS_OUTPUTS = {
     "section_11_amount_for_accommodation_payments": {
         "axiom": (
@@ -759,13 +694,6 @@ SCOTTISH_CHILD_PAYMENT_FINAL_OUTPUTS = {
             f"{SCOTTISH_CHILD_PAYMENT_FINAL_BASE}#scottish_child_payment_annual_amount"
         ),
         "pe": "scottish_child_payment",
-    },
-}
-
-SDA_FINAL_OUTPUTS = {
-    "severe_disablement_allowance_annual_amount": {
-        "axiom": (f"{SDA_FINAL_BASE}#severe_disablement_allowance_annual_amount"),
-        "pe": "sda",
     },
 }
 
@@ -929,20 +857,6 @@ SURFACE_SPECS = {
             "child_benefit_respective_amount",
         ),
     ),
-    "child-benefit-final": UKEFRSSurfaceSpec(
-        program=CHILD_BENEFIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=CHILD_BENEFIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "child_benefit",
-            "child_benefit_entitlement",
-            "would_claim_child_benefit",
-        ),
-        projection_person_variables=(
-            "child_benefit_child_index",
-            "child_benefit_respective_amount",
-        ),
-    ),
     "benefit-cap-relevant-amount": UKEFRSSurfaceSpec(
         program=BENEFIT_CAP_REGULATION_80A_PROGRAM_PATH,
         entity="benunit",
@@ -991,16 +905,6 @@ SURFACE_SPECS = {
             "standard_minimum_guarantee",
         ),
     ),
-    "state-pension-final": UKEFRSSurfaceSpec(
-        program=STATE_PENSION_FINAL_PROGRAM_PATH,
-        entity="person",
-        outputs=STATE_PENSION_FINAL_OUTPUTS,
-        pe_variables=(
-            "state_pension",
-            "state_pension_reported",
-            "state_pension_type",
-        ),
-    ),
     "pension-credit": UKEFRSSurfaceSpec(
         program=PENSION_CREDIT_PROGRAM_PATH,
         entity="benunit",
@@ -1037,16 +941,6 @@ SURFACE_SPECS = {
             "pension_credit_deemed_income",
         ),
     ),
-    "pension-credit-final": UKEFRSSurfaceSpec(
-        program=PENSION_CREDIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=PENSION_CREDIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "pension_credit",
-            "pension_credit_entitlement",
-            "would_claim_pc",
-        ),
-    ),
     "esa-income-tariff-income": UKEFRSSurfaceSpec(
         program=ESA_REGULATION_118_PROGRAM_PATH,
         entity="benunit",
@@ -1055,17 +949,6 @@ SURFACE_SPECS = {
             "esa_income_assessable_capital",
             "esa_income_tariff_income",
         ),
-    ),
-    "esa-income-final": UKEFRSSurfaceSpec(
-        program=ESA_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=ESA_FINAL_OUTPUTS,
-        pe_variables=(
-            "esa_income",
-            "esa_income_eligible",
-            "esa_income_tariff_income",
-        ),
-        projection_person_variables=("esa_income_reported",),
     ),
     "jsa-income-tariff-income": UKEFRSSurfaceSpec(
         program=JSA_REGULATION_116_PROGRAM_PATH,
@@ -1106,17 +989,6 @@ SURFACE_SPECS = {
             "housing_benefit_tariff_income",
         ),
         projection_person_variables=("is_SP_age",),
-    ),
-    "housing-benefit-final": UKEFRSSurfaceSpec(
-        program=HOUSING_BENEFIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=HOUSING_BENEFIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "benefit_cap_reduction",
-            "housing_benefit",
-            "housing_benefit_pre_benefit_cap",
-            "would_claim_housing_benefit",
-        ),
     ),
     "universal-credit-standard-allowance": UKEFRSSurfaceSpec(
         program=UNIVERSAL_CREDIT_PROGRAM_PATH,
@@ -1193,17 +1065,6 @@ SURFACE_SPECS = {
             "uc_income_reduction",
             "uc_maximum_amount",
             "uc_standard_allowance",
-        ),
-    ),
-    "universal-credit-final": UKEFRSSurfaceSpec(
-        program=UNIVERSAL_CREDIT_FINAL_PROGRAM_PATH,
-        entity="benunit",
-        outputs=UNIVERSAL_CREDIT_FINAL_OUTPUTS,
-        pe_variables=(
-            "benefit_cap_reduction",
-            "universal_credit",
-            "universal_credit_pre_benefit_cap",
-            "would_claim_uc",
         ),
     ),
     "universal-credit-housing-costs": UKEFRSSurfaceSpec(
@@ -1299,15 +1160,6 @@ SURFACE_SPECS = {
             "is_scp_eligible",
             "scottish_child_payment",
             "would_claim_scp",
-        ),
-    ),
-    "severe-disablement-allowance-final": UKEFRSSurfaceSpec(
-        program=SDA_FINAL_PROGRAM_PATH,
-        entity="person",
-        outputs=SDA_FINAL_OUTPUTS,
-        pe_variables=(
-            "sda",
-            "sda_reported",
         ),
     ),
     "disability-living-allowance-final": UKEFRSSurfaceSpec(
