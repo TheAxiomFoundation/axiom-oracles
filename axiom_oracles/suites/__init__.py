@@ -57,6 +57,7 @@ from .uk_self_employed import (
 from .uk_child_benefit import uk_child_benefit_cases
 from .uk_housing_benefit import uk_housing_benefit_cases
 from .uk_pension_credit import uk_pension_credit_cases
+from .uk_personal_allowance import uk_personal_allowance_cases
 from .uk_statutory_pay import (
     uk_maternity_allowance_cases,
     uk_statutory_maternity_pay_cases,
@@ -104,6 +105,7 @@ def available_suites() -> tuple[str, ...]:
         "be-unemployment",
         "be-pensioner-contributions",
         "uk-worker-pit",
+        "uk-personal-allowance",
         "uk-worker-nic",
         "uk-self-employed-nic",
         "uk-employer-nic",
@@ -188,6 +190,8 @@ def load_suite(name: str):
         return be_pensioner_contributions_cases()
     if name == "uk-worker-pit":
         return uk_worker_pit_cases()
+    if name == "uk-personal-allowance":
+        return uk_personal_allowance_cases()
     if name == "uk-worker-nic":
         return uk_worker_nic_cases()
     if name == "uk-self-employed-nic":
@@ -257,6 +261,7 @@ __all__ = [
     "uk_housing_benefit_cases",
     "uk_maternity_allowance_cases",
     "uk_pension_credit_cases",
+    "uk_personal_allowance_cases",
     "uk_statutory_maternity_pay_cases",
     "uk_statutory_paternity_pay_cases",
     "uk_employer_secondary_nic_cases",

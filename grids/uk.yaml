@@ -1340,6 +1340,68 @@ case_sets:
         pension_income: 0.0
       facts:
         pension_income: 22000.0
+  uk-personal-allowance:
+    locale: UK
+    entity: Person
+    entity_id: head
+    outputs:
+    - uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_personal_allowance
+    cases:
+    - id: uk-personal-allowance-40k
+      period: '2026-04-06'
+      scenario: single-personal-allowance
+      parameters:
+        yearly_earned_income: 40000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+    - id: uk-personal-allowance-100k
+      period: '2026-04-06'
+      scenario: single-personal-allowance
+      parameters:
+        yearly_earned_income: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: uk-personal-allowance-110k
+      period: '2026-04-06'
+      scenario: single-personal-allowance
+      parameters:
+        yearly_earned_income: 110000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 110000.0
+    - id: uk-personal-allowance-125k
+      period: '2026-04-06'
+      scenario: single-personal-allowance
+      parameters:
+        yearly_earned_income: 125140.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 125140.0
+    - id: uk-personal-allowance-150k
+      period: '2026-04-06'
+      scenario: single-personal-allowance
+      parameters:
+        yearly_earned_income: 150000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 150000.0
   uk-self-employed-nic:
     locale: UK
     entity: Person

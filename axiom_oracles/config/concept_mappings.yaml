@@ -786,6 +786,33 @@ concepts:
           type: country
           geoid: UK
 
+  uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_personal_allowance:
+    description: UK personal allowance (Income Tax Act 2007 section 35; single individual)
+    category: tax
+    comparison: amount
+    # Both sides compute the s.35 allowance as the preliminary allowance less
+    # half of adjusted net income above the income limit, floored at zero. The
+    # Axiom pipeline ceils the result while UKMOD's tinta_s is the same integer
+    # allowance, so a £1 absolute tolerance absorbs the ceil/rounding boundary
+    # while still catching a structural taper-rate or threshold gap.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: uk_pit_pilot_personal_allowance
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: tinta_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#uk_nic_pilot_primary_class_1_contribution:
     description: UK Class 1 employee National Insurance contribution (single employee)
     category: social_contributions

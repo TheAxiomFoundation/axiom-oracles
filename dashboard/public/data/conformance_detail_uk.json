@@ -1106,7 +1106,7 @@
       "oracle_policy_name": "tinta_uk",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
+      "suite": "uk-personal-allowance",
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -1116,7 +1116,7 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "TAX: Personal tax allowance. The UK_2026 policy is switch=on and computes the final personal allowance tinta_s = preliminary allowance $ITPerAll less the income-limit taper (half of taxable income il_tinty in excess of $ITAllLim, floored at zero) \u2014 i.e. the Income Tax Act 2007 s.35(1)-(3) allowance with its adjusted-net-income withdrawal. This is a genuine, cleanly comparable surface: it needs only an income sweep on a single individual (no household structure, receipt history, or take-up draw), so it is the most directly gradable of the uncovered UK surfaces. rulespec-uk already encodes exactly this computation \u2014 uk_pit_pilot_personal_allowance in pilot_worker_oracle_pipeline is ceil(max(0, personal_allowance_base_amount - max(0, adjusted_net_income - 100000)/2)) against ITA 2007 s.35 \u2014 but it is currently an intermediate of the composed worker-PIT pipeline (feeding uk-worker-pit on the final liability tin_s), not exposed as a standalone tinta_s parity target. Uncovered until a personal-allowance comparison surfaces uk_pit_pilot_personal_allowance against tinta_s directly. Ready next-wave target (evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk s.35 encoding).",
+      "note": "TAX: Personal tax allowance. The UK_2026 policy is switch=on and computes the final personal allowance tinta_s = preliminary allowance $ITPerAll less the income-limit taper (half of taxable income il_tinty in excess of $ITAllLim, floored at zero) \u2014 i.e. the Income Tax Act 2007 s.35(1)-(3) allowance with its adjusted-net-income withdrawal. This is a genuine, cleanly comparable surface: it needs only an income sweep on a single individual (no household structure, receipt history, or take-up draw), so it is the most directly gradable of the uncovered UK surfaces. rulespec-uk encodes exactly this computation \u2014 uk_pit_pilot_personal_allowance in pilot_worker_oracle_pipeline is ceil(max(0, personal_allowance_base_amount - max(0, adjusted_net_income - adjusted_net_income_reduction_threshold)/2)) against ITA 2007 s.35. The uk-personal-allowance suite now surfaces uk_pit_pilot_personal_allowance against tinta_s directly on a single-individual sweep (40k/100k/110k/125.14k/150k straddling the taper and full withdrawal); the concept mapping binds it to euromod tinta_s, and the comparison (comparisons/uk-personal-allowance-ukmod.yaml) regenerates on the x64 UKMOD runner via scripts/regenerate_euromod_uk.sh. Covered once that runner commits axiom-euromod-uk-personal-allowance.json (the euromod runtime has no macOS wheel, so the live match rate is generated on the provisioned runner, per axiom-oracles#190). Evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk s.35 encoding.",
       "status": "uncovered"
     },
     {
