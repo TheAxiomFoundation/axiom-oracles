@@ -27655,6 +27655,252 @@ mappings:
     candidate_priority: P4
     rationale: This RuleSpec output is the 2026 Social Security cost-of-living adjustment percentage applied under 42 USC 415(i) to claimed benefits. PolicyEngine-US has no claimed-benefit-from-PIA-by-claiming-age surface in microdata -- the retirement benefit is the reported value (social_security_retirement_reported), so this application-level COLA percentage is not comparable as a one-to-one oracle output.
 
+  # California Revenue and Taxation Code Part 10 (personal income tax core) — RTC 17041/17052/17054
+  - legal_id: us-ca:statutes/rtc/17041#regular_tax_band_upper_bound
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#regular_tax_excess_floor_by_band
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#regular_tax_base_amount_by_band
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#regular_tax_rate_by_band
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#temporary_rate_increase
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#head_of_household_tax_excess_floor_by_band
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#head_of_household_tax_base_amount_by_band
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#head_of_household_tax_rate_by_band
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17041#tax_imposed_by_this_part_is_surtax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Source-level structural predicate or intermediate from California resident personal income tax rate schedule (RTC 17041). PolicyEngine composes final California income tax, credits, and exemptions from indexed current-year parameters and does not expose this statutory intermediate as a one-to-one variable.
+
+  - legal_id: us-ca:statutes/rtc/17041#modified_child_unearned_income_lowest_rate
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California resident personal income tax rate schedule (RTC 17041). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#statutory_credit_percentage
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#statutory_earned_income_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#statutory_phaseout_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#investment_income_limit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#temporary_cpi_floor
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#temporary_credit_ceiling_no_qualifying_children
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#temporary_credit_ceiling_with_qualifying_children
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#temporary_credit_percentage
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#temporary_phaseout_percentage
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#temporary_earned_income_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#temporary_phaseout_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California earned income tax credit / CalEITC (RTC 17052). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17052#itin_user_must_provide_requested_identifying_documents
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Source-level structural predicate or intermediate from California earned income tax credit / CalEITC (RTC 17052). PolicyEngine composes final California income tax, credits, and exemptions from indexed current-year parameters and does not expose this statutory intermediate as a one-to-one variable.
+
+  - legal_id: us-ca:statutes/rtc/17052#itin_user_must_notify_franchise_tax_board_after_valid_ssn_received
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Source-level structural predicate or intermediate from California earned income tax credit / CalEITC (RTC 17052). PolicyEngine composes final California income tax, credits, and exemptions from indexed current-year parameters and does not expose this statutory intermediate as a one-to-one variable.
+
+  - legal_id: us-ca:statutes/rtc/17054#base_individual_personal_exemption_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#joint_or_surviving_spouse_personal_exemption_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#senior_age_threshold
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#senior_personal_exemption_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#dependent_personal_exemption_credit_amount
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#taxpayer_blind_personal_exemption_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#spouse_blind_personal_exemption_credit
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#central_visual_acuity_numerator_threshold
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#central_visual_acuity_denominator_threshold
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#visual_field_angle_threshold
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: RTC statutory base amount or rate from California personal exemption credit (RTC 17054). The California Franchise Tax Board indexes these figures annually, so PolicyEngine's current-year parameter carries the indexed value rather than this un-indexed statutory base; the two are not a one-to-one comparison.
+
+  - legal_id: us-ca:statutes/rtc/17054#individual_is_blind
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Source-level structural predicate or intermediate from California personal exemption credit (RTC 17054). PolicyEngine composes final California income tax, credits, and exemptions from indexed current-year parameters and does not expose this statutory intermediate as a one-to-one variable.
+
+  - legal_id: us-ca:statutes/rtc/17054#individual_personal_exemption_credit_zero_due_to_another_taxpayer
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Source-level structural predicate or intermediate from California personal exemption credit (RTC 17054). PolicyEngine composes final California income tax, credits, and exemptions from indexed current-year parameters and does not expose this statutory intermediate as a one-to-one variable.
+
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
     country: us
