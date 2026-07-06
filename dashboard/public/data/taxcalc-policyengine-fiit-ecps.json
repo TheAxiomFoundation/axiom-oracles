@@ -1,0 +1,2811 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [
+        "us:tax/federal-income-tax#agi",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#nonrefundable_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
+        "us:tax/federal-income-tax#amt",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare"
+      ],
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "left_weighted_sum": 1716863272261.5317,
+      "match_rate": 87.096774,
+      "match_weight": 159874114.5,
+      "mismatch_count": 4,
+      "mismatch_weight": 23685054,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1736457358749.084,
+      "weighted_difference": -19594086487.552246,
+      "weighted_match_rate": 87.096774
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#agi",
+      "description": "Federal adjusted gross income",
+      "left_weighted_sum": 16231061588210.676,
+      "match_rate": 100,
+      "match_weight": 183559168.5,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 16231061570156.57,
+      "weighted_difference": 18054.105469,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#standard_deduction",
+      "description": "Federal standard deduction",
+      "left_weighted_sum": 4211202601200,
+      "match_rate": 100,
+      "match_weight": 183559168.5,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 4211202601200,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "left_weighted_sum": 12199247706756.29,
+      "match_rate": 96.774194,
+      "match_weight": 177637905,
+      "mismatch_count": 1,
+      "mismatch_weight": 5921263.5,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 12200014876080.932,
+      "weighted_difference": -767169324.642578,
+      "weighted_match_rate": 96.774194
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "left_weighted_sum": 1830430442556.7375,
+      "match_rate": 90.322581,
+      "match_weight": 165795378,
+      "mismatch_count": 3,
+      "mismatch_weight": 17763790.5,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 1828530312765.3706,
+      "weighted_difference": 1900129791.366943,
+      "weighted_match_rate": 90.322581
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "left_weighted_sum": 82734648502.7657,
+      "match_rate": 100,
+      "match_weight": 183559168.5,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 82734648975.57202,
+      "weighted_difference": -472.80632,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit value",
+      "left_weighted_sum": 164065511806.42322,
+      "match_rate": 96.774194,
+      "match_weight": 177637905,
+      "mismatch_count": 1,
+      "mismatch_weight": 5921263.5,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 164931950516.6239,
+      "weighted_difference": -866438710.200684,
+      "weighted_match_rate": 96.774194
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 31,
+      "comparison_weight": 183559168.5,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#amt",
+      "description": "Alternative Minimum Tax",
+      "left_weighted_sum": 0,
+      "match_rate": 96.774194,
+      "match_weight": 177637905,
+      "mismatch_count": 1,
+      "mismatch_weight": 5921263.5,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 21494186505,
+      "weighted_difference": -21494186505,
+      "weighted_match_rate": 96.774194
+    }
+  ],
+  "case_count": 31,
+  "cases": [
+    {
+      "case_id": "ecps-tax-unit-82418",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 4447,
+        "household_summary": {
+          "ages": [
+            37
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            21089.15
+          ],
+          "yearly_earned_income_total": 21089.15
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "09009",
+          "type": "census_county"
+        },
+        "tax_unit_id": 82418,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 1,
+          "XTOT": 1,
+          "age_head": 37,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 21089.146484375,
+          "e00200p": 21089.146484375,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-5706",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 4793,
+        "household_summary": {
+          "ages": [
+            72,
+            69
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "36047",
+          "type": "census_county"
+        },
+        "tax_unit_id": 5706,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 2,
+          "XTOT": 2,
+          "age_head": 72,
+          "age_spouse": 69,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 0.0,
+          "e00200p": 0.0,
+          "e00200s": 0.0,
+          "e00300": 116.26251077651978,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 15616.9462890625,
+          "e01700": 15616.9462890625,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 49482.609375,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": -4.750638961791992,
+          "p23250": 4753.51123046875,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-91529",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 12050,
+        "household_summary": {
+          "ages": [
+            32
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            75590.81
+          ],
+          "yearly_earned_income_total": 75590.81
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "18097",
+          "type": "census_county"
+        },
+        "tax_unit_id": 91529,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 3,
+          "XTOT": 1,
+          "age_head": 32,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 75590.8125,
+          "e00200p": 75590.8125,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": -13662.75390625,
+          "e00900p": -13662.75390625,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-15955",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 87.5,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 13356,
+        "household_summary": {
+          "ages": [
+            33,
+            37,
+            2,
+            0
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            940.25,
+            39796.49,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 40736.73
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "17031",
+          "type": "census_county"
+        },
+        "tax_unit_id": 15955,
+        "taxcalc_input": {
+          "EIC": 2,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 4,
+          "XTOT": 4,
+          "age_head": 37,
+          "age_spouse": 33,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 40736.734924316406,
+          "e00200p": 39796.48828125,
+          "e00200s": 940.2466430664062,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 2,
+          "nu06": 2,
+          "nu13": 2,
+          "nu18": 2,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "description": "Child Tax Credit value",
+          "difference": -146.32650756835938,
+          "kind": "amount_difference",
+          "left": 4253.673492431641,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 4400.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-95929",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 15806,
+        "household_summary": {
+          "ages": [
+            42,
+            36,
+            12,
+            11,
+            8,
+            5
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            72923.78,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 72923.78
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "55053",
+          "type": "census_county"
+        },
+        "tax_unit_id": 95929,
+        "taxcalc_input": {
+          "EIC": 3,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 5,
+          "XTOT": 6,
+          "age_head": 42,
+          "age_spouse": 36,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 72923.78125,
+          "e00200p": 72923.78125,
+          "e00200s": 0.0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 4,
+          "nu06": 1,
+          "nu13": 4,
+          "nu18": 4,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-19169",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 16127,
+        "household_summary": {
+          "ages": [
+            21
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            16399.65
+          ],
+          "yearly_earned_income_total": 16399.65
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "55083",
+          "type": "census_county"
+        },
+        "tax_unit_id": 19169,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 6,
+          "XTOT": 1,
+          "age_head": 21,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 16399.650390625,
+          "e00200p": 16399.650390625,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-19976",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 16829,
+        "household_summary": {
+          "ages": [
+            28
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            56852.12
+          ],
+          "yearly_earned_income_total": 56852.12
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "27003",
+          "type": "census_county"
+        },
+        "tax_unit_id": 19976,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 7,
+          "XTOT": 1,
+          "age_head": 28,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 56852.125,
+          "e00200p": 56852.125,
+          "e00200s": 0,
+          "e00300": 391.3787536621094,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 1.0020354986190796,
+          "e00900p": 1.0020354986190796,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-99035",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 18465,
+        "household_summary": {
+          "ages": [
+            72
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "29189",
+          "type": "census_county"
+        },
+        "tax_unit_id": 99035,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 8,
+          "XTOT": 1,
+          "age_head": 72,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 0.0,
+          "e00200p": 0.0,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 20000.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 25689.875,
+          "e01700": 25689.875,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 25430.921875,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-99036",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 18465,
+        "household_summary": {
+          "ages": [
+            42
+          ],
+          "household_size": 1,
+          "pregnant_member_present": true,
+          "yearly_earned_income_per_person": [
+            56352.74
+          ],
+          "yearly_earned_income_total": 56352.74
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "29189",
+          "type": "census_county"
+        },
+        "tax_unit_id": 99036,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 9,
+          "XTOT": 1,
+          "age_head": 42,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 56352.73828125,
+          "e00200p": 56352.73828125,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-27798",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 23573,
+        "household_summary": {
+          "ages": [
+            60
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "11001",
+          "type": "census_county"
+        },
+        "tax_unit_id": 27798,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 10,
+          "XTOT": 1,
+          "age_head": 60,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 0.0,
+          "e00200p": 0.0,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 696.7603759765625,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-110248",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 28135,
+        "household_summary": {
+          "ages": [
+            23
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            42644.56
+          ],
+          "yearly_earned_income_total": 42644.56
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "37183",
+          "type": "census_county"
+        },
+        "tax_unit_id": 110248,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 11,
+          "XTOT": 1,
+          "age_head": 23,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 42644.55859375,
+          "e00200p": 42644.55859375,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 5154.443359375,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-113542",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 30929,
+        "household_summary": {
+          "ages": [
+            27
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            26059.53
+          ],
+          "yearly_earned_income_total": 26059.53
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "13119",
+          "type": "census_county"
+        },
+        "tax_unit_id": 113542,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 12,
+          "XTOT": 1,
+          "age_head": 27,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 26059.52734375,
+          "e00200p": 26059.52734375,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 10.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-38771",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 75.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 32882,
+        "household_summary": {
+          "ages": [
+            85
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "12011",
+          "type": "census_county"
+        },
+        "tax_unit_id": 38771,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 13,
+          "XTOT": 1,
+          "age_head": 85,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 0.0,
+          "e00200p": 0.0,
+          "e00200s": 0,
+          "e00300": 5.755569934844971,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 15806.9443359375,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": -211305.625,
+          "p23250": 881743.4375,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": -3629.9984601953474,
+          "kind": "amount_difference",
+          "left": 116840.81403980465,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 120470.8125,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "description": "Alternative Minimum Tax",
+          "difference": -3630.0,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 3630.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-116690",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 33531,
+        "household_summary": {
+          "ages": [
+            59,
+            63
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            94026.91,
+            0.0
+          ],
+          "yearly_earned_income_total": 94026.91
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "12083",
+          "type": "census_county"
+        },
+        "tax_unit_id": 116690,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 14,
+          "XTOT": 2,
+          "age_head": 63,
+          "age_spouse": 59,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 94026.9140625,
+          "e00200p": 0.0,
+          "e00200s": 94026.9140625,
+          "e00300": 28.777849197387695,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 149402.109375,
+          "e01700": 149402.109375,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-118458",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 35031,
+        "household_summary": {
+          "ages": [
+            80
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "21117",
+          "type": "census_county"
+        },
+        "tax_unit_id": 118458,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 15,
+          "XTOT": 1,
+          "age_head": 80,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 0.0,
+          "e00200p": 0.0,
+          "e00200s": 0,
+          "e00300": 287.77850341796875,
+          "e00600": 24000.0,
+          "e00650": 0.0,
+          "e00900": 473.4617614746094,
+          "e00900p": 473.4617614746094,
+          "e00900s": 0,
+          "e01500": 13100.0146484375,
+          "e01700": 13100.0146484375,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 35874.890625,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-120326",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 36623,
+        "household_summary": {
+          "ages": [
+            35,
+            32,
+            7,
+            6
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            10174.83,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 10174.83
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "01125",
+          "type": "census_county"
+        },
+        "tax_unit_id": 120326,
+        "taxcalc_input": {
+          "EIC": 2,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 16,
+          "XTOT": 4,
+          "age_head": 35,
+          "age_spouse": 32,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 10174.826171875,
+          "e00200p": 10174.826171875,
+          "e00200s": 0.0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 10781.400390625,
+          "e00900p": 10781.400390625,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 2,
+          "nu06": 0,
+          "nu13": 2,
+          "nu18": 2,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-120344",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 36640,
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            52893.05
+          ],
+          "yearly_earned_income_total": 52893.05
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "01003",
+          "type": "census_county"
+        },
+        "tax_unit_id": 120344,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 17,
+          "XTOT": 1,
+          "age_head": 40,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 52893.0546875,
+          "e00200p": 52893.0546875,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 608.736572265625,
+          "e00900p": 608.736572265625,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-44459",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 37735,
+        "household_summary": {
+          "ages": [
+            68,
+            54,
+            17
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            221941.94,
+            0.0,
+            8746.48
+          ],
+          "yearly_earned_income_total": 230688.42
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "01017",
+          "type": "census_county"
+        },
+        "tax_unit_id": 44459,
+        "taxcalc_input": {
+          "EIC": 1,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 18,
+          "XTOT": 3,
+          "age_head": 68,
+          "age_spouse": 54,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 221941.9375,
+          "e00200p": 221941.9375,
+          "e00200s": 0.0,
+          "e00300": 121039.6328125,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 1,
+          "p22250": -775.4719848632812,
+          "p23250": -11670.736328125,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-127720",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 75.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 43016,
+        "household_summary": {
+          "ages": [
+            43
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            64964.64
+          ],
+          "yearly_earned_income_total": 64964.64
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "48439",
+          "type": "census_county"
+        },
+        "tax_unit_id": 127720,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 19,
+          "XTOT": 1,
+          "age_head": 43,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 64964.64453125,
+          "e00200p": 64964.64453125,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 23.75319480895996,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 222.70587165832512,
+          "kind": "amount_difference",
+          "left": 5618.607727127075,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 5395.90185546875,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 222.70587165832512,
+          "kind": "amount_difference",
+          "left": 5618.607727127075,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 5395.90185546875,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-51995",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 75.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 44209,
+        "household_summary": {
+          "ages": [
+            58,
+            55,
+            13
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            109331.01,
+            131197.2,
+            0.0
+          ],
+          "yearly_earned_income_total": 240528.21
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "48117",
+          "type": "census_county"
+        },
+        "tax_unit_id": 51995,
+        "taxcalc_input": {
+          "EIC": 1,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 20,
+          "XTOT": 3,
+          "age_head": 58,
+          "age_spouse": 55,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 240528.2109375,
+          "e00200p": 109331.0078125,
+          "e00200s": 131197.203125,
+          "e00300": 6981.50634765625,
+          "e00600": 10.0,
+          "e00650": 10.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 46850.8359375,
+          "e01700": 46850.8359375,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 1,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 1,
+          "p22250": 11272.9873046875,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 46.366110351562384,
+          "kind": "amount_difference",
+          "left": 49315.60048535156,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 49269.234375,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 46.367719726564246,
+          "kind": "amount_difference",
+          "left": 50821.5497265625,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 50775.18200683594,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-51996",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 44209,
+        "household_summary": {
+          "ages": [
+            24
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            17492.96
+          ],
+          "yearly_earned_income_total": 17492.96
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "48117",
+          "type": "census_county"
+        },
+        "tax_unit_id": 51996,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 21,
+          "XTOT": 1,
+          "age_head": 24,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 17492.9609375,
+          "e00200p": 17492.9609375,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-130468",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 45332,
+        "household_summary": {
+          "ages": [
+            46,
+            46,
+            17,
+            13
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            52352.19,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 52352.19
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "48355",
+          "type": "census_county"
+        },
+        "tax_unit_id": 130468,
+        "taxcalc_input": {
+          "EIC": 2,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 22,
+          "XTOT": 4,
+          "age_head": 46,
+          "age_spouse": 46,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 52352.1875,
+          "e00200p": 52352.1875,
+          "e00200s": 0.0,
+          "e00300": 0.0,
+          "e00600": 27000.0,
+          "e00650": 0.0,
+          "e00900": 12717.421875,
+          "e00900p": 12717.421875,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 1,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 2,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-54610",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 46378,
+        "household_summary": {
+          "ages": [
+            51,
+            59
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "48201",
+          "type": "census_county"
+        },
+        "tax_unit_id": 54610,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 23,
+          "XTOT": 2,
+          "age_head": 59,
+          "age_spouse": 51,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 0.0,
+          "e00200p": 0.0,
+          "e00200s": 0.0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 30061.064453125,
+          "e00900p": 30061.064453125,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-54611",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 46378,
+        "household_summary": {
+          "ages": [
+            24
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            21866.2
+          ],
+          "yearly_earned_income_total": 21866.2
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "48201",
+          "type": "census_county"
+        },
+        "tax_unit_id": 54611,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 24,
+          "XTOT": 1,
+          "age_head": 24,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 21866.201171875,
+          "e00200p": 21866.201171875,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-67376",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 62.5,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 57142,
+        "household_summary": {
+          "ages": [
+            45,
+            43,
+            9
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            0.0,
+            13119.72,
+            0.0
+          ],
+          "yearly_earned_income_total": 13119.72
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06107",
+          "type": "census_county"
+        },
+        "tax_unit_id": 67376,
+        "taxcalc_input": {
+          "EIC": 1,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 25,
+          "XTOT": 3,
+          "age_head": 45,
+          "age_spouse": 43,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 13119.720703125,
+          "e00200p": 0.0,
+          "e00200s": 13119.720703125,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 40081.41796875,
+          "e00900p": 40081.41796875,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 1,
+          "nu06": 0,
+          "nu13": 1,
+          "nu18": 1,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 51.82430367746338,
+          "kind": "amount_difference",
+          "left": -2103.7674931975366,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": -2155.591796875,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": -129.56319079140667,
+          "kind": "amount_difference",
+          "left": 14535.581340458593,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 14665.14453125,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 51.82440601851704,
+          "kind": "amount_difference",
+          "left": 1453.5581340458593,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 1401.7337280273423,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-67377",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 57142,
+        "household_summary": {
+          "ages": [
+            24
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            21866.2
+          ],
+          "yearly_earned_income_total": 21866.2
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06107",
+          "type": "census_county"
+        },
+        "tax_unit_id": 67377,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 26,
+          "XTOT": 1,
+          "age_head": 24,
+          "age_spouse": 0,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 21866.201171875,
+          "e00200p": 21866.201171875,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-69642",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 58830,
+        "household_summary": {
+          "ages": [
+            20
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            20772.89
+          ],
+          "yearly_earned_income_total": 20772.89
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
+          "type": "census_county"
+        },
+        "tax_unit_id": 69642,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 27,
+          "XTOT": 1,
+          "age_head": 20,
+          "age_spouse": 0,
+          "blind_head": 1,
+          "blind_spouse": 0,
+          "e00200": 20772.890625,
+          "e00200p": 20772.890625,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-69643",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 58830,
+        "household_summary": {
+          "ages": [
+            23
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            37172.54
+          ],
+          "yearly_earned_income_total": 37172.54
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
+          "type": "census_county"
+        },
+        "tax_unit_id": 69643,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 28,
+          "XTOT": 1,
+          "age_head": 23,
+          "age_spouse": 0,
+          "blind_head": 1,
+          "blind_spouse": 0,
+          "e00200": 37172.54296875,
+          "e00200p": 37172.54296875,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 1.0020354986190796,
+          "e00900p": 1.0020354986190796,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-69644",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 58830,
+        "household_summary": {
+          "ages": [
+            18
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            22959.51
+          ],
+          "yearly_earned_income_total": 22959.51
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06075",
+          "type": "census_county"
+        },
+        "tax_unit_id": 69644,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 1,
+          "RECID": 29,
+          "XTOT": 1,
+          "age_head": 18,
+          "age_spouse": 0,
+          "blind_head": 1,
+          "blind_spouse": 0,
+          "e00200": 22959.51171875,
+          "e00200p": 22959.51171875,
+          "e00200s": 0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-71974",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 60633,
+        "household_summary": {
+          "ages": [
+            29,
+            27,
+            1,
+            0
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            69971.84,
+            39359.16,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 109331.01
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06065",
+          "type": "census_county"
+        },
+        "tax_unit_id": 71974,
+        "taxcalc_input": {
+          "EIC": 2,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 30,
+          "XTOT": 4,
+          "age_head": 29,
+          "age_spouse": 27,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 109331.0078125,
+          "e00200p": 69971.84375,
+          "e00200s": 39359.1640625,
+          "e00300": 577.8592438697815,
+          "e00600": 1100.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 0.0,
+          "e01700": 0.0,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 0.0,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 2,
+          "nu06": 2,
+          "nu13": 2,
+          "nu18": 2,
+          "p22250": 0.0,
+          "p23250": 25025.310546875,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-151698",
+      "left_engine": "taxcalc",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 62685,
+        "household_summary": {
+          "ages": [
+            68,
+            60
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 5921263.5,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "06061",
+          "type": "census_county"
+        },
+        "tax_unit_id": 151698,
+        "taxcalc_input": {
+          "EIC": 0,
+          "FLPDYR": 2026,
+          "MARS": 2,
+          "RECID": 31,
+          "XTOT": 2,
+          "age_head": 68,
+          "age_spouse": 60,
+          "blind_head": 0,
+          "blind_spouse": 0,
+          "e00200": 0.0,
+          "e00200p": 0.0,
+          "e00200s": 0.0,
+          "e00300": 0.0,
+          "e00600": 0.0,
+          "e00650": 0.0,
+          "e00900": 0.0,
+          "e00900p": 0.0,
+          "e00900s": 0.0,
+          "e01500": 21863.724609375,
+          "e01700": 21863.724609375,
+          "e02000": 0.0,
+          "e02300": 0.0,
+          "e02400": 32836.46875,
+          "e18500": 0.0,
+          "e19200": 0.0,
+          "e32800": 0.0,
+          "n24": 0,
+          "nu06": 0,
+          "nu13": 0,
+          "nu18": 0,
+          "p22250": 0.0,
+          "p23250": 0.0,
+          "s006": 1.0
+        }
+      },
+      "mismatches": [],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [
+        "us:tax/federal-income-tax#agi",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#nonrefundable_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
+        "us:tax/federal-income-tax#amt",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare"
+      ],
+      "description": "Federal income tax liability",
+      "id": "us:tax/federal-income-tax#liability",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 15
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal adjusted gross income",
+      "id": "us:tax/federal-income-tax#agi",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal standard deduction",
+      "id": "us:tax/federal-income-tax#standard_deduction",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal taxable income",
+      "id": "us:tax/federal-income-tax#taxable_income",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal tax before credits",
+      "id": "us:tax/federal-income-tax#tax_before_credits",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Earned Income Tax Credit",
+      "id": "us:tax/federal-income-tax#eitc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Child Tax Credit value",
+      "id": "us:tax/federal-income-tax#ctc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Alternative Minimum Tax",
+      "id": "us:tax/federal-income-tax#amt",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    }
+  ],
+  "engines": {
+    "left": "taxcalc",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-15955",
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit value",
+      "difference": -146.32650756835938,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "15955-ctc-definition-open"
+      },
+      "kind": "amount_difference",
+      "left": 4253.673492431641,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 4400.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-38771",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": -3629.9984601953474,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "38771-liability-propagates-amt"
+      },
+      "kind": "amount_difference",
+      "left": 116840.81403980465,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 120470.8125,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-38771",
+      "concept": "us:tax/federal-income-tax#amt",
+      "description": "Alternative Minimum Tax",
+      "difference": -3630.0,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "38771-amt-large-capital-gains-open"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 3630.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-127720",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 222.70587165832512,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "127720-liability-propagates-before-credits"
+      },
+      "kind": "amount_difference",
+      "left": 5618.607727127075,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 5395.90185546875,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-127720",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 222.70587165832512,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "127720-before-credits-open"
+      },
+      "kind": "amount_difference",
+      "left": 5618.607727127075,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 5395.90185546875,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-51995",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 46.366110351562384,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "51995-liability-propagates-before-credits"
+      },
+      "kind": "amount_difference",
+      "left": 49315.60048535156,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 49269.234375,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-51995",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 46.367719726564246,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "51995-tax-before-credits-rounding-residual"
+      },
+      "kind": "amount_difference",
+      "left": 50821.5497265625,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 50775.18200683594,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-67376",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 51.82430367746338,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "67376-liability-propagates-taxable-income"
+      },
+      "kind": "amount_difference",
+      "left": -2103.7674931975366,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": -2155.591796875,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-67376",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": -129.56319079140667,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "67376-taxable-income-self-employment-open"
+      },
+      "kind": "amount_difference",
+      "left": 14535.581340458593,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 14665.14453125,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-67376",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 51.82440601851704,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "67376-before-credits-propagates-taxable-income"
+      },
+      "kind": "amount_difference",
+      "left": 1453.5581340458593,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1401.7337280273423,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "enhanced-cps",
+  "provenance": {
+    "dataset": {
+      "population": "enhanced-cps",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-06T04:16:03Z",
+    "generated_by": "scripts/run_comparison.py::taxcalc-fiit-ecps",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.752.2",
+      "taxcalc": "6.7.1"
+    },
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "US",
+    "type": "country"
+  },
+  "suite": "taxcalc-fiit-ecps",
+  "summary": {
+    "comparison_count": 248,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 6,
+        "unexplained": 4,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/taxcalc-fiit-ecps.yaml",
+      "expired_entries": [],
+      "explained_rate": 98.387097,
+      "orphaned_entries": [],
+      "raw_match_rate": 95.967742,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 4
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 238,
+    "mismatch_count": 10,
+    "mismatches_by_concept": [
+      {
+        "count": 4,
+        "value": "us:tax/federal-income-tax#liability"
+      },
+      {
+        "count": 3,
+        "value": "us:tax/federal-income-tax#tax_before_credits"
+      },
+      {
+        "count": 1,
+        "value": "us:tax/federal-income-tax#amt"
+      },
+      {
+        "count": 1,
+        "value": "us:tax/federal-income-tax#ctc"
+      },
+      {
+        "count": 1,
+        "value": "us:tax/federal-income-tax#taxable_income"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 10,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 10,
+        "value": null
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 1468473348,
+      "match_rate": 95.967742,
+      "match_weight": 1409260713,
+      "mismatch_weight": 59212635
+    }
+  }
+}

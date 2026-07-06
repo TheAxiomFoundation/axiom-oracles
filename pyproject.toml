@@ -40,6 +40,9 @@ policyengine = [
 taxsim = [
   "policyengine-taxsim>=2.7.1",
 ]
+taxcalc = [
+  "taxcalc==6.7.1",
+]
 accessnyc-python = [
   "pydantic>=2.11",
 ]

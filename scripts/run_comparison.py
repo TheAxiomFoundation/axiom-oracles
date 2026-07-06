@@ -712,11 +712,18 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_uk": params.get("policyengine_uk_version", "2.88.56"),
         }
     elif runner_type == "axiom-oracles-compare":
+        engines = {str(params.get("left", "")), str(params.get("right", ""))}
         oracle = {
             "name": params.get("right", "policyengine"),
             "policyengine_package": _PE_ORACLE_PINS[0],
             "policyengine_us": _PE_ORACLE_PINS[1].split("==", 1)[-1],
         }
+        # Pin the Tax-Calculator engine version when it is a participant, so a
+        # taxcalc-vs-policyengine report records both engine stacks it compared
+        # (the Axiom-specific `engine` block is empty for an oracle-vs-oracle
+        # run). Matches the pin the runner installs into its isolated env.
+        if "taxcalc" in engines:
+            oracle["taxcalc"] = "6.7.1"
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
     elif runner_type == "euromod-synthetic-compare":
@@ -1318,9 +1325,18 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     `axiom-encode-tax-ecps-compare` runner's environment.
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
     params = runner["parameters"]
-    _ensure_composed_axiom_program(params, axiom_rules_repo)
+    engines = {str(params.get("left", "")), str(params.get("right", ""))}
+    # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
+    # Axiom side, so it needs neither a built engine binary nor a composed
+    # program — skip the Rust dependency entirely rather than force a build.
+    uses_axiom = "axiom" in engines
+    if uses_axiom:
+        _ensure_engine_binary(axiom_rules_repo, kind="release")
+        _ensure_composed_axiom_program(params, axiom_rules_repo)
+    # Tax-Calculator is an optional extra; install its pin into the isolated
+    # `uv run` when either side is the taxcalc adapter.
+    taxcalc_pins = ("taxcalc==6.7.1",) if "taxcalc" in engines else ()
     cmd = [
         "uv",
         "run",
@@ -1330,6 +1346,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--with-editable",
         str(REPO_ROOT),
         *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
+        *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
@@ -1343,9 +1360,16 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--period",
         str(params["period"]),
         *(["--report-suite", str(params["suite"])] if params.get("suite") else []),
+        *(["--include-components"] if params.get("include_components") else []),
         *_concept_args(params),
-        "--axiom-engine-binary",
-        str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+        *(
+            [
+                "--axiom-engine-binary",
+                str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+            ]
+            if uses_axiom
+            else []
+        ),
         "--output",
         str(output),
     ]

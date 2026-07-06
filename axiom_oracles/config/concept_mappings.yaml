@@ -11,6 +11,10 @@ targets:
     scope:
       type: country
       geoid: US
+  taxcalc:
+    scope:
+      type: country
+      geoid: US
   prd:
     scope:
       type: country
@@ -1039,6 +1043,7 @@ concepts:
     tolerance: 15
     priority: high
     components:
+      - us:tax/federal-income-tax#agi
       - us:tax/federal-income-tax#standard_deduction
       - us:tax/federal-income-tax#taxable_income
       - us:tax/federal-income-tax#tax_before_credits
@@ -1057,6 +1062,17 @@ concepts:
       axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
       taxsim: fiitax
+      taxcalc: iitax
+
+  us:tax/federal-income-tax#agi:
+    description: Federal adjusted gross income
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    targets:
+      policyengine: adjusted_gross_income
+      taxcalc: c00100
 
   us:tax/federal-income-tax#standard_deduction:
     description: Federal standard deduction
@@ -1068,6 +1084,7 @@ concepts:
       axiom: us:policies/irs/rev-proc-2025-32/standard-deduction#standard_deduction
       policyengine: standard_deduction
       taxsim: v13
+      taxcalc: standard
 
   us:tax/federal-income-tax#taxable_income:
     description: Federal taxable income
@@ -1079,6 +1096,7 @@ concepts:
       axiom: us:tax/oracle-bridge#taxable_income
       policyengine: taxable_income
       taxsim: v18
+      taxcalc: c04800
 
   us:tax/federal-income-tax#tax_before_credits:
     description: Federal tax before credits
@@ -1088,8 +1106,18 @@ concepts:
     parent: us:tax/federal-income-tax#liability
     targets:
       axiom: us:statutes/26/1/j#income_tax_main_rates
-      policyengine: income_tax_main_rates
+      # Tax-Calculator's `taxbc` is regular tax before credits including the
+      # Schedule D preferential-rate worksheet, so it must be compared against
+      # PolicyEngine's ordinary-bracket tax PLUS its separate capital-gains tax.
+      # PE's `income_tax_main_rates` alone excludes capital gains (it subtracts
+      # `capital_gains_excluded_from_taxable_income` before applying brackets);
+      # `income_tax_before_credits = main_rates + capital_gains_tax + AMT`. The
+      # comparator sums a list target, so [main_rates, capital_gains_tax] equals
+      # `taxbc`. AMT is excluded because `taxbc` excludes it too (Tax-Calculator
+      # adds `c09600` separately); the AMT concept maps `taxcalc: c09600` alone.
+      policyengine: [income_tax_main_rates, capital_gains_tax]
       taxsim: v19
+      taxcalc: taxbc
 
   us:tax/federal-income-tax#nonrefundable_credits:
     description: Federal capped nonrefundable credits
@@ -1111,6 +1139,7 @@ concepts:
       axiom: us:statutes/26/32#eitc
       policyengine: eitc
       taxsim: v25
+      taxcalc: eitc
 
   us:tax/federal-income-tax#ctc:
     description: Child Tax Credit value
@@ -1122,6 +1151,7 @@ concepts:
       axiom: us:tax/oracle-bridge#ctc_value
       policyengine: ctc_value
       taxsim: v22
+      taxcalc: ctc_total
 
   us:tax/federal-income-tax#cdcc:
     description: Child and Dependent Care Credit
@@ -1153,6 +1183,7 @@ concepts:
       axiom: us:statutes/26/55#alternative_minimum_tax
       policyengine: alternative_minimum_tax
       taxsim: v27
+      taxcalc: c09600
 
   us:tax/federal-income-tax#capital_gain:
     description: Federal capital gain definitions
