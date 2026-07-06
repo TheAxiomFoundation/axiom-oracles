@@ -419,6 +419,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "uk-best-start-foods",
+      "report": "axiom-euromod-uk-best-start-foods.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-best-start-foods-ukmod.yaml"
+    },
+    {
       "suite": "uk-child-benefit",
       "report": "axiom-euromod-uk-child-benefit.json",
       "repos": [
@@ -441,6 +449,14 @@
         "TheAxiomFoundation/rulespec-uk"
       ],
       "source": "comparisons/uk-employer-nic-ukmod.yaml"
+    },
+    {
+      "suite": "uk-healthy-start",
+      "report": "axiom-euromod-uk-healthy-start.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-healthy-start-ukmod.yaml"
     },
     {
       "suite": "uk-housing-benefit",
@@ -529,6 +545,14 @@
         "TheAxiomFoundation/rulespec-uk"
       ],
       "source": "comparisons/uk-statutory-paternity-pay-ukmod.yaml"
+    },
+    {
+      "suite": "uk-sure-start-maternity-grant",
+      "report": "axiom-euromod-uk-sure-start-maternity-grant.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-sure-start-maternity-grant-ukmod.yaml"
     },
     {
       "suite": "uk-tax-benefits-efrs",

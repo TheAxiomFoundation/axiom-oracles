@@ -3158,3 +3158,39 @@ prefixes:
     program: statutory_paternity_pay
     mapping_type: not_comparable
     rationale: Composed Person-level UKMOD Statutory Paternity Pay oracle pipeline; its earnings-related-rate, lower-earnings-limit, paternity-pay-period, normal-weekly-earnings, entitlement, weekly-amount and total-entitlement outputs reconstruct the UKMOD bpact_s earnings-related award (0.9 x normal weekly earnings x 2 weeks, grounded in SSCBA 1992 s.171ZE) for the UKMOD bpact_s comparison rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Person-level UKMOD Sure Start Maternity Grant oracle pipeline (Social
+  # Fund Maternity and Funeral Expenses (General) Regulations 2005 (SI 2005/3061)
+  # reg.5). Its grant-amount and annual-entitlement outputs reconstruct the UKMOD
+  # bmamt_s £500 passported lump sum for the UKMOD comparison rather than adding
+  # new PolicyEngine UK oracle variables. Added for the passported-grant family.
+  - legal_id_prefix: uk:regulations/uksi/2005/3061/pilot_sure_start_maternity_grant_oracle_pipeline#
+    country: uk
+    program: ssmg
+    mapping_type: not_comparable
+    rationale: Composed Person-level UKMOD Sure Start Maternity Grant oracle pipeline; its grant-amount and annual-entitlement outputs reconstruct the UKMOD bmamt_s £500 passported lump sum (SI 2005/3061 reg.5) for the UKMOD bmamt_s comparison rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Person-level UKMOD Healthy Start oracle pipeline (Healthy Start Scheme
+  # and Welfare Food (Amendment) Regulations 2005 (SI 2005/3262) reg.8). Its
+  # weeks-per-year, minimum-weekly-value, determined-weekly-value and annual-
+  # entitlement outputs reconstruct the UKMOD bmamt01_s passported voucher value
+  # for the UKMOD comparison rather than adding new PolicyEngine UK oracle
+  # variables. Added for the passported-grant family.
+  - legal_id_prefix: uk:regulations/uksi/2005/3262/pilot_healthy_start_oracle_pipeline#
+    country: uk
+    program: healthy_start
+    mapping_type: not_comparable
+    rationale: Composed Person-level UKMOD Healthy Start oracle pipeline; its weeks-per-year, minimum-weekly-value, determined-weekly-value and annual-entitlement outputs reconstruct the UKMOD bmamt01_s passported voucher value (SI 2005/3262 reg.8, the determined weekly value floored at £3.10, annualised over 52 benefit weeks) for the UKMOD bmamt01_s comparison rather than adding new PolicyEngine UK oracle variables.
+
+  # Composed Person-level UKMOD Best Start Foods oracle pipeline (Welfare Foods
+  # (Best Start Foods) (Scotland) Regulations 2019 (SSI 2019/193) reg.13). Its
+  # weeks-per-year, basic-weekly-rate, under-one-weekly-rate, child-age,
+  # applicable-weekly-rate and annual-entitlement outputs reconstruct the UKMOD
+  # bmascmt01_s passported Scottish payment for the UKMOD comparison rather than
+  # adding new PolicyEngine UK oracle variables. Added for the passported-grant
+  # family.
+  - legal_id_prefix: uk:regulations/ssi/2019/193/pilot_best_start_foods_oracle_pipeline#
+    country: uk
+    program: best_start_foods
+    mapping_type: not_comparable
+    rationale: Composed Person-level UKMOD Best Start Foods oracle pipeline; its weeks-per-year, basic-weekly-rate, under-one-weekly-rate, child-age, applicable-weekly-rate and annual-entitlement outputs reconstruct the UKMOD bmascmt01_s passported Scottish payment (SSI 2019/193 reg.13, £5.60 basic rate doubled to £11.20 under one, annualised over 52 benefit weeks) for the UKMOD bmascmt01_s comparison rather than adding new PolicyEngine UK oracle variables.

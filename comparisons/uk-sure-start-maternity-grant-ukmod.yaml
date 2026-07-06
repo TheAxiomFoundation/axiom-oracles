@@ -1,0 +1,55 @@
+name: uk-sure-start-maternity-grant-ukmod
+title: UK Sure Start Maternity Grant — Axiom vs UKMOD
+description: >-
+  Compares the Sure Start Maternity Grant encoded in Axiom RuleSpec (Social Fund
+  Maternity and Funeral Expenses (General) Regulations 2005 (SI 2005/3061)
+  regulation 5: the £500 lump sum to meet maternity expenses) against CeMPA's
+  UKMOD bmamt_s on a synthetic passported case: a zero-earnings lone parent
+  responsible for a newborn, renting, who passports onto Universal Credit. The
+  Sure Start Maternity Grant is a passported means-tested lump sum — its UKMOD
+  Elig_Cond requires a qualifying means-tested benefit in payment (bsauc_s > 0
+  among others) and a child under one with no other dependent children — so the
+  case is built to receive Universal Credit and the grant passports off it. It is
+  an already-annual £500, so both sides match to the penny.
+
+  UKMOD's Universal Credit output bsauc_s carries a STOCHASTIC per-benefit-unit
+  take-up draw (i_rand_tu, gated in bsauc_uk on the $ISTUNoChild / $ISTUChild
+  take-up-rate constants); for a hypothetical benefit unit a non-taking solo draw
+  would zero the UC award and switch the passport off (documented in
+  axiom_oracles/data/euromod_issues.json as ukmod-uc-bsauc-takeup-correction).
+  euromod_constant_overrides pins those UC take-up rates to 1.0 so Universal
+  Credit is deterministically in payment and the grant passports; the adapter
+  patches the DefConst values into the system XML on the model overlay
+  (axiom-oracles#168), since the connector's constantsToOverwrite kwarg silently
+  ignores DefConst constants. bmamt_uk itself does not consume i_rand_tu, so once
+  UC is in payment the £500 grant is a deterministic per-household result. UKMOD
+  runs the registration-free public model (UKMOD_PUBLIC_B2026.03, system UK_2026,
+  dataset training_data). This suite runs where the x64 UKMOD runtime and model
+  checkout are available; on runners without them it re-emits the committed
+  dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-sure-start-maternity-grant
+    population: synthetic
+    sample_size: 0
+    period: 2026-04
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    # Pin the Universal Credit take-up-rate constants to 1.0 so the passporting
+    # benefit is deterministically in payment (bsauc_s > 0) rather than a take-up
+    # lottery realization; the grant's Elig_Cond then passports off UC.
+    euromod_constant_overrides: $ISTUNochild=1.0,$ISTUChild=1.0
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-sure-start-maternity-grant.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-sure-start-maternity-grant
+
+dashboard:
+  filename: axiom-euromod-uk-sure-start-maternity-grant.json
+  suite: uk-sure-start-maternity-grant

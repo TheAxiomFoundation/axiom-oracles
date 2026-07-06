@@ -37,12 +37,12 @@
       },
       {
         "date": "2026-07-06",
-        "in_scope": 27,
-        "covered": 7,
-        "uncovered": 20,
+        "in_scope": 26,
+        "covered": 13,
+        "uncovered": 13,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 20,
+        "gap": 13,
         "conformant": false
       }
     ],
@@ -50,11 +50,11 @@
       {
         "date": "2026-07-06",
         "in_scope": 25,
-        "covered": 13,
-        "uncovered": 12,
+        "covered": 14,
+        "uncovered": 11,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 12,
+        "gap": 11,
         "conformant": false
       }
     ]
