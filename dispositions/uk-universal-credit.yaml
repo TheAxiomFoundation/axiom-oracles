@@ -3,12 +3,32 @@ suite: uk-universal-credit
 updated: "2026-07-05"
 # Below the benefit cap the composed rulespec-uk Universal Credit award matches
 # UKMOD bsauc_s to the penny (single, couple, couple+rent, single+1child, and
-# the capital tariff below the limit). The residual rows fall into three
-# explained groups: UKMOD's benefit take-up correction zeroing a hypothetical
-# benefit unit, UKMOD not applying the regulation 80A benefit cap, the UC
-# net-earnings taper leaving a small NIC-rounding residual, and the capital
-# upper-limit boundary convention. All are UKMOD-side or reconciled-convention,
-# not Axiom encoding gaps.
+# the capital tariff below the limit). The residual rows fall into explained
+# groups: UKMOD's benefit take-up correction zeroing a hypothetical benefit unit,
+# UKMOD not applying the regulation 80A benefit cap, the UC net-earnings taper
+# leaving a small NIC-rounding residual, and the capital upper-limit boundary
+# convention. All are UKMOD-side or reconciled-convention, not Axiom encoding
+# gaps.
+#
+# CORRECTED 2026-07-05 (batch-size-1 integrity audit): the take-up zeroing is
+# STOCHASTIC per row, not deterministic per composition/earnings. The earlier
+# per-case claims ("turning off the take-up policies does not suppress the draw"
+# framed as proof of a fixed pattern; "the identical single owner-occupier at
+# 6,000 capital returns the full 424.90, so the zero here is the take-up draw not
+# the capital test") describe one non-reproducible realization (all cases in one
+# batch). Verified live on UKMOD_PUBLIC_B2026.03: ten byte-for-byte identical
+# copies of the entitled couple-owner household in one run return
+# [666.97, 666.97, 0, 666.97, 666.97, 0, 0, 666.97, 666.97, 666.97] and ten
+# identical single-owner-no-capital households return the same pattern at 424.90
+# — identical facts, different awards by position. At --comparison-batch-size 1
+# the whole suite gives 8 mismatches vs 11 all-in-one-batch: three take-up zeros
+# resolve (couple-owner, couple-2child-owner, single-owner-capital0) and two
+# persist by draw (earn15000, earn30000), while the benefit-cap, NIC-rounding,
+# and capital-boundary mismatches below are BYTE-IDENTICAL across both batchings
+# (they are deterministic and remain fully confirmed). The take-up entries stay
+# upstream_engine_gap because Axiom's entitlement is exact wherever a unit takes
+# up; pinned values record the committed single-batch realization. See
+# euromod_issues.json#ukmod-uc-bsauc-takeup-correction.
 entries:
   # --- UKMOD benefit take-up correction zeroes the award -------------------
   - id: takeup-correction-zeroes-couple-owner
@@ -19,13 +39,17 @@ entries:
     evidence:
       mechanism: >-
         UKMOD's benefit take-up correction (policies BTA_uk and random_uk seed
-        a per-benefit-unit take-up draw i_rand_tu, gated in bsauc_uk) marks this
-        hypothetical benefit unit as a non-taker and returns a zero award rather
-        than the statutory entitlement. The Axiom pipeline computes the couple
-        standard allowance (666.97/month) as the full entitlement. Turning off
-        the take-up policies does not suppress the draw (initialised in
-        InitVars_uk), so this is a UKMOD modelling behaviour for hypothetical
-        households, not an Axiom encoding gap.
+        a stochastic per-benefit-unit take-up draw i_rand_tu, gated in bsauc_uk)
+        marks this hypothetical benefit unit as a non-taker on this run and
+        returns a zero award rather than the statutory entitlement. The Axiom
+        pipeline computes the couple standard allowance (666.97/month) as the
+        full entitlement, which UKMOD pays whenever this unit draws take-up.
+        Turning off the take-up policies does not suppress the draw (initialised
+        in InitVars_uk), and the draw is stochastic per row rather than
+        composition-determined (verified: ten identical copies of this household
+        in one run receive different awards by position; see suite header), so
+        this is a UKMOD modelling behaviour for hypothetical households, not an
+        Axiom encoding gap.
       arithmetic:
         - expression: "666.97 - 666.97"
           equals: 0.0
@@ -42,12 +66,14 @@ entries:
     disposition: upstream_engine_gap
     evidence:
       mechanism: >-
-        UKMOD's benefit take-up correction returns a zero award for this
+        UKMOD's stochastic benefit take-up draw returns a zero award for this
         hypothetical benefit unit (couple with two children, owner-occupier) in
         place of the statutory entitlement, which the Axiom pipeline computes as
         the couple standard allowance plus two child elements
-        (666.97 + 351.88 + 303.94 = 1,322.79/month). Take-up is a UKMOD
-        modelling behaviour, not an Axiom encoding gap.
+        (666.97 + 351.88 + 303.94 = 1,322.79/month) and which UKMOD pays whenever
+        this unit draws take-up (this case resolves to the full award at
+        --comparison-batch-size 1). Take-up is a UKMOD modelling behaviour, not an
+        Axiom encoding gap.
       arithmetic:
         - expression: "666.97 + 351.88 + 303.94"
           equals: 1322.79
@@ -64,13 +90,16 @@ entries:
     disposition: upstream_engine_gap
     evidence:
       mechanism: >-
-        UKMOD's benefit take-up correction returns a zero award for this earner
-        benefit unit (couple, two children, social renter, 15,000 gross annual
-        earnings), so the taper is not exercised on the UKMOD side. The Axiom
-        award applies the couple maximum (2,222.79/month) less the 55% taper on
-        net earnings above the couple-with-housing work allowance (427/month):
-        net earnings 1,193.30/month give a deduction of 421.4650 and an award of
-        1,801.325/month. Take-up is a UKMOD modelling behaviour, not an Axiom
+        UKMOD's stochastic benefit take-up draw returns a zero award for this
+        earner benefit unit (couple, two children, social renter, 15,000 gross
+        annual earnings), so the taper is not exercised on the UKMOD side on this
+        run. The Axiom award applies the couple maximum (2,222.79/month) less the
+        55% taper on net earnings above the couple-with-housing work allowance
+        (427/month): net earnings 1,193.30/month give a deduction of 421.4650 and
+        an award of 1,801.325/month, which UKMOD pays whenever this unit draws
+        take-up. (This case also drew non-take at --comparison-batch-size 1, but
+        that persistence is itself a draw, not an income/composition rule; see
+        suite header.) Take-up is a UKMOD modelling behaviour, not an Axiom
         encoding gap.
       arithmetic:
         - expression: "2222.79 - 0.55 * (1193.30 - 427)"
@@ -88,12 +117,15 @@ entries:
     disposition: upstream_engine_gap
     evidence:
       mechanism: >-
-        UKMOD's benefit take-up correction returns a zero award for this earner
-        benefit unit (couple, two children, social renter, 30,000 gross annual
-        earnings). The Axiom award applies the couple maximum (2,222.79/month)
-        less the 55% taper on net earnings above the work allowance (427/month):
-        net earnings 2,093.325/month give a deduction of 916.464 and an award of
-        1,306.325/month. Take-up is a UKMOD modelling behaviour, not an Axiom
+        UKMOD's stochastic benefit take-up draw returns a zero award for this
+        earner benefit unit (couple, two children, social renter, 30,000 gross
+        annual earnings). The Axiom award applies the couple maximum
+        (2,222.79/month) less the 55% taper on net earnings above the work
+        allowance (427/month): net earnings 2,093.325/month give a deduction of
+        916.464 and an award of 1,306.325/month, which UKMOD pays whenever this
+        unit draws take-up. (This case also drew non-take at
+        --comparison-batch-size 1, but that persistence is itself a draw; see
+        suite header.) Take-up is a UKMOD modelling behaviour, not an Axiom
         encoding gap.
       arithmetic:
         - expression: "2222.79 - 0.55 * (2093.30 - 427)"
@@ -111,13 +143,16 @@ entries:
     disposition: upstream_engine_gap
     evidence:
       mechanism: >-
-        UKMOD's benefit take-up correction returns a zero award for this
+        UKMOD's stochastic benefit take-up draw returns a zero award for this
         hypothetical benefit unit (single owner-occupier, no capital) in place
         of the single standard allowance (424.90/month) the Axiom pipeline
-        computes. The identical single owner-occupier at 6,000 capital returns
-        the full 424.90 on both sides, so the zero here is the take-up draw, not
-        the capital test. Take-up is a UKMOD modelling behaviour, not an Axiom
-        encoding gap.
+        computes, which UKMOD pays whenever this unit draws take-up. The zero is
+        the take-up draw, not the capital test: at --comparison-batch-size 1 this
+        case resolves to the full 424.90, and ten identical copies of the entitled
+        single-owner-no-capital household in one run return different awards by
+        position [424.90, 424.90, 0, 424.90, 424.90, 0, 0, 424.90, 424.90,
+        424.90] (see suite header). Take-up is a UKMOD modelling behaviour, not an
+        Axiom encoding gap.
       arithmetic:
         - expression: "424.90 - 424.90"
           equals: 0.0
