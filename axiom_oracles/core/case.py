@@ -169,6 +169,19 @@ class Concepts:
         "uk:policies/pension_credit_composed_award_pipeline"
         "#pc_pilot_award_amount"
     )
+    # Composed Housing Benefit entitlement pipeline (rulespec-uk#83) that wires
+    # the Housing Benefit Regulations 2006 regulation 22 applicable amount, the
+    # regulation 74 / regulation 55 non-dependant deductions, and the
+    # regulation 70 / regulation 50 maximum benefit after the regulation 71 /
+    # regulation 51 65 per cent taper from hypothetical renter inputs, so an
+    # end-to-end UKMOD comparison (Housing Benefit ``bho_s``) can run on a
+    # shared renter grid. The final award is the annual entitlement, exposed as
+    # ``hb_pilot_entitlement`` by
+    # ``uk/policies/housing_benefit_composed_entitlement_pipeline.yaml``.
+    UK_HOUSEHOLD_HOUSING_BENEFIT_AWARD = (
+        "uk:policies/housing_benefit_composed_entitlement_pipeline"
+        "#hb_pilot_entitlement"
+    )
     # Composed savings-and-dividend income tax pipeline (rulespec-uk) that wires
     # the section 12/12A/12B/13/13A stage boundaries from gross earned, savings,
     # and dividend income, so an end-to-end UKMOD tin_s comparison can run for

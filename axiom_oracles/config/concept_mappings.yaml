@@ -1077,6 +1077,44 @@ concepts:
           type: country
           geoid: UK
 
+  uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement:
+    description: UK Housing Benefit household entitlement (hypothetical renter benefit unit)
+    category: benefits
+    comparison: amount
+    # The composed rulespec-uk Housing Benefit pilot (#83) applies the Housing
+    # Benefit Regulations 2006 regulation 70 / regulation 50 appropriate maximum
+    # housing benefit after the regulation 71 / regulation 51 65 per cent taper,
+    # less the regulation 74 / regulation 55 non-dependant deductions. UKMOD
+    # returns the same entitlement as bho_s (bho_uk BenCalc:
+    # i_bho_maxHousBen - 0.65*(ymn01_s - i_bho_prelimAmt), less non-dependant
+    # deductions) subject to its take-up / Universal-Credit-transition
+    # correction, which for hypothetical benefit units can zero the reported
+    # award away from the entitlement (see euromod_issues.json
+    # ukmod-hb-bho-takeup-transition). The suite bridges UKMOD's assessed HB
+    # means ymn01_s into the pipeline's applicable income so both engines taper
+    # the identical income. UKMOD bho_s is monthly; the adapter annualizes it
+    # (×12) so the comparison is annual-to-annual against the pipeline's annual
+    # entitlement. An absolute tolerance to the pound catches structural encoding
+    # gaps; the take-up-driven zeroing is classified as a UKMOD-side artefact
+    # rather than absorbed by tolerance.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: hb_pilot_entitlement
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bho_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#uk_nic_pilot_er_secondary_class_1_contribution:
     description: UK employer secondary Class 1 National Insurance contribution (single employment)
     category: social_contributions

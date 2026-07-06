@@ -443,6 +443,14 @@
       "source": "comparisons/uk-employer-nic-ukmod.yaml"
     },
     {
+      "suite": "uk-housing-benefit",
+      "report": "axiom-euromod-uk-housing-benefit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-housing-benefit-ukmod.yaml"
+    },
+    {
       "suite": "uk-income-tax-dividend",
       "report": "axiom-euromod-uk-income-tax-dividend.json",
       "repos": [

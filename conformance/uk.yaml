@@ -430,7 +430,7 @@ policies:
       - i_bho_probtr
       - i_bho_yesUC
       - i_excess_nRooms
-    suite: null
+    suite: uk-housing-benefit
     note: 'BEN: Housing Benefit. The UK_2026 policy is switch=on and computes the full HB entitlement
       bho_s from statute: applicable amount (personal allowances i_bho_PersAllow by age/couple/lone-parent
       status + disability/carer/family premiums + child element with the two-child limit), the means test
@@ -439,14 +439,20 @@ policies:
       i_excess_nRooms excess rooms. This is a genuine benefit-unit comparable surface: rulespec-uk encodes
       the composed HB entitlement pipeline (housing_benefit_composed_entitlement_pipeline, rulespec-uk#83),
       so bho_s is the parity target on synthetic HHoT renter cases (rent/tenure supplied through the projection
-      layer''s xhcrt/xhcsc + amrtn, bedroom counts through amrrm/bhoro). Like UC/PC/ir-ESA, bho_s embeds
-      UKMOD''s take-up correction (the "fully random" and "based on observed take-up" functions are switch-type
-      and the observed path gates on the bho data input, absent on synthetic households) and a UC-transition
-      that can zero a would-be award away from statutory entitlement; the clean pre-correction value is
-      i_bho_noUC. Those points need take-up/UC-transition dispositions (upstream_engine_gap, as in uk-universal-credit
-      and uk-pension-credit; take-up recharacterization per or#168/or#170). Next-wave uncovered surface
-      pending a bho_s comparison built against the #83 pipeline (evidence: UK.xml UK_2026 bho_uk function
-      body).'
+      layer''s xhcrt/xhcsc + amrtn, bedroom counts through amrrm/bhoro). The uk-housing-benefit suite
+      builds that comparison: single/couple, working-age/pension-age renters, an earnings sweep crossing
+      the 65% taper, and a non-dependant-deduction case, bridging UKMOD''s assessed HB means ymn01_s into
+      the pipeline''s applicable income so both engines taper the identical income (the bho_s award formula
+      i_bho_maxHousBen - 0.65*(ymn01_s - i_bho_prelimAmt) mirrors the pipeline''s rent_after_taper less
+      non-dependant deductions). Like UC/PC/ir-ESA, bho_s embeds UKMOD''s take-up correction (the "fully
+      random" i_bho_probtu group gate on i_rand_tu against $HBTUWAWork/$HBTUWANowork/$HBTUPen, and a "based
+      on observed take-up" path that gates on the bho data input, absent on synthetic households) and
+      a UC-transition that can zero a would-be award away from statutory entitlement; the clean pre-correction
+      value is i_bho_noUC. The comparison spec pins those take-up rates to 1.0 via euromod_constant_overrides
+      (or#168) so a runner regeneration returns statutory entitlements, disposing any residual zeros upstream_engine_gap
+      (recharacterization per or#168/or#170). Uncovered until the x64 runner emits the committed report
+      (UKMOD has no macOS wheel; scripts/regenerate_euromod_uk.sh is the source of the numbers) (evidence:
+      UK.xml UK_2026 bho_uk function body).'
   - id: uk:bhosc01_uk
     oracle_policy_name: bhosc01_uk
     oracle_policy_type: ben
@@ -454,16 +460,25 @@ policies:
       - bhosc01_s
     in_scope: true
     suite: null
-    note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. The UK_2026 policy
+    note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. Verdict: scoped out
+      (not encoded), a modelled policy assumption rather than a statutory formula. The UK_2026 policy
       is switch=on and computes a distinct payable bhosc01_s: for a Scottish social renter (amrtn=5 &
       drgn1=12 & dhr=1) subject to the bedroom tax it pays back the size-criteria reduction (14% of (xhcrt
       + xhcsc) for one excess room, 25% for more), gated on being on HB (bho_s>0) or UC (bsauc_s>0), plus
-      a benefit- cap top-up limited to housing costs xhc_hbai. It is a real comparable surface, but three
-      properties make it a later-wave target than bho_uk: (i) it is fully downstream of bho_s/bsauc_s
-      and the excess-room count i_excess_nRooms, so it can only be compared once the HB/UC housing surfaces
-      are covered; (ii) it is devolved Scotland-only (Discretionary Housing Payments (Scotland) Regulations);
-      (iii) rulespec-uk does not encode Scottish DHP bedroom-tax mitigation. Next-wave uncovered surface,
-      sequenced after bho_uk (evidence: UK.xml UK_2026 bhosc01_uk function body).'
+      a benefit-cap top-up limited to housing costs xhc_hbai. UKMOD models this as if formulaic, but the
+      underlying instrument is not: DHPs rest on the Discretionary Financial Assistance Regulations 2001
+      (SI 2001/1167) reg 2(2), which gives the relevant authority a discretion "as to whether or not to
+      make discretionary housing payments in a particular case; and as to the amount of the payments"
+      — no statutory formula, percentage, or cap. Administered by the 32 Scottish local authorities and
+      demand-led/budget-capped (the Scottish Government funds full bedroom-tax mitigation as a policy
+      commitment, not a statutory entitlement to a fixed amount). The only statutory numbers UKMOD uses
+      here (14%/25%) are the HB/UC size-criteria percentages, already encoded where they ARE statutory:
+      rulespec-uk uk/regulations/uksi/2013/376/schedule/4/paragraph/36 (Universal Credit under-occupancy:
+      0.14 one excess bedroom, 0.25 two or more). So encoding "pay back 14%/25% of eligible rent" as if
+      a Scottish statutory formula would misrepresent a discretionary, LA-administered, budget-capped
+      payment (and the corpus carries no DHP source to ground it). Kept in scope as a real UKMOD surface
+      but classified not-comparable-from-statute; the size-criteria percentages it references are already
+      covered on the UC side (evidence: UK.xml UK_2026 bhosc01_uk function body; SI 2001/1167 reg 2(2)).'
   - id: uk:bmact_uk
     oracle_policy_name: bmact_uk
     oracle_policy_type: ben
