@@ -16,10 +16,12 @@ import ProgramBreakdown from "./ProgramBreakdown";
 
 function programRegion(program) {
   const id = String(program?.id || "");
+  if (id.startsWith("ca:")) return "ca";
   if (id.startsWith("be:")) return "be";
   if (id.startsWith("uk:")) return "uk";
   if (id.startsWith("us:")) return "us";
   const coverage = program?.coverage || [];
+  if (coverage.some((entry) => entry?.country === "CA")) return "ca";
   if (coverage.some((entry) => entry?.country === "BE")) return "be";
   if (coverage.some((entry) => entry?.country === "UK")) return "uk";
   if (coverage.some((entry) => entry?.country === "US")) return "us";
@@ -28,6 +30,7 @@ function programRegion(program) {
 
 const COUNTRIES = [
   { id: "us", label: "US" },
+  { id: "ca", label: "CA" },
   { id: "uk", label: "UK" },
   { id: "be", label: "BE" },
 ];
@@ -83,7 +86,7 @@ export default function DashboardContent() {
   const [error, setError] = useState(null);
   const [jurisdiction, setJurisdiction] = useState("us");
 
-  // Deep-link the active jurisdiction via ?jurisdiction=uk|be|us (also accepts
+  // Deep-link the active jurisdiction via ?jurisdiction=ca|uk|be|us (also accepts
   // #uk), so a conformance card can be linked to directly. Read once on mount.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

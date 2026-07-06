@@ -3,6 +3,7 @@
 import { formatPct, formatAgreementRate, engineLabel } from "../utils/format";
 import {
   US_STATE_NAMES,
+  JURISDICTION_LABELS,
   FAMILY_LABELS,
   suiteMeta,
   reportMetric,
@@ -121,6 +122,8 @@ function cellTitle(cell) {
 // comparison run yet), aligned with the suite orders in utils/suites.js.
 const FAMILY_FALLBACK_ORDER = {
   federal_income_tax: 10,
+  canada_personal_income_tax: 12,
+  canada_family_benefits: 14,
   social_security: 20,
   ssi: 25,
   state_ssi_supplement: 26,
@@ -143,6 +146,7 @@ const FAMILY_FALLBACK_ORDER = {
 };
 
 function coverageRegion(program) {
+  if (program.jurisdiction === "CAN") return "ca";
   return program.jurisdiction === "UK" ? "uk" : "us";
 }
 
@@ -158,13 +162,14 @@ function addCoverageOnlyCells(cells, coveragePrograms, region) {
     const key = `${program.program}::${program.jurisdiction}`;
     if (cells.has(key)) continue;
     const label = FAMILY_LABELS[program.program] || program.program;
+    const jurisdictionLabel = JURISDICTION_LABELS[program.jurisdiction] || program.jurisdiction;
     cells.set(key, {
       meta: {
         family: program.program,
         jurisdiction: program.jurisdiction,
         label:
           program.jurisdiction && !["US", "UK"].includes(program.jurisdiction)
-            ? `${US_STATE_NAMES[program.jurisdiction] || program.jurisdiction} ${label}`
+            ? `${jurisdictionLabel} ${label}`
             : label,
         order: FAMILY_FALLBACK_ORDER[program.program] ?? 450,
         kind: program.status === "parameter" ? "parameter" : "coverage",

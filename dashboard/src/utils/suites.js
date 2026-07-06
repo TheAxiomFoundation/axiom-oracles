@@ -29,6 +29,15 @@ export const US_STATE_NAMES = {
   WI: "Wisconsin", WY: "Wyoming",
 };
 
+export const JURISDICTION_LABELS = {
+  ...US_STATE_NAMES,
+  US: "Federal (US)",
+  UK: "United Kingdom",
+  BE: "Belgium",
+  CAN: "Canada",
+  NYC: "New York City",
+};
+
 export const FAMILY_LABELS = {
   snap: "SNAP food assistance",
   federal_income_tax: "Federal income tax",
@@ -58,6 +67,8 @@ export const FAMILY_LABELS = {
   be_social_security: "Belgium social security",
   be_social_assistance: "Belgium social assistance",
   be_health_insurance: "Belgium health insurance",
+  canada_personal_income_tax: "Canada personal income tax",
+  canada_family_benefits: "Canada family and disability benefits",
 };
 
 const SUITE_OVERRIDES = {
@@ -426,7 +437,13 @@ export function suiteMeta(suite) {
     family: slug || "unknown",
     jurisdiction: null,
     label: slug || "Unnamed run",
-    region: slug.startsWith("uk-") ? "uk" : slug.startsWith("be-") ? "be" : "us",
+    region: slug.startsWith("uk-")
+      ? "uk"
+      : slug.startsWith("be-")
+        ? "be"
+        : slug.startsWith("ca-")
+          ? "ca"
+          : "us",
     kind: "household",
     order: 500,
   };
