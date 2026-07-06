@@ -702,6 +702,14 @@
    "kind": "amount_difference",
    "label": "Household vs SPM-unit sizing; scope note",
    "suite": "ks-tanf-ecps"
+  },
+  {
+   "concept": "us-fl:policies/dcf/ess-program-policy-manual#fl_tca",
+   "description": "The upstream us-fl/tca compose spec compiles, but its input surface has 112 slots including mid-chain seams (countable_income, applicable_budget_standard, calculated_tca_benefit_amount appear as inputs), meaning ESS-manual pages outside the compose scope feed the chain. Scoring it requires either widening the compose scope upstream or a careful boundary-fact selection \u2014 deferred with groundwork recorded, unlike AZ/KS which mapped cleanly.",
+   "fix_owner": "program-coverage",
+   "kind": "coverage_note",
+   "label": "FL TCA household suite needs a scoping pass",
+   "suite": "fl-tca-scoping"
   }
  ]
 }

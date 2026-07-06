@@ -13,7 +13,8 @@ cd "$(dirname "$0")/.."
 (cd scripts && ../.venv/bin/python run_medicaid_thresholds_comparison.py)
 
 for suite in fiit-ecps co-state-income-tax-ecps ssi-ecps ny-tanf-ecps \
-             wa-tanf-ecps co-tanf-ecps ca-tanf-ecps mn-tanf-ecps medicaid-magi-co-ecps \
+             wa-tanf-ecps co-tanf-ecps ca-tanf-ecps mn-tanf-ecps az-tanf-ecps \
+             ks-tanf-ecps medicaid-magi-co-ecps \
              al-snap-ecps az-snap-ecps ca-snap-ecps co-snap-ecps \
              fl-snap-ecps ma-snap-ecps nc-snap-ecps ny-snap-ecps \
              or-snap-ecps sc-snap-ecps tn-snap-ecps ut-snap-ecps; do
