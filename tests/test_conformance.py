@@ -548,12 +548,26 @@ def test_scoreboard_excluded_breakdown_by_reason():
 
 
 def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():
-    """The live BE scoreboard's excluded-by-reason breakdown surfaces the new
-    class (regression guard against the reason silently vanishing from the join)."""
+    """The live BE scoreboard's excluded-by-reason breakdown surfaces the
+    class (regression guard against the reason silently vanishing from the join).
+
+    Three BE policies are excluded under it: bfapl_be (parental-leave allowance;
+    lpb input absent, axiom-oracles#150/#158/#160) and the two Covid-19 wage-
+    compensation schemes yemcomp_be / ysecomp_be, whose sole activator
+    (bwkmceemy_s/bwkmcsemy_s, written only by the switched-off TransLMA_be from
+    lmcee/lmcse/lindi columns absent from BE_training_data) is unreachable — a
+    112-combination live probe returned 0 in every cell (axiom-oracles#142)."""
     import yaml as _yaml  # noqa: F401  (json already imported at module top)
     scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
     be = next(j for j in scoreboard["jurisdictions"] if j["jurisdiction"] == "be")
-    assert be["excluded_by_reason"].get("oracle_dataset_lacks_input") == 1
+    assert be["excluded_by_reason"].get("oracle_dataset_lacks_input") == 3
+    detail = json.loads((CONFORMANCE_DIR / "detail" / "be.json").read_text())
+    excluded_ids = {
+        row["id"]
+        for row in detail["policies"]
+        if row.get("exclusion_reason") == "oracle_dataset_lacks_input"
+    }
+    assert {"be:bfapl_be", "be:yemcomp_be", "be:ysecomp_be"} <= excluded_ids
 
 
 # ---------------------------------------------------------------------------
