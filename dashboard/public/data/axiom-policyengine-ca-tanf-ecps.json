@@ -8,18 +8,18 @@
       "components": [],
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "left_weighted_sum": 6672637855.597642,
-      "match_rate": 97.493311,
-      "match_weight": 17212096.098184,
-      "mismatch_count": 178,
-      "mismatch_weight": 555761.537566,
+      "left_weighted_sum": 6659525309.321294,
+      "match_rate": 97.507393,
+      "match_weight": 17217177.077676,
+      "mismatch_count": 177,
+      "mismatch_weight": 550680.558073,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 4279842059.883105,
-      "weighted_difference": 2392795795.714537,
-      "weighted_match_rate": 96.872096
+      "right_weighted_sum": 4266922135.596009,
+      "weighted_difference": 2392603173.725285,
+      "weighted_match_rate": 96.900692
     }
   ],
   "case_count": 7101,
@@ -112,9 +112,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -12455.179296875,
+          "difference": -11619.979296875,
           "kind": "amount_difference",
-          "left": 3522.6,
+          "left": 4357.8,
           "parent": null,
           "relative_tolerance": 0,
           "right": 15977.779296875,
@@ -452,12 +452,12 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -792.0,
+          "difference": -720.0,
           "kind": "amount_difference",
-          "left": 14976.0,
+          "left": 13380.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 15768.0,
+          "right": 14100.0,
           "tolerance": 25
         }
       ],
@@ -498,9 +498,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -2371.6800000000003,
+          "difference": -2199.24,
           "kind": "amount_difference",
-          "left": 8788.32,
+          "left": 8960.76,
           "parent": null,
           "relative_tolerance": 0,
           "right": 11160.0,
@@ -848,9 +848,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -5028.054140625,
+          "difference": -4691.9341406250005,
           "kind": "amount_difference",
-          "left": 202.44,
+          "left": 538.56,
           "parent": null,
           "relative_tolerance": 0,
           "right": 5230.494140625,
@@ -1334,12 +1334,12 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -792.0180078124995,
+          "difference": -720.0180078124995,
           "kind": "amount_difference",
-          "left": 10189.44,
+          "left": 8593.44,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 10981.4580078125,
+          "right": 9313.4580078125,
           "tolerance": 25
         }
       ],
@@ -1731,9 +1731,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": 6667.08,
+          "difference": 4375.08,
           "kind": "amount_difference",
-          "left": 6667.08,
+          "left": 4375.08,
           "parent": null,
           "relative_tolerance": 0,
           "right": 0.0,
@@ -2527,12 +2527,12 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -15624.1103515625,
+          "difference": -13956.1103515625,
           "kind": "amount_difference",
           "left": 0.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 15624.1103515625,
+          "right": 13956.1103515625,
           "tolerance": 25
         }
       ],
@@ -2927,9 +2927,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -5653.7148046875,
+          "difference": -5313.2748046875,
           "kind": "amount_difference",
-          "left": 6156.96,
+          "left": 6497.4,
           "parent": null,
           "relative_tolerance": 0,
           "right": 11810.6748046875,
@@ -4018,9 +4018,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": 8791.56,
+          "difference": 5971.56,
           "kind": "amount_difference",
-          "left": 8791.56,
+          "left": 5971.56,
           "parent": null,
           "relative_tolerance": 0,
           "right": 0.0,
@@ -4222,12 +4222,12 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -1259.9605468749996,
+          "difference": -1127.9605468749996,
           "kind": "amount_difference",
-          "left": 10932.6,
+          "left": 8412.6,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 12192.560546875,
+          "right": 9540.560546875,
           "tolerance": 25
         }
       ],
@@ -4915,12 +4915,12 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -624.0,
+          "difference": -552.0,
           "kind": "amount_difference",
-          "left": 11844.0,
+          "left": 10608.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 12468.0,
+          "right": 11160.0,
           "tolerance": 25
         }
       ],
@@ -5224,9 +5224,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -16280.88,
+          "difference": -15157.92,
           "kind": "amount_difference",
-          "left": 711.12,
+          "left": 1834.08,
           "parent": null,
           "relative_tolerance": 0,
           "right": 16992.0,
@@ -5910,9 +5910,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -13341.0148046875,
+          "difference": -12370.6948046875,
           "kind": "amount_difference",
-          "left": 1007.16,
+          "left": 1977.48,
           "parent": null,
           "relative_tolerance": 0,
           "right": 14348.1748046875,
@@ -6610,12 +6610,12 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -972.0,
+          "difference": -840.0,
           "kind": "amount_difference",
-          "left": 17976.0,
+          "left": 16152.0,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 18948.0,
+          "right": 16992.0,
           "tolerance": 25
         }
       ],
@@ -6656,9 +6656,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -8092.7802734375,
+          "difference": -7544.2602734375,
           "kind": "amount_difference",
-          "left": 2589.0,
+          "left": 3137.52,
           "parent": null,
           "relative_tolerance": 0,
           "right": 10681.7802734375,
@@ -7391,9 +7391,9 @@
         {
           "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
           "description": "CA CalWORKs benefit (annualized)",
-          "difference": -10623.36,
+          "difference": -9850.68,
           "kind": "amount_difference",
-          "left": 3476.64,
+          "left": 4249.32,
           "parent": null,
           "relative_tolerance": 0,
           "right": 14100.0,
@@ -8424,54 +8424,6 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-62602",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 0.0,
-      "metadata": {
-        "axiom_entity": "Household",
-        "axiom_entity_id": "household",
-        "axiom_input_records_count": 6,
-        "axiom_relations_count": 6,
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_summary": {
-          "ages": [
-            48,
-            50,
-            12
-          ],
-          "household_size": 3,
-          "yearly_earned_income_per_person": [
-            38265.85,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 38265.85
-        },
-        "household_weight": 5080.9794921875,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "06075",
-          "type": "census_county"
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
-          "description": "CA CalWORKs benefit (annualized)",
-          "difference": 235.08,
-          "kind": "amount_difference",
-          "left": 235.08,
-          "parent": null,
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 25
-        }
-      ],
-      "right_engine": "policyengine",
-      "right_errors": []
-    },
-    {
       "case_id": "ecps-62609",
       "left_engine": "axiom",
       "left_errors": [],
@@ -8830,10 +8782,10 @@
     }
   ],
   "dashboard_truncation": {
-    "shown_case_rows": 178,
-    "shown_mismatches": 178,
+    "shown_case_rows": 177,
+    "shown_mismatches": 177,
     "total_case_rows": 7101,
-    "total_mismatches": 178
+    "total_mismatches": 177
   },
   "engines": {
     "left": "axiom",
@@ -8863,9 +8815,9 @@
       "case_id": "ecps-56934",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -12455.179296875,
+      "difference": -11619.979296875,
       "kind": "amount_difference",
-      "left": 3522.6,
+      "left": 4357.8,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -8975,13 +8927,13 @@
       "case_id": "ecps-57059",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -792.0,
+      "difference": -720.0,
       "kind": "amount_difference",
-      "left": 14976.0,
+      "left": 13380.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 15768.0,
+      "right": 14100.0,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
@@ -8991,9 +8943,9 @@
       "case_id": "ecps-57077",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -2371.6800000000003,
+      "difference": -2199.24,
       "kind": "amount_difference",
-      "left": 8788.32,
+      "left": 8960.76,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -9103,9 +9055,9 @@
       "case_id": "ecps-57183",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -5028.054140625,
+      "difference": -4691.9341406250005,
       "kind": "amount_difference",
-      "left": 202.44,
+      "left": 538.56,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -9263,13 +9215,13 @@
       "case_id": "ecps-57639",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -792.0180078124995,
+      "difference": -720.0180078124995,
       "kind": "amount_difference",
-      "left": 10189.44,
+      "left": 8593.44,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 10981.4580078125,
+      "right": 9313.4580078125,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
@@ -9391,9 +9343,9 @@
       "case_id": "ecps-58094",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": 6667.08,
+      "difference": 4375.08,
       "kind": "amount_difference",
-      "left": 6667.08,
+      "left": 4375.08,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -9647,13 +9599,13 @@
       "case_id": "ecps-58523",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -15624.1103515625,
+      "difference": -13956.1103515625,
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 15624.1103515625,
+      "right": 13956.1103515625,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
@@ -9775,9 +9727,9 @@
       "case_id": "ecps-58756",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -5653.7148046875,
+      "difference": -5313.2748046875,
       "kind": "amount_difference",
-      "left": 6156.96,
+      "left": 6497.4,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -10127,9 +10079,9 @@
       "case_id": "ecps-59207",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": 8791.56,
+      "difference": 5971.56,
       "kind": "amount_difference",
-      "left": 8791.56,
+      "left": 5971.56,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -10191,13 +10143,13 @@
       "case_id": "ecps-59578",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -1259.9605468749996,
+      "difference": -1127.9605468749996,
       "kind": "amount_difference",
-      "left": 10932.6,
+      "left": 8412.6,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 12192.560546875,
+      "right": 9540.560546875,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
@@ -10415,13 +10367,13 @@
       "case_id": "ecps-59933",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -624.0,
+      "difference": -552.0,
       "kind": "amount_difference",
-      "left": 11844.0,
+      "left": 10608.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 12468.0,
+      "right": 11160.0,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
@@ -10511,9 +10463,9 @@
       "case_id": "ecps-60046",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -16280.88,
+      "difference": -15157.92,
       "kind": "amount_difference",
-      "left": 711.12,
+      "left": 1834.08,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -10735,9 +10687,9 @@
       "case_id": "ecps-60415",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -13341.0148046875,
+      "difference": -12370.6948046875,
       "kind": "amount_difference",
-      "left": 1007.16,
+      "left": 1977.48,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -10959,13 +10911,13 @@
       "case_id": "ecps-60893",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -972.0,
+      "difference": -840.0,
       "kind": "amount_difference",
-      "left": 17976.0,
+      "left": 16152.0,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 18948.0,
+      "right": 16992.0,
       "scenario": null,
       "tolerance": 25,
       "yearly_earned_income": null
@@ -10975,9 +10927,9 @@
       "case_id": "ecps-60896",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -8092.7802734375,
+      "difference": -7544.2602734375,
       "kind": "amount_difference",
-      "left": 2589.0,
+      "left": 3137.52,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -11215,9 +11167,9 @@
       "case_id": "ecps-61760",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
-      "difference": -10623.36,
+      "difference": -9850.68,
       "kind": "amount_difference",
-      "left": 3476.64,
+      "left": 4249.32,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -11564,22 +11516,6 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-62602",
-      "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
-      "description": "CA CalWORKs benefit (annualized)",
-      "difference": 235.08,
-      "kind": "amount_difference",
-      "left": 235.08,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 25,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-62609",
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
@@ -11692,6 +11628,31 @@
     }
   ],
   "population": "enhanced-cps",
+  "provenance": {
+    "dataset": {
+      "population": "enhanced-cps",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-06T04:02:31Z",
+    "generated_by": "scripts/run_comparison.py::ca-tanf-ecps",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.752.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us-ca",
+        "sha": null
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
   "schema_version": "axiom.comparison_report.v2.1",
   "scope": {
     "geoid": "US",
@@ -11710,39 +11671,39 @@
       },
       "dispositions_file": null,
       "expired_entries": [],
-      "explained_rate": 97.493311,
+      "explained_rate": 97.507393,
       "orphaned_entries": [],
-      "raw_match_rate": 97.493311,
+      "raw_match_rate": 97.507393,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 178
+      "unexplained_count": 177
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 6923,
-    "mismatch_count": 178,
+    "match_count": 6924,
+    "mismatch_count": 177,
     "mismatches_by_concept": [
       {
-        "count": 178,
+        "count": 177,
         "value": "us-ca:policies/cdss/calworks#ca_tanf_benefit"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 178,
+        "count": 177,
         "value": "amount_difference"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 178,
+        "count": 177,
         "value": null
       }
     ],
     "weighted": {
       "comparison_weight": 17767857.63575,
-      "match_rate": 96.872096,
-      "match_weight": 17212096.098184,
-      "mismatch_weight": 555761.537566
+      "match_rate": 96.900692,
+      "match_weight": 17217177.077676,
+      "mismatch_weight": 550680.558073
     }
   }
 }
