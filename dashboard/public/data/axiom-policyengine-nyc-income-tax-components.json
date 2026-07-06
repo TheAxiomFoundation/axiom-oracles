@@ -312,6 +312,11 @@
       "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
       "description": "NYC school tax credit rate-reduction amount",
       "difference": 0.48000167846679886,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "school-rate-second-band-rounded-base-convention",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/8947"
+      },
       "kind": "amount_difference",
       "left": 39.24,
       "right": 38.7599983215332,
@@ -323,6 +328,11 @@
       "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
       "description": "NYC school tax credit rate-reduction amount",
       "difference": 0.3760017089843757,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "school-rate-second-band-rounded-base-convention",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/8947"
+      },
       "kind": "amount_difference",
       "left": 37.768,
       "right": 37.391998291015625,
@@ -334,6 +344,11 @@
       "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
       "description": "NYC school tax credit rate-reduction amount",
       "difference": 0.48000167846679886,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "school-rate-second-band-rounded-base-convention",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/8947"
+      },
       "kind": "amount_difference",
       "left": 39.24,
       "right": 38.7599983215332,
@@ -342,7 +357,7 @@
     }
   ],
   "population": "synthetic-components",
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": {
     "geoid": "3651000",
     "type": "census_place"
@@ -362,6 +377,22 @@
       }
     ],
     "comparison_count": 11,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 3
+      },
+      "dispositions_file": "dispositions/nyc-income-tax-gap.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 72.727273,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
     "error_count": 0,
     "errors_by_engine": [],
     "match_count": 8,

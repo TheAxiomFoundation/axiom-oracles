@@ -19,6 +19,8 @@ from typing import Any
 
 from policyengine_us import Simulation
 
+from axiom_oracles.comparison.dispositions import apply_dispositions_from_dir
+
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
@@ -112,7 +114,7 @@ def main() -> int:
         pe_value = _run_policyengine_case(case)
         rows.append((case, axiom_value, pe_value))
 
-    report = _build_report(rows)
+    report = _merge_dispositions(_build_report(rows))
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print(f"Wrote: {output}")
@@ -515,6 +517,14 @@ def _build_report(rows: list[tuple[ComponentCase, float, float]]) -> dict[str, A
         "errors": [],
         "cases": cases,
     }
+
+
+def _merge_dispositions(report: dict[str, Any]) -> dict[str, Any]:
+    return apply_dispositions_from_dir(
+        report,
+        REPO_ROOT / "dispositions",
+        repo_root=REPO_ROOT,
+    )
 
 
 def _aggregate() -> dict[str, Any]:

@@ -1,0 +1,35 @@
+schema: axiom_oracles.dispositions.v1
+suite: nyc-income-tax-ecps-diagnostic
+updated: "2026-07-06"
+entries:
+  - id: school-rate-second-band-rounded-base-convention
+    concept: us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount
+    case_selector:
+      case_id_prefix: ecps-tax-unit-
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Every NYC ECPS school-tax rate-reduction mismatch is a second-band case.
+        Axiom follows the IT-201 instruction table's printed rounded base
+        amounts ($37, $21, and $25), while PolicyEngine models the component as
+        a marginal-rate table and derives the carry-in from the first-band
+        threshold and rate. That produces constant sub-dollar residuals by
+        filing-status group, with first-band, zero/negative, and over-limit cases
+        matching.
+      arithmetic:
+        - expression: "37 - 21600 * 0.00171"
+          equals: 0.064
+          tolerance: 0.000001
+        - expression: "21 - 12000 * 0.00171"
+          equals: 0.48
+          tolerance: 0.000001
+        - expression: "25 - 14400 * 0.00171"
+          equals: 0.376
+          tolerance: 0.000001
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/8947
+      sources:
+        - docs/nyc-school-tax-credit-rate-reduction-convention.md
+        - reports/nyc-income-tax-gap-2026-06-05.md
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/8947
+    expires_on_source_change: true
