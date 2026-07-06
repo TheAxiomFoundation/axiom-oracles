@@ -3013,6 +3013,23 @@ prefixes:
     program: universal_credit
     mapping_type: not_comparable
     rationale: Composed Family-level UKMOD Universal Credit oracle pipeline; its element, deduction, benefit-cap and award outputs re-wire the separately encoded Welfare Reform Act 2012 section 8 and Universal Credit Regulations 2013 element, taper, capital-tariff and benefit-cap provisions for the UKMOD bsauc_s comparison rather than adding new PolicyEngine UK oracle variables.
+  # Composed Family-level income-related Employment and Support Allowance
+  # applicable-amount pipeline. It wires the Employment and Support Allowance
+  # Regulations 2008 (SI 2008/794) regulation 67(1) applicable amount (Schedule
+  # 4 Part A1 personal allowance, Part 4 support/work-related-activity component,
+  # Part 3 severe-disability and carer premiums) and the section 4(2)(a) Welfare
+  # Reform Act 2007 income-related award from raw household facts. It is oriented
+  # to the UKMOD bsadi_s oracle, not PolicyEngine: PolicyEngine's esa_income is a
+  # reported-award capital screen ("not a full entitlement model"), so it is not
+  # a comparable statutory-entitlement surface, and UKMOD UK_2026 freezes the
+  # applicable amount at a mid-2010s vintage ($ISSing25 = 73.10/week vs the
+  # current statutory 97.75/week). Added for rulespec-uk composed income-related
+  # ESA pipeline (UKMOD wave-2 lane-C bsadi_uk).
+  - legal_id_prefix: uk:policies/esa_income_related_applicable_amount_pipeline#
+    country: uk
+    program: esa_income
+    mapping_type: not_comparable
+    rationale: Composed Family-level income-related Employment and Support Allowance applicable-amount pipeline; its personal-allowance, component, premium, applicable-amount and award outputs re-wire the separately encoded Employment and Support Allowance Regulations 2008 (SI 2008/794) regulation 67 and Schedule 4 provisions and the Welfare Reform Act 2007 section 4(2)(a) income-related award for the UKMOD bsadi_s comparison rather than adding new PolicyEngine UK oracle variables. PolicyEngine's esa_income is a reported-award capital screen, not a full statutory-entitlement model, so it is not a comparable surface for this pipeline.
   # Reconciliation guard between the two rulespec-uk Universal Credit award
   # paths: it re-expresses the compose-spec program
   # (programs/uk/universal-credit/fy-2026-27.yaml) Welfare Reform Act 2012
