@@ -237,12 +237,25 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-05T22:33:02Z",
+    "generated_at": "2026-07-06T04:51:31Z",
     "generated_by": "scripts/run_comparison.py::be-capital-income-tax",
-    "run_kind": "manual",
+    "oracle": {
+      "euromod_country": "BE",
+      "euromod_dataset": "BE_2024_c1_2015_03_e2",
+      "euromod_release": "J2.0+",
+      "euromod_system": "BE_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-be",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
