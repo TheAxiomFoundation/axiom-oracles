@@ -355,3 +355,85 @@ suites:
         rule: cost_of_employment_monthly_deduction_amount
         description: AZ cash assistance cost-of-employment monthly deduction
         pe: gov.states.az.hhs.tanf.income.deductions.flat
+  - suite: ak-apa-state-supplement
+    category: cash
+    locales: [AK]
+    comparisons:
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: a_individual_apa_payment_standard
+        description: AK APA state supplement, independent living, individual
+        pe: gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.INDIVIDUAL
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: a_couple_one_eligible_apa_payment_standard
+        description: AK APA state supplement, independent living, couple one eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_ONE_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: a_couple_both_eligible_apa_payment_standard
+        description: AK APA state supplement, independent living, couple both eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_BOTH_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: b_individual_apa_payment_standard
+        description: AK APA state supplement, household of another, individual
+        pe: gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.INDIVIDUAL
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: b_couple_one_eligible_apa_payment_standard
+        description: AK APA state supplement, household of another, couple one eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_ONE_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: b_couple_both_eligible_apa_payment_standard
+        description: AK APA state supplement, household of another, couple both eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_BOTH_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: alh_individual_apa_payment_standard
+        description: AK APA state supplement, assisted living home, individual
+        pe: gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.INDIVIDUAL
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: alh_couple_one_eligible_apa_payment_standard
+        description: AK APA state supplement, assisted living home, couple one eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_ONE_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: alh_couple_both_eligible_apa_payment_standard
+        description: AK APA state supplement, assisted living home, couple both eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_BOTH_ELIGIBLE
+  - suite: mi-ssp-payments
+    category: cash
+    locales: [MI]
+    comparisons:
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: independent_living_individual_state_ssi_payment
+        description: MI SSP, independent living, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.INDEPENDENT_LIVING
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: independent_living_couple_state_ssi_payment
+        axiom_formula: independent_living_couple_state_ssi_payment * 2
+        description: MI SSP, independent living, couple (RFT 248 lists per person)
+        pe: gov.states.mi.mdhhs.ssp.payment.couple.INDEPENDENT_LIVING
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: household_of_another_individual_state_ssi_payment
+        description: MI SSP, household of another, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.HOUSEHOLD_OF_ANOTHER
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: household_of_another_couple_state_ssi_payment
+        axiom_formula: household_of_another_couple_state_ssi_payment * 2
+        description: MI SSP, household of another, couple (RFT 248 lists per person)
+        pe: gov.states.mi.mdhhs.ssp.payment.couple.HOUSEHOLD_OF_ANOTHER
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: domiciliary_care_individual_dhs_supplement
+        description: MI SSP, domiciliary care supplement, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.DOMICILIARY_CARE
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: personal_care_individual_dhs_supplement
+        description: MI SSP, personal care supplement, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.PERSONAL_CARE
+  - suite: ca-capi-limits
+    category: cash
+    locales: [CA]
+    comparisons:
+      - file: us-ca/regulations/cdss/eas/49/49-040.yaml
+        rule: ca_capi_individual_resource_limit
+        description: CA CAPI resource limit, individual
+        pe: gov.states.ca.cdss.capi.resources.limit.single
+      - file: us-ca/regulations/cdss/eas/49/49-040.yaml
+        rule: ca_capi_couple_resource_limit
+        description: CA CAPI resource limit, couple
+        pe: gov.states.ca.cdss.capi.resources.limit.couple

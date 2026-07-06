@@ -4,6 +4,14 @@
   "owner": "TheAxiomFoundation",
   "suites": [
     {
+      "suite": "ak-apa-state-supplement",
+      "report": "axiom-policyengine-ak-apa-state-supplement.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-ak"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
       "suite": "ak-atap-standards",
       "report": "axiom-policyengine-ak-atap-standards.json",
       "repos": [
@@ -115,6 +123,14 @@
         "TheAxiomFoundation/rulespec-be"
       ],
       "source": "comparisons/be-work-bonus-credit.yaml"
+    },
+    {
+      "suite": "ca-capi-limits",
+      "report": "axiom-policyengine-ca-capi-limits.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-ca"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "ca-income-tax-liability",
@@ -261,6 +277,14 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/medicaid-magi-co-ecps.yaml"
+    },
+    {
+      "suite": "mi-ssp-payments",
+      "report": "axiom-policyengine-mi-ssp-payments.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-mi"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "mn-tanf-ecps",

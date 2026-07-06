@@ -1,0 +1,342 @@
+{
+ "aggregates": [
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-mi:policies/mdhhs/rft/248#independent_living_individual_state_ssi_payment",
+   "description": "MI SSP, independent living, individual",
+   "left_weighted_sum": 14.0,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 14.0,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-mi:policies/mdhhs/rft/248#independent_living_couple_state_ssi_payment",
+   "description": "MI SSP, independent living, couple (RFT 248 lists per person)",
+   "left_weighted_sum": 21.0,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 21.0,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-mi:policies/mdhhs/rft/248#household_of_another_individual_state_ssi_payment",
+   "description": "MI SSP, household of another, individual",
+   "left_weighted_sum": 9.33,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 9.33,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-mi:policies/mdhhs/rft/248#household_of_another_couple_state_ssi_payment",
+   "description": "MI SSP, household of another, couple (RFT 248 lists per person)",
+   "left_weighted_sum": 13.96,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 13.96,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-mi:policies/mdhhs/rft/248#domiciliary_care_individual_dhs_supplement",
+   "description": "MI SSP, domiciliary care supplement, individual",
+   "left_weighted_sum": 87.0,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 87.0,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "comparison_count": 1,
+   "comparison_weight": 1,
+   "components": [],
+   "concept": "us-mi:policies/mdhhs/rft/248#personal_care_individual_dhs_supplement",
+   "description": "MI SSP, personal care supplement, individual",
+   "left_weighted_sum": 157.5,
+   "match_count": 1,
+   "match_rate": 100.0,
+   "match_weight": 1,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 157.5,
+   "tolerance": 1e-09,
+   "weighted_difference": 0.0,
+   "weighted_match_rate": 100.0
+  }
+ ],
+ "case_count": 6,
+ "cases": [
+  {
+   "case_id": "mi-ssp-payments-independent_living_individual_state_ssi_payment",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": null,
+    "axiom_rule": "independent_living_individual_state_ssi_payment",
+    "axiom_source": "rulespec-us origin/main: us-mi/policies/mdhhs/rft/248.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.states.mi.mdhhs.ssp.payment.individual.INDEPENDENT_LIVING",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "mi-ssp-payments-independent_living_couple_state_ssi_payment",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": "independent_living_couple_state_ssi_payment * 2",
+    "axiom_rule": "independent_living_couple_state_ssi_payment",
+    "axiom_source": "rulespec-us origin/main: us-mi/policies/mdhhs/rft/248.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.states.mi.mdhhs.ssp.payment.couple.INDEPENDENT_LIVING",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "mi-ssp-payments-household_of_another_individual_state_ssi_payment",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": null,
+    "axiom_rule": "household_of_another_individual_state_ssi_payment",
+    "axiom_source": "rulespec-us origin/main: us-mi/policies/mdhhs/rft/248.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.states.mi.mdhhs.ssp.payment.individual.HOUSEHOLD_OF_ANOTHER",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "mi-ssp-payments-household_of_another_couple_state_ssi_payment",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": "household_of_another_couple_state_ssi_payment * 2",
+    "axiom_rule": "household_of_another_couple_state_ssi_payment",
+    "axiom_source": "rulespec-us origin/main: us-mi/policies/mdhhs/rft/248.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.states.mi.mdhhs.ssp.payment.couple.HOUSEHOLD_OF_ANOTHER",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "mi-ssp-payments-domiciliary_care_individual_dhs_supplement",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": null,
+    "axiom_rule": "domiciliary_care_individual_dhs_supplement",
+    "axiom_source": "rulespec-us origin/main: us-mi/policies/mdhhs/rft/248.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.states.mi.mdhhs.ssp.payment.individual.DOMICILIARY_CARE",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  },
+  {
+   "case_id": "mi-ssp-payments-personal_care_individual_dhs_supplement",
+   "left_engine": "axiom",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_formula": null,
+    "axiom_rule": "personal_care_individual_dhs_supplement",
+    "axiom_source": "rulespec-us origin/main: us-mi/policies/mdhhs/rft/248.yaml",
+    "dataset": "encoded_parameter_oracle",
+    "period": "2026-01-01",
+    "policyengine_parameter": "gov.states.mi.mdhhs.ssp.payment.individual.PERSONAL_CARE",
+    "population": "rulespec-parameters"
+   },
+   "mismatches": [],
+   "right_engine": "policyengine",
+   "right_errors": []
+  }
+ ],
+ "concepts": [
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "components": [],
+   "description": "MI SSP, independent living, individual",
+   "id": "us-mi:policies/mdhhs/rft/248#independent_living_individual_state_ssi_payment",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "components": [],
+   "description": "MI SSP, independent living, couple (RFT 248 lists per person)",
+   "id": "us-mi:policies/mdhhs/rft/248#independent_living_couple_state_ssi_payment",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "components": [],
+   "description": "MI SSP, household of another, individual",
+   "id": "us-mi:policies/mdhhs/rft/248#household_of_another_individual_state_ssi_payment",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "components": [],
+   "description": "MI SSP, household of another, couple (RFT 248 lists per person)",
+   "id": "us-mi:policies/mdhhs/rft/248#household_of_another_couple_state_ssi_payment",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "components": [],
+   "description": "MI SSP, domiciliary care supplement, individual",
+   "id": "us-mi:policies/mdhhs/rft/248#domiciliary_care_individual_dhs_supplement",
+   "parent": null,
+   "tolerance": 1e-09
+  },
+  {
+   "category": "cash",
+   "comparison": "amount",
+   "components": [],
+   "description": "MI SSP, personal care supplement, individual",
+   "id": "us-mi:policies/mdhhs/rft/248#personal_care_individual_dhs_supplement",
+   "parent": null,
+   "tolerance": 1e-09
+  }
+ ],
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "errors": [],
+ "locales": [
+  "MI"
+ ],
+ "mismatches": [],
+ "population": "rulespec-parameters",
+ "schema_version": "axiom.comparison_report.v1",
+ "scope": {
+  "period": "2026-01-01",
+  "source": "rulespec-us origin/main"
+ },
+ "suite": "mi-ssp-payments",
+ "summary": {
+  "alarms": [],
+  "comparison_count": 6,
+  "error_count": 0,
+  "errors_by_engine": {},
+  "match_count": 6,
+  "mismatch_count": 0,
+  "mismatches_by_concept": [],
+  "mismatches_by_kind": [],
+  "mismatches_by_scenario": {},
+  "weighted": {
+   "comparison_weight": 6,
+   "match_rate": 100.0,
+   "match_weight": 6,
+   "mismatch_weight": 0
+  }
+ }
+}

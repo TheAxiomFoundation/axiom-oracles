@@ -670,6 +670,14 @@
    "kind": "amount_difference",
    "label": "MD TCA 2026 increase not yet in PolicyEngine",
    "suite": "md-tca-payments"
+  },
+  {
+   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
+   "description": "All 9 comparisons diverge because the two sides encode different quantities: the corpus encodes the APA payment standard as the combined amount (federal SSI FBR plus the Alaska supplement, e.g. independent-living individual 1,356), while PolicyEngine stores only the state increment (362). Netting out the 2026 FBR still leaves a gap (~389 vs 362), so after the definitional split there may also be a table-vintage difference. Needs a decision on which decomposition the comparison should use before assigning encoder or PE.",
+   "fix_owner": "triage",
+   "kind": "amount_difference",
+   "label": "AK APA combined standard vs PE supplement increment",
+   "suite": "ak-apa-state-supplement"
   }
  ]
 }
