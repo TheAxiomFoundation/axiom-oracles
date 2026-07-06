@@ -738,9 +738,8 @@ def test_eitc_projection_uses_ecps_income_and_demographic_inputs():
         == 0
     )
     assert self_employment_inputs == {
-        "self_employment_trade_or_business_gross_income": 0,
-        "self_employment_trade_or_business_deductions": 0,
-        "partnership_section_702_a_8_income_or_loss": 0,
+        "net_earnings_from_self_employment": 0.0,
+        "net_earnings_from_self_employment_for_paragraph_2_threshold_test": 0.0,
     }
 
 
@@ -886,9 +885,10 @@ def test_eitc_projection_sends_self_employment_to_section_1402_not_earned_income
         persons=persons,
         contexts=contexts,
     ) == {
-        "self_employment_trade_or_business_gross_income": 3_550,
-        "self_employment_trade_or_business_deductions": 0,
-        "partnership_section_702_a_8_income_or_loss": 400,
+        "net_earnings_from_self_employment": 3_647.825,
+        "net_earnings_from_self_employment_for_paragraph_2_threshold_test": (
+            3_647.825
+        ),
     }
     assert project_section_164_f_tax_unit_inputs() == {
         "taxpayer_is_individual": True,
@@ -899,10 +899,10 @@ def test_eitc_projection_sends_self_employment_to_section_1402_not_earned_income
         contribution_base=184_500,
     ) == {
         "individual_is_nonresident_alien": False,
-        "social_security_agreement_under_section_233_applies_to_nonresident_alien": False,
-        "individual_is_noncitizen_territory_resident": False,
-        "contribution_and_benefit_base_under_section_230_of_social_security_act": 184_500.0,
-        "wages_paid_to_individual_for_section_1401_a": 23_000,
+        "agreement_under_social_security_act_section_233_provides_for_individual": False,
+        "individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": False,
+        "contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins": 184_500.0,
+        "wages_paid_to_individual_during_taxable_year_for_section_1401_a": 23_000,
     }
     assert project_section_1401_tax_unit_inputs(
         row=row,
@@ -1114,7 +1114,7 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
     )
     assert (
         input_values[
-            f"{SECTION_1402_A_BASE}#input.self_employment_trade_or_business_gross_income"
+            f"{SECTION_1402_B_BASE}#input.net_earnings_from_self_employment"
         ]
         == "0.0"
     )
@@ -1134,13 +1134,13 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
     assert f"{SECTION_1401_BASE}#input.self_employment_income" not in input_values
     assert (
         input_values[
-            f"{SECTION_1402_B_BASE}#input.contribution_and_benefit_base_under_section_230_of_social_security_act"
+            f"{SECTION_1402_B_BASE}#input.contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins"
         ]
         == "184500.0"
     )
     assert (
         input_values[
-            f"{SECTION_1402_B_BASE}#input.wages_paid_to_individual_for_section_1401_a"
+            f"{SECTION_1402_B_BASE}#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a"
         ]
         == "18000.0"
     )

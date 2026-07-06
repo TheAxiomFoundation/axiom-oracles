@@ -1570,13 +1570,15 @@ def build_eitc_request(
                     value,
                 )
             )
+        # 1402(a) is deferred upstream; its projected net-earnings inputs
+        # bind to the 1402(b) input slots.
         for name, value in project_section_1402_a_tax_unit_inputs(
             persons=tax_unit_persons,
             contexts=contexts,
         ).items():
             inputs.append(
                 input_record(
-                    f"{SECTION_1402_A_BASE}#input.{name}",
+                    f"{SECTION_1402_B_BASE}#input.{name}",
                     entity_id,
                     interval,
                     value,
@@ -2314,12 +2316,15 @@ def project_section_1402_a_tax_unit_inputs(
         for person, context in zip(persons, contexts, strict=True)
         if context.is_head or context.is_spouse
     )
+    # The 1402(a) NESE chain is deferred upstream (rules: []) since the
+    # generated SECA re-encode; 1402(b) now takes net earnings from
+    # self-employment as a boundary input, net of the 1402(a)(12)
+    # deduction (one-half of the combined 1401(a)+(b)(1) rates).
+    raw = max(0.0, self_employment_income + partnership_self_employment_income)
+    nese = raw * (1 - 0.5 * (0.124 + 0.029))
     return {
-        "self_employment_trade_or_business_gross_income": self_employment_income,
-        "self_employment_trade_or_business_deductions": 0,
-        "partnership_section_702_a_8_income_or_loss": (
-            partnership_self_employment_income
-        ),
+        "net_earnings_from_self_employment": nese,
+        "net_earnings_from_self_employment_for_paragraph_2_threshold_test": nese,
     }
 
 
@@ -2340,12 +2345,14 @@ def project_section_1402_b_tax_unit_inputs(
     )
     return {
         "individual_is_nonresident_alien": False,
-        "social_security_agreement_under_section_233_applies_to_nonresident_alien": False,
-        "individual_is_noncitizen_territory_resident": False,
-        "contribution_and_benefit_base_under_section_230_of_social_security_act": (
+        "agreement_under_social_security_act_section_233_provides_for_individual": False,
+        "individual_is_not_united_states_citizen_and_resident_of_puerto_rico_virgin_islands_guam_or_american_samoa": False,
+        "contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins": (
             contribution_base
         ),
-        "wages_paid_to_individual_for_section_1401_a": money(wages_paid),
+        "wages_paid_to_individual_during_taxable_year_for_section_1401_a": money(
+            wages_paid
+        ),
     }
 
 
