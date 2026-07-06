@@ -388,10 +388,6 @@ UK_EFRS_OUTPUT_CONCEPTS: dict[tuple[str, str], dict] = {
         "concept": "uk:regulations/uksi/2006/965/2#child_benefit_weekly_rate",
         "description": "UK Child Benefit weekly rate",
     },
-    ("child-benefit-final", "child_benefit_weekly_amount"): {
-        "concept": "uk:policies/govuk/child-benefit#child_benefit_weekly_amount",
-        "description": "UK Child Benefit weekly amount",
-    },
     ("benefit-cap-relevant-amount", "benefit_cap_relevant_amount"): {
         "concept": "uk:regulations/uksi/2013/376/80A#benefit_cap_relevant_amount",
         "description": "UK benefit cap relevant amount",
@@ -418,10 +414,6 @@ UK_EFRS_OUTPUT_CONCEPTS: dict[tuple[str, str], dict] = {
     ("state-pension-credit-savings-credit", "savings_credit"): {
         "concept": "uk:statutes/ukpga/2002/16/3#savings_credit",
         "description": "UK Pension Credit savings credit",
-    },
-    ("state-pension-final", "state_pension_weekly_amount"): {
-        "concept": "uk:policies/govuk/state-pension#state_pension_weekly_amount",
-        "description": "UK State Pension weekly amount",
     },
     ("pension-credit", "standard_minimum_guarantee"): {
         "concept": "uk:regulations/uksi/2002/1792/6#standard_minimum_guarantee",
@@ -462,10 +454,6 @@ UK_EFRS_OUTPUT_CONCEPTS: dict[tuple[str, str], dict] = {
     ("housing-benefit-pension-age-tariff-income", "capital_tariff_weekly_income"): {
         "concept": "uk:regulations/uksi/2006/214/29#capital_tariff_weekly_income",
         "description": "UK Housing Benefit pension-age capital tariff weekly income",
-    },
-    ("universal-credit-final", "universal_credit_annual_amount"): {
-        "concept": "uk:policies/govuk/universal-credit#universal_credit_annual_amount",
-        "description": "UK Universal Credit annual amount",
     },
     ("student-loan-repayment", "student_loan_repayment"): {
         "concept": "uk:policies/govuk/student-loan-repayments#student_loan_repayment",
