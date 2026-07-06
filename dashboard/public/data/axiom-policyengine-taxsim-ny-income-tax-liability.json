@@ -1,35 +1,128 @@
 {
-  "schema_version": "axiom-oracles/state-income-tax-liability/v1",
-  "suite": "ny-income-tax-liability",
+  "case_count": 6,
   "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
-  "population": "case-grid",
-  "validation_year": 2026,
-  "taxsim_law_year": 2024,
   "engines": {
     "axiom": "us-ny:policies/income_tax/pilot_liability_pipeline",
     "policyengine": "ny_income_tax",
     "taxsim": "siitax"
   },
+  "mismatches": [
+    {
+      "case_id": "ny-single-30000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "difference": -22.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ny-taxsim-2024-rate-vintage-single-30k"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1023.0,
+      "left_engine": "axiom",
+      "right": 1045.0,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ny-single-150000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "difference": -433.09100708007827,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ny-taxsim-2024-rate-vintage-single-150k"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 8289.998992919922,
+      "left_engine": "axiom",
+      "right": 8723.09,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ny-married-60000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "difference": -43.950000000000045,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ny-taxsim-2024-rate-vintage-married-60k"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 2040.8,
+      "left_engine": "axiom",
+      "right": 2084.75,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ny-married-300000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "difference": -3192.709999999999,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ny-taxsim-2024-rate-cut-and-recapture-vintage"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 16752.8,
+      "left_engine": "axiom",
+      "right": 19945.51,
+      "right_engine": "taxsim"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
+    "generated": "2026-07-06",
+    "generator": "scripts/generate_state_income_tax_liability.py",
+    "note": "axiom-vs-PolicyEngine matches every case at the 2026 validation year; the mismatches array carries the axiom-vs-TAXSIM-2024 residuals, whose 2024-to-2026 indexation vintage is dispositioned."
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "ny-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_2024_match_rate": 33.33,
+    "comparison_count": 6,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 4,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/ny-income-tax-liability.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 33.333333,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 2,
+    "mismatch_count": 4,
+    "policyengine_matches": 6,
+    "taxsim_2024_matches": 2
+  },
+  "taxsim_law_year": 2024,
   "tolerance": {
     "absolute": 5.0,
     "relative": 0.02
   },
-  "case_count": 6,
-  "summary": {
-    "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_2024_match_rate": 33.33,
-    "policyengine_matches": 6,
-    "taxsim_2024_matches": 2
-  },
+  "validation_year": 2026,
   "cases": [
     {
-      "case_id": "ny-single-30000",
-      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
-      "filing_status": "single",
-      "employment_income": 30000.0,
       "axiom": 1023.0,
-      "policyengine": 1023.0,
-      "taxsim_2024": 1045.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
@@ -37,16 +130,16 @@
       "axiom_vs_taxsim_2024": {
         "difference": -22.0,
         "match": false
-      }
+      },
+      "case_id": "ny-single-30000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 1023.0,
+      "taxsim_2024": 1045.0
     },
     {
-      "case_id": "ny-single-60000",
-      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
-      "filing_status": "single",
-      "employment_income": 60000.0,
       "axiom": 2643.0,
-      "policyengine": 2643.0,
-      "taxsim_2024": 2695.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
@@ -54,16 +147,16 @@
       "axiom_vs_taxsim_2024": {
         "difference": -52.0,
         "match": true
-      }
+      },
+      "case_id": "ny-single-60000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 2643.0,
+      "taxsim_2024": 2695.0
     },
     {
-      "case_id": "ny-single-150000",
-      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
-      "filing_status": "single",
-      "employment_income": 150000.0,
       "axiom": 8289.998992919922,
-      "policyengine": 8289.9990234375,
-      "taxsim_2024": 8723.09,
       "axiom_vs_policyengine": {
         "difference": -3.0517578125e-05,
         "match": true
@@ -71,16 +164,16 @@
       "axiom_vs_taxsim_2024": {
         "difference": -433.09100708007827,
         "match": false
-      }
+      },
+      "case_id": "ny-single-150000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 8289.9990234375,
+      "taxsim_2024": 8723.09
     },
     {
-      "case_id": "ny-married-60000",
-      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
-      "filing_status": "married",
-      "employment_income": 60000.0,
       "axiom": 2040.8,
-      "policyengine": 2040.800048828125,
-      "taxsim_2024": 2084.75,
       "axiom_vs_policyengine": {
         "difference": -4.8828125045474735e-05,
         "match": true
@@ -88,16 +181,16 @@
       "axiom_vs_taxsim_2024": {
         "difference": -43.950000000000045,
         "match": false
-      }
+      },
+      "case_id": "ny-married-60000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 2040.800048828125,
+      "taxsim_2024": 2084.75
     },
     {
-      "case_id": "ny-married-120000",
-      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
-      "filing_status": "married",
-      "employment_income": 120000.0,
       "axiom": 5363.050999450684,
-      "policyengine": 5363.05078125,
-      "taxsim_2024": 5384.75,
       "axiom_vs_policyengine": {
         "difference": 0.00021820068377564894,
         "match": true
@@ -105,16 +198,16 @@
       "axiom_vs_taxsim_2024": {
         "difference": -21.699000549316224,
         "match": true
-      }
+      },
+      "case_id": "ny-married-120000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 5363.05078125,
+      "taxsim_2024": 5384.75
     },
     {
-      "case_id": "ny-married-300000",
-      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
-      "filing_status": "married",
-      "employment_income": 300000.0,
       "axiom": 16752.8,
-      "policyengine": 16752.80078125,
-      "taxsim_2024": 19945.51,
       "axiom_vs_policyengine": {
         "difference": -0.0007812500007275958,
         "match": true
@@ -122,13 +215,13 @@
       "axiom_vs_taxsim_2024": {
         "difference": -3192.709999999999,
         "match": false
-      }
+      },
+      "case_id": "ny-married-300000",
+      "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 16752.80078125,
+      "taxsim_2024": 19945.51
     }
-  ],
-  "provenance": {
-    "generated": "2026-07-06",
-    "generator": "scripts/generate_state_income_tax_liability.py",
-    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "note": "TAXSIM leg run at its latest supported law year 2024; the 2024-to-2026 indexation vintage is recorded in the disposition."
-  }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": "axiom-oracles/state-income-tax-liability/v1",
+  "schema_version": "axiom.comparison_report.v2",
   "suite": "ma-income-tax-liability",
   "concept": "us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability",
   "population": "case-grid",
@@ -16,11 +16,15 @@
   },
   "case_count": 6,
   "summary": {
+    "comparison_count": 6,
+    "match_count": 6,
+    "mismatch_count": 0,
     "axiom_vs_policyengine_match_rate": 100.0,
     "axiom_vs_taxsim_2024_match_rate": 100.0,
     "policyengine_matches": 6,
     "taxsim_2024_matches": 6
   },
+  "mismatches": [],
   "cases": [
     {
       "case_id": "ma-single-30000",
@@ -129,6 +133,6 @@
     "generated": "2026-07-06",
     "generator": "scripts/generate_state_income_tax_liability.py",
     "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "note": "TAXSIM leg run at its latest supported law year 2024; the 2024-to-2026 indexation vintage is recorded in the disposition."
+    "note": "axiom-vs-PolicyEngine matches every case at the 2026 validation year; the mismatches array carries the axiom-vs-TAXSIM-2024 residuals, whose 2024-to-2026 indexation vintage is dispositioned."
   }
 }

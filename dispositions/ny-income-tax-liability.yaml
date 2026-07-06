@@ -56,6 +56,26 @@ entries:
     pinned:
       left: 2040.8
       right: 2084.75
+  - id: ny-taxsim-2024-rate-vintage-single-30k
+    concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
+    case_id: ny-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        For the single 30,000-dollar filer the 2026 pipeline reports 1023.00 and
+        TAXSIM 2024 reports 1045.00, a 22.00-dollar gap. There is no supplemental
+        recapture at this income, so the residual is purely the 2024-versus-2026
+        marginal-rate difference on the 22,000-dollar taxable base from the
+        Chapter 59 of the Laws of 2025 rate reductions.
+      arithmetic:
+        - expression: "1023.00 - 1045.00"
+          equals: -22.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 1023.0
+      right: 1045.0
   - id: ny-taxsim-2024-rate-vintage-single-150k
     concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
     case_id: ny-single-150000

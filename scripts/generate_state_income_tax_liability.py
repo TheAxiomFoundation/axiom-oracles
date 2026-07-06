@@ -224,6 +224,13 @@ def _build_report(
     tol, rel = _TOL[state]
     concept = _LIABILITY_OUTPUT[state]
     report_cases = []
+    # `mismatches` uses the standard v2 schema (concept, case_id, kind, left,
+    # right) so scripts/apply_dispositions.py can join the committed dispositions
+    # against these rows and validate that every residual is explained. The
+    # axiom-vs-PolicyEngine comparison matches on every case, so only the
+    # axiom-vs-TAXSIM-2024 residuals become mismatch rows (axiom is `left`,
+    # TAXSIM 2024 is `right`); the indexation-vintage dispositions pin those.
+    mismatches: list[dict] = []
     pe_matches = 0
     taxsim_matches = 0
     n = 0
@@ -257,8 +264,25 @@ def _build_report(
                 },
             }
         )
+        if not ts_ok:
+            mismatches.append(
+                {
+                    "case_id": case.case_id,
+                    "concept": concept,
+                    "kind": "amount_difference",
+                    "engines": ["axiom", "taxsim"],
+                    "left_engine": "axiom",
+                    "right_engine": "taxsim",
+                    "left": ax,
+                    "right": ts_v,
+                    "difference": ax - ts_v,
+                }
+            )
+    comparison_count = n
+    mismatch_count = len(mismatches)
+    match_count = comparison_count - mismatch_count
     return {
-        "schema_version": "axiom-oracles/state-income-tax-liability/v1",
+        "schema_version": "axiom.comparison_report.v2",
         "suite": f"{state.lower()}-income-tax-liability",
         "concept": concept,
         "population": "case-grid",
@@ -272,19 +296,24 @@ def _build_report(
         "tolerance": {"absolute": tol, "relative": rel},
         "case_count": n,
         "summary": {
+            "comparison_count": comparison_count,
+            "match_count": match_count,
+            "mismatch_count": mismatch_count,
             "axiom_vs_policyengine_match_rate": round(100.0 * pe_matches / n, 2),
             "axiom_vs_taxsim_2024_match_rate": round(100.0 * taxsim_matches / n, 2),
             "policyengine_matches": pe_matches,
             "taxsim_2024_matches": taxsim_matches,
         },
+        "mismatches": mismatches,
         "cases": report_cases,
         "provenance": {
             "generated": date.today().isoformat(),
             "generator": "scripts/generate_state_income_tax_liability.py",
             "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
             "note": (
-                "TAXSIM leg run at its latest supported law year 2024; the "
-                "2024-to-2026 indexation vintage is recorded in the disposition."
+                "axiom-vs-PolicyEngine matches every case at the 2026 validation "
+                "year; the mismatches array carries the axiom-vs-TAXSIM-2024 "
+                "residuals, whose 2024-to-2026 indexation vintage is dispositioned."
             ),
         },
     }
