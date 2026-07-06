@@ -6,6 +6,14 @@ final-liability comparison. Current Axiom NYC RuleSpecs do not yet derive
 NY taxable income, NY CDCC, or final NYC income tax from raw ECPS facts, so this
 diagnostic uses PE/ECPS upstream tax-unit projections as Axiom inputs and
 compares only the source-backed NYC component formulas.
+
+This diagnostic deliberately loads the NYC per-city Enhanced-CPS file
+(``NYC_ECPS_DATASET`` below) rather than the certified populace-us artifact
+every other US suite reads: populace-us has no place geography yet, so a
+national populace artifact cannot be filtered to NYC. It is the sanctioned last
+Enhanced-CPS load in this repo and retires only when the populace spine grows
+place grain — TheAxiomFoundation/axiom-oracles#74 (and PolicyEngine/populace#204).
+The ``ecps`` naming here is therefore accurate, not a leftover lie.
 """
 
 from __future__ import annotations

@@ -305,7 +305,7 @@ The US representative population is the **certified populace-us artifact**
 (`populace://policyengine/populace-us/populace_us_2024.h5`, resolved
 through the Hugging Face dataset repo). The reference is **content-pinned**
 to a specific Hugging Face revision with a verified sha256
-(`axiom_oracles/populations/enhanced_cps.py::POPULACE_PINS`) — it does NOT
+(`axiom_oracles/populations/populace_us.py::POPULACE_PINS`) — it does NOT
 follow HF-latest. Latest currently points at a sparse L0 refit that zeroes
 untargeted input bases (IRA/HSA/self-employed pension/childcare and ~80
 other engine inputs are dead in that artifact, PolicyEngine/populace#278),
