@@ -168,11 +168,15 @@ def score_jurisdiction(
     policy_scores: list[PolicyScore] = []
     excluded_by_reason: dict[str, int] = {}
     covered = 0
-    unexplained_total = 0
-    axiom_attributed_open = 0
-    oracle_attributed = 0
-    bridge_artifacts = 0
     uncovered_policies: list[str] = []
+    #: Suites of the DISTINCT covered reports, so each report's mismatch signals
+    #: are counted once toward the jurisdiction headline even when several
+    #: in-scope policies share one report (the PE-UK case: 12 programs covered by
+    #: uk-tax-benefits-efrs). Summing per-policy would multiply a report's 232
+    #: upstream gaps by 12 — and, worse, inflate unexplained/axiom-attributed
+    #: (which gate conformance) N-fold. The per-policy drill-down still shows each
+    #: policy's covering-report stats; only the headline dedupes.
+    covered_report_suites: set[str] = set()
 
     for policy in universe.policies:
         if not policy.in_scope:
@@ -211,14 +215,12 @@ def score_jurisdiction(
 
         # Covered: pull the report's comparison stats + disposition signals.
         covered += 1
+        covered_report_suites.add(policy.suite)
         summary = report.get("summary") or {}
         comparisons = int(summary.get("comparison_count", 0) or 0)
         match_count = int(summary.get("match_count", 0) or 0)
+        # Per-policy signals for the drill-down row (the report's own numbers).
         unexplained, axiom_open, oracle_gap, bridge = _disposition_signals(report)
-        unexplained_total += unexplained
-        axiom_attributed_open += axiom_open
-        oracle_attributed += oracle_gap
-        bridge_artifacts += bridge
 
         dispositioned = summary.get("dispositioned") or {}
         raw_rate = (
@@ -254,6 +256,21 @@ def score_jurisdiction(
                 status=status,
             )
         )
+
+    # Headline mismatch signals: sum each DISTINCT covered report once (a report
+    # shared by N policies must not multiply its residual N-fold, or the
+    # conformance predicate and the ratchet would be inflated).
+    unexplained_total = 0
+    axiom_attributed_open = 0
+    oracle_attributed = 0
+    bridge_artifacts = 0
+    for suite in covered_report_suites:
+        report = suite_index[suite]
+        unexplained, axiom_open, oracle_gap, bridge = _disposition_signals(report)
+        unexplained_total += unexplained
+        axiom_attributed_open += axiom_open
+        oracle_attributed += oracle_gap
+        bridge_artifacts += bridge
 
     in_scope = len(universe.in_scope())
     covered_pct = _round(100 * covered / in_scope) if in_scope else 0.0
