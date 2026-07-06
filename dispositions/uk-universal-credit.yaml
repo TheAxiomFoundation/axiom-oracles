@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: uk-universal-credit
-updated: "2026-07-05"
+updated: "2026-07-06"
 # Below the benefit cap the composed rulespec-uk Universal Credit award matches
 # UKMOD bsauc_s to the penny (single, couple, couple+rent, single+1child, and
 # the capital tariff below the limit). The residual rows fall into explained
@@ -29,6 +29,24 @@ updated: "2026-07-05"
 # upstream_engine_gap because Axiom's entitlement is exact wherever a unit takes
 # up; pinned values record the committed single-batch realization. See
 # euromod_issues.json#ukmod-uc-bsauc-takeup-correction.
+#
+# Minimum income floor (added 2026-07-06): the composed pipeline now applies the
+# regulation 62 minimum income floor for gainful self-employment, computing the
+# floor from the now-grounded regulation 90 thresholds (regulation 4 national
+# living wage rate x regulation 88 expected hours x 52 / 12). No self-employed
+# MIF case is added to this suite because a deterministic per-case comparison
+# against UKMOD is not achievable: a self-employed benefit unit that is entitled
+# to a Universal Credit award is gated by the same stochastic bsauc_s take-up
+# draw (i_rand_tu) documented above, so its reported award varies by row
+# position and neither --comparison-batch-size 1 nor the exposed policy switches
+# (BTA_uk, random_uk) force 100% take-up (see
+# euromod_issues.json#ukmod-uc-bsauc-takeup-correction and or#170). The MIF is
+# instead covered by the hand-verified companion tests in rulespec-uk
+# (uk/policies/universal_credit_composed_award_pipeline.test.yaml: below-floor,
+# above-floor, couple, and non-gainful cases) and by the regulation 90 module's
+# own companion tests, which assert the threshold arithmetic to the penny. A
+# future adapter fix that forces 100% take-up would make a self-employed row
+# comparable and is the point at which one should be added.
 entries:
   # --- UKMOD benefit take-up correction zeroes the award -------------------
   - id: takeup-correction-zeroes-couple-owner

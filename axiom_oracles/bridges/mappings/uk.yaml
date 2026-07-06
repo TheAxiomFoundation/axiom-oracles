@@ -2681,6 +2681,12 @@ prefixes:
     mapping_type: not_comparable
     rationale: Universal Credit regulation 88 expected-hours helpers are source-level conditionality mechanics not exposed as one-to-one PolicyEngine UK variables.
 
+  - legal_id_prefix: uk:regulations/uksi/2013/376/90#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Universal Credit regulation 90 individual/couple minimum-income-floor threshold helpers (the gainful-self-employment thresholds from the NMW/NLW hourly rate x expected hours converted to a monthly amount, and the section 19 no-work-related-requirements predicates) are source-level conditionality and earned-income-floor mechanics not exposed as one-to-one PolicyEngine UK variables.
+
   - legal_id_prefix: uk:statutes/ukpga/2012/5/2#
     country: uk
     program: universal_credit
@@ -2842,6 +2848,12 @@ prefixes:
     program: universal_credit
     mapping_type: not_comparable
     rationale: The National Minimum Wage Regulations 2015 regulation 4 hourly rate is a rate instrument referenced by the regulation 82 earnings exception; PolicyEngine UK carries it as a parameter rather than a variable.
+
+  - legal_id_prefix: uk:regulations/uksi/2015/621/4A#
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: The National Minimum Wage Regulations 2015 regulation 4A age-banded and apprentice hourly rates are rate instruments referenced by the regulation 90 minimum-income-floor threshold; PolicyEngine UK carries the NMW/NLW rates as parameters rather than variables.
 
   - legal_id_prefix: uk:policies/govuk/carers-allowance#
     country: uk
