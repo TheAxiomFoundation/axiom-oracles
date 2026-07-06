@@ -101,6 +101,14 @@
       "source": "comparisons/be-work-bonus-credit.yaml"
     },
     {
+      "suite": "ca-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ca-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ca-income-tax-liability.yaml"
+    },
+    {
       "suite": "ca-snap-ecps",
       "report": "axiom-policyengine-ca-snap-ecps.json",
       "repos": [
@@ -183,12 +191,28 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "il-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-il-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/il-income-tax-liability.yaml"
+    },
+    {
       "suite": "lifeline-parameters",
       "report": "axiom-policyengine-lifeline-parameters.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "ma-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ma-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ma-income-tax-liability.yaml"
     },
     {
       "suite": "ma-snap-ecps",
@@ -221,6 +245,14 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/nc-snap-ecps.yaml"
+    },
+    {
+      "suite": "ny-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ny-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ny-income-tax-liability.yaml"
     },
     {
       "suite": "ny-snap-ecps",

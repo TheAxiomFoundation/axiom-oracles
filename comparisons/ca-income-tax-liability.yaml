@@ -1,0 +1,40 @@
+# California composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
+# on a modest case grid (single and married filers at incomes that cross the
+# state's brackets). The Axiom side is the composed rulespec-us pipeline
+# us-ca/policies/income_tax/pilot_liability_pipeline, evaluated through the
+# axiom rules engine (its liabilities are the engine-verified companion-test
+# fixtures). California is progressive (RTC 17041 brackets, 1-12.3 per cent) less the RTC 17054 personal exemption credit.
+#
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 indexation vintage is recorded in
+# dispositions/ca-income-tax-liability.yaml rather than absorbed by tolerance.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py ca-income-tax-liability
+
+name: ca-income-tax-liability
+title: California income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed California income-tax liability pipeline encoded in Axiom
+  RuleSpec (us-ca/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (ca_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
+  single and married filers crossing the state's brackets.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: CA
+    period: "2026"
+    taxsim_law_year: 2024
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the composed pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ca-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ca-income-tax-liability.json
+  suite: ca-income-tax-liability
