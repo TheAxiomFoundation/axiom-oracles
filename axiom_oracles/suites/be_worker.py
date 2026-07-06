@@ -73,9 +73,11 @@ def be_article_51_forfait_cases() -> list[Case]:
     engine's post-uprating gross (``yem``).
 
     The sweep crosses the forfait cap: the 30% rate binds below a post-SSC base of
-    ~19,767 EUR (0.30 * 19,766.67 = 5,930) and the cap binds above it. The 12k and
-    22k cases sit on the rate side, 35k/60k on the cap side, and 27k straddles the
-    crossover once ordinary employee SSC (13.07%) is netted out.
+    ~19,767 EUR (0.30 * 19,766.67 = 5,930) and the cap binds above it. After
+    uprating and ordinary employee SSC (13.07%), the 12k case lands on the 30%-rate
+    side (post-SSC base ~11,000 EUR, forfait ~3,300 EUR) while 22k / 27k / 35k / 60k
+    are all in the capped region (forfait 5,930 EUR), so the sweep exercises both
+    limbs of the min().
     """
 
     return [
