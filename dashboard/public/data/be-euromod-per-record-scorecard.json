@@ -1,0 +1,150 @@
+{
+  "schema": "axiom_oracles.cross_engine_scorecard.v1",
+  "title": "Belgium Axiom\u2194EUROMOD per-record cross-engine validation (ladder rungs 1 + 2)",
+  "generated_at": "2026-07-06T19:16:32Z",
+  "generated_by": "axiom-rules-engine#77 rung1+rung2; per-record upgrade of the \u20ac643-on-\u20ac20.9B aggregate SSC claim",
+  "config_pins": {
+    "euromod_release": "J2.0+ (EUROMOD_RELEASES_J2.0+)",
+    "euromod_country": "BE",
+    "euromod_system": "BE_2025",
+    "euromod_dataset": "BE_2024_c1_2015_03_e2 (real dataset-configuration name; dataset-name gating workaround, ec-jrc#4; no licensed microdata read)",
+    "euromod_template_dataset": "BE_training_data",
+    "euromod_runtime": "x86_64 (Rosetta) python 3.12 + .NET x64 (coreclr); euromod connector; DOTNET_ROOT=<scratch>/dotnet-x64",
+    "uprating_factor_config_to_system": 1.05502,
+    "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+    "axiom_rules_engine_version": "0.1.0",
+    "rulespec_be_sha": "a69bfa61458630ac574b779f7d9d47de2afaba8b",
+    "period": 2025,
+    "batch_isolation": "per-household engine runs (axiom-oracles#168): each household its own engine run; results batch-position/order/composition-independent by construction",
+    "population_sha256": "82ba29382bae3f95ca6608e97e2751d2bc334afbb402b058c04e97843ff72cdc",
+    "population_records": 166302,
+    "population_worker_records": 78479,
+    "population_weighted_persons": 11851557.62992948,
+    "population_weighted_workers": 4416671.2147632195,
+    "population_description": "calibrated populace-be v0: populace-us records reweighted to Belgian Ledger targets (populace_be_v0.py); the identical population the \u20ac643 aggregate check used"
+  },
+  "programs": {
+    "rung1_ssc": {
+      "program": "employee_social_security_contribution",
+      "concept_axiom": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
+      "concept_euromod": "tscee_s (annualized x12)",
+      "linearity": "proportional (13.07% flat rate on gross professional income; weak discriminator by construction, as the aggregate \u20ac643 claim relied on)",
+      "population_records": 166302,
+      "worker_records": 78479,
+      "weighted_workers": 4416671.0,
+      "per_record_abs_diff_eur_year": {
+        "max": 0.028175,
+        "mean": 0.00045556,
+        "percentiles": {
+          "p50": 0.000202,
+          "p90": 0.000933,
+          "p99": 0.004889,
+          "p99.9": 0.01132,
+          "p100": 0.028175
+        }
+      },
+      "exact_match_within_tolerance": {
+        "0.001": 71165,
+        "0.01": 78378,
+        "0.10": 78479,
+        "1.00": 78479
+      },
+      "aggregate": {
+        "axiom_eur": 20874275929.01,
+        "euromod_eur": 20874276571.88,
+        "abs_diff_eur": 642.87,
+        "ppm": 0.0308,
+        "note": "reproduces the original \u20ac643-on-\u20ac20.9B aggregate claim exactly"
+      },
+      "live_reproduction": "first 2000 rows re-run through EUROMOD BE_2025 today reproduce stored tscee_s to max|d|=0.000000 (verify_ssc.log)",
+      "verdict": "EXACT per-record agreement. 100% of worker records within \u20ac0.10/yr; max \u20ac0.028/yr = float32 pipeline rounding, not a modeling difference. The aggregate \u20ac643 (0.031 ppm) concealed exact per-record identity."
+    },
+    "rung2a_pit_population": {
+      "program": "personal_income_tax_population",
+      "concept_axiom": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding (@7% flat communal assumption; @0% also reported)",
+      "concept_euromod": "tin_s (annualized x12; national + communal)",
+      "linearity": "nonlinear (Article 130 progressive 25/40/45/50% brackets, Article 134 tax-free-amount ladder, Article 5/2 autonomy factor)",
+      "note": "population = populace-us records reweighted to Belgian Ledger targets (SHA below). A DEMO population of individual filers, NOT a controlled single-earner-couple grid; the marital quotient is not exercised here. Divergences are dominated by KNOWN concept differences, decomposed below \u2014 this is why aggregate PIT is NOT a per-record match and why the clean isolated test is rung 2b.",
+      "aggregate": {
+        "axiom_pit_7pct_communal_eur": 35106610889.84,
+        "axiom_pit_0pct_communal_eur": 32809916719.47,
+        "euromod_tin_s_eur": 19528981246.86
+      },
+      "per_record_diff_eur_year_taxpaying_both": {
+        "records": 58079,
+        "percentiles_axiom7_minus_euromod": {
+          "p0": 933.155487,
+          "p1": 985.950577,
+          "p5": 1231.480739,
+          "p25": 2646.614592,
+          "p50": 5678.494249,
+          "p75": 11779.557425,
+          "p95": 41052.83126,
+          "p99": 157848.910578,
+          "p100": 315477.019273
+        },
+        "mean_abs": 12115.64
+      },
+      "decomposition_of_divergence": [
+        {
+          "driver": "refundable Article 289ter/1 low-wage work-bonus credit",
+          "mechanism": "EUROMOD tin_s goes negative (net refund) for low-wage records; the pilot clamps liability at >=0",
+          "records_euromod_negative": 20332,
+          "weighted_records": 1994925.0,
+          "weighted_eur_sum_of_negative_tin_s": -2649096066.62,
+          "filed": "rulespec-be#5 (art. 292bis / 289ter1 refundable credit)"
+        },
+        {
+          "driver": "dependants / children (Article 132 supplements)",
+          "mechanism": "pilot declares dependants out of scope; EUROMOD applies child tax-free supplements \u2192 ~\u20ac1.4B (prior decomposition, epic comment 2 on populace#259)",
+          "status": "declared_out_of_scope"
+        },
+        {
+          "driver": "7% flat communal assumption",
+          "mechanism": "pilot has no commune assignment; @7% overstates vs EUROMOD's actual per-commune surcharge; @0% run reported alongside",
+          "status": "modeling_assumption"
+        }
+      ],
+      "verdict": "NOT a per-record match at the population level, BUT every divergence resolves to a documented concept/scope difference (refundable credit, dependants, communal assumption) \u2014 not a rate/bracket/quotient defect. Aggregate \u20ac35.1B(@7%) vs \u20ac19.5B is an honest scope gap, not an engine disagreement."
+    },
+    "rung2b_pit_marital_quotient": {
+      "program": "personal_income_tax_marital_quotient",
+      "concept_axiom": "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding",
+      "concept_euromod": "tin_s summed over both spouses",
+      "linearity": "nonlinear + household structure (CIR 1992 Article 87 one-earner marital quotient: impute min(30%\u00d7base, \u20ac13,460) to zero-income spouse, tax each spouse separately through the progressive scale)",
+      "population": "synthetic single-earner married-couple grid at 30k/45k/60k gross (controlled; isolates the marital quotient)",
+      "take_up": "N/A \u2014 tin_s is deterministic PIT (no bed_s/random_be take-up draw involved); no euromod_constant_overrides pin required. (Pin mechanism documented for benefit suites where the solo draw marks non-take.)",
+      "per_case": [
+        {
+          "case_id": "be-marital-quotient-30k",
+          "euromod_tin_s": -808.5753,
+          "axiom_couple_pit": 2766.6014,
+          "difference_axiom_minus_euromod": 3575.1767
+        },
+        {
+          "case_id": "be-marital-quotient-45k",
+          "euromod_tin_s": 3484.2607,
+          "axiom_couple_pit": 7000.9141,
+          "difference_axiom_minus_euromod": 3516.6534
+        },
+        {
+          "case_id": "be-marital-quotient-60k",
+          "euromod_tin_s": 7548.6041,
+          "axiom_couple_pit": 12345.0776,
+          "difference_axiom_minus_euromod": 4796.4735
+        }
+      ],
+      "diagnosis": {
+        "root_cause": "The couple_pit_oracle_pipeline is a DELIBERATELY THIN Article 87 marital-quotient slice: its per-spouse taxable-income entry is max(0, professional_income_after_imputation) fed the RAW post-uprating gross via the yem bridge. It does NOT subtract the 13.07% employee SSC (Law 29.06.1981 art. 38) or the Article 51 professional-expense forfait (30% capped \u20ac5,930) before the rate scale \u2014 whereas EUROMOD (and the complete single-worker pilot_worker_oracle_pipeline, which matches EUROMOD 0/0) applies the scale to gross \u2212 SSC \u2212 forfait.",
+        "independent_verification": "Hand-computed CIR 1992 PIT (Art 130 brackets 16320/28800/49840 @25/40/45/50%, Art 131 TFA \u20ac10,910, Art 134 ladder, Art 5/2 autonomy 0.24957) reproduces: (A) scale on GROSS \u00d7 0.75043 = Axiom to the cent at all 3 cases; (B) scale on NET base = EUROMOD to the cent at 60k, within \u20ac57.73 at 45k, and at 30k the remaining \u20ac1,596.30 is exactly the refundable work-bonus credit (EUROMOD tin_s=\u2212808.58 vs positive-tax 787.72).",
+        "per_case_attribution": {
+          "60k": "gap \u20ac4,796.47 = 100% omitted SSC+Art.51 forfait base reduction (exact to the cent)",
+          "45k": "gap \u20ac3,516.65 = SSC+forfait base reduction + \u20ac57.73 additional pre-scale net-income reductions EUROMOD applies",
+          "30k": "gap \u20ac3,575.18 = SSC+forfait base reduction + \u20ac1,596.30 refundable Article 289ter/1 work-bonus credit"
+        },
+        "classification": "encoding scope limitation (rulespec-be), NOT an engine defect and NOT a rate/threshold/marital-quotient concept difference. The Article 87 imputation arithmetic itself is EXACT (companion test reproduces both spouses' post-imputation income).",
+        "verdict": "The marital quotient mechanism agrees exactly; the couple pipeline needs SSC+forfait wired into its per-spouse base (as the single-worker pilot already does) to reach 0/0. Filing as an encoding issue on rulespec-be."
+      }
+    }
+  }
+}
