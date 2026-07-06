@@ -190,6 +190,16 @@ class EuromodPlatformRunner(EngineAdapter):
         are summed to the case level (a household's income tax is the sum
         of its members'), and monthly amounts are annualized when
         ``annualize_outputs`` is set.
+
+        Cases in one call share a worker subprocess (one model load) but
+        each household executes as its own engine run, so a case's results
+        are identical to running it alone regardless of batch size, order,
+        or composition. Sharing one engine run is not safe: EUROMOD-platform
+        spines consume fixed-seed random draws per household in dataset
+        order (take-up corrections such as Belgium ``bed_be``'s or UKMOD
+        Universal Credit's), which silently zeroed benefits for every
+        household after the first batch position (see euromod_issues.json
+        euromod-be-2025-bed-study-allowance-batch-position-contamination).
         """
         outputs = _euromod_outputs_for_variables(variables)
         worker_outputs = _expand_derived_outputs(outputs)
@@ -244,6 +254,10 @@ class EuromodPlatformRunner(EngineAdapter):
             sums = by_household.setdefault(int(household), dict.fromkeys(payload["columns"], 0.0))
             for column in payload["columns"]:
                 sums[column] += float(payload["values"][column][position])
+        household_errors = {
+            int(household): message
+            for household, message in payload.get("household_errors", {}).items()
+        }
 
         annualization_factor = 12.0 if self.annualize_outputs else 1.0
         missing = tuple(
@@ -252,7 +266,31 @@ class EuromodPlatformRunner(EngineAdapter):
         )
         results = []
         for index, case in enumerate(cases):
-            sums = by_household.get(index + 1, {})
+            household = index + 1
+            if household in household_errors:
+                results.append(
+                    EngineResult(
+                        engine=self.name,
+                        household_id=case.case_id,
+                        values={},
+                        errors=(household_errors[household],),
+                    )
+                )
+                continue
+            if household not in by_household:
+                results.append(
+                    EngineResult(
+                        engine=self.name,
+                        household_id=case.case_id,
+                        values={},
+                        errors=(
+                            "EUROMOD returned no output rows for household "
+                            f"{household} ({case.case_id})",
+                        ),
+                    )
+                )
+                continue
+            sums = by_household[household]
             results.append(
                 EngineResult(
                     engine=self.name,

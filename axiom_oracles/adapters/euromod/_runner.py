@@ -15,6 +15,19 @@ template built from the model's own dataset header (UKMOD's demo schema
 has ~22 columns, EUROMOD's ~273 — the template makes one projection serve
 both). The engine prints progress chatter to stdout, so results travel
 through the result file, never stdout.
+
+The model is loaded once per subprocess but **each household runs through
+its own engine run**. EUROMOD-platform models are not row-independent
+across households: policy spines seed pseudo-random streams and consume
+one draw per household *in dataset order* (e.g. Belgium's ``random_be``
+``RandSeed seed=1`` feeds the ``bed_be`` non-take-up correction, UKMOD's
+``random_uk`` feeds the Universal Credit take-up gate), so in a shared
+run a household's outputs depend on its batch position — every position
+after the first can silently zero a benefit. Running one household per
+engine run gives every household the draws of a solo run, making results
+independent of batch composition by construction. A household whose run
+raises is reported in ``household_errors`` without poisoning the rest of
+the batch; model-load failures still fail the whole job.
 """
 
 from __future__ import annotations
@@ -167,6 +180,18 @@ def _patch_policy_switch(
     return f"{system_xml[:policy_start]}{patched_policy}{system_xml[policy_end:]}"
 
 
+def _rows_by_household(rows: list) -> dict:
+    """Group input rows by ``idhh``, preserving first-appearance order.
+
+    Each group becomes its own engine run so no household's outputs can
+    depend on which other households share the job (see module docstring).
+    """
+    groups: dict = {}
+    for row in rows:
+        groups.setdefault(int(row["idhh"]), []).append(row)
+    return groups
+
+
 def main() -> None:
     job_path, result_path = Path(sys.argv[1]), Path(sys.argv[2])
     job = json.loads(job_path.read_text(encoding="utf-8"))
@@ -193,15 +218,14 @@ def main() -> None:
     header = [name.strip() for name in header if name.strip()]
 
     template = {name: 0.0 for name in header}
-    frame_rows = []
-    for row in job["rows"]:
-        filled = dict(template)
-        for key, value in row.items():
-            if key in filled:
-                filled[key] = value
-        frame_rows.append(filled)
-    frame = pd.DataFrame(frame_rows, columns=header)
+    households = _rows_by_household(job["rows"])
 
+    requested = job.get("outputs") or []
+    columns = None
+    missing: list = []
+    idhh: list = []
+    values: dict = {}
+    household_errors: dict = {}
     try:
         switches = [
             (str(name), bool(enabled)) for name, enabled in job.get("switches", [])
@@ -219,19 +243,47 @@ def main() -> None:
             model = Model(str(run_model_root))
             country = [c for c in model.countries if c.name == job["country"]][0]
             system = [s for s in country.systems if s.name == job["system"]][0]
-            output = system.run(frame, job["dataset"], switches=switches).outputs[0]
+            for household, household_rows in households.items():
+                frame_rows = []
+                for row in household_rows:
+                    filled = dict(template)
+                    for key, value in row.items():
+                        if key in filled:
+                            filled[key] = value
+                    frame_rows.append(filled)
+                frame = pd.DataFrame(frame_rows, columns=header)
+                try:
+                    output = system.run(
+                        frame, job["dataset"], switches=switches
+                    ).outputs[0]
+                except Exception as error:  # noqa: BLE001 - isolate the household
+                    household_errors[str(household)] = (
+                        f"{type(error).__name__}: {error}"
+                    )
+                    continue
+                if columns is None:
+                    missing = [name for name in requested if name not in output.columns]
+                    columns = [name for name in requested if name in output.columns]
+                    values = {name: [] for name in columns}
+                idhh.extend(int(value) for value in output["idhh"].tolist())
+                for name in columns:
+                    values[name].extend(output[name].tolist())
     except Exception as error:  # noqa: BLE001 - report, never crash silently
         _fail(result_path, f"{type(error).__name__}: {error}")
         return
 
-    requested = job.get("outputs") or []
-    missing = [name for name in requested if name not in output.columns]
-    present = [name for name in requested if name in output.columns]
+    if households and columns is None and household_errors:
+        # Every household failed; a shared cause (bad dataset, broken model)
+        # reads better as one job-level error than N copies of it.
+        _fail(result_path, next(iter(household_errors.values())))
+        return
+
     payload = {
-        "columns": present,
+        "columns": columns or [],
         "missing": missing,
-        "idhh": [int(value) for value in output["idhh"].tolist()],
-        "values": {name: output[name].tolist() for name in present},
+        "idhh": idhh,
+        "values": values,
+        "household_errors": household_errors,
     }
     result_path.write_text(json.dumps(payload), encoding="utf-8")
 

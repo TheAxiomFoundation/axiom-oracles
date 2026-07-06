@@ -271,10 +271,16 @@ Conventions the adapter owns: case facts are annual while the demo
 datasets are monthly (inputs divide by 12, outputs annualize back), and
 the datasets uprate incomes from their data year to the system year — so
 comparisons bridge on the engine's own post-uprating gross (`yem`), which
-is returned alongside the outputs. The live UKMOD tests reproduce
-hand-computed 2025-26 income tax and employee NICs; the live EUROMOD
-Belgium tests recover the statutory 13.07% employee social contribution
-exactly and progressive PIT.
+is returned alongside the outputs. Batches share one worker subprocess
+(one model load) but every household executes as its own engine run:
+EUROMOD-platform spines consume fixed-seed random draws per household in
+dataset order (benefit take-up corrections such as Belgium `bed_be`'s or
+UKMOD Universal Credit's), so households sharing an engine run would get
+batch-position-dependent results (issue ledger:
+`euromod-be-2025-bed-study-allowance-batch-position-contamination`). The
+live UKMOD tests reproduce hand-computed 2025-26 income tax and employee
+NICs; the live EUROMOD Belgium tests recover the statutory 13.07%
+employee social contribution exactly and progressive PIT.
 
 One EUROMOD-release quirk the adapter absorbs: some model content is
 gated on the *dataset name* (`Run_Cond IsUsedDatabase` patterns matching

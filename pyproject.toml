@@ -33,6 +33,10 @@ dependencies = [
 dev = [
   "pytest>=8.0",
   "ruff>=0.14",
+  # The euromod worker's per-household isolation test drives the real
+  # _runner.py under this interpreter with a stub engine; the worker itself
+  # needs pandas.
+  "pandas>=2.2",
 ]
 policyengine = [
   "policyengine[us]==4.4.4",

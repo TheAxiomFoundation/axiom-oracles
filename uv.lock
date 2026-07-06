@@ -73,6 +73,7 @@ accessnyc-python = [
     { name = "pydantic" },
 ]
 dev = [
+    { name = "pandas" },
     { name = "pytest" },
     { name = "ruff" },
 ]
@@ -89,6 +90,7 @@ taxsim = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.1" },
+    { name = "pandas", marker = "extra == 'dev'", specifier = ">=2.2" },
     { name = "policyengine", extras = ["us"], marker = "extra == 'policyengine'", specifier = "==4.4.4" },
     { name = "policyengine-taxsim", marker = "extra == 'taxsim'", specifier = ">=2.7.1" },
     { name = "pydantic", marker = "extra == 'accessnyc-python'", specifier = ">=2.11" },
