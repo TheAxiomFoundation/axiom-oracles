@@ -3,10 +3,10 @@
   "date": "2026-07-06",
   "jurisdiction": "be",
   "oracle": "EUROMOD_J2.0/BE_2025",
-  "policies_in_scope": 25,
+  "policies_in_scope": 23,
   "covered": 21,
-  "covered_pct": 84.0,
-  "excluded": 18,
+  "covered_pct": 91.3043,
+  "excluded": 20,
   "unexplained_total": 0,
   "axiom_attributed_open": 0,
   "conformant": false

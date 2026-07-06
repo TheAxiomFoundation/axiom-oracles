@@ -637,13 +637,25 @@ policies:
     output_vars:
       - yemmw_s
       - bwkmcee_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bwkmcee_s
-    suite: null
-    note: 'BEN: Covid-19 temporary-unemployment wage compensation (employees); switch-on but a historical
-      crisis scheme. Carried in scope pending an explicit exclusion decision (issue being filed) rather
-      than silently excluded.'
+    exclusion_reason: oracle_dataset_lacks_input
+    note: 'BEN: Covid-19 temporary-unemployment wage compensation for employees (RD 30.03.2020 family),
+      Switch=on in BE_2025 and writing bwkmcee_s. Every compute branch is gated on bwkmceemy_s (months
+      in the wage-compensation scheme): Elig_Cond (bwkmceemy_s > 0), both part/full-time BenCalc Comp_Cond
+      branches (bwkmceemy_s>=1 & lhw<38, bwkmceemy_s>=1 & lhw>=38), and the final award bwkmcee_s = i_bwkmcee_s*bwkmceemy_s/12.
+      bwkmceemy_s and lmcee_s are DefVar-initialised to 0; their only writer is policy TransLMA_be (Switch=off,
+      comment "DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON"), which selects lay-off spells from lindi
+      (sector) x dgn x i_mc_rand_* draws. None of {lmcee, lmcee_s, bwkmceemy, bwkmceemy_s, lindi, i_mc_rand_1,
+      lma} exist in the BE_training_data schema (273 cols), so the worker template overlay drops any injected
+      activator (the row is reindexed to the dataset header) and bwkmcee_s stays 0 for every synthetic
+      case — the only achievable comparison is vacuous (0 == 0). Probe evidence (axiom-oracles#142, mirrors
+      the bfapl #150/#158 lineage): 112-combination live sweep over {TransLMA_be off/on} x {6 activator-injection
+      sets incl. all_activators} x {dgn 0/1} x {lhw 20/40} x {employee/self-employed} under BE_2025, real-config
+      BE_2024_c1_2015_03_e2 over BE_training_data — 112/112 cells returned bwkmcee_s=0 (with internal
+      bwkmceemy_s=lmcee_s=0 even when TransLMA_be is forced on and every activator column is injected,
+      confirming the overlay drop). Lineage: docs/be-coverage-matrix.md.'
   - id: be:ysecomp_be
     oracle_policy_name: ysecomp_be
     oracle_policy_type: ben
@@ -651,10 +663,20 @@ policies:
       - bwkmcse_s
       - bwkmcse01_s
       - bwkmcse02_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bwkmcse01_s
       - i_bwkmcse02_s
-    suite: null
-    note: 'BEN: Covid-19 wage compensation (self-employed bridging right); switch-on but historical. Carried
-      in scope pending the same exclusion decision.'
+    exclusion_reason: oracle_dataset_lacks_input
+    note: 'BEN: Covid-19 wage compensation for the self-employed (droit passerelle / bridging right, Law
+      23.03.2020 family), Switch=on in BE_2025 and writing bwkmcse_s. Every eligibility and BenCalc branch
+      is gated on lmcse_s (>=1) / bwkmcsemy_s (>0) — Elig_Cond loc=1 & bwkmcsemy_s>0 and loc!=1 & bwkmcsemy_s>0,
+      the four income-tier Comp_Cond branches all lead with lmcse_s>=1, and the awards bwkmcse01_s/bwkmcse02_s
+      = i_bwkmcse0*_s*bwkmcsemy_s/12. lmcse_s and bwkmcsemy_s are DefVar-initialised to 0; the sole writer
+      is TransLMA_be (Switch=off, "DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON"), selecting from
+      lindi x dgn x i_mc_rand_* draws. None of {lmcse, lmcse_s, bwkmcsemy, bwkmcsemy_s, lindi, i_mc_rand_1,
+      lma} — nor even ysemy (self-employed months) — exist in the BE_training_data schema, so the overlay
+      drops any injected activator and bwkmcse_s stays 0 for every synthetic case (vacuous 0 == 0). Probe
+      evidence: the same 112-combination BE_2025 sweep (axiom-oracles#142) returned bwkmcse_s=0 in 112/112
+      cells, self-employed rows (yse>0, yem=0) included, with TransLMA_be forced on and every activator
+      injected. Lineage: docs/be-coverage-matrix.md.'
