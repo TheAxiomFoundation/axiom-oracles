@@ -1112,19 +1112,11 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         ]
         == 0
     )
-    assert (
-        input_values[
-            f"{SECTION_1402_B_BASE}#input.net_earnings_from_self_employment"
-        ]
-        == "0.0"
-    )
-    assert input_values[f"{SECTION_164_F_BASE}#input.taxpayer_is_individual"] is True
-    assert (
-        input_values[
-            f"{SECTION_1401_BASE}#input.international_social_security_agreement_under_section_233_in_effect"
-        ]
-        is False
-    )
+    # The EITC program no longer imports the 1402/164(f)/1401 SECA chain;
+    # its earned income grounds in the 32(c)(2) net-earnings input.
+    assert not any("statutes/26/1402" in key for key in input_values)
+    assert not any("statutes/26/164/f" in key for key in input_values)
+    assert not any("statutes/26/1401#" in key for key in input_values)
     assert (
         input_values[
             f"{SECTION_7703_BASE}#input.taxpayer_married_at_close_of_taxable_year"
@@ -1132,18 +1124,6 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         is False
     )
     assert f"{SECTION_1401_BASE}#input.self_employment_income" not in input_values
-    assert (
-        input_values[
-            f"{SECTION_1402_B_BASE}#input.contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins"
-        ]
-        == "184500.0"
-    )
-    assert (
-        input_values[
-            f"{SECTION_1402_B_BASE}#input.wages_paid_to_individual_during_taxable_year_for_section_1401_a"
-        ]
-        == "18000.0"
-    )
     assert (
         input_values[
             f"{SECTION_152_C_BASE}#input.individual_is_child_of_taxpayer_or_descendant_of_such_child"

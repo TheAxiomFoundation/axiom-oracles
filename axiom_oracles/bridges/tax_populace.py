@@ -1570,55 +1570,10 @@ def build_eitc_request(
                     value,
                 )
             )
-        # 1402(a) is deferred upstream; its projected net-earnings inputs
-        # bind to the 1402(b) input slots.
-        for name, value in project_section_1402_a_tax_unit_inputs(
-            persons=tax_unit_persons,
-            contexts=contexts,
-        ).items():
-            inputs.append(
-                input_record(
-                    f"{SECTION_1402_B_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        for name, value in project_section_1402_b_tax_unit_inputs(
-            persons=tax_unit_persons,
-            contexts=contexts,
-            contribution_base=contribution_base,
-        ).items():
-            inputs.append(
-                input_record(
-                    f"{SECTION_1402_B_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        for name, value in project_section_164_f_tax_unit_inputs().items():
-            inputs.append(
-                input_record(
-                    f"{SECTION_164_F_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
-        for name, value in project_section_1401_tax_unit_inputs(
-            row=row,
-            persons=tax_unit_persons,
-            contexts=contexts,
-        ).items():
-            inputs.append(
-                input_record(
-                    f"{SECTION_1401_BASE}#input.{name}",
-                    entity_id,
-                    interval,
-                    value,
-                )
-            )
+        # The generated EITC re-encode grounds earned income in 32(c)(2)'s
+        # own net-earnings boundary input (supplied above); the program no
+        # longer imports the 1402/164(f)/1401 SECA chain, so those modules
+        # have no input slots here.
 
         for person_index, (person, context) in enumerate(
             zip(tax_unit_persons, contexts, strict=True)
