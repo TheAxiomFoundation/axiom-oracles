@@ -88,8 +88,11 @@ CB_MODULE = "uk:statutes/child_benefit/pilot_child_benefit_oracle_pipeline"
 # The composed pilot pipeline is effective from the 2026-27 tax year, where the
 # Child Benefit weekly rates are imported from the SI 2006/965 rate module. The
 # 2025-26 and 2026-27 rates are the same, so UKMOD UK_2025 and UK_2026 return
-# the same gross entitlement here.
-UK_CB_PERIOD = "2026"
+# the same gross entitlement here. The period is the 2026-27 UK tax year, keyed
+# to its 6 April start so the engine (which selects parameter versions by
+# period.start) reads the fiscal-year vintage. The synthetic runner overrides
+# this from the comparison config (same 2026-04-06 start).
+UK_CB_PERIOD = "2026-04-06"
 
 # EUROMOD codes.
 _DCT = 15
