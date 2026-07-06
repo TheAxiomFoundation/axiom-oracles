@@ -389,6 +389,118 @@ def test_boundary_generator_is_deterministic() -> None:
         assert rendered == second
 
 
+def _load_boundary_gen():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "_gen_boundary", _REPO_ROOT / "scripts" / "generate_boundary_cases.py"
+    )
+    gen = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gen)
+    return gen
+
+
+def _write_registry(tmp_path: Path, jurisdiction: str, concepts: list[dict]) -> Path:
+    root = tmp_path / "data"
+    root.mkdir(parents=True, exist_ok=True)
+    (root / f"{jurisdiction}.yaml").write_text(
+        yaml.safe_dump({"concepts": concepts}, sort_keys=False)
+    )
+    return root
+
+
+def _mapped_concept(name: str, engine: str, parameter: str, *, dtype="Money") -> dict:
+    return {
+        "id": f"test:{name}",
+        "kind": "output",
+        "name": name,
+        "dtype": dtype,
+        "mappings": {
+            engine: {
+                "mapping_type": "parameter_value",
+                "parameter": parameter,
+                "program": "income_tax",
+            }
+        },
+    }
+
+
+def test_uk_boundary_allowlist_surfaces_mapped_allowance_style_concepts(tmp_path) -> None:
+    # #135: an "allowance"-style boundary the GLOBAL threshold regex does not
+    # catch (no threshold/limit/bracket token) must be surfaced for UK once it
+    # carries a parameter_value mapping. Proven against a synthetic registry so
+    # the test does not depend on the live corpus mapping these yet.
+    gen = _load_boundary_gen()
+    for name, param in [
+        ("savings_allowance", "gov.hmrc.income_tax.allowances.personal_savings_allowance.basic"),
+        ("dividend_nil_rate_allowance", "gov.hmrc.income_tax.allowances.dividend_allowance"),
+        ("applicable_work_allowance_amount", "gov.dwp.universal_credit.means_test.work_allowance"),
+        ("prescribed_capital_limit_for_single_claimant", "gov.dwp.universal_credit.means_test.capital.limit"),
+    ]:
+        # Sanity: the global regex genuinely does NOT match these names, so the
+        # allowlist is doing the work (guards against the test passing because
+        # the base regex already caught it).
+        assert not gen._THRESHOLD_NAME.search(name), name
+        concept = _mapped_concept(name, "policyengine_uk", param)
+        root = _write_registry(tmp_path, "uk", [concept])
+        payload = gen.build_suggestions(root, ("uk",))["uk"]
+        emitted = {
+            case["probe"]["concept"]
+            for cs in payload["case_sets"].values()
+            for case in cs["cases"]
+        }
+        assert f"test:{name}" in emitted, f"UK allowlist did not surface {name}"
+
+
+def test_us_does_not_inherit_uk_boundary_allowlist(tmp_path) -> None:
+    # The scoping requirement: the same allowance-style concept under US must NOT
+    # surface (US uses only the global regex), so broadening UK never balloons US.
+    gen = _load_boundary_gen()
+    concept = _mapped_concept(
+        "savings_allowance", "policyengine_us", "gov.irs.something.allowance"
+    )
+    root = _write_registry(tmp_path, "us", [concept])
+    payload = gen.build_suggestions(root, ("us",))
+    # No case sets at all (the sole concept was filtered) — US stays untouched.
+    assert "us" not in payload or not payload["us"]["case_sets"]
+
+
+def test_global_threshold_regex_still_applies_to_all_jurisdictions(tmp_path) -> None:
+    # The allowlist is additive: a genuinely threshold-named concept still
+    # surfaces for both US and UK (the base behaviour is preserved).
+    gen = _load_boundary_gen()
+    for jurisdiction, engine in [("us", "policyengine_us"), ("uk", "policyengine_uk")]:
+        concept = _mapped_concept(
+            "income_limit", engine, "gov.x.income_limit"
+        )
+        root = _write_registry(tmp_path, jurisdiction, [concept])
+        payload = gen.build_suggestions(root, (jurisdiction,))[jurisdiction]
+        emitted = {
+            case["probe"]["concept"]
+            for cs in payload["case_sets"].values()
+            for case in cs["cases"]
+        }
+        assert "test:income_limit" in emitted
+
+
+def test_us_suggestions_byte_identical_after_allowlist_change() -> None:
+    # #135 acceptance: the scoped allowlist must leave US output byte-identical.
+    # Regenerate US from the live corpus and compare to the committed file;
+    # skips visibly when the corpus checkout is absent.
+    gen = _load_boundary_gen()
+    registry_root = gen._discover_registry_root()
+    if registry_root is None or not registry_root.is_dir():
+        pytest.skip("axiom-corpus concept registry not available in this checkout")
+    payload = gen.build_suggestions(registry_root, ("us",)).get("us")
+    assert payload is not None, "corpus present but produced no US suggestions"
+    rendered = gen._dump(payload)
+    committed = (_GRID_ROOT / "us.suggested.yaml").read_text()
+    assert rendered == committed, (
+        "US boundary suggestions changed under the #135 allowlist — the UK-scoped "
+        "tokens must not affect US output"
+    )
+
+
 def test_suggested_files_parse_and_carry_probe_provenance() -> None:
     # The suggestion files are valid YAML under the same schema version, and
     # every suggested case names the concept, PolicyEngine parameter, and side

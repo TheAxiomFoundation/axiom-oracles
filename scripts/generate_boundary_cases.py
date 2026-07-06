@@ -52,12 +52,60 @@ GRID_ROOT = _REPO_ROOT / "grids"
 _DEFAULT_JURISDICTIONS = ("us", "uk")
 
 # A concept whose *name* encodes a numeric boundary. Deliberately conservative:
-# these tokens are the ones the corpus uses for statutory thresholds.
+# these tokens are the ones the corpus uses for statutory thresholds. Applied to
+# EVERY jurisdiction — broadening it globally balloons US output (see #135), so
+# jurisdiction-specific boundary vocabularies live in the scoped allowlist below.
 _THRESHOLD_NAME = re.compile(
     r"threshold|phase[_-]?out[_-]?start|phase[_-]?out[_-]?begin|"
     r"_floor\b|_cap\b|_ceiling\b|_limit\b|bracket|income_limit",
     re.I,
 )
+
+# Per-jurisdiction *additional* boundary tokens (axiom-oracles#135). Some
+# jurisdictions gate real discontinuities with names the global regex above does
+# not catch — UK "allowance"-style boundaries (the personal savings allowance and
+# dividend nil-rate allowance edge a nil-rate band; the Universal Credit work
+# allowance sets the taper start; the UC capital limits are the £6k/£16k
+# eligibility cliffs). Adding these tokens to the *global* regex would balloon the
+# US grid (the US corpus has 144 further parameter_value-mapped numeric concepts
+# whose names carry "allowance"/"amount"/"limit"-adjacent tokens — +288 cases,
+# more than doubling US output). Scoping them per jurisdiction keeps US
+# byte-identical (US falls back to the global regex alone) while letting UK reach
+# its allowance/capital-limit boundaries the moment they carry a parameter_value
+# mapping. As of this change the four families are still classified
+# ``not_comparable`` upstream in the axiom-encode PE-mapping source
+# (``oracles/policyengine/mappings/uk.yaml``: legal_id_prefix entries for
+# ukpga/2007/3/12B, 13A and uksi/2013/376/18, /22 — "parameter-level comparisons
+# not yet registered"), so this allowlist emits nothing for them YET; it removes
+# the oracles-side name-filter blocker so they surface automatically if/when
+# axiom-encode registers a parameter_value comparison. This keeps the two gates
+# independent: the name filter (here) and the mapping gate (the corpus edge).
+#
+# NB these are boundary tokens (a straddle point), NOT benefit-amount tokens: a
+# bare "allowance" would also drag in award LEVELS (e.g. attendance-allowance
+# weekly rates) that are not thresholds a case straddles, so the UK set names the
+# specific boundary families #135 calls out rather than every "allowance".
+_JURISDICTION_BOUNDARY_TOKENS: dict[str, re.Pattern[str]] = {
+    "uk": re.compile(
+        r"savings_allowance|dividend_nil_rate|dividend_allowance|"
+        r"work_allowance|capital_limit|prescribed_capital",
+        re.I,
+    ),
+}
+
+
+def _name_is_boundary(name: str, jurisdiction: str) -> bool:
+    """True if the concept name reads as a numeric boundary for this jurisdiction.
+
+    The global :data:`_THRESHOLD_NAME` applies everywhere; a jurisdiction may add
+    boundary tokens via :data:`_JURISDICTION_BOUNDARY_TOKENS` without widening the
+    match for any other jurisdiction (the #135 scoping requirement).
+    """
+    if _THRESHOLD_NAME.search(name):
+        return True
+    extra = _JURISDICTION_BOUNDARY_TOKENS.get(jurisdiction)
+    return bool(extra and extra.search(name))
+
 
 # dtypes that denote a numeric boundary a case can straddle. Judgment/String
 # concepts are booleans/labels, not straddle-able amounts.
@@ -93,7 +141,7 @@ def _pe_mapping(concept: dict) -> dict | None:
     return None
 
 
-def _threshold_concepts(registry_path: Path) -> list[dict]:
+def _threshold_concepts(registry_path: Path, jurisdiction: str) -> list[dict]:
     payload = yaml.safe_load(registry_path.read_text()) or {}
     concepts = payload.get("concepts") or []
     hits: list[dict] = []
@@ -101,7 +149,7 @@ def _threshold_concepts(registry_path: Path) -> list[dict]:
         if not isinstance(concept, dict):
             continue
         name = str(concept.get("name", ""))
-        if not _THRESHOLD_NAME.search(name):
+        if not _name_is_boundary(name, jurisdiction):
             continue
         if concept.get("dtype") not in _NUMERIC_DTYPES:
             continue
@@ -173,7 +221,7 @@ def build_suggestions(registry_root: Path, jurisdictions) -> dict[str, dict]:
         registry_path = registry_root / f"{jurisdiction}.yaml"
         if not registry_path.exists():
             continue
-        concepts = _threshold_concepts(registry_path)
+        concepts = _threshold_concepts(registry_path, jurisdiction)
         if not concepts:
             continue
         case_sets: dict[str, dict] = {}
