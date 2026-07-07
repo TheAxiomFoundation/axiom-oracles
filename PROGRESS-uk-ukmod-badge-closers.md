@@ -31,12 +31,24 @@ AXIOM_RULESPEC_REPO_ROOTS=~/TheAxiomFoundation` then `.venv/bin/python scripts/r
     cases dropped from the oracle grid (not dispositioned — Axiom-side); taper arithmetic
     is graded to the penny by the #83 pipeline's own companion tests. → rulespec-uk issue.
 
-## Remaining uncovered (9): bched01, bched02, bchht, bchmt, bcrdicm, bhosc01, bsadi, bunct, bwkmt_bfamt
-- Track 2 exclusions: bwkmt_bfamt (WTC/CTC repealed 5 Apr 2025 — oracle models repealed law),
-  bsadi (dataset LCW-input audit). bhosc01 (discretionary DHP). bched01/02 (passported
-  non-statutory). → shrink in_scope with probe evidence.
-- bchmt (SCP, encoded both sides): build suite + regen (take-up pinned).
+## Track 2 — EXCLUSION ADJUDICATIONS (DONE, evidence-first)
+- `bwkmt_bfamt` (WTC/CTC): EXCLUDED **oracle_models_repealed_law** (NEW enum value added to
+  schema.py). Tax credits ended 5 Apr 2025 (GOV.UK). Live probe: UKMOD UK_2026 returns
+  bwkmt_s/bfamt_s = 0 for single-childless-30h + lone-parent synthetic cases with take-up
+  pinned and $UCtransition=0 (gated to a pre-repeal legacy population). The wave-2 note's
+  nonzero figures are NOT reproducible. Axiom has no current-law tax-credit surface by design.
+- `bsadi` (ir-ESA): EXCLUDED **oracle_dataset_lacks_input**. The ir-ESA phase input ddipd/ddipd00
+  is absent from the 364-col training_data schema; the adapter is schema-bounded (skips non-header
+  keys) so ddipd can't be supplied synthetically → bsadi01_s/bsadi00_s can never fire (probe: 0).
+  Same class as BE bfapl (oracles#160). ir-ESA is extant law, so missing-input, not repeal.
+- Probe committed: `scripts/probe_uk_repealed_and_missing_input.py`.
+- **UK now covered 17/24, unexplained 0, axiom 0.**
+
+## Remaining uncovered (7): bched01, bched02, bchht, bchmt, bcrdicm, bhosc01, bunct
+- Dataset audit confirmed buildable (inputs present in training_data): bcrdi (bcrdicm), bunct+les+lhw01 (bunct).
+- bchmt (SCP, encoded both sides): build suite + regen (take-up pinned; Scotland drgn1=12).
 - Net-new (ingest+encode via codex/gpt-5.5, then suite): bchht (CWHA), bcrdicm (CA Supplement),
   bunct (contributory JSA).
+- bhosc01 (discretionary Scottish DHP), bched01/02 (passported non-statutory FSM/clothing): adjudicate build vs exclude.
 
 ## uk-pe legacy_means_tested — TODO (read PE 2.89.2 legacy IS/JSA-ib/ESA-ir/HB; suite vs PE or exclude).

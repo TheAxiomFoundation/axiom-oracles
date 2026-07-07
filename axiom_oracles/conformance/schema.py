@@ -63,6 +63,24 @@ CONFORMANCE_SCHEMA_VERSION = "axiom_oracles.conformance.v1"
 #:   dataset schema, so ``bfapl_s`` stays 0 for every synthetic case (probe
 #:   lineage: rulespec-be#86, axiom-oracles#150/#158, axiom-oracles#160). Requires
 #:   a ``note`` recording the absent input and the probe evidence pointer.
+#: - ``oracle_models_repealed_law``: the oracle retains a policy for a benefit or
+#:   tax REPEALED before the validation period, so there is no current-law
+#:   instrument for Axiom (which encodes current law) to compare. The policy is
+#:   switch=on and runs, but produces no payable/current output for synthetic
+#:   cases in the validation period — typically because it is gated (through the
+#:   UKMOD Universal-Credit transition or a legacy-claimant receipt input) to a
+#:   pre-repeal population that no longer exists. Distinct from
+#:   ``oracle_dataset_lacks_input`` (there a dataset column WOULD make it
+#:   comparable; here no dataset fix can, because the instrument itself is
+#:   repealed and Axiom has no current-law surface for it by design) and from
+#:   ``technical`` (a real instrument, not scaffolding). Requires a ``note``
+#:   recording the repeal with a citation AND probe evidence that the oracle
+#:   produces no current output. Canonical case: UK ``bwkmt_bfamt`` Working Tax
+#:   Credit / Child Tax Credit — tax credits ended 5 April 2025 (GOV.UK
+#:   www.gov.uk/tax-credits-have-ended), and UKMOD UK_2026 returns
+#:   ``bwkmt_s``/``bfamt_s`` = 0 across a synthetic earnings/hours/labour-status
+#:   sweep with take-up pinned and the UC transition disabled (probe:
+#:   scripts/probe_uk_repealed_and_missing_input.py).
 EXCLUSION_REASONS: tuple[str, ...] = (
     "input_carrying",
     "technical",
@@ -71,6 +89,7 @@ EXCLUSION_REASONS: tuple[str, ...] = (
     "unobservable_boundary",
     "extension_not_available",
     "oracle_dataset_lacks_input",
+    "oracle_models_repealed_law",
 )
 
 ExclusionReason = Literal[
@@ -81,6 +100,7 @@ ExclusionReason = Literal[
     "unobservable_boundary",
     "extension_not_available",
     "oracle_dataset_lacks_input",
+    "oracle_models_repealed_law",
 ]
 
 #: Comparability of an *in-scope* policy's output surface — how faithfully a
