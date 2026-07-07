@@ -1313,6 +1313,43 @@ concepts:
           type: country
           geoid: UK
 
+  uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount:
+    description: UK Scottish Child Payment award (single-child Scotland benefit unit)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the Scottish Child Payment per child (SSI 2020/351): a
+    # weekly amount for a qualifying child under 16 whose applicant or partner
+    # receives a qualifying means-tested benefit. UKMOD returns the same payment
+    # as bchmt_s (bchmt_uk), passporting off il_bchmt (the qualifying awards) for
+    # a Scotland benefit unit (drgn1=12) and take-up-adjusted by the i_rand_tu
+    # draw against $SCPTUu6y / $SCPTU6to15y, which for hypothetical benefit units
+    # can zero the reported award away from the entitlement. The grid is
+    # single-child so the per-child pipeline amount equals the benefit-unit
+    # bchmt_s. UKMOD bchmt_s is monthly; the adapter annualizes it (×12) so the
+    # comparison is annual-to-annual against the pipeline's annual amount. The
+    # weekly statutory rate is identical (28.20); the residual is only the
+    # annualization convention (UKMOD 365/7 vs the pipeline's 52 weeks/year),
+    # dispositioned explained_residual. An absolute tolerance to the pound
+    # catches structural encoding gaps; take-up-driven zeroing is classified as a
+    # UKMOD-side artefact rather than absorbed by tolerance.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: scottish_child_payment_annual_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bchmt_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#uk_nic_pilot_er_secondary_class_1_contribution:
     description: UK employer secondary Class 1 National Insurance contribution (single employment)
     category: social_contributions

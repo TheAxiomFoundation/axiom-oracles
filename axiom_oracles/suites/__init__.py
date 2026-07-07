@@ -57,6 +57,7 @@ from .uk_self_employed import (
 from .uk_benefit_cap import uk_benefit_cap_cases
 from .uk_child_benefit import uk_child_benefit_cases
 from .uk_housing_benefit import uk_housing_benefit_cases
+from .uk_scottish_child_payment import uk_scottish_child_payment_cases
 from .uk_passported_grants import (
     uk_best_start_foods_cases,
     uk_healthy_start_cases,
@@ -121,6 +122,7 @@ def available_suites() -> tuple[str, ...]:
         "uk-winter-fuel",
         "uk-pension-credit",
         "uk-housing-benefit",
+        "uk-scottish-child-payment",
         "uk-income-tax-scottish",
         "uk-child-benefit",
         "uk-statutory-maternity-pay",
@@ -220,6 +222,8 @@ def load_suite(name: str):
         return uk_pension_credit_cases()
     if name == "uk-housing-benefit":
         return uk_housing_benefit_cases()
+    if name == "uk-scottish-child-payment":
+        return uk_scottish_child_payment_cases()
     if name == "uk-income-tax-scottish":
         return uk_income_tax_scottish_cases()
     if name == "uk-child-benefit":
@@ -284,6 +288,7 @@ __all__ = [
     "uk_child_benefit_cases",
     "uk_healthy_start_cases",
     "uk_housing_benefit_cases",
+    "uk_scottish_child_payment_cases",
     "uk_maternity_allowance_cases",
     "uk_winter_fuel_cases",
     "uk_pension_credit_cases",

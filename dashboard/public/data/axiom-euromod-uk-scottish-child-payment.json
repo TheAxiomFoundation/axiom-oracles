@@ -1,0 +1,745 @@
+{
+  "aggregates": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+      "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+      "left_weighted_sum": 4411.285714,
+      "match_rate": 25,
+      "match_weight": 1,
+      "mismatch_count": 3,
+      "mismatch_weight": 3,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 4399.2,
+      "weighted_difference": 12.085714,
+      "weighted_match_rate": 25
+    }
+  ],
+  "case_count": 4,
+  "cases": [
+    {
+      "case_id": "uk-scp-scotland-child4-uc",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/govuk/scottish-child-payment#input.applicant_or_partner_receives_qualifying_benefit": true,
+          "uk:policies/govuk/scottish-child-payment#input.child_age": 4,
+          "uk:policies/govuk/scottish-child-payment#input.person_lives_in_scotland": true
+        },
+        "child_age": 4,
+        "euromod_constant_overrides": [
+          [
+            "$UCtransition",
+            "0"
+          ],
+          [
+            "$SCPTUu6y",
+            "1.0"
+          ],
+          [
+            "$SCPTU6to15y",
+            "1.0"
+          ],
+          [
+            "$ISTUChild",
+            "1.0"
+          ]
+        ],
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 30,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 20,
+            "lhw01": 20,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 500.0,
+            "xhcsc": 0.0,
+            "yem": 400.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 4,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 4,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 201,
+            "les": 6,
+            "lhw": 0,
+            "lhw01": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "xhcsc": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "household_summary": {
+          "ages": [
+            30,
+            4
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            4800.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 4800.0
+        },
+        "locale": "UK",
+        "on_qualifying_benefit": true,
+        "scenario": "scotland-scottish-child-payment",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+          "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+          "difference": 4.0285714285714675,
+          "kind": "amount_difference",
+          "left": 1470.4285714285716,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1466.4,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-scp-scotland-child7-uc",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/govuk/scottish-child-payment#input.applicant_or_partner_receives_qualifying_benefit": true,
+          "uk:policies/govuk/scottish-child-payment#input.child_age": 7,
+          "uk:policies/govuk/scottish-child-payment#input.person_lives_in_scotland": true
+        },
+        "child_age": 7,
+        "euromod_constant_overrides": [
+          [
+            "$UCtransition",
+            "0"
+          ],
+          [
+            "$SCPTUu6y",
+            "1.0"
+          ],
+          [
+            "$SCPTU6to15y",
+            "1.0"
+          ],
+          [
+            "$ISTUChild",
+            "1.0"
+          ]
+        ],
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 30,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 20,
+            "lhw01": 20,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 500.0,
+            "xhcsc": 0.0,
+            "yem": 400.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 7,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 4,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 201,
+            "les": 6,
+            "lhw": 0,
+            "lhw01": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "xhcsc": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "household_summary": {
+          "ages": [
+            30,
+            7
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            4800.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 4800.0
+        },
+        "locale": "UK",
+        "on_qualifying_benefit": true,
+        "scenario": "scotland-scottish-child-payment",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+          "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+          "difference": 4.0285714285714675,
+          "kind": "amount_difference",
+          "left": 1470.4285714285716,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1466.4,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-scp-scotland-child15-uc",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/govuk/scottish-child-payment#input.applicant_or_partner_receives_qualifying_benefit": true,
+          "uk:policies/govuk/scottish-child-payment#input.child_age": 15,
+          "uk:policies/govuk/scottish-child-payment#input.person_lives_in_scotland": true
+        },
+        "child_age": 15,
+        "euromod_constant_overrides": [
+          [
+            "$UCtransition",
+            "0"
+          ],
+          [
+            "$SCPTUu6y",
+            "1.0"
+          ],
+          [
+            "$SCPTU6to15y",
+            "1.0"
+          ],
+          [
+            "$ISTUChild",
+            "1.0"
+          ]
+        ],
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 30,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 20,
+            "lhw01": 20,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 500.0,
+            "xhcsc": 0.0,
+            "yem": 400.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 15,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 4,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 201,
+            "les": 6,
+            "lhw": 0,
+            "lhw01": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "xhcsc": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "household_summary": {
+          "ages": [
+            30,
+            15
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            4800.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 4800.0
+        },
+        "locale": "UK",
+        "on_qualifying_benefit": true,
+        "scenario": "scotland-scottish-child-payment",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+          "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+          "difference": 4.0285714285714675,
+          "kind": "amount_difference",
+          "left": 1470.4285714285716,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1466.4,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "uk-scp-scotland-child16-uc",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Family",
+        "axiom_entity_id": "benefit_unit",
+        "axiom_inputs": {
+          "uk:policies/govuk/scottish-child-payment#input.applicant_or_partner_receives_qualifying_benefit": true,
+          "uk:policies/govuk/scottish-child-payment#input.child_age": 16,
+          "uk:policies/govuk/scottish-child-payment#input.person_lives_in_scotland": true
+        },
+        "child_age": 16,
+        "euromod_constant_overrides": [
+          [
+            "$UCtransition",
+            "0"
+          ],
+          [
+            "$SCPTUu6y",
+            "1.0"
+          ],
+          [
+            "$SCPTU6to15y",
+            "1.0"
+          ],
+          [
+            "$ISTUChild",
+            "1.0"
+          ]
+        ],
+        "euromod_inputs": [
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 30,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhr": 1,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idmotherbio": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lhw": 20,
+            "lhw01": 20,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 500.0,
+            "xhcsc": 0.0,
+            "yem": 400.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          },
+          {
+            "afc": 0.0,
+            "amrtn": 5,
+            "boact00": 0.0,
+            "dag": 16,
+            "dct": 15,
+            "ddi": 0,
+            "dec": 4,
+            "dgn": 1,
+            "dhr": 0,
+            "dms": 1,
+            "drgn1": 12,
+            "dwt": 1000.0,
+            "idfather": 0,
+            "idfatherbio": 0,
+            "idhh": 1,
+            "idmother": 101,
+            "idmotherbio": 101,
+            "idpartner": 0,
+            "idperson": 201,
+            "les": 6,
+            "lhw": 0,
+            "lhw01": 0,
+            "loc": 5,
+            "poa": 0.0,
+            "xhcrt": 0.0,
+            "xhcsc": 0.0,
+            "yem": 0.0,
+            "yiy": 0.0,
+            "yse": 0.0
+          }
+        ],
+        "euromod_policy_switch_overrides": [
+          [
+            "BTA_uk",
+            false
+          ],
+          [
+            "random_uk",
+            false
+          ]
+        ],
+        "household_summary": {
+          "ages": [
+            30,
+            16
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            4800.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 4800.0
+        },
+        "locale": "UK",
+        "on_qualifying_benefit": true,
+        "scenario": "scotland-scottish-child-payment",
+        "scope": {
+          "geoid": "UK",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+      "id": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "uk-scp-scotland-child4-uc",
+      "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+      "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+      "difference": 4.0285714285714675,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "weeks-convention-residual-child4"
+      },
+      "kind": "amount_difference",
+      "left": 1470.4285714285716,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1466.4,
+      "scenario": "scotland-scottish-child-payment",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-scp-scotland-child7-uc",
+      "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+      "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+      "difference": 4.0285714285714675,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "weeks-convention-residual-child7"
+      },
+      "kind": "amount_difference",
+      "left": 1470.4285714285716,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1466.4,
+      "scenario": "scotland-scottish-child-payment",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-scp-scotland-child15-uc",
+      "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+      "description": "UK Scottish Child Payment award (single-child Scotland benefit unit)",
+      "difference": 4.0285714285714675,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "weeks-convention-residual-child15"
+      },
+      "kind": "amount_difference",
+      "left": 1470.4285714285716,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1466.4,
+      "scenario": "scotland-scottish-child-payment",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-07T17:55:45Z",
+    "generated_by": "scripts/run_comparison.py::uk-scottish-child-payment-ukmod",
+    "oracle": {
+      "euromod_country": "UK",
+      "euromod_dataset": "training_data",
+      "euromod_release": "B2026.03",
+      "euromod_system": "UK_2026",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": "17fc102363f7a9a32a2751e9f8cf92d5bdc1c79c"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-scottish-child-payment",
+  "summary": {
+    "comparison_count": 4,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 3,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/uk-scottish-child-payment.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 25,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 1,
+    "mismatch_count": 3,
+    "mismatches_by_concept": [
+      {
+        "count": 3,
+        "value": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 3,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 3,
+        "value": "scotland-scottish-child-payment"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 4,
+      "match_rate": 25,
+      "match_weight": 1,
+      "mismatch_weight": 3
+    }
+  }
+}

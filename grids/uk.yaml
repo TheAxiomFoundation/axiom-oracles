@@ -1502,6 +1502,145 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 150000.0
+  uk-scottish-child-payment:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount
+    cases:
+    - id: uk-scp-scotland-child4-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 4
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 4
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+    - id: uk-scp-scotland-child7-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 7
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 7
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+    - id: uk-scp-scotland-child15-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 15
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 15
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+    - id: uk-scp-scotland-child16-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 16
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 16
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
   uk-self-employed-nic:
     locale: UK
     entity: Person

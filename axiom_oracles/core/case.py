@@ -216,6 +216,16 @@ class Concepts:
         "uk:policies/housing_benefit_composed_entitlement_pipeline"
         "#hb_pilot_entitlement"
     )
+    # Scottish Child Payment (rulespec-uk uk/policies/govuk/scottish-child-payment,
+    # SSI 2020/351) — the devolved weekly payment for a qualifying child under 16
+    # whose applicant or partner receives a qualifying means-tested benefit, paid
+    # per child at the flat weekly rate. The per-child annual amount
+    # (scottish_child_payment_annual_amount) grades against UKMOD's benefit-unit
+    # Scottish Child Payment output bchmt_s on single-child Scotland cases.
+    UK_HOUSEHOLD_SCOTTISH_CHILD_PAYMENT_AWARD = (
+        "uk:policies/govuk/scottish-child-payment"
+        "#scottish_child_payment_annual_amount"
+    )
     # Composed savings-and-dividend income tax pipeline (rulespec-uk) that wires
     # the section 12/12A/12B/13/13A stage boundaries from gross earned, savings,
     # and dividend income, so an end-to-end UKMOD tin_s comparison can run for

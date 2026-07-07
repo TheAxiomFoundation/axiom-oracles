@@ -1,0 +1,86 @@
+schema: axiom_oracles.dispositions.v1
+suite: uk-scottish-child-payment
+updated: "2026-07-07"
+# The rulespec-uk Scottish Child Payment (SSI 2020/351) and UKMOD bchmt_s agree
+# on the WEEKLY statutory rate exactly (28.20/week for a qualifying child under
+# 16 in Scotland whose applicant/partner receives a qualifying benefit). The
+# only difference on the three qualifying single-child cases is the
+# ANNUALIZATION CONVENTION: UKMOD annualizes the weekly rate at 365/7 =
+# 52.142857 weeks/year (28.20 * 365 / 7 = 1,470.43), while the pipeline uses
+# scottish_child_payment_weeks_in_year = 52 (28.20 * 52 = 1,466.40). Neither is
+# an encoding error — it is a period-conversion convention, so the residual
+# (4.03/year, a constant 0.142857 * 28.20) is dispositioned explained_residual.
+# The child-aged-16 case matches at zero on both engines (the maximum-age gate),
+# and the take-up pins ($SCPTUu6y/$SCPTU6to15y = 1.0, $ISTUChild = 1.0,
+# $UCtransition = 0) make the payment fire deterministically, so no take-up zero
+# needs dispositioning.
+entries:
+  - id: weeks-convention-residual-child4
+    concept: uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount
+    case_id: uk-scp-scotland-child4-uc
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Identical weekly Scottish Child Payment rate (28.20/week) on both
+        engines; the 4.03/year difference is only the annualization convention —
+        UKMOD uses 365/7 weeks/year, the pipeline uses 52.
+      arithmetic:
+        - expression: "28.20 * 365 / 7"
+          equals: 1470.4285714285716
+        - expression: "28.20 * 52"
+          equals: 1466.40
+        - expression: "1470.4285714285716 - 1466.40"
+          equals: 4.0285714285716
+      sources:
+        - axiom_oracles/suites/uk_scottish_child_payment.py
+    expires_on_source_change: true
+    pinned:
+      left: 1470.4285714285716
+      right: 1466.40
+  - id: weeks-convention-residual-child7
+    concept: uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount
+    case_id: uk-scp-scotland-child7-uc
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Identical weekly Scottish Child Payment rate (28.20/week); the 4.03/year
+        difference is only the annualization convention (UKMOD 365/7 vs the
+        pipeline's 52 weeks/year).
+      arithmetic:
+        - expression: "28.20 * 365 / 7"
+          equals: 1470.4285714285716
+        - expression: "28.20 * 52"
+          equals: 1466.40
+        - expression: "1470.4285714285716 - 1466.40"
+          equals: 4.0285714285716
+      sources:
+        - axiom_oracles/suites/uk_scottish_child_payment.py
+    expires_on_source_change: true
+    pinned:
+      left: 1470.4285714285716
+      right: 1466.40
+  - id: weeks-convention-residual-child15
+    concept: uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount
+    case_id: uk-scp-scotland-child15-uc
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Identical weekly Scottish Child Payment rate (28.20/week); the 4.03/year
+        difference is only the annualization convention (UKMOD 365/7 vs the
+        pipeline's 52 weeks/year).
+      arithmetic:
+        - expression: "28.20 * 365 / 7"
+          equals: 1470.4285714285716
+        - expression: "28.20 * 52"
+          equals: 1466.40
+        - expression: "1470.4285714285716 - 1466.40"
+          equals: 4.0285714285716
+      sources:
+        - axiom_oracles/suites/uk_scottish_child_payment.py
+    expires_on_source_change: true
+    pinned:
+      left: 1470.4285714285716
+      right: 1466.40
