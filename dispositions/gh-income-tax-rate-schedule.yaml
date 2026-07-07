@@ -1,0 +1,37 @@
+schema: axiom_oracles.dispositions.v1
+suite: gh-income-tax-rate-schedule
+updated: "2026-07-07"
+entries:
+  - id: rate-schedule-missing-act-1111-35pct-top-band-700k
+    concept: gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax
+    case_id: gh-rate-700k-35pct-band
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        GHAMOD's simulated labour income tax tin_s applies only five marginal-
+        rate bands and taxes chargeable income above 238,760 GHS at a flat 30%,
+        never applying the 35% top marginal rate that the Income Tax (Amendment)
+        (No. 2) Act 2023 (Act 1111) introduced on income exceeding 605,000 GHS
+        (the six explicit band widths 5,880 / 1,320 / 1,560 / 38,000 / 192,000 /
+        366,240 sum to 605,000; the First Schedule labels the band "Exceeding
+        GH 600,000"). The encoded rulespec-gh schedule applies the statutory 35%
+        band above 605,000. At chargeable income 700,000 GHS GHAMOD returns
+        tin_s = 193,244 while the encoded schedule returns 197,994; the 4,750
+        difference is exactly 5% (35% minus 30%) of the 95,000 above 605,000
+        that GHAMOD taxes at 30% rather than 35%. The two engines agree to the
+        cedi for all chargeable income at or below 605,000. The encoded schedule
+        is statutorily correct; GHAMOD is the simplified oracle.
+      arithmetic:
+        - expression: "0.05 * (700000 - 605000)"
+          equals: 4750
+          tolerance: 0.001
+        - expression: "193244 - 197994"
+          equals: -4750
+          tolerance: 0.001
+      sources:
+        - axiom_oracles/data/ghamod_issues.json#ghamod-tin-s-missing-act-1111-35pct-top-band
+    expires_on_source_change: true
+    pinned:
+      left: 193244.0
+      right: 197994.0

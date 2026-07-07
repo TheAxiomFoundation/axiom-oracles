@@ -1,6 +1,105 @@
+mappings:
+  # Ghana outputs are validated against GHAMOD (SOUTHMOD Ghana, run on the
+  # EUROMOD engine), not PolicyEngine, which has no Ghana model. These explicit
+  # entries record the GHAMOD household-oracle wiring for the income-tax rate
+  # schedule and the Fifth Schedule personal reliefs; they stay not_comparable
+  # to PolicyEngine because there is no Ghana PolicyEngine target, mirroring the
+  # UKMOD-compared UK pipeline entries. The comparisons live in the
+  # gh-income-tax-rate-schedule and gh-personal-reliefs suites
+  # (concept_mappings.yaml, comparisons/, dashboard/public/data/); GHAMOD-
+  # produced parity values and the oracle-side gaps are recorded there and in
+  # axiom_oracles/data/ghamod_issues.json.
+  - legal_id: gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Resident individual income tax over chargeable income (Income Tax
+      (Amendment) (No. 2) Act 2023, Act 1111, First Schedule bands). Validated
+      against GHAMOD tin_s by the gh-income-tax-rate-schedule suite (SOUTHMOD
+      A4.0, GH_2025): exact to the cedi for chargeable income at or below
+      605,000; the 700,000 case is dispositioned as an oracle gap because
+      GHAMOD's schedule omits the Act 1111 35% top band. PolicyEngine has no
+      Ghana model, so there is no PolicyEngine oracle target; the household
+      oracle is GHAMOD.
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#resident_individual_personal_reliefs
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Total Fifth Schedule personal reliefs (Income Tax Act 2015, Act 896,
+      section 51 and Fifth Schedule as amended by Act 1007). Its component
+      reliefs are each validated to the cedi against GHAMOD's per-relief
+      tinta0X_s outputs by the gh-personal-reliefs suite; the total is their
+      deterministic sum. No single GHAMOD variable reports the total, and
+      PolicyEngine has no Ghana model, so there is no one-to-one oracle target
+      for the aggregate.
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Marriage relief for a dependent spouse or at least two dependant children
+      (Act 896 Fifth Schedule paragraph 1(a)). Validated against GHAMOD tinta01_s
+      (dependent-spouse limb) by the gh-personal-reliefs suite: 1,200 GHS, exact.
+      GHAMOD's separate lone-parent limb (tinta02) does not fire for synthetic
+      lone-parent households (axiom_oracles/data/ghamod_issues.json), so the
+      two-child limb is validated through the spouse limb. Not comparable to
+      PolicyEngine (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Disability relief of 25% of assessable business/employment income (Act 896
+      Fifth Schedule paragraph 1(b)). Validated against GHAMOD tinta07_s by the
+      gh-personal-reliefs suite, bridged on the engine's own tax base so both
+      take 25% of the identical amount; exact. Not comparable to PolicyEngine
+      (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Old-age relief for an individual aged 60 or above (Act 896 Fifth Schedule
+      paragraph 1(c), amount as amended by Act 1007). Validated against GHAMOD
+      tinta03_s by the gh-personal-reliefs suite: 1,500 GHS, exact. Not
+      comparable to PolicyEngine (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Child-education relief of 600 GHS per child in education, capped at three
+      (Act 896 Fifth Schedule paragraph 1(d), amount as amended by Act 1007).
+      Validated against GHAMOD tinta05_s by the gh-personal-reliefs suite,
+      including the three-child cap; exact. Not comparable to PolicyEngine (no
+      Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Relief of 1,000 GHS per aged dependant relative, capped at two (Act 896
+      Fifth Schedule paragraph 1(e), amount as amended by Act 1007). Validated
+      against GHAMOD tinta06_s by the gh-personal-reliefs suite, including the
+      two-relative cap; exact. Not comparable to PolicyEngine (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#training_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Professional/technical/vocational training relief, cost capped at 2,000 GHS
+      (Act 896 Fifth Schedule paragraph 1(f), amount as amended by Act 1007). No
+      live GHAMOD comparison: GHAMOD's tinta04 training relief is switched off
+      and emits no output column at all (documented oracle gap in
+      axiom_oracles/data/ghamod_issues.json); the encoded relief is exercised by
+      the rulespec-gh companion tests. Not comparable to PolicyEngine (no Ghana
+      model).
+
 prefixes:
   - legal_id_prefix: "gh:"
     country: gh
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: PolicyEngine has no Ghana model and cannot serve as a Ghana tax-benefit oracle. Axiom Ghana outputs are built from official Ghana legislation (Income Tax Act 2015, Act 896, as amended) and GRA/LEAP sources; the intended household oracle is GHAMOD (UNU-WIDER SOUTHMOD), which attaches once the model-and-data bundle clears licensing. Exact PolicyEngine mappings should be added only after a real one-to-one Ghana oracle target is implemented and verified.
+    rationale: PolicyEngine has no Ghana model and cannot serve as a Ghana tax-benefit oracle. Axiom Ghana outputs are built from official Ghana legislation (Income Tax Act 2015, Act 896, as amended) and GRA/LEAP sources; the household oracle is GHAMOD (UNU-WIDER SOUTHMOD, EUROMOD engine), wired for the income-tax rate schedule and Fifth Schedule reliefs by the gh-income-tax-rate-schedule and gh-personal-reliefs suites (see the explicit mappings above and concept_mappings.yaml). This prefix classifies any remaining Ghana output that has no explicit entry as not comparable to PolicyEngine; add exact PolicyEngine mappings only if a real one-to-one Ghana PolicyEngine oracle target is ever implemented.
