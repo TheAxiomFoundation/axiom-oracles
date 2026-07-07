@@ -250,7 +250,7 @@ policies:
     oracle_policy_type: ben
     output_vars:
       - bched01_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bched01a
       - i_bched01b
@@ -259,40 +259,46 @@ policies:
       - i_UC_means_earned_adj
       - n/a
       - sel2_s
-    suite: null
-    note: 'BEN: Free School Meals (UKMOD comment "BEN: Free School Meals"), not a Child Benefit education-age
-      extension despite the bch* prefix. bched01_s is a passported, means-tested devolved benefit: eligibility
-      passports off receipt of other means-tested awards (bsa_s, bunmt_s, bsadi_s, bfamt_s/bwkmt_s with
-      il_TC_means thresholds, bsauc_s with i_UC_means_earned_adj, boamtmm_s) crossed with primary/secondary
-      age bands and region (drgn1=12 Scotland, drgn1=13 NI), valued at $BFSMprim / $BFSMsec and scaled
-      by the take-up factors $BFSMPrUnTakeUp/$BFSMPrMtTakeUp/$BFSMScMtTakeUp. Not encoded in Axiom (no
-      FSM pipeline in rulespec-uk), and the synthetic UK grids run drgn1=2, so no current case activates
-      it. Groundability assessment (this-wave): FSM is not a standalone statutory rate-and-threshold rule
-      that grounds cleanly like the Scottish Child Payment — it is a passported service (Education (Scotland)
-      Act 1980 s.53-55 powers; devolved Scottish/NI administration) whose eligibility is derived from
-      receipt of the upstream means-tested benefits and whose rate is set administratively and take-up-scaled.
-      Encoding it therefore requires the upstream benefits (UC/IS/JSA/ESA/HB/PC) encoded first plus a
-      non-standard derived-entitlement layer, not a self-contained corpus ingest. Uncovered; the honest
-      build path is a passported surface (region/passporting inputs) layered on those upstream awards,
-      not encoder-first from a single statute. Out of scope for the child-benefit + benefit-cap lane.'
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'BEN: Free School Meals (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child
+      Benefit education-age extension despite the bch* prefix. bched01_s is a passported, means-tested
+      devolved benefit: eligibility passports off receipt of other means-tested awards (bsa_s, bunmt_s,
+      bsadi_s, bfamt_s/bwkmt_s with il_TC_means thresholds, bsauc_s with i_UC_means_earned_adj, boamtmm_s)
+      crossed with primary/secondary age bands and region (drgn1=12 Scotland, drgn1=13 NI), valued at
+      $BFSMprim / $BFSMsec and scaled by the take-up factors $BFSMPrUnTakeUp/$BFSMPrMtTakeUp/$BFSMScMtTakeUp.
+      Not encoded in Axiom (no FSM pipeline in rulespec-uk), and the synthetic UK grids run drgn1=2, so
+      no current case activates it. Groundability assessment (this-wave): FSM is not a standalone statutory
+      rate-and-threshold rule that grounds cleanly like the Scottish Child Payment — it is a passported
+      service (Education (Scotland) Act 1980 s.53-55 powers; devolved Scottish/NI administration) whose
+      eligibility is derived from receipt of the upstream means-tested benefits and whose rate is set
+      administratively and take-up-scaled. Encoding it therefore requires the upstream benefits (UC/IS/JSA/ESA/HB/PC)
+      encoded first plus a non-standard derived-entitlement layer, not a self-contained corpus ingest.
+      Exclusion basis (verified 2026-07-07 against primary sources): s.53 of the Education (Scotland)
+      Act 1980 imposes an IN-KIND duty to "provide ... a school lunch, free of charge" (s.53(2)) with
+      NO monetary amount — FSM pays no cash, so UKMOD''s bched01_s is a modelled per-meal cost-equivalent,
+      not a legislated cash award. The qualifying-income thresholds ARE statutory (e.g. the UC net-earnings
+      limit raised to GBP 995/month from 1 April 2026 by SSI 2025/44 amending the 1980 Act), but no benefit
+      AMOUNT exists in statute for Axiom (which encodes statutory monetary rules) to compare — so it is
+      not comparable from statute.'
   - id: uk:bched02_uk
     oracle_policy_name: bched02_uk
     oracle_policy_type: ben
     output_vars:
       - bched02_s
-    in_scope: true
-    suite: null
-    note: 'BEN: School Clothing Grant (UKMOD comment "BEN: School Clothing Grant"), not a Child Benefit
-      education-age extension despite the bch* prefix. bched02_s passports off the same means-tested awards
-      as bched01_uk (bsa_s/bunmt_s/bsadi_s/bfamt_s/bwkmt_s/bsauc_s/boamtmm_s) for dependent children aged
-      12-18 (dec!=6, dec!=0) at the secondary grant rate $BScSCGsec. A passported devolved payment, not
-      encoded in Axiom; the synthetic UK grids run drgn1=2 so no current case activates it. Groundability
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'BEN: School Clothing Grant (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child
+      Benefit education-age extension despite the bch* prefix. bched02_s passports off the same means-tested
+      awards as bched01_uk (bsa_s/bunmt_s/bsadi_s/bfamt_s/bwkmt_s/bsauc_s/boamtmm_s) for dependent children
+      aged 12-18 (dec!=6, dec!=0) at the secondary grant rate $BScSCGsec. A passported devolved payment,
+      not encoded in Axiom; the synthetic UK grids run drgn1=2 so no current case activates it. Groundability
       assessment (this-wave): like FSM (bched01_uk), the School Clothing Grant is a passported, take-up-scaled,
-      administratively-set Scottish service, not a clean standalone statutory rate — it grounds only on
-      top of the upstream means-tested awards it passports off, so it needs those encoded first plus a
-      derived-entitlement layer, not encoder-first from a single statute. Uncovered; the honest build
-      path is a passported surface on those upstream awards. Out of scope for the child-benefit + benefit-cap
-      lane.'
+      administratively-set Scottish service, not a clean standalone statutory rate. Exclusion basis (verified
+      2026-07-07 against primary sources): s.54 of the Education (Scotland) Act 1980 confers the clothing-provision
+      duty with NO monetary amount; the "national minimum" school clothing grant (GBP 120 primary / GBP
+      150 secondary) is a Scottish Government-COSLA administrative agreement, NOT fixed in any SSI, and
+      each of the 32 local authorities sets its own amount above that floor. So bched02_s pays an administratively-set,
+      LA-varying figure with no statutory basis for Axiom to encode — not comparable from statute.'
   - id: uk:bchht_uk
     oracle_policy_name: bchht_uk
     oracle_policy_type: ben
@@ -492,27 +498,29 @@ policies:
     oracle_policy_type: ben
     output_vars:
       - bhosc01_s
-    in_scope: true
-    suite: null
-    note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. Verdict: scoped out
-      (not encoded), a modelled policy assumption rather than a statutory formula. The UK_2026 policy
-      is switch=on and computes a distinct payable bhosc01_s: for a Scottish social renter (amrtn=5 &
-      drgn1=12 & dhr=1) subject to the bedroom tax it pays back the size-criteria reduction (14% of (xhcrt
-      + xhcsc) for one excess room, 25% for more), gated on being on HB (bho_s>0) or UC (bsauc_s>0), plus
-      a benefit-cap top-up limited to housing costs xhc_hbai. UKMOD models this as if formulaic, but the
-      underlying instrument is not: DHPs rest on the Discretionary Financial Assistance Regulations 2001
-      (SI 2001/1167) reg 2(2), which gives the relevant authority a discretion "as to whether or not to
-      make discretionary housing payments in a particular case; and as to the amount of the payments"
-      — no statutory formula, percentage, or cap. Administered by the 32 Scottish local authorities and
-      demand-led/budget-capped (the Scottish Government funds full bedroom-tax mitigation as a policy
-      commitment, not a statutory entitlement to a fixed amount). The only statutory numbers UKMOD uses
-      here (14%/25%) are the HB/UC size-criteria percentages, already encoded where they ARE statutory:
-      rulespec-uk uk/regulations/uksi/2013/376/schedule/4/paragraph/36 (Universal Credit under-occupancy:
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. EXCLUDED oracle_models_nonstatutory_amount.
+      Verdict: scoped out (not encoded), a modelled policy assumption rather than a statutory formula.
+      The UK_2026 policy is switch=on and computes a distinct payable bhosc01_s: for a Scottish social
+      renter (amrtn=5 & drgn1=12 & dhr=1) subject to the bedroom tax it pays back the size-criteria reduction
+      (14% of (xhcrt + xhcsc) for one excess room, 25% for more), gated on being on HB (bho_s>0) or UC
+      (bsauc_s>0), plus a benefit-cap top-up limited to housing costs xhc_hbai. UKMOD models this as if
+      formulaic, but the underlying instrument is not: DHPs rest on the Discretionary Financial Assistance
+      Regulations 2001 (SI 2001/1167) reg 2(2), which gives the relevant authority a discretion "as to
+      whether or not to make discretionary housing payments in a particular case; and as to the amount
+      of the payments" — no statutory formula, percentage, or cap. Administered by the 32 Scottish local
+      authorities and demand-led/budget-capped (the Scottish Government funds full bedroom-tax mitigation
+      as a policy commitment, not a statutory entitlement to a fixed amount). The only statutory numbers
+      UKMOD uses here (14%/25%) are the HB/UC size-criteria percentages, already encoded where they ARE
+      statutory: rulespec-uk uk/regulations/uksi/2013/376/schedule/4/paragraph/36 (Universal Credit under-occupancy:
       0.14 one excess bedroom, 0.25 two or more). So encoding "pay back 14%/25% of eligible rent" as if
       a Scottish statutory formula would misrepresent a discretionary, LA-administered, budget-capped
-      payment (and the corpus carries no DHP source to ground it). Kept in scope as a real UKMOD surface
-      but classified not-comparable-from-statute; the size-criteria percentages it references are already
-      covered on the UC side (evidence: UK.xml UK_2026 bhosc01_uk function body; SI 2001/1167 reg 2(2)).'
+      payment (and the corpus carries no DHP source to ground it). Excluded as a real UKMOD surface whose
+      paid amount is not comparable from statute; the size-criteria percentages it references are already
+      covered on the UC side. Probe: bhosc01_s stayed 0 on the synthetic Scottish social-renter case even
+      with excess bedrooms supplied (the UC/HB passport did not fire), so no gradable surface activates
+      either (evidence: UK.xml UK_2026 bhosc01_uk function body; SI 2001/1167 reg 2(2)).'
   - id: uk:bmact_uk
     oracle_policy_name: bmact_uk
     oracle_policy_type: ben
