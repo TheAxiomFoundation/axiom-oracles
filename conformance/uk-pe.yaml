@@ -177,9 +177,12 @@ policies:
     output_vars:
       - fuel_duty
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes fuel_duty but rulespec has not encoded it and no suite runs
-      (matrix row 10 → HODA 1979 rates).
+    suite: uk-fuel-duty
+    note: Covered by the uk-fuel-duty case-grid suite. The module grounds the HODA 1979 s.6(1A) standing
+      rate (£0.5795/litre) and subtracts a supplied temporary Budget-resolution reduction (the 5p cut
+      extension, not carried into the consolidated s.6(1A) text) and the rural relief, so both engines
+      apply PolicyEngine's in-force 2026 effective rate to the same supplied litres; matches penny-exact
+      (matrix row 10 → HODA 1979 s.6).
   - id: uk-pe:housing_benefit
     oracle_policy_name: housing_benefit
     oracle_policy_type: rules
@@ -374,9 +377,11 @@ policies:
       - tv_licence
       - free_tv_licence_value
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes tv_licence and free_tv_licence_value but only the fee parameter
-      is compared; no over-75/concession final surface runs (matrix row 34 → uksi/2004/692).
+    suite: uk-tv-licence
+    note: Covered by the uk-tv-licence case-grid suite. The module grounds the SI 2004/692 Schedule 1 fee
+      (£180 for 2026-27) and the Communications Act 2003 s.365 concession structure (over-75 free for
+      Pension Credit claimants, blind 50 per cent); both tv_licence and free_tv_licence_value match
+      PolicyEngine penny-exact (matrix row 34 → uksi/2004/692).
   - id: uk-pe:universal_credit
     oracle_policy_name: universal_credit
     oracle_policy_type: rules
@@ -390,9 +395,11 @@ policies:
     output_vars:
       - vat
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes vat (output/input/net) but no PE VAT oracle surface runs;
-      rulespec has a rate-only shell. The largest indirect-tax gap (matrix row 1 → VATA 1994 Sch.7A-9).
+    suite: uk-vat
+    note: Covered by the uk-vat case-grid suite. The module encodes VATA 1994 s.2(1) standard rate
+      (20 per cent) and s.29A reduced rate (5 per cent) applied to the supplied full/reduced consumption
+      split and grossed by the microdata coverage factor; matches PolicyEngine vat penny-exact
+      (matrix row 1 → VATA 1994 s.2/s.29A).
   - id: uk-pe:winter_fuel_allowance
     oracle_policy_name: winter_fuel_allowance
     oracle_policy_type: rules

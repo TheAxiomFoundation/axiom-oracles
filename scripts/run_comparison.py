@@ -1906,6 +1906,61 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _run_uk_pe_grid(
+    generator_basename: str, report_basename: str, output: Path
+) -> None:
+    """Shared runner for the UK PolicyEngine case-grid comparisons.
+
+    Delegates to the named generator, which runs a synthetic household grid
+    through PolicyEngine-UK 2.89.2 and the encoded rulespec module (evaluated
+    through the axiom rules engine) and writes one v2 report. On a runner
+    without a PolicyEngine-UK environment or a built axiom rules engine, the
+    committed dashboard report is reused, exactly like the council-tax-reduction
+    grid.
+    """
+    generator = REPO_ROOT / "scripts" / generator_basename
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{report_basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"{report_basename} grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_vat_grid(runner: dict, output: Path) -> None:
+    del runner
+    _run_uk_pe_grid("generate_uk_vat.py", "axiom-policyengine-uk-vat", output)
+
+
+def _run_uk_fuel_duty_grid(runner: dict, output: Path) -> None:
+    del runner
+    _run_uk_pe_grid(
+        "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output
+    )
+
+
+def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
+    del runner
+    _run_uk_pe_grid(
+        "generate_uk_tv_licence.py", "axiom-policyengine-uk-tv-licence", output
+    )
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -1919,6 +1974,9 @@ RUNNERS = {
     "uk-winter-fuel-payment-pe-grid": _run_uk_winter_fuel_payment_pe_grid,
     "uk-attendance-allowance-pe-grid": _run_uk_attendance_allowance_pe_grid,
     "uk-tax-free-childcare-pe-grid": _run_uk_tax_free_childcare_pe_grid,
+    "uk-vat-grid": _run_uk_vat_grid,
+    "uk-fuel-duty-grid": _run_uk_fuel_duty_grid,
+    "uk-tv-licence-grid": _run_uk_tv_licence_grid,
 }
 
 
