@@ -502,6 +502,20 @@ class Concepts:
         "first-schedule-8-rates-of-withholding-tax"
         "#individual_residential_rent_final_withholding"
     )
+    # Second Schedule paragraph 5 presumptive turnover tax as substituted by
+    # Act 1071 (3%, band (20,000, 500,000]), compared to GHAMOD ``ttn01_s``;
+    # the COVID-19 Health Recovery Levy (Act 1068, 1%), compared to GHAMOD
+    # ``ttn02_s`` (which applies it on presumptive payers' turnover).
+    GH_PRESUMPTIVE_TURNOVER_TAX = (
+        "gh:statutes/act-1071/income-tax-amendment-no2-2021/"
+        "second-schedule-substitutions"
+        "#paragraph_5_turnover_tax_payable"
+    )
+    GH_COVID_HEALTH_RECOVERY_LEVY = (
+        "gh:statutes/act-1068/covid-19-health-recovery-levy-2021/"
+        "section-1-imposition-of-levy"
+        "#covid_health_recovery_levy_amount"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"

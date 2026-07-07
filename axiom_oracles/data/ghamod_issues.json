@@ -105,6 +105,27 @@
    "observed": "GHAMOD's tinkt_gh withholds a flat 15% on investment income (tiniy_s = 0.15 x yiy, eligibility yiy > 50/yr; probed live: 1,000 of post-uprating yiy -> 150.00). No in-force paragraph 8(1)(b) rate supports 15% for investment income proper: dividends are 8% (row (i)); interest paid to an individual by a resident financial institution or on Government of Ghana bonds is exempt (Act 907 s.7(1)(p)/(q)) with a 1% residual row (ii); other interest is 8% (row (iii)). The 2015-2026 amendment chain is closed (all eleven Income Tax (Amendment) Acts read); none amended these rows. 15% exists only for non-residential rent and natural-resource/royalty rows.",
    "axiom_position": "The encoded module (rulespec-gh gh/statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax.yaml) follows the statutory rows. The gh-capital-income suite compares rent (tinrt_s, 8%, exact) live and records this entry instead of running yiy cases, which would all diverge.",
    "reported_upstream": "Queued for the UNU-WIDER finding set (southmod@wider.unu.edu) as finding #6 alongside the tin_s top-band, relief, and SSNIT age-cap findings."
+  },
+  {
+   "id": "ghamod-ttn-eligibility-band-10k-120k-superseded",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "ttn01_s",
+    "ttn02_s",
+    "ttn_s"
+   ],
+   "statute": "Income Tax Act, 2015 (Act 896) Second Schedule paragraph 5, as substituted by Act 902 (2015) and Act 1071 (2021)",
+   "observed": "GHAMOD's ttn_gh restricts the presumptive turnover tax (3%) and the CHRL component (1%) to turnover between 10,000 and 120,000. Probed live: turnover 15,000 -> ttn01_s+ttn02_s = 450+150/yr although the statutory floor is 'more than twenty thousand' in every printed version; turnover 200,000 -> 0 although the in-force band (Act 1071, Dec 2021) runs to five hundred thousand Ghana Cedis (statute charges 6,000 + levy). The 120,000 ceiling matches only the original 2015 text, superseded within the same month by Act 902 (200,000); the 10,000 floor appears in no print. Inside the shared (20,000, 120,000] band the 3%/1% rates are exact (probed 30k/60k/120k -> 900/1,800/3,600 + 300/600/1,200).",
+   "axiom_position": "The encoded modules (rulespec-gh act-1071 second-schedule-substitutions; act-1068 section-1-imposition-of-levy) follow the in-force texts. The gh-presumptive-turnover suite keeps live cases inside the shared band and records this entry for the band divergence.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set (southmod@wider.unu.edu) as finding #7."
   }
  ]
 }

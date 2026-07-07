@@ -142,3 +142,26 @@ prefixes:
       in-force statutory rate and is dispositioned in ghamod_issues.json
       rather than compared. PolicyEngine has no Ghana model, so there is no
       PolicyEngine oracle target; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Presumptive turnover tax (Act 896 Second Schedule paragraph 5 as
+      substituted by Act 1071: three per cent of turnover in the
+      (20,000, 500,000] band). Validated against GHAMOD ttn01_s by the
+      gh-presumptive-turnover suite inside the shared (20,000, 120,000]
+      band, exact to the cedi; GHAMOD's 10,000-120,000 eligibility band
+      matches no in-force text and is dispositioned in ghamod_issues.json.
+      PolicyEngine has no Ghana model; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      COVID-19 Health Recovery Levy (Act 1068 s.1(4): one per cent of the
+      value of the taxable supply). Validated against GHAMOD ttn02_s (which
+      applies the levy on presumptive payers' turnover) by the
+      gh-presumptive-turnover suite, exact to the cedi on the shared
+      turnover base. PolicyEngine has no Ghana model; the household oracle
+      is GHAMOD.
