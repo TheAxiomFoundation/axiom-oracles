@@ -272,6 +272,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 290,
   },
+  "co-state-income-tax-taxsim": {
+    family: "state_income_tax",
+    jurisdiction: "CO",
+    label: "Colorado income tax (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 201,
+  },
   "co-state-income-tax-ecps": {
     family: "state_income_tax",
     jurisdiction: "CO",

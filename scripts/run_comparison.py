@@ -1330,6 +1330,11 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     # Tax-Calculator is an optional extra; install its pin into the isolated
     # `uv run` when either side is the taxcalc adapter.
     taxcalc_pins = ("taxcalc==6.7.1",) if "taxcalc" in engines else ()
+    # TAXSIM ships as policyengine-taxsim, which bundles the pinned NBER
+    # binary (adapters/taxsim/taxsim_pins.json records its identity).
+    taxsim_pins = (
+        ("policyengine-taxsim==2.30.0",) if "taxsim" in engines else ()
+    )
     cmd = [
         "uv",
         "run",
@@ -1340,6 +1345,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         str(REPO_ROOT),
         *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
+        *(arg for pin in taxsim_pins for arg in ("--with", pin)),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,

@@ -7,7 +7,7 @@ from typing import Any
 from ...core.case import Case, Concepts, Entity
 
 
-TAXSIM_MAX_YEAR = 2024
+TAXSIM_MAX_YEAR = 2026
 
 _STATE_FIPS = {
     "AL": 1,

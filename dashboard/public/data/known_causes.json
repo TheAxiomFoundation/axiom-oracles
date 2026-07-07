@@ -665,7 +665,7 @@
   },
   {
    "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
-   "description": "All 5 comparisons diverge by a uniform ~2.6% with axiom higher: the corpus encodes Maryland's IM-26-13 memo (the FY2026 TCA/TDAP benefit increase) while the parameter runner's PolicyEngine build carries the prior-year table. The newer certified oracle pin may already include the increase \u2014 re-check after the runner venv catches up, else file upstream.",
+   "description": "All 5 comparisons diverge by a uniform ~2.6% with axiom higher: the corpus encodes Maryland's IM-26-13 memo (the FY2026 TCA/TDAP benefit increase). Re-checked on the certified 1.752.2 oracle after the venv alignment \u2014 PolicyEngine still carries the prior-year table; file upstream.",
    "fix_owner": "policyengine",
    "kind": "amount_difference",
    "label": "MD TCA 2026 increase not yet in PolicyEngine",
@@ -710,6 +710,14 @@
    "kind": "coverage_note",
    "label": "FL TCA household suite needs a scoping pass",
    "suite": "fl-tca-scoping"
+  },
+  {
+   "concept": "us:tax/state-income-tax#liability",
+   "description": "First run of the third oracle: 662 of 1,201 Colorado tax units match NBER TAXSIM-35 exactly on bottom-line liability. Most divergence is TAXSIM's narrower state model \u2014 it does not carry the TABOR sales-tax refund, the family affordability credit, or Colorado's EITC expansions, so axiom reads higher on 406 units (median $165/yr) and lower where TAXSIM misses subtractions. The right long-term comparison scope against TAXSIM is likely pre-refundable-credit liability; until then this suite documents where the three engines stand. TAXSIM identity is pinned (policyengine-taxsim 2.30.0, NBER binary sha256 in adapters/taxsim/taxsim_pins.json; models 2026 law including OBBBA).",
+   "fix_owner": "triage",
+   "kind": "amount_difference",
+   "label": "TAXSIM state-model scope: no TABOR or CO refundable credits",
+   "suite": "co-state-income-tax-taxsim"
   }
  ]
 }

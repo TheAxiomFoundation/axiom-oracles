@@ -3,19 +3,19 @@
   "description": "Pinned identity of the TAXSIM executable used by the axiom-oracles TAXSIM adapter. The adapter shells out to a TAXSIM binary bundled inside the policyengine-taxsim distribution (imported dynamically as TaxsimRunner); the binary itself is not vendored in this repo. This file pins the reproducible provenance of that binary: the exact policyengine-taxsim release, its PyPI sdist/wheel SHA-256 (the source of truth for the bundled binary), and the SHA-256 + byte size of each bundled executable extracted from that wheel. Without this pin no oracle number produced against TAXSIM is reproducible (Phase-A item A2).",
   "distribution": {
     "package": "policyengine-taxsim",
-    "version": "2.21.2",
-    "pypi_upload_time": "2026-05-09T14:06:50Z",
+    "version": "2.30.0",
+    "pypi_upload_time": "2026-07-06T21:36:11Z",
     "sdist": {
-      "filename": "policyengine_taxsim-2.21.2.tar.gz",
-      "sha256": "c9fc898dace8f90a4f422ed47465dbb97c64e665861e0f06d5ea9e8ac420baf3",
-      "bytes": 14094068,
-      "url": "https://files.pythonhosted.org/packages/f3/72/9369ea15358471d324b9f96e3dd2b62dc27519bc4702b2dc51d9f8a7f076/policyengine_taxsim-2.21.2.tar.gz"
+      "filename": "policyengine_taxsim-2.30.0.tar.gz",
+      "sha256": "842ca58b5e0a6a623a37957d561ecd728a5f50292f137c307f30d5dee403d3b8",
+      "bytes": 14655585,
+      "url": "https://files.pythonhosted.org/packages/93/f6/8e163daadc61bb37f297bbe27a6fe5ef155fc13e1d13822ab087439c6840/policyengine_taxsim-2.30.0.tar.gz"
     },
     "wheel": {
-      "filename": "policyengine_taxsim-2.21.2-py3-none-any.whl",
-      "sha256": "e5788e4b6d1d4faadc272f2f2ca8bca3f9d4813dfce40feebde4ee33be564f51",
-      "bytes": 5822919,
-      "url": "https://files.pythonhosted.org/packages/b1/cb/54283294691fdbca50e5cd2d6372d3497d1726b8624d2223ec361dd67424/policyengine_taxsim-2.21.2-py3-none-any.whl"
+      "filename": "policyengine_taxsim-2.30.0-py3-none-any.whl",
+      "sha256": "2897300fbcd0596791ca8f8528f579b90c605ff3a918bfef4d1b3ad272152ad1",
+      "bytes": 5922424,
+      "url": "https://files.pythonhosted.org/packages/bd/b7/48f91f6950876ad562898a3ed0c9f1e65d77ec5ad7c5b5b9f1c8f84ebb56/policyengine_taxsim-2.30.0-py3-none-any.whl"
     }
   },
   "runtime_binary": {
@@ -29,18 +29,6 @@
     "primary": "taxsimtest/taxsimtest-linux.exe"
   },
   "bundled_binaries": {
-    "taxsim35/taxsim-latest-windows.exe": {
-      "sha256": "85325403b2b6b40bebb2b7680b5dbceb29a9b1019dabf7f0596bb99e429b1e47",
-      "bytes": 2317791
-    },
-    "taxsim35/taxsim35-osx.exe": {
-      "sha256": "0c879416a3bb96f9903cd21aab84108402fd760c4bf280f68aad331f7b57ff1e",
-      "bytes": 1661800
-    },
-    "taxsim35/taxsim35-unix.exe": {
-      "sha256": "c83d6a214e49f0206f69eb675502968ffe1109dff4420f5ec4b8d85f7386055d",
-      "bytes": 4545432
-    },
     "taxsimtest/taxsimtest-linux.exe": {
       "sha256": "0d934f202541f43a7999907b523e5431183a1258dadef4ddc6121d3f31120442",
       "bytes": 3737960
@@ -50,8 +38,8 @@
       "bytes": 1712528
     },
     "taxsimtest/taxsimtest-osx.exe": {
-      "sha256": "0c879416a3bb96f9903cd21aab84108402fd760c4bf280f68aad331f7b57ff1e",
-      "bytes": 1661800
+      "sha256": "0d9e43a983055d44eec9e5de7edfc933fa061b2a336716d760fe98abf4336319",
+      "bytes": 1961912
     },
     "taxsimtest/taxsimtest-windows.exe": {
       "sha256": "92e011693cbfd45634fe57a041e31099926246bddaad20b5143485ffac9297cb",

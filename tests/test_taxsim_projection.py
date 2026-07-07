@@ -142,7 +142,7 @@ def test_taxsim_projection_requires_state() -> None:
 def test_taxsim_projection_rejects_years_after_bundled_taxsim_support() -> None:
     case = Case(
         case_id="future-year",
-        period="2026",
+        period="2027",
         facts={Concepts.STATE_CODE: "NY"},
         entities=(
             Entity(
@@ -156,5 +156,5 @@ def test_taxsim_projection_rejects_years_after_bundled_taxsim_support() -> None:
         ),
     )
 
-    with pytest.raises(RuntimeError, match="through 2024"):
+    with pytest.raises(RuntimeError, match="through 2026"):
         taxsim_input_for_case(case)

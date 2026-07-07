@@ -184,6 +184,14 @@
       "source": "comparisons/co-state-income-tax-ecps.yaml"
     },
     {
+      "suite": "co-state-income-tax-taxsim",
+      "report": "axiom-taxsim-co-state-income-tax-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/co-state-income-tax-taxsim.yaml"
+    },
+    {
       "suite": "co-state-supplement",
       "report": "axiom-policyengine-co-state-supplement.json",
       "repos": [
