@@ -103,3 +103,28 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: PolicyEngine has no Ghana model and cannot serve as a Ghana tax-benefit oracle. Axiom Ghana outputs are built from official Ghana legislation (Income Tax Act 2015, Act 896, as amended) and GRA/LEAP sources; the household oracle is GHAMOD (UNU-WIDER SOUTHMOD, EUROMOD engine), wired for the income-tax rate schedule and Fifth Schedule reliefs by the gh-income-tax-rate-schedule and gh-personal-reliefs suites (see the explicit mappings above and concept_mappings.yaml). This prefix classifies any remaining Ghana output that has no explicit entry as not comparable to PolicyEngine; add exact PolicyEngine mappings only if a real one-to-one Ghana PolicyEngine oracle target is ever implemented.
+  - legal_id: gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution
+    country: gh
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      SSNIT worker contribution of 5.5% of qualifying employment income
+      (National Pensions Act 2008, Act 766, s.3(1)). Validated against GHAMOD
+      tscee_s by the gh-ssnit-contributions suite (SOUTHMOD A4.0, GH_2025):
+      exactly 5.5% of the engine's post-uprating yem at every probed income
+      for contributors inside GHAMOD's age window; GHAMOD's age-15-45
+      contributor cap has no basis in Act 766 and is recorded in
+      ghamod_issues.json. PolicyEngine has no Ghana model, so there is no
+      PolicyEngine oracle target; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution
+    country: gh
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      SSNIT employer contribution of 13% of qualifying employment income
+      (National Pensions Act 2008, Act 766, s.3(2)). Validated against GHAMOD
+      tscer_s by the gh-ssnit-contributions suite (SOUTHMOD A4.0, GH_2025):
+      exactly 13% of the engine's post-uprating yem at every probed income
+      for contributors inside GHAMOD's age window; the age-cap divergence is
+      recorded in ghamod_issues.json. PolicyEngine has no Ghana model, so
+      there is no PolicyEngine oracle target; the household oracle is GHAMOD.

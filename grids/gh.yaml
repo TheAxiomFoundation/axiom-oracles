@@ -232,3 +232,55 @@ case_sets:
         age: 40
         relation: HeadOfHousehold
         yearly_earned_income: 100000.0
+  gh-ssnit-contributions:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution
+    - gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution
+    cases:
+    - id: gh-ssnit-10k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 10000.0
+    - id: gh-ssnit-60k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
+    - id: gh-ssnit-120k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 120000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000.0
+    - id: gh-ssnit-500k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 500000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 500000.0
