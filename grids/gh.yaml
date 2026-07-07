@@ -9,6 +9,46 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  gh-capital-income:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding
+    cases:
+    - id: gh-rent-12k
+      period: '2026'
+      scenario: single-individual-residential-rent-withholding
+      parameters:
+        annual_residential_rent: 12000.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        rental_income: 12000.0
+    - id: gh-rent-24k
+      period: '2026'
+      scenario: single-individual-residential-rent-withholding
+      parameters:
+        annual_residential_rent: 24000.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        rental_income: 24000.0
+    - id: gh-rent-60k
+      period: '2026'
+      scenario: single-individual-residential-rent-withholding
+      parameters:
+        annual_residential_rent: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        rental_income: 60000.0
   gh-income-tax-rate-schedule:
     locale: GH
     entity: Person

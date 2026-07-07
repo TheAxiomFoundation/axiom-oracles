@@ -128,3 +128,17 @@ prefixes:
       for contributors inside GHAMOD's age window; the age-cap divergence is
       recorded in ghamod_issues.json. PolicyEngine has no Ghana model, so
       there is no PolicyEngine oracle target; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Residential rent final withholding (Act 896 First Schedule paragraph
+      8(1)(b)(iv): 8% of rent paid to a resident individual; final under
+      s.119(1)(b); row never amended 2015-2026). Validated against GHAMOD
+      tinrt_s by the gh-capital-income suite (SOUTHMOD A4.0, GH_2025):
+      exactly 8% of the engine's post-uprating ypr at every probed rent.
+      GHAMOD's companion tiniy_s (flat 15% on investment income) matches no
+      in-force statutory rate and is dispositioned in ghamod_issues.json
+      rather than compared. PolicyEngine has no Ghana model, so there is no
+      PolicyEngine oracle target; the household oracle is GHAMOD.
