@@ -1,0 +1,130 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "uk-business-rates",
+  "concept": "uk:policies/govuk/business-rates#business_rates",
+  "population": "case-grid",
+  "validation_year": 2026,
+  "locales": [
+    "UK"
+  ],
+  "scope": {
+    "type": "country",
+    "geoid": "UK"
+  },
+  "engines": {
+    "axiom": "uk:policies/govuk/business-rates#business_rates",
+    "policyengine": "business_rates"
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 2e-07
+  },
+  "case_count": 6,
+  "summary": {
+    "comparison_count": 6,
+    "match_count": 6,
+    "mismatch_count": 0,
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "policyengine_matches": 6,
+    "weighted": {
+      "comparison_weight": 6,
+      "match_weight": 6,
+      "mismatch_weight": 0,
+      "match_rate": 100.0
+    },
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "error_count": 0,
+    "errors_by_engine": []
+  },
+  "mismatches": [],
+  "errors": [],
+  "cases": [
+    {
+      "case_id": "br-zero-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "scenario": "no-corporate-shareholding",
+      "shareholding": 0.0,
+      "total_revenue": 31732499000.0,
+      "axiom": 0.0,
+      "policyengine": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "br-tiny-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "scenario": "very-small-shareholding",
+      "shareholding": 9.999999974752427e-07,
+      "total_revenue": 31732499000.0,
+      "axiom": 31732.498919883143,
+      "policyengine": 31732.498046875,
+      "axiom_vs_policyengine": {
+        "difference": 0.0008730081426620018,
+        "match": true
+      }
+    },
+    {
+      "case_id": "br-small-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "scenario": "small-shareholding",
+      "shareholding": 9.999999747378752e-06,
+      "total_revenue": 31732499000.0,
+      "axiom": 317324.9819836965,
+      "policyengine": 317324.96875,
+      "axiom_vs_policyengine": {
+        "difference": 0.013233696518000215,
+        "match": true
+      }
+    },
+    {
+      "case_id": "br-mid-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "scenario": "mid-shareholding",
+      "shareholding": 9.999999747378752e-05,
+      "total_revenue": 31732499000.0,
+      "axiom": 3173249.819836965,
+      "policyengine": 3173249.75,
+      "axiom_vs_policyengine": {
+        "difference": 0.06983696483075619,
+        "match": true
+      }
+    },
+    {
+      "case_id": "br-large-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "scenario": "large-shareholding",
+      "shareholding": 0.0005000000237487257,
+      "total_revenue": 31732499000.0,
+      "axiom": 15866250.253606414,
+      "policyengine": 15866250.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.25360641442239285,
+        "match": true
+      }
+    },
+    {
+      "case_id": "br-larger-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "scenario": "larger-shareholding",
+      "shareholding": 0.0010000000474974513,
+      "total_revenue": 31732499000.0,
+      "axiom": 31732500.507212825,
+      "policyengine": 31732500.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.5072128251194954,
+        "match": true
+      }
+    }
+  ],
+  "provenance": {
+    "generated": "2026-07-07",
+    "generator": "scripts/generate_uk_business_rates.py",
+    "axiom_engine": "axiom rules engine over rulespec-uk uk/policies/govuk/business-rates.yaml",
+    "policyengine_uk": "2.89.2",
+    "commensurability": "PolicyEngine-UK business_rates (shareholding times total non-domestic rates revenue across England, Scotland, Wales and Northern Ireland) vs the rulespec LGFA 1988 s.43 incidence wrapper; shareholding and the total revenue are supplied inputs on both engines, bridged from PolicyEngine."
+  }
+}

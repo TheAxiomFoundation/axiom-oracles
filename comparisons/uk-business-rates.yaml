@@ -1,0 +1,43 @@
+# Business rates — rulespec-uk household incidence wrapper vs PolicyEngine-UK on
+# a synthetic household grid. The Axiom side is the encoded LGFA 1988 s.43
+# incidence proxy, uk/policies/govuk/business-rates.yaml, evaluated through the
+# axiom rules engine over PolicyEngine's own shareholding and the held-forward
+# total non-domestic rates revenue (England + Scotland + Wales + Northern
+# Ireland).
+#
+# shareholding and the total revenue are supplied inputs on both sides, so the
+# surfaces are commensurable and the grid matches to the penny (in relative
+# terms); the only residuals are PolicyEngine float32 artifacts on the large
+# revenue magnitude, inside the relative tolerance.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-business-rates
+
+name: uk-business-rates
+title: UK Business Rates — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded business rates household incidence wrapper (rulespec-uk
+  uk/policies/govuk/business-rates.yaml, LGFA 1988 s.43 enabling authority)
+  against PolicyEngine-UK business_rates (2.89.2) at the 2026 validation year on
+  a synthetic household grid spanning the corporate-shareholding range.
+  shareholding and the total non-domestic rates revenue are supplied inputs on
+  both engines.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-business-rates-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    # Links this suite to the rulespec-uk monorepo in the affected map so a
+    # change to the encoded incidence wrapper triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-business-rates
+
+dashboard:
+  filename: axiom-policyengine-uk-business-rates.json
+  suite: uk-business-rates

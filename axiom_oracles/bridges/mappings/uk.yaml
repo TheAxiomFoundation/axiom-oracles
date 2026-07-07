@@ -2476,6 +2476,20 @@ mappings:
     program: capital_gains_tax
     mapping_type: not_comparable
     rationale: Internal derived value (the higher rate excess above the basic rate band, s.1I); the compared surface is the final capital_gains_tax charge.
+  # Business rates household incidence proxy (LGFA 1988 s.43 enabling
+  # authority). PolicyEngine-UK models the incidence as shareholding times the
+  # total non-domestic rates revenue across the four nations; the rulespec
+  # module restates that product. Both quantities are supplied inputs.
+  - legal_id: uk:policies/govuk/business-rates#business_rates
+    country: uk
+    program: business_rates
+    mapping_type: direct_variable
+    policyengine_variable: business_rates
+    entity: household
+    period: year
+    unit: GBP
+    rationale: Same household business rates incidence as PolicyEngine UK's business_rates variable — the household's shareholding times the total non-domestic rates revenue raised across England, Scotland, Wales and Northern Ireland (LGFA 1988 s.43 creates the liability being distributed). Shareholding and the total revenue are supplied inputs on both engines.
+
 
 
 
