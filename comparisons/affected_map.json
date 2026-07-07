@@ -451,6 +451,14 @@
       "source": "comparisons/uk-best-start-foods-ukmod.yaml"
     },
     {
+      "suite": "uk-capital-gains-tax",
+      "report": "axiom-policyengine-uk-capital-gains-tax.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-capital-gains-tax.yaml"
+    },
+    {
       "suite": "uk-child-benefit",
       "report": "axiom-euromod-uk-child-benefit.json",
       "repos": [

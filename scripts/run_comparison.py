@@ -704,6 +704,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type == "uk-capital-gains-tax-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
     elif runner_type == "uk-winter-fuel-payment-pe-grid":
         oracle = {
             "name": "policyengine",
@@ -1700,6 +1705,43 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
+    """Capital Gains Tax grid: rulespec-uk band split vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_capital_gains_tax.py, which runs a synthetic
+    individual grid through PolicyEngine-UK 2.89.2's ``capital_gains_tax`` and the
+    encoded TCGA 1992 s.1H/1I/1K band split (evaluated through the axiom rules
+    engine over PolicyEngine's own capital_gains, taxable income and basic rate
+    limit), then writes one v2 report. On a runner without a PolicyEngine-UK
+    environment or a built axiom rules engine, the committed dashboard report is
+    reused, exactly like the Council Tax Reduction grid.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_capital_gains_tax.py"
+    basename = "axiom-policyengine-uk-capital-gains-tax"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"CGT grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
 def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
     """Winter Fuel Payment grid: rulespec-uk SI 2025/969 pipeline vs PolicyEngine-UK.
 
@@ -1746,6 +1788,7 @@ RUNNERS = {
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
     "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,
+    "uk-capital-gains-tax-grid": _run_uk_capital_gains_tax_grid,
     "uk-winter-fuel-payment-pe-grid": _run_uk_winter_fuel_payment_pe_grid,
 }
 

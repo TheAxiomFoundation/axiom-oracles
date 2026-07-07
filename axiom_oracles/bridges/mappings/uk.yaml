@@ -2422,6 +2422,62 @@ mappings:
     mapping_type: not_comparable
     rationale: SSCBA 1992 s.13(1) elective Class 3 weekly contribution amount when the contributor chooses to pay. PolicyEngine UK's ni_class_3 is a frozen microdata input with no rules formula, so there is no PolicyEngine rules value to compare; UKMOD does not model voluntary Class 3. No oracle available.
 
+  # Capital gains tax band split (TCGA 1992 s.1H/1I/1K), matching the
+  # PolicyEngine-UK capital_gains_tax surface. The final capital_gains_tax
+  # output is the comparable Person-level annual charge; the annual exempt
+  # amount, the 18%/24% rates and the band-split intermediates are internal.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax
+    country: uk
+    program: capital_gains_tax
+    mapping_type: direct_variable
+    policyengine_variable: capital_gains_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual individual capital gains tax charge as PolicyEngine UK's capital_gains_tax variable — the annual exempt amount (TCGA 1992 s.1K, £3,000) deducted from chargeable gains, then charged at the s.1H basic 18% rate within the unused basic rate band and 24% above (PolicyEngine's higher and additional CGT rates are both 24%). Taxable income and the basic rate limit are supplied inputs on both sides.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_annual_exempt_amount
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal parameter (TCGA 1992 s.1K annual exempt amount, £3,000); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_basic_rate
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal parameter (TCGA 1992 s.1H basic CGT rate, 18%); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_higher_rate
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal parameter (TCGA 1992 s.1H higher CGT rate, 24%); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_chargeable_gains
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (chargeable gains floored at zero, from the supplied capital_gains input); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_gains_after_annual_exempt_amount
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (chargeable gains less the annual exempt amount); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_unused_basic_rate_band
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (the individual's unused basic rate band after taxable income, s.1I); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_basic_rate_gains
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (gains charged at the basic rate, s.1I); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_higher_rate_gains
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (the higher rate excess above the basic rate band, s.1I); the compared surface is the final capital_gains_tax charge.
+
+
 
 prefixes:
   - legal_id_prefix: uk:policies/govuk/council-tax-reduction#
