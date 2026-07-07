@@ -2012,6 +2012,33 @@ concepts:
           type: country
           geoid: GH
 
+  # Act 896 First Schedule paragraph 8(1)(b)(iv) residential rent withholding
+  # (final for rent paid to a resident individual, s.119(1)(b)); rate row
+  # never amended 2015-2026. GHAMOD's tinrt_s applies the same 8% on ypr.
+  # GHAMOD's tiniy_s (flat 15% on yiy) has no supported statutory rate and is
+  # dispositioned in ghamod_issues.json, not compared.
+  gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding:
+    description: Ghana residential rent final withholding (Act 896 First Schedule para 8(1)(b)(iv), 8% of rent to a resident individual)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: individual_residential_rent_final_withholding
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinrt_s
+        scope:
+          type: country
+          geoid: GH
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

@@ -494,6 +494,14 @@ class Concepts:
         "section-3-contributions-to-the-scheme"
         "#employer_social_security_contribution"
     )
+    # Act 896 First Schedule paragraph 8(1)(b) rent withholding (final for
+    # rent paid to a resident individual, s.119(1)(b)), compared to GHAMOD
+    # ``tinrt_s`` (8% of ypr).
+    GH_INDIVIDUAL_RESIDENTIAL_RENT_WITHHOLDING = (
+        "gh:statutes/act-896/income-tax-2015/"
+        "first-schedule-8-rates-of-withholding-tax"
+        "#individual_residential_rent_final_withholding"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"

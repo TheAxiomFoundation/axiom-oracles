@@ -85,6 +85,26 @@
    "observed": "GHAMOD's tscee_gh/tscer_gh restrict SSNIT contributions to formal earners aged 15-45: a probed age-50 formal earner (lfo=1, positive yem) gets tscee_s = tscer_s = 0, while an otherwise identical age-35 earner gets exactly 5.5%/13% of yem. Population scale: 537 formal earners in gh_2017_a8 (weighted ~317k) fall outside the window.",
    "axiom_position": "Act 766 s.3 imposes the worker and employer contributions on every worker's salary with no upper age limit; the encoded module (rulespec-gh gh/statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme.yaml) follows the statute. The gh-ssnit-contributions suite therefore keeps its live cases inside the shared 15-45 window and records this entry for the out-of-window divergence.",
    "reported_upstream": "Included in the SSNIT finding set drafted for UNU-WIDER (southmod@wider.unu.edu) alongside the tin_s top-band and relief findings."
+  },
+  {
+   "id": "ghamod-tiniy-15pct-rate-unsupported-by-para-8",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tiniy_s",
+    "tinkt_s"
+   ],
+   "statute": "Income Tax Act, 2015 (Act 896) First Schedule paragraph 8(1)(b); Act 907 s.1",
+   "observed": "GHAMOD's tinkt_gh withholds a flat 15% on investment income (tiniy_s = 0.15 x yiy, eligibility yiy > 50/yr; probed live: 1,000 of post-uprating yiy -> 150.00). No in-force paragraph 8(1)(b) rate supports 15% for investment income proper: dividends are 8% (row (i)); interest paid to an individual by a resident financial institution or on Government of Ghana bonds is exempt (Act 907 s.7(1)(p)/(q)) with a 1% residual row (ii); other interest is 8% (row (iii)). The 2015-2026 amendment chain is closed (all eleven Income Tax (Amendment) Acts read); none amended these rows. 15% exists only for non-residential rent and natural-resource/royalty rows.",
+   "axiom_position": "The encoded module (rulespec-gh gh/statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax.yaml) follows the statutory rows. The gh-capital-income suite compares rent (tinrt_s, 8%, exact) live and records this entry instead of running yiy cases, which would all diverge.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set (southmod@wider.unu.edu) as finding #6 alongside the tin_s top-band, relief, and SSNIT age-cap findings."
   }
  ]
 }
