@@ -407,3 +407,31 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 500000.0
+  gh-vat-levies:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount
+    - gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount
+    cases:
+    - id: gh-levies-12k
+      period: '2026'
+      scenario: single-consumer-standard-rated-levies
+      parameters:
+        annual_standard_rated_consumption: 12000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: gh-levies-60k
+      period: '2026'
+      scenario: single-consumer-standard-rated-levies
+      parameters:
+        annual_standard_rated_consumption: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold

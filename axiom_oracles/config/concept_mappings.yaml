@@ -2088,6 +2088,53 @@ concepts:
           type: country
           geoid: GH
 
+  # December 2025 reform consumption levies (rates unchanged across the
+  # boundary; VAT itself dispositioned in ghamod_issues.json —
+  # ghamod-tva-wedge-double-and-triple-counts-levies).
+  gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount:
+    description: Ghana National Health Insurance Levy (Act 1156 s.47, 2.5% of the chargeable supply value)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: national_health_insurance_levy_amount
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tva01_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount:
+    description: Ghana Education Trust Fund Levy (Act 1152 s.3A, 2.5% of the taxable supply value)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: getfund_levy_amount
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tva02_s
+        scope:
+          type: country
+          geoid: GH
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

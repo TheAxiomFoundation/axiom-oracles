@@ -165,3 +165,37 @@ prefixes:
       gh-presumptive-turnover suite, exact to the cedi on the shared
       turnover base. PolicyEngine has no Ghana model; the household oracle
       is GHAMOD.
+  - legal_id: gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      National Health Insurance Levy (Act 852 s.47 as substituted by Act
+      1156: 2.5% of the chargeable supply value; rate unchanged across the
+      December 2025 reform). Validated against GHAMOD tva01_s by the
+      gh-vat-levies suite, exact to the cedi on the shared standard-rated
+      base. PolicyEngine has no Ghana model; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Ghana Education Trust Fund Levy (Act 581 s.3A as substituted by Act
+      1152: 2.5% of the taxable supply value; rate unchanged across the
+      reform). Validated against GHAMOD tva02_s by the gh-vat-levies suite,
+      exact to the cedi. PolicyEngine has no Ghana model; the household
+      oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1151/value-added-tax-2025/section-3-rate-of-the-tax#value_added_tax_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Value Added Tax (Act 1151 s.3: fifteen per cent of the taxable supply
+      or import value, commencing 1 January 2026). No live GHAMOD case:
+      GHAMOD emits no pure-VAT output — its tva_s applies an
+      effective-cascade 21% and then re-adds the levy components (27%; the
+      ils_taxco list re-adds them again, 33%), against a statutory 2025
+      cascade of 21.9% — dispositioned in ghamod_issues.json
+      (ghamod-tva-wedge-double-and-triple-counts-levies). The Axiom branch
+      is exercised by the rulespec-gh companion tests. PolicyEngine has no
+      Ghana model.

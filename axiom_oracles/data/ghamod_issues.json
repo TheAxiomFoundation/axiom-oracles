@@ -126,6 +126,26 @@
    "observed": "GHAMOD's ttn_gh restricts the presumptive turnover tax (3%) and the CHRL component (1%) to turnover between 10,000 and 120,000. Probed live: turnover 15,000 -> ttn01_s+ttn02_s = 450+150/yr although the statutory floor is 'more than twenty thousand' in every printed version; turnover 200,000 -> 0 although the in-force band (Act 1071, Dec 2021) runs to five hundred thousand Ghana Cedis (statute charges 6,000 + levy). The 120,000 ceiling matches only the original 2015 text, superseded within the same month by Act 902 (200,000); the 10,000 floor appears in no print. Inside the shared (20,000, 120,000] band the 3%/1% rates are exact (probed 30k/60k/120k -> 900/1,800/3,600 + 300/600/1,200).",
    "axiom_position": "The encoded modules (rulespec-gh act-1071 second-schedule-substitutions; act-1068 section-1-imposition-of-levy) follow the in-force texts. The gh-presumptive-turnover suite keeps live cases inside the shared band and records this entry for the band divergence.",
    "reported_upstream": "Queued for the UNU-WIDER finding set (southmod@wider.unu.edu) as finding #7."
+  },
+  {
+   "id": "ghamod-tva-wedge-double-and-triple-counts-levies",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tva_s",
+    "ils_taxco"
+   ],
+   "statute": "Value Added Tax Act, 2013 (Act 870) chain (2025 cascade: levies 6% + VAT 15% on the levy-inclusive value = 21.9% of the standard base)",
+   "observed": "On a single standard-rated COICOP item (x0111105) with matching xhh, monthly base 1,000 (GH_2025): tva01_s/tva02_s/tva03_s = 25/25/10 (2.5%/2.5%/1%, correct); the pre-sum VAT component of tva_s is 210 (runtime $VAT_rate = 0.21, an effective-cascade shortcut; the base parameter column shows 0.15); the final ArithOp re-adds the three levy components (tva_s = 270 = 27%); and the ils_taxco stats list (tva_s + tva01 + tva02 + tva03 + ils_excise) adds them a third time (330 = 33%). GH_2024 shows the same pattern (237.10 / 878 base). Statutory 2025 wedge: 21.9%. tva_tex_cbs_gh is sw=off and not involved.",
+   "axiom_position": "The encoded 2026 modules (Act 1151 VAT 15%; Act 1152 GETFund 2.5%; Act 1156 NHIL 2.5%) follow the reform texts; rates carry unchanged across the boundary, so the gh-vat-levies suite compares the two levies against tva01_s/tva02_s exactly and dispositions the VAT/total comparison under this entry — GHAMOD emits no pure-VAT output.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set (southmod@wider.unu.edu) as finding #8 — the largest-magnitude finding so far (~5 to ~11 points of the standard basket on any tva_s/ils_taxco statistic)."
   }
  ]
 }
