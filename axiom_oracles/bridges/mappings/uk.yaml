@@ -1,4 +1,35 @@
 mappings:
+  # Welfare Reform Act 2012 sections 6, 7 and 39 (Universal Credit) —
+  # statutory entitlement mechanics and definitions with no comparable
+  # PolicyEngine UK oracle variable. PolicyEngine models the final
+  # universal_credit award, not these intermediate section conditions.
+  # Classification sweep draining the rulespec-uk oracle-coverage pending
+  # declarations for the WRA 2012 bulk batch (rulespec-uk#101).
+  - legal_id: uk:statutes/ukpga/2012/5/6#maximum_prescribed_period_under_subsection_1_b_or_c_days
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 6 maximum prescribed period (in days) for the subsection (1)(b)/(c) capital-and-period condition; an administrative time-limit parameter with no comparable PolicyEngine UK oracle variable, since PolicyEngine models the final universal_credit award rather than the statutory prescribed-period mechanic.
+  - legal_id: uk:statutes/ukpga/2012/5/6#prescribed_period_under_subsection_1_b_or_c_is_within_statutory_limit
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 6 boolean check that the prescribed period falls within the statutory limit; an intermediate eligibility condition with no comparable PolicyEngine UK oracle variable, since PolicyEngine computes the universal_credit award rather than this section-6 period test.
+  - legal_id: uk:statutes/ukpga/2012/5/6#universal_credit_entitlement_precluded_by_section_6
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 6 preclusion flag (whether Universal Credit entitlement is precluded by the subsection (1) conditions); PolicyEngine UK computes the universal_credit award amount, not this intermediate statutory preclusion condition, so there is no comparable oracle variable.
+  - legal_id: uk:statutes/ukpga/2012/5/7#universal_credit_payable_for_complete_assessment_period
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 7 rule that Universal Credit is payable in respect of each complete assessment period; a statutory payment-period mechanic with no comparable PolicyEngine UK oracle variable, since PolicyEngine models the universal_credit award amount rather than the assessment-period accrual rule.
+  - legal_id: uk:statutes/ukpga/2012/5/39#couple
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 39 statutory definition of "couple" for Universal Credit; a definitional helper with no comparable PolicyEngine UK oracle variable, since PolicyEngine derives benefit-unit couple status from household structure rather than exposing this section-39 definition as an oracle output.
   - legal_id: uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount
     country: uk
     program: council_tax_reduction
