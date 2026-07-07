@@ -300,10 +300,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "b726a9dfa421dde267b8faae01038779d0710fd3",
+      "axiom_rules_engine_sha": "ffaec214ea0f87a8ffb37a640bdc7e005adb74bc",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-07T15:34:47Z",
+    "generated_at": "2026-07-07T20:58:17Z",
     "generated_by": "scripts/run_comparison.py::be-local-municipal-pit",
     "oracle": {
       "euromod_country": "BE",
