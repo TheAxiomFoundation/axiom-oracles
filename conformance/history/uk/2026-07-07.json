@@ -3,11 +3,11 @@
   "date": "2026-07-07",
   "jurisdiction": "uk",
   "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
-  "policies_in_scope": 24,
-  "covered": 18,
-  "covered_pct": 75.0,
-  "excluded": 43,
+  "policies_in_scope": 21,
+  "covered": 21,
+  "covered_pct": 100.0,
+  "excluded": 46,
   "unexplained_total": 0,
   "axiom_attributed_open": 0,
-  "conformant": false
+  "conformant": true
 }
