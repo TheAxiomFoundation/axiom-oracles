@@ -1,64 +1,90 @@
 {
-  "schema": "axiom_oracles.ghamod_issues.v1",
-  "updated_at": "2026-07-07",
-  "purpose": "Track GHAMOD (SOUTHMOD Ghana, EUROMOD engine) oracle-side behaviours that affect household-level Axiom comparisons for rulespec-gh. These are observations of the model's outputs, not statutory encoding gaps: in each the encoded RuleSpec follows current Ghana law and GHAMOD is the simplified oracle. The SOUTHMOD bundle is licensed and non-redistributable; entries describe observed behaviour and reference variable names and GHAMOD-produced values only, never model content.",
-  "entries": [
-    {
-      "id": "ghamod-tin-s-missing-act-1111-35pct-top-band",
-      "classification": "southmod_model_simplification",
-      "counts_as_axiom_gap": false,
-      "jurisdiction": "GH",
-      "observed_with": {
-        "country": "GH",
-        "system": "GH_2025",
-        "dataset": "gh_2017_a8",
-        "model_root": "SOUTHMOD_A4.0"
-      },
-      "oracle_scope": "household_level",
-      "status": "observed_local",
-      "summary": "GHAMOD's simulated labour income tax tin_s applies only five marginal-rate bands and taxes chargeable income above 238,760 GHS at a flat 30%, never applying the 35% top marginal rate that the Income Tax (Amendment) (No. 2) Act 2023 (Act 1111) introduced on income exceeding 605,000 GHS (labelled 600,000 in the First Schedule). Observed live: at chargeable income 700,000 GHS GHAMOD returns tin_s = 193,244 while the encoded Act 1111 schedule returns 197,994; the 4,750 difference is exactly 5% of the 95,000 above 605,000 that GHAMOD taxes at 30% rather than 35%. The two engines agree to the cedi for all chargeable income at or below 605,000. The encoded rulespec-gh schedule is statutorily correct; GHAMOD is the simplified oracle.",
-      "affected_comparisons": ["gh-income-tax-rate-schedule"],
-      "affected_concepts": [
-        "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax"
-      ]
-    },
-    {
-      "id": "ghamod-tinta04-training-relief-not-modelled",
-      "classification": "southmod_model_simplification",
-      "counts_as_axiom_gap": false,
-      "jurisdiction": "GH",
-      "observed_with": {
-        "country": "GH",
-        "system": "GH_2025",
-        "dataset": "gh_2017_a8",
-        "model_root": "SOUTHMOD_A4.0"
-      },
-      "oracle_scope": "household_level",
-      "status": "observed_local",
-      "summary": "GHAMOD does not model the Act 896 Fifth Schedule paragraph 1(f) professional/technical/vocational training relief: its tinta04 relief is inactive and no tinta04_s output column is produced (a missing column, not a zero), so there is no GHAMOD value to compare against. The encoded rulespec-gh training_personal_relief pays min(cost, 2,000 GHS) per Act 896 as amended by Act 1007 and is exercised by the module's companion tests. Because the missing column cannot form a clean per-case comparison, the gh-personal-reliefs suite carries no live training case; the concept stays mapped (unused) in concept_mappings.yaml for the day a SOUTHMOD release models it.",
-      "affected_comparisons": ["gh-personal-reliefs"],
-      "affected_concepts": [
-        "gh:statutes/act-896/income-tax-2015/fifth-schedule#training_personal_relief"
-      ]
-    },
-    {
-      "id": "ghamod-tinta02-lone-parent-relief-does-not-fire",
-      "classification": "southmod_model_behaviour",
-      "counts_as_axiom_gap": false,
-      "jurisdiction": "GH",
-      "observed_with": {
-        "country": "GH",
-        "system": "GH_2025",
-        "dataset": "gh_2017_a8",
-        "model_root": "SOUTHMOD_A4.0"
-      },
-      "oracle_scope": "household_level",
-      "status": "observed_local",
-      "summary": "GHAMOD splits the Act 896 Fifth Schedule paragraph 1(a) 'dependant spouse or at least two dependant children' relief into two limbs: a dependent-spouse relief tinta01 and a lone-parent relief tinta02. tinta01 fires correctly (1,200 GHS, observed) and is the parity case for the encoded dependant_spouse_or_children_personal_relief. tinta02 did not fire for any synthetic lone-parent household tested (a formal-sector earner with two dependent children under 19 linked by idmother or idfather, single or divorced marital status); those households instead received only the separate child-education relief tinta05. The encoded RuleSpec grants the 1,200 GHS relief for dependant_child_count >= 2 per Act 896 paragraph 1(a); the lone-parent limb is compared through the dependent-spouse limb, and the two-child limb is recorded here rather than asserted against a non-firing oracle output.",
-      "affected_comparisons": ["gh-personal-reliefs"],
-      "affected_concepts": [
-        "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief"
-      ]
-    }
-  ]
+ "schema": "axiom_oracles.ghamod_issues.v1",
+ "updated_at": "2026-07-07",
+ "purpose": "Track GHAMOD (SOUTHMOD Ghana, EUROMOD engine) oracle-side behaviours that affect household-level Axiom comparisons for rulespec-gh. These are observations of the model's outputs, not statutory encoding gaps: in each the encoded RuleSpec follows current Ghana law and GHAMOD is the simplified oracle. The SOUTHMOD bundle is licensed and non-redistributable; entries describe observed behaviour and reference variable names and GHAMOD-produced values only, never model content.",
+ "entries": [
+  {
+   "id": "ghamod-tin-s-missing-act-1111-35pct-top-band",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "GHAMOD's simulated labour income tax tin_s applies only five marginal-rate bands and taxes chargeable income above 238,760 GHS at a flat 30%, never applying the 35% top marginal rate that the Income Tax (Amendment) (No. 2) Act 2023 (Act 1111) introduced on income exceeding 605,000 GHS (labelled 600,000 in the First Schedule). Observed live: at chargeable income 700,000 GHS GHAMOD returns tin_s = 193,244 while the encoded Act 1111 schedule returns 197,994; the 4,750 difference is exactly 5% of the 95,000 above 605,000 that GHAMOD taxes at 30% rather than 35%. The two engines agree to the cedi for all chargeable income at or below 605,000. The encoded rulespec-gh schedule is statutorily correct; GHAMOD is the simplified oracle.",
+   "affected_comparisons": [
+    "gh-income-tax-rate-schedule"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax"
+   ]
+  },
+  {
+   "id": "ghamod-tinta04-training-relief-not-modelled",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "GHAMOD does not model the Act 896 Fifth Schedule paragraph 1(f) professional/technical/vocational training relief: its tinta04 relief is inactive and no tinta04_s output column is produced (a missing column, not a zero), so there is no GHAMOD value to compare against. The encoded rulespec-gh training_personal_relief pays min(cost, 2,000 GHS) per Act 896 as amended by Act 1007 and is exercised by the module's companion tests. Because the missing column cannot form a clean per-case comparison, the gh-personal-reliefs suite carries no live training case; the concept stays mapped (unused) in concept_mappings.yaml for the day a SOUTHMOD release models it.",
+   "affected_comparisons": [
+    "gh-personal-reliefs"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-896/income-tax-2015/fifth-schedule#training_personal_relief"
+   ]
+  },
+  {
+   "id": "ghamod-tinta02-lone-parent-relief-does-not-fire",
+   "classification": "southmod_model_behaviour",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "GHAMOD splits the Act 896 Fifth Schedule paragraph 1(a) 'dependant spouse or at least two dependant children' relief into two limbs: a dependent-spouse relief tinta01 and a lone-parent relief tinta02. tinta01 fires correctly (1,200 GHS, observed) and is the parity case for the encoded dependant_spouse_or_children_personal_relief. tinta02 did not fire for any synthetic lone-parent household tested (a formal-sector earner with two dependent children under 19 linked by idmother or idfather, single or divorced marital status); those households instead received only the separate child-education relief tinta05. The encoded RuleSpec grants the 1,200 GHS relief for dependant_child_count >= 2 per Act 896 paragraph 1(a); the lone-parent limb is compared through the dependent-spouse limb, and the two-child limb is recorded here rather than asserted against a non-firing oracle output.",
+   "affected_comparisons": [
+    "gh-personal-reliefs"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief"
+   ]
+  },
+  {
+   "id": "ghamod-tscee-tscer-age-15-45-contributor-cap",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tscee_s",
+    "tscer_s"
+   ],
+   "statute": "National Pensions Act, 2008 (Act 766) s.3",
+   "observed": "GHAMOD's tscee_gh/tscer_gh restrict SSNIT contributions to formal earners aged 15-45: a probed age-50 formal earner (lfo=1, positive yem) gets tscee_s = tscer_s = 0, while an otherwise identical age-35 earner gets exactly 5.5%/13% of yem. Population scale: 537 formal earners in gh_2017_a8 (weighted ~317k) fall outside the window.",
+   "axiom_position": "Act 766 s.3 imposes the worker and employer contributions on every worker's salary with no upper age limit; the encoded module (rulespec-gh gh/statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme.yaml) follows the statute. The gh-ssnit-contributions suite therefore keeps its live cases inside the shared 15-45 window and records this entry for the out-of-window divergence.",
+   "reported_upstream": "Included in the SSNIT finding set drafted for UNU-WIDER (southmod@wider.unu.edu) alongside the tin_s top-band and relief findings."
+  }
+ ]
 }

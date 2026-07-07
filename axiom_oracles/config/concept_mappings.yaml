@@ -1961,6 +1961,57 @@ concepts:
           type: country
           geoid: GH
 
+  # National Pensions Act, 2008 (Act 766) s.3 SSNIT contributions. Flat
+  # statutory rates (worker 5.5%, employer 13%) frozen since commencement
+  # (Act 883 (2014) left s.3 untouched), so GH_2025 and the 2026 validation
+  # year apply identical rates. GHAMOD restricts contributors to ages 15-45
+  # (no basis in Act 766; ghamod_issues.json
+  # ghamod-tscee-tscer-age-15-45-contributor-cap); suite cases stay inside
+  # the shared window.
+  gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution:
+    description: Ghana SSNIT worker contribution (Act 766 s.3(1), 5.5% of qualifying employment income)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: employee_social_security_contribution
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution:
+    description: Ghana SSNIT employer contribution (Act 766 s.3(2), 13% of qualifying employment income)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: employer_social_security_contribution
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: GH
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax
