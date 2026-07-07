@@ -1,322 +1,344 @@
 {
-  "schema_version": "axiom.comparison_report.v2",
-  "suite": "uk-tv-licence",
-  "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-  "population": "case-grid",
-  "validation_year": 2026,
-  "locales": [
-    "UK"
+  "case_count": 9,
+  "cases": [
+    {
+      "axiom": 180.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-working-age-full-fee",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": false,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 180.0,
+      "receives_pc": false,
+      "scenario": "full-fee"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-working-age-full-fee",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": false,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 0.0,
+      "receives_pc": false,
+      "scenario": "full-fee"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-over75-pension-credit-free",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": true,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 0.0,
+      "receives_pc": true,
+      "scenario": "over-75-free"
+    },
+    {
+      "axiom": 180.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-over75-pension-credit-free",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": true,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 180.0,
+      "receives_pc": true,
+      "scenario": "over-75-free"
+    },
+    {
+      "axiom": 180.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-over75-no-pension-credit-pays",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": true,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 180.0,
+      "receives_pc": false,
+      "scenario": "over-75-no-pc-pays"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-over75-no-pension-credit-pays",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": true,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 0.0,
+      "receives_pc": false,
+      "scenario": "over-75-no-pc-pays"
+    },
+    {
+      "axiom": 90.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-blind-half-fee",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": false,
+      "has_blind": true,
+      "owns_tv": true,
+      "policyengine": 90.0,
+      "receives_pc": false,
+      "scenario": "blind-half"
+    },
+    {
+      "axiom": 90.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-blind-half-fee",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": false,
+      "has_blind": true,
+      "owns_tv": true,
+      "policyengine": 90.0,
+      "receives_pc": false,
+      "scenario": "blind-half"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-over75-pc-and-blind-larger",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": true,
+      "has_blind": true,
+      "owns_tv": true,
+      "policyengine": 0.0,
+      "receives_pc": true,
+      "scenario": "over-75-and-blind"
+    },
+    {
+      "axiom": 180.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-over75-pc-and-blind-larger",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": true,
+      "has_blind": true,
+      "owns_tv": true,
+      "policyengine": 180.0,
+      "receives_pc": true,
+      "scenario": "over-75-and-blind"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-no-receiver",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": false,
+      "has_blind": false,
+      "owns_tv": false,
+      "policyengine": 0.0,
+      "receives_pc": false,
+      "scenario": "no-receiver"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-no-receiver",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": false,
+      "has_blind": false,
+      "owns_tv": false,
+      "policyengine": 0.0,
+      "receives_pc": false,
+      "scenario": "no-receiver"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-evader",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": false,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 0.0,
+      "receives_pc": false,
+      "scenario": "evader"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-evader",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": false,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 0.0,
+      "receives_pc": false,
+      "scenario": "evader"
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-couple-one-over75-pc",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": true,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 0.0,
+      "receives_pc": true,
+      "scenario": "couple-over-75-free"
+    },
+    {
+      "axiom": 180.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-couple-one-over75-pc",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": true,
+      "has_blind": false,
+      "owns_tv": true,
+      "policyengine": 180.0,
+      "receives_pc": true,
+      "scenario": "couple-over-75-free"
+    },
+    {
+      "axiom": 90.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-blind-over75-not-on-pc",
+      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
+      "has_aged_75": true,
+      "has_blind": true,
+      "owns_tv": true,
+      "policyengine": 90.0,
+      "receives_pc": false,
+      "scenario": "blind-over75-no-pc"
+    },
+    {
+      "axiom": 90.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "tvl-blind-over75-not-on-pc",
+      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
+      "has_aged_75": true,
+      "has_blind": true,
+      "owns_tv": true,
+      "policyengine": 90.0,
+      "receives_pc": false,
+      "scenario": "blind-over75-no-pc"
+    }
   ],
-  "scope": {
-    "type": "country",
-    "geoid": "UK"
-  },
+  "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
   "engines": {
     "axiom": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
     "policyengine": "tv_licence"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-07T21:20:20Z",
+    "generated_by": "scripts/run_comparison.py::uk-tv-licence",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "UK",
+    "type": "country"
+  },
+  "suite": "uk-tv-licence",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "comparison_count": 18,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 18,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "policyengine_matches": 18,
+    "weighted": {
+      "comparison_weight": 18,
+      "match_rate": 100.0,
+      "match_weight": 18,
+      "mismatch_weight": 0
+    }
   },
   "tolerance": {
     "absolute": 0.01,
     "relative": 2e-07
   },
-  "case_count": 9,
-  "summary": {
-    "comparison_count": 18,
-    "match_count": 18,
-    "mismatch_count": 0,
-    "axiom_vs_policyengine_match_rate": 100.0,
-    "policyengine_matches": 18,
-    "weighted": {
-      "comparison_weight": 18,
-      "match_weight": 18,
-      "mismatch_weight": 0,
-      "match_rate": 100.0
-    },
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
-    "error_count": 0,
-    "errors_by_engine": []
-  },
-  "mismatches": [],
-  "errors": [],
-  "cases": [
-    {
-      "case_id": "tvl-working-age-full-fee",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "full-fee",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 180.0,
-      "policyengine": 180.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-working-age-full-fee",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "full-fee",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-over75-pension-credit-free",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "over-75-free",
-      "has_aged_75": true,
-      "receives_pc": true,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-over75-pension-credit-free",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "over-75-free",
-      "has_aged_75": true,
-      "receives_pc": true,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 180.0,
-      "policyengine": 180.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-over75-no-pension-credit-pays",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "over-75-no-pc-pays",
-      "has_aged_75": true,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 180.0,
-      "policyengine": 180.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-over75-no-pension-credit-pays",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "over-75-no-pc-pays",
-      "has_aged_75": true,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-blind-half-fee",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "blind-half",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": true,
-      "owns_tv": true,
-      "axiom": 90.0,
-      "policyengine": 90.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-blind-half-fee",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "blind-half",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": true,
-      "owns_tv": true,
-      "axiom": 90.0,
-      "policyengine": 90.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-over75-pc-and-blind-larger",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "over-75-and-blind",
-      "has_aged_75": true,
-      "receives_pc": true,
-      "has_blind": true,
-      "owns_tv": true,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-over75-pc-and-blind-larger",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "over-75-and-blind",
-      "has_aged_75": true,
-      "receives_pc": true,
-      "has_blind": true,
-      "owns_tv": true,
-      "axiom": 180.0,
-      "policyengine": 180.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-no-receiver",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "no-receiver",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": false,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-no-receiver",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "no-receiver",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": false,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-evader",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "evader",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-evader",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "evader",
-      "has_aged_75": false,
-      "receives_pc": false,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-couple-one-over75-pc",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "couple-over-75-free",
-      "has_aged_75": true,
-      "receives_pc": true,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-couple-one-over75-pc",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "couple-over-75-free",
-      "has_aged_75": true,
-      "receives_pc": true,
-      "has_blind": false,
-      "owns_tv": true,
-      "axiom": 180.0,
-      "policyengine": 180.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-blind-over75-not-on-pc",
-      "concept": "uk:policies/govuk/tv-licence#tv_licence_net_cost",
-      "scenario": "blind-over75-no-pc",
-      "has_aged_75": true,
-      "receives_pc": false,
-      "has_blind": true,
-      "owns_tv": true,
-      "axiom": 90.0,
-      "policyengine": 90.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "tvl-blind-over75-not-on-pc",
-      "concept": "uk:policies/govuk/tv-licence#free_tv_licence_value",
-      "scenario": "blind-over75-no-pc",
-      "has_aged_75": true,
-      "receives_pc": false,
-      "has_blind": true,
-      "owns_tv": true,
-      "axiom": 90.0,
-      "policyengine": 90.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    }
-  ],
-  "provenance": {
-    "generated": "2026-07-07",
-    "generator": "scripts/generate_uk_tv_licence.py",
-    "axiom_engine": "axiom rules engine over rulespec-uk uk/policies/govuk/tv-licence.yaml",
-    "policyengine_uk": "2.89.2",
-    "commensurability": "PolicyEngine-UK tv_licence and free_tv_licence_value are fee * (1 - discount) and fee * discount for a household that owns a receiver and does not evade, with fee = \u00a3180 (2026-27, gov.dcms.bbc.tv_licence.colour) and discount = max(over-75 100%, blind 50%). The rulespec module reproduces this with the fee grounded in SI 2004/692 Schedule 1 (\u00a3180.00) and the concession structure in Communications Act 2003 s.365; the demographic facts and the two concession rates are supplied from PolicyEngine on both sides."
-  }
+  "validation_year": 2026
 }
