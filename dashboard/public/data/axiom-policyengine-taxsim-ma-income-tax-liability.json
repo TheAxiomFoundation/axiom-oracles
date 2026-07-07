@@ -114,7 +114,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-06T20:24:20Z",
+    "generated_at": "2026-07-07T04:58:41Z",
     "generated_by": "scripts/run_comparison.py::ma-income-tax-liability",
     "rulespecs": [
       {
