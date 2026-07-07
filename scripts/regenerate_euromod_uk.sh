@@ -37,6 +37,7 @@ for name in \
   uk-child-benefit-ukmod \
   uk-housing-benefit-ukmod \
   uk-personal-allowance-ukmod \
+  uk-scottish-child-payment-ukmod \
   uk-income-tax-savings-ukmod \
   uk-income-tax-dividend-ukmod \
   uk-income-tax-mixed-ukmod; do

@@ -334,7 +334,7 @@ policies:
     output_vars:
       - bchmt_s
     in_scope: true
-    suite: null
+    suite: uk-scottish-child-payment
     note: 'BEN: Scottish Child Payment (UKMOD comment "BEN: Child Payment (Scotland)"), not a Child Benefit
       means-test variant despite the bch* prefix (distinct from the excluded bchmt01_uk SCP bridging scheme).
       bchmt_s is a devolved Scotland-only (drgn1=12) means-tested payment: eligibility passports off il_bchmt
