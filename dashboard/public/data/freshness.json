@@ -218,13 +218,13 @@
     },
     {
       "suite": "be-marital-quotient",
-      "generated_at": "2026-07-06T19:12:55Z",
-      "run_kind": "manual",
+      "generated_at": "2026-07-07T10:05:33Z",
+      "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-be": "a69bfa61458630ac574b779f7d9d47de2afaba8b"
+        "TheAxiomFoundation/rulespec-be": null
       },
       "unstamped": false
     },

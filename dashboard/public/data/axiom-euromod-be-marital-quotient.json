@@ -433,10 +433,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "b726a9dfa421dde267b8faae01038779d0710fd3",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T19:12:55Z",
+    "generated_at": "2026-07-07T10:05:33Z",
     "generated_by": "scripts/run_comparison.py::be-marital-quotient",
     "oracle": {
       "euromod_country": "BE",
@@ -448,10 +448,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": "a69bfa61458630ac574b779f7d9d47de2afaba8b"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
