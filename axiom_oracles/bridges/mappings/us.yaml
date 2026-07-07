@@ -27914,6 +27914,42 @@ mappings:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: This RuleSpec output is the New York Tax Law section 614 standard-deduction concept. The standard deduction is inflation-indexed by New York State annually, so this output is declared as a deferred output to import from the current-year authority rather than an executable value; PolicyEngine exposes the indexed ny_standard_deduction variable. It becomes directly comparable once the composed current-year output is encoded.
+  - legal_id: us:programs/fiit/fy-2026#regular_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: The us/fiit program exposes the encoded section 1(j) ordinary-rate schedule, but upstream taxable-income assembly (sections 61-63) is not yet encoded, so taxable income is a runtime input rather than a computed quantity. PolicyEngine derives regular_tax_before_credits from fully modeled taxable income, so this program output is not comparable until the taxable-income chain is encoded.
+  - legal_id: us:programs/fiit/fy-2026#income_tax_before_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: The us/fiit program exposes the encoded section 26 nonrefundable-credit limitation, but upstream taxable-income assembly (sections 61-63) is not yet encoded, so taxable income is a runtime input. PolicyEngine computes income_tax_before_refundable_credits from fully modeled taxable income and credits, so this program output is not comparable until the taxable-income chain is encoded.
+  - legal_id: us:programs/fiit/fy-2026#eitc
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: The us/fiit program surfaces the section 32 earned income credit, but the program takes taxable income and its earned-income inputs as runtime inputs because upstream income assembly (sections 61-63) is not yet encoded. PolicyEngine computes eitc from fully modeled earned income and AGI, so this program output is not comparable until the upstream chain is encoded.
+  - legal_id: us:programs/fiit/fy-2026#ctc_after_advance_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: The us/fiit program surfaces the section 24 child tax credit after advance payments, but the program takes taxable income and its inputs as runtime inputs because upstream income assembly (sections 61-63) is not yet encoded. PolicyEngine computes ctc_after_advance_payments from fully modeled income and phase-outs, so this program output is not comparable until the upstream chain is encoded.
+  - legal_id: us:programs/fiit/fy-2026#alternative_minimum_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: The us/fiit program surfaces the section 55 alternative minimum tax, but the program takes taxable income and its inputs as runtime inputs because upstream income assembly (sections 61-63) is not yet encoded. PolicyEngine computes alternative_minimum_tax from fully modeled AMT income, so this program output is not comparable until the upstream chain is encoded.
+  - legal_id: us:programs/fiit/fy-2026#income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P3
+    rationale: The us/fiit program surfaces income tax before credits from the encoded section 1(j) and section 55 chain, but the program takes taxable income as a runtime input because upstream income assembly (sections 61-63) is not yet encoded. PolicyEngine computes income_tax_before_credits from fully modeled taxable income, so this program output is not comparable until the upstream chain is encoded.
 
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
