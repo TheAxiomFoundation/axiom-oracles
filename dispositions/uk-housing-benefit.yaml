@@ -1,0 +1,98 @@
+schema: axiom_oracles.dispositions.v1
+suite: uk-housing-benefit
+updated: "2026-07-07"
+# The composed rulespec-uk Housing Benefit entitlement pipeline
+# (housing_benefit_composed_entitlement_pipeline, #83) matches UKMOD bho_s to the
+# penny on the pension-age population, where UKMOD Housing Benefit stays live: the
+# single and couple pension-age no-earnings renters both pay the full eligible
+# rent and match exactly (graded in the committed report, not dispositioned).
+#
+# The three WORKING-AGE renter cases below are deterministically zeroed by UKMOD's
+# Universal-Credit transition inside bho_uk (the i_bho_noUC / i_bho_yesUC split),
+# whose model comment states the intent verbatim: "ensure new benefit claims are
+# to UC only and not to the legacy benefits". A hypothetical working-age renter is
+# treated as a new claim, routed to Universal Credit, and its legacy bho_s is
+# forced to zero (UKMOD would instead pay the Universal Credit housing element,
+# compared in the uk-universal-credit suite). This is NOT the stochastic take-up
+# draw that zeros the Universal Credit and Pension Credit awards — it is
+# DETERMINISTIC: verified live on UKMOD_PUBLIC_B2026.03 (system UK_2026, dataset
+# training_data), every working-age renter with a positive statutory entitlement
+# returns bho_s = 0.0, and the zeroed set is IDENTICAL across two consecutive
+# full-suite runs. Pinning the three HB take-up rates ($HBTUWAWork / $HBTUWANowork
+# / $HBTUPen) to 1.0 via euromod_constant_overrides does not restore a working-age
+# award, isolating the cause to the UC transition rather than take-up. Axiom
+# computes the full statutory Housing Benefit entitlement the HB Regulations 2006
+# confer, so the zeros are a UKMOD-side current-law caseload-routing behaviour, not
+# an Axiom encoding gap (see
+# euromod_issues.json#ukmod-hb-bho-uc-transition).
+entries:
+  # --- UKMOD UC transition routes the working-age claim to UC, zeroing bho_s ---
+  - id: uc-transition-zeroes-single-under25
+    concept: uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement
+    case_id: uk-hb-single-under25-renter
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        UKMOD's Universal-Credit transition inside bho_uk (i_bho_noUC /
+        i_bho_yesUC) treats this hypothetical single under-25 working-age renter
+        as a new benefit claim, routes it to Universal Credit, and deterministically
+        zeroes the legacy Housing Benefit award bho_s ("ensure new benefit claims
+        are to UC only and not to the legacy benefits"). The composed pipeline
+        computes the full statutory maximum Housing Benefit — the eligible rent
+        6000.00/year (500.00/month x 12) with a nil HB means so the 65 per cent
+        taper does not bite. Verified deterministic (identical zero across repeated
+        runs) and unaffected by pinning the HB take-up rates to 1.0, so this is a
+        UKMOD-side current-law caseload-routing behaviour, not an Axiom encoding
+        gap.
+      arithmetic:
+        - expression: "6000.00 - 0"
+          equals: 6000.00
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-hb-bho-uc-transition
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 6000.0
+  - id: uc-transition-zeroes-single
+    concept: uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement
+    case_id: uk-hb-single-renter
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Same UKMOD Universal-Credit transition as uc-transition-zeroes-single-under25:
+        this single working-age renter is routed to Universal Credit and its legacy
+        bho_s is deterministically zeroed. The composed pipeline computes the full
+        statutory maximum Housing Benefit — the eligible rent 6600.00/year
+        (550.00/month x 12) with a nil HB means. UKMOD-side, not an Axiom gap.
+      arithmetic:
+        - expression: "6600.00 - 0"
+          equals: 6600.00
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-hb-bho-uc-transition
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 6600.0
+  - id: uc-transition-zeroes-couple
+    concept: uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement
+    case_id: uk-hb-couple-renter
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Same UKMOD Universal-Credit transition as the single working-age cases:
+        this working-age couple renter is routed to Universal Credit and its legacy
+        bho_s is deterministically zeroed. The composed pipeline computes the full
+        statutory maximum Housing Benefit — the eligible rent 7800.00/year
+        (650.00/month x 12) with a nil HB means. UKMOD-side, not an Axiom gap.
+      arithmetic:
+        - expression: "7800.00 - 0"
+          equals: 7800.00
+      sources:
+        - axiom_oracles/data/euromod_issues.json#ukmod-hb-bho-uc-transition
+    expires_on_source_change: true
+    pinned:
+      left: 0.0
+      right: 7800.0

@@ -825,7 +825,7 @@ policies:
       - bsadi01_s
       - bsadi_s
       - bsa_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bsadi_EligSevDisPremium
       - i_bsadi_EligCarerPremium
@@ -849,33 +849,21 @@ policies:
       - i_bsadi_turtob
       - i_bsadi_s_ftu
       - i_bsadi_probtu
-    suite: null
-    note: 'BEN: Social Assistance (income-related Employment and Support Allowance). PROBE-ADJUDICATED
-      (live UKMOD_PUBLIC_B2026.03/UK_2026 on this Mac, x86_64/coreclr, euromod 0.2.18): the policy is
-      switch=on and SIMULATES the full ir-ESA entitlement bsadi_s from statute — NOT a design-zero exclusion.
-      With the limited-capability-for-work input supplied and the UC-transition constant $UCtransition
-      set to 0 (Full Legacy Benefits) and take-up pinned, bsadi_s fires nonzero: ddipd=1 (WRAG) -> 6,961.07/yr
-      (bsadi01_s WRAG component 1,978.82); ddipd=3 (Support) -> 7,607.64/yr (bsadi00_s Support 2,625.39);
-      ddipd=0 -> 0 (falls back to Income Support bsa_s 4,982.25). It is a genuine benefit-unit comparable
-      surface (applicable amount i_bsadi_PersAllow + SDP/carer/EDP premiums, LCW gate, il_IS_means means
-      deduction, housing-cost non-dependant deductions, Support/WRAG components $ESAsup/$ESAwra). THREE
-      barriers to a live UKMOD suite on the registration-free demo data, all evidenced: (1) the LCW eligibility
-      gate reads ((ddipd>0)|(ddipd00>0)|((ddi02>=9)&(ddi02<=14))) and ddipd/ddipd00/ddi02 are pure data
-      inputs ABSENT from the 365-column training_data schema (the _runner.py template overlay drops non-header
-      columns) — ir-ESA cannot fire from statute on stock demo data (data-exercisability limit, like the
-      PC savings-credit; a patched schema supplying ddipd exercises it, verified above); (2) the UC-transition
-      (i_rand_uc<=$UCtransition; $UCtransition=0.06 baseline per DefConst, 0=LBA/1=UCA) plus the fully-random
-      take-up ($ISTUChild=0.89/$ISTUNochild=0.83) can zero a hypothetical award away from entitlement
-      (clean pre-transition value = i_bsadi_noUC) — dispositions upstream_engine_gap per or#168/or#170;
-      (3) UK_2026 applies a FROZEN applicable amount ($ISSing25=73.10/wk vs the current statutory ESA
-      Regs 2008 SI 2008/794 Sch 4 single-25+/main-phase 97.75/wk, corpus 2026-04-06 in force; UKMOD across
-      systems 73.10(x4 incl UK_2026)..92.05,95.55,97.55.. = UK_2026 frozen ~2015 vintage), so an Axiom
-      pipeline at current statutory rates would diverge from UKMOD by the freeze. Income-related ESA remains
-      a LIVE legacy benefit in current law (closing to new claims via UC managed migration; existing awards
-      continue). rulespec-uk does not yet encode ir-ESA. Statutory provisions ingested to axiom-corpus
-      (2026-07-06-uk-esa-income-related: SI 2008/794 regs 67-68 + Sch 4). Next-wave: composed applicable-amount
-      pipeline graded vs UKMOD via a patched (ddipd-carrying) schema, with the frozen-rate divergence
-      dispositioned (evidence: UK.xml UK_2026 bsadi_uk function body; live probe 2026-07-06).'
+    exclusion_reason: oracle_dataset_lacks_input
+    note: 'BEN: Social Assistance (income-related Employment and Support Allowance). EXCLUDED oracle_dataset_lacks_input.
+      The ir-ESA phase selector ddipd / ddipd00 (0 = Income Support fallback, 1 = Work-Related Activity
+      Group, 3 = Support Group) — the input that activates the ESA-specific components bsadi01_s (WRAG)
+      and bsadi00_s (Support) — is ABSENT from the registration-free training_data column schema (364
+      columns; ddipd, ddipd00, ddi02 and the bfapl-class LCW/LCWRA inputs all absent). The euromod adapter
+      builds each synthetic household from a template of the dataset header columns and skips any key
+      not in the header, so ddipd cannot be supplied even synthetically; the ir-ESA WRAG/Support surface
+      can never be exercised on the registration-free dataset (ddipd defaults to 0, routing bsadi_s to
+      its Income Support fallback). PROBE (scripts/probe_uk_repealed_and_missing_input.py, live UKMOD_PUBLIC_B2026.03/UK_2026):
+      a disabled single adult with the admissible disability indicators set (ddi=1, bdisc>0) but no ddipd
+      returns bsadi_s=0, bsadi01_s=0, bsadi00_s=0. Same class as EUROMOD BE bfapl (lpb column absent,
+      oracles#160). The wave-2 note reported bsadi firing WRAG/Support after supplying ddipd, which the
+      schema-bounded adapter cannot do; ir-ESA remains extant law (unlike repealed tax credits), so the
+      block is the missing dataset input, not repeal.'
   - id: uk:bsaec_uk
     oracle_policy_name: bsaec_uk
     oracle_policy_type: ben
@@ -969,7 +957,7 @@ policies:
       - bfamt_s
       - bwkmt_s
       - bfamttm_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bwkmt_bfamt_Disab
       - i_bwkmt_ChildCare
@@ -1002,28 +990,19 @@ policies:
       - i_bwkmt_probtrback
       - i_bwkmt_probtr
       - i_bwkmt_yesUC
-    suite: null
-    note: 'BEN: Tax credits (Working Tax Credit and Child Tax Credit). PROBE-ADJUDICATED (live UKMOD_PUBLIC_B2026.03/UK_2026
-      on this Mac): the policy is switch=on and SIMULATES the full legacy tax-credit entitlements from
-      statute — NOT a design-zero exclusion of the UKMOD row. With les=2 (employed) + lhw01 populated
-      + $UCtransition=0 + take-up pinned, the surfaces fire nonzero: single childless 30h -> WTC bwkmt_s
-      3,145.95/yr (30-hour element bwkmtcm_s 1,070); lone parent 30h + 1 child -> WTC 5,780.95 + CTC bfamt_s
-      3,650 (CTC responds to child age: 3,650 age5 -> 4,195 age10); lone parent 16h -> WTC 5,205 (no 30h
-      element, correct). WTC (basic/lone-parent/couple/30h/disability + 70%-of-xcc childcare) and CTC
-      (family + per-child + disability, two-child limit) are jointly income-tested; the shared withdrawal
-      (rate 0.41, threshold $WTCCTCThresh1) is applied to WTC FIRST then CTC (i_bwkmt_bfamt_withdrawnAmt).
-      BUT: (1) THE BENEFIT IS ABOLISHED IN CURRENT LAW — Working Tax Credit and Child Tax Credit ENDED
-      5 April 2025 (gov.uk/tax-credits-have-ended; HoC Library CBP-9984); PolicyEngine encodes gov.dwp.tax_credits.active=false
-      from 2025-04-06 and pays 0 in 2026 by design. UKMOD UK_2026 models a FROZEN CLOSING LEGACY STOCK,
-      a counterfactual, not current law: $WTCBasic=1,960/yr vs the unrepealed-but-closed SI 2002/2005
-      Sch 2 basic 2,435 (corpus 2026-04-06) and the PE-projected 2,542. (2) take-up (switch-type fully-random,
-      $WTCCTCTULP=0.96 etc.) + UC-transition zero hypothetical awards (clean pre-transition i_bwkmt_noUC/i_bfamt_noUC)
-      — dispositions per or#168/or#170. Because the programme no longer pays ongoing awards, NO net-new
-      statutory pipeline is encoded (it would encode dead law and grade a frozen UKMOD counterfactual);
-      the row stays in-scope (UKMOD simulates it) with this probe evidence. Statutory rate provisions
-      ingested to axiom-corpus anyway (2026-07-06-uk-tax-credits-rates: SI 2002/2005 Sch 2, SI 2002/2007
-      regs 7-8, SI 2002/2008 regs 7-8) for provenance. Evidence: UK.xml UK_2026 bwkmt_bfamt_uk function
-      body; live probe 2026-07-06.'
+    exclusion_reason: oracle_models_repealed_law
+    note: 'BEN: Tax credits (Working Tax Credit and Child Tax Credit). EXCLUDED oracle_models_repealed_law.
+      Tax credits ended 5 April 2025 (GOV.UK www.gov.uk/tax-credits-have-ended) — abolished from the 2025-26
+      tax year, no new claims and no payments after 5 April 2025; the caseload migrated to Universal Credit
+      / Pension Credit. UKMOD UK_2026 retains bwkmt_bfamt_uk (switch=on, outputs bwkmt_s/bfamt_s/bwkmtcm_s/bfamttm_s/ydg04_s)
+      but gates entitlement through the same Universal-Credit transition as Housing Benefit (''taker of
+      ben bef 1st obs trans'' — new claims routed to UC), so on the registration-free training_data no
+      synthetic case is a pre-transition legacy tax-credit claimant. PROBE (scripts/probe_uk_repealed_and_missing_input.py,
+      live UKMOD_PUBLIC_B2026.03/UK_2026): single childless 30h (les=2 and les=3) and a lone parent with
+      one child at 35h all return bwkmt_s=0 and bfamt_s=0 with the WTC/CTC take-up rates pinned to 1.0
+      and $UCtransition=0 (the wave-2 note''s nonzero figures are not reproducible on UK_2026). Because
+      WTC/CTC are repealed, rulespec-uk encodes no current-law tax-credit surface by design, so no dataset
+      input would make this comparable — the exclusion is oracle_models_repealed_law, distinct from oracle_dataset_lacks_input.'
   - id: uk:cjrs_uk
     oracle_policy_name: cjrs_uk
     oracle_policy_type: ben

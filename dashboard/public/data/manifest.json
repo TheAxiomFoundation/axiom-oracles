@@ -107,6 +107,8 @@
     "axiom-euromod-uk-healthy-start.json",
     "axiom-euromod-uk-sure-start-maternity-grant.json",
     "axiom-taxsim-co-state-income-tax-ecps.json",
-    "axiom-policyengine-uk-winter-fuel-payment-pe.json"
+    "axiom-policyengine-uk-winter-fuel-payment-pe.json",
+    "axiom-euromod-uk-personal-allowance.json",
+    "axiom-euromod-uk-housing-benefit.json"
   ]
 }
