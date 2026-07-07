@@ -216,6 +216,14 @@
       "source": "comparisons/fl-snap-ecps.yaml"
     },
     {
+      "suite": "fl-tca-standards",
+      "report": "axiom-policyengine-fl-tca-standards.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-fl"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
       "suite": "ga-health-thresholds",
       "report": "axiom-policyengine-ga-health-thresholds.json",
       "repos": [

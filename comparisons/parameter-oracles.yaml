@@ -437,3 +437,82 @@ suites:
         rule: ca_capi_couple_resource_limit
         description: CA CAPI resource limit, couple
         pe: gov.states.ca.cdss.capi.resources.limit.couple
+  - suite: fl-tca-standards
+    category: cash
+    locales: [FL]
+    comparisons:
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 2
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 1
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.1
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 4
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 2
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.2
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 6
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 3
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.3
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 10
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 5
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.5
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 16
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 8
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.8
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 2
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 1
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.1
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 4
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 2
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.2
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 6
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 3
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.3
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 10
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 5
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.5
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 16
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 8
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.8
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 2
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 1
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.1
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 4
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 2
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.2
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 6
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 3
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.3
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 10
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 5
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.5
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 16
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 8
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.8

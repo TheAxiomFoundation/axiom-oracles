@@ -152,6 +152,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 221,
   },
+  "fl-tca-standards": {
+    family: "tanf",
+    jurisdiction: "FL",
+    label: "Florida TCA payment standards",
+    region: "us",
+    kind: "parameter",
+    order: 226,
+  },
   "md-tca-payments": {
     family: "tanf",
     jurisdiction: "MD",
