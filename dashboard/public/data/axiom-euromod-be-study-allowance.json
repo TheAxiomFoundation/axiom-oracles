@@ -483,7 +483,7 @@
       "axiom_rules_engine_sha": "b726a9dfa421dde267b8faae01038779d0710fd3",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-07T05:06:12Z",
+    "generated_at": "2026-07-07T10:08:48Z",
     "generated_by": "scripts/run_comparison.py::be-study-allowance",
     "oracle": {
       "euromod_country": "BE",
