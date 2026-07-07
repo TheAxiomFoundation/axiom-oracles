@@ -1,136 +1,162 @@
 {
-  "schema_version": "axiom.comparison_report.v2",
-  "suite": "uk-capital-gains-tax",
-  "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
-  "population": "case-grid",
-  "validation_year": 2026,
-  "locales": [
-    "UK"
+  "case_count": 6,
+  "cases": [
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "basic_rate_limit": 37700.0,
+      "capital_gains": 2000.0,
+      "case_id": "cgt-within-annual-exempt-amount",
+      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
+      "policyengine": 0.0,
+      "scenario": "gains-below-annual-exempt-amount",
+      "taxable_income": 7430.0
+    },
+    {
+      "axiom": 900.0,
+      "axiom_vs_policyengine": {
+        "difference": -6.103515625e-05,
+        "match": true
+      },
+      "basic_rate_limit": 37700.0,
+      "capital_gains": 8000.0,
+      "case_id": "cgt-basic-rate-band-only",
+      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
+      "policyengine": 900.0000610351562,
+      "scenario": "gains-within-basic-rate-band",
+      "taxable_income": 7430.0
+    },
+    {
+      "axiom": 9463.8,
+      "axiom_vs_policyengine": {
+        "difference": 0.00019531249927240424,
+        "match": true
+      },
+      "basic_rate_limit": 37700.0,
+      "capital_gains": 50000.0,
+      "case_id": "cgt-spanning-basic-and-higher",
+      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
+      "policyengine": 9463.7998046875,
+      "scenario": "gains-span-basic-and-higher-bands",
+      "taxable_income": 7430.0
+    },
+    {
+      "axiom": 6480.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "basic_rate_limit": 37700.0,
+      "capital_gains": 30000.0,
+      "case_id": "cgt-fully-higher-rate",
+      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
+      "policyengine": 6480.0,
+      "scenario": "gains-fully-above-basic-rate-band",
+      "taxable_income": 67430.0
+    },
+    {
+      "axiom": 3060.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "basic_rate_limit": 37700.0,
+      "capital_gains": 20000.0,
+      "case_id": "cgt-mid-income-partial-band",
+      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
+      "policyengine": 3060.0,
+      "scenario": "basic-rate-band-partly-used-by-income",
+      "taxable_income": 17430.0
+    },
+    {
+      "axiom": 25963.8,
+      "axiom_vs_policyengine": {
+        "difference": 0.0011718749992724042,
+        "match": true
+      },
+      "basic_rate_limit": 37700.0,
+      "capital_gains": 120000.0,
+      "case_id": "cgt-large-gain-low-income",
+      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
+      "policyengine": 25963.798828125,
+      "scenario": "large-gain-low-income",
+      "taxable_income": 2430.0
+    }
   ],
-  "scope": {
-    "type": "country",
-    "geoid": "UK"
-  },
+  "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
   "engines": {
     "axiom": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
     "policyengine": "capital_gains_tax"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-07T21:10:18Z",
+    "generated_by": "scripts/run_comparison.py::uk-capital-gains-tax",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_uk": "2.89.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "UK",
+    "type": "country"
+  },
+  "suite": "uk-capital-gains-tax",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "comparison_count": 6,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 6,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "policyengine_matches": 6,
+    "weighted": {
+      "comparison_weight": 6,
+      "match_rate": 100.0,
+      "match_weight": 6,
+      "mismatch_weight": 0
+    }
   },
   "tolerance": {
     "absolute": 0.01,
     "relative": 2e-07
   },
-  "case_count": 6,
-  "summary": {
-    "comparison_count": 6,
-    "match_count": 6,
-    "mismatch_count": 0,
-    "axiom_vs_policyengine_match_rate": 100.0,
-    "policyengine_matches": 6,
-    "weighted": {
-      "comparison_weight": 6,
-      "match_weight": 6,
-      "mismatch_weight": 0,
-      "match_rate": 100.0
-    },
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
-    "error_count": 0,
-    "errors_by_engine": []
-  },
-  "mismatches": [],
-  "errors": [],
-  "cases": [
-    {
-      "case_id": "cgt-within-annual-exempt-amount",
-      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
-      "scenario": "gains-below-annual-exempt-amount",
-      "capital_gains": 2000.0,
-      "taxable_income": 7430.0,
-      "basic_rate_limit": 37700.0,
-      "axiom": 0.0,
-      "policyengine": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "cgt-basic-rate-band-only",
-      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
-      "scenario": "gains-within-basic-rate-band",
-      "capital_gains": 8000.0,
-      "taxable_income": 7430.0,
-      "basic_rate_limit": 37700.0,
-      "axiom": 900.0,
-      "policyengine": 900.0000610351562,
-      "axiom_vs_policyengine": {
-        "difference": -6.103515625e-05,
-        "match": true
-      }
-    },
-    {
-      "case_id": "cgt-spanning-basic-and-higher",
-      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
-      "scenario": "gains-span-basic-and-higher-bands",
-      "capital_gains": 50000.0,
-      "taxable_income": 7430.0,
-      "basic_rate_limit": 37700.0,
-      "axiom": 9463.8,
-      "policyengine": 9463.7998046875,
-      "axiom_vs_policyengine": {
-        "difference": 0.00019531249927240424,
-        "match": true
-      }
-    },
-    {
-      "case_id": "cgt-fully-higher-rate",
-      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
-      "scenario": "gains-fully-above-basic-rate-band",
-      "capital_gains": 30000.0,
-      "taxable_income": 67430.0,
-      "basic_rate_limit": 37700.0,
-      "axiom": 6480.0,
-      "policyengine": 6480.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "cgt-mid-income-partial-band",
-      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
-      "scenario": "basic-rate-band-partly-used-by-income",
-      "capital_gains": 20000.0,
-      "taxable_income": 17430.0,
-      "basic_rate_limit": 37700.0,
-      "axiom": 3060.0,
-      "policyengine": 3060.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      }
-    },
-    {
-      "case_id": "cgt-large-gain-low-income",
-      "concept": "uk:policies/govuk/capital-gains-tax#capital_gains_tax",
-      "scenario": "large-gain-low-income",
-      "capital_gains": 120000.0,
-      "taxable_income": 2430.0,
-      "basic_rate_limit": 37700.0,
-      "axiom": 25963.8,
-      "policyengine": 25963.798828125,
-      "axiom_vs_policyengine": {
-        "difference": 0.0011718749992724042,
-        "match": true
-      }
-    }
-  ],
-  "provenance": {
-    "generated": "2026-07-07",
-    "generator": "scripts/generate_uk_capital_gains_tax.py",
-    "axiom_engine": "axiom rules engine over rulespec-uk uk/policies/govuk/capital-gains-tax.yaml",
-    "policyengine_uk": "2.89.2",
-    "commensurability": "PolicyEngine-UK capital_gains_tax (annual exempt amount \u00a33,000, basic rate 18%, higher/additional 24%) vs the TCGA 1992 s.1H/1I/1K band split; capital_gains is a supplied input on both sides. PolicyEngine's taxable income (adjusted_net_income less allowances) and basic rate limit (gov.hmrc.income_tax basic rate threshold) are bridged into the rulespec supplied inputs."
-  }
+  "validation_year": 2026
 }

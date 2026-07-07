@@ -113,6 +113,7 @@
     "axiom-policyengine-uk-attendance-allowance-pe.json",
     "axiom-policyengine-uk-tax-free-childcare-pe.json",
     "axiom-euromod-uk-scottish-child-payment.json",
-    "axiom-policyengine-uk-fuel-duty.json"
+    "axiom-policyengine-uk-fuel-duty.json",
+    "axiom-policyengine-uk-capital-gains-tax.json"
   ]
 }
