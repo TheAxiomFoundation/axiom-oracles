@@ -148,7 +148,6 @@ _HEAD_RELATIONS = {
 }
 
 _ZERO_COLUMNS = (
-    "otherprop",
     "nonprop",
     "transfers",
     "scorp",
@@ -228,6 +227,10 @@ def taxsim_input_for_case(
         "stcg": _sum_fact(earners, Concepts.SHORT_TERM_CAPITAL_GAINS),
         "ltcg": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS),
         "pensions": _sum_fact(earners, Concepts.PENSION_INCOME),
+        # Rental/royalty income flows through TAXSIM's other-property
+        # column; zero-filling it depressed TAXSIM AGI on every
+        # rental-income unit relative to the axiom side.
+        "otherprop": _sum_fact(earners, Concepts.RENTAL_INCOME),
         "gssi": _sum_fact(earners, Concepts.SOCIAL_SECURITY_BENEFITS),
         "pui": _number(head.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0)),
         "sui": (
