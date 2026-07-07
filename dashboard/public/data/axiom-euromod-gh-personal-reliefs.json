@@ -1,0 +1,956 @@
+{
+ "aggregates": [
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "comparison_count": 8,
+   "comparison_weight": 8,
+   "components": [],
+   "concept": "gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief",
+   "description": "Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)",
+   "left_weighted_sum": 1500,
+   "match_rate": 100,
+   "match_weight": 8,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 1500,
+   "weighted_difference": 0,
+   "weighted_match_rate": 100
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "comparison_count": 8,
+   "comparison_weight": 8,
+   "components": [],
+   "concept": "gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief",
+   "description": "Ghana Fifth Schedule disability personal relief (Act 896 para 1(b), 25% of assessable income)",
+   "left_weighted_sum": 25000,
+   "match_rate": 100,
+   "match_weight": 8,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 25000,
+   "weighted_difference": 0,
+   "weighted_match_rate": 100
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "comparison_count": 8,
+   "comparison_weight": 8,
+   "components": [],
+   "concept": "gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief",
+   "description": "Ghana Fifth Schedule child-education personal relief (Act 896 para 1(d), 600 per child, max 3)",
+   "left_weighted_sum": 4200,
+   "match_rate": 100,
+   "match_weight": 8,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 4200,
+   "weighted_difference": 0,
+   "weighted_match_rate": 100
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "comparison_count": 8,
+   "comparison_weight": 8,
+   "components": [],
+   "concept": "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief",
+   "description": "Ghana Fifth Schedule aged-dependant-relative relief (Act 896 para 1(e), 1000 per relative, max 2)",
+   "left_weighted_sum": 4000,
+   "match_rate": 100,
+   "match_weight": 8,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 4000,
+   "weighted_difference": 0,
+   "weighted_match_rate": 100
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "comparison_count": 8,
+   "comparison_weight": 8,
+   "components": [],
+   "concept": "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief",
+   "description": "Ghana Fifth Schedule dependent-spouse-or-children (marriage) relief (Act 896 para 1(a))",
+   "left_weighted_sum": 2400,
+   "match_rate": 100,
+   "match_weight": 8,
+   "mismatch_count": 0,
+   "mismatch_weight": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "right_weighted_sum": 2400,
+   "weighted_difference": 0,
+   "weighted_match_rate": 100
+  }
+ ],
+ "case_count": 8,
+ "cases": [
+  {
+   "case_id": "gh-relief-old-age",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 65,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 0
+    },
+    "euromod_inputs": [
+     {
+      "dag": 65,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     }
+    ],
+    "household_summary": {
+     "ages": [
+      65
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "working-elderly-old-age-relief",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  },
+  {
+   "case_id": "gh-relief-disability",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 40,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 99999.99999999999,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": true,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 0
+    },
+    "euromod_inputs": [
+     {
+      "dag": 40,
+      "ddi": 1,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     }
+    ],
+    "euromod_to_axiom_input_bridge": {
+     "il_tintb3": [
+      "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income"
+     ]
+    },
+    "euromod_to_axiom_input_bridge_applied": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 99999.99999999999
+    },
+    "household_summary": {
+     "ages": [
+      40
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "disabled-worker-disability-relief",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  },
+  {
+   "case_id": "gh-relief-child-education-2",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 40,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 2
+    },
+    "euromod_inputs": [
+     {
+      "dag": 40,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     },
+     {
+      "dag": 12,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 102,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 11,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 1,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 103,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     }
+    ],
+    "household_summary": {
+     "ages": [
+      40
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "sponsored-children-education-relief",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  },
+  {
+   "case_id": "gh-relief-child-education-4-cap",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 40,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 4
+    },
+    "euromod_inputs": [
+     {
+      "dag": 40,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     },
+     {
+      "dag": 12,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 102,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 11,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 1,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 103,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 10,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 104,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 9,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 1,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 105,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     }
+    ],
+    "household_summary": {
+     "ages": [
+      40
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "sponsored-children-education-relief",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  },
+  {
+   "case_id": "gh-relief-aged-dependant-1",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 40,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 1,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 0
+    },
+    "euromod_inputs": [
+     {
+      "dag": 40,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     },
+     {
+      "dag": 68,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 102,
+      "les": 0,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     }
+    ],
+    "household_summary": {
+     "ages": [
+      40
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "aged-dependant-relative-relief",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  },
+  {
+   "case_id": "gh-relief-aged-dependant-3-cap",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 40,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 3,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 0
+    },
+    "euromod_inputs": [
+     {
+      "dag": 40,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     },
+     {
+      "dag": 68,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 102,
+      "les": 0,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 69,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 103,
+      "les": 0,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 70,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 104,
+      "les": 0,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     }
+    ],
+    "household_summary": {
+     "ages": [
+      40
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "aged-dependant-relative-relief",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  },
+  {
+   "case_id": "gh-relief-dependant-spouse",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 40,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": true,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 0
+    },
+    "euromod_inputs": [
+     {
+      "dag": 40,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 2,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 102,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     },
+     {
+      "dag": 38,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 2,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 101,
+      "idperson": 102,
+      "les": 0,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     }
+    ],
+    "household_summary": {
+     "ages": [
+      40
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "married-worker-dependent-spouse-relief",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  },
+  {
+   "case_id": "gh-relief-combined",
+   "left_engine": "euromod",
+   "left_errors": [],
+   "match_rate": 100.0,
+   "metadata": {
+    "axiom_entity": "Person",
+    "axiom_entity_id": "head",
+    "axiom_inputs": {
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#age": 40,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_count": 1,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#assessable_business_or_employment_income": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_child_count": 0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_dependant_spouse": true,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_disability": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#has_undergone_skills_update_training": false,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#skills_update_training_cost": 0.0,
+     "gh:statutes/act-896/income-tax-2015/fifth-schedule#sponsored_children_in_education_count": 2
+    },
+    "euromod_inputs": [
+     {
+      "dag": 40,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 1,
+      "dhh": 1,
+      "dms": 2,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 105,
+      "idperson": 101,
+      "les": 3,
+      "lfo": 1,
+      "yem": 2321.2015627896308,
+      "yem00": 2321.2015627896308
+     },
+     {
+      "dag": 12,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 105,
+      "idpartner": 0,
+      "idperson": 102,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 9,
+      "ddi": 0,
+      "deh": 2,
+      "dgn": 1,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 101,
+      "idhh": 1,
+      "idmother": 105,
+      "idpartner": 0,
+      "idperson": 103,
+      "les": 6,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 70,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 1,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 0,
+      "idperson": 104,
+      "les": 0,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     },
+     {
+      "dag": 38,
+      "ddi": 0,
+      "deh": 0,
+      "dgn": 0,
+      "dhh": 0,
+      "dms": 2,
+      "dwt": 1.0,
+      "idfather": 0,
+      "idhh": 1,
+      "idmother": 0,
+      "idpartner": 101,
+      "idperson": 105,
+      "les": 0,
+      "lfo": 0,
+      "yem": 0.0,
+      "yem00": 0.0
+     }
+    ],
+    "household_summary": {
+     "ages": [
+      40
+     ],
+     "household_size": 1,
+     "yearly_earned_income_per_person": [
+      100000.0
+     ],
+     "yearly_earned_income_total": 100000.0
+    },
+    "locale": "GH",
+    "scenario": "combined-multi-relief-household",
+    "scope": {
+     "geoid": "GH",
+     "type": "country"
+    }
+   },
+   "mismatches": [],
+   "right_engine": "axiom",
+   "right_errors": []
+  }
+ ],
+ "concepts": [
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "components": [],
+   "description": "Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)",
+   "id": "gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief",
+   "parent": null,
+   "priority": "high",
+   "relative_tolerance": 0,
+   "tolerance": 1
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "components": [],
+   "description": "Ghana Fifth Schedule disability personal relief (Act 896 para 1(b), 25% of assessable income)",
+   "id": "gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief",
+   "parent": null,
+   "priority": "high",
+   "relative_tolerance": 0,
+   "tolerance": 1
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "components": [],
+   "description": "Ghana Fifth Schedule child-education personal relief (Act 896 para 1(d), 600 per child, max 3)",
+   "id": "gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief",
+   "parent": null,
+   "priority": "high",
+   "relative_tolerance": 0,
+   "tolerance": 1
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "components": [],
+   "description": "Ghana Fifth Schedule aged-dependant-relative relief (Act 896 para 1(e), 1000 per relative, max 2)",
+   "id": "gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief",
+   "parent": null,
+   "priority": "high",
+   "relative_tolerance": 0,
+   "tolerance": 1
+  },
+  {
+   "category": "tax",
+   "comparison": "amount",
+   "components": [],
+   "description": "Ghana Fifth Schedule dependent-spouse-or-children (marriage) relief (Act 896 para 1(a))",
+   "id": "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief",
+   "parent": null,
+   "priority": "high",
+   "relative_tolerance": 0,
+   "tolerance": 1
+  }
+ ],
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "errors": [],
+ "locales": [
+  "GH"
+ ],
+ "mismatches": [],
+ "population": "synthetic",
+ "schema_version": "axiom.comparison_report.v2",
+ "scope": null,
+ "suite": "gh-personal-reliefs",
+ "summary": {
+  "comparison_count": 40,
+  "error_count": 0,
+  "errors_by_engine": [],
+  "match_count": 40,
+  "mismatch_count": 0,
+  "mismatches_by_concept": [],
+  "mismatches_by_kind": [],
+  "mismatches_by_scenario": [],
+  "weighted": {
+   "comparison_weight": 40,
+   "match_rate": 100,
+   "match_weight": 40,
+   "mismatch_weight": 0
+  }
+ }
+}

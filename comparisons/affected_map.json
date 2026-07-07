@@ -248,6 +248,22 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "gh-income-tax-rate-schedule",
+      "report": "axiom-euromod-gh-income-tax-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-income-tax-rate-schedule.yaml"
+    },
+    {
+      "suite": "gh-personal-reliefs",
+      "report": "axiom-euromod-gh-personal-reliefs.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-personal-reliefs.yaml"
+    },
+    {
       "suite": "il-income-tax-liability",
       "report": "axiom-policyengine-taxsim-il-income-tax-liability.json",
       "repos": [

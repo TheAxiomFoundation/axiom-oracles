@@ -42,6 +42,10 @@ from .be_worker import (
     be_worker_ssc_cases,
     be_worker_tax_income_list_cases,
 )
+from .gh_income_tax import (
+    gh_income_tax_rate_schedule_cases,
+    gh_personal_reliefs_cases,
+)
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
 from .uk_income_tax import (
@@ -132,6 +136,8 @@ def available_suites() -> tuple[str, ...]:
         "uk-income-tax-savings",
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",
+        "gh-income-tax-rate-schedule",
+        "gh-personal-reliefs",
     )
 
 
@@ -242,6 +248,10 @@ def load_suite(name: str):
         return uk_income_tax_dividend_cases()
     if name == "uk-income-tax-mixed":
         return uk_income_tax_mixed_cases()
+    if name == "gh-income-tax-rate-schedule":
+        return gh_income_tax_rate_schedule_cases()
+    if name == "gh-personal-reliefs":
+        return gh_personal_reliefs_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -276,6 +286,8 @@ __all__ = [
     "be_worker_pit_cases",
     "be_worker_ssc_cases",
     "be_worker_tax_income_list_cases",
+    "gh_income_tax_rate_schedule_cases",
+    "gh_personal_reliefs_cases",
     "load_suite",
     "nyc_basic_cases",
     "nyc_synthetic_cases",

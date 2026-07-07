@@ -1,0 +1,805 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 11,
+      "comparison_weight": 11,
+      "components": [],
+      "concept": "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax",
+      "description": "Ghana resident individual income tax over chargeable income (Act 1111 First Schedule bands)",
+      "left_weighted_sum": 486385,
+      "match_rate": 90.909091,
+      "match_weight": 10,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 491135,
+      "weighted_difference": -4750,
+      "weighted_match_rate": 90.909091
+    }
+  ],
+  "case_count": 11,
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana resident individual income tax over chargeable income (Act 1111 First Schedule bands)",
+      "id": "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "GH"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "gh-rate-700k-35pct-band",
+      "concept": "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax",
+      "description": "Ghana resident individual income tax over chargeable income (Act 1111 First Schedule bands)",
+      "difference": -4750.000000000029,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "rate-schedule-missing-act-1111-35pct-top-band-700k"
+      },
+      "kind": "amount_difference",
+      "left": 193243.99999999997,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 197994.0,
+      "scenario": "single-formal-employee-rate-schedule",
+      "tolerance": 1,
+      "yearly_earned_income": 700000.0
+    }
+  ],
+  "population": "synthetic",
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "gh-income-tax-rate-schedule",
+  "summary": {
+    "comparison_count": 11,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 1
+      },
+      "dispositions_file": "dispositions/gh-income-tax-rate-schedule.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 90.909091,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 10,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "single-formal-employee-rate-schedule"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 11,
+      "match_rate": 90.909091,
+      "match_weight": 10,
+      "mismatch_weight": 1
+    }
+  },
+  "cases": [
+    {
+      "case_id": "gh-rate-5k-below-threshold",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 5000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 116.06007813948155,
+            "yem00": 116.06007813948155
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 5000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            5000.0
+          ],
+          "yearly_earned_income_total": 5000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 5000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-5880-nil-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 5879.999999999999
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 136.4866518920303,
+            "yem00": 136.4866518920303
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 5879.999999999999
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            5880.0
+          ],
+          "yearly_earned_income_total": 5880.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 5880.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-7200-5pct-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 7200.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 167.12651252085342,
+            "yem00": 167.12651252085342
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 7200.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            7200.0
+          ],
+          "yearly_earned_income_total": 7200.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 7200.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-8760-10pct-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 8760.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 203.33725690037167,
+            "yem00": 203.33725690037167
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 8760.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            8760.0
+          ],
+          "yearly_earned_income_total": 8760.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 8760.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-10k-17p5-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 10000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 232.1201562789631,
+            "yem00": 232.1201562789631
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 10000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            10000.0
+          ],
+          "yearly_earned_income_total": 10000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 10000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-46760-17p5-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 46760.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 1085.3938507604314,
+            "yem00": 1085.3938507604314
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 46760.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            46760.0
+          ],
+          "yearly_earned_income_total": 46760.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 46760.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-50k-25pct-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 49999.99999999999
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 1160.6007813948154,
+            "yem00": 1160.6007813948154
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 49999.99999999999
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            50000.0
+          ],
+          "yearly_earned_income_total": 50000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 50000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-238760-25pct-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 238759.99999999997
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 5542.1008513165225,
+            "yem00": 5542.1008513165225
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 238759.99999999997
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            238760.0
+          ],
+          "yearly_earned_income_total": 238760.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 238760.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-250k-30pct-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 250000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 5803.003906974077,
+            "yem00": 5803.003906974077
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 250000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            250000.0
+          ],
+          "yearly_earned_income_total": 250000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 250000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-605000-30pct-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 604999.9999999999
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 14043.269454877265,
+            "yem00": 14043.269454877265
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 604999.9999999999
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            605000.0
+          ],
+          "yearly_earned_income_total": 605000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 605000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rate-700k-35pct-band",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 700000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 16248.410939527415,
+            "yem00": 16248.410939527415
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#chargeable_income": 700000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            700000.0
+          ],
+          "yearly_earned_income_total": 700000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-rate-schedule",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 700000.0
+      },
+      "mismatches": [
+        {
+          "concept": "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax",
+          "description": "Ghana resident individual income tax over chargeable income (Act 1111 First Schedule bands)",
+          "difference": -4750.000000000029,
+          "kind": "amount_difference",
+          "left": 193243.99999999997,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 197994.0,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ]
+}

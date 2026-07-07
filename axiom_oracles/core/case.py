@@ -449,6 +449,40 @@ class Concepts:
         "#belgium_capital_income_separate_tax"
     )
 
+    # GHAMOD (SOUTHMOD Ghana) oracle concepts. The Act 1111 First Schedule
+    # resident income-tax liability over chargeable income (compared to GHAMOD
+    # ``tin_s``) and the Act 896 Fifth Schedule personal reliefs as amended by
+    # Act 1007 (compared to GHAMOD's per-relief ``tinta0X_s`` outputs).
+    GH_RESIDENT_INCOME_TAX = (
+        "gh:statutes/act-1111/income-tax-amendment-no2-2023/"
+        "first-schedule-rates-of-income-tax-for-individuals"
+        "#resident_individual_income_tax"
+    )
+    GH_DEPENDANT_SPOUSE_OR_CHILDREN_RELIEF = (
+        "gh:statutes/act-896/income-tax-2015/fifth-schedule"
+        "#dependant_spouse_or_children_personal_relief"
+    )
+    GH_DISABILITY_RELIEF = (
+        "gh:statutes/act-896/income-tax-2015/fifth-schedule"
+        "#disability_personal_relief"
+    )
+    GH_OLD_AGE_RELIEF = (
+        "gh:statutes/act-896/income-tax-2015/fifth-schedule"
+        "#old_age_personal_relief"
+    )
+    GH_CHILD_EDUCATION_RELIEF = (
+        "gh:statutes/act-896/income-tax-2015/fifth-schedule"
+        "#child_education_personal_relief"
+    )
+    GH_AGED_DEPENDANT_RELATIVE_RELIEF = (
+        "gh:statutes/act-896/income-tax-2015/fifth-schedule"
+        "#aged_dependant_relative_personal_relief"
+    )
+    GH_TRAINING_RELIEF = (
+        "gh:statutes/act-896/income-tax-2015/fifth-schedule"
+        "#training_personal_relief"
+    )
+
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
     EMPLOYER_OASDI = "us:tax/payroll#employer_oasdi"

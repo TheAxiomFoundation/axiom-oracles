@@ -1930,3 +1930,174 @@ concepts:
           geoid: US
       policyengine: ny_income_tax
       taxsim: siitax
+
+  # GHAMOD (SOUTHMOD Ghana, EUROMOD engine) oracle concepts. Compared on the
+  # GH_2025 system; the Act 1111 rate bands (effective 2024) and Act 1007 relief
+  # amounts (effective 2020) are frozen through 2026, so GH_2024/GH_2025 apply
+  # the identical schedule and reliefs the Axiom modules validate for 2026.
+  gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax:
+    description: Ghana resident individual income tax over chargeable income (Act 1111 First Schedule bands)
+    category: tax
+    comparison: amount
+    # Exact-to-the-cedi schedule parity for chargeable income <= 605,000; above
+    # it GHAMOD's tin_gh omits the Act 1111 35% top band (defined constants
+    # unused by the SchedCalc), dispositioned in
+    # dispositions/gh-income-tax-rate-schedule.yaml.
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: resident_individual_income_tax
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
+    description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: old_age_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta03_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief:
+    description: Ghana Fifth Schedule disability personal relief (Act 896 para 1(b), 25% of assessable income)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: disability_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta07_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief:
+    description: Ghana Fifth Schedule child-education personal relief (Act 896 para 1(d), 600 per child, max 3)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: child_education_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta05_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief:
+    description: Ghana Fifth Schedule aged-dependant-relative relief (Act 896 para 1(e), 1000 per relative, max 2)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: aged_dependant_relative_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta06_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief:
+    description: Ghana Fifth Schedule dependent-spouse-or-children (marriage) relief (Act 896 para 1(a))
+    category: tax
+    comparison: amount
+    # Compared against GHAMOD tinta01_s (dependent-spouse limb). GHAMOD splits
+    # para 1(a) into tinta01 (spouse) and tinta02 (lone parent); tinta02 does
+    # not fire for synthetic lone-parent households (ghamod_issues.json), so the
+    # spouse limb is the parity target.
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: dependant_spouse_or_children_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta01_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#training_personal_relief:
+    description: Ghana Fifth Schedule professional/vocational training relief (Act 896 para 1(f), capped at 2000)
+    category: tax
+    comparison: amount
+    # Mapped but not live-compared: GHAMOD's tinta04 training relief is switched
+    # off (not modelled) and emits no tinta04_s output column at all, so there is
+    # nothing to compare against (a missing column, not a zero). The gap is
+    # recorded in axiom_oracles/data/ghamod_issues.json; the encoded relief pays
+    # min(cost, 2000) and is exercised by the rulespec-gh companion tests.
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: training_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta04_s
+        scope:
+          type: country
+          geoid: GH
