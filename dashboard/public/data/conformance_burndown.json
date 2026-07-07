@@ -56,6 +56,16 @@
         "axiom_attributed_open": 0,
         "gap": 11,
         "conformant": false
+      },
+      {
+        "date": "2026-07-07",
+        "in_scope": 24,
+        "covered": 15,
+        "uncovered": 9,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 9,
+        "conformant": false
       }
     ]
   }

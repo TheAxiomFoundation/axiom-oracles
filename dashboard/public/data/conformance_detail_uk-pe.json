@@ -474,8 +474,8 @@
     {
       "id": "uk-pe:state_pension",
       "oracle_policy_name": "state_pension",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "input_carrying",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -486,8 +486,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-UK computes state_pension (basic+new+additional) from accrual rules, but no final suite runs; the state-pension bridge surface was removed when rulespec re-grounded to accrual basis (matrix row 4 \u2192 Pensions Act 2014).",
-      "status": "uncovered"
+      "note": "PE-UK carries the State Pension as an uprated reported amount, not an accrual computation, so there is no commensurable statutory surface. The top-level state_pension formula sums basic_state_pension + additional_state_pension + new_state_pension and applies an uprating factor (so the generator's shallow kind heuristic, reading only the summing top-level formula, labels it rules); but each component is a state_pension_reported passthrough. basic_state_pension and new_state_pension read the FRS-reported gross State Pension (state_pension_reported), take its share of the data-year flat maximum (share = min(reported, max_data) / max_data) and re-base that share onto the period maximum; additional_state_pension is the reported amount above the flat ceiling, uprated. None reads a National Insurance qualifying-years record \u2014 the award is the reported amount, uprated and bucketed by magnitude and state_pension_type. The rulespec encoding (uk/policies/govuk/state-pension.yaml) instead computes entitlement from qualifying years (new: full_new_state_pension_weekly_rate \u00d7 min(1, qualifying_years/35), Pensions Act 2014 s.3; basic: category-A basic rate \u00d7 min(1, qualifying_years/30), SSCBA 1992 s.44; weekly rates from SI 2026/148). The two surfaces are not commensurable: PE consumes a reported money amount, rulespec a qualifying-years count, with no mapping between them, so the only achievable agreement is by construction (feeding both the \"full\" case), which is vacuous. Same reported-carry class as sda (SSCBA 1992 s.68 \u2014 reads sda_reported \u00d7 max rate) and esa_income; corrects the prior note's \"from accrual rules\" \u2014 PE does not model accrual (matrix row 4 \u2192 Pensions Act 2014; SSCBA 1992 s.44).",
+      "status": "excluded:input_carrying"
     },
     {
       "id": "uk-pe:student_loan_repayments",
@@ -584,18 +584,18 @@
       "oracle_policy_name": "winter_fuel_allowance",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": null,
-      "covered": false,
-      "comparisons": null,
-      "matches": null,
-      "raw_match_rate": null,
-      "explained_rate": null,
-      "unexplained": null,
-      "axiom_attributed_open": null,
-      "oracle_attributed": null,
-      "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-UK computes winter_fuel_allowance (2024 PC-only restriction, zeroed in Scotland) but only rate params are compared; no final WFA program surface runs (matrix row 24 \u2192 uksi/2025/969; Scotland PAWHP separate).",
-      "status": "uncovered"
+      "suite": "uk-winter-fuel-payment-pe",
+      "covered": true,
+      "comparisons": 7,
+      "matches": 7,
+      "raw_match_rate": 100,
+      "explained_rate": 100,
+      "unexplained": 0,
+      "axiom_attributed_open": 0,
+      "oracle_attributed": 0,
+      "bridge_artifacts": 0,
+      "note": "Covered by the uk-winter-fuel-payment-pe case-grid suite. PE-UK 2.89.2 computes winter_fuel_allowance from the SI 2025/969 standard amounts (gov.dwp.winter_fuel_payment.amount.lower 200, .higher 300, higher_age_requirement 80) under the 2024/25 means test (eligibility.require_benefits true from 2024, taxable_income_test.maximum_taxable_income 35000 from 2025), zeroed in Scotland. The suite compares this against the rulespec SI 2025/969 reg 3(1)/3(4) England-and-Wales award pipeline (uk/policies/winter_fuel_payment_composed_award_pipeline.yaml), supplying the state-pension-age, 80+ and income-below-recovery-threshold judgments to the pipeline from the same age/income facts PolicyEngine reads; all 7 cases match to the penny (the 200/300 age tiers, the household non-per-member allocation for couples, the 35000 income-recovery withdrawal, and the state-pension-age gate). Scotland's devolved PAWHP is outside the pipeline's scope and not placed (matrix row 24 \u2192 uksi/2025/969; Scotland PAWHP separate).",
+      "status": "conformant"
     }
   ]
 }

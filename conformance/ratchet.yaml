@@ -15,7 +15,7 @@ ratchets:
   axiom_attributed_open_max: 0
   policies_in_scope: 26
 - jurisdiction: uk-pe
-  covered_min: 14
+  covered_min: 15
   unexplained_max: 0
   axiom_attributed_open_max: 0
-  policies_in_scope: 25
+  policies_in_scope: 24
