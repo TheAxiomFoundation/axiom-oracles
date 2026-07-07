@@ -57,13 +57,13 @@
       },
       {
         "date": "2026-07-07",
-        "in_scope": 24,
-        "covered": 18,
-        "uncovered": 6,
+        "in_scope": 21,
+        "covered": 21,
+        "uncovered": 0,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 6,
-        "conformant": false
+        "gap": 0,
+        "conformant": true
       }
     ],
     "uk-pe": [
@@ -79,13 +79,13 @@
       },
       {
         "date": "2026-07-07",
-        "in_scope": 24,
-        "covered": 22,
-        "uncovered": 2,
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 2,
-        "conformant": false
+        "gap": 0,
+        "conformant": true
       }
     ]
   }

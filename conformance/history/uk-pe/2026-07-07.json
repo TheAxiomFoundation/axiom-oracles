@@ -3,11 +3,11 @@
   "date": "2026-07-07",
   "jurisdiction": "uk-pe",
   "oracle": "policyengine-uk_2.89.2/uk",
-  "policies_in_scope": 24,
-  "covered": 22,
-  "covered_pct": 91.6667,
-  "excluded": 9,
+  "policies_in_scope": 23,
+  "covered": 23,
+  "covered_pct": 100.0,
+  "excluded": 10,
   "unexplained_total": 0,
   "axiom_attributed_open": 0,
-  "conformant": false
+  "conformant": true
 }
