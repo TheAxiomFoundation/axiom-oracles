@@ -681,7 +681,7 @@
   },
   {
    "concept": "us:statutes/26/32#earned_income_credit",
-   "description": "First full run since the corpus restructure: 3,852,650 of 3,881,635 values agree (99.25%). Residuals concentrate in the freshly re-encoded EITC chain (26,854 of 962,709 EITC values) and tax-before-credits (2,118), with seven surfaces at 100% and CTC at 5 diffs in 437,595. The EITC class needs per-case triage against the new 32(c)(2) earned-income grounding (net-earnings boundary convention, childless age gates, investment-income tests) before assigning encoder vs bridge vs PolicyEngine.",
+   "description": "3,862,844 of 3,881,635 values agree (99.52%) after correcting the bridge's EIC earned-income convention to the IRS worksheet form (half the SECA tax imposed). Remaining residuals: the EITC chain (16,660 of 962,709 \u2014 includes a 203-case constant-118,500 class and investment-income eligibility edges) and tax-before-credits (2,118); seven surfaces at 100%, CTC at 5 diffs in 437,595. Per-case triage continues.",
    "fix_owner": "triage",
    "kind": "amount_difference",
    "label": "EITC residuals after the generated re-encode",

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Run a full NYC ECPS diagnostic comparison for encoded NYC tax components.
+"""Run a full NYC ECPS diagnostic comparison for encoded NYC income tax.
 
-This is a full-population Enhanced CPS sweep, but it is not an independent
-final-liability comparison. Current Axiom NYC RuleSpecs do not yet derive
-NY taxable income, NY CDCC, or final NYC income tax from raw ECPS facts, so this
-diagnostic uses PE/ECPS upstream tax-unit projections as Axiom inputs and
-compares only the source-backed NYC component formulas.
+This is a full-population Enhanced CPS sweep, including the composed NYC final
+liability pipeline. It is still a bridged diagnostic rather than an independent
+raw-facts comparison: the composed pipeline intentionally receives PE/ECPS
+upstream tax-unit projections for New York taxable income and supplied NYC
+credits that are not yet independently recomposed from raw ECPS facts.
 
 This diagnostic deliberately loads the NYC per-city Enhanced-CPS file
 (``NYC_ECPS_DATASET`` below) rather than the certified populace-us artifact
@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import subprocess
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -35,7 +36,8 @@ from axiom_oracles.comparison.dispositions import apply_dispositions_from_dir
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
-RULESPEC_NY = Path.home() / "rulespec-us-ny"
+RULESPEC_NY = Path(os.environ.get("AXIOM_RULESPEC_NY", Path.home() / "rulespec-us-ny"))
+RULESPEC_US = Path(os.environ.get("AXIOM_RULESPEC_US", Path.home() / "rulespec-us"))
 AXIOM_ENGINE = (
     Path.home() / "axiom-rules-engine" / "target" / "release" / "axiom-rules-engine"
 )
@@ -55,6 +57,13 @@ CDCC_PROGRAM = (
     / "it-216-instructions"
     / "nyc-child-dependent-care-credit.yaml"
 )
+FINAL_PROGRAM = (
+    RULESPEC_US
+    / "us-ny"
+    / "policies"
+    / "income_tax"
+    / "nyc_composed_liability_pipeline.yaml"
+)
 
 SCHOOL_BASE = (
     "us-ny:policies/tax/it-201-instructions/"
@@ -67,6 +76,8 @@ CDCC_BASE = (
     "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit"
 )
 CDCC_OUTPUT = f"{CDCC_BASE}#form_it216_line_24_nyc_child_dependent_care_credit"
+FINAL_BASE = "us-ny:policies/income_tax/nyc_composed_liability_pipeline"
+FINAL_OUTPUT = f"{FINAL_BASE}#nyc_pit_composed_income_tax"
 
 TAX_YEAR_PERIOD = {
     "period_kind": "tax_year",
@@ -90,6 +101,11 @@ class TaxUnitRows:
     under_four_childcare_expenses: list[float]
     has_child_under_four: list[bool]
     pe_nyc_cdcc: list[float]
+    pe_nyc_household_credit: list[float]
+    pe_nyc_unincorporated_business_credit: list[float]
+    pe_nyc_school_tax_credit: list[float]
+    pe_nyc_eitc: list[float]
+    pe_nyc_income_tax: list[float]
 
 
 def main() -> int:
@@ -112,6 +128,7 @@ def main() -> int:
     artifacts = {
         SCHOOL_PROGRAM: Path("/tmp/nyc-school-rate.compiled.json"),
         CDCC_PROGRAM: Path("/tmp/nyc-cdcc.compiled.json"),
+        FINAL_PROGRAM: Path("/tmp/nyc-final-income-tax.compiled.json"),
     }
     for program, artifact in artifacts.items():
         _compile(program, artifact)
@@ -124,6 +141,11 @@ def main() -> int:
     cdcc_left = _run_cdcc_axiom(
         rows,
         artifacts[CDCC_PROGRAM],
+        batch_size=args.batch_size,
+    )
+    final_left = _run_final_axiom(
+        rows,
+        artifacts[FINAL_PROGRAM],
         batch_size=args.batch_size,
     )
 
@@ -143,6 +165,14 @@ def main() -> int:
             component="cdcc_full_year",
             left=cdcc_left,
             right=rows.pe_nyc_cdcc,
+        ),
+        _comparison_rows(
+            rows=rows,
+            concept=FINAL_OUTPUT,
+            description="NYC composed final resident income tax",
+            component="final_liability",
+            left=final_left,
+            right=rows.pe_nyc_income_tax,
         ),
     ]
     report = _build_report(
@@ -204,6 +234,17 @@ def _load_tax_unit_rows(*, sample_size: int) -> TaxUnitRows:
         sim.calculate("nyc_cdcc_age_restricted_expenses", period=year)
     )[:take]
     pe_nyc_cdcc = _floats(sim.calculate("nyc_cdcc", period=year))[:take]
+    pe_nyc_household_credit = _floats(
+        sim.calculate("nyc_household_credit", period=year)
+    )[:take]
+    pe_nyc_unincorporated_business_credit = _floats(
+        sim.calculate("nyc_unincorporated_business_credit", period=year)
+    )[:take]
+    pe_nyc_school_tax_credit = _floats(
+        sim.calculate("nyc_school_tax_credit", period=year)
+    )[:take]
+    pe_nyc_eitc = _floats(sim.calculate("nyc_eitc", period=year))[:take]
+    pe_nyc_income_tax = _floats(sim.calculate("nyc_income_tax", period=year))[:take]
     has_child_under_four = _has_under_four_children(sim, year, tax_unit_ids[:take])
 
     return TaxUnitRows(
@@ -217,6 +258,11 @@ def _load_tax_unit_rows(*, sample_size: int) -> TaxUnitRows:
         under_four_childcare_expenses=under_four_childcare_expenses,
         has_child_under_four=has_child_under_four,
         pe_nyc_cdcc=pe_nyc_cdcc,
+        pe_nyc_household_credit=pe_nyc_household_credit,
+        pe_nyc_unincorporated_business_credit=pe_nyc_unincorporated_business_credit,
+        pe_nyc_school_tax_credit=pe_nyc_school_tax_credit,
+        pe_nyc_eitc=pe_nyc_eitc,
+        pe_nyc_income_tax=pe_nyc_income_tax,
     )
 
 
@@ -333,6 +379,71 @@ def _run_cdcc_axiom(
     )
 
 
+def _run_final_axiom(
+    rows: TaxUnitRows,
+    artifact: Path,
+    *,
+    batch_size: int,
+) -> list[float]:
+    specs = []
+    for idx, tax_unit_id in enumerate(rows.tax_unit_ids):
+        status = rows.filing_status[idx]
+        agi = rows.adjusted_gross_income[idx]
+        expenses = rows.childcare_expenses[idx]
+        specs.append(
+            (
+                tax_unit_id,
+                {
+                    "us-ny:statutes/NYC/11-1701#input.city_taxable_income": (
+                        rows.nyc_taxable_income[idx]
+                    ),
+                    "nyc_pit_composed_joint_or_surviving_spouse_return": (
+                        status in {"JOINT", "SURVIVING_SPOUSE"}
+                    ),
+                    "nyc_pit_composed_head_of_household_return": (
+                        status == "HEAD_OF_HOUSEHOLD"
+                    ),
+                    "nyc_pit_composed_supplied_household_credit": (
+                        rows.pe_nyc_household_credit[idx]
+                    ),
+                    "nyc_pit_composed_supplied_unincorporated_business_tax_credit": (
+                        rows.pe_nyc_unincorporated_business_credit[idx]
+                    ),
+                    "nyc_pit_composed_supplied_school_tax_credit": (
+                        rows.pe_nyc_school_tax_credit[idx]
+                    ),
+                    "nyc_pit_composed_supplied_earned_income_tax_credit": (
+                        rows.pe_nyc_eitc[idx]
+                    ),
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.fagi": agi,
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.has_child_under_four_years_old": rows.has_child_under_four[idx],
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.qualifies_for_new_york_state_child_dependent_care_credit": (
+                        rows.ny_cdcc[idx] > 0
+                    ),
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_14_amount": rows.ny_cdcc[idx],
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_23_amount": rows.under_four_childcare_expenses[idx],
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_3a_amount": expenses if expenses > 0 else 1,
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.nyc_child_dependent_care_credit_limitation_table_decimal_amount": (
+                        _nyc_cdcc_limitation_decimal(agi)
+                    ),
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.is_full_year_new_york_city_resident": True,
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.is_part_year_new_york_city_resident": False,
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.new_york_city_tax_liability_for_credit": 0,
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it360_1_line_18_column_b_amount": 0,
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it360_1_line_18_column_a_amount": 1,
+                },
+            )
+        )
+    return _run_axiom_batches(
+        specs,
+        program=FINAL_PROGRAM,
+        artifact=artifact,
+        output=FINAL_OUTPUT,
+        batch_size=batch_size,
+        label="final-liability",
+    )
+
+
 def _run_axiom_batches(
     specs: list[tuple[int | str, dict[str, Any]]],
     *,
@@ -395,6 +506,8 @@ def _input_record(
         base = SCHOOL_BASE
     elif program == CDCC_PROGRAM:
         base = CDCC_BASE
+    elif program == FINAL_PROGRAM:
+        base = FINAL_BASE
     else:
         raise ValueError(f"unknown program: {program}")
     if isinstance(value, bool):
@@ -407,7 +520,7 @@ def _input_record(
         kind = "decimal"
         encoded = str(_finite_number(value))
     return {
-        "name": f"{base}#input.{name}",
+        "name": name if "#input." in name else f"{base}#input.{name}",
         "entity": "TaxUnit",
         "entity_id": _entity_id(tax_unit_id),
         "interval": INTERVAL,
@@ -458,7 +571,12 @@ def _comparison_rows(
                     "filing_status": rows.filing_status[idx],
                     "has_child_under_four": rows.has_child_under_four[idx],
                     "ny_cdcc": rows.ny_cdcc[idx],
+                    "nyc_eitc": rows.pe_nyc_eitc[idx],
+                    "nyc_household_credit": rows.pe_nyc_household_credit[idx],
+                    "nyc_income_tax": rows.pe_nyc_income_tax[idx],
+                    "nyc_school_tax_credit": rows.pe_nyc_school_tax_credit[idx],
                     "nyc_taxable_income": rows.nyc_taxable_income[idx],
+                    "nyc_unincorporated_business_credit": rows.pe_nyc_unincorporated_business_credit[idx],
                     "population": "enhanced-cps",
                     "suite": SUITE,
                     "tax_unit_id": tax_unit_id,
@@ -599,19 +717,11 @@ def _build_report(
                     "severity": "warning",
                     "message": (
                         "This is a full NYC Enhanced CPS component diagnostic, "
-                        "not an independent final-liability comparison. Axiom "
+                        "including the composed final liability pipeline. Axiom "
                         "receives PE/ECPS upstream tax-unit projections such as "
-                        "nyc_taxable_income and ny_cdcc because those upstream "
-                        "NY/NYC inputs are not yet encoded through final "
-                        "nyc_income_tax."
-                    ),
-                },
-                {
-                    "code": "not_final_nyc_income_tax",
-                    "severity": "warning",
-                    "message": (
-                        "The report compares encoded NYC component formulas only: "
-                        "school-tax rate reduction and full-year CDCC."
+                        "nyc_taxable_income, ny_cdcc, and supplied NYC credits "
+                        "because those upstream inputs are not yet independently "
+                        "recomposed from raw ECPS facts."
                     ),
                 },
                 {

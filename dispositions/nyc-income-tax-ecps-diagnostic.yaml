@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: nyc-income-tax-ecps-diagnostic
-updated: "2026-07-06"
+updated: "2026-07-07"
 entries:
   - id: school-rate-second-band-rounded-base-convention
     concept: us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount
@@ -26,6 +26,38 @@ entries:
           tolerance: 0.000001
         - expression: "25 - 14400 * 0.00171"
           equals: 0.376
+          tolerance: 0.000001
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/8947
+      sources:
+        - docs/nyc-school-tax-credit-rate-reduction-convention.md
+        - reports/nyc-income-tax-gap-2026-06-05.md
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/8947
+    expires_on_source_change: true
+  - id: final-liability-section-1701-printed-base-convention
+    concept: us-ny:policies/income_tax/nyc_composed_liability_pipeline#nyc_pit_composed_income_tax
+    case_selector:
+      case_id_prefix: ecps-tax-unit-
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The composed NYC final-liability ECPS residuals are produced by the
+        same printed-base-versus-derived-carry-in convention at the section
+        11-1701 base-tax layer. Axiom follows NYC Administrative Code section
+        11-1701's printed base-tax amounts and then composes the separate
+        section 11-1704.1 fourteen-percent additional tax. PolicyEngine uses
+        the current IT-201 combined marginal rates and derives carry-ins from
+        thresholds and combined rates, producing stable sub-dollar residuals
+        for tax units above the final section 11-1701 bracket threshold.
+      arithmetic:
+        - expression: "1591 * 1.14 - (12000 * 0.03078 + 13000 * 0.03762 + 25000 * 0.03819)"
+          equals: 0.57
+          tolerance: 0.000001
+        - expression: "2863 * 1.14 - (21600 * 0.03078 + 23400 * 0.03762 + 45000 * 0.03819)"
+          equals: 0.114
+          tolerance: 0.000001
+        - expression: "1909 * 1.14 - (14400 * 0.03078 + 15600 * 0.03762 + 30000 * 0.03819)"
+          equals: 0.456
           tolerance: 0.000001
       upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/8947
       sources:

@@ -8,7 +8,7 @@
       "components": [],
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
-      "left_weighted_sum": 9760464152.891914,
+      "left_weighted_sum": 9760455811.063488,
       "match_rate": 97.418818,
       "match_weight": 2984653.879266,
       "mismatch_count": 31,
@@ -18,7 +18,7 @@
       "missing_right_count": 0,
       "parent": null,
       "right_weighted_sum": 9792910473.764019,
-      "weighted_difference": -32446320.872105,
+      "weighted_difference": -32454662.700531,
       "weighted_match_rate": 95.556632
     }
   ],
@@ -2124,7 +2124,7 @@
       "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T20:13:29Z",
+    "generated_at": "2026-07-07T02:36:38Z",
     "generated_by": "scripts/run_comparison.py::co-state-income-tax-ecps",
     "oracle": {
       "name": "policyengine",
