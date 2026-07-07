@@ -235,6 +235,27 @@
    "observed": "GHAMOD's ad-valorem constants (25% / 20% / 22.5% / 10% / 150% / 170.65% over COICOP buckets) match the Act 1108 table only for beer at under-50-per-cent local raw material (tvl04_s, 47.5%, probed exact). The statutory table: wines 45% (GHAMOD bucket 22.5% — half), spirits 50% blended / 20% akpeteshie (GHAMOD 25% and 20%), cigarettes 50% + 28 pesewas per stick (GHAMOD 150% / 170.65% ad-valorem equivalents). These look like retail-vs-ex-factory conversions and specific-duty ad-valoremisations applied inconsistently (beer is NOT halved).",
    "axiom_position": "The encoded module (rulespec-gh act-1108 first-schedule-goods-liable-to-excise-duty) carries the statutory table verbatim; the gh-excise-transfers suite compares the beer under-50 band live (exact) and dispositions the rest under this entry.",
    "reported_upstream": "Queued for the UNU-WIDER finding set as finding #12 (a documentation question: what conversion factors underlie the buckets?)."
+  },
+  {
+   "id": "ghamod-tin-taxes-gross-employment-income-omitting-s112-deduction",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tin_s",
+    "il_tintb3",
+    "ils_dispy"
+   ],
+   "statute": "National Pensions Act, 2008 (Act 766) s.112(2); Income Tax Act, 2015 (Act 896) chargeable-income base",
+   "observed": "GHAMOD's income-tax base il_tintb3 equals gross employment income yem (probed live), so tin_s applies the Act 1111 rate schedule to gross pay with no deduction of the mandatory 5.5% SSNIT employee contribution that Act 766 s.112(2) makes deductible income for the contributor (contributions up to 16.5% of income). Probed at 60,000 gross: tin_s = 10,182 and ils_dispy = 46,518 (= 60,000 + 0 - 10,182 - 3,300, identity confirmed), where the statutory chain gives tax 9,357 on chargeable 56,700 and disposable income 47,343 — an 825/year overtax at the 25% marginal rate, growing with the band (5.5% of gross times the marginal rate).",
+   "axiom_position": "The composed rulespec-gh pipeline (gh/statutes/composed/pilot-worker-disposable-income-pipeline) deducts the imported Act 766 s.3(1) contribution from the tax base per s.112(2) before applying the imported Act 1111 bands. The gh-dispy suite keeps its live cases in the shared-nil zone (gross at or below the 5,880 first-band bound, where both engines charge no tax and dispy = 94.5% of gross) and records this entry for the taxed-zone divergence.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set (southmod@wider.unu.edu) as finding #13 — with #8 (VAT wedge) the second defect candidate that shifts every household-level statistic: all formal-sector taxpayers above the nil band are overtaxed by 5.5% of gross times their marginal rate."
   }
  ]
 }
