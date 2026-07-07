@@ -2184,6 +2184,34 @@ concepts:
           type: country
           geoid: GH
 
+  # Composed single-employee disposable income (rulespec-gh pipeline:
+  # Act 766 s.3(1) contribution, s.112(2) deduction, Act 1111 bands),
+  # compared to GHAMOD ils_dispy in the shared-nil zone. In the taxed
+  # zone GHAMOD taxes gross employment income (il_tintb3 = yem), omitting
+  # the s.112(2) deduction — dispositioned in ghamod_issues.json
+  # (finding #13).
+  gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Ghana composed single-employee disposable income (gross + benefits - income tax - employee SSNIT contribution)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: GH
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

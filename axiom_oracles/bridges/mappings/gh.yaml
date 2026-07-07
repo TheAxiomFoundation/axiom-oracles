@@ -221,3 +221,17 @@ prefixes:
       count (260.71 days/year — a documented convention). LEAP and Free
       SHS are dispositioned (findings #10/#11). PolicyEngine has no Ghana
       model; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    country: gh
+    program: income
+    mapping_type: not_comparable
+    rationale: >-
+      Composed single-employee disposable income (Act 766 s.3(1) employee
+      SSNIT contribution, s.112(2) deduction from the tax base, Act 1111
+      First Schedule bands; gross + benefits - tax - contribution).
+      Validated against GHAMOD ils_dispy by the gh-dispy suite in the
+      shared-nil zone (dispy = 94.5% of gross, exact); in the taxed zone
+      GHAMOD taxes gross employment income without the s.112(2) deduction
+      — dispositioned in ghamod_issues.json (finding #13, probed 46,518 vs
+      statutory 47,343 at 60,000 gross). PolicyEngine has no Ghana model;
+      the household oracle is GHAMOD.

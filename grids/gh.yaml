@@ -49,6 +49,35 @@ case_sets:
         age: 45
         relation: HeadOfHousehold
         rental_income: 60000.0
+  gh-dispy:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    cases:
+    - id: gh-dispy-5000-nil-zone
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 5000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5000.0
+    - id: gh-dispy-5880-nil-band-bound
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 5880.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5880.0
   gh-excise:
     locale: GH
     entity: Person
