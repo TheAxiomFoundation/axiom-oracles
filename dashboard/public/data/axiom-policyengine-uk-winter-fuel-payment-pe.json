@@ -1,0 +1,197 @@
+{
+  "case_count": 7,
+  "cases": [
+    {
+      "any_member_aged_80_or_over": false,
+      "axiom": 200.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "uk-wfp-single-under80",
+      "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+      "has_pension_age_member": true,
+      "head_age": 67,
+      "head_income": 0.0,
+      "income_below_recovery_threshold": true,
+      "partner_age": null,
+      "policyengine": 200.0,
+      "scenario": "under-80-single-200"
+    },
+    {
+      "any_member_aged_80_or_over": true,
+      "axiom": 300.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "uk-wfp-single-age80",
+      "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+      "has_pension_age_member": true,
+      "head_age": 82,
+      "head_income": 0.0,
+      "income_below_recovery_threshold": true,
+      "partner_age": null,
+      "policyengine": 300.0,
+      "scenario": "age-80-single-300"
+    },
+    {
+      "any_member_aged_80_or_over": false,
+      "axiom": 200.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "uk-wfp-couple-under80",
+      "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+      "has_pension_age_member": true,
+      "head_age": 67,
+      "head_income": 0.0,
+      "income_below_recovery_threshold": true,
+      "partner_age": 66,
+      "policyengine": 200.0,
+      "scenario": "under-80-couple-200"
+    },
+    {
+      "any_member_aged_80_or_over": true,
+      "axiom": 300.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "uk-wfp-couple-one-age80",
+      "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+      "has_pension_age_member": true,
+      "head_age": 82,
+      "head_income": 0.0,
+      "income_below_recovery_threshold": true,
+      "partner_age": 66,
+      "policyengine": 300.0,
+      "scenario": "age-80-couple-300"
+    },
+    {
+      "any_member_aged_80_or_over": false,
+      "axiom": 200.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "uk-wfp-single-income30000-below-threshold",
+      "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+      "has_pension_age_member": true,
+      "head_age": 67,
+      "head_income": 30000.0,
+      "income_below_recovery_threshold": true,
+      "partner_age": null,
+      "policyengine": 200.0,
+      "scenario": "income-below-recovery-threshold-pays"
+    },
+    {
+      "any_member_aged_80_or_over": false,
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "uk-wfp-single-income42000-above-threshold",
+      "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+      "has_pension_age_member": true,
+      "head_age": 67,
+      "head_income": 42000.0,
+      "income_below_recovery_threshold": false,
+      "partner_age": null,
+      "policyengine": 0.0,
+      "scenario": "income-above-recovery-threshold-withdrawn"
+    },
+    {
+      "any_member_aged_80_or_over": false,
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "uk-wfp-single-below-pension-age",
+      "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+      "has_pension_age_member": false,
+      "head_age": 60,
+      "head_income": 0.0,
+      "income_below_recovery_threshold": true,
+      "partner_age": null,
+      "policyengine": 0.0,
+      "scenario": "below-state-pension-age-nil"
+    }
+  ],
+  "concept": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+  "engines": {
+    "axiom": "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount",
+    "policyengine": "winter_fuel_allowance"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-07T16:32:32Z",
+    "generated_by": "scripts/run_comparison.py::uk-winter-fuel-payment-pe",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_uk": "2.89.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": "17fc102363f7a9a32a2751e9f8cf92d5bdc1c79c"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "UK",
+    "type": "country"
+  },
+  "suite": "uk-winter-fuel-payment-pe",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "comparison_count": 7,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 7,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "policyengine_matches": 7,
+    "weighted": {
+      "comparison_weight": 7,
+      "match_rate": 100.0,
+      "match_weight": 7,
+      "mismatch_weight": 0
+    }
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 2e-07
+  },
+  "validation_year": 2026
+}

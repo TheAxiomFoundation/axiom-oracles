@@ -399,13 +399,16 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
     Two are population EFRS suites (uk-tax-benefits-efrs, uk-universal-credit-efrs);
     uk-council-tax-reduction is a synthetic pensioner case-grid comparing the
     SI 2012/2885 England pension-age scheme against PE-UK's council_tax_reduction
-    (present from 2.89.2).
+    (present from 2.89.2); uk-winter-fuel-payment-pe is a synthetic pensioner
+    case-grid comparing the SI 2025/969 England-and-Wales Winter Fuel award pipeline
+    against PE-UK's winter_fuel_allowance (the 2024/25 means-tested restriction).
     """
     universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
     live_pe_suites = {
         "uk-tax-benefits-efrs",
         "uk-universal-credit-efrs",
         "uk-council-tax-reduction",
+        "uk-winter-fuel-payment-pe",
     }
     covered_suites = {
         p.suite for p in universe.in_scope() if p.suite is not None
@@ -430,6 +433,10 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         }, program
     # Council Tax Reduction is covered by its case-grid suite.
     assert by_name["council_tax_reduction"].suite == "uk-council-tax-reduction"
+    # Winter Fuel Payment is covered by its case-grid suite.
+    assert (
+        by_name["winter_fuel_allowance"].suite == "uk-winter-fuel-payment-pe"
+    )
 
 
 def test_serialize_is_stable_roundtrip():
