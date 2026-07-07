@@ -714,6 +714,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type == "uk-lbtt-ltt-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
     elif runner_type == "uk-winter-fuel-payment-pe-grid":
         oracle = {
             "name": "policyengine",
@@ -1794,6 +1799,45 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
+    """Devolved transaction tax grid: rulespec-uk band splits vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_lbtt_ltt.py, which runs a synthetic
+    household grid through PolicyEngine-UK 2.89.2's
+    ``land_and_buildings_transaction_tax`` (Scotland) and ``land_transaction_tax``
+    (Wales) and the encoded SSI 2015/126 + LBTT(S)A 2013 Sch 2A and WSI 2018/128
+    + LTT(W)A 2017 band splits (evaluated through the axiom rules engine over the
+    supplied main and additional residential purchase prices), then writes one v2
+    report. On a runner without a PolicyEngine-UK environment or a built axiom
+    rules engine, the committed dashboard report is reused, exactly like the
+    Capital Gains Tax grid.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_lbtt_ltt.py"
+    basename = "axiom-policyengine-uk-lbtt-ltt"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"LBTT/LTT grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
 def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
     """Winter Fuel Payment grid: rulespec-uk SI 2025/969 pipeline vs PolicyEngine-UK.
 
@@ -1971,6 +2015,7 @@ RUNNERS = {
     "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,
     "uk-capital-gains-tax-grid": _run_uk_capital_gains_tax_grid,
     "uk-business-rates-grid": _run_uk_business_rates_grid,
+    "uk-lbtt-ltt-grid": _run_uk_lbtt_ltt_grid,
     "uk-winter-fuel-payment-pe-grid": _run_uk_winter_fuel_payment_pe_grid,
     "uk-attendance-allowance-pe-grid": _run_uk_attendance_allowance_pe_grid,
     "uk-tax-free-childcare-pe-grid": _run_uk_tax_free_childcare_pe_grid,

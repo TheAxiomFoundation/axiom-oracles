@@ -219,9 +219,14 @@ policies:
       - land_and_buildings_transaction_tax
       - land_transaction_tax
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes the Scottish LBTT and Welsh LTT transaction taxes but rulespec
-      has not encoded them and no suite runs (matrix row 31 → LTT(S)A 2013 / LTTA(W) 2017).
+    suite: uk-lbtt-ltt
+    note: Covered by the uk-lbtt-ltt case-grid suite. The rulespec modules (uk/policies/govuk/lbtt.yaml,
+      SSI 2015/126 + LBTT(S)A 2013 Sch 2A; uk/policies/govuk/ltt.yaml, WSI 2018/128 + LTT(W)A 2017 s.24)
+      reproduce PE-UK's land_and_buildings_transaction_tax and land_transaction_tax band splits on the
+      supplied main and additional residential purchase prices. LBTT main-home purchases match to the penny;
+      the LBTT Additional Dwelling Supplement (PE-UK 6% vs the statutory 8% from 5 December 2024) and the
+      stale Welsh LTT primary and higher-rate scales are dispositioned as upstream PolicyEngine staleness
+      (matrix row 31 → LBTT(S)A 2013 / LTT(W)A 2017; PolicyEngine-UK #1795, #1796).
   - id: uk-pe:legacy_means_tested
     oracle_policy_name: legacy_means_tested
     oracle_policy_type: rules

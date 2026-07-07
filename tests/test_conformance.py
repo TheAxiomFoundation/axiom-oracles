@@ -416,6 +416,7 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         "uk-vat",
         "uk-fuel-duty",
         "uk-tv-licence",
+        "uk-lbtt-ltt",
     }
     covered_suites = {
         p.suite for p in universe.in_scope() if p.suite is not None
