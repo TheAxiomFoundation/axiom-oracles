@@ -310,7 +310,7 @@ policies:
       - i_bdisc01
       - i_bdiscwa00
       - i_bdiscwa01
-    suite: null
+    suite: uk-child-winter-heating-payment
     note: 'BEN: Child Winter Heating Assistance (Scotland) (UKMOD comment "BEN: Child Winter Heating Assistance
       (Scotland)"), not a Child Benefit household/HICBC test component despite the bch* prefix. bchht_s
       is a devolved Scottish disability payment: paid at $SCWHA to a child under 18 in Scotland (drgn1=12)
@@ -385,7 +385,7 @@ policies:
     in_scope: true
     internal_only_vars:
       - i_bcrdi
-    suite: null
+    suite: uk-scottish-carer-supplement
     note: 'BEN: Scottish Carer''s Allowance Supplement (from Sept 2018). The UK_2026 policy is switch=on
       and computes a distinct payable instrument bcrdicm_s = the flat weekly supplement $CASupW, gated
       on being a Carer''s Allowance recipient in Scotland (Elig_Cond (bcrdi>0) & (drgn1=12)); it then
@@ -935,7 +935,7 @@ policies:
     in_scope: true
     internal_only_vars:
       - i_bunct_IncDisregard
-    suite: null
+    suite: uk-contribution-based-jsa
     note: 'BEN: Contributory unemployment benefit (contribution-based Jobseeker''s Allowance). The UK_2026
       policy is switch=on and, once eligible, computes a distinct payable bunct_s from statute (age-banded
       rate $JSARate1824/$JSARate withdrawn pound-for-pound against the pension/earnings disregard base

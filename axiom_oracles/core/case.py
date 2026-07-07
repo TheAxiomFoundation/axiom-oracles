@@ -226,6 +226,34 @@ class Concepts:
         "uk:policies/govuk/scottish-child-payment"
         "#scottish_child_payment_annual_amount"
     )
+    # Child Winter Heating Payment (rulespec-uk
+    # uk/policies/govuk/child-winter-heating-payment, SSI 2020/352) — the devolved
+    # flat annual payment for a severely disabled child or young person in
+    # Scotland on the high-rate care passport. The statutory payable value
+    # (child_winter_heating_assistance_payable_value) grades against UKMOD's
+    # bchht_s at an exact GBP 265.50/year.
+    UK_HOUSEHOLD_CHILD_WINTER_HEATING_PAYMENT_AWARD = (
+        "uk:policies/govuk/child-winter-heating-payment"
+        "#child_winter_heating_assistance_payable_value"
+    )
+    # Contribution-based JSA (rulespec-uk
+    # uk/policies/govuk/contribution-based-jobseekers-allowance, SI 1996/207 reg 79)
+    # — the reserved, UK-wide age-related weekly amount annualised over 52 weeks.
+    # The annual amount (contribution_based_jsa_annual_amount) grades against
+    # UKMOD's bunct_s (u25 3944.61, 25+ 4982.25; 365/7-vs-52 residual).
+    UK_HOUSEHOLD_CONTRIBUTION_BASED_JSA_AWARD = (
+        "uk:policies/govuk/contribution-based-jobseekers-allowance"
+        "#contribution_based_jsa_annual_amount"
+    )
+    # Scottish Carer Supplement (rulespec-uk
+    # uk/policies/govuk/scottish-carer-supplement, SSI 2023/302 reg 16(1A)) — the
+    # devolved carer top-up (GBP 11.70/week) annualised over 52 weeks. The annual
+    # amount (scottish_carer_supplement_annual_amount) grades against UKMOD's
+    # bcrdicm_s (609.55; small annualisation residual).
+    UK_HOUSEHOLD_SCOTTISH_CARER_SUPPLEMENT_AWARD = (
+        "uk:policies/govuk/scottish-carer-supplement"
+        "#scottish_carer_supplement_annual_amount"
+    )
     # Composed savings-and-dividend income tax pipeline (rulespec-uk) that wires
     # the section 12/12A/12B/13/13A stage boundaries from gross earned, savings,
     # and dividend income, so an end-to-end UKMOD tin_s comparison can run for

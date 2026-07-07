@@ -27,8 +27,8 @@
       "jurisdiction": "uk",
       "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
       "policies_in_scope": 21,
-      "covered": 18,
-      "covered_pct": 85.7143,
+      "covered": 21,
+      "covered_pct": 100.0,
       "excluded": 46,
       "excluded_by_reason": {
         "input_carrying": 4,
@@ -44,37 +44,28 @@
       "axiom_attributed_open": 0,
       "oracle_attributed": 16,
       "bridge_artifacts": 0,
-      "conformant": false,
-      "uncovered_policies": [
-        "bchht_uk",
-        "bcrdicm_uk",
-        "bunct_uk"
-      ],
-      "blocking_reasons": [
-        "3 of 21 in-scope policies are not covered by a live suite: bchht_uk, bcrdicm_uk, bunct_uk"
-      ]
+      "conformant": true,
+      "uncovered_policies": [],
+      "blocking_reasons": []
     },
     {
       "jurisdiction": "uk-pe",
       "oracle": "policyengine-uk_2.89.2/uk",
-      "policies_in_scope": 24,
+      "policies_in_scope": 23,
       "covered": 23,
-      "covered_pct": 95.8333,
-      "excluded": 9,
+      "covered_pct": 100.0,
+      "excluded": 10,
       "excluded_by_reason": {
-        "input_carrying": 9
+        "input_carrying": 9,
+        "oracle_models_repealed_law": 1
       },
       "unexplained_total": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 238,
       "bridge_artifacts": 0,
-      "conformant": false,
-      "uncovered_policies": [
-        "legacy_means_tested"
-      ],
-      "blocking_reasons": [
-        "1 of 24 in-scope policies are not covered by a live suite: legacy_means_tested"
-      ]
+      "conformant": true,
+      "uncovered_policies": [],
+      "blocking_reasons": []
     }
   ]
 }
