@@ -719,6 +719,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type == "uk-attendance-allowance-pe-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
         oracle = {
@@ -1822,6 +1827,44 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
+    """Attendance Allowance rate grid: rulespec-uk SI 2026/148 rates vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_attendance_allowance_pe.py, which runs a
+    synthetic care-category grid through PolicyEngine-UK 2.89.2's
+    ``attendance_allowance`` and the encoded SI 2026/148 Schedule 1 Part III weekly
+    rates (evaluated through the axiom rules engine over the awarded-category
+    judgments and annualised over PE's WEEKS_IN_YEAR), then writes one v2 report.
+    On a runner without a PolicyEngine-UK environment or a built axiom rules engine,
+    the committed dashboard report is reused, exactly like the Council Tax Reduction
+    and Winter Fuel Payment grids.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_attendance_allowance_pe.py"
+    basename = "axiom-policyengine-uk-attendance-allowance-pe"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"Attendance Allowance grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -1833,6 +1876,7 @@ RUNNERS = {
     "uk-capital-gains-tax-grid": _run_uk_capital_gains_tax_grid,
     "uk-business-rates-grid": _run_uk_business_rates_grid,
     "uk-winter-fuel-payment-pe-grid": _run_uk_winter_fuel_payment_pe_grid,
+    "uk-attendance-allowance-pe-grid": _run_uk_attendance_allowance_pe_grid,
 }
 
 
