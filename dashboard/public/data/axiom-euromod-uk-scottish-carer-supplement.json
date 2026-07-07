@@ -166,7 +166,7 @@
       "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-07T23:29:02Z",
+    "generated_at": "2026-07-07T23:52:00Z",
     "generated_by": "scripts/run_comparison.py::uk-scottish-carer-supplement-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -178,7 +178,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "6dd8bf3871b93d7e2afadba0cb26f5340bbd58f4"
+        "sha": "9be8d6fea64806fca7802be4cdc3a66617363ae9"
       }
     ],
     "run_kind": "manual",
