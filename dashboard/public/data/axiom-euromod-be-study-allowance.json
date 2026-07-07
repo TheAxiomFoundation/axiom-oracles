@@ -480,10 +480,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "10b7f0c1de2b68142bbdcf0519a2380f997bbaf9",
+      "axiom_rules_engine_sha": "b726a9dfa421dde267b8faae01038779d0710fd3",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T20:24:51Z",
+    "generated_at": "2026-07-07T05:06:12Z",
     "generated_by": "scripts/run_comparison.py::be-study-allowance",
     "oracle": {
       "euromod_country": "BE",
