@@ -451,6 +451,14 @@
       "source": "comparisons/uk-best-start-foods-ukmod.yaml"
     },
     {
+      "suite": "uk-business-rates",
+      "report": "axiom-policyengine-uk-business-rates.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-business-rates.yaml"
+    },
+    {
       "suite": "uk-capital-gains-tax",
       "report": "axiom-policyengine-uk-capital-gains-tax.json",
       "repos": [

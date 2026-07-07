@@ -30,9 +30,14 @@ policies:
     output_vars:
       - business_rates
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes business_rates but rulespec has not encoded it and no suite
-      runs (matrix row 7 → LGFA 1988 Pt III multiplier + reliefs).
+    suite: uk-business-rates
+    note: Covered by the uk-business-rates case-grid suite. PE-UK does not compute an individual
+      ratepayer's bill (the LGFA 1988 Pt III multiplier and reliefs); its business_rates is a
+      distributional incidence model — shareholding times the total non-domestic rates revenue across
+      England, Scotland, Wales and Northern Ireland. The rulespec module (uk/policies/govuk/business-rates.yaml,
+      LGFA 1988 s.43 enabling authority) restates that product with both quantities as supplied inputs,
+      so the surfaces are commensurable; all 6 cases match to the penny in relative terms, residuals being
+      PE float32 artifacts on the large revenue magnitude (matrix row 7 → LGFA 1988 Pt III).
   - id: uk-pe:capital_gains_tax
     oracle_policy_name: capital_gains_tax
     oracle_policy_type: rules
