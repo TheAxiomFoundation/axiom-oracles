@@ -541,6 +541,79 @@ case_sets:
         kind: person
         age: 4
         relation: Child
+  uk-child-winter-heating-payment:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/child-winter-heating-payment#child_winter_heating_assistance_payable_value
+    cases:
+    - id: uk-cwha-scotland-disabled-child10
+      period: '2026-04-06'
+      scenario: scotland-child-winter-heating-payment
+      parameters:
+        child_age: 10
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 10
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+  uk-contribution-based-jsa:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount
+    cases:
+    - id: uk-jsa-contributory-under25
+      period: '2026-04-06'
+      scenario: contribution-based-jsa
+      parameters:
+        claimant_age: 22
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: claimant
+        kind: person
+        age: 22
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 0.0
+    - id: uk-jsa-contributory-25plus
+      period: '2026-04-06'
+      scenario: contribution-based-jsa
+      parameters:
+        claimant_age: 40
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: claimant
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 0.0
   uk-employer-nic:
     locale: UK
     entity: Person
@@ -1502,6 +1575,30 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 150000.0
+  uk-scottish-carer-supplement:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/scottish-carer-supplement#scottish_carer_supplement_annual_amount
+    cases:
+    - id: uk-scs-scotland-carer
+      period: '2026-04-06'
+      scenario: scotland-scottish-carer-supplement
+      parameters:
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: carer
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 0.0
   uk-scottish-child-payment:
     locale: UK
     entity: Family

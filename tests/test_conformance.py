@@ -332,6 +332,26 @@ def test_be_universe_excludes_bfapl_dataset_lacks_input_with_probe_pointer():
     assert "rulespec-be#86" in bfapl.note
 
 
+def test_uk_universe_excludes_nonstatutory_amount_rows():
+    """bhosc01 (discretionary DHP), bched02 (administrative clothing-grant minimum)
+    and bched01 (in-kind Free School Meals) each compute a payable ``_s`` output
+    whose monetary value has no statutory basis, so they are excluded as
+    oracle_models_nonstatutory_amount with the governing instrument in the note and
+    the observable output surface retained (the reason's defining property)."""
+    universe = parse_universe(CONFORMANCE_DIR / "uk.yaml")
+    by_name = universe.by_name()
+    for name, out_var, source_marker in (
+        ("bhosc01_uk", "bhosc01_s", "2001/1167"),
+        ("bched02_uk", "bched02_s", "s.54"),
+        ("bched01_uk", "bched01_s", "s.53"),
+    ):
+        row = by_name[name]
+        assert row.in_scope is False, name
+        assert row.exclusion_reason == "oracle_models_nonstatutory_amount", name
+        assert out_var in row.output_vars, name
+        assert row.note is not None and source_marker in row.note, name
+
+
 # ---------------------------------------------------------------------------
 # Committed pe-uk universe (PolicyEngine-UK oracle)
 # ---------------------------------------------------------------------------

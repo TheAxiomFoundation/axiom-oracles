@@ -483,6 +483,22 @@
       "source": "comparisons/uk-child-benefit-ukmod.yaml"
     },
     {
+      "suite": "uk-child-winter-heating-payment",
+      "report": "axiom-euromod-uk-child-winter-heating-payment.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-child-winter-heating-payment-ukmod.yaml"
+    },
+    {
+      "suite": "uk-contribution-based-jsa",
+      "report": "axiom-euromod-uk-contribution-based-jsa.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-contribution-based-jsa-ukmod.yaml"
+    },
+    {
       "suite": "uk-council-tax-reduction",
       "report": "axiom-policyengine-uk-council-tax-reduction.json",
       "repos": [
@@ -585,6 +601,14 @@
         "TheAxiomFoundation/rulespec-uk"
       ],
       "source": "comparisons/uk-personal-allowance-ukmod.yaml"
+    },
+    {
+      "suite": "uk-scottish-carer-supplement",
+      "report": "axiom-euromod-uk-scottish-carer-supplement.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-scottish-carer-supplement-ukmod.yaml"
     },
     {
       "suite": "uk-scottish-child-payment",

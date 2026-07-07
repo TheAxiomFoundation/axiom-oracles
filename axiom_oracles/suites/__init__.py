@@ -58,6 +58,9 @@ from .uk_benefit_cap import uk_benefit_cap_cases
 from .uk_child_benefit import uk_child_benefit_cases
 from .uk_housing_benefit import uk_housing_benefit_cases
 from .uk_scottish_child_payment import uk_scottish_child_payment_cases
+from .uk_child_winter_heating_payment import uk_child_winter_heating_payment_cases
+from .uk_contribution_based_jsa import uk_contribution_based_jsa_cases
+from .uk_scottish_carer_supplement import uk_scottish_carer_supplement_cases
 from .uk_passported_grants import (
     uk_best_start_foods_cases,
     uk_healthy_start_cases,
@@ -123,6 +126,9 @@ def available_suites() -> tuple[str, ...]:
         "uk-pension-credit",
         "uk-housing-benefit",
         "uk-scottish-child-payment",
+        "uk-child-winter-heating-payment",
+        "uk-contribution-based-jsa",
+        "uk-scottish-carer-supplement",
         "uk-income-tax-scottish",
         "uk-child-benefit",
         "uk-statutory-maternity-pay",
@@ -224,6 +230,12 @@ def load_suite(name: str):
         return uk_housing_benefit_cases()
     if name == "uk-scottish-child-payment":
         return uk_scottish_child_payment_cases()
+    if name == "uk-child-winter-heating-payment":
+        return uk_child_winter_heating_payment_cases()
+    if name == "uk-contribution-based-jsa":
+        return uk_contribution_based_jsa_cases()
+    if name == "uk-scottish-carer-supplement":
+        return uk_scottish_carer_supplement_cases()
     if name == "uk-income-tax-scottish":
         return uk_income_tax_scottish_cases()
     if name == "uk-child-benefit":
@@ -289,6 +301,9 @@ __all__ = [
     "uk_healthy_start_cases",
     "uk_housing_benefit_cases",
     "uk_scottish_child_payment_cases",
+    "uk_child_winter_heating_payment_cases",
+    "uk_contribution_based_jsa_cases",
+    "uk_scottish_carer_supplement_cases",
     "uk_maternity_allowance_cases",
     "uk_winter_fuel_cases",
     "uk_pension_credit_cases",

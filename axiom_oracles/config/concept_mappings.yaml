@@ -1350,6 +1350,97 @@ concepts:
           type: country
           geoid: UK
 
+  uk:policies/govuk/child-winter-heating-payment#child_winter_heating_assistance_payable_value:
+    description: UK Child Winter Heating Payment award (disabled-child Scotland benefit unit)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the Child Winter Heating Payment statutory payable value
+    # (SSI 2020/352 reg 10): a flat GBP 265.50/year for a severely disabled child
+    # or young person in Scotland on the high-rate care passport. UKMOD returns the
+    # same payment as bchht_s (bchht_uk) for a qualifying disabled child in a
+    # Scotland benefit unit (drgn1=12) whose disability input carries the high-rate
+    # care passport (bdisc). The payment is a flat annual amount on both engines
+    # (no weekly annualisation), so the values match exactly at 265.50. An absolute
+    # tolerance to the pound catches structural encoding gaps.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: child_winter_heating_assistance_payable_value
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bchht_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount:
+    description: UK contribution-based JSA award (single unemployed claimant)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the reserved, UK-wide contribution-based JSA age-related
+    # weekly amount (SI 1996/207 reg 79, as uprated for 2026-27 by SI 2026/148):
+    # GBP 75.65/week under 25 and GBP 95.55/week for 25 or over, annualised over 52
+    # weeks. UKMOD returns the same award as bunct_s (bunct_uk) for an unemployed
+    # claimant (les=5) on a contributory award (bunct) satisfying the contribution
+    # weeks (liwwh). The weekly statutory rate is identical; the residual is only
+    # the annualisation convention (UKMOD 365/7 vs the pipeline's 52 weeks/year),
+    # dispositioned explained_residual. An absolute tolerance to the pound catches
+    # structural encoding gaps.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: contribution_based_jsa_annual_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bunct_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:policies/govuk/scottish-carer-supplement#scottish_carer_supplement_annual_amount:
+    description: UK Scottish Carer Supplement award (single Scotland carer)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the devolved Scottish Carer Supplement top-up (SSI
+    # 2023/302 reg 16(1A)): GBP 11.70/week, annualised over 52 weeks (608.40/year),
+    # excluding the separate GBP 86.45 base Carer Support Payment. UKMOD returns the
+    # supplement as bcrdicm_s (bcrdicm_uk) for a carer in a Scotland benefit unit
+    # (drgn1=12) on the underlying carer award (bcrdi). The residual is only a small
+    # annualisation/uprating-timing difference (UKMOD 609.55 vs the pipeline's
+    # 608.40), dispositioned explained_residual. An absolute tolerance to the pound
+    # catches structural encoding gaps.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: scottish_carer_supplement_annual_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bcrdicm_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#uk_nic_pilot_er_secondary_class_1_contribution:
     description: UK employer secondary Class 1 National Insurance contribution (single employment)
     category: social_contributions

@@ -115,6 +115,9 @@
     "axiom-euromod-uk-scottish-child-payment.json",
     "axiom-policyengine-uk-fuel-duty.json",
     "axiom-policyengine-uk-capital-gains-tax.json",
-    "axiom-policyengine-uk-tv-licence.json"
+    "axiom-policyengine-uk-tv-licence.json",
+    "axiom-euromod-uk-child-winter-heating-payment.json",
+    "axiom-euromod-uk-contribution-based-jsa.json",
+    "axiom-euromod-uk-scottish-carer-supplement.json"
   ]
 }
