@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { loadOracleData, buildNWayData } from "../utils/data";
-import { suiteRegion } from "../utils/suites";
+import { suiteRegion, suiteMeta, isAxiomPair, otherOracle } from "../utils/suites";
+import { engineLabel } from "../utils/format";
 import OverviewHero from "./OverviewHero";
 import ConformanceCard from "./ConformanceCard";
 import BelgiumEuromodCoverage from "./BelgiumEuromodCoverage";
-import CoverageRegister from "./CoverageRegister";
+import CoverageTracker from "./CoverageTracker";
 import RuleVerification from "./RuleVerification";
 import GapLedger from "./GapLedger";
 import ProgramRuns from "./ProgramRuns";
@@ -33,6 +34,11 @@ const COUNTRIES = [
   { id: "ca", label: "CA" },
   { id: "uk", label: "UK" },
   { id: "be", label: "BE" },
+];
+
+const VIEWS = [
+  { id: "verification", label: "Verification" },
+  { id: "coverage", label: "Coverage tracker" },
 ];
 
 function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
@@ -80,14 +86,78 @@ function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
   );
 }
 
+function ViewTabs({ view, onChange }) {
+  return (
+    <nav className="view-tabs" role="tablist" aria-label="Dashboard view">
+      {VIEWS.map((v) => (
+        <button
+          key={v.id}
+          type="button"
+          role="tab"
+          aria-selected={view === v.id}
+          className={`view-tab${view === v.id ? " view-tab-active" : ""}`}
+          onClick={() => onChange(v.id)}
+        >
+          {v.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+/**
+ * The oracles a report is checked against: the non-axiom engine of an
+ * axiom pair, or both engines of an oracle-vs-oracle cross-check.
+ */
+function reportOracles(report) {
+  const engines = [report?.engines?.left, report?.engines?.right].filter(
+    (e) => e && e !== "axiom",
+  );
+  return engines;
+}
+
+function OracleFilter({ available, selected, onToggle }) {
+  if (available.length <= 1) return null;
+  return (
+    <div className="oracle-filter" role="group" aria-label="Oracles compared">
+      <span className="oracle-filter-label mono">oracles</span>
+      {available.map(({ oracle, runs }) => {
+        const on = selected.has(oracle);
+        const lastOn = on && selected.size === 1;
+        return (
+          <button
+            key={oracle}
+            type="button"
+            aria-pressed={on}
+            disabled={lastOn}
+            className={`oracle-chip${on ? " oracle-chip-on" : ""}`}
+            title={
+              lastOn
+                ? "At least one oracle stays selected"
+                : `${on ? "Hide" : "Show"} runs against ${engineLabel(oracle)}`
+            }
+            onClick={() => onToggle(oracle)}
+          >
+            <span className="oracle-chip-mark" aria-hidden="true" />
+            {engineLabel(oracle)}
+            <span className="mono oracle-chip-count">{runs}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function DashboardContent() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [jurisdiction, setJurisdiction] = useState("us");
+  const [view, setView] = useState("verification");
+  const [hiddenOracles, setHiddenOracles] = useState(() => new Set());
 
-  // Deep-link the active jurisdiction via ?jurisdiction=ca|uk|be|us (also accepts
-  // #uk), so a conformance card can be linked to directly. Read once on mount.
+  // Deep-link jurisdiction (?jurisdiction=ca|uk|be|us, or #uk) and view
+  // (?view=coverage). Read once on mount.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const fromUrl = (
@@ -96,14 +166,24 @@ export default function DashboardContent() {
     if (COUNTRIES.some((c) => c.id === fromUrl)) {
       setJurisdiction(fromUrl);
     }
+    const viewFromUrl = (params.get("view") || "").toLowerCase();
+    if (VIEWS.some((v) => v.id === viewFromUrl)) {
+      setView(viewFromUrl);
+    }
   }, []);
 
-  // Keep the URL query in sync when the toggle changes, without a navigation.
+  const syncUrl = (key, value) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set(key, value);
+    window.history.replaceState(null, "", url);
+  };
   const changeJurisdiction = (next) => {
     setJurisdiction(next);
-    const url = new URL(window.location.href);
-    url.searchParams.set("jurisdiction", next);
-    window.history.replaceState(null, "", url);
+    syncUrl("jurisdiction", next);
+  };
+  const changeView = (next) => {
+    setView(next);
+    syncUrl("view", next);
   };
 
   useEffect(() => {
@@ -113,18 +193,64 @@ export default function DashboardContent() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Region slice, then the oracle filter on top of it.
+  const regionReports = useMemo(() => {
+    if (!data) return [];
+    return data.reports.filter((r) => suiteRegion(r.suite) === jurisdiction);
+  }, [data, jurisdiction]);
+
+  const availableOracles = useMemo(() => {
+    const counts = new Map();
+    for (const r of regionReports) {
+      for (const o of reportOracles(r)) {
+        counts.set(o, (counts.get(o) || 0) + 1);
+      }
+    }
+    return [...counts.entries()]
+      .map(([oracle, runs]) => ({ oracle, runs }))
+      .sort((a, b) => b.runs - a.runs);
+  }, [regionReports]);
+
+  const selectedOracles = useMemo(() => {
+    const all = new Set(availableOracles.map((o) => o.oracle));
+    for (const hidden of hiddenOracles) all.delete(hidden);
+    // Never allow an empty selection.
+    if (all.size === 0 && availableOracles.length > 0) {
+      all.add(availableOracles[0].oracle);
+    }
+    return all;
+  }, [availableOracles, hiddenOracles]);
+
+  const toggleOracle = (oracle) => {
+    setHiddenOracles((prev) => {
+      const next = new Set(prev);
+      if (next.has(oracle)) next.delete(oracle);
+      else next.add(oracle);
+      return next;
+    });
+  };
+
+  const filteredReports = useMemo(
+    () =>
+      regionReports.filter((r) =>
+        reportOracles(r).every((o) => selectedOracles.has(o)),
+      ),
+    [regionReports, selectedOracles],
+  );
+
   const viewData = useMemo(() => {
     if (!data) return null;
-    const reports = data.reports.filter(
-      (r) => suiteRegion(r.suite) === jurisdiction,
-    );
     const programs = data.programs.filter(
       (p) => programRegion(p) === jurisdiction,
     );
-    return { ...buildNWayData(reports), reports, programs };
-  }, [data, jurisdiction]);
+    return {
+      ...buildNWayData(filteredReports),
+      reports: filteredReports,
+      programs,
+    };
+  }, [data, jurisdiction, filteredReports]);
 
-  if (loading) {
+  if (loading || error || !data) {
     return (
       <>
         <TopBar
@@ -133,39 +259,101 @@ export default function DashboardContent() {
         />
         <main style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px" }}>
           <div className="page-intro">
-            <p className="mono" style={{ fontSize: 13 }}>
-              Loading oracle data…
-            </p>
+            {loading ? (
+              <p className="mono" style={{ fontSize: 13 }}>
+                Loading oracle data…
+              </p>
+            ) : (
+              <>
+                <h1>No reports found.</h1>
+                <p>
+                  Generate one with the{" "}
+                  <code className="mono">axiom-oracles</code> CLI.
+                </p>
+              </>
+            )}
           </div>
         </main>
       </>
     );
   }
 
-  if (error || !data) {
-    return (
-      <>
-        <TopBar
-          jurisdiction={jurisdiction}
-          onJurisdictionChange={changeJurisdiction}
-        />
-        <main style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px" }}>
-          <div className="page-intro">
-            <h1>No reports found.</h1>
-            <p>
-              Generate one with the <code className="mono">axiom-oracles</code> CLI.
-            </p>
-          </div>
-        </main>
-      </>
-    );
-  }
-
-  const withData = viewData.reports.filter(
+  const withData = filteredReports.filter(
     (r) =>
       (r.aggregates || []).length > 0 || (r.summary?.alarms || []).length > 0,
   );
   const isBelgium = jurisdiction === "be";
+
+  const verificationView = (
+    <>
+      <OracleFilter
+        available={availableOracles}
+        selected={selectedOracles}
+        onToggle={toggleOracle}
+      />
+
+      {!isBelgium && <OverviewHero reports={withData} />}
+
+      <ConformanceCard region={jurisdiction} />
+      {jurisdiction === "uk" && <ConformanceCard region="uk-pe" />}
+
+      <ProgramRuns
+        key={`${jurisdiction}-${[...selectedOracles].sort().join(",")}`}
+        reports={withData}
+        knownCauses={data.knownCauses || []}
+        coverageOverview={data.coverageOverview}
+      />
+
+      <GapLedger
+        reports={withData}
+        knownCauses={data.knownCauses || []}
+        coverageOverview={data.coverageOverview}
+        region={jurisdiction}
+      />
+
+      <details className="advanced-panel">
+        <summary>
+          Advanced view · oracle agreement matrix and program breakdown
+        </summary>
+        <div className="advanced-panel-body">
+          {viewData.summary.totalCases > 0 && (
+            <AgreementMatrix
+              oracles={viewData.oracles}
+              matrix={viewData.matrix}
+              overallMatrix={viewData.overallMatrix}
+              concepts={viewData.concepts}
+            />
+          )}
+          <ProgramBreakdown
+            programs={viewData.programs}
+            reports={viewData.reports}
+            oracles={viewData.oracles}
+          />
+        </div>
+      </details>
+    </>
+  );
+
+  const coverageView = (
+    <>
+      {isBelgium ? (
+        <BelgiumEuromodCoverage
+          coverage={data.euromodCoverage}
+          issues={data.euromodIssues}
+        />
+      ) : (
+        <CoverageTracker
+          reports={regionReports}
+          coverageOverview={data.coverageOverview}
+          region={jurisdiction}
+        />
+      )}
+
+      {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
+
+      <FreshnessRegister freshness={data.freshness} region={jurisdiction} />
+    </>
+  );
 
   return (
     <>
@@ -178,163 +366,13 @@ export default function DashboardContent() {
         style={{
           maxWidth: 1180,
           margin: "0 auto",
-          padding: "56px 20px 80px",
+          padding: "40px 20px 80px",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
-          {isBelgium ? (
-            <>
-              <ConformanceCard region={jurisdiction} />
+        <ViewTabs view={view} onChange={changeView} />
 
-              <BelgiumEuromodCoverage
-                coverage={data.euromodCoverage}
-                issues={data.euromodIssues}
-              />
-
-              <ProgramRuns
-                key={jurisdiction}
-                reports={withData}
-                knownCauses={data.knownCauses || []}
-                coverageOverview={data.coverageOverview}
-              />
-
-              <FreshnessRegister
-                freshness={data.freshness}
-                region={jurisdiction}
-              />
-
-              <GapLedger
-                reports={withData}
-                knownCauses={data.knownCauses || []}
-                coverageOverview={data.coverageOverview}
-                region={jurisdiction}
-              />
-
-              <details
-                style={{
-                  background: "var(--paper-elevated)",
-                  border: "1px solid var(--hairline)",
-                  borderRadius: 12,
-                  padding: "12px 16px",
-                }}
-              >
-                <summary
-                  style={{
-                    cursor: "pointer",
-                    fontSize: 13,
-                    color: "var(--ink-mute)",
-                  }}
-                >
-                  Advanced view · EUROMOD agreement matrix and encoded-rule
-                  inventory
-                </summary>
-                <div
-                  style={{
-                    marginTop: 12,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 16,
-                  }}
-                >
-                  {viewData.summary.totalCases > 0 && (
-                    <AgreementMatrix
-                      oracles={viewData.oracles}
-                      matrix={viewData.matrix}
-                      overallMatrix={viewData.overallMatrix}
-                      concepts={viewData.concepts}
-                    />
-                  )}
-                  <ProgramBreakdown
-                    programs={viewData.programs}
-                    reports={viewData.reports}
-                    oracles={viewData.oracles}
-                  />
-                </div>
-              </details>
-            </>
-          ) : (
-            <>
-              <OverviewHero reports={withData} />
-
-              <ConformanceCard region={jurisdiction} />
-
-              {/* The UK has two oracle universes: UKMOD (region "uk", above) and
-                  PolicyEngine-UK (region "uk-pe"). Render the PE-UK conformance
-                  card alongside so "parity vs PE-UK" is a scoreboard badge like
-                  Belgium's. The card no-ops when its jurisdiction is absent from
-                  the scoreboard, so this is safe for us/be. */}
-              {jurisdiction === "uk" && <ConformanceCard region="uk-pe" />}
-
-              <CoverageRegister
-                reports={withData}
-                coverageOverview={data.coverageOverview}
-                region={jurisdiction}
-              />
-
-              {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
-
-              <ProgramRuns
-                key={jurisdiction}
-                reports={withData}
-                knownCauses={data.knownCauses || []}
-                coverageOverview={data.coverageOverview}
-              />
-
-              <FreshnessRegister
-                freshness={data.freshness}
-                region={jurisdiction}
-              />
-
-              <GapLedger
-                reports={withData}
-                knownCauses={data.knownCauses || []}
-                coverageOverview={data.coverageOverview}
-                region={jurisdiction}
-              />
-
-              <details
-                style={{
-                  background: "var(--paper-elevated)",
-                  border: "1px solid var(--hairline)",
-                  borderRadius: 12,
-                  padding: "12px 16px",
-                }}
-              >
-                <summary
-                  style={{
-                    cursor: "pointer",
-                    fontSize: 13,
-                    color: "var(--ink-mute)",
-                  }}
-                >
-                  Advanced view · oracle agreement matrix and the encoded-rule
-                  inventory (statute references, corpus files)
-                </summary>
-                <div
-                  style={{
-                    marginTop: 12,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 16,
-                  }}
-                >
-                  {viewData.summary.totalCases > 0 && (
-                    <AgreementMatrix
-                      oracles={viewData.oracles}
-                      matrix={viewData.matrix}
-                      overallMatrix={viewData.overallMatrix}
-                      concepts={viewData.concepts}
-                    />
-                  )}
-                  <ProgramBreakdown
-                    programs={viewData.programs}
-                    reports={viewData.reports}
-                    oracles={viewData.oracles}
-                  />
-                </div>
-              </details>
-            </>
-          )}
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+          {view === "coverage" ? coverageView : verificationView}
         </div>
 
         <footer

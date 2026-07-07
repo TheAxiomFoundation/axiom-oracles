@@ -60,6 +60,7 @@ export function engineLabel(name) {
     accessnyc: "ACCESS NYC",
     prd: "PRD",
     euromod: "EUROMOD",
+    taxcalc: "Tax-Calculator",
   };
   return labels[name] || name;
 }
