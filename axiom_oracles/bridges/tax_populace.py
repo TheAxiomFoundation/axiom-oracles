@@ -2206,7 +2206,12 @@ def project_section_32_c_2_tax_unit_inputs(
     # 26 USC 32(c)(2)(A)(ii): net earnings from self-employment determined
     # with regard to the 164(f)/1402(a)(12) deduction — NESE net of one-half
     # of the combined 1401(a)+(b)(1) rates.
-    seca_deduction_fraction = 0.5 * (0.124 + 0.029)
+    # One-half of the SECA tax actually imposed (the section 164(f)
+    # deduction the 32(c)(2)(A)(ii) parenthetical points at): the combined
+    # 1401 rates apply to 92.35% of profits, so the deduction is
+    # 0.5 x 15.3% x 92.35% of raw self-employment income — the IRS
+    # Schedule SE -> EIC worksheet convention PolicyEngine also follows.
+    seca_deduction_fraction = 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029))
     net_earnings_after_deduction = sum(
         max(
             0.0,
@@ -2276,7 +2281,7 @@ def project_section_1402_a_tax_unit_inputs(
     # self-employment as a boundary input, net of the 1402(a)(12)
     # deduction (one-half of the combined 1401(a)+(b)(1) rates).
     raw = max(0.0, self_employment_income + partnership_self_employment_income)
-    nese = raw * (1 - 0.5 * (0.124 + 0.029))
+    nese = raw * (1 - 0.5 * (0.124 + 0.029))  # 1402(a)(12): NESE proper
     return {
         "net_earnings_from_self_employment": nese,
         "net_earnings_from_self_employment_for_paragraph_2_threshold_test": nese,

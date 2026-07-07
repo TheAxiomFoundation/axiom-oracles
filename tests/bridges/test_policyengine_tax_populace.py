@@ -869,9 +869,11 @@ def test_eitc_projection_sends_self_employment_to_section_1402_not_earned_income
         contexts=contexts,
     ) == {
         "employee_compensation_includible_in_gross_income": 23_000,
-            "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
-                3_647.825
-            ),
+        # 3,950 x (1 - 0.5 x 15.3% x 92.35%): earned income nets out half
+        # the SECA tax actually imposed, the IRS EIC-worksheet convention.
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
+            3_670.9413875
+        ),
         "pension_or_annuity_amount": 0,
         "nonresident_alien_income_not_connected_with_united_states_business": 0,
         "penal_institution_service_compensation": 0,

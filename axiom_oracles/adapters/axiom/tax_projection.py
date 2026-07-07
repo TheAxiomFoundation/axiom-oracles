@@ -3570,7 +3570,10 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         # 164(f)/1402(a)(12) deduction (one-half of the combined
         # 1401(a)+(b)(1) rates).
         "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
-            max(0.0, self_employment) * (1 - 0.5 * (0.124 + 0.029))
+            # 32(c)(2)(A)(ii) via 164(f): earned income nets out one-half
+            # of the SECA tax imposed (rates apply to 92.35% of profits).
+            max(0.0, self_employment)
+            * (1 - 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029)))
         ),
         "alaska_permanent_fund_dividend_eligible_person_count": _alaska_permanent_fund_dividend_eligible_person_count(
             case,
