@@ -9,6 +9,8 @@ import {
   US_STATE_NAMES,
   suiteMeta,
   reportMetric,
+  nearMetric,
+  NEAR_THRESHOLD_USD,
   rateStatus,
   isAxiomPair,
   runAnchor,
@@ -173,6 +175,20 @@ function RunRow({ report, knownCauses, coverageOverview, isOpen, onToggle, ancho
         </span>
         <span className="run-figures">
           <RunStatus metric={metric} kind={meta.kind} alarms={alarms} />
+          {(() => {
+            const near = nearMetric(report);
+            if (!near || near.rate - metric.rate < 1) return null;
+            return (
+              <span
+                className="mono run-rate-explained"
+                style={{ color: rateColor(near.rate) }}
+                title={`Counting the ${near.near.toLocaleString()} disagreements within $${near.threshold} of the oracle as near-agreement`}
+              >
+                {formatAgreementRate(near.rate, metric.mismatches - near.near)}{" "}
+                within ${NEAR_THRESHOLD_USD}
+              </span>
+            );
+          })()}
           {metric.total > 0 &&
             metric.explainedRate != null &&
             metric.mismatches > 0 &&

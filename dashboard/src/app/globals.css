@@ -668,6 +668,13 @@ a.cov-cell:hover {
   }
 }
 
+.hero-stat-near {
+  display: block;
+  font-size: 10px;
+  color: var(--ink-mute);
+  margin-top: 2px;
+}
+
 /* ── View tabs & oracle filter ── */
 .view-tabs {
   display: flex;

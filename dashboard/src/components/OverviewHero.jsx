@@ -5,6 +5,8 @@ import { rateColor } from "../utils/colors";
 import {
   suiteKind,
   reportMetric,
+  nearMetric,
+  NEAR_THRESHOLD_USD,
   reportProgramCount,
   isAxiomPair,
   otherOracle,
@@ -58,6 +60,11 @@ export default function OverviewHero({ reports }) {
     pair.matched += m.matched;
     pair.total += m.total;
     pair.runs += 1;
+    // Near-agreement aggregates only while every contributing report can
+    // compute it; one slimmed report makes the oracle's figure unknowable.
+    const near = nearMetric(report);
+    if (near === null && m.mismatches > 0) pair.nearUnknown = true;
+    else if (near) pair.near = (pair.near || 0) + near.near;
   }
   const oracles = new Set(byOracle.keys());
   const rate = total > 0 ? (matched / total) * 100 : null;
@@ -98,6 +105,10 @@ export default function OverviewHero({ reports }) {
             .map(([oracle, pair]) => {
               const pairRate =
                 pair.total > 0 ? (pair.matched / pair.total) * 100 : null;
+              const nearRate =
+                !pair.nearUnknown && pair.near
+                  ? ((pair.matched + pair.near) / pair.total) * 100
+                  : null;
               return (
                 <Stat
                   key={oracle}
@@ -106,7 +117,16 @@ export default function OverviewHero({ reports }) {
                       {formatAgreementRate(pairRate, pair.total - pair.matched)}
                     </span>
                   }
-                  label={`vs ${engineLabel(oracle)} · ${pair.total.toLocaleString()} checks`}
+                  label={
+                    <>
+                      {`vs ${engineLabel(oracle)} · ${pair.total.toLocaleString()} checks`}
+                      {nearRate != null && nearRate - pairRate >= 1 && (
+                        <span className="hero-stat-near">
+                          {formatPct(nearRate, 1)} within ${NEAR_THRESHOLD_USD}
+                        </span>
+                      )}
+                    </>
+                  }
                 />
               );
             })}

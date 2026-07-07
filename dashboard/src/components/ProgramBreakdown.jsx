@@ -703,52 +703,60 @@ function ProgramFamilyCard({ familyName, category, subsections, oracles }) {
 function SubsectionRow({ program, stats, oracles, isFirst }) {
   const hasData = stats.comparisons > 0;
   const status = program.encoding_status ?? (hasData ? "live" : "encoded");
+  const flags = stats.qualityFlags || [];
 
   return (
     <div
       style={{
         padding: "14px 20px 14px 52px",
         borderTop: isFirst ? "none" : "1px solid var(--hairline)",
-        display: "flex",
-        alignItems: "center",
-        gap: 16,
       }}
     >
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            flexWrap: "wrap",
-          }}
-        >
-          <div style={{ fontSize: 14, color: "var(--ink)", fontWeight: 500 }}>
-            {program.subsection_name || program.name}
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              flexWrap: "wrap",
+            }}
+          >
+            <div
+              style={{ fontSize: 14, color: "var(--ink)", fontWeight: 500 }}
+            >
+              {program.subsection_name || program.name}
+            </div>
+          </div>
+          <CoverageChips coverage={program.coverage || []} />
+        </div>
+
+        <div style={{ textAlign: "right", minWidth: 70 }}>
+          <div className="section-eyebrow" style={{ fontSize: 10 }}>
+            Agreement
+          </div>
+          <div
+            className="mono"
+            style={{
+              fontSize: 13,
+              fontWeight: 500,
+              marginTop: 2,
+              color:
+                stats.overallRate != null
+                  ? rateColor(stats.overallRate)
+                  : "var(--ink-mute)",
+            }}
+          >
+            {stats.overallRate != null ? formatPct(stats.overallRate) : "—"}
           </div>
         </div>
-        <CoverageChips coverage={program.coverage || []} />
       </div>
 
-      <div style={{ textAlign: "right", minWidth: 70 }}>
-        <div className="section-eyebrow" style={{ fontSize: 10 }}>
-          Agreement
+      {flags.length > 0 && (
+        <div style={{ marginTop: 12 }}>
+          <QualityAlarms flags={flags} />
         </div>
-        <div
-          className="mono"
-          style={{
-            fontSize: 13,
-            fontWeight: 500,
-            marginTop: 2,
-            color:
-              stats.overallRate != null
-                ? rateColor(stats.overallRate)
-                : "var(--ink-mute)",
-          }}
-        >
-          {stats.overallRate != null ? formatPct(stats.overallRate) : "—"}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -640,6 +640,31 @@ export function reportMetric(report) {
  * rateColor() in utils/colors.js so a tile and its run row never disagree:
  * 90%+ reads as verified, not as a warning.
  */
+/**
+ * Near-agreement: exact matches plus mismatches within a dollar threshold.
+ * Only computable when the report carries its COMPLETE mismatch list —
+ * large suites slim the dashboard copy to the first 1,000 rows, and a
+ * partial list would overstate closeness. Returns null when not computable
+ * or when it would not differ from the exact rate.
+ */
+export const NEAR_THRESHOLD_USD = 100;
+
+export function nearMetric(report, threshold = NEAR_THRESHOLD_USD) {
+  const metric = reportMetric(report);
+  if (!metric.total || !metric.mismatches) return null;
+  const list = report?.mismatches || [];
+  const declared = report?.summary?.mismatch_count;
+  if (declared == null || list.length !== declared) return null;
+  let near = 0;
+  for (const m of list) {
+    const diff = m?.difference;
+    if (typeof diff === "number" && Math.abs(diff) <= threshold) near += 1;
+  }
+  if (near === 0) return null;
+  const rate = ((metric.matched + near) / metric.total) * 100;
+  return { rate, near, threshold };
+}
+
 export function rateStatus(rate) {
   if (rate == null) return "unmeasured";
   if (rate >= 90) return "verified";
