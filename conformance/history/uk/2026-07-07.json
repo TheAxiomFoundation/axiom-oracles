@@ -1,12 +1,12 @@
 {
   "schema": "axiom_oracles.conformance_snapshot.v1",
   "date": "2026-07-07",
-  "jurisdiction": "uk-pe",
-  "oracle": "policyengine-uk_2.89.2/uk",
+  "jurisdiction": "uk",
+  "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
   "policies_in_scope": 24,
-  "covered": 22,
-  "covered_pct": 91.6667,
-  "excluded": 9,
+  "covered": 18,
+  "covered_pct": 75.0,
+  "excluded": 43,
   "unexplained_total": 0,
   "axiom_attributed_open": 0,
   "conformant": false

@@ -1,0 +1,38 @@
+# TV licence — rulespec-uk fee-and-concession module vs PolicyEngine-UK on a
+# synthetic household grid. The Axiom side grounds the SI 2004/692 Schedule 1 fee
+# (£180 for 2026-27) and the Communications Act 2003 s.365 concession structure
+# (uk/policies/govuk/tv-licence.yaml), evaluated over PolicyEngine's own
+# ownership/evasion/age-75/pension-credit/blindness facts and the two concession
+# rates. Both engines compute net cost and concession value identically, so the
+# grid matches to the penny across the full fee, over-75 free, blind half-fee,
+# and no-receiver cases.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-tv-licence
+
+name: uk-tv-licence
+title: UK TV licence — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded TV licence fee-and-concession module (rulespec-uk
+  uk/policies/govuk/tv-licence.yaml, Communications Act 2003 s.363/s.365 and
+  SI 2004/692 Schedule 1) against PolicyEngine-UK tv_licence and
+  free_tv_licence_value (2.89.2) at the 2026 validation year on a synthetic
+  household grid. The demographic facts and the two concession rates are supplied
+  on both engines.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-tv-licence-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-tv-licence
+
+dashboard:
+  filename: axiom-policyengine-uk-tv-licence.json
+  suite: uk-tv-licence

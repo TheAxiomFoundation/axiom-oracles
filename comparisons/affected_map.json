@@ -499,6 +499,14 @@
       "source": "comparisons/uk-employer-nic-ukmod.yaml"
     },
     {
+      "suite": "uk-fuel-duty",
+      "report": "axiom-policyengine-uk-fuel-duty.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-fuel-duty.yaml"
+    },
+    {
       "suite": "uk-healthy-start",
       "report": "axiom-euromod-uk-healthy-start.json",
       "repos": [
@@ -627,6 +635,14 @@
       "source": "comparisons/uk-tax-free-childcare-pe.yaml"
     },
     {
+      "suite": "uk-tv-licence",
+      "report": "axiom-policyengine-uk-tv-licence.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-tv-licence.yaml"
+    },
+    {
       "suite": "uk-universal-credit",
       "report": "axiom-euromod-uk-universal-credit.json",
       "repos": [
@@ -641,6 +657,14 @@
         "TheAxiomFoundation/rulespec-uk"
       ],
       "source": "comparisons/uk-universal-credit-efrs.yaml"
+    },
+    {
+      "suite": "uk-vat",
+      "report": "axiom-policyengine-uk-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-vat.yaml"
     },
     {
       "suite": "uk-winter-fuel",

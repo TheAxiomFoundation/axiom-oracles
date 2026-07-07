@@ -1,0 +1,178 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "uk-fuel-duty",
+  "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+  "population": "case-grid",
+  "validation_year": 2026,
+  "locales": [
+    "UK"
+  ],
+  "scope": {
+    "type": "country",
+    "geoid": "UK"
+  },
+  "engines": {
+    "axiom": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+    "policyengine": "fuel_duty"
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 2e-07
+  },
+  "case_count": 9,
+  "summary": {
+    "comparison_count": 9,
+    "match_count": 9,
+    "mismatch_count": 0,
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "policyengine_matches": 9,
+    "weighted": {
+      "comparison_weight": 9,
+      "match_weight": 9,
+      "mismatch_weight": 0,
+      "match_rate": 100.0
+    },
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "error_count": 0,
+    "errors_by_engine": []
+  },
+  "mismatches": [],
+  "errors": [],
+  "cases": [
+    {
+      "case_id": "fd-petrol-only-small",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "petrol-only",
+      "petrol_litres": 800.0,
+      "diesel_litres": 0.0,
+      "rural": false,
+      "axiom": 427.59999999999997,
+      "policyengine": 427.5999755859375,
+      "axiom_vs_policyengine": {
+        "difference": 2.441406246589395e-05,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-petrol-only-large",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "petrol-only",
+      "petrol_litres": 2500.0,
+      "diesel_litres": 0.0,
+      "rural": false,
+      "axiom": 1336.25,
+      "policyengine": 1336.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-diesel-only",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "diesel-only",
+      "petrol_litres": 0.0,
+      "diesel_litres": 1200.0,
+      "rural": false,
+      "axiom": 641.4,
+      "policyengine": 641.4000854492188,
+      "axiom_vs_policyengine": {
+        "difference": -8.544921877273737e-05,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-petrol-and-diesel",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "petrol-and-diesel",
+      "petrol_litres": 900.0,
+      "diesel_litres": 400.0,
+      "rural": false,
+      "axiom": 694.8499999999999,
+      "policyengine": 694.8500366210938,
+      "axiom_vs_policyengine": {
+        "difference": -3.662109384094947e-05,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-heavy-driver",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "petrol-and-diesel",
+      "petrol_litres": 3000.0,
+      "diesel_litres": 1000.0,
+      "rural": false,
+      "axiom": 2138.0,
+      "policyengine": 2137.999755859375,
+      "axiom_vs_policyengine": {
+        "difference": 0.000244140625,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-rural-relief-petrol",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "rural-relief",
+      "petrol_litres": 1000.0,
+      "diesel_litres": 0.0,
+      "rural": true,
+      "axiom": 484.49999999999994,
+      "policyengine": 484.5,
+      "axiom_vs_policyengine": {
+        "difference": -5.684341886080802e-14,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-rural-relief-both",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "rural-relief",
+      "petrol_litres": 700.0,
+      "diesel_litres": 300.0,
+      "rural": true,
+      "axiom": 484.49999999999994,
+      "policyengine": 484.4999694824219,
+      "axiom_vs_policyengine": {
+        "difference": 3.051757806815658e-05,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-rural-relief-diesel",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "rural-relief",
+      "petrol_litres": 0.0,
+      "diesel_litres": 1500.0,
+      "rural": true,
+      "axiom": 726.7499999999999,
+      "policyengine": 726.75,
+      "axiom_vs_policyengine": {
+        "difference": -1.1368683772161603e-13,
+        "match": true
+      }
+    },
+    {
+      "case_id": "fd-no-fuel",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "scenario": "no-fuel",
+      "petrol_litres": 0.0,
+      "diesel_litres": 0.0,
+      "rural": false,
+      "axiom": 0.0,
+      "policyengine": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      }
+    }
+  ],
+  "provenance": {
+    "generated": "2026-07-07",
+    "generator": "scripts/generate_uk_fuel_duty.py",
+    "axiom_engine": "axiom rules engine over rulespec-uk uk/policies/govuk/fuel-duty.yaml",
+    "policyengine_uk": "2.89.2",
+    "commensurability": "PolicyEngine-UK fuel_duty applies an effective per-litre rate (petrol_and_diesel 0.5345 for 2026, less rural relief) to the household's petrol and diesel litres. The rulespec module grounds the HODA s.6(1A) standing rate \u00a30.5795 and subtracts a supplied temporary reduction (0.5795 - 0.5345 = 0.045, the temporary Budget-resolution 5p cut extension not carried into the consolidated s.6(1A) text) and the rural relief, so both engines apply the same in-force effective rate to the same supplied litres."
+  }
+}
