@@ -10,7 +10,10 @@ title: Colorado income tax -- Axiom vs TAXSIM
 description: >-
   Compares Colorado income tax liability from the composed oracle-bridge
   program against NBER TAXSIM-35's siitax on Enhanced CPS tax units in
-  Colorado, as an independent second oracle beside PolicyEngine.
+  Colorado, as an independent second oracle beside PolicyEngine. TAXSIM's
+  2026 Colorado core matches exactly (taxable x 4.40 percent); residuals
+  are credit-model differences (its smooth TABOR-style estimate vs the
+  tiered statutory refund table, and state-EITC vintage).
 
 runner:
   type: axiom-oracles-compare

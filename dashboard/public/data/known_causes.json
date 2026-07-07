@@ -713,10 +713,10 @@
   },
   {
    "concept": "us:tax/state-income-tax#liability",
-   "description": "First run of the third oracle: 662 of 1,201 Colorado tax units match NBER TAXSIM-35 exactly on bottom-line liability. Most divergence is TAXSIM's narrower state model \u2014 it does not carry the TABOR sales-tax refund, the family affordability credit, or Colorado's EITC expansions, so axiom reads higher on 406 units (median $165/yr) and lower where TAXSIM misses subtractions. The right long-term comparison scope against TAXSIM is likely pre-refundable-credit liability; until then this suite documents where the three engines stand. TAXSIM identity is pinned (policyengine-taxsim 2.30.0, NBER binary sha256 in adapters/taxsim/taxsim_pins.json; models 2026 law including OBBBA).",
+   "description": "The 55% headline undersells the agreement: TAXSIM's 2026 Colorado core is exact \u2014 before-credit tax equals taxable x 4.40% to the penny (verified via TAXSIM's v36/staxbc decomposition), on current 2026 law both sides. The mismatches are credit modeling against a $15 tolerance: 44% are at most $60, where TAXSIM carries a smooth TABOR-style credit estimate (about $21 for a mid-income single) versus the tiered statutory refund table ($19-59) the corpus and PolicyEngine use; 141 exceed $500, the EITC-class where TAXSIM's state-EITC vintage differs. An earlier note here claimed TAXSIM omits TABOR \u2014 wrong, corrected after decomposition. Median absolute difference across all mismatches: $87 on annual liability.",
    "fix_owner": "triage",
    "kind": "amount_difference",
-   "label": "TAXSIM state-model scope: no TABOR or CO refundable credits",
+   "label": "Credit-model deltas on an exactly-agreeing core",
    "suite": "co-state-income-tax-taxsim"
   }
  ]
