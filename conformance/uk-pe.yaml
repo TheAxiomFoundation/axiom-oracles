@@ -39,9 +39,17 @@ policies:
     output_vars:
       - capital_gains_tax
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes capital_gains_tax but rulespec has not encoded it and no
-      suite runs (matrix row 9 → TCGA 1992; FA rate schedule).
+    suite: uk-capital-gains-tax
+    note: Covered by the uk-capital-gains-tax case-grid suite. The rulespec module
+      (uk/policies/govuk/capital-gains-tax.yaml, TCGA 1992 s.1H/1I/1K) reproduces
+      PE-UK's capital_gains_tax band split — annual exempt amount £3,000 (s.1K)
+      deducted from chargeable gains, then charged at the s.1H basic 18% rate
+      within the unused basic rate band and 24% above (PE's higher and additional
+      CGT rates are both 24%). capital_gains, taxable income (adjusted_net_income
+      less allowances) and the basic rate limit are supplied inputs on both sides,
+      so the surfaces are commensurable; all 6 cases match to the penny, residuals
+      sub-0.01 (PE float32) inside tolerance (matrix row 9 → TCGA 1992; FA rate
+      schedule).
   - id: uk-pe:carer_support_payment
     oracle_policy_name: carer_support_payment
     oracle_policy_type: reported_ceiling

@@ -1,0 +1,44 @@
+# Capital Gains Tax — rulespec-uk band split vs PolicyEngine-UK on a synthetic
+# individual grid. The Axiom side is the encoded capital gains tax policy module
+# (TCGA 1992 s.1H/1I/1K), uk/policies/govuk/capital-gains-tax.yaml, evaluated
+# through the axiom rules engine over PolicyEngine's own capital_gains, taxable
+# income (adjusted_net_income less allowances) and basic rate limit
+# (gov.hmrc.income_tax basic rate threshold).
+#
+# capital_gains is a supplied input on both sides, so the surfaces are
+# commensurable and the grid matches to the penny (gains within the annual exempt
+# amount, within the basic rate band, spanning both bands, and fully above the
+# band); the only residuals are sub-0.01 PolicyEngine float32 artifacts, inside
+# tolerance.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-capital-gains-tax
+
+name: uk-capital-gains-tax
+title: UK Capital Gains Tax — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded capital gains tax band split (rulespec-uk
+  uk/policies/govuk/capital-gains-tax.yaml, TCGA 1992 s.1H/1I/1K) against
+  PolicyEngine-UK capital_gains_tax (2.89.2) at the 2026 validation year on a
+  synthetic individual grid crossing the annual exempt amount and the basic rate
+  band. capital_gains, taxable income and the basic rate limit are supplied
+  inputs on both engines.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-capital-gains-tax-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    # Links this suite to the rulespec-uk monorepo in the affected map so a
+    # change to the encoded band split triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-capital-gains-tax
+
+dashboard:
+  filename: axiom-policyengine-uk-capital-gains-tax.json
+  suite: uk-capital-gains-tax
