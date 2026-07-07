@@ -516,6 +516,22 @@ class Concepts:
         "section-1-imposition-of-levy"
         "#covid_health_recovery_levy_amount"
     )
+    # December 2025 reform consumption core: NHIL (Act 1156 s.47) and the
+    # GETFund Levy (Act 1152 s.3A), both two and a half per cent and
+    # rate-unchanged across the reform boundary, compared to GHAMOD
+    # ``tva01_s``/``tva02_s``. VAT (Act 1151 s.3, fifteen per cent) has no
+    # clean GHAMOD counterpart (ghamod_issues.json
+    # ghamod-tva-wedge-double-and-triple-counts-levies).
+    GH_NHIL_AMOUNT = (
+        "gh:statutes/act-1156/national-health-insurance-amendment-2025/"
+        "section-47-nhil-substituted"
+        "#national_health_insurance_levy_amount"
+    )
+    GH_GETFUND_LEVY_AMOUNT = (
+        "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/"
+        "section-3a-getfund-levy-substituted"
+        "#getfund_levy_amount"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
