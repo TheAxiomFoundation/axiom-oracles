@@ -681,10 +681,10 @@
   },
   {
    "concept": "us:statutes/26/32#earned_income_credit",
-   "description": "3,862,844 of 3,881,635 values agree (99.52%) after correcting the bridge's EIC earned-income convention to the IRS worksheet form (half the SECA tax imposed). Remaining residuals: the EITC chain (16,660 of 962,709 \u2014 includes a 203-case constant-118,500 class and investment-income eligibility edges) and tax-before-credits (2,118); seven surfaces at 100%, CTC at 5 diffs in 437,595. Per-case triage continues.",
+   "description": "3,862,844 of 3,881,635 values agree (99.52%). The 18,791 residuals decompose into five fingerprinted classes: (1) eitc_earned_income constant-delta class \u2014 216 units differ by exactly 119,251 and 58 by exactly twice that (two-earner), consistent with a top-coded Populace self-employment value that PolicyEngine excludes from EITC earned income while the composed 32(c)(2) includes it; (2) eitc_earned_income 'PE zero, axiom pays' \u2014 1,461 units where PolicyEngine zeroes the component for EITC-ineligible units while the encoded definition computes it unconditionally; a comparison-scoping call, not a law difference; (3) eitc_investment_income_eligible boolean splits both ways (1,863 vs 936) \u2014 investment- income definition edges (rental/royalty inclusion and threshold vintage); (4) income_tax_main_rates \u2014 all 2,118 are sub-$5 with ratio 1.0000: bracket-rounding convention, tolerance material; (5) cascade rows (phased_in/reduction/eligible) downstream of (1)-(3). Seven surfaces at 100%; CTC 5 diffs in 437,595.",
    "fix_owner": "triage",
    "kind": "amount_difference",
-   "label": "EITC residuals after the generated re-encode",
+   "label": "fiit residual classes, fingerprinted",
    "suite": "fiit-ecps"
   },
   {
