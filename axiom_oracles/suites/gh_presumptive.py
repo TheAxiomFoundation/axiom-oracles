@@ -14,7 +14,13 @@
 
 Live cases stay inside the band BOTH engines tax — turnover in
 (20,000, 120,000] — where the rates are exact (probed: 30,000 → 900/300;
-60,000 → 1,800/600; 120,000 → 3,600/1,200 annually). GHAMOD's eligibility
+60,000 → 1,800/600; 120,000 → 3,600/1,200 annually). Law equivalence:
+the presumptive cases compare at period 2026 (the Act 1071 band and rate
+are unchanged into 2026); the CHRL cases compare at period 2025 — the
+levy's last live year and GHAMOD's policy year — because the COVID-19
+Health Recovery Levy (Repeal) Act, 2025 (Act 1150, gazette 10 Dec 2025)
+repeals the levy from 2026, and the rulespec module carries the repeal as
+a zero-rate version from 2025-12-10. GHAMOD's eligibility
 band 10,000-120,000 matches no in-force text: the statutory band has been
 (20,000, 500,000] since Act 1071 (Dec 2021), was (20,000, 200,000] from
 Act 902 (Dec 2015), and the original (20,000, 120,000] ceiling lasted
@@ -72,10 +78,15 @@ _TURNOVER_GRID: tuple[tuple[str, float], ...] = (
 
 def gh_presumptive_turnover_cases() -> list[Case]:
     """Small-business turnover cases for the GHAMOD ttn01_s/ttn02_s oracles."""
-    return [
+    cases = [
         _turnover_case(f"gh-presumptive-{label}", turnover)
         for label, turnover in _TURNOVER_GRID
     ]
+    cases.extend(
+        _chrl_case(f"gh-chrl-{label}", turnover)
+        for label, turnover in _TURNOVER_GRID
+    )
+    return cases
 
 
 def _gh_small_business(idperson: int, annual_turnover: float) -> dict[str, float | int]:
@@ -88,7 +99,6 @@ def _gh_small_business(idperson: int, annual_turnover: float) -> dict[str, float
 
 def _turnover_case(case_id: str, annual_turnover: float) -> Case:
     turnover_input = _presumptive_input("input.business_turnover")
-    supply_value_input = _chrl_input("input.taxable_supply_or_import_value")
     return Case(
         case_id=case_id,
         period=GH_PERIOD,
@@ -109,18 +119,9 @@ def _turnover_case(case_id: str, annual_turnover: float) -> Case:
                 _presumptive_input(
                     "input.turnover_calculated_using_modified_cash_basis"
                 ): 0.0,
-                supply_value_input: annual_turnover,
-                _chrl_input("input.supply_of_goods_or_services_made_in_country"): True,
-                _chrl_input("input.supply_is_exempt_goods_or_services"): False,
-                _chrl_input("input.import_of_goods_or_services"): False,
-                _chrl_input("input.import_is_exempt_import"): False,
-                _chrl_input("input.person_charges_value_added_tax_flat_rate"): False,
-                _chrl_input("input.person_makes_supply_of_goods_or_services"): True,
             },
             "euromod_inputs": [_gh_small_business(101, annual_turnover)],
-            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
-                "ytn": [turnover_input, supply_value_input]
-            },
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {"ytn": [turnover_input]},
         },
         entities=(
             Entity(
@@ -133,8 +134,42 @@ def _turnover_case(case_id: str, annual_turnover: float) -> Case:
                 },
             ),
         ),
-        outputs=(
-            Concepts.GH_PRESUMPTIVE_TURNOVER_TAX,
-            Concepts.GH_COVID_HEALTH_RECOVERY_LEVY,
+        outputs=(Concepts.GH_PRESUMPTIVE_TURNOVER_TAX,),
+    )
+
+
+def _chrl_case(case_id: str, annual_turnover: float) -> Case:
+    """CHRL comparison at period 2025 — the levy's last live year."""
+    supply_value_input = _chrl_input("input.taxable_supply_or_import_value")
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **GH_METADATA,
+            "scenario": "single-small-business-chrl-2025",
+            "annual_turnover": annual_turnover,
+            "axiom_inputs": {
+                supply_value_input: annual_turnover,
+                _chrl_input("input.supply_of_goods_or_services_made_in_country"): True,
+                _chrl_input("input.supply_is_exempt_goods_or_services"): False,
+                _chrl_input("input.import_of_goods_or_services"): False,
+                _chrl_input("input.import_is_exempt_import"): False,
+                _chrl_input("input.person_charges_value_added_tax_flat_rate"): False,
+                _chrl_input("input.person_makes_supply_of_goods_or_services"): True,
+            },
+            "euromod_inputs": [_gh_small_business(101, annual_turnover)],
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {"ytn": [supply_value_input]},
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.SELF_EMPLOYMENT_INCOME: annual_turnover,
+                },
+            ),
         ),
+        outputs=(Concepts.GH_COVID_HEALTH_RECOVERY_LEVY,),
     )

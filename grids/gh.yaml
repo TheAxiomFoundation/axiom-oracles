@@ -276,13 +276,12 @@ case_sets:
     locale: GH
     entity: Person
     entity_id: head
-    outputs:
-    - gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
-    - gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
     cases:
     - id: gh-presumptive-30k
       period: '2026'
       scenario: single-small-business-presumptive-turnover
+      outputs:
+      - gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
       parameters:
         annual_turnover: 30000.0
       entities:
@@ -294,6 +293,8 @@ case_sets:
     - id: gh-presumptive-60k
       period: '2026'
       scenario: single-small-business-presumptive-turnover
+      outputs:
+      - gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
       parameters:
         annual_turnover: 60000.0
       entities:
@@ -305,6 +306,47 @@ case_sets:
     - id: gh-presumptive-120k-shared-band-top
       period: '2026'
       scenario: single-small-business-presumptive-turnover
+      outputs:
+      - gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
+      parameters:
+        annual_turnover: 120000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 120000.0
+    - id: gh-chrl-30k
+      period: '2025'
+      scenario: single-small-business-chrl-2025
+      outputs:
+      - gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
+      parameters:
+        annual_turnover: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 30000.0
+    - id: gh-chrl-60k
+      period: '2025'
+      scenario: single-small-business-chrl-2025
+      outputs:
+      - gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
+      parameters:
+        annual_turnover: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 60000.0
+    - id: gh-chrl-120k-shared-band-top
+      period: '2025'
+      scenario: single-small-business-chrl-2025
+      outputs:
+      - gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
       parameters:
         annual_turnover: 120000.0
       entities:
