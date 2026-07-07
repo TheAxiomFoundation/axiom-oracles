@@ -146,6 +146,95 @@
    "observed": "On a single standard-rated COICOP item (x0111105) with matching xhh, monthly base 1,000 (GH_2025): tva01_s/tva02_s/tva03_s = 25/25/10 (2.5%/2.5%/1%, correct); the pre-sum VAT component of tva_s is 210 (runtime $VAT_rate = 0.21, an effective-cascade shortcut; the base parameter column shows 0.15); the final ArithOp re-adds the three levy components (tva_s = 270 = 27%); and the ils_taxco stats list (tva_s + tva01 + tva02 + tva03 + ils_excise) adds them a third time (330 = 33%). GH_2024 shows the same pattern (237.10 / 878 base). Statutory 2025 wedge: 21.9%. tva_tex_cbs_gh is sw=off and not involved.",
    "axiom_position": "The encoded 2026 modules (Act 1151 VAT 15%; Act 1152 GETFund 2.5%; Act 1156 NHIL 2.5%) follow the reform texts; rates carry unchanged across the boundary, so the gh-vat-levies suite compares the two levies against tva01_s/tva02_s exactly and dispositions the VAT/total comparison under this entry — GHAMOD emits no pure-VAT output.",
    "reported_upstream": "Queued for the UNU-WIDER finding set (southmod@wider.unu.edu) as finding #8 — the largest-magnitude finding so far (~5 to ~11 points of the standard basket on any tva_s/ils_taxco statistic)."
+  },
+  {
+   "id": "ghamod-fuel-levies-omit-road-and-energy-funds-and-miswire-petrol-spl",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "texsx01_s",
+    "texsx04_s",
+    "texsx06_s",
+    "texsx02_s",
+    "texsx05_s",
+    "texsx07_s",
+    "texsx03_s",
+    "texry01_s",
+    "texry02_s"
+   ],
+   "statute": "Energy Sector Levies Act, 2025 (Act 1135) Schedule as amended by Acts 1141 and 1145",
+   "observed": "Probed on 100 litres/year: petrol rows charge 1.65 + 0.20 + 0.20 = GH2.05/l — the third row (SPL) applies the ESRL constant (the model defines $petrol_spl = 0.100 but the texsx06 formula uses $petrol_esrl_rate), so petrol is 0.10/l above even the model's own intended 1.95. Diesel is wired correctly (1.63+0.20+0.10 = 1.93). Both omit the Road Fund Levy (GHp 48/l) and Energy Fund Levy (GHp 1/l): statutory totals are GHp 244 petrol / 242 diesel from 29 July 2025. Kerosene carries a -0.0271/l subsidy row and LPG 0.5608/l + 0.18/l, neither matching the schedule (LPG shortfall is GHp 73 per KILOGRAMME; kerosene 1 GHp/kg Energy Fund).",
+   "axiom_position": "The encoded fuel-levy module (rulespec-gh act-1141 schedule-shortfall-row-substituted) follows the in-force schedule (petrol 244 / diesel 242 GHp per litre; LPG 73 GHp/kg; kerosene 1 GHp/kg). No live fuel cases run — every row diverges; this entry records the probes.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set as finding #9 (with the petrol SPL mis-wire called out separately — a one-line model fix)."
+  },
+  {
+   "id": "ghamod-leap-pays-bimonthly-amounts-monthly",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "bsa_s"
+   ],
+   "statute": "LEAP administrative schedule (MoGCSP 97th payment cycle, June 2025 indexation)",
+   "observed": "The official LEAP grants are BI-MONTHLY: GH¢320/380/440/530 per two-month cycle by 1/2/3/4+ eligible members (MoGCSP 97th-cycle announcement, verbatim: 'bi-monthly'). GHAMOD codes the same four amounts as monthly ($bch1-4 = 320#m..530#m); probed live, a two-dependent household gets bsa_s = 380/month = 4,560/year versus the official 6 cycles x 380 = 2,280/year — exactly 2x on every band.",
+   "axiom_position": "The encoded module (rulespec-gh gh/policies/mogcsp-leap/payment-cycle-grants) carries the per-cycle amounts; annualisation is six cycles per year. No live LEAP cases run (every case would show the 2x); this entry records the probe.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set as finding #10."
+  },
+  {
+   "id": "ghamod-free-shs-amounts-have-no-official-basis",
+   "classification": "southmod_source_gap",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "bedes_s"
+   ],
+   "statute": "Free SHS programme (administrative; 2025 Budget Statement paragraphs 376-379 fund it via the uncapped GETFund)",
+   "observed": "GHAMOD pays bedes_s = 83.54/month (residential) and 54.04/month (day) = 1,002.48 / 648.48 per year, matching its internal constants. No official public per-student Free SHS subsidy schedule exists (searched the Ministry of Education, the Free SHS Secretariat and the 2025/2026 Budget Statements on 2026-07-07).",
+   "axiom_position": "The encoded module (rulespec-gh gh/policies/free-shs/fee-free-structure) encodes the fee-free structure and DEFERS the per-student value output pending an official schedule; bedes_s is dispositioned rather than compared.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set as finding #11 (a source question: what is the official basis for the amounts?)."
+  },
+  {
+   "id": "ghamod-excise-buckets-diverge-from-act-1108-table",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tvl01_s",
+    "tvl02_s",
+    "tvl03_s",
+    "tvl05_s",
+    "tvl06_s",
+    "tvl07_s"
+   ],
+   "statute": "Excise Duty Act, 2014 (Act 878) First Schedule as substituted by Act 1108 (29 Dec 2023)",
+   "observed": "GHAMOD's ad-valorem constants (25% / 20% / 22.5% / 10% / 150% / 170.65% over COICOP buckets) match the Act 1108 table only for beer at under-50-per-cent local raw material (tvl04_s, 47.5%, probed exact). The statutory table: wines 45% (GHAMOD bucket 22.5% — half), spirits 50% blended / 20% akpeteshie (GHAMOD 25% and 20%), cigarettes 50% + 28 pesewas per stick (GHAMOD 150% / 170.65% ad-valorem equivalents). These look like retail-vs-ex-factory conversions and specific-duty ad-valoremisations applied inconsistently (beer is NOT halved).",
+   "axiom_position": "The encoded module (rulespec-gh act-1108 first-schedule-goods-liable-to-excise-duty) carries the statutory table verbatim; the gh-excise-transfers suite compares the beer under-50 band live (exact) and dispositions the rest under this entry.",
+   "reported_upstream": "Queued for the UNU-WIDER finding set as finding #12 (a documentation question: what conversion factors underlie the buckets?)."
   }
  ]
 }

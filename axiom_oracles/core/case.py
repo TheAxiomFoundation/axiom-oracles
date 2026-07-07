@@ -532,6 +532,20 @@ class Concepts:
         "section-3a-getfund-levy-substituted"
         "#getfund_levy_amount"
     )
+    # Act 1108 First Schedule beer excise (banded by local raw material; the
+    # under-50-per-cent band is the one GHAMOD bucket that matches the
+    # statutory table exactly), compared to GHAMOD ``tvl04_s``.
+    GH_BEER_EXCISE_AMOUNT = (
+        "gh:statutes/act-1108/excise-duty-amendment-no2-2023/"
+        "first-schedule-goods-liable-to-excise-duty"
+        "#beer_excise_amount"
+    )
+    # Ghana School Feeding Programme grant (GH¢2.00 per child per day, 2025
+    # Budget paragraph 381), compared to GHAMOD ``bed_s``.
+    GH_SCHOOL_FEEDING_VALUE = (
+        "gh:policies/gsfp/feeding-grant"
+        "#school_feeding_value_per_year"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"

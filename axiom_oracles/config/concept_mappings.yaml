@@ -2135,6 +2135,55 @@ concepts:
           type: country
           geoid: GH
 
+  # Act 1108 First Schedule beer excise (under-50%-local band — the one
+  # GHAMOD ad-valorem bucket matching the statutory table exactly) and the
+  # GSFP feeding grant (GH¢2.00/day, compared at GHAMOD's weekday-calendar
+  # day count). Other excise buckets, fuel rows, LEAP and Free SHS are
+  # dispositioned in ghamod_issues.json (findings #9-#12).
+  gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount:
+    description: Ghana beer excise (Act 1108 First Schedule, 47.5% band under 50% local raw material)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: beer_excise_amount
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tvl04_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:policies/gsfp/feeding-grant#school_feeding_value_per_year:
+    description: Ghana School Feeding Programme grant (GH¢2.00 per child per day, 2025 Budget paragraph 381)
+    category: benefit
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: school_feeding_value_per_year
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: bed_s
+        scope:
+          type: country
+          geoid: GH
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax
