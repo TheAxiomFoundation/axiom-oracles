@@ -19,11 +19,16 @@ policies:
     output_vars:
       - attendance_allowance
     in_scope: true
-    suite: null
+    suite: uk-attendance-allowance-pe
     comparability: rate_only
-    note: rates-given-category — PE-UK applies the AA rate table over a frozen aa_category FRS input.
-      In-scope uncovered — the rate params are compared in the matrix but no AA program surface runs in
-      either PE suite yet (matrix row 14 → SSCBA 1992 s.64-67).
+    note: 'rates-given-category — PE-UK applies the AA rate table (gov.dwp.attendance_allowance.higher
+      114.60, .lower 76.70 per week, annualised over WEEKS_IN_YEAR = 52) over a frozen aa_category FRS
+      input. Covered by the uk-attendance-allowance-pe case-grid suite: the encoded SI 2026/148 Schedule
+      1 Part III weekly rates (uk/policies/attendance_allowance_composed_amount_pipeline.yaml) are applied
+      over the same supplied award category and annualised over the same 52 weeks; the award category is
+      a frozen input on both engines, so the grid binds the rate schedule (higher £5,959.20, lower
+      £3,988.40, none £0 — all 3 cases match to the penny), not the SSCBA 1992 s.64-66 needs assessment
+      (matrix row 14 → SSCBA 1992 s.64-67).'
   - id: uk-pe:business_rates
     oracle_policy_name: business_rates
     oracle_policy_type: rules

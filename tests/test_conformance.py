@@ -411,6 +411,7 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         "uk-winter-fuel-payment-pe",
         "uk-capital-gains-tax",
         "uk-business-rates",
+        "uk-attendance-allowance-pe",
     }
     covered_suites = {
         p.suite for p in universe.in_scope() if p.suite is not None
@@ -438,6 +439,10 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
     # Winter Fuel Payment is covered by its case-grid suite.
     assert (
         by_name["winter_fuel_allowance"].suite == "uk-winter-fuel-payment-pe"
+    )
+    # Attendance Allowance is covered by its rate-only case-grid suite.
+    assert (
+        by_name["attendance_allowance"].suite == "uk-attendance-allowance-pe"
     )
 
 

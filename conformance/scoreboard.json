@@ -61,8 +61,8 @@
       "jurisdiction": "uk-pe",
       "oracle": "policyengine-uk_2.89.2/uk",
       "policies_in_scope": 24,
-      "covered": 17,
-      "covered_pct": 70.8333,
+      "covered": 18,
+      "covered_pct": 75.0,
       "excluded": 9,
       "excluded_by_reason": {
         "input_carrying": 9
@@ -73,7 +73,6 @@
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
-        "attendance_allowance",
         "fuel_duty",
         "lbtt_ltt",
         "legacy_means_tested",
@@ -82,7 +81,7 @@
         "vat"
       ],
       "blocking_reasons": [
-        "7 of 24 in-scope policies are not covered by a live suite: attendance_allowance, fuel_duty, lbtt_ltt, legacy_means_tested, tax_free_childcare, tv_licence, vat"
+        "6 of 24 in-scope policies are not covered by a live suite: fuel_duty, lbtt_ltt, legacy_means_tested, tax_free_childcare, tv_licence, vat"
       ]
     }
   ]
