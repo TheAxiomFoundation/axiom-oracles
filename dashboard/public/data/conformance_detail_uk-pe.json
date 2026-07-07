@@ -312,8 +312,8 @@
     {
       "id": "uk-pe:legacy_means_tested",
       "oracle_policy_name": "legacy_means_tested",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_repealed_law",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -324,8 +324,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-UK computes income_support and applies a tariff screen to jsa_income; WTC/CTC are reported inputs. All \u00a30 in 2026 under UC migration; only tariff/rate helpers are compared, no final award surface runs (matrix row 30).",
-      "status": "uncovered"
+      "note": "EXCLUDED oracle_models_repealed_law. PolicyEngine-UK 2.89.2 deactivates the legacy means-tested benefits for 2026 under Universal Credit migration: gov.dwp.income_support.active and gov.dwp.JSA.income.active are both False for 2026 (both True in 2018), so income_support and jsa_income compute structurally 0 for every household \u2014 verified live: a lone parent with no earnings renting from the council gets income_support=0 and jsa_income=0 while universal_credit=14,746 fires. Only the applicable-amount/tariff helpers (income_support_applicable_amount; WTC/CTC reported inputs) run; no award surface produces a non-zero value, so the only achievable comparison is vacuous (0==0). Parallels the UK tax-credits repeal case (matrix row 30).",
+      "status": "excluded:oracle_models_repealed_law"
     },
     {
       "id": "uk-pe:marriage_allowance",
