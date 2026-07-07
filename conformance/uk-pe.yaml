@@ -354,10 +354,19 @@ policies:
     output_vars:
       - tax_free_childcare
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes tax_free_childcare but only the top-up rate/ceiling params
-      are compared; no final payment surface runs, and PE frames the rate as 20% vs statute 25% (matrix
-      row 27 → Childcare Payments Act 2014).
+    suite: uk-tax-free-childcare-pe
+    note: 'Covered by the uk-tax-free-childcare-pe case-grid suite. PE-UK computes tax_free_childcare as
+      min(eligible_childcare_expense * rate / (1 - rate), cap) with rate 0.20, which grosses up to 25% of
+      the qualifying payment — the same top-up as Childcare Payments Act 2014 s.1 ("the amount of the
+      top-up payment is 25% of the amount of the qualifying payment"), resolving the prior "20% vs 25%"
+      framing: they are the same top-up on different bases (25% of the parent payment = 20% of the total
+      account). The suite compares the rulespec CPA 2014 s.1 top-up
+      (uk/policies/tax_free_childcare_composed_top_up_pipeline.yaml) against PE over a supplied qualifying
+      childcare payment on an eligible household; the grid stays below the £8,000 payment at which the
+      £2,000 per-child cap binds, so PE''s min(..., cap) reduces to the uncapped 25% top-up and all 3 cases
+      match to the penny (£2,000 → £500, £4,000 → £1,000, £6,000 → £1,500). The per-child
+      entitlement-period cap is a separate parameter not yet in corpus and is a documented scope boundary
+      (matrix row 27 → Childcare Payments Act 2014).'
   - id: uk-pe:tv_licence
     oracle_policy_name: tv_licence
     oracle_policy_type: rules

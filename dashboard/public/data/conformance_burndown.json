@@ -60,11 +60,11 @@
       {
         "date": "2026-07-07",
         "in_scope": 24,
-        "covered": 18,
-        "uncovered": 6,
+        "covered": 19,
+        "uncovered": 5,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 6,
+        "gap": 5,
         "conformant": false
       }
     ]
