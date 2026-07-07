@@ -724,6 +724,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type == "uk-tax-free-childcare-pe-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
         oracle = {
@@ -1865,6 +1870,42 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
+    """Tax-Free Childcare grid: rulespec-uk CPA 2014 s.1 top-up vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_tax_free_childcare_pe.py, which runs a
+    synthetic eligible-household grid (below the per-child cap) through
+    PolicyEngine-UK 2.89.2's ``tax_free_childcare`` and the encoded CPA 2014 s.1
+    25%-of-qualifying-payment top-up, then writes one v2 report. On a runner
+    without a PolicyEngine-UK environment or a built axiom rules engine, the
+    committed dashboard report is reused, exactly like the other UK case grids.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_tax_free_childcare_pe.py"
+    basename = "axiom-policyengine-uk-tax-free-childcare-pe"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"Tax-Free Childcare grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -1877,6 +1918,7 @@ RUNNERS = {
     "uk-business-rates-grid": _run_uk_business_rates_grid,
     "uk-winter-fuel-payment-pe-grid": _run_uk_winter_fuel_payment_pe_grid,
     "uk-attendance-allowance-pe-grid": _run_uk_attendance_allowance_pe_grid,
+    "uk-tax-free-childcare-pe-grid": _run_uk_tax_free_childcare_pe_grid,
 }
 
 

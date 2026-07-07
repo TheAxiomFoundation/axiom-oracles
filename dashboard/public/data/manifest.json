@@ -110,6 +110,7 @@
     "axiom-policyengine-uk-winter-fuel-payment-pe.json",
     "axiom-euromod-uk-personal-allowance.json",
     "axiom-euromod-uk-housing-benefit.json",
-    "axiom-policyengine-uk-attendance-allowance-pe.json"
+    "axiom-policyengine-uk-attendance-allowance-pe.json",
+    "axiom-policyengine-uk-tax-free-childcare-pe.json"
   ]
 }

@@ -1,0 +1,46 @@
+# Tax-Free Childcare — rulespec-uk CPA 2014 s.1 25%-of-qualifying-payment top-up
+# vs PolicyEngine-UK tax_free_childcare on a synthetic eligible-household grid.
+# The Axiom side is the encoded top-up pipeline
+# (uk/policies/tax_free_childcare_composed_top_up_pipeline.yaml), evaluated
+# through the axiom rules engine over a supplied qualifying childcare payment.
+# This resolves the coverage matrix's "PE frames the rate as 20% vs statute 25%"
+# question: PE's contribution = payment * rate / (1 - rate) with rate = 0.20
+# grosses up to 25% of the qualifying payment, the same as CPA 2014 s.1.
+#
+# The grid stays below the per-child entitlement-period cap (£2,000/year, reached
+# at an £8,000 payment), so PE's min(..., cap) reduces to the uncapped 25% top-up
+# and both sides match to the penny (£2,000 → £500, £4,000 → £1,000, £6,000 →
+# £1,500). The per-child cap is a separate parameter not encoded in the pipeline
+# (not yet in corpus) and is out of scope.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-tax-free-childcare-pe
+
+name: uk-tax-free-childcare-pe
+title: UK Tax-Free Childcare — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded Childcare Payments Act 2014 s.1 25%-of-qualifying-payment
+  top-up (rulespec-uk uk/policies/tax_free_childcare_composed_top_up_pipeline.yaml)
+  against PolicyEngine-UK tax_free_childcare (2.89.2) at the 2026 validation year
+  on a synthetic eligible-household grid with below-cap qualifying childcare
+  payments. The qualifying payment is a supplied input on both engines; the
+  per-child entitlement-period cap is out of scope.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-tax-free-childcare-pe-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    # Links this suite to the rulespec-uk monorepo in the affected map so a
+    # change to the encoded Tax-Free Childcare pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-tax-free-childcare-pe
+
+dashboard:
+  filename: axiom-policyengine-uk-tax-free-childcare-pe.json
+  suite: uk-tax-free-childcare-pe

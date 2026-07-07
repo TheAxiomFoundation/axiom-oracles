@@ -412,6 +412,7 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         "uk-capital-gains-tax",
         "uk-business-rates",
         "uk-attendance-allowance-pe",
+        "uk-tax-free-childcare-pe",
     }
     covered_suites = {
         p.suite for p in universe.in_scope() if p.suite is not None
@@ -443,6 +444,10 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
     # Attendance Allowance is covered by its rate-only case-grid suite.
     assert (
         by_name["attendance_allowance"].suite == "uk-attendance-allowance-pe"
+    )
+    # Tax-Free Childcare is covered by its below-cap top-up case-grid suite.
+    assert (
+        by_name["tax_free_childcare"].suite == "uk-tax-free-childcare-pe"
     )
 
 
