@@ -579,6 +579,21 @@ class Concepts:
         "ug:statutes/act-2020-20/income-tax-amendment-2020"
         "#presumptive_small_business_income_tax_before_credits"
     )
+    # Uganda NSSF standard-contribution shares (Cap. 230 ss.10-11: the
+    # employee's five percent share and the derived employer-net ten
+    # percent of the fifteen percent standard contribution), compared to
+    # UGAMOD ``tscee_s``/``tscer_s`` (probed exact; no ceiling, no age
+    # window).
+    UG_NSSF_EMPLOYEE_SHARE = (
+        "ug:statutes/cap-230/national-social-security-fund-act/"
+        "section-10-payment-of-standard-contribution-by-employers"
+        "#nssf_employee_share"
+    )
+    UG_NSSF_EMPLOYER_NET_SHARE = (
+        "ug:statutes/cap-230/national-social-security-fund-act/"
+        "section-10-payment-of-standard-contribution-by-employers"
+        "#nssf_employer_net_share"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"

@@ -2286,6 +2286,52 @@ concepts:
           type: country
           geoid: UG
 
+  # Uganda NSSF employee share and employer-net share (Cap. 230
+  # ss.10-11) vs UGAMOD tscee_s/tscer_s — probed exact.
+  ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employee_share:
+    description: Uganda NSSF employee share (5% of total wages, Cap. 230 s.11)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: nssf_employee_share
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employer_net_share:
+    description: Uganda NSSF employer-net share (derived 10% of total wages, Cap. 230 ss.10-11)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: nssf_employer_net_share
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: UG
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax
