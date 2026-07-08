@@ -1,78 +1,71 @@
-# PROGRESS — us-pe conformance universe
+# PROGRESS — us-pe reconciliation (drive `unexplained_total` 23,138 → 0)
 
-Branch `claude/us-pe-conformance` (from `origin/main`). Stand up the `us-pe`
-conformance universe mirroring `uk-pe` (axiom-oracles#188). **Measurement, not
-coverage work** — no new suites built; day-one number is honestly low.
+Predecessor: **#224** stood up the us-pe conformance universe (measurement only,
+day-one unexplained=23,138). This lane (`us-pe-reconciliation` from `origin/main`
+`2ad66f9`) dispositions/attributes those residuals. Oracle pin
+policyengine-us==1.767.3, validation year 2026. Pattern: BE reconciliation
+(or#177) — a day-one universe registered 16 existing suites whose comparison
+residuals were never dispositioned into conformance accounting.
 
-## Status: COMPLETE — ready for PR / CI
-
-All gates green locally (`uv run`): ruff, `generate_conformance_universe.py --all
---check`, `conformance_scoreboard.py --check`, `conformance_ratchet.py --check`,
-`conformance_burndown.py --check`, full `pytest` (1253 passed, 12 skipped),
-`uv build`.
-
-## Scoreboard line (verbatim)
+## Scoreboard entry point (origin/main)
 
 ```
-"jurisdiction": "us-pe", "oracle": "policyengine-us_1.767.3/us",
-"policies_in_scope": 140, "covered": 27, "covered_pct": 19.2857, "excluded": 8,
-"excluded_by_reason": {"input_carrying": 7, "technical": 1},
-"unexplained_total": 23138, "axiom_attributed_open": 0, "oracle_attributed": 0,
-"bridge_artifacts": 0, "conformant": false
+us-pe  policyengine-us_1.767.3/us  in_scope=140 covered=27 (16 suites)
+       unexplained_total=23138  axiom_attributed_open=0  oracle_attributed=0  conformant=false
 ```
+Coverage gap (113/140 uncovered) is OUT OF SCOPE (coverage waves come after
+unexplained=0). This lane touches **only** the 23,138 unexplained on covered suites.
 
-## Granularity rule (badge denominator)
+## Decomposition — unexplained by suite × concept-output × signature
 
-One row per PE-US program instrument at the granularity of the household-facing
-output variable PE computes, derived deterministically from PE-US's own module
-tree (`policyengine_us/variables/gov`) + PE-native parameter lists:
-- Federal income tax → component surfaces + each credit in
-  `gov.irs.credits.refundable`/`non_refundable` (23 rows).
-- Payroll & SECA (6).
-- Federal benefit/health programs = `gov.household.household_benefits` list +
-  `household_health_benefits` expansion (24 rows, 8 excluded).
-- **Per-state** rows for each `<state>_income_tax` (44) and each
-  `STATE_TANF_VARIABLES` member (51) — mirroring PE's per-state variable tree.
-  SNAP/SSI stay national (one PE variable each). The per-state/national split is
-  the rule following PE's tree, not a coverage choice.
-In-scope iff PE carries the primary output with a computed surface (`def formula`
-OR `adds`/`subtracts`). 148 rows total, **140 in-scope**, 8 excluded
-(`input_carrying` reported passthroughs ×7 + `technical` reform-lever
-`basic_income`) — the PE-US analogue of uk-pe's 8 exclusions.
+| suite | unexpl | concept-output | signature | provisional cause |
+| --- | ---: | --- | --- | --- |
+| fiit-ecps | 18791 | (12 federal rows share one report) | | |
+| — eitc | 16660 | eitc_earned_income / eitc_phased_in | axiom sees earnings where PE=0 (172/367 sampled PE=0); both-nonzero ratios 0.002–7523; `eitc_phased_in` caps at $664 childless max on one side | UNRESOLVED — needs per-case inputs |
+| — tax_before_credits | 2118 | income_tax_main_rates | float/rounding noise, \|diff\|≤$5.83 on values to $2.8M (rel ≤1e-6) | explained_residual (bracket rounding) |
+| — capital_gain | 8 | adjusted_net_capital_gain | float noise, \|diff\|≤$3.25 on values to $8.3M | explained_residual (float) |
+| — ctc | 5 | ctc_phaseout_amount | exactly ±$50 = one $1,000 excess-AGI increment ×5% (26 USC 24(b)); credit fully phased out both sides | explained_residual (excess-AGI rounding) |
+| ssi-ecps | 4044 | (truncated) | TBD | UNRESOLVED — needs inputs |
+| ca-tanf-ecps | 177 | ca_tanf_benefit | structural: PE=0 in 66, axiom=0 in 39, big $ diffs | UNRESOLVED — needs inputs |
+| medicaid-magi-co-ecps | 46 | adult_eligible(45)/older_child(1) | boolean eligibility flips: axiom False/PE True ×38, axiom True/PE False ×8 (42 CFR 435.119) | UNRESOLVED — needs inputs/params |
+| ny-tanf-ecps | 36 | ny_tanf_benefit | PE=0 in 15, big $ diffs | UNRESOLVED — needs inputs |
+| co-state-income-tax-ecps | 31 | liability | $ diffs $19–$1107, negative liabilities (refundable credits) | UNRESOLVED — needs inputs |
+| ks-tanf-ecps | 6 | ks_tanf_maximum_benefit | axiom 3708 vs PE 2688 (Δ$1020); one PE=0 | param-groundable |
+| az-tanf-ecps | 4 | az_tanf_benefit | small $ diffs $37–$52 | UNRESOLVED — needs inputs |
+| co-tanf-ecps | 3 | co_tanf_benefit | PE=0 in 2, big diffs | UNRESOLVED — needs inputs |
+| **TOTAL** | **23138** | | | |
 
-## Pin
+fiit + ssi = 22,835 (98.7%). eitc alone = 16,660 (72%).
 
-`policyengine-us==1.767.3` (current release; the `pinned_version()` metadata
-fallback reads it from the installed distribution — no dirty local checkout).
+## Architecture findings that shape feasibility
 
-## Day-one coverage (27 covered, verified running vs PE-2026, no vacuous regs)
+1. Scoreboard reads `summary.dispositioned.unexplained_count` from each committed
+   `dashboard/public/data/axiom-policyengine-<suite>.json`
+   (`= mismatch_count − classified_rows`). `dispositions.py` classifies **per-row**
+   against `report["mismatches"]`.
+2. **fiit and ssi reports are TRUNCATED** to 1000 of 18,791 / 4,044 rows
+   (`dashboard_truncation`). Per-row dispositions on the committed truncated file
+   cannot reduce the full count — the reduction must merge on the FULL set before
+   slimming (a `run_comparison.py` re-run). The other 7 suites (303 mismatches)
+   have ALL rows on disk → per-row disposition + `apply_dispositions.py` works now.
+3. Reports carry outputs only, **not inputs**. Rigorous attribution needs
+   per-record inputs; source is the pinned Populace artifact, present in local HF
+   cache: snapshot `d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5`
+   (revision `populace-us-2024-f0af251-...`, DENSE f0af251 build).
+4. Vintage gap: reports generated vs **PE-US 1.729.0** (Populace build version);
+   universe pins **1.767.3**. OBBBA-era shifts plausible.
 
-- Federal income tax + payroll via `fiit-ecps` (12 rows).
-- `ssi-ecps` (SSI); `ca-snap-ecps` (SNAP, national row, canonical of 11 state
-  suites); `medicaid-magi-co-ecps` (Medicaid categorical).
-- State income tax: `co-state-income-tax-ecps` (pop) + CA/NY/IL/MA
-  `*-income-tax-liability` composed grids (rulespec-us #556-#561, 3-way vs PE + TAXSIM).
-- Per-state TANF: az/ca/co/ks/mn/ny/wa suites.
-- `fl-snap-ecps` NOT registered — its committed report is mislabeled
-  `nyc-synthetic`; co-tanf-coverage NOT registered (0 comparisons, vacuous).
+## Plan / status
 
-## Files
+- [x] Worktree from origin/main; decomposition committed (this file).
+- [ ] Ground fiit rounding signatures from report values + formula reading.
+- [ ] Extract per-case inputs from populace_us_2024.h5 for divergent case_ids.
+- [ ] Attribute each signature (axiom→rulespec-us issue/axiom_attributed_open;
+      PE→policyengine-us issue/oracle_attributed; dataset→disposition citing
+      populace issue; plumbing→fix suite).
+- [ ] Dispositions with AST-checked arithmetic; issues each side.
+- [ ] apply_dispositions + scoreboard + ratchet + snapshot per batch; ratchet down.
+- [ ] fiit/ssi: author dispositions; regenerate if feasible, else document re-run.
 
-- Code: `axiom_oracles/conformance/universe.py` (adds/subtracts computed test,
-  `pinned_version` metadata fallback, `PE_US_PROGRAM_SPINE`),
-  `scripts/generate_conformance_universe.py` (us-pe config + spine wiring),
-  `tests/test_conformance.py` (+7 tests), `conformance/README.md`.
-- Artifacts: `conformance/us-pe.yaml`, `conformance/detail/us-pe.json`,
-  `conformance/history/us-pe/2026-07-07.json`, `conformance/scoreboard.json`,
-  `conformance/ratchet.yaml` (us-pe row added), burndown + dashboard mirrors.
-
-## Reproduce enumeration
-
-`pip install policyengine-us==1.767.3` into a venv, then
-`generate_conformance_universe.py us-pe --model-root <site-packages>` (metadata
-fallback pins the version). CI runs it as a no-op (no matching checkout).
-
-## Remaining
-
-Open PR, poll CI foreground to green, merge (no admin-merge). concept_mappings.yaml
-untouched. rulespec-us untouched (bulk-health worker owns it).
+Discipline: no blanket dispositions; ≥3 concrete records per signature;
+corpus-grounded amounts; oracle merges serialized; NO admin-merge; sentence case.
