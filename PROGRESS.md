@@ -21,7 +21,7 @@ unexplained=0). This lane touches **only** the 23,138 unexplained on covered sui
 | suite | unexpl | concept-output | signature | provisional cause |
 | --- | ---: | --- | --- | --- |
 | fiit-ecps | 18791 | (12 federal rows share one report) | | |
-| — eitc | 16660 | eitc_earned_income / eitc_phased_in | axiom sees earnings where PE=0 (172/367 sampled PE=0); both-nonzero ratios 0.002–7523; `eitc_phased_in` caps at $664 childless max on one side | UNRESOLVED — needs per-case inputs |
+| — eitc | 16660 | eitc_earned_income / eitc_phased_in | axiom includes partnership SE income in EITC earned income; PE-US **1.729.0** (report engine) omits it | **RESOLVED — upstream engine gap / vintage** (see below) |
 | — tax_before_credits | 2118 | income_tax_main_rates | float/rounding noise, \|diff\|≤$5.83 on values to $2.8M (rel ≤1e-6) | explained_residual (bracket rounding) |
 | — capital_gain | 8 | adjusted_net_capital_gain | float noise, \|diff\|≤$3.25 on values to $8.3M | explained_residual (float) |
 | — ctc | 5 | ctc_phaseout_amount | exactly ±$50 = one $1,000 excess-AGI increment ×5% (26 USC 24(b)); credit fully phased out both sides | explained_residual (excess-AGI rounding) |
@@ -66,6 +66,63 @@ fiit + ssi = 22,835 (98.7%). eitc alone = 16,660 (72%).
 - [ ] Dispositions with AST-checked arithmetic; issues each side.
 - [ ] apply_dispositions + scoreboard + ratchet + snapshot per batch; ratchet down.
 - [ ] fiit/ssi: author dispositions; regenerate if feasible, else document re-run.
+
+## RESOLVED — EITC earned-income divergence (16,660 = 72% of total)
+
+Root cause, verified on 8 concrete tax-unit records against the pinned Populace
+`person/table` inputs (`~/PolicyEngine/policyengine-us/.venv/bin/python` reading
+the h5 directly): **axiom's rulespec `earned_income` (us:statutes/26/32/c/2)
+includes partnership self-employment income (`partnership_se_income`) as net
+earnings from self-employment per 26 USC 32(c)(2)(A)/§1402(a), netting the actual
+½ SE-tax deduction; the PE-US engine the committed report was generated against
+(1.729.0) omits partnership SE income from `eitc_earned_income`.**
+
+Airtight arithmetic (axiom eitc_earned_income reproduced to the cent from inputs):
+- tu 154343: partnership 126,692, no other earnings → axiom 117,741.43 =
+  126,692 − ½·SE-tax(126,692·0.9235); PE 0.00. **exact.**
+- tu 154463 / 161849: partnership 128,316 → axiom 119,250.94; PE 0.00. **exact.**
+- tu 17243: partnership 23,099 → axiom 21,466.75; PE 0.00. **exact.**
+- tu 154392: emp 62,785 + partnership 43,313 → axiom−PE = 108,896.96−68,643.48 =
+  40,253.48 = 43,313·0.9294 (partnership netted). **exact delta.**
+- tu 163592 (partnership 1, control): axiom 62,625.93 vs PE 62,625.01 = $0.92
+  rounding — correctly NOT a partnership case.
+Population: **6,269 tax units** carry non-dependent `partnership_se_income`
+shifting EITC earned income >$5 (×2 outputs eitc_earned_income+eitc_phased_in
+≈ the bulk of 16,660; remainder = SE-netting/phased-in-cap/float on non-partnership units).
+
+Attribution: **oracle/vintage, NOT axiom.** PE-US **#8614** "Split partnership and
+S-corp income inputs" (merged 2026-06-14) added `partnership_self_employment_net_earnings`
+to `eitc_earned_income`'s sources; **#8337** (2026-05-19) created the variable.
+Report engine 1.729.0 (uploaded 2026-06-14T18:05Z) predates the partnership
+plumbing landing in the data pipeline; the **pinned oracle 1.767.3**
+(2026-07-07) contains #8614. So the committed fiit report is **stale** — run
+against 1.729.0, not the pinned 1.767.3. Remediation = regenerate fiit against
+the pinned oracle (with a Populace build wiring the split partnership input), not
+a disposition.
+
+## Why the number can't be ratcheted from committed artifacts alone
+
+- **fiit (18,791) + ssi (4,044) = 98.7% are truncated** (1000 of N rows on disk).
+  `apply_dispositions` classifies per-row against the truncated array, so it
+  cannot reduce the full `unexplained_count`; and authoring `dispositions/fiit-ecps.yaml`
+  would make `apply_dispositions.py --check` rewrite the committed report's
+  `summary.dispositioned` with a **partial, mechanism-mismatched** number (only
+  the ~1000 present rows), baking a wrong count / breaking CI. The correct
+  reduction requires a harness re-run that merges dispositions (or the fixed
+  oracle) on the full row set **before** slimming — out of budget/reproducibility
+  here (needs isolated PE-US install + a 3.88M-case run + a 1.767.3-compatible
+  Populace build).
+- The 7 non-truncated small suites (303 mismatches) are per-row dispositionable,
+  but each structural signature (TANF benefit/eligibility, medicaid MAGI flips,
+  state-liability) needs per-record inputs to attribute without blanket-dispositioning;
+  ks-tanf is a household-size-shifted benefit-standard disagreement (axiom vs PE
+  KS payment standard), plausibly axiom off-by-one — needs size + param-vintage
+  confirmation before an issue/disposition.
+
+No dispositions committed and no issues filed: the dominant cause (72%) is an
+already-fixed upstream PE bug (#8614) surfacing as report staleness, not an open
+defect; the small-suite causes are scoped but not yet verified to issue-filing
+confidence. Committing a reduction from truncated reports would be fabricated.
 
 Discipline: no blanket dispositions; ≥3 concrete records per signature;
 corpus-grounded amounts; oracle merges serialized; NO admin-merge; sentence case.
