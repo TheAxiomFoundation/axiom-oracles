@@ -2,7 +2,7 @@
   "aggregates": {
     "failure_pareto": [
       {
-        "count": 1756,
+        "count": 1720,
         "key": "gate.ci:ci_failure",
         "reason_code": "ci_failure",
         "stage": "gate.ci"
@@ -12,6 +12,12 @@
         "key": "apply:apply_blocked_manifest",
         "reason_code": "apply_blocked_manifest",
         "stage": "apply"
+      },
+      {
+        "count": 36,
+        "key": "generate:generation_failed",
+        "reason_code": "generation_failed",
+        "stage": "generate"
       },
       {
         "count": 29,
@@ -29,7 +35,7 @@
     "funnel": [
       {
         "bucket": "generated",
-        "count": 3212,
+        "count": 3176,
         "stage": "generate"
       },
       {
@@ -75,7 +81,8 @@
         "passed": 1401
       },
       "generate": {
-        "passed": 3212
+        "failed": 36,
+        "passed": 3176
       }
     }
   },
@@ -105,7 +112,7 @@
       "stage": "merge"
     }
   ],
-  "generated_at": "2026-07-08T10:50:51.078655+00:00",
+  "generated_at": "2026-07-08T11:20:01.360878+00:00",
   "run_count": 3212,
   "runs": [
     {
@@ -2962,12 +2969,12 @@
       "citation": "us/statute/42/1397ll/d/2",
       "ended_at": "2026-07-04T19:55:42.073010",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -2983,7 +2990,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-07-04T19:55:42.073010"
     },
@@ -3742,12 +3749,12 @@
       "citation": "us-ia/regulation/iac/441/41/41.28",
       "ended_at": "2026-07-03T15:14:19.133033",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -3763,7 +3770,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-07-03T15:14:19.133033"
     },
@@ -9142,12 +9149,12 @@
       "citation": "us/regulation/42/435/603/a",
       "ended_at": "2026-06-28T20:44:59.645770",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -9163,7 +9170,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-28T20:44:59.645770"
     },
@@ -9232,12 +9239,12 @@
       "citation": "us/regulation/42/435/603/d",
       "ended_at": "2026-06-28T18:37:50.263977",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -9253,7 +9260,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-28T18:37:50.263977"
     },
@@ -9382,12 +9389,12 @@
       "citation": "us/regulation/42/435/603/d",
       "ended_at": "2026-06-28T16:44:25.810840",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -9403,7 +9410,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-28T16:44:25.810840"
     },
@@ -17632,12 +17639,12 @@
       "citation": "us-wa/regulation/388/388-478/388-478-0020",
       "ended_at": "2026-06-25T14:17:07.969948",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -17652,7 +17659,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-25T14:17:07.969948"
     },
@@ -18831,12 +18838,12 @@
       "citation": "us-co/regulation/9-ccr-2503-5/3.532",
       "ended_at": "2026-06-25T06:19:09.409587",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -18851,7 +18858,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-25T06:19:09.409587"
     },
@@ -19160,12 +19167,12 @@
       "citation": "us-ga/manual/dfcs/tanf/1605/block-14",
       "ended_at": "2026-06-25T04:17:35.861665",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -19180,7 +19187,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-25T04:17:35.861665"
     },
@@ -19667,12 +19674,12 @@
       "citation": "policies/cdss/calworks/recipient-income-disregard",
       "ended_at": "2026-06-24T23:27:30.320584",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -19688,7 +19695,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-24T23:27:30.320584"
     },
@@ -19697,12 +19704,12 @@
       "citation": "policies/cdss/calworks/recipient-income-disregard",
       "ended_at": "2026-06-24T23:13:36.247080",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -19718,7 +19725,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-24T23:13:36.247080"
     },
@@ -20897,12 +20904,12 @@
       "citation": "us/statute/20/1070a/b/1",
       "ended_at": "2026-06-24T09:31:57.657980",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -20915,7 +20922,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-24T09:31:57.657980"
     },
@@ -20924,12 +20931,12 @@
       "citation": "us/statute/20/1070a/b/1",
       "ended_at": "2026-06-24T09:30:52.243392",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -20942,7 +20949,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-24T09:30:52.243392"
     },
@@ -21701,12 +21708,12 @@
       "citation": "us-fl:policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1",
       "ended_at": "2026-06-22T13:14:42.463487",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -21722,7 +21729,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-22T13:14:42.463487"
     },
@@ -21731,12 +21738,12 @@
       "citation": "us-fl:policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1",
       "ended_at": "2026-06-22T11:38:35.591098",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -21752,7 +21759,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-22T11:38:35.591098"
     },
@@ -27461,12 +27468,12 @@
       "citation": "us-co:regulations/10-ccr-2506-1/4.504.5",
       "ended_at": "2026-06-17T12:40:24.945463",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -27481,7 +27488,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-17T12:40:24.945463"
     },
@@ -43989,12 +43996,12 @@
       "citation": "policies/dfcs/snap/3612",
       "ended_at": "2026-06-15T08:44:39.094294",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -44009,7 +44016,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-15T08:44:39.094294"
     },
@@ -45607,12 +45614,12 @@
       "citation": "policies/des/faa5/na-categorical-eligibility",
       "ended_at": "2026-06-09T03:18:02.133140",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -45627,7 +45634,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-09T03:18:02.133140"
     },
@@ -46116,12 +46123,12 @@
       "citation": "policies/des/faa5/ca-jobs-exemptions/tribal-new",
       "ended_at": "2026-06-08T20:33:06.886036",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -46137,7 +46144,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "passed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-08T20:33:06.886036"
     },
@@ -46326,12 +46333,12 @@
       "citation": "policies/des/faa5/ca-jobs-exemptions/age",
       "ended_at": "2026-06-08T18:48:18.509604",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -46347,7 +46354,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "passed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-08T18:48:18.509604"
     },
@@ -46746,12 +46753,12 @@
       "citation": "uk:policies/govuk/pip",
       "ended_at": "2026-06-06T23:33:57.846864",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -46766,7 +46773,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-06T23:33:57.846864"
     },
@@ -46835,12 +46842,12 @@
       "citation": "uk/guidance/govuk/student-loan-repayments",
       "ended_at": "2026-06-05T23:16:01.856281",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -46853,7 +46860,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-05T23:16:01.856281"
     },
@@ -47702,12 +47709,12 @@
       "citation": "26 USC 32(c)(2)",
       "ended_at": "2026-06-02T20:52:53.023987",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -47723,7 +47730,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-02T20:52:53.023987"
     },
@@ -51302,12 +51309,12 @@
       "citation": "26 USC 3241(a)",
       "ended_at": "2026-06-02T00:40:00.970739",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -51321,7 +51328,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-02T00:40:00.970739"
     },
@@ -52440,12 +52447,12 @@
       "citation": "26 USC 3306(c)(7)",
       "ended_at": "2026-06-01T22:18:04.982951",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -52458,7 +52465,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-01T22:18:04.982951"
     },
@@ -53157,12 +53164,12 @@
       "citation": "26 USC 1402(b)",
       "ended_at": "2026-06-01T19:13:16.898586",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -53175,7 +53182,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-01T19:13:16.898586"
     },
@@ -53304,12 +53311,12 @@
       "citation": "26 USC 3241(b)",
       "ended_at": "2026-06-01T12:58:13.583173",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -53322,7 +53329,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-06-01T12:58:13.583173"
     },
@@ -56781,12 +56788,12 @@
       "citation": "us-co/statute/39/39-22-104/2",
       "ended_at": "2026-05-30T20:35:24.760056",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -56799,7 +56806,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-30T20:35:24.760056"
     },
@@ -67728,12 +67735,12 @@
       "citation": "26 USC 3302(f)",
       "ended_at": "2026-05-26T07:01:53.159082",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -67748,7 +67755,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-26T07:01:53.159082"
     },
@@ -67757,12 +67764,12 @@
       "citation": "26 USC 3302(f)",
       "ended_at": "2026-05-26T06:50:56.219801",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -67777,7 +67784,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-26T06:50:56.219801"
     },
@@ -70486,12 +70493,12 @@
       "citation": "26 USC 3306(b)(5)",
       "ended_at": "2026-05-25T09:51:15.003734",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -70506,7 +70513,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-25T09:51:15.003734"
     },
@@ -81913,12 +81920,12 @@
       "citation": "26 USC 151",
       "ended_at": "2026-05-17T07:40:36.528069",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -81931,7 +81938,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-17T07:40:36.528069"
     },
@@ -83260,12 +83267,12 @@
       "citation": "us/statute/26/6013/a",
       "ended_at": "2026-05-16T13:51:02.848502",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -83280,7 +83287,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-16T13:51:02.848502"
     },
@@ -83289,12 +83296,12 @@
       "citation": "26 USC 6013",
       "ended_at": "2026-05-16T13:44:34.288322",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -83309,7 +83316,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-16T13:44:34.288322"
     },
@@ -84698,12 +84705,12 @@
       "citation": "us/statute/26/63",
       "ended_at": "2026-05-16T06:32:17.447831",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -84719,7 +84726,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-16T06:32:17.447831"
     },
@@ -84968,12 +84975,12 @@
       "citation": "us/statute/26/1/h",
       "ended_at": "2026-05-16T04:24:48.454720",
       "event_count": 4,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -84989,7 +84996,7 @@
         "apply": "failed",
         "gate.ci": "failed",
         "gate.review": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-16T04:24:48.454720"
     },
@@ -86288,12 +86295,12 @@
       "citation": "26 USC 224",
       "ended_at": "2026-05-14T21:39:33.279043",
       "event_count": 3,
-      "first_failure_reason_code": "ci_failure",
-      "first_failure_stage": "gate.ci",
+      "first_failure_reason_code": "generation_failed",
+      "first_failure_stage": "generate",
       "funnel": {
         "applied": false,
         "gates_passed": false,
-        "generated": true,
+        "generated": false,
         "judged": false,
         "merged": false,
         "pr": false
@@ -86308,7 +86315,7 @@
       "stage_status": {
         "apply": "failed",
         "gate.ci": "failed",
-        "generate": "passed"
+        "generate": "failed"
       },
       "started_at": "2026-05-14T21:39:33.279043"
     },
