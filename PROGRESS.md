@@ -100,6 +100,24 @@ against 1.729.0, not the pinned 1.767.3. Remediation = regenerate fiit against
 the pinned oracle (with a Populace build wiring the split partnership input), not
 a disposition.
 
+## SSI (4,044 = 17.5%) — probable axiom resource-screen gap (needs confirmation)
+
+All 4,044 are `ssi_benefit`; **94% (936/1000 sampled) have PE=0 while axiom
+awards a positive SSI benefit.** Concrete records (spm-unit inputs from the h5):
+unit 13 age 85 / assets $40,000; unit 70 age 71 / $40,000; unit 87 age 76 /
+$46,185 — all far over the SSI resource limit ($2,000 individual / $3,000
+couple), which PE screens (→$0) and axiom does not (awards full/near-FBR:
+$11,928=$994·12, $17,880=$1,490·12). rulespec-us **does** encode the resource
+test (`us/statutes/42/1382b/a.yaml`, 42 USC 1382b), so the live axiom SSI result
+ignoring resources points to either (a) the **composed** SSI program not wiring
+the resource rule, or (b) the **ssi-ecps bridge** not feeding the artifact's
+asset inputs (`bank_account_assets`/`stock_assets`/`bond_assets`) to axiom's
+resource variables. One low-asset aged+disabled case (unit 42, $284, PE=0) shows
+an additional factor, so SSI needs a composed-program / bridge-input trace before
+classing as `axiom_encoding_gap` vs `bridge_artifact`. **Likely axiom-attributed
+— flagged, not hidden.** Truncated (1000/4044) → not reducible from the committed
+report regardless.
+
 ## Why the number can't be ratcheted from committed artifacts alone
 
 - **fiit (18,791) + ssi (4,044) = 98.7% are truncated** (1000 of N rows on disk).
