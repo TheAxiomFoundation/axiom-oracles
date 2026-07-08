@@ -119,6 +119,7 @@
     "axiom-euromod-uk-child-winter-heating-payment.json",
     "axiom-euromod-uk-contribution-based-jsa.json",
     "axiom-euromod-uk-scottish-carer-supplement.json",
-    "axiom-policyengine-uk-lbtt-ltt.json"
+    "axiom-policyengine-uk-lbtt-ltt.json",
+    "axiom-policyengine-uk-vat.json"
   ]
 }
