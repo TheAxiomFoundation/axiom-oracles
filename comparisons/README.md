@@ -11,6 +11,7 @@ every config in the registry on a weekly schedule.
 ```bash
 uv run scripts/run_comparison.py fiit-ecps --summary
 uv run scripts/run_comparison.py co-snap-ecps --summary
+uv run scripts/run_comparison.py co-snap-qc --summary
 uv run scripts/run_comparison.py uk-universal-credit-efrs --summary
 ```
 
@@ -101,6 +102,35 @@ missing.
 
 Required runner keys: `axiom_rules_repo`. Required `parameters`: `left`,
 `right`, `concept`, `period`, `sample_size`, `population`.
+
+### `snap-qc-compare`
+
+Replays USDA SNAP Quality Control public-use reviews through the Axiom RuleSpec
+SNAP composition and compares the constructed benefit (FSBEN) plus its stage
+intermediates against the QC file's own recomputed values. Unlike the
+`axiom-encode-*` runners this calls the in-repo bridge
+(`axiom_oracles.bridges.snap_qc_compare.run_snap_qc_comparison`) **in process** —
+the oracle lives in this repo, so there is no encoder CLI to shell out to.
+
+FY2024 law is evaluated through a sparse compile-time overlay (SNAP COLA module
+ids rewritten from the in-repo fy-2026 vintage to `fy-2024-cola`, plus four
+Colorado standard-utility-allowance amount patches) at the nominal period
+`2026-01`, because the federal-regulation and Colorado-manual chain is snapshot-
+dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see the
+playbook and TheAxiomFoundation/rulespec-us#759). The runner **skips gracefully**
+— re-emitting the committed dashboard report, exactly like
+`euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
+checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file
+is absent, or while the bridge is still mid-build. Where all three exist it runs
+for real; the checked-in numbers are regenerated there.
+
+Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
+whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
+`tolerance` (FSBEN dollar tolerance, default exact after whole-dollar rounding),
+`stage_tolerance` (intermediate dollar tolerance, default `1.0`), `data_dir`,
+`rulespec_root`, `workspace_root`, `axiom_binary`, `include_special_programs`,
+`keep_overlay`, and `dashboard_filename` (the committed report the skip path
+re-emits). See [docs/snap-qc-oracle-playbook.md](../docs/snap-qc-oracle-playbook.md).
 
 ## Adding a new runner type
 
