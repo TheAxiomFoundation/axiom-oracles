@@ -738,6 +738,38 @@
         "TheAxiomFoundation/rulespec-us-wa"
       ],
       "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "zm-napsa-contributions",
+      "report": "axiom-euromod-zm-napsa-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-napsa-contributions.yaml"
+    },
+    {
+      "suite": "zm-nhima-contributions",
+      "report": "axiom-euromod-zm-nhima-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-nhima-contributions.yaml"
+    },
+    {
+      "suite": "zm-paye-rate-schedule",
+      "report": "axiom-euromod-zm-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "zm-turnover",
+      "report": "axiom-euromod-zm-turnover.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-turnover.yaml"
     }
   ]
 }

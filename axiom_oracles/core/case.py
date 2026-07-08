@@ -629,6 +629,45 @@ class Concepts:
         "ug:statutes/composed/pilot-worker-disposable-income-pipeline"
         "#pilot_worker_disposable_income"
     )
+    # Zambia Charging Schedule paragraph 2(1) individual rates (Act 22
+    # of 2023), compared to MicroZAMOD ``tin_s`` on the bridged ttb_s
+    # base (the model's net-of-contributions base is candidate
+    # finding 1 in rulespec-zm#1).
+    ZM_INDIVIDUAL_INCOME_TAX = (
+        "zm:statutes/act-2023-22/income-tax-amendment-2023"
+        "#individual_income_tax"
+    )
+    # Zambia turnover tax (Act 22 of 2024 Ninth Schedule Part II + the
+    # s.64A five-million-kwacha ceiling), compared to MicroZAMOD
+    # ``ttn_s`` in the agreement zone.
+    ZM_TURNOVER_TAX = (
+        "zm:statutes/act-2024-22/income-tax-amendment-2024"
+        "#turnover_tax"
+    )
+    # Zambia NAPSA shares (S.I. 9 of 2024: 5% each of pensionable
+    # earnings, monthly ceiling K29,816), compared to MicroZAMOD
+    # ``tsceepi_s``/``tscerpi_s`` on the ZM_2024 system.
+    ZM_NAPSA_EMPLOYEE_CONTRIBUTION = (
+        "zm:regulations/si-2024-9/pensionable-earnings-amendment-2024"
+        "#napsa_employee_contribution"
+    )
+    ZM_NAPSA_EMPLOYER_CONTRIBUTION = (
+        "zm:regulations/si-2024-9/pensionable-earnings-amendment-2024"
+        "#napsa_employer_contribution"
+    )
+    # Zambia NHIMA contributions (S.I. 63 of 2019 Third Schedule: 1%
+    # each of basic salary, uncapped), compared to MicroZAMOD
+    # ``tsceehl_s``/``tscerhl_s``.
+    ZM_NHIMA_EMPLOYEE_CONTRIBUTION = (
+        "zm:regulations/si-2019-63/"
+        "national-health-insurance-general-regulations-2019"
+        "#employee_monthly_contribution_amount"
+    )
+    ZM_NHIMA_EMPLOYER_CONTRIBUTION = (
+        "zm:regulations/si-2019-63/"
+        "national-health-insurance-general-regulations-2019"
+        "#employer_monthly_contribution_amount"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"

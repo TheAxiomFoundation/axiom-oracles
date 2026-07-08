@@ -1,0 +1,32 @@
+name: zm-nhima-contributions
+title: Zambia zm-nhima-contributions — Axiom vs MicroZAMOD
+description: >-
+  Compares the rulespec-zm S.I. No. 63 of 2019 NHIMA rates (Third
+  Schedule: employee 1% of basic salary; employer 1%; uncapped)
+  against MicroZAMOD tsceehl_s/tscerhl_s (ZM_2025, zm_2022_a2), with
+  the engine's yem bridged (divided to the module's monthly basis) -
+  probed exact at all tested incomes including 144,295.10/month.
+  The SOUTHMOD bundle is licensed and non-redistributable; referenced
+  only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: zm-nhima-contributions
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ZM
+    euromod_system: ZM_2025
+    euromod_dataset: zm_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-zm-nhima-contributions.json
+
+artifacts:
+  report_basename: axiom-euromod-zm-nhima-contributions
+
+dashboard:
+  filename: axiom-euromod-zm-nhima-contributions.json
+  suite: zm-nhima-contributions
