@@ -387,6 +387,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "oh-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-oh-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/oh-income-tax-liability.yaml"
+    },
+    {
       "suite": "or-snap-ecps",
       "report": "axiom-policyengine-or-snap-ecps.json",
       "repos": [

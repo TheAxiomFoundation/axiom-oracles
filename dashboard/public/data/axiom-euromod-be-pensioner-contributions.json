@@ -393,7 +393,7 @@
       "axiom_rules_engine_sha": "c6a1992f6e942cff93223ba2334632ae2146a169",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-08T15:27:07Z",
+    "generated_at": "2026-07-08T20:43:09Z",
     "generated_by": "scripts/run_comparison.py::be-pensioner-contributions",
     "oracle": {
       "euromod_country": "BE",

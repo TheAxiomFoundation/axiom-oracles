@@ -547,8 +547,8 @@ def test_us_pe_state_programs_are_per_state():
 def test_us_pe_covered_programs_name_a_live_pe_suite():
     """Every covered us-pe program points at a live PolicyEngine-US suite that
     runs vs PE-2026 — the day-one registrations (federal income tax + payroll via
-    fiit-ecps, SSI, SNAP, Medicaid categorical, CO/CA/NY/IL/MA state income tax,
-    and the per-state TANF suites)."""
+    fiit-ecps, SSI, SNAP, Medicaid categorical, CO/CA/NY/IL/MA/OH state income
+    tax, and the per-state TANF suites)."""
     universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
     live_pe_suites = {
         "fiit-ecps",
@@ -560,6 +560,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "ny-income-tax-liability",
         "il-income-tax-liability",
         "ma-income-tax-liability",
+        "oh-income-tax-liability",
         "al-tanf-ecps",
         "az-tanf-ecps",
         "ca-tanf-ecps",

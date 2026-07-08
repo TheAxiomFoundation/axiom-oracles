@@ -1,0 +1,6 @@
+prefixes:
+  - legal_id_prefix: "zm:"
+    country: zm
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: PolicyEngine has no Zambia model and cannot serve as a Zambia tax-benefit oracle. Axiom Zambia outputs are built from official Zambia legislation (the Income Tax Act, Cap. 323, as amended, from National Assembly assented prints; the National Pension Scheme and National Health Insurance instruments), and the household oracle is MicroZAMOD (UNU-WIDER SOUTHMOD, EUROMOD engine, systems ZM_2010-ZM_2025 in the licensed SOUTHMOD A4.0 bundle), whose suite wiring lands with the Ghana/Uganda/Zambia oracle chain. This prefix classifies Zambia outputs as not comparable to PolicyEngine; add exact PolicyEngine mappings only if a real one-to-one Zambia PolicyEngine oracle target is ever implemented.

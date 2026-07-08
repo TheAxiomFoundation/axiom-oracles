@@ -2068,3 +2068,33 @@ concepts:
           geoid: US
       policyengine: ny_income_tax
       taxsim: siitax
+
+  us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability:
+    description: Ohio nonbusiness income tax liability (resident wage earner; section 5747.02 graduated tax less the section 5747.98 nonrefundable exemption credit)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine oh_income_tax_before_refundable_credits, the
+    # exact statutory analog of this core (the section 5747.02 graduated tax on
+    # Ohio taxable income less the section 5747.98 nonrefundable exemption
+    # credit); the pipeline reproduces it to the cent across the grid (the
+    # residual is PolicyEngine's float32 rounding, under a tenth of a cent).
+    # PolicyEngine's final oh_income_tax additionally nets the Ohio refundable
+    # credits, which are zero for these childless wage cases. Against TAXSIM 2024
+    # every case diverges by the Ohio 2024-to-2026 schedule vintage (the House
+    # Bill 33 base-amount indexation and the pre-2025 3.5 per cent top rate above
+    # 100,000), dispositioned in dispositions/oh-income-tax-liability.yaml. The
+    # tight absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-OH]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: oh_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: oh_income_tax_before_refundable_credits
+      taxsim: siitax
