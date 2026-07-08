@@ -6210,7 +6210,7 @@
       },
       "case_id": "2024-202310-33334",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6242,7 +6242,7 @@
       },
       "case_id": "2024-202311-33370",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6274,7 +6274,7 @@
       },
       "case_id": "2024-202311-33383",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6306,7 +6306,7 @@
       },
       "case_id": "2024-202312-33422",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6338,7 +6338,7 @@
       },
       "case_id": "2024-202312-33426",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6370,7 +6370,7 @@
       },
       "case_id": "2024-202401-33471",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": -2,
+      "difference": 2,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "homeless-shelter-deduction-cap-stale-143",
@@ -6402,7 +6402,7 @@
       },
       "case_id": "2024-202401-33486",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": -7,
+      "difference": 7,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "homeless-shelter-deduction-cap-stale-143",
@@ -6434,7 +6434,7 @@
       },
       "case_id": "2024-202401-33527",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6466,7 +6466,7 @@
       },
       "case_id": "2024-202402-33537",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6498,7 +6498,7 @@
       },
       "case_id": "2024-202402-33559",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6530,7 +6530,7 @@
       },
       "case_id": "2024-202403-33610",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6562,7 +6562,7 @@
       },
       "case_id": "2024-202403-33627",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6594,7 +6594,7 @@
       },
       "case_id": "2024-202403-33645",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6626,7 +6626,7 @@
       },
       "case_id": "2024-202404-33661",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6658,7 +6658,7 @@
       },
       "case_id": "2024-202404-33704",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention-net-income",
@@ -6690,7 +6690,7 @@
       },
       "case_id": "2024-202404-33715",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": -11,
+      "difference": 11,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "homeless-shelter-deduction-cap-stale-143",
@@ -6722,7 +6722,7 @@
       },
       "case_id": "2024-202404-33724",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6754,7 +6754,7 @@
       },
       "case_id": "2024-202405-33758",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6786,7 +6786,7 @@
       },
       "case_id": "2024-202405-33760",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": -11,
+      "difference": 11,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "homeless-shelter-deduction-cap-stale-143",
@@ -6818,7 +6818,7 @@
       },
       "case_id": "2024-202405-33766",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6850,7 +6850,7 @@
       },
       "case_id": "2024-202405-33793",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": -11,
+      "difference": 11,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "homeless-shelter-deduction-cap-stale-143",
@@ -6882,7 +6882,7 @@
       },
       "case_id": "2024-202405-33800",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6914,7 +6914,7 @@
       },
       "case_id": "2024-202405-33802",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6946,7 +6946,7 @@
       },
       "case_id": "2024-202406-33850",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -6978,7 +6978,7 @@
       },
       "case_id": "2024-202406-33853",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7010,7 +7010,7 @@
       },
       "case_id": "2024-202406-33854",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7042,7 +7042,7 @@
       },
       "case_id": "2024-202407-33896",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7074,7 +7074,7 @@
       },
       "case_id": "2024-202407-33902",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7106,7 +7106,7 @@
       },
       "case_id": "2024-202407-33914",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7138,7 +7138,7 @@
       },
       "case_id": "2024-202407-33918",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7170,7 +7170,7 @@
       },
       "case_id": "2024-202407-33923",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": -11,
+      "difference": 11,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "homeless-shelter-deduction-cap-stale-143",
@@ -7202,7 +7202,7 @@
       },
       "case_id": "2024-202407-33955",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7234,7 +7234,7 @@
       },
       "case_id": "2024-202408-33981",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7266,7 +7266,7 @@
       },
       "case_id": "2024-202408-33989",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7298,7 +7298,7 @@
       },
       "case_id": "2024-202408-34023",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention-net-income",
@@ -7330,7 +7330,7 @@
       },
       "case_id": "2024-202409-34048",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7362,7 +7362,7 @@
       },
       "case_id": "2024-202409-34072",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": 1,
+      "difference": -1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention-net-income",
@@ -7394,7 +7394,7 @@
       },
       "case_id": "2024-202409-34084",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7426,7 +7426,7 @@
       },
       "case_id": "2024-202409-34122",
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-      "difference": -1,
+      "difference": 1,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "whole-dollar-rounding-convention",
@@ -7458,7 +7458,7 @@
       },
       "case_id": "2024-202409-34123",
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-      "difference": -11,
+      "difference": 11,
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "homeless-shelter-deduction-cap-stale-143",
@@ -7483,8 +7483,20 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-08T18:23:56Z",
+    "generated_at": "2026-07-08T20:45:34Z",
     "generated_by": "scripts/run_comparison.py::co-snap-qc",
+    "oracle": {
+      "fiscal_year": 2024,
+      "name": "snap-qc",
+      "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
+      "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "67cd100040f07317c067379d92a39bb1f3451caf"
+      }
+    ],
     "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
@@ -7509,6 +7521,7 @@
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
+    "error_case_count": 0,
     "exclusions": {
       "by_reason": {},
       "total_excluded": 0,
@@ -7541,10 +7554,12 @@
           "us/statutes/7/2017/a.yaml": "772f90b2817a0c5f421d90288cf2e76b490fccf06b4c4ce7731350eb9de61da9"
         },
         "module_id_rewrites": {
-          "fy-2026-cola": "fy-2024-cola"
+          "us:policies/usda/snap/fy-2026-cola/deductions": "us:policies/usda/snap/fy-2024-cola/deductions",
+          "us:policies/usda/snap/fy-2026-cola/income-eligibility-standards": "us:policies/usda/snap/fy-2024-cola/income-eligibility-standards",
+          "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-co-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-6o5a_jdg/rulespec-us-snap-fy2024",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-61de8e1v/rulespec-us-snap-fy2024",
         "patches": [
           {
             "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
@@ -7619,6 +7634,7 @@
     ],
     "weighted": {
       "comparison_weight": 3663355.009217,
+      "error_case_weight": 0,
       "match_rate": 95.408467,
       "match_weight": 3495150.844987,
       "mismatch_weight": 168204.16423

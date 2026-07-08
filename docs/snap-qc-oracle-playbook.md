@@ -103,7 +103,8 @@ it documents them. The loader's own exclusions are each counted by reason in
 | ineligible / non-compliance findings | `STATUS = 4`; listed-in-error actives | FNS upstream | no positive benefit to reproduce (PDF p.16–17) |
 | MFIP units | `MN_FIP` | loader (counted) | the Minnesota Family Investment Program uses a separate benefit procedure — only a 50% earnings deduction, all other deductions coded missing (Table F.3 note, PDF p.180; MFIP benefits Table F.8, PDF p.186) |
 | SSI-CAP units | SSI-CAP participation flag | loader (counted) | Combined Application Projects use separate procedures; standard-benefit units have deductions coded missing (Table F.3 note, PDF p.180; SSI-CAP shelter Table F.23, PDF p.192) |
-| zero/blank FSBEN with STATUS missing | `FSBEN`, `STATUS` | loader (counted) | no constructed benefit to compare |
+| missing benefit | `FSBEN` missing or 0 | loader (counted) | no constructed benefit to replay (the file's minimum is $1) |
+| missing certified size | `CERTHHSZ` missing or 0 | loader (counted) | no unit size to drive `household_size` |
 
 Of the FY2024 sample, 6,332 reviews were dropped as incomplete and 46,418 were
 completed; a further set of ineligible and listed-in-error actives left 44,891 units
@@ -201,14 +202,15 @@ Colorado parameters exactly.
   differs from the tier's standard amount (an actual-expense claim, SUA1 = 2, or a
   prorated allowance), the mapper drops the flags and carries UTIL as an incurred
   shelter cost instead.
-- **Medical expenses: `FSMEDEXP` is the excess, and the QC recomputation ignores
-  the demonstration.** `FSMEDEXP` is the allowable medical expense *in excess of
-  $35* and the constructed deduction is literally `FSMEDDED = MAX(0, FSMEDEXP)`
-  (codebook PDF p.84) — the QC benefit recomputation does not model Colorado's
-  standard-medical-deduction demonstration ($165 standard, Table F.4, PDF p.181),
-  only the statutory excess. The mapper therefore feeds `FSMEDEXP + 35` into the
-  engine's `total − 35` rule, which reproduces `FSMEDDED` exactly; only units with
-  an elderly or disabled member are entitled, which the engine gates itself.
+- **Medical expenses: feed the applied deduction, not the reported excess.**
+  `FSMEDEXP` is the allowable medical expense *in excess of $35* and `FSMEDDED`
+  is the deduction FNS applied (codebook PDF p.84). The two are equal in
+  ordinary states, but in standard-medical-deduction demonstration states
+  `FSMEDDED` is a flat standard that can differ from the excess (10 FY2024 rows
+  nationally, none in Colorado; Table F.4, PDF p.181). The mapper therefore
+  feeds `FSMEDDED + 35` into the engine's `total − 35` rule, which reproduces
+  the applied deduction in both kinds of state; only units with an elderly or
+  disabled member are entitled, which the engine gates itself.
 - **The homeless shelter deduction is a flat path.** `HOMEDED = 3` units receive
   the standard homeless shelter deduction; the QC file zeroes `FSSLTDED` for them
   by construction (codebook PDF p.85), so the mapper raises the composition's
