@@ -28,6 +28,14 @@
       "source": "comparisons/al-snap-ecps.yaml"
     },
     {
+      "suite": "al-tanf-ecps",
+      "report": "axiom-policyengine-al-tanf-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-al"
+      ],
+      "source": "comparisons/al-tanf-ecps.yaml"
+    },
+    {
       "suite": "al-tanf-payment-standards",
       "report": "axiom-policyengine-al-tanf-payment-standards.json",
       "repos": [

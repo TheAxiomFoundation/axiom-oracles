@@ -132,11 +132,11 @@
       {
         "date": "2026-07-08",
         "in_scope": 137,
-        "covered": 27,
-        "uncovered": 110,
+        "covered": 28,
+        "uncovered": 109,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 110,
+        "gap": 109,
         "conformant": false
       }
     ]
