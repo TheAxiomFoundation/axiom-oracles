@@ -1,0 +1,38 @@
+name: ug-dispy
+title: Uganda ug-dispy — Axiom vs UGAMOD
+description: >-
+  Compares the rulespec-ug composed single-employee disposable-income
+  pipeline (Act 4 of 2012 Third Schedule resident income tax on
+  chargeable income, Cap. 230 s.11 employee 5% share, dispy = gross +
+  benefits - tax - share) against UGAMOD ils_dispy on the full PAYE
+  grid (SOUTHMOD A4.0, country UG, system UG_2025 = FY2025/26, dataset
+  ug_2024_a1). Unlike Ghana (finding #13), the Ugandan ITA has no
+  employee NSSF deduction and UGAMOD agrees (probed ttb_s = yem), so
+  the live cases run every band boundary and interior point including
+  the additional-rate region — probed exact to within UGAMOD's monthly
+  sub-shilling rounding (worst 0.4 UGX/yr at 150m gross). The bridge
+  feeds the engine's post-uprating yem to both imported inputs
+  (chargeable_income and total_wages). The SOUTHMOD bundle is licensed
+  and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: ug-dispy
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: UG
+    euromod_system: UG_2025
+    euromod_dataset: ug_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-ug-dispy.json
+
+artifacts:
+  report_basename: axiom-euromod-ug-dispy
+
+dashboard:
+  filename: axiom-euromod-ug-dispy.json
+  suite: ug-dispy

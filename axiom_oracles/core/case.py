@@ -620,6 +620,15 @@ class Concepts:
         "ug:statutes/act-2024-excise/excise-duty-amendment-2024"
         "#fuel_excise_duty"
     )
+    # Uganda composed single-employee disposable income (Act 4 of 2012
+    # Third Schedule tax on chargeable income = gross, Cap. 230 s.11
+    # employee 5% share), compared to UGAMOD ``ils_dispy`` on the full
+    # PAYE grid — the engines share the tax base at every income (no
+    # Ghana-finding-#13 equivalent; probed ``ttb_s = yem``).
+    UG_PILOT_DISPOSABLE_INCOME = (
+        "ug:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_disposable_income"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
