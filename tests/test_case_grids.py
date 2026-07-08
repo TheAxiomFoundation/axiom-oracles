@@ -109,6 +109,8 @@ def _suite_jurisdiction(suite_name: str) -> str:
         return "be"
     if locales == {"GH"}:
         return "gh"
+    if locales == {"UG"}:
+        return "ug"
     if locales == {"UK"}:
         return "uk"
     if locales <= {"US-NY-NYC", "US-NY", "US"}:
