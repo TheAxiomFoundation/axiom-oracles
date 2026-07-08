@@ -134,7 +134,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-07T16:32:32Z",
+    "generated_at": "2026-07-08T04:21:33Z",
     "generated_by": "scripts/run_comparison.py::uk-winter-fuel-payment-pe",
     "oracle": {
       "name": "policyengine",
@@ -143,10 +143,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "17fc102363f7a9a32a2751e9f8cf92d5bdc1c79c"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
