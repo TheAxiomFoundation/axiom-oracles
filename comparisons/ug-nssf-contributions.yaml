@@ -1,0 +1,36 @@
+name: ug-nssf-contributions
+title: Uganda NSSF contributions — Axiom vs UGAMOD
+description: >-
+  Compares the rulespec-ug NSSF standard-contribution module (Cap. 230:
+  fifteen percent employer-paid standard contribution on monthly total
+  wages, s.10; five percent employee's share, s.11; employer-net share
+  derived as their difference) against UGAMOD tscee_s (employee share)
+  and tscer_s (employer share) on a wage sweep from 1.2m to 124.5m
+  UGX/year. Probed live exact at every case (worst diff 0.0000 UGX/yr):
+  no wage ceiling and no age window — in contrast to GHAMOD's age-15-45
+  contributor cap (rulespec-gh finding #4). Each case pre-divides the
+  euromod input by the UG_2025 uprating index and bridges the Axiom
+  total_wages input on the engine's own post-uprating yem. The SOUTHMOD
+  bundle is licensed and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: ug-nssf-contributions
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: UG
+    euromod_system: UG_2025
+    euromod_dataset: ug_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-ug-nssf-contributions.json
+
+artifacts:
+  report_basename: axiom-euromod-ug-nssf-contributions
+
+dashboard:
+  filename: axiom-euromod-ug-nssf-contributions.json
+  suite: ug-nssf-contributions
