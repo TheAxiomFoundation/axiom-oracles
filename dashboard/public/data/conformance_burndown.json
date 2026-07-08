@@ -87,6 +87,18 @@
         "gap": 0,
         "conformant": true
       }
+    ],
+    "us-pe": [
+      {
+        "date": "2026-07-07",
+        "in_scope": 140,
+        "covered": 27,
+        "uncovered": 113,
+        "unexplained": 23138,
+        "axiom_attributed_open": 0,
+        "gap": 23251,
+        "conformant": false
+      }
     ]
   }
 }

@@ -44,12 +44,19 @@ from axiom_oracles.conformance.loader import (  # noqa: E402
     serialize,
 )
 from axiom_oracles.conformance.universe import (  # noqa: E402
+    PE_UK_PROGRAM_SPINE,
+    PE_US_PROGRAM_SPINE,
     EuromodUniverseBackend,
     PolicyEngineUniverseBackend,
     raw_to_universe_policy,
 )
 
 CONFORMANCE_DIR = REPO_ROOT / "conformance"
+
+#: Program spines keyed by the ``spine`` field in :data:`JURISDICTIONS`. The
+#: spine is the committed grouping (the row set); the pinned checkout supplies
+#: every scored fact. ``uk`` is the default for backward compatibility.
+_PE_SPINES = {"uk": PE_UK_PROGRAM_SPINE, "us": PE_US_PROGRAM_SPINE}
 
 
 #: Per-jurisdiction generation config. ``uk`` is implemented and committed now;
@@ -90,8 +97,29 @@ JURISDICTIONS: dict[str, dict] = {
         "release": "checkout",
         "system": "uk",
         "package": "policyengine_uk",
+        "spine": "uk",
         "env_roots": ("POLICYENGINE_UK_CHECKOUT",),
         "default_root": "$HOME/PolicyEngine/policyengine-uk",
+    },
+    "us-pe": {
+        "implemented": True,
+        "backend": "policyengine",
+        "country": "US",
+        "model": "policyengine-us",
+        # release is read from the pinned checkout at generation time (its
+        # pyproject.toml, or the installed distribution metadata for a
+        # pip-installed tree). This literal is the error-text fallback only.
+        "release": "checkout",
+        "system": "us",
+        "package": "policyengine_us",
+        "spine": "us",
+        # PE-US composes many surfaces (state income taxes, income_tax_before_*,
+        # standard_deduction, medicaid …) from an adds/subtracts variable list
+        # rather than a def formula; those ARE computed, so the backend must not
+        # read them as pure inputs.
+        "include_adds_subtracts": True,
+        "env_roots": ("POLICYENGINE_US_CHECKOUT",),
+        "default_root": "$HOME/PolicyEngine/policyengine-us",
     },
 }
 
@@ -132,6 +160,8 @@ def generate_universe(jurisdiction: str, model_root: Path) -> Universe:
         backend = PolicyEngineUniverseBackend(
             checkout=model_root,
             package=config.get("package", "policyengine_uk"),
+            spine=_PE_SPINES[config.get("spine", "uk")],
+            include_adds_subtracts=config.get("include_adds_subtracts", False),
         )
         # Pin the exact version enumerated, read from the checkout (not memory).
         release = backend.pinned_version()
@@ -209,7 +239,7 @@ def _process(
             if present_version and present_version != committed.oracle.release:
                 print(
                     f"conformance[{jurisdiction}] --check: checkout at {root} is "
-                    f"policyengine-uk@{present_version}, not the pinned "
+                    f"{config['model']}@{present_version}, not the pinned "
                     f"{committed.oracle.release}; committed universe left unverified "
                     "this run (no-op clean — pin a matching checkout to enforce)."
                 )
