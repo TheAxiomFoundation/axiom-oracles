@@ -99,7 +99,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-07T21:10:18Z",
+    "generated_at": "2026-07-08T04:16:13Z",
     "generated_by": "scripts/run_comparison.py::uk-capital-gains-tax",
     "oracle": {
       "name": "policyengine",
