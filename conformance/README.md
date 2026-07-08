@@ -77,6 +77,26 @@ oracle's own model spine — **never from memory**:
   in-scope with a `rate_only` comparability note. The header pins the exact
   `policyengine-uk` version from the checkout's `pyproject.toml`. Backs the
   committed `uk-pe` universe (a distinct oracle from the UKMOD-backed `uk`).
+* **PolicyEngine-US** uses the same `PolicyEngineUniverseBackend` with
+  `PE_US_PROGRAM_SPINE` and `include_adds_subtracts=True`. PE-US is far larger, so
+  the spine follows a deterministic rule biased to PE-US's own module tree
+  (`policyengine_us/variables/gov`): one row per program instrument at the
+  granularity of the household-facing output variable PE computes — federal income
+  tax decomposed into its component surfaces + each credit in
+  `gov.irs.credits.refundable`/`non_refundable`; payroll & SECA; each member of the
+  `gov.household.household_benefits` parameter list + the `household_health_benefits`
+  expansion (SNAP, SSI, Medicaid, ACA PTC …); and **per-state** rows for each
+  `<state>_income_tax` (44 states) and each `STATE_TANF_VARIABLES` member (51 state
+  cash-assistance programs). The per-state/national split is the rule following PE's
+  tree, not a coverage choice: SNAP/SSI are single national variables (one row);
+  income tax and TANF are per-state variables (per-state rows). Because PE-US
+  composes many aggregates from an `adds`/`subtracts` variable list rather than a
+  `def formula`, the backend treats those as computed rules surfaces; only genuine
+  reported passthroughs (`social_security`, `unemployment_compensation`, …) are
+  excluded `input_carrying` (the reform-only `basic_income` lever is `technical`).
+  The header pins `policyengine-us` from the checkout's `pyproject.toml`, or the
+  installed distribution metadata for a pip-installed tree. Backs the committed
+  `us-pe` universe.
 
 The generator overwrites the **facts** (`output_vars`, `oracle_policy_type`,
 `internal_only_vars`) and **preserves the decisions** (`in_scope`,
