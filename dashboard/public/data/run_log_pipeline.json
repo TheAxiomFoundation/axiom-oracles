@@ -1,0 +1,168 @@
+{
+  "funnel_steps": [
+    {
+      "bucket": "generated",
+      "stage": "generate"
+    },
+    {
+      "bucket": "gates_passed",
+      "stage": "gate.ci"
+    },
+    {
+      "bucket": "judged",
+      "stage": "judge"
+    },
+    {
+      "bucket": "applied",
+      "stage": "apply"
+    },
+    {
+      "bucket": "pr",
+      "stage": "pr"
+    },
+    {
+      "bucket": "merged",
+      "stage": "merge"
+    }
+  ],
+  "pipeline_spec_version": "axiom_encode.pipeline_spec.v1",
+  "run_log_schema": "axiom_encode.run_log.v1",
+  "stages": [
+    {
+      "category": "generate",
+      "depends_on": [],
+      "description": "Model produces a candidate RuleSpec artifact from source text.",
+      "id": "generate",
+      "label": "Generate",
+      "optional": false
+    },
+    {
+      "category": "gate",
+      "depends_on": [
+        "generate"
+      ],
+      "description": "RuleSpec compiles under the engine.",
+      "id": "gate.compile",
+      "label": "Compile",
+      "optional": false
+    },
+    {
+      "category": "gate",
+      "depends_on": [
+        "gate.compile"
+      ],
+      "description": "Generated numeric literals are grounded in source text.",
+      "id": "gate.grounding",
+      "label": "Numeric grounding",
+      "optional": false
+    },
+    {
+      "category": "gate",
+      "depends_on": [
+        "gate.compile"
+      ],
+      "description": "Proof/source atoms validate against the cited provisions.",
+      "id": "gate.proof",
+      "label": "Proof atoms",
+      "optional": true
+    },
+    {
+      "category": "gate",
+      "depends_on": [
+        "gate.compile"
+      ],
+      "description": "Companion RuleSpec tests pass under the engine.",
+      "id": "gate.ci",
+      "label": "CI tests",
+      "optional": false
+    },
+    {
+      "category": "gate",
+      "depends_on": [
+        "gate.ci"
+      ],
+      "description": "Cross-engine oracle (PolicyEngine/TAXSIM) agreement.",
+      "id": "gate.oracle",
+      "label": "Oracle",
+      "optional": true
+    },
+    {
+      "category": "gate",
+      "depends_on": [
+        "gate.ci"
+      ],
+      "description": "Checklist reviewers (rulespec/formula/parameter/integration).",
+      "id": "gate.review",
+      "label": "Reviewers",
+      "optional": true
+    },
+    {
+      "category": "judge",
+      "depends_on": [
+        "gate.review"
+      ],
+      "description": "LLM judge verdict with structured findings (parallel worker).",
+      "id": "judge",
+      "label": "LLM judge",
+      "optional": true
+    },
+    {
+      "category": "apply",
+      "depends_on": [
+        "gate.ci"
+      ],
+      "description": "Files installed into a rulespec repo; signed manifest written.",
+      "id": "apply",
+      "label": "Apply + manifest",
+      "optional": false
+    },
+    {
+      "category": "downstream",
+      "depends_on": [
+        "apply"
+      ],
+      "description": "Pull request opened in the rulespec repo.",
+      "id": "pr",
+      "label": "PR opened",
+      "optional": true
+    },
+    {
+      "category": "downstream",
+      "depends_on": [
+        "pr"
+      ],
+      "description": "Repo CI run(s) for the PR.",
+      "id": "ci_run",
+      "label": "CI run",
+      "optional": true
+    },
+    {
+      "category": "downstream",
+      "depends_on": [
+        "ci_run"
+      ],
+      "description": "PR merged to the rulespec repo default branch.",
+      "id": "merge",
+      "label": "Merged",
+      "optional": true
+    },
+    {
+      "category": "downstream",
+      "depends_on": [
+        "merge"
+      ],
+      "description": "Oracle-suite / conformance-row result captured at merge.",
+      "id": "oracle_at_merge",
+      "label": "Oracle at merge",
+      "optional": true
+    }
+  ],
+  "statuses": [
+    "started",
+    "passed",
+    "failed",
+    "skipped",
+    "error",
+    "superseded"
+  ]
+}

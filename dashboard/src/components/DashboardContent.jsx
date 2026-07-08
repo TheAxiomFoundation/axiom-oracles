@@ -13,6 +13,7 @@ import ProgramRuns from "./ProgramRuns";
 import FreshnessRegister from "./FreshnessRegister";
 import AgreementMatrix from "./AgreementMatrix";
 import ProgramBreakdown from "./ProgramBreakdown";
+import EncodingRunLog from "./EncodingRunLog";
 
 function programRegion(program) {
   const id = String(program?.id || "");
@@ -272,6 +273,8 @@ export default function DashboardContent() {
               />
 
               {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
+
+              <EncodingRunLog basePath="" />
 
               <ProgramRuns
                 key={jurisdiction}
