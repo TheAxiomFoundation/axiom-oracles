@@ -1,0 +1,53 @@
+name: ug-paye-rate-schedule
+title: Uganda resident income-tax rate schedule — Axiom vs UGAMOD
+description: >-
+  Compares the rulespec-ug resident individual income-tax schedule (Income Tax
+  Act, Cap. 340, Third Schedule Part I as substituted by Act 4 of 2012:
+  2,820,000 nil / to 4,020,000 10% / to 4,920,000 20% / above 30%, plus an
+  additional 10% on chargeable income exceeding 120,000,000 per year) encoded
+  in Axiom RuleSpec against UGAMOD's tin_s on a band-boundary and interior
+  income sweep including the additional-rate region. UGAMOD is the SOUTHMOD
+  tax-benefit model for Uganda (UNU-WIDER / Ministry of Finance, Planning and
+  Economic Development), run on the EUROMOD engine (SOUTHMOD A4.0, country UG,
+  system UG_2025 = FY2025/26, dataset ug_2024_a1). The substituted schedule is
+  unchanged from 1 July 2012 through FY2025/26 (the 2014-2024 amendment prints
+  do not touch Part I). UGAMOD's tax base for a plain formal employee is gross
+  employment income (probed: ttb_s = yem), so both engines apply the schedule
+  to the identical base; each case pre-divides the euromod input by the
+  UG_2025 employment-income uprating index (1.0375626043405675, probed) and
+  bridges Axiom's chargeable_income on the engine's own post-uprating yem.
+  Probed live, every case — including the 120,000,000 boundary and the
+  150,000,000 additional-rate interior — agrees with the statutory schedule to
+  within 0.4 UGX per year (UGAMOD computes monthly and truncates at the
+  sub-shilling grain; the Uganda Shilling has no minor unit in circulation),
+  inside the comparison tolerance of 1. UGAMOD implements the full schedule
+  including the additional 10% — in contrast to GHAMOD's missing Act 1111 top
+  band (rulespec-gh finding #1). The SOUTHMOD bundle is licensed and
+  non-redistributable: referenced only by path (euromod_model_root); no model
+  XML, dataset row, or DRD text is committed.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: ug-paye-rate-schedule
+    population: synthetic
+    sample_size: 0
+    # Ugandan year of income FY2025/26 (the rulespec-ug validation year).
+    # UGAMOD resolves its policy year from euromod_system (UG_2025) and
+    # ignores the case period; the substituted schedule is frozen from
+    # 1 July 2012.
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: UG
+    euromod_system: UG_2025
+    euromod_dataset: ug_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-ug-paye-rate-schedule.json
+
+artifacts:
+  report_basename: axiom-euromod-ug-paye-rate-schedule
+
+dashboard:
+  filename: axiom-euromod-ug-paye-rate-schedule.json
+  suite: ug-paye-rate-schedule

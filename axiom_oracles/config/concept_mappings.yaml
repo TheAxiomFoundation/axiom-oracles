@@ -2212,6 +2212,32 @@ concepts:
           type: country
           geoid: GH
 
+  # Uganda Third Schedule Part I resident schedule (Act 4 of 2012
+  # substitution; rulespec-ug), compared to UGAMOD tin_s on a
+  # band-boundary/interior sweep including the additional 10% above
+  # 120,000,000/yr, which UGAMOD implements.
+  ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#resident_individual_income_tax:
+    description: Uganda resident individual income tax (Cap. 340 Third Schedule Part I as substituted by Act 4 of 2012)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: resident_individual_income_tax
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: UG
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax
