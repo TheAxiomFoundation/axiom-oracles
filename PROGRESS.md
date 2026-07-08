@@ -144,3 +144,53 @@ confidence. Committing a reduction from truncated reports would be fabricated.
 
 Discipline: no blanket dispositions; ≥3 concrete records per signature;
 corpus-grounded amounts; oracle merges serialized; NO admin-merge; sentence case.
+
+---
+
+## PHASE 2 (execution) — 2026-07-08
+
+Environment: dep repos live under `~/TheAxiomFoundation/` (not `$HOME`); bridged
+with `$HOME/{axiom-encode,axiom-rules,axiom-rules-engine,axiom-compose}` symlinks
+and `$HOME/.axiom-oracles/roots/rulespec-us` (rsync). The shared axiom-compose
+main clone is on another session's feature branch and is 13 commits behind
+origin/main (no `data_relation`/`derived_formula`); built a durable origin/main
+worktree at `~/TheAxiomFoundation/_worktrees/axiom-compose-main` and repointed
+`$HOME/axiom-compose` at it (feature branch untouched).
+
+### FIIT — the 1.767.3 hypothesis is FALSIFIED (verified by running it)
+
+Ran fiit-ecps against policyengine-us **1.767.3** (full population, 87,519 tax
+units). Result: **EITC did NOT resolve** and total rose 18,791 → **27,513**.
+- EITC 16,680: unchanged. tax_unit 154343 axiom 117,741.43 vs PE **0.00** at
+  1.767.3 — identical to 1.729.0. The pinned f0af251 Populace build stores
+  partnership income in the pre-#8614 layout, so 1.767.3's eitc_earned_income
+  still reads $0 partnership. Resolving EITC needs a NEW Populace build, not a
+  model bump.
+- capital-gain 8 → **6,173** large divergences (e.g. tax_unit 103 axiom 4,334.86
+  vs PE 7,192.42): 1.767.3 drifts from the pinned Axiom rulespec on
+  adjusted_net_capital_gain; tax_before_credits 2,118 → 4,655 downstream.
+
+Decision: pin the oracle to **1.729.0** (coherent with the data's built_with).
+The scoreboard matches reports by suite, not oracle label, so this is the honest
+pairing. It keeps capital-gain/tax clean and isolates EITC as the sole structural
+divergence — an upstream PE #8614 gap (1.729.0 predates it); Axiom correctly
+includes partnership SE net earnings per 26 USC 32(c)(2)/1402(a). Regenerating at
+1.729.0 now.
+
+Planned fiit dispositions (on the FULL 1.729.0 report, bounds AST-verified over
+all rows): EITC → upstream_engine_gap (linked PE #8614); tax_before_credits,
+capital_gain, ctc → explained_residual (rounding/float).
+
+### SSI — root cause found and fixed (issue #227)
+
+Not a rulespec-us gap: `1382/a/1#eligible_individual` already tests
+`resources_other_than_excluded_pursuant_to_section_1382b_a <= individual_no_spouse_resource_limit`
+($2,000, from 1382/a/3). The defect is in axiom-oracles projection:
+`data/populace_input_mapping.yaml` pinned that input to `{constant: 0}` on the
+false premise "ECPS carries no asset data ... PE faces the same absence." PE reads
+real countable resources from the same populace build and screens them (PE=0 at
+$40k), so Axiom's constant-0 left it resource-unconstrained → 4,044 mismatches.
+Fixed (committed): add `Concepts.SSI_COUNTABLE_RESOURCES`, project PE
+`ssi_countable_resources`, map the slot from that fact (default 0). Verified at
+the mapping layer (40k→40000, else 0). Issue TheAxiomFoundation/axiom-oracles#227.
+SSI regen kept at the certified in-repo pair (1.752.2), version-invariant here.

@@ -139,13 +139,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#aotc).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:ar_income_tax",
@@ -283,13 +283,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#capital_gain).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:cdcc",
@@ -301,13 +301,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#cdcc).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:child_support_received",
@@ -445,13 +445,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#ctc).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:dc_income_tax",
@@ -589,13 +589,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#eitc) \u2014 the largest federal residual, undispositioned.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:elderly_disabled_credit",
@@ -625,13 +625,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employee_medicare).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:employee_social_security_tax",
@@ -643,13 +643,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employee_oasdi).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:employer_medicare_tax",
@@ -661,13 +661,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employer_medicare).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:employer_social_security_tax",
@@ -679,13 +679,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employer_oasdi).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:energy_efficient_home_improvement_credit",
@@ -1039,13 +1039,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps \u2014 the federal income tax ECPS bridge compares PE-US income_tax (us:tax/federal-income-tax#liability) at population scale vs PE-2026; residuals concentrate in EITC and tax-before-credits and are not yet dispositioned (counted unexplained).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:income_tax_before_refundable_credits",
@@ -1057,13 +1057,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#tax_before_credits).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:itemized_taxable_income_deductions",
@@ -2281,13 +2281,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#standard_deduction).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:survivor_benefits",

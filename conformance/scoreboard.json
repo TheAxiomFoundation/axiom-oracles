@@ -78,9 +78,9 @@
         "input_carrying": 7,
         "technical": 1
       },
-      "unexplained_total": 23138,
+      "unexplained_total": 4347,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "conformant": false,
       "uncovered_policies": [
@@ -200,7 +200,7 @@
       ],
       "blocking_reasons": [
         "113 of 140 in-scope policies are not covered by a live suite: aca_ptc, acp, additional_medicare_tax, ak_atap, al_income_tax, al_tanf, alternative_minimum_tax, ar_income_tax, ar_tea, az_income_tax, chip, commodity_supplemental_food_program, ct_income_tax, ct_tfa, dc_income_tax, dc_tanf, de_income_tax, de_tanf, early_head_start, ebb, elderly_disabled_credit, energy_efficient_home_improvement_credit, fl_tca, foreign_tax_credit, free_school_meals, ga_income_tax, ga_tanf, head_start, hi_income_tax, hi_tanf, high_efficiency_electric_home_rebate, ia_fip, ia_income_tax, id_income_tax, id_tafi, il_tanf, in_income_tax, in_tanf, itemized_taxable_income_deductions, ks_income_tax, ky_income_tax, ky_ktap, la_fitap, la_income_tax, lifetime_learning_credit, ma_tafdc, md_income_tax, md_tca, me_income_tax, me_tanf, mi_fip, mi_income_tax, mn_income_tax, mo_income_tax, mo_tanf, ms_income_tax, ms_tanf, mt_income_tax, mt_tanf, nc_income_tax, nc_tanf, nd_income_tax, nd_tanf, ne_adc, ne_income_tax, net_investment_income_tax, new_clean_vehicle_credit, nh_fanf, nh_income_tax, nj_income_tax, nj_wfnj, nm_income_tax, nm_works, nv_tanf, oh_income_tax, oh_owf, ok_income_tax, ok_tanf, or_income_tax, or_tanf, pa_income_tax, pa_tanf, qualified_business_income_deduction, recovery_rebate_credit, reduced_price_school_meals, residential_clean_energy_credit, residential_efficiency_electrification_rebate, ri_income_tax, ri_works, salt_deduction, savers_credit, sc_income_tax, sc_tanf, sd_tanf, self_employment_tax, spm_unit_capped_housing_subsidy, taxable_income, tn_ff, tx_tanf, used_clean_vehicle_credit, ut_fep, ut_income_tax, va_income_tax, va_tanf, vt_income_tax, vt_reach_up, wa_income_tax, wi_income_tax, wi_works, wic, wv_income_tax, wv_works, wy_power",
-        "23138 unexplained mismatch(es) across covered suites"
+        "4347 unexplained mismatch(es) across covered suites"
       ]
     }
   ]

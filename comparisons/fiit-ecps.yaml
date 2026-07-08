@@ -34,20 +34,36 @@ runner:
     year: 2026
     python: "3.13"
     surface: all
-    # `pinned: true` installs the PE oracle stack below. The us-pe universe pins
-    # policyengine-us 1.767.3 (2026-07-07), which carries PE-US #8614 "Split
-    # partnership and S-corp income inputs" (merged 2026-06-14) — it adds
-    # partnership self-employment net earnings to eitc_earned_income. The report
-    # engine 1.729.0 predated that landing in the data pipeline, so a 1.729.0 run
-    # omitted partnership SE income from EITC earned income and diverged from
-    # Axiom on every partnership tax unit. 1.767.3 needs PE-Core 3.29.1; meta
-    # stays 4.11.0 (resolves cleanly). The harness still loads the pinned Populace
-    # artifact (--allow-policyengine-us-version bypasses the built_with gate) and
-    # clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723).
+    # `pinned: true` installs the PE oracle stack below, matched to the certified
+    # Populace artifact this harness loads: revision populace-us-2024-f0af251,
+    # built_with policyengine-us 1.729.0. Model and data are pinned together on
+    # purpose.
+    #
+    # The us-pe universe LABELS its oracle 1.767.3 (which carries PE-US #8614,
+    # "Split partnership and S-corp income inputs"), on the theory that #8614
+    # would add partnership self-employment net earnings to eitc_earned_income and
+    # resolve the EITC divergence. Regenerating against 1.767.3 empirically does
+    # NOT (verified 2026-07-08): the pinned f0af251 build stores partnership income
+    # under the pre-#8614 layout, so 1.767.3's eitc_earned_income still reads $0
+    # partnership (e.g. tax_unit 154343 axiom 117,741.43 vs PE 0.00, identical to
+    # 1.729.0). Resolving EITC needs a NEW Populace build that feeds PE the split
+    # input — not a model bump. Worse, 1.767.3 drifts from the pinned Axiom
+    # rulespec on capital gains (adjusted_net_capital_gain: 8 float residuals at
+    # 1.729.0 -> 6,173 large divergences at 1.767.3, e.g. tax_unit 103 axiom
+    # 4,334.86 vs PE 7,192.42) and downstream tax_before_credits (2,118 -> 4,655),
+    # lifting unexplained 18,791 -> 27,513.
+    #
+    # So we pin the oracle to 1.729.0 — coherent with the built_with of the pinned
+    # data — which keeps capital-gain/tax clean and isolates EITC as the sole
+    # structural divergence (an upstream #8614 gap in PE 1.729.0; Axiom correctly
+    # includes partnership SE net earnings per 26 USC 32(c)(2)/1402(a)). The
+    # conformance scoreboard matches reports by suite, not oracle-version label, so
+    # this coherent pairing is what drives an honest unexplained count. See
+    # dispositions/fiit-ecps.yaml.
     pinned: true
     policyengine_version: "4.11.0"
-    policyengine_us_version: "1.767.3"
-    policyengine_core_version: "3.29.1"
+    policyengine_us_version: "1.729.0"
+    policyengine_core_version: "3.26.11"
     allow_policyengine_us_version: true
     # Deprecated no-op on this harness (Populace validation no longer loads
     # policyengine.py microdata); retained for orchestrator back-compat.
