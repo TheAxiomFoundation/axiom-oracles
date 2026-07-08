@@ -194,3 +194,21 @@ Fixed (committed): add `Concepts.SSI_COUNTABLE_RESOURCES`, project PE
 `ssi_countable_resources`, map the slot from that fact (default 0). Verified at
 the mapping layer (40k→40000, else 0). Issue TheAxiomFoundation/axiom-oracles#227.
 SSI regen kept at the certified in-repo pair (1.752.2), version-invariant here.
+
+Regenerated ssi-ecps (75,112 cases): the fix resolved 977 individual high-resource
+cases, 4,044 → 3,067. The residual is NOT the resource screen and NOT takeup
+(`takes_up_ssi_if_eligible` is 100% among PE-eligible): it is the v1 individual
+slice diverging from PE's full SSI model. Per-household PE correlation of the
+2,764 axiom>PE/PE=0 cases: 1,768 have NO PE-eligible member (Axiom's eligibility
+determination is broader — SSI-specific disability, qualified-alien/institutional
+criteria; projector feeds generic is_disabled/is_blind), 996 have a PE-eligible
+taker-up whose benefit offsets to $0 on income (countable-income assembly
+diverges). Filed axiom-oracles#228; dispositioned axiom_encoding_gap (3,067) —
+classified (unexplained → 0) but counted as axiom_attributed_open on the badge
+until the slice is completed. dispositions/ssi-ecps.yaml.
+
+### Scoreboard trajectory
+23,138 → 4,347 (fiit) → 303 (ssi). Remaining 303 = 7 small state suites
+(ca/ny/co/ks/az/co-tanf, medicaid-magi-co, co-state-income-tax), non-truncated,
+per-row dispositionable. axiom_attributed_open=3,067 (ssi #228),
+oracle_attributed=16,660 (eitc PE #8614).

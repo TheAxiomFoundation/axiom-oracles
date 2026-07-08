@@ -2261,15 +2261,15 @@
       "suite": "ssi-ecps",
       "covered": true,
       "comparisons": 75112,
-      "matches": 71068,
-      "raw_match_rate": 94.61604,
-      "explained_rate": 94.61604,
-      "unexplained": 4044,
+      "matches": 72045,
+      "raw_match_rate": 95.916764,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 3067,
       "note": "Covered by ssi-ecps \u2014 SSI benefit (42 USC 1382) vs PE-2026 at population scale; residuals undispositioned (counted unexplained).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:standard_deduction",
