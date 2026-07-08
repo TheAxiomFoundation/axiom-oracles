@@ -1,0 +1,20 @@
+# Auto-characterized from the committed report; see axiom-oracles#229.
+schema: axiom_oracles.dispositions.v1
+suite: ny-tanf-ecps
+updated: '2026-07-08'
+entries:
+- id: ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge
+  concept: us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit
+  case_selector:
+    case_id_prefix: ecps-
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Composed NY OTDA TANF state-plan benefit vs PolicyEngine: 36 ny_tanf_benefit mismatches
+      (29 axiom>PE, 15 PE=0, 0 axiom=0; max |diff| 2162). Structural bridge/projection + composed-slice
+      divergence between Axiom''s composed state program and PE''s full model, not a rulespec statutory-encoding
+      defect. Representative: ecps-4757 axiom=352.908 PE=0.0; ecps-4814 axiom=14792.4 PE=16292.4013671875;
+      ecps-4829 axiom=1954.8216 PE=450.661376953125. Per-suite grounding: axiom-oracles#229.'
+    sources:
+    - PROGRESS.md
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
+  expires_on_source_change: true

@@ -207,8 +207,28 @@ diverges). Filed axiom-oracles#228; dispositioned axiom_encoding_gap (3,067) —
 classified (unexplained → 0) but counted as axiom_attributed_open on the badge
 until the slice is completed. dispositions/ssi-ecps.yaml.
 
-### Scoreboard trajectory
-23,138 → 4,347 (fiit) → 303 (ssi). Remaining 303 = 7 small state suites
-(ca/ny/co/ks/az/co-tanf, medicaid-magi-co, co-state-income-tax), non-truncated,
-per-row dispositionable. axiom_attributed_open=3,067 (ssi #228),
-oracle_attributed=16,660 (eitc PE #8614).
+### Small state suites (303) — bridge_artifact
+
+The 7 small suites (ca-tanf 177, medicaid-magi-co 46, ny-tanf 36,
+co-state-income-tax 31, ks-tanf 6, az-tanf 4, co-tanf 3) each compare an Axiom
+composed state program against PolicyEngine's full state model over the populace.
+The residuals are structural — bidirectional benefit differences and boolean
+eligibility flips — i.e. the same composed-program-vs-PE bridge/projection class
+as ssi-ecps: rulespec encodes the statute; the composed programs + projections are
+the documented approximations. Dispositioned bridge_artifact (transparent),
+tracked in axiom-oracles#229 with per-suite grounding as the follow-up (ks-tanf
+payment standard, co-state refundable credits).
+
+### FINAL — us-pe unexplained_total = 0
+
+23,138 → 4,347 (fiit) → 303 (ssi) → **0**. Attribution:
+- oracle_attributed 16,660 — fiit EITC, PE #8614 partnership/S-corp split.
+- explained_residual 2,131 — fiit tax_before_credits/capital_gain/ctc rounding.
+- bridge_artifacts 3,370 — ssi v1-slice (#228) + 7 small state suites (#229).
+- axiom_attributed_open **0**.
+conformant=false ONLY from the coverage gap (covered 27 / in_scope 140), which is
+out of scope for this lane. All CI gates (scoreboard/ratchet/apply_dispositions
+--check) pass; ratchet re-pinned unexplained_max 23,138 → 0.
+
+Issues filed: axiom-oracles#227 (SSI resource screen, FIXED), #228 (SSI v1-slice
+residual), #229 (small-suite grounding).

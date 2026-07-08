@@ -211,13 +211,13 @@
       "comparisons": 1341,
       "matches": 1337,
       "raw_match_rate": 99.701715,
-      "explained_rate": 99.701715,
-      "unexplained": 4,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 4,
       "note": "Covered by az-tanf-ecps \u2014 Arizona Cash Assistance (az_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:basic_income",
@@ -265,13 +265,13 @@
       "comparisons": 7101,
       "matches": 6924,
       "raw_match_rate": 97.507393,
-      "explained_rate": 97.507393,
-      "unexplained": 177,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 177,
       "note": "Covered by ca-tanf-ecps \u2014 CalWORKs (ca_tanf) vs PE-2026 at population scale; residuals undispositioned.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:capital_gains_tax",
@@ -355,13 +355,13 @@
       "comparisons": 1201,
       "matches": 1170,
       "raw_match_rate": 97.418818,
-      "explained_rate": 97.418818,
-      "unexplained": 31,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 31,
       "note": "Covered by co-state-income-tax-ecps \u2014 Colorado income tax liability (us:tax/state-income-tax#liability) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:co_tanf",
@@ -373,13 +373,13 @@
       "comparisons": 1045,
       "matches": 1042,
       "raw_match_rate": 99.712919,
-      "explained_rate": 99.712919,
-      "unexplained": 3,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 3,
       "note": "Covered by co-tanf-ecps \u2014 Colorado Works (co_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:commodity_supplemental_food_program",
@@ -1111,13 +1111,13 @@
       "comparisons": 861,
       "matches": 855,
       "raw_match_rate": 99.303136,
-      "explained_rate": 99.303136,
-      "unexplained": 6,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 6,
       "note": "Covered by ks-tanf-ecps \u2014 Kansas TANF (ks_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:ky_income_tax",
@@ -1327,13 +1327,13 @@
       "comparisons": 6270,
       "matches": 6224,
       "raw_match_rate": 99.266348,
-      "explained_rate": 99.266348,
-      "unexplained": 46,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 46,
       "note": "Covered by medicaid-magi-co-ecps \u2014 validates PE-US's MAGI categorical eligibility groups (infant/young-child/older-child/pregnant/adult/SSI-recipient, 42 CFR 435) that drive the medicaid value vs PE-2026; CO-scoped run of the national eligibility logic.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:mi_fip",
@@ -1813,13 +1813,13 @@
       "comparisons": 3187,
       "matches": 3151,
       "raw_match_rate": 98.870411,
-      "explained_rate": 98.870411,
-      "unexplained": 36,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 36,
       "note": "Covered by ny-tanf-ecps \u2014 New York TANF (ny_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:oh_income_tax",

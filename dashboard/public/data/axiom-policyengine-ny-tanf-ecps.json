@@ -1846,6 +1846,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 352.908,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 352.908,
       "parent": null,
@@ -1862,6 +1867,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": -1500.0013671875004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 14792.4,
       "parent": null,
@@ -1878,6 +1888,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1504.160223046875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1954.8216,
       "parent": null,
@@ -1894,6 +1909,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": -1500.0226953125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1875.24,
       "parent": null,
@@ -1910,6 +1930,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1451.320405078125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2224.7352,
       "parent": null,
@@ -1926,6 +1951,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 210.3072,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 210.3072,
       "parent": null,
@@ -1942,6 +1972,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 30.6384,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 30.6384,
       "parent": null,
@@ -1958,6 +1993,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 205.0128,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 205.0128,
       "parent": null,
@@ -1974,6 +2014,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 414.276,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 414.276,
       "parent": null,
@@ -1990,6 +2035,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1238.4792,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1238.4792,
       "parent": null,
@@ -2006,6 +2056,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 2056.8248734375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 5027.1696,
       "parent": null,
@@ -2022,6 +2077,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1804.4894742187498,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9248.1384,
       "parent": null,
@@ -2038,6 +2098,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 350.36684921874985,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7010.9064,
       "parent": null,
@@ -2054,6 +2119,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1531.960030078125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1866.8592,
       "parent": null,
@@ -2070,6 +2140,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": -768.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6126.0,
       "parent": null,
@@ -2086,6 +2161,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 164.9808,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 164.9808,
       "parent": null,
@@ -2102,6 +2182,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": -768.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6126.0,
       "parent": null,
@@ -2118,6 +2203,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 219.96235390625043,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 5998.3896,
       "parent": null,
@@ -2134,6 +2224,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 2161.5984,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2161.5984,
       "parent": null,
@@ -2150,6 +2245,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1130.9208,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1130.9208,
       "parent": null,
@@ -2166,6 +2266,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 44.5104,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 44.5104,
       "parent": null,
@@ -2182,6 +2287,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1069.025827734375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2108.7624,
       "parent": null,
@@ -2198,6 +2308,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 702.012,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 702.012,
       "parent": null,
@@ -2214,6 +2329,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1483.3614781249998,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7010.9064,
       "parent": null,
@@ -2230,6 +2350,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1858.99721015625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1933.5768,
       "parent": null,
@@ -2246,6 +2371,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1342.9688191406249,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2465.3592,
       "parent": null,
@@ -2262,6 +2392,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1609.9512,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1609.9512,
       "parent": null,
@@ -2278,6 +2413,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": -1224.0313671875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7674.12,
       "parent": null,
@@ -2294,6 +2434,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1035.6568382812502,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2210.9376,
       "parent": null,
@@ -2310,6 +2455,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": -768.0496093749998,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6124.8,
       "parent": null,
@@ -2326,6 +2476,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1256.712,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1256.712,
       "parent": null,
@@ -2342,6 +2497,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": -238.58400000000074,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10241.916,
       "parent": null,
@@ -2358,6 +2518,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 787.1610640624999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3975.2304,
       "parent": null,
@@ -2374,6 +2539,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 900.8184,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 900.8184,
       "parent": null,
@@ -2390,6 +2560,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1183.02086171875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6912.1776,
       "parent": null,
@@ -2406,6 +2581,11 @@
       "concept": "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit",
       "description": "NY TANF benefit (annualized)",
       "difference": 1134.6744,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ny-tanf-ecps-ny_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1134.6744,
       "parent": null,
@@ -2454,18 +2634,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 36,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/ny-tanf-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 98.870411,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 98.870411,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 36
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
