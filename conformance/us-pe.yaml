@@ -376,7 +376,8 @@ policies:
     output_vars:
       - ga_tanf
     in_scope: true
-    suite: null
+    suite: ga-tanf-ecps
+    note: Covered by ga-tanf-ecps — Georgia TANF (ga_tanf) vs PE-2026 at population scale (1896/1897 match, 1 residual dispositioned bridge_artifact, 0 unexplained).
   - id: us-pe:head_start
     oracle_policy_name: head_start
     oracle_policy_type: rules

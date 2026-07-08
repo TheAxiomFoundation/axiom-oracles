@@ -1,0 +1,40 @@
+# Georgia TANF -- Axiom vs PolicyEngine on Enhanced CPS, Georgia households.
+
+name: ga-tanf-ecps
+title: Georgia TANF -- Axiom vs PolicyEngine
+description: >-
+  Compares the monthly Georgia TANF benefit from the composed us-ga/tanf program
+  (PAMMS Appendix A financial standards by AU size, 1605 GIC/standard-of-need
+  budgeting, 1615 standard $250 work deduction, and the Step 11-13
+  min(standard-of-need deficit, family maximum) benefit) against PolicyEngine's
+  ga_tanf on Enhanced CPS households in Georgia. Refresh the rulespec root after
+  pulling ~/rulespec-us with:
+  rsync -a --delete --exclude .axiom ~/rulespec-us/us-ga/ ~/.axiom-oracles/roots/rulespec-us-ga/
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    suite: ga-tanf-ecps
+    concepts:
+      - us-ga:policies/dfcs/tanf#ga_tanf_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    jurisdiction_fips: "13"
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-oracles/programs/us-ga/tanf/fy-2026.yaml
+    axiom_composed_program: /tmp/ga-tanf-composed.yaml
+    axiom_compiled_program: /tmp/ga-tanf-compiled.json
+    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    rulespec_roots:
+      - $HOME/.axiom-oracles/roots/rulespec-us-ga
+
+artifacts:
+  report_basename: axiom-policyengine-ga-tanf-ecps
+
+dashboard:
+  filename: axiom-policyengine-ga-tanf-ecps.json
+  suite: ga-tanf-ecps
