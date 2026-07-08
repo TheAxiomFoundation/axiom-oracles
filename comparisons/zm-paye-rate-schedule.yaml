@@ -1,0 +1,40 @@
+name: zm-paye-rate-schedule
+title: Zambia zm-paye-rate-schedule — Axiom vs MicroZAMOD
+description: >-
+  Compares the rulespec-zm Act 22 of 2023 Charging Schedule paragraph
+  2(1) individual rates (0 to 61,200; 20% to 85,200; 30% to 110,400;
+  37% above) against MicroZAMOD tin_s (SOUTHMOD A4.0, country ZM,
+  system ZM_2025 = CY2025, dataset zm_2022_a2). The engine's own
+  post-deduction taxable base (ttb_s) is bridged onto the module's
+  individual_income input so the live cases verify the schedule
+  arithmetic exactly. Base disposition (rulespec-zm#1 candidate
+  finding 1): MicroZAMOD computes ttb_s = yem - tsceepi_s - tsceehl_s,
+  deducting employee NAPSA and NHIMA contributions that the CY2025
+  statute does not allow (Act 22 of 2024 s.4 makes the approved-fund
+  deduction employer-only; neither NHI instrument carries a
+  deductibility provision) - probed magnitude: PAYE understated by
+  9,101.29/yr at 409,968 gross (tin_s 114,098.87 vs statutory
+  123,200.16 on gross). The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: zm-paye-rate-schedule
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ZM
+    euromod_system: ZM_2025
+    euromod_dataset: zm_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-zm-paye-rate-schedule.json
+
+artifacts:
+  report_basename: axiom-euromod-zm-paye-rate-schedule
+
+dashboard:
+  filename: axiom-euromod-zm-paye-rate-schedule.json
+  suite: zm-paye-rate-schedule

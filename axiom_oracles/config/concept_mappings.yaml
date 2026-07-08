@@ -2449,6 +2449,152 @@ concepts:
           type: country
           geoid: UG
 
+  # Zambia individual income tax (Act 22 of 2023 Charging Schedule
+  # para 2(1)) vs MicroZAMOD tin_s on the bridged ttb_s base — the
+  # net-of-contributions base is rulespec-zm#1 candidate finding 1.
+  zm:statutes/act-2023-22/income-tax-amendment-2023#individual_income_tax:
+    description: Zambia individual income tax (Charging Schedule paragraph 2(1) as substituted by Act No. 22 of 2023)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: individual_income_tax
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia turnover tax (Act 22 of 2024 Ninth Schedule Part II; slab
+  # 5% above K12,000 up to K5,000,000) vs MicroZAMOD ttn_s in the
+  # agreement zone (the 0% band and ceiling-bound divergences are
+  # rulespec-zm#1 candidate findings 2a/2b).
+  zm:statutes/act-2024-22/income-tax-amendment-2024#turnover_tax:
+    description: Zambia turnover tax (Ninth Schedule Part II as substituted by Act No. 22 of 2024; s.64A ceiling)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: turnover_tax
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NAPSA employee share (S.I. 9 of 2024: 5% of pensionable
+  # earnings, monthly ceiling K29,816) vs MicroZAMOD tsceepi_s on the
+  # ZM_2024 system (the SI's statutory year).
+  zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employee_contribution:
+    description: Zambia NAPSA employee contribution (National Pension Scheme (Pensionable Earnings) (Amendment) Regulations, 2024)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: napsa_employee_contribution
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tsceepi_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NAPSA employer share (same SI and system).
+  zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employer_contribution:
+    description: Zambia NAPSA employer contribution (National Pension Scheme (Pensionable Earnings) (Amendment) Regulations, 2024)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: napsa_employer_contribution
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tscerpi_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NHIMA employee contribution (S.I. 63 of 2019 Third
+  # Schedule: 1% of basic salary, uncapped) vs MicroZAMOD tsceehl_s.
+  zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employee_monthly_contribution_amount:
+    description: Zambia NHIMA employee contribution (National Health Insurance (General) Regulations, 2019, Third Schedule)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: employee_monthly_contribution_amount
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tsceehl_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NHIMA employer contribution (same instrument).
+  zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employer_monthly_contribution_amount:
+    description: Zambia NHIMA employer contribution (National Health Insurance (General) Regulations, 2019, Third Schedule)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: employer_monthly_contribution_amount
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tscerhl_s
+        scope:
+          type: country
+          geoid: ZM
+
 
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)

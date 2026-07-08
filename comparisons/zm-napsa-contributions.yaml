@@ -1,0 +1,39 @@
+name: zm-napsa-contributions
+title: Zambia zm-napsa-contributions — Axiom vs MicroZAMOD
+description: >-
+  Compares the rulespec-zm S.I. No. 9 of 2024 NAPSA schedules (5%
+  employee + 5% employer of total pensionable earnings; monthly social
+  security ceiling K29,816, cap K1,490.80 each side) against
+  MicroZAMOD tsceepi_s/tscerpi_s on the ZM_2024 system - the SI's own
+  statutory year, whose model cap equals the SI value exactly. The
+  engine's yem is bridged (divided to the module's monthly basis).
+  CY2025 note (documentation, not a finding): the ZM_2025 cap of
+  K1,708.20 equals 5% x 34,164 = 5% x 4 x the ZamStats national
+  average earnings of 8,541, matching the Cap. 256 s.19(3) formula
+  arithmetically; no dedicated statutory instrument exists for the
+  2025 ceiling (SIs published for 2021, 2024 and 2026), the revision
+  operating through the formula and NAPSA's administrative
+  announcement. The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: zm-napsa-contributions
+    population: synthetic
+    sample_size: 0
+    period: 2024
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ZM
+    euromod_system: ZM_2024
+    euromod_dataset: zm_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-zm-napsa-contributions.json
+
+artifacts:
+  report_basename: axiom-euromod-zm-napsa-contributions
+
+dashboard:
+  filename: axiom-euromod-zm-napsa-contributions.json
+  suite: zm-napsa-contributions
