@@ -53,6 +53,7 @@ from .gh_presumptive import gh_presumptive_turnover_cases
 from .gh_ssnit import gh_ssnit_contributions_cases
 from .gh_vat_levies import gh_vat_levies_cases
 from .ug_income_tax import ug_paye_rate_schedule_cases
+from .ug_rental_presumptive import ug_presumptive_cases, ug_rental_cases
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
 from .uk_income_tax import (
@@ -153,6 +154,8 @@ def available_suites() -> tuple[str, ...]:
         "gh-transfers",
         "gh-dispy",
         "ug-paye-rate-schedule",
+        "ug-rental",
+        "ug-presumptive",
     )
 
 
@@ -283,6 +286,10 @@ def load_suite(name: str):
         return gh_dispy_cases()
     if name == "ug-paye-rate-schedule":
         return ug_paye_rate_schedule_cases()
+    if name == "ug-rental":
+        return ug_rental_cases()
+    if name == "ug-presumptive":
+        return ug_presumptive_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -327,6 +334,8 @@ __all__ = [
     "gh_transfers_cases",
     "gh_vat_levies_cases",
     "ug_paye_rate_schedule_cases",
+    "ug_presumptive_cases",
+    "ug_rental_cases",
     "load_suite",
     "nyc_basic_cases",
     "nyc_synthetic_cases",

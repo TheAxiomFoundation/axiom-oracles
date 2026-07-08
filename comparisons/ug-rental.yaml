@@ -1,0 +1,34 @@
+name: ug-rental
+title: Uganda rental income tax — Axiom vs UGAMOD
+description: >-
+  Compares the rulespec-ug individual rental tax (12% of gross rental above 2,820,000/yr, 2022 amendment Part VI) vs UGAMOD tpr_s on the suite grid. UGAMOD is the SOUTHMOD
+  tax-benefit model for Uganda (UNU-WIDER), run on the EUROMOD engine
+  (SOUTHMOD A4.0, country UG, system UG_2025 = FY2025/26, dataset
+  ug_2024_a1). Each case pre-divides the euromod input by the UG_2025
+  employment-income uprating index (1.0375626043405675, probed) and
+  bridges the Axiom input on the engine's own post-uprating value.
+  Probed live: every case agrees with the statutory formula exactly
+  (worst diff 0.0000 UGX/year across the grid). The SOUTHMOD bundle is
+  licensed and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: ug-rental
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: UG
+    euromod_system: UG_2025
+    euromod_dataset: ug_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-ug-rental.json
+
+artifacts:
+  report_basename: axiom-euromod-ug-rental
+
+dashboard:
+  filename: axiom-euromod-ug-rental.json
+  suite: ug-rental
