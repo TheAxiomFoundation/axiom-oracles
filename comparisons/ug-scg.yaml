@@ -1,0 +1,36 @@
+name: ug-scg
+title: Uganda ug-scg — Axiom vs UGAMOD
+description: >-
+  Compares the rulespec-ug Senior Citizens Grant national rule (SAGE Handbook) against UGAMOD boa_s on the suite grid
+  (SOUTHMOD A4.0, country UG, system UG_2025 = FY2025/26, dataset
+  ug_2024_a1). Probed live exact: LST at every tested band (loc01=1
+  formal employees; mid-band incomes so uprating round-trip cannot
+  cross a band edge), SCG at ages 80/85 with zero at 79, fuel excise
+  to the shilling on litre inputs (quantities pass unuprated), and VAT
+  exactly via the post-uprating consumption bridge (consumption x-vars
+  carry their own uprating index, so the Axiom taxable_value is bridged
+  on the engine's own post-uprating base - the Ghana consumption-suite
+  convention). The SOUTHMOD bundle is licensed and non-redistributable;
+  referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: ug-scg
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: UG
+    euromod_system: UG_2025
+    euromod_dataset: ug_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-ug-scg.json
+
+artifacts:
+  report_basename: axiom-euromod-ug-scg
+
+dashboard:
+  filename: axiom-euromod-ug-scg.json
+  suite: ug-scg

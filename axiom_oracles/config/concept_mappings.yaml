@@ -2332,6 +2332,94 @@ concepts:
           type: country
           geoid: UG
 
+  ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax:
+    description: Uganda salaried-employee Local Service Tax (Act 8 of 2008 Fifth Schedule graduated table)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: local_service_tax
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tgv_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:policies/mglsd-scg/sage-handbook#senior_citizens_grant_per_year:
+    description: Uganda Senior Citizens Grant national rule (Shs 25,000/month at 80+, SAGE Handbook)
+    category: benefit
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: senior_citizens_grant_per_year
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: boa_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006#vat_amount:
+    description: Uganda 18% standard VAT (Rate of Tax Order 2006)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: vat_amount
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty:
+    description: "Uganda fuel excise (2024 amendment item 8: petrol 1550/l, diesel 1230/l)"
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: fuel_excise_duty
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tex10_s
+        scope:
+          type: country
+          geoid: UG
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

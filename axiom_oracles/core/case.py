@@ -594,6 +594,32 @@ class Concepts:
         "section-10-payment-of-standard-contribution-by-employers"
         "#nssf_employer_net_share"
     )
+    # Uganda salaried-employee Local Service Tax (Act 8 of 2008 Fifth
+    # Schedule graduated table), compared to UGAMOD ``tgv_s`` for formal
+    # employees (loc01=1) — probed exact at every tested band.
+    UG_LOCAL_SERVICE_TAX = (
+        "ug:statutes/act-2008-8/local-governments-amendment-no2-2008"
+        "#local_service_tax"
+    )
+    # Uganda Senior Citizens Grant national rule (SAGE Handbook: Shs
+    # 25,000/month at 80+), compared to UGAMOD ``boa_s``.
+    UG_SENIOR_CITIZENS_GRANT = (
+        "ug:policies/mglsd-scg/sage-handbook"
+        "#senior_citizens_grant_per_year"
+    )
+    # Uganda 18% standard VAT (Rate of Tax Order 2006), compared to
+    # UGAMOD ``tva_s`` on a standard-rated item from the model's own
+    # il_exp_vat01 list.
+    UG_VAT_AMOUNT = (
+        "ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006"
+        "#vat_amount"
+    )
+    # Uganda fuel excise (2024 amendment item 8: petrol 1550/l, diesel
+    # 1230/l), compared to UGAMOD ``tex10_s``.
+    UG_FUEL_EXCISE_DUTY = (
+        "ug:statutes/act-2024-excise/excise-duty-amendment-2024"
+        "#fuel_excise_duty"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
