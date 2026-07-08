@@ -689,10 +689,16 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     if runner_type == "axiom-encode-tax-ecps-compare":
         oracle = {
             "name": "policyengine",
-            "policyengine_package": "policyengine==4.11.0"
-            if params.get("pinned", True)
-            else "policyengine",
-            "policyengine_us": "1.729.0" if params.get("pinned", True) else None,
+            "policyengine_package": (
+                f"policyengine=={params.get('policyengine_version', '4.11.0')}"
+                if params.get("pinned", True)
+                else "policyengine"
+            ),
+            "policyengine_us": (
+                params.get("policyengine_us_version", "1.729.0")
+                if params.get("pinned", True)
+                else None
+            ),
         }
     elif runner_type == "axiom-encode-uk-efrs-compare":
         oracle = {
@@ -891,14 +897,24 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # fail hard. Keeping the PE meta-package at 4.11.0 (the oracle baseline used
     # by the other runners) with an explicit newer -us is why the runner passes
     # --allow-policyengine-us-version to the harness.
+    # Oracle PE stack. The pinned versions default to the model version the
+    # certified Populace artifact was built with (1.729.0), but a comparison can
+    # override them to validate against a newer certified oracle — the us-pe
+    # universe pins policyengine-us 1.767.3, which carries the #8614 partnership
+    # self-employment split absent from 1.729.0's eitc_earned_income. The harness
+    # still runs against the pinned Populace inputs (--allow-policyengine-us-version
+    # bypasses the build_with gate), so only the PE computation vintage moves.
+    pe_meta = params.get("policyengine_version", "4.11.0")
+    pe_us = params.get("policyengine_us_version", "1.729.0")
+    pe_core = params.get("policyengine_core_version", "3.26.11")
     pe_pins = (
         [
             "--with",
-            "policyengine==4.11.0",
+            f"policyengine=={pe_meta}",
             "--with",
-            "policyengine-us==1.729.0",
+            f"policyengine-us=={pe_us}",
             "--with",
-            "policyengine-core==3.26.11",
+            f"policyengine-core=={pe_core}",
         ]
         if pinned
         else [

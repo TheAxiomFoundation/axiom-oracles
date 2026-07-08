@@ -34,11 +34,20 @@ runner:
     year: 2026
     python: "3.13"
     surface: all
-    # `pinned: true` installs PE 4.11.0 + PE-Core 3.26.11 + PE-US 1.729.0 — the
-    # model version the certified pinned Populace artifact was built with, which
-    # also clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723). See
-    # run_comparison.py::_run_axiom_encode_tax_ecps_compare.
+    # `pinned: true` installs the PE oracle stack below. The us-pe universe pins
+    # policyengine-us 1.767.3 (2026-07-07), which carries PE-US #8614 "Split
+    # partnership and S-corp income inputs" (merged 2026-06-14) — it adds
+    # partnership self-employment net earnings to eitc_earned_income. The report
+    # engine 1.729.0 predated that landing in the data pipeline, so a 1.729.0 run
+    # omitted partnership SE income from EITC earned income and diverged from
+    # Axiom on every partnership tax unit. 1.767.3 needs PE-Core 3.29.1; meta
+    # stays 4.11.0 (resolves cleanly). The harness still loads the pinned Populace
+    # artifact (--allow-policyengine-us-version bypasses the built_with gate) and
+    # clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723).
     pinned: true
+    policyengine_version: "4.11.0"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.29.1"
     allow_policyengine_us_version: true
     # Deprecated no-op on this harness (Populace validation no longer loads
     # policyengine.py microdata); retained for orchestrator back-compat.
