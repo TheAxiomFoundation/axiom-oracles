@@ -1163,6 +1163,18 @@ def _collect_input_slots(node: Any, slots: set[str]) -> None:
 
 
 def _default_rulespec_repo_roots() -> tuple[Path, ...]:
+    # AXIOM_RULESPEC_ROOT (singular) names one rulespec checkout, or the
+    # workspace that holds the rulespec-<country> checkouts, so `compare
+    # euromod axiom --suite X` resolves its composition with no --axiom-program
+    # (axiom-oracles#185). Module refs resolve as
+    # <root>/rulespec-<country>/<prefix>/<path>.yaml, so a path pointing straight
+    # at a rulespec-* checkout is lifted to its parent.
+    single = os.environ.get("AXIOM_RULESPEC_ROOT")
+    if single:
+        root = Path(single).expanduser()
+        if root.name.startswith("rulespec-"):
+            root = root.parent
+        return (root,)
     candidate = Path.home() / "TheAxiomFoundation"
     if candidate.exists():
         return (candidate,)

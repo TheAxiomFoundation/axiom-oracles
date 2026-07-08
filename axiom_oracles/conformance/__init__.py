@@ -21,6 +21,18 @@ See ``conformance/README.md`` for the adoption workflow and the exact
 conformance predicate.
 """
 
+from axiom_oracles.conformance.compositions import (
+    AXIOM_RULESPEC_ROOT_ENV,
+    COMPOSITIONS_SCHEMA_VERSION,
+    CompositionsDocument,
+    ResolvedComposition,
+    SuiteComposition,
+    build_compositions_document,
+    composition_for_suite,
+    load_composition,
+    resolve_suite_program,
+    rulespec_imports_for_concepts,
+)
 from axiom_oracles.conformance.schema import (
     CONFORMANCE_SCHEMA_VERSION,
     EXCLUSION_REASONS,
@@ -29,8 +41,18 @@ from axiom_oracles.conformance.schema import (
 )
 
 __all__ = [
+    "AXIOM_RULESPEC_ROOT_ENV",
+    "COMPOSITIONS_SCHEMA_VERSION",
     "CONFORMANCE_SCHEMA_VERSION",
+    "CompositionsDocument",
     "EXCLUSION_REASONS",
     "ExclusionReason",
+    "ResolvedComposition",
+    "SuiteComposition",
     "UniversePolicy",
+    "build_compositions_document",
+    "composition_for_suite",
+    "load_composition",
+    "resolve_suite_program",
+    "rulespec_imports_for_concepts",
 ]

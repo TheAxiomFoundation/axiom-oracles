@@ -53,6 +53,12 @@ jobs:
         # universes stand alone); enforces determinism when they are present.
         run: uv run scripts/generate_conformance_universe.py --all --check
 
+      - name: Validate conformance program compositions (drift vs suites)
+        # Derived from the committed suites (no external checkout needed), so
+        # this always bites: a covered suite whose runnable-program composition
+        # changed must refresh conformance/compositions/<jur>.yaml.
+        run: uv run scripts/generate_conformance_compositions.py --all --check
+
       - name: Validate conformance scoreboard is up to date
         run: uv run scripts/conformance_scoreboard.py --check
 
