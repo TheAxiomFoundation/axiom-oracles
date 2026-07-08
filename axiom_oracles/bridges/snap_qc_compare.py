@@ -42,6 +42,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import shutil
 import tempfile
 from dataclasses import dataclass
@@ -107,19 +108,40 @@ FY2024_MAX_ALLOTMENT_ADDITIONAL_MEMBER = 219
 #: engine's deduction reproduces ``FSMEDDED`` exactly.
 _MEDICAL_EXCESS_THRESHOLD = 35.0
 
-#: FY 2024 Colorado standard utility allowance amount per tier (QC technical
-#: documentation Table F.7, PDF p.183). When the unit's QC-applied ``UTIL``
-#: amount differs from its tier's standard (an actual-expense claim, SUA1 = 2,
-#: or a prorated allowance), ``UTIL`` is authoritative — the codebook notes
-#: SUA1 itself was edited for consistency with UTIL — and the mapper carries
-#: it as an incurred shelter cost instead of raising a tier flag.
-_FY2024_CO_SUA_AMOUNT_BY_TIER = {
-    "heating_cooling": 560.0,
-    "limited": 356.0,
-    "one_utility": 67.0,
-    "telephone": 91.0,
-    "none": 0.0,
+#: Overlay parameter-patch rule name -> utility tier. The fiscal-year SUA
+#: amounts are owned by the overlay spec's ``parameter_patches`` (the values
+#: the engine actually computes with); :func:`sua_amounts_from_overlay`
+#: derives the mapper's per-tier standard table from that single source so
+#: the two can never drift.
+_SUA_PATCH_RULE_TO_TIER = {
+    "colorado_snap_heating_cooling_utility_allowance_amount": "heating_cooling",
+    "colorado_snap_basic_utility_allowance_amount": "limited",
+    "colorado_snap_one_utility_allowance_amount": "one_utility",
+    "colorado_snap_telephone_utility_allowance_amount": "telephone",
 }
+
+
+def sua_amounts_from_overlay(spec: Any) -> dict[str, float]:
+    """Derive the per-tier standard utility allowance table from an overlay spec.
+
+    Reads the ``to`` value of each SUA parameter patch (QC technical
+    documentation Table F.7 amounts, the values the patched engine computes
+    with) and adds the zero ``none`` tier. Raises if the spec does not patch
+    all four Colorado allowances — a partial table would silently misroute the
+    UTIL-versus-standard comparison in :func:`map_qc_unit`.
+    """
+    amounts: dict[str, float] = {"none": 0.0}
+    for patch in spec.parameter_patches:
+        tier = _SUA_PATCH_RULE_TO_TIER.get(patch.rule)
+        if tier is not None:
+            amounts[tier] = float(patch.to_value)
+    missing = set(_SUA_PATCH_RULE_TO_TIER.values()) - set(amounts)
+    if missing:
+        raise ValueError(
+            f"overlay spec {spec.name!r} does not patch the "
+            f"{sorted(missing)} standard utility allowance amounts"
+        )
+    return amounts
 
 #: The seven Colorado utility-cost flags (10 CCR 2506-1 section 4.407.31) that
 #: drive the standard utility allowance tier.
@@ -203,7 +225,6 @@ _LABELS: tuple[_Label, ...] = (
         "snap_regular_month_allotment", "benefit", "benefit", "benefits", True
     ),
 )
-_BENEFIT_LABEL = "snap_regular_month_allotment"
 
 
 # --------------------------------------------------------------------------- #
@@ -215,6 +236,8 @@ def map_qc_unit(
     unit: Any,
     base_inputs: dict[str, Any],
     base_member: dict[str, Any],
+    *,
+    sua_amount_by_tier: dict[str, float],
 ) -> ProjectedCase:
     """Project one QC unit onto the Colorado SNAP composition input surface.
 
@@ -224,18 +247,29 @@ def map_qc_unit(
     copied and overridden per :data:`snap_populace.set_input_value` friendly
     names; work, student, SSN, and citizenship member facts keep the template's
     passing defaults because the replay validates benefit computation, not
-    eligibility screening.
+    eligibility screening. ``sua_amount_by_tier`` is the per-tier standard
+    utility allowance table derived from the overlay spec via
+    :func:`sua_amounts_from_overlay` — the same amounts the patched engine
+    computes with.
     """
     inputs = dict(base_inputs)
     members = list(unit.members)
 
+    if getattr(unit, "certified_size", None) is None:
+        raise ValueError(
+            f"QC unit {getattr(unit, 'case_id', '?')} has no certified size "
+            "(CERTHHSZ); the loader excludes such rows, so this unit did not "
+            "come from load_qc_units"
+        )
+
     set_input_value(
         inputs,
         "snap_countable_earned_income",
-        _money(sum(_call(member, "earned_income") for member in members)),
+        _money(_call(unit, "earned_income")),
     )
 
-    # 4.404 itemized unearned income.
+    # 4.404 itemized unearned income. The category sums come from the same
+    # per-source member fields whose total reproduces FSUNEARN exactly.
     retirement_disability = sum(
         _source(member, "social_security") + _source(member, "ssi")
         for member in members
@@ -244,9 +278,18 @@ def map_qc_unit(
         _source(member, "tanf") + _source(member, "general_assistance")
         for member in members
     )
-    direct_support = sum(_source(member, "child_support") for member in members)
-    total_unearned = sum(_call(member, "unearned_income") for member in members)
+    direct_support = sum(
+        _source(member, "child_support") + _source(member, "alimony")
+        for member in members
+    )
+    total_unearned = _call(unit, "unearned_income")
     other_unearned = total_unearned - retirement_disability - assistance - direct_support
+    if other_unearned < -0.005:
+        raise ValueError(
+            f"QC unit {getattr(unit, 'case_id', '?')}: itemized unearned "
+            f"categories exceed the unit total by {-other_unearned:.2f}; the "
+            "per-source fields no longer reconstruct FSUNEARN"
+        )
     set_input_value(inputs, "retirement_disability_payments", _money(retirement_disability))
     set_input_value(inputs, "assistance_payments", _money(assistance))
     set_input_value(inputs, "direct_support_and_alimony_payments", _money(direct_support))
@@ -257,29 +300,42 @@ def map_qc_unit(
     set_input_value(inputs, "household_size", int(unit.certified_size))
 
     # Shelter and utilities. The QC-applied allowance (UTIL) is authoritative:
-    # when it matches the tier's FY 2024 standard the tier flags exercise the
-    # encoded allowance rules; when it differs (actual expenses, SUA1 = 2, or a
-    # prorated allowance) the amount rides as an incurred shelter cost instead.
+    # when it matches the tier's standard amount the tier flags exercise the
+    # encoded allowance rules; when it is present but different (actual
+    # expenses, SUA1 = 2, or a prorated allowance) the amount rides as an
+    # incurred shelter cost instead; when UTIL is missing entirely the tier's
+    # standard is presumed (the codebook edited SUA1 for consistency with
+    # UTIL, so a recorded tier with a blank amount means the standard applied).
     # Units receiving the standard homeless shelter deduction (HOMEDED = 3)
     # take the flat-deduction path: the QC file zeroes FSSLTDED for them by
     # construction, so no utility flag is raised at all.
-    shelter_costs = _money(unit.shelter_expense)
+    shelter_costs = _money(getattr(unit, "shelter_expense", 0) or 0)
     utility_flags = _utility_flag_inputs(unit.utility_tier)
     homeless_claimed = bool(getattr(unit, "homeless_deduction_claimed", False))
-    utility_amount = _money(getattr(unit, "utility_amount", 0) or 0)
+    raw_utility_amount = getattr(unit, "utility_amount", None)
     tier = str(getattr(unit.utility_tier, "value", unit.utility_tier))
-    standard_amount = _FY2024_CO_SUA_AMOUNT_BY_TIER.get(tier, 0.0)
+    if tier not in sua_amount_by_tier:
+        raise ValueError(f"unknown SNAP QC utility tier {tier!r}")
+    standard_amount = _money(sua_amount_by_tier[tier])
     if homeless_claimed:
         utility_flags = {name: False for name in utility_flags}
-    elif utility_amount != standard_amount:
+    elif (
+        raw_utility_amount is not None
+        and _money(raw_utility_amount) != standard_amount
+    ):
         utility_flags = {name: False for name in utility_flags}
-        shelter_costs = _money(shelter_costs + utility_amount)
+        shelter_costs = _money(shelter_costs + _money(raw_utility_amount))
     set_input_value(inputs, "household_shelter_costs_incurred", shelter_costs)
     for name, value in utility_flags.items():
         set_input_value(inputs, name, value)
 
     # Standard homeless shelter deduction (7 USC 2014(e)(6)(D); 10 CCR 2506-1
     # section 4.407.3(C)): a flat deduction replacing the excess-shelter path.
+    # The two sub-elections stay False by construction: HOMEDED = 3 is defined
+    # as receiving the STANDARD homeless deduction (a verified-higher-costs
+    # election would be HOMEDED = 4, which carries its actuals in RENT and
+    # takes the ordinary excess-shelter path), and a free-shelter month would
+    # have produced no deduction and therefore not HOMEDED = 3.
     set_input_value(
         inputs, "all_household_members_experiencing_homelessness", homeless_claimed
     )
@@ -306,11 +362,25 @@ def map_qc_unit(
     set_input_value(inputs, "average_monthly_child_support_paid", child_support_paid)
     set_input_value(inputs, "estimated_monthly_child_support_paid", child_support_paid)
 
-    medical_excess = _money(getattr(unit, "medical_expenses", 0) or 0)
+    # Reconstruct the deduction FNS actually applied. FSMEDDED equals the
+    # excess FSMEDEXP in ordinary states, but in standard-medical-deduction
+    # demonstration states it is a flat standard that differs from the excess
+    # (10 FY2024 rows nationally, none in Colorado), so the applied deduction
+    # — not the reported excess — is the operative amount. Feeding it plus the
+    # $35 threshold makes the engine's ``total - 35`` reproduce FSMEDDED in
+    # both kinds of state.
+    applied_medical = getattr(
+        getattr(unit, "expected", None), "medical_deduction", None
+    )
+    if applied_medical is None:
+        applied_medical = getattr(unit, "medical_expenses", 0) or 0
+    applied_medical = _money(applied_medical)
     set_input_value(
         inputs,
         "total_medical_expenses",
-        _money(medical_excess + _MEDICAL_EXCESS_THRESHOLD) if medical_excess > 0 else 0,
+        _money(applied_medical + _MEDICAL_EXCESS_THRESHOLD)
+        if applied_medical > 0
+        else 0,
     )
 
     set_input_value(
@@ -319,7 +389,7 @@ def map_qc_unit(
     set_input_value(
         inputs,
         "liquid_resource_current_redemption_rate",
-        _money(unit.liquid_resources),
+        _money(getattr(unit, "liquid_resources", 0) or 0),
     )
 
     member_inputs: list[dict[str, Any]] = []
@@ -423,15 +493,24 @@ def run_snap_qc_comparison(
     workspace_root = resolve_workspace_root(
         Path(workspace_root) if workspace_root is not None else None
     )
+    # Environment fallbacks live here, next to the loader's own
+    # AXIOM_SNAP_QC_DATA_DIR, so the module CLI, the live test, and the
+    # comparison runner all honor the same variables.
+    if rulespec_root is None:
+        rulespec_root = os.environ.get("AXIOM_SNAP_QC_RULESPEC_ROOT") or None
     rulespec_root = (
-        Path(rulespec_root)
+        Path(rulespec_root).expanduser()
         if rulespec_root is not None
         else workspace_root / "rulespec-us"
     )
+    if axiom_binary is None:
+        axiom_binary = os.environ.get("AXIOM_SNAP_QC_AXIOM_BINARY") or None
     axiom_binary = resolve_axiom_binary(
-        workspace_root, Path(axiom_binary) if axiom_binary is not None else None
+        workspace_root,
+        Path(axiom_binary).expanduser() if axiom_binary is not None else None,
     )
     period = month_period(*NOMINAL_PERIOD)
+    _validate_months(months, fiscal_year)
 
     spec = load_overlay_spec(config.overlay)
     output_id_by_label = _output_id_by_label(config, spec.module_id_rewrites)
@@ -461,7 +540,16 @@ def run_snap_qc_comparison(
         # duplicate-rule error. The materialized overlay is complete on its own.
         env = axiom_rules_env(build.program_path, workspace_root)
         env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
-        cases = [map_qc_unit(unit, base_inputs, base_member) for unit in units]
+        sua_amount_by_tier = sua_amounts_from_overlay(spec)
+        cases = [
+            map_qc_unit(
+                unit,
+                base_inputs,
+                base_member,
+                sua_amount_by_tier=sua_amount_by_tier,
+            )
+            for unit in units
+        ]
         results = _run_cases(
             binary=axiom_binary,
             program_path=build.program_path,
@@ -578,6 +666,8 @@ def _build_report(
     comparison_weight = 0.0
     match_weight = 0.0
     mismatch_weight = 0.0
+    error_case_count = 0
+    error_case_weight = 0.0
 
     for unit, result in zip(units, results, strict=True):
         weight = _float_or(getattr(unit, "weight", 1.0), 1.0)
@@ -611,6 +701,25 @@ def _build_report(
 
         benefit_stage = _benefit_stage()
         benefit_match = matches[benefit_stage]
+        if benefit_match is None:
+            # One side of the headline comparison is missing (a missing axiom
+            # output already produced an errors row above; a missing QC
+            # constructed benefit is excluded at load). These are
+            # infrastructure failures, not divergences: they are counted
+            # separately so a broken output id reads as N error cases, never
+            # as a 0% match rate.
+            error_case_count += 1
+            error_case_weight += weight
+            case_rows.append(
+                {
+                    "case_id": _case_id(unit),
+                    "yrmonth": getattr(unit, "yrmonth", None),
+                    "weight": _clean(weight),
+                    "matched": None,
+                    "stage": "error",
+                }
+            )
+            continue
         comparison_count += 1
         comparison_weight += weight
         matched = bool(benefit_match)
@@ -649,11 +758,13 @@ def _build_report(
         "comparison_count": comparison_count,
         "match_count": match_count,
         "mismatch_count": mismatch_count,
+        "error_case_count": error_case_count,
         "match_rate": _percentage(match_count, comparison_count),
         "weighted": {
             "comparison_weight": _clean(comparison_weight),
             "match_weight": _clean(match_weight),
             "mismatch_weight": _clean(mismatch_weight),
+            "error_case_weight": _clean(error_case_weight),
             "match_rate": _percentage(match_weight, comparison_weight),
         },
         "stages": [
@@ -709,10 +820,12 @@ def _mismatch_row(
     benefit_stage = _benefit_stage()
     axiom_benefit = axiom_values.get(benefit_stage)
     expected_benefit = expected_values.get(benefit_stage)
+    # Left minus right (QC minus axiom), matching the v2 schema's mismatch
+    # convention and this report's own weighted aggregates.
     difference = (
         None
         if axiom_benefit is None or expected_benefit is None
-        else _clean(float(axiom_benefit) - float(expected_benefit))
+        else _clean(float(expected_benefit) - float(axiom_benefit))
     )
     return {
         "case_id": _case_id(unit),
@@ -933,7 +1046,28 @@ def _ordered_stages(stage_counts: dict[str, int]) -> list[str]:
 
 
 def _benefit_stage() -> str:
-    return next(label.stage for label in _LABELS if label.label == _BENEFIT_LABEL)
+    return next(label.stage for label in _LABELS if label.is_benefit)
+
+
+def _validate_months(months: tuple[int, ...] | None, fiscal_year: int) -> None:
+    """Reject month filters that cannot match any YRMONTH in the fiscal year.
+
+    The loader filters on the file's YRMONTH values (YYYYMM); fiscal year N
+    spans October N-1 through September N. Calendar-month integers (1..12)
+    silently match nothing, so they are rejected here instead of producing an
+    empty comparison.
+    """
+    if months is None:
+        return
+    valid = {(fiscal_year - 1) * 100 + m for m in range(10, 13)} | {
+        fiscal_year * 100 + m for m in range(1, 10)
+    }
+    bad = [m for m in months if m not in valid]
+    if bad:
+        raise ValueError(
+            f"months must be YRMONTH values within fiscal year {fiscal_year} "
+            f"({min(valid)}..{max(valid)}); got {bad}"
+        )
 
 
 def _describe(label: _Label) -> str:
@@ -1068,7 +1202,11 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--months",
         type=_month_list,
         default=None,
-        help="Comma-separated calendar months to include (for example 1,2,3).",
+        help=(
+            "Comma-separated YRMONTH sample months to include, as YYYYMM "
+            "(for example 202310,202311); a fiscal year spans October through "
+            "the following September."
+        ),
     )
     parser.add_argument(
         "--tolerance",

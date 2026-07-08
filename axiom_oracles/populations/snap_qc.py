@@ -135,9 +135,11 @@ noncitizen whose income is counted). This is deliberate: summing member
 ``len(members)`` can exceed ``certified_size``: ``certified_size``
 (``CERTHHSZ``) counts only participating members (``FSAFILi == 1``) and is what
 governs the SNAP household size, so the mapper must use ``certified_size`` for
-``household_size`` — never ``len(members)``. The demonstration-waiver flag
-``MED_DED_DEMO`` and every other column stay available on ``QcUnit.raw`` for
-the mapper's standard-medical-deduction transform.
+``household_size`` — never ``len(members)``. Every source column stays
+available read-only on ``QcUnit.raw`` (a mapping proxy over the row) so
+mismatch triage and disposition evidence can quote the exact QC record; the
+memory cost is one wide row dict per loaded unit, acceptable at state scope
+and worth revisiting before whole-file national runs.
 """
 
 from __future__ import annotations
@@ -146,11 +148,14 @@ import csv
 import hashlib
 import io
 import os
+import shutil
 import zipfile
 from collections import Counter
 from dataclasses import dataclass, field, fields
 from enum import Enum
 from pathlib import Path
+from types import MappingProxyType
+from typing import Mapping
 
 # ---------------------------------------------------------------------------
 # Pins
@@ -414,7 +419,7 @@ class QcUnit:
     liquid_resources: float | None
     weight: float | None
     expected: QcExpected
-    raw: dict[str, str]
+    raw: Mapping[str, str]
 
     def earned_income(self) -> float:
         """Total earned income across members (reproduces FSEARN)."""
@@ -433,14 +438,17 @@ class QcUnit:
 EXCLUSION_MFIP = "mfip"
 #: Unit uses an SSI Combined Application Project benefit procedure (SSI_CAP).
 EXCLUSION_SSI_CAP = "ssi_cap"
-#: Data-quality guard: no constructed benefit and no error finding.
-EXCLUSION_MISSING_BENEFIT = "missing_benefit_without_status"
+#: Data-quality guard: no constructed benefit to replay (FSBEN missing or 0).
+EXCLUSION_MISSING_BENEFIT = "missing_benefit"
+#: Data-quality guard: no certified unit size to drive household_size.
+EXCLUSION_MISSING_SIZE = "missing_certified_size"
 
 #: Human-readable descriptions for :meth:`QcExclusionLog.summary`.
 _EXCLUSION_DESCRIPTIONS = {
     EXCLUSION_MFIP: "MFIP unit (separate benefit procedure; MN_FIP=1)",
     EXCLUSION_SSI_CAP: "SSI-CAP unit (separate benefit procedure; SSI_CAP!=0)",
-    EXCLUSION_MISSING_BENEFIT: "missing FSBEN with no STATUS error finding",
+    EXCLUSION_MISSING_BENEFIT: "no constructed benefit (FSBEN missing or 0)",
+    EXCLUSION_MISSING_SIZE: "no certified unit size (CERTHHSZ missing or 0)",
 }
 
 
@@ -566,7 +574,9 @@ def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
         with archive.open(pin.archive_member) as member, open(
             destination, "wb"
         ) as handle:
-            handle.write(member.read())
+            # Stream the ~92 MB member to disk instead of materializing it —
+            # the compressed payload is already held for sha256 verification.
+            shutil.copyfileobj(member, handle, length=8 * 1024 * 1024)
     return destination
 
 
@@ -713,7 +723,7 @@ def _build_unit(
         liquid_resources=_num(row.get("LIQRESOR")),
         weight=_num(row.get("HWGT")),
         expected=_build_expected(row),
-        raw=dict(row),
+        raw=MappingProxyType(dict(row)),
     )
 
 
@@ -727,8 +737,10 @@ def _exclusion_reason(
     The public file already dropped incomplete reviews, ineligible units, and
     zero-size units during editing (tech doc III.B), so the loader does not
     re-apply eligibility filters; it only removes units whose benefit is
-    produced by a separate procedure (MFIP, SSI-CAP) and guards against a unit
-    with no constructed benefit and no error finding.
+    produced by a separate procedure (MFIP, SSI-CAP) and guards against rows
+    that cannot be replayed at all: no constructed benefit to compare
+    (FSBEN missing or zero — the file's minimum is $1, so either means the
+    recomputation is absent), or no certified size to drive household_size.
     """
     if not include_special_programs:
         if _int(row.get("MN_FIP")) == 1:
@@ -736,8 +748,10 @@ def _exclusion_reason(
         ssi_cap = _int(row.get("SSI_CAP"))
         if ssi_cap is not None and ssi_cap != 0:
             return EXCLUSION_SSI_CAP
-    if _num(row.get("FSBEN")) in (None, 0.0) and _int(row.get("STATUS")) is None:
+    if _num(row.get("FSBEN")) in (None, 0.0):
         return EXCLUSION_MISSING_BENEFIT
+    if _int(row.get("CERTHHSZ")) in (None, 0):
+        return EXCLUSION_MISSING_SIZE
     return None
 
 

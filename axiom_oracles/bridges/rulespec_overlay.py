@@ -40,6 +40,8 @@ file) so a report can prove exactly which vintage it ran against.
 from __future__ import annotations
 
 import hashlib
+import os
+import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
@@ -104,19 +106,25 @@ def load_overlay_spec(name_or_path: str | Path) -> OverlaySpec:
     rewrites = data.get("module_id_rewrites") or {}
     if not isinstance(rewrites, dict) or not rewrites:
         raise ValueError(f"overlay spec {path} needs a non-empty module_id_rewrites")
+
+    def _require(mapping: dict, key: str, where: str) -> str:
+        if key not in mapping:
+            raise ValueError(f"overlay spec {path}: {where} is missing {key!r}")
+        return str(mapping[key])
+
     patches = tuple(
         ParameterPatch(
-            file=str(entry["file"]),
-            rule=str(entry["rule"]),
-            from_value=str(entry["from"]),
-            to_value=str(entry["to"]),
+            file=_require(entry, "file", f"parameter_patches[{index}]"),
+            rule=_require(entry, "rule", f"parameter_patches[{index}]"),
+            from_value=_require(entry, "from", f"parameter_patches[{index}]"),
+            to_value=_require(entry, "to", f"parameter_patches[{index}]"),
             source=str(entry.get("source", "")),
         )
-        for entry in data.get("parameter_patches", []) or []
+        for index, entry in enumerate(data.get("parameter_patches", []) or [])
     )
     return OverlaySpec(
-        name=str(data["name"]),
-        program=str(data["program"]),
+        name=_require(data, "name", "the spec"),
+        program=_require(data, "program", "the spec"),
         notes=str(data.get("notes", "")),
         module_id_rewrites={str(k): str(v) for k, v in rewrites.items()},
         rewrite_files=tuple(str(item) for item in data.get("rewrite_files", []) or []),
@@ -165,8 +173,16 @@ def build_overlay(
                 f"overlay {spec.name}: prefix directory {prefix} not found under "
                 f"{rulespec_root}; the base repo moved and the overlay is stale"
             )
+        # Hardlink where possible (the trees run to thousands of files while
+        # the overlay modifies ~17); modified files are re-written through
+        # _write_text_unlinked, which replaces the link with a fresh inode so
+        # the source repo is never mutated through a shared link.
         shutil.copytree(
-            source, overlay_root / prefix, dirs_exist_ok=True, symlinks=False
+            source,
+            overlay_root / prefix,
+            dirs_exist_ok=True,
+            symlinks=False,
+            copy_function=_link_or_copy,
         )
 
     rewrite_counts: dict[str, int] = {}
@@ -186,7 +202,7 @@ def build_overlay(
                 f"overlay {spec.name}: no module-id rewrites matched in {relative}; "
                 f"the base repo moved and the overlay is stale"
             )
-        target.write_text(text, encoding="utf-8")
+        _write_text_unlinked(target, text)
         rewrite_counts[relative] = count
         changed.append(relative)
 
@@ -200,9 +216,9 @@ def build_overlay(
             )
         data = yaml.safe_load(target.read_text(encoding="utf-8"))
         _apply_parameter_patch(data, patch, spec.name)
-        target.write_text(
+        _write_text_unlinked(
+            target,
             yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=1_000_000),
-            encoding="utf-8",
         )
         if patch.file not in changed:
             changed.append(patch.file)
@@ -260,12 +276,50 @@ def rewrite_output_ids(
     }
 
 
+def _link_or_copy(source: str, destination: str) -> None:
+    """Hardlink ``source`` to ``destination``, copying when linking cannot work
+    (cross-device destinations, filesystems without hardlinks)."""
+    try:
+        os.link(source, destination)
+    except OSError:
+        shutil.copy2(source, destination)
+
+
+def _write_text_unlinked(target: Path, text: str) -> None:
+    """Write ``text`` to ``target`` through a fresh inode.
+
+    Overlay trees are hardlinked from the source repo, so an in-place write
+    would mutate the original file through the shared link; writing a sibling
+    temp file and replacing the target breaks the link first.
+    """
+    temp = target.with_name(target.name + ".overlay-tmp")
+    temp.write_text(text, encoding="utf-8")
+    os.replace(temp, target)
+
+
 def _rewrite_module_ids(text: str, rewrites: dict[str, str]) -> tuple[str, int]:
-    total = 0
-    for old, new in rewrites.items():
-        total += text.count(old)
-        text = text.replace(old, new)
-    return text, total
+    """Rewrite module ids in one pass over the text.
+
+    A single alternation (longest ids first) replaces every occurrence
+    simultaneously, so one pair's replacement can never be re-matched by a
+    later pair — sequential ``str.replace`` chains would let
+    ``{a: b, b: c}`` rewrite ``a`` all the way to ``c``.
+    """
+    if not rewrites:
+        return text, 0
+    pattern = re.compile(
+        "|".join(
+            re.escape(old) for old in sorted(rewrites, key=len, reverse=True)
+        )
+    )
+    count = 0
+
+    def _substitute(match: re.Match[str]) -> str:
+        nonlocal count
+        count += 1
+        return rewrites[match.group(0)]
+
+    return pattern.sub(_substitute, text), count
 
 
 def _apply_parameter_patch(data: Any, patch: ParameterPatch, overlay_name: str) -> None:

@@ -664,6 +664,20 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             rulespec_paths.append(
                 str(Path(str(roots)) / f"rulespec-{str(country).lower()}")
             )
+    # The SNAP QC lane resolves its rulespec checkout inside the bridge (env
+    # fallback and workspace default), so read the root it actually ran
+    # against off the just-written report — otherwise the affected-rerun
+    # staleness check has no SHA to diff for this suite.
+    if runner_type == "snap-qc-compare" and not rulespec_paths:
+        try:
+            report_provenance = (
+                json.loads(output.read_text()).get("summary", {}).get("provenance", {})
+            )
+            ran_against = report_provenance.get("rulespec_root")
+            if ran_against:
+                rulespec_paths.append(str(ran_against))
+        except Exception:  # provenance must annotate, never fail a run
+            pass
     rulespecs = rulespec_provenance(rulespec_paths)
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
@@ -770,6 +784,21 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "euromod_system": params.get("euromod_system"),
             "euromod_dataset": params.get("euromod_dataset"),
         }
+    elif runner_type == "snap-qc-compare":
+        # The USDA SNAP QC public-use file is the oracle; its identity is the
+        # pinned posting for the fiscal year (immutable, sha256-verified by the
+        # loader). The bridge's own summary.provenance carries the richer
+        # overlay/engine identity for the run.
+        oracle = {"name": "snap-qc", "fiscal_year": params.get("fiscal_year")}
+        try:
+            from axiom_oracles.populations.snap_qc import SNAP_QC_PINS
+
+            pin = SNAP_QC_PINS.get(int(params.get("fiscal_year", 0)))
+            if pin is not None:
+                oracle["url"] = pin.url
+                oracle["sha256"] = pin.sha256
+        except Exception:  # provenance must annotate, never fail a run
+            pass
 
     # Dataset identity — reuse the pinned-populace identity (#80/#952) when the
     # report carries one.
@@ -2222,15 +2251,15 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
         workspace_root=_snap_qc_optional_path(
             runner.get("workspace_root") or params.get("workspace_root")
         ),
+        # The AXIOM_SNAP_QC_RULESPEC_ROOT / AXIOM_SNAP_QC_AXIOM_BINARY env
+        # fallbacks live inside run_snap_qc_comparison itself (next to the
+        # loader's AXIOM_SNAP_QC_DATA_DIR); only explicit config values are
+        # threaded from here.
         rulespec_root=_snap_qc_optional_path(
-            runner.get("rulespec_root")
-            or params.get("rulespec_root")
-            or os.environ.get("AXIOM_SNAP_QC_RULESPEC_ROOT")
+            runner.get("rulespec_root") or params.get("rulespec_root")
         ),
         axiom_binary=_snap_qc_optional_path(
-            runner.get("axiom_binary")
-            or params.get("axiom_binary")
-            or os.environ.get("AXIOM_SNAP_QC_AXIOM_BINARY")
+            runner.get("axiom_binary") or params.get("axiom_binary")
         ),
         data_dir=_snap_qc_optional_path(params.get("data_dir")),
         include_special_programs=bool(params.get("include_special_programs", False)),
@@ -2386,6 +2415,12 @@ def _print_summary(output: Path) -> None:
     elif "case_count" in data:
         cc = data.get("case_count", 0)
         mm = sum(len(c.get("mismatches", []) or []) for c in data.get("cases", []))
+        if not mm:
+            # Reports whose case rows carry no per-case mismatch lists (the
+            # SNAP QC bridge) count mismatches at the summary/top level.
+            mm = (data.get("summary") or {}).get(
+                "mismatch_count", len(data.get("mismatches") or [])
+            )
         print(f"Cases:             {cc}")
         print(f"Mismatch entries:  {mm}")
         agg = data.get("aggregates") or []

@@ -99,6 +99,7 @@ def _member(**kwargs):
         "tanf": 0.0,
         "general_assistance": 0.0,
         "child_support": 0.0,
+        "alimony": 0.0,
         "_earned": 0.0,
         "_unearned": 0.0,
     }
@@ -112,13 +113,10 @@ def _member(**kwargs):
     )
 
 
-_SUA_AMOUNTS = {
-    "heating_cooling": 560.0,
-    "limited": 356.0,
-    "one_utility": 67.0,
-    "telephone": 91.0,
-    "none": 0.0,
-}
+#: The per-tier standard amounts come from the shipped overlay spec — the same
+#: single source the run path derives them from — so the tests can never pin a
+#: stale copy of the FY 2024 values.
+_SUA_AMOUNTS = sc.sua_amounts_from_overlay(load_overlay_spec("us-co-snap-fy2024"))
 
 
 def _unit(**kwargs):
@@ -136,13 +134,35 @@ def _unit(**kwargs):
         "liquid_resources": 0.0,
         "weight": 1.0,
         "members": [_member(_earned=1000.0)],
-        "expected": SimpleNamespace(benefit=291),
+        "expected": SimpleNamespace(benefit=291, medical_deduction=None),
     }
     values.update(kwargs)
     # The QC-applied allowance defaults to the tier's FY 2024 standard so the
     # tier flags are exercised; override utility_amount to test the raw path.
-    values.setdefault("utility_amount", _SUA_AMOUNTS[str(values["utility_tier"])])
+    # Computed lazily: an unknown tier must reach the mapper's own error, and
+    # an explicit utility_amount must not evaluate the table lookup at all.
+    if "utility_amount" not in values:
+        tier = str(getattr(values["utility_tier"], "value", values["utility_tier"]))
+        values["utility_amount"] = _SUA_AMOUNTS[tier]
+    members = values["members"]
+    values.setdefault(
+        "earned_income",
+        lambda members=members: sum(m.earned_income() for m in members),
+    )
+    values.setdefault(
+        "unearned_income",
+        lambda members=members: sum(m.unearned_income() for m in members),
+    )
     return SimpleNamespace(**values)
+
+
+def _map(unit, base_inputs=None, base_member=None):
+    return sc.map_qc_unit(
+        unit,
+        base_inputs if base_inputs is not None else _base_inputs(),
+        base_member if base_member is not None else _base_member(),
+        sua_amount_by_tier=_SUA_AMOUNTS,
+    )
 
 
 # --------------------------------------------------------------------------- #
@@ -151,7 +171,7 @@ def _unit(**kwargs):
 
 
 def test_map_qc_unit_projects_household_and_member_facts() -> None:
-    case = sc.map_qc_unit(_unit(), _base_inputs(), _base_member())
+    case = _map(_unit())
     inputs = case.inputs
     assert inputs[EARNED] == 1000
     assert inputs[SIZE] == 1
@@ -180,7 +200,7 @@ def test_map_qc_unit_itemizes_unearned_into_4_404_categories() -> None:
         _earned=0.0,
         _unearned=300.0,
     )
-    inputs = sc.map_qc_unit(_unit(members=[member]), _base_inputs(), _base_member()).inputs
+    inputs = _map(_unit(members=[member])).inputs
     assert inputs[RET] == 150  # social security + SSI
     assert inputs[ASSIST] == 50  # TANF + GA
     assert inputs[DIRECT] == 40  # child support received
@@ -198,9 +218,7 @@ def test_map_qc_unit_itemizes_unearned_into_4_404_categories() -> None:
     ],
 )
 def test_map_qc_unit_utility_tiers(tier, expected_true) -> None:
-    inputs = sc.map_qc_unit(
-        _unit(utility_tier=tier), _base_inputs(), _base_member()
-    ).inputs
+    inputs = _map(_unit(utility_tier=tier)).inputs
     for flag in _UTILITY_KEYS:
         assert inputs[flag] is (flag in expected_true), flag
 
@@ -213,17 +231,13 @@ def test_map_qc_unit_medical_excess_plus_threshold(excess, projected) -> None:
     # FSMEDEXP is the allowable expense in excess of $35 and the QC
     # recomputation sets FSMEDDED = MAX(0, FSMEDEXP), so the mapper feeds
     # excess + 35 and the engine's total - 35 reproduces FSMEDDED exactly.
-    inputs = sc.map_qc_unit(
-        _unit(medical_expenses=excess), _base_inputs(), _base_member()
-    ).inputs
+    inputs = _map(_unit(medical_expenses=excess)).inputs
     assert inputs[MEDICAL] == projected
 
 
 def test_map_qc_unit_homeless_deduction_claim_sets_flat_path() -> None:
-    inputs = sc.map_qc_unit(
+    inputs = _map(
         _unit(homeless_deduction_claimed=True, utility_tier="telephone"),
-        _base_inputs(),
-        _base_member(),
     ).inputs
     homeless_flag = f"{CO}/4.407.3#input.all_household_members_experiencing_homelessness"
     has_costs = f"{CO}/4.407.3#input.homeless_household_has_shelter_costs"
@@ -238,10 +252,8 @@ def test_map_qc_unit_nonstandard_utility_amount_rides_as_shelter_cost() -> None:
     # A prorated or actual-expense allowance (UTIL differing from the tier's
     # FY 2024 standard) is authoritative: no tier flag, amount added to the
     # incurred shelter costs.
-    inputs = sc.map_qc_unit(
+    inputs = _map(
         _unit(utility_tier="heating_cooling", utility_amount=91.0),
-        _base_inputs(),
-        _base_member(),
     ).inputs
     assert all(inputs[flag] is False for flag in _UTILITY_KEYS)
     assert inputs[SHELTER] == 591
@@ -250,6 +262,8 @@ def test_map_qc_unit_nonstandard_utility_amount_rides_as_shelter_cost() -> None:
 def test_expected_gross_nets_out_child_support_deduction() -> None:
     # Colorado elects the 7 USC 2014(e)(4) child-support income exclusion, so
     # the QC-recorded deduction is netted out of FSGRINC for the gross label.
+    # In deduction states FSCSDED equals FSCSEXP; in exclusion states FSCSDED
+    # is 0 and the netting is skipped — the FY2024 file has no partial rows.
     label = next(
         label for label in sc._LABELS if label.expected_attr == "gross_income"
     )
@@ -261,21 +275,90 @@ def test_expected_gross_nets_out_child_support_deduction() -> None:
     assert sc._expected_value(label, unit) == 1188.0
 
 
+def test_map_qc_unit_missing_utility_amount_presumes_tier_standard() -> None:
+    # A recorded tier with a blank UTIL cell means the standard applied (the
+    # codebook edited SUA1 for consistency with UTIL), so the tier flags stay
+    # raised and nothing rides as an incurred cost.
+    inputs = _map(_unit(utility_tier="heating_cooling", utility_amount=None)).inputs
+    assert inputs[HEAT] is True
+    assert inputs[SHELTER] == 500
+
+
+def test_map_qc_unit_accepts_utility_tier_enum_instances() -> None:
+    from axiom_oracles.populations.snap_qc import UtilityTier
+
+    inputs = _map(
+        _unit(
+            utility_tier=UtilityTier.TELEPHONE,
+            utility_amount=_SUA_AMOUNTS["telephone"],
+        )
+    ).inputs
+    assert inputs[PHONE] is True
+    assert all(inputs[flag] is False for flag in _UTILITY_KEYS if flag != PHONE)
+
+
+def test_map_qc_unit_unknown_tier_raises() -> None:
+    with pytest.raises(ValueError, match="unknown SNAP QC utility tier"):
+        _map(_unit(utility_tier="jacuzzi", utility_amount=0.0))
+
+
+def test_map_qc_unit_alimony_joins_direct_support() -> None:
+    member = _member(child_support=40.0, alimony=25.0, _unearned=100.0)
+    inputs = _map(_unit(members=[member])).inputs
+    assert inputs[DIRECT] == 65  # child support received plus alimony
+    assert inputs[OTHER] == 35  # 100 - 65
+
+
+def test_map_qc_unit_missing_certified_size_raises() -> None:
+    with pytest.raises(ValueError, match="certified size"):
+        _map(_unit(certified_size=None))
+
+
+def test_map_qc_unit_medical_feeds_applied_deduction() -> None:
+    # The engine input reconstructs the deduction FNS applied (FSMEDDED plus
+    # the $35 threshold): in standard-medical-deduction demonstration states
+    # FSMEDDED is a flat standard that differs from the excess FSMEDEXP, so
+    # FSMEDDED is the operative amount (10 such rows in FY2024, none in CO).
+    unit = _unit(
+        medical_expenses=130.0,
+        expected=SimpleNamespace(benefit=291, medical_deduction=135.0),
+    )
+    assert _map(unit).inputs[MEDICAL] == 170  # 135 + 35
+
+
+def test_validate_months_rejects_calendar_month_integers() -> None:
+    with pytest.raises(ValueError, match="YRMONTH"):
+        sc._validate_months((1, 2, 3), 2024)
+    sc._validate_months((202310, 202409), 2024)
+
+
+def test_sua_amounts_from_overlay_requires_all_four_patches() -> None:
+    spec = SimpleNamespace(
+        name="partial",
+        parameter_patches=[
+            SimpleNamespace(
+                rule="colorado_snap_heating_cooling_utility_allowance_amount",
+                to_value="560",
+            )
+        ],
+    )
+    with pytest.raises(ValueError, match="does not patch"):
+        sc.sua_amounts_from_overlay(spec)
+
+
 @pytest.mark.parametrize(
     "age, elderly_flag, expected",
     [(40, False, False), (65, False, True), (40, True, True), (None, False, False)],
 )
 def test_map_qc_unit_elderly_or_disabled_flag(age, elderly_flag, expected) -> None:
     member = _member(age=age, elderly_or_disabled=elderly_flag, _earned=1000.0)
-    inputs = sc.map_qc_unit(_unit(members=[member]), _base_inputs(), _base_member())
+    inputs = _map(_unit(members=[member]))
     assert inputs.member_inputs[0][ELDERLY] is expected
 
 
 def test_map_qc_unit_projects_dependent_care_and_child_support_expense() -> None:
-    inputs = sc.map_qc_unit(
+    inputs = _map(
         _unit(dependent_care_expense=120.0, child_support_expense=80.0),
-        _base_inputs(),
-        _base_member(),
     ).inputs
     assert inputs[DEPCARE_NEC] is True
     assert inputs[DEPCARE_PAID] == 120
@@ -410,7 +493,7 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
     assert mismatch["stage"] == "gross_income"
     assert mismatch["kind"] == "amount_difference"
     assert mismatch["received_minimum_benefit"] is False
-    assert mismatch["difference"] == 91  # axiom 291 - expected 200
+    assert mismatch["difference"] == -91  # left (QC 200) minus right (axiom 291)
     assert mismatch["axiom"]["gross_income"] == 1000
     assert mismatch["qc"]["gross_income"] == 900
 
@@ -482,7 +565,12 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     env = snap_populace.axiom_rules_env(build.program_path, _RULESPEC_FY2024.parent)
     env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
 
-    case = sc.map_qc_unit(unit, base_inputs, base_member)
+    case = sc.map_qc_unit(
+        unit,
+        base_inputs,
+        base_member,
+        sua_amount_by_tier=sc.sua_amounts_from_overlay(spec),
+    )
     results = sc._run_cases(
         binary=_ENGINE,
         program_path=build.program_path,

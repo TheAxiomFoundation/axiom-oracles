@@ -22,6 +22,8 @@ from axiom_oracles.populations.snap_qc import (
     DATA_DIR_ENV_VAR,
     EARNED_INCOME_SOURCES,
     EXCLUSION_MFIP,
+    EXCLUSION_MISSING_BENEFIT,
+    EXCLUSION_MISSING_SIZE,
     EXCLUSION_SSI_CAP,
     UNEARNED_INCOME_SOURCES,
     QcExclusionLog,
@@ -57,6 +59,7 @@ _FIXTURE_COLUMNS = [
     "RENT",
     "SUA1",
     "SUA2",
+    "UTIL",
     "FSMEDEXP",
     "FSDEPDED",
     "FSCSEXP",
@@ -103,6 +106,7 @@ _ROW_ELDERLY_MAX_ALLOTMENT = {
     "RENT": "700",
     "SUA1": "4",
     "SUA2": "1",
+    "UTIL": "560",
     "FSMEDEXP": "0",
     "FSDEPDED": "0",
     "FSCSEXP": "0",
@@ -153,6 +157,7 @@ _ROW_EARNER_SHELTER = {
     "RENT": "800",
     "SUA1": "5",
     "SUA2": "1",
+    "UTIL": "356",
     "FSMEDEXP": "0",
     "FSDEPDED": "0",
     "FSCSEXP": "0",
@@ -200,11 +205,109 @@ _ROW_MFIP_EXCLUDED = {
     "STATUS": "1",
 }
 
+# Row 3: Colorado elderly unit with every deduction nonzero — pins the
+# FSMEDDED/FSDEPDED/FSCSDED column mapping (a column swap cannot hide behind
+# zeros) and a telephone-standard UTIL.
+_ROW_DEDUCTIONS = {
+    "STATE": "8",
+    "YRMONTH": "202403",
+    "CERTHHSZ": "1",
+    "MN_FIP": "0",
+    "SSI_CAP": "0",
+    "AGE1": "70",
+    "FSAFIL1": "1",
+    "DIS1": "0",
+    "SOCSEC1": "900",
+    "RENT": "600",
+    "SUA1": "6",
+    "SUA2": "1",
+    "UTIL": "91",
+    "FSMEDEXP": "130",
+    "FSDEPDED": "120",
+    "FSCSEXP": "90",
+    "LIQRESOR": "0",
+    "CAT_ELIG": "1",
+    "HOMEDED": "1",
+    "HWGT": "500.0",
+    "FSEARN": "0",
+    "FSUNEARN": "900",
+    "FSGRINC": "900",
+    "FSNETINC": "0",
+    "FSSTDDED": "198",
+    "FSERNDED": "0",
+    "FSMEDDED": "130",
+    "FSCSDED": "90",
+    "FSSLTDED": "691",
+    "FSBEN": "291",
+    "MINIMUM_BEN": "23",
+    "FSMINBEN": "0",
+    "GROSSCRN": "1580",
+    "NETSCRN": "1215",
+    "FSGRTEST": "1",
+    "FSNETEST": "1",
+    "STATUS": "1",
+    "AMTERR": "0",
+}
+
+# Row 4: Colorado unit receiving the standard homeless shelter deduction
+# (HOMEDED = 3): FSSLTDED is zeroed by construction and the telephone
+# standard rides in FSSLTEXP, not the excess-shelter path.
+_ROW_HOMELESS_CLAIMED = {
+    "STATE": "8",
+    "YRMONTH": "202404",
+    "CERTHHSZ": "1",
+    "MN_FIP": "0",
+    "SSI_CAP": "0",
+    "AGE1": "45",
+    "FSAFIL1": "1",
+    "DIS1": "1",
+    "SSI1": "629",
+    "SUA1": "6",
+    "SUA2": "1",
+    "UTIL": "91",
+    "FSMEDEXP": "0",
+    "FSDEPDED": "0",
+    "FSCSEXP": "0",
+    "LIQRESOR": "0",
+    "CAT_ELIG": "1",
+    "HOMEDED": "3",
+    "HWGT": "400.0",
+    "FSEARN": "0",
+    "FSUNEARN": "629",
+    "FSGRINC": "629",
+    "FSNETINC": "251",
+    "FSSTDDED": "198",
+    "FSERNDED": "0",
+    "FSMEDDED": "0",
+    "FSCSDED": "0",
+    "FSSLTDED": "0",
+    "FSBEN": "215",
+    "MINIMUM_BEN": "23",
+    "FSMINBEN": "0",
+    "GROSSCRN": "1580",
+    "NETSCRN": "1215",
+    "FSGRTEST": "1",
+    "FSNETEST": "1",
+    "STATUS": "1",
+    "AMTERR": "0",
+}
+
 _FIXTURE_ROWS = [
     _ROW_ELDERLY_MAX_ALLOTMENT,
     _ROW_EARNER_SHELTER,
     _ROW_MFIP_EXCLUDED,
+    _ROW_DEDUCTIONS,
+    _ROW_HOMELESS_CLAIMED,
 ]
+
+
+def _fixture_csv_text_for_rows(rows) -> str:
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=_FIXTURE_COLUMNS, restval=".")
+    writer.writeheader()
+    for row in rows:
+        writer.writerow(row)
+    return buffer.getvalue()
 
 
 def _fixture_csv_text() -> str:
@@ -354,7 +457,7 @@ def test_mfip_units_are_excluded_and_counted(tmp_path) -> None:
     units, log = load_qc_units(2024, data_dir=tmp_path)
 
     assert {u.certified_size for u in units} == {1, 2}
-    assert log.total_loaded == 2
+    assert log.total_loaded == 4
     assert log.counts[EXCLUSION_MFIP] == 1
     assert log.total_excluded == 1
     # Every scanned row is accounted for exactly once.
@@ -366,7 +469,7 @@ def test_include_special_programs_keeps_mfip_units(tmp_path) -> None:
     units, log = load_qc_units(
         2024, data_dir=tmp_path, include_special_programs=True
     )
-    assert len(units) == 3
+    assert len(units) == 5
     assert log.total_excluded == 0
     assert 3 in {u.certified_size for u in units}
 
@@ -376,8 +479,8 @@ def test_state_filter_scopes_without_counting_out_of_scope_rows(tmp_path) -> Non
     co_units, co_log = load_qc_units(2024, data_dir=tmp_path, state_fips=8)
     # Only the two Colorado rows are in scope; the Minnesota MFIP row is neither
     # loaded nor counted as an exclusion (it is out of scope).
-    assert len(co_units) == 2
-    assert co_log.total_loaded == 2
+    assert len(co_units) == 4
+    assert co_log.total_loaded == 4
     assert co_log.total_excluded == 0
 
 
@@ -471,7 +574,7 @@ def test_download_uses_browser_headers_and_verifies_hash(tmp_path, monkeypatch) 
     # The extracted CSV is byte-identical to the archived member and is loadable.
     assert path.read_bytes() == csv_text.encode("utf-8")
     downloaded_units, _ = load_qc_units(2024, data_dir=tmp_path)
-    assert len(downloaded_units) == 2
+    assert len(downloaded_units) == 4
 
     assert captured["url"] == pin.url
     headers = captured["headers"]
@@ -504,7 +607,7 @@ def test_data_dir_short_circuits_the_download(tmp_path, monkeypatch) -> None:
 
     _install_fake_requests(monkeypatch, on_get=exploding_get)
     units, log = load_qc_units(2024, data_dir=tmp_path)
-    assert log.total_loaded == 2
+    assert log.total_loaded == 4
 
 
 def test_env_var_directory_short_circuits_the_download(tmp_path, monkeypatch) -> None:
@@ -516,7 +619,7 @@ def test_env_var_directory_short_circuits_the_download(tmp_path, monkeypatch) ->
 
     _install_fake_requests(monkeypatch, on_get=exploding_get)
     units, _ = load_qc_units(2024)
-    assert len(units) == 2
+    assert len(units) == 4
 
 
 def test_exclusion_log_summary_is_readable() -> None:
@@ -565,3 +668,54 @@ def test_live_fy2024_row_counts() -> None:
         )
         assert abs(unit.earned_income() - fsearn) < 0.5
         assert abs(unit.unearned_income() - fsunearn) < 0.5
+
+
+def test_deduction_columns_map_to_distinct_fields(tmp_path) -> None:
+    directory = _write_fixture(tmp_path).parent
+    units, _ = load_qc_units(2024, data_dir=directory)
+    unit = next(u for u in units if u.yrmonth == 202403)
+    # Distinct nonzero values pin each column: a swapped mapping cannot pass.
+    assert unit.medical_expenses == 130.0
+    assert unit.expected.medical_deduction == 130.0
+    assert unit.dependent_care_expense == 120.0
+    assert unit.expected.dependent_care_deduction == 120.0
+    assert unit.child_support_expense == 90.0
+    assert unit.expected.child_support_deduction == 90.0
+    assert unit.utility_amount == 91.0
+    assert unit.utility_tier is UtilityTier.TELEPHONE
+
+
+def test_homeless_deduction_claim_and_utility_amount(tmp_path) -> None:
+    directory = _write_fixture(tmp_path).parent
+    units, _ = load_qc_units(2024, data_dir=directory)
+    claimed = next(u for u in units if u.yrmonth == 202404)
+    assert claimed.homeless is True
+    assert claimed.homeless_deduction_claimed is True
+    assert claimed.expected.shelter_deduction == 0.0  # zeroed for HOMEDED = 3
+    actuals = next(u for u in units if u.yrmonth == 202402)
+    assert actuals.homeless is True  # HOMEDED = 4
+    assert actuals.homeless_deduction_claimed is False
+    hcsua = next(u for u in units if u.yrmonth == 202401)
+    assert hcsua.utility_amount == 560.0
+
+
+def test_missing_benefit_and_size_rows_are_counted_exclusions(tmp_path) -> None:
+    rows = [dict(_ROW_ELDERLY_MAX_ALLOTMENT), dict(_ROW_ELDERLY_MAX_ALLOTMENT)]
+    rows[0]["FSBEN"] = "."
+    rows[1]["FSBEN"] = "291"
+    rows[1]["CERTHHSZ"] = "."
+    text = _fixture_csv_text_for_rows(rows)
+    directory = tmp_path / "qc"
+    directory.mkdir()
+    (directory / "qc_pub_fy2024.csv").write_text(text)
+    units, log = load_qc_units(2024, data_dir=directory)
+    assert units == []
+    assert log.counts[EXCLUSION_MISSING_BENEFIT] == 1
+    assert log.counts[EXCLUSION_MISSING_SIZE] == 1
+
+
+def test_raw_row_is_read_only(tmp_path) -> None:
+    directory = _write_fixture(tmp_path).parent
+    units, _ = load_qc_units(2024, data_dir=directory)
+    with pytest.raises(TypeError):
+        units[0].raw["FSBEN"] = "999"

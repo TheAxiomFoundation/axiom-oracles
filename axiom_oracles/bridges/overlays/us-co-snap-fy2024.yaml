@@ -22,7 +22,13 @@ notes: >-
   DefConst values into a copy of the model tree because the source model must
   never be mutated in place.
 module_id_rewrites:
-  fy-2026-cola: fy-2024-cola
+  # Full module ids (not a bare substring): every one of the 195
+  # occurrences across the rewrite files is a canonical id in an import
+  # or proof target, and full ids can never rewrite prose that merely
+  # mentions a fiscal year.
+  us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
+  us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
+  us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
 rewrite_files:
   - us/statutes/7/2017/a.yaml
   - us/regulations/7-cfr/273/8.yaml

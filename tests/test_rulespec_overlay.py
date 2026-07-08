@@ -151,7 +151,16 @@ def test_load_packaged_overlay_spec_is_wellformed() -> None:
     spec = load_overlay_spec("us-co-snap-fy2024")
     assert spec.name == "us-co-snap-fy2024"
     assert spec.program == "us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
-    assert spec.module_id_rewrites == {"fy-2026-cola": "fy-2024-cola"}
+    assert spec.module_id_rewrites == {
+        f"us:policies/usda/snap/fy-2026-cola/{module}": (
+            f"us:policies/usda/snap/fy-2024-cola/{module}"
+        )
+        for module in (
+            "maximum-allotments",
+            "deductions",
+            "income-eligibility-standards",
+        )
+    }
     assert len(spec.rewrite_files) == 16
     assert len(spec.parameter_patches) == 4
     # Each patch cites the FY 2024 technical documentation page.
