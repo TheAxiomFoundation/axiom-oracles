@@ -27,8 +27,14 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - acp
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_repealed_law
+    note: 'Lapsed before the 2026 validation year: the Affordable Connectivity Program
+      (47 USC 1752; IIJA 2021 sec. 60502) stopped new enrollments 2024-02-07 and paid
+      its last partial benefit for May 2024 as appropriated funds were exhausted. PolicyEngine-US
+      1.767.3 zeroes gov.fcc.acp.amount for 2026, so acp pays 0 for every synthetic case
+      even with is_acp_eligible forced on and broadband_cost 2400 (probe evidence: scripts/probe_us_repealed_federal.py).
+      Axiom encodes current law and has no current-law ACP surface to compare.'
   - id: us-pe:additional_medicare_tax
     oracle_policy_name: additional_medicare_tax
     oracle_policy_type: rules
@@ -253,8 +259,14 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - ebb
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_repealed_law
+    note: 'Lapsed before the 2026 validation year: the Emergency Broadband Benefit (Consolidated
+      Appropriations Act 2021; 47 USC 1752 note) closed enrollment and transitioned to the
+      Affordable Connectivity Program on 2021-12-31. PolicyEngine-US 1.767.3 sets gov.fcc.ebb.amount
+      to 0 for 2026, so ebb pays 0 for every synthetic case even with is_ebb_eligible forced
+      on and broadband_cost 2400 (probe evidence: scripts/probe_us_repealed_federal.py). No
+      current-law EBB surface exists for Axiom to compare.'
   - id: us-pe:educational_assistance
     oracle_policy_name: educational_assistance
     oracle_policy_type: pure_input
@@ -840,8 +852,14 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - recovery_rebate_credit
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_repealed_law
+    note: 'Lapsed before the 2026 validation year: the economic impact payment credits under
+      IRC 6428 (CARES Act, 2020), 6428A (CAA 2021, for 2020) and 6428B (ARPA 2021, for 2021)
+      applied only to the 2020-2021 tax years. PolicyEngine-US 1.767.3 sums rrc_cares + rrc_caa
+      + rrc_arpa, each 0 at 2026, so recovery_rebate_credit is 0 for every synthetic case
+      (probe evidence: scripts/probe_us_repealed_federal.py). There is no current-law recovery
+      rebate for 2026 for Axiom to compare.'
   - id: us-pe:reduced_price_school_meals
     oracle_policy_name: reduced_price_school_meals
     oracle_policy_type: rules
