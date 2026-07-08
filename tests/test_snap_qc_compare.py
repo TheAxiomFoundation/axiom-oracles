@@ -76,6 +76,12 @@ def _base_inputs() -> dict:
     base[HEAT] = True
     base[f"{CO}/4.407.4#input.dependent_care_reimbursed_or_paid_by_other_program"] = 0
     base[f"{CO}/4.407.5#input.estimated_monthly_child_support_paid"] = 0
+    # Homeless shelter deduction flags (10 CCR 2506-1 section 4.407.3), present
+    # in the composition test template with false defaults.
+    base[f"{CO}/4.407.3#input.all_household_members_experiencing_homelessness"] = False
+    base[f"{CO}/4.407.3#input.homeless_household_has_shelter_costs"] = False
+    base[f"{CO}/4.407.3#input.homeless_household_free_shelter_all_month"] = False
+    base[f"{CO}/4.407.3#input.verified_higher_homeless_shelter_costs"] = False
     return base
 
 
@@ -106,6 +112,15 @@ def _member(**kwargs):
     )
 
 
+_SUA_AMOUNTS = {
+    "heating_cooling": 560.0,
+    "limited": 356.0,
+    "one_utility": 67.0,
+    "telephone": 91.0,
+    "none": 0.0,
+}
+
+
 def _unit(**kwargs):
     values = {
         "case_id": "2024-202401-7",
@@ -117,12 +132,16 @@ def _unit(**kwargs):
         "dependent_care_expense": 0.0,
         "child_support_expense": 0.0,
         "categorically_eligible": False,
+        "homeless_deduction_claimed": False,
         "liquid_resources": 0.0,
         "weight": 1.0,
         "members": [_member(_earned=1000.0)],
         "expected": SimpleNamespace(benefit=291),
     }
     values.update(kwargs)
+    # The QC-applied allowance defaults to the tier's FY 2024 standard so the
+    # tier flags are exercised; override utility_amount to test the raw path.
+    values.setdefault("utility_amount", _SUA_AMOUNTS[str(values["utility_tier"])])
     return SimpleNamespace(**values)
 
 
@@ -187,14 +206,59 @@ def test_map_qc_unit_utility_tiers(tier, expected_true) -> None:
 
 
 @pytest.mark.parametrize(
-    "expenses, projected",
-    [(0.0, 0), (20.0, 20), (150.0, 200), (200.0, 200), (250.0, 250)],
+    "excess, projected",
+    [(0.0, 0), (20.0, 55), (165.0, 200), (325.0, 360)],
 )
-def test_map_qc_unit_colorado_medical_demonstration(expenses, projected) -> None:
+def test_map_qc_unit_medical_excess_plus_threshold(excess, projected) -> None:
+    # FSMEDEXP is the allowable expense in excess of $35 and the QC
+    # recomputation sets FSMEDDED = MAX(0, FSMEDEXP), so the mapper feeds
+    # excess + 35 and the engine's total - 35 reproduces FSMEDDED exactly.
     inputs = sc.map_qc_unit(
-        _unit(medical_expenses=expenses), _base_inputs(), _base_member()
+        _unit(medical_expenses=excess), _base_inputs(), _base_member()
     ).inputs
     assert inputs[MEDICAL] == projected
+
+
+def test_map_qc_unit_homeless_deduction_claim_sets_flat_path() -> None:
+    inputs = sc.map_qc_unit(
+        _unit(homeless_deduction_claimed=True, utility_tier="telephone"),
+        _base_inputs(),
+        _base_member(),
+    ).inputs
+    homeless_flag = f"{CO}/4.407.3#input.all_household_members_experiencing_homelessness"
+    has_costs = f"{CO}/4.407.3#input.homeless_household_has_shelter_costs"
+    assert inputs[homeless_flag] is True
+    assert inputs[has_costs] is True
+    # The QC file zeroes FSSLTDED for HOMEDED = 3 units by construction, so no
+    # utility flag is raised on the flat-deduction path.
+    assert all(inputs[flag] is False for flag in _UTILITY_KEYS)
+
+
+def test_map_qc_unit_nonstandard_utility_amount_rides_as_shelter_cost() -> None:
+    # A prorated or actual-expense allowance (UTIL differing from the tier's
+    # FY 2024 standard) is authoritative: no tier flag, amount added to the
+    # incurred shelter costs.
+    inputs = sc.map_qc_unit(
+        _unit(utility_tier="heating_cooling", utility_amount=91.0),
+        _base_inputs(),
+        _base_member(),
+    ).inputs
+    assert all(inputs[flag] is False for flag in _UTILITY_KEYS)
+    assert inputs[SHELTER] == 591
+
+
+def test_expected_gross_nets_out_child_support_deduction() -> None:
+    # Colorado elects the 7 USC 2014(e)(4) child-support income exclusion, so
+    # the QC-recorded deduction is netted out of FSGRINC for the gross label.
+    label = next(
+        label for label in sc._LABELS if label.expected_attr == "gross_income"
+    )
+    unit = _unit(
+        expected=SimpleNamespace(
+            benefit=81, gross_income=1469.0, child_support_deduction=281.0
+        )
+    )
+    assert sc._expected_value(label, unit) == 1188.0
 
 
 @pytest.mark.parametrize(

@@ -122,6 +122,7 @@
     "axiom-policyengine-uk-lbtt-ltt.json",
     "axiom-policyengine-uk-vat.json",
     "axiom-policyengine-al-tanf-ecps.json",
-    "axiom-policyengine-uk-business-rates.json"
+    "axiom-policyengine-uk-business-rates.json",
+    "axiom-snapqc-co-snap.json"
   ]
 }

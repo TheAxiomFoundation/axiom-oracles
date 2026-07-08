@@ -2114,7 +2114,9 @@ def _snap_qc_skip_reason(runner: dict, params: dict, fiscal_year: int) -> str | 
         axiom_binary = snap_populace.resolve_axiom_binary(
             workspace_root,
             _snap_qc_optional_path(
-                runner.get("axiom_binary") or params.get("axiom_binary")
+                runner.get("axiom_binary")
+                or params.get("axiom_binary")
+                or os.environ.get("AXIOM_SNAP_QC_AXIOM_BINARY")
             ),
         )
     except Exception as exc:  # probe must degrade, never raise
@@ -2123,7 +2125,9 @@ def _snap_qc_skip_reason(runner: dict, params: dict, fiscal_year: int) -> str | 
         return f"axiom-rules-engine binary not built at {axiom_binary}"
 
     rulespec_root = _snap_qc_optional_path(
-        runner.get("rulespec_root") or params.get("rulespec_root")
+        runner.get("rulespec_root")
+        or params.get("rulespec_root")
+        or os.environ.get("AXIOM_SNAP_QC_RULESPEC_ROOT")
     ) or (workspace_root / "rulespec-us")
     return _snap_qc_cola_marker_reason(rulespec_root, fiscal_year)
 
@@ -2219,10 +2223,14 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
             runner.get("workspace_root") or params.get("workspace_root")
         ),
         rulespec_root=_snap_qc_optional_path(
-            runner.get("rulespec_root") or params.get("rulespec_root")
+            runner.get("rulespec_root")
+            or params.get("rulespec_root")
+            or os.environ.get("AXIOM_SNAP_QC_RULESPEC_ROOT")
         ),
         axiom_binary=_snap_qc_optional_path(
-            runner.get("axiom_binary") or params.get("axiom_binary")
+            runner.get("axiom_binary")
+            or params.get("axiom_binary")
+            or os.environ.get("AXIOM_SNAP_QC_AXIOM_BINARY")
         ),
         data_dir=_snap_qc_optional_path(params.get("data_dir")),
         include_special_programs=bool(params.get("include_special_programs", False)),

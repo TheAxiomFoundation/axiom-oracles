@@ -124,6 +124,12 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
   that already holds `qc_pub_fy{YYYY}.csv` to skip the download entirely — that is
   also how the engine-gated live test and a local real run pick up the file. The
   sha256 is verified after download with the populace-style remediation message.
+- Until the fy-2024-cola modules merge to rulespec-us main, a local run also needs
+  `AXIOM_SNAP_QC_RULESPEC_ROOT` pointed at a checkout that carries them (and
+  `AXIOM_SNAP_QC_AXIOM_BINARY` at a built engine when the default debug-path
+  resolution does not apply). The `scripts/run_comparison.py co-snap-qc` runner
+  honors both alongside the yaml parameters; absent any of the three
+  prerequisites it degrades to re-emitting the committed dashboard report.
 
 ## 6. The fiscal-year gap and the overlay
 
@@ -186,17 +192,43 @@ Colorado parameters exactly.
   rounding. The homeless shelter deduction, statutorily $179.66, is recorded as $180
   in the QC file (whole-dollar rounding; tech doc Table F.3 note, PDF p.180) — expect
   and disposition that one-dollar artifact rather than chase it.
-- **Utility tiers, not raw expenses.** The QC `SUA1`/`SUA2` codes are mapped to the
+- **Utility tiers when standard, `UTIL` when not.** The QC `SUA1` code maps to the
   Colorado composition's utility-allowance flags (heating/cooling, limited,
-  single-utility, telephone, none) so the awarded allowance triggers — the same "type
-  projection" the `snap_populace` bridge uses for oracle parity
-  (`--utility-projection policyengine-type`), not itemized utility dollars.
-- **The Colorado standard medical deduction demonstration.** Colorado ran the
-  standard-medical-deduction demonstration in FY2024: when 35 < medical expenses ≤ 200
-  the deduction is a flat 165, and above 200 it is actual − 35 (tech doc Table F.4,
-  PDF p.181). The mapper feeds 200 into the statutory actual − 35 rule so the engine
-  reproduces the 165 flat amount; only units with an elderly or disabled member are
-  entitled, which the engine gates itself. `MED_DED_DEMO` marks demonstration states.
+  single-utility, telephone, none) so the awarded allowance exercises the encoded
+  FY2024 amounts — the same "type projection" the `snap_populace` bridge uses for
+  oracle parity. But `UTIL` (the QC-applied utility amount) is authoritative: the
+  codebook notes SUA1 itself was edited for consistency with UTIL, so when UTIL
+  differs from the tier's standard amount (an actual-expense claim, SUA1 = 2, or a
+  prorated allowance), the mapper drops the flags and carries UTIL as an incurred
+  shelter cost instead.
+- **Medical expenses: `FSMEDEXP` is the excess, and the QC recomputation ignores
+  the demonstration.** `FSMEDEXP` is the allowable medical expense *in excess of
+  $35* and the constructed deduction is literally `FSMEDDED = MAX(0, FSMEDEXP)`
+  (codebook PDF p.84) — the QC benefit recomputation does not model Colorado's
+  standard-medical-deduction demonstration ($165 standard, Table F.4, PDF p.181),
+  only the statutory excess. The mapper therefore feeds `FSMEDEXP + 35` into the
+  engine's `total − 35` rule, which reproduces `FSMEDDED` exactly; only units with
+  an elderly or disabled member are entitled, which the engine gates itself.
+- **The homeless shelter deduction is a flat path.** `HOMEDED = 3` units receive
+  the standard homeless shelter deduction; the QC file zeroes `FSSLTDED` for them
+  by construction (codebook PDF p.85), so the mapper raises the composition's
+  homeless flags, raises no utility flag, and the engine takes the flat-deduction
+  path. First-run finding: the federal 273.10 encoding caps that deduction at the
+  stale CFR literal $143 where the statute indexes it ($179.66 in FY 2024) —
+  TheAxiomFoundation/rulespec-us#761, carried as `axiom_encoding_gap` dispositions
+  until fixed.
+- **Child support: exclusion, not deduction.** Colorado elects the 7 USC
+  2014(e)(4) child-support income exclusion, so the composition removes child
+  support paid from countable gross income while the QC file books the same
+  amount as a deduction (`FSCSDED`; the `FSCSEXP` codebook entry documents the
+  state split). Net income is identical either way; the gross-income comparison
+  nets `FSCSDED` out of `FSGRINC`.
+- **Whole-dollar rounding is a known encoding gap.** The encoded chain carries
+  cents (20 percent earned-income deduction, half-income shelter subtraction)
+  where the FNS Minimodel computes with whole dollars at each step; when the
+  fractional net crosses a dollar boundary the benefit flips by exactly $1.
+  TheAxiomFoundation/rulespec-us#762 tracks encoding the rounding steps; the
+  affected rows are `axiom_encoding_gap` dispositions until then.
 - **Replicate weights are not needed for parity.** The QC file ships `HWGT` plus
   replicate weights for design-consistent variance estimation. Per-unit benefit
   reproduction uses neither: `HWGT` is applied only to report a caseload-weighted

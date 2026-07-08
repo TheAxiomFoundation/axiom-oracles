@@ -71,12 +71,21 @@ Household expenses and resources
     ``RENT`` rent/mortgage (p86) -> ``shelter_expense``;
     ``SUA1`` standard-utility-allowance usage (p86) -> ``utility_tier``
     (``SUA2`` proration, p86, does not change the tier);
+    ``UTIL`` utility amount (p86) -> ``utility_amount`` — the QC-applied
+    allowance, which the codebook notes SUA1 was edited for consistency with;
+    when it disagrees with the tier's standard amount (an actual-expense or
+    prorated allowance), the mapper treats ``UTIL`` as authoritative;
     ``FSMEDEXP`` reported medical expenses over $35 (p85) -> ``medical_expenses``;
     ``FSDEPDED`` dependent-care deduction (p84) -> ``dependent_care_expense``;
     ``FSCSEXP`` reported child-support payment (p84) -> ``child_support_expense``;
     ``LIQRESOR`` countable liquid assets (p82) -> ``liquid_resources``;
     ``CAT_ELIG`` categorical-eligibility status (p72) -> ``categorically_eligible``;
-    ``HOMEDED`` homelessness indicator (p85) -> ``homeless``.
+    ``HOMEDED`` homelessness indicator (p86; 1 = not homeless, 2 = homeless
+    without the standard homeless shelter deduction, 3 = homeless receiving
+    it, 4 = homeless applying actual expenses toward excess shelter) ->
+    ``homeless`` (codes 2-4) and ``homeless_deduction_claimed`` (code 3;
+    the constructed ``HOMELESS_DED`` is positive only for these units and
+    ``FSSLTDED`` is zeroed for them by construction).
 
 Expected (QC-constructed benefit computation)
     ``FSBEN`` final calculated benefit (p87) -> ``benefit``;
@@ -395,10 +404,12 @@ class QcUnit:
     members: tuple[QcMember, ...]
     shelter_expense: float | None
     utility_tier: UtilityTier
+    utility_amount: float | None
     medical_expenses: float | None
     dependent_care_expense: float | None
     child_support_expense: float | None
     homeless: bool | None
+    homeless_deduction_claimed: bool | None
     categorically_eligible: bool | None
     liquid_resources: float | None
     weight: float | None
@@ -627,8 +638,17 @@ def _member_from_slot(row: dict[str, str], index: int) -> QcMember:
 
 
 def _homeless_from_homeded(homeded: int | None) -> bool | None:
-    # HOMEDED (p85): 1 = not homeless; 2/3/4 = homeless (varying deductions).
+    # HOMEDED (p86): 1 = not homeless; 2 = homeless without the standard
+    # homeless shelter deduction; 3 = homeless receiving it; 4 = homeless
+    # applying actual expenses toward the excess shelter deduction.
     return None if homeded is None else homeded != 1
+
+
+def _homeless_deduction_claimed(homeded: int | None) -> bool | None:
+    # HOMEDED = 3 is the only code that receives the standard homeless shelter
+    # deduction; the constructed HOMELESS_DED (p86) is positive only for these
+    # units, and FSSLTDED (p85) is set to 0 for them by construction.
+    return None if homeded is None else homeded == 3
 
 
 def _categorically_eligible(cat_elig: int | None) -> bool | None:
@@ -681,10 +701,14 @@ def _build_unit(
         members=members,
         shelter_expense=_num(row.get("RENT")),
         utility_tier=_utility_tier_from_sua1(_int(row.get("SUA1"))),
+        utility_amount=_num(row.get("UTIL")),
         medical_expenses=_num(row.get("FSMEDEXP")),
         dependent_care_expense=_num(row.get("FSDEPDED")),
         child_support_expense=_num(row.get("FSCSEXP")),
         homeless=_homeless_from_homeded(_int(row.get("HOMEDED"))),
+        homeless_deduction_claimed=_homeless_deduction_claimed(
+            _int(row.get("HOMEDED"))
+        ),
         categorically_eligible=_categorically_eligible(_int(row.get("CAT_ELIG"))),
         liquid_resources=_num(row.get("LIQRESOR")),
         weight=_num(row.get("HWGT")),

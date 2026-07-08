@@ -1,0 +1,119 @@
+schema: axiom_oracles.dispositions.v1
+suite: co-snap-qc
+updated: "2026-07-08"
+entries:
+  - id: homeless-shelter-deduction-cap-stale-143
+    concept: us:regulations/7-cfr/273/10#snap_net_monthly_income
+    case_selector:
+      case_ids:
+        - 2024-202401-33471
+        - 2024-202401-33486
+        - 2024-202404-33715
+        - 2024-202405-33760
+        - 2024-202405-33793
+        - 2024-202407-33923
+        - 2024-202409-34123
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        Every unit claiming the standard homeless shelter deduction
+        (HOMEDED = 3) nets out $143 in the engine where FNS applies the
+        FY 2024 indexed maximum of $179.66 (recorded as $180 in the
+        whole-dollar QC file). 7 CFR 273.10's
+        snap_homeless_shelter_deduction_cap encodes the stale $143 CFR
+        literal (the FY 2019 base value), and
+        min(claimed, cap) clamps the correctly supplied FY 2024 amount
+        back down; 7 USC 2014(e)(6)(D) indexes the deduction annually and
+        the FY 2024 COLA memorandum publishes $179.66.
+      arithmetic:
+        - expression: "629 - 198 - 143"
+          equals: 288
+        - expression: "629 - 198 - 180"
+          equals: 251
+        - expression: "180 - 143"
+          equals: 37
+      upstream_url: https://github.com/TheAxiomFoundation/rulespec-us/issues/761
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/761
+    expires_on_source_change: true
+  - id: whole-dollar-rounding-convention
+    concept: us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment
+    case_selector:
+      case_ids:
+      - 2024-202310-33334
+      - 2024-202311-33370
+      - 2024-202311-33383
+      - 2024-202312-33422
+      - 2024-202312-33426
+      - 2024-202401-33527
+      - 2024-202402-33537
+      - 2024-202402-33559
+      - 2024-202403-33610
+      - 2024-202403-33627
+      - 2024-202403-33645
+      - 2024-202404-33661
+      - 2024-202404-33724
+      - 2024-202405-33758
+      - 2024-202405-33766
+      - 2024-202405-33800
+      - 2024-202405-33802
+      - 2024-202406-33850
+      - 2024-202406-33853
+      - 2024-202406-33854
+      - 2024-202407-33896
+      - 2024-202407-33902
+      - 2024-202407-33914
+      - 2024-202407-33918
+      - 2024-202407-33955
+      - 2024-202408-33981
+      - 2024-202408-33989
+      - 2024-202409-34048
+      - 2024-202409-34084
+      - 2024-202409-34122
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        The encoded chain carries cents end-to-end (the 20 percent
+        earned-income deduction and the half-income excess-shelter
+        subtraction produce fractional dollars) while the FNS QC
+        Minimodel computes with whole dollars at each step (FSERNDED is
+        truncated; FSSLTDED and FSNETINC are whole dollars). When the
+        fractional net crosses a dollar boundary, the round-up of 30
+        percent of net income flips the final allotment by exactly one
+        dollar; every intermediate stage agrees to the dollar on all 33
+        rows (three of them surface at the net-income stage as a
+        sub-two-dollar net difference for the same reason).
+      arithmetic:
+        - expression: "200.5 * 0.3"
+          equals: 60.15
+        - expression: "200 * 0.3"
+          equals: 60
+        - expression: "766 - 61"
+          equals: 705
+        - expression: "766 - 60"
+          equals: 706
+      upstream_url: https://github.com/TheAxiomFoundation/rulespec-us/issues/762
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/762
+    expires_on_source_change: true
+  - id: whole-dollar-rounding-convention-net-income
+    concept: us:regulations/7-cfr/273/10#snap_net_monthly_income
+    case_selector:
+      case_ids:
+        - 2024-202404-33704
+        - 2024-202408-34023
+        - 2024-202409-34072
+    disposition: axiom_encoding_gap
+    evidence:
+      mechanism: >-
+        Same mechanism as whole-dollar-rounding-convention: the encoded
+        chain carries cents where the FNS QC Minimodel computes with whole
+        dollars, and on these rows the fractional carry first exceeds the
+        one-dollar stage tolerance at net income (for example 549.8 against
+        the whole-dollar 551) before flipping the benefit by one dollar.
+      arithmetic:
+        - expression: "1414 - 198 - 282.8 - 383.4"
+          equals: 549.8
+        - expression: "1414 - 198 - 282 - 383"
+          equals: 551
+      upstream_url: https://github.com/TheAxiomFoundation/rulespec-us/issues/762
+    linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/762
+    expires_on_source_change: true

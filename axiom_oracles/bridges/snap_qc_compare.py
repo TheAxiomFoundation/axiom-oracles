@@ -99,14 +99,27 @@ FY2024_MAX_ALLOTMENT_48_STATES = {
 }
 FY2024_MAX_ALLOTMENT_ADDITIONAL_MEMBER = 219
 
-#: Colorado ran the standard medical deduction demonstration in FY 2024 (QC
-#: technical documentation Table F.4): a household with more than $35 and at
-#: most $200 of verified medical expenses gets a flat $165 deduction. The
-#: statutory engine computes ``actual - 35``, so feeding it $200 in that band
-#: yields the demonstration's $165; outside the band the actual expense passes
-#: through unchanged.
-_MEDICAL_DEMO_LOWER = 35.0
-_MEDICAL_DEMO_UPPER = 200.0
+#: ``FSMEDEXP`` is the allowable medical expense *in excess of $35* (codebook
+#: PDF p.84), and the QC recomputation sets ``FSMEDDED = MAX(0, FSMEDEXP)`` —
+#: it does not model Colorado's standard medical deduction demonstration
+#: ($165 standard; Table F.4), only the statutory excess. The statutory engine
+#: computes ``total - 35``, so the mapper feeds ``FSMEDEXP + 35`` and the
+#: engine's deduction reproduces ``FSMEDDED`` exactly.
+_MEDICAL_EXCESS_THRESHOLD = 35.0
+
+#: FY 2024 Colorado standard utility allowance amount per tier (QC technical
+#: documentation Table F.7, PDF p.183). When the unit's QC-applied ``UTIL``
+#: amount differs from its tier's standard (an actual-expense claim, SUA1 = 2,
+#: or a prorated allowance), ``UTIL`` is authoritative — the codebook notes
+#: SUA1 itself was edited for consistency with UTIL — and the mapper carries
+#: it as an incurred shelter cost instead of raising a tier flag.
+_FY2024_CO_SUA_AMOUNT_BY_TIER = {
+    "heating_cooling": 560.0,
+    "limited": 356.0,
+    "one_utility": 67.0,
+    "telephone": 91.0,
+    "none": 0.0,
+}
 
 #: The seven Colorado utility-cost flags (10 CCR 2506-1 section 4.407.31) that
 #: drive the standard utility allowance tier.
@@ -242,12 +255,37 @@ def map_qc_unit(
     )
 
     set_input_value(inputs, "household_size", int(unit.certified_size))
-    set_input_value(
-        inputs, "household_shelter_costs_incurred", _money(unit.shelter_expense)
-    )
 
-    for name, value in _utility_flag_inputs(unit.utility_tier).items():
+    # Shelter and utilities. The QC-applied allowance (UTIL) is authoritative:
+    # when it matches the tier's FY 2024 standard the tier flags exercise the
+    # encoded allowance rules; when it differs (actual expenses, SUA1 = 2, or a
+    # prorated allowance) the amount rides as an incurred shelter cost instead.
+    # Units receiving the standard homeless shelter deduction (HOMEDED = 3)
+    # take the flat-deduction path: the QC file zeroes FSSLTDED for them by
+    # construction, so no utility flag is raised at all.
+    shelter_costs = _money(unit.shelter_expense)
+    utility_flags = _utility_flag_inputs(unit.utility_tier)
+    homeless_claimed = bool(getattr(unit, "homeless_deduction_claimed", False))
+    utility_amount = _money(getattr(unit, "utility_amount", 0) or 0)
+    tier = str(getattr(unit.utility_tier, "value", unit.utility_tier))
+    standard_amount = _FY2024_CO_SUA_AMOUNT_BY_TIER.get(tier, 0.0)
+    if homeless_claimed:
+        utility_flags = {name: False for name in utility_flags}
+    elif utility_amount != standard_amount:
+        utility_flags = {name: False for name in utility_flags}
+        shelter_costs = _money(shelter_costs + utility_amount)
+    set_input_value(inputs, "household_shelter_costs_incurred", shelter_costs)
+    for name, value in utility_flags.items():
         set_input_value(inputs, name, value)
+
+    # Standard homeless shelter deduction (7 USC 2014(e)(6)(D); 10 CCR 2506-1
+    # section 4.407.3(C)): a flat deduction replacing the excess-shelter path.
+    set_input_value(
+        inputs, "all_household_members_experiencing_homelessness", homeless_claimed
+    )
+    set_input_value(inputs, "homeless_household_has_shelter_costs", homeless_claimed)
+    set_input_value(inputs, "homeless_household_free_shelter_all_month", False)
+    set_input_value(inputs, "verified_higher_homeless_shelter_costs", False)
 
     dependent_care = _money(getattr(unit, "dependent_care_expense", 0) or 0)
     set_input_value(
@@ -268,10 +306,11 @@ def map_qc_unit(
     set_input_value(inputs, "average_monthly_child_support_paid", child_support_paid)
     set_input_value(inputs, "estimated_monthly_child_support_paid", child_support_paid)
 
+    medical_excess = _money(getattr(unit, "medical_expenses", 0) or 0)
     set_input_value(
         inputs,
         "total_medical_expenses",
-        _demo_medical_expenses(_money(getattr(unit, "medical_expenses", 0) or 0)),
+        _money(medical_excess + _MEDICAL_EXCESS_THRESHOLD) if medical_excess > 0 else 0,
     )
 
     set_input_value(
@@ -329,13 +368,6 @@ def _utility_flag_inputs(utility_tier: Any) -> dict[str, bool]:
     elif tier != "none":
         raise ValueError(f"unknown SNAP QC utility tier {tier!r}")
     return flags
-
-
-def _demo_medical_expenses(expenses: float) -> float:
-    """Apply the Colorado FY 2024 standard medical deduction demonstration."""
-    if _MEDICAL_DEMO_LOWER < expenses <= _MEDICAL_DEMO_UPPER:
-        return _MEDICAL_DEMO_UPPER
-    return expenses
 
 
 def _entity_id(unit: Any) -> int:
@@ -529,6 +561,12 @@ def _build_report(
 ) -> dict:
     locale = "-".join(part.upper() for part in jurisdiction.split("-"))
     aggregates = {label.label: _fresh_bucket() for label in _LABELS}
+    # Concept id per stage: the compared output whose divergence localizes a
+    # mismatch. Stamped onto mismatch rows so dispositions and dashboards can
+    # key on the concept, mirroring the comparator's v2 rows.
+    concept_by_stage = {
+        label.stage: output_id_by_label.get(label.label) for label in _LABELS
+    }
     stage_counts: dict[str, int] = {}
     mismatches: list[dict] = []
     errors: list[dict] = []
@@ -594,6 +632,7 @@ def _build_report(
                     first_stage,
                     axiom_values,
                     expected_values,
+                    concept=concept_by_stage.get(first_stage),
                 )
             )
         case_rows.append(
@@ -664,6 +703,8 @@ def _mismatch_row(
     first_stage: str | None,
     axiom_values: dict[str, float | None],
     expected_values: dict[str, float | None],
+    *,
+    concept: str | None = None,
 ) -> dict:
     benefit_stage = _benefit_stage()
     axiom_benefit = axiom_values.get(benefit_stage)
@@ -676,6 +717,7 @@ def _mismatch_row(
     return {
         "case_id": _case_id(unit),
         "qc_case_id": _case_id(unit),
+        "concept": concept,
         "yrmonth": getattr(unit, "yrmonth", None),
         "weight": _clean(weight),
         "stage": first_stage,
@@ -805,7 +847,19 @@ def _expected_value(label: _Label, unit: Any) -> float | None:
     if label.expected_attr is None:
         return None
     value = getattr(unit.expected, label.expected_attr, None)
-    return None if value is None else float(value)
+    if value is None:
+        return None
+    if label.expected_attr == "gross_income":
+        # Colorado elects the 7 USC 2014(e)(4) child-support income exclusion,
+        # so the composition removes child support paid from countable gross
+        # income; the QC file books the same amount as a deduction instead
+        # (FSCSDED; the FSCSEXP codebook entry notes the state split). Net
+        # income is identical either way, so the gross comparison nets the
+        # QC-recorded deduction out of FSGRINC.
+        child_support = getattr(unit.expected, "child_support_deduction", None)
+        if child_support:
+            return float(value) - float(child_support)
+    return float(value)
 
 
 def _axiom_value(references: dict[str, Any], output_id: str) -> float | None:
