@@ -20,21 +20,29 @@ import {
  * case explorer live.
  */
 
-function OracleDot({ run }) {
-  const status = rateStatus(run.metric.rate);
+function OracleRate({ run }) {
   const near = run.near;
   const title = [
-    `vs ${engineLabel(run.oracle)}: ${formatAgreementRate(run.metric.rate, run.metric.mismatches)}`,
+    `${run.metric.mismatches.toLocaleString()} of ${run.metric.total.toLocaleString()} checks disagree`,
     near ? `${near.rate.toFixed(1)}% within $${near.threshold}` : null,
-    run.kind === "parameter" ? "parameter check" : null,
+    run.kind === "parameter"
+      ? "parameter-value check, not household-level"
+      : null,
   ]
     .filter(Boolean)
     .join(" · ");
   return (
-    <span
-      className={`pst-dot pst-${status}${run.kind === "parameter" ? " pst-param" : ""}`}
-      title={title}
-    />
+    <span className="pst-oracle" title={title}>
+      <span
+        className="mono pst-oracle-rate"
+        style={{ color: rateColor(run.metric.rate) }}
+      >
+        {formatAgreementRate(run.metric.rate, run.metric.mismatches)}
+      </span>
+      {run.kind === "parameter" && (
+        <span className="pst-oracle-kind">params</span>
+      )}
+    </span>
   );
 }
 
@@ -91,7 +99,6 @@ export default function ProgramStatusTable({ reports, onOpen }) {
       </div>
       <div className="pst-body">
         {rows.map((row) => {
-          const rate = row.total > 0 ? ((row.total - row.mismatches) / row.total) * 100 : null;
           const key = programKey(row.meta);
           const where = US_STATE_NAMES[row.meta.jurisdiction] || row.meta.jurisdiction;
           return (
@@ -104,21 +111,38 @@ export default function ProgramStatusTable({ reports, onOpen }) {
             >
               <span className="pst-label">{row.meta.label}</span>
               <span className="mono pst-where">{where}</span>
-              <span className="pst-dots">
-                {row.runs
-                  .sort((a, b) => b.metric.total - a.metric.total)
-                  .map((run) => (
-                    <OracleDot key={run.suite} run={run} />
-                  ))}
+              <span className="pst-oracles">
+                {(() => {
+                  const byOracle = new Map();
+                  for (const run of row.runs) {
+                    if (run.metric.rate == null) continue;
+                    if (!byOracle.has(run.oracle)) byOracle.set(run.oracle, []);
+                    byOracle.get(run.oracle).push(run);
+                  }
+                  return [...byOracle.entries()]
+                    .sort(
+                      (a, b) =>
+                        Math.max(...b[1].map((r) => r.metric.total)) -
+                        Math.max(...a[1].map((r) => r.metric.total)),
+                    )
+                    .map(([oracle, runs]) => (
+                      <span key={oracle} className="pst-oracle-group">
+                        <span className="pst-oracle-name">
+                          {engineLabel(oracle)}
+                        </span>
+                        {runs
+                          .sort((a, b) => b.metric.total - a.metric.total)
+                          .map((run) => (
+                            <OracleRate key={run.suite} run={run} />
+                          ))}
+                      </span>
+                    ));
+                })()}
               </span>
               <span className="mono pst-checks">
-                {row.total > 0 ? `${row.total.toLocaleString()} checks` : "parameters"}
-              </span>
-              <span
-                className="mono pst-rate"
-                style={rate != null ? { color: rateColor(rate) } : undefined}
-              >
-                {rate != null ? formatAgreementRate(rate, row.mismatches) : "—"}
+                {row.total > 0
+                  ? `${row.total.toLocaleString()} checks`
+                  : "parameter check"}
               </span>
               <span className="pst-arrow" aria-hidden="true">
                 →
