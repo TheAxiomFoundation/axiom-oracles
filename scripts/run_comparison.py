@@ -689,10 +689,16 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     if runner_type == "axiom-encode-tax-ecps-compare":
         oracle = {
             "name": "policyengine",
-            "policyengine_package": "policyengine==4.11.0"
-            if params.get("pinned", True)
-            else "policyengine",
-            "policyengine_us": "1.729.0" if params.get("pinned", True) else None,
+            "policyengine_package": (
+                f"policyengine=={params.get('policyengine_version', '4.11.0')}"
+                if params.get("pinned", True)
+                else "policyengine"
+            ),
+            "policyengine_us": (
+                params.get("policyengine_us_version", "1.729.0")
+                if params.get("pinned", True)
+                else None
+            ),
         }
     elif runner_type == "axiom-encode-uk-efrs-compare":
         oracle = {
@@ -736,10 +742,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         }
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
+        pins = _resolve_pe_oracle_pins(params)
         oracle = {
             "name": params.get("right", "policyengine"),
-            "policyengine_package": _PE_ORACLE_PINS[0],
-            "policyengine_us": _PE_ORACLE_PINS[1].split("==", 1)[-1],
+            "policyengine_package": pins[0],
+            "policyengine_us": pins[1].split("==", 1)[-1],
         }
         # Pin the Tax-Calculator engine version when it is a participant, so a
         # taxcalc-vs-policyengine report records both engine stacks it compared
@@ -891,14 +898,24 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # fail hard. Keeping the PE meta-package at 4.11.0 (the oracle baseline used
     # by the other runners) with an explicit newer -us is why the runner passes
     # --allow-policyengine-us-version to the harness.
+    # Oracle PE stack. The pinned versions default to the model version the
+    # certified Populace artifact was built with (1.729.0), but a comparison can
+    # override them to validate against a newer certified oracle — the us-pe
+    # universe pins policyengine-us 1.767.3, which carries the #8614 partnership
+    # self-employment split absent from 1.729.0's eitc_earned_income. The harness
+    # still runs against the pinned Populace inputs (--allow-policyengine-us-version
+    # bypasses the build_with gate), so only the PE computation vintage moves.
+    pe_meta = params.get("policyengine_version", "4.11.0")
+    pe_us = params.get("policyengine_us_version", "1.729.0")
+    pe_core = params.get("policyengine_core_version", "3.26.11")
     pe_pins = (
         [
             "--with",
-            "policyengine==4.11.0",
+            f"policyengine=={pe_meta}",
             "--with",
-            "policyengine-us==1.729.0",
+            f"policyengine-us=={pe_us}",
             "--with",
-            "policyengine-core==3.26.11",
+            f"policyengine-core=={pe_core}",
         ]
         if pinned
         else [
@@ -1270,6 +1287,25 @@ _PE_ORACLE_PINS = (
     "policyengine-core==3.28.0",
 )
 
+
+def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
+    """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
+
+    Defaults to ``_PE_ORACLE_PINS`` (the certified in-repo pair) so every other
+    suite is unaffected; a comparison that must validate against a newer oracle
+    (e.g. ssi-ecps against the us-pe universe pin policyengine-us 1.767.3) sets
+    ``policyengine_version`` / ``policyengine_us_version`` /
+    ``policyengine_core_version`` in its config.
+    """
+    meta = params.get("policyengine_version")
+    us = params.get("policyengine_us_version")
+    core = params.get("policyengine_core_version")
+    return (
+        f"policyengine=={meta}" if meta else _PE_ORACLE_PINS[0],
+        f"policyengine-us=={us}" if us else _PE_ORACLE_PINS[1],
+        f"policyengine-core=={core}" if core else _PE_ORACLE_PINS[2],
+    )
+
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
 # need to bypass certification, but the shim keeps policyengine.us import
@@ -1349,6 +1385,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
+    pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
     # Axiom side, so it needs neither a built engine binary nor a composed
@@ -1373,7 +1410,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
+        *(arg for pin in pe_pins for arg in ("--with", pin)),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
         *(arg for pin in taxsim_pins for arg in ("--with", pin)),
         "python",
@@ -3098,6 +3135,15 @@ def _slim_report_for_dashboard(report: dict) -> dict:
         "total_case_rows": len(cases),
         "shown_case_rows": len(slim["cases"]),
     }
+    # When a dispositioned report is trimmed, record how many example mismatch
+    # rows survive so scripts/apply_dispositions.py --check recognizes it as a
+    # premerged-slim report (v2.1) and keeps the full-run summary.dispositioned
+    # block instead of re-merging dispositions against the truncated examples
+    # (which would undercount classified rows). See dispositions._is_premerged_...
+    summary = report.get("summary")
+    if isinstance(summary, dict) and isinstance(summary.get("dispositioned"), dict):
+        slim["summary"] = dict(summary)
+        slim["summary"]["stored_mismatch_example_count"] = len(kept_mismatches)
     return slim
 
 

@@ -205,6 +205,11 @@
       "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
       "description": "CO TANF (Colorado Works) benefit (annualized)",
       "difference": 3408.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-tanf-ecps-co_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3408.0,
       "parent": null,
@@ -221,6 +226,11 @@
       "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
       "description": "CO TANF (Colorado Works) benefit (annualized)",
       "difference": -1798.8486328125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-tanf-ecps-co_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9444.0,
       "parent": null,
@@ -237,6 +247,11 @@
       "concept": "us-co:policies/cdhs/colorado-works#co_tanf_benefit",
       "description": "CO TANF (Colorado Works) benefit (annualized)",
       "difference": 2040.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-tanf-ecps-co_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2040.0,
       "parent": null,
@@ -285,18 +300,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 3,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/co-tanf-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.712919,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 99.712919,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 3
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

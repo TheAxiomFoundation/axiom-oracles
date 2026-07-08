@@ -89,6 +89,12 @@ class Concepts:
     RENTAL_INCOME = "axiom:income/person#rental_income"
     SELF_EMPLOYMENT_INCOME = "axiom:income/person#self_employment_income"
 
+    # Resources (person-level stock). SSI countable resources — 42 USC 1382b(a)
+    # resources net of the statutory exclusions — feed the 1382(a)(1)(B) resource
+    # screen ($2,000 individual / $3,000 couple). PolicyEngine populates this from
+    # the certified populace-us artifact, so Axiom must screen the same value.
+    SSI_COUNTABLE_RESOURCES = "axiom:resources/person#ssi_countable_resources"
+
     # Itemization / household-level inputs (annual)
     PROPERTY_TAX_PAID = "axiom:housing/household#property_tax_paid"
     MORTGAGE_INTEREST_PAID = "axiom:housing/household#mortgage_interest_paid"

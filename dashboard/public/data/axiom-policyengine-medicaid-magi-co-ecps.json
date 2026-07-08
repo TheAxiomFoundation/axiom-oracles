@@ -2467,6 +2467,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2483,6 +2488,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2499,6 +2509,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2515,6 +2530,11 @@
       "concept": "us:regulations/42-cfr/435#older_child_eligible",
       "description": "Medicaid older children group (42 CFR 435.118)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-older_child_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -2531,6 +2551,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -2547,6 +2572,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2563,6 +2593,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2579,6 +2614,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2595,6 +2635,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2611,6 +2656,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2627,6 +2677,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2643,6 +2698,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2659,6 +2719,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -2675,6 +2740,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2691,6 +2761,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2707,6 +2782,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2723,6 +2803,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2739,6 +2824,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2755,6 +2845,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2771,6 +2866,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2787,6 +2887,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2803,6 +2908,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2819,6 +2929,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2835,6 +2950,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2851,6 +2971,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2867,6 +2992,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2883,6 +3013,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2899,6 +3034,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2915,6 +3055,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2931,6 +3076,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2947,6 +3097,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2963,6 +3118,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2979,6 +3139,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -2995,6 +3160,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3011,6 +3181,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3027,6 +3202,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3043,6 +3223,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3059,6 +3244,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3075,6 +3265,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3091,6 +3286,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3107,6 +3307,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_right_only",
       "left": false,
       "parent": null,
@@ -3123,6 +3328,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -3139,6 +3349,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -3155,6 +3370,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -3171,6 +3391,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -3187,6 +3412,11 @@
       "concept": "us:regulations/42-cfr/435#adult_eligible",
       "description": "Medicaid adult expansion group (42 CFR 435.119)",
       "difference": null,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "eligibility_left_only",
       "left": true,
       "parent": null,
@@ -3235,18 +3465,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 46,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/medicaid-magi-co-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.266348,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 99.266348,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 46
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

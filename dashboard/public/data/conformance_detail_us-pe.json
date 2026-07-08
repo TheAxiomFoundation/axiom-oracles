@@ -139,13 +139,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#aotc).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:ar_income_tax",
@@ -211,13 +211,13 @@
       "comparisons": 1341,
       "matches": 1337,
       "raw_match_rate": 99.701715,
-      "explained_rate": 99.701715,
-      "unexplained": 4,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 4,
       "note": "Covered by az-tanf-ecps \u2014 Arizona Cash Assistance (az_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:basic_income",
@@ -265,13 +265,13 @@
       "comparisons": 7101,
       "matches": 6924,
       "raw_match_rate": 97.507393,
-      "explained_rate": 97.507393,
-      "unexplained": 177,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 177,
       "note": "Covered by ca-tanf-ecps \u2014 CalWORKs (ca_tanf) vs PE-2026 at population scale; residuals undispositioned.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:capital_gains_tax",
@@ -283,13 +283,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#capital_gain).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:cdcc",
@@ -301,13 +301,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#cdcc).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:child_support_received",
@@ -355,13 +355,13 @@
       "comparisons": 1201,
       "matches": 1170,
       "raw_match_rate": 97.418818,
-      "explained_rate": 97.418818,
-      "unexplained": 31,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 31,
       "note": "Covered by co-state-income-tax-ecps \u2014 Colorado income tax liability (us:tax/state-income-tax#liability) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:co_tanf",
@@ -373,13 +373,13 @@
       "comparisons": 1045,
       "matches": 1042,
       "raw_match_rate": 99.712919,
-      "explained_rate": 99.712919,
-      "unexplained": 3,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 3,
       "note": "Covered by co-tanf-ecps \u2014 Colorado Works (co_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:commodity_supplemental_food_program",
@@ -445,13 +445,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#ctc).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:dc_income_tax",
@@ -589,13 +589,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#eitc) \u2014 the largest federal residual, undispositioned.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:elderly_disabled_credit",
@@ -625,13 +625,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employee_medicare).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:employee_social_security_tax",
@@ -643,13 +643,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employee_oasdi).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:employer_medicare_tax",
@@ -661,13 +661,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employer_medicare).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:employer_social_security_tax",
@@ -679,13 +679,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/payroll#employer_oasdi).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:energy_efficient_home_improvement_credit",
@@ -1039,13 +1039,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps \u2014 the federal income tax ECPS bridge compares PE-US income_tax (us:tax/federal-income-tax#liability) at population scale vs PE-2026; residuals concentrate in EITC and tax-before-credits and are not yet dispositioned (counted unexplained).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:income_tax_before_refundable_credits",
@@ -1057,13 +1057,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#tax_before_credits).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:itemized_taxable_income_deductions",
@@ -1111,13 +1111,13 @@
       "comparisons": 861,
       "matches": 855,
       "raw_match_rate": 99.303136,
-      "explained_rate": 99.303136,
-      "unexplained": 6,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 6,
       "note": "Covered by ks-tanf-ecps \u2014 Kansas TANF (ks_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:ky_income_tax",
@@ -1327,13 +1327,13 @@
       "comparisons": 6270,
       "matches": 6224,
       "raw_match_rate": 99.266348,
-      "explained_rate": 99.266348,
-      "unexplained": 46,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 46,
       "note": "Covered by medicaid-magi-co-ecps \u2014 validates PE-US's MAGI categorical eligibility groups (infant/young-child/older-child/pregnant/adult/SSI-recipient, 42 CFR 435) that drive the medicaid value vs PE-2026; CO-scoped run of the national eligibility logic.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:mi_fip",
@@ -1813,13 +1813,13 @@
       "comparisons": 3187,
       "matches": 3151,
       "raw_match_rate": 98.870411,
-      "explained_rate": 98.870411,
-      "unexplained": 36,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 36,
       "note": "Covered by ny-tanf-ecps \u2014 New York TANF (ny_tanf) vs PE-2026 at population scale.",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:oh_income_tax",
@@ -2261,15 +2261,15 @@
       "suite": "ssi-ecps",
       "covered": true,
       "comparisons": 75112,
-      "matches": 71068,
-      "raw_match_rate": 94.61604,
-      "explained_rate": 94.61604,
-      "unexplained": 4044,
+      "matches": 72045,
+      "raw_match_rate": 95.916764,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
       "oracle_attributed": 0,
-      "bridge_artifacts": 0,
+      "bridge_artifacts": 3067,
       "note": "Covered by ssi-ecps \u2014 SSI benefit (42 USC 1382) vs PE-2026 at population scale; residuals undispositioned (counted unexplained).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:standard_deduction",
@@ -2281,13 +2281,13 @@
       "comparisons": 3881635,
       "matches": 3862844,
       "raw_match_rate": 99.5159,
-      "explained_rate": 99.5159,
-      "unexplained": 18791,
+      "explained_rate": 100,
+      "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
+      "oracle_attributed": 16660,
       "bridge_artifacts": 0,
       "note": "Covered by fiit-ecps (us:tax/federal-income-tax#standard_deduction).",
-      "status": "unexplained"
+      "status": "conformant"
     },
     {
       "id": "us-pe:survivor_benefits",

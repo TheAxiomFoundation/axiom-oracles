@@ -255,6 +255,11 @@
       "concept": "us-az:policies/des/faa5#az_tanf_benefit",
       "description": "AZ Cash Assistance benefit (annualized)",
       "difference": 52.25620117187509,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3755.9,
       "parent": null,
@@ -271,6 +276,11 @@
       "concept": "us-az:policies/des/faa5#az_tanf_benefit",
       "description": "AZ Cash Assistance benefit (annualized)",
       "difference": 44.6440283203126,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1798.39,
       "parent": null,
@@ -287,6 +297,11 @@
       "concept": "us-az:policies/des/faa5#az_tanf_benefit",
       "description": "AZ Cash Assistance benefit (annualized)",
       "difference": 37.02382812499991,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2661.1,
       "parent": null,
@@ -303,6 +318,11 @@
       "concept": "us-az:policies/des/faa5#az_tanf_benefit",
       "description": "AZ Cash Assistance benefit (annualized)",
       "difference": 37.02382812499991,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "az-tanf-ecps-az_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2661.1,
       "parent": null,
@@ -351,18 +371,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 4,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/az-tanf-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.701715,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 99.701715,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 4
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
