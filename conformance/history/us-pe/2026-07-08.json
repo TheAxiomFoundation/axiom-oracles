@@ -3,10 +3,10 @@
   "date": "2026-07-08",
   "jurisdiction": "us-pe",
   "oracle": "policyengine-us_1.767.3/us",
-  "policies_in_scope": 140,
+  "policies_in_scope": 137,
   "covered": 27,
-  "covered_pct": 19.2857,
-  "excluded": 8,
+  "covered_pct": 19.708,
+  "excluded": 11,
   "unexplained_total": 0,
   "axiom_attributed_open": 0,
   "conformant": false
