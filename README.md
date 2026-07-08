@@ -331,6 +331,35 @@ For the CLI, `axiom-oracles compare euromod axiom ...` reads
 `EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,
 `EUROMOD_DATASET`, and `EUROMOD_PYTHON` from the environment.
 
+## SNAP QC administrative data oracle
+
+The SNAP QC oracle validates Axiom SNAP encodings against real administrative
+microdata rather than another engine. It replays the USDA SNAP Quality Control
+public-use file — a nationally representative sample of completed active-case
+reviews, 44,891 units in FY2024 — through the Axiom RuleSpec SNAP composition and
+compares the file's own constructed benefit (`FSBEN`) and stage intermediates
+(gross income, each deduction, net income, income screens, maximum allotment)
+against Axiom's. `FSBEN` is FNS/Mathematica's QC Minimodel recomputation from
+edited, internally consistent inputs, so agreement is admin-grade
+benefit-computation parity — the US analogue of the BEAMM full-admin-returns
+income-tax check. The oracle scores the benefit calculation, not the eligibility
+screening: the public file already dropped every incomplete or ineligible review,
+so the replay feeds eligibility gates the composition's passing defaults.
+
+The first jurisdiction is Colorado FY2024:
+
+```bash
+uv run scripts/run_comparison.py co-snap-qc --summary
+```
+
+The comparison bridge (`axiom_oracles.bridges.snap_qc_compare`) downloads and
+sha256-verifies the pinned public-use file, materializes a patched FY2024 rule overlay,
+and evaluates at a nominal period; the run skips gracefully and re-emits the
+committed dashboard report on any machine that lacks the engine binary, the dated
+rulespec checkout, or the QC file. The standing recipe — the FY-gap overlay
+mechanism, the exclusion table, and how to add a fiscal year or a second state —
+is in [docs/snap-qc-oracle-playbook.md](docs/snap-qc-oracle-playbook.md).
+
 ## Thin Case Schema
 
 The shared schema is intentionally not a universal household ontology. Cases are

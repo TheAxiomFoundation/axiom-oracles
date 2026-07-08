@@ -241,6 +241,66 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     assert report["cases"][0]["metadata"]["pe_standard_deduction"] == 209
 
 
+def test_snap_qc_runner_registered_and_reemits_committed_report(monkeypatch, tmp_path):
+    """The snap-qc-compare runner is registered and, when the replay cannot run
+    here (no engine binary / dated rulespec / QC file, or the bridge is mid-build),
+    re-emits the committed dashboard report — the euromod graceful-skip contract.
+    No engine or data is needed, exactly as the runner promises."""
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison.RUNNERS["snap-qc-compare"] is (
+        run_comparison._run_snap_qc_compare
+    )
+
+    dashboard_dir = tmp_path / "dashboard-data"
+    dashboard_dir.mkdir()
+    committed = dashboard_dir / "axiom-snapqc-co-snap.json"
+    committed.write_text('{"schema_version": "axiom.comparison_report.v2"}')
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard_dir)
+    # Force the skip path without touching the engine, rulespec, or QC file.
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "forced skip"
+    )
+
+    output = tmp_path / "report.json"
+    run_comparison._run_snap_qc_compare(
+        {
+            "parameters": {
+                "jurisdiction": "us-co",
+                "fiscal_year": 2024,
+                "sample_size": 0,
+                "dashboard_filename": "axiom-snapqc-co-snap.json",
+            }
+        },
+        output,
+    )
+
+    assert output.read_text() == committed.read_text()
+
+
+def test_snap_qc_runner_writes_v2_shell_when_no_committed_report(monkeypatch, tmp_path):
+    """With nothing committed yet, the skip path writes a valid empty v2 report
+    recording the skip reason, so the weekly matrix never crashes on a first run."""
+    run_comparison = load_run_comparison_module()
+
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path / "empty")
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "no engine here"
+    )
+
+    output = tmp_path / "report.json"
+    run_comparison._run_snap_qc_compare(
+        {"parameters": {"suite": "co-snap-qc", "dashboard_filename": "missing.json"}},
+        output,
+    )
+
+    report = json.loads(output.read_text())
+    assert report["schema_version"] == "axiom.comparison_report.v2"
+    assert report["suite"] == "co-snap-qc"
+    assert report["case_count"] == 0
+    assert report["errors"] == ["skipped: no engine here"]
+
+
 def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
     axiom_encode = tmp_path / "axiom-encode"

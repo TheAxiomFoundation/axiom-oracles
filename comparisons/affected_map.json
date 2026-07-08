@@ -184,6 +184,15 @@
       "source": "comparisons/co-snap-ecps.yaml"
     },
     {
+      "suite": "co-snap-qc",
+      "report": "axiom-snapqc-co-snap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-co"
+      ],
+      "source": "comparisons/co-snap-qc.yaml"
+    },
+    {
       "suite": "co-state-income-tax-ecps",
       "report": "axiom-policyengine-co-state-income-tax-ecps.json",
       "repos": [

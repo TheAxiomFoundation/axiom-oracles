@@ -2042,12 +2042,202 @@ def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
     )
 
 
+def _snap_qc_optional_path(raw: str | Path | None) -> Path | None:
+    """Expand a config path value, or return None when it is unset."""
+    return _expand_path(raw) if raw else None
+
+
+def _snap_qc_cola_marker_reason(rulespec_root: Path, fiscal_year: int) -> str | None:
+    """Confirm ``rulespec_root`` carries the target-year SNAP COLA modules.
+
+    The overlay compiles the CO SNAP composition with its COLA module ids
+    rewritten from the in-repo fy-2026 vintage to ``fy-<year>-cola``, so the base
+    checkout must actually define that vintage under
+    ``us/policies/usda/snap/fy-<year>-cola/``. A plain rulespec-us checkout (or an
+    un-rebased clone) carries only fy-2026 and is skipped — the common CI case.
+    ``fy-2024-cola`` currently lives on the branch tracked by
+    TheAxiomFoundation/rulespec-us#759, which retires the overlay once it lands.
+    """
+    if not rulespec_root.exists():
+        return f"rulespec root not found at {rulespec_root}"
+    cola_dir = (
+        rulespec_root / "us" / "policies" / "usda" / "snap" / f"fy-{fiscal_year}-cola"
+    )
+    if cola_dir.is_dir() and any(cola_dir.glob("*.yaml")):
+        return None
+    return (
+        f"rulespec checkout at {rulespec_root} has no "
+        f"fy-{fiscal_year}-cola SNAP COLA modules"
+    )
+
+
+def _snap_qc_skip_reason(runner: dict, params: dict, fiscal_year: int) -> str | None:
+    """Return why the SNAP QC replay cannot run here, or None if it can.
+
+    The replay needs the built ``axiom-rules-engine`` binary, a rulespec-us
+    checkout whose SNAP COLA modules are dated for ``fiscal_year`` (the overlay
+    base), and the downloaded QC public-use file. Any probe failure — including
+    the bridge module still being mid-build — counts as "not runnable" so the
+    runner degrades to the committed-report re-emit rather than raising, exactly
+    like the EUROMOD runner on a bare CI machine.
+    """
+    # The bridge and its snap_populace dependency may lack optional deps or still
+    # be mid-build; a failed import means "skip", never a hard error.
+    try:
+        from axiom_oracles.bridges import snap_populace
+        from axiom_oracles.bridges.snap_qc_compare import (  # noqa: F401
+            run_snap_qc_comparison,
+        )
+    except ImportError as exc:
+        return f"snap_qc_compare bridge unavailable ({exc})"
+
+    # QC public-use file. Resolution mirrors populations/snap_qc.load_qc_units:
+    # explicit data_dir, then AXIOM_SNAP_QC_DATA_DIR, then the default cache dir.
+    data_dir = _expand_path(
+        params.get("data_dir")
+        or os.environ.get("AXIOM_SNAP_QC_DATA_DIR")
+        or (Path.home() / ".cache" / "axiom-oracles" / "snap-qc")
+    )
+    qc_file = data_dir / f"qc_pub_fy{fiscal_year}.csv"
+    if not qc_file.exists():
+        return f"QC public-use file not found at {qc_file}"
+
+    # Engine binary + rulespec checkout, resolved with the same snap_populace
+    # helpers the bridge uses so this precondition matches what the bridge would
+    # attempt. Resolution must degrade, never crash the runner.
+    try:
+        workspace_root = snap_populace.resolve_workspace_root(
+            _snap_qc_optional_path(
+                runner.get("workspace_root") or params.get("workspace_root")
+            )
+        )
+        axiom_binary = snap_populace.resolve_axiom_binary(
+            workspace_root,
+            _snap_qc_optional_path(
+                runner.get("axiom_binary") or params.get("axiom_binary")
+            ),
+        )
+    except Exception as exc:  # probe must degrade, never raise
+        return f"engine resolution failed ({exc})"
+    if not axiom_binary.exists():
+        return f"axiom-rules-engine binary not built at {axiom_binary}"
+
+    rulespec_root = _snap_qc_optional_path(
+        runner.get("rulespec_root") or params.get("rulespec_root")
+    ) or (workspace_root / "rulespec-us")
+    return _snap_qc_cola_marker_reason(rulespec_root, fiscal_year)
+
+
+def _reemit_snap_qc_committed_report(
+    runner: dict, params: dict, output: Path, reason: str
+) -> None:
+    """Re-emit the committed dashboard report as the run output (graceful skip).
+
+    Mirrors ``_run_euromod_synthetic_compare``: when the replay cannot run here,
+    reuse the committed dashboard JSON so the weekly matrix stays green and the
+    dashboard copy is idempotent. Falls back to an empty v2 report shell when no
+    committed report exists yet (the first run before numbers are checked in).
+    """
+    dashboard_filename = runner.get("dashboard_filename") or params.get(
+        "dashboard_filename", ""
+    )
+    print(
+        f"SNAP QC replay not runnable here ({reason}); re-emitting the committed "
+        "dashboard report. Regenerate locally where the engine binary, the "
+        "fiscal-year rulespec checkout, and the QC public-use file all exist."
+    )
+    committed = (
+        DASHBOARD_DATA_DIR / dashboard_filename if dashboard_filename else None
+    )
+    if committed is not None and committed.exists():
+        output.write_text(committed.read_text())
+        return
+    output.write_text(
+        json.dumps(
+            {
+                "schema_version": "axiom.comparison_report.v2",
+                "suite": params.get("suite", "co-snap-qc"),
+                "population": "snap-qc",
+                "case_count": 0,
+                "engines": {"left": "snap-qc", "right": "axiom"},
+                "aggregates": [],
+                "cases": [],
+                "mismatches": [],
+                "concepts": [],
+                "errors": [f"skipped: {reason}"],
+                "locales": [],
+                "scope": None,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+def _run_snap_qc_compare(runner: dict, output: Path) -> None:
+    """SNAP QC administrative-data replay vs Axiom RuleSpec (in-process).
+
+    Replays the USDA SNAP Quality Control public-use microdata through the Axiom
+    SNAP composition and compares the constructed benefit (FSBEN) and stage
+    intermediates via ``axiom_oracles.bridges.snap_qc_compare``. Unlike the
+    ``axiom-encode`` runners this calls the bridge in-process — the oracle lives
+    in this repo, so there is no encoder CLI to shell out to.
+
+    The replay needs three things a shared CI runner does not carry: the built
+    ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
+    are dated for the target fiscal year (the overlay base), and the downloaded
+    QC public-use file. When any is absent — or the bridge is still mid-build —
+    this runner **skips gracefully**, re-emitting the committed dashboard report
+    so the weekly matrix stays green and the dashboard copy is idempotent, exactly
+    like ``_run_euromod_synthetic_compare``. Regenerate the committed numbers
+    locally where all three exist.
+    """
+    params = runner["parameters"]
+    fiscal_year = int(params.get("fiscal_year", 2024))
+    jurisdiction = str(params.get("jurisdiction", "us-co"))
+
+    skip_reason = _snap_qc_skip_reason(runner, params, fiscal_year)
+    if skip_reason is not None:
+        _reemit_snap_qc_committed_report(runner, params, output, skip_reason)
+        return
+
+    # Imported here (not at module scope) so the script stays importable while
+    # the bridge is mid-build; the skip path above already caught an ImportError.
+    from axiom_oracles.bridges.snap_qc_compare import run_snap_qc_comparison
+
+    raw_sample = params.get("sample_size")
+    sample_size = None if raw_sample in (None, 0, "0") else int(raw_sample)
+
+    report = run_snap_qc_comparison(
+        fiscal_year=fiscal_year,
+        jurisdiction=jurisdiction,
+        sample_size=sample_size,
+        months=params.get("months"),
+        tolerance=float(params.get("tolerance", 0.0)),
+        stage_tolerance=float(params.get("stage_tolerance", 1.0)),
+        workspace_root=_snap_qc_optional_path(
+            runner.get("workspace_root") or params.get("workspace_root")
+        ),
+        rulespec_root=_snap_qc_optional_path(
+            runner.get("rulespec_root") or params.get("rulespec_root")
+        ),
+        axiom_binary=_snap_qc_optional_path(
+            runner.get("axiom_binary") or params.get("axiom_binary")
+        ),
+        data_dir=_snap_qc_optional_path(params.get("data_dir")),
+        include_special_programs=bool(params.get("include_special_programs", False)),
+        keep_overlay=bool(params.get("keep_overlay", False)),
+    )
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
+    "snap-qc-compare": _run_snap_qc_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
     "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,
     "uk-capital-gains-tax-grid": _run_uk_capital_gains_tax_grid,

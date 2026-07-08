@@ -156,6 +156,16 @@ def repos_for_registry_config(config: dict) -> set[str]:
             repos.add(state_slug)
         repos.add(_slug("rulespec-us"))
 
+    # The SNAP QC administrative-data lane (snap-qc-compare) replays USDA QC
+    # public-use cases through the state's composed SNAP program under the
+    # fy-cola overlay; rule changes in the state shard or the federal SNAP
+    # chain both move its results.
+    if runner.get("type") == "snap-qc-compare" and jurisdiction:
+        state_slug = _repo_from_prefix(str(jurisdiction))
+        if state_slug:
+            repos.add(state_slug)
+        repos.add(_slug("rulespec-us"))
+
     # The EUROMOD/UKMOD synthetic lane (euromod-synthetic-compare) points
     # `axiom_rulespec_repo_roots` at the whole org dir and names the model
     # country (`euromod_country: UK`/`BE`); the encoded rules live in that
