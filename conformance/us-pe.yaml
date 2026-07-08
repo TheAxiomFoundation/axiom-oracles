@@ -791,7 +791,13 @@ policies:
     output_vars:
       - oh_income_tax
     in_scope: true
-    suite: null
+    suite: oh-income-tax-liability
+    note: 'Covered by oh-income-tax-liability — the Ohio composed liability pipeline (rulespec-us
+      us-oh/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US oh_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
+      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the Ohio 2024-to-2026 schedule vintage, not a
+      PE mismatch). oh_income_tax nets the Ohio refundable credits, which are zero for these childless
+      wage cases.'
   - id: us-pe:oh_owf
     oracle_policy_name: oh_owf
     oracle_policy_type: rules

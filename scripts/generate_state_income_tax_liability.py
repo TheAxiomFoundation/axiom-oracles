@@ -48,19 +48,26 @@ VALIDATION_YEAR = 2026
 TAXSIM_YEAR = 2024  # pinned binary abandons 2026; latest available law year
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
-_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22}
-# PolicyEngine target per state. CA and IL use the before-refundable-credits
+_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22, "OH": 36}
+# PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
 # il_income_tax additionally net the refundable CalEITC/Young Child credit and
-# the Illinois EITC/use tax, which these cores exclude). NY and MA have no
-# refundable credits for these childless cases, so the final variable is
-# identical to the before-refundable-credits value.
+# the Illinois EITC/use tax, and oh_income_tax nets the Ohio refundable credits,
+# which these cores exclude). NY and MA have no refundable credits for these
+# childless cases, so the final variable is identical to the
+# before-refundable-credits value. Ohio also has no refundable credit active for
+# the childless wage grid, so oh_income_tax_before_refundable_credits equals
+# oh_income_tax here.
 _PE_VAR = {
     "CA": "ca_income_tax_before_refundable_credits",
     "NY": "ny_income_tax",
     "IL": "il_income_tax_before_refundable_credits",
     "MA": "ma_income_tax",
+    "OH": "oh_income_tax_before_refundable_credits",
 }
+# Ordered state list; new states append here so the grid, reports, and main loop
+# all pick them up. Derived from _TAXSIM_STATE insertion order.
+_STATES = tuple(_TAXSIM_STATE)
 _MODULE = {
     st: f"us-{st.lower()}:policies/income_tax/pilot_liability_pipeline"
     for st in _TAXSIM_STATE
@@ -88,7 +95,7 @@ def _grid() -> list[Case]:
         "single": [30000, 60000, 150000],
         "married": [60000, 120000, 300000],
     }
-    for state in ("CA", "NY", "IL", "MA"):
+    for state in _STATES:
         for filing, incomes in plan.items():
             for inc in incomes:
                 cases.append(
@@ -211,6 +218,10 @@ _TOL = {
     "NY": (5.0, 0.02),
     "IL": (5.0, 0.02),
     "MA": (1.0, 0.0),
+    # Ohio reproduces PolicyEngine to the cent (the residual is PolicyEngine's
+    # float32 rounding, under a tenth of a cent); a $1 absolute band catches any
+    # structural bracket error without absorbing the indexation vintage.
+    "OH": (1.0, 0.0),
 }
 
 
@@ -327,7 +338,7 @@ def main() -> int:
     REPORTS.mkdir(exist_ok=True)
     DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
-    for state in ("CA", "NY", "IL", "MA"):
+    for state in _STATES:
         report = _build_report(state, cases, axiom, pe, taxsim)
         basename = f"axiom-policyengine-taxsim-{state.lower()}-income-tax-liability"
         (REPORTS / f"{basename}-{stamp}.json").write_text(
