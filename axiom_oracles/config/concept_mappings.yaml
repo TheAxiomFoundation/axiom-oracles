@@ -1821,6 +1821,16 @@ concepts:
       axiom: wa_tanf_annual_benefit
       policyengine: wa_tanf
 
+  us-al:policies/dhr/tanf#al_tanf_benefit:
+    description: AL TANF (Family Assistance) benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: al_tanf_annual_benefit
+      policyengine: al_tanf
+
   us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit:
     description: KS TANF maximum benefit standard (annualized)
     category: cash

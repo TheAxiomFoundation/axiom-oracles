@@ -64,7 +64,8 @@ policies:
     output_vars:
       - al_tanf
     in_scope: true
-    suite: null
+    suite: al-tanf-ecps
+    note: Covered by al-tanf-ecps — Alabama Family Assistance (al_tanf) vs PE-2026 at population scale (1444/1444 match, 0 unexplained).
   - id: us-pe:alternative_minimum_tax
     oracle_policy_name: alternative_minimum_tax
     oracle_policy_type: rules
