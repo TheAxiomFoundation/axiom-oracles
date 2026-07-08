@@ -1,0 +1,12 @@
+{
+ "suite": "mn-tanf-ecps",
+ "count": 991,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [],
+ "source": "axiom-policyengine-mn-tanf-ecps-0-2026-07-06.json"
+}

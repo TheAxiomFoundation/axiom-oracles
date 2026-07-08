@@ -130,8 +130,11 @@ function Cell({ family, jurisdiction, c, wide }) {
   const body = wide ? (
     <span className="cov-cell-code">{jurisdiction}</span>
   ) : null;
-  return c?.anchor ? (
-    <a className={cls} href={`#${c.anchor}`} title={title}>
+  const href = c?.measured
+    ? `?view=verification&program=${family}__${jurisdiction}`
+    : null;
+  return href ? (
+    <a className={cls} href={href} title={title}>
       {body}
     </a>
   ) : (

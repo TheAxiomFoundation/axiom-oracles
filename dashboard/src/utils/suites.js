@@ -665,6 +665,11 @@ export function nearMetric(report, threshold = NEAR_THRESHOLD_USD) {
   return { rate, near, threshold };
 }
 
+/** Stable, URL-safe program identity: family__jurisdiction. */
+export function programKey(meta) {
+  return `${meta.family}__${meta.jurisdiction}`;
+}
+
 export function rateStatus(rate) {
   if (rate == null) return "unmeasured";
   if (rate >= 90) return "verified";

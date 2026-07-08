@@ -1,0 +1,14 @@
+{
+ "suite": "ca-tanf-ecps",
+ "count": 7101,
+ "chunks": 15,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ca:policies/cdss/calworks#ca_tanf_benefit"
+ ],
+ "source": "axiom-policyengine-ca-tanf-ecps-0-2026-07-06.json"
+}

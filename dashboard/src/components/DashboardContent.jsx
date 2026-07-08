@@ -11,6 +11,8 @@ import CoverageTracker from "./CoverageTracker";
 import RuleVerification from "./RuleVerification";
 import GapLedger from "./GapLedger";
 import ProgramRuns from "./ProgramRuns";
+import ProgramStatusTable from "./ProgramStatusTable";
+import ProgramPage from "./ProgramPage";
 import FreshnessRegister from "./FreshnessRegister";
 import AgreementMatrix from "./AgreementMatrix";
 import ProgramBreakdown from "./ProgramBreakdown";
@@ -154,6 +156,7 @@ export default function DashboardContent() {
   const [error, setError] = useState(null);
   const [jurisdiction, setJurisdiction] = useState("us");
   const [view, setView] = useState("verification");
+  const [programId, setProgramId] = useState(null);
   const [hiddenOracles, setHiddenOracles] = useState(() => new Set());
 
   // Deep-link jurisdiction (?jurisdiction=ca|uk|be|us, or #uk) and view
@@ -170,6 +173,8 @@ export default function DashboardContent() {
     if (VIEWS.some((v) => v.id === viewFromUrl)) {
       setView(viewFromUrl);
     }
+    const programFromUrl = params.get("program");
+    if (programFromUrl) setProgramId(programFromUrl);
   }, []);
 
   const syncUrl = (key, value) => {
@@ -183,7 +188,21 @@ export default function DashboardContent() {
   };
   const changeView = (next) => {
     setView(next);
-    syncUrl("view", next);
+    setProgramId(null);
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", next);
+    url.searchParams.delete("program");
+    window.history.replaceState(null, "", url);
+  };
+  const openProgram = (id) => {
+    setProgramId(id);
+    syncUrl("program", id);
+  };
+  const closeProgram = () => {
+    setProgramId(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("program");
+    window.history.replaceState(null, "", url);
   };
 
   useEffect(() => {
@@ -297,12 +316,7 @@ export default function DashboardContent() {
       <ConformanceCard region={jurisdiction} />
       {jurisdiction === "uk" && <ConformanceCard region="uk-pe" />}
 
-      <ProgramRuns
-        key={`${jurisdiction}-${[...selectedOracles].sort().join(",")}`}
-        reports={withData}
-        knownCauses={data.knownCauses || []}
-        coverageOverview={data.coverageOverview}
-      />
+      <ProgramStatusTable reports={withData} onOpen={openProgram} />
 
       <GapLedger
         reports={withData}
@@ -372,7 +386,19 @@ export default function DashboardContent() {
         <ViewTabs view={view} onChange={changeView} />
 
         <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-          {view === "coverage" ? coverageView : verificationView}
+          {programId ? (
+            <ProgramPage
+              programId={programId}
+              reports={withData}
+              knownCauses={data.knownCauses || []}
+              coverageOverview={data.coverageOverview}
+              onBack={closeProgram}
+            />
+          ) : view === "coverage" ? (
+            coverageView
+          ) : (
+            verificationView
+          )}
         </div>
 
         <footer

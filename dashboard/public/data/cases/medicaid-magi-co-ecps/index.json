@@ -1,0 +1,15 @@
+{
+ "suite": "medicaid-magi-co-ecps",
+ "count": 1045,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us:regulations/42-cfr/435#adult_eligible",
+  "us:regulations/42-cfr/435#older_child_eligible"
+ ],
+ "source": "axiom-policyengine-medicaid-magi-co-ecps-0-2026-07-06.json"
+}

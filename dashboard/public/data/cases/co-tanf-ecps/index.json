@@ -1,0 +1,14 @@
+{
+ "suite": "co-tanf-ecps",
+ "count": 1045,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-co:policies/cdhs/colorado-works#co_tanf_benefit"
+ ],
+ "source": "axiom-policyengine-co-tanf-ecps-0-2026-07-06.json"
+}

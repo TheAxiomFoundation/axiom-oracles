@@ -1,0 +1,12 @@
+{
+ "suite": "wa-tanf-ecps",
+ "count": 1467,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [],
+ "source": "axiom-policyengine-wa-tanf-ecps-0-2026-07-06.json"
+}

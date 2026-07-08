@@ -1,0 +1,14 @@
+{
+ "suite": "ks-tanf-ecps",
+ "count": 861,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit"
+ ],
+ "source": "axiom-policyengine-ks-tanf-ecps-0-2026-07-06.json"
+}

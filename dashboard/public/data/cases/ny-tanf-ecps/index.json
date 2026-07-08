@@ -1,0 +1,14 @@
+{
+ "suite": "ny-tanf-ecps",
+ "count": 3187,
+ "chunks": 7,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit"
+ ],
+ "source": "axiom-policyengine-ny-tanf-ecps-0-2026-07-06.json"
+}

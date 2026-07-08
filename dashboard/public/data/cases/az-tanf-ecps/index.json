@@ -1,0 +1,14 @@
+{
+ "suite": "az-tanf-ecps",
+ "count": 1341,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-az:policies/des/faa5#az_tanf_benefit"
+ ],
+ "source": "axiom-policyengine-az-tanf-ecps-0-2026-07-06.json"
+}

@@ -1,0 +1,14 @@
+{
+ "suite": "co-state-income-tax-taxsim",
+ "count": 1201,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "taxsim"
+ },
+ "mismatch_concepts": [
+  "us:tax/state-income-tax#liability"
+ ],
+ "source": "axiom-taxsim-co-state-income-tax-ecps-0-2026-07-07.json"
+}
