@@ -9,6 +9,92 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  ug-fuel-excise:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty
+    cases:
+    - id: ug-fuel-100l-each
+      period: '2026'
+      scenario: single-consumer-fuel-excise
+      parameters:
+        annual_petrol_litres: 100.0
+        annual_diesel_litres: 100.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-fuel-petrol-only-500l
+      period: '2026'
+      scenario: single-consumer-fuel-excise
+      parameters:
+        annual_petrol_litres: 500.0
+        annual_diesel_litres: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+  ug-lst:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax
+    cases:
+    - id: ug-lst-band1-150k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_take_home_income: 150000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band3-350k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_take_home_income: 350000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band6-650k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_take_home_income: 650000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-top-band-1500k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_take_home_income: 1500000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-below-100k-no-tax
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_take_home_income: 80000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
   ug-nssf-contributions:
     locale: UG
     entity: Person
@@ -337,6 +423,60 @@ case_sets:
       scenario: single-landlord-rental-income
       parameters:
         annual_gross_rental_income: 10000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+  ug-scg:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:policies/mglsd-scg/sage-handbook#senior_citizens_grant_per_year
+    cases:
+    - id: ug-scg-age-80
+      period: '2026'
+      scenario: older-person-senior-citizens-grant
+      parameters:
+        person_age: 80
+      entities:
+      - id: head
+        kind: person
+        age: 80
+        relation: HeadOfHousehold
+    - id: ug-scg-age-85
+      period: '2026'
+      scenario: older-person-senior-citizens-grant
+      parameters:
+        person_age: 85
+      entities:
+      - id: head
+        kind: person
+        age: 85
+        relation: HeadOfHousehold
+    - id: ug-scg-age-79-not-eligible
+      period: '2026'
+      scenario: older-person-senior-citizens-grant
+      parameters:
+        person_age: 79
+      entities:
+      - id: head
+        kind: person
+        age: 79
+        relation: HeadOfHousehold
+  ug-vat:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006#vat_amount
+    cases:
+    - id: ug-vat-restaurant-1200000
+      period: '2026'
+      scenario: single-consumer-standard-rated-vat
+      parameters:
+        annual_standard_rated_consumption: 1200000.0
       entities:
       - id: head
         kind: person

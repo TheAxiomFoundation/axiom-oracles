@@ -53,6 +53,12 @@ from .gh_presumptive import gh_presumptive_turnover_cases
 from .gh_ssnit import gh_ssnit_contributions_cases
 from .gh_vat_levies import gh_vat_levies_cases
 from .ug_income_tax import ug_paye_rate_schedule_cases
+from .ug_final_four import (
+    ug_fuel_excise_cases,
+    ug_lst_cases,
+    ug_scg_cases,
+    ug_vat_cases,
+)
 from .ug_nssf import ug_nssf_contributions_cases
 from .ug_rental_presumptive import ug_presumptive_cases, ug_rental_cases
 from .nyc_basic import nyc_basic_cases
@@ -158,6 +164,10 @@ def available_suites() -> tuple[str, ...]:
         "ug-rental",
         "ug-presumptive",
         "ug-nssf-contributions",
+        "ug-lst",
+        "ug-scg",
+        "ug-vat",
+        "ug-fuel-excise",
     )
 
 
@@ -294,6 +304,14 @@ def load_suite(name: str):
         return ug_presumptive_cases()
     if name == "ug-nssf-contributions":
         return ug_nssf_contributions_cases()
+    if name == "ug-lst":
+        return ug_lst_cases()
+    if name == "ug-scg":
+        return ug_scg_cases()
+    if name == "ug-vat":
+        return ug_vat_cases()
+    if name == "ug-fuel-excise":
+        return ug_fuel_excise_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -337,7 +355,11 @@ __all__ = [
     "gh_ssnit_contributions_cases",
     "gh_transfers_cases",
     "gh_vat_levies_cases",
+    "ug_fuel_excise_cases",
+    "ug_lst_cases",
     "ug_nssf_contributions_cases",
+    "ug_scg_cases",
+    "ug_vat_cases",
     "ug_paye_rate_schedule_cases",
     "ug_presumptive_cases",
     "ug_rental_cases",
