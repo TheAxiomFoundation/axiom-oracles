@@ -494,6 +494,12 @@ _PERSON_NON_WAGE_VARIABLES = {
     Concepts.UNEMPLOYMENT_INSURANCE_INCOME: "unemployment_compensation",
     Concepts.RENTAL_INCOME: "rental_income",
     Concepts.SELF_EMPLOYMENT_INCOME: "self_employment_income",
+    # Person-level resource STOCK (not an income flow), projected through the same
+    # per-person fact mechanism: SSI countable resources so the composed us/ssi
+    # program can apply the 42 USC 1382(a)(1)(B) resource screen. Its fact concept
+    # lives in the axiom:resources/person namespace, so it never mixes with the
+    # income concepts downstream — only the SSI resource input slot reads it.
+    Concepts.SSI_COUNTABLE_RESOURCES: "ssi_countable_resources",
 }
 
 

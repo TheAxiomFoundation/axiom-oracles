@@ -516,12 +516,18 @@ mappings:
     scope: person
     source: { kind: derived, transform: ssi_couple_countable_income }
 
-  # Resources: ECPS carries no asset data (CASH_ON_HAND is a stub 0), and
-  # PolicyEngine's ECPS SSI faces the same absence, so both sides are
-  # effectively resource-unconstrained.
+  # Resources (42 USC 1382b(a) countable resources, net of the statutory
+  # exclusions). The certified populace-us artifact DOES carry SSI countable
+  # resources: PolicyEngine reads them and screens the 1382(a)(1)(B) limit
+  # ($2,000 individual / $3,000 couple), so Axiom must screen the same value.
+  # Projected from PolicyEngine's person-level ssi_countable_resources (see
+  # populace_us.py::_PERSON_NON_WAGE_VARIABLES); defaults to 0 when absent (no
+  # resources -> screen passes), matching PE. The prior { constant: 0 } wiring
+  # left Axiom resource-unconstrained and awarded SSI over the limit
+  # (axiom-oracles#227).
   - match: { kind: suffix, value: resources_other_than_excluded_pursuant_to_section_1382b_a }
     scope: person
-    source: { kind: constant, value: 0 }
+    source: { kind: fact, name: SSI_COUNTABLE_RESOURCES, default: 0 }
 
   # Self-support plans and work expenses: not observable in ECPS.
   - match: { kind: suffix, value: individual_has_commissioner_approved_plan_for_achieving_self_support }
