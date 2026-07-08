@@ -42,6 +42,11 @@ from .comparison.report import (
     ComparisonReportAccumulator,
     build_comparison_report,
 )
+from .conformance.compositions import (
+    AXIOM_RULESPEC_ROOT_ENV,
+    load_composition,
+    rulespec_imports_for_concepts,
+)
 from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
@@ -89,14 +94,52 @@ def _needs_axiom_tax_itemization_choice(concept_ids: tuple[str, ...]) -> bool:
 
 
 def _rulespec_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:
-    imports: list[str] = []
-    for concept_id in concept_ids:
-        module_ref = str(concept_id).split("#", maxsplit=1)[0]
-        if ":" not in module_ref or not module_ref:
-            continue
-        if module_ref not in imports:
-            imports.append(module_ref)
-    return tuple(imports)
+    # Single-sourced with the recorded per-suite compositions so the committed
+    # record (conformance/compositions/<jur>.yaml) describes exactly the
+    # import-set this runner builds.
+    return rulespec_imports_for_concepts(concept_ids)
+
+
+def _echo_resolved_axiom_composition(
+    suite_name: str,
+    engines: set[str],
+    axiom_program: Path | None,
+) -> None:
+    """Surface the recorded runnable program the axiom leg composes.
+
+    When ``--axiom-program`` is omitted, the axiom leg builds its program from
+    the suite's output concepts. If the suite has a committed composition record
+    (``conformance/compositions/<jur>.yaml``, axiom-oracles#185) this echoes the
+    resolved program modules so the run is reproducible outside the harness, and
+    — when ``AXIOM_RULESPEC_ROOT`` names a checkout — resolves them to concrete
+    files and flags any that are missing. Never fails a run: a suite with no
+    record (US/UK-PE suites) or an unset root is silent/soft. Backward
+    compatible: passing ``--axiom-program`` skips this entirely.
+    """
+
+    if "axiom" not in engines or axiom_program is not None:
+        return
+    try:
+        composition = load_composition(suite_name)
+    except Exception:  # pragma: no cover - never let surfacing fail a run
+        return
+    if composition is None:
+        return
+    rels = ", ".join(composition.paths)
+    suffix = ""
+    root = os.environ.get(AXIOM_RULESPEC_ROOT_ENV)
+    if root:
+        resolved = composition.resolve(root)
+        suffix = f"; root {resolved.root}"
+        missing = resolved.missing_paths()
+        if missing:
+            suffix += "; WARNING missing " + ", ".join(str(p) for p in missing)
+    click.echo(
+        f"Resolved '{composition.suite}' composition from conformance record: "
+        f"{len(composition.imports)} module(s) [{rels}] as {composition.entity}"
+        f"{suffix}.",
+        err=True,
+    )
 
 
 @click.group()
@@ -449,6 +492,9 @@ def compare(
         period = _resolve_period(period, left, right)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
+        _echo_resolved_axiom_composition(
+            report_suite or suite_name, {left, right}, axiom_program
+        )
         cases = _load_population_cases(
             population=population,
             suite_name=suite_name,

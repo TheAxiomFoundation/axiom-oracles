@@ -1214,3 +1214,187 @@ def test_burndown_check_fails_on_mutated_commit():
     finally:
         bd.OUTPUT_PATH.write_text(original)
     assert rc == 1
+
+
+# ---------------------------------------------------------------------------
+# Per-suite runnable-program compositions (axiom-oracles#185)
+# ---------------------------------------------------------------------------
+
+from axiom_oracles.conformance.compositions import (  # noqa: E402
+    AXIOM_RULESPEC_ROOT_ENV,
+    build_compositions_document,
+    composition_for_suite,
+    compositions_path,
+    load_composition,
+    parse as parse_compositions,
+    repo_relative_program_path,
+    resolve_suite_program,
+    rulespec_imports_for_concepts,
+    serialize as serialize_compositions,
+)
+
+BE_COMPOSITIONS_PATH = CONFORMANCE_DIR / "compositions" / "be.yaml"
+
+
+def _covered_be_suites() -> dict[str, str]:
+    """suite -> universe policy id for every in-scope, suite-named BE row."""
+    universe = parse_universe(CONFORMANCE_DIR / "be.yaml")
+    return {p.suite: p.id for p in universe.in_scope() if p.suite is not None}
+
+
+def test_be_compositions_record_covers_exactly_the_covered_suites():
+    """The record enumerates every covered BE suite — no more, no fewer."""
+    document = parse_compositions(BE_COMPOSITIONS_PATH)
+    assert {c.suite for c in document.compositions} == set(_covered_be_suites())
+
+
+def test_be_compositions_record_is_fresh():
+    """POSITIVE gate: committed record == a fresh regeneration, byte for byte."""
+    fresh = serialize_compositions(build_compositions_document("be"))
+    assert BE_COMPOSITIONS_PATH.read_text() == fresh
+
+
+def test_recorded_imports_match_the_cli_runner_derivation():
+    """Anti-drift tie: each recorded import-set is exactly what the CLI runner
+    composes for that suite when --axiom-program is omitted.
+
+    ``_build_runner`` derives ``program_imports`` from the suite's output
+    concepts via the same :func:`rulespec_imports_for_concepts`, so the record
+    describes the real run path — it cannot name a program the harness would
+    not compile.
+    """
+    document = parse_compositions(BE_COMPOSITIONS_PATH)
+    for composition in document.compositions:
+        live = composition_for_suite(composition.suite)
+        assert composition.imports == live.imports, composition.suite
+        assert composition.imports == rulespec_imports_for_concepts(
+            composition.outputs
+        ), composition.suite
+        assert composition.target == composition.imports[0], composition.suite
+        assert composition.entity == live.entity, composition.suite
+        assert composition.entity_id == live.entity_id, composition.suite
+
+
+def test_recorded_paths_are_repo_relative_to_the_imports():
+    """Every recorded program file is the import's monorepo path (…​.yaml)."""
+    document = parse_compositions(BE_COMPOSITIONS_PATH)
+    for composition in document.compositions:
+        assert len(composition.paths) == len(composition.imports), composition.suite
+        for module_ref, path in zip(composition.imports, composition.paths):
+            assert path == repo_relative_program_path(module_ref)
+            assert path.startswith("rulespec-be/")
+            assert path.endswith(".yaml")
+
+
+def test_marital_quotient_is_the_lone_couple_module_not_front_chained():
+    """The archaeology finding, pinned: be-marital-quotient runs the single
+    ``couple_pit_oracle_pipeline`` module as a TaxUnit — it is NOT front-chained
+    with the SSC/forfait/work-bonus stages. Its EUROMOD residual is carried by
+    dispositions (dispositions/be-marital-quotient.yaml), not by a wider
+    program. This guards against a future edit that silently widens the slice
+    and quietly changes what "covered" means for this policy.
+    """
+    composition = load_composition("be-marital-quotient")
+    assert composition is not None
+    assert composition.entity == "TaxUnit"
+    assert composition.imports == (
+        "be:statutes/income_tax/individual/couple_pit_oracle_pipeline",
+    )
+    # No employee-SSC / forfait / work-bonus module is chained in front.
+    joined = " ".join(composition.imports)
+    assert "employee_contributions" not in joined
+    assert "work_bonus" not in joined
+    # The engine post-uprating gross is bridged onto the Article 89 boundary —
+    # the supplied default beyond the suite's own axiom_inputs.
+    assert composition.input_bridge == {
+        "yem": (
+            "be:statutes/income_tax/individual/joint_assessment"
+            "#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions",
+        )
+    }
+
+
+def test_worker_ssc_composition_spans_two_modules():
+    """be-worker-ssc is the one multi-module composition: its three outputs span
+    employee_contributions and work_bonus."""
+    composition = load_composition("be-worker-ssc")
+    assert composition is not None
+    assert composition.imports == (
+        "be:regulations/social_security/workers/employee_contributions",
+        "be:regulations/social_security/workers/work_bonus",
+    )
+    assert len(composition.paths) == 2
+
+
+def test_resolve_suite_program_normalizes_a_rulespec_checkout_root(tmp_path):
+    """resolve() lifts a rulespec-* checkout path to the workspace root that
+    modules resolve against, and binds the single-module program to a file."""
+    workspace = tmp_path
+    checkout = workspace / "rulespec-be"
+    module_rel = (
+        "be/statutes/income_tax/individual/couple_pit_oracle_pipeline.yaml"
+    )
+    target = checkout / module_rel
+    target.parent.mkdir(parents=True)
+    target.write_text("format: rulespec/v1\n")
+
+    composition = load_composition("be-marital-quotient")
+    # Pointing straight at the checkout resolves to its parent workspace.
+    resolved = composition.resolve(checkout)
+    assert resolved.root == workspace
+    assert resolved.single_program_path == target
+    assert resolved.missing_paths() == ()
+    # Pointing at the workspace directly resolves identically.
+    assert composition.resolve(workspace).root == workspace
+
+
+def test_resolve_suite_program_reads_env_and_falls_back(monkeypatch):
+    """resolve_suite_program uses AXIOM_RULESPEC_ROOT; None for unknown suite or
+    unset root (the caller then falls back to live concept-derivation)."""
+    monkeypatch.setenv(AXIOM_RULESPEC_ROOT_ENV, str(Path.home() / "TheAxiomFoundation"))
+    assert resolve_suite_program("uk-universal-credit") is None  # no BE record
+    monkeypatch.delenv(AXIOM_RULESPEC_ROOT_ENV, raising=False)
+    assert resolve_suite_program("be-marital-quotient") is None  # no root
+
+
+def test_multi_module_composition_has_no_single_program_path(tmp_path):
+    """A 2-module composition offers no single --axiom-program file; callers use
+    the import-set the harness composes."""
+    workspace = tmp_path
+    composition = load_composition("be-worker-ssc")
+    resolved = composition.resolve(workspace)
+    assert resolved.single_program_path is None
+    assert len(resolved.program_paths) == 2
+
+
+def _run_compositions_check(module) -> int:
+    import sys
+
+    argv = sys.argv
+    sys.argv = ["prog", "--all", "--check"]
+    try:
+        return module.main()
+    finally:
+        sys.argv = argv
+
+
+def test_compositions_check_passes_on_committed():
+    """POSITIVE: the committed record passes --check."""
+    gen = _load_script("generate_conformance_compositions.py")
+    assert _run_compositions_check(gen) == 0
+
+
+def test_compositions_check_fails_on_mutated_commit():
+    """NEGATIVE: mutating the committed record must fail --check (the gate bites)."""
+    gen = _load_script("generate_conformance_compositions.py")
+    path = compositions_path("be")
+    original = path.read_text()
+    # Flip a query entity — a lie about what the harness runs.
+    tampered = original.replace("entity: TaxUnit", "entity: Household", 1)
+    assert tampered != original
+    path.write_text(tampered)
+    try:
+        rc = _run_compositions_check(gen)
+    finally:
+        path.write_text(original)
+    assert rc == 1
