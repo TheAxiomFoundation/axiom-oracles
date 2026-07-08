@@ -2238,6 +2238,54 @@ concepts:
           type: country
           geoid: UG
 
+  # Uganda individual rental tax (2022 amendment Part VI; 12% of gross
+  # rental above 2,820,000/yr) vs UGAMOD tpr_s — probed exact.
+  ug:statutes/act-2022-11/income-tax-amendment-2022/third-schedule-rental-rate-part-substituted#individual_rental_income_tax:
+    description: Uganda individual rental income tax (Third Schedule Part VI as substituted by the Income Tax (Amendment) Act, 2022)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: individual_rental_income_tax
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tpr_s
+        scope:
+          type: country
+          geoid: UG
+
+  # Uganda small-business presumptive tax (Act 20 of 2020 Second
+  # Schedule; both regimes) vs UGAMOD ttn_s — probed exact at every band.
+  ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits:
+    description: Uganda presumptive small-business income tax (Second Schedule as substituted by Act 20 of 2020)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: presumptive_small_business_income_tax_before_credits
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: UG
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

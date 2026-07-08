@@ -563,6 +563,22 @@ class Concepts:
         "third-schedule-rates-of-tax-substituted"
         "#resident_individual_income_tax"
     )
+    # Uganda individual rental tax (Third Schedule Part VI as substituted
+    # by the 2022 amendment; 12% of gross rental above 2,820,000/yr),
+    # compared to UGAMOD ``tpr_s`` (probed exact).
+    UG_RENTAL_INCOME_TAX = (
+        "ug:statutes/act-2022-11/income-tax-amendment-2022/"
+        "third-schedule-rental-rate-part-substituted"
+        "#individual_rental_income_tax"
+    )
+    # Uganda small-business presumptive tax (Act 20 of 2020 Second
+    # Schedule; fixed amounts without records, cumulative components with
+    # records, 150m regime ceiling), compared to UGAMOD ``ttn_s`` in both
+    # regimes (probed exact at every band).
+    UG_PRESUMPTIVE_INCOME_TAX = (
+        "ug:statutes/act-2020-20/income-tax-amendment-2020"
+        "#presumptive_small_business_income_tax_before_credits"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
