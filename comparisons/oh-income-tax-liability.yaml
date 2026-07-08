@@ -1,0 +1,44 @@
+# Ohio composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
+# on a modest case grid (single and married filers at incomes that cross the
+# state's brackets). The Axiom side is the composed rulespec-us pipeline
+# us-oh/policies/income_tax/pilot_liability_pipeline, evaluated through the
+# axiom rules engine (its liabilities are the engine-verified companion-test
+# fixtures). Ohio is two-tier (ORC 5747.02(A)(3)(c): no tax at or below the
+# $26,050 threshold, else $332.00 plus 2.75 per cent of the excess).
+#
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 schedule vintage (the 2024 $360.69 base and 3.5 per cent top
+# bracket versus the 2026 $332.00 flat-2.75-per-cent schedule under H.B. 96) is
+# recorded in dispositions/oh-income-tax-liability.yaml rather than absorbed by
+# tolerance.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py oh-income-tax-liability
+
+name: oh-income-tax-liability
+title: Ohio income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Ohio income-tax liability pipeline encoded in Axiom
+  RuleSpec (us-oh/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (oh_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
+  (siitax) at 2024 on a modest grid of single and married filers crossing the
+  state's threshold.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: OH
+    period: "2026"
+    taxsim_law_year: 2024
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the composed pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-oh-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-oh-income-tax-liability.json
+  suite: oh-income-tax-liability

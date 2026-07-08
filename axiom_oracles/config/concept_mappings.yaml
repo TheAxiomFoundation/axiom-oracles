@@ -1993,6 +1993,36 @@ concepts:
       policyengine: ca_income_tax_before_refundable_credits
       taxsim: siitax
 
+  us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability:
+    description: Ohio individual nonbusiness income tax liability (resident wage earner; ORC 5747.02(A)(3)(c) two-tier tax, $332.00 plus 2.75 per cent of taxable nonbusiness income over $26,050)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine oh_income_tax_before_non_refundable_credits,
+    # the exact statutory analog of this core (the ORC 5747.02 nonbusiness
+    # bracket tax before the joint-filing, $20 low-income exemption, and other
+    # nonrefundable credits). PolicyEngine reproduces the $332.00 statutory base
+    # through an implied first-bracket average rate (0.0127448 x 26,050 =
+    # 332.00204), so the pipeline matches to the cent (a constant 0.00204 float
+    # residual). TAXSIM's 2024 law year uses the 2024 Ohio schedule ($360.69 base
+    # and a 3.5 per cent top bracket), dispositioned in
+    # dispositions/oh-income-tax-liability.yaml. The small absolute + relative
+    # tolerance catches structural schedule errors.
+    tolerance: 5
+    relative_tolerance: 0.02
+    priority: high
+    locales: [US-OH]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: oh_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: oh_income_tax_before_non_refundable_credits
+      taxsim: siitax
+
   us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability:
     description: Illinois individual income tax liability (flat 4.95 per cent on base income after the standard exemption)
     category: tax

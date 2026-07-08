@@ -48,7 +48,7 @@ VALIDATION_YEAR = 2026
 TAXSIM_YEAR = 2024  # pinned binary abandons 2026; latest available law year
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
-_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22}
+_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22, "OH": 36}
 # PolicyEngine target per state. CA and IL use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
 # il_income_tax additionally net the refundable CalEITC/Young Child credit and
@@ -60,6 +60,11 @@ _PE_VAR = {
     "NY": "ny_income_tax",
     "IL": "il_income_tax_before_refundable_credits",
     "MA": "ma_income_tax",
+    # Ohio's before-non-refundable-credits variable is the exact analog of the
+    # ORC 5747.02 nonbusiness bracket tax core; the before-refundable variable
+    # nets the $20 low-income exemption credit and joint-filing credit that this
+    # core excludes.
+    "OH": "oh_income_tax_before_non_refundable_credits",
 }
 _MODULE = {
     st: f"us-{st.lower()}:policies/income_tax/pilot_liability_pipeline"
@@ -88,7 +93,7 @@ def _grid() -> list[Case]:
         "single": [30000, 60000, 150000],
         "married": [60000, 120000, 300000],
     }
-    for state in ("CA", "NY", "IL", "MA"):
+    for state in ("CA", "NY", "IL", "MA", "OH"):
         for filing, incomes in plan.items():
             for inc in incomes:
                 cases.append(
@@ -211,6 +216,7 @@ _TOL = {
     "NY": (5.0, 0.02),
     "IL": (5.0, 0.02),
     "MA": (1.0, 0.0),
+    "OH": (5.0, 0.02),
 }
 
 
@@ -327,7 +333,7 @@ def main() -> int:
     REPORTS.mkdir(exist_ok=True)
     DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
-    for state in ("CA", "NY", "IL", "MA"):
+    for state in ("CA", "NY", "IL", "MA", "OH"):
         report = _build_report(state, cases, axiom, pe, taxsim)
         basename = f"axiom-policyengine-taxsim-{state.lower()}-income-tax-liability"
         (REPORTS / f"{basename}-{stamp}.json").write_text(
