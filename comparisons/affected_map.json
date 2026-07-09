@@ -451,6 +451,62 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "rw-cbhi-tiers",
+      "report": "axiom-euromod-rw-cbhi-tiers.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-cbhi-tiers.yaml"
+    },
+    {
+      "suite": "rw-contributions",
+      "report": "axiom-euromod-rw-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-contributions.yaml"
+    },
+    {
+      "suite": "rw-excise",
+      "report": "axiom-euromod-rw-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-excise.yaml"
+    },
+    {
+      "suite": "rw-lump-sum",
+      "report": "axiom-euromod-rw-lump-sum.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-lump-sum.yaml"
+    },
+    {
+      "suite": "rw-paye-rate-schedule",
+      "report": "axiom-euromod-rw-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "rw-rental",
+      "report": "axiom-euromod-rw-rental.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-rental.yaml"
+    },
+    {
+      "suite": "rw-vat",
+      "report": "axiom-euromod-rw-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-vat.yaml"
+    },
+    {
       "suite": "sc-snap-ecps",
       "report": "axiom-policyengine-sc-snap-ecps.json",
       "repos": [

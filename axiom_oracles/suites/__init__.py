@@ -66,6 +66,15 @@ from .zm_consumption import (
     zm_excise_ad_valorem_cases,
     zm_vat_cases,
 )
+from .rw_core import (
+    rw_cbhi_tiers_cases,
+    rw_contributions_cases,
+    rw_excise_cases,
+    rw_lump_sum_cases,
+    rw_paye_rate_schedule_cases,
+    rw_rental_cases,
+    rw_vat_cases,
+)
 from .zm_dispy import zm_dispy_cases
 from .zm_sct import zm_sct_cases
 from .zm_core import (
@@ -203,6 +212,13 @@ def available_suites() -> tuple[str, ...]:
         "et-business-mat",
         "et-pension-contributions",
         "et-vat",
+        "rw-paye-rate-schedule",
+        "rw-lump-sum",
+        "rw-rental",
+        "rw-contributions",
+        "rw-vat",
+        "rw-excise",
+        "rw-cbhi-tiers",
         "et-dispy",
     )
 
@@ -376,6 +392,20 @@ def load_suite(name: str):
         return et_pension_contributions_cases()
     if name == "et-vat":
         return et_vat_cases()
+    if name == "rw-paye-rate-schedule":
+        return rw_paye_rate_schedule_cases()
+    if name == "rw-lump-sum":
+        return rw_lump_sum_cases()
+    if name == "rw-rental":
+        return rw_rental_cases()
+    if name == "rw-contributions":
+        return rw_contributions_cases()
+    if name == "rw-vat":
+        return rw_vat_cases()
+    if name == "rw-excise":
+        return rw_excise_cases()
+    if name == "rw-cbhi-tiers":
+        return rw_cbhi_tiers_cases()
     if name == "et-dispy":
         return et_dispy_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -421,6 +451,13 @@ __all__ = [
     "et_pension_contributions_cases",
     "et_presumptive_cases",
     "et_vat_cases",
+    "rw_cbhi_tiers_cases",
+    "rw_contributions_cases",
+    "rw_excise_cases",
+    "rw_lump_sum_cases",
+    "rw_paye_rate_schedule_cases",
+    "rw_rental_cases",
+    "rw_vat_cases",
     "gh_excise_cases",
     "gh_personal_reliefs_cases",
     "gh_presumptive_turnover_cases",

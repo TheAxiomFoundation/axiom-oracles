@@ -1,0 +1,41 @@
+name: rw-cbhi-tiers
+title: Rwanda rw-cbhi-tiers — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw Ministerial Order 002/26/10/TC CBHI member
+  premium schedule (IMIBEREHO Dynamic Social Registry levels: member-
+  paid 3,000/5,000/8,000/20,000 FRW per year at levels 2-5) against
+  RWAMOD tsceehl02_s, which pays the amounts as annual twelfths by
+  monthly-income tier (probed 250/416.67/666.67/1,666.67 at bounds
+  30,000/60,000/120,000 FRW). TIMING FINDING (rulespec-rw#1): RWAMOD
+  applies the schedule in RW_2025 (CY2025) where its first gazetted
+  carrier is the Order of 16/02/2026, in force on publication
+  23/02/2026 (the prior PM Order 105/03 of 30/09/2020 carries the
+  funding schedule and the 0.5% employee levy but no income-tier
+  member premiums; the practice ran administratively from 2024 under
+  RSSB publication). The amounts agree exactly; the validation-year
+  grounding does not - the module correctly starts 2026-02-23, the
+  Axiom side evaluates at 2027, and the timing gap is the recorded
+  finding. The SOUTHMOD bundle is licensed and non-redistributable;
+  referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-cbhi-tiers
+    population: synthetic
+    sample_size: 0
+    period: 2027
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-cbhi-tiers.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-cbhi-tiers
+
+dashboard:
+  filename: axiom-euromod-rw-cbhi-tiers.json
+  suite: rw-cbhi-tiers
