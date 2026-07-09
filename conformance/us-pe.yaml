@@ -720,7 +720,15 @@ policies:
     output_vars:
       - ne_income_tax
     in_scope: true
-    suite: null
+    suite: ne-income-tax-liability
+    note: 'Covered by ne-income-tax-liability — the Nebraska composed liability pipeline (rulespec-us
+      us-ne/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US ne_income_tax_before_credits (the pure 77-2715.03 four-bracket tax on Nebraska taxable income)
+      exactly on every grid case. The report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg
+      (the L.B. 754 top-rate compression and indexation vintage plus TAXSIM''s netting of the 77-2716.01
+      personal exemption credit this before-credits core excludes), not a PE mismatch. ne_income_tax
+      equals the before-credits value less the personal exemption credit and any refundable credits, none
+      active for these childless wage cases beyond the exemption credit.'
   - id: us-pe:net_investment_income_tax
     oracle_policy_name: net_investment_income_tax
     oracle_policy_type: rules

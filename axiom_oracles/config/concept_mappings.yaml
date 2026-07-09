@@ -2234,3 +2234,32 @@ concepts:
           geoid: US
       policyengine: ky_income_tax_before_refundable_credits
       taxsim: siitax
+
+
+  us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability:
+    description: Nebraska individual income tax liability (resident wage earner; Neb. Rev. Stat. 77-2715.03 four-bracket progressive tax on Nebraska taxable income, before the 77-2716.01 personal exemption credit)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ne_income_tax_before_credits, the pure
+    # 77-2715.03 four-bracket tax on Nebraska taxable income (AGI less the
+    # 77-2716.01 standard deduction); the pipeline reproduces it exactly. The
+    # before-refundable variable nets the 77-2716.01 personal exemption credit (a
+    # post-tax nonrefundable credit) that this before-credits core excludes.
+    # Against TAXSIM 2024 every case diverges by the L.B. 754 top-rate compression
+    # and inflation-indexation vintage plus TAXSIM's netting of the personal
+    # exemption credit, dispositioned in dispositions/ne-income-tax-liability.yaml.
+    # The tight absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-NE]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ne_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ne_income_tax_before_credits
+      taxsim: siitax

@@ -1,0 +1,40 @@
+# Nebraska composed income-tax liability — Axiom pipeline vs PolicyEngine and
+# TAXSIM on a modest case grid. The Axiom side is the composed rulespec-us
+# pipeline us-ne/policies/income_tax/pilot_liability_pipeline, evaluated through
+# the axiom rules engine (its liabilities are the engine-verified companion-test
+# fixtures). Nebraska is progressive (Neb. Rev. Stat. 77-2715.03: 2.46/3.51/4.55/
+# 4.55% for 2026 — L.B. 754 compresses the top two rates to a common 4.55% — over
+# the inflation-indexed bracket floors).
+#
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 rate-compression and indexation vintage plus TAXSIM's netting of
+# the 77-2716.01 personal exemption credit are recorded in
+# dispositions/ne-income-tax-liability.yaml rather than absorbed by tolerance.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py ne-income-tax-liability
+
+name: ne-income-tax-liability
+title: Nebraska income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Nebraska income-tax liability pipeline encoded in Axiom
+  RuleSpec (us-ne/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (ne_income_tax_before_credits) at 2026 and TAXSIM (siitax) at 2024
+  on a modest grid of single and married filers crossing the state's brackets.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: NE
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ne-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ne-income-tax-liability.json
+  suite: ne-income-tax-liability

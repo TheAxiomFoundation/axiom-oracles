@@ -386,6 +386,14 @@
       "source": "comparisons/nc-snap-ecps.yaml"
     },
     {
+      "suite": "ne-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ne-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ne-income-tax-liability.yaml"
+    },
+    {
       "suite": "ny-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ny-income-tax-liability.json",
       "repos": [
