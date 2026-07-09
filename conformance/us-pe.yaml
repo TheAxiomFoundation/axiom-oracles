@@ -106,7 +106,14 @@ policies:
     output_vars:
       - az_income_tax
     in_scope: true
-    suite: null
+    suite: az-income-tax-liability
+    note: 'Covered by az-income-tax-liability — the Arizona composed liability pipeline (rulespec-us
+      us-az/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US az_income_tax to the cent on every grid case (the A.R.S. 43-1011 flat 2.5% tax on Arizona
+      taxable income = AGI less the 43-1041 standard deduction). az_income_tax equals
+      az_income_tax_before_refundable_credits on this childless grid (no refundable credits active). The
+      report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 2024-to-2026 standard-deduction
+      indexation vintage, not a PE mismatch.'
   - id: us-pe:az_tanf
     oracle_policy_name: az_tanf
     oracle_policy_type: rules
