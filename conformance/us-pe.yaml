@@ -209,7 +209,8 @@ policies:
     output_vars:
       - ct_income_tax
     in_scope: true
-    suite: null
+    suite: ct-income-tax-liability
+    note: "Covered by ct-income-tax-liability — the Connecticut composed liability pipeline (rulespec-us us-ct/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US ct_income_tax_before_refundable_credits to the cent on every grid case (the supplied credit nets the section 12-703 personal credit and the section 12-700(b) three-per-cent phase-out recapture). The report low top-line match_count is the axiom-vs-TAXSIM-2024 vintage, not a PE mismatch."
   - id: us-pe:ct_tfa
     oracle_policy_name: ct_tfa
     oracle_policy_type: rules
@@ -245,7 +246,8 @@ policies:
     output_vars:
       - de_income_tax
     in_scope: true
-    suite: null
+    suite: de-income-tax-liability
+    note: "Covered by de-income-tax-liability — the Delaware composed liability pipeline (rulespec-us us-de/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US de_income_tax_before_refundable_credits to the cent on every grid case and also matches TAXSIM-2024 (Delaware fixes its section 1102 brackets and the 3,250/6,500 standard deduction, unchanged 2024-to-2026), so the suite is 6/6 on both legs. de_income_tax nets the refundable EITC, which this section 1102/1110 core excludes."
   - id: us-pe:de_tanf
     oracle_policy_name: de_tanf
     oracle_policy_type: rules
@@ -576,7 +578,8 @@ policies:
     output_vars:
       - md_income_tax
     in_scope: true
-    suite: null
+    suite: md-income-tax-liability
+    note: "Covered by md-income-tax-liability — the Maryland composed liability pipeline (rulespec-us us-md/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US md_income_tax_before_refundable_credits (the STATE tax; the county income tax is a separate PE variable, excluded) to the cent on every grid case. The report low top-line match_count is the axiom-vs-TAXSIM-2024 leg — the 700-dollar-per-filer 2024-to-2026 standard-deduction vintage, TAXSIM adding no county tax here — not a PE mismatch."
   - id: us-pe:md_tca
     oracle_policy_name: md_tca
     oracle_policy_type: rules
@@ -590,7 +593,8 @@ policies:
     output_vars:
       - me_income_tax
     in_scope: true
-    suite: null
+    suite: me-income-tax-liability
+    note: "Covered by me-income-tax-liability — the Maine composed liability pipeline (rulespec-us us-me/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US me_income_tax_before_refundable_credits to the cent on every grid case. The report low top-line match_count is the axiom-vs-TAXSIM-2024 leg — the section 5111 bracket and section 5124-C standard-deduction indexation vintage — not a PE mismatch."
   - id: us-pe:me_tanf
     oracle_policy_name: me_tanf
     oracle_policy_type: rules
@@ -628,7 +632,8 @@ policies:
     output_vars:
       - mn_income_tax
     in_scope: true
-    suite: null
+    suite: mn-income-tax-liability
+    note: "Covered by mn-income-tax-liability — the Minnesota composed liability pipeline (rulespec-us us-mn/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US mn_income_tax_before_refundable_credits to the cent on every grid case (the top married case carries the section 290.091 alternative minimum tax). The report low top-line match_count is the axiom-vs-TAXSIM-2024 subdivision-2d indexation vintage, not a PE mismatch."
   - id: us-pe:mn_mfip
     oracle_policy_name: mn_mfip
     oracle_policy_type: rules

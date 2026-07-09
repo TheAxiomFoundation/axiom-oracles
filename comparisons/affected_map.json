@@ -233,6 +233,22 @@
       "source": "comparisons/co-tanf-ecps.yaml"
     },
     {
+      "suite": "ct-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ct-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ct-income-tax-liability.yaml"
+    },
+    {
+      "suite": "de-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-de-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/de-income-tax-liability.yaml"
+    },
+    {
       "suite": "fiit-ecps",
       "report": "axiom-policyengine-fiit-ecps.json",
       "repos": [
@@ -338,12 +354,28 @@
       "source": "comparisons/ma-snap-ecps.yaml"
     },
     {
+      "suite": "md-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-md-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/md-income-tax-liability.yaml"
+    },
+    {
       "suite": "md-tca-payments",
       "report": "axiom-policyengine-md-tca-payments.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us-md"
       ],
       "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "me-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-me-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/me-income-tax-liability.yaml"
     },
     {
       "suite": "me-tanf-standards",
@@ -368,6 +400,14 @@
         "TheAxiomFoundation/rulespec-us-mi"
       ],
       "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "mn-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-mn-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/mn-income-tax-liability.yaml"
     },
     {
       "suite": "mn-tanf-ecps",

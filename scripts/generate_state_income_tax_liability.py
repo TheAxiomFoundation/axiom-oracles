@@ -56,11 +56,21 @@ _TAXSIM_STATE = {
     "OH": 36,
     "UT": 45,
     "VA": 47,
-    "AL": 1,
-    "ID": 13,
-    "KY": 18,
+    "NE": 28,
+    "DE": 8,
+    "MD": 21,
+    "ME": 20,
+    "MN": 24,
+    "CT": 7,
+    # Alabama, Idaho, and Kentucky are registered us-pe suites (committed
+    # comparisons + dispositions + coverage rows) but their rulespec-us pilot
+    # pipelines are not yet on main (rulespec-us#773 pending), so they are kept
+    # OUT of the generation set: listing them would make an affected-rerun against
+    # rulespec-us main fail on the missing companion fixtures. Re-add the three
+    # here once #773 lands (their _PE_VAR/_TOL entries below are retained for that
+    # restore). This also collapses a duplicate _TAXSIM_STATE definition that a
+    # concurrent Nebraska lane left shadowing this one.
 }
-_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22, "OH": 36, "UT": 45, "VA": 47, "NE": 28}
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
 # il_income_tax additionally net the refundable CalEITC/Young Child credit and
@@ -98,6 +108,19 @@ _PE_VAR = {
     # deduction). The before-refundable variable nets the 77-2716.01 personal
     # exemption credit (a post-tax nonrefundable credit) that this core excludes.
     "NE": "ne_income_tax_before_credits",
+    # Delaware, Maryland, Maine, Minnesota, and Connecticut use the
+    # before-refundable-credits variable, the exact statutory analog of each
+    # composed pipeline. Delaware's final de_income_tax nets the refundable EITC;
+    # Maryland's md_income_tax_before_refundable_credits is the STATE tax only (the
+    # county tax md_county_tax is a separate variable the pipeline excludes); Maine
+    # and Minnesota net their refundable credits in the final variable; Connecticut
+    # nets the refundable EITC/property-tax credit. On this childless grid each
+    # before-refundable variable is the pipeline's exact target.
+    "DE": "de_income_tax_before_refundable_credits",
+    "MD": "md_income_tax_before_refundable_credits",
+    "ME": "me_income_tax_before_refundable_credits",
+    "MN": "mn_income_tax_before_refundable_credits",
+    "CT": "ct_income_tax_before_refundable_credits",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -274,6 +297,17 @@ _TOL = {
     # bracket errors without absorbing the TAXSIM rate-compression and indexation
     # vintage.
     "NE": (1.0, 0.0),
+    # Delaware, Maryland, Maine, Minnesota, and Connecticut each reproduce
+    # PolicyEngine to the cent (residual is PolicyEngine's float32 rounding); a $1
+    # absolute band catches any structural bracket error without absorbing the
+    # 2024-to-2026 vintage on the TAXSIM leg. Maryland's TAXSIM residual also
+    # carries the county/local income tax that siitax includes but the state-only
+    # target excludes; that scope gap is dispositioned, not absorbed by tolerance.
+    "DE": (1.0, 0.0),
+    "MD": (1.0, 0.0),
+    "ME": (1.0, 0.0),
+    "MN": (1.0, 0.0),
+    "CT": (1.0, 0.0),
 }
 
 
