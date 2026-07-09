@@ -6,6 +6,8 @@
  * (e.g., policyengine-taxsim.json).
  */
 
+import { topLevelAggregates } from "./suites";
+
 /**
  * @typedef {Object} OracleData
  * @property {string[]} oracles - Unique oracle names
@@ -322,7 +324,7 @@ export function buildNWayData(reports) {
   // numbers.
   const aggregateTotals = reports.reduce(
     (acc, r) => {
-      for (const agg of r.aggregates || []) {
+      for (const agg of topLevelAggregates(r.aggregates)) {
         acc.matches += (agg.comparison_count - agg.mismatch_count) || 0;
         acc.mismatches += agg.mismatch_count || 0;
         acc.comparisons += agg.comparison_count || 0;

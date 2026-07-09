@@ -9,7 +9,7 @@ import {
   mismatchKindLabel,
 } from "../utils/format";
 import { rateColor, heatmapBg } from "../utils/colors";
-import { suiteMeta } from "../utils/suites";
+import { suiteMeta, topLevelAggregates } from "../utils/suites";
 
 /**
  * Per-report alignment card.
@@ -780,7 +780,7 @@ function datasetIdentityTitle(identity) {
 function reportHeadlineRate(aggregates) {
   let matched = 0;
   let total = 0;
-  for (const a of aggregates) {
+  for (const a of topLevelAggregates(aggregates)) {
     total += a.comparison_count || 0;
     matched += (a.comparison_count || 0) - (a.mismatch_count || 0);
   }
@@ -832,11 +832,11 @@ export default function AlignmentReport({
     );
   };
 
-  const aggregateCount = aggregates.reduce(
+  const aggregateCount = topLevelAggregates(aggregates).reduce(
     (sum, a) => sum + (a.comparison_count || 0),
     0,
   );
-  const mismatchCount = aggregates.reduce(
+  const mismatchCount = topLevelAggregates(aggregates).reduce(
     (sum, a) => sum + (a.mismatch_count || 0),
     0,
   );

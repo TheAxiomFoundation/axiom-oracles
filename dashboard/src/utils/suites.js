@@ -611,11 +611,25 @@ export function reportProgramCount(report) {
   return Math.max(1, pieces.size);
 }
 
+/**
+ * Some suites (fiit, UK EFRS) report a concept HIERARCHY: a parent row
+ * (e.g. #liability) plus component rows (#ctc, #eitc, …) that break the
+ * parent down. Components are the parent's anatomy, not extra checks —
+ * summing every row double-counts. Keep a row only when its parent is
+ * absent from the same report (flat suites have no parents at all; the
+ * NYC components suite names a parent that lives in another suite).
+ */
+export function topLevelAggregates(aggregates) {
+  const rows = aggregates || [];
+  const concepts = new Set(rows.map((agg) => agg.concept));
+  return rows.filter((agg) => !(agg.parent && concepts.has(agg.parent)));
+}
+
 /** Aggregate one report's aggregates into a single matched/total metric. */
 export function reportMetric(report) {
   let total = 0;
   let mismatches = 0;
-  for (const agg of report?.aggregates || []) {
+  for (const agg of topLevelAggregates(report?.aggregates)) {
     total += agg.comparison_count || 0;
     mismatches += agg.mismatch_count || 0;
   }
