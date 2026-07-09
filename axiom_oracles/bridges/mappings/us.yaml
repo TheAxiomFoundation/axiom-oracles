@@ -3499,13 +3499,9 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_additional_member
     country: us
     program: snap
-    mapping_type: parameter_value
-    policyengine_parameter: gov.usda.snap.max_allotment.additional
-    parameter_key: CONTIGUOUS_US
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP maximum allotment additional-member amount for the 48 states and DC for FY 2024.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Intermediate scalar leaf used by the FY 2024 maximum-allotment formula. Compare the signed table leaves and the full `snap_maximum_allotment` output against PolicyEngine instead of requiring a signed companion-test edit for this helper constant.
 
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_one_person_thrifty_food_plan_cost
     country: us
@@ -3532,13 +3528,9 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_urban_additional_member
     country: us
     program: snap
-    mapping_type: parameter_value
-    policyengine_parameter: gov.usda.snap.max_allotment.additional
-    parameter_key: AK_URBAN
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP maximum allotment additional-member amount for Alaska Urban for FY 2024.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Intermediate scalar leaf used by the FY 2024 Alaska Urban maximum-allotment table. Compare the signed table leaves against PolicyEngine instead of requiring a signed companion-test edit for this helper constant.
 
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_1_table
     country: us
@@ -3554,13 +3546,9 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_1_additional_member
     country: us
     program: snap
-    mapping_type: parameter_value
-    policyengine_parameter: gov.usda.snap.max_allotment.additional
-    parameter_key: AK_RURAL_1
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP maximum allotment additional-member amount for Alaska Rural 1 for FY 2024.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Intermediate scalar leaf used by the FY 2024 Alaska Rural 1 maximum-allotment table. Compare the signed table leaves against PolicyEngine instead of requiring a signed companion-test edit for this helper constant.
 
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_2_table
     country: us
@@ -3576,13 +3564,9 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_2_additional_member
     country: us
     program: snap
-    mapping_type: parameter_value
-    policyengine_parameter: gov.usda.snap.max_allotment.additional
-    parameter_key: AK_RURAL_2
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP maximum allotment additional-member amount for Alaska Rural 2 for FY 2024.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Intermediate scalar leaf used by the FY 2024 Alaska Rural 2 maximum-allotment table. Compare the signed table leaves against PolicyEngine instead of requiring a signed companion-test edit for this helper constant.
 
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_guam_table
     country: us
@@ -3598,13 +3582,9 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_guam_additional_member
     country: us
     program: snap
-    mapping_type: parameter_value
-    policyengine_parameter: gov.usda.snap.max_allotment.additional
-    parameter_key: GU
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP maximum allotment additional-member amount for Guam for FY 2024.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Intermediate scalar leaf used by the FY 2024 Guam maximum-allotment table. Compare the signed table leaves against PolicyEngine instead of requiring a signed companion-test edit for this helper constant.
 
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_hawaii_table
     country: us
@@ -3620,13 +3600,9 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_hawaii_additional_member
     country: us
     program: snap
-    mapping_type: parameter_value
-    policyengine_parameter: gov.usda.snap.max_allotment.additional
-    parameter_key: HI
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP maximum allotment additional-member amount for Hawaii for FY 2024.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Intermediate scalar leaf used by the FY 2024 Hawaii maximum-allotment table. Compare the signed table leaves against PolicyEngine instead of requiring a signed companion-test edit for this helper constant.
 
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_virgin_islands_table
     country: us
@@ -3642,13 +3618,9 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_virgin_islands_additional_member
     country: us
     program: snap
-    mapping_type: parameter_value
-    policyengine_parameter: gov.usda.snap.max_allotment.additional
-    parameter_key: VI
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP maximum allotment additional-member amount for the Virgin Islands for FY 2024.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Intermediate scalar leaf used by the FY 2024 Virgin Islands maximum-allotment table. Compare the signed table leaves against PolicyEngine instead of requiring a signed companion-test edit for this helper constant.
 
   - legal_id: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards#snap_net_income_limit_100_percent_fpl_48_states_dc_table
     country: us
