@@ -66,6 +66,7 @@ from .zm_consumption import (
     zm_excise_ad_valorem_cases,
     zm_vat_cases,
 )
+from .rw_dispy import rw_dispy_cases
 from .rw_core import (
     rw_cbhi_tiers_cases,
     rw_contributions_cases,
@@ -219,6 +220,7 @@ def available_suites() -> tuple[str, ...]:
         "rw-vat",
         "rw-excise",
         "rw-cbhi-tiers",
+        "rw-dispy",
         "et-dispy",
     )
 
@@ -406,6 +408,8 @@ def load_suite(name: str):
         return rw_excise_cases()
     if name == "rw-cbhi-tiers":
         return rw_cbhi_tiers_cases()
+    if name == "rw-dispy":
+        return rw_dispy_cases()
     if name == "et-dispy":
         return et_dispy_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -452,6 +456,7 @@ __all__ = [
     "et_presumptive_cases",
     "et_vat_cases",
     "rw_cbhi_tiers_cases",
+    "rw_dispy_cases",
     "rw_contributions_cases",
     "rw_excise_cases",
     "rw_lump_sum_cases",

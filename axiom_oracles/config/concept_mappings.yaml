@@ -3315,6 +3315,31 @@ concepts:
           geoid: RW
 
 
+  # Rwanda composed disposable income vs RWAMOD ils_dispy (full grid,
+  # no base divergence; formal private-sector worker).
+  rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Rwanda composed worker disposable income (Table 2 tax + employee pension/maternity/CBHI-levy stack)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: RW
+
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

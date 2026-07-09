@@ -824,6 +824,14 @@ class Concepts:
         "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums"
         "#cbhi_member_paid_annual_contribution"
     )
+    # Rwanda composed monthly disposable income (Table 2 tax on gross,
+    # less the employee pension half, maternity share and the CBHI
+    # levy on the composed net), compared to RWAMOD ``ils_dispy`` on
+    # the FULL grid (no base divergence).
+    RW_PILOT_DISPOSABLE_INCOME = (
+        "rw:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_disposable_income"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"

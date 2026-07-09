@@ -137,6 +137,79 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 1200000.0
+  rw-dispy:
+    locale: RW
+    entity: Person
+    entity_id: head
+    outputs:
+    - rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    cases:
+    - id: rw-dispy-30000-nil-zone
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 360000.0
+    - id: rw-dispy-60000-exempt-bound
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 720000.0
+    - id: rw-dispy-80000-band2
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 80000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 960000.0
+    - id: rw-dispy-150000-band3
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 150000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1800000.0
+    - id: rw-dispy-400000-top-band
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 400000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800000.0
+    - id: rw-dispy-1000000-high-income
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 1000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000000.0
   rw-excise:
     locale: RW
     entity: Person

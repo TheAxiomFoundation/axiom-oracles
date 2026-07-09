@@ -467,6 +467,14 @@
       "source": "comparisons/rw-contributions.yaml"
     },
     {
+      "suite": "rw-dispy",
+      "report": "axiom-euromod-rw-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-dispy.yaml"
+    },
+    {
       "suite": "rw-excise",
       "report": "axiom-euromod-rw-excise.json",
       "repos": [
