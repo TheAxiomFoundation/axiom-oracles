@@ -2263,3 +2263,124 @@ concepts:
           geoid: US
       policyengine: ne_income_tax_before_credits
       taxsim: siitax
+  us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability:
+    description: Delaware income tax liability (resident wage earner; the section 1102 graduated tax on Delaware taxable income (AGI less the section 1108 standard deduction) less the section 1110 personal credit)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine de_income_tax_before_refundable_credits, the exact
+    # statutory analog of this core; the pipeline reproduces it to the cent across the
+    # grid. de_income_tax nets the refundable EITC, which the section 1102/1110 core
+    # excludes. Delaware fixes its brackets and the 3,250/6,500 standard deduction, so
+    # the pipeline also matches TAXSIM 2024 (no 2024-to-2026 vintage). The tight
+    # absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-DE]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: de_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: de_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability:
+    description: Maryland STATE income tax liability (resident wage earner; the section 10-105 graduated state tax on Maryland taxable income; the county income tax is a separate PolicyEngine variable, excluded)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine md_income_tax_before_refundable_credits, the STATE
+    # tax only (the county income tax is a separate variable); the pipeline reproduces
+    # it to the cent across the grid. Against TAXSIM 2024 every case diverges by the
+    # 700-dollar-per-filer standard-deduction vintage (TAXSIM adds no county tax here),
+    # dispositioned in dispositions/md-income-tax-liability.yaml. The tight absolute
+    # tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-MD]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: md_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: md_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability:
+    description: Maine income tax liability (resident wage earner; the indexed section 5111 graduated tax on Maine taxable income (AGI less the section 5124-C standard deduction and section 5126-A exemption))
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine me_income_tax_before_refundable_credits, the exact
+    # statutory analog of this core; the pipeline reproduces it to the cent across the
+    # grid (the residual is PolicyEngine's float32 rounding). Against TAXSIM 2024 every
+    # case diverges by the section 5111/5124-C indexation vintage, dispositioned in
+    # dispositions/me-income-tax-liability.yaml. The tight absolute tolerance catches
+    # structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-ME]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: me_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: me_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability:
+    description: Minnesota income tax liability (resident wage earner; the indexed section 290.06 subd. 2c graduated tax; the top married case carries the section 290.091 alternative minimum tax)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine mn_income_tax_before_refundable_credits, the exact
+    # statutory analog of this core; the pipeline reproduces it to the cent across the
+    # grid (the top married case carries the section 290.091 alternative minimum tax).
+    # Against TAXSIM 2024 every case diverges by the subdivision-2d indexation vintage,
+    # dispositioned in dispositions/mn-income-tax-liability.yaml. The tight absolute
+    # tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-MN]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: mn_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: mn_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability:
+    description: Connecticut income tax liability (resident wage earner; the section 12-700 graduated tax less the net section 12-703 personal credit / section 12-700(b) three-per-cent phase-out recapture)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ct_income_tax_before_refundable_credits, the exact
+    # statutory analog of this core; the pipeline reproduces it to the cent across the
+    # grid (the supplied credit nets the section 12-703 personal credit and the section
+    # 12-700(b) recapture). Against TAXSIM 2024 every case diverges by the exemption,
+    # credit, and recapture indexation vintage, dispositioned in
+    # dispositions/ct-income-tax-liability.yaml. The tight absolute tolerance catches
+    # structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-CT]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ct_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ct_income_tax_before_refundable_credits
+      taxsim: siitax
