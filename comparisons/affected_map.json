@@ -740,6 +740,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "zm-dispy",
+      "report": "axiom-euromod-zm-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-dispy.yaml"
+    },
+    {
       "suite": "zm-excise-ad-valorem",
       "report": "axiom-euromod-zm-excise-ad-valorem.json",
       "repos": [

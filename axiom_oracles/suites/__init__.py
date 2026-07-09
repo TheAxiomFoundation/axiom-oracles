@@ -58,6 +58,7 @@ from .zm_consumption import (
     zm_excise_ad_valorem_cases,
     zm_vat_cases,
 )
+from .zm_dispy import zm_dispy_cases
 from .zm_sct import zm_sct_cases
 from .zm_core import (
     zm_napsa_contributions_cases,
@@ -188,6 +189,7 @@ def available_suites() -> tuple[str, ...]:
         "zm-vat",
         "zm-excise-ad-valorem",
         "zm-sct",
+        "zm-dispy",
     )
 
 
@@ -348,6 +350,8 @@ def load_suite(name: str):
         return zm_excise_ad_valorem_cases()
     if name == "zm-sct":
         return zm_sct_cases()
+    if name == "zm-dispy":
+        return zm_dispy_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -392,6 +396,7 @@ __all__ = [
     "gh_transfers_cases",
     "gh_vat_levies_cases",
     "ug_dispy_cases",
+    "zm_dispy_cases",
     "zm_excise_ad_valorem_cases",
     "zm_napsa_contributions_cases",
     "zm_nhima_contributions_cases",

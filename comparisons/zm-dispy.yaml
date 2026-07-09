@@ -1,0 +1,41 @@
+name: zm-dispy
+title: Zambia zm-dispy — Axiom vs MicroZAMOD
+description: >-
+  Compares the rulespec-zm composed single-employee disposable-income
+  pipeline (Act 22 of 2023 Charging Schedule tax on GROSS income, less
+  the employee NAPSA and NHIMA contributions) against MicroZAMOD
+  ils_dispy (ZM_2025, zm_2022_a2). Live cases sit in the shared-nil
+  zone (gross at or below the 61,200 exempt bound) where both engines
+  charge no tax and dispy = gross - NAPSA - NHIMA exactly; the bridges
+  feed the engine's own post-uprating yem and computed
+  tsceepi_s/tsceehl_s so nil-zone parity is index- and ceiling-proof.
+  Taxed-zone disposition (rulespec-zm#1 finding 1, probed): MicroZAMOD
+  taxes the net base (ttb_s = yem - tsceepi_s - tsceehl_s), which Act
+  22 of 2024 s.4 (employer-only approved-fund deduction, no NHIMA
+  deductibility) does not support - at 240,000 gross the model returns
+  tax 54,984 / dispy 170,616 vs the statutory 60,312 / 165,288, and at
+  409,968 gross the tax gap is 9,101.29/yr (the Ghana gh-dispy
+  precedent with the opposite sign). The SOUTHMOD bundle is licensed
+  and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: zm-dispy
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ZM
+    euromod_system: ZM_2025
+    euromod_dataset: zm_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-zm-dispy.json
+
+artifacts:
+  report_basename: axiom-euromod-zm-dispy
+
+dashboard:
+  filename: axiom-euromod-zm-dispy.json
+  suite: zm-dispy

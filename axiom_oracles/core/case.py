@@ -693,6 +693,14 @@ class Concepts:
         "zm:policies/mcdss-sct/ministerial-statement-transfer-values"
         "#sct_monthly_transfer"
     )
+    # Zambia composed single-employee disposable income (Act 22 of 2023
+    # tax on gross, less employee NAPSA and NHIMA contributions),
+    # compared to MicroZAMOD ``ils_dispy`` in the shared-nil zone; the
+    # taxed-zone net-base divergence is rulespec-zm#1 finding 1.
+    ZM_PILOT_DISPOSABLE_INCOME = (
+        "zm:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_disposable_income"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
