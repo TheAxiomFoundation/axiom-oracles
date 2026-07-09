@@ -127,6 +127,7 @@
     "axiom-policyengine-ga-tanf-ecps.json",
     "axiom-policyengine-taxsim-id-income-tax-liability.json",
     "axiom-policyengine-taxsim-md-income-tax-liability.json",
-    "axiom-policyengine-taxsim-ut-income-tax-liability.json"
+    "axiom-policyengine-taxsim-ut-income-tax-liability.json",
+    "axiom-policyengine-taxsim-oh-income-tax-liability.json"
   ]
 }
