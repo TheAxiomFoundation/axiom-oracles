@@ -39,13 +39,30 @@ function kindDescription(kind, engines) {
   return descriptions[kind];
 }
 
-function ConceptMetric({ aggregate }) {
+function ConceptMetric({ aggregate, caseCount, isParent }) {
   const rate = aggregate.match_rate;
   const total = aggregate.comparison_count;
-  const matched = total - aggregate.mismatch_count;
+  const mismatches = aggregate.mismatch_count || 0;
+  const matched = total - mismatches;
   const weighted = aggregate.weighted_match_rate;
   const tolerance = aggregate.tolerance;
   const isAmount = aggregate.comparison === "amount";
+  // Say what the denominator IS: concepts differ in how many worksheet
+  // surfaces they check per case (EITC compares 11 intermediate values,
+  // tax-before-credits just one), and payroll is compared per worker,
+  // so the raw counts differ even over the same population.
+  const perCase = caseCount > 0 ? total / caseCount : null;
+  let scope = null;
+  if (isParent) {
+    scope = "all surfaces combined";
+  } else if (perCase != null && Number.isInteger(perCase)) {
+    scope =
+      perCase === 1
+        ? "one check per case"
+        : `${perCase} surfaces × ${caseCount.toLocaleString()} cases`;
+  } else if (String(aggregate.concept || "").includes(":tax/payroll")) {
+    scope = "one check per worker";
+  }
   // The descriptive label comes from the concept (e.g. "SNAP benefit
   // amount", "Child Tax Credit value", "Federal income tax liability").
   // Falls back to the kind tag only when no description is set.
@@ -102,8 +119,15 @@ function ConceptMetric({ aggregate }) {
       <div
         className="mono"
         style={{ fontSize: 11, color: "var(--ink-mute)", marginTop: 6 }}
+        title={`${matched.toLocaleString()} of ${total.toLocaleString()} checks agree`}
       >
-        {matched.toLocaleString()}/{total.toLocaleString()}
+        {total === 1
+          ? mismatches > 0
+            ? "disagrees"
+            : "agrees"
+          : mismatches > 0
+            ? `${mismatches.toLocaleString()} of ${total.toLocaleString()} disagree`
+            : `all ${total.toLocaleString()} agree`}
         {isAmount && tolerance != null && (
           <span style={{ marginLeft: 6 }}>
             · ±{formatCurrency(tolerance)}
@@ -115,6 +139,14 @@ function ConceptMetric({ aggregate }) {
           </span>
         )}
       </div>
+      {scope && (
+        <div
+          className="mono"
+          style={{ fontSize: 10, color: "var(--ink-soft)", marginTop: 3 }}
+        >
+          {scope}
+        </div>
+      )}
     </div>
   );
 }
@@ -966,13 +998,19 @@ export default function AlignmentReport({
       )}
 
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-        {aggregates.map((agg) => (
-          <ConceptMetric
-            key={agg.concept}
-            aggregate={agg}
-            mismatchCount={agg.mismatch_count}
-          />
-        ))}
+        {(() => {
+          const parents = new Set(
+            aggregates.filter((a) => a.parent).map((a) => a.parent),
+          );
+          return aggregates.map((agg) => (
+            <ConceptMetric
+              key={agg.concept}
+              aggregate={agg}
+              caseCount={report.case_count}
+              isParent={parents.has(agg.concept)}
+            />
+          ));
+        })()}
       </div>
 
       {report.suite === "fiit-ecps" && (
