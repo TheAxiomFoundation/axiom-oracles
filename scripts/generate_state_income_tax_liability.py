@@ -48,7 +48,7 @@ VALIDATION_YEAR = 2026
 TAXSIM_YEAR = 2024  # pinned binary abandons 2026; latest available law year
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
-_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22, "OH": 36}
+_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22, "OH": 36, "UT": 45, "VA": 47}
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
 # il_income_tax additionally net the refundable CalEITC/Young Child credit and
@@ -64,6 +64,14 @@ _PE_VAR = {
     "IL": "il_income_tax_before_refundable_credits",
     "MA": "ma_income_tax",
     "OH": "oh_income_tax_before_refundable_credits",
+    # Virginia's before-non-refundable-credits variable is the exact 58.1-320
+    # bracket-tax analog; on the childless grid it equals the final va_income_tax
+    # (no VA credits).
+    "VA": "va_income_tax_before_non_refundable_credits",
+    # Utah's before-credits variable is the pure 59-10-104 flat tax; the
+    # before-non-refundable variable nets the phased-out 59-10-1018 taxpayer
+    # credit that this flat core excludes.
+    "UT": "ut_income_tax_before_credits",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -222,6 +230,12 @@ _TOL = {
     # float32 rounding, under a tenth of a cent); a $1 absolute band catches any
     # structural bracket error without absorbing the indexation vintage.
     "OH": (1.0, 0.0),
+    # Virginia matches PolicyEngine exactly (fixed statutory brackets, no
+    # rounding); a $1 band catches structural bracket errors without absorbing
+    # the TAXSIM standard-deduction vintage.
+    "VA": (1.0, 0.0),
+    # Utah is a single flat rate on the taxable base; exact match.
+    "UT": (1.0, 0.0),
 }
 
 

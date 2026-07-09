@@ -756,6 +756,14 @@
       "source": "comparisons/uk-worker-pit-ukmod.yaml"
     },
     {
+      "suite": "ut-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ut-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ut-income-tax-liability.yaml"
+    },
+    {
       "suite": "ut-snap-ecps",
       "report": "axiom-policyengine-ut-snap-ecps.json",
       "repos": [
@@ -763,6 +771,14 @@
         "TheAxiomFoundation/rulespec-us-ut"
       ],
       "source": "comparisons/ut-snap-ecps.yaml"
+    },
+    {
+      "suite": "va-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-va-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/va-income-tax-liability.yaml"
     },
     {
       "suite": "wa-tanf-ecps",
