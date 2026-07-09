@@ -1480,3 +1480,66 @@ mappings:
   - match: { kind: suffix, value: tanf_case_reopened_in_month_following_effective_date_of_closure }
     scope: household
     source: { kind: constant, value: false }
+
+  # ---------------------------------------------------------------------
+  # GA TANF (us-ga/tanf program) — DFCS PAMMS 1525/1605/1615/appendix-a slice.
+  # The benefit leaf (1605 block-14) already encodes Steps 11-13:
+  # min(max(standard_of_need - net_countable_income, 0), family_maximum). This
+  # block projects its budgeting free-inputs from ECPS. Gross countable income
+  # is the AU's included earned + unearned income; the 1615 standard $250 work
+  # deduction is projected at household scope as min(monthly AU earned, 250)
+  # (allowable_earned_income_deductions), exact for the 0-/1-earner units that
+  # dominate the caseload. Deemed/allocated non-member income and the
+  # SON-trial-budget applicant path are not observable in ECPS and take inert
+  # constants (steady-state recipient month); the demographic gate
+  # (household_has_minor_or_pregnant_member) is shared above.
+  # ---------------------------------------------------------------------
+
+  # au_size is declared Count in the program spec (integer chart key); it binds to
+  # this AU member count. hh_size returns len(people) as an integer.
+  - match: { kind: exact, value: assistance_unit_member_count }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+
+  - match: { kind: exact, value: assistance_unit_included_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: exact, value: income_deemed_from_non_assistance_unit_members }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: exact, value: income_allocated_to_non_assistance_unit_members }
+    scope: household
+    source: { kind: constant, value: 0 }
+
+  - match: { kind: exact, value: son_trial_budget_is_necessary }
+    scope: household
+    source: { kind: constant, value: false }
+
+  # 1605 block-4 net_countable_income = gross_countable - allowable_earned_income_deductions.
+  # PolicyEngine's ga_tanf earned disregard is the PAMMS 1615 standard $250 work
+  # deduction per employed individual (min(earned, 250) each). Projected here at
+  # household scope as min(monthly AU earned income, 250) via monthly_rate_plus_flat
+  # (rate 0, flat 250, capped at the income): exact for the 0- and 1-earner units
+  # that dominate the caseload; a rare multi-earner unit understates the total by
+  # capping at one $250 rather than one per earner (dispositioned).
+  - match: { kind: exact, value: allowable_earned_income_deductions }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_rate_plus_flat
+      rate: 0
+      flat: 250
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]

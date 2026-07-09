@@ -1,0 +1,206 @@
+{
+  "aggregates": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1897,
+      "comparison_weight": 5138603.901064,
+      "components": [],
+      "concept": "us-ga:policies/dfcs/tanf#ga_tanf_benefit",
+      "description": "GA TANF benefit (annualized)",
+      "left_weighted_sum": 641312530.174785,
+      "match_rate": 99.947285,
+      "match_weight": 5138595.370721,
+      "mismatch_count": 1,
+      "mismatch_weight": 8.530343,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 641328897.117749,
+      "weighted_difference": -16366.942964,
+      "weighted_match_rate": 99.999834
+    }
+  ],
+  "case_count": 1897,
+  "cases": [
+    {
+      "case_id": "ecps-30062",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 26,
+        "axiom_relations_count": 8,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            48,
+            48,
+            16,
+            14
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 8.530343055725098,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "13245",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-ga:policies/dfcs/tanf#ga_tanf_benefit",
+          "description": "GA TANF benefit (annualized)",
+          "difference": -1979.6455078125,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1979.6455078125,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "GA TANF benefit (annualized)",
+      "id": "us-ga:policies/dfcs/tanf#ga_tanf_benefit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 25
+    }
+  ],
+  "dashboard_truncation": {
+    "shown_case_rows": 1,
+    "shown_mismatches": 1,
+    "total_case_rows": 1897,
+    "total_mismatches": 1
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "ecps-30062",
+      "concept": "us-ga:policies/dfcs/tanf#ga_tanf_benefit",
+      "description": "GA TANF benefit (annualized)",
+      "difference": -1979.6455078125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ga-tanf-ecps-ga_tanf_benefit-composed-vs-pe-income-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/247"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1979.6455078125,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "enhanced-cps",
+  "provenance": {
+    "dataset": {
+      "population": "enhanced-cps",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-08T22:16:52Z",
+    "generated_by": "scripts/run_comparison.py::ga-tanf-ecps",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.752.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us-ga",
+        "sha": null
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "US",
+    "type": "country"
+  },
+  "suite": "ga-tanf-ecps",
+  "summary": {
+    "comparison_count": 1897,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 1,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/ga-tanf-ecps.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 99.947285,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 1896,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "us-ga:policies/dfcs/tanf#ga_tanf_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": null
+      }
+    ],
+    "stored_mismatch_example_count": 1,
+    "weighted": {
+      "comparison_weight": 5138603.901064,
+      "match_rate": 99.999834,
+      "match_weight": 5138595.370721,
+      "mismatch_weight": 8.530343
+    }
+  }
+}
