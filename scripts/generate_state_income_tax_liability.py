@@ -62,14 +62,15 @@ _TAXSIM_STATE = {
     "ME": 20,
     "MN": 24,
     "CT": 7,
-    # Alabama, Idaho, and Kentucky are registered us-pe suites (committed
-    # comparisons + dispositions + coverage rows) but their rulespec-us pilot
-    # pipelines are not yet on main (rulespec-us#773 pending), so they are kept
-    # OUT of the generation set: listing them would make an affected-rerun against
-    # rulespec-us main fail on the missing companion fixtures. Re-add the three
-    # here once #773 lands (their _PE_VAR/_TOL entries below are retained for that
-    # restore). This also collapses a duplicate _TAXSIM_STATE definition that a
-    # concurrent Nebraska lane left shadowing this one.
+    # Alabama, Idaho, and Kentucky rejoin the generation set now that their
+    # rulespec-us composed pilot pipelines have landed on main (rulespec-us#773),
+    # so an affected-rerun against rulespec-us main finds the companion fixtures.
+    # Their us-pe suites, comparisons, and dispositions were registered in or#254;
+    # the _PE_VAR/_TOL entries below were retained across the omission for this
+    # restore.
+    "AL": 1,
+    "ID": 13,
+    "KY": 18,
 }
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
