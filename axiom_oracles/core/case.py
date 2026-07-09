@@ -685,6 +685,14 @@ class Concepts:
         "zm:statutes/act-2024-24/customs-and-excise-amendment-2024"
         "#spirits_duty"
     )
+    # Zambia Social Cash Transfer standing values (MCDSS Ministerial
+    # Statement: 200/month, doubled for severe disability), compared to
+    # MicroZAMOD ``bsa_s`` on the ZM_2024 system (the standing scheme);
+    # the ZM_2025 400/600 drought-annualization is finding 6.
+    ZM_SCT_MONTHLY_TRANSFER = (
+        "zm:policies/mcdss-sct/ministerial-statement-transfer-values"
+        "#sct_monthly_transfer"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
