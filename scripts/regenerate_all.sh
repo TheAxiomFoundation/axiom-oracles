@@ -6,13 +6,22 @@
 set -e
 cd "$(dirname "$0")/.."
 
+# Unattended runs commit and deploy production — never do that from a
+# review branch someone left checked out.
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" != "main" ]; then
+  echo "!! refusing unattended regen on branch '$branch' (expected main)"
+  exit 1
+fi
+
 ./scripts/sync_rulespec_roots.sh
 
 (cd scripts && ../.venv/bin/python run_ssa_parameter_comparison.py)
 (cd scripts && ../.venv/bin/python run_parameter_comparisons.py)
 (cd scripts && ../.venv/bin/python run_medicaid_thresholds_comparison.py)
 
-for suite in fiit-ecps co-state-income-tax-ecps ssi-ecps ny-tanf-ecps \
+for suite in fiit-ecps co-state-income-tax-ecps co-state-income-tax-taxsim \
+             ssi-ecps ny-tanf-ecps \
              wa-tanf-ecps co-tanf-ecps ca-tanf-ecps mn-tanf-ecps az-tanf-ecps \
              ks-tanf-ecps medicaid-magi-co-ecps \
              al-snap-ecps az-snap-ecps ca-snap-ecps co-snap-ecps \
@@ -23,6 +32,9 @@ for suite in fiit-ecps co-state-income-tax-ecps ssi-ecps ny-tanf-ecps \
 done
 
 .venv/bin/python scripts/sync_encoded_coverage.py || true
+# Re-emit per-suite case artifacts for the dashboard's case explorer from
+# the fresh full reports (auto-discovers suites from comparisons/*.yaml).
+.venv/bin/python scripts/emit_case_artifacts.py || echo "!! case artifacts failed"
 .venv/bin/python -m pytest tests/ -q
 
 if ! git diff --quiet dashboard/public/data; then
