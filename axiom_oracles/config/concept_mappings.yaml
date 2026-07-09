@@ -2667,6 +2667,31 @@ concepts:
           type: country
           geoid: ZM
 
+  # Zambia Social Cash Transfer standing values (MCDSS Ministerial
+  # Statement) vs MicroZAMOD bsa_s on ZM_2024 (the standing scheme);
+  # ZM_2025's 400/600 drought-annualization is rulespec-zm#1 finding 6.
+  zm:policies/mcdss-sct/ministerial-statement-transfer-values#sct_monthly_transfer:
+    description: Zambia Social Cash Transfer monthly value (K200 standing; K400 severe-disability double)
+    category: benefit
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: sct_monthly_transfer
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: bsa_s
+        scope:
+          type: country
+          geoid: ZM
+
 
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)

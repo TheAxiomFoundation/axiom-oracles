@@ -1,0 +1,39 @@
+name: zm-sct
+title: Zambia zm-sct — Axiom vs MicroZAMOD
+description: >-
+  Compares the rulespec-zm Social Cash Transfer standing transfer
+  values (MCDSS Ministerial Statement: K200 per month per household,
+  doubled to K400 for a household with a member with severe
+  disability) against MicroZAMOD bsa_s on the ZM_2024 system, whose
+  amounts equal the standing scheme exactly (probed live). Finding 6
+  disposition (rulespec-zm#1, probed): ZM_2025 pays 400/600 per month
+  (4,800/7,200 per year), annualizing the time-bounded drought
+  measures ending June 2025 (or anticipating the 2026 budget); the
+  standing 2025 scheme remains 200/400, and even in the drought window
+  severe disability is double-the-base, not base-plus-200. The suite
+  cases use a 65-plus zero-asset urban household, which the model's
+  proxy-means score qualifies deterministically (scaled 99.06 < 460),
+  so no random draw or score bridge is required. The SOUTHMOD bundle
+  is licensed and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: zm-sct
+    population: synthetic
+    sample_size: 0
+    period: 2024
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ZM
+    euromod_system: ZM_2024
+    euromod_dataset: zm_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-zm-sct.json
+
+artifacts:
+  report_basename: axiom-euromod-zm-sct
+
+dashboard:
+  filename: axiom-euromod-zm-sct.json
+  suite: zm-sct
