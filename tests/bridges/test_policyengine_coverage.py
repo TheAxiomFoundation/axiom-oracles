@@ -9245,6 +9245,56 @@ rules:
     )
 
 
+def test_policyengine_registry_classifies_snap_fy2024_cola_outputs():
+    registry = load_policyengine_registry()
+
+    standard = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
+        country="us",
+    )
+    assert standard is not None
+    assert standard.mapping_type == "direct_variable"
+    assert standard.policyengine_variable == "snap_standard_deduction"
+
+    standard_table = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/deductions"
+        "#snap_standard_deduction_48_states_dc_table",
+        country="us",
+    )
+    assert standard_table is not None
+    assert standard_table.mapping_type == "parameter_value"
+    assert (
+        standard_table.policyengine_parameter
+        == "gov.usda.snap.income.deductions.standard.CONTIGUOUS_US"
+    )
+    assert standard_table.parameter_key_input == "household_size"
+
+    maximum_allotment = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
+        "#snap_maximum_allotment",
+        country="us",
+    )
+    assert maximum_allotment is not None
+    assert maximum_allotment.mapping_type == "direct_variable"
+    assert maximum_allotment.policyengine_variable == "snap_max_allotment"
+
+    asset_selector = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/deductions#snap_asset_limit",
+        country="us",
+    )
+    assert asset_selector is not None
+    assert asset_selector.mapping_type == "not_comparable"
+    assert asset_selector.policyengine_variable == "snap_asset_limit"
+
+    additional_member_helper = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/income-eligibility-standards"
+        "#snap_net_income_limit_100_percent_fpl_48_states_dc_additional_member",
+        country="us",
+    )
+    assert additional_member_helper is not None
+    assert additional_member_helper.mapping_type == "not_comparable"
+
+
 def test_policyengine_coverage_classifies_arizona_snap_utility_eligibility(
     tmp_path,
 ):
