@@ -1,0 +1,136 @@
+schema: axiom_oracles.dispositions.v1
+suite: al-income-tax-liability
+updated: '2026-07-08'
+entries:
+- id: al-taxsim-2024-vintage-single-30000
+  concept: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  case_id: al-single-30000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: TAXSIM runs at its latest 2024 law year. Alabama's section 40-18-5
+      rate schedule (2/4/5 per cent) is unchanged between 2024 and 2026; the residual
+      is the section 40-18-15(a)(1) federal-income-tax-deduction vintage. Alabama
+      deducts the filer's federal income tax, which fell from 2024 to 2026 as the
+      OBBBA rate schedule took effect, so the 2026 Alabama taxable income and tax
+      are higher than TAXSIM's 2024 computation. The pipeline reports 1174.00; TAXSIM
+      2024 reports 1164.73. Pinned-2024-law-year vintage, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent.
+    arithmetic:
+    - expression: 1174.0001 - 1164.73
+      equals: 9.2701
+      tolerance: 0.01
+  expires_on_source_change: true
+  pinned:
+    left: 1174.0001
+    right: 1164.73
+- id: al-taxsim-2024-vintage-single-60000
+  concept: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  case_id: al-single-60000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: TAXSIM runs at its latest 2024 law year. Alabama's section 40-18-5
+      rate schedule (2/4/5 per cent) is unchanged between 2024 and 2026; the residual
+      is the section 40-18-15(a)(1) federal-income-tax-deduction vintage. Alabama
+      deducts the filer's federal income tax, which fell from 2024 to 2026 as the
+      OBBBA rate schedule took effect, so the 2026 Alabama taxable income and tax
+      are higher than TAXSIM's 2024 computation. The pipeline reports 2404.50; TAXSIM
+      2024 reports 2394.70. Pinned-2024-law-year vintage, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent.
+    arithmetic:
+    - expression: 2404.5001 - 2394.7
+      equals: 9.8001
+      tolerance: 0.01
+  expires_on_source_change: true
+  pinned:
+    left: 2404.5001
+    right: 2394.7
+- id: al-taxsim-2024-vintage-single-150000
+  concept: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  case_id: al-single-150000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: TAXSIM runs at its latest 2024 law year. Alabama's section 40-18-5
+      rate schedule (2/4/5 per cent) is unchanged between 2024 and 2026; the residual
+      is the section 40-18-15(a)(1) federal-income-tax-deduction vintage. Alabama
+      deducts the filer's federal income tax, which fell from 2024 to 2026 as the
+      OBBBA rate schedule took effect, so the 2026 Alabama taxable income and tax
+      are higher than TAXSIM's 2024 computation. The pipeline reports 5574.55; TAXSIM
+      2024 reports 5534.33. Pinned-2024-law-year vintage, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent.
+    arithmetic:
+    - expression: 5574.5501 - 5534.33
+      equals: 40.2201
+      tolerance: 0.01
+  expires_on_source_change: true
+  pinned:
+    left: 5574.5501
+    right: 5534.33
+- id: al-taxsim-2024-vintage-married-60000
+  concept: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  case_id: al-married-60000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: TAXSIM runs at its latest 2024 law year. Alabama's section 40-18-5
+      rate schedule (2/4/5 per cent) is unchanged between 2024 and 2026; the residual
+      is the section 40-18-15(a)(1) federal-income-tax-deduction vintage. Alabama
+      deducts the filer's federal income tax, which fell from 2024 to 2026 as the
+      OBBBA rate schedule took effect, so the 2026 Alabama taxable income and tax
+      are higher than TAXSIM's 2024 computation. The pipeline reports 2378.00; TAXSIM
+      2024 reports 2358.40. Pinned-2024-law-year vintage, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent.
+    arithmetic:
+    - expression: 2378.0002 - 2358.4
+      equals: 19.6002
+      tolerance: 0.01
+  expires_on_source_change: true
+  pinned:
+    left: 2378.0002
+    right: 2358.4
+- id: al-taxsim-2024-vintage-married-120000
+  concept: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  case_id: al-married-120000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: TAXSIM runs at its latest 2024 law year. Alabama's section 40-18-5
+      rate schedule (2/4/5 per cent) is unchanged between 2024 and 2026; the residual
+      is the section 40-18-15(a)(1) federal-income-tax-deduction vintage. Alabama
+      deducts the filer's federal income tax, which fell from 2024 to 2026 as the
+      OBBBA rate schedule took effect, so the 2026 Alabama taxable income and tax
+      are higher than TAXSIM's 2024 computation. The pipeline reports 4809.00; TAXSIM
+      2024 reports 4789.40. Pinned-2024-law-year vintage, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent.
+    arithmetic:
+    - expression: 4809.0002 - 4789.4
+      equals: 19.6002
+      tolerance: 0.01
+  expires_on_source_change: true
+  pinned:
+    left: 4809.0002
+    right: 4789.4
+- id: al-taxsim-2024-vintage-married-300000
+  concept: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  case_id: al-married-300000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: TAXSIM runs at its latest 2024 law year. Alabama's section 40-18-5
+      rate schedule (2/4/5 per cent) is unchanged between 2024 and 2026; the residual
+      is the section 40-18-15(a)(1) federal-income-tax-deduction vintage. Alabama
+      deducts the filer's federal income tax, which fell from 2024 to 2026 as the
+      OBBBA rate schedule took effect, so the 2026 Alabama taxable income and tax
+      are higher than TAXSIM's 2024 computation. The pipeline reports 11484.65;
+      TAXSIM 2024 reports 11451.65. Pinned-2024-law-year vintage, not a pipeline
+      defect; the pipeline matches PolicyEngine at 2026 to the cent.
+    arithmetic:
+    - expression: 11484.6502 - 11451.65
+      equals: 33.0002
+      tolerance: 0.01
+  expires_on_source_change: true
+  pinned:
+    left: 11484.6502
+    right: 11451.65

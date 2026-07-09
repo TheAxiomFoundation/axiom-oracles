@@ -20,6 +20,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "al-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-al-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/al-income-tax-liability.yaml"
+    },
+    {
       "suite": "al-snap-ecps",
       "report": "axiom-policyengine-al-snap-ecps.json",
       "repos": [
@@ -273,6 +281,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "id-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-id-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/id-income-tax-liability.yaml"
+    },
+    {
       "suite": "il-income-tax-liability",
       "report": "axiom-policyengine-taxsim-il-income-tax-liability.json",
       "repos": [
@@ -288,6 +304,14 @@
         "TheAxiomFoundation/rulespec-us-ks"
       ],
       "source": "comparisons/ks-tanf-ecps.yaml"
+    },
+    {
+      "suite": "ky-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ky-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ky-income-tax-liability.yaml"
     },
     {
       "suite": "lifeline-parameters",

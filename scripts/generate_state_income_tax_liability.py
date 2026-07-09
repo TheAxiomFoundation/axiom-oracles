@@ -48,7 +48,18 @@ VALIDATION_YEAR = 2026
 TAXSIM_YEAR = 2024  # pinned binary abandons 2026; latest available law year
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
-_TAXSIM_STATE = {"CA": 5, "NY": 33, "IL": 14, "MA": 22, "OH": 36, "UT": 45, "VA": 47}
+_TAXSIM_STATE = {
+    "CA": 5,
+    "NY": 33,
+    "IL": 14,
+    "MA": 22,
+    "OH": 36,
+    "UT": 45,
+    "VA": 47,
+    "AL": 1,
+    "ID": 13,
+    "KY": 18,
+}
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
 # il_income_tax additionally net the refundable CalEITC/Young Child credit and
@@ -72,6 +83,15 @@ _PE_VAR = {
     # before-non-refundable variable nets the phased-out 59-10-1018 taxpayer
     # credit that this flat core excludes.
     "UT": "ut_income_tax_before_credits",
+    # Alabama, Idaho, and Kentucky use the before-refundable-credits variable,
+    # the exact statutory analog of each core. Alabama's final al_income_tax
+    # equals it on this grid (no refundable credits); Idaho's final id_income_tax
+    # additionally nets the refundable grocery credit that the 63-3024 core
+    # excludes; Kentucky's final ky_income_tax nets the refundable/family-size
+    # credits that the 141.020 flat core excludes.
+    "AL": "al_income_tax_before_refundable_credits",
+    "ID": "id_income_tax_before_refundable_credits",
+    "KY": "ky_income_tax_before_refundable_credits",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -236,6 +256,13 @@ _TOL = {
     "VA": (1.0, 0.0),
     # Utah is a single flat rate on the taxable base; exact match.
     "UT": (1.0, 0.0),
+    # Alabama, Idaho, and Kentucky each reproduce PolicyEngine to a hundredth of
+    # a cent (the residual is PolicyEngine's float32 rounding); a $1 absolute
+    # band catches any structural bracket error without absorbing the
+    # 2024-to-2026 rate/deduction vintage carried by the TAXSIM leg.
+    "AL": (1.0, 0.0),
+    "ID": (1.0, 0.0),
+    "KY": (1.0, 0.0),
 }
 
 
