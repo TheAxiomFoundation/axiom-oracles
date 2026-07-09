@@ -1053,14 +1053,26 @@ policies:
     output_vars:
       - ut_income_tax
     in_scope: true
-    suite: null
+    suite: ut-income-tax-liability
+    note: 'Covered by ut-income-tax-liability — the Utah composed liability pipeline (rulespec-us
+      us-ut/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US ut_income_tax_before_credits (the pure 59-10-104 flat tax) exactly on every grid case. The
+      report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg (the 4.55-to-4.45 rate vintage
+      plus TAXSIM''s inclusion of the 59-10-1018 taxpayer credit this before-credits core excludes), not
+      a PE mismatch.'
   - id: us-pe:va_income_tax
     oracle_policy_name: va_income_tax
     oracle_policy_type: rules
     output_vars:
       - va_income_tax
     in_scope: true
-    suite: null
+    suite: va-income-tax-liability
+    note: 'Covered by va-income-tax-liability — the Virginia composed liability pipeline (rulespec-us
+      us-va/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US va_income_tax_before_non_refundable_credits exactly on every grid case (the report''s low
+      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 2024-to-2026 standard-deduction vintage,
+      not a PE mismatch). va_income_tax equals the before-non-refundable value for these childless wage
+      cases (no VA credits).'
   - id: us-pe:va_tanf
     oracle_policy_name: va_tanf
     oracle_policy_type: rules

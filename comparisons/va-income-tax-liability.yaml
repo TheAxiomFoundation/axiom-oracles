@@ -1,0 +1,39 @@
+# Virginia composed income-tax liability — Axiom pipeline vs PolicyEngine and
+# TAXSIM on a modest case grid. The Axiom side is the composed rulespec-us
+# pipeline us-va/policies/income_tax/pilot_liability_pipeline, evaluated through
+# the axiom rules engine (its liabilities are the engine-verified companion-test
+# fixtures). Virginia is progressive (Va. Code 58.1-320: 2/3/5/5.75% at the
+# $3,000/$5,000/$17,000 floors, statutory fixed).
+#
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 standard-deduction vintage is recorded in
+# dispositions/va-income-tax-liability.yaml rather than absorbed by tolerance.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py va-income-tax-liability
+
+name: va-income-tax-liability
+title: Virginia income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Virginia income-tax liability pipeline encoded in Axiom
+  RuleSpec (us-va/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (va_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
+  (siitax) at 2024 on a modest grid of single and married filers crossing the
+  state's brackets.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: VA
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-va-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-va-income-tax-liability.json
+  suite: va-income-tax-liability
