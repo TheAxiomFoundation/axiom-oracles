@@ -2718,6 +2718,198 @@ concepts:
           type: country
           geoid: ZM
 
+  # Ethiopia employment income tax (Proclamation 1395/2025 Article 11
+  # monthly schedule) vs ETMOD tin01_s - gross base verified correct.
+  et:statutes/proc-1395-2025/income-tax-amendment-2025#employment_income_tax:
+    description: Ethiopia employment income tax (Income Tax (Amendment) Proclamation No. 1395/2025, monthly schedule)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: employment_income_tax
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tin01_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia business income tax payable incl. the Article 23 minimum
+  # tax floor vs ETMOD tin02_s (agreement zone; MAT findings 1-2
+  # dispositioned).
+  et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable:
+    description: Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: business_income_tax_payable
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tin02_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia presumptive gross-receipts tax (Article 50 schedule under
+  # the Article 49 regime) vs ETMOD ttn_s - probed exact.
+  et:statutes/proc-1395-2025/income-tax-amendment-2025#presumptive_gross_receipts_tax:
+    description: Ethiopia presumptive gross-receipts tax (Article 50 schedule, Category B)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: presumptive_gross_receipts_tax
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia private-organization employee pension share (7%,
+  # Proclamation 715/2011 Article 10) vs ETMOD tscee_s.
+  et:statutes/proc-715-2011/private-organization-employees-pension#private_employee_pension_contribution:
+    description: Ethiopia private-organization employee pension contribution (7% of salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: private_employee_pension_contribution
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia private-organization employer pension share (11%).
+  et:statutes/proc-715-2011/private-organization-employees-pension#private_employer_pension_contribution:
+    description: Ethiopia private-organization employer pension contribution (11% of salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: private_employer_pension_contribution
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia military/police office pension rate (25%, Proclamation
+  # 714/2011 Article 11) vs ETMOD tscer_s at loc=0.
+  et:statutes/proc-714-2011/public-servants-pension#military_police_office_pension_contribution:
+    description: Ethiopia military and police office pension contribution (25% of salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: military_police_office_pension_contribution
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia VAT on domestic electricity above the Directive
+  # 1021/2024 200 kWh monthly threshold vs ETMOD tva_s.
+  et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat:
+    description: Ethiopia VAT on domestic electricity above 200 kWh per month (15%)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: electricity_vat
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia VAT on domestic water above the 15 cubic-meter monthly
+  # threshold vs ETMOD tva_s.
+  et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat:
+    description: Ethiopia VAT on domestic water above 15 cubic meters per month (15%)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: water_vat
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: ET
+
 
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)

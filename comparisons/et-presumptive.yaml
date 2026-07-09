@@ -1,0 +1,30 @@
+name: et-presumptive
+title: Ethiopia et-presumptive — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et Article 50 gross-receipts schedule
+  (marginal 2/3/5/7/9% to 2,000,000 birr under the Article 49 regime)
+  against ETMOD ttn_s - probed exact at interior and band-edge
+  receipts, bridged post-uprating. The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-presumptive
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-presumptive.json
+
+artifacts:
+  report_basename: axiom-euromod-et-presumptive
+
+dashboard:
+  filename: axiom-euromod-et-presumptive.json
+  suite: et-presumptive

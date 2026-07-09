@@ -208,6 +208,46 @@
       "source": "comparisons/co-tanf-ecps.yaml"
     },
     {
+      "suite": "et-business-mat",
+      "report": "axiom-euromod-et-business-mat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-business-mat.yaml"
+    },
+    {
+      "suite": "et-paye-rate-schedule",
+      "report": "axiom-euromod-et-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "et-pension-contributions",
+      "report": "axiom-euromod-et-pension-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-pension-contributions.yaml"
+    },
+    {
+      "suite": "et-presumptive",
+      "report": "axiom-euromod-et-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-presumptive.yaml"
+    },
+    {
+      "suite": "et-vat",
+      "report": "axiom-euromod-et-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-vat.yaml"
+    },
+    {
       "suite": "fiit-ecps",
       "report": "axiom-policyengine-fiit-ecps.json",
       "repos": [

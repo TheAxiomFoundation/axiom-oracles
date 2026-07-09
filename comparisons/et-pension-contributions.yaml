@@ -1,0 +1,32 @@
+name: et-pension-contributions
+title: Ethiopia et-pension-contributions — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et pension shares - Proclamation 715/2011
+  Article 10 (employee 7%, employer 11%) and Proclamation 714/2011
+  Article 11 (military and police office 25%) - against ETMOD
+  tscee_s/tscer_s, probed exact; ETMOD keys the employer rate on loc
+  (0 = the 25% class). The engine's yem is bridged to the monthly
+  module inputs. The SOUTHMOD bundle is licensed and non-
+  redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-pension-contributions
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-pension-contributions.json
+
+artifacts:
+  report_basename: axiom-euromod-et-pension-contributions
+
+dashboard:
+  filename: axiom-euromod-et-pension-contributions.json
+  suite: et-pension-contributions
