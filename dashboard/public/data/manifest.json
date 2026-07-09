@@ -124,6 +124,7 @@
     "axiom-policyengine-al-tanf-ecps.json",
     "axiom-policyengine-uk-business-rates.json",
     "axiom-snapqc-co-snap.json",
-    "axiom-policyengine-ga-tanf-ecps.json"
+    "axiom-policyengine-ga-tanf-ecps.json",
+    "axiom-policyengine-taxsim-id-income-tax-liability.json"
   ]
 }
