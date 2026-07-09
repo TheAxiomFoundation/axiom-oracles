@@ -740,6 +740,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "zm-excise-ad-valorem",
+      "report": "axiom-euromod-zm-excise-ad-valorem.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-excise-ad-valorem.yaml"
+    },
+    {
       "suite": "zm-napsa-contributions",
       "report": "axiom-euromod-zm-napsa-contributions.json",
       "repos": [
@@ -770,6 +778,14 @@
         "TheAxiomFoundation/rulespec-zm"
       ],
       "source": "comparisons/zm-turnover.yaml"
+    },
+    {
+      "suite": "zm-vat",
+      "report": "axiom-euromod-zm-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-vat.yaml"
     }
   ]
 }

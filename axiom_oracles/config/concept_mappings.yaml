@@ -2595,6 +2595,78 @@ concepts:
           type: country
           geoid: ZM
 
+  # Zambia VAT standard rate (S.I. 14 of 2008 under Cap. 331 s.9(3))
+  # vs MicroZAMOD tva_s on the post-uprating expenditure bridge.
+  zm:statutes/cap-331/value-added-tax-act#vat_amount:
+    description: Zambia VAT at the standard rate (16% per the Value Added Tax (Rate of Tax) Order, 2008)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: vat_amount
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia wine ad-valorem excise (60%, Act 19 of 2018) vs MicroZAMOD
+  # tex02_s on a wine-only expenditure case.
+  zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty:
+    description: Zambia wine excise duty (Second Schedule heading 5, 60 percent)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: wine_duty
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tex02_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia spirits ad-valorem excise (60%, Acts 45/2021-25/2023) vs
+  # MicroZAMOD tex02_s on a spirits-only expenditure case.
+  zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty:
+    description: Zambia spirits excise duty (Second Schedule heading 6, 60 percent)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: spirits_duty
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tex02_s
+        scope:
+          type: country
+          geoid: ZM
+
 
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
