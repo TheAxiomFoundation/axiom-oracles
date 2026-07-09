@@ -20,7 +20,7 @@ import {
  * case explorer live.
  */
 
-function OracleRate({ run }) {
+function OracleRate({ run, tagged }) {
   const near = run.near;
   const title = [
     `${run.metric.mismatches.toLocaleString()} of ${run.metric.total.toLocaleString()} checks disagree`,
@@ -33,15 +33,13 @@ function OracleRate({ run }) {
     .join(" · ");
   return (
     <span className="pst-oracle" title={title}>
+      {tagged && <span className="pst-oracle-kind">params</span>}
       <span
         className="mono pst-oracle-rate"
         style={{ color: rateColor(run.metric.rate) }}
       >
         {formatAgreementRate(run.metric.rate, run.metric.mismatches)}
       </span>
-      {run.kind === "parameter" && (
-        <span className="pst-oracle-kind">params</span>
-      )}
     </span>
   );
 }
@@ -76,6 +74,8 @@ export default function ProgramStatusTable({ reports, onOpen }) {
     if (meta.kind === "household") {
       entry.total += metric.total;
       entry.mismatches += metric.mismatches;
+    } else {
+      entry.paramTotal = (entry.paramTotal || 0) + metric.total;
     }
   }
 
@@ -125,24 +125,52 @@ export default function ProgramStatusTable({ reports, onOpen }) {
                         Math.max(...b[1].map((r) => r.metric.total)) -
                         Math.max(...a[1].map((r) => r.metric.total)),
                     )
-                    .map(([oracle, runs]) => (
-                      <span key={oracle} className="pst-oracle-group">
-                        <span className="pst-oracle-name">
-                          {engineLabel(oracle)}
-                        </span>
-                        {runs
-                          .sort((a, b) => b.metric.total - a.metric.total)
-                          .map((run) => (
-                            <OracleRate key={run.suite} run={run} />
+                    .map(([oracle, runs]) => {
+                      // Household rate first; a parameter probe rides along
+                      // as "params N%". When the program is ONLY a parameter
+                      // check the checks column already says so — no tag.
+                      const ordered = runs.sort((a, b) =>
+                        a.kind === b.kind
+                          ? b.metric.total - a.metric.total
+                          : a.kind === "household"
+                            ? -1
+                            : 1,
+                      );
+                      const mixed = ordered.some(
+                        (r) => r.kind === "household",
+                      );
+                      return (
+                        <span key={oracle} className="pst-oracle-group">
+                          <span className="pst-oracle-name">
+                            {engineLabel(oracle)}
+                          </span>
+                          {ordered.map((run, i) => (
+                            <span key={run.suite} className="pst-oracle-run">
+                              {i > 0 && (
+                                <span
+                                  className="pst-oracle-sep"
+                                  aria-hidden="true"
+                                >
+                                  ·
+                                </span>
+                              )}
+                              <OracleRate
+                                run={run}
+                                tagged={mixed && run.kind === "parameter"}
+                              />
+                            </span>
                           ))}
-                      </span>
-                    ));
+                        </span>
+                      );
+                    });
                 })()}
               </span>
               <span className="mono pst-checks">
                 {row.total > 0
                   ? `${row.total.toLocaleString()} checks`
-                  : "parameter check"}
+                  : `${(row.paramTotal || 0).toLocaleString()} parameter ${
+                      (row.paramTotal || 0) === 1 ? "check" : "checks"
+                    }`}
               </span>
               <span className="pst-arrow" aria-hidden="true">
                 →

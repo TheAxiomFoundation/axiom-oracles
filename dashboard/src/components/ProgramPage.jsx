@@ -29,6 +29,21 @@ import ProgramRuns from "./ProgramRuns";
 
 const PAGE_SIZE = 50;
 
+/** Render `backticked` spans in cause prose as inline code. */
+function richText(text) {
+  return String(text || "")
+    .split(/`([^`]+)`/g)
+    .map((seg, i) =>
+      i % 2 ? (
+        <code key={i} className="pp-cause-code">
+          {seg}
+        </code>
+      ) : (
+        seg
+      ),
+    );
+}
+
 function useSuiteCases(suites) {
   const [bySuite, setBySuite] = useState({});
   useEffect(() => {
@@ -444,9 +459,18 @@ export default function ProgramPage({
           <div className="pp-causes">
             {causes.map((c, i) => (
               <div key={i} className="pp-cause">
-                <span className="pp-cause-label">{c.label}</span>
-                <span className="mono pp-cause-owner">{c.fix_owner}</span>
-                <p className="pp-cause-desc">{c.description}</p>
+                <div className="pp-cause-head">
+                  <span className="pp-cause-label">{c.label}</span>
+                  {c.fix_owner && (
+                    <span
+                      className="mono pp-cause-owner"
+                      title="Where the fix lives"
+                    >
+                      {c.fix_owner}
+                    </span>
+                  )}
+                </div>
+                <p className="pp-cause-desc">{richText(c.description)}</p>
               </div>
             ))}
           </div>
