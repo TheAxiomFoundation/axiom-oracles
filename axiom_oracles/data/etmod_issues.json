@@ -1,0 +1,51 @@
+{
+ "schema": "axiom_oracles.etmod_issues.v1",
+ "updated_at": "2026-07-09",
+ "purpose": "Track ETMOD (SOUTHMOD Ethiopia) model findings observed in household-level Axiom oracle comparisons, mirroring ghamod_issues.json and microzamod_issues.json. Canonical narrative ledger: rulespec-et#1 closing comment.",
+ "entries": [
+  {
+   "id": "etmod-mat-added-instead-of-reduced-floor",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ET",
+   "observed_with": {
+    "country": "ET",
+    "system": "ET_2025",
+    "dataset": "et_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "ETMOD implements the Proclamation 1395/2025 Article 23 Minimum Alternative Tax as an addition: when scheduled business tax falls below 2.5% of turnover it ADDS the full 2.5% of turnover to tin02_s (Output_Add_Var), where sub-article 3 provides the minimum tax 'shall be reduced by business income tax under Article 18 paid in the tax year' - a floor. Probed live: at 3,000,000 birr receipts and 60,000 taxable income ETMOD returns tin02_s 81,000 (= scheduled 6,000 + 75,000) where the statutory payable is 75,000. The encoded rulespec-et module implements the reduced top-up; the et-business-mat suite runs the MAT-dormant agreement zone.",
+   "affected_comparisons": [
+    "et-business-mat"
+   ],
+   "affected_concepts": [
+    "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable"
+   ]
+  },
+  {
+   "id": "etmod-mat-applied-to-article-49-regime-taxpayers",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ET",
+   "observed_with": {
+    "country": "ET",
+    "system": "ET_2025",
+    "dataset": "et_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "ETMOD levies the Article 23 minimum tax on taxpayers under the Article 49 total gross revenue tax regime (Category B, annual gross receipts at or below Birr 2,000,000), whom sub-article 4 expressly excludes: 'This Article shall not apply to a taxpayer under the total gross revenue tax regime set out in Article 49 of this Proclamation.' Probed live: at 50,000 birr receipts ETMOD returns tin02_s 1,250 (= 2.5% of receipts) alongside the presumptive ttn_s 1,000, double-taxing every presumptive-regime business. The encoded module gates the minimum tax to receipts above the Category A bound.",
+   "affected_comparisons": [
+    "et-business-mat",
+    "et-presumptive"
+   ],
+   "affected_concepts": [
+    "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+    "et:statutes/proc-1395-2025/income-tax-amendment-2025#presumptive_gross_receipts_tax"
+   ]
+  }
+ ]
+}

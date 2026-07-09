@@ -740,6 +740,13 @@ class Concepts:
         "et:statutes/proc-1341-2024/value-added-tax-proclamation"
         "#water_vat"
     )
+    # Ethiopia composed monthly disposable income (Article 11 tax on
+    # gross less the 7% employee pension), compared to ETMOD
+    # ``ils_dispy`` on the FULL grid (no base divergence).
+    ET_PILOT_DISPOSABLE_INCOME = (
+        "et:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_disposable_income"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"

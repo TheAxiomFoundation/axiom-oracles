@@ -49,6 +49,68 @@ case_sets:
         kind: person
         age: 35
         relation: HeadOfHousehold
+  et-dispy:
+    locale: ET
+    entity: Person
+    entity_id: head
+    outputs:
+    - et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    cases:
+    - id: et-dispy-1500-nil-zone
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 1500.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 18000.0
+    - id: et-dispy-3000-band2
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 3000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 36000.0
+    - id: et-dispy-7000-band3-top
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 7000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 84000.0
+    - id: et-dispy-12000-band5
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 12000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 144000.0
+    - id: et-dispy-20000-top-band
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 20000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 240000.0
   et-paye-rate-schedule:
     locale: ET
     entity: Person
