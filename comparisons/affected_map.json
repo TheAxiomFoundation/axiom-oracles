@@ -257,6 +257,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ga-tanf-ecps",
+      "report": "axiom-policyengine-ga-tanf-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-ga"
+      ],
+      "source": "comparisons/ga-tanf-ecps.yaml"
+    },
+    {
       "suite": "ga-tanf-standards",
       "report": "axiom-policyengine-ga-tanf-standards.json",
       "repos": [
