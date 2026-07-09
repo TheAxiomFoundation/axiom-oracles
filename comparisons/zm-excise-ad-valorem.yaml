@@ -1,0 +1,44 @@
+name: zm-excise-ad-valorem
+title: Zambia zm-excise-ad-valorem — Axiom vs MicroZAMOD
+description: >-
+  Compares the rulespec-zm wine and spirits excise rates (60 percent,
+  Second Schedule headings 5-6 assembled across Acts 19 of 2018, 45 of
+  2021, 25 of 2022 and 25 of 2023) against MicroZAMOD tex02_s
+  (ZM_2025, zm_2022_a2) on single-item expenditure cases with the
+  post-uprating bridge - probed exact. Dispositions (rulespec-zm#1
+  findings, probed live, no agreement zone): cigarettes - the model
+  prices K0.400/piece, the CY2024 K400/mille (probed 480.00 on 1,200
+  sticks), where Act 24 of 2024 sets K452/mille -> 542.40 (finding 3);
+  transport fuels - the model applies K2.07/l (the CY2021-24 combined
+  petrol figure) to all fuel litres (probed 2,484.00 on 1,200 l),
+  where CY2025 statutory rows are petrol K2.34/l -> 2,808.00 and
+  diesel K0.75/l -> 900.00 (finding 4); clear beer - the model's flat
+  20% on expenditure matches only the sorghum suspended rate, vs the
+  60% statutory rate and the S.I. 66/71 of 2023 suspension layer
+  (finding 5); opaque beer - the statutory duty is specific
+  (K0.25/litre) but the model taxes expenditure at the 60% ad-valorem
+  group rate (probed 938.07 on 1,563.48 uprated), a base-and-rate
+  mismatch recorded with the ledger. The SOUTHMOD bundle is licensed
+  and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: zm-excise-ad-valorem
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ZM
+    euromod_system: ZM_2025
+    euromod_dataset: zm_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-zm-excise-ad-valorem.json
+
+artifacts:
+  report_basename: axiom-euromod-zm-excise-ad-valorem
+
+dashboard:
+  filename: axiom-euromod-zm-excise-ad-valorem.json
+  suite: zm-excise-ad-valorem

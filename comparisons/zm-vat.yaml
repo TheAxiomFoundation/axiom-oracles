@@ -1,0 +1,36 @@
+name: zm-vat
+title: Zambia zm-vat — Axiom vs MicroZAMOD
+description: >-
+  Compares the rulespec-zm VAT standard rate (16% per the Value Added
+  Tax (Rate of Tax) Order, 2008, S.I. No. 14 of 2008, over the Cap.
+  331 s.9(3) default of 17.5%) against MicroZAMOD tva_s (ZM_2025,
+  zm_2022_a2) on a non-excise VAT-base expenditure item (COICOP
+  x011119). Consumption x-vars carry their own per-group uprating
+  indices (probed: 1.5163 for this group vs 1.3029 for alcohol and
+  1.4430 for employment), so each case bridges the engine's own
+  post-uprating expenditure onto the module's taxable_value input -
+  the Ghana/Uganda consumption convention - making parity exact
+  regardless of index. The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: zm-vat
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ZM
+    euromod_system: ZM_2025
+    euromod_dataset: zm_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-zm-vat.json
+
+artifacts:
+  report_basename: axiom-euromod-zm-vat
+
+dashboard:
+  filename: axiom-euromod-zm-vat.json
+  suite: zm-vat

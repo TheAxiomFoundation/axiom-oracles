@@ -668,6 +668,23 @@ class Concepts:
         "national-health-insurance-general-regulations-2019"
         "#employer_monthly_contribution_amount"
     )
+    # Zambia VAT standard rate (16% per S.I. 14 of 2008 under Cap. 331
+    # s.9(3)), compared to MicroZAMOD ``tva_s`` on the post-uprating
+    # expenditure bridge.
+    ZM_VAT_AMOUNT = (
+        "zm:statutes/cap-331/value-added-tax-act"
+        "#vat_amount"
+    )
+    # Zambia wine and spirits ad-valorem excise (60%), compared to
+    # MicroZAMOD ``tex02_s`` on single-item expenditure bridges.
+    ZM_WINE_DUTY = (
+        "zm:statutes/act-2024-24/customs-and-excise-amendment-2024"
+        "#wine_duty"
+    )
+    ZM_SPIRITS_DUTY = (
+        "zm:statutes/act-2024-24/customs-and-excise-amendment-2024"
+        "#spirits_duty"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
