@@ -255,10 +255,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "c6a1992f6e942cff93223ba2334632ae2146a169",
+      "axiom_rules_engine_sha": "11416c672b091513f90db3a90dd20b1689df0493",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-08T20:48:36Z",
+    "generated_at": "2026-07-09T15:41:49Z",
     "generated_by": "scripts/run_comparison.py::be-regional-pit-surcharge",
     "oracle": {
       "euromod_country": "BE",
