@@ -1270,7 +1270,7 @@
     },
     {
       "suite": "uk-tax-free-childcare-pe",
-      "generated_at": "2026-07-08T15:50:16Z",
+      "generated_at": "2026-07-09T10:05:21Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
