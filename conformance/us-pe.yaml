@@ -57,7 +57,12 @@ policies:
     output_vars:
       - al_income_tax
     in_scope: true
-    suite: null
+    suite: al-income-tax-liability
+    note: 'Covered by al-income-tax-liability — the Alabama composed liability pipeline (rulespec-us
+      us-al/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US al_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
+      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the section 40-18-15(a)(1) federal-income-tax
+      deduction vintage, not a PE mismatch). al_income_tax equals the before-refundable value on this grid.'
   - id: us-pe:al_tanf
     oracle_policy_name: al_tanf
     oracle_policy_type: rules
@@ -426,7 +431,12 @@ policies:
     output_vars:
       - id_income_tax
     in_scope: true
-    suite: null
+    suite: id-income-tax-liability
+    note: 'Covered by id-income-tax-liability — the Idaho composed liability pipeline (rulespec-us
+      us-id/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US id_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
+      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 5.695-to-5.3 per cent rate-step vintage,
+      not a PE mismatch). id_income_tax nets the refundable grocery credit, excluded by the 63-3024 core.'
   - id: us-pe:id_tafi
     oracle_policy_name: id_tafi
     oracle_policy_type: rules
@@ -510,7 +520,12 @@ policies:
     output_vars:
       - ky_income_tax
     in_scope: true
-    suite: null
+    suite: ky-income-tax-liability
+    note: 'Covered by ky-income-tax-liability — the Kentucky composed liability pipeline (rulespec-us
+      us-ky/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
+      PE-US ky_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
+      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 4.0-to-3.5 per cent rate-step plus
+      standard-deduction vintage, not a PE mismatch). ky_income_tax nets the family-size credit.'
   - id: us-pe:ky_ktap
     oracle_policy_name: ky_ktap
     oracle_policy_type: rules
