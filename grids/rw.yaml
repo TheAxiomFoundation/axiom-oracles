@@ -1,0 +1,547 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: rw
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  rw-cbhi-tiers:
+    locale: RW
+    entity: Person
+    entity_id: head
+    outputs:
+    - rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution
+    cases:
+    - id: rw-cbhi-tier-20000-level2
+      period: '2027'
+      scenario: informal-cbhi-member-premium
+      parameters:
+        monthly_earnings: 20000.0
+        imibereho_level: 2
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-cbhi-tier-45000-level3
+      period: '2027'
+      scenario: informal-cbhi-member-premium
+      parameters:
+        monthly_earnings: 45000.0
+        imibereho_level: 3
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-cbhi-tier-90000-level4
+      period: '2027'
+      scenario: informal-cbhi-member-premium
+      parameters:
+        monthly_earnings: 90000.0
+        imibereho_level: 4
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-cbhi-tier-200000-level5
+      period: '2027'
+      scenario: informal-cbhi-member-premium
+      parameters:
+        monthly_earnings: 200000.0
+        imibereho_level: 5
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+  rw-contributions:
+    locale: RW
+    entity: Person
+    entity_id: head
+    cases:
+    - id: rw-contributions-private-100000
+      period: '2026'
+      scenario: formal-employee-contribution-stack
+      outputs:
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
+      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
+      parameters:
+        monthly_employment_income: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1200000.0
+    - id: rw-contributions-private-400000
+      period: '2026'
+      scenario: formal-employee-contribution-stack
+      outputs:
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
+      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
+      parameters:
+        monthly_employment_income: 400000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800000.0
+    - id: rw-contributions-public-servant-100000
+      period: '2026'
+      scenario: formal-employee-contribution-stack
+      outputs:
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
+      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
+      - rw:statutes/law-2001-24/rama-contributions#employee_rama_contribution
+      - rw:statutes/law-2001-24/rama-contributions#employer_rama_contribution
+      parameters:
+        monthly_employment_income: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1200000.0
+    - id: rw-contributions-military-100000
+      period: '2026'
+      scenario: formal-employee-contribution-stack
+      outputs:
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution
+      - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
+      - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
+      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
+      - rw:statutes/law-2005-23/mmi-contributions#insured_mmi_contribution
+      - rw:statutes/law-2005-23/mmi-contributions#government_mmi_contribution
+      parameters:
+        monthly_employment_income: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1200000.0
+  rw-dispy:
+    locale: RW
+    entity: Person
+    entity_id: head
+    outputs:
+    - rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    cases:
+    - id: rw-dispy-30000-nil-zone
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 360000.0
+    - id: rw-dispy-60000-exempt-bound
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 720000.0
+    - id: rw-dispy-80000-band2
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 80000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 960000.0
+    - id: rw-dispy-150000-band3
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 150000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1800000.0
+    - id: rw-dispy-400000-top-band
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 400000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800000.0
+    - id: rw-dispy-1000000-high-income
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        monthly_employment_income: 1000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000000.0
+  rw-excise:
+    locale: RW
+    entity: Person
+    entity_id: head
+    cases:
+    - id: rw-excise-premium-fuel-20l
+      period: '2026'
+      scenario: household-fuel-specific-excise
+      outputs:
+      - rw:statutes/law-2025-011/excise-duty#premium_fuel_excise_duty
+      parameters:
+        monthly_litres: 20.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-excise-premium-fuel-100l
+      period: '2026'
+      scenario: household-fuel-specific-excise
+      outputs:
+      - rw:statutes/law-2025-011/excise-duty#premium_fuel_excise_duty
+      parameters:
+        monthly_litres: 100.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-excise-gas-oil-10l
+      period: '2026'
+      scenario: household-fuel-specific-excise
+      outputs:
+      - rw:statutes/law-2025-011/excise-duty#gas_oil_excise_duty
+      parameters:
+        monthly_litres: 10.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-excise-gas-oil-80l
+      period: '2026'
+      scenario: household-fuel-specific-excise
+      outputs:
+      - rw:statutes/law-2025-011/excise-duty#gas_oil_excise_duty
+      parameters:
+        monthly_litres: 80.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-excise-cigarettes-10-packs
+      period: '2026'
+      scenario: household-cigarette-compound-excise
+      outputs:
+      - rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty
+      parameters:
+        monthly_retail_raw: 20000.0
+        monthly_packs: 10.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-excise-cigarettes-40-packs
+      period: '2026'
+      scenario: household-cigarette-compound-excise
+      outputs:
+      - rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty
+      parameters:
+        monthly_retail_raw: 90000.0
+        monthly_packs: 40.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+  rw-lump-sum:
+    locale: RW
+    entity: Person
+    entity_id: head
+    outputs:
+    - rw:statutes/law-2022-027/lump-sum-regime#lump_sum_tax
+    cases:
+    - id: rw-lump-sum-3m-band1
+      period: '2026'
+      scenario: small-business-lump-sum
+      parameters:
+        yearly_turnover: 3000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-lump-sum-5m-band2
+      period: '2026'
+      scenario: small-business-lump-sum
+      parameters:
+        yearly_turnover: 5000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-lump-sum-8m-band3
+      period: '2026'
+      scenario: small-business-lump-sum
+      parameters:
+        yearly_turnover: 8000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-lump-sum-11m-band4
+      period: '2026'
+      scenario: small-business-lump-sum
+      parameters:
+        yearly_turnover: 11000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-lump-sum-15m-small-3pct
+      period: '2026'
+      scenario: small-business-lump-sum
+      parameters:
+        yearly_turnover: 15000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-lump-sum-19m-small-3pct
+      period: '2026'
+      scenario: small-business-lump-sum
+      parameters:
+        yearly_turnover: 19000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-lump-sum-25m-above-regime
+      period: '2026'
+      scenario: small-business-lump-sum
+      parameters:
+        yearly_turnover: 25000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+  rw-paye-rate-schedule:
+    locale: RW
+    entity: Person
+    entity_id: head
+    outputs:
+    - rw:statutes/law-2022-027/employment-income-tax#employment_income_tax
+    cases:
+    - id: rw-paye-30000-nil-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 360000.0
+    - id: rw-paye-60000-exempt-bound
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 720000.0
+    - id: rw-paye-80000-band2-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 80000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 960000.0
+    - id: rw-paye-100000-band2-bound
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1200000.0
+    - id: rw-paye-150000-band3-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 150000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1800000.0
+    - id: rw-paye-200000-band3-bound
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 200000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 2400000.0
+    - id: rw-paye-400000-band4-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 400000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800000.0
+    - id: rw-paye-1000000-high-income
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 1000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000000.0
+  rw-rental:
+    locale: RW
+    entity: Person
+    entity_id: head
+    outputs:
+    - rw:statutes/law-2023-048/rental-income-tax#rental_income_tax
+    cases:
+    - id: rw-rental-120000-nil
+      period: '2026'
+      scenario: individual-rental-income-tax
+      parameters:
+        yearly_gross_rental: 120000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-rental-360000-zero-bound
+      period: '2026'
+      scenario: individual-rental-income-tax
+      parameters:
+        yearly_gross_rental: 360000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-rental-800000-band2
+      period: '2026'
+      scenario: individual-rental-income-tax
+      parameters:
+        yearly_gross_rental: 800000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-rental-2400000-band3
+      period: '2026'
+      scenario: individual-rental-income-tax
+      parameters:
+        yearly_gross_rental: 2400000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+  rw-vat:
+    locale: RW
+    entity: Person
+    entity_id: head
+    outputs:
+    - rw:statutes/law-2023-049/value-added-tax#vat_amount
+    cases:
+    - id: rw-vat-10000-monthly
+      period: '2026'
+      scenario: household-vat-standard-rate
+      parameters:
+        yearly_expenditure_raw: 120000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-vat-50000-monthly
+      period: '2026'
+      scenario: household-vat-standard-rate
+      parameters:
+        yearly_expenditure_raw: 600000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: rw-vat-200000-monthly
+      period: '2026'
+      scenario: household-vat-standard-rate
+      parameters:
+        yearly_expenditure_raw: 2400000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold

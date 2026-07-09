@@ -1,0 +1,49 @@
+name: rw-contributions
+title: Rwanda rw-contributions — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw RSSB contribution stack against the RWAMOD
+  tsc* arms by employment sector: pension 6% + 6% (Presidential Order
+  086/01 twelve percent from 1 January 2025 halved by the Law 05/2015
+  Article 8 equal-sharing rule) vs tsceepi_s/tscerpi_s; maternity
+  0.3% + 0.3% (Law 003/2016 Article 7) vs tsceeml_s/tscerml_s; RAMA
+  7.5% + 7.5% for formal public-sector employees (Law 24/2001 Article
+  44; the model keys the scheme on lfo=1 & loc!=0 & lindi 9-11) vs
+  tsceehl_s/tscerhl_s; MMI insured 5% + government 17.5% (Law 23/2005
+  Article 30; loc=0 keys the military class) vs tsceehl01_s/
+  tscerhl01_s; and the CBHI employee levy 0.5% of net salary (PM
+  Order 105/03 of 30/09/2020 Article 5) vs tsceehl03_s, whose
+  statutory base ("net salary") the order does not define further -
+  the model operationalizes gross less employment PAYE, employee
+  pension, employee maternity and the employee medical contribution,
+  and the bridge feeds the engine's own levy base back so the live
+  cases verify the 0.5% arithmetic exactly. Occupational-hazards
+  disposition (rulespec-rw#1 finding): the model applies a 2%
+  employer contribution (tscerac_s, probed 2,143.06 at uprated
+  107,152.85) where Law 06/2003 Article 10 makes the branch
+  employer-only and Article 9 delegates the rate to a Presidential
+  Decree that is not publicly digitized - no encodable primary
+  carrier, documented gap, no live case. The SOUTHMOD bundle is
+  licensed and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-contributions
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    euromod_annualize_outputs: false
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-contributions.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-contributions
+
+dashboard:
+  filename: axiom-euromod-rw-contributions.json
+  suite: rw-contributions

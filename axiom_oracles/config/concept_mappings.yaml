@@ -2936,6 +2936,410 @@ concepts:
           geoid: ET
 
 
+  # Rwanda Law 027/2022 schedules, Law 048/2023 rental, Law 049/2023
+  # VAT, Law 011/2025 excise rows and the RSSB contribution stack vs
+  # RWAMOD (rulespec-rw#1). The CBHI member premium mapping carries the
+  # 2026 gazetting timing finding in its suite description.
+  rw:statutes/law-2022-027/employment-income-tax#employment_income_tax:
+    description: Rwanda employment income tax (Law 027/2022 Article 56 Table 2 monthly schedule)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employment_income_tax
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2022-027/lump-sum-regime#lump_sum_tax:
+    description: Rwanda micro/small-enterprise lump-sum tax (Law 027/2022 flat table + 3% arm)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: lump_sum_tax
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2023-048/rental-income-tax#rental_income_tax:
+    description: Rwanda rental income tax (Law 048/2023 Articles 42-43)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: rental_income_tax
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tpr_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2023-049/value-added-tax#vat_amount:
+    description: Rwanda VAT standard rate (Law 049/2023 Article 4, 18%)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: vat_amount
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2025-011/excise-duty#premium_fuel_excise_duty:
+    description: Rwanda premium fuel excise (Law 011/2025 Annex item 17, FRW 183/litre)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: premium_fuel_excise_duty
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tex12_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2025-011/excise-duty#gas_oil_excise_duty:
+    description: Rwanda gas oil excise (Law 011/2025 Annex item 18, FRW 150/litre)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: gas_oil_excise_duty
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tex13_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty:
+    description: Rwanda cigarette compound excise (Law 011/2025 Annex item 13, 36% + FRW 230/pack)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: cigarette_excise_duty
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tex01_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution:
+    description: Rwanda employee pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employee_pension_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceepi_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution:
+    description: Rwanda employer pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employer_pension_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerpi_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution:
+    description: Rwanda employee maternity contribution (Law 003/2016 Article 7, 0.3%)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employee_maternity_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceeml_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution:
+    description: Rwanda employer maternity contribution (Law 003/2016 Article 7, 0.3%)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employer_maternity_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerml_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2001-24/rama-contributions#employee_rama_contribution:
+    description: Rwanda employee RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employee_rama_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2001-24/rama-contributions#employer_rama_contribution:
+    description: Rwanda employer RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employer_rama_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerhl_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2005-23/mmi-contributions#insured_mmi_contribution:
+    description: Rwanda insured MMI contribution (Law 23/2005 Article 30, 5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: insured_mmi_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl01_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2005-23/mmi-contributions#government_mmi_contribution:
+    description: Rwanda government MMI contribution (Law 23/2005 Article 30, 17.5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: government_mmi_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerhl01_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution:
+    description: Rwanda CBHI employee levy (PM Order 105/03 of 30/09/2020 Article 5, 0.5% of net salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employee_cbhi_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl03_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution:
+    description: Rwanda CBHI member premium by IMIBEREHO level (MO 002/26/10/TC of 16/02/2026; RW_2025 timing finding)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: cbhi_member_paid_annual_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl02_s
+        scope:
+          type: country
+          geoid: RW
+
+
+  # Rwanda composed disposable income vs RWAMOD ils_dispy (full grid,
+  # no base divergence; formal private-sector worker).
+  rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Rwanda composed worker disposable income (Table 2 tax + employee pension/maternity/CBHI-levy stack)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: RW
+
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

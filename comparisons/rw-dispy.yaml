@@ -1,0 +1,39 @@
+name: rw-dispy
+title: Rwanda rw-dispy — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw composed monthly disposable-income pipeline
+  (Law 027/2022 Article 56 Table 2 tax on gross monthly employment
+  income, less the Presidential Order 086/01 employee pension half,
+  the Law 003/2016 employee maternity contribution and the PM Order
+  105/03 CBHI employee levy of 0.5% on the composed net salary)
+  against RWAMOD ils_dispy on RW_2025 for the formal private-sector
+  worker - the same identity in both engines on the identical gross
+  base, so the live cases run the FULL grid from the nil zone through
+  the top band (EUROMOD's one-franc band lower limits sit inside the
+  1-FRW tolerance). Monthly pipeline: euromod output annualization is
+  off and the engine's own post-uprating yem is bridged to the three
+  imported inputs. The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-dispy
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    euromod_annualize_outputs: false
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-dispy.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-dispy
+
+dashboard:
+  filename: axiom-euromod-rw-dispy.json
+  suite: rw-dispy

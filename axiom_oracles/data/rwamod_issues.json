@@ -1,0 +1,94 @@
+{
+  "schema": "axiom_oracles.rwamod_issues.v1",
+  "updated_at": "2026-07-09",
+  "purpose": "Track RWAMOD (SOUTHMOD Rwanda) model findings and grounding gaps observed in household-level Axiom oracle comparisons, mirroring ghamod_issues.json, microzamod_issues.json and etmod_issues.json. Canonical narrative ledger: rulespec-rw#1 closing comment.",
+  "entries": [
+    {
+      "id": "rwamod-cbhi-tier-premiums-gazetting-timing",
+      "classification": "validation_year_grounding_gap",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows - the bundle ships no Rwandan microdata)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD RW_2025 applies the informal-sector CBHI member premiums by monthly-income tier (3,000/5,000/8,000/20,000 FRW per year at bounds 30,000/60,000/120,000, paid as twelfths - probed 250/416.67/666.67/1,666.67 per month) for CY2025, where the first gazetted carrier of the schedule is Ministerial Order No 002/26/10/TC of 16/02/2026 (Official Gazette no Special of 23/02/2026, in force on publication; expressed by IMIBEREHO Dynamic Social Registry level). The prior gazetted instrument (PM Order No 105/03 of 30/09/2020) carries the funding schedule and the 0.5% employee levy but no income-tier member premiums; the income-tier practice ran administratively from 2024 under RSSB publication (the RWAMOD report's own citation). The amounts agree exactly; the validation-year grounding does not - the rulespec-rw module starts 2026-02-23 and the rw-cbhi-tiers suite evaluates the Axiom side at 2027 (4/4 live).",
+      "affected_comparisons": ["rw-cbhi-tiers"],
+      "affected_concepts": [
+        "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution"
+      ]
+    },
+    {
+      "id": "rwamod-occupational-hazards-rate-not-digitized",
+      "classification": "primary_instrument_not_publicly_digitized",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD applies a 2% employer occupational-hazards contribution (tscerac_s, probed 2,143.06 at uprated monthly 107,152.85). Law No 06/2003 (modifying the Decree-Law of 22 August 1974) Article 10 makes the branch exclusively employer-paid and Article 9 delegates the percentage rates to a Presidential Decree that is not publicly digitized (the RSSB scheme page documents benefits, not the rate; the RWAMOD report itself cites the RSSB webpage). No encodable primary carrier exists, so the 2% stays a documented grounding gap - the framework law is captured and the rate is not encoded.",
+      "affected_comparisons": ["rw-contributions"],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-water-excise-row-repealed",
+      "classification": "southmod_model_stale_parameter",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD taxes bottled-water expenditure at 10% (tex11 arm, $texra_8_water_adv) for the whole of RW_2025, where Law No 011/2025 of 27/05/2025 (in force on publication, 29/05/2025) carries NO water row in its Annex - the row existed in the repealed Law No 050/2023, in force through 28 May 2025. The model otherwise applies the 2025 schedule (cigarettes 36% plus FRW 230 per pack, wine 40%), so the year mixes the new rates with a dropped row. The rulespec-rw excise module encodes the 2025 Annex only.",
+      "affected_comparisons": ["rw-excise"],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-juice-basket-local-rate",
+      "classification": "southmod_model_simplification",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD prices its whole juice expenditure basket (x0121001-x0121003, x0129001) at the 10% rate ($texra_6_juice_adv), where the Law 011/2025 Annex prices only juices with at least 30% local raw material content at 10% (item 1) and other juices at 39% (item 2). Basket-level simplification: the survey data cannot split local content, so the model applies the local rate to all juice.",
+      "affected_comparisons": ["rw-excise"],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-beer-fermented-basket-rates",
+      "classification": "southmod_model_simplification",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD prices a four-variable local-beer basket (x0213091, x0213092, x0213001, x0213002) at the 40% local-beer rate and a single other-beer variable at 65%, where the Law 011/2025 Annex separately prices other fermented beverages at 65% (item 11) and other alcoholic beverages with local raw material content at 30% (item 12) - traditional/fermented drinks inside the 40% basket are not distinguished. Basket-level simplification recorded for the excise dispositions.",
+      "affected_comparisons": ["rw-excise"],
+      "affected_concepts": []
+    }
+  ]
+}

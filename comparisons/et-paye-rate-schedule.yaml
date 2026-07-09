@@ -24,6 +24,7 @@ runner:
     euromod_country: ET
     euromod_system: ET_2025
     euromod_dataset: et_2022_a2
+    euromod_annualize_outputs: false
     axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
     dashboard_filename: axiom-euromod-et-paye-rate-schedule.json
 

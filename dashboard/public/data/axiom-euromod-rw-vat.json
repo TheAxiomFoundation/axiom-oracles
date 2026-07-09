@@ -1,0 +1,298 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "rw:statutes/law-2023-049/value-added-tax#vat_amount",
+      "description": "Rwanda VAT standard rate (Law 049/2023 Article 4, 18%)",
+      "left_weighted_sum": 639216.208394,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 639216.208394,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 3,
+  "cases": [
+    {
+      "case_id": "rw-vat-10000-monthly",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:statutes/law-2023-049/value-added-tax#input.taxable_value": 136584.65991316934
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 2,
+            "lfo": 0,
+            "lindi": 5,
+            "loc": 3,
+            "x0111211": 10000.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tva_s": {
+            "divide_by": 0.18,
+            "inputs": [
+              "rw:statutes/law-2023-049/value-added-tax#input.taxable_value"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:statutes/law-2023-049/value-added-tax#input.taxable_value": 136584.65991316934
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "RW",
+        "scenario": "household-vat-standard-rate",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        },
+        "yearly_expenditure_raw": 120000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-vat-50000-monthly",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:statutes/law-2023-049/value-added-tax#input.taxable_value": 682923.2995658466
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 2,
+            "lfo": 0,
+            "lindi": 5,
+            "loc": 3,
+            "x0111211": 50000.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tva_s": {
+            "divide_by": 0.18,
+            "inputs": [
+              "rw:statutes/law-2023-049/value-added-tax#input.taxable_value"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:statutes/law-2023-049/value-added-tax#input.taxable_value": 682923.2995658466
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "RW",
+        "scenario": "household-vat-standard-rate",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        },
+        "yearly_expenditure_raw": 600000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-vat-200000-monthly",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:statutes/law-2023-049/value-added-tax#input.taxable_value": 2731693.1982633863
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 2,
+            "lfo": 0,
+            "lindi": 5,
+            "loc": 3,
+            "x0111211": 200000.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tva_s": {
+            "divide_by": 0.18,
+            "inputs": [
+              "rw:statutes/law-2023-049/value-added-tax#input.taxable_value"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:statutes/law-2023-049/value-added-tax#input.taxable_value": 2731693.1982633863
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "RW",
+        "scenario": "household-vat-standard-rate",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        },
+        "yearly_expenditure_raw": 2400000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda VAT standard rate (Law 049/2023 Article 4, 18%)",
+      "id": "rw:statutes/law-2023-049/value-added-tax#vat_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "RW"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "82743c15350157f9391732b0066a9087a41eaa53",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-09T15:56:09Z",
+    "generated_by": "scripts/run_comparison.py::rw-vat-local",
+    "oracle": {
+      "euromod_country": "RW",
+      "euromod_dataset": "rw_2024_a1",
+      "euromod_system": "RW_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-rw",
+        "sha": "91e8f66c66449795ee7535d7d4ed2687f6ea8841"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "rw-vat",
+  "summary": {
+    "comparison_count": 3,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 3,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 3,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_weight": 0
+    }
+  }
+}

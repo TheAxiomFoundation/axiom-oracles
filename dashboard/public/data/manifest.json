@@ -106,6 +106,14 @@
     "axiom-euromod-uk-best-start-foods.json",
     "axiom-euromod-uk-healthy-start.json",
     "axiom-euromod-uk-sure-start-maternity-grant.json",
-    "axiom-taxsim-co-state-income-tax-ecps.json"
+    "axiom-taxsim-co-state-income-tax-ecps.json",
+    "axiom-euromod-rw-paye-rate-schedule.json",
+    "axiom-euromod-rw-lump-sum.json",
+    "axiom-euromod-rw-rental.json",
+    "axiom-euromod-rw-contributions.json",
+    "axiom-euromod-rw-vat.json",
+    "axiom-euromod-rw-excise.json",
+    "axiom-euromod-rw-cbhi-tiers.json",
+    "axiom-euromod-rw-dispy.json"
   ]
 }

@@ -1,0 +1,39 @@
+name: rw-paye-rate-schedule
+title: Rwanda rw-paye-rate-schedule — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw Law 027/2022 Article 56 Table 2 monthly
+  schedule (0% to 60,000 FRW; 10% to 100,000; 20% to 200,000; 30%
+  above) against RWAMOD tin_s (SOUTHMOD A4.0, country RW, system
+  RW_2025 = CY2025; synthetic rows under the registered rw_2024_a1
+  dataset name - the bundle ships no Rwandan microdata). The engine's
+  own post-uprating gross yem is bridged onto the module's monthly
+  input so the live cases verify the schedule arithmetic exactly; the
+  employment-only grid keeps the model's three-base ttb equal to the
+  employment base. EUROMOD's band lower limits (60,001/100,001/
+  200,001 exactly) price totals about 0.3 FRW below the statutory
+  bracket reading at high incomes - inside the 1-FRW tolerance. The
+  SOUTHMOD bundle is licensed and non-redistributable; referenced
+  only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-paye-rate-schedule
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    euromod_annualize_outputs: false
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-paye-rate-schedule.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-paye-rate-schedule
+
+dashboard:
+  filename: axiom-euromod-rw-paye-rate-schedule.json
+  suite: rw-paye-rate-schedule

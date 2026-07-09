@@ -1,0 +1,35 @@
+name: rw-vat
+title: Rwanda rw-vat — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw Law 049/2023 Article 4 standard VAT rate
+  (18%) against RWAMOD tva_s on a VAT-base food-detail expenditure
+  item (x0111211, an il_exp_vat01 member; probed 2,048.77 = 18% of
+  the engine's post-uprating value exactly). Consumption x-vars carry
+  per-group uprating indices, so the bridge feeds the engine's own
+  post-uprating expenditure onto the module's taxable_value. RWAMOD
+  additionally charges VAT on the excise-inclusive value of excisable
+  purchases inside its excise policy; those arms are exercised by the
+  rw-excise bridges. The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-vat
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-vat.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-vat
+
+dashboard:
+  filename: axiom-euromod-rw-vat.json
+  suite: rw-vat

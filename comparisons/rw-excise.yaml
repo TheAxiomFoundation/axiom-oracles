@@ -1,0 +1,43 @@
+name: rw-excise
+title: Rwanda rw-excise — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw Law 011/2025 Annex rows against the RWAMOD
+  tex* arms: premium fuel FRW 183/litre (tex12_s) and gas oil FRW
+  150/litre (tex13_s) on unuprated litre quantities - probed exact
+  (3,660 on 20 litres; 1,500 on 10) - and the cigarette compound duty
+  (36% of retail value plus FRW 230 per pack, tex01_s; retail
+  expenditure bridged post-uprating, pack counts unuprated).
+  Dispositions (rulespec-rw#1 findings, probed live, no agreement
+  zone): (1) the model taxes bottled-water expenditure at 10%
+  (tex11 arm) where the Law 011/2025 Annex carries NO water row - the
+  row existed only in the repealed Law 050/2023, in force through 28
+  May 2025, so the model applies a repealed row alongside the 2025
+  rates for the same year; (2) the model prices its whole juice
+  basket at the 10% local-content rate where the Annex prices only
+  at-least-30%-local juices at 10% and other juices at 39%; (3) the
+  model's local-beer basket spans four expenditure vars at 40% where
+  the Annex prices other-fermented beverages at 65% and other
+  local-content alcoholic beverages at 30%. The SOUTHMOD bundle is
+  licensed and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-excise
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-excise.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-excise
+
+dashboard:
+  filename: axiom-euromod-rw-excise.json
+  suite: rw-excise

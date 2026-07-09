@@ -1,0 +1,33 @@
+name: rw-rental
+title: Rwanda rw-rental — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw Law 048/2023 rental income tax (Article 43
+  base = gross rental less 50% deemed expenses; Article 42 bands
+  0/20/30% at 180,000/1,000,000 FRW annual) against RWAMOD tpr_s -
+  probed exact (2,357.63 and 20,812.50 FRW per month at uprated
+  monthly gross 53,576.42 and 214,305.69). The engine's post-uprating
+  ypr is bridged onto the module's annual gross input. The SOUTHMOD
+  bundle is licensed and non-redistributable; referenced only by
+  path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-rental
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-rental.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-rental
+
+dashboard:
+  filename: axiom-euromod-rw-rental.json
+  suite: rw-rental

@@ -14,7 +14,7 @@ _GEOID_LENGTHS = {
     "zcta": 5,
 }
 
-_SUPPORTED_COUNTRIES = frozenset({"BE", "ET", "GH", "UG", "UK", "US", "ZM"})
+_SUPPORTED_COUNTRIES = frozenset({"BE", "ET", "GH", "RW", "UG", "UK", "US", "ZM"})
 
 
 @dataclass(frozen=True)
