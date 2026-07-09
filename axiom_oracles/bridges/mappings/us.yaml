@@ -3299,6 +3299,427 @@ mappings:
     comparison: rate
     rationale: Same federal SNAP earned-income deduction rate at the (e)(2)(B) anchor.
 
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_standard_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP standard deduction amount for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction_48_states_dc
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_standard_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP standard deduction amount for the 48 states and DC for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction_48_states_dc_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.standard.CONTIGUOUS_US
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP standard deduction table for the 48 states and DC for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction_alaska_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.standard.AK
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP standard deduction table for Alaska for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction_guam_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.standard.GU
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP standard deduction table for Guam for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction_hawaii_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.standard.HI
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP standard deduction table for Hawaii for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction_virgin_islands_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.standard.VI
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP standard deduction table for the Virgin Islands for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_maximum_excess_shelter_deduction_48_states_dc
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.excess_shelter_expense.cap
+    parameter_key: CONTIGUOUS_US
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum excess shelter deduction for the 48 states and DC for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_maximum_excess_shelter_deduction_alaska
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.excess_shelter_expense.cap
+    parameter_keys:
+      - AK_URBAN
+      - AK_RURAL_1
+      - AK_RURAL_2
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum excess shelter deduction for Alaska regions for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_maximum_excess_shelter_deduction_guam
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.excess_shelter_expense.cap
+    parameter_key: GU
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum excess shelter deduction for Guam for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_maximum_excess_shelter_deduction_hawaii
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.excess_shelter_expense.cap
+    parameter_key: HI
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum excess shelter deduction for Hawaii for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_maximum_excess_shelter_deduction_virgin_islands
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.excess_shelter_expense.cap
+    parameter_key: VI
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum excess shelter deduction for the Virgin Islands for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_homeless_shelter_deduction
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.income.deductions.excess_shelter_expense.homeless.deduction
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP homeless shelter deduction amount for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_asset_limit_elderly_or_disabled_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.asset_test.limit
+    parameter_key: elderly_disabled
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP resource limit for FY 2024 households with an elderly or disabled member.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_asset_limit_other_households
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.asset_test.limit
+    parameter_key: standard
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP resource limit for other FY 2024 households.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/deductions#snap_asset_limit
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_asset_limit
+    candidate_priority: P4
+    rationale: FY 2024 Axiom selector output switches between the two resource-limit parameters using the RuleSpec elderly-or-disabled household relation; compare the two parameter leaves directly.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_max_allotment
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA maximum allotment table output for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.CONTIGUOUS_US
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment table for the 48 states and DC for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_additional_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.additional
+    parameter_key: CONTIGUOUS_US
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment additional-member amount for the 48 states and DC for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_one_person_thrifty_food_plan_cost
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.CONTIGUOUS_US
+    parameter_key: 1
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same one-person thrifty food plan cost embedded in the FY 2024 USDA maximum allotment table.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_urban_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.AK_URBAN
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment table for Alaska Urban for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_urban_additional_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.additional
+    parameter_key: AK_URBAN
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment additional-member amount for Alaska Urban for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_1_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.AK_RURAL_1
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment table for Alaska Rural 1 for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_1_additional_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.additional
+    parameter_key: AK_RURAL_1
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment additional-member amount for Alaska Rural 1 for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_2_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.AK_RURAL_2
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment table for Alaska Rural 2 for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_alaska_rural_2_additional_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.additional
+    parameter_key: AK_RURAL_2
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment additional-member amount for Alaska Rural 2 for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_guam_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.GU
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment table for Guam for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_guam_additional_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.additional
+    parameter_key: GU
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment additional-member amount for Guam for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_hawaii_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.HI
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment table for Hawaii for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_hawaii_additional_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.additional
+    parameter_key: HI
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment additional-member amount for Hawaii for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_virgin_islands_table
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.main.VI
+    parameter_key_input: household_size
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment table for the Virgin Islands for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment_virgin_islands_additional_member
+    country: us
+    program: snap
+    mapping_type: parameter_value
+    policyengine_parameter: gov.usda.snap.max_allotment.additional
+    parameter_key: VI
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP maximum allotment additional-member amount for the Virgin Islands for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards#snap_net_income_limit_100_percent_fpl_48_states_dc_table
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_fpg
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP net-income limit at 100 percent of the federal poverty guideline for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards#snap_net_income_limit_100_percent_fpl_48_states_dc
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_fpg
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP net-income limit at 100 percent of the federal poverty guideline for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards#snap_gross_income_limit_130_percent_fpl_48_states_dc_table
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_fpg
+    result_multiplier: 1.3
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP gross-income limit at 130 percent of the federal poverty guideline for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards#snap_gross_income_limit_130_percent_fpl_48_states_dc
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_fpg
+    result_multiplier: 1.3
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP gross-income limit at 130 percent of the federal poverty guideline for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards#snap_gross_income_limit_165_percent_fpl_48_states_dc_table
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_fpg
+    result_multiplier: 1.65
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP gross-income limit at 165 percent of the federal poverty guideline for FY 2024.
+
+  - legal_id: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards#snap_gross_income_limit_165_percent_fpl_48_states_dc
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_fpg
+    result_multiplier: 1.65
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same USDA SNAP gross-income limit at 165 percent of the federal poverty guideline for FY 2024.
+
   - legal_id: us:policies/usda/snap/fy-2026-cola/deductions#snap_standard_deduction
     country: us
     program: snap
@@ -28585,6 +29006,12 @@ prefixes:
     mapping_type: not_comparable
     candidate_priority: P4
     rationale: NYC Administrative Code section 11-1706 pass-through entity tax credit outputs depend on reported direct-share facts, identifying-information conditions, and overpayment mechanics. PolicyEngine does not expose a matching NYC pass-through entity tax credit or overpayment variable.
+
+  - legal_id_prefix: us:policies/usda/snap/fy-2024-cola/
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    rationale: USDA FY 2024 COLA helper outputs are table scalars and source-level selectors unless an exact PolicyEngine mapping overrides this prefix.
 
   - legal_id_prefix: us:policies/usda/snap/fy-2026-cola/
     country: us
