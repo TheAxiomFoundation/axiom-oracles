@@ -9,6 +9,35 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  zm-dispy:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    outputs:
+    - zm:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    cases:
+    - id: zm-dispy-40000-nil-interior
+      period: '2025'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 40000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+    - id: zm-dispy-61200-exempt-bound
+      period: '2025'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 61200.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 61200.0
   zm-excise-ad-valorem:
     locale: ZM
     entity: Person
