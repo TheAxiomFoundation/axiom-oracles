@@ -115,6 +115,8 @@ def _suite_jurisdiction(suite_name: str) -> str:
         return "uk"
     if locales == {"ZM"}:
         return "zm"
+    if locales == {"ET"}:
+        return "et"
     if locales <= {"US-NY-NYC", "US-NY", "US"}:
         return "us"
     raise AssertionError(f"unmapped locales for {suite_name}: {locales}")

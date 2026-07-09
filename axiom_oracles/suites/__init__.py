@@ -42,6 +42,13 @@ from .be_worker import (
     be_worker_ssc_cases,
     be_worker_tax_income_list_cases,
 )
+from .et_core import (
+    et_business_mat_cases,
+    et_paye_rate_schedule_cases,
+    et_pension_contributions_cases,
+    et_presumptive_cases,
+    et_vat_cases,
+)
 from .gh_income_tax import (
     gh_income_tax_rate_schedule_cases,
     gh_personal_reliefs_cases,
@@ -190,6 +197,11 @@ def available_suites() -> tuple[str, ...]:
         "zm-excise-ad-valorem",
         "zm-sct",
         "zm-dispy",
+        "et-paye-rate-schedule",
+        "et-presumptive",
+        "et-business-mat",
+        "et-pension-contributions",
+        "et-vat",
     )
 
 
@@ -352,6 +364,16 @@ def load_suite(name: str):
         return zm_sct_cases()
     if name == "zm-dispy":
         return zm_dispy_cases()
+    if name == "et-paye-rate-schedule":
+        return et_paye_rate_schedule_cases()
+    if name == "et-presumptive":
+        return et_presumptive_cases()
+    if name == "et-business-mat":
+        return et_business_mat_cases()
+    if name == "et-pension-contributions":
+        return et_pension_contributions_cases()
+    if name == "et-vat":
+        return et_vat_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -389,6 +411,11 @@ __all__ = [
     "gh_income_tax_rate_schedule_cases",
     "gh_capital_income_cases",
     "gh_dispy_cases",
+    "et_business_mat_cases",
+    "et_paye_rate_schedule_cases",
+    "et_pension_contributions_cases",
+    "et_presumptive_cases",
+    "et_vat_cases",
     "gh_excise_cases",
     "gh_personal_reliefs_cases",
     "gh_presumptive_turnover_cases",

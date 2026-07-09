@@ -1,0 +1,36 @@
+name: et-business-mat
+title: Ethiopia et-business-mat — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et annual business schedule with the Article
+  23 minimum-tax floor against ETMOD tin02_s in the agreement zone
+  (Category A taxpayers whose scheduled tax meets the 2.5%-of-turnover
+  floor - the minimum tax dormant in both engines). Dispositions
+  (rulespec-et#1 findings 1-2, probed live and adjudicated against the
+  Article 23 verbatim text): ETMOD ADDS the full 2.5% of turnover
+  where sub-article 3 reduces the minimum by the tax paid (probed
+  81,000 vs statutory 75,000 at 3,000,000 receipts / 60,000 income),
+  and levies the minimum tax on Article 49 regime taxpayers whom sub-
+  article 4 excludes (probed 1,250 at 50,000 receipts). The SOUTHMOD
+  bundle is licensed and non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-business-mat
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-business-mat.json
+
+artifacts:
+  report_basename: axiom-euromod-et-business-mat
+
+dashboard:
+  filename: axiom-euromod-et-business-mat.json
+  suite: et-business-mat

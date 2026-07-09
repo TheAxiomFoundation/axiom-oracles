@@ -1,0 +1,274 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: et
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  et-business-mat:
+    locale: ET
+    entity: Person
+    entity_id: head
+    outputs:
+    - et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable
+    cases:
+    - id: et-business-2500000-high-margin
+      period: '2026'
+      scenario: category-a-business-income-tax
+      parameters:
+        annual_gross_receipts: 2500000.0
+        annual_business_income: 1000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-business-3000000-mid-margin
+      period: '2026'
+      scenario: category-a-business-income-tax
+      parameters:
+        annual_gross_receipts: 3000000.0
+        annual_business_income: 1200000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-business-4000000-comfortable
+      period: '2026'
+      scenario: category-a-business-income-tax
+      parameters:
+        annual_gross_receipts: 4000000.0
+        annual_business_income: 2000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+  et-paye-rate-schedule:
+    locale: ET
+    entity: Person
+    entity_id: head
+    outputs:
+    - et:statutes/proc-1395-2025/income-tax-amendment-2025#employment_income_tax
+    cases:
+    - id: et-paye-1000-nil-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 1000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000.0
+    - id: et-paye-2000-exempt-bound
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 2000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 24000.0
+    - id: et-paye-3000-band2-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 3000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 36000.0
+    - id: et-paye-4000-band2-top
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 4000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+    - id: et-paye-7000-band3-top
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 7000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 84000.0
+    - id: et-paye-10000-band4-top
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000.0
+    - id: et-paye-14000-band5-top
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 14000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 168000.0
+    - id: et-paye-20000-top-band-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        monthly_employment_income: 20000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 240000.0
+  et-pension-contributions:
+    locale: ET
+    entity: Person
+    entity_id: head
+    cases:
+    - id: et-pension-private-10000
+      period: '2026'
+      scenario: private-organization-pension-contributions
+      outputs:
+      - et:statutes/proc-715-2011/private-organization-employees-pension#private_employee_pension_contribution
+      - et:statutes/proc-715-2011/private-organization-employees-pension#private_employer_pension_contribution
+      parameters:
+        monthly_salary: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000.0
+    - id: et-pension-private-3000
+      period: '2026'
+      scenario: private-organization-pension-contributions
+      outputs:
+      - et:statutes/proc-715-2011/private-organization-employees-pension#private_employee_pension_contribution
+      - et:statutes/proc-715-2011/private-organization-employees-pension#private_employer_pension_contribution
+      parameters:
+        monthly_salary: 3000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 36000.0
+    - id: et-pension-military-office-25pct
+      period: '2026'
+      scenario: military-police-office-pension-contribution
+      outputs:
+      - et:statutes/proc-714-2011/public-servants-pension#military_police_office_pension_contribution
+      parameters:
+        monthly_salary: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000.0
+  et-presumptive:
+    locale: ET
+    entity: Person
+    entity_id: head
+    outputs:
+    - et:statutes/proc-1395-2025/income-tax-amendment-2025#presumptive_gross_receipts_tax
+    cases:
+    - id: et-presumptive-50000-band1
+      period: '2026'
+      scenario: small-business-presumptive-tax
+      parameters:
+        annual_gross_receipts: 50000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-presumptive-100000-band1-top
+      period: '2026'
+      scenario: small-business-presumptive-tax
+      parameters:
+        annual_gross_receipts: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-presumptive-400000-band2
+      period: '2026'
+      scenario: small-business-presumptive-tax
+      parameters:
+        annual_gross_receipts: 400000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-presumptive-900000-band3
+      period: '2026'
+      scenario: small-business-presumptive-tax
+      parameters:
+        annual_gross_receipts: 900000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-presumptive-1900000-band5
+      period: '2026'
+      scenario: small-business-presumptive-tax
+      parameters:
+        annual_gross_receipts: 1900000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+  et-vat:
+    locale: ET
+    entity: Person
+    entity_id: head
+    cases:
+    - id: et-vat-electricity-above-threshold
+      period: '2026'
+      scenario: household-vat-utility-thresholds
+      outputs:
+      - et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-vat-water-above-threshold
+      period: '2026'
+      scenario: household-vat-utility-thresholds
+      outputs:
+      - et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold

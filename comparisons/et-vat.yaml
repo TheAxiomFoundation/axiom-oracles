@@ -1,0 +1,33 @@
+name: et-vat
+title: Ethiopia et-vat — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et VAT (Proclamation 1341/2024 Article 8, 15%)
+  with the Directive No. 1021/2024 domestic electricity (200 kWh) and
+  water (15 cubic meters) monthly thresholds against ETMOD tva_s.
+  Expenditures bridge post-uprating (per-group indices probed: 1.4959
+  utilities, 1.4427 water); threshold quantities pass unuprated; the
+  full expenditure becomes taxable above the threshold in both engines
+  (probed). The SOUTHMOD bundle is licensed and non-redistributable;
+  referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-vat
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-vat.json
+
+artifacts:
+  report_basename: axiom-euromod-et-vat
+
+dashboard:
+  filename: axiom-euromod-et-vat.json
+  suite: et-vat

@@ -1,0 +1,35 @@
+name: et-paye-rate-schedule
+title: Ethiopia et-paye-rate-schedule — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et Proclamation 1395/2025 Article 11 monthly
+  employment schedule (0% to 2,000 birr; 15/20/25/30%; 35% above
+  14,000) against ETMOD tin01_s (ET_2025 = EFY2025/26, et_2022_a2) on
+  the FULL grid - the statutory base is gross employment income
+  (Proclamation 979/2016 Articles 10(3) and 65(1)(c) verified: no
+  employee deduction exists) and ETMOD taxes gross, probed exact to
+  the birr at eight incomes. The engine's post-uprating yem is bridged
+  to the module's monthly input (employment uprating
+  1.7035555555555557, probed). The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-paye-rate-schedule
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-paye-rate-schedule.json
+
+artifacts:
+  report_basename: axiom-euromod-et-paye-rate-schedule
+
+dashboard:
+  filename: axiom-euromod-et-paye-rate-schedule.json
+  suite: et-paye-rate-schedule

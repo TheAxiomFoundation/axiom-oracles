@@ -701,6 +701,45 @@ class Concepts:
         "zm:statutes/composed/pilot-worker-disposable-income-pipeline"
         "#pilot_worker_disposable_income"
     )
+    # Ethiopia Proclamation 1395/2025 schedules (employment monthly,
+    # business annual, Article 50 presumptive) and the Article 23
+    # minimum-tax floor, compared to ETMOD tin01_s/tin02_s/ttn_s.
+    ET_EMPLOYMENT_INCOME_TAX = (
+        "et:statutes/proc-1395-2025/income-tax-amendment-2025"
+        "#employment_income_tax"
+    )
+    ET_BUSINESS_INCOME_TAX_PAYABLE = (
+        "et:statutes/proc-1395-2025/income-tax-amendment-2025"
+        "#business_income_tax_payable"
+    )
+    ET_PRESUMPTIVE_TAX = (
+        "et:statutes/proc-1395-2025/income-tax-amendment-2025"
+        "#presumptive_gross_receipts_tax"
+    )
+    # Ethiopia pension shares (Proclamations 715/2011 and 714/2011),
+    # compared to ETMOD tscee_s/tscer_s.
+    ET_PRIVATE_EMPLOYEE_PENSION = (
+        "et:statutes/proc-715-2011/private-organization-employees-pension"
+        "#private_employee_pension_contribution"
+    )
+    ET_PRIVATE_EMPLOYER_PENSION = (
+        "et:statutes/proc-715-2011/private-organization-employees-pension"
+        "#private_employer_pension_contribution"
+    )
+    ET_MILITARY_OFFICE_PENSION = (
+        "et:statutes/proc-714-2011/public-servants-pension"
+        "#military_police_office_pension_contribution"
+    )
+    # Ethiopia VAT (Proclamation 1341/2024 + Directive 1021/2024
+    # electricity/water thresholds), compared to ETMOD tva_s.
+    ET_ELECTRICITY_VAT = (
+        "et:statutes/proc-1341-2024/value-added-tax-proclamation"
+        "#electricity_vat"
+    )
+    ET_WATER_VAT = (
+        "et:statutes/proc-1341-2024/value-added-tax-proclamation"
+        "#water_vat"
+    )
 
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
