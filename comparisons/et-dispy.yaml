@@ -1,0 +1,36 @@
+name: et-dispy
+title: Ethiopia et-dispy — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et composed monthly disposable-income pipeline
+  (the Proclamation 1395/2025 Article 11 employment income tax on
+  gross monthly income, less the Proclamation 715/2011 employee 7
+  percent pension share) against ETMOD ils_dispy (ET_2025 =
+  EFY2025/26, et_2022_a2) on the FULL grid - the statutory base is
+  gross (Proclamation 979/2016 Articles 10(3) and 65(1)(c) verified)
+  and ETMOD taxes gross, so unlike Ghana and Zambia there is no base
+  divergence and no shared-nil restriction. The engine's post-uprating
+  yem is bridged to both imported inputs on the monthly basis, making
+  parity index-proof. The SOUTHMOD bundle is licensed and
+  non-redistributable; referenced only by path.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-dispy
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-dispy.json
+
+artifacts:
+  report_basename: axiom-euromod-et-dispy
+
+dashboard:
+  filename: axiom-euromod-et-dispy.json
+  suite: et-dispy

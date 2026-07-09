@@ -2910,6 +2910,31 @@ concepts:
           type: country
           geoid: ET
 
+  # Ethiopia composed monthly disposable income vs ETMOD ils_dispy on
+  # the FULL grid (gross base verified in both engines - no shared-nil
+  # restriction).
+  et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Ethiopia composed single-employee monthly disposable income (gross + benefits - income tax - employee pension)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: ET
+
 
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
