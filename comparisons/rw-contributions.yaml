@@ -37,6 +37,7 @@ runner:
     euromod_country: RW
     euromod_system: RW_2025
     euromod_dataset: rw_2024_a1
+    euromod_annualize_outputs: false
     axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
     dashboard_filename: axiom-euromod-rw-contributions.json
 

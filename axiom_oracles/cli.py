@@ -1097,6 +1097,14 @@ def _build_runner(
             constant_overrides=_parse_euromod_constant_overrides(
                 os.environ.get("EUROMOD_CONSTANT_OVERRIDES"),
             ),
+            # Month-period Axiom modules compare monthly-to-monthly (the
+            # engine returns one month at the queried period), so suites
+            # whose Axiom outputs are monthly disable the x12
+            # annualization via EUROMOD_ANNUALIZE_OUTPUTS=false.
+            annualize_outputs=os.environ.get(
+                "EUROMOD_ANNUALIZE_OUTPUTS", "true"
+            ).strip().lower()
+            not in {"false", "0", "no"},
         )
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
 

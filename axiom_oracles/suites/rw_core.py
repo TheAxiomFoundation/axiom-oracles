@@ -248,9 +248,9 @@ def _paye_case(case_id: str, monthly_target: float) -> Case:
             # the module's monthly basis.
             "axiom_inputs": {income_input: monthly_target},
             "euromod_inputs": [_rw_formal_earner(101, monthly_target)],
-            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
-                "yem": {"inputs": [income_input], "divide_by": 12}
-            },
+            # euromod_annualize_outputs is off for this suite (monthly
+            # module), so the bridged yem is already monthly.
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {"yem": [income_input]},
         },
         entities=_head_entity(
             **{Concepts.YEARLY_EARNED_INCOME: monthly_target * 12.0}
@@ -297,7 +297,10 @@ def _lump_sum_case(case_id: str, annual_turnover: float) -> Case:
             **RW_METADATA,
             "scenario": "small-business-lump-sum",
             "yearly_turnover": annual_turnover,
-            "axiom_inputs": {turnover_input: annual_turnover},
+            "axiom_inputs": {
+                turnover_input: annual_turnover,
+                f"{LUMP_SUM_MODULE}#input.small_enterprise_operator_opted_for_real_regime": False,
+            },
             "euromod_inputs": [row],
             # The runner annualizes the engine's uprated monthly ytn01,
             # which lands directly on the module's annual input.
@@ -393,9 +396,11 @@ def _contributions_case(
 ) -> Case:
     pension_input = f"{PENSION_MODULE}#input.covered_remuneration"
     maternity_input = f"{MATERNITY_MODULE}#input.contributory_salary"
-    rama_input = f"{RAMA_MODULE}#input.basic_salary"
+    rama_input = f"{RAMA_MODULE}#input.employee_basic_salary"
     mmi_input = f"{MMI_MODULE}#input.basic_salary"
-    levy_input = f"{CBHI_LEVY_MODULE}#input.net_salary"
+    levy_input = f"{CBHI_LEVY_MODULE}#input.employee_net_salary"
+    is_public = loc != 0 and 9 <= lindi <= 11
+    is_military = loc == 0
     outputs = [
         Concepts.RW_EMPLOYEE_PENSION_CONTRIBUTION,
         Concepts.RW_EMPLOYER_PENSION_CONTRIBUTION,
@@ -404,15 +409,24 @@ def _contributions_case(
         Concepts.RW_CBHI_EMPLOYEE_CONTRIBUTION,
     ]
     outputs.extend(getattr(Concepts, name) for name in extra_concepts)
+    # euromod_annualize_outputs is off for this suite (monthly
+    # modules), so bridged values arrive on their monthly basis. The
+    # scheme-specific salary inputs are bridged in their applicable
+    # sector only (zero elsewhere), matching the oracle's eligibility
+    # keying.
+    yem_targets = [pension_input, maternity_input]
+    if is_public:
+        yem_targets.append(rama_input)
+    if is_military:
+        yem_targets.append(mmi_input)
     bridge = {
         "yem": {
-            "inputs": [pension_input, maternity_input, rama_input, mmi_input],
-            "divide_by": 12,
+            "inputs": yem_targets,
         },
         # The levy base ("net salary") is RWAMOD's own operationalization;
-        # bridging the engine's levy back to its base (annualized levy /
-        # 0.005 / 12) verifies the module's 0.5% arithmetic exactly.
-        "tsceehl03_s": {"inputs": [levy_input], "divide_by": 0.06},
+        # bridging the engine's monthly levy back to its base (levy /
+        # 0.005) verifies the module's 0.5% arithmetic exactly.
+        "tsceehl03_s": {"inputs": [levy_input], "divide_by": 0.005},
     }
     return Case(
         case_id=case_id,
@@ -421,11 +435,15 @@ def _contributions_case(
             **RW_METADATA,
             "scenario": "formal-employee-contribution-stack",
             "monthly_employment_income": monthly_target,
+            # RWAMOD keys RAMA on the public-service industry codes and
+            # MMI on loc=0; the Axiom modules price any salary they are
+            # fed, so scheme inputs feed the applicable sector only and
+            # zero elsewhere (both engines nil by construction).
             "axiom_inputs": {
                 pension_input: monthly_target,
                 maternity_input: monthly_target,
-                rama_input: monthly_target,
-                mmi_input: monthly_target,
+                rama_input: monthly_target if is_public else 0,
+                mmi_input: monthly_target if is_military else 0,
                 levy_input: monthly_target,
             },
             "euromod_inputs": [
@@ -461,6 +479,10 @@ def _vat_case(case_id: str, annual_raw: float) -> Case:
     row = _rw_informal(101)
     # x0111211 is a VAT-base food-detail item (il_exp_vat01 member,
     # probed: tva = 18% of the engine's post-uprating value exactly).
+    # Detailed COICOP inputs are not echoed in the engine's output
+    # frame, so the engine's own VAT charge is bridged back to its
+    # base (tva_s / 0.18) - the case verifies the module's 18%
+    # arithmetic on the engine's post-uprating base exactly.
     row["x0111211"] = annual_raw / 12.0
     return Case(
         case_id=case_id,
@@ -471,7 +493,9 @@ def _vat_case(case_id: str, annual_raw: float) -> Case:
             "yearly_expenditure_raw": annual_raw,
             "axiom_inputs": {taxable_value: annual_raw},
             "euromod_inputs": [row],
-            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {"x0111211": [taxable_value]},
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "tva_s": {"inputs": [taxable_value], "divide_by": 0.18}
+            },
         },
         entities=_head_entity(),
         outputs=(Concepts.RW_VAT_AMOUNT,),
@@ -481,6 +505,15 @@ def _vat_case(case_id: str, annual_raw: float) -> Case:
 # ---------------------------------------------------------------------------
 # rw-excise (tex arms: fuels per litre + cigarette compound, exact)
 # ---------------------------------------------------------------------------
+
+
+_EXCISE_ZERO_INPUTS = {
+    f"{EXCISE_MODULE}#input.premium_fuel_litres": 0,
+    f"{EXCISE_MODULE}#input.gas_oil_litres": 0,
+    f"{EXCISE_MODULE}#input.cigarette_retail_value": 0,
+    f"{EXCISE_MODULE}#input.cigarette_packs": 0,
+    f"{EXCISE_MODULE}#input.cigar_value": 0,
+}
 
 
 def rw_excise_cases() -> list[Case]:
@@ -505,6 +538,8 @@ def _fuel_case(case_id: str, quantity_var: str, monthly_litres: float, kind: str
         concept = Concepts.RW_GAS_OIL_EXCISE_DUTY
     row = _rw_informal(101)
     row[quantity_var] = monthly_litres
+    axiom_inputs = dict(_EXCISE_ZERO_INPUTS)
+    axiom_inputs[litres_input] = monthly_litres * 12.0
     return Case(
         case_id=case_id,
         period=RW_PERIOD,
@@ -514,8 +549,10 @@ def _fuel_case(case_id: str, quantity_var: str, monthly_litres: float, kind: str
             "monthly_litres": monthly_litres,
             # Litre quantities are unuprated in RWAMOD (probed: 20 l ->
             # 3,660 = 20 x 183 exactly), so the annual litres feed the
-            # Axiom side directly - no bridge needed.
-            "axiom_inputs": {litres_input: monthly_litres * 12.0},
+            # Axiom side directly - no bridge needed; the other excise
+            # inputs are zero-filled because the suite queries every
+            # excise concept on every case.
+            "axiom_inputs": axiom_inputs,
             "euromod_inputs": [row],
         },
         entities=_head_entity(),
@@ -528,6 +565,10 @@ def _cigarette_case(case_id: str, monthly_retail_raw: float, monthly_packs: floa
     packs_input = f"{EXCISE_MODULE}#input.cigarette_packs"
     row = _rw_informal(101)
     row.update({"x02301": monthly_retail_raw, "q02301": monthly_packs})
+    annual_packs = monthly_packs * 12.0
+    axiom_inputs = dict(_EXCISE_ZERO_INPUTS)
+    axiom_inputs[retail_input] = monthly_retail_raw * 12.0
+    axiom_inputs[packs_input] = annual_packs
     return Case(
         case_id=case_id,
         period=RW_PERIOD,
@@ -537,14 +578,22 @@ def _cigarette_case(case_id: str, monthly_retail_raw: float, monthly_packs: floa
             "monthly_retail_raw": monthly_retail_raw,
             "monthly_packs": monthly_packs,
             # Retail expenditure is uprated (alcohol/tobacco group index,
-            # probed 1.1104), so the engine's own post-uprating value is
-            # bridged; pack counts are unuprated and feed directly.
-            "axiom_inputs": {
-                retail_input: monthly_retail_raw * 12.0,
-                packs_input: monthly_packs * 12.0,
-            },
+            # probed 1.1104) and detailed COICOP inputs are not echoed in
+            # the engine's output frame, so the engine's own compound duty
+            # is inverted back to its retail base ((tex01 - 230 x packs) /
+            # 0.36; the transform applies divide-then-add, so the pack
+            # term is pre-divided); pack counts are unuprated and feed
+            # directly. The case verifies the module's 36% + 230/pack
+            # arithmetic on the engine's post-uprating base exactly.
+            "axiom_inputs": axiom_inputs,
             "euromod_inputs": [row],
-            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {"x02301": [retail_input]},
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "tex01_s": {
+                    "inputs": [retail_input],
+                    "divide_by": 0.36,
+                    "add": -(230.0 * annual_packs) / 0.36,
+                }
+            },
         },
         entities=_head_entity(),
         outputs=(Concepts.RW_CIGARETTE_EXCISE_DUTY,),

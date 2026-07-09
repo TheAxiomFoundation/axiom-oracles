@@ -1,0 +1,680 @@
+{
+  "aggregates": [
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution",
+      "description": "Rwanda employee pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)",
+      "left_weighted_sum": 41999.999999,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 41999.999999,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution",
+      "description": "Rwanda employer pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)",
+      "left_weighted_sum": 41999.999999,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 41999.999999,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution",
+      "description": "Rwanda employee maternity contribution (Law 003/2016 Article 7, 0.3%)",
+      "left_weighted_sum": 2100,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 2100,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution",
+      "description": "Rwanda employer maternity contribution (Law 003/2016 Article 7, 0.3%)",
+      "left_weighted_sum": 2100,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 2100,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:statutes/law-2001-24/rama-contributions#employee_rama_contribution",
+      "description": "Rwanda employee RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)",
+      "left_weighted_sum": 7500,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 7500,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:statutes/law-2001-24/rama-contributions#employer_rama_contribution",
+      "description": "Rwanda employer RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)",
+      "left_weighted_sum": 7500,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 7500,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:statutes/law-2005-23/mmi-contributions#insured_mmi_contribution",
+      "description": "Rwanda insured MMI contribution (Law 23/2005 Article 30, 5% of basic salary)",
+      "left_weighted_sum": 5000,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 5000,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:statutes/law-2005-23/mmi-contributions#government_mmi_contribution",
+      "description": "Rwanda government MMI contribution (Law 23/2005 Article 30, 17.5% of basic salary)",
+      "left_weighted_sum": 17500,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 17500,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution",
+      "description": "Rwanda CBHI employee levy (PM Order 105/03 of 30/09/2020 Article 5, 0.5% of net salary)",
+      "left_weighted_sum": 2737.003,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 2737.003,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 4,
+  "cases": [
+    {
+      "case_id": "rw-contributions-private-100000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 89700.0999984286,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 99999.99999812258,
+          "rw:statutes/law-2001-24/rama-contributions#input.employee_basic_salary": 0,
+          "rw:statutes/law-2005-23/mmi-contributions#input.basic_salary": 0,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 99999.99999812258
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 93324.63263552556
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tsceehl03_s": {
+            "divide_by": 0.005,
+            "inputs": [
+              "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary"
+            ]
+          },
+          "yem": {
+            "inputs": [
+              "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+              "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 89700.0999984286,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 99999.99999812258,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 99999.99999812258
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            1200000.0
+          ],
+          "yearly_earned_income_total": 1200000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 100000.0,
+        "scenario": "formal-employee-contribution-stack",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-contributions-private-400000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 290800.29999521637,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 399999.99999249034,
+          "rw:statutes/law-2001-24/rama-contributions#input.employee_basic_salary": 0,
+          "rw:statutes/law-2005-23/mmi-contributions#input.basic_salary": 0,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 399999.99999249034
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 373298.53054210223
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tsceehl03_s": {
+            "divide_by": 0.005,
+            "inputs": [
+              "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary"
+            ]
+          },
+          "yem": {
+            "inputs": [
+              "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+              "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 290800.29999521637,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 399999.99999249034,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 399999.99999249034
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            4800000.0
+          ],
+          "yearly_earned_income_total": 4800000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 400000.0,
+        "scenario": "formal-employee-contribution-stack",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-contributions-public-servant-100000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 82200.0999985694,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 99999.99999812258,
+          "rw:statutes/law-2001-24/rama-contributions#input.employee_basic_salary": 99999.99999812258,
+          "rw:statutes/law-2005-23/mmi-contributions#input.basic_salary": 0,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 99999.99999812258
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 10,
+            "loc": 1,
+            "yem": 93324.63263552556
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tsceehl03_s": {
+            "divide_by": 0.005,
+            "inputs": [
+              "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary"
+            ]
+          },
+          "yem": {
+            "inputs": [
+              "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+              "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary",
+              "rw:statutes/law-2001-24/rama-contributions#input.employee_basic_salary"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 82200.0999985694,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 99999.99999812258,
+          "rw:statutes/law-2001-24/rama-contributions#input.employee_basic_salary": 99999.99999812258,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 99999.99999812258
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            1200000.0
+          ],
+          "yearly_earned_income_total": 1200000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 100000.0,
+        "scenario": "formal-employee-contribution-stack",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-contributions-military-100000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 84700.09999852248,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 99999.99999812258,
+          "rw:statutes/law-2001-24/rama-contributions#input.employee_basic_salary": 0,
+          "rw:statutes/law-2005-23/mmi-contributions#input.basic_salary": 99999.99999812258,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 99999.99999812258
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 0,
+            "yem": 93324.63263552556
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "tsceehl03_s": {
+            "divide_by": 0.005,
+            "inputs": [
+              "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary"
+            ]
+          },
+          "yem": {
+            "inputs": [
+              "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+              "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary",
+              "rw:statutes/law-2005-23/mmi-contributions#input.basic_salary"
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#input.employee_net_salary": 84700.09999852248,
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 99999.99999812258,
+          "rw:statutes/law-2005-23/mmi-contributions#input.basic_salary": 99999.99999812258,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 99999.99999812258
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            1200000.0
+          ],
+          "yearly_earned_income_total": 1200000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 100000.0,
+        "scenario": "formal-employee-contribution-stack",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda employee pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)",
+      "id": "rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda employer pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)",
+      "id": "rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda employee maternity contribution (Law 003/2016 Article 7, 0.3%)",
+      "id": "rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda employer maternity contribution (Law 003/2016 Article 7, 0.3%)",
+      "id": "rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda employee RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)",
+      "id": "rw:statutes/law-2001-24/rama-contributions#employee_rama_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda employer RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)",
+      "id": "rw:statutes/law-2001-24/rama-contributions#employer_rama_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda insured MMI contribution (Law 23/2005 Article 30, 5% of basic salary)",
+      "id": "rw:statutes/law-2005-23/mmi-contributions#insured_mmi_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda government MMI contribution (Law 23/2005 Article 30, 17.5% of basic salary)",
+      "id": "rw:statutes/law-2005-23/mmi-contributions#government_mmi_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda CBHI employee levy (PM Order 105/03 of 30/09/2020 Article 5, 0.5% of net salary)",
+      "id": "rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "RW"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "82743c15350157f9391732b0066a9087a41eaa53",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-09T16:00:37Z",
+    "generated_by": "scripts/run_comparison.py::rw-contributions-local",
+    "oracle": {
+      "euromod_country": "RW",
+      "euromod_dataset": "rw_2024_a1",
+      "euromod_system": "RW_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-rw",
+        "sha": "d814f2d9032a0a3f5ea6ebeefac7e78ed9f850ad"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "rw-contributions",
+  "summary": {
+    "comparison_count": 36,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 36,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 36,
+      "match_rate": 100,
+      "match_weight": 36,
+      "mismatch_weight": 0
+    }
+  }
+}

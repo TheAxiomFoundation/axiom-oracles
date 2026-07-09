@@ -1608,6 +1608,9 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     constant_overrides = params.get("euromod_constant_overrides")
     if constant_overrides:
         env["EUROMOD_CONSTANT_OVERRIDES"] = str(constant_overrides)
+    annualize_outputs = params.get("euromod_annualize_outputs")
+    if annualize_outputs is not None:
+        env["EUROMOD_ANNUALIZE_OUTPUTS"] = str(annualize_outputs)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
         env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
