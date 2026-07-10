@@ -1,0 +1,19 @@
+{
+ "suite": "fiit-ecps",
+ "count": 12691,
+ "chunks": 26,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "capital-gain-definitions",
+  "ctc",
+  "eitc",
+  "tax-before-credits"
+ ],
+ "source": "axiom-policyengine-fiit-ecps-0-2026-07-07.json",
+ "total_cases": 87519,
+ "partial": "mismatch-only"
+}

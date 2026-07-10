@@ -11,5 +11,6 @@
   "us:regulations/42-cfr/435#adult_eligible",
   "us:regulations/42-cfr/435#older_child_eligible"
  ],
- "source": "axiom-policyengine-medicaid-magi-co-ecps-0-2026-07-06.json"
+ "source": "axiom-policyengine-medicaid-magi-co-ecps-0-2026-07-06.json",
+ "total_cases": 1045
 }

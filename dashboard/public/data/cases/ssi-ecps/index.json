@@ -1,0 +1,16 @@
+{
+ "suite": "ssi-ecps",
+ "count": 4044,
+ "chunks": 9,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us:statutes/42/1382#ssi_benefit"
+ ],
+ "source": "axiom-policyengine-ssi-ecps-0-2026-07-06.json",
+ "total_cases": 75112,
+ "partial": "mismatch-only"
+}

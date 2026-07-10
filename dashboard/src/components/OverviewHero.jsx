@@ -60,6 +60,11 @@ export default function OverviewHero({ reports }) {
     pair.matched += m.matched;
     pair.total += m.total;
     pair.runs += 1;
+    // Dispositioned mismatches (the native deviation-analysis layer) count
+    // as explained; a report without the block contributes none.
+    pair.explained =
+      (pair.explained || 0) +
+      (m.unexplainedCount != null ? m.mismatches - m.unexplainedCount : 0);
     // Near-agreement aggregates only while every contributing report can
     // compute it; one slimmed report makes the oracle's figure unknowable.
     const near = nearMetric(report);
@@ -105,6 +110,10 @@ export default function OverviewHero({ reports }) {
             .map(([oracle, pair]) => {
               const pairRate =
                 pair.total > 0 ? (pair.matched / pair.total) * 100 : null;
+              const explainedRate =
+                pair.total > 0 && pair.explained > 0
+                  ? ((pair.matched + pair.explained) / pair.total) * 100
+                  : null;
               const nearRate =
                 !pair.nearUnknown && pair.near
                   ? ((pair.matched + pair.near) / pair.total) * 100
@@ -120,6 +129,15 @@ export default function OverviewHero({ reports }) {
                   label={
                     <>
                       {`vs ${engineLabel(oracle)} · ${pair.total.toLocaleString()} checks`}
+                      {explainedRate != null &&
+                        explainedRate - pairRate >= 0.05 && (
+                          <span
+                            className="hero-stat-near"
+                            title="Counting mismatches with schema-validated dispositions (explained residuals, upstream engine gaps, bridge artifacts) as explained"
+                          >
+                            {formatPct(explainedRate, 1)} explained
+                          </span>
+                        )}
                       {nearRate != null && nearRate - pairRate >= 1 && (
                         <span className="hero-stat-near">
                           {formatPct(nearRate, 1)} within ${NEAR_THRESHOLD_USD}

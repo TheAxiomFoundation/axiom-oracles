@@ -6,10 +6,23 @@ re-emits them as compact chunked JSON under
 ``dashboard/public/data/cases/<suite>/`` so the program pages can
 lazy-load and filter them client-side without a server.
 
+Disposition annotations (the native deviation-analysis layer,
+``dispositions/<suite>.yaml``) are read from the DASHBOARD report copy —
+the run already merged and normalized them there — so every mismatch a
+disposition covers carries its class. The explorer's default view is the
+queue of UNEXPLAINED mismatches, the raw material for the next
+disposition.
+
+Suites whose reports carry no per-case rows (the fiit harness) or whose
+population exceeds the cap (SSI) fall back to mismatch-only artifacts:
+one row per disagreeing case, flagged ``partial`` so the UI says matched
+cases aren't listed.
+
 Row shape (kept deliberately small):
     {"id": case_id, "r": match_rate,
      "h": {"n": household_size, "e": earned_income, "a": ages},
-     "m": [{"c": concept, "l": left, "x": right, "d": difference}, ...]}
+     "m": [{"c": concept, "l": left, "x": right, "d": difference,
+            "e": disposition_kind_if_explained}, ...]}
 
 Usage:
     .venv/bin/python scripts/emit_case_artifacts.py            # all suites
@@ -26,7 +39,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
-OUT_ROOT = REPO_ROOT / "dashboard" / "public" / "data" / "cases"
+DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
+OUT_ROOT = DASHBOARD_DATA / "cases"
 CHUNK_SIZE = 500
 MAX_CASES = 25_000  # keep artifacts static-site friendly
 
@@ -40,10 +54,54 @@ def latest_full_report(basename: str) -> Path | None:
     return candidates[-1] if candidates else None
 
 
-def compact_case(case: dict) -> dict:
+def dashboard_report(basename: str) -> dict | None:
+    """The slim, disposition-merged report the dashboard serves."""
+    path = DASHBOARD_DATA / f"{basename}.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text())
+
+
+def mismatches_complete(report: dict | None) -> bool:
+    """True when the report's mismatch list is the whole population."""
+    if not report:
+        return False
+    declared = (report.get("summary") or {}).get("mismatch_count")
+    if declared is None:
+        declared = report.get("mismatch_count")
+    if declared is None:
+        return False
+    return len(report.get("mismatches") or []) == declared
+
+
+def explained_lookup(report: dict | None) -> dict:
+    """(case_id, concept) -> disposition class for annotated rows."""
+    out = {}
+    for m in (report or {}).get("mismatches") or []:
+        note = m.get("disposition")
+        if note:
+            out[(m.get("case_id"), m.get("concept"))] = note.get(
+                "disposition"
+            )
+    return out
+
+
+def compact_case(case: dict, explained: dict) -> dict:
     hs = (case.get("metadata") or {}).get("household_summary") or {}
     ages = hs.get("ages") or []
-    row = {
+    mismatches = []
+    for m in case.get("mismatches") or []:
+        row = {
+            "c": m.get("concept"),
+            "l": m.get("left"),
+            "x": m.get("right"),
+            "d": m.get("difference"),
+        }
+        kind = explained.get((case.get("case_id"), m.get("concept")))
+        if kind:
+            row["e"] = kind
+        mismatches.append(row)
+    return {
         "id": case.get("case_id"),
         "r": case.get("match_rate"),
         "h": {
@@ -51,39 +109,76 @@ def compact_case(case: dict) -> dict:
             "e": round(sum(hs.get("yearly_earned_income_per_person") or [0])),
             "a": ages,
         },
-        "m": [
-            {
-                "c": m.get("concept"),
-                "l": m.get("left"),
-                "x": m.get("right"),
-                "d": m.get("difference"),
-            }
-            for m in case.get("mismatches") or []
-        ],
+        "m": mismatches,
     }
-    return row
 
 
-def emit_suite(suite: str, dashboard_config: dict) -> str:
-    basename = dashboard_config["basename"]
-    src = latest_full_report(basename)
-    if src is None:
-        return f"skip {suite}: no full report under reports/"
-    report = json.loads(src.read_text())
-    cases = report.get("cases") or []
-    declared = report.get("case_count")
-    if not cases:
-        return f"skip {suite}: report has no case rows"
-    if declared and len(cases) != declared:
-        return f"skip {suite}: report itself is truncated ({len(cases)}/{declared})"
-    if len(cases) > MAX_CASES:
-        return f"skip {suite}: {len(cases)} cases exceeds artifact cap"
+def normalize_mismatch(m: dict) -> dict:
+    """Standard and fiit-harness mismatch rows -> one shape."""
+    if "entity_id" in m and "case_id" not in m:
+        # fiit harness: entity_id/surface/axiom/policyengine/diff
+        return {
+            "case_id": m.get("entity_id"),
+            "concept": m.get("surface"),
+            "left": m.get("axiom"),
+            "right": m.get("policyengine"),
+            "difference": m.get("diff"),
+            "ages": [],
+            "earned": None,
+        }
+    return {
+        "case_id": m.get("case_id"),
+        "concept": m.get("concept"),
+        "left": m.get("left"),
+        "right": m.get("right"),
+        "difference": m.get("difference"),
+        "ages": m.get("ages") or [],
+        "earned": m.get("yearly_earned_income"),
+    }
 
+
+def mismatch_only_rows(report: dict, explained: dict) -> list[dict]:
+    """One row per disagreeing case, from a complete mismatch list."""
+    by_case: dict = {}
+    for raw in report.get("mismatches") or []:
+        m = normalize_mismatch(raw)
+        row = by_case.setdefault(
+            m["case_id"],
+            {
+                "id": m["case_id"],
+                "r": None,
+                "h": {
+                    "n": len(m["ages"]) or None,
+                    "e": round(m["earned"]) if m["earned"] else 0,
+                    "a": m["ages"],
+                },
+                "m": [],
+            },
+        )
+        entry = {
+            "c": m["concept"],
+            "l": m["left"],
+            "x": m["right"],
+            "d": m["difference"],
+        }
+        kind = explained.get((m["case_id"], m["concept"]))
+        if kind:
+            entry["e"] = kind
+        row["m"].append(entry)
+    return list(by_case.values())
+
+
+def write_artifacts(
+    suite: str,
+    rows: list[dict],
+    meta: dict,
+    source: str,
+    partial: bool,
+) -> str:
     out_dir = OUT_ROOT / suite
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("chunk-*.json"):
         stale.unlink()
-    rows = [compact_case(c) for c in cases]
     chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
@@ -97,12 +192,69 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
         "count": len(rows),
         "chunks": len(chunks),
         "chunk_size": CHUNK_SIZE,
-        "engines": report.get("engines"),
+        "engines": meta.get("engines"),
         "mismatch_concepts": concepts,
-        "source": src.name,
+        "source": source,
+        "total_cases": meta.get("total_cases") or len(rows),
     }
+    if partial:
+        index["partial"] = "mismatch-only"
     (out_dir / "index.json").write_text(json.dumps(index, indent=1) + "\n")
-    return f"wrote {suite}: {len(rows)} cases in {len(chunks)} chunks"
+    mode = "mismatch-only rows" if partial else "cases"
+    return f"wrote {suite}: {len(rows)} {mode} in {len(chunks)} chunks"
+
+
+def emit_suite(suite: str, dashboard_config: dict) -> str:
+    basename = dashboard_config["basename"]
+    src = latest_full_report(basename)
+    full = json.loads(src.read_text()) if src else None
+    dash = dashboard_report(basename)
+    if full is None and dash is None:
+        return f"skip {suite}: no full report under reports/"
+
+    # Dispositions live on the dashboard copy; only trust the lookup when
+    # its mismatch list is the whole population.
+    explained = (
+        explained_lookup(dash) if mismatches_complete(dash) else {}
+    )
+    meta = {
+        "engines": (full or {}).get("engines") or (dash or {}).get("engines"),
+        "total_cases": (full or {}).get("case_count")
+        or (full or {}).get("compared_tax_units")
+        or (dash or {}).get("case_count"),
+    }
+
+    cases = (full or {}).get("cases") or []
+    declared_cases = (full or {}).get("case_count")
+    full_ok = (
+        cases
+        and (not declared_cases or len(cases) == declared_cases)
+        and len(cases) <= MAX_CASES
+    )
+    if full_ok:
+        rows = [compact_case(c, explained) for c in cases]
+        return write_artifacts(suite, rows, meta, src.name, partial=False)
+
+    # No usable case rows — fall back to a mismatch-only queue, from the
+    # annotated dashboard list when complete, else the full report's own.
+    if mismatches_complete(dash):
+        rows = mismatch_only_rows(dash, explained)
+        source = f"{basename}.json"
+    elif full is not None and mismatches_complete(full):
+        rows = mismatch_only_rows(full, explained)
+        source = src.name
+    else:
+        if cases:
+            return (
+                f"skip {suite}: {len(cases)} cases exceeds cap and no "
+                "complete mismatch list"
+            )
+        return f"skip {suite}: no case rows and no complete mismatch list"
+    if not rows:
+        return f"skip {suite}: no case rows, and nothing disagrees"
+    if len(rows) > MAX_CASES:
+        return f"skip {suite}: {len(rows)} mismatch rows exceeds artifact cap"
+    return write_artifacts(suite, rows, meta, source, partial=True)
 
 
 def dashboard_suites() -> dict[str, dict]:

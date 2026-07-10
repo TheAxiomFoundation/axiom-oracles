@@ -161,23 +161,38 @@ function Triangulation({ runs, bySuite, onPick }) {
   );
 }
 
+/** A case row is settled when every one of its mismatches is dispositioned. */
+function unexplainedCount(c) {
+  return (c.m || []).filter((m) => !m.e).length;
+}
+
 function CaseExplorer({ runs, bySuite, pickedIds, onClearPick }) {
   const loaded = runs.filter((r) => bySuite[r.suite]?.cases);
+  const householdRuns = runs.filter((r) => r.kind !== "parameter");
   const [suite, setSuite] = useState(null);
-  const [status, setStatus] = useState("all"); // all | match | mismatch
+  // The queue view: unexplained disagreements are the work; everything
+  // else (explained mismatches, matches) is reachable but not the default.
+  const [status, setStatus] = useState("unexplained");
   const [minDiff, setMinDiff] = useState(0);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
 
   const active = loaded.find((r) => r.suite === suite) || loaded[0];
   const data = active ? bySuite[active.suite] : null;
+  const partial = Boolean(data?.index?.partial);
 
   const rows = useMemo(() => {
     if (!data) return [];
     let out = data.cases;
     if (pickedIds) out = out.filter((c) => pickedIds.has(c.id));
+    if (status === "unexplained")
+      out = out.filter((c) => unexplainedCount(c) > 0);
+    if (status === "explained")
+      out = out.filter(
+        (c) => (c.m || []).length > 0 && unexplainedCount(c) === 0,
+      );
     if (status === "match") out = out.filter((c) => c.r === 100);
-    if (status === "mismatch") out = out.filter((c) => c.r !== 100);
+    if (status === "mismatch") out = out.filter((c) => (c.m || []).length > 0);
     if (minDiff > 0)
       out = out.filter((c) =>
         (c.m || []).some((m) => Math.abs(m.d || 0) >= minDiff),
@@ -191,18 +206,24 @@ function CaseExplorer({ runs, bySuite, pickedIds, onClearPick }) {
     setPage(0);
   }, [active?.suite, status, minDiff, query, pickedIds]);
 
+  // A program measured only by parameter probes has no cases by nature —
+  // no section at all, rather than an apologetic empty state.
+  if (!householdRuns.length) return null;
+
   if (!loaded.length) {
     return (
       <section className="card-flat">
         <div className="section-head">
           <div>
             <div className="section-eyebrow">Case explorer</div>
-            <div className="section-title">No case artifacts for this program yet</div>
+            <div className="section-title">No per-case rows to browse</div>
           </div>
         </div>
         <p className="cx-empty">
-          Regenerate with <code className="mono">scripts/emit_case_artifacts.py</code>{" "}
-          after the next suite run to browse every case here.
+          This program&apos;s reports don&apos;t record per-case rows or a
+          complete mismatch list, so there is nothing to browse yet — the
+          aggregate rates above are the whole story until the report writer
+          includes them.
         </p>
       </section>
     );
@@ -217,13 +238,26 @@ function CaseExplorer({ runs, bySuite, pickedIds, onClearPick }) {
         <div>
           <div className="section-eyebrow">Case explorer</div>
           <div className="section-title">
-            Every case, matched and mismatched
+            Unexplained disagreements — the queue for the next disposition
           </div>
         </div>
         <span className="mono tri-note">
-          {rows.length.toLocaleString()} of {data.cases.length.toLocaleString()} cases
+          {rows.length.toLocaleString()} of{" "}
+          {data.cases.length.toLocaleString()}
+          {partial ? " disagreeing cases" : " cases"}
         </span>
       </div>
+
+      {partial && (
+        <p className="cx-partial mono">
+          mismatch rows only — the other{" "}
+          {Math.max(
+            0,
+            (data.index?.total_cases || 0) - data.cases.length,
+          ).toLocaleString()}{" "}
+          cases agree and aren&apos;t listed individually
+        </p>
+      )}
 
       <div className="cx-filters">
         {loaded.length > 1 && (
@@ -244,11 +278,13 @@ function CaseExplorer({ runs, bySuite, pickedIds, onClearPick }) {
           className="cx-select"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          aria-label="Match status"
+          aria-label="Disposition status"
         >
-          <option value="all">matches + mismatches</option>
-          <option value="match">matches only</option>
-          <option value="mismatch">mismatches only</option>
+          <option value="unexplained">unexplained mismatches</option>
+          <option value="explained">explained mismatches</option>
+          <option value="mismatch">all mismatches</option>
+          {!partial && <option value="match">matches only</option>}
+          {!partial && <option value="all">everything</option>}
         </select>
         <select
           className="cx-select"
@@ -287,24 +323,50 @@ function CaseExplorer({ runs, bySuite, pickedIds, onClearPick }) {
             </tr>
           </thead>
           <tbody>
+            {rows.length === 0 && status === "unexplained" && (
+              <tr>
+                <td colSpan={6} className="cx-queue-empty">
+                  Queue is empty — every disagreement here carries a
+                  schema-validated disposition.
+                </td>
+              </tr>
+            )}
             {pageRows.map((c) => {
-              const worst = (c.m || []).reduce(
+              // Surface the worst UNEXPLAINED diff when one exists; a
+              // dispositioned $10k residual is less urgent than a fresh $50.
+              const pool = (c.m || []).some((m) => !m.e)
+                ? (c.m || []).filter((m) => !m.e)
+                : c.m || [];
+              const worst = pool.reduce(
                 (a, m) => (Math.abs(m.d || 0) > Math.abs(a?.d || 0) ? m : a),
                 null,
               );
+              const open = unexplainedCount(c);
               return (
                 <tr key={c.id} className={c.r === 100 ? "" : "cx-miss"}>
                   <td className="mono">{c.id}</td>
                   <td className="mono cx-hh">
-                    {c.h?.n || (c.h?.a || []).length || "?"} ppl
+                    {c.h?.n || (c.h?.a || []).length
+                      ? `${c.h?.n || (c.h?.a || []).length} ppl`
+                      : "—"}
                     {c.h?.e ? ` · $${Number(c.h.e).toLocaleString()} earned` : ""}
                   </td>
                   <td>
                     {c.r === 100 ? (
                       <span className="cx-ok">match</span>
-                    ) : (
+                    ) : open > 0 ? (
                       <span className="cx-bad">
-                        {(c.m || []).length} disagree
+                        {open} unexplained
+                      </span>
+                    ) : (
+                      <span
+                        className="cx-expl"
+                        title={(c.m || [])
+                          .map((m) => m.e)
+                          .filter(Boolean)
+                          .join(", ")}
+                      >
+                        explained
                       </span>
                     )}
                   </td>
@@ -427,6 +489,15 @@ export default function ProgramPage({
                 {run.metric.total.toLocaleString()} checks
                 {run.kind === "parameter" ? " · parameter" : ""}
               </span>
+              {run.metric.explainedRate != null &&
+                run.metric.explainedRate - run.metric.rate >= 0.05 && (
+                  <span
+                    className="mono pp-oracle-near"
+                    title="Counting mismatches with schema-validated dispositions as explained"
+                  >
+                    {formatPct(run.metric.explainedRate, 1)} explained
+                  </span>
+                )}
               {run.near && run.near.rate - run.metric.rate >= 1 && (
                 <span className="mono pp-oracle-near">
                   {formatPct(run.near.rate, 1)} within ${run.near.threshold}

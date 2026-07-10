@@ -1,0 +1,16 @@
+{
+ "suite": "uk-pension-credit",
+ "count": 4,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount"
+ ],
+ "source": "axiom-euromod-uk-pension-credit.json",
+ "total_cases": 12,
+ "partial": "mismatch-only"
+}

@@ -10,5 +10,6 @@
  "mismatch_concepts": [
   "us:tax/state-income-tax#liability"
  ],
- "source": "axiom-taxsim-co-state-income-tax-ecps-0-2026-07-07.json"
+ "source": "axiom-taxsim-co-state-income-tax-ecps-0-2026-07-07.json",
+ "total_cases": 1201
 }
