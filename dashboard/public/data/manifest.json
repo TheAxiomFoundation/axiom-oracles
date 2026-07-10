@@ -129,6 +129,7 @@
     "axiom-policyengine-taxsim-md-income-tax-liability.json",
     "axiom-policyengine-taxsim-ut-income-tax-liability.json",
     "axiom-policyengine-taxsim-oh-income-tax-liability.json",
-    "axiom-policyengine-taxsim-de-income-tax-liability.json"
+    "axiom-policyengine-taxsim-de-income-tax-liability.json",
+    "axiom-policyengine-taxsim-al-income-tax-liability.json"
   ]
 }
