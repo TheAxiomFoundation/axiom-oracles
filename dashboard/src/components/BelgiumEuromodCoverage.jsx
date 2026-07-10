@@ -224,7 +224,13 @@ export default function BelgiumEuromodCoverage({ coverage, issues }) {
           {plural(residualTargets, "target")} live-compared with a known
           EUROMOD residual.
         </h1>
-        <p className="hero-sub">{coverage.coverage_claim}</p>
+        {/* The full claim of record is precise but book-length; the
+            structured cards below carry the same facts, so keep the prose
+            for auditors behind a disclosure. */}
+        <details className="be-claim">
+          <summary>Full coverage claim — the audit record, verbatim</summary>
+          <p className="hero-sub be-claim-body">{coverage.coverage_claim}</p>
+        </details>
         <div className="hero-stats">
           <Stat
             value={compactNumber(denominator.policy_count)}

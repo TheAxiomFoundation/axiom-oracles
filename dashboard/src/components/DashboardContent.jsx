@@ -2,15 +2,13 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { loadOracleData, buildNWayData } from "../utils/data";
-import { suiteRegion, suiteMeta, isAxiomPair, otherOracle } from "../utils/suites";
+import { suiteRegion } from "../utils/suites";
 import { engineLabel } from "../utils/format";
 import OverviewHero from "./OverviewHero";
 import ConformanceCard from "./ConformanceCard";
 import BelgiumEuromodCoverage from "./BelgiumEuromodCoverage";
-import CoverageTracker from "./CoverageTracker";
 import RuleVerification from "./RuleVerification";
 import GapLedger from "./GapLedger";
-import ProgramRuns from "./ProgramRuns";
 import ProgramStatusTable from "./ProgramStatusTable";
 import ProgramPage from "./ProgramPage";
 import FreshnessRegister from "./FreshnessRegister";
@@ -38,10 +36,9 @@ const COUNTRIES = [
   { id: "be", label: "BE" },
 ];
 
-const VIEWS = [
-  { id: "verification", label: "Verification" },
-  { id: "coverage", label: "Coverage tracker" },
-];
+// The Axiom app owns the "what is encoded" story; Oracles only measures
+// how accurate those encodings are, and links out for the rest.
+const AXIOM_APP_URL = "https://axiom-foundation.org";
 
 function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
   return (
@@ -49,7 +46,7 @@ function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
       <div className="topbar-inner">
         <span className="brand-group">
           <a
-            href="https://axiom-foundation.org"
+            href={AXIOM_APP_URL}
             target="_blank"
             rel="noreferrer"
             className="brand-link"
@@ -85,25 +82,6 @@ function TopBar({ jurisdiction = "us", onJurisdictionChange = () => {} }) {
         </div>
       </div>
     </header>
-  );
-}
-
-function ViewTabs({ view, onChange }) {
-  return (
-    <nav className="view-tabs" role="tablist" aria-label="Dashboard view">
-      {VIEWS.map((v) => (
-        <button
-          key={v.id}
-          type="button"
-          role="tab"
-          aria-selected={view === v.id}
-          className={`view-tab${view === v.id ? " view-tab-active" : ""}`}
-          onClick={() => onChange(v.id)}
-        >
-          {v.label}
-        </button>
-      ))}
-    </nav>
   );
 }
 
@@ -155,12 +133,11 @@ export default function DashboardContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [jurisdiction, setJurisdiction] = useState("us");
-  const [view, setView] = useState("verification");
   const [programId, setProgramId] = useState(null);
   const [hiddenOracles, setHiddenOracles] = useState(() => new Set());
 
-  // Deep-link jurisdiction (?jurisdiction=ca|uk|be|us, or #uk) and view
-  // (?view=coverage). Read once on mount.
+  // Deep-link jurisdiction (?jurisdiction=ca|uk|be|us, or #uk) and an open
+  // program (?program=…). Read once on mount.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const fromUrl = (
@@ -169,12 +146,15 @@ export default function DashboardContent() {
     if (COUNTRIES.some((c) => c.id === fromUrl)) {
       setJurisdiction(fromUrl);
     }
-    const viewFromUrl = (params.get("view") || "").toLowerCase();
-    if (VIEWS.some((v) => v.id === viewFromUrl)) {
-      setView(viewFromUrl);
-    }
     const programFromUrl = params.get("program");
     if (programFromUrl) setProgramId(programFromUrl);
+    // The retired two-tab system deep-linked ?view=…; strip the dead
+    // param so bookmarked URLs don't carry it forever.
+    if (params.has("view")) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("view");
+      window.history.replaceState(null, "", url);
+    }
   }, []);
 
   const syncUrl = (key, value) => {
@@ -185,14 +165,6 @@ export default function DashboardContent() {
   const changeJurisdiction = (next) => {
     setJurisdiction(next);
     syncUrl("jurisdiction", next);
-  };
-  const changeView = (next) => {
-    setView(next);
-    setProgramId(null);
-    const url = new URL(window.location.href);
-    url.searchParams.set("view", next);
-    url.searchParams.delete("program");
-    window.history.replaceState(null, "", url);
   };
   const openProgram = (id) => {
     setProgramId(id);
@@ -303,7 +275,7 @@ export default function DashboardContent() {
   );
   const isBelgium = jurisdiction === "be";
 
-  const verificationView = (
+  const mainView = (
     <>
       <OracleFilter
         available={availableOracles}
@@ -311,7 +283,14 @@ export default function DashboardContent() {
         onToggle={toggleOracle}
       />
 
-      {!isBelgium && <OverviewHero reports={withData} />}
+      {isBelgium ? (
+        <BelgiumEuromodCoverage
+          coverage={data.euromodCoverage}
+          issues={data.euromodIssues}
+        />
+      ) : (
+        <OverviewHero reports={withData} />
+      )}
 
       <ConformanceCard region={jurisdiction} />
       {jurisdiction === "uk" && <ConformanceCard region="uk-pe" />}
@@ -324,6 +303,10 @@ export default function DashboardContent() {
         coverageOverview={data.coverageOverview}
         region={jurisdiction}
       />
+
+      {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
+
+      <FreshnessRegister freshness={data.freshness} region={jurisdiction} />
 
       <details className="advanced-panel">
         <summary>
@@ -348,27 +331,6 @@ export default function DashboardContent() {
     </>
   );
 
-  const coverageView = (
-    <>
-      {isBelgium ? (
-        <BelgiumEuromodCoverage
-          coverage={data.euromodCoverage}
-          issues={data.euromodIssues}
-        />
-      ) : (
-        <CoverageTracker
-          reports={regionReports}
-          coverageOverview={data.coverageOverview}
-          region={jurisdiction}
-        />
-      )}
-
-      {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
-
-      <FreshnessRegister freshness={data.freshness} region={jurisdiction} />
-    </>
-  );
-
   return (
     <>
       <TopBar
@@ -383,7 +345,21 @@ export default function DashboardContent() {
           padding: "40px 20px 80px",
         }}
       >
-        <ViewTabs view={view} onChange={changeView} />
+        {!programId && (
+          <p className="page-caption">
+            Oracles measures how accurate the encodings are. For what is
+            encoded, see the{" "}
+            <a
+              href={`${AXIOM_APP_URL}/axiom/encoded`}
+              target="_blank"
+              rel="noreferrer"
+              className="cite"
+            >
+              Axiom app
+            </a>
+            .
+          </p>
+        )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
           {programId ? (
@@ -394,10 +370,8 @@ export default function DashboardContent() {
               coverageOverview={data.coverageOverview}
               onBack={closeProgram}
             />
-          ) : view === "coverage" ? (
-            coverageView
           ) : (
-            verificationView
+            mainView
           )}
         </div>
 

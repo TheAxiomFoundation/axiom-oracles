@@ -8,10 +8,10 @@ import { FAMILY_LABELS, JURISDICTION_LABELS } from "../utils/suites";
  * Per-rule verification status (Phase-A item A7).
  *
  * Answers "which rules have no oracle?" and turns the coverage number into a
- * tracked KPI. Reads the compact summary that
- * scripts/rule_verification.py emits; the full per-rule join
- * (rule_verification.json) is fetched lazily only when a row is expanded, so
- * the initial page load stays light.
+ * tracked KPI. Reads only the compact summary that
+ * scripts/rule_verification.py emits, so the page load stays light; the
+ * full per-rule join (rule_verification.json) is emitted alongside it but
+ * never fetched by the dashboard.
  *
  * The view keeps three axes deliberately distinct:
  *  - grounding + manifest provenance are true per-rule signals (near-total),
