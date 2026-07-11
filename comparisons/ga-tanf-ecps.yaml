@@ -7,13 +7,12 @@ description: >-
   (PAMMS Appendix A financial standards by AU size, 1605 GIC/standard-of-need
   budgeting, 1615 standard $250 work deduction, and the Step 11-13
   min(standard-of-need deficit, family maximum) benefit) against PolicyEngine's
-  ga_tanf on Enhanced CPS households in Georgia. Refresh the rulespec root after
-  pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-ga/ ~/.axiom-oracles/roots/rulespec-us-ga/
+  ga_tanf on Enhanced CPS households in Georgia, using the canonical rulespec-us
+  checkout directly.
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     left: axiom
     right: policyengine
@@ -24,13 +23,11 @@ runner:
     period: 2026-01
     population: enhanced-cps
     jurisdiction_fips: "13"
-    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/axiom-oracles/programs/us-ga/tanf/fy-2026.yaml
-    axiom_composed_program: /tmp/ga-tanf-composed.yaml
+    axiom_compose_binary: $HOME/TheAxiomFoundation/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/TheAxiomFoundation/rulespec-us/us-ga/programs/tanf/fy-2026.yaml
+    axiom_composed_program: /tmp/axiom-composed/ga-tanf-ecps.yaml
     axiom_compiled_program: /tmp/ga-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
-    rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-ga
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-ga-tanf-ecps

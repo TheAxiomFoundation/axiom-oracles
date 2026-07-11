@@ -24,7 +24,6 @@ from .tax_populace import (
     require_numpy,
     require_policyengine_versions,
     resolve_rulespec_program_path,
-    resolve_workspace_root,
     row_value,
     run_axiom_program,
     within_tolerance,
@@ -36,6 +35,7 @@ from .population import (
     population_table,
 )
 from .registry import PolicyEngineMapping, load_policyengine_registry
+from .rulespec_paths import require_axiom_binary, require_rulespec_checkout
 
 STATE_FIPS_TO_CODE = {
     1: "AL",
@@ -146,22 +146,16 @@ class USVariableComparisonReport:
 
 def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.add_argument(
-        "--root",
-        type=Path,
-        default=None,
-        help="Workspace root containing rulespec-us and axiom-rules-engine",
-    )
-    parser.add_argument(
         "--rulespec-root",
         type=Path,
-        default=None,
-        help="rulespec-us checkout; defaults to <root>/rulespec-us",
+        required=True,
+        help="Exact canonical rulespec-us country checkout.",
     )
     parser.add_argument(
-        "--axiom-rules-engine-path",
+        "--axiom-binary",
         type=Path,
-        default=None,
-        help="axiom-rules-engine checkout; defaults to <root>/axiom-rules-engine",
+        required=True,
+        help="Exact executable axiom-rules-engine binary.",
     )
     parser.add_argument("--year", type=int, default=2026)
     parser.add_argument("--month", type=int, default=1)
@@ -231,9 +225,8 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
 
 def main(args: argparse.Namespace) -> int:
     report = compare_us_populace_variables(
-        workspace_root=resolve_workspace_root(args.root),
         rulespec_root=args.rulespec_root,
-        axiom_rules_path=args.axiom_rules_engine_path,
+        axiom_binary=args.axiom_binary,
         year=args.year,
         month=args.month,
         variables=tuple(args.variables or ()),
@@ -262,9 +255,8 @@ def main(args: argparse.Namespace) -> int:
 
 def compare_us_populace_variables(
     *,
-    workspace_root: Path,
-    rulespec_root: Path | None,
-    axiom_rules_path: Path | None,
+    rulespec_root: Path,
+    axiom_binary: Path,
     year: int,
     month: int,
     variables: tuple[str, ...],
@@ -281,10 +273,8 @@ def compare_us_populace_variables(
     require_policyengine_versions(
         allow_policyengine_us_version=allow_policyengine_us_version
     )
-    resolved_rulespec_root = (rulespec_root or workspace_root / "rulespec-us").resolve()
-    resolved_axiom_rules_path = (
-        axiom_rules_path or workspace_root / "axiom-rules-engine"
-    ).resolve()
+    resolved_rulespec_root = require_rulespec_checkout(rulespec_root, country="us")
+    resolved_axiom_binary = require_axiom_binary(axiom_binary)
     selected_variables = variables or default_us_populace_variables()
     mappings_by_variable = {
         variable: direct_variable_mappings(variable) for variable in selected_variables
@@ -331,7 +321,7 @@ def compare_us_populace_variables(
                 program=program,
                 request=request,
                 rulespec_root=resolved_rulespec_root,
-                axiom_rules_path=resolved_axiom_rules_path,
+                axiom_binary=resolved_axiom_binary,
             )
             break
         axiom_outputs_by_variable[variable] = variable_results

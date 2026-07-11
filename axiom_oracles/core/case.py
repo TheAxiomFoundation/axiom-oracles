@@ -108,9 +108,7 @@ class Concepts:
     FEDERAL_INCOME_TAX = "us:tax/federal-income-tax#liability"
     STATE_INCOME_TAX = "us:tax/state-income-tax#liability"
     MEDICAID_ELIGIBLE = "us:programs/medicaid#eligible"
-    MEDICAID_PREGNANT_WOMEN_ELIGIBLE = (
-        "us:programs/medicaid-pregnant-women#eligible"
-    )
+    MEDICAID_PREGNANT_WOMEN_ELIGIBLE = "us:programs/medicaid-pregnant-women#eligible"
     BASIC_HEALTH_PROGRAM_ELIGIBLE = "us:programs/basic-health-program#eligible"
     CHILD_HEALTH_PLUS_ELIGIBLE = "us:programs/child-health-plus#eligible"
     WIC_ELIGIBLE = "us:statutes/42/1786#wic_eligible"
@@ -170,8 +168,7 @@ class Concepts:
     # amount, exposed as ``uc_pilot_award_amount`` by
     # ``uk/policies/universal_credit_composed_award_pipeline.yaml``.
     UK_HOUSEHOLD_UNIVERSAL_CREDIT_AWARD = (
-        "uk:policies/universal_credit_composed_award_pipeline"
-        "#uc_pilot_award_amount"
+        "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount"
     )
     # Benefit-cap reduction of the Universal Credit award (UC Regulations 2013
     # regulation 80A/81), the monthly amount by which the section 8(1) award is
@@ -195,8 +192,7 @@ class Concepts:
     # ``wfp_pilot_award_amount`` by
     # ``uk/policies/winter_fuel_payment_composed_award_pipeline.yaml``.
     UK_HOUSEHOLD_WINTER_FUEL_PAYMENT_AWARD = (
-        "uk:policies/winter_fuel_payment_composed_award_pipeline"
-        "#wfp_pilot_award_amount"
+        "uk:policies/winter_fuel_payment_composed_award_pipeline#wfp_pilot_award_amount"
     )
     # Composed Pension Credit guarantee-credit award pipeline (rulespec-uk) that
     # wires the State Pension Credit Act 2002 section 2 standard-minimum-
@@ -206,8 +202,7 @@ class Concepts:
     # the weekly guarantee credit, exposed as ``pc_pilot_award_amount`` by
     # ``uk/policies/pension_credit_composed_award_pipeline.yaml``.
     UK_HOUSEHOLD_PENSION_CREDIT_AWARD = (
-        "uk:policies/pension_credit_composed_award_pipeline"
-        "#pc_pilot_award_amount"
+        "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount"
     )
     # Composed Housing Benefit entitlement pipeline (rulespec-uk#83) that wires
     # the Housing Benefit Regulations 2006 regulation 22 applicable amount, the
@@ -219,8 +214,7 @@ class Concepts:
     # ``hb_pilot_entitlement`` by
     # ``uk/policies/housing_benefit_composed_entitlement_pipeline.yaml``.
     UK_HOUSEHOLD_HOUSING_BENEFIT_AWARD = (
-        "uk:policies/housing_benefit_composed_entitlement_pipeline"
-        "#hb_pilot_entitlement"
+        "uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement"
     )
     # Scottish Child Payment (rulespec-uk uk/policies/govuk/scottish-child-payment,
     # SSI 2020/351) — the devolved weekly payment for a qualifying child under 16
@@ -229,8 +223,7 @@ class Concepts:
     # (scottish_child_payment_annual_amount) grades against UKMOD's benefit-unit
     # Scottish Child Payment output bchmt_s on single-child Scotland cases.
     UK_HOUSEHOLD_SCOTTISH_CHILD_PAYMENT_AWARD = (
-        "uk:policies/govuk/scottish-child-payment"
-        "#scottish_child_payment_annual_amount"
+        "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount"
     )
     # Child Winter Heating Payment (rulespec-uk
     # uk/policies/govuk/child-winter-heating-payment, SSI 2020/352) — the devolved
@@ -416,8 +409,7 @@ class Concepts:
         "#flanders_social_protection_annual_premium"
     )
     BE_FLEMISH_JOBBONUS = (
-        "be-vlg:regulations/employment/jobbonus"
-        "#flanders_jobbonus_annual_amount"
+        "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount"
     )
     BE_IMMOVABLE_WITHHOLDING_GROSS_WITH_SUPPLIED_CENTIMES = (
         "be:statutes/property_tax/gross_withholding_and_supplied_centimes"

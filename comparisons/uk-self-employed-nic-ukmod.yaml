@@ -17,7 +17,7 @@ description: >-
 
 runner:
   type: euromod-synthetic-compare
-  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     suite: uk-self-employed-nic
     population: synthetic
@@ -32,7 +32,7 @@ runner:
     euromod_country: UK
     euromod_system: UK_2026
     euromod_dataset: training_data
-    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-uk
     dashboard_filename: axiom-euromod-uk-self-employed-nic.json
 
 artifacts:

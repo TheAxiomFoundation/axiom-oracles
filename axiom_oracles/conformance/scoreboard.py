@@ -278,9 +278,7 @@ def score_jurisdiction(
     # The exact predicate.
     predicate_covered = covered == in_scope
     conformant = (
-        predicate_covered
-        and unexplained_total == 0
-        and axiom_attributed_open == 0
+        predicate_covered and unexplained_total == 0 and axiom_attributed_open == 0
     )
 
     blocking_reasons: list[str] = []

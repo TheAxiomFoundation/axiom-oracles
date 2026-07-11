@@ -36,10 +36,11 @@ engine, and the rulespec-uk checkout)::
 from __future__ import annotations
 
 import json
-import os
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
+
+from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -48,10 +49,6 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
-RULESPEC_UK = Path(
-    os.environ.get("RULESPEC_UK_CHECKOUT")
-    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
-)
 
 LBTT_PROGRAM = "uk/policies/govuk/lbtt.yaml"
 LBTT_BASE = "uk:policies/govuk/lbtt"
@@ -113,31 +110,85 @@ def _grid() -> list[TxnCase]:
 
     return [
         # --- Scotland LBTT ---
-        TxnCase("lbtt-main-below-nil-rate-band", "SCOTLAND", 100000, 0,
-                "main-home-below-nil-rate-band"),
-        TxnCase("lbtt-main-two-percent-band", "SCOTLAND", 200000, 0,
-                "main-home-in-two-percent-band"),
-        TxnCase("lbtt-main-spanning-two-and-five", "SCOTLAND", 300000, 0,
-                "main-home-spanning-two-and-five-percent-bands"),
-        TxnCase("lbtt-main-into-ten-percent-band", "SCOTLAND", 500000, 0,
-                "main-home-into-ten-percent-band"),
-        TxnCase("lbtt-main-top-band", "SCOTLAND", 800000, 0,
-                "main-home-in-top-band"),
-        TxnCase("lbtt-additional-dwelling", "SCOTLAND", 0, 300000,
-                "additional-dwelling-supplement"),
-        TxnCase("lbtt-main-plus-additional", "SCOTLAND", 300000, 250000,
-                "main-plus-additional-dwelling"),
+        TxnCase(
+            "lbtt-main-below-nil-rate-band",
+            "SCOTLAND",
+            100000,
+            0,
+            "main-home-below-nil-rate-band",
+        ),
+        TxnCase(
+            "lbtt-main-two-percent-band",
+            "SCOTLAND",
+            200000,
+            0,
+            "main-home-in-two-percent-band",
+        ),
+        TxnCase(
+            "lbtt-main-spanning-two-and-five",
+            "SCOTLAND",
+            300000,
+            0,
+            "main-home-spanning-two-and-five-percent-bands",
+        ),
+        TxnCase(
+            "lbtt-main-into-ten-percent-band",
+            "SCOTLAND",
+            500000,
+            0,
+            "main-home-into-ten-percent-band",
+        ),
+        TxnCase("lbtt-main-top-band", "SCOTLAND", 800000, 0, "main-home-in-top-band"),
+        TxnCase(
+            "lbtt-additional-dwelling",
+            "SCOTLAND",
+            0,
+            300000,
+            "additional-dwelling-supplement",
+        ),
+        TxnCase(
+            "lbtt-main-plus-additional",
+            "SCOTLAND",
+            300000,
+            250000,
+            "main-plus-additional-dwelling",
+        ),
         # --- Wales LTT ---
-        TxnCase("ltt-main-below-nil-rate-band", "WALES", 100000, 0,
-                "main-home-below-nil-rate-band"),
-        TxnCase("ltt-main-six-percent-band", "WALES", 300000, 0,
-                "main-home-in-six-percent-band"),
-        TxnCase("ltt-main-into-ten-percent-band", "WALES", 800000, 0,
-                "main-home-into-ten-percent-band"),
-        TxnCase("ltt-additional-higher-rates", "WALES", 0, 300000,
-                "additional-dwelling-higher-rates"),
-        TxnCase("ltt-main-plus-additional", "WALES", 400000, 300000,
-                "main-plus-additional-dwelling"),
+        TxnCase(
+            "ltt-main-below-nil-rate-band",
+            "WALES",
+            100000,
+            0,
+            "main-home-below-nil-rate-band",
+        ),
+        TxnCase(
+            "ltt-main-six-percent-band",
+            "WALES",
+            300000,
+            0,
+            "main-home-in-six-percent-band",
+        ),
+        TxnCase(
+            "ltt-main-into-ten-percent-band",
+            "WALES",
+            800000,
+            0,
+            "main-home-into-ten-percent-band",
+        ),
+        TxnCase(
+            "ltt-additional-higher-rates",
+            "WALES",
+            0,
+            300000,
+            "additional-dwelling-higher-rates",
+        ),
+        TxnCase(
+            "ltt-main-plus-additional",
+            "WALES",
+            400000,
+            300000,
+            "main-plus-additional-dwelling",
+        ),
     ]
 
 
@@ -152,9 +203,7 @@ def _pe_situation(case: TxnCase) -> dict:
                 "country": {year: case.country},
                 _MAIN: {year: case.main_purchase},
                 _ADDITIONAL: {year: case.additional_purchase},
-                "main_residential_property_purchased_is_first_home": {
-                    year: False
-                },
+                "main_residential_property_purchased_is_first_home": {year: False},
             }
         },
     }
@@ -173,7 +222,12 @@ def _policyengine_rows(cases: list[TxnCase]) -> dict[str, float]:
     return rows
 
 
-def _axiom_amounts(cases: list[TxnCase]) -> dict[str, float]:
+def _axiom_amounts(
+    cases: list[TxnCase],
+    *,
+    rulespec_root: Path,
+    axiom_binary: Path,
+) -> dict[str, float]:
     """Rulespec LBTT/LTT band split through the axiom rules engine.
 
     Each case feeds its purchase prices as the rulespec supplied inputs, so both
@@ -186,19 +240,16 @@ def _axiom_amounts(cases: list[TxnCase]) -> dict[str, float]:
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
     amounts: dict[str, float] = {}
 
     # Group by program so each module is compiled once.
     for program_rel, output, group in (
-        (LBTT_PROGRAM, LBTT_OUTPUT,
-         [c for c in cases if c.country == "SCOTLAND"]),
-        (LTT_PROGRAM, LTT_OUTPUT,
-         [c for c in cases if c.country == "WALES"]),
+        (LBTT_PROGRAM, LBTT_OUTPUT, [c for c in cases if c.country == "SCOTLAND"]),
+        (LTT_PROGRAM, LTT_OUTPUT, [c for c in cases if c.country == "WALES"]),
     ):
         if not group:
             continue
-        program = RULESPEC_UK / program_rel
+        program = rulespec_root / program_rel
         axiom_cases = [
             Case(
                 case_id=case.case_id,
@@ -217,10 +268,10 @@ def _axiom_amounts(cases: list[TxnCase]) -> dict[str, float]:
         ]
         runner = AxiomRulesRunner(
             program_path=program,
-            binary_path=binary,
+            binary_path=axiom_binary,
             default_entity="Household",
             default_entity_id="household",
-            rulespec_repo_roots=(RULESPEC_UK,),
+            rulespec_root=rulespec_root,
             mode="explain",
         )
         results = runner.run_cases(axiom_cases, [output])
@@ -317,7 +368,10 @@ def build_report(
                 "match_rate": match_rate,
             },
             "mismatches_by_concept": (
-                [{"count": c, "value": k} for k, c in sorted(mismatch_by_concept.items())]
+                [
+                    {"count": c, "value": k}
+                    for k, c in sorted(mismatch_by_concept.items())
+                ]
             ),
             "mismatches_by_kind": (
                 [{"count": mismatch_count, "value": "amount_difference"}]
@@ -335,8 +389,7 @@ def build_report(
             "generated": datetime.now(timezone.utc).date().isoformat(),
             "generator": "scripts/generate_uk_lbtt_ltt.py",
             "axiom_engine": (
-                f"axiom rules engine over rulespec-uk {LBTT_PROGRAM} and "
-                f"{LTT_PROGRAM}"
+                f"axiom rules engine over rulespec-uk {LBTT_PROGRAM} and {LTT_PROGRAM}"
             ),
             "policyengine_uk": POLICYENGINE_UK_VERSION,
             "commensurability": (
@@ -352,10 +405,15 @@ def build_report(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
     cases = _grid()
     pe_rows = _policyengine_rows(cases)
-    axiom = _axiom_amounts(cases)
+    axiom = _axiom_amounts(
+        cases,
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     report = build_report(cases, pe_rows, axiom)
 
     REPORTS.mkdir(exist_ok=True)

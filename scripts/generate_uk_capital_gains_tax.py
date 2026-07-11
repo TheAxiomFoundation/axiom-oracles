@@ -38,10 +38,11 @@ engine, and the rulespec-uk checkout)::
 from __future__ import annotations
 
 import json
-import os
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
+
+from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -50,10 +51,6 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
-RULESPEC_UK = Path(
-    os.environ.get("RULESPEC_UK_CHECKOUT")
-    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
-)
 
 CGT_PROGRAM = "uk/policies/govuk/capital-gains-tax.yaml"
 CGT_BASE = "uk:policies/govuk/capital-gains-tax"
@@ -97,18 +94,31 @@ def _grid() -> list[CGTCase]:
     """
 
     return [
-        CGTCase("cgt-within-annual-exempt-amount", 20000, 2000,
-                "gains-below-annual-exempt-amount"),
-        CGTCase("cgt-basic-rate-band-only", 20000, 8000,
-                "gains-within-basic-rate-band"),
-        CGTCase("cgt-spanning-basic-and-higher", 20000, 50000,
-                "gains-span-basic-and-higher-bands"),
-        CGTCase("cgt-fully-higher-rate", 80000, 30000,
-                "gains-fully-above-basic-rate-band"),
-        CGTCase("cgt-mid-income-partial-band", 30000, 20000,
-                "basic-rate-band-partly-used-by-income"),
-        CGTCase("cgt-large-gain-low-income", 15000, 120000,
-                "large-gain-low-income"),
+        CGTCase(
+            "cgt-within-annual-exempt-amount",
+            20000,
+            2000,
+            "gains-below-annual-exempt-amount",
+        ),
+        CGTCase(
+            "cgt-basic-rate-band-only", 20000, 8000, "gains-within-basic-rate-band"
+        ),
+        CGTCase(
+            "cgt-spanning-basic-and-higher",
+            20000,
+            50000,
+            "gains-span-basic-and-higher-bands",
+        ),
+        CGTCase(
+            "cgt-fully-higher-rate", 80000, 30000, "gains-fully-above-basic-rate-band"
+        ),
+        CGTCase(
+            "cgt-mid-income-partial-band",
+            30000,
+            20000,
+            "basic-rate-band-partly-used-by-income",
+        ),
+        CGTCase("cgt-large-gain-low-income", 15000, 120000, "large-gain-low-income"),
     ]
 
 
@@ -137,9 +147,7 @@ def _policyengine_rows(cases: list[CGTCase]) -> dict[str, dict[str, float]]:
     for case in cases:
         sim = Simulation(situation=_pe_situation(case))
         params = sim.tax_benefit_system.parameters(f"{year}-04-06")
-        basic_rate_limit = float(
-            params.gov.hmrc.income_tax.rates.uk.thresholds[1]
-        )
+        basic_rate_limit = float(params.gov.hmrc.income_tax.rates.uk.thresholds[1])
         ani = float(sim.calculate(_PE_ANI, year).sum())
         allowances = float(sim.calculate(_PE_ALLOWANCES, year).sum())
         rows[case.case_id] = {
@@ -152,7 +160,11 @@ def _policyengine_rows(cases: list[CGTCase]) -> dict[str, dict[str, float]]:
 
 
 def _axiom_amounts(
-    cases: list[CGTCase], pe_rows: dict[str, dict[str, float]]
+    cases: list[CGTCase],
+    pe_rows: dict[str, dict[str, float]],
+    *,
+    rulespec_root: Path,
+    axiom_binary: Path,
 ) -> dict[str, float]:
     """Rulespec CGT band split through the axiom rules engine.
 
@@ -168,8 +180,7 @@ def _axiom_amounts(
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = RULESPEC_UK / CGT_PROGRAM
-    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+    program = rulespec_root / CGT_PROGRAM
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -193,10 +204,10 @@ def _axiom_amounts(
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=binary,
+        binary_path=axiom_binary,
         default_entity="Person",
         default_entity_id="person",
-        rulespec_repo_roots=(RULESPEC_UK,),
+        rulespec_root=rulespec_root,
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [CGT_OUTPUT])
@@ -204,8 +215,7 @@ def _axiom_amounts(
     for result in results:
         if result.errors:
             raise RuntimeError(
-                f"axiom rules engine failed for {result.household_id}: "
-                f"{result.errors}"
+                f"axiom rules engine failed for {result.household_id}: {result.errors}"
             )
         amounts[str(result.household_id)] = float(result.values[CGT_OUTPUT])
     return amounts
@@ -323,10 +333,16 @@ def build_report(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
     cases = _grid()
     pe_rows = _policyengine_rows(cases)
-    axiom = _axiom_amounts(cases, pe_rows)
+    axiom = _axiom_amounts(
+        cases,
+        pe_rows,
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     report = build_report(cases, pe_rows, axiom)
 
     REPORTS.mkdir(exist_ok=True)

@@ -149,13 +149,10 @@ corpus-grounded amounts; oracle merges serialized; NO admin-merge; sentence case
 
 ## PHASE 2 (execution) — 2026-07-08
 
-Environment: dep repos live under `~/TheAxiomFoundation/` (not `$HOME`); bridged
-with `$HOME/{axiom-encode,axiom-rules,axiom-rules-engine,axiom-compose}` symlinks
-and `$HOME/.axiom-oracles/roots/rulespec-us` (rsync). The shared axiom-compose
-main clone is on another session's feature branch and is 13 commits behind
-origin/main (no `data_relation`/`derived_formula`); built a durable origin/main
-worktree at `~/TheAxiomFoundation/_worktrees/axiom-compose-main` and repointed
-`$HOME/axiom-compose` at it (feature branch untouched).
+Environment note (historical run): dependency repositories lived under
+`~/TheAxiomFoundation/`. Current reruns use each comparison config's exact
+country RuleSpec checkout and exact engine binary; the old replicated-root and
+sibling-discovery setup is intentionally unsupported.
 
 ### FIIT — the 1.767.3 hypothesis is FALSIFIED (verified by running it)
 

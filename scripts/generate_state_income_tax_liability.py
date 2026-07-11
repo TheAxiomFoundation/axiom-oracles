@@ -7,11 +7,9 @@ state's brackets) through three independent computations and records a v2
 comparison report plus the per-case residuals:
 
 * **axiom** — the composed liability pipeline in rulespec-us
-  (``us-XX/policies/income_tax/pilot_liability_pipeline``), evaluated through
-  the axiom rules engine. The engine-computed liabilities are read from the
-  committed ``.test.yaml`` fixtures, which ``axiom-encode test`` verifies equal
-  the engine output to full decimal precision, so they are the engine's values
-  rather than an independent re-implementation.
+  (``us-XX/policies/income_tax/pilot_liability_pipeline``), executed directly
+  by the explicitly supplied axiom rules engine over the committed companion
+  fixtures' inputs.
 * **policyengine** — PolicyEngine ``ca_income_tax`` / ``ny_income_tax`` /
   ``il_income_tax`` / ``ma_income_tax`` computed live at the 2026 tax year.
 * **taxsim** — the pinned TAXSIM binary's ``siitax``. The pinned binary is a
@@ -37,10 +35,11 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
+from canonical_rulespec_runtime import parse_canonical_runtime_args
+
 warnings.filterwarnings("ignore")
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-RULESPEC_US = REPO_ROOT.parent / "rulespec-us"
 REPORTS = REPO_ROOT / "reports"
 DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 
@@ -167,44 +166,70 @@ def _grid() -> list[Case]:
     return cases
 
 
-def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
-    """Read the engine-verified pipeline liabilities from the test fixtures.
+def _axiom_liabilities(
+    *,
+    rulespec_root: Path,
+    axiom_binary: Path,
+) -> dict[tuple[str, str, int], float]:
+    """Execute each state pipeline over its companion fixture inputs."""
 
-    ``axiom-encode test`` proves these equal the axiom rules-engine output to
-    full decimal precision, so they are the engine's liabilities. The fixture
-    inputs are the pipeline's supplied AGI/base-income (which equals wages for
-    the ordinary wage earner this slice models), filing status, and the
-    supplied 2026 indexed schedule.
-    """
     import yaml
+
+    from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
+    from axiom_oracles.core.case import Case as AxiomCase
 
     out: dict[tuple[str, str, int], float] = {}
     for state in _TAXSIM_STATE:
-        test_file = (
-            RULESPEC_US
+        program = (
+            rulespec_root
             / f"us-{state.lower()}"
             / "policies"
             / "income_tax"
-            / "pilot_liability_pipeline.test.yaml"
+            / "pilot_liability_pipeline.yaml"
         )
+        test_file = program.with_name("pilot_liability_pipeline.test.yaml")
         doc = yaml.safe_load(test_file.read_text())
         liab_key = _LIABILITY_OUTPUT[state]
+        cases: list[AxiomCase] = []
+        keys: list[tuple[str, str, int]] = []
         for case in doc:
             name = case["name"]
-            # Map the fixture case to (state, filing, income) by its supplied AGI.
             inputs = case["input"]
             agi_key = next(k for k in inputs if k.endswith("adjusted_gross_income"))
             agi = int(round(float(inputs[agi_key])))
             filing = (
-                "married"
-                if name.startswith("joint")
-                or "married" in name
-                else "single"
+                "married" if name.startswith("joint") or "married" in name else "single"
             )
-            liab_raw = case["output"].get(liab_key)
-            if liab_raw is None:
+            if liab_key not in case["output"]:
                 continue
-            out[(state, filing, agi)] = float(str(liab_raw))
+            keys.append((state, filing, agi))
+            cases.append(
+                AxiomCase(
+                    case_id=f"{state.lower()}-{name}",
+                    period=str(VALIDATION_YEAR),
+                    metadata={
+                        "axiom_entity": "TaxUnit",
+                        "axiom_entity_id": "tax_unit",
+                        "axiom_inputs": inputs,
+                    },
+                    outputs=(liab_key,),
+                )
+            )
+        runner = AxiomRulesRunner(
+            program_path=program,
+            binary_path=axiom_binary,
+            rulespec_root=rulespec_root,
+            default_entity="TaxUnit",
+            default_entity_id="tax_unit",
+        )
+        for key, result in zip(
+            keys,
+            runner.run_cases(cases, [liab_key]),
+            strict=True,
+        ):
+            if result.errors:
+                raise RuntimeError(f"Axiom execution failed for {key}: {result.errors}")
+            out[key] = float(result.values[liab_key])
     return out
 
 
@@ -407,7 +432,7 @@ def _build_report(
         "provenance": {
             "generated": date.today().isoformat(),
             "generator": "scripts/generate_state_income_tax_liability.py",
-            "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
+            "axiom_source": "live axiom-rules-engine execution over companion fixture inputs",
             "note": (
                 "axiom-vs-PolicyEngine matches every case at the 2026 validation "
                 "year; the mismatches array carries the axiom-vs-TAXSIM-2024 "
@@ -417,9 +442,13 @@ def _build_report(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="us")
     cases = _grid()
-    axiom = _axiom_liabilities()
+    axiom = _axiom_liabilities(
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     pe = {case.case_id: _policyengine_liability(case) for case in cases}
     taxsim = _taxsim_liabilities(cases)
     REPORTS.mkdir(exist_ok=True)

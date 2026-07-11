@@ -11,11 +11,10 @@ committed, reviewable source of truth instead of re-parsing configs in bash.
 
 Derivation, per suite, unions three signals (all deterministic):
 
-1. **rulespec checkout paths** — ``rulespec_root`` / ``rulespec_roots`` /
-   ``rulespec_remote``. The path basename (or the remote's ``owner/repo``)
-   names the repo directly. This is the authoritative signal.
+1. **rulespec checkout path** — the singular explicit ``rulespec_root``. Its
+   exact ``rulespec-<country>`` basename names the repo directly.
 2. **concept id prefixes** — a concept like ``us-co:policies/…#co_tanf_benefit``
-   is encoded in ``rulespec-us-co``; ``us:statutes/…`` in ``rulespec-us``;
+   is encoded in ``rulespec-us``; ``us:statutes/…`` is in the same checkout;
    ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``. This backstops
    suites whose rulespec paths are indirected (e.g. rsync'd roots).
 3. **parameter-suite ``file:`` prefixes** — the non-registry
@@ -58,6 +57,7 @@ from axiom_oracles.provenance import (  # noqa: E402
     RULESPEC_OWNER,
     canonical_rulespec_slug as _slug,
 )
+from axiom_oracles.bridges.repo_routing import jurisdiction_country  # noqa: E402
 
 
 def _rel(path: Path) -> str:
@@ -69,38 +69,29 @@ def _rel(path: Path) -> str:
 
 
 def _repo_from_path(path_str: str) -> str | None:
-    """``$HOME/.axiom-oracles/roots/rulespec-us-co`` → the repo slug."""
-    name = Path(os.path.expandvars(str(path_str))).name
-    if not name.startswith("rulespec-"):
-        return None
-    return _slug(name)
+    """Map a declared exact canonical checkout path to its repository slug.
 
+    This generator is deterministic metadata tooling: it validates the lexical
+    basename in the registry without inspecting whatever happens to exist at
+    the expanded local path on the machine running ``--check``.
+    """
 
-def _repo_from_remote(remote: str) -> str | None:
-    """``https://github.com/TheAxiomFoundation/rulespec-us.git`` → slug."""
-    url = remote.strip()
-    if url.endswith(".git"):
-        url = url[: -len(".git")]
-    if "github.com/" in url:
-        url = url.split("github.com/", 1)[1]
-    elif url.startswith("git@") and ":" in url:
-        url = url.split(":", 1)[1]
-    else:
-        return None
-    parts = [p for p in url.split("/") if p]
-    if len(parts) < 2:
-        return None
-    return f"{parts[-2]}/{parts[-1]}"
+    path = Path(os.path.expandvars(os.path.expanduser(str(path_str))))
+    try:
+        return _slug(path.name)
+    except ValueError as exc:
+        raise ValueError(
+            f"not an exact canonical RuleSpec checkout path: {path}"
+        ) from exc
 
 
 def _repo_from_prefix(prefix: str) -> str | None:
     """Map a concept/file jurisdiction prefix (``us``, ``us-co``, ``uk``, ``be``)
-    to its rulespec repo slug. ``us`` → ``rulespec-us``; ``us-co`` →
-    ``rulespec-us-co``; ``uk``/``be`` → ``rulespec-uk``/``rulespec-be``."""
+    to its canonical country-checkout slug."""
     prefix = prefix.strip().lower()
     if not prefix:
         return None
-    return _slug(f"rulespec-{prefix}")
+    return _slug(f"rulespec-{jurisdiction_country(prefix)}")
 
 
 def _concept_prefix(concept: str) -> str | None:
@@ -118,58 +109,57 @@ def repos_for_registry_config(config: dict) -> set[str]:
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
 
-    remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
-    if remote:
-        slug = _repo_from_remote(str(remote))
-        if slug:
-            repos.add(slug)
+    legacy_keys = {
+        key
+        for section in (runner, params)
+        for key in ("rulespec_roots", "rulespec_remote", "axiom_rulespec_repo_roots")
+        if key in section
+    }
+    if legacy_keys:
+        raise ValueError(
+            "legacy RuleSpec routing keys are unsupported: "
+            + ", ".join(sorted(legacy_keys))
+        )
 
+    uses_axiom = runner.get("type") != "axiom-oracles-compare" or "axiom" in {
+        params.get("left"),
+        params.get("right"),
+    }
     root = runner.get("rulespec_root") or params.get("rulespec_root")
+    if uses_axiom and not root:
+        raise ValueError(
+            f"comparison {config.get('name', '<unnamed>')!r} must declare "
+            "one explicit rulespec_root"
+        )
     if root:
-        slug = _repo_from_path(str(root))
-        if slug:
-            repos.add(slug)
-
-    for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
-        slug = _repo_from_path(str(entry))
-        if slug:
-            repos.add(slug)
+        repos.add(_repo_from_path(str(root)))
 
     concepts = params.get("concepts") or (
         [params["concept"]] if params.get("concept") else []
     )
-    for concept in concepts:
+    for concept in concepts if uses_axiom else ():
         prefix = _concept_prefix(str(concept))
         slug = _repo_from_prefix(prefix) if prefix else None
         if slug:
             repos.add(slug)
 
-    # The encoder SNAP lane (axiom-encode-snap-ecps-compare) names its state as
-    # `jurisdiction: us-ca` and runs the state's axiom-programs SNAP spec over
-    # federal SNAP rules. Map the jurisdiction to the state rulespec repo, and
-    # add federal rulespec-us since every state SNAP inherits the 7 USC/7 CFR
-    # federal chain.
+    # State and federal US rules share the same canonical country checkout.
     jurisdiction = params.get("jurisdiction")
-    if runner.get("type") == "axiom-encode-snap-ecps-compare" and jurisdiction:
+    if runner.get("type") == "axiom-encode-snap-populace-compare" and jurisdiction:
         state_slug = _repo_from_prefix(str(jurisdiction))
         if state_slug:
             repos.add(state_slug)
         repos.add(_slug("rulespec-us"))
 
-    # The SNAP QC administrative-data lane (snap-qc-compare) replays USDA QC
-    # public-use cases through the state's composed SNAP program under the
-    # fy-cola overlay; rule changes in the state shard or the federal SNAP
-    # chain both move its results.
+    # The SNAP QC administrative-data lane uses that same country checkout.
     if runner.get("type") == "snap-qc-compare" and jurisdiction:
         state_slug = _repo_from_prefix(str(jurisdiction))
         if state_slug:
             repos.add(state_slug)
         repos.add(_slug("rulespec-us"))
 
-    # The EUROMOD/UKMOD synthetic lane (euromod-synthetic-compare) points
-    # `axiom_rulespec_repo_roots` at the whole org dir and names the model
-    # country (`euromod_country: UK`/`BE`); the encoded rules live in that
-    # country's rulespec repo.
+    # EUROMOD/UKMOD also declares an exact country checkout; the country field
+    # remains a cross-checking dependency signal.
     euromod_country = params.get("euromod_country")
     if runner.get("type") == "euromod-synthetic-compare" and euromod_country:
         country_slug = _repo_from_prefix(str(euromod_country))
@@ -284,10 +274,7 @@ def main() -> int:
         return 0
 
     OUTPUT_PATH.write_text(serialized)
-    print(
-        f"Wrote {_rel(OUTPUT_PATH)}: "
-        f"{len(generated['suites'])} suites"
-    )
+    print(f"Wrote {_rel(OUTPUT_PATH)}: {len(generated['suites'])} suites")
     return 0
 
 

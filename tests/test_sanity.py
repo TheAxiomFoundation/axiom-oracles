@@ -103,24 +103,30 @@ def test_fixture_to_case_sets_scope_for_jurisdiction_filter(
 
 def test_summary_pass_and_fail_modes() -> None:
     summary = SanitySummary(concept="x", period="2026-01")
-    summary.results.append(SanityResult(
-        fixture_id="a", engine="axiom", expected=True, actual=True, matched=True
-    ))
+    summary.results.append(
+        SanityResult(
+            fixture_id="a", engine="axiom", expected=True, actual=True, matched=True
+        )
+    )
     assert summary.passed is True
     assert summary.fail_count == 0
 
-    summary.results.append(SanityResult(
-        fixture_id="b", engine="axiom", expected=False, actual=True, matched=False
-    ))
+    summary.results.append(
+        SanityResult(
+            fixture_id="b", engine="axiom", expected=False, actual=True, matched=False
+        )
+    )
     assert summary.passed is False
     assert summary.fail_count == 1
 
 
 def test_print_summary_includes_failure_banner(capsys) -> None:
     summary = SanitySummary(concept="x", period="2026-01")
-    summary.results.append(SanityResult(
-        fixture_id="a", engine="axiom", expected=False, actual=True, matched=False
-    ))
+    summary.results.append(
+        SanityResult(
+            fixture_id="a", engine="axiom", expected=False, actual=True, matched=False
+        )
+    )
     print_summary(summary)
     out = capsys.readouterr().out
     assert "FAIL" in out

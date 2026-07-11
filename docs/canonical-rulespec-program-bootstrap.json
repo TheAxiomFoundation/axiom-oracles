@@ -1,0 +1,207 @@
+{
+  "schema": "axiom-oracles/canonical-rulespec-program-bootstrap/v1",
+  "rulespec_repository": "TheAxiomFoundation/rulespec-us",
+  "merge_order": [
+    "rulespec-us bootstrap",
+    "axiom-oracles hard cut"
+  ],
+  "source_commits": {
+    "TheAxiomFoundation/axiom-oracles": "f3b3b09979cd3cf34867f84424400dbc3a488352",
+    "TheAxiomFoundation/rulespec-us": "f82b37d27dad02076b686424275f3511d5161f77"
+  },
+  "files": [
+    {
+      "destination": "us-al/programs/snap/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/rulespec-us",
+        "path": "programs/us-al/snap/fy-2026.yaml",
+        "sha256": "a9bb1cf6de683b9995b899f92e461b55e09a1540cb6b729eb8e1c9f5d49d2dab"
+      },
+      "bootstrap_action": "git_move",
+      "affected_comparisons": ["al-snap-ecps"]
+    },
+    {
+      "destination": "us-al/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-al/tanf/fy-2026.yaml",
+        "sha256": "2fb475677e8129372f943c54cdd8acc9f4213f7ca1c37b64cbc3f4fd2fcdb2f3"
+      },
+      "bootstrap_action": "git_move_identical_rulespec_legacy_file",
+      "rulespec_legacy_path": "programs/us-al/tanf/fy-2026.yaml",
+      "semantic_difference": "none; the RuleSpec legacy file is byte-identical",
+      "affected_comparisons": ["al-tanf-ecps"]
+    },
+    {
+      "destination": "us-az/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-az/tanf/fy-2026.yaml",
+        "sha256": "66600721d807d063da2f7e179c013456f68a4b3c1e6de4cdbe837ad8a0098a20"
+      },
+      "bootstrap_action": "copy_source_and_delete_different_rulespec_legacy_file",
+      "rulespec_legacy_path": "programs/us-az/tanf/fy-2026.yaml",
+      "semantic_difference": "The legacy file exposes the monthly az_tanf chain. The oracle file exposes az_tanf_annual_cash_benefit and adds household membership plus the minor-or-pregnant gate required by the comparison.",
+      "affected_comparisons": ["az-tanf-ecps"]
+    },
+    {
+      "destination": "us-ca/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-ca/tanf/fy-2026.yaml",
+        "sha256": "55475fcbcbf6ced3e795fb42691285b6bb946f42ae809af808fbbd0251d4006b"
+      },
+      "bootstrap_action": "copy_source",
+      "semantic_difference": "missing from rulespec-us",
+      "affected_comparisons": ["ca-tanf-ecps"]
+    },
+    {
+      "destination": "us-co/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-co/tanf/fy-2026.yaml",
+        "sha256": "ec328befcb5a55a6bcf8e4ea01fb900d3b4074d05d723544ec5ec409f4930e83"
+      },
+      "bootstrap_action": "copy_source_and_delete_different_rulespec_legacy_file",
+      "rulespec_legacy_path": "programs/us-co/tanf/fy-2026.yaml",
+      "semantic_difference": "The legacy file exposes monthly co_tanf. The oracle file exposes annual co_tanf_annual_benefit and includes household and pregnant-parent relations, the pregnancy allowance, and the demographic gate.",
+      "affected_comparisons": ["co-tanf-ecps"]
+    },
+    {
+      "destination": "us-fl/programs/snap/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/rulespec-us",
+        "commit": "9454184212df7afe525dbf9ff03118f3ac399b61",
+        "path": "programs/us-fl/snap/fy-2026.yaml",
+        "sha256": "3932bc3abe1bd996e6d5326cb90e351d65872f2b3394ef26a15fdafcd652252e"
+      },
+      "bootstrap_action": "restore_historical_source_at_canonical_path",
+      "semantic_difference": "The active comparison referenced this file after it disappeared from rulespec-us main; do not substitute the unrelated us-fl TCA program.",
+      "affected_comparisons": ["fl-snap-ecps"]
+    },
+    {
+      "destination": "us-ga/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-ga/tanf/fy-2026.yaml",
+        "sha256": "b858f3ae83fa59ca55694046e3606a83fdd8c45ecfdce4e570416eef980147a7"
+      },
+      "bootstrap_action": "copy_source",
+      "semantic_difference": "missing from rulespec-us",
+      "affected_comparisons": ["ga-tanf-ecps"]
+    },
+    {
+      "destination": "us-ks/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-ks/tanf/fy-2026.yaml",
+        "sha256": "60cdbe2ac37adf59f404ea6a8d82f56e9591562933a862d68233215b77385707"
+      },
+      "bootstrap_action": "copy_source_and_delete_different_rulespec_legacy_file",
+      "rulespec_legacy_path": "programs/us-ks/tanf/fy-2026.yaml",
+      "semantic_difference": "The legacy file exposes the monthly full and prorated chain. The oracle file exposes the annual maximum-benefit comparison and adds household membership.",
+      "affected_comparisons": ["ks-tanf-ecps"]
+    },
+    {
+      "destination": "us-ma/programs/snap/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/rulespec-us",
+        "path": "programs/us-ma/snap/fy-2026.yaml",
+        "sha256": "577feca092dd87771dd499f36b3968bbe0e13581e26ab6685c136c1018a1ec3f"
+      },
+      "bootstrap_action": "git_move",
+      "affected_comparisons": ["ma-snap-ecps"]
+    },
+    {
+      "destination": "us-mn/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-mn/tanf/fy-2026.yaml",
+        "sha256": "e0677eda11dd7bb90e9305418995a2cddab62cf18fb787a4e01a7b79382b6d4d"
+      },
+      "bootstrap_action": "copy_source",
+      "semantic_difference": "missing from rulespec-us",
+      "affected_comparisons": ["mn-tanf-ecps"]
+    },
+    {
+      "destination": "us-nc/programs/snap/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/rulespec-us",
+        "path": "programs/us-nc/snap/fy-2026.yaml",
+        "sha256": "d345847672b411918ad98c91a04c3e8e431b3de3f7ed47a2b95eeeeaad050433"
+      },
+      "bootstrap_action": "git_move",
+      "affected_comparisons": ["nc-snap-ecps"]
+    },
+    {
+      "destination": "us-ny/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-ny/tanf/fy-2026.yaml",
+        "sha256": "4442298193838aee6c021cbe347831f0798c1877d37670a76b9e40453a22ea68"
+      },
+      "bootstrap_action": "copy_source_and_delete_different_rulespec_legacy_file",
+      "rulespec_legacy_path": "programs/us-ny/tanf/fy-2026.yaml",
+      "semantic_difference": "The legacy file exposes a simpler monthly grant-minus-income chain. The oracle file exposes an annual benefit with membership and demographic gates plus the comparison's state-plan income and need assembly.",
+      "affected_comparisons": ["ny-tanf-ecps"]
+    },
+    {
+      "destination": "us-sc/programs/snap/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/rulespec-us",
+        "path": "programs/us-sc/snap/fy-2026.yaml",
+        "sha256": "f7dc71825761a06dd96a9342a518913a1556e6e662f30115806fd00db4ca51c0"
+      },
+      "bootstrap_action": "git_move",
+      "affected_comparisons": ["sc-snap-ecps"]
+    },
+    {
+      "destination": "us-tn/programs/snap/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/rulespec-us",
+        "path": "programs/us-tn/snap/fy-2026.yaml",
+        "sha256": "3bb2a530a6bf114ef09f396d2cda446571bebb98a0c1472bea0ceb9b6e5ce4c8"
+      },
+      "bootstrap_action": "git_move",
+      "affected_comparisons": ["tn-snap-ecps"]
+    },
+    {
+      "destination": "us-wa/programs/tanf/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us-wa/tanf/fy-2026.yaml",
+        "sha256": "93638cf92bc77a9a5b434665e48f1df0b828230195d7b5f79de485863a011367"
+      },
+      "bootstrap_action": "copy_source",
+      "semantic_difference": "missing from rulespec-us",
+      "affected_comparisons": ["wa-tanf-ecps"]
+    },
+    {
+      "destination": "us/programs/medicaid-magi/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us/medicaid-magi/fy-2026.yaml",
+        "sha256": "f2b1017dd49b586c4d098c1300f953f2175afab267eee76cf9a0386a326f4787"
+      },
+      "bootstrap_action": "copy_source",
+      "semantic_difference": "missing from rulespec-us",
+      "affected_comparisons": ["medicaid-magi-co-ecps"]
+    },
+    {
+      "destination": "us/programs/ssi/fy-2026.yaml",
+      "source": {
+        "repository": "TheAxiomFoundation/axiom-oracles",
+        "path": "programs/us/ssi/fy-2026.yaml",
+        "sha256": "1546601f145e4e1a27d2f789fc8e3d54e5cad1bdbfa5739128cbe74195cd5d35"
+      },
+      "bootstrap_action": "copy_source",
+      "semantic_difference": "missing from rulespec-us",
+      "affected_comparisons": ["ssi-ecps"]
+    }
+  ],
+  "affected_tests": [
+    "tests/bridges/test_policyengine_coverage.py",
+    "tests/test_run_comparison.py",
+    "tests/test_affected_map.py"
+  ]
+}

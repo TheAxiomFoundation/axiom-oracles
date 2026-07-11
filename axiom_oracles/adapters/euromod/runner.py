@@ -194,9 +194,7 @@ class EuromodPlatformRunner(EngineAdapter):
         self.policy_switch_overrides = _normalize_switches(policy_switch_overrides)
         self.constant_overrides = _normalize_constant_overrides(constant_overrides)
         self.python_executable = str(
-            python_executable
-            or os.environ.get("EUROMOD_PYTHON")
-            or sys.executable
+            python_executable or os.environ.get("EUROMOD_PYTHON") or sys.executable
         )
         self.dotnet_root = str(dotnet_root or os.environ.get("DOTNET_ROOT") or "")
         self.timeout = timeout
@@ -279,7 +277,9 @@ class EuromodPlatformRunner(EngineAdapter):
 
         by_household: dict[int, dict[str, float]] = {}
         for position, household in enumerate(payload["idhh"]):
-            sums = by_household.setdefault(int(household), dict.fromkeys(payload["columns"], 0.0))
+            sums = by_household.setdefault(
+                int(household), dict.fromkeys(payload["columns"], 0.0)
+            )
             for column in payload["columns"]:
                 sums[column] += float(payload["values"][column][position])
         household_errors = {
@@ -324,7 +324,8 @@ class EuromodPlatformRunner(EngineAdapter):
                     engine=self.name,
                     household_id=case.case_id,
                     values={
-                        name: value * _annualization_factor(
+                        name: value
+                        * _annualization_factor(
                             name,
                             annualization_factor,
                         )
@@ -429,9 +430,7 @@ def _constant_overrides_for_cases(
     base_overrides: tuple[ConstantOverride, ...],
 ) -> tuple[ConstantOverride, ...]:
     case_overrides = {
-        _normalize_constant_overrides(
-            case.metadata.get("euromod_constant_overrides")
-        )
+        _normalize_constant_overrides(case.metadata.get("euromod_constant_overrides"))
         for case in cases
     }
     if not case_overrides:
@@ -447,9 +446,7 @@ def _constant_overrides_for_cases(
     }
     for name, group, value in next(iter(case_overrides)):
         merged[(name, group)] = value
-    return tuple(
-        (name, group, value) for (name, group), value in merged.items()
-    )
+    return tuple((name, group, value) for (name, group), value in merged.items())
 
 
 def _normalize_constant_overrides(value: Any) -> tuple[ConstantOverride, ...]:
@@ -494,8 +491,7 @@ def _normalize_constant_overrides(value: Any) -> tuple[ConstantOverride, ...]:
             )
         if raw is None or isinstance(raw, bool):
             raise ValueError(
-                f"EUROMOD constant override {name!r} needs a numeric or "
-                "string value."
+                f"EUROMOD constant override {name!r} needs a numeric or string value."
             )
         overrides.append((name, str(group or ""), str(raw)))
     return tuple(overrides)
@@ -605,7 +601,9 @@ def _attach_derived_outputs(payload: dict[str, Any], outputs: list[str]) -> None
             continue
         values[output] = [
             float(gross) - float(reduction)
-            for gross, reduction in zip(values["tscee_s"], values["tsceerd_s"], strict=True)
+            for gross, reduction in zip(
+                values["tscee_s"], values["tsceerd_s"], strict=True
+            )
         ]
         columns.append(output)
     payload["columns"] = columns

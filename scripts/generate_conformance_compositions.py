@@ -90,13 +90,17 @@ def main() -> int:
         nargs="?",
         help="Jurisdiction key (be). Omit with --all.",
     )
-    parser.add_argument("--all", action="store_true", help="Process every jurisdiction.")
+    parser.add_argument(
+        "--all", action="store_true", help="Process every jurisdiction."
+    )
     parser.add_argument(
         "--check",
         action="store_true",
         help="CI: fail if the committed record drifts from the suites.",
     )
-    parser.add_argument("--list", action="store_true", help="List configured jurisdictions.")
+    parser.add_argument(
+        "--list", action="store_true", help="List configured jurisdictions."
+    )
     args = parser.parse_args()
 
     if args.list:

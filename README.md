@@ -50,7 +50,8 @@ The current implementation includes:
 - stable JSON comparison reports with mismatch taxonomy and weighted aggregates
 - generic `compare <left> <right>` CLI
 - thin package-runner adapters for TAXSIM and PRD
-- Axiom RuleSpec adapter backed by `axiom-rules`
+- Axiom RuleSpec adapter backed by an exact `axiom-rules-engine` binary and
+  canonical country checkout
 
 ## Install
 
@@ -213,15 +214,18 @@ mismatches, and upstream triage workflow.
 
 ## Axiom RuleSpec Oracle
 
-The Axiom adapter executes a RuleSpec program through the local `axiom-rules`
-binary and compares its outputs through the same concept mapping layer:
+The Axiom adapter executes a canonical RuleSpec program through an explicitly
+named `axiom-rules-engine` binary and compares its outputs through the same
+concept mapping layer:
 
 ```bash
 axiom-oracles compare axiom policyengine \
   --population enhanced-cps \
   --category tax \
   --period 2026 \
-  --axiom-program /path/to/rulespec-us/statutes/26/6401.yaml
+  --axiom-program /path/to/rulespec-us/us/statutes/26/6401.yaml \
+  --rulespec-root /path/to/rulespec-us \
+  --axiom-engine-binary /path/to/axiom-rules-engine
 ```
 
 Cases must carry Axiom runtime inputs in `metadata["axiom_inputs"]` or as

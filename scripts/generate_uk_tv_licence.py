@@ -32,17 +32,19 @@ arithmetic. The Axiom side is evaluated through the axiom rules engine
 Run locally (needs PolicyEngine-UK 2.89.2, a built axiom rules engine, and the
 rulespec-uk checkout)::
 
-    RULESPEC_UK_CHECKOUT=/path/to/rulespec-uk \
-      uv run python scripts/generate_uk_tv_licence.py
+    uv run python scripts/generate_uk_tv_licence.py \
+      --rulespec-root /path/to/rulespec-uk \
+      --axiom-binary /path/to/axiom-rules-engine
 """
 
 from __future__ import annotations
 
 import json
-import os
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
+
+from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -51,10 +53,6 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
-RULESPEC_UK = Path(
-    os.environ.get("RULESPEC_UK_CHECKOUT")
-    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
-)
 
 TVL_PROGRAM = "uk/policies/govuk/tv-licence.yaml"
 TVL_BASE = "uk:policies/govuk/tv-licence"
@@ -116,8 +114,13 @@ def _grid() -> list[TVLCase]:
             70,
             partner_age=78,
         ),
-        TVLCase("tvl-blind-over75-not-on-pc", "blind-over75-no-pc", 80,
-                head_income=40000, head_blind=True),
+        TVLCase(
+            "tvl-blind-over75-not-on-pc",
+            "blind-over75-no-pc",
+            80,
+            head_income=40000,
+            head_blind=True,
+        ),
     ]
 
 
@@ -162,29 +165,30 @@ def _policyengine_rows(cases: list[TVLCase]) -> dict[str, dict]:
             "tv_licence": float(sim.calculate(_PE_NET, year).sum()),
             "free_tv_licence_value": float(sim.calculate(_PE_FREE, year).sum()),
             "owns_tv": bool(sim.calculate("household_owns_tv", year)[0]),
-            "would_evade": bool(
-                sim.calculate("would_evade_tv_licence_fee", year)[0]
-            ),
+            "would_evade": bool(sim.calculate("would_evade_tv_licence_fee", year)[0]),
             "has_aged_75": bool((ages >= 75).any()),
             "receives_pc": pc > 0,
             "has_blind": bool(is_blind.any()),
             "aged_rate": float(params.gov.dcms.bbc.tv_licence.discount.aged.discount),
-            "blind_rate": float(
-                params.gov.dcms.bbc.tv_licence.discount.blind.discount
-            ),
+            "blind_rate": float(params.gov.dcms.bbc.tv_licence.discount.blind.discount),
         }
     return rows
 
 
-def _axiom_awards(cases: list[TVLCase], pe_rows: dict[str, dict]) -> dict[str, dict]:
+def _axiom_awards(
+    cases: list[TVLCase],
+    pe_rows: dict[str, dict],
+    *,
+    rulespec_root: Path,
+    axiom_binary: Path,
+) -> dict[str, dict]:
     import sys
 
     sys.path.insert(0, str(REPO_ROOT))
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = RULESPEC_UK / TVL_PROGRAM
-    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+    program = rulespec_root / TVL_PROGRAM
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -212,10 +216,10 @@ def _axiom_awards(cases: list[TVLCase], pe_rows: dict[str, dict]) -> dict[str, d
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=binary,
+        binary_path=axiom_binary,
         default_entity="Household",
         default_entity_id="household",
-        rulespec_repo_roots=(RULESPEC_UK,),
+        rulespec_root=rulespec_root,
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [TVL_NET, TVL_FREE])
@@ -348,10 +352,16 @@ def build_report(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
     cases = _grid()
     pe_rows = _policyengine_rows(cases)
-    axiom = _axiom_awards(cases, pe_rows)
+    axiom = _axiom_awards(
+        cases,
+        pe_rows,
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     report = build_report(cases, pe_rows, axiom)
 
     REPORTS.mkdir(exist_ok=True)

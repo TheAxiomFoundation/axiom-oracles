@@ -131,6 +131,43 @@ def test_build_overlay_raises_when_rewrite_matches_nothing(tmp_path: Path) -> No
         build_overlay(spec, root, tmp_path / "dest")
 
 
+def test_build_overlay_rejects_flat_checkout(tmp_path: Path) -> None:
+    root = tmp_path / "rulespec-us-co"
+    _fake_rulespec_tree(root)
+
+    with pytest.raises(ValueError, match="exact canonical rulespec-<country>"):
+        build_overlay(_spec(), root, tmp_path / "dest")
+
+
+def test_build_overlay_rejects_partial_layout_path(tmp_path: Path) -> None:
+    root = tmp_path / "rulespec-us"
+    _fake_rulespec_tree(root)
+    spec = _spec(program="us-co/snap.yaml")
+
+    with pytest.raises(ValueError, match="canonical <jurisdiction>/<content-root>"):
+        build_overlay(spec, root, tmp_path / "dest")
+
+
+def test_build_overlay_rejects_yml_content(tmp_path: Path) -> None:
+    root = tmp_path / "rulespec-us"
+    _fake_rulespec_tree(root)
+    _write(root / "us-co/policies/legacy.yml", "rules: []\n")
+
+    with pytest.raises(ValueError, match=r"legacy \.yml"):
+        build_overlay(_spec(), root, tmp_path / "dest")
+
+
+def test_build_overlay_rejects_symlinked_content(tmp_path: Path) -> None:
+    root = tmp_path / "rulespec-us"
+    _fake_rulespec_tree(root)
+    target = root / "us-co/policies/target.yaml"
+    _write(target, "rules: []\n")
+    (root / "us-co/policies/alias.yaml").symlink_to(target)
+
+    with pytest.raises(ValueError, match="symlinked RuleSpec content"):
+        build_overlay(_spec(), root, tmp_path / "dest")
+
+
 def test_rewrite_output_ids_rewrites_only_matching_ids() -> None:
     rewritten = rewrite_output_ids(
         {

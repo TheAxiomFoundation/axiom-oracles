@@ -205,11 +205,7 @@ def _selected_values(
     excluded_keys: set[str],
 ) -> dict[str, Any]:
     if variables is None:
-        return {
-            key: value
-            for key, value in record.items()
-            if key not in excluded_keys
-        }
+        return {key: value for key, value in record.items() if key not in excluded_keys}
     return {variable: record[variable] for variable in variables if variable in record}
 
 

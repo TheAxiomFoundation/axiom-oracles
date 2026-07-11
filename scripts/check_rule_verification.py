@@ -10,6 +10,7 @@ the numbers are *current* (the scheduled job does that), but it proves they are
 
 Exits non-zero with a specific message on the first inconsistency.
 """
+
 from __future__ import annotations
 
 import json
@@ -74,16 +75,15 @@ def main() -> int:
         return round(100.0 * num / den, 1) if den else 0.0
 
     if s.get("grounded_pct") != pct(grounded, total):
-        fail(
-            f"summary grounded_pct {s.get('grounded_pct')} != {pct(grounded, total)}"
-        )
+        fail(f"summary grounded_pct {s.get('grounded_pct')} != {pct(grounded, total)}")
 
     # Surface KPI sanity: executable ⊆ any_oracle ⊆ total.
     surf = summary.get("surfaces", {})
     if not (
-        0 <= surf.get("executable", -1) <= surf.get("any_oracle", -1) <= surf.get(
-            "total", -1
-        )
+        0
+        <= surf.get("executable", -1)
+        <= surf.get("any_oracle", -1)
+        <= surf.get("total", -1)
     ):
         fail("surface counts violate executable ≤ any_oracle ≤ total")
 

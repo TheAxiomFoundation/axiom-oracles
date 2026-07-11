@@ -113,7 +113,9 @@ class PrdPackageRunner(EngineAdapter):
         variables: list[str] | None,
     ) -> list[EngineResult]:
         records = _records(output)
-        ids_by_text = {str(household_id): household_id for household_id in household_ids}
+        ids_by_text = {
+            str(household_id): household_id for household_id in household_ids
+        }
         results = []
         for index, record in enumerate(records):
             household_id = record.get(self.id_column, record.get("case_id"))
@@ -161,9 +163,5 @@ def _selected_values(
     excluded_keys: set[str],
 ) -> dict[str, Any]:
     if variables is None:
-        return {
-            key: value
-            for key, value in record.items()
-            if key not in excluded_keys
-        }
+        return {key: value for key, value in record.items() if key not in excluded_keys}
     return {variable: record[variable] for variable in variables if variable in record}

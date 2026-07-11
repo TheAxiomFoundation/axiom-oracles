@@ -253,7 +253,9 @@ def _uc_case(
         head_annual_earnings=head_annual_earnings,
         capital=capital,
     )
-    entities = _entities(adults=adults, children=children, head_annual_earnings=head_annual_earnings)
+    entities = _entities(
+        adults=adults, children=children, head_annual_earnings=head_annual_earnings
+    )
     axiom_inputs = _axiom_pipeline_inputs(
         adults=adults,
         children=children,
@@ -281,7 +283,9 @@ def _uc_case(
             "capital": capital,
             "axiom_inputs": axiom_inputs,
             "euromod_inputs": rows,
-            "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
+            "euromod_policy_switch_overrides": [
+                list(pair) for pair in _TAKEUP_OVERRIDES
+            ],
         },
         entities=entities,
         outputs=(Concepts.UK_HOUSEHOLD_UNIVERSAL_CREDIT_AWARD,),

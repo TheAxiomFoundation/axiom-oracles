@@ -6,13 +6,12 @@ description: >-
   Compares the monthly Colorado Works basic cash assistance grant from the
   composed us-co/tanf program (9 CCR 2503-6 grant standard chart, need
   standard, and earned income disregards) against PolicyEngine's co_tanf
-  on Enhanced CPS households in Colorado. Refresh the rulespec root after
-  pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-co/ ~/.axiom-oracles/roots/rulespec-us-co/
+  on Enhanced CPS households in Colorado, using the canonical rulespec-us
+  checkout directly.
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     left: axiom
     right: policyengine
@@ -23,13 +22,11 @@ runner:
     period: 2026-01
     population: enhanced-cps
     jurisdiction_fips: "08"
-    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/axiom-oracles/programs/us-co/tanf/fy-2026.yaml
-    axiom_composed_program: /tmp/co-tanf-composed.yaml
+    axiom_compose_binary: $HOME/TheAxiomFoundation/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/TheAxiomFoundation/rulespec-us/us-co/programs/tanf/fy-2026.yaml
+    axiom_composed_program: /tmp/axiom-composed/co-tanf-ecps.yaml
     axiom_compiled_program: /tmp/co-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
-    rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-co
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-co-tanf-ecps

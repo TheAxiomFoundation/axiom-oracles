@@ -79,9 +79,7 @@ class AccessNycInputMapper:
             "studentFulltime": person.student_fulltime,
             "pregnant": person.pregnant,
             "unemployed": person.unemployed,
-            "unemployedWorkedLast18Months": (
-                person.unemployed_worked_last_18_months
-            ),
+            "unemployedWorkedLast18Months": (person.unemployed_worked_last_18_months),
             "blind": person.blind,
             "disabled": person.disabled,
             "veteran": person.veteran,

@@ -185,7 +185,7 @@ class ComparisonReportAccumulator:
             for key in sorted(key for key in report if key != "cases"):
                 handle.write(_top_level_json_entry(key, report[key]))
                 handle.write(",\n")
-            handle.write(f'  {json.dumps("cases")}: [')
+            handle.write(f"  {json.dumps('cases')}: [")
             wrote_case = False
             for row in self._iter_case_rows():
                 handle.write(",\n" if wrote_case else "\n")
@@ -515,8 +515,7 @@ def _aggregate_rows_from_buckets(
                     "left_weighted_sum": _clean_float(bucket["left_weighted_sum"]),
                     "right_weighted_sum": _clean_float(bucket["right_weighted_sum"]),
                     "weighted_difference": _clean_float(
-                        bucket["left_weighted_sum"]
-                        - bucket["right_weighted_sum"]
+                        bucket["left_weighted_sum"] - bucket["right_weighted_sum"]
                     ),
                 }
             )
@@ -560,47 +559,55 @@ def _quality_flags(left_rate: float, right_rate: float) -> list[dict]:
     """
     flags: list[dict] = []
     if left_rate == 0 and right_rate > 0:
-        flags.append({
-            "severity": "alarm",
-            "code": "left_always_false",
-            "message": (
-                f"Left engine never returned True ({left_rate:.1f}%) while "
-                f"right engine returned True for {right_rate:.1f}% of cases "
-                "— match rate likely reflects agreement on the dominant False "
-                "outcome, not real agreement."
-            ),
-        })
+        flags.append(
+            {
+                "severity": "alarm",
+                "code": "left_always_false",
+                "message": (
+                    f"Left engine never returned True ({left_rate:.1f}%) while "
+                    f"right engine returned True for {right_rate:.1f}% of cases "
+                    "— match rate likely reflects agreement on the dominant False "
+                    "outcome, not real agreement."
+                ),
+            }
+        )
     if left_rate == 100 and right_rate < 100:
-        flags.append({
-            "severity": "alarm",
-            "code": "left_always_true",
-            "message": (
-                f"Left engine returned True for {left_rate:.1f}% of cases "
-                f"while right engine returned True for {right_rate:.1f}% — "
-                "likely over-permissive (missing eligibility tests) or "
-                "always-true bug."
-            ),
-        })
+        flags.append(
+            {
+                "severity": "alarm",
+                "code": "left_always_true",
+                "message": (
+                    f"Left engine returned True for {left_rate:.1f}% of cases "
+                    f"while right engine returned True for {right_rate:.1f}% — "
+                    "likely over-permissive (missing eligibility tests) or "
+                    "always-true bug."
+                ),
+            }
+        )
     if right_rate == 0 and left_rate > 0:
-        flags.append({
-            "severity": "alarm",
-            "code": "right_always_false",
-            "message": (
-                f"Right engine never returned True while left engine "
-                f"returned True for {left_rate:.1f}% — right pipeline likely "
-                "broken."
-            ),
-        })
+        flags.append(
+            {
+                "severity": "alarm",
+                "code": "right_always_false",
+                "message": (
+                    f"Right engine never returned True while left engine "
+                    f"returned True for {left_rate:.1f}% — right pipeline likely "
+                    "broken."
+                ),
+            }
+        )
     if right_rate == 100 and left_rate < 100:
-        flags.append({
-            "severity": "alarm",
-            "code": "right_always_true",
-            "message": (
-                f"Right engine returned True for 100% of cases while left "
-                f"returned True for {left_rate:.1f}% — right likely "
-                "over-permissive."
-            ),
-        })
+        flags.append(
+            {
+                "severity": "alarm",
+                "code": "right_always_true",
+                "message": (
+                    f"Right engine returned True for 100% of cases while left "
+                    f"returned True for {left_rate:.1f}% — right likely "
+                    "over-permissive."
+                ),
+            }
+        )
     return flags
 
 

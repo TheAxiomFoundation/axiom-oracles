@@ -12,7 +12,7 @@ import argparse
 import copy
 import json
 import math
-import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -24,11 +24,14 @@ from typing import Any
 
 import yaml
 
-from .jurisdiction import jurisdiction_prefix
 from .rulespec_paths import (
-    _canonical_rulespec_compile_path,
+    require_rulespec_module,
     _rulespec_public_item_keys,
-    _rulespec_repo_alias_parent,
+    require_axiom_binary,
+    require_rulespec_checkout,
+    resolve_rulespec_program,
+    rulespec_engine_env,
+    rulespec_root_args,
 )
 from .population import (
     DEFAULT_US_POPULACE_YEAR,
@@ -392,18 +395,24 @@ SURFACE_PROGRAM_PATHS = {
 
 
 def resolve_rulespec_program_path(rulespec_root: Path, program_path: Path) -> Path:
-    """Resolve pre- and post-country-monorepo RuleSpec paths."""
+    """Resolve a program under one exact canonical country checkout."""
 
-    direct = rulespec_root / program_path
-    if direct.exists():
-        return direct
-    prefix = jurisdiction_prefix(rulespec_root)
-    if prefix and (not program_path.parts or program_path.parts[0] != prefix):
-        country_scoped = rulespec_root / prefix / program_path
-        if country_scoped.exists():
-            return country_scoped
-        return country_scoped
-    return direct
+    parts = program_path.parts
+    if not parts:
+        raise ValueError("RuleSpec program path cannot be empty")
+    checkout = require_rulespec_checkout(rulespec_root)
+    country = checkout.name.removeprefix("rulespec-")
+    if re.fullmatch(rf"{re.escape(country)}(?:-[a-z0-9]+)*", parts[0]):
+        jurisdiction = parts[0]
+        relative_path = Path(*parts[1:])
+    else:
+        jurisdiction = country
+        relative_path = program_path
+    return resolve_rulespec_program(
+        checkout,
+        jurisdiction=jurisdiction,
+        relative_path=relative_path,
+    )
 
 
 PE_TAX_UNIT_VARIABLES = tuple(
@@ -572,22 +581,16 @@ class PersonProjectionContext:
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
-        "--root",
-        type=Path,
-        default=None,
-        help="Workspace root containing rulespec-us and axiom-rules-engine",
-    )
-    parser.add_argument(
         "--rulespec-root",
         type=Path,
-        default=None,
-        help="rulespec-us checkout; defaults to <root>/rulespec-us",
+        required=True,
+        help="Exact canonical rulespec-us country checkout.",
     )
     parser.add_argument(
-        "--axiom-rules-engine-path",
+        "--axiom-binary",
         type=Path,
-        default=None,
-        help="axiom-rules-engine checkout; defaults to <root>/axiom-rules-engine",
+        required=True,
+        help="Exact executable axiom-rules-engine binary.",
     )
     parser.add_argument("--year", type=int, default=2026)
     parser.add_argument(
@@ -674,9 +677,8 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
 
 def main(args: argparse.Namespace) -> int:
     report = compare_tax_ecps(
-        workspace_root=resolve_workspace_root(args.root),
         rulespec_root=args.rulespec_root,
-        axiom_rules_path=args.axiom_rules_engine_path,
+        axiom_binary=args.axiom_binary,
         year=args.year,
         sample_size=args.sample_size,
         positive_ctc_only=args.positive_ctc_only,
@@ -704,9 +706,8 @@ def main(args: argparse.Namespace) -> int:
 
 def compare_tax_ecps(
     *,
-    workspace_root: Path,
-    rulespec_root: Path | None,
-    axiom_rules_path: Path | None,
+    rulespec_root: Path,
+    axiom_binary: Path,
     year: int,
     sample_size: int,
     positive_ctc_only: bool,
@@ -723,10 +724,8 @@ def compare_tax_ecps(
     require_policyengine_versions(
         allow_policyengine_us_version=allow_policyengine_us_version,
     )
-    resolved_rulespec_root = (rulespec_root or workspace_root / "rulespec-us").resolve()
-    resolved_axiom_rules_path = (
-        axiom_rules_path or workspace_root / "axiom-rules-engine"
-    ).resolve()
+    resolved_rulespec_root = require_rulespec_checkout(rulespec_root, country="us")
+    resolved_axiom_binary = require_axiom_binary(axiom_binary)
     surfaces = list(SURFACE_OUTPUTS) if surface == "all" else [surface]
     tax_unit_variables, person_variables = policyengine_variables_for_surfaces(
         surfaces,
@@ -785,7 +784,7 @@ def compare_tax_ecps(
                             output=contribution_base_output,
                         ),
                         rulespec_root=resolved_rulespec_root,
-                        axiom_rules_path=resolved_axiom_rules_path,
+                        axiom_binary=resolved_axiom_binary,
                     )
                     contribution_base = contribution_and_benefit_base_from_results(
                         contribution_base_results,
@@ -810,7 +809,7 @@ def compare_tax_ecps(
                     program=oasdi_program,
                     request=oasdi_request,
                     rulespec_root=resolved_rulespec_root,
-                    axiom_rules_path=resolved_axiom_rules_path,
+                    axiom_binary=resolved_axiom_binary,
                 )
         request = build_axiom_request(
             pe_data=pe_data,
@@ -823,7 +822,7 @@ def compare_tax_ecps(
             program=program,
             request=request,
             rulespec_root=resolved_rulespec_root,
-            axiom_rules_path=resolved_axiom_rules_path,
+            axiom_binary=resolved_axiom_binary,
         )
     return compare_outputs(
         pe_data=pe_data,
@@ -1728,12 +1727,16 @@ def contribution_and_benefit_base_from_rulespec_test(
     year: int,
     output: str | None = None,
 ) -> float | None:
-    test_path = resolve_rulespec_program_path(
-        rulespec_root,
-        contribution_and_benefit_base_program_path(year).with_suffix(".test.yaml"),
+    checkout = require_rulespec_checkout(rulespec_root, country="us")
+    relative_test_path = contribution_and_benefit_base_program_path(year).with_suffix(
+        ".test.yaml"
     )
-    if not test_path.exists():
+    if not (checkout / "us" / relative_test_path).is_file():
         return None
+    test_path = resolve_rulespec_program_path(
+        checkout,
+        relative_test_path,
+    )
     try:
         cases = yaml.safe_load(test_path.read_text()) or []
     except (OSError, yaml.YAMLError):
@@ -2572,28 +2575,12 @@ def run_axiom_program(
     program: Path,
     request: dict[str, Any],
     rulespec_root: Path,
-    axiom_rules_path: Path,
+    axiom_binary: Path,
 ) -> list[dict[str, Any]]:
-    binary = axiom_rules_path / "target" / "release" / "axiom-rules-engine"
-    if not binary.exists():
-        raise SystemExit(f"axiom-rules-engine binary not found: {binary}")
-    env = os.environ.copy()
-    roots = [rulespec_root, rulespec_root.parent]
-    alias_parent = _rulespec_repo_alias_parent(rulespec_root)
-    if alias_parent is not None:
-        roots.insert(0, alias_parent)
-    existing_roots = env.get("AXIOM_RULESPEC_REPO_ROOTS", "")
-    if existing_roots:
-        roots.extend(Path(root) for root in existing_roots.split(os.pathsep) if root)
-    deduped_roots: list[str] = []
-    seen: set[str] = set()
-    for root in roots:
-        raw = str(root)
-        if raw and raw not in seen:
-            seen.add(raw)
-            deduped_roots.append(raw)
-    env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(deduped_roots)
-    compile_program = _canonical_rulespec_compile_path(program, rulespec_root)
+    checkout = require_rulespec_checkout(rulespec_root)
+    binary = require_axiom_binary(axiom_binary)
+    env = rulespec_engine_env()
+    compile_program = require_rulespec_module(program, rulespec_root)
     with tempfile.TemporaryDirectory(prefix="axiom-tax-populace-") as tmpdir:
         artifact = Path(tmpdir) / f"{program.stem}.json"
         compile_result = subprocess.run(
@@ -2602,12 +2589,12 @@ def run_axiom_program(
                 "compile",
                 "--program",
                 str(compile_program),
+                *rulespec_root_args(checkout),
                 "--output",
                 str(artifact),
             ],
             capture_output=True,
             text=True,
-            cwd=str(axiom_rules_path),
             env=env,
             timeout=60,
         )
@@ -2626,7 +2613,6 @@ def run_axiom_program(
             input=json.dumps(runtime_request),
             capture_output=True,
             text=True,
-            cwd=str(axiom_rules_path),
             env=env,
             timeout=600,
         )
@@ -2711,13 +2697,7 @@ def _runtime_output_ids_by_public_name(
 
 
 def _runtime_rulespec_name(name: str, *, rulespec_root: Path) -> str:
-    if ":" not in name:
-        return name
-    prefix, relative = name.split(":", 1)
-    canonical_prefix = jurisdiction_prefix(rulespec_root)
-    local_prefix = rulespec_root.name.removeprefix("rulespec-")
-    if prefix == canonical_prefix and local_prefix != canonical_prefix:
-        return f"{local_prefix}:{relative}"
+    require_rulespec_checkout(rulespec_root)
     return name
 
 
@@ -3092,18 +3072,6 @@ def bool_value(value: Any) -> bool:
     except TypeError:
         pass
     return bool(value)
-
-
-def resolve_workspace_root(root: Path | None) -> Path:
-    if root is not None:
-        return root.resolve()
-    cwd = Path.cwd().resolve()
-    for candidate in [cwd, *cwd.parents, Path.home() / "TheAxiomFoundation"]:
-        if (candidate / "rulespec-us").exists() and (
-            candidate / "axiom-rules-engine"
-        ).exists():
-            return candidate
-    return cwd
 
 
 def require_numpy() -> None:

@@ -12,7 +12,6 @@ import argparse
 import csv
 import json
 import os
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -43,11 +42,20 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.bridges.rulespec_paths import (  # noqa: E402
+    require_axiom_binary,
+    require_axiom_compiled_artifact,
+    require_program_spec,
+    require_rulespec_checkout,
+    require_rulespec_module,
+    rulespec_engine_env,
+)
+
 # ---------------------------------------------------------------------------
-# tax-ecps-compare → v2 dashboard schema adapter
+# tax-populace-compare → v2 dashboard schema adapter
 # ---------------------------------------------------------------------------
 #
-# The axiom-encode `tax-ecps-compare` harness emits a flat shape
+# The axiom-encode `tax-populace-compare` harness emits a flat shape
 # (`output_summary` + `mismatches` by entity_id) that the dashboard
 # (`axiom.comparison_report.v2`) doesn't speak natively. The mapping below
 # pins each FIIT surface to a concept id the dashboard already understands.
@@ -621,7 +629,7 @@ def _euromod_release_from_model_root(model_root: str | None) -> str | None:
     name = _expand_path(model_root).name
     for prefix in ("EUROMOD_RELEASES_", "UKMOD_PUBLIC_"):
         if name.startswith(prefix):
-            return name[len(prefix):] or None
+            return name[len(prefix) :] or None
     return None
 
 
@@ -643,64 +651,26 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
 
-    # Rulespec repos + SHAs, from whichever path form this runner uses. The
-    # remote-cloned FIIT lane records the remote's slug (SHA is the clone's
-    # HEAD only if it survives; a fresh --depth 1 clone is main's tip).
-    rulespec_paths: list[str] = []
-    for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
-        rulespec_paths.append(str(entry))
-    for key in ("rulespec_root",):
-        val = runner.get(key) or params.get(key)
-        if val:
-            rulespec_paths.append(str(val))
-    # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
-    # whole org directory and names the model country; the encoded rules live in
-    # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
-    # explicitly for provenance (mirrors the affected-map's country → repo map).
-    if runner_type == "euromod-synthetic-compare":
-        roots = params.get("axiom_rulespec_repo_roots")
-        country = params.get("euromod_country")
-        if roots and country:
-            rulespec_paths.append(
-                str(Path(str(roots)) / f"rulespec-{str(country).lower()}")
-            )
-    # The SNAP QC lane resolves its rulespec checkout inside the bridge (env
-    # fallback and workspace default), so read the root it actually ran
-    # against off the just-written report — otherwise the affected-rerun
-    # staleness check has no SHA to diff for this suite.
-    if runner_type == "snap-qc-compare" and not rulespec_paths:
-        try:
-            report_provenance = (
-                json.loads(output.read_text()).get("summary", {}).get("provenance", {})
-            )
-            ran_against = report_provenance.get("rulespec_root")
-            if ran_against:
-                rulespec_paths.append(str(ran_against))
-        except Exception:  # provenance must annotate, never fail a run
-            pass
-    rulespecs = rulespec_provenance(rulespec_paths)
-    remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
-    if remote and not rulespecs:
-        from axiom_oracles.provenance import repo_slug_from_remote
+    # Every Axiom lane names one exact local country checkout. Provenance uses
+    # that same path; it never reconstructs identity from a remote, workspace,
+    # report body, or concept prefix.
+    uses_axiom = runner_type != "axiom-oracles-compare" or "axiom" in {
+        params.get("left"),
+        params.get("right"),
+    }
+    rulespecs = (
+        rulespec_provenance([_runner_rulespec_root(runner)]) if uses_axiom else []
+    )
 
-        slug = repo_slug_from_remote(str(remote))
-        if slug:
-            rulespecs = [{"repo": slug, "sha": None}]
-
-    # Engine identity (Axiom side under test).
-    axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
-    axiom_rules_path = None
-    if axiom_rules_ref:
-        try:
-            axiom_rules_path = _resolve_path(str(axiom_rules_ref), "axiom_rules_repo")
-        except SystemExit:
-            axiom_rules_path = None
-    engine = engine_provenance(axiom_rules_path)
+    # The exact binary is the runtime input. Its conventional target/<kind>
+    # location also binds provenance to the containing engine checkout.
+    engine_checkout = _runner_axiom_binary(runner).parents[2] if uses_axiom else None
+    engine = engine_provenance(engine_checkout)
 
     # Oracle identity (the side compared to). Derived from the runner type +
     # the pins each runner installs, so the report says which oracle stack ran.
     oracle: dict = {}
-    if runner_type == "axiom-encode-tax-ecps-compare":
+    if runner_type == "axiom-encode-tax-populace-compare":
         oracle = {
             "name": "policyengine",
             "policyengine_package": (
@@ -714,7 +684,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 else None
             ),
         }
-    elif runner_type == "axiom-encode-uk-efrs-compare":
+    elif runner_type == "axiom-encode-uk-populace-compare":
         oracle = {
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.88.56"),
@@ -768,7 +738,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
-    elif runner_type == "axiom-encode-snap-ecps-compare":
+    elif runner_type == "axiom-encode-snap-populace-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
     elif runner_type == "euromod-synthetic-compare":
         # EUROMOD/UKMOD identity comes straight from the runner params: the
@@ -805,9 +775,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     dataset = None
     try:
         raw_report = json.loads(output.read_text())
-        identity = _normalize_dataset_identity(raw_report) if isinstance(
-            raw_report, dict
-        ) else None
+        identity = (
+            _normalize_dataset_identity(raw_report)
+            if isinstance(raw_report, dict)
+            else None
+        )
         dataset = dataset_provenance_from_identity(identity)
     except (OSError, json.JSONDecodeError):
         dataset = None
@@ -877,7 +849,7 @@ def _print_coverage_warnings(config: dict) -> None:
     if not compiled_program_ref or not concepts:
         return
     try:
-        compiled_program = _resolve_path(compiled_program_ref, "axiom_compiled_program")
+        compiled_program = _resolve_compiled_artifact(compiled_program_ref)
     except SystemExit:
         return
     if not compiled_program.exists():
@@ -911,17 +883,16 @@ def _print_coverage_warnings(config: dict) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
-    """`axiom-encode tax-ecps-compare` via uv run with the pinned PE stack."""
+def _run_axiom_encode_tax_populace_compare(runner: dict, output: Path) -> None:
+    """Run the canonical tax Populace comparison with the pinned PE stack."""
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
-    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
-    rulespec_root = _ensure_rulespec_us_checkout(runner["rulespec_remote"])
+    axiom_binary = _runner_axiom_binary(runner)
+    rulespec_root = _runner_rulespec_root(runner, country="us")
     params = runner["parameters"]
     pinned = params.get("pinned", True)
     # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
     # artifact was built with (axiom-encode population.py::POPULACE_PINS, built_with
-    # "1.729.0"), and it clears the tax harness's floor (ecps_tax.py
+    # "1.729.0"), and it clears the tax harness's floor (tax_populace.py
     # MIN_POLICYENGINE_US_VERSION = "1.723"). The previously pinned 1.705.16 is
     # below that floor, so the harness now rejects it — a pinned FIIT run would
     # fail hard. Keeping the PE meta-package at 4.11.0 (the oracle baseline used
@@ -966,11 +937,11 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         str(axiom_encode_repo),
         *pe_pins,
         "axiom-encode",
-        "tax-ecps-compare",
+        "tax-populace-compare",
         "--rulespec-root",
         str(rulespec_root),
-        "--axiom-rules-engine-path",
-        str(axiom_rules_repo),
+        "--axiom-binary",
+        str(axiom_binary),
         "--sample-size",
         str(params.get("sample_size", 1000)),
         "--year",
@@ -980,29 +951,26 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         "--json",
     ]
     if params.get("data_folder"):
-        cmd.extend([
-            "--data-folder",
-            str(_resolve_path(params["data_folder"], "data_folder")),
-        ])
+        cmd.extend(
+            [
+                "--data-folder",
+                str(_resolve_path(params["data_folder"], "data_folder")),
+            ]
+        )
     if params.get("allow_policyengine_us_version", True):
         cmd.append("--allow-policyengine-us-version")
     if params.get("allow_uncertified_policyengine_data", True):
         cmd.append("--allow-uncertified-policyengine-data")
-    try:
-        with output.open("w") as f:
-            subprocess.run(cmd, check=True, stdout=f)
-    finally:
-        shutil.rmtree(rulespec_root.parent, ignore_errors=True)
+    with output.open("w") as f:
+        subprocess.run(cmd, check=True, stdout=f)
 
 
-def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
-    """`axiom-encode uk-efrs-compare` via uv run with the pinned PE UK stack."""
+def _run_axiom_encode_uk_populace_compare(runner: dict, output: Path) -> None:
+    """Run the canonical UK Populace comparison with the pinned PE stack."""
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
-    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    rulespec_root = _resolve_path(runner["rulespec_root"], "rulespec_root")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
+    axiom_binary = _runner_axiom_binary(runner)
+    rulespec_root = _runner_rulespec_root(runner, country="uk")
     params = runner["parameters"]
-    universal_credit_program = _compose_uk_universal_credit_program(params)
     pe_pins = [
         "--with",
         f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
@@ -1037,11 +1005,11 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             str(axiom_encode_repo),
             *pe_pins,
             "axiom-encode",
-            "uk-efrs-compare",
+            "uk-populace-compare",
             "--rulespec-root",
             str(rulespec_root),
-            "--axiom-rules-engine-path",
-            str(axiom_rules_repo),
+            "--axiom-binary",
+            str(axiom_binary),
             "--sample-size",
             str(params.get("sample_size", 100)),
             "--year",
@@ -1058,16 +1026,6 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             str(params.get("relative_tolerance", 2e-7)),
             "--json",
         ]
-        if universal_credit_program is not None:
-            cmd.extend([
-                "--universal-credit-program",
-                str(universal_credit_program),
-            ])
-        if params.get("workspace_root"):
-            cmd.extend([
-                "--root",
-                str(_resolve_path(params["workspace_root"], "workspace_root")),
-            ])
         print(
             f"  [{index}/{len(surfaces)}] UK EFRS surface {surface}...",
             flush=True,
@@ -1098,7 +1056,9 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(_merge_uk_efrs_reports(reports), indent=2) + "\n")
 
 
-def _ensure_uk_single_year_dataset(dataset: str, *, data_folder: Path, year: int) -> str:
+def _ensure_uk_single_year_dataset(
+    dataset: str, *, data_folder: Path, year: int
+) -> str:
     """Return a PE-UK 2.88 single-year H5 path, adding time_period if needed."""
     dataset_path = _resolve_uk_dataset_path(dataset, data_folder=data_folder, year=year)
     if dataset_path is None:
@@ -1122,10 +1082,13 @@ def _ensure_uk_single_year_dataset(dataset: str, *, data_folder: Path, year: int
             f"from {dataset_path}"
         ) from exc
 
-    with pd.HDFStore(dataset_path, mode="r") as source, pd.HDFStore(
-        compatible_path,
-        mode="w",
-    ) as target:
+    with (
+        pd.HDFStore(dataset_path, mode="r") as source,
+        pd.HDFStore(
+            compatible_path,
+            mode="w",
+        ) as target,
+    ):
         for key in ("person", "benunit", "household"):
             target.put(key, source[key], format="table", data_columns=True)
         target.put("time_period", pd.Series([year]), format="table")
@@ -1154,35 +1117,6 @@ def _h5_has_dataset(path: Path, name: str) -> bool:
         return False
     with h5py.File(path, "r") as h5_file:
         return name in h5_file
-
-
-def _compose_uk_universal_credit_program(params: dict) -> Path | None:
-    program_ref = params.get("axiom_program")
-    if not program_ref:
-        return None
-
-    compose_binary = _resolve_path(
-        params.get(
-            "axiom_compose_binary",
-            "$HOME/axiom-compose/.venv/bin/axiom-compose",
-        ),
-        "axiom_compose_binary",
-    )
-    program_path = _resolve_path(program_ref, "axiom_program")
-    composed_path = _expand_path(
-        params.get("axiom_composed_program", "/tmp/uk-universal-credit-composed.yaml")
-    )
-    composed_path.parent.mkdir(parents=True, exist_ok=True)
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
-    compose_cmd = [str(compose_binary), str(program_path)]
-    for root in roots:
-        compose_cmd.extend(["--rulespec-root", str(root)])
-    compose_cmd.extend(["-o", str(composed_path)])
-    subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
-    return composed_path.resolve()
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
@@ -1231,17 +1165,14 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
     return merged
 
 
-def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
-    """`axiom-encode snap-ecps-compare`, adapted from CSV to v2 JSON."""
+def _run_axiom_encode_snap_populace_compare(runner: dict, output: Path) -> None:
+    """Run the canonical SNAP Populace comparison, adapted to v2 JSON."""
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
     params = runner["parameters"]
-    axiom_binary = None
-    if runner.get("axiom_rules_repo"):
-        axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-        _ensure_engine_binary(axiom_rules_repo, kind="release")
-        axiom_binary = axiom_rules_repo / "target" / "release" / "axiom-rules-engine"
+    rulespec_root = _runner_rulespec_root(runner, country="us")
+    axiom_binary = _runner_axiom_binary(runner)
 
-    with tempfile.TemporaryDirectory(prefix="snap-ecps-compare.") as tmp:
+    with tempfile.TemporaryDirectory(prefix="snap-populace-compare.") as tmp:
         csv_path = Path(tmp) / "rows.csv"
         cmd = [
             "uv",
@@ -1253,7 +1184,9 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
             "--with",
             "numpy",
             "axiom-encode",
-            "snap-ecps-compare",
+            "snap-populace-compare",
+            "--rulespec-root",
+            str(rulespec_root),
             "--jurisdiction",
             str(params.get("jurisdiction", "us-co")),
             "--year",
@@ -1285,15 +1218,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
                     str(_resolve_path(params["test_template"], "test_template")),
                 ]
             )
-        if params.get("workspace_root"):
-            cmd.extend(
-                [
-                    "--workspace-root",
-                    str(_resolve_path(params["workspace_root"], "workspace_root")),
-                ]
-            )
-        if axiom_binary is not None:
-            cmd.extend(["--axiom-binary", str(axiom_binary)])
+        cmd.extend(["--axiom-binary", str(axiom_binary)])
 
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
         with csv_path.open(newline="") as f:
@@ -1334,6 +1259,7 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
         f"policyengine-us=={us}" if us else _PE_ORACLE_PINS[1],
         f"policyengine-core=={core}" if core else _PE_ORACLE_PINS[2],
     )
+
 
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
@@ -1410,9 +1336,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
 
     Runs via `uv run --python 3.13` against pinned PolicyEngine versions so
     PE 4.11.0's pydantic-based models load cleanly. Mirrors the
-    `axiom-encode-tax-ecps-compare` runner's environment.
+    `axiom-encode-tax-populace-compare` runner's environment.
     """
-    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
     pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
@@ -1420,17 +1345,16 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     # Axiom side, so it needs neither a built engine binary nor a composed
     # program — skip the Rust dependency entirely rather than force a build.
     uses_axiom = "axiom" in engines
+    rulespec_root = _runner_rulespec_root(runner) if uses_axiom else None
+    axiom_binary = _runner_axiom_binary(runner) if uses_axiom else None
     if uses_axiom:
-        _ensure_engine_binary(axiom_rules_repo, kind="release")
-        _ensure_composed_axiom_program(params, axiom_rules_repo)
+        _ensure_composed_axiom_program(params, axiom_binary, rulespec_root)
     # Tax-Calculator is an optional extra; install its pin into the isolated
     # `uv run` when either side is the taxcalc adapter.
     taxcalc_pins = ("taxcalc==6.7.1",) if "taxcalc" in engines else ()
     # TAXSIM ships as policyengine-taxsim, which bundles the pinned NBER
     # binary (adapters/taxsim/taxsim_pins.json records its identity).
-    taxsim_pins = (
-        ("policyengine-taxsim==2.30.0",) if "taxsim" in engines else ()
-    )
+    taxsim_pins = ("policyengine-taxsim==2.30.0",) if "taxsim" in engines else ()
     cmd = [
         "uv",
         "run",
@@ -1460,7 +1384,9 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         *(
             [
                 "--axiom-engine-binary",
-                str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+                str(axiom_binary),
+                "--rulespec-root",
+                str(rulespec_root),
             ]
             if uses_axiom
             else []
@@ -1480,39 +1406,32 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     if comparison_batch_size is not None:
         cmd.extend(["--comparison-batch-size", str(comparison_batch_size)])
     if params.get("axiom_compiled_program"):
-        compiled_program = (
-            _expand_path(params["axiom_compiled_program"])
-            if params.get("axiom_program")
-            else _resolve_path(
-                params["axiom_compiled_program"],
-                "axiom_compiled_program",
-            )
+        compiled_program = _resolve_compiled_artifact(params["axiom_compiled_program"])
+        cmd.extend(
+            [
+                "--axiom-compiled-program",
+                str(compiled_program),
+            ]
         )
-        cmd.extend([
-            "--axiom-compiled-program",
-            str(compiled_program),
-        ])
     if params.get("jurisdiction_fips"):
         cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
     if params.get("ecps_dataset"):
         # Population dataset override (path or hf:// URL) — e.g. the certified
         # populace-us artifact instead of the enhanced CPS.
         cmd.extend(["--ecps-dataset", str(params["ecps_dataset"])])
-    env = dict(os.environ)
-    roots_env = params.get("axiom_rulespec_repo_roots")
-    if roots_env:
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
-            _resolve_path(roots_env, "axiom_rulespec_repo_roots")
-        )
-    subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
 
 
-def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None:
+def _ensure_composed_axiom_program(
+    params: dict,
+    axiom_binary: Path,
+    rulespec_root: Path,
+) -> None:
     """Compose/compile a program artifact when the comparison config declares one.
 
     Dashboard comparisons consume compiled artifacts, but `/tmp` artifacts are
     intentionally disposable. This hook keeps state SNAP dashboard regeneration
-    reproducible from the declarative `axiom-programs` spec instead of relying
+    reproducible from the declarative canonical RuleSpec program instead of relying
     on a prior manual compose step.
     """
     program_ref = params.get("axiom_program")
@@ -1521,60 +1440,66 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     compiled_ref = params.get("axiom_compiled_program")
     if not compiled_ref:
         raise SystemExit(
-            "`axiom_program` comparisons must also declare "
-            "`axiom_compiled_program`."
+            "`axiom_program` comparisons must also declare `axiom_compiled_program`."
         )
 
-    compose_binary = _resolve_path(
-        params.get(
-            "axiom_compose_binary",
-            "$HOME/axiom-compose/.venv/bin/axiom-compose",
-        ),
+    compose_ref = params.get("axiom_compose_binary")
+    if not compose_ref:
+        raise SystemExit(
+            "`axiom_program` comparisons must declare the exact `axiom_compose_binary`."
+        )
+    compose_binary = _require_config_executable(
+        compose_ref,
         "axiom_compose_binary",
     )
-    program_path = _resolve_path(program_ref, "axiom_program")
-    composed_path = _expand_path(
-        params.get(
-            "axiom_composed_program",
-            str(_expand_path(compiled_ref).with_suffix(".composed.yaml")),
+    program_candidate = _lexical_config_path(program_ref, "axiom_program")
+    try:
+        program_path = require_program_spec(program_candidate, rulespec_root)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+    composed_ref = params.get("axiom_composed_program")
+    if not composed_ref:
+        raise SystemExit(
+            "`axiom_program` comparisons must declare an exact canonical "
+            "`axiom_composed_program`."
         )
+    composed_path = _lexical_output_path(
+        composed_ref,
+        "axiom_composed_program",
     )
-    compiled_path = _expand_path(compiled_ref)
+    compiled_path = _lexical_output_path(compiled_ref, "axiom_compiled_program")
     composed_path.parent.mkdir(parents=True, exist_ok=True)
     compiled_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
+    compose_cmd = [
+        str(compose_binary),
+        str(program_path),
+        "--rulespec-root",
+        str(rulespec_root),
+        "-o",
+        str(composed_path),
     ]
-    compose_cmd = [str(compose_binary), str(program_path)]
-    for root in roots:
-        compose_cmd.extend(["--rulespec-root", str(root)])
-    compose_cmd.extend(["-o", str(composed_path)])
     subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
-
-    compile_env = dict(os.environ)
-    roots_env = params.get("axiom_rulespec_repo_roots")
-    if roots_env:
-        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = str(_expand_path(roots_env))
-    elif "AXIOM_RULESPEC_REPO_ROOTS" not in compile_env and roots:
-        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
-            str(root.parent) for root in roots
-        )
 
     subprocess.run(
         [
-            str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
-            "compile",
+            str(axiom_binary),
+            "compile-composed",
             "--program",
             str(composed_path),
+            "--rulespec-root",
+            str(rulespec_root),
             "--output",
             str(compiled_path),
         ],
         check=True,
         cwd=REPO_ROOT,
-        env=compile_env,
+        env=rulespec_engine_env(),
     )
+    try:
+        require_axiom_compiled_artifact(compiled_path)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
 
 
 def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
@@ -1592,6 +1517,11 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     exist; that regeneration is the source of the committed numbers.
     """
     params = runner["parameters"]
+    rulespec_root = _runner_rulespec_root(
+        runner,
+        country=str(params.get("euromod_country", "UK")).lower(),
+    )
+    axiom_binary = _runner_axiom_binary(runner)
     model_root_raw = params.get("euromod_model_root") or os.environ.get(
         "EUROMOD_MODEL_ROOT", ""
     )
@@ -1638,8 +1568,6 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
             )
         return
 
-    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
     cmd = [
         "uv",
         "run",
@@ -1665,7 +1593,9 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
         "--period",
         str(params["period"]),
         "--axiom-engine-binary",
-        str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+        str(axiom_binary),
+        "--rulespec-root",
+        str(rulespec_root),
         "--output",
         str(output),
     ]
@@ -1704,11 +1634,6 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     constant_overrides = params.get("euromod_constant_overrides")
     if constant_overrides:
         env["EUROMOD_CONSTANT_OVERRIDES"] = str(constant_overrides)
-    roots_env = params.get("axiom_rulespec_repo_roots")
-    if roots_env:
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
-            _expand_path(roots_env)
-        )
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
@@ -1742,6 +1667,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "policyengine-taxsim==2.21.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="us"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
@@ -1765,7 +1691,6 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     built axiom rules engine, the committed dashboard report is reused, exactly
     like the state income-tax grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_council_tax_reduction.py"
     basename = "axiom-policyengine-uk-council-tax-reduction"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -1781,6 +1706,7 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
@@ -1802,7 +1728,6 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
     environment or a built axiom rules engine, the committed dashboard report is
     reused, exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_capital_gains_tax.py"
     basename = "axiom-policyengine-uk-capital-gains-tax"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -1818,6 +1743,7 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
@@ -1839,7 +1765,6 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
     PolicyEngine-UK environment or a built axiom rules engine, the committed
     dashboard report is reused, exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_business_rates.py"
     basename = "axiom-policyengine-uk-business-rates"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -1855,13 +1780,16 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        print(f"Business rates grid generation unavailable ({exc}); reusing {committed}.")
+        print(
+            f"Business rates grid generation unavailable ({exc}); reusing {committed}."
+        )
     output.write_text(committed.read_text())
 
 
@@ -1878,7 +1806,6 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
     rules engine, the committed dashboard report is reused, exactly like the
     Capital Gains Tax grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_lbtt_ltt.py"
     basename = "axiom-policyengine-uk-lbtt-ltt"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -1894,6 +1821,7 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
@@ -1916,7 +1844,6 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
     or a built axiom rules engine, the committed dashboard report is reused,
     exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_winter_fuel_payment_pe.py"
     basename = "axiom-policyengine-uk-winter-fuel-payment-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -1932,6 +1859,7 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
@@ -1954,7 +1882,6 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
     the committed dashboard report is reused, exactly like the Council Tax Reduction
     and Winter Fuel Payment grids.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_attendance_allowance_pe.py"
     basename = "axiom-policyengine-uk-attendance-allowance-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -1970,13 +1897,16 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        print(f"Attendance Allowance grid generation unavailable ({exc}); reusing {committed}.")
+        print(
+            f"Attendance Allowance grid generation unavailable ({exc}); reusing {committed}."
+        )
     output.write_text(committed.read_text())
 
 
@@ -1990,7 +1920,6 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
     without a PolicyEngine-UK environment or a built axiom rules engine, the
     committed dashboard report is reused, exactly like the other UK case grids.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_tax_free_childcare_pe.py"
     basename = "axiom-policyengine-uk-tax-free-childcare-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -2006,18 +1935,24 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        print(f"Tax-Free Childcare grid generation unavailable ({exc}); reusing {committed}.")
+        print(
+            f"Tax-Free Childcare grid generation unavailable ({exc}); reusing {committed}."
+        )
     output.write_text(committed.read_text())
 
 
 def _run_uk_pe_grid(
-    generator_basename: str, report_basename: str, output: Path
+    generator_basename: str,
+    report_basename: str,
+    runner: dict,
+    output: Path,
 ) -> None:
     """Shared runner for the UK PolicyEngine case-grid comparisons.
 
@@ -2042,32 +1977,43 @@ def _run_uk_pe_grid(
         "policyengine-uk==2.89.2",
         "python",
         str(generator),
+        *_canonical_generator_args(runner, country="uk"),
     ]
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        print(f"{report_basename} grid generation unavailable ({exc}); reusing {committed}.")
+        print(
+            f"{report_basename} grid generation unavailable ({exc}); reusing {committed}."
+        )
     output.write_text(committed.read_text())
 
 
 def _run_uk_vat_grid(runner: dict, output: Path) -> None:
-    del runner
-    _run_uk_pe_grid("generate_uk_vat.py", "axiom-policyengine-uk-vat", output)
+    _run_uk_pe_grid(
+        "generate_uk_vat.py",
+        "axiom-policyengine-uk-vat",
+        runner,
+        output,
+    )
 
 
 def _run_uk_fuel_duty_grid(runner: dict, output: Path) -> None:
-    del runner
     _run_uk_pe_grid(
-        "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output
+        "generate_uk_fuel_duty.py",
+        "axiom-policyengine-uk-fuel-duty",
+        runner,
+        output,
     )
 
 
 def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
-    del runner
     _run_uk_pe_grid(
-        "generate_uk_tv_licence.py", "axiom-policyengine-uk-tv-licence", output
+        "generate_uk_tv_licence.py",
+        "axiom-policyengine-uk-tv-licence",
+        runner,
+        output,
     )
 
 
@@ -2092,8 +2038,20 @@ def _snap_qc_cola_marker_reason(rulespec_root: Path, fiscal_year: int) -> str | 
     cola_dir = (
         rulespec_root / "us" / "policies" / "usda" / "snap" / f"fy-{fiscal_year}-cola"
     )
-    if cola_dir.is_dir() and any(cola_dir.glob("*.yaml")):
-        return None
+    if cola_dir.is_dir():
+        found_module = False
+        for candidate in sorted(cola_dir.rglob("*")):
+            if candidate.is_file() and candidate.suffix == ".yml":
+                return f"legacy .yml RuleSpec module is unsupported: {candidate}"
+            if candidate.suffix != ".yaml" or not candidate.is_file():
+                continue
+            try:
+                require_rulespec_module(candidate, rulespec_root)
+            except ValueError as exc:
+                return f"invalid SNAP COLA RuleSpec module ({exc})"
+            found_module = True
+        if found_module:
+            return None
     return (
         f"rulespec checkout at {rulespec_root} has no "
         f"fy-{fiscal_year}-cola SNAP COLA modules"
@@ -2131,33 +2089,26 @@ def _snap_qc_skip_reason(runner: dict, params: dict, fiscal_year: int) -> str | 
     if not qc_file.exists():
         return f"QC public-use file not found at {qc_file}"
 
-    # Engine binary + rulespec checkout, resolved with the same snap_populace
-    # helpers the bridge uses so this precondition matches what the bridge would
-    # attempt. Resolution must degrade, never crash the runner.
+    # Engine binary + RuleSpec checkout are explicit inputs. Resolution must
+    # degrade, never crash the runner.
+    raw_axiom_binary = runner.get("axiom_binary") or params.get("axiom_binary")
+    raw_rulespec_root = runner.get("rulespec_root") or params.get("rulespec_root")
+    if not raw_axiom_binary:
+        return "explicit axiom_binary is required"
+    if not raw_rulespec_root:
+        return "explicit rulespec_root is required"
     try:
-        workspace_root = snap_populace.resolve_workspace_root(
-            _snap_qc_optional_path(
-                runner.get("workspace_root") or params.get("workspace_root")
-            )
-        )
-        axiom_binary = snap_populace.resolve_axiom_binary(
-            workspace_root,
-            _snap_qc_optional_path(
-                runner.get("axiom_binary")
-                or params.get("axiom_binary")
-                or os.environ.get("AXIOM_SNAP_QC_AXIOM_BINARY")
-            ),
-        )
+        snap_populace.resolve_axiom_binary(_snap_qc_optional_path(raw_axiom_binary))
     except Exception as exc:  # probe must degrade, never raise
         return f"engine resolution failed ({exc})"
-    if not axiom_binary.exists():
-        return f"axiom-rules-engine binary not built at {axiom_binary}"
-
-    rulespec_root = _snap_qc_optional_path(
-        runner.get("rulespec_root")
-        or params.get("rulespec_root")
-        or os.environ.get("AXIOM_SNAP_QC_RULESPEC_ROOT")
-    ) or (workspace_root / "rulespec-us")
+    rulespec_root = _snap_qc_optional_path(raw_rulespec_root)
+    try:
+        rulespec_root = snap_populace.require_rulespec_checkout(
+            rulespec_root,
+            country="us",
+        )
+    except (TypeError, ValueError) as exc:
+        return f"RuleSpec root resolution failed ({exc})"
     return _snap_qc_cola_marker_reason(rulespec_root, fiscal_year)
 
 
@@ -2179,9 +2130,7 @@ def _reemit_snap_qc_committed_report(
         "dashboard report. Regenerate locally where the engine binary, the "
         "fiscal-year rulespec checkout, and the QC public-use file all exist."
     )
-    committed = (
-        DASHBOARD_DATA_DIR / dashboard_filename if dashboard_filename else None
-    )
+    committed = DASHBOARD_DATA_DIR / dashboard_filename if dashboard_filename else None
     if committed is not None and committed.exists():
         output.write_text(committed.read_text())
         return
@@ -2248,13 +2197,6 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
         months=params.get("months"),
         tolerance=float(params.get("tolerance", 0.0)),
         stage_tolerance=float(params.get("stage_tolerance", 1.0)),
-        workspace_root=_snap_qc_optional_path(
-            runner.get("workspace_root") or params.get("workspace_root")
-        ),
-        # The AXIOM_SNAP_QC_RULESPEC_ROOT / AXIOM_SNAP_QC_AXIOM_BINARY env
-        # fallbacks live inside run_snap_qc_comparison itself (next to the
-        # loader's AXIOM_SNAP_QC_DATA_DIR); only explicit config values are
-        # threaded from here.
         rulespec_root=_snap_qc_optional_path(
             runner.get("rulespec_root") or params.get("rulespec_root")
         ),
@@ -2269,9 +2211,9 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
 
 
 RUNNERS = {
-    "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
-    "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
-    "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
+    "axiom-encode-snap-populace-compare": _run_axiom_encode_snap_populace_compare,
+    "axiom-encode-tax-populace-compare": _run_axiom_encode_tax_populace_compare,
+    "axiom-encode-uk-populace-compare": _run_axiom_encode_uk_populace_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "snap-qc-compare": _run_snap_qc_compare,
@@ -2302,26 +2244,43 @@ def _run_sanity(name: str) -> int:
         print(f"No fixtures file at {fixtures_path}", file=sys.stderr)
         return 2
     params = config["runner"]["parameters"]
-    axiom_rules_repo = _resolve_path(
-        config["runner"].get("axiom_rules_repo", "$HOME/axiom-rules"),
-        "axiom_rules_repo",
-    )
+    uses_axiom = "axiom" in {params.get("left"), params.get("right")}
     cmd = [
-        "uv", "run", "--python", "3.14", "--no-project",
-        "--with-editable", str(REPO_ROOT),
+        "uv",
+        "run",
+        "--python",
+        "3.14",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
         *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
-        "python", "-c", _PE_CERT_OVERRIDE,
-        "sanity", str(fixtures_path),
-        "--left", params.get("left", "axiom"),
-        "--right", params.get("right", "policyengine"),
-        "--axiom-engine-binary",
-        str(axiom_rules_repo / "target" / "release" / "axiom-rules-engine"),
+        "python",
+        "-c",
+        _PE_CERT_OVERRIDE,
+        "sanity",
+        str(fixtures_path),
+        "--left",
+        params.get("left", "axiom"),
+        "--right",
+        params.get("right", "policyengine"),
+        *(
+            [
+                "--axiom-engine-binary",
+                str(_runner_axiom_binary(config["runner"])),
+                "--rulespec-root",
+                str(_runner_rulespec_root(config["runner"])),
+            ]
+            if uses_axiom
+            else []
+        ),
     ]
     if params.get("axiom_compiled_program"):
-        cmd.extend([
-            "--axiom-compiled-program",
-            str(_resolve_path(params["axiom_compiled_program"], "axiom_compiled_program")),
-        ])
+        cmd.extend(
+            [
+                "--axiom-compiled-program",
+                str(_resolve_compiled_artifact(params["axiom_compiled_program"])),
+            ]
+        )
     if params.get("jurisdiction_fips"):
         cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
     result = subprocess.run(cmd, cwd=REPO_ROOT)
@@ -2348,7 +2307,6 @@ def _resolve_path(raw: str, field: str) -> Path:
     if not expanded.exists():
         env_override = {
             "axiom_encode_repo": "AXIOM_ENCODE_REPO",
-            "axiom_rules_repo": "AXIOM_RULES_REPO",
         }.get(field)
         if env_override and os.environ.get(env_override):
             expanded = Path(
@@ -2359,30 +2317,96 @@ def _resolve_path(raw: str, field: str) -> Path:
     return expanded
 
 
+def _resolve_compiled_artifact(raw: str | Path) -> Path:
+    path = _lexical_config_path(raw, "axiom_compiled_program")
+    try:
+        return require_axiom_compiled_artifact(path)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+
+
+def _runner_rulespec_root(runner: dict, *, country: str | None = None) -> Path:
+    """Resolve the runner's one explicit canonical RuleSpec checkout."""
+
+    params = runner.get("parameters") or {}
+    legacy = {
+        key
+        for section in (runner, params)
+        for key in ("rulespec_roots", "rulespec_remote", "axiom_rulespec_repo_roots")
+        if key in section
+    }
+    if legacy:
+        raise SystemExit(
+            "legacy RuleSpec routing keys are unsupported: " + ", ".join(sorted(legacy))
+        )
+    raw = runner.get("rulespec_root") or params.get("rulespec_root")
+    if not raw:
+        raise SystemExit("runner must declare one explicit rulespec_root")
+    path = _lexical_config_path(str(raw), "rulespec_root")
+    try:
+        return require_rulespec_checkout(path, country=country)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+
+
+def _runner_axiom_binary(runner: dict) -> Path:
+    """Resolve the runner's explicit executable Axiom engine file."""
+
+    params = runner.get("parameters") or {}
+    if "axiom_rules_repo" in runner or "axiom_rules_repo" in params:
+        raise SystemExit(
+            "axiom_rules_repo is unsupported; declare the exact axiom_binary"
+        )
+    raw = runner.get("axiom_binary") or params.get("axiom_binary")
+    if not raw:
+        raise SystemExit("runner must declare one explicit axiom_binary")
+    path = _lexical_config_path(str(raw), "axiom_binary")
+    try:
+        return require_axiom_binary(path)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+
+
+def _canonical_generator_args(runner: dict, *, country: str) -> list[str]:
+    return [
+        "--rulespec-root",
+        str(_runner_rulespec_root(runner, country=country)),
+        "--axiom-binary",
+        str(_runner_axiom_binary(runner)),
+    ]
+
+
+def _lexical_config_path(raw: str | Path, field: str) -> Path:
+    path = Path(os.path.abspath(os.path.expandvars(os.path.expanduser(str(raw)))))
+    if not path.exists():
+        raise SystemExit(f"{field}: path does not exist: {path}")
+    return path
+
+
+def _lexical_output_path(raw: str | Path, field: str) -> Path:
+    path = Path(os.path.abspath(os.path.expandvars(os.path.expanduser(str(raw)))))
+    cursor = Path(path.anchor)
+    for part in path.parts[1:]:
+        cursor /= part
+        if cursor.is_symlink():
+            raise SystemExit(f"{field}: output path is symlinked: {cursor}")
+    return path
+
+
+def _require_config_executable(raw: str | Path, field: str) -> Path:
+    path = _lexical_config_path(raw, field)
+    cursor = Path(path.anchor)
+    for part in path.parts[1:]:
+        cursor /= part
+        if cursor.is_symlink():
+            raise SystemExit(f"{field}: executable path is symlinked: {cursor}")
+    if not path.is_file() or not os.access(path, os.X_OK):
+        raise SystemExit(f"{field}: path is not executable: {path}")
+    return path.resolve()
+
+
 def _expand_path(raw: str | Path) -> Path:
     return Path(os.path.expandvars(os.path.expanduser(str(raw)))).resolve()
-
-
-def _ensure_engine_binary(repo: Path, *, kind: str) -> None:
-    bin_path = repo / "target" / kind / "axiom-rules-engine"
-    if bin_path.exists():
-        return
-    print(f"Building {kind} axiom-rules-engine in {repo}...")
-    cmd = ["cargo", "build", "--bin", "axiom-rules-engine"]
-    if kind == "release":
-        cmd.append("--release")
-    subprocess.run(cmd, check=True, cwd=repo)
-
-
-def _ensure_rulespec_us_checkout(remote: str) -> Path:
-    workspace = Path(tempfile.mkdtemp(prefix="oracle-compare."))
-    target = workspace / "rulespec-us"
-    print(f"Cloning rulespec-us into {target}...")
-    subprocess.run(
-        ["git", "clone", "--depth", "1", "--quiet", remote, str(target)],
-        check=True,
-    )
-    return target
 
 
 def _print_summary(output: Path) -> None:
@@ -2478,9 +2502,9 @@ def _print_quality_flags(aggregates: list) -> None:
 
 def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) -> dict:
     raw = json.loads(raw_path.read_text())
-    if runner_type == "axiom-encode-tax-ecps-compare":
+    if runner_type == "axiom-encode-tax-populace-compare":
         return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
-    if runner_type == "axiom-encode-uk-efrs-compare":
+    if runner_type == "axiom-encode-uk-populace-compare":
         return _adapt_uk_efrs_to_v2(raw, config, suite=suite)
     # axiom-oracles-compare already emits v2 — pass through, but override
     # the suite with the comparison-config value. The upstream report
@@ -2493,7 +2517,7 @@ def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) 
 
 
 def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
-    """Convert uk-efrs-compare output to axiom.comparison_report.v2."""
+    """Convert uk-populace-compare output to axiom.comparison_report.v2."""
     from collections import Counter, defaultdict
 
     dashboard_config = config.get("dashboard") or {}
@@ -2826,7 +2850,7 @@ def _dataset_label_from_identity(identity: dict | None, *, fallback: str) -> str
 
 
 def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
-    """Convert tax-ecps-compare flat output to axiom.comparison_report.v2.
+    """Convert tax-populace-compare flat output to axiom.comparison_report.v2.
 
     Surfaces become aggregates; mismatching entities become cases (matching
     units are counted in summary/aggregates but don't appear in cases[]). The
@@ -3050,7 +3074,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
 
 def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
-    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2."""
+    """Convert snap-populace-compare row CSV into axiom.comparison_report.v2."""
     params = runner.get("parameters", {})
     jurisdiction = str(params.get("jurisdiction", "us-co"))
     state_code = str(params.get("state") or jurisdiction.rsplit("-", 1)[-1]).upper()
@@ -3069,8 +3093,8 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
     eligibility_matched = compared - len(eligibility_mismatching_rows)
     amount_match_rate = (amount_matched / compared * 100) if compared else 100.0
     eligibility_match_rate = (
-        eligibility_matched / compared * 100
-    ) if compared else 100.0
+        (eligibility_matched / compared * 100) if compared else 100.0
+    )
     left_sum = sum(_csv_float(row.get("axiom_snap_allotment")) for row in rows)
     right_sum = sum(_csv_float(row.get("pe_snap")) for row in rows)
     left_eligible_count = sum(
@@ -3137,13 +3161,9 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         metadata = {
             "axiom_gross_income": _csv_float(row.get("axiom_gross_income")),
             "axiom_net_income": _csv_float(row.get("axiom_net_income")),
-            "axiom_shelter_deduction": _csv_float(
-                row.get("axiom_shelter_deduction")
-            ),
+            "axiom_shelter_deduction": _csv_float(row.get("axiom_shelter_deduction")),
             "axiom_snap_eligible": _csv_bool(row.get("axiom_snap_eligible")),
-            "axiom_utility_allowance": _csv_float(
-                row.get("axiom_utility_allowance")
-            ),
+            "axiom_utility_allowance": _csv_float(row.get("axiom_utility_allowance")),
             "case_unit": "spm_unit",
             "dataset": "enhanced_cps",
             "household_id": row.get("household_id"),
@@ -3359,9 +3379,9 @@ def _slim_report_for_dashboard(report: dict) -> dict:
     kept_mismatches = mismatches[:_DASHBOARD_MAX_MISMATCHES]
     kept_ids = {m.get("case_id") for m in kept_mismatches}
     slim["mismatches"] = kept_mismatches
-    slim["cases"] = [
-        case for case in cases if case.get("case_id") in kept_ids
-    ][:_DASHBOARD_MAX_CASE_ROWS]
+    slim["cases"] = [case for case in cases if case.get("case_id") in kept_ids][
+        :_DASHBOARD_MAX_CASE_ROWS
+    ]
     slim["dashboard_truncation"] = {
         "total_mismatches": len(mismatches),
         "shown_mismatches": len(kept_mismatches),

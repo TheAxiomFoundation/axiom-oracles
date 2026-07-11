@@ -17,9 +17,9 @@ projection layer:
 5. Let an *ECPS mapping table* — pure data, not code — override the small set
    of facts ECPS actually measures.
 
-A new program comparison is then: declare the ECPS mapping in axiom-programs
-or pass it inline. No new Python module per state. No new baselines copied
-from upstream test fixtures.
+A new program comparison is then: declare the ECPS mapping alongside the
+canonical RuleSpec program or pass it inline. No new Python module per state.
+No new baselines copied from upstream test fixtures.
 
 See axiom-oracles#26 for the architectural background.
 """
@@ -421,7 +421,9 @@ def _resolve_value(
         return mapper(case_facts, None)
 
     # Fact-table fallback: look up by slot name (or its unqualified suffix).
-    unqualified = slot.name.split("#input.")[-1] if "#input." in slot.name else slot.name
+    unqualified = (
+        slot.name.split("#input.")[-1] if "#input." in slot.name else slot.name
+    )
     facts_table = person_facts if slot.entity == "Person" else case_facts
     if facts_table is None:
         facts_table = {}

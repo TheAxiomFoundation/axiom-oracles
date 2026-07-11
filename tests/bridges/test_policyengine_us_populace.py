@@ -435,7 +435,16 @@ def test_configure_us_populace_parser_accepts_repeated_variables():
     us_populace.configure_parser(parser)
 
     args = parser.parse_args(
-        ["--variable", "co_oap", "--variable", "co_state_supplement"]
+        [
+            "--rulespec-root",
+            "/tmp/rulespec-us",
+            "--axiom-binary",
+            "/tmp/axiom-rules-engine",
+            "--variable",
+            "co_oap",
+            "--variable",
+            "co_state_supplement",
+        ]
     )
 
     assert args.variables == ["co_oap", "co_state_supplement"]

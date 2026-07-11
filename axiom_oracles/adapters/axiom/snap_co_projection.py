@@ -1,6 +1,7 @@
 """Project thin Axiom Cases into Colorado SNAP RuleSpec input records.
 
-Colorado SNAP FY 2026 (rules-us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml)
+Colorado SNAP FY 2026
+(rulespec-us/us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml)
 declares >340 fully-namespaced ``#input.X`` slots across federal SNAP statutes,
 USDA policies, 7-CFR regulations, and the 10-CCR-2506-1 Colorado SNAP manual.
 This module ships a baseline drawn from the upstream test fixture and lets a
@@ -11,12 +12,10 @@ Use ``attach_axiom_snap_co_inputs(cases)`` from the CLI when a SNAP comparison
 is requested and the cases scope to Colorado. The runner picks the input
 records up via ``case.metadata[AXIOM_INPUT_RECORDS_METADATA_KEY]``.
 """
+
 from __future__ import annotations
 
-import json
 from dataclasses import replace
-from functools import cache
-from pathlib import Path
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
@@ -32,9 +31,7 @@ _SNAP_HOUSEHOLD_ENTITY = "Household"
 _MEMBER_RELATION = "us:statutes/7/2012/j#relation.member_of_household"
 _MEMBER_RELATION_RUNTIME = "member_of_household"
 _WAGES_INPUT = "us-co:regulations/10-ccr-2506-1/4.403#input.employee_wages_received"
-_HOUSEHOLD_SIZE_INPUT = (
-    "us-co:regulations/10-ccr-2506-1/4.207.3#input.household_size"
-)
+_HOUSEHOLD_SIZE_INPUT = "us-co:regulations/10-ccr-2506-1/4.207.3#input.household_size"
 _FEDERAL_NET_INCOME_DEFAULTS = {
     "us:policies/usda/snap/fy-2026-cola/deductions#input.household_size": None,
     "us:regulations/7-cfr/273/10#input.household_size": None,
@@ -83,50 +80,6 @@ _FEDERAL_MEMBER_DEFAULTS = {
     "us:regulations/7-cfr/273/24#input.member_regained_abawd_eligibility": False,
     "us:regulations/7-cfr/273/24#input.member_has_additional_three_month_abawd_eligibility": False,
 }
-
-US_SNAP_CO_PROGRAM_PATH = (
-    "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
-)
-
-# Precompiled artifact shipped alongside this projection. Bundling the
-# artifact lets axiom-oracles use `axiom-rules-engine run-compiled` and
-# avoid recompiling the CO SNAP YAML on every case — which would also
-# require an engine binary that supports `kind: reiteration`.
-US_SNAP_CO_COMPILED_ARTIFACT_PATH = (
-    Path(__file__).parent / "artifacts" / "co-snap.compiled.json"
-)
-
-
-@cache
-def _compiled_reference_targets() -> frozenset[str]:
-    artifact = json.loads(US_SNAP_CO_COMPILED_ARTIFACT_PATH.read_text())
-    program = artifact.get("program") if isinstance(artifact, dict) else {}
-    if not isinstance(program, dict):
-        return frozenset()
-    targets: set[str] = set()
-    for collection in ("derived", "parameters"):
-        for item in program.get(collection, []):
-            if not isinstance(item, dict):
-                continue
-            item_id = item.get("id")
-            if isinstance(item_id, str) and "#" in item_id:
-                targets.add(item_id.split("#", 1)[0])
-    return frozenset(targets)
-
-
-def _supported_input_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    reference_targets = _compiled_reference_targets()
-    if not reference_targets:
-        return records
-    supported = []
-    for record in records:
-        name = str(record.get("name"))
-        if "#" not in name:
-            supported.append(record)
-            continue
-        if name.split("#", 1)[0] in reference_targets:
-            supported.append(record)
-    return supported
 
 
 def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
@@ -181,9 +134,7 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
                     )
                 )
 
-        metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = _supported_input_records(
-            records + member_records
-        )
+        metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = records + member_records
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
             *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
             *[

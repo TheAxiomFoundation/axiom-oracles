@@ -57,9 +57,7 @@ def _birth_leave_case(
                 _birth_leave_input("belgium_birth_leave_eligible_parent"): True,
                 uncapped_daily_input: daily_income,
                 capped_daily_input: (
-                    DAILY_REMUNERATION_CAP_BE_2025
-                    if apply_daily_cap
-                    else daily_income
+                    DAILY_REMUNERATION_CAP_BE_2025 if apply_daily_cap else daily_income
                 ),
             },
             "euromod_inputs": _birth_leave_euromod_inputs(annual_income),

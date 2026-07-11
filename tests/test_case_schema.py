@@ -307,7 +307,9 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     assert {case.outputs for case in tax_income_list_cases} == {
         (Concepts.BE_EUROMOD_ILS_TAX_WORKER_PIT_PILOT,)
     }
-    assert [case.metadata["yearly_earned_income"] for case in tax_income_list_cases] == [
+    assert [
+        case.metadata["yearly_earned_income"] for case in tax_income_list_cases
+    ] == [
         30_000,
         60_000,
     ]
@@ -315,8 +317,7 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         (Concepts.BE_EUROMOD_ILS_DISPY_WORKER_PIT_SIC_PILOT,)
     }
     assert [
-        case.metadata["yearly_earned_income"]
-        for case in disposable_income_list_cases
+        case.metadata["yearly_earned_income"] for case in disposable_income_list_cases
     ] == [
         30_000,
         55_000,
@@ -337,8 +338,7 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
     ]
     assert all(case.metadata["axiom_entity"] == "Person" for case in pit_cases)
     assert all(
-        case.metadata["axiom_entity"] == "Household"
-        for case in tax_income_list_cases
+        case.metadata["axiom_entity"] == "Household" for case in tax_income_list_cases
     )
     assert all(
         case.metadata["axiom_entity"] == "Household"
@@ -352,12 +352,9 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         case.metadata["axiom_entity_id"] == "household"
         for case in disposable_income_list_cases
     )
+    assert all(case.metadata["axiom_entity"] == "Person" for case in employer_ssc_cases)
     assert all(
-        case.metadata["axiom_entity"] == "Person" for case in employer_ssc_cases
-    )
-    assert all(
-        "axiom_alias_qualified_inputs" not in case.metadata
-        for case in worker_cases
+        "axiom_alias_qualified_inputs" not in case.metadata for case in worker_cases
     )
     assert all(
         "#input." in key for case in pit_cases for key in case.metadata["axiom_inputs"]
@@ -380,9 +377,7 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         for case in employer_ssc_cases
         for key in case.metadata["axiom_inputs"]
     )
-    assert all(
-        "euromod_inputs" in case.metadata for case in worker_cases
-    )
+    assert all("euromod_inputs" in case.metadata for case in worker_cases)
     include_input = (
         "be:policies/euromod_tax_income_list#input."
         "belgium_euromod_ils_tax_include_pit_component"
@@ -619,12 +614,12 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
     }
-    assert {case.outputs for case in cases} == {
-        (Concepts.BE_FLEMISH_JOBBONUS,)
-    }
+    assert {case.outputs for case in cases} == {(Concepts.BE_FLEMISH_JOBBONUS,)}
     assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
     assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
-    assert all("#input." in key for case in cases for key in case.metadata["axiom_inputs"])
+    assert all(
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
+    )
     assert {case.metadata["scenario"] for case in cases} == {
         "flemish-jobbonus-full-time-worker",
         "flemish-jobbonus-part-time-worker",
@@ -641,8 +636,7 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
         "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
     )
     work_fraction_input = (
-        "be-vlg:regulations/employment/jobbonus#input."
-        "flanders_jobbonus_work_fraction"
+        "be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction"
     )
     full_time_input = (
         "be-vlg:regulations/employment/jobbonus#input."
@@ -663,9 +657,7 @@ def test_belgium_flemish_jobbonus_suite_defines_oracle_concept_and_inputs() -> N
     assert half_time.metadata["euromod_inputs"][0]["lhw"] == 19
     assert small_part_time.metadata["axiom_inputs"][work_fraction_input] == 0.01
     assert small_part_time.metadata["euromod_inputs"][0]["yem"] == 15
-    assert small_part_time.metadata["euromod_inputs"][0]["lhw"] == pytest.approx(
-        0.38
-    )
+    assert small_part_time.metadata["euromod_inputs"][0]["lhw"] == pytest.approx(0.38)
     assert low_wage.metadata["euromod_to_axiom_input_bridge"] == {
         "yemeq_s": {
             "inputs": [gross_input],
@@ -942,9 +934,7 @@ def test_belgium_property_tax_suite_defines_oracle_concept_and_bridge() -> None:
     assert {case.period for case in cases} == {"2025"}
 
 
-def test_belgium_cadastral_income_indexation_suite_defines_oracle_concept() -> (
-    None
-):
+def test_belgium_cadastral_income_indexation_suite_defines_oracle_concept() -> None:
     cases = load_suite("be-cadastral-income-indexation")
 
     assert len(cases) == 2
@@ -952,9 +942,7 @@ def test_belgium_cadastral_income_indexation_suite_defines_oracle_concept() -> (
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
     }
-    assert {case.outputs for case in cases} == {
-        (Concepts.BE_CADASTRAL_INCOME_INDEXED,)
-    }
+    assert {case.outputs for case in cases} == {(Concepts.BE_CADASTRAL_INCOME_INDEXED,)}
     assert all(case.metadata["axiom_entity"] == "Property" for case in cases)
     assert all(case.metadata["axiom_entity_id"] == "property" for case in cases)
     assert all(
@@ -1007,9 +995,7 @@ def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs(
     assert {case.scope for case in cases} == {
         GeographyScope(type="country", geoid="BE")
     }
-    assert {case.outputs for case in cases} == {
-        (Concepts.BE_FAMILY_BIRTH_ALLOWANCE,)
-    }
+    assert {case.outputs for case in cases} == {(Concepts.BE_FAMILY_BIRTH_ALLOWANCE,)}
     assert all(case.metadata["axiom_entity"] == "Household" for case in cases)
     assert all(case.metadata["axiom_entity_id"] == "household" for case in cases)
     assert all(
@@ -1028,9 +1014,7 @@ def test_belgium_family_birth_allowance_suite_defines_oracle_concept_and_inputs(
     by_id = {case.case_id: case for case in cases}
     brussels_first = by_id["be-family-birth-allowance-brussels-first-newborn"]
     brussels_later = by_id["be-family-birth-allowance-brussels-later-newborn"]
-    german_case = by_id[
-        "be-family-birth-allowance-german-speaking-community-newborn"
-    ]
+    german_case = by_id["be-family-birth-allowance-german-speaking-community-newborn"]
     first_or_multiple_input = (
         "be:statutes/family_benefits/birth_allowance#input."
         "belgium_family_benefits_birth_allowance_brussels_first_child_or_multiple_birth"
@@ -1112,9 +1096,7 @@ def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inpu
     wallonia_age_13 = by_id["be-family-child-benefit-base-wallonia-age-13"]
     flanders_age_13 = by_id["be-family-child-benefit-base-flanders-age-13"]
     flanders_age_18 = by_id["be-family-child-benefit-base-flanders-age-18"]
-    german_age_0 = by_id[
-        "be-family-child-benefit-base-german-speaking-community-age-0"
-    ]
+    german_age_0 = by_id["be-family-child-benefit-base-german-speaking-community-age-0"]
     german_age_18 = by_id[
         "be-family-child-benefit-base-german-speaking-community-age-18-higher-education"
     ]
@@ -1138,8 +1120,7 @@ def test_belgium_family_child_benefit_base_suite_defines_oracle_concept_and_inpu
     assert brussels_age_0.metadata["axiom_inputs"][child_age_input] == 0
     assert brussels_age_0.metadata["axiom_inputs"][child_count_input] == 1
     assert (
-        brussels_age_18_no_he.metadata["axiom_inputs"][higher_education_input]
-        is False
+        brussels_age_18_no_he.metadata["axiom_inputs"][higher_education_input] is False
     )
     assert brussels_age_18_he.metadata["axiom_inputs"][higher_education_input] is True
     assert wallonia_age_13.metadata["axiom_inputs"][region_input] == 3
@@ -1282,10 +1263,9 @@ def test_belgium_family_child_benefit_income_list_suite_defines_oracle_concept_a
     assert brussels_base.metadata["axiom_inputs"][birth_include_input] is True
     assert brussels_same_age.metadata["axiom_inputs"][selector_input] == 3
     assert brussels_same_age.metadata["child_count"] == 2
-    assert (
-        brussels_same_age.metadata["euromod_to_axiom_input_bridge"]["il_bch_means"]
-        == [income_input]
-    )
+    assert brussels_same_age.metadata["euromod_to_axiom_input_bridge"][
+        "il_bch_means"
+    ] == [income_input]
     assert {case.period for case in cases} == {"2025"}
 
 
@@ -1342,19 +1322,18 @@ def test_belgium_family_child_benefit_brussels_same_age_household_suite_defines_
         102,
         103,
     ]
-    assert (
-        two_child_single.metadata["euromod_to_axiom_input_bridge"]["il_bch_means"]
-        == [income_input]
-    )
+    assert two_child_single.metadata["euromod_to_axiom_input_bridge"][
+        "il_bch_means"
+    ] == [income_input]
 
     assert three_child_couple.metadata["axiom_inputs"][child_count_input] == 3
     assert three_child_couple.metadata["axiom_inputs"][single_parent_input] is False
     assert len(three_child_couple.entities) == 4
     assert len(three_child_couple.metadata["euromod_inputs"]) == 5
     assert three_child_couple.metadata["euromod_inputs"][1]["idperson"] == 103
-    assert {row["dag"] for row in three_child_couple.metadata["euromod_inputs"][2:]} == {
-        13
-    }
+    assert {
+        row["dag"] for row in three_child_couple.metadata["euromod_inputs"][2:]
+    } == {13}
     assert {case.period for case in cases} == {"2025"}
 
 
@@ -1440,7 +1419,9 @@ def test_belgium_social_assistance_suite_defines_oracle_concept_and_inputs() -> 
         if case.case_id == "be-social-assistance-single-parent-no-resources"
     )
     assert {case.locale for case in cases} == {"BE"}
-    assert {case.scope for case in cases} == {GeographyScope(type="country", geoid="BE")}
+    assert {case.scope for case in cases} == {
+        GeographyScope(type="country", geoid="BE")
+    }
     assert all(
         case.outputs == (Concepts.BE_SOCIAL_INTEGRATION_INCOME_SUPPORT,)
         for case in cases
@@ -1448,9 +1429,7 @@ def test_belgium_social_assistance_suite_defines_oracle_concept_and_inputs() -> 
     assert all(case.metadata["axiom_entity"] == "Person" for case in cases)
     assert all(case.metadata["axiom_entity_id"] == "head" for case in cases)
     assert all(
-        "#input." in key
-        for case in cases
-        for key in case.metadata["axiom_inputs"]
+        "#input." in key for case in cases for key in case.metadata["axiom_inputs"]
     )
     assert (
         isolated.metadata["axiom_inputs"][

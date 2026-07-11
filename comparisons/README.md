@@ -57,12 +57,10 @@ set for a probe that does not belong in the shared grid.
 
 ## Supported runners
 
-### `axiom-encode-tax-ecps-compare`
+### `axiom-encode-tax-populace-compare`
 
-Invokes `axiom-encode tax-populace-compare` (registered as `tax-ecps-compare`
-too — same command) via `uv run`. Builds a release `axiom-rules-engine` binary
-if missing; clones `rulespec-us` fresh into a directory named exactly
-`rulespec-us` (required by the engine import resolver). Honors a `pinned`
+Invokes `axiom-encode tax-populace-compare` via `uv run`, using the exact local
+`rulespec-us` checkout and executable declared in the registry. Honors a `pinned`
 parameter that controls the PolicyEngine version stack. The runner installs the
 local `axiom-encode` checkout with `--with-editable` so comparison configs can
 validate unmerged harness changes before they land.
@@ -78,30 +76,34 @@ shims); this runner still shells out to the encoder CLI in a pinned
 PolicyEngine environment, and pointing it at the in-repo package is a
 follow-up.
 
-Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
-`rulespec_remote`. Required `parameters`: `sample_size`, `year`, `surface`.
+Required runner keys: `axiom_encode_repo`, `rulespec_root`, `axiom_binary`.
+Required `parameters`: `sample_size`, `year`, `surface`.
 
-### `axiom-encode-uk-efrs-compare`
+### `axiom-encode-uk-populace-compare`
 
-Invokes `axiom-encode uk-efrs-compare` via `uv run` with the pinned
+Invokes `axiom-encode uk-populace-compare` via `uv run` with the pinned
 PolicyEngine UK stack. Supports either one `surface` or a `surfaces` list; the
 runner merges multi-surface JSON output before adapting it to the dashboard.
-When `parameters.axiom_program` is declared, the runner first composes that
-`axiom-programs` spec and passes the composed RuleSpec file as the Universal
-Credit program under test.
+Every surface resolves from the exact canonical `rulespec-uk/uk` tree; external
+composed-program overrides are not accepted.
 
-Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
-`rulespec_root`. Required `parameters`: `sample_size`, `year`, `dataset`.
+Required runner keys: `axiom_encode_repo`, `axiom_binary`, `rulespec_root`.
+Required `parameters`: `sample_size`, `year`, `dataset`.
 
 ### `axiom-oracles-compare`
 
 Invokes `axiom-oracles compare <left> <right>` — the generic comparator in
-this repo. The SNAP path uses a precompiled artifact bundled at
-`axiom_oracles/adapters/axiom/artifacts/`. Builds a release engine binary if
-missing.
+this repo. A source program must live under the supplied canonical RuleSpec
+checkout. The runner composes it with the exact declared `axiom-compose`
+executable, writes the composed module beneath a canonical temporary
+`rulespec-<country>/<jurisdiction>/programs/` path, and compiles it with the
+exact declared engine binary. No bundled artifact, build discovery,
+environment, workspace, or sibling fallback is used.
 
-Required runner keys: `axiom_rules_repo`. Required `parameters`: `left`,
-`right`, `concept`, `period`, `sample_size`, `population`.
+Required runner keys for an Axiom leg: `axiom_binary` and `rulespec_root`.
+Required `parameters`: `left`, `right`, `concept`, `period`, `sample_size`,
+`population`. Source-program comparisons also require `axiom_compose_binary`,
+`axiom_program`, `axiom_composed_program`, and `axiom_compiled_program`.
 
 ### `snap-qc-compare`
 
@@ -128,9 +130,10 @@ Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs th
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
 `tolerance` (FSBEN dollar tolerance, default exact after whole-dollar rounding),
 `stage_tolerance` (intermediate dollar tolerance, default `1.0`), `data_dir`,
-`rulespec_root`, `workspace_root`, `axiom_binary`, `include_special_programs`,
+`include_special_programs`,
 `keep_overlay`, and `dashboard_filename` (the committed report the skip path
 re-emits). See [docs/snap-qc-oracle-playbook.md](../docs/snap-qc-oracle-playbook.md).
+Required runner keys: `rulespec_root` and `axiom_binary`.
 
 ## Adding a new runner type
 

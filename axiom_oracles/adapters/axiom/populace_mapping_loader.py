@@ -171,19 +171,20 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             # marital linkage at this layer, so two ABD adults in one
             # household are treated as an eligible couple.
             facts = person_facts or {}
+
             def _abd(f):
                 return (
                     float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 65
                     or bool(f.get(Concepts.BLIND, False) or False)
                     or bool(f.get(Concepts.DISABLED, False) or False)
                 )
+
             def _adult(f):
                 return float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 18
+
             if not (_abd(facts) and _adult(facts)):
                 return False
-            others = [
-                f for f in facts.get("__others__", []) if _abd(f) and _adult(f)
-            ]
+            others = [f for f in facts.get("__others__", []) if _abd(f) and _adult(f)]
             return len(others) == 1
 
         if transform == "ssi_couple_countable_income":
@@ -192,15 +193,15 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             # annual general exclusion, plus earned less $780 and half the
             # remainder — mirroring the individual-side wrapper math.
             facts = person_facts or {}
+
             def _abd2(f):
                 return (
                     float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 65
                     or bool(f.get(Concepts.BLIND, False) or False)
                     or bool(f.get(Concepts.DISABLED, False) or False)
                 ) and float(f.get(Concepts.PERSON_AGE, 0) or 0) >= 18
-            members = [facts] + [
-                f for f in facts.get("__others__", []) if _abd2(f)
-            ][:1]
+
+            members = [facts] + [f for f in facts.get("__others__", []) if _abd2(f)][:1]
             unearned_keys = [
                 Concepts.SOCIAL_SECURITY_BENEFITS,
                 Concepts.PENSION_INCOME,
@@ -216,9 +217,7 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             unearned = sum(
                 float(m.get(k, 0) or 0) for m in members for k in unearned_keys
             )
-            earned = sum(
-                float(m.get(k, 0) or 0) for m in members for k in earned_keys
-            )
+            earned = sum(float(m.get(k, 0) or 0) for m in members for k in earned_keys)
             countable_unearned = max(0.0, unearned - 240.0)
             earned_after_initial = max(0.0, earned - 780.0)
             countable_earned = earned_after_initial / 2
@@ -228,7 +227,8 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             people = (case_facts or {}).get("__people__") or []
             threshold = float(source.get("threshold", 0))
             return sum(
-                1 for p in people
+                1
+                for p in people
                 if float(p.get(Concepts.PERSON_AGE, 0) or 0) < threshold
             )
 
@@ -237,7 +237,8 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             threshold = float(source.get("threshold", 0))
             cap = source.get("cap")
             count = sum(
-                1 for p in people
+                1
+                for p in people
                 if float(p.get(Concepts.PERSON_AGE, 0) or 0) >= threshold
             )
             return min(count, int(cap)) if cap is not None else count
@@ -263,7 +264,8 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             if source.get("flat_per_earner"):
                 people = (case_facts or {}).get("__people__") or []
                 earners = sum(
-                    1 for p in people
+                    1
+                    for p in people
                     if any(float(p.get(k, 0) or 0) > 0 for k in from_facts)
                 )
                 flat *= max(1, earners)
@@ -282,7 +284,8 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             if source.get("flat_per_earner"):
                 people = (case_facts or {}).get("__people__") or []
                 earners = sum(
-                    1 for p in people
+                    1
+                    for p in people
                     if any(float(p.get(k, 0) or 0) > 0 for k in from_facts)
                 )
                 flat *= earners
@@ -304,12 +307,10 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             # add-on beyond the first child (Colorado Works need standards).
             people = (case_facts or {}).get("__people__") or []
             adults = sum(
-                1 for p in people
-                if float(p.get(Concepts.PERSON_AGE, 0) or 0) >= 18
+                1 for p in people if float(p.get(Concepts.PERSON_AGE, 0) or 0) >= 18
             )
             children = sum(
-                1 for p in people
-                if float(p.get(Concepts.PERSON_AGE, 0) or 0) < 18
+                1 for p in people if float(p.get(Concepts.PERSON_AGE, 0) or 0) < 18
             )
             table = {int(k): float(v) for k, v in (source.get("table") or {}).items()}
             if not table:
@@ -317,8 +318,7 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             key = min(adults, max(table))
             per_child = float(source.get("per_child", 0))
             return round(
-                table.get(key, 0.0)
-                + per_child * max(0, children - 1),
+                table.get(key, 0.0) + per_child * max(0, children - 1),
                 2,
             )
 

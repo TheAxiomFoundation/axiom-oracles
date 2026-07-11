@@ -32,9 +32,10 @@ def test_matrix_parses_with_provenance_and_valid_statuses() -> None:
         assert entry["status"] in KNOWN_STATUSES
         if entry["status"] == "ok_real_config_workaround":
             # the workaround requires both names
-            assert entry["run_dataset"] and entry["run_dataset"] != entry[
-                "training_dataset"
-            ]
+            assert (
+                entry["run_dataset"]
+                and entry["run_dataset"] != entry["training_dataset"]
+            )
 
 
 def test_every_probed_country_is_currently_runnable() -> None:

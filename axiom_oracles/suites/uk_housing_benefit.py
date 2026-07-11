@@ -298,7 +298,9 @@ def _hb_case(
             "pension_age": pension_age,
             "axiom_inputs": axiom_inputs,
             "euromod_inputs": rows,
-            "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
+            "euromod_policy_switch_overrides": [
+                list(pair) for pair in _TAKEUP_OVERRIDES
+            ],
             # Bridge UKMOD's assessed Housing Benefit means (``ymn01_s``, "Means
             # HB") into the composed pipeline's applicable-income input so both
             # engines taper the identical assessed income (isolating the taper /
@@ -379,7 +381,9 @@ def _entities(
         )
     ]
     if couple:
-        partner_age = _AGE_PARTNER_PENSION if head_age >= _AGE_PENSION else _AGE_PARTNER_WORKING
+        partner_age = (
+            _AGE_PARTNER_PENSION if head_age >= _AGE_PENSION else _AGE_PARTNER_WORKING
+        )
         people.append(
             Entity(
                 entity_id="partner",

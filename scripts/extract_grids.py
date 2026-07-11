@@ -155,9 +155,7 @@ def main() -> int:
     GRID_ROOT.mkdir(parents=True, exist_ok=True)
     payloads = build_grids()
     if args.jurisdiction:
-        payloads = {
-            j: p for j, p in payloads.items() if j == args.jurisdiction
-        }
+        payloads = {j: p for j, p in payloads.items() if j == args.jurisdiction}
         if not payloads:
             print(f"No suites found for jurisdiction {args.jurisdiction!r}.")
             return 1

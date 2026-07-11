@@ -1,6 +1,5 @@
 import shutil
 from datetime import date
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -41,25 +40,38 @@ def test_set_input_value_updates_every_matching_legal_input():
     assert set(inputs.values()) == {4}
 
 
-def test_axiom_rules_env_prioritizes_active_rulespec_worktree(monkeypatch, tmp_path):
-    workspace = tmp_path / "workspace"
-    stale_repo = workspace / "rulespec-us"
-    active_repo = tmp_path / "worktrees" / "rulespec-us-medicaid-primary-categories"
+def test_axiom_engine_env_scrubs_ambient_roots(monkeypatch, tmp_path):
+    stale_repo = tmp_path / "stale" / "rulespec-us"
+    active_repo = tmp_path / "rulespec-us"
     program = active_repo / "us" / "statutes" / "42" / "1396a" / "a" / "10.yaml"
     stale_repo.mkdir(parents=True)
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\nrules: []\n", encoding="utf-8")
     monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(stale_repo))
 
-    env = snap_populace.axiom_rules_env(program, workspace)
+    env = snap_populace.axiom_engine_env()
 
-    roots = [
-        Path(root)
-        for root in env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep)
-    ]
-    assert roots[0] == active_repo.resolve()
-    assert stale_repo.resolve() in roots
-    assert roots.index(active_repo.resolve()) < roots.index(stale_repo.resolve())
+    assert "AXIOM_RULESPEC_REPO_ROOTS" not in env
+    assert "AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE" not in env
+    assert str(stale_repo) not in env.values()
+
+
+def test_test_template_override_rejects_symlink(tmp_path):
+    checkout = tmp_path / "rulespec-us"
+    program = checkout / "us-co/programs/snap/fy-2026.yaml"
+    template = checkout / "us-co/programs/snap/fy-2026.test.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text("format: rulespec/v1\nrules: []\n")
+    template.write_text("[]\n")
+    alias = template.with_name("template-alias.yaml")
+    alias.symlink_to(template)
+
+    with pytest.raises(ValueError, match="exact .yaml"):
+        snap_populace.resolve_test_template_path(
+            program,
+            alias,
+            rulespec_root=checkout,
+        )
 
 
 def test_set_input_value_can_skip_optional_unknown_inputs():

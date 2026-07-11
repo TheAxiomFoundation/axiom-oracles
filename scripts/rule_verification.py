@@ -47,17 +47,17 @@ Emits two files under ``dashboard/public/data/``:
 
 Usage::
 
-    python scripts/rule_verification.py                    # fetch + read origin/main
-    python scripts/rule_verification.py --no-fetch         # offline, read current HEAD
-    python scripts/rule_verification.py --ref HEAD         # read a specific ref
-    python scripts/rule_verification.py --rulespec ~/rulespec-us
+    python scripts/rule_verification.py \
+      --rulespec-root ~/TheAxiomFoundation/rulespec-us --ref HEAD
 """
+
 from __future__ import annotations
 
 import argparse
 import hashlib
 import importlib.util
 import json
+import re
 import subprocess
 import sys
 from collections import defaultdict
@@ -71,6 +71,15 @@ except ImportError:  # pragma: no cover - matches sibling scripts' guard
         "This script requires PyYAML. Install with: uv pip install pyyaml\n"
     )
     raise SystemExit(1)
+
+_PACKAGE_ROOT = Path(__file__).resolve().parent.parent
+if str(_PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PACKAGE_ROOT))
+
+from axiom_oracles.bridges.repo_routing import RULESPEC_ATOMIC_ROOTS  # noqa: E402
+from axiom_oracles.bridges.rulespec_paths import (  # noqa: E402
+    require_rulespec_checkout,
+)
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parent
@@ -161,9 +170,7 @@ def batch_blobs(repo: Path, ref: str, paths: list[str]) -> dict[str, bytes]:
 
 
 # ── manifest index ────────────────────────────────────────────────────────
-def build_manifest_index(
-    repo: Path, ref: str, tree: list[str]
-) -> dict[str, dict]:
+def build_manifest_index(repo: Path, ref: str, tree: list[str]) -> dict[str, dict]:
     """Map every rule-file path → its signed-manifest record (or absence).
 
     A manifest lives at ``<tree>/.axiom/encoding-manifests/<rel>.json`` and
@@ -177,9 +184,7 @@ def build_manifest_index(
     file (``.test.yaml`` entries are ignored — tests are not rules).
     """
     manifest_paths = [
-        p
-        for p in tree
-        if p.endswith(".json") and ".axiom/encoding-manifests/" in p
+        p for p in tree if p.endswith(".json") and ".axiom/encoding-manifests/" in p
     ]
     blobs = batch_blobs(repo, ref, manifest_paths)
     index: dict[str, dict] = {}
@@ -271,20 +276,15 @@ def main() -> int:
         description="Generate per-rule verification status data for the dashboard."
     )
     parser.add_argument(
-        "--rulespec",
+        "--rulespec-root",
         type=Path,
-        default=Path.home() / "rulespec-us",
+        required=True,
         help="Path to a rulespec-us monorepo checkout (federal us/ + state us-xx/).",
     )
     parser.add_argument(
         "--ref",
-        default=None,
-        help="Git ref to read (default: origin/main, or HEAD with --no-fetch).",
-    )
-    parser.add_argument(
-        "--no-fetch",
-        action="store_true",
-        help="Skip git fetch; read the current checkout's HEAD instead of origin/main.",
+        default="HEAD",
+        help="Exact local Git ref to read (default: HEAD).",
     )
     parser.add_argument(
         "--coverage",
@@ -294,34 +294,35 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    repo = args.rulespec.expanduser().resolve()
-    if not (repo / ".git").exists() and not (repo.parent / ".git").exists():
-        # Allow a bare working dir too, but a missing checkout is the common
-        # skip-in-CI case: exit cleanly so the workflow guard can no-op.
-        if not repo.exists():
-            sys.stderr.write(
-                f"rulespec checkout not found at {repo}; nothing to generate.\n"
-            )
-            return 3
-
-    if not args.no_fetch:
-        subprocess.run(
-            ["git", "-C", str(repo), "fetch", "-q", "origin", "main"],
-            capture_output=True,
-            check=False,
-        )
-    ref = args.ref or ("HEAD" if args.no_fetch else "origin/main")
+    try:
+        repo = require_rulespec_checkout(args.rulespec_root, country="us")
+    except ValueError as exc:
+        parser.error(str(exc))
+    ref = args.ref
     # Resolve to a concrete commit so the output records exactly what was read.
     commit = git(repo, "rev-parse", ref).strip()
 
     tree = list_tree(repo, ref)
-    rule_files = [
-        p
-        for p in tree
-        if p.endswith(".yaml")
-        and not p.endswith(".test.yaml")
-        and not SKIP_DIRS.search(p)
-    ]
+    rule_files = []
+    for path in tree:
+        parts = Path(path).parts
+        if (
+            len(parts) >= 3
+            and re.fullmatch(r"us(?:-[a-z0-9]+)*", parts[0])
+            and parts[1] in RULESPEC_ATOMIC_ROOTS
+            and path.endswith(".yml")
+        ):
+            raise ValueError(f"legacy .yml RuleSpec module is unsupported: {path}")
+        if (
+            len(parts) < 3
+            or re.fullmatch(r"us(?:-[a-z0-9]+)*", parts[0]) is None
+            or parts[1] not in RULESPEC_ATOMIC_ROOTS
+            or not path.endswith(".yaml")
+            or path.endswith(".test.yaml")
+            or SKIP_DIRS.search(path)
+        ):
+            continue
+        rule_files.append(path)
 
     manifest_index = build_manifest_index(repo, ref, tree)
     coverage = json.loads(args.coverage.read_text())
@@ -581,8 +582,7 @@ def main() -> int:
     print(f"rulespec-us @ {ref} ({commit[:12]})")
     print(f"  {total_rules} rules across {len(rule_files)} files")
     print(
-        f"  grounded:        {grounded_rules:6} "
-        f"({summary['rules']['grounded_pct']}%)"
+        f"  grounded:        {grounded_rules:6} ({summary['rules']['grounded_pct']}%)"
     )
     print(
         f"  manifest-backed: {manifest_rules:6} "

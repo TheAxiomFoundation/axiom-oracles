@@ -155,8 +155,7 @@ def main() -> int:
             return 1
         n = sum(len(s) for s in document["series"].values())
         print(
-            f"conformance burn-down OK: {len(document['series'])} series, "
-            f"{n} point(s)"
+            f"conformance burn-down OK: {len(document['series'])} series, {n} point(s)"
         )
         return 0
 

@@ -41,10 +41,11 @@ run_comparison.py reuses it), exactly like the other UK case grids.
 from __future__ import annotations
 
 import json
-import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+
+from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -53,10 +54,6 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
-RULESPEC_UK = Path(
-    os.environ.get("RULESPEC_UK_CHECKOUT")
-    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
-)
 
 AA_PROGRAM = "uk/policies/tax_free_childcare_composed_top_up_pipeline.yaml"
 TFC_BASE = "uk:policies/tax_free_childcare_composed_top_up_pipeline"
@@ -118,9 +115,7 @@ def _pe_situation(case: TFCCase) -> dict:
             },
         },
         "benunits": {"bu": {"members": ["parent1", "parent2", "child"]}},
-        "households": {
-            "hh": {"members": ["parent1", "parent2", "child"]}
-        },
+        "households": {"hh": {"members": ["parent1", "parent2", "child"]}},
     }
 
 
@@ -137,7 +132,12 @@ def _policyengine_awards(cases: list[TFCCase]) -> dict[str, float]:
     return awards
 
 
-def _axiom_awards(cases: list[TFCCase]) -> dict[str, float]:
+def _axiom_awards(
+    cases: list[TFCCase],
+    *,
+    rulespec_root: Path,
+    axiom_binary: Path,
+) -> dict[str, float]:
     """Rulespec Tax-Free Childcare top-up through the axiom rules engine."""
 
     import sys
@@ -146,8 +146,7 @@ def _axiom_awards(cases: list[TFCCase]) -> dict[str, float]:
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = RULESPEC_UK / AA_PROGRAM
-    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+    program = rulespec_root / AA_PROGRAM
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -168,10 +167,10 @@ def _axiom_awards(cases: list[TFCCase]) -> dict[str, float]:
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=binary,
+        binary_path=axiom_binary,
         default_entity="Person",
         default_entity_id="person",
-        rulespec_repo_roots=(RULESPEC_UK,),
+        rulespec_root=rulespec_root,
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [TFC_ENGINE_OUTPUT])
@@ -179,8 +178,7 @@ def _axiom_awards(cases: list[TFCCase]) -> dict[str, float]:
     for result in results:
         if result.errors:
             raise RuntimeError(
-                f"axiom rules engine failed for {result.household_id}: "
-                f"{result.errors}"
+                f"axiom rules engine failed for {result.household_id}: {result.errors}"
             )
         value = result.values.get(TFC_ENGINE_OUTPUT)
         if value is None:
@@ -293,8 +291,7 @@ def build_report(
         "provenance": {
             "generated": datetime.now(timezone.utc).date().isoformat(),
             "generator": "scripts/generate_uk_tax_free_childcare_pe.py",
-            "axiom_engine": "axiom rules engine over "
-            f"rulespec-uk {AA_PROGRAM}",
+            "axiom_engine": f"axiom rules engine over rulespec-uk {AA_PROGRAM}",
             "policyengine_uk": POLICYENGINE_UK_VERSION,
             "commensurability": (
                 "PolicyEngine-UK Tax-Free Childcare (gov.hmrc.tax_free_childcare: "
@@ -312,10 +309,15 @@ def build_report(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
     cases = _grid()
     pe_awards = _policyengine_awards(cases)
-    axiom = _axiom_awards(cases)
+    axiom = _axiom_awards(
+        cases,
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     report = build_report(cases, pe_awards, axiom)
 
     REPORTS.mkdir(exist_ok=True)

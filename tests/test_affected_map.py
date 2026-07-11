@@ -6,6 +6,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 SCRIPTS = Path(__file__).parents[1] / "scripts"
 
 
@@ -23,20 +25,21 @@ def _load(name: str):
 
 def test_repo_from_path_and_prefix():
     gam = _load("generate_affected_map.py")
-    assert gam._repo_from_path("$HOME/roots/rulespec-us-co") == (
-        "TheAxiomFoundation/rulespec-us-co"
+    assert gam._repo_from_path("$HOME/roots/rulespec-us") == (
+        "TheAxiomFoundation/rulespec-us"
     )
-    assert gam._repo_from_prefix("us-co") == "TheAxiomFoundation/rulespec-us-co"
+    assert gam._repo_from_prefix("us-co") == "TheAxiomFoundation/rulespec-us"
     assert gam._repo_from_prefix("uk") == "TheAxiomFoundation/rulespec-uk"
-    # NEGATIVE: a non-rulespec directory contributes no repo.
-    assert gam._repo_from_path("$HOME/some/other/dir") is None
+    with pytest.raises(ValueError, match="exact canonical"):
+        gam._repo_from_path("$HOME/some/other/dir")
 
 
-def test_dir_alias_collapses_official_uk():
+def test_flat_and_alias_roots_are_rejected():
     gam = _load("generate_affected_map.py")
-    assert gam._repo_from_path("$HOME/rulespec-uk-official") == (
-        "TheAxiomFoundation/rulespec-uk"
-    )
+    with pytest.raises(ValueError, match="exact canonical"):
+        gam._repo_from_path("$HOME/roots/rulespec-us-co")
+    with pytest.raises(ValueError, match="exact canonical"):
+        gam._repo_from_path("$HOME/rulespec-uk-official")
 
 
 def test_generator_and_provenance_share_one_slug_function():
@@ -48,8 +51,10 @@ def test_generator_and_provenance_share_one_slug_function():
     from axiom_oracles.provenance import canonical_rulespec_slug
 
     assert gam._slug is canonical_rulespec_slug
-    for name in ("rulespec-us", "rulespec-us-co", "rulespec-uk-official"):
+    for name in ("rulespec-us", "rulespec-uk", "rulespec-be"):
         assert gam._slug(name) == canonical_rulespec_slug(name)
+    with pytest.raises(ValueError, match="canonical"):
+        gam._slug("rulespec-us-co")
 
 
 def test_concept_prefix_without_colon_yields_no_repo():
@@ -61,7 +66,11 @@ def test_concept_prefix_without_colon_yields_no_repo():
             "name": "x",
             "runner": {
                 "type": "axiom-oracles-compare",
-                "parameters": {"concepts": ["co_tanf_benefit"]},
+                "parameters": {
+                    "left": "taxcalc",
+                    "right": "policyengine",
+                    "concepts": ["co_tanf_benefit"],
+                },
             },
         }
     )
@@ -75,13 +84,16 @@ def test_concept_prefix_maps_to_repo():
             "name": "co-tanf-ecps",
             "runner": {
                 "type": "axiom-oracles-compare",
+                "rulespec_root": "$HOME/roots/rulespec-us",
                 "parameters": {
+                    "left": "axiom",
+                    "right": "policyengine",
                     "concepts": ["us-co:policies/cdhs/colorado-works#co_tanf_benefit"],
                 },
             },
         }
     )
-    assert "TheAxiomFoundation/rulespec-us-co" in repos
+    assert repos == {"TheAxiomFoundation/rulespec-us"}
 
 
 def test_snap_encoder_lane_adds_state_and_federal():
@@ -90,15 +102,36 @@ def test_snap_encoder_lane_adds_state_and_federal():
         {
             "name": "ca-snap-ecps",
             "runner": {
-                "type": "axiom-encode-snap-ecps-compare",
+                "type": "axiom-encode-snap-populace-compare",
+                "rulespec_root": "$HOME/roots/rulespec-us",
                 "parameters": {"jurisdiction": "us-ca"},
             },
         }
     )
-    assert repos == {
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ca",
-    }
+    assert repos == {"TheAxiomFoundation/rulespec-us"}
+
+
+@pytest.mark.parametrize(
+    "legacy_key",
+    ["rulespec_roots", "rulespec_remote", "axiom_rulespec_repo_roots"],
+)
+def test_registry_rejects_legacy_routing_keys(legacy_key):
+    gam = _load("generate_affected_map.py")
+    with pytest.raises(ValueError, match="legacy RuleSpec routing"):
+        gam.repos_for_registry_config(
+            {
+                "name": "legacy",
+                "runner": {
+                    "type": "axiom-oracles-compare",
+                    "rulespec_root": "$HOME/roots/rulespec-us",
+                    "parameters": {
+                        "left": "axiom",
+                        "right": "policyengine",
+                        legacy_key: "legacy",
+                    },
+                },
+            }
+        )
 
 
 def test_build_map_is_deterministic_and_check_passes():
@@ -137,7 +170,7 @@ def test_parameter_suite_entries_use_file_prefix():
             ]
         }
     )
-    assert entries[0]["repos"] == ["TheAxiomFoundation/rulespec-us-ga"]
+    assert entries[0]["repos"] == ["TheAxiomFoundation/rulespec-us"]
     assert entries[0]["report"] == "axiom-policyengine-ga-health-thresholds.json"
 
 

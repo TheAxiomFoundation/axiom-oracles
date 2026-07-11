@@ -126,15 +126,11 @@ def test_arithmetic_that_does_not_reconcile_is_invalid() -> None:
 def test_arithmetic_rejects_non_arithmetic_expressions() -> None:
     with pytest.raises(ValueError, match="unsupported syntax"):
         evaluate_arithmetic("__import__('os').getcwd()")
-    assert evaluate_arithmetic("3 * (820.68 + 373.08)") == pytest.approx(
-        3581.28
-    )
+    assert evaluate_arithmetic("3 * (820.68 + 373.08)") == pytest.approx(3581.28)
 
 
 def test_unknown_disposition_kind_is_invalid() -> None:
-    errors = validate_dispositions(
-        _document([_entry(disposition="wontfix")])
-    )
+    errors = validate_dispositions(_document([_entry(disposition="wontfix")]))
     assert any("disposition must be one of" in error for error in errors)
 
 
@@ -162,9 +158,7 @@ def test_missing_source_path_is_invalid(tmp_path: Path) -> None:
             "sources": ["docs/does-not-exist.md"],
         }
     )
-    errors = validate_dispositions(
-        _document([entry]), repo_root=tmp_path
-    )
+    errors = validate_dispositions(_document([entry]), repo_root=tmp_path)
     assert any("missing file" in error for error in errors)
 
 
@@ -305,9 +299,7 @@ def test_seeded_belgium_lane_rollup_covers_every_mismatch() -> None:
         suite = report.get("suite")
         dispositions_path = DISPOSITIONS_DIR / f"{suite}.yaml"
         if dispositions_path.exists():
-            dispositions = load_dispositions(
-                dispositions_path, repo_root=REPO_ROOT
-            )
+            dispositions = load_dispositions(dispositions_path, repo_root=REPO_ROOT)
             report = apply_dispositions(report, dispositions)
         reports.append(report)
     rollup = dispositioned_rollup(reports)

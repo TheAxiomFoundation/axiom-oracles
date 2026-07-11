@@ -261,9 +261,7 @@ def _patch_policy_switch(
     policy_start = system_xml.rfind("<Policy>", 0, name_at)
     policy_end = system_xml.find("</Policy>", name_at)
     if policy_start < 0 or policy_end < 0:
-        raise ValueError(
-            f"EUROMOD policy {policy_name!r} has no complete XML block."
-        )
+        raise ValueError(f"EUROMOD policy {policy_name!r} has no complete XML block.")
     policy_end += len("</Policy>")
 
     policy_xml = system_xml[policy_start:policy_end]

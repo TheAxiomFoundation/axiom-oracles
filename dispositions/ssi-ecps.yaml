@@ -8,7 +8,7 @@ updated: "2026-07-08"
 # rulespec-us correctly encodes SSI eligibility (1382), income (1382a) and
 # resources (1382b), but the ssi-ecps bridge feeds Axiom generic is_disabled/
 # is_blind flags (not PE's SSI-specific disability determination) and runs the
-# documented v1 individual slice (programs/us/ssi/fy-2026.yaml lists
+# documented v1 individual slice (rulespec-us/us/programs/ssi/fy-2026.yaml lists
 # ssi_annual_benefit under acknowledged_incomplete; couple/ineligible-spouse
 # deeming is an explicit encoder-backlog divergence class). So the divergence is
 # the comparison's projection + v1-slice scope, not Axiom's statutory encoding —

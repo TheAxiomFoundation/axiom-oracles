@@ -180,7 +180,8 @@ def euromod_input_rows(
                 "yem": employment / factor,
                 "dgn": 1 if is_head else 0,
                 "lhw": 40 if employment > 0 else 0,
-                "dms": _DMS_MARRIED if (is_head or is_spouse) and spouse is not None
+                "dms": _DMS_MARRIED
+                if (is_head or is_spouse) and spouse is not None
                 else _DMS_SINGLE,
                 "loc": 5,
                 "yse": 0.0,

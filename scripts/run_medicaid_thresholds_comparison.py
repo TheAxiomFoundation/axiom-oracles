@@ -6,30 +6,31 @@ with per-category FPL limits plus ``*_effective_fpl_limit`` deriveds that
 add the shared MAGI 5% disregard. PolicyEngine carries the same table as
 ``gov.hhs.medicaid.eligibility.categories.<category>.income_limit.<STATE>``.
 
-This runner discovers the state files from upstream ``origin/main`` (so a
-newly encoded state joins the comparison with no changes here), evaluates
-each file together with the shared federal disregard module, and compares
-every effective limit both sides model. Colorado and Georgia keep their
-dedicated suites and are skipped to avoid double-counting.
+This runner discovers state files under one explicitly supplied canonical
+rulespec-us checkout, executes each through Axiom (including its shared federal
+disregard import), and compares every effective limit both sides model.
 
 Output: ``axiom.comparison_report.v1`` JSON at
 ``dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json``.
 
 Usage:
-    uv run python scripts/run_medicaid_thresholds_comparison.py
-    RULESPEC_US_ROOT=~/rulespec-us uv run python scripts/run_medicaid_thresholds_comparison.py
+    uv run python scripts/run_medicaid_thresholds_comparison.py \
+      --rulespec-root ~/TheAxiomFoundation/rulespec-us \
+      --axiom-binary ~/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
 """
 
 from __future__ import annotations
 
 import json
-import math
-import os
 import re
-import subprocess
 from pathlib import Path
 
 import yaml
+
+from canonical_rulespec_runtime import parse_canonical_runtime_args
+
+from axiom_oracles.bridges.parameter_runtime import evaluate_rulespec_outputs
+from axiom_oracles.bridges.repo_routing import canonical_rulespec_module_path
 
 PERIOD = "2026-01-01"
 SUITE = "medicaid-thresholds-states"
@@ -41,11 +42,6 @@ OUTPUT_PATH = (
     / "data"
     / "axiom-policyengine-medicaid-thresholds-states.json"
 )
-RULESPEC_ROOT = Path(
-    os.environ.get("RULESPEC_US_ROOT", Path.home() / "rulespec-us")
-).expanduser()
-
-SHARED_MODULE = "us/policies/cms/medicaid-chip-bhp-eligibility-levels.yaml"
 STATE_FILE_RE = re.compile(
     r"^us-(?P<code>[a-z]{2})/policies/cms/(?P<slug>[a-z-]+)-medicaid-chip-bhp-eligibility-levels\.yaml$"
 )
@@ -64,91 +60,30 @@ SUFFIX_TO_CATEGORY = {
     "expansion_adults_medicaid_effective_fpl_limit": "adult",
 }
 
-_NAME_RE = re.compile(r"[a-z_][a-z0-9_]*")
-_ALLOWED_FORMULA = re.compile(r"^[a-z0-9_+\-*/(),.\s]+$")
 
+def _state_files(rulespec_root: Path) -> list[tuple[str, str, Path]]:
+    """Return canonical state CMS modules from the explicit checkout."""
 
-def _git_show(path: str) -> str | None:
-    proc = subprocess.run(
-        ["git", "-C", str(RULESPEC_ROOT), "show", f"origin/main:{path}"],
-        capture_output=True,
-        text=True,
-    )
-    return proc.stdout if proc.returncode == 0 else None
-
-
-def _state_files() -> list[tuple[str, str, str]]:
-    """(state_code, state_slug, repo_path) for every encoded CMS file."""
-    proc = subprocess.run(
-        ["git", "-C", str(RULESPEC_ROOT), "ls-tree", "-r", "--name-only", "origin/main"],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
     out = []
-    for line in proc.stdout.splitlines():
-        m = STATE_FILE_RE.match(line)
-        if m:
-            out.append((m.group("code"), m.group("slug"), line))
+    pattern = "us-??/policies/cms/*-medicaid-chip-bhp-eligibility-levels.*"
+    for path in rulespec_root.glob(pattern):
+        if path.is_symlink():
+            raise ValueError(f"symlinked RuleSpec module is unsupported: {path}")
+        if path.is_file() and path.suffix == ".yml":
+            raise ValueError(f"legacy .yml RuleSpec module is unsupported: {path}")
+        if not path.is_file() or path.suffix != ".yaml":
+            continue
+        relative = path.relative_to(rulespec_root).as_posix()
+        match = STATE_FILE_RE.fullmatch(relative)
+        if match:
+            content_root = rulespec_root / f"us-{match.group('code')}"
+            if canonical_rulespec_module_path(path, content_root=content_root) is None:
+                raise ValueError(f"noncanonical RuleSpec module path: {path}")
+            out.append((match.group("code"), match.group("slug"), path))
     return sorted(out)
 
 
-def evaluate_rules(texts: list[str]) -> dict[str, float]:
-    """Evaluate parameter AND scalar derived rules across merged documents.
-
-    Same restricted evaluator as the SSA runner, widened to scalar
-    ``kind: derived`` rules (the effective limits) — they are plain
-    arithmetic over parameters, with no entity or period machinery.
-    """
-    formulas: dict[str, str] = {}
-    values: dict[str, float] = {}
-    for text in texts:
-        doc = yaml.safe_load(text)
-        for rule in doc.get("rules", []) or []:
-            versions = rule.get("versions") or []
-            if rule.get("kind") not in {"parameter", "derived"} or not versions:
-                continue
-            if rule.get("entity"):
-                continue  # entity-scoped deriveds need the engine, not this
-            table = versions[0].get("values")
-            if isinstance(table, dict):
-                continue
-            formula = str(versions[0].get("formula", "")).strip()
-            if _ALLOWED_FORMULA.match(formula):
-                formulas[rule["name"]] = formula
-
-    namespace = {
-        "floor": math.floor,
-        "max": max,
-        "min": min,
-        "true": True,
-        "false": False,
-    }
-    for _ in range(len(formulas) + 1):
-        progressed = False
-        for name, formula in formulas.items():
-            if name in values:
-                continue
-            deps = [
-                token
-                for token in _NAME_RE.findall(formula)
-                if token in formulas and token != name
-            ]
-            if any(dep not in values for dep in deps):
-                continue
-            try:
-                values[name] = float(
-                    eval(formula, {"__builtins__": {}}, {**namespace, **values})  # noqa: S307
-                )
-            except Exception:
-                continue
-            progressed = True
-        if not progressed:
-            break
-    return values
-
-
-def build_report() -> dict:
+def build_report(*, rulespec_root: Path, axiom_binary: Path) -> dict:
     from policyengine_us import CountryTaxBenefitSystem
 
     parameters = CountryTaxBenefitSystem().parameters
@@ -160,10 +95,6 @@ def build_report() -> dict:
         .children["categories"]
     )
 
-    shared_text = _git_show(SHARED_MODULE)
-    if shared_text is None:
-        raise SystemExit(f"cannot read {SHARED_MODULE} from {RULESPEC_ROOT} origin/main")
-
     concepts = []
     aggregates = []
     cases = []
@@ -171,15 +102,34 @@ def build_report() -> dict:
     states_compared = set()
     skipped = []
 
-    for code, slug, path in _state_files():
+    for code, slug, path in _state_files(rulespec_root):
         if code in SKIP_STATES:
             continue
-        state_text = _git_show(path)
-        if state_text is None:
-            skipped.append((code, "unreadable"))
-            continue
-        values = evaluate_rules([shared_text, state_text])
         prefix = slug.replace("-", "_")
+        rule_names = {
+            rule.get("name")
+            for rule in (yaml.safe_load(path.read_text()).get("rules") or [])
+        }
+        rules = [
+            f"{prefix}_{suffix}"
+            for suffix in SUFFIX_TO_CATEGORY
+            if f"{prefix}_{suffix}" in rule_names
+        ]
+        module_ref = (
+            f"us-{code}:policies/cms/{slug}-medicaid-chip-bhp-eligibility-levels"
+        )
+        output_ids = [f"{module_ref}#{rule}" for rule in rules]
+        executed = evaluate_rulespec_outputs(
+            path,
+            output_ids,
+            rulespec_root=rulespec_root,
+            axiom_binary=axiom_binary,
+            period="2026",
+        )
+        values = {
+            rule: float(executed[output_id])
+            for rule, output_id in zip(rules, output_ids, strict=True)
+        }
 
         for suffix, category in SUFFIX_TO_CATEGORY.items():
             rule = f"{prefix}_{suffix}"
@@ -257,7 +207,7 @@ def build_report() -> dict:
                     "match_rate": 100.0 if matched else 0.0,
                     "metadata": {
                         "axiom_rule": rule,
-                        "axiom_source": f"rulespec-us/{path}",
+                        "axiom_source": path.relative_to(rulespec_root).as_posix(),
                         "dataset": "encoded_parameter_oracle",
                         "policyengine_parameter": (
                             "gov.hhs.medicaid.eligibility.categories."
@@ -289,7 +239,7 @@ def build_report() -> dict:
         "schema_version": "axiom.comparison_report.v1",
         "scope": {
             "period": PERIOD,
-            "source": "rulespec-us us-*/policies/cms (origin/main)",
+            "source": "canonical rulespec-us us-*/policies/cms",
             "skipped": [f"{a}:{b}" for a, b in skipped],
         },
         "suite": SUITE,
@@ -321,8 +271,12 @@ def build_report() -> dict:
     }
 
 
-def main() -> None:
-    report = build_report()
+def main(argv: list[str] | None = None) -> None:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="us")
+    report = build_report(
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     OUTPUT_PATH.write_text(json.dumps(report, indent=1, sort_keys=True) + "\n")
     s = report["summary"]
     states = report["locales"]

@@ -1,7 +1,7 @@
 # Parameter-oracle suites: encoded rulespec parameter values compared against
-# PolicyEngine parameters at a fixed instant. The rulespec side is read from
-# upstream rulespec-us origin/main (local checkouts drift), evaluated from the
-# encoded formulas by scripts/run_parameter_comparisons.py.
+# PolicyEngine parameters at a fixed instant. The rulespec side is compiled and
+# executed from an explicitly supplied canonical rulespec-us checkout by
+# scripts/run_parameter_comparisons.py.
 #
 # NOTE: the parameter runner evaluates PolicyEngine from the repo venv,
 # while household suites run the pinned PE 4.11 stack — a PE upgrade can
@@ -144,6 +144,7 @@ suites:
   - suite: pell-parameters
     category: education
     locales: [US]
+    period: "2026-07-01"
     comparisons:
       - file: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml
         rule: maximum_pell_grant_award

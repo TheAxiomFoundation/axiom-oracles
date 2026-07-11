@@ -1,114 +1,188 @@
-"""RuleSpec checkout-path and item-id helpers for the oracle bridge layer.
-
-These helpers were extracted verbatim from
-``axiom_encode.harness.validator_pipeline`` (TheAxiomFoundation/axiom-encode @
-a314fc624967b4e990beb7d9ffc429dae6e26642) so that :mod:`.ecps_tax` can resolve
-canonical ``rulespec-*`` compile paths and public item-id aliases without
-depending on the encoder harness. They keep their original (underscored) names
-because :mod:`.ecps_tax` is a verbatim copy that imports them by those names;
-the encoder's own ``validator_pipeline`` retains its originals for its other
-call sites.
-"""
+"""Exact canonical RuleSpec paths used by the oracle bridge layer."""
 
 from __future__ import annotations
 
-import contextlib
-import hashlib
-import shutil
-import tempfile
+import os
+import re
 from pathlib import Path
 from typing import Any
 
-from .jurisdiction import jurisdiction_prefix
-from .repo_routing import canonical_rulespec_repo_name, jurisdiction_subdir_names
+from .repo_routing import (
+    RULESPEC_ATOMIC_ROOTS,
+    canonical_program_spec_path,
+    canonical_rulespec_module_path,
+    canonical_rulespec_root_identity,
+    find_policy_repo_root,
+    is_policy_repo_root,
+)
 
 
-def _rulespec_repo_alias_parent(policy_repo_path: Path) -> Path | None:
-    """Expose a temp checkout under its canonical `rulespec-*` repo name."""
-    canonical_name = canonical_rulespec_repo_name(policy_repo_path)
-    return _rulespec_repo_alias_parent_for_root(policy_repo_path, canonical_name)
+def require_rulespec_checkout(path: Path, *, country: str | None = None) -> Path:
+    """Return one exact canonical country checkout or raise ``ValueError``."""
+
+    raw_checkout = Path(path)
+    if not is_policy_repo_root(raw_checkout):
+        raise ValueError(
+            "RuleSpec root must be an exact canonical rulespec-<country> checkout"
+        )
+    checkout = raw_checkout.resolve()
+    if country is not None and checkout.name != f"rulespec-{country}":
+        raise ValueError(
+            f"RuleSpec root for {country!r} must be named rulespec-{country}"
+        )
+    return checkout
 
 
-def _monorepo_rulespec_repo_alias(
+def resolve_rulespec_program(
+    checkout: Path,
+    *,
+    jurisdiction: str,
+    relative_path: Path,
+    override: Path | None = None,
+) -> Path:
+    """Resolve an exact program under a canonical jurisdiction content root."""
+
+    checkout = require_rulespec_checkout(
+        checkout,
+        country=jurisdiction.split("-", 1)[0],
+    )
+    content_root = checkout / jurisdiction
+    if canonical_rulespec_root_identity(content_root) is None:
+        raise ValueError(f"RuleSpec jurisdiction root is not canonical: {content_root}")
+    candidate = Path(override) if override is not None else content_root / relative_path
+    return require_rulespec_module(candidate, checkout)
+
+
+def resolve_rulespec_module_ref(checkout: Path, module_ref: str) -> Path:
+    """Resolve one extensionless absolute module reference under ``checkout``."""
+
+    checkout = require_rulespec_checkout(checkout)
+    if "#" in module_ref or module_ref.count(":") != 1:
+        raise ValueError(f"invalid absolute RuleSpec module reference: {module_ref!r}")
+    jurisdiction, relative = module_ref.split(":", 1)
+    country = checkout.name.removeprefix("rulespec-")
+    relative_path = Path(relative.strip("/"))
+    if (
+        re.fullmatch(rf"{re.escape(country)}(?:-[a-z0-9]+)*", jurisdiction) is None
+        or not relative.strip("/")
+        or relative_path.is_absolute()
+        or any(part in {"", ".", ".."} for part in relative_path.parts)
+        or relative_path.parts[0] not in RULESPEC_ATOMIC_ROOTS
+        or relative_path.suffix in {".yaml", ".yml"}
+    ):
+        raise ValueError(f"invalid canonical RuleSpec module reference: {module_ref!r}")
+    return resolve_rulespec_program(
+        checkout,
+        jurisdiction=jurisdiction,
+        relative_path=Path(f"{relative_path}.yaml"),
+    )
+
+
+def require_axiom_binary(path: Path) -> Path:
+    """Return an exact executable regular file with no symlink components."""
+
+    raw = Path(os.path.abspath(Path(path).expanduser()))
+    cursor = Path(raw.anchor)
+    for part in raw.parts[1:]:
+        cursor /= part
+        if cursor.is_symlink():
+            raise ValueError(f"axiom-rules-engine binary path is symlinked: {cursor}")
+    binary = raw.resolve()
+    if not binary.is_file() or not os.access(binary, os.X_OK):
+        raise ValueError(f"axiom-rules-engine binary is not executable: {binary}")
+    return binary
+
+
+def require_axiom_compiled_artifact(path: Path) -> Path:
+    """Return an exact regular compiled artifact with no symlink components."""
+
+    raw = Path(os.path.abspath(Path(path).expanduser()))
+    cursor = Path(raw.anchor)
+    for part in raw.parts[1:]:
+        cursor /= part
+        if cursor.is_symlink():
+            raise ValueError(f"Axiom compiled artifact path is symlinked: {cursor}")
+    artifact = raw.resolve()
+    if not artifact.is_file():
+        raise ValueError(f"Axiom compiled artifact is not a regular file: {artifact}")
+    return artifact
+
+
+def rulespec_engine_env() -> dict[str, str]:
+    """Build an engine environment with legacy ambient roots removed."""
+
+    env = os.environ.copy()
+    env.pop("AXIOM_RULESPEC_REPO_ROOTS", None)
+    env.pop("AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE", None)
+    return env
+
+
+def rulespec_root_args(checkout: Path) -> list[str]:
+    """Render the engine's required explicit country-checkout argument."""
+
+    return ["--rulespec-root", str(require_rulespec_checkout(checkout))]
+
+
+def _authorized_rulespec_content_root(
+    rules_file: Path,
     policy_repo_path: Path,
-) -> tuple[Path, str] | None:
-    """Expose a country monorepo root when validating one jurisdiction subdir."""
-    policy_root = Path(policy_repo_path).resolve()
-    monorepo_root = policy_root.parent
-    if not monorepo_root.name.startswith("rulespec-"):
-        return None
-    if policy_root.name not in jurisdiction_subdir_names(monorepo_root):
-        return None
-    canonical_name = canonical_rulespec_repo_name(monorepo_root)
-    alias_parent = _rulespec_repo_alias_parent_for_root(monorepo_root, canonical_name)
-    if alias_parent is None or canonical_name is None:
-        return None
-    return alias_parent, canonical_name
-
-
-def _is_canonical_monorepo_content_root(policy_repo_path: Path) -> bool:
-    """Return true for a country content root inside its canonical checkout."""
-    policy_root = Path(policy_repo_path).resolve()
-    monorepo_root = policy_root.parent
-    if not monorepo_root.name.startswith("rulespec-"):
-        return False
-    if policy_root.name not in jurisdiction_subdir_names(monorepo_root):
-        return False
-    return canonical_rulespec_repo_name(monorepo_root) == monorepo_root.name
-
-
-def _rulespec_repo_alias_parent_for_root(
-    rulespec_root: Path,
-    canonical_name: str | None,
 ) -> Path | None:
-    """Expose a checkout root under a canonical `rulespec-*` repo name."""
-    if not canonical_name or Path(rulespec_root).name == canonical_name:
+    """Return the file's content root when explicitly authorized by the caller."""
+
+    content_root = find_policy_repo_root(rules_file)
+    if content_root is None:
         return None
-
-    resolved_repo = Path(rulespec_root).resolve()
-    digest = hashlib.sha256(str(resolved_repo).encode()).hexdigest()[:16]
-    alias_parent = Path(tempfile.gettempdir()) / "axiom-rulespec-repo-aliases" / digest
-    alias_parent.mkdir(parents=True, exist_ok=True)
-    alias = alias_parent / canonical_name
-    if alias.exists() or alias.is_symlink():
-        with contextlib.suppress(OSError, RuntimeError):
-            if alias.resolve() == resolved_repo:
-                return alias_parent
-        if alias.is_symlink() or alias.is_file():
-            alias.unlink()
-        else:
-            shutil.rmtree(alias)
-    alias.symlink_to(resolved_repo, target_is_directory=True)
-    return alias_parent
+    raw_authorized = Path(policy_repo_path)
+    authorized = raw_authorized.resolve()
+    if canonical_rulespec_root_identity(raw_authorized) is not None:
+        return content_root if content_root == authorized else None
+    if is_policy_repo_root(raw_authorized):
+        return content_root if content_root.parent == authorized else None
+    return None
 
 
-def _canonical_rulespec_compile_path(
+def require_rulespec_module(
     rules_file: Path,
     policy_repo_path: Path,
 ) -> Path:
-    """Return a compile path under the canonical repo alias when needed."""
-    monorepo_alias = _monorepo_rulespec_repo_alias(policy_repo_path)
-    if monorepo_alias is not None:
-        monorepo_alias_parent, monorepo_canonical_name = monorepo_alias
-        try:
-            relative = rules_file.resolve().relative_to(
-                Path(policy_repo_path).resolve().parent
-            )
-        except ValueError:
-            return rules_file
-        return monorepo_alias_parent / monorepo_canonical_name / relative
-    if _is_canonical_monorepo_content_root(policy_repo_path):
-        return rules_file
+    """Return one exact canonical ``.yaml`` compile path.
 
-    alias_parent = _rulespec_repo_alias_parent(policy_repo_path)
-    canonical_name = canonical_rulespec_repo_name(policy_repo_path)
-    if alias_parent is None or canonical_name is None:
-        return rules_file
-    try:
-        relative = rules_file.resolve().relative_to(policy_repo_path.resolve())
-    except ValueError:
-        return rules_file
-    return alias_parent / canonical_name / relative
+    ``policy_repo_path`` must be the exact country checkout or the exact direct
+    jurisdiction root containing ``rules_file``.  No temporary alias, legacy
+    flat checkout, sibling workspace, Git-origin identity, or ``.yml`` path is
+    accepted.
+    """
+
+    content_root = _authorized_rulespec_content_root(rules_file, policy_repo_path)
+    canonical = (
+        canonical_rulespec_module_path(rules_file, content_root=content_root)
+        if content_root is not None
+        else None
+    )
+    if canonical is None:
+        raise ValueError(
+            "RuleSpec program must be an exact .yaml module beneath one of the "
+            "four atomic roots of the explicitly supplied "
+            "rulespec-<country>/<jurisdiction> checkout/root"
+        )
+    return canonical
+
+
+def require_program_spec(spec_file: Path, rulespec_root: Path) -> Path:
+    """Return one exact declarative ProgramSpec under ``programs/``."""
+
+    content_root = _authorized_rulespec_content_root(spec_file, rulespec_root)
+    canonical = (
+        canonical_program_spec_path(spec_file, content_root=content_root)
+        if content_root is not None
+        else None
+    )
+    if canonical is None:
+        raise ValueError(
+            "ProgramSpec must be an exact .yaml file beneath "
+            "rulespec-<country>/<jurisdiction>/programs/<program>/"
+        )
+    return canonical
 
 
 def _rulespec_public_item_key(item: Any) -> str:
@@ -120,92 +194,21 @@ def _rulespec_public_item_key(item: Any) -> str:
     return str(item.get("name") or "").strip()
 
 
-def _canonical_rulespec_item_id_alias(
-    item_id: str,
-    *,
-    policy_repo_path: Path,
-) -> str | None:
-    if ":" not in item_id:
-        return None
-    raw_prefix, raw_path = item_id.split(":", 1)
-    canonical_prefix = jurisdiction_prefix(policy_repo_path)
-    local_prefixes = _rulespec_local_item_prefixes(policy_repo_path)
-    if raw_prefix != canonical_prefix and raw_prefix not in local_prefixes:
-        return None
-    canonical_path = _canonical_rulespec_item_path_for_policy_root(
-        raw_path,
-        policy_repo_path=policy_repo_path,
-        canonical_prefix=canonical_prefix,
-    )
-    alias = f"{canonical_prefix}:{canonical_path}"
-    if alias == item_id:
-        return None
-    return alias
-
-
-def _rulespec_local_item_prefixes(policy_repo_path: Path) -> set[str]:
-    """Return noncanonical prefixes the engine may stamp for this checkout."""
-    canonical_prefix = jurisdiction_prefix(policy_repo_path)
-    prefixes: set[str] = set()
-    current = Path(policy_repo_path).resolve()
-    for candidate in (current, *current.parents):
-        name = candidate.name
-        if name.startswith("rulespec-"):
-            prefixes.add(name.removeprefix("rulespec-"))
-            break
-    local_prefix = Path(policy_repo_path).name.removeprefix("rulespec-")
-    if local_prefix:
-        prefixes.add(local_prefix)
-    canonical_name = canonical_rulespec_repo_name(policy_repo_path)
-    if canonical_name and canonical_name.startswith("rulespec-"):
-        prefixes.add(canonical_name.removeprefix("rulespec-"))
-    prefixes.discard(canonical_prefix)
-    return {prefix for prefix in prefixes if prefix}
-
-
-def _rulespec_content_prefix_segment(
-    *,
-    policy_repo_path: Path,
-    canonical_prefix: str,
-) -> str | None:
-    """Return a monorepo content-root path segment when engine ids include it."""
-    policy_path = Path(policy_repo_path)
-    if policy_path.name == canonical_prefix and policy_path.parent.name.startswith(
-        "rulespec-"
-    ):
-        return canonical_prefix
-    if (policy_path / canonical_prefix).is_dir():
-        return canonical_prefix
-    return None
-
-
-def _canonical_rulespec_item_path_for_policy_root(
-    item_path: str,
-    *,
-    policy_repo_path: Path,
-    canonical_prefix: str,
-) -> str:
-    content_segment = _rulespec_content_prefix_segment(
-        policy_repo_path=policy_repo_path,
-        canonical_prefix=canonical_prefix,
-    )
-    if content_segment and item_path.startswith(f"{content_segment}/"):
-        return item_path.split("/", 1)[1]
-    return item_path
-
-
 def _rulespec_public_item_keys(
     item: Any,
     *,
     policy_repo_path: Path,
 ) -> set[str]:
+    """Return only the exact item key emitted by the canonical engine path.
+
+    ``policy_repo_path`` remains a required argument so callers cannot fall
+    back to an ambient checkout contract.  It must itself be a canonical
+    country checkout or jurisdiction root.  Legacy prefix/path aliases are
+    intentionally not generated.
+    """
+
+    root = Path(policy_repo_path)
+    if not is_policy_repo_root(root) and canonical_rulespec_root_identity(root) is None:
+        raise ValueError("policy_repo_path must be an exact canonical RuleSpec root")
     key = _rulespec_public_item_key(item)
-    if not key:
-        return set()
-    keys = {key}
-    if alias := _canonical_rulespec_item_id_alias(
-        key,
-        policy_repo_path=policy_repo_path,
-    ):
-        keys.add(alias)
-    return keys
+    return {key} if key else set()

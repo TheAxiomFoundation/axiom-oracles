@@ -33,19 +33,18 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Mapping
+import re
 
 import yaml
 
-from axiom_oracles.bridges.repo_routing import jurisdiction_country
+from axiom_oracles.bridges.repo_routing import (
+    RULESPEC_ATOMIC_ROOTS,
+    jurisdiction_country,
+)
+from axiom_oracles.bridges.rulespec_paths import require_rulespec_checkout
 
 
 COMPOSITIONS_SCHEMA_VERSION = "axiom_oracles.compositions.v1"
-
-#: Single env var naming one rulespec checkout (or the workspace holding the
-#: ``rulespec-<country>`` checkouts). Distinct from the harness's existing
-#: ``AXIOM_RULESPEC_REPO_ROOTS`` (an os.pathsep list); this is the convenience
-#: knob issue #185 asks the CLI to honour when ``--axiom-program`` is omitted.
-AXIOM_RULESPEC_ROOT_ENV = "AXIOM_RULESPEC_ROOT"
 
 # The metadata keys the suites use to carry the Axiom projection facts. Kept in
 # sync with axiom_oracles.suites and the AxiomRulesRunner.
@@ -91,7 +90,14 @@ def repo_relative_program_path(module_ref: str) -> str:
     if not prefix or not relative:
         raise ValueError(f"module ref must be '<prefix>:<path>', got {module_ref!r}")
     country = jurisdiction_country(prefix)
-    return f"rulespec-{country}/{prefix}/{relative}.yaml"
+    first = relative.split("/", maxsplit=1)[0]
+    if first not in RULESPEC_ATOMIC_ROOTS:
+        raise ValueError(
+            f"module ref must use one of the four atomic roots, got {module_ref!r}"
+        )
+    if re.fullmatch(rf"{re.escape(country)}(?:-[a-z0-9]+)*", prefix) is None:
+        raise ValueError(f"invalid jurisdiction prefix in module ref {module_ref!r}")
+    return f"{prefix}/{relative}.yaml"
 
 
 @dataclass
@@ -159,17 +165,22 @@ class SuiteComposition:
             imports=tuple(program.get("imports") or ()),
             paths=tuple(program.get("paths") or ()),
             outputs=tuple(row.get("outputs") or ()),
-            supplied_input_boundaries=tuple(
-                row.get("supplied_input_boundaries") or ()
-            ),
-            input_bridge={
-                str(k): tuple(v) for k, v in bridge_raw.items()
-            },
+            supplied_input_boundaries=tuple(row.get("supplied_input_boundaries") or ()),
+            input_bridge={str(k): tuple(v) for k, v in bridge_raw.items()},
         )
 
     def resolve(self, rulespec_root: str | Path) -> "ResolvedComposition":
         """Bind ``paths`` to absolute files under a rulespec checkout root."""
-        root = normalize_rulespec_root(rulespec_root)
+        countries = {jurisdiction_country(ref.split(":", 1)[0]) for ref in self.imports}
+        if len(countries) != 1:
+            raise ValueError("a composition must import exactly one RuleSpec country")
+        country = countries.pop()
+        root = normalize_rulespec_root(rulespec_root, country=country)
+        expected_paths = tuple(repo_relative_program_path(ref) for ref in self.imports)
+        if self.paths != expected_paths:
+            raise ValueError(
+                f"composition {self.suite!r} paths do not match its canonical imports"
+            )
         return ResolvedComposition(
             composition=self,
             root=root,
@@ -200,19 +211,18 @@ class ResolvedComposition:
         return tuple(p for p in self.program_paths if not p.exists())
 
 
-def normalize_rulespec_root(rulespec_root: str | Path) -> Path:
-    """Resolve a checkout/workspace path to the root modules resolve against.
+def normalize_rulespec_root(
+    rulespec_root: str | Path,
+    *,
+    country: str | None = None,
+) -> Path:
+    """Require one explicit canonical country checkout.
 
-    Module refs resolve as ``<root>/rulespec-<country>/<prefix>/<path>.yaml``,
-    so ``root`` must be the directory that *holds* the ``rulespec-*`` checkout.
-    A path pointing straight at a ``rulespec-*`` checkout is lifted to its
-    parent; a workspace/org directory is used as-is.
+    Workspace parents, flat jurisdiction checkouts, aliases, and environment
+    fallbacks are intentionally unsupported.
     """
 
-    root = Path(rulespec_root).expanduser()
-    if root.name.startswith("rulespec-"):
-        return root.parent
-    return root
+    return require_rulespec_checkout(Path(rulespec_root), country=country)
 
 
 def _single_metadata_value(cases, key: str, suite: str) -> str:
@@ -259,7 +269,7 @@ def composition_for_suite(suite: str) -> SuiteComposition:
     supplied: set[str] = set()
     bridge: dict[str, set[str]] = {}
     for case in cases:
-        for name in (case.metadata.get(_AXIOM_INPUTS_KEY) or {}):
+        for name in case.metadata.get(_AXIOM_INPUTS_KEY) or {}:
             supplied.add(str(name))
         for engine_var, refs in (case.metadata.get(_INPUT_BRIDGE_KEY) or {}).items():
             bridge.setdefault(str(engine_var), set()).update(str(r) for r in refs)
@@ -389,8 +399,7 @@ def parse(path: str | Path) -> CompositionsDocument:
         jurisdiction=document["jurisdiction"],
         oracle=document.get("oracle") or {},
         compositions=[
-            SuiteComposition.from_row(row)
-            for row in document.get("compositions", [])
+            SuiteComposition.from_row(row) for row in document.get("compositions", [])
         ],
     )
 
@@ -424,22 +433,16 @@ def load_composition(
 def resolve_suite_program(
     suite: str,
     *,
+    rulespec_root: str | Path,
     jurisdiction: str = "be",
-    rulespec_root: str | Path | None = None,
 ) -> ResolvedComposition | None:
     """Resolve a covered suite's recorded program against a rulespec checkout.
 
-    ``rulespec_root`` defaults to the ``AXIOM_RULESPEC_ROOT`` env var. Returns
-    ``None`` when the suite has no committed record (the caller then falls back
-    to the harness's live concept-derivation), or when no root is available.
+    Returns ``None`` only when the suite has no committed record. The caller
+    must supply the exact canonical country checkout.
     """
-
-    import os
 
     composition = load_composition(suite, jurisdiction=jurisdiction)
     if composition is None:
         return None
-    root = rulespec_root or os.environ.get(AXIOM_RULESPEC_ROOT_ENV)
-    if not root:
-        return None
-    return composition.resolve(root)
+    return composition.resolve(rulespec_root)

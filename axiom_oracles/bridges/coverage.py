@@ -14,10 +14,13 @@ from typing import Any
 import yaml
 
 from .repo_routing import (
+    canonical_program_spec_path,
+    RULESPEC_ATOMIC_ROOTS,
+    canonical_rulespec_module_path,
     canonical_rulespec_repo_name,
+    canonical_rulespec_root_identity,
+    is_policy_repo_root,
     iter_jurisdiction_content_dirs,
-    jurisdiction_subdir_names,
-    legacy_checkout_name,
 )
 
 from .registry import PolicyEngineMapping, load_policyengine_registry
@@ -446,13 +449,17 @@ def build_policyengine_coverage_report(
 ) -> dict[str, Any]:
     """Classify executable RuleSpec outputs against the PolicyEngine registry."""
     registry = load_policyengine_registry()
+    _require_explicit_rulespec_root(root)
     root = root.resolve()
     raw_items = _iter_policyengine_coverage_items(root, registry)
-    duplicate_outputs_collapsed = len(raw_items) - len(
-        {item.legal_id for item in raw_items}
+    duplicate_ids = sorted(
+        legal_id
+        for legal_id, count in Counter(item.legal_id for item in raw_items).items()
+        if count > 1
     )
-    deduped_items = _dedupe_coverage_items_by_legal_id(raw_items)
-    evidence_items = _apply_test_evidence_mappings(deduped_items, registry)
+    if duplicate_ids:
+        raise ValueError(f"duplicate canonical RuleSpec output: {duplicate_ids[0]}")
+    evidence_items = _apply_test_evidence_mappings(raw_items, registry)
     items = sorted(evidence_items, key=lambda item: item.legal_id)
     if program:
         programs = _program_filter_values(program)
@@ -471,7 +478,7 @@ def build_policyengine_coverage_report(
         "oracle": "policyengine",
         "root": str(root),
         "total_outputs": len(items),
-        "duplicate_outputs_collapsed": duplicate_outputs_collapsed,
+        "duplicate_outputs_collapsed": 0,
         "status_counts": dict(sorted(status_counts.items())),
         "untested_comparable": len(untested_comparable),
         "program_counts": dict(sorted(program_counts.items())),
@@ -493,33 +500,6 @@ def build_policyengine_coverage_report(
     return report
 
 
-def _dedupe_coverage_items_by_legal_id(
-    items: list[PolicyEngineCoverageItem],
-) -> list[PolicyEngineCoverageItem]:
-    """Collapse migrated legacy/country-monorepo duplicates by legal output."""
-    by_legal_id: dict[str, PolicyEngineCoverageItem] = {}
-    for item in items:
-        current = by_legal_id.get(item.legal_id)
-        if current is None or _coverage_item_preference_key(
-            item
-        ) < _coverage_item_preference_key(current):
-            by_legal_id[item.legal_id] = item
-    return list(by_legal_id.values())
-
-
-def _coverage_item_preference_key(item: PolicyEngineCoverageItem) -> tuple:
-    prefix = item.legal_id.split(":", 1)[0]
-    country = prefix.split("-", 1)[0]
-    monorepo_prefixes = (f"rulespec-{country}/{prefix}/", f"{prefix}/")
-    monorepo_rank = 0 if item.file.startswith(monorepo_prefixes) else 1
-    return (
-        monorepo_rank,
-        -item.test_output_count,
-        item.file,
-        item.repo,
-    )
-
-
 def build_policyengine_cloud_queue_report(
     root: Path,
     *,
@@ -534,6 +514,7 @@ def build_policyengine_cloud_queue_report(
     branches. It gives cloud workers a stable work-item contract while the
     orchestration layer is still being designed.
     """
+    _require_explicit_rulespec_root(root)
     root = root.resolve()
     surface_report = build_policyengine_program_surface_report(
         country=country,
@@ -848,37 +829,72 @@ def build_policyengine_candidate_report(
     }
 
 
+def _require_explicit_rulespec_root(root: Path) -> None:
+    """Reject workspace, flat, aliased, and partially migrated scan roots."""
+
+    if is_policy_repo_root(root) or canonical_rulespec_root_identity(root) is not None:
+        return
+    raise ValueError(
+        "coverage root must be an exact rulespec-<country> checkout or its "
+        "direct jurisdiction root"
+    )
+
+
+def _iter_canonical_rulespec_yaml(
+    content_dir: Path,
+    *,
+    roots: frozenset[str] = RULESPEC_ATOMIC_ROOTS,
+) -> list[Path]:
+    """Return exact ``.yaml`` files beneath selected canonical roots.
+
+    A legacy ``.yml`` file is rejected instead of being silently omitted from
+    coverage.  Symlinked and otherwise noncanonical files also fail closed.
+    """
+
+    files: list[Path] = []
+    for root_name in sorted(roots):
+        rules_root = content_dir / root_name
+        if not rules_root.exists():
+            continue
+        if rules_root.is_symlink() or not rules_root.is_dir():
+            raise ValueError(
+                f"canonical RuleSpec root is not a real directory: {rules_root}"
+            )
+        for rulespec_file in sorted(rules_root.rglob("*")):
+            if rulespec_file.suffix == ".yml" and rulespec_file.is_file():
+                raise ValueError(
+                    f"RuleSpec coverage accepts .yaml only; migrate {rulespec_file}"
+                )
+            if rulespec_file.suffix != ".yaml" or not rulespec_file.is_file():
+                continue
+            if root_name == "programs":
+                canonical = canonical_program_spec_path(
+                    rulespec_file, content_root=content_dir
+                )
+            else:
+                canonical = canonical_rulespec_module_path(
+                    rulespec_file, content_root=content_dir
+                )
+            if canonical is None:
+                raise ValueError(f"noncanonical RuleSpec module path: {rulespec_file}")
+            files.append(canonical)
+    return files
+
+
 def _iter_policyengine_coverage_items(
     root: Path,
     registry,
 ) -> list[PolicyEngineCoverageItem]:
     items: list[PolicyEngineCoverageItem] = []
     items.extend(_iter_program_spec_coverage_items(root, registry))
-    # Enumerate each jurisdiction's content root under the workspace, handling
-    # both layouts: a legacy ``rulespec-<prefix>`` checkout contributes itself
-    # under its prefix; a country monorepo ``rulespec-<country>`` contributes
-    # each first-level jurisdiction directory (``us``, ``us-al``, ...,
-    # ``uk-kingston-upon-thames``). ``prefix`` is the jurisdiction and
-    # ``content_dir`` is the directory whose repo-relative paths form the
-    # ``<prefix>:...`` portion of each output's legal ID, so a file at
-    # ``<rulespec-us>/us-al/policies/X.yaml`` yields ``us-al:policies/X#name``
-    # in either layout instead of a jurisdiction-doubled ``us:us-al/...`` ID.
+    # Each explicit country checkout contributes only its direct jurisdiction
+    # roots.  A direct jurisdiction root contributes only itself.
     for prefix, content_dir in iter_jurisdiction_content_dirs(root):
-        repo_name = canonical_rulespec_repo_name(content_dir) or legacy_checkout_name(
-            prefix
-        )
-        # In a partially migrated monorepo a country root can be both the
-        # content_dir for the country prefix and the parent of sibling
-        # jurisdiction directories; skip those sibling subtrees here so each
-        # output is attributed to exactly one (prefix, content_dir) pair.
-        nested_subdirs = jurisdiction_subdir_names(content_dir)
-        for rulespec_file in sorted(content_dir.rglob("*.y*ml")):
+        repo_name = canonical_rulespec_repo_name(content_dir)
+        if repo_name is None:
+            raise ValueError(f"noncanonical RuleSpec root: {content_dir}")
+        for rulespec_file in _iter_canonical_rulespec_yaml(content_dir):
             if rulespec_file.name.endswith(".test.yaml"):
-                continue
-            rel_parts = rulespec_file.relative_to(content_dir).parts
-            if "_axiom" in rel_parts:
-                continue
-            if rel_parts and rel_parts[0] in nested_subdirs:
                 continue
             payload = _load_rulespec_payload(rulespec_file)
             if not payload:
@@ -968,11 +984,21 @@ def _iter_program_spec_coverage_items(
     root: Path,
     registry,
 ) -> list[PolicyEngineCoverageItem]:
-    """Enumerate outputs declared by monorepo-native ``programs/`` specs."""
+    """Enumerate outputs declared under jurisdiction-native ``programs/``."""
     items: list[PolicyEngineCoverageItem] = []
-    for programs_dir, checkout_dir in _program_spec_dirs(root):
-        repo_name = canonical_rulespec_repo_name(checkout_dir) or checkout_dir.name
-        for spec_file in sorted(programs_dir.glob("*/*/*.y*ml")):
+    for _prefix, content_dir in iter_jurisdiction_content_dirs(root):
+        repo_name = canonical_rulespec_repo_name(content_dir)
+        if repo_name is None:
+            raise ValueError(f"noncanonical RuleSpec root: {content_dir}")
+        programs_dir = content_dir / "programs"
+        if not programs_dir.is_dir():
+            continue
+        for spec_file in _iter_canonical_rulespec_yaml(
+            content_dir,
+            roots=frozenset({"programs"}),
+        ):
+            if spec_file.name.endswith(".test.yaml"):
+                continue
             items.extend(
                 _program_spec_coverage_items_for_file(
                     root=root,
@@ -982,28 +1008,6 @@ def _iter_program_spec_coverage_items(
                 )
             )
     return items
-
-
-def _program_spec_dirs(root: Path) -> list[tuple[Path, Path]]:
-    """Return ``(programs_dir, checkout_dir)`` pairs under a checkout/workspace."""
-    candidates: list[tuple[Path, Path]] = []
-    direct = root / "programs"
-    if direct.is_dir():
-        candidates.append((direct, root))
-    for checkout in sorted(root.glob("rulespec-*")):
-        programs_dir = checkout / "programs"
-        if programs_dir.is_dir():
-            candidates.append((programs_dir, checkout))
-
-    seen: set[Path] = set()
-    out: list[tuple[Path, Path]] = []
-    for programs_dir, checkout_dir in candidates:
-        resolved = programs_dir.resolve()
-        if resolved in seen:
-            continue
-        seen.add(resolved)
-        out.append((programs_dir, checkout_dir))
-    return out
 
 
 def _program_spec_coverage_items_for_file(
@@ -1871,16 +1875,9 @@ def _canonical_rulespec_legal_id(
     rulespec_file: Path,
     rule_name: str,
 ) -> str:
-    """Derive an output's canonical legal ID from its jurisdiction content root.
-
-    ``content_dir`` is the jurisdiction's content root (a ``rulespec-<prefix>``
-    checkout root in the legacy layout, or the ``<prefix>`` directory inside a
-    country monorepo). Paths are taken relative to that root so both layouts
-    yield identical IDs: ``<rulespec-us>/us-al/policies/X.yaml`` and
-    ``<rulespec-us-al>/policies/X.yaml`` both produce ``us-al:policies/X#name``.
-    """
+    """Derive an output ID relative to its exact jurisdiction content root."""
     relative = rulespec_file.relative_to(content_dir)
-    if relative.suffix in {".yaml", ".yml"}:
+    if relative.suffix == ".yaml":
         relative = relative.with_suffix("")
     return f"{prefix}:{relative.as_posix()}#{rule_name}"
 
@@ -1891,19 +1888,9 @@ def _country_from_rulespec_prefix(prefix: str) -> str:
 
 
 def _display_file_path(rulespec_file: Path, root: Path) -> str:
-    """Return a file path relative to the workspace ``root`` for reporting.
+    """Return a canonical file path relative to the explicit scan root."""
 
-    Prefers the unresolved path so a file reached through a sibling-checkout
-    symlink keeps its symlink-name prefix (``rulespec-us/us-al/...`` rather
-    than ``_axiom/rulespec-us/us-al/...``); CI matches changed files against
-    ``<consumer-repo-name>/<path>`` keys built from that symlink name.
-    """
-    for candidate in (rulespec_file, rulespec_file.resolve()):
-        try:
-            return str(candidate.relative_to(root))
-        except ValueError:
-            continue
-    return str(rulespec_file)
+    return str(rulespec_file.relative_to(root))
 
 
 def _coverage_item_from_mapping(

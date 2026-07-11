@@ -96,9 +96,7 @@ def select(
             if recorded is None:
                 reasons.append(f"{repo}: report ran against unknown SHA")
             elif recorded != head:
-                reasons.append(
-                    f"{repo}: {recorded[:12]} → {head[:12]}"
-                )
+                reasons.append(f"{repo}: {recorded[:12]} → {head[:12]}")
         if reasons:
             selected.append(
                 {"suite": suite, "reason": "; ".join(reasons), "repos": repos}

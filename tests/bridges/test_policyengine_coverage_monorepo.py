@@ -1,20 +1,11 @@
-"""Coverage classifier ID derivation across monorepo and legacy layouts.
-
-The PolicyEngine oracle-coverage classifier must derive identical canonical
-legal IDs whether a jurisdiction's RuleSpec content lives in a country
-monorepo (``rulespec-us/us-al/...``) or a legacy standalone checkout
-(``rulespec-us-al/...``). Earlier the classifier took the repo directory name
-as the prefix and treated everything beneath it as the relative path, which
-doubled the jurisdiction in monorepo IDs (``us:us-al/policies/X#r`` instead of
-``us-al:policies/X#r``). These tests pin the cross-layout equivalence and the
-absence of jurisdiction-doubled IDs.
-"""
+"""Coverage classifier behavior for canonical country checkouts."""
 
 from __future__ import annotations
 
-import os
 import re
 from pathlib import Path
+
+import pytest
 
 from axiom_oracles.bridges.coverage import (
     build_policyengine_coverage_report,
@@ -238,35 +229,24 @@ def _malformed_doubled_ids(report: dict) -> list[str]:
     ]
 
 
-def test_monorepo_and_legacy_layouts_derive_identical_ids(tmp_path):
-    """A file under ``rulespec-us/us-al`` and one under a legacy
-    ``rulespec-us-al`` checkout must produce the same ``us-al:policies/X#r``."""
-    monorepo_root = tmp_path / "mono"
+def test_flat_legacy_layout_is_rejected(tmp_path):
+    canonical_checkout = tmp_path / "rulespec-us"
     _write(
-        monorepo_root / "rulespec-us" / "us-al" / "policies" / "dhr" / "poe.yaml",
+        canonical_checkout / "us-al" / "policies" / "dhr" / "poe.yaml",
+        _UNMAPPED_US_RULESPEC,
+    )
+    flat_root = tmp_path / "rulespec-us-al"
+    _write(
+        flat_root / "policies" / "dhr" / "poe.yaml",
         _UNMAPPED_US_RULESPEC,
     )
 
-    legacy_root = tmp_path / "legacy"
-    _write(
-        legacy_root / "rulespec-us-al" / "policies" / "dhr" / "poe.yaml",
-        _UNMAPPED_US_RULESPEC,
-    )
-
-    monorepo_report = build_policyengine_coverage_report(monorepo_root)
-    legacy_report = build_policyengine_coverage_report(legacy_root)
-
-    expected_id = "us-al:policies/dhr/poe#brand_new_state_helper_xyz"
-    monorepo_ids = [item["legal_id"] for item in monorepo_report["items"]]
-    legacy_ids = [item["legal_id"] for item in legacy_report["items"]]
-
-    assert monorepo_ids == [expected_id]
-    assert legacy_ids == [expected_id]
-    assert monorepo_ids == legacy_ids
-
-    # The repo attribution is the canonical legacy repo name in both layouts.
-    assert {item["repo"] for item in monorepo_report["items"]} == {"rulespec-us-al"}
-    assert {item["repo"] for item in legacy_report["items"]} == {"rulespec-us-al"}
+    report = build_policyengine_coverage_report(canonical_checkout)
+    assert [item["legal_id"] for item in report["items"]] == [
+        "us-al:policies/dhr/poe#brand_new_state_helper_xyz"
+    ]
+    with pytest.raises(ValueError, match="exact rulespec-<country>"):
+        build_policyengine_coverage_report(flat_root)
 
 
 def test_direct_monorepo_root_is_enumerated(tmp_path):
@@ -279,11 +259,10 @@ def test_direct_monorepo_root_is_enumerated(tmp_path):
     assert [item["legal_id"] for item in report["items"]] == [
         "us-al:policies/dhr/poe#brand_new_state_helper_xyz"
     ]
-    assert {item["repo"] for item in report["items"]} == {"rulespec-us-al"}
+    assert {item["repo"] for item in report["items"]} == {"rulespec-us"}
 
 
-def test_same_named_workspace_wrapper_does_not_become_country_root(tmp_path):
-    """GitHub Actions uses ``.../rulespec-us/rulespec-us``; only the child is a checkout."""
+def test_same_named_workspace_wrapper_is_rejected(tmp_path):
     workspace = tmp_path / "rulespec-us"
     checkout = workspace / "rulespec-us"
     _write(
@@ -291,25 +270,18 @@ def test_same_named_workspace_wrapper_does_not_become_country_root(tmp_path):
         _UNMAPPED_US_RULESPEC,
     )
 
-    report = build_policyengine_coverage_report(workspace)
-
-    assert [item["legal_id"] for item in report["items"]] == [
-        "us-al:policies/dhr/poe#brand_new_state_helper_xyz"
-    ]
-    assert {item["repo"] for item in report["items"]} == {"rulespec-us-al"}
+    with pytest.raises(ValueError, match="exact rulespec-<country>"):
+        build_policyengine_coverage_report(workspace)
+    report = build_policyengine_coverage_report(checkout)
+    assert report["total_outputs"] == 1
 
 
-def test_direct_legacy_root_is_enumerated(tmp_path):
-    """``--root <rulespec-us-al>`` should scan legacy standalone checkouts."""
+def test_direct_flat_legacy_root_is_rejected(tmp_path):
     root = tmp_path / "rulespec-us-al"
     _write(root / "policies" / "dhr" / "poe.yaml", _UNMAPPED_US_RULESPEC)
 
-    report = build_policyengine_coverage_report(root)
-
-    assert [item["legal_id"] for item in report["items"]] == [
-        "us-al:policies/dhr/poe#brand_new_state_helper_xyz"
-    ]
-    assert {item["repo"] for item in report["items"]} == {"rulespec-us-al"}
+    with pytest.raises(ValueError, match="exact rulespec-<country>"):
+        build_policyengine_coverage_report(root)
 
 
 def test_kansas_tanf_keesm_prefix_is_classified_not_comparable(tmp_path):
@@ -327,7 +299,7 @@ def test_kansas_tanf_keesm_prefix_is_classified_not_comparable(tmp_path):
     assert item["legal_id"] == (
         "us-ks:policies/dcf/keesm/keesm7410#ks_tanf_maximum_benefit"
     )
-    assert item["repo"] == "rulespec-us-ks"
+    assert item["repo"] == "rulespec-us"
     assert item["status"] == "known_not_comparable"
     assert item["mapping_type"] == "not_comparable"
     assert item["policyengine_variable"] == "ks_tanf_maximum_benefit"
@@ -494,7 +466,7 @@ def test_monorepo_country_directory_is_not_doubled(tmp_path):
         _UNMAPPED_US_RULESPEC,
     )
 
-    report = build_policyengine_coverage_report(root)
+    report = build_policyengine_coverage_report(root / "rulespec-us")
     ids = [item["legal_id"] for item in report["items"]]
 
     assert ids == ["us:statutes/26/9999#brand_new_state_helper_xyz"]
@@ -518,7 +490,7 @@ def test_monorepo_uk_jurisdiction_directories(tmp_path):
         _UNMAPPED_UK_RULESPEC,
     )
 
-    report = build_policyengine_coverage_report(root)
+    report = build_policyengine_coverage_report(root / "rulespec-uk")
     ids = {item["legal_id"] for item in report["items"]}
 
     assert ids == {
@@ -528,7 +500,7 @@ def test_monorepo_uk_jurisdiction_directories(tmp_path):
     }
     assert _malformed_doubled_ids(report) == []
     repos = {item["repo"] for item in report["items"]}
-    assert repos == {"rulespec-uk", "rulespec-uk-kingston-upon-thames"}
+    assert repos == {"rulespec-uk"}
 
 
 def test_uk_vat_policy_outputs_are_classified_not_comparable(tmp_path):
@@ -539,7 +511,7 @@ def test_uk_vat_policy_outputs_are_classified_not_comparable(tmp_path):
         _UK_VAT_RULESPEC,
     )
 
-    report = build_policyengine_coverage_report(root)
+    report = build_policyengine_coverage_report(root / "rulespec-uk")
 
     assert report["total_outputs"] == 3
     assert report["status_counts"] == {"known_not_comparable": 3}
@@ -564,7 +536,7 @@ def test_uk_companies_act_small_company_outputs_are_not_comparable(tmp_path):
         _UK_COMPANIES_ACT_SMALL_COMPANY_RULESPEC,
     )
 
-    report = build_policyengine_coverage_report(root)
+    report = build_policyengine_coverage_report(root / "rulespec-uk")
 
     assert report["total_outputs"] == 3
     assert report["status_counts"] == {"known_not_comparable": 3}
@@ -589,7 +561,7 @@ def test_uk_dpa_2018_s157_penalty_cap_outputs_are_not_comparable(tmp_path):
         _UK_DPA_2018_S157_RULESPEC,
     )
 
-    report = build_policyengine_coverage_report(root)
+    report = build_policyengine_coverage_report(root / "rulespec-uk")
 
     assert report["total_outputs"] == 8
     assert report["status_counts"] == {"known_not_comparable": 8}
@@ -624,7 +596,7 @@ def test_belgium_outputs_are_policyengine_non_comparable(tmp_path):
     for prefix, relative in jurisdictions.items():
         _write(root / prefix / relative, _BELGIUM_RULESPEC)
 
-    report = build_policyengine_coverage_report(root.parent)
+    report = build_policyengine_coverage_report(root)
 
     assert report["total_outputs"] == 5
     assert report["status_counts"] == {"known_not_comparable": 5}
@@ -635,7 +607,7 @@ def test_belgium_outputs_are_policyengine_non_comparable(tmp_path):
             "#household_benefit_amount"
         )
         item = items_by_id[legal_id]
-        assert item["repo"] == f"rulespec-{prefix}"
+        assert item["repo"] == "rulespec-be"
         assert item["status"] == "known_not_comparable"
         assert item["mapping_type"] == "not_comparable"
         assert item["candidate_priority"] == "P4"
@@ -644,9 +616,12 @@ def test_belgium_outputs_are_policyengine_non_comparable(tmp_path):
 def test_canada_outputs_are_policyengine_non_comparable(tmp_path):
     """Canada outputs are not yet backed by one-to-one PolicyEngine targets."""
     root = tmp_path / "mono" / "rulespec-ca"
-    _write(root / "policies" / "cra" / "t1-2026" / "federal-tax.yaml", _CANADA_RULESPEC)
+    _write(
+        root / "ca" / "policies" / "cra" / "t1-2026" / "federal-tax.yaml",
+        _CANADA_RULESPEC,
+    )
 
-    report = build_policyengine_coverage_report(root.parent)
+    report = build_policyengine_coverage_report(root)
 
     assert report["total_outputs"] == 1
     assert report["status_counts"] == {"known_not_comparable": 1}
@@ -668,13 +643,13 @@ def test_monorepo_program_directory_is_not_a_jurisdiction(tmp_path):
         root / "rulespec-us" / "us-al" / "policies" / "dhr" / "poe.yaml",
         _UNMAPPED_US_RULESPEC,
     )
-    # A shared non-encoding directory holding non-rulespec program manifests.
+    # Program specs live under the jurisdiction's canonical programs root.
     _write(
-        root / "rulespec-us" / "programs" / "us-al" / "snap" / "fy-2026.yaml",
+        root / "rulespec-us" / "us-al" / "programs" / "snap" / "fy-2026.yaml",
         "program: us-al/snap\noutputs:\n  - snap_eligible\n",
     )
 
-    report = build_policyengine_coverage_report(root)
+    report = build_policyengine_coverage_report(root / "rulespec-us")
     ids = [item["legal_id"] for item in report["items"]]
 
     assert ids == [
@@ -705,10 +680,17 @@ def test_fake_monorepo_produces_no_malformed_country_doubled_ids(tmp_path):
         )
         _write(root / checkout / prefix / rel, content)
 
-    report = build_policyengine_coverage_report(root)
+    reports = [
+        build_policyengine_coverage_report(root / "rulespec-us"),
+        build_policyengine_coverage_report(root / "rulespec-uk"),
+    ]
 
-    assert _malformed_doubled_ids(report) == []
-    prefixes = {item["legal_id"].split(":", 1)[0] for item in report["items"]}
+    assert all(_malformed_doubled_ids(report) == [] for report in reports)
+    prefixes = {
+        item["legal_id"].split(":", 1)[0]
+        for report in reports
+        for item in report["items"]
+    }
     assert prefixes == {
         "us",
         "us-al",
@@ -720,12 +702,7 @@ def test_fake_monorepo_produces_no_malformed_country_doubled_ids(tmp_path):
     }
 
 
-def test_multi_checkout_symlink_layout_matches_ci(tmp_path):
-    """Mirror CI: the workspace root holds a real consumer monorepo checkout
-    plus a sibling-checkout symlink to a nested second monorepo. Both walk
-    correctly, output IDs are not doubled, and the symlinked checkout's outputs
-    are not double-counted (the resolved-path dedup collapses the symlink and
-    the nested checkout)."""
+def test_workspace_and_symlinked_checkout_are_rejected(tmp_path):
     workspace = tmp_path / "work"
     workspace.mkdir()
     consumer = workspace / "rulespec-uk"
@@ -742,8 +719,6 @@ def test_multi_checkout_symlink_layout_matches_ci(tmp_path):
         _UNMAPPED_UK_RULESPEC,
     )
 
-    # A second monorepo nested under the consumer checkout's _axiom/ directory,
-    # exposed at the workspace root through a sibling-checkout symlink.
     nested_us = consumer / "_axiom" / "rulespec-us"
     _write(
         nested_us / "us-al" / "policies" / "dhr" / "poe.yaml",
@@ -753,54 +728,35 @@ def test_multi_checkout_symlink_layout_matches_ci(tmp_path):
         nested_us / "us" / "statutes" / "26" / "9999.yaml",
         _UNMAPPED_US_RULESPEC,
     )
-    os.symlink(nested_us, workspace / "rulespec-us")
+    (workspace / "rulespec-us").symlink_to(nested_us, target_is_directory=True)
 
-    report = build_policyengine_coverage_report(workspace)
+    with pytest.raises(ValueError, match="exact rulespec-<country>"):
+        build_policyengine_coverage_report(workspace)
+    with pytest.raises(ValueError, match="exact rulespec-<country>"):
+        build_policyengine_coverage_report(workspace / "rulespec-us")
 
-    ids = sorted(item["legal_id"] for item in report["items"])
-    assert ids == [
+    report = build_policyengine_coverage_report(consumer)
+    assert [item["legal_id"] for item in report["items"]] == [
         "uk-kingston-upon-thames:policies/kingston-upon-thames/"
         "council-tax-reduction#brand_new_local_helper_xyz",
         "uk:policies/govuk/child-benefit#brand_new_local_helper_xyz",
-        "us-al:policies/dhr/poe#brand_new_state_helper_xyz",
-        "us:statutes/26/9999#brand_new_state_helper_xyz",
     ]
-    # No output is attributed twice despite the symlink + nested checkout.
-    assert len(ids) == len(set(ids))
     assert _malformed_doubled_ids(report) == []
 
-    # The reported file path keeps the symlink-name prefix (``rulespec-us/...``)
-    # so CI's changed-file matching against ``<consumer-repo>/<path>`` works.
-    files_by_id = {item["legal_id"]: item["file"] for item in report["items"]}
-    assert (
-        files_by_id["us-al:policies/dhr/poe#brand_new_state_helper_xyz"]
-        == "rulespec-us/us-al/policies/dhr/poe.yaml"
-    )
-    assert (
-        files_by_id["uk:policies/govuk/child-benefit#brand_new_local_helper_xyz"]
-        == "rulespec-uk/uk/policies/govuk/child-benefit.yaml"
-    )
 
-
-def test_legacy_and_monorepo_unmapped_outputs_match_for_real_prefix(tmp_path):
-    """A genuinely-new (unmapped) output remains unmapped in both layouts,
-    confirming the registry lookup is keyed on the same canonical ID."""
-    monorepo_root = tmp_path / "mono"
+def test_unmapped_output_requires_canonical_checkout(tmp_path):
+    canonical_checkout = tmp_path / "rulespec-us"
     _write(
-        monorepo_root / "rulespec-us" / "us-zz" / "policies" / "new" / "x.yaml",
+        canonical_checkout / "us-zz" / "policies" / "new" / "x.yaml",
         _UNMAPPED_US_RULESPEC,
     )
-    legacy_root = tmp_path / "legacy"
+    flat_root = tmp_path / "rulespec-us-zz"
     _write(
-        legacy_root / "rulespec-us-zz" / "policies" / "new" / "x.yaml",
+        flat_root / "policies" / "new" / "x.yaml",
         _UNMAPPED_US_RULESPEC,
     )
 
-    monorepo_report = build_policyengine_coverage_report(monorepo_root)
-    legacy_report = build_policyengine_coverage_report(legacy_root)
-
-    assert monorepo_report["status_counts"] == {"unmapped": 1}
-    assert legacy_report["status_counts"] == {"unmapped": 1}
-    assert [item["legal_id"] for item in monorepo_report["items"]] == [
-        item["legal_id"] for item in legacy_report["items"]
-    ]
+    report = build_policyengine_coverage_report(canonical_checkout)
+    assert report["status_counts"] == {"unmapped": 1}
+    with pytest.raises(ValueError, match="exact rulespec-<country>"):
+        build_policyengine_coverage_report(flat_root)

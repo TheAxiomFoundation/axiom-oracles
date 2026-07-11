@@ -3317,7 +3317,7 @@ prefixes:
     rationale: Composed Family-level income-related Employment and Support Allowance applicable-amount pipeline; its personal-allowance, component, premium, applicable-amount and award outputs re-wire the separately encoded Employment and Support Allowance Regulations 2008 (SI 2008/794) regulation 67 and Schedule 4 provisions and the Welfare Reform Act 2007 section 4(2)(a) income-related award for the UKMOD bsadi_s comparison rather than adding new PolicyEngine UK oracle variables. PolicyEngine's esa_income is a reported-award capital screen, not a full statutory-entitlement model, so it is not a comparable surface for this pipeline.
   # Reconciliation guard between the two rulespec-uk Universal Credit award
   # paths: it re-expresses the compose-spec program
-  # (programs/uk/universal-credit/fy-2026-27.yaml) Welfare Reform Act 2012
+  # (rulespec-uk/uk/programs/universal-credit/fy-2026-27.yaml) Welfare Reform Act 2012
   # section 8(1) balance over the composed pilot pipeline's own section 8
   # elements and asserts (in its companion test) that the pilot's pre-cap award
   # equals that balance to the penny, diverging only by the pilot's

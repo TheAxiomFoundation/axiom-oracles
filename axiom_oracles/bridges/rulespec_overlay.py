@@ -9,7 +9,7 @@ and the listed parameter rules get structural patches to their
 The overlay is *materialized* into a single self-contained rulespec root: it
 copies the referenced top-level prefix trees (``us/``, ``us-co/``) as real
 files, applies the rewrites and patches in place, and is compiled with that
-root as the sole ``AXIOM_RULESPEC_REPO_ROOTS`` entry — no fallback root. This
+root as the sole explicit ``--rulespec-root`` argument — no fallback root. This
 is a deliberate departure from a sparse overlay fronting the real monorepo,
 which the axiom-rules-engine does not support: given two roots the engine
 loads *every* root's copy of a shared module id rather than shadowing, so a
@@ -48,6 +48,13 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+
+from .repo_routing import (
+    RULESPEC_ATOMIC_ROOTS,
+    canonical_rulespec_checkout_name,
+    canonical_rulespec_module_path,
+    canonical_rulespec_root_identity,
+)
 
 OVERLAY_SPEC_SCHEMA_VERSION = "axiom_oracles.rulespec_overlay.v1"
 
@@ -163,16 +170,47 @@ def build_overlay(
     sole repo root the engine should be given. Returns the overlay root, the
     path to the overlaid program composition, and a provenance dict.
     """
-    rulespec_root = Path(rulespec_root)
+    rulespec_root = Path(rulespec_root).expanduser()
+    checkout_name = canonical_rulespec_checkout_name(rulespec_root)
+    if checkout_name is None:
+        raise ValueError(
+            "overlay base must be an exact canonical rulespec-<country> checkout"
+        )
+    _validate_overlay_spec_paths(spec, checkout_name)
+    for label, text in _overlay_spec_paths(spec).items():
+        relative = Path(text)
+        content_root = rulespec_root / relative.parts[0]
+        if (
+            canonical_rulespec_module_path(
+                rulespec_root / relative,
+                content_root=content_root,
+            )
+            is None
+        ):
+            raise ValueError(
+                f"overlay {spec.name}: {label} is not an existing canonical "
+                f"RuleSpec module: {text}"
+            )
     overlay_root = Path(dest_dir) / rulespec_root.name
 
     for prefix in _prefix_dirs(spec):
         source = rulespec_root / prefix
-        if not source.exists():
+        if canonical_rulespec_root_identity(source) != f"{checkout_name}/{prefix}":
             raise ValueError(
-                f"overlay {spec.name}: prefix directory {prefix} not found under "
-                f"{rulespec_root}; the base repo moved and the overlay is stale"
+                f"overlay {spec.name}: {prefix} is not a canonical direct "
+                f"jurisdiction root under {rulespec_root}"
             )
+        for candidate in source.rglob("*"):
+            if candidate.is_symlink():
+                raise ValueError(
+                    f"overlay {spec.name}: symlinked RuleSpec content is not "
+                    f"supported: {candidate}"
+                )
+            if candidate.is_file() and candidate.suffix == ".yml":
+                raise ValueError(
+                    f"overlay {spec.name}: legacy .yml RuleSpec module is not "
+                    f"supported: {candidate}"
+                )
         # Hardlink where possible (the trees run to thousands of files while
         # the overlay modifies ~17); modified files are re-written through
         # _write_text_unlinked, which replaces the link with a fresh inode so
@@ -260,6 +298,41 @@ def _prefix_dirs(spec: OverlaySpec) -> list[str]:
     return sorted(prefixes)
 
 
+def _validate_overlay_spec_paths(spec: OverlaySpec, checkout_name: str) -> None:
+    """Require every overlay path to name one canonical ``.yaml`` module."""
+
+    country = checkout_name.removeprefix("rulespec-")
+    for label, text in _overlay_spec_paths(spec).items():
+        relative = Path(text)
+        parts = relative.parts
+        if (
+            relative.is_absolute()
+            or ".." in parts
+            or len(parts) < 3
+            or re.fullmatch(rf"{re.escape(country)}(?:-[a-z]{{2}})?", parts[0]) is None
+            or parts[1] not in RULESPEC_ATOMIC_ROOTS
+            or relative.suffix != ".yaml"
+        ):
+            raise ValueError(
+                f"overlay {spec.name}: {label} must be a canonical "
+                f"<jurisdiction>/<content-root>/... .yaml path, got {text!r}"
+            )
+
+
+def _overlay_spec_paths(spec: OverlaySpec) -> dict[str, str]:
+    return {
+        "program": spec.program,
+        **{
+            f"rewrite_files[{index}]": path
+            for index, path in enumerate(spec.rewrite_files)
+        },
+        **{
+            f"parameter_patches[{index}].file": patch.file
+            for index, patch in enumerate(spec.parameter_patches)
+        },
+    }
+
+
 def rewrite_output_ids(
     output_id_by_label: dict[str, str],
     module_id_rewrites: dict[str, str],
@@ -308,9 +381,7 @@ def _rewrite_module_ids(text: str, rewrites: dict[str, str]) -> tuple[str, int]:
     if not rewrites:
         return text, 0
     pattern = re.compile(
-        "|".join(
-            re.escape(old) for old in sorted(rewrites, key=len, reverse=True)
-        )
+        "|".join(re.escape(old) for old in sorted(rewrites, key=len, reverse=True))
     )
     count = 0
 

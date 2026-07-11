@@ -1599,7 +1599,7 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:tax/oracle-bridge#taxable_income
+      axiom: us:programs/oracles/tax#taxable_income
       policyengine: taxable_income
       taxsim: v18
       taxcalc: c04800
@@ -1654,7 +1654,7 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:tax/oracle-bridge#ctc_value
+      axiom: us:programs/oracles/tax#ctc_value
       policyengine: ctc_value
       taxsim: v22
       taxcalc: ctc_total
@@ -1749,7 +1749,7 @@ concepts:
     relative_tolerance: 0.0000002
     priority: high
     targets:
-      axiom: us:tax/oracle-bridge#state_income_tax
+      axiom: us:programs/oracles/tax#state_income_tax
       policyengine: state_income_tax
       taxsim: siitax
 

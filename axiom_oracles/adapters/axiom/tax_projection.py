@@ -131,7 +131,7 @@ US_TAX_ORACLE_IMPORTS = (
     "us:statutes/26/6401",
 )
 
-US_TAX_ORACLE_BRIDGE_TARGET = "us:tax/oracle-bridge"
+US_TAX_ORACLE_BRIDGE_TARGET = "us:programs/oracles/tax"
 
 US_TAX_ORACLE_PROGRAM_RULES = (
     _generated_parameter_rule(
@@ -1584,10 +1584,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         dtype="Decimal",
         source="Colorado HB24-1311 family affordability credit age multiplier",
         formula=(
-            "if oracle_person_age < 6: "
-            "1 "
-            "else: "
-            "if oracle_person_age < 17: 0.75 else: 0"
+            "if oracle_person_age < 6: 1 else: if oracle_person_age < 17: 0.75 else: 0"
         ),
     ),
     _generated_tax_unit_rule(
@@ -1686,10 +1683,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         unit="USD",
         source="26 USC 164(b)(6), resolved for 2026 oracle comparison",
         formula=(
-            "max("
-            "salt_cap_floor, "
-            "max(0, salt_cap_max - salt_cap_phaseout_reduction)"
-            ")"
+            "max(salt_cap_floor, max(0, salt_cap_max - salt_cap_phaseout_reduction))"
         ),
     ),
     _generated_tax_unit_rule(
@@ -2204,10 +2198,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         unit="USD",
         source="Colorado state income tax addback worksheet, 2025 DR 0104 Book Additions Line 2",
         formula=(
-            "max("
-            "0, "
-            "total_itemized_taxable_income_deductions - standard_deduction"
-            ")"
+            "max(0, total_itemized_taxable_income_deductions - standard_deduction)"
         ),
     ),
     _generated_tax_unit_rule(
@@ -2282,13 +2273,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="C.R.S. 39-22-104(4), resolved from encoded Colorado subtraction leaves available to the oracle bridge",
-        formula=(
-            "max("
-            "0, "
-            "co_social_security_subtraction "
-            "+ co_pension_subtraction"
-            ")"
-        ),
+        formula=("max(0, co_social_security_subtraction + co_pension_subtraction)"),
     ),
     _generated_tax_unit_rule(
         "co_head_age",
@@ -2491,10 +2476,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         dtype="Money",
         unit="USD",
         source="C.R.S. 39-22-104(4)(g), pension and annuity subtraction",
-        formula=(
-            "co_head_pension_subtraction "
-            "+ co_spouse_pension_subtraction"
-        ),
+        formula=("co_head_pension_subtraction + co_spouse_pension_subtraction"),
     ),
     _generated_tax_unit_rule(
         "co_taxable_income",
@@ -2559,10 +2541,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         unit="USD",
         source="Colorado refundable credits resolved from encoded bridge components",
         formula=(
-            "co_sales_tax_refund"
-            " + co_eitc"
-            " + co_ctc"
-            " + co_family_affordability_credit"
+            "co_sales_tax_refund + co_eitc + co_ctc + co_family_affordability_credit"
         ),
     ),
     _generated_tax_unit_rule(
@@ -2756,11 +2735,11 @@ _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100
 _STANDARD_DEDUCTION_OTHER_CASE_AFTER_2017_BASE_AMOUNT = 15_750
 
 _RELATION_REFS = (
-    "us:tax/oracle-bridge#relation.business_income_of_tax_unit",
-    "us:tax/oracle-bridge#relation.co_dependent_of_tax_unit",
-    "us:tax/oracle-bridge#relation.co_withheld_income_tax_member_of_tax_unit",
-    "us:tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
-    "us:tax/oracle-bridge#relation.payroll_member_of_tax_unit",
+    "us:programs/oracles/tax#relation.business_income_of_tax_unit",
+    "us:programs/oracles/tax#relation.co_dependent_of_tax_unit",
+    "us:programs/oracles/tax#relation.co_withheld_income_tax_member_of_tax_unit",
+    "us:programs/oracles/tax#relation.filer_adjusted_earnings_of_tax_unit",
+    "us:programs/oracles/tax#relation.payroll_member_of_tax_unit",
     "us:statutes/26/151#relation.exemption_individual_of_tax_unit",
     "us:statutes/26/151#relation.senior_deduction_individual_of_tax_unit",
     "us:statutes/26/21#relation.qualifying_individual_of_tax_unit",
@@ -3234,16 +3213,10 @@ _INPUT_REF_OVERRIDES.update(
     }
 )
 _INPUT_REF_OVERRIDES.update(
-    {
-        name: f"us:statutes/26/164/f#input.{name}"
-        for name in ("taxpayer_is_individual",)
-    }
+    {name: f"us:statutes/26/164/f#input.{name}" for name in ("taxpayer_is_individual",)}
 )
 _INPUT_REF_OVERRIDES.update(
-    {
-        name: f"us:statutes/26/26#input.{name}"
-        for name in ("net_investment_income_tax",)
-    }
+    {name: f"us:statutes/26/26#input.{name}" for name in ("net_investment_income_tax",)}
 )
 _INPUT_REF_OVERRIDES.update(
     {
@@ -3491,8 +3464,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
 
     inputs: dict[str, Any] = {
         "additional_standard_deduction_entitlement_count_under_subsection_f": sum(
-            int(_age(person) >= 65)
-            + int(bool(person.fact(Concepts.BLIND, False)))
+            int(_age(person) >= 65) + int(bool(person.fact(Concepts.BLIND, False)))
             for person in (head, spouse)
             if person is not None
         ),
@@ -3623,7 +3595,9 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     inputs.setdefault("deduction_for_personal_exemptions_provided_in_section_151", 0)
     inputs.setdefault("deductions_allowable_in_arriving_at_adjusted_gross_income", 0)
     inputs.setdefault("deductions_allowable_under_this_chapter", 0)
-    inputs.setdefault("deductions_allowed_by_this_chapter_other_than_standard_deduction", 0)
+    inputs.setdefault(
+        "deductions_allowed_by_this_chapter_other_than_standard_deduction", 0
+    )
     records = [
         _input_record(name, "TaxUnit", _TAX_UNIT_ID, value)
         for name, value in inputs.items()
@@ -3641,7 +3615,9 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "short_term_capital_gains": capital_gains_tax_short_capital_gains,
         "net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
         "qualified_dividend_income": capital_gains_tax_qualified_dividends,
-        "unrecaptured_section_1250_gain": inputs.get("unrecaptured_section_1250_gain", 0),
+        "unrecaptured_section_1250_gain": inputs.get(
+            "unrecaptured_section_1250_gain", 0
+        ),
         "capital_gains_28_percent_rate_gain": inputs.get(
             "capital_gains_28_percent_rate_gain",
             0,
@@ -3705,9 +3681,7 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "oracle_person_age": age,
             "oracle_person_is_qualifying_child_dependent": is_dependent and age < 19,
             "oracle_person_is_tax_unit_dependent": is_dependent,
-            "person_dividend_income": _number(
-                person.fact(Concepts.DIVIDEND_INCOME, 0)
-            ),
+            "person_dividend_income": _number(person.fact(Concepts.DIVIDEND_INCOME, 0)),
             "person_long_term_capital_gains": _number(
                 person.fact(Concepts.LONG_TERM_CAPITAL_GAINS, 0)
             ),
@@ -3876,12 +3850,12 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
     records = []
     for relation_ref in _RELATION_REFS:
         if relation_ref in {
-            "us:tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit",
+            "us:programs/oracles/tax#relation.filer_adjusted_earnings_of_tax_unit",
             "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit",
         }:
             relation_people = tax_filers
         elif relation_ref in {
-            "us:tax/oracle-bridge#relation.co_dependent_of_tax_unit",
+            "us:programs/oracles/tax#relation.co_dependent_of_tax_unit",
             "us:statutes/26/24/h#relation.dependent_of_tax_unit",
             "us:statutes/26/32#relation.qualifying_child_of_tax_unit",
             "us:statutes/26/7703#relation.living_apart_child_of_tax_unit",
@@ -4157,11 +4131,7 @@ def _tax_dependents(
     head: Entity,
     spouse: Entity | None,
 ) -> list[Entity]:
-    return [
-        person
-        for person in people
-        if _is_tax_dependent(person, head, spouse)
-    ]
+    return [person for person in people if _is_tax_dependent(person, head, spouse)]
 
 
 def _is_tax_dependent(

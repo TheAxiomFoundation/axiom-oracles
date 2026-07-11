@@ -9,14 +9,11 @@ description: >-
   Enhanced CPS. v1 compares every person at the individual rate: eligible
   couples, ineligible-spouse deeming, resources, and blind/disabled
   determination differences are documented divergence classes, not silent
-  assumptions. The rulespec root is a synced copy of upstream rulespec-us
-  main (refresh with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us/ ~/.axiom-oracles/roots/rulespec-us/
-  after pulling ~/rulespec-us).
+  assumptions. The runner uses the canonical rulespec-us checkout directly.
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     left: axiom
     right: policyengine
@@ -26,13 +23,11 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
-    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: programs/us/ssi/fy-2026.yaml
-    axiom_composed_program: /tmp/ssi-composed.yaml
+    axiom_compose_binary: $HOME/TheAxiomFoundation/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/TheAxiomFoundation/rulespec-us/us/programs/ssi/fy-2026.yaml
+    axiom_composed_program: /tmp/axiom-composed/ssi-ecps.yaml
     axiom_compiled_program: /tmp/ssi-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
-    rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-ssi-ecps

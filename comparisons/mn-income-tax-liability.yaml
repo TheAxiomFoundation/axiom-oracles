@@ -23,14 +23,14 @@ description: >-
 
 runner:
   type: state-income-tax-liability-grid
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     state: MN
     period: "2026"
     taxsim_law_year: 2024
     # Links this suite to the rulespec-us monorepo in the affected map
     # so a change to the composed pipeline triggers a re-run.
-    rulespec_roots:
-      - $HOME/TheAxiomFoundation/rulespec-us
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-taxsim-mn-income-tax-liability

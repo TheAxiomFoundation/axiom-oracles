@@ -22,11 +22,6 @@ description: >-
 
 runner:
   type: axiom-oracles-compare
-  # No axiom side: the generic comparator runs both Python engines directly.
-  # axiom_rules_repo is still read by the runner, but the pre-built mirror
-  # binary is reused (no rebuild) and no rulespec is imported for a
-  # PolicyEngine-vs-Tax-Calculator run.
-  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
   parameters:
     left: taxcalc
     right: policyengine

@@ -2,6 +2,8 @@ import json
 import subprocess
 from pathlib import Path
 
+import click
+import pytest
 import yaml
 
 from axiom_oracles.adapters.axiom import (
@@ -17,7 +19,59 @@ from axiom_oracles.comparison.mappings import comparable_mappings, load_program_
 from axiom_oracles.core.case import Case, Concepts, Entity
 
 
-def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path) -> None:
+@pytest.fixture(autouse=True)
+def _canonical_axiom_inputs(tmp_path: Path) -> None:
+    binary = tmp_path / "axiom-rules"
+    binary.write_text("#!/bin/sh\nexit 0\n")
+    binary.chmod(0o755)
+    (tmp_path / "rulespec-us" / "us").mkdir(parents=True)
+    (tmp_path / "rulespec-be" / "be").mkdir(parents=True)
+    module_refs = {
+        *US_TAX_ORACLE_IMPORTS,
+        "us:statutes/26/example",
+        "be:regulations/health_insurance/birth_leave/indemnity_rates",
+    }
+    for module_ref in module_refs:
+        jurisdiction, relative = module_ref.split(":", 1)
+        country = jurisdiction.split("-", 1)[0]
+        module = tmp_path / f"rulespec-{country}" / jurisdiction / f"{relative}.yaml"
+        module.parent.mkdir(parents=True, exist_ok=True)
+        module.write_text("format: rulespec/v1\nrules: []\n")
+    program = tmp_path / "rulespec-us/us/policies/tests/program.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text("format: rulespec/v1\nrules: []\n")
+
+
+def test_axiom_runner_rejects_program_outside_canonical_layout(tmp_path: Path) -> None:
+    legacy_program = tmp_path / "program.yaml"
+    legacy_program.write_text("format: rulespec/v1\nrules: []\n")
+
+    with pytest.raises(ValueError, match="four atomic roots"):
+        AxiomRulesRunner(
+            program_path=legacy_program,
+            binary_path=tmp_path / "axiom-rules",
+            rulespec_root=tmp_path / "rulespec-us",
+        )
+
+
+def test_axiom_runner_rejects_noncanonical_generated_target(tmp_path: Path) -> None:
+    runner = AxiomRulesRunner(
+        binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
+        program_imports=("us:statutes/26/example",),
+        generated_program_target="us:tax/oracle-bridge",
+    )
+
+    with pytest.raises(RuntimeError, match="absolute canonical"):
+        runner.run_cases(
+            [Case(case_id="case-1", period="2026")],
+            ["us:statutes/26/example#tax"],
+        )
+
+
+def test_axiom_runner_executes_rulespec_program_with_case_inputs(
+    tmp_path: Path,
+) -> None:
     calls = []
 
     def fake_run(args, **kwargs):
@@ -25,9 +79,7 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path)
         if args[1] == "compile":
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
-        assert request["queries"][0]["outputs"] == [
-            "us:statutes/26/6401#income_tax"
-        ]
+        assert request["queries"][0]["outputs"] == ["us:statutes/26/6401#income_tax"]
         assert request["queries"][0]["period"]["period_kind"] == "tax_year"
         assert request["dataset"]["inputs"] == [
             {
@@ -79,8 +131,9 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(tmp_path: Path)
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "program.yaml",
+        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
     case = Case(
@@ -149,6 +202,7 @@ def test_axiom_runner_aliases_unique_local_output_to_qualified_id(
     runner = AxiomRulesRunner(
         compiled_artifact_path=artifact_path,
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
 
@@ -183,8 +237,9 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "program.yaml",
+        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
     case = Case(
@@ -231,24 +286,16 @@ def test_snap_co_projection_uses_repaired_colorado_income_surface() -> None:
     }
 
     assert "us:regulations/7-cfr/273/9#input.snap_gross_monthly_income" not in records
-    assert (
-        "us:statutes/7/2014/e/6/A#input.snap_monthly_household_income"
-        not in records
-    )
+    assert "us:statutes/7/2014/e/6/A#input.snap_monthly_household_income" not in records
     assert (
         "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income"
         not in records
     )
     assert (
-        records[
-            "us-co:regulations/10-ccr-2506-1/4.403#input."
-            "employee_wages_received"
-        ]
+        records["us-co:regulations/10-ccr-2506-1/4.403#input.employee_wages_received"]
         == 2500
     )
-    relation_names = {
-        relation["name"] for relation in case.metadata["axiom_relations"]
-    }
+    relation_names = {relation["name"] for relation in case.metadata["axiom_relations"]}
     assert "us:statutes/7/2012/j#relation.member_of_household" in relation_names
     assert "member_of_household" in relation_names
     member_records = {
@@ -291,8 +338,7 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
         itemization_records = [
             record
             for record in request["dataset"]["inputs"]
-            if record["name"]
-            == "us:statutes/26/63#input."
+            if record["name"] == "us:statutes/26/63#input."
             "individual_makes_election_to_itemize_deductions_for_taxable_year"
         ]
         assert len(itemization_records) == 1
@@ -322,8 +368,9 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "program.yaml",
+        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
     case = Case(
@@ -391,8 +438,9 @@ def test_axiom_runner_records_execution_errors_per_case(tmp_path: Path) -> None:
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "program.yaml",
+        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
 
@@ -494,8 +542,9 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "program.yaml",
+        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         prune_unsupported_inputs=True,
         subprocess_run=fake_run,
     )
@@ -548,11 +597,12 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] == "compile-composed":
             program_path = Path(args[args.index("--program") + 1])
             program = yaml.safe_load(program_path.read_text())
             assert program == {
                 "format": "rulespec/v1",
+                "module": {"kind": "composition"},
                 "imports": ["us:statutes/26/example"],
                 "rules": [
                     {
@@ -617,7 +667,9 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
 
     runner = AxiomRulesRunner(
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         program_imports=("us:statutes/26/example",),
+        generated_program_target="us:programs/oracles/test",
         program_rules=(
             {
                 "name": "bridge_amount",
@@ -644,23 +696,20 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
     )
 
     assert result.errors == ()
-    assert [call[0][1] for call in calls] == ["compile", "run-compiled"]
+    assert [call[0][1] for call in calls] == ["compile-composed", "run-compiled"]
 
 
-def test_axiom_runner_writes_generated_program_under_canonical_target(
+def test_axiom_runner_writes_generated_program_to_neutral_composed_path(
     tmp_path: Path,
 ) -> None:
     calls = []
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] == "compile-composed":
             program_path = Path(args[args.index("--program") + 1])
-            assert program_path.parts[-3:] == (
-                "rulespec-us",
-                "tax",
-                "oracle-bridge.yaml",
-            )
+            assert program_path.name == "program.composed.yaml"
+            assert "programs" not in program_path.parts
             output_path = Path(args[args.index("--output") + 1])
             output_path.write_text(
                 json.dumps(
@@ -668,10 +717,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
                         "program": {
                             "derived": [
                                 {
-                                    "id": (
-                                        "us:tax/oracle-bridge"
-                                        "#taxable_income"
-                                    ),
+                                    "id": ("us:programs/oracles/tax#taxable_income"),
                                     "name": "taxable_income",
                                     "expr": {"kind": "integer", "value": 0},
                                 }
@@ -686,7 +732,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         assert request["queries"][0]["outputs"] == [
-            "us:tax/oracle-bridge#taxable_income"
+            "us:programs/oracles/tax#taxable_income"
         ]
         return subprocess.CompletedProcess(
             args,
@@ -696,7 +742,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
                     "results": [
                         {
                             "outputs": {
-                                "us:tax/oracle-bridge#taxable_income": {
+                                "us:programs/oracles/tax#taxable_income": {
                                     "kind": "scalar",
                                     "value": {
                                         "kind": "integer",
@@ -713,6 +759,7 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
 
     runner = AxiomRulesRunner(
         binary_path=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
         program_imports=("us:statutes/26/example",),
         program_rules=(
             {
@@ -737,14 +784,12 @@ def test_axiom_runner_writes_generated_program_under_canonical_target(
 
     [result] = runner.run_cases(
         [Case(case_id="case-1", period="2026")],
-        ["us:tax/oracle-bridge#taxable_income"],
+        ["us:programs/oracles/tax#taxable_income"],
     )
 
     assert result.errors == ()
-    assert result.values == {
-        "us:tax/oracle-bridge#taxable_income": 0
-    }
-    assert [call[0][1] for call in calls] == ["compile", "run-compiled"]
+    assert result.values == {"us:programs/oracles/tax#taxable_income": 0}
+    assert [call[0][1] for call in calls] == ["compile-composed", "run-compiled"]
 
 
 def test_axiom_tax_concept_is_comparable_to_policyengine() -> None:
@@ -775,25 +820,26 @@ def test_federal_ctc_component_maps_to_total_ctc_value() -> None:
         if mapping.concept_id == Concepts.CTC
     )
 
-    assert mapping.targets["axiom"] == "us:tax/oracle-bridge#ctc_value"
+    assert mapping.targets["axiom"] == "us:programs/oracles/tax#ctc_value"
     assert mapping.targets["policyengine"] == "ctc_value"
 
 
-def test_cli_builds_axiom_runner() -> None:
+def test_cli_builds_axiom_runner(tmp_path: Path) -> None:
     runner = _build_runner(
         "axiom",
         "api",
         None,
         None,
         (),
-        axiom_program=Path("/tmp/program.yaml"),
-        axiom_engine_binary=Path("/tmp/axiom-rules"),
+        axiom_program=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
+        axiom_engine_binary=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
     )
 
     assert isinstance(runner, AxiomRulesRunner)
 
 
-def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
+def test_cli_builds_generated_federal_tax_axiom_runner(tmp_path: Path) -> None:
     runner = _build_runner(
         "axiom",
         "api",
@@ -801,7 +847,8 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
         None,
         (Concepts.FEDERAL_INCOME_TAX,),
         axiom_program=None,
-        axiom_engine_binary=Path("/tmp/axiom-rules"),
+        axiom_engine_binary=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
     )
 
     assert isinstance(runner, AxiomRulesRunner)
@@ -810,15 +857,12 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     assert runner.prune_unsupported_inputs
     assert (
-        "us:policies/irs/rev-proc-2025-32/standard-deduction"
-        in US_TAX_ORACLE_IMPORTS
+        "us:policies/irs/rev-proc-2025-32/standard-deduction" in US_TAX_ORACLE_IMPORTS
     )
     assert "us:statutes/26/86" in US_TAX_ORACLE_IMPORTS
     assert "us:statutes/26/1402/a" in US_TAX_ORACLE_IMPORTS
     assert "us:statutes/26/164/f" in US_TAX_ORACLE_IMPORTS
-    generated_rule_names = {
-        rule["name"] for rule in US_TAX_ORACLE_PROGRAM_RULES
-    }
+    generated_rule_names = {rule["name"] for rule in US_TAX_ORACLE_PROGRAM_RULES}
     generated_rules_by_name = {
         rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
     }
@@ -847,7 +891,44 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     assert "state_withheld_income_tax" in generated_rule_names
 
 
-def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept() -> None:
+def test_cli_requires_explicit_snap_program_or_artifact(tmp_path: Path) -> None:
+    with pytest.raises(click.ClickException, match="explicit canonical"):
+        _build_runner(
+            "axiom",
+            "api",
+            None,
+            None,
+            (Concepts.SNAP_BENEFIT,),
+            axiom_program=None,
+            axiom_engine_binary=tmp_path / "axiom-rules",
+            rulespec_root=tmp_path / "rulespec-us",
+        )
+
+
+def test_cli_builds_snap_runner_from_explicit_canonical_program(
+    tmp_path: Path,
+) -> None:
+    program = tmp_path / "rulespec-us/us/policies/tests/program.yaml"
+    runner = _build_runner(
+        "axiom",
+        "api",
+        None,
+        None,
+        (Concepts.SNAP_BENEFIT,),
+        axiom_program=program,
+        axiom_engine_binary=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
+    )
+
+    assert isinstance(runner, AxiomRulesRunner)
+    assert runner.program_path == program.resolve()
+    assert runner.compiled_artifact_path is None
+    assert runner.prune_unsupported_inputs is True
+
+
+def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept(
+    tmp_path: Path,
+) -> None:
     runner = _build_runner(
         "axiom",
         "api",
@@ -855,7 +936,8 @@ def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept() -> Non
         None,
         (Concepts.BE_BIRTH_LEAVE_TOTAL_COMPENSATION,),
         axiom_program=None,
-        axiom_engine_binary=Path("/tmp/axiom-rules"),
+        axiom_engine_binary=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-be",
     )
 
     assert isinstance(runner, AxiomRulesRunner)
@@ -863,14 +945,13 @@ def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept() -> Non
         "be:regulations/health_insurance/birth_leave/indemnity_rates",
     )
     assert runner.program_rules == ()
-    assert (
-        runner.generated_program_target
-        == "be:regulations/health_insurance/birth_leave/indemnity_rates"
-    )
+    assert runner.generated_program_target == "be:programs/oracles/comparison"
     assert runner.prune_unsupported_inputs
 
 
-def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
+def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax(
+    tmp_path: Path,
+) -> None:
     runner = _build_runner(
         "axiom",
         "api",
@@ -878,7 +959,8 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
         None,
         (Concepts.STATE_INCOME_TAX,),
         axiom_program=None,
-        axiom_engine_binary=Path("/tmp/axiom-rules"),
+        axiom_engine_binary=tmp_path / "axiom-rules",
+        rulespec_root=tmp_path / "rulespec-us",
     )
 
     assert isinstance(runner, AxiomRulesRunner)
@@ -891,25 +973,32 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
         if rule["name"] != "self_employment_income"
     )
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
-    generated_rule_names = {
-        rule["name"] for rule in runner.program_rules
-    }
-    generated_rules_by_name = {
-        rule["name"]: rule for rule in runner.program_rules
-    }
+    generated_rule_names = {rule["name"] for rule in runner.program_rules}
+    generated_rules_by_name = {rule["name"]: rule for rule in runner.program_rules}
     assert "self_employment_income" not in generated_rule_names
-    assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
-        generated_rules_by_name["taxable_earned_income_under_section_32"]["versions"][
-            0
-        ]["formula"]
+    assert (
+        "sum_where(filer_adjusted_earnings_of_tax_unit"
+        in (
+            generated_rules_by_name["taxable_earned_income_under_section_32"][
+                "versions"
+            ][0]["formula"]
+        )
     )
-    assert "qualified_business_income_deduction_phaseout_rate" in (
-        generated_rules_by_name["qualified_business_income_deduction_before_floor"][
-            "versions"
-        ][0]["formula"]
+    assert (
+        "qualified_business_income_deduction_phaseout_rate"
+        in (
+            generated_rules_by_name["qualified_business_income_deduction_before_floor"][
+                "versions"
+            ][0]["formula"]
+        )
     )
-    assert "sum_where(business_income_of_tax_unit" in (
-        generated_rules_by_name["qualified_business_income"]["versions"][0]["formula"]
+    assert (
+        "sum_where(business_income_of_tax_unit"
+        in (
+            generated_rules_by_name["qualified_business_income"]["versions"][0][
+                "formula"
+            ]
+        )
     )
     assert "amt_part_iii_required" in generated_rule_names
     assert "amt_tax_including_capital_gains" in generated_rule_names
@@ -919,18 +1008,25 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     assert "capital_gains_worksheet_line_13" in generated_rule_names
     assert "capital_gains_worksheet_line_14" in generated_rule_names
     assert "capital_gains_worksheet_line_19" in generated_rule_names
-    assert "capital_gains_tax_qualified_dividend_income" in (
-        generated_rules_by_name["capital_gains_worksheet_line_10"]["versions"][0][
-            "formula"
-        ]
+    assert (
+        "capital_gains_tax_qualified_dividend_income"
+        in (
+            generated_rules_by_name["capital_gains_worksheet_line_10"]["versions"][0][
+                "formula"
+            ]
+        )
     )
-    assert "capital_gains_worksheet_line_10 > 0" in (
-        generated_rules_by_name["amt_part_iii_required"]["versions"][0]["formula"]
+    assert (
+        "capital_gains_worksheet_line_10 > 0"
+        in (generated_rules_by_name["amt_part_iii_required"]["versions"][0]["formula"])
     )
-    assert "amt_capital_gain_line_31_tax" in (
-        generated_rules_by_name["amt_tax_including_capital_gains"]["versions"][0][
-            "formula"
-        ]
+    assert (
+        "amt_capital_gain_line_31_tax"
+        in (
+            generated_rules_by_name["amt_tax_including_capital_gains"]["versions"][0][
+                "formula"
+            ]
+        )
     )
     assert (
         "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"

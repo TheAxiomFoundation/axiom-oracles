@@ -14,7 +14,7 @@ description: >-
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     left: axiom
     right: policyengine
@@ -30,13 +30,11 @@ runner:
     period: 2026-01
     population: enhanced-cps
     jurisdiction_fips: "08"
-    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/axiom-oracles/programs/us/medicaid-magi/fy-2026.yaml
-    axiom_composed_program: /tmp/medicaid-magi-composed.yaml
+    axiom_compose_binary: $HOME/TheAxiomFoundation/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/TheAxiomFoundation/rulespec-us/us/programs/medicaid-magi/fy-2026.yaml
+    axiom_composed_program: /tmp/axiom-composed/medicaid-magi-co-ecps.yaml
     axiom_compiled_program: /tmp/medicaid-magi-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
-    rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-medicaid-magi-co-ecps

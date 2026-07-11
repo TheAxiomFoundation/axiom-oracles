@@ -116,10 +116,7 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     ]
     assert outputs["ils_tax"]["status"] == "live_oracle_verified_worker_pit_pilot"
     assert outputs["ils_ben"]["status"] == "live_oracle_verified_family_benefit_pilot"
-    assert (
-        outputs["ils_dispy"]["status"]
-        == "live_oracle_verified_worker_pit_sic_pilot"
-    )
+    assert outputs["ils_dispy"]["status"] == "live_oracle_verified_worker_pit_sic_pilot"
 
 
 def test_dashboard_static_copy_matches_packaged_inventory() -> None:

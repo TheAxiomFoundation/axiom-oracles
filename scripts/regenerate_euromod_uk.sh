@@ -13,18 +13,15 @@
 #         https://github.com/centreformicrosimulation/UKMOD-PUBLIC
 #   - EUROMOD_PYTHON: an x86_64 interpreter with `euromod` installed
 #   - DOTNET_ROOT: an x64 .NET runtime
-#   - AXIOM_RULESPEC_REPO_ROOTS reaching rulespec-uk with the composed pilot
-#     pipelines (uk/statutes/income_tax/individual/pilot_worker_oracle_pipeline,
-#     uk/statutes/social_security/workers/pilot_worker_class_1_nic_pipeline, and
-#     uk/policies/universal_credit_composed_award_pipeline)
+#   - canonical rulespec-uk checkout and exact engine binary at the paths
+#     declared by the comparison registry
 set -e
 cd "$(dirname "$0")/.."
 
 : "${EUROMOD_MODEL_ROOT:=$HOME/Downloads/UKMOD_PUBLIC_B2026.03}"
 : "${EUROMOD_PYTHON:?set EUROMOD_PYTHON to the x86_64 interpreter with the euromod connector}"
 : "${DOTNET_ROOT:?set DOTNET_ROOT to an x64 .NET runtime}"
-: "${AXIOM_RULESPEC_REPO_ROOTS:=$HOME/TheAxiomFoundation}"
-export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT AXIOM_RULESPEC_REPO_ROOTS
+export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT
 
 for name in \
   uk-worker-pit-ukmod \

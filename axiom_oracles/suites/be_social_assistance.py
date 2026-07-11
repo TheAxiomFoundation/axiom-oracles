@@ -127,7 +127,9 @@ def _no_resources_axiom_inputs(
         _eligibility_input(
             "belgium_social_integration_minor_emancipated_by_marriage"
         ): False,
-        _eligibility_input("belgium_social_integration_minor_has_dependent_child"): False,
+        _eligibility_input(
+            "belgium_social_integration_minor_has_dependent_child"
+        ): False,
         _eligibility_input("belgium_social_integration_minor_is_pregnant"): False,
         _eligibility_input("belgium_social_integration_age_years"): 35,
         _eligibility_input(
@@ -142,13 +144,19 @@ def _no_resources_axiom_inputs(
         _eligibility_input(
             "belgium_social_integration_registered_foreigner_in_population_register"
         ): False,
-        _eligibility_input("belgium_social_integration_stateless_under_1954_convention"): False,
+        _eligibility_input(
+            "belgium_social_integration_stateless_under_1954_convention"
+        ): False,
         _eligibility_input("belgium_social_integration_refugee_under_1980_law"): False,
         _eligibility_input(
             "belgium_social_integration_subsidiary_protection_under_1980_law"
         ): False,
-        _eligibility_input("belgium_social_integration_has_sufficient_resources"): False,
-        _eligibility_input("belgium_social_integration_can_claim_sufficient_resources"): False,
+        _eligibility_input(
+            "belgium_social_integration_has_sufficient_resources"
+        ): False,
+        _eligibility_input(
+            "belgium_social_integration_can_claim_sufficient_resources"
+        ): False,
         _eligibility_input(
             "belgium_social_integration_can_procure_sufficient_resources_by_efforts_or_other_means"
         ): False,
@@ -156,7 +164,9 @@ def _no_resources_axiom_inputs(
         _eligibility_input(
             "belgium_social_integration_health_or_equity_prevents_work"
         ): False,
-        _eligibility_input("belgium_social_integration_social_benefit_rights_asserted"): True,
+        _eligibility_input(
+            "belgium_social_integration_social_benefit_rights_asserted"
+        ): True,
         _eligibility_input(
             "belgium_social_integration_cpas_requires_maintenance_rights_against_listed_debtor"
         ): False,

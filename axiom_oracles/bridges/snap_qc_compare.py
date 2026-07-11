@@ -42,7 +42,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import os
 import shutil
 import tempfile
 from dataclasses import dataclass
@@ -57,17 +56,17 @@ from .rulespec_overlay import build_overlay, load_overlay_spec, rewrite_output_i
 from .snap_populace import (
     JURISDICTION_CONFIGS,
     ProjectedCase,
-    axiom_rules_env,
+    axiom_engine_env,
     compile_program,
     load_base_inputs,
     month_period,
     outputs_by_reference,
     output_to_python,
     resolve_axiom_binary,
-    resolve_workspace_root,
     run_axiom_cases,
     set_input_value,
 )
+from .rulespec_paths import require_rulespec_checkout
 
 SUITE = "co-snap-qc"
 
@@ -143,6 +142,7 @@ def sua_amounts_from_overlay(spec: Any) -> dict[str, float]:
         )
     return amounts
 
+
 #: The seven Colorado utility-cost flags (10 CCR 2506-1 section 4.407.31) that
 #: drive the standard utility allowance tier.
 _HEATING_COOLING_FLAG = (
@@ -202,7 +202,9 @@ class _Label:
 #: not separately bound axiom outputs, so a divergence there first surfaces at
 #: the standard-deduction, shelter-deduction, or net-income stage.
 _LABELS: tuple[_Label, ...] = (
-    _Label("snap_gross_monthly_income", "gross_income", "gross_income", "income", False),
+    _Label(
+        "snap_gross_monthly_income", "gross_income", "gross_income", "income", False
+    ),
     _Label(
         "snap_standard_deduction",
         "standard_deduction",
@@ -218,12 +220,8 @@ _LABELS: tuple[_Label, ...] = (
         False,
     ),
     _Label("snap_net_income", "net_income", "net_income", "income", False),
-    _Label(
-        "snap_maximum_allotment", "maximum_allotment", None, "benefits", False
-    ),
-    _Label(
-        "snap_regular_month_allotment", "benefit", "benefit", "benefits", True
-    ),
+    _Label("snap_maximum_allotment", "maximum_allotment", None, "benefits", False),
+    _Label("snap_regular_month_allotment", "benefit", "benefit", "benefits", True),
 )
 
 
@@ -283,16 +281,22 @@ def map_qc_unit(
         for member in members
     )
     total_unearned = _call(unit, "unearned_income")
-    other_unearned = total_unearned - retirement_disability - assistance - direct_support
+    other_unearned = (
+        total_unearned - retirement_disability - assistance - direct_support
+    )
     if other_unearned < -0.005:
         raise ValueError(
             f"QC unit {getattr(unit, 'case_id', '?')}: itemized unearned "
             f"categories exceed the unit total by {-other_unearned:.2f}; the "
             "per-source fields no longer reconstruct FSUNEARN"
         )
-    set_input_value(inputs, "retirement_disability_payments", _money(retirement_disability))
+    set_input_value(
+        inputs, "retirement_disability_payments", _money(retirement_disability)
+    )
     set_input_value(inputs, "assistance_payments", _money(assistance))
-    set_input_value(inputs, "direct_support_and_alimony_payments", _money(direct_support))
+    set_input_value(
+        inputs, "direct_support_and_alimony_payments", _money(direct_support)
+    )
     set_input_value(
         inputs, "other_gain_or_benefit_payments", _money(max(0.0, other_unearned))
     )
@@ -320,8 +324,7 @@ def map_qc_unit(
     if homeless_claimed:
         utility_flags = {name: False for name in utility_flags}
     elif (
-        raw_utility_amount is not None
-        and _money(raw_utility_amount) != standard_amount
+        raw_utility_amount is not None and _money(raw_utility_amount) != standard_amount
     ):
         utility_flags = {name: False for name in utility_flags}
         shelter_costs = _money(shelter_costs + _money(raw_utility_amount))
@@ -463,9 +466,8 @@ def run_snap_qc_comparison(
     months: tuple[int, ...] | None = None,
     tolerance: float = 0.0,
     stage_tolerance: float = 1.0,
-    workspace_root: str | Path | None = None,
-    rulespec_root: str | Path | None = None,
-    axiom_binary: str | Path | None = None,
+    rulespec_root: str | Path,
+    axiom_binary: str | Path,
     data_dir: str | Path | None = None,
     include_special_programs: bool = False,
     keep_overlay: bool = False,
@@ -490,25 +492,8 @@ def run_snap_qc_comparison(
             f"{config.supported_fiscal_years}, not {fiscal_year}"
         )
 
-    workspace_root = resolve_workspace_root(
-        Path(workspace_root) if workspace_root is not None else None
-    )
-    # Environment fallbacks live here, next to the loader's own
-    # AXIOM_SNAP_QC_DATA_DIR, so the module CLI, the live test, and the
-    # comparison runner all honor the same variables.
-    if rulespec_root is None:
-        rulespec_root = os.environ.get("AXIOM_SNAP_QC_RULESPEC_ROOT") or None
-    rulespec_root = (
-        Path(rulespec_root).expanduser()
-        if rulespec_root is not None
-        else workspace_root / "rulespec-us"
-    )
-    if axiom_binary is None:
-        axiom_binary = os.environ.get("AXIOM_SNAP_QC_AXIOM_BINARY") or None
-    axiom_binary = resolve_axiom_binary(
-        workspace_root,
-        Path(axiom_binary).expanduser() if axiom_binary is not None else None,
-    )
+    rulespec_root = require_rulespec_checkout(Path(rulespec_root), country="us")
+    axiom_binary = resolve_axiom_binary(Path(axiom_binary))
     period = month_period(*NOMINAL_PERIOD)
     _validate_months(months, fiscal_year)
 
@@ -529,7 +514,9 @@ def run_snap_qc_comparison(
         units = units[:sample_size]
 
     base_inputs = load_base_inputs(rulespec_root / config.template)
-    base_member = _load_base_member(rulespec_root / config.template, config.base.relation_id)
+    base_member = _load_base_member(
+        rulespec_root / config.template, config.base.relation_id
+    )
 
     overlay_dir = Path(tempfile.mkdtemp(prefix="snap-qc-overlay-"))
     try:
@@ -538,8 +525,7 @@ def run_snap_qc_comparison(
         # rather than shadowing, so fronting the monorepo with the overlay would
         # compile both the fy-2024 and fy-2026 cola imports and abort with a
         # duplicate-rule error. The materialized overlay is complete on its own.
-        env = axiom_rules_env(build.program_path, workspace_root)
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
+        env = axiom_engine_env()
         sua_amount_by_tier = sua_amounts_from_overlay(spec)
         cases = [
             map_qc_unit(
@@ -557,6 +543,7 @@ def run_snap_qc_comparison(
             period=period,
             output_ids=list(output_id_by_label.values()),
             config=config,
+            rulespec_root=build.overlay_root,
             env=env,
         )
         report = _build_report(
@@ -590,11 +577,18 @@ def _run_cases(
     period: snap_populace.Period,
     output_ids: list[str],
     config: QcJurisdiction,
+    rulespec_root: Path,
     env: dict[str, str],
 ) -> list[dict[str, Any]]:
     with tempfile.TemporaryDirectory(prefix="snap-qc-artifact-") as artifact_dir:
         artifact = Path(artifact_dir) / "program.compiled.json"
-        compile_program(binary, program_path, artifact, env=env)
+        compile_program(
+            binary,
+            program_path,
+            artifact,
+            rulespec_root=rulespec_root,
+            env=env,
+        )
         results: list[dict[str, Any]] = []
         for start in range(0, len(cases), CHUNK_SIZE):
             chunk = cases[start : start + CHUNK_SIZE]
@@ -943,7 +937,9 @@ def _matches(
     if axiom_value is None or expected_value is None:
         return None
     if label.is_benefit:
-        return abs(round(float(axiom_value)) - round(float(expected_value))) <= tolerance
+        return (
+            abs(round(float(axiom_value)) - round(float(expected_value))) <= tolerance
+        )
     return abs(float(axiom_value) - float(expected_value)) <= stage_tolerance
 
 
@@ -1221,9 +1217,8 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         help="Dollar tolerance for the intermediate stage comparisons.",
     )
     parser.add_argument("--data-dir", type=Path, default=None)
-    parser.add_argument("--rulespec-root", type=Path, default=None)
-    parser.add_argument("--workspace-root", type=Path, default=None)
-    parser.add_argument("--axiom-binary", type=Path, default=None)
+    parser.add_argument("--rulespec-root", type=Path, required=True)
+    parser.add_argument("--axiom-binary", type=Path, required=True)
     parser.add_argument(
         "--output", type=Path, default=None, help="Write the report JSON here."
     )
@@ -1256,7 +1251,6 @@ def main(args: argparse.Namespace | None = None) -> int:
         months=args.months,
         tolerance=args.tolerance,
         stage_tolerance=args.stage_tolerance,
-        workspace_root=args.workspace_root,
         rulespec_root=args.rulespec_root,
         axiom_binary=args.axiom_binary,
         data_dir=args.data_dir,

@@ -35,6 +35,7 @@ Run (pin the oracle to the us-pe universe label, policyengine-us 1.767.3):
 
 The verdict lines are the evidence pointer recorded in conformance/us-pe.yaml.
 """
+
 from __future__ import annotations
 
 import importlib.metadata as _md
@@ -50,7 +51,9 @@ def _spm_sim(broadband_cost: float, force_eligible: str | None) -> Simulation:
     sit = {
         "people": {"you": {"age": {YEAR: 40}, "employment_income": {YEAR: 6000}}},
         "tax_units": {"tu": {"members": ["you"]}},
-        "spm_units": {"spm": {"members": ["you"], "broadband_cost": {YEAR: broadband_cost}}},
+        "spm_units": {
+            "spm": {"members": ["you"], "broadband_cost": {YEAR: broadband_cost}}
+        },
         "households": {"hh": {"members": ["you"], "state_name": {YEAR: "CA"}}},
     }
     sim = Simulation(situation=sit)
@@ -80,18 +83,26 @@ def main() -> int:
 
     # 3. Recovery rebate credit: each year-limited component, and the total.
     rrc_sim = _spm_sim(0.0, None)
-    comps = {c: float(rrc_sim.calculate(c, YEAR).sum())
-             for c in ("rrc_cares", "rrc_caa", "rrc_arpa", "recovery_rebate_credit")}
+    comps = {
+        c: float(rrc_sim.calculate(c, YEAR).sum())
+        for c in ("rrc_cares", "rrc_caa", "rrc_arpa", "recovery_rebate_credit")
+    }
     print("\nRecovery rebate credit components at 2026:")
     for c, v in comps.items():
         print(f"  {c} = {v}")
 
-    zero = {"acp": acp, "ebb": ebb, "recovery_rebate_credit": comps["recovery_rebate_credit"]}
+    zero = {
+        "acp": acp,
+        "ebb": ebb,
+        "recovery_rebate_credit": comps["recovery_rebate_credit"],
+    }
     all_zero = all(v == 0.0 for v in zero.values())
     print("\nVERDICT:")
     for k, v in zero.items():
-        print(f"  {k}: PolicyEngine-US pays {v} for every synthetic case in {YEAR} "
-              f"-> oracle_models_repealed_law")
+        print(
+            f"  {k}: PolicyEngine-US pays {v} for every synthetic case in {YEAR} "
+            f"-> oracle_models_repealed_law"
+        )
     print(f"\nall_zero = {all_zero}")
     return 0 if all_zero else 1
 

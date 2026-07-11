@@ -466,9 +466,7 @@ def test_mfip_units_are_excluded_and_counted(tmp_path) -> None:
 
 def test_include_special_programs_keeps_mfip_units(tmp_path) -> None:
     _write_fixture(tmp_path)
-    units, log = load_qc_units(
-        2024, data_dir=tmp_path, include_special_programs=True
-    )
+    units, log = load_qc_units(2024, data_dir=tmp_path, include_special_programs=True)
     assert len(units) == 5
     assert log.total_excluded == 0
     assert 3 in {u.certified_size for u in units}
@@ -660,7 +658,9 @@ def test_live_fy2024_row_counts() -> None:
 
     # Member income reproduces the QC-constructed unit aggregates exactly.
     for unit in co_units:
-        fsearn = float(unit.raw["FSEARN"]) if unit.raw["FSEARN"] not in ("", ".") else 0.0
+        fsearn = (
+            float(unit.raw["FSEARN"]) if unit.raw["FSEARN"] not in ("", ".") else 0.0
+        )
         fsunearn = (
             float(unit.raw["FSUNEARN"])
             if unit.raw["FSUNEARN"] not in ("", ".")
