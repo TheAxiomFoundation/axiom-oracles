@@ -593,3 +593,14 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     assert value("snap_standard_deduction") == 198
     assert value("snap_maximum_allotment") == 291
     assert value("snap_standard_utility_allowance") == 560
+
+
+def test_unit_level_elderly_or_disabled_overrides_member_flags() -> None:
+    # A disabled non-participant makes the member-derived flag true, but the
+    # file's own FSNELDER/FSNDIS counts say the unit is not elderly/disabled
+    # (observed on a real Colorado row: QC capped its shelter deduction).
+    member = _member(age=45, elderly_or_disabled=True, _unearned=881.0)
+    case = _map(_unit(members=[member], unit_has_elderly_or_disabled=False))
+    assert case.member_inputs[0][ELDERLY] is False
+    case = _map(_unit(members=[_member(age=30)], unit_has_elderly_or_disabled=True))
+    assert case.member_inputs[0][ELDERLY] is True

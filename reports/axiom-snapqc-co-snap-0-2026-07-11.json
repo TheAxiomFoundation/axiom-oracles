@@ -6219,31 +6219,11 @@
     "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
-  "schema_version": "axiom.comparison_report.v2.1",
+  "schema_version": "axiom.comparison_report.v2",
   "scope": null,
   "suite": "co-snap-qc",
   "summary": {
     "comparison_count": 856,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
-        "explained_residual": 0,
-        "unexplained": 0,
-        "upstream_engine_gap": 0
-      },
-      "dispositions_file": "dispositions/co-snap-qc.yaml",
-      "expired_entries": [
-        "homeless-shelter-deduction-cap-stale-143",
-        "whole-dollar-rounding-convention",
-        "whole-dollar-rounding-convention-net-income"
-      ],
-      "explained_rate": 100,
-      "orphaned_entries": [],
-      "raw_match_rate": 100,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 0
-    },
     "error_case_count": 0,
     "exclusions": {
       "by_reason": {},

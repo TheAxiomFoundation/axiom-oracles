@@ -346,7 +346,10 @@ income-tax check. The oracle scores the benefit calculation, not the eligibility
 screening: the public file already dropped every incomplete or ineligible review,
 so the replay feeds eligibility gates the composition's passing defaults.
 
-The first jurisdiction is Colorado FY2024:
+The first jurisdiction is Colorado FY2024, currently 856/856 (100%)
+benefit-exact with every stage intermediate exact — a state reached by fixing
+two encoding defects the suite's first run surfaced (the playbook's
+track-record section has the path):
 
 ```bash
 uv run scripts/run_comparison.py co-snap-qc --summary

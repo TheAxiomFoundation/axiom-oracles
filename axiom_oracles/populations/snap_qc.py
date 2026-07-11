@@ -415,6 +415,13 @@ class QcUnit:
     child_support_expense: float | None
     homeless: bool | None
     homeless_deduction_claimed: bool | None
+    #: Unit-level elderly-or-disabled status from the file's own constructed
+    #: counts (FSNELDER, elderly members in the unit, PDF p.79; FSNDIS,
+    #: non-elderly members with disabilities in the unit, PDF p.79). This is
+    #: authoritative over any member-derived flag: ``members`` includes
+    #: non-participants whose income counts but whose age or disability does
+    #: not confer unit status (observed on real rows).
+    unit_has_elderly_or_disabled: bool | None
     categorically_eligible: bool | None
     liquid_resources: float | None
     weight: float | None
@@ -654,6 +661,18 @@ def _homeless_from_homeded(homeded: int | None) -> bool | None:
     return None if homeded is None else homeded != 1
 
 
+def _unit_elderly_or_disabled(row: dict[str, str]) -> bool | None:
+    # FSNELDER counts elderly (60+) unit members; FSNDIS counts non-elderly
+    # unit members with disabilities. Either positive makes the unit
+    # elderly-or-disabled for the shelter cap, medical entitlement, and
+    # gross-test path.
+    elder = _num(row.get("FSNELDER"))
+    disabled = _num(row.get("FSNDIS"))
+    if elder is None and disabled is None:
+        return None
+    return bool((elder or 0) > 0 or (disabled or 0) > 0)
+
+
 def _homeless_deduction_claimed(homeded: int | None) -> bool | None:
     # HOMEDED = 3 is the only code that receives the standard homeless shelter
     # deduction; the constructed HOMELESS_DED (p86) is positive only for these
@@ -719,6 +738,7 @@ def _build_unit(
         homeless_deduction_claimed=_homeless_deduction_claimed(
             _int(row.get("HOMEDED"))
         ),
+        unit_has_elderly_or_disabled=_unit_elderly_or_disabled(row),
         categorically_eligible=_categorically_eligible(_int(row.get("CAT_ELIG"))),
         liquid_resources=_num(row.get("LIQRESOR")),
         weight=_num(row.get("HWGT")),

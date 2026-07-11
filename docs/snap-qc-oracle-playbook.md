@@ -191,8 +191,9 @@ Colorado parameters exactly.
   benefit is compared exactly after rounding to whole dollars (`--tolerance 0`), with
   stage intermediates at `--stage-tolerance 1` to absorb the file's per-field
   rounding. The homeless shelter deduction, statutorily $179.66, is recorded as $180
-  in the QC file (whole-dollar rounding; tech doc Table F.3 note, PDF p.180) — expect
-  and disposition that one-dollar artifact rather than chase it.
+  in the QC file (whole-dollar rounding; tech doc Table F.3 note, PDF p.180) — the
+  encoding applies it at its nearest-dollar value under the 273.10(e)(1)(ii)(A)
+  rounding election, reproducing the file exactly.
 - **Utility tiers when standard, `UTIL` when not.** The QC `SUA1` code maps to the
   Colorado composition's utility-allowance flags (heating/cooling, limited,
   single-utility, telephone, none) so the awarded allowance exercises the encoded
@@ -215,22 +216,32 @@ Colorado parameters exactly.
   the standard homeless shelter deduction; the QC file zeroes `FSSLTDED` for them
   by construction (codebook PDF p.85), so the mapper raises the composition's
   homeless flags, raises no utility flag, and the engine takes the flat-deduction
-  path. First-run finding: the federal 273.10 encoding caps that deduction at the
+  path. First-run finding: the federal 273.10 encoding capped that deduction at the
   stale CFR literal $143 where the statute indexes it ($179.66 in FY 2024) —
-  TheAxiomFoundation/rulespec-us#761, carried as `axiom_encoding_gap` dispositions
-  until fixed.
+  TheAxiomFoundation/rulespec-us#761, fixed by rulespec-us#765 (the cap now binds
+  from the fiscal-year COLA policy module).
 - **Child support: exclusion, not deduction.** Colorado elects the 7 USC
   2014(e)(4) child-support income exclusion, so the composition removes child
   support paid from countable gross income while the QC file books the same
   amount as a deduction (`FSCSDED`; the `FSCSEXP` codebook entry documents the
   state split). Net income is identical either way; the gross-income comparison
   nets `FSCSDED` out of `FSGRINC`.
-- **Whole-dollar rounding is a known encoding gap.** The encoded chain carries
+- **Whole-dollar rounding is encoded.** The encoded chain originally carried
   cents (20 percent earned-income deduction, half-income shelter subtraction)
   where the FNS Minimodel computes with whole dollars at each step; when the
-  fractional net crosses a dollar boundary the benefit flips by exactly $1.
-  TheAxiomFoundation/rulespec-us#762 tracks encoding the rounding steps; the
-  affected rows are `axiom_encoding_gap` dispositions until then.
+  fractional net crossed a dollar boundary the benefit flipped by exactly $1.
+  TheAxiomFoundation/rulespec-us#762, fixed by rulespec-us#826: the earned-income
+  deduction drops cents and the excess-shelter subtraction rounds to the nearest
+  whole dollar per the 273.10(e)(1)(ii)(A) election, matching the Minimodel's
+  constructed FSERNDED/FSSLTDED/FSNETINC.
+- **Elderly/disabled status is a unit-level fact.** The medical deduction and the
+  excess-shelter cap waiver key off `FSNELDER`/`FSNDIS` (the file's constructed
+  unit-level counts), not off member rows: `members` includes non-participants,
+  so a disabled non-member can make a member-derived flag true while the QC
+  computation treats the unit as not elderly/disabled (observed once in the
+  Colorado sample — the unit's shelter deduction stayed capped). The loader
+  carries `unit_has_elderly_or_disabled` from the counts and the mapper prefers
+  it, falling back to member facts only when the columns are absent.
 - **Replicate weights are not needed for parity.** The QC file ships `HWGT` plus
   replicate weights for design-consistent variance estimation. Per-unit benefit
   reproduction uses neither: `HWGT` is applied only to report a caseload-weighted
@@ -285,3 +296,18 @@ full 856-review Colorado subset turns the editing guarantee into a benefit-compu
 match rate and a stage-keyed mismatch taxonomy, so a real encoding gap shows up as a
 dispositioned class against administrative ground truth rather than as a green light
 nobody checked.
+
+That is exactly how the pilot played out. The first run matched 816 of 856
+benefits (95.3%) with every residual classified; the classifications surfaced
+two defects in the federal 273.10 encoding — the stale $143 homeless-deduction
+literal (rulespec-us#761 → #765) and the missing whole-dollar rounding steps
+(rulespec-us#762 → #826) — plus one mapping refinement in this repo
+(unit-level elderly/disabled status, §7). With the two upstream fixes merged
+and the mapper refined, the suite stands at **856/856 (100%) benefit-exact,
+with every stage intermediate exact** — gross income, standard deduction,
+shelter deduction, net income, maximum allotment, and benefit, 5,136/5,136
+comparisons — against rulespec-us `b53ce208`
+(`reports/axiom-snapqc-co-snap-0-2026-07-11.json`). The dispositions ledger
+for the suite is empty: every divergence either exposed a real defect (fixed
+upstream, in public pull requests) or a documented mapping subtlety (encoded
+in §7). That is the loop working as designed.
