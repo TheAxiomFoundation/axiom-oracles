@@ -1,5 +1,5 @@
 from axiom_oracles.adapters.prd import PrdPackageRunner
-from axiom_oracles.adapters.axiom import AxiomRulesRunner
+from axiom_oracles.adapters.axiom import AxiomRulesRunner, US_TAX_ORACLE_IMPORTS
 from axiom_oracles.adapters.axiom.runner import _input_record_names
 from axiom_oracles.adapters.euromod import EuromodPlatformRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
@@ -26,8 +26,7 @@ from axiom_oracles.suites import load_suite
 
 def test_unknown_engines_do_not_get_implicit_concept_targets() -> None:
     concept_ids = {
-        mapping.concept_id
-        for mapping in comparable_mappings("taxsim", "policyengine")
+        mapping.concept_id for mapping in comparable_mappings("taxsim", "policyengine")
     }
 
     assert "us:statutes/7/2014/o#snap_eligible" not in concept_ids
@@ -52,8 +51,7 @@ def test_package_targets_have_us_scope_and_intersect_with_accessnyc() -> None:
 
 def test_prd_defaults_to_mapped_policyengine_intersection() -> None:
     concept_ids = {
-        mapping.concept_id
-        for mapping in comparable_mappings("prd", "policyengine")
+        mapping.concept_id for mapping in comparable_mappings("prd", "policyengine")
     }
 
     assert concept_ids == {"us:statutes/7/2014/u#snap_benefit"}
@@ -76,13 +74,25 @@ def test_cli_builds_package_target_runners() -> None:
     assert isinstance(policyengine_for_taxsim, PolicyEngineTaxsimRunner)
 
 
-def test_cli_passes_axiom_batch_size_to_runner() -> None:
+def test_cli_passes_axiom_batch_size_to_runner(tmp_path) -> None:
+    binary = tmp_path / "axiom-rules-engine"
+    binary.write_text("#!/bin/sh\nexit 0\n")
+    binary.chmod(0o755)
+    rulespec_root = tmp_path / "rulespec-us"
+    rulespec_root.mkdir()
+    for module_ref in US_TAX_ORACLE_IMPORTS:
+        jurisdiction, relative = module_ref.split(":", 1)
+        module = rulespec_root / jurisdiction / f"{relative}.yaml"
+        module.parent.mkdir(parents=True, exist_ok=True)
+        module.write_text("format: rulespec/v1\nrules: []\n")
     runner = _build_runner(
         "axiom",
         "api",
         None,
         None,
         (Concepts.FEDERAL_INCOME_TAX,),
+        axiom_engine_binary=binary,
+        rulespec_root=rulespec_root,
         axiom_batch_size=123,
         paired_engine="policyengine",
     )
@@ -215,7 +225,7 @@ def test_cli_prepares_axiom_tax_inputs_for_state_income_tax() -> None:
     assert projected.metadata["axiom_input_record_overlays"]
     assert projected.metadata["axiom_result_selection"] == {
         "strategy": "min",
-        "output": "us:tax/oracle-bridge#state_income_tax",
+        "output": "us:programs/oracles/tax#state_income_tax",
     }
 
 

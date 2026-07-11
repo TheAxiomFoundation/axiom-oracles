@@ -6,10 +6,10 @@ Axiom, this script:
 
 1. Extracts the rule name from the Axiom target (e.g. ``us:statutes/26/6401#income_tax``
    → ``income_tax``).
-2. Scans every YAML file across all configured corpus repos for top-level rule
-   definitions matching that name.
-3. Infers each match's jurisdiction from the repo name (e.g. ``rulespec-us`` →
-   federal, ``rules-us-co`` → Colorado).
+2. Scans the five canonical content roots beneath every jurisdiction in each
+   explicitly supplied ``rulespec-<country>`` checkout.
+3. Infers each match's jurisdiction from its direct jurisdiction directory
+   (e.g. ``rulespec-us/us`` → federal, ``rulespec-us/us-co`` → Colorado).
 4. Emits a ``coverage`` list per program so the dashboard can show exactly
    which jurisdictions have an encoding.
 
@@ -19,10 +19,10 @@ prior run are preserved so manual annotations (live/partial) survive.
 
 Usage::
 
-    uv run --with pyyaml python scripts/sync_programs.py \\
-        --corpus ~/rulespec-us \\
-        --corpus ~/rules-us-co
+    uv run --with pyyaml python dashboard/scripts/sync_programs.py \\
+        --rulespec-root ~/TheAxiomFoundation/rulespec-us
 """
+
 from __future__ import annotations
 
 import argparse
@@ -30,6 +30,19 @@ import json
 import re
 import sys
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.bridges.repo_routing import (  # noqa: E402
+    RULESPEC_ATOMIC_ROOTS,
+    canonical_rulespec_module_path,
+    canonical_rulespec_repo_name,
+    canonical_rulespec_root_identity,
+    is_policy_repo_root,
+    iter_jurisdiction_content_dirs,
+)
 
 try:
     import yaml
@@ -40,37 +53,67 @@ except ImportError:
 
 # US state codes → display name. Add as new state repos land.
 US_STATE_NAMES = {
-    "al": "Alabama", "ak": "Alaska", "az": "Arizona", "ar": "Arkansas",
-    "ca": "California", "co": "Colorado", "ct": "Connecticut", "de": "Delaware",
-    "fl": "Florida", "ga": "Georgia", "hi": "Hawaii", "id": "Idaho",
-    "il": "Illinois", "in": "Indiana", "ia": "Iowa", "ks": "Kansas",
-    "ky": "Kentucky", "la": "Louisiana", "me": "Maine", "md": "Maryland",
-    "ma": "Massachusetts", "mi": "Michigan", "mn": "Minnesota", "ms": "Mississippi",
-    "mo": "Missouri", "mt": "Montana", "ne": "Nebraska", "nv": "Nevada",
-    "nh": "New Hampshire", "nj": "New Jersey", "nm": "New Mexico", "ny": "New York",
-    "nc": "North Carolina", "nd": "North Dakota", "oh": "Ohio", "ok": "Oklahoma",
-    "or": "Oregon", "pa": "Pennsylvania", "ri": "Rhode Island", "sc": "South Carolina",
-    "sd": "South Dakota", "tn": "Tennessee", "tx": "Texas", "ut": "Utah",
-    "vt": "Vermont", "va": "Virginia", "wa": "Washington", "wv": "West Virginia",
-    "wi": "Wisconsin", "wy": "Wyoming", "dc": "District of Columbia",
+    "al": "Alabama",
+    "ak": "Alaska",
+    "az": "Arizona",
+    "ar": "Arkansas",
+    "ca": "California",
+    "co": "Colorado",
+    "ct": "Connecticut",
+    "de": "Delaware",
+    "fl": "Florida",
+    "ga": "Georgia",
+    "hi": "Hawaii",
+    "id": "Idaho",
+    "il": "Illinois",
+    "in": "Indiana",
+    "ia": "Iowa",
+    "ks": "Kansas",
+    "ky": "Kentucky",
+    "la": "Louisiana",
+    "me": "Maine",
+    "md": "Maryland",
+    "ma": "Massachusetts",
+    "mi": "Michigan",
+    "mn": "Minnesota",
+    "ms": "Mississippi",
+    "mo": "Missouri",
+    "mt": "Montana",
+    "ne": "Nebraska",
+    "nv": "Nevada",
+    "nh": "New Hampshire",
+    "nj": "New Jersey",
+    "nm": "New Mexico",
+    "ny": "New York",
+    "nc": "North Carolina",
+    "nd": "North Dakota",
+    "oh": "Ohio",
+    "ok": "Oklahoma",
+    "or": "Oregon",
+    "pa": "Pennsylvania",
+    "ri": "Rhode Island",
+    "sc": "South Carolina",
+    "sd": "South Dakota",
+    "tn": "Tennessee",
+    "tx": "Texas",
+    "ut": "Utah",
+    "vt": "Vermont",
+    "va": "Virginia",
+    "wa": "Washington",
+    "wv": "West Virginia",
+    "wi": "Wisconsin",
+    "wy": "Wyoming",
+    "dc": "District of Columbia",
 }
 
 
-def jurisdiction_for(corpus_root: Path) -> dict:
-    """Infer jurisdiction from a corpus repo name.
+def jurisdiction_for(prefix: str) -> dict:
+    """Return dashboard metadata for one canonical jurisdiction prefix."""
 
-    rulespec-us       → {"label": "Federal (US)", "scope": "federal", "country": "US"}
-    rules-us-co       → {"label": "Colorado", "scope": "state", "country": "US", "state": "CO"}
-    rulespec-us-ca    → California (same pattern)
-    rulespec-uk       → United Kingdom
-    rulespec-ca       → Canada federal
-    Anything else     → raw repo name.
-    """
-    name = corpus_root.name.lower()
-    match = re.match(r"(rulespec|rules)-([a-z]{2})(?:-([a-z]{2}))?$", name)
+    match = re.fullmatch(r"([a-z]{2})(?:-([a-z]{2}))?", prefix)
     if not match:
-        return {"label": corpus_root.name, "scope": "unknown"}
-    _, country, sub = match.groups()
+        raise ValueError(f"invalid canonical jurisdiction prefix: {prefix!r}")
+    country, sub = match.groups()
     if country == "us" and sub:
         state_name = US_STATE_NAMES.get(sub, sub.upper())
         return {
@@ -85,7 +128,7 @@ def jurisdiction_for(corpus_root: Path) -> dict:
         return {"label": "United Kingdom", "scope": "federal", "country": "UK"}
     if country == "ca":
         return {"label": "Federal (Canada)", "scope": "federal", "country": "CA"}
-    return {"label": corpus_root.name, "scope": "unknown"}
+    return {"label": prefix, "scope": "unknown", "country": country.upper()}
 
 
 def extract_rule_names(yaml_path: Path) -> set[str]:
@@ -106,25 +149,57 @@ def extract_rule_names(yaml_path: Path) -> set[str]:
     return names
 
 
-def build_rule_index(corpus_roots: list[Path]) -> dict[str, list[dict]]:
-    """Map rule_name → list of {corpus, file, jurisdiction} where it's defined."""
+def build_rule_index(rulespec_roots: list[Path]) -> dict[str, list[dict]]:
+    """Index rules beneath explicit canonical country/jurisdiction roots."""
+
     index: dict[str, list[dict]] = {}
-    for root in corpus_roots:
+    seen_identities: set[str] = set()
+    for root in rulespec_roots:
+        root = root.expanduser()
         if not root.exists():
-            sys.stderr.write(f"warning: corpus root not found: {root}\n")
-            continue
-        jurisdiction = jurisdiction_for(root)
-        for yaml_path in root.rglob("*.yaml"):
-            if yaml_path.name.endswith(".test.yaml"):
-                continue
-            for name in extract_rule_names(yaml_path):
-                index.setdefault(name, []).append(
-                    {
-                        "corpus": root.name,
-                        "file": str(yaml_path.relative_to(root)),
-                        **jurisdiction,
-                    }
-                )
+            raise ValueError(f"RuleSpec root not found: {root}")
+        if not (is_policy_repo_root(root) or canonical_rulespec_root_identity(root)):
+            raise ValueError(
+                f"RuleSpec root must be an exact rulespec-<country> checkout "
+                f"or direct jurisdiction root: {root}"
+            )
+
+        for prefix, content_root in iter_jurisdiction_content_dirs(root):
+            identity = canonical_rulespec_root_identity(content_root)
+            if identity is None:
+                raise ValueError(f"invalid jurisdiction root: {content_root}")
+            if identity in seen_identities:
+                raise ValueError(f"duplicate RuleSpec jurisdiction root: {identity}")
+            seen_identities.add(identity)
+
+            repo_name = canonical_rulespec_repo_name(content_root)
+            if repo_name is None:
+                raise ValueError(f"invalid RuleSpec repository root: {content_root}")
+            jurisdiction = jurisdiction_for(prefix)
+            checkout_root = content_root.parent
+            for canonical_root in sorted(RULESPEC_ATOMIC_ROOTS):
+                content_dir = content_root / canonical_root
+                if not content_dir.is_dir():
+                    continue
+                for yaml_path in sorted(content_dir.rglob("*")):
+                    if yaml_path.is_file() and yaml_path.suffix == ".yml":
+                        raise ValueError(
+                            f"legacy .yml RuleSpec module is not supported: {yaml_path}"
+                        )
+                    module_path = canonical_rulespec_module_path(
+                        yaml_path,
+                        content_root=content_root,
+                    )
+                    if module_path is None or module_path.name.endswith(".test.yaml"):
+                        continue
+                    for name in extract_rule_names(module_path):
+                        index.setdefault(name, []).append(
+                            {
+                                "corpus": repo_name,
+                                "file": str(module_path.relative_to(checkout_root)),
+                                **jurisdiction,
+                            }
+                        )
     return index
 
 
@@ -138,11 +213,14 @@ def load_existing(programs_json: Path) -> dict[str, dict]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--corpus",
+        "--rulespec-root",
         action="append",
         type=Path,
         required=True,
-        help="Path to a rulespec corpus root. Can be repeated.",
+        help=(
+            "Exact rulespec-<country> checkout or direct jurisdiction root. "
+            "Can be repeated."
+        ),
     )
     parser.add_argument(
         "--mappings",
@@ -154,13 +232,11 @@ def main() -> int:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path(__file__).resolve().parent.parent
-        / "public/data/programs.json",
+        default=Path(__file__).resolve().parent.parent / "public/data/programs.json",
     )
     args = parser.parse_args()
 
-    corpus_roots = [c.expanduser().resolve() for c in args.corpus]
-    rule_index = build_rule_index(corpus_roots)
+    rule_index = build_rule_index(args.rulespec_root)
 
     with open(args.mappings) as fh:
         mappings = yaml.safe_load(fh)
@@ -180,9 +256,7 @@ def main() -> int:
         # corpus. Aliases default to the rule name in the axiom_target but can
         # be hand-extended in programs.json (e.g., SNAP benefit also matches
         # ``snap_allotment``, the actual output rule used by state encodings).
-        canonical_rule = (
-            axiom_target.split("#", 1)[1] if "#" in axiom_target else None
-        )
+        canonical_rule = axiom_target.split("#", 1)[1] if "#" in axiom_target else None
         aliases = list(prior.get("rule_aliases") or [])
         if canonical_rule and canonical_rule not in aliases:
             aliases.insert(0, canonical_rule)
@@ -220,9 +294,7 @@ def main() -> int:
             "category": concept.get("category"),
             "axiom_ref": axiom_target.split("#", 1)[0],
             "axiom_target": axiom_target,
-            "statute_label": prior.get(
-                "statute_label", _statute_label(axiom_target)
-            ),
+            "statute_label": prior.get("statute_label", _statute_label(axiom_target)),
             "comparison": concept.get("comparison"),
             "tolerance": concept.get("tolerance"),
             "oracles": prior.get("oracles") or sorted(_oracle_keys(targets)),
@@ -254,9 +326,7 @@ def main() -> int:
     print(f"Wrote {len(programs)} programs to {args.output} ({live} encoded)")
     for p in programs:
         if p["coverage"]:
-            jurisdictions = ", ".join(
-                sorted({c["label"] for c in p["coverage"]})
-            )
+            jurisdictions = ", ".join(sorted({c["label"] for c in p["coverage"]}))
             print(f"  ✓ {p['name']:<40s} {jurisdictions}")
         else:
             print(f"  ✗ {p['name']:<40s} (not in any corpus)")
@@ -267,14 +337,14 @@ def main() -> int:
 def _statute_label(target: str) -> str:
     base = target.split("#", 1)[0]
     if base.startswith("us:statutes/"):
-        rest = base[len("us:statutes/"):]
+        rest = base[len("us:statutes/") :]
         parts = rest.split("/")
         if len(parts) >= 2:
             title = parts[0]
             section = "/".join(parts[1:])
             return f"{title} USC § {section}"
     if base.startswith("us:programs/"):
-        return base[len("us:programs/"):]
+        return base[len("us:programs/") :]
     return base
 
 

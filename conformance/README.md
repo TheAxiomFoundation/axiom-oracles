@@ -201,7 +201,9 @@ EUROMOD-synthetic lane that program is assembled implicitly at run time:
 with **no `--axiom-program`**, and the runner derives the RuleSpec import-set
 from the `module#name` prefixes of the suite's output concepts
 (`rulespec_imports_for_concepts`), compiles a generated program that imports
-those modules, and resolves them against `AXIOM_RULESPEC_REPO_ROOTS`. Nothing
+those modules, and resolves them against the explicit canonical
+`--rulespec-root`. The engine environment is derived from that argument; it is
+never read as ambient configuration. Nothing
 consumable recorded that program, so the verdict could not be reproduced outside
 the harness and a population run could not reuse the identical program without
 re-deriving it.
@@ -236,15 +238,15 @@ at 30k the refundable work-bonus credit), **not** by a wider program. The
 record therefore describes what actually runs, not an idealised composition that
 would make the raw numbers match.
 
-### CLI convenience
+### CLI contract
 
 `compare euromod axiom --suite <name>` (no `--axiom-program`) already composes
-the program from the suite's concepts. When `AXIOM_RULESPEC_ROOT` names a
-rulespec checkout — one repo (`…/rulespec-be`) or the workspace holding the
-`rulespec-<country>` checkouts — the runner resolves the modules against it, and
-the compare command echoes the resolved composition (its modules, files, and
-entity) so the run is reproducible. Passing `--axiom-program` still overrides
-everything; suites with no record (US / UK-PE lanes) fall through unchanged.
+the program from the suite's concepts. The command requires an exact canonical
+country checkout via `--rulespec-root` and an exact executable via
+`--axiom-engine-binary`; no environment, workspace, sibling, or alias fallback
+exists. It echoes the resolved composition (modules, files, and entity) so the
+run is reproducible. Passing `--axiom-program` overrides composition selection,
+but not the explicit runtime inputs.
 
 ## CI gates
 

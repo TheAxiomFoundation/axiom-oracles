@@ -6,8 +6,7 @@ from .be_worker import BE_METADATA, EUROMOD_TO_AXIOM_INPUT_BRIDGE
 
 JOBBONUS_MODULE = "be-vlg:regulations/employment/jobbonus"
 GROSS_WAGE_INPUT = (
-    f"{JOBBONUS_MODULE}#input."
-    "flanders_jobbonus_average_monthly_gross_wage_at_full_time"
+    f"{JOBBONUS_MODULE}#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time"
 )
 
 

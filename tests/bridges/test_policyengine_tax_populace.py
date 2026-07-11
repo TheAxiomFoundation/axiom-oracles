@@ -1,4 +1,5 @@
 import argparse
+import os
 
 import pytest
 
@@ -162,36 +163,28 @@ def test_remove_raw_columns_replaced_by_outputs_prefers_period_values():
     assert merged.loc[0, "american_opportunity_credit"] == 2_500
 
 
-def test_run_axiom_program_compiles_through_canonical_repo_alias(
+def test_run_axiom_program_uses_exact_canonical_checkout_and_binary(
     monkeypatch,
     tmp_path,
 ):
-    rulespec_root = tmp_path / "rulespec-uk-worktree"
-    program = rulespec_root / "statutes" / "ukpga" / "2007" / "3" / "35.yaml"
+    rulespec_root = tmp_path / "rulespec-uk"
+    program = rulespec_root / "uk" / "statutes" / "ukpga" / "2007" / "3" / "35.yaml"
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\nrules: []\n")
-    axiom_rules_path = tmp_path / "axiom-rules-engine"
-    binary = axiom_rules_path / "target" / "release" / "axiom-rules-engine"
-    binary.parent.mkdir(parents=True)
+    binary = tmp_path / "axiom-rules-engine"
     binary.write_text("")
+    binary.chmod(0o755)
 
     compiled_programs = []
-    compile_env_roots = []
+    compile_commands = []
     runtime_requests = []
 
     def fake_run(cmd, **kwargs):
-        if len(cmd) >= 6 and cmd[:3] == ["git", "-C", str(rulespec_root)]:
-            return tax_populace.subprocess.CompletedProcess(
-                cmd,
-                0,
-                stdout="https://github.com/TheAxiomFoundation/rulespec-uk.git\n",
-                stderr="",
-            )
         if "compile" in cmd:
             compiled_programs.append(cmd[cmd.index("--program") + 1])
-            compile_env_roots.extend(
-                kwargs["env"]["AXIOM_RULESPEC_REPO_ROOTS"].split(tax_populace.os.pathsep)
-            )
+            compile_commands.append(cmd)
+            assert "AXIOM_RULESPEC_REPO_ROOTS" not in kwargs["env"]
+            assert "AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE" not in kwargs["env"]
             output_path = cmd[cmd.index("--output") + 1]
             with open(output_path, "w") as artifact:
                 artifact.write(
@@ -201,7 +194,7 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
                                 "parameters": [],
                                 "derived": [
                                     {
-                                        "id": "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance",
+                                        "id": "uk:statutes/ukpga/2007/3/35#personal_allowance",
                                         "name": "personal_allowance",
                                         "entity": "Person",
                                     }
@@ -210,7 +203,9 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
                         }
                     )
                 )
-            return tax_populace.subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+            return tax_populace.subprocess.CompletedProcess(
+                cmd, 0, stdout="", stderr=""
+            )
         if "run-compiled" in cmd:
             runtime_requests.append(tax_populace.json.loads(kwargs["input"]))
             return tax_populace.subprocess.CompletedProcess(
@@ -221,7 +216,7 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
                         "results": [
                             {
                                 "outputs": {
-                                    "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance": {
+                                    "uk:statutes/ukpga/2007/3/35#personal_allowance": {
                                         "kind": "scalar",
                                         "value": {
                                             "kind": "integer",
@@ -283,7 +278,7 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
             ],
         },
         rulespec_root=rulespec_root,
-        axiom_rules_path=axiom_rules_path,
+        axiom_binary=binary,
     )
 
     assert (
@@ -293,20 +288,19 @@ def test_run_axiom_program_compiles_through_canonical_repo_alias(
         == 12570
     )
     assert compiled_programs
-    assert "rulespec-uk" in compiled_programs[0].split("/")
-    assert "rulespec-uk-worktree" not in compiled_programs[0].split("/")
+    assert compiled_programs == [str(program.resolve())]
     assert runtime_requests[0]["dataset"]["inputs"][0]["name"] == (
-        "uk-worktree:statutes/ukpga/2007/3/35#input.adjusted_net_income"
+        "uk:statutes/ukpga/2007/3/35#input.adjusted_net_income"
     )
     assert runtime_requests[0]["dataset"]["relations"][0]["name"] == (
-        "uk-worktree:statutes/ukpga/2007/3/35#relation.members"
+        "uk:statutes/ukpga/2007/3/35#relation.members"
     )
     assert runtime_requests[0]["queries"][0]["outputs"] == [
-        "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance"
+        "uk:statutes/ukpga/2007/3/35#personal_allowance"
     ]
-    assert str(rulespec_root) in compile_env_roots
-    assert str(rulespec_root.parent) in compile_env_roots
-    assert compile_env_roots[0] != str(rulespec_root)
+    assert compile_commands[0][compile_commands[0].index("--rulespec-root") + 1] == str(
+        rulespec_root.resolve()
+    )
 
 
 @pytest.mark.parametrize(
@@ -721,7 +715,7 @@ def test_eitc_projection_uses_ecps_income_and_demographic_inputs():
     )
     assert earned_income_inputs == {
         "employee_compensation_includible_in_gross_income": 18_000,
-            "net_earnings_from_self_employment_after_self_employment_tax_deduction": 0.0,
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction": 0.0,
         "pension_or_annuity_amount": 0,
         "nonresident_alien_income_not_connected_with_united_states_business": 0,
         "penal_institution_service_compensation": 0,
@@ -793,9 +787,7 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
         project_section_32_c_2_tax_unit_inputs(
             persons=persons,
             contexts=contexts,
-        )[
-            "employee_compensation_includible_in_gross_income"
-        ]
+        )["employee_compensation_includible_in_gross_income"]
         == 0
     )
 
@@ -885,9 +877,7 @@ def test_eitc_projection_sends_self_employment_to_section_1402_not_earned_income
         contexts=contexts,
     ) == {
         "net_earnings_from_self_employment": 3_647.825,
-        "net_earnings_from_self_employment_for_paragraph_2_threshold_test": (
-            3_647.825
-        ),
+        "net_earnings_from_self_employment_for_paragraph_2_threshold_test": (3_647.825),
     }
     assert project_section_164_f_tax_unit_inputs() == {
         "taxpayer_is_individual": True,
@@ -1840,15 +1830,14 @@ def test_resolve_rulespec_program_path_supports_country_monorepo_root(tmp_path):
     )
 
 
-def test_resolve_rulespec_program_path_keeps_direct_layout(tmp_path):
+def test_resolve_rulespec_program_path_rejects_flat_layout(tmp_path):
     root = tmp_path / "rulespec-us"
     program = root / "statutes" / "26" / "1" / "j.yaml"
     program.parent.mkdir(parents=True)
     program.write_text("program: {}\n")
 
-    assert (
-        resolve_rulespec_program_path(root, TAX_BEFORE_CREDITS_PROGRAM_PATH) == program
-    )
+    with pytest.raises(ValueError, match="jurisdiction root is not canonical"):
+        resolve_rulespec_program_path(root, TAX_BEFORE_CREDITS_PROGRAM_PATH)
 
 
 def test_select_tax_unit_indices_rejects_filtered_requested_case():
@@ -2090,8 +2079,11 @@ def test_contribution_and_benefit_base_comes_from_selected_axiom_result():
 
 
 def test_contribution_and_benefit_base_can_come_from_rulespec_test(tmp_path):
-    test_path = tmp_path / contribution_and_benefit_base_program_path(2024).with_suffix(
-        ".test.yaml"
+    rulespec_root = tmp_path / "rulespec-us"
+    test_path = (
+        rulespec_root
+        / "us"
+        / contribution_and_benefit_base_program_path(2024).with_suffix(".test.yaml")
     )
     test_path.parent.mkdir(parents=True)
     output = "us:policies/ssa/contribution-and-benefit-base/2024#contribution_and_benefit_base"
@@ -2110,7 +2102,7 @@ def test_contribution_and_benefit_base_can_come_from_rulespec_test(tmp_path):
 
     assert (
         contribution_and_benefit_base_from_rulespec_test(
-            tmp_path,
+            rulespec_root,
             year=2024,
             output=output,
         )
@@ -2291,8 +2283,8 @@ def test_build_medicare_payroll_request_uses_projected_fica_wages():
 
 
 def test_policyengine_variables_for_payroll_surface_are_person_scoped():
-    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
-        ["employee-medicare"]
+    tax_unit_variables, person_variables = (
+        tax_populace.policyengine_variables_for_surfaces(["employee-medicare"])
     )
 
     assert tax_unit_variables == ()
@@ -2306,9 +2298,11 @@ def test_policyengine_variables_for_payroll_surface_are_person_scoped():
 
 
 def test_policyengine_variables_for_positive_ctc_payroll_surface_selects_ctc():
-    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
-        ["employee-oasdi"],
-        positive_ctc_only=True,
+    tax_unit_variables, person_variables = (
+        tax_populace.policyengine_variables_for_surfaces(
+            ["employee-oasdi"],
+            positive_ctc_only=True,
+        )
     )
 
     assert tax_unit_variables == ("ctc",)
@@ -2321,15 +2315,17 @@ def test_policyengine_variables_for_non_payroll_surfaces_use_legacy_sets():
         tax_populace.PE_TAX_UNIT_VARIABLES,
         tax_populace.PE_PERSON_VARIABLES,
     )
-    assert tax_populace.policyengine_variables_for_surfaces(["employee-oasdi", "ctc"]) == (
+    assert tax_populace.policyengine_variables_for_surfaces(
+        ["employee-oasdi", "ctc"]
+    ) == (
         tax_populace.PE_TAX_UNIT_VARIABLES,
         tax_populace.PE_PERSON_VARIABLES,
     )
 
 
 def test_policyengine_variables_for_tax_before_credits_include_main_rates_inputs():
-    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
-        ["tax-before-credits"]
+    tax_unit_variables, person_variables = (
+        tax_populace.policyengine_variables_for_surfaces(["tax-before-credits"])
     )
 
     assert "income_tax_main_rates" in tax_unit_variables
@@ -2428,7 +2424,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         OASDI_WAGE_BASE_PROGRAM_PATH,
         EMPLOYEE_OASDI_PROGRAM_PATH,
     ):
-        target = rulespec_root / program_path
+        target = rulespec_root / "us" / program_path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text("format: rulespec/v1\nrules: []\n")
 
@@ -2466,9 +2462,9 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
 
     calls = []
 
-    def fake_run_axiom_program(*, program, request, rulespec_root, axiom_rules_path):
-        del rulespec_root, axiom_rules_path
-        calls.append((program.relative_to(tmp_path / "rulespec-us"), request))
+    def fake_run_axiom_program(*, program, request, rulespec_root, axiom_binary):
+        del rulespec_root, axiom_binary
+        calls.append((program.relative_to(tmp_path / "rulespec-us" / "us"), request))
         if program.name == "2026.yaml":
             return [
                 {
@@ -2481,7 +2477,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
                 }
             ]
         if (
-            program.relative_to(tmp_path / "rulespec-us")
+            program.relative_to(tmp_path / "rulespec-us" / "us")
             == OASDI_WAGE_BASE_PROGRAM_PATH
         ):
             input_values = {
@@ -2516,11 +2512,13 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         ]
 
     monkeypatch.setattr(tax_populace, "run_axiom_program", fake_run_axiom_program)
+    axiom_binary = tmp_path / "axiom-rules-engine"
+    axiom_binary.write_text("")
+    axiom_binary.chmod(0o755)
 
     report = compare_tax_ecps(
-        workspace_root=tmp_path,
         rulespec_root=rulespec_root,
-        axiom_rules_path=tmp_path / "axiom-rules-engine",
+        axiom_binary=axiom_binary,
         year=2026,
         sample_size=1,
         positive_ctc_only=False,
@@ -2582,4 +2580,4 @@ def test_policyengine_data_certification_override_noop_for_populace(monkeypatch)
 
     tax_populace._install_policyengine_data_certification_override()
 
-    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_populace.os.environ
+    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in os.environ

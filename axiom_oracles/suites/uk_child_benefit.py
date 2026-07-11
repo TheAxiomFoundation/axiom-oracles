@@ -163,7 +163,9 @@ def _child_benefit_case(
                 _cb_input("uk_cb_pilot_supplied_adjusted_net_income"): annual_income,
             },
             "euromod_inputs": rows,
-            "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
+            "euromod_policy_switch_overrides": [
+                list(pair) for pair in _TAKEUP_OVERRIDES
+            ],
         },
         entities=_entities(children=children, head_annual_income=annual_income),
         outputs=(
@@ -256,9 +258,7 @@ def _adult_row(*, idperson: int, annual_income: float) -> dict[str, float | int]
     }
 
 
-def _child_row(
-    *, idperson: int, age: int, mother_id: int
-) -> dict[str, float | int]:
+def _child_row(*, idperson: int, age: int, mother_id: int) -> dict[str, float | int]:
     return {
         "idhh": 1,
         "idperson": idperson,

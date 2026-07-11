@@ -9,12 +9,12 @@ all listed rules are fully comparable to PolicyEngine.
 | --- | --- | --- |
 | CA | Dashboard SNAP clean | Direct encoder comparison path; 0 current mismatches. |
 | NY | Dashboard SNAP clean | Direct encoder comparison path; 0 current mismatches. |
-| CO | Dashboard SNAP clean | Direct encoder comparison path is clean. The `axiom-programs/us-co/snap/fy-2026.yaml` wrapper compiles and the generic adapter now runs without engine errors, but the full generic household-level run is not clean (694 CO households, 1,388 comparisons, 276 mismatches). The dashboard remains on the encoder-backed SPM/SNAP-unit projection, which is clean over 730 units. |
-| NC | Promoted axiom-programs SNAP | Composed spec now lives under `axiom-programs/us-nc/snap/fy-2026.yaml`. Remaining non-TANF issue is annual-FPG vs FY2026 monthly SNAP table treatment. |
-| SC | Promoted axiom-programs SNAP | Composed spec now lives under `axiom-programs/us-sc/snap/fy-2026.yaml`. Remaining residuals include PE categorical treatment and TANF income. |
-| AL | Merged axiom-programs SNAP | Current residuals are 21 PE TANF-in-SNAP-income cases, 1 PE-only income/categorical case, 1 Axiom-only threshold/disqualification case, and 1 PE-greater amount edge. |
-| TN | Merged axiom-programs SNAP | Current residuals are 30 PE Families First/TANF-in-SNAP-income cases and 1 PE-greater amount edge; five eligibility residuals also include PE Families First/TANF. |
-| MA | Merged axiom-programs SNAP | HCSUA and categorical/standard income rollup are wired; remaining gaps are TAFDC/TANF and missing categorical service/source facts in ECPS. |
+| CO | Dashboard SNAP clean | Direct encoder comparison path is clean. The `rulespec-us/us-co/programs/snap/fy-2026.yaml` wrapper compiles and the generic adapter now runs without engine errors, but the full generic household-level run is not clean (694 CO households, 1,388 comparisons, 276 mismatches). The dashboard remains on the encoder-backed SPM/SNAP-unit projection, which is clean over 730 units. |
+| NC | Canonical SNAP program | Composed spec now lives under `rulespec-us/us-nc/programs/snap/fy-2026.yaml`. Remaining non-TANF issue is annual-FPG vs FY2026 monthly SNAP table treatment. |
+| SC | Canonical SNAP program | Composed spec now lives under `rulespec-us/us-sc/programs/snap/fy-2026.yaml`. Remaining residuals include PE categorical treatment and TANF income. |
+| AL | Canonical SNAP program | Current residuals are 21 PE TANF-in-SNAP-income cases, 1 PE-only income/categorical case, 1 Axiom-only threshold/disqualification case, and 1 PE-greater amount edge. |
+| TN | Canonical SNAP program | Current residuals are 30 PE Families First/TANF-in-SNAP-income cases and 1 PE-greater amount edge; five eligibility residuals also include PE Families First/TANF. |
+| MA | Canonical SNAP program | HCSUA and categorical/standard income rollup are wired; remaining gaps are TAFDC/TANF and missing categorical service/source facts in ECPS. |
 
 ## Other Local State RuleSpec Repos
 

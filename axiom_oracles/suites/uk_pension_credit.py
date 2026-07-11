@@ -220,7 +220,9 @@ def _pc_case(
             "has_reached_pension_age": has_reached_pension_age,
             "axiom_inputs": axiom_inputs,
             "euromod_inputs": rows,
-            "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
+            "euromod_policy_switch_overrides": [
+                list(pair) for pair in _TAKEUP_OVERRIDES
+            ],
             # Bridge UKMOD's assessed state pension (``boact_s``) into the
             # composed pipeline's weekly assessable-income input so both engines
             # test the identical income. The euromod adapter already converts

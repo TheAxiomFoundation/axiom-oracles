@@ -171,7 +171,7 @@ Fixable only after new facts or program coverage:
 ## CO Wrapper Status
 
 The CO encoder-backed dashboard comparison is clean. The generic
-`axiom-programs/us-co/snap/fy-2026.yaml` wrapper now compiles and has a
+`rulespec-us/us-co/programs/snap/fy-2026.yaml` wrapper now compiles and has a
 source-backed generic adapter path for:
 
 - `us:statutes/7/2014/u#snap_benefit`

@@ -185,9 +185,7 @@ def _refresh_be_rollup(
             continue
         data["dispositioned_parity"] = rollup
         serialized = json.dumps(data, indent=2, ensure_ascii=False)
-        path.write_text(
-            serialized + "\n" if text.endswith("\n") else serialized
-        )
+        path.write_text(serialized + "\n" if text.endswith("\n") else serialized)
         print(f"Updated {path.relative_to(REPO_ROOT)} dispositioned_parity")
         changed = True
     return problems, changed
@@ -202,10 +200,7 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
     for suite, dispositions in sorted(dispositions_by_suite.items()):
         report = reports_by_suite.get(suite)
         if report is None:
-            print(
-                f"note: dispositions/{suite}.yaml has no committed "
-                "dashboard report"
-            )
+            print(f"note: dispositions/{suite}.yaml has no committed dashboard report")
             continue
         merged = apply_dispositions(report, dispositions)
         block = merged["summary"]["dispositioned"]
@@ -241,9 +236,7 @@ def main() -> int:
         f"file{'s' if len(dispositions_by_suite) != 1 else ''}"
     )
 
-    problems, be_reports, _ = _merge_reports(
-        dispositions_by_suite, check=args.check
-    )
+    problems, be_reports, _ = _merge_reports(dispositions_by_suite, check=args.check)
     rollup_problems, _ = _refresh_be_rollup(be_reports, check=args.check)
     problems.extend(rollup_problems)
     _report_orphans(dispositions_by_suite)

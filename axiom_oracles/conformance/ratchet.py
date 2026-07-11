@@ -70,9 +70,7 @@ class RatchetInvariant:
         )
 
 
-def check_regressions(
-    ratchet: RatchetInvariant, summary: dict
-) -> list[str]:
+def check_regressions(ratchet: RatchetInvariant, summary: dict) -> list[str]:
     """Return violation messages naming the exact invariant that regressed.
 
     Each message tells the agent which monotonic invariant they broke and how,

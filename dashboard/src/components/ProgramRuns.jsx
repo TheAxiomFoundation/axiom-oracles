@@ -39,7 +39,7 @@ const COVERAGE_STATUS_LABEL = {
 
 function measurementNote(report, axiomProgram) {
   if (report.suite === "co-snap-ecps") {
-    return "Measured by the encoder-backed CO SNAP report; the axiom-programs wrapper now has generic output/input mapping smoke-tested, but is not yet the dashboard comparison path.";
+    return "Measured by the encoder-backed CO SNAP report; the canonical RuleSpec program has generic output/input mapping smoke-tested, but is not yet the dashboard comparison path.";
   }
   if (axiomProgram?.status === "coverageOnly") {
     return "Coverage-only surface; not a measured alignment run.";

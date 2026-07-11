@@ -117,9 +117,9 @@ def _reconstruct_oracle(config: dict) -> dict:
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
     rtype = runner.get("type")
-    if rtype == "axiom-encode-tax-ecps-compare":
+    if rtype == "axiom-encode-tax-populace-compare":
         return {"name": "policyengine", "policyengine_package": "policyengine==4.11.0"}
-    if rtype == "axiom-encode-uk-efrs-compare":
+    if rtype == "axiom-encode-uk-populace-compare":
         return {
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.88.56"),
@@ -132,7 +132,7 @@ def _reconstruct_oracle(config: dict) -> dict:
             # actually used and a future pin bump here isn't silently inert.
             "policyengine_us": _PE_ORACLE_PINS[1].split("==", 1)[-1],
         }
-    if rtype == "axiom-encode-snap-ecps-compare":
+    if rtype == "axiom-encode-snap-populace-compare":
         return {"name": "policyengine", "policyengine_us": "1.705.1"}
     # Committed EUROMOD reports have no run_comparison config; infer from suite.
     return {}
@@ -183,7 +183,9 @@ def _serialize_like(original_text: str, report: dict) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="Fail on any missing stamp.")
+    parser.add_argument(
+        "--check", action="store_true", help="Fail on any missing stamp."
+    )
     args = parser.parse_args()
 
     repos_by_suite = _affected_repos_by_suite()

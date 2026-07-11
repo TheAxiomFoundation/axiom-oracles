@@ -125,12 +125,11 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
   that already holds `qc_pub_fy{YYYY}.csv` to skip the download entirely — that is
   also how the engine-gated live test and a local real run pick up the file. The
   sha256 is verified after download with the populace-style remediation message.
-- Until the fy-2024-cola modules merge to rulespec-us main, a local run also needs
-  `AXIOM_SNAP_QC_RULESPEC_ROOT` pointed at a checkout that carries them (and
-  `AXIOM_SNAP_QC_AXIOM_BINARY` at a built engine when the default debug-path
-  resolution does not apply). The `scripts/run_comparison.py co-snap-qc` runner
-  honors both alongside the yaml parameters; absent any of the three
-  prerequisites it degrades to re-emitting the committed dashboard report.
+- Until the fy-2024-cola modules merge to rulespec-us main, the comparison YAML
+  must name the exact canonical checkout carrying them as `rulespec_root` and
+  the exact executable as `axiom_binary`. There are no workspace, environment,
+  or debug-build fallbacks. Absent any prerequisite, the runner re-emits the
+  committed dashboard report.
 
 ## 6. The fiscal-year gap and the overlay
 
@@ -166,10 +165,9 @@ period `2026-01`:
   `10-ccr-2506-1/4.407.31.yaml` — heating/cooling 594→560, basic 377→356,
   one-utility 71→67, telephone 97→91 (tech doc Table F.7, PDF p.183). Each patch
   asserts its from-value first, so a moved base repo fails loudly instead of silently
-  mispatching. The engine then runs with `AXIOM_RULESPEC_REPO_ROOTS` set to the
-  overlay root alone: the engine unions module ids across roots rather than
-  shadowing, so a sparse overlay in front of the real monorepo would compile both
-  COLA years and abort on duplicate rules.
+  mispatching. The engine then receives the complete overlay checkout as its sole
+  explicit `--rulespec-root`. Sparse overlay roots and ambient root unions are not
+  supported.
 - Caveat, carried in the report provenance and here: the rule *structure* is the
   current-manual snapshot, not the FY2024 manual. The benefit-calculation chain is
   structurally stable FY2024→FY2026 (only parameters moved), but genuine FY2024

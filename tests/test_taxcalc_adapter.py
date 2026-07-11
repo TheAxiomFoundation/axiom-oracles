@@ -158,7 +158,9 @@ def test_taxcalc_package_runner_projects_dependent_credit_counts() -> None:
     assert input_row["nu06"] == 1
 
 
-def test_taxcalc_package_runner_limits_head_of_household_to_qualifying_dependents() -> None:
+def test_taxcalc_package_runner_limits_head_of_household_to_qualifying_dependents() -> (
+    None
+):
     captured_inputs: list[dict] = []
 
     class FakeTaxCalcRunner:

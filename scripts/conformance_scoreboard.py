@@ -73,9 +73,7 @@ def _load_reports() -> list[dict]:
 
 def _universe_paths() -> list[Path]:
     return sorted(
-        p
-        for p in CONFORMANCE_DIR.glob("*.yaml")
-        if p.stem not in {"ratchet"}
+        p for p in CONFORMANCE_DIR.glob("*.yaml") if p.stem not in {"ratchet"}
     )
 
 
@@ -263,8 +261,7 @@ def main() -> int:
         n = len(document["jurisdictions"])
         conformant = sum(1 for j in document["jurisdictions"] if j["conformant"])
         print(
-            f"conformance scoreboard OK: {n} jurisdiction(s), "
-            f"{conformant} conformant"
+            f"conformance scoreboard OK: {n} jurisdiction(s), {conformant} conformant"
         )
         return 0
 

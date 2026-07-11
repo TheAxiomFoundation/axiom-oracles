@@ -2425,7 +2425,9 @@ def test_pip_final_projection_maps_categories_to_rate_band_leaves():
         f"{PIP_FINAL_BASE}#input.mobility_is_standard_rate": True,
     }
 
-    nil = project_pip_final_inputs({"pip_dl_category": "NONE", "pip_m_category": "NONE"})
+    nil = project_pip_final_inputs(
+        {"pip_dl_category": "NONE", "pip_m_category": "NONE"}
+    )
     assert all(value is False for value in nil.values())
 
 
@@ -3393,7 +3395,7 @@ rules:
 
 def test_run_axiom_parameter_outputs_resolves_composed_program_imports(tmp_path):
     rulespec_root = tmp_path / "rulespec-uk"
-    source = rulespec_root / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
+    source = rulespec_root / "uk" / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
     source.parent.mkdir(parents=True)
     source.write_text(
         """
@@ -3412,7 +3414,8 @@ rules:
           209.34
 """.strip()
     )
-    composed = tmp_path / "uk-uc-composed.yaml"
+    composed = rulespec_root / "uk" / "programs" / "universal-credit" / "composed.yaml"
+    composed.parent.mkdir(parents=True)
     composed.write_text(
         """
 format: rulespec/v1
@@ -4033,9 +4036,7 @@ class hbai_household_net_income(Variable):
     )
     assert by_name["esa_income"].status == "partial"
     assert by_name["esa_income"].surfaces == ("esa-income-tariff-income",)
-    assert by_name["esa_income"].covered_outputs == (
-        "esa_income_tariff_income",
-    )
+    assert by_name["esa_income"].covered_outputs == ("esa_income_tariff_income",)
     assert by_name["housing_benefit"].status == "partial"
     assert by_name["housing_benefit"].surfaces == (
         "housing-benefit-working-age-tariff-income",
@@ -5982,11 +5983,12 @@ def test_compare_uk_efrs_runs_axiom_personal_allowance(
     tmp_path,
 ):
     rulespec_root = tmp_path / "rulespec-uk"
-    program = rulespec_root / PERSONAL_ALLOWANCE_PROGRAM_PATH
+    program = rulespec_root / "uk" / PERSONAL_ALLOWANCE_PROGRAM_PATH
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\n")
     axiom_rules = tmp_path / "axiom-rules-engine"
-    axiom_rules.mkdir()
+    axiom_rules.write_text("")
+    axiom_rules.chmod(0o755)
     captured = {}
 
     monkeypatch.setattr(
@@ -6021,9 +6023,8 @@ def test_compare_uk_efrs_runs_axiom_personal_allowance(
     monkeypatch.setattr(efrs_uk, "run_axiom_surface", fake_run_axiom_program)
 
     report = compare_uk_efrs(
-        workspace_root=tmp_path,
-        rulespec_root=None,
-        axiom_rules_path=None,
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_rules,
         year=2026,
         sample_size=100,
         surface="personal-allowance",
@@ -6038,12 +6039,11 @@ def test_compare_uk_efrs_runs_axiom_personal_allowance(
     assert report.mismatches == []
     assert captured["program"] == program
     assert captured["rulespec_root"] == rulespec_root.resolve()
-    assert captured["axiom_rules_path"] == axiom_rules.resolve()
+    assert captured["axiom_binary"] == axiom_rules.resolve()
     assert captured["request"]["queries"][0]["entity_id"] == "person_7"
 
 
 def test_main_returns_nonzero_when_requested_for_mismatches(monkeypatch, tmp_path):
-    monkeypatch.setattr(efrs_uk, "resolve_workspace_root", lambda root: tmp_path)
     monkeypatch.setattr(
         efrs_uk,
         "compare_uk_efrs",
@@ -6071,9 +6071,8 @@ def test_main_returns_nonzero_when_requested_for_mismatches(monkeypatch, tmp_pat
     assert (
         efrs_uk.main(
             argparse.Namespace(
-                root=None,
-                rulespec_root=None,
-                axiom_rules_engine_path=None,
+                rulespec_root=tmp_path / "rulespec-uk",
+                axiom_binary=tmp_path / "axiom-rules-engine",
                 year=2026,
                 sample_size=100,
                 surface="all",

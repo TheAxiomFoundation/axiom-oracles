@@ -31,7 +31,7 @@ def test_real_policyengine_config_passes():
     gate = _load_gate()
     problems = gate._config_oracle_problems(
         "fiit-ecps",
-        {"runner": {"type": "axiom-encode-tax-ecps-compare"}},
+        {"runner": {"type": "axiom-encode-tax-populace-compare"}},
     )
     assert problems == []
 
@@ -229,7 +229,17 @@ def test_build_freshness_stores_no_time_dependent_state(monkeypatch, tmp_path):
     )
     (data_dir / "coverage_overview.json").write_text(
         json.dumps(
-            {"axiom": {"programs": [{"program": "snap", "jurisdiction": "CO", "status": "executable"}]}}
+            {
+                "axiom": {
+                    "programs": [
+                        {
+                            "program": "snap",
+                            "jurisdiction": "CO",
+                            "status": "executable",
+                        }
+                    ]
+                }
+            }
         )
     )
     monkeypatch.setattr(gate, "DASHBOARD_DATA_DIR", data_dir)
@@ -240,9 +250,7 @@ def test_build_freshness_stores_no_time_dependent_state(monkeypatch, tmp_path):
     assert all("stale" not in s and "age_days" not in s for s in fresh["suites"])
     # But the invariant facts ARE present: the executable surface is linked to
     # its matching report suite so the dashboard can derive the alarm.
-    surface = next(
-        s for s in fresh["executable_surfaces"] if s["program"] == "snap"
-    )
+    surface = next(s for s in fresh["executable_surfaces"] if s["program"] == "snap")
     assert "co-snap-ecps" in surface["suites"]
     suite_entry = next(s for s in fresh["suites"] if s["suite"] == "co-snap-ecps")
     assert suite_entry["generated_at"] == old

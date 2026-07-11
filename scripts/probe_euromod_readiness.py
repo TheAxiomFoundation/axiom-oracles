@@ -86,8 +86,7 @@ def probe(model_root: Path, only: set[str]) -> dict:
                 (
                     d.name
                     for d in system.datasets
-                    if "hhot" not in d.name.lower()
-                    and "training" not in d.name.lower()
+                    if "hhot" not in d.name.lower() and "training" not in d.name.lower()
                 ),
                 reverse=True,
             )

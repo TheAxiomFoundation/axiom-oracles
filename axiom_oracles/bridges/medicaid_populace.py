@@ -20,7 +20,7 @@ from typing import Any
 
 from .snap_populace import (
     Period,
-    axiom_rules_env,
+    axiom_engine_env,
     compile_program,
     load_base_inputs,
     month_period,
@@ -28,7 +28,6 @@ from .snap_populace import (
     outputs_by_reference,
     resolve_axiom_binary,
     resolve_test_template_path,
-    resolve_workspace_root,
     scalar_value,
 )
 from .population import (
@@ -37,6 +36,7 @@ from .population import (
     load_populace_dataset,
     populace_data_requirement,
 )
+from .rulespec_paths import require_rulespec_checkout, resolve_rulespec_program
 
 try:
     import numpy as np
@@ -86,7 +86,7 @@ AXIOM_COMPONENT_OUTPUT_IDS = {
         "us:statutes/42/1396a/xx#demonstrated_community_engagement_for_month"
     ),
 }
-DEFAULT_PROGRAM_RELATIVE_PATH = Path("us/statutes/42/1396a/a/10.yaml")
+DEFAULT_PROGRAM_RELATIVE_PATH = Path("statutes/42/1396a/a/10.yaml")
 STATE_FIPS_BY_CODE = {
     "AL": 1,
     "AK": 2,
@@ -219,14 +219,14 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
     parser.add_argument(
         "--axiom-binary",
         type=Path,
-        default=None,
-        help="Path to the axiom-rules-engine binary.",
+        required=True,
+        help="Exact executable axiom-rules-engine binary.",
     )
     parser.add_argument(
-        "--workspace-root",
+        "--rulespec-root",
         type=Path,
-        default=None,
-        help="Workspace containing axiom-rules-engine and rulespec-us.",
+        required=True,
+        help="Exact canonical rulespec-us country checkout.",
     )
     parser.add_argument("--write-csv", type=Path, default=None)
     parser.add_argument("--max-differences", type=int, default=20)
@@ -292,13 +292,13 @@ def calculate_or_default(
         return np.full(size, default)
 
 
-def resolve_program_path(workspace_root: Path, override: Path | None) -> Path:
-    if override is not None:
-        return override.resolve()
-    cwd_program = Path.cwd() / DEFAULT_PROGRAM_RELATIVE_PATH
-    if cwd_program.exists():
-        return cwd_program.resolve()
-    return (workspace_root / "rulespec-us" / DEFAULT_PROGRAM_RELATIVE_PATH).resolve()
+def resolve_program_path(rulespec_root: Path, override: Path | None) -> Path:
+    return resolve_rulespec_program(
+        rulespec_root,
+        jurisdiction="us",
+        relative_path=DEFAULT_PROGRAM_RELATIVE_PATH,
+        override=override,
+    )
 
 
 def _policyengine_import_error_message(exc: BaseException) -> str:
@@ -1149,10 +1149,14 @@ def print_category_summary(rows: list[dict[str, Any]]) -> None:
 def main(args: argparse.Namespace | None = None) -> None:
     if args is None:
         args = parse_args()
-    workspace_root = resolve_workspace_root(args.workspace_root)
-    program = resolve_program_path(workspace_root, args.program)
-    test_template = resolve_test_template_path(program, args.test_template)
-    binary = resolve_axiom_binary(workspace_root, args.axiom_binary)
+    rulespec_root = require_rulespec_checkout(args.rulespec_root, country="us")
+    program = resolve_program_path(rulespec_root, args.program)
+    test_template = resolve_test_template_path(
+        program,
+        args.test_template,
+        rulespec_root=rulespec_root,
+    )
+    binary = resolve_axiom_binary(args.axiom_binary)
     if not program.exists():
         raise SystemExit(f"RuleSpec program not found: {program}")
     if not test_template.exists():
@@ -1176,11 +1180,17 @@ def main(args: argparse.Namespace | None = None) -> None:
     identity_line = format_dataset_identity(dataset_identity)
     if identity_line:
         print(identity_line, flush=True)
-    env = axiom_rules_env(program, workspace_root)
+    env = axiom_engine_env()
     with tempfile.TemporaryDirectory(prefix="medicaid-pe-populace-") as tmp_dir:
         artifact = Path(tmp_dir) / "program.bin"
         print(f"Compiling {program}...", flush=True)
-        compile_program(binary, program, artifact, env=env)
+        compile_program(
+            binary,
+            program,
+            artifact,
+            rulespec_root=rulespec_root,
+            env=env,
+        )
         axiom_output_id_by_label = axiom_output_ids_by_label(
             artifact,
             include_diagnostics=not args.eligibility_only,

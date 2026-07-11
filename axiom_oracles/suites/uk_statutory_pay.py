@@ -65,9 +65,13 @@ UK_STATPAY_METADATA = {
     "axiom_entity_id": "head",
 }
 
-SMP_MODULE = "uk:statutes/statutory_maternity_pay/pilot_statutory_maternity_pay_oracle_pipeline"
+SMP_MODULE = (
+    "uk:statutes/statutory_maternity_pay/pilot_statutory_maternity_pay_oracle_pipeline"
+)
 MA_MODULE = "uk:statutes/maternity_allowance/pilot_maternity_allowance_oracle_pipeline"
-SPP_MODULE = "uk:statutes/statutory_paternity_pay/pilot_statutory_paternity_pay_oracle_pipeline"
+SPP_MODULE = (
+    "uk:statutes/statutory_paternity_pay/pilot_statutory_paternity_pay_oracle_pipeline"
+)
 EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 
 # The composed pilots are effective from the 2026-27 tax year. 2025-26 and
@@ -164,10 +168,14 @@ def _smp_case(case_id: str, *, annual_income: float) -> Case:
             "euromod_inputs": _lone_parent_newborn_rows(
                 mother_gender=0, annual_employment=annual_income
             ),
-            "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
+            "euromod_policy_switch_overrides": [
+                list(pair) for pair in _TAKEUP_OVERRIDES
+            ],
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": {
-                    "inputs": [_smp_input("uk_smp_pilot_supplied_normal_weekly_earnings")],
+                    "inputs": [
+                        _smp_input("uk_smp_pilot_supplied_normal_weekly_earnings")
+                    ],
                     "divide_by": _ANNUAL_GROSS_TO_WEEKLY_DIVISOR,
                 },
             },
@@ -206,10 +214,14 @@ def _ma_case(case_id: str, *, annual_self_employment: float) -> Case:
             "euromod_inputs": _lone_parent_newborn_rows(
                 mother_gender=0, annual_self_employment=annual_self_employment
             ),
-            "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
+            "euromod_policy_switch_overrides": [
+                list(pair) for pair in _TAKEUP_OVERRIDES
+            ],
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yse": {
-                    "inputs": [_ma_input("uk_ma_pilot_supplied_average_weekly_earnings")],
+                    "inputs": [
+                        _ma_input("uk_ma_pilot_supplied_average_weekly_earnings")
+                    ],
                     "divide_by": _ANNUAL_GROSS_TO_WEEKLY_DIVISOR,
                 },
             },
@@ -250,10 +262,14 @@ def _spp_case(case_id: str, *, annual_income: float) -> Case:
             "euromod_inputs": _lone_parent_newborn_rows(
                 mother_gender=1, annual_employment=annual_income
             ),
-            "euromod_policy_switch_overrides": [list(pair) for pair in _TAKEUP_OVERRIDES],
+            "euromod_policy_switch_overrides": [
+                list(pair) for pair in _TAKEUP_OVERRIDES
+            ],
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": {
-                    "inputs": [_spp_input("uk_spp_pilot_supplied_normal_weekly_earnings")],
+                    "inputs": [
+                        _spp_input("uk_spp_pilot_supplied_normal_weekly_earnings")
+                    ],
                     "divide_by": _ANNUAL_GROSS_TO_WEEKLY_DIVISOR,
                 },
             },

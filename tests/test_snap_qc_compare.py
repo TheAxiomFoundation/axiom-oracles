@@ -48,7 +48,9 @@ SEWER = f"{CO}/4.407.31#input.household_pays_sewer_utility_cost"
 TRASH = f"{CO}/4.407.31#input.household_pays_trash_utility_cost"
 COOK = f"{CO}/4.407.31#input.household_pays_cooking_fuel_utility_cost"
 PHONE = f"{CO}/4.407.31#input.household_pays_telephone_service_cost"
-DEPCARE_NEC = f"{CO}/4.407.4#input.dependent_care_expense_necessary_for_work_or_training"
+DEPCARE_NEC = (
+    f"{CO}/4.407.4#input.dependent_care_expense_necessary_for_work_or_training"
+)
 DEPCARE_PAID = f"{CO}/4.407.4#input.dependent_care_expenses_paid"
 CS_VERIFIED = f"{CO}/4.407.5#input.child_support_payment_verified"
 CS_MONTHS = f"{CO}/4.407.5#input.child_support_payment_history_months"
@@ -64,8 +66,21 @@ _UTILITY_KEYS = (HEAT, ELEC, WATER, SEWER, TRASH, COOK, PHONE)
 
 def _base_inputs() -> dict:
     keys = [
-        EARNED, SHELTER, SIZE, CATEG, RET, ASSIST, DIRECT, OTHER,
-        DEPCARE_NEC, DEPCARE_PAID, CS_VERIFIED, CS_MONTHS, CS_AVG, MEDICAL, LIQUID,
+        EARNED,
+        SHELTER,
+        SIZE,
+        CATEG,
+        RET,
+        ASSIST,
+        DIRECT,
+        OTHER,
+        DEPCARE_NEC,
+        DEPCARE_PAID,
+        CS_VERIFIED,
+        CS_MONTHS,
+        CS_AVG,
+        MEDICAL,
+        LIQUID,
     ]
     base = {key: 0 for key in keys}
     base[CATEG] = False
@@ -239,7 +254,9 @@ def test_map_qc_unit_homeless_deduction_claim_sets_flat_path() -> None:
     inputs = _map(
         _unit(homeless_deduction_claimed=True, utility_tier="telephone"),
     ).inputs
-    homeless_flag = f"{CO}/4.407.3#input.all_household_members_experiencing_homelessness"
+    homeless_flag = (
+        f"{CO}/4.407.3#input.all_household_members_experiencing_homelessness"
+    )
     has_costs = f"{CO}/4.407.3#input.homeless_household_has_shelter_costs"
     assert inputs[homeless_flag] is True
     assert inputs[has_costs] is True
@@ -264,9 +281,7 @@ def test_expected_gross_nets_out_child_support_deduction() -> None:
     # the QC-recorded deduction is netted out of FSGRINC for the gross label.
     # In deduction states FSCSDED equals FSCSEXP; in exclusion states FSCSDED
     # is 0 and the netting is skipped — the FY2024 file has no partial rows.
-    label = next(
-        label for label in sc._LABELS if label.expected_attr == "gross_income"
-    )
+    label = next(label for label in sc._LABELS if label.expected_attr == "gross_income")
     unit = _unit(
         expected=SimpleNamespace(
             benefit=81, gross_income=1469.0, child_support_deduction=281.0
@@ -378,7 +393,10 @@ def _decimal(value: float) -> dict:
 
 def _result(output_id_by_label: dict, values: dict) -> dict:
     outputs = {
-        output_id_by_label[label]: {"id": output_id_by_label[label], "value": _decimal(v)}
+        output_id_by_label[label]: {
+            "id": output_id_by_label[label],
+            "value": _decimal(v),
+        }
         for label, v in values.items()
     }
     return {"outputs": outputs}
@@ -458,9 +476,20 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
     )
 
     assert set(report) == {
-        "aggregates", "case_count", "cases", "concepts", "engines", "errors",
-        "locales", "mismatches", "population", "provenance", "schema_version",
-        "scope", "suite", "summary",
+        "aggregates",
+        "case_count",
+        "cases",
+        "concepts",
+        "engines",
+        "errors",
+        "locales",
+        "mismatches",
+        "population",
+        "provenance",
+        "schema_version",
+        "scope",
+        "suite",
+        "summary",
     }
     assert report["schema_version"] == COMPARISON_REPORT_SCHEMA_VERSION
     assert report["suite"] == "co-snap-qc"
@@ -514,22 +543,21 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
 # Engine-gated live test: reproduce the proven worked example end to end
 # --------------------------------------------------------------------------- #
 
-_ENGINE = Path(
-    os.environ.get(
-        "AXIOM_RULES_ENGINE_BIN",
-        "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/release/"
-        "axiom-rules-engine",
-    )
+_ENGINE_RAW = os.environ.get("AXIOM_RULES_ENGINE_BIN")
+_RULESPEC_FY2024_RAW = os.environ.get("RULESPEC_US_SNAP_FY2024_ROOT")
+_ENGINE = Path(_ENGINE_RAW) if _ENGINE_RAW else Path("__missing_axiom_binary__")
+_RULESPEC_FY2024 = (
+    Path(_RULESPEC_FY2024_RAW)
+    if _RULESPEC_FY2024_RAW
+    else Path("__missing_rulespec_root__")
 )
-_RULESPEC_FY2024 = Path(
-    os.environ.get(
-        "RULESPEC_US_SNAP_FY2024_ROOT",
-        "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-fy2024",
-    )
+_LIVE = (
+    bool(_ENGINE_RAW)
+    and bool(_RULESPEC_FY2024_RAW)
+    and _RULESPEC_FY2024.name == "rulespec-us"
+    and _ENGINE.is_file()
+    and (_RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola").is_dir()
 )
-_LIVE = _ENGINE.exists() and (
-    _RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola"
-).exists()
 
 
 @pytest.mark.skipif(
@@ -562,8 +590,7 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
 
     overlay_dir = Path(tempfile.mkdtemp(prefix="snap-qc-live-", dir=tmp_path))
     build = build_overlay(spec, _RULESPEC_FY2024, overlay_dir)
-    env = snap_populace.axiom_rules_env(build.program_path, _RULESPEC_FY2024.parent)
-    env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
+    env = snap_populace.axiom_engine_env()
 
     case = sc.map_qc_unit(
         unit,
@@ -578,6 +605,7 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
         period=snap_populace.month_period(*sc.NOMINAL_PERIOD),
         output_ids=list(output_id_by_label.values()),
         config=config,
+        rulespec_root=build.overlay_root,
         env=env,
     )
 

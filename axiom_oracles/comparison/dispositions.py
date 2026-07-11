@@ -94,9 +94,7 @@ EXPLAINED_DISPOSITION_KINDS = (
     "upstream_engine_gap",
     "bridge_artifact",
 )
-CLASSIFIED_DISPOSITION_KINDS = EXPLAINED_DISPOSITION_KINDS + (
-    "axiom_encoding_gap",
-)
+CLASSIFIED_DISPOSITION_KINDS = EXPLAINED_DISPOSITION_KINDS + ("axiom_encoding_gap",)
 DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS + ("unexplained",)
 
 DEFAULT_ARITHMETIC_TOLERANCE = 0.005
@@ -163,9 +161,7 @@ def evaluate_arithmetic(expression: str) -> float:
                 return left * right
             if isinstance(node.op, ast.Div):
                 return left / right
-        if isinstance(node, ast.UnaryOp) and isinstance(
-            node.op, ast.USub | ast.UAdd
-        ):
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub | ast.UAdd):
             value = _eval(node.operand)
             return -value if isinstance(node.op, ast.USub) else value
         if (
@@ -197,9 +193,7 @@ def _validate_arithmetic(items: object, label: str) -> list[str]:
             continue
         unknown = set(item) - {"expression", "equals", "tolerance"}
         if unknown:
-            errors.append(
-                f"{item_label} has unknown keys: {sorted(unknown)}"
-            )
+            errors.append(f"{item_label} has unknown keys: {sorted(unknown)}")
         expression = item.get("expression")
         equals = item.get("equals")
         tolerance = item.get("tolerance", DEFAULT_ARITHMETIC_TOLERANCE)
@@ -247,14 +241,10 @@ def _validate_sources(
             continue
         relative = source.split("#", 1)[0]
         if Path(relative).is_absolute():
-            errors.append(
-                f"{source_label} must be repo-relative or a URL: {source}"
-            )
+            errors.append(f"{source_label} must be repo-relative or a URL: {source}")
             continue
         if repo_root is not None and not (repo_root / relative).exists():
-            errors.append(
-                f"{source_label} cites a missing file: {relative}"
-            )
+            errors.append(f"{source_label} cites a missing file: {relative}")
     return errors
 
 
@@ -285,16 +275,12 @@ def _validate_entry(
 
     concept = entry.get("concept")
     if not isinstance(concept, str) or "#" not in concept:
-        errors.append(
-            f"{label} needs a `concept` id of the form module#output"
-        )
+        errors.append(f"{label} needs a `concept` id of the form module#output")
 
     case_id = entry.get("case_id")
     case_selector = entry.get("case_selector")
     if (case_id is None) == (case_selector is None):
-        errors.append(
-            f"{label} needs exactly one of `case_id` or `case_selector`"
-        )
+        errors.append(f"{label} needs exactly one of `case_id` or `case_selector`")
     if case_id is not None and (
         not isinstance(case_id, str | int) or str(case_id).strip() == ""
     ):
@@ -314,22 +300,15 @@ def _validate_entry(
                 not isinstance(case_ids, list) or not case_ids
             ):
                 errors.append(
-                    f"{label} case_selector.case_ids must be a "
-                    "non-empty list"
+                    f"{label} case_selector.case_ids must be a non-empty list"
                 )
             prefix = case_selector.get("case_id_prefix")
-            if prefix is not None and (
-                not isinstance(prefix, str) or not prefix
-            ):
+            if prefix is not None and (not isinstance(prefix, str) or not prefix):
                 errors.append(
-                    f"{label} case_selector.case_id_prefix must be a "
-                    "non-empty string"
+                    f"{label} case_selector.case_id_prefix must be a non-empty string"
                 )
             if not (case_ids or prefix):
-                errors.append(
-                    f"{label} case_selector needs case_ids or "
-                    "case_id_prefix"
-                )
+                errors.append(f"{label} case_selector needs case_ids or case_id_prefix")
 
     kind = entry.get("kind")
     if kind is not None and (not isinstance(kind, str) or not kind.strip()):
@@ -344,31 +323,21 @@ def _validate_entry(
 
     expires = entry.get("expires_on_source_change")
     if not isinstance(expires, bool):
-        errors.append(
-            f"{label} needs `expires_on_source_change` as a boolean"
-        )
+        errors.append(f"{label} needs `expires_on_source_change` as a boolean")
 
     pinned = entry.get("pinned")
     if pinned is not None:
         if case_id is None:
-            errors.append(
-                f"{label} `pinned` values require a single `case_id`"
-            )
+            errors.append(f"{label} `pinned` values require a single `case_id`")
         if not isinstance(pinned, dict) or not pinned:
             errors.append(f"{label} `pinned` must be a non-empty mapping")
         else:
             unknown_pin = set(pinned) - _PINNED_KEYS
             if unknown_pin:
-                errors.append(
-                    f"{label} pinned has unknown keys: {sorted(unknown_pin)}"
-                )
+                errors.append(f"{label} pinned has unknown keys: {sorted(unknown_pin)}")
             for key, value in pinned.items():
-                if key in _PINNED_KEYS and not isinstance(
-                    value, int | float | bool
-                ):
-                    errors.append(
-                        f"{label} pinned.{key} must be numeric or boolean"
-                    )
+                if key in _PINNED_KEYS and not isinstance(value, int | float | bool):
+                    errors.append(f"{label} pinned.{key} must be numeric or boolean")
 
     linked_issue = entry.get("linked_issue")
     if linked_issue is not None and not _is_url(linked_issue):
@@ -384,14 +353,10 @@ def _validate_entry(
 
     unknown_evidence = set(evidence) - _EVIDENCE_KEYS
     if unknown_evidence:
-        errors.append(
-            f"{label} evidence has unknown keys: {sorted(unknown_evidence)}"
-        )
+        errors.append(f"{label} evidence has unknown keys: {sorted(unknown_evidence)}")
     mechanism = evidence.get("mechanism")
     if not isinstance(mechanism, str) or not mechanism.strip():
-        errors.append(
-            f"{label} evidence needs a non-empty `mechanism` description"
-        )
+        errors.append(f"{label} evidence needs a non-empty `mechanism` description")
     arithmetic = evidence.get("arithmetic")
     if arithmetic is not None:
         errors.extend(_validate_arithmetic(arithmetic, label))
@@ -427,16 +392,13 @@ def validate_dispositions(
     errors: list[str] = []
     schema = data.get("schema")
     if schema != DISPOSITIONS_SCHEMA_VERSION:
-        errors.append(
-            f"schema must be {DISPOSITIONS_SCHEMA_VERSION!r}; got {schema!r}"
-        )
+        errors.append(f"schema must be {DISPOSITIONS_SCHEMA_VERSION!r}; got {schema!r}")
     suite = data.get("suite")
     if not isinstance(suite, str) or not suite.strip():
         errors.append("suite must be a non-empty string")
     elif expected_suite is not None and suite != expected_suite:
         errors.append(
-            f"suite {suite!r} does not match the file name "
-            f"({expected_suite!r})"
+            f"suite {suite!r} does not match the file name ({expected_suite!r})"
         )
     unknown = set(data) - {"schema", "suite", "updated", "entries"}
     if unknown:
@@ -488,9 +450,7 @@ def _pin_matches(pinned: dict | None, row: dict) -> bool:
         if isinstance(expected, bool) or isinstance(live, bool):
             if bool(live) != bool(expected):
                 return False
-        elif isinstance(expected, int | float) and isinstance(
-            live, int | float
-        ):
+        elif isinstance(expected, int | float) and isinstance(live, int | float):
             if abs(float(live) - float(expected)) > DEFAULT_PIN_TOLERANCE:
                 return False
         elif live != expected:
@@ -510,9 +470,7 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
         return row_case == str(case_id)
     selector = entry.get("case_selector") or {}
     case_ids = selector.get("case_ids")
-    if case_ids is not None and row_case not in {
-        str(value) for value in case_ids
-    }:
+    if case_ids is not None and row_case not in {str(value) for value in case_ids}:
         return False
     prefix = selector.get("case_id_prefix")
     if prefix is not None and not row_case.startswith(prefix):
@@ -590,19 +548,13 @@ def apply_dispositions(
         else:
             orphaned.append(entry_id)
 
-    explained_rows = sum(
-        counts[kind] for kind in EXPLAINED_DISPOSITION_KINDS
-    )
-    classified_rows = sum(
-        counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
-    )
+    explained_rows = sum(counts[kind] for kind in EXPLAINED_DISPOSITION_KINDS)
+    classified_rows = sum(counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS)
     summary["dispositioned"] = {
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": dispositions_file,
         "raw_match_rate": _percentage(match_count, comparison_count),
-        "explained_rate": _percentage(
-            match_count + explained_rows, comparison_count
-        ),
+        "explained_rate": _percentage(match_count + explained_rows, comparison_count),
         "unexplained_count": max(mismatch_count - classified_rows, 0),
         "counts": counts,
         "expired_entries": expired,
@@ -628,9 +580,7 @@ def apply_dispositions_from_dir(
     every dashboard summary carries both rates.
     """
 
-    path = dispositions_path_for_suite(
-        dispositions_dir, report.get("suite")
-    )
+    path = dispositions_path_for_suite(dispositions_dir, report.get("suite"))
     if path is None:
         return apply_dispositions(report, None)
     dispositions = load_dispositions(path, repo_root=repo_root)
@@ -639,9 +589,7 @@ def apply_dispositions_from_dir(
         label = str(path.relative_to(root))
     except ValueError:
         label = str(path)
-    return apply_dispositions(
-        report, dispositions, dispositions_file=label
-    )
+    return apply_dispositions(report, dispositions, dispositions_file=label)
 
 
 def dispositioned_rollup(reports: list[dict]) -> dict:
@@ -699,7 +647,7 @@ def report_json_text(report: dict) -> str:
     for key in sorted(key for key in report if key != "cases"):
         lines.append(_top_level_json_entry(key, report[key]))
         lines.append(",\n")
-    lines.append(f'  {json.dumps("cases")}: [')
+    lines.append(f"  {json.dumps('cases')}: [")
     wrote_case = False
     for row in report.get("cases") or []:
         lines.append(",\n" if wrote_case else "\n")

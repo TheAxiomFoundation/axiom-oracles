@@ -132,7 +132,10 @@ def test_inline_revision_override_is_passed_through(monkeypatch, tmp_path) -> No
         "populace://policyengine/populace-us-experiments/probe.h5@abc123"
     )
     assert path == local
-    assert calls == {"repo_id": "policyengine/populace-us-experiments", "revision": "abc123"}
+    assert calls == {
+        "repo_id": "policyengine/populace-us-experiments",
+        "revision": "abc123",
+    }
 
 
 def test_inline_revision_conflicting_with_pin_raises(monkeypatch, tmp_path) -> None:

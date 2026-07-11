@@ -64,11 +64,7 @@ class AccessNycPythonRunner(EngineAdapter):
     def available_program_codes(self) -> set[str]:
         if self.repo_path:
             rules_dir = self.repo_path / "src" / "rules" / "program_rules"
-            return {
-                path.stem
-                for path in rules_dir.glob("S2R*.py")
-                if path.is_file()
-            }
+            return {path.stem for path in rules_dir.glob("S2R*.py") if path.is_file()}
 
         self._ensure_import_path()
         try:

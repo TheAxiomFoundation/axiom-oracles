@@ -8,7 +8,7 @@ description: Compares South Carolina SNAP eligibility and benefit amount from
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     left: axiom
     right: policyengine
@@ -18,13 +18,11 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
-    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/rulespec-us/programs/us-sc/snap/fy-2026.yaml
-    axiom_composed_program: /tmp/sc-snap-composed.yaml
+    axiom_compose_binary: $HOME/TheAxiomFoundation/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/TheAxiomFoundation/rulespec-us/us-sc/programs/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/axiom-composed/sc-snap-ecps.yaml
     axiom_compiled_program: /tmp/sc-snap-compiled.json
-    axiom_rulespec_repo_roots: $HOME
-    rulespec_roots:
-      - $HOME/rulespec-us
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
     jurisdiction_fips: "45"
 
 artifacts:

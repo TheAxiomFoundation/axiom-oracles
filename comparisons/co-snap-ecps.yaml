@@ -1,12 +1,13 @@
 name: co-snap-ecps
 title: Colorado SNAP — Axiom vs PolicyEngine
 description: Compares the Colorado SNAP benefit amount produced by Axiom RuleSpec
-  (rules-us-co/policies/cdhs/snap/fy-2026-benefit-calculation) against PolicyEngine
-  on the Enhanced CPS, filtered to Colorado households.
+  (rulespec-us/us-co/policies/cdhs/snap/fy-2026-benefit-calculation) against PolicyEngine
+  on the certified Populace US artifact, filtered to Colorado households.
 runner:
-  type: axiom-encode-snap-ecps-compare
+  type: axiom-encode-snap-populace-compare
   axiom_encode_repo: $HOME/axiom-encode
-  axiom_rules_repo: $HOME/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
+  rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
   parameters:
     jurisdiction: us-co
     sample_size: 0

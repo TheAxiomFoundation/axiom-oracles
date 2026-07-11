@@ -137,12 +137,45 @@ jobs:
           path: axiom-encode
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout axiom-rules
+      - name: Checkout axiom-rules-engine
         uses: actions/checkout@v4
         with:
-          repository: TheAxiomFoundation/axiom-rules
-          path: axiom-rules
+          repository: TheAxiomFoundation/axiom-rules-engine
+          path: axiom-rules-engine
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout axiom-compose
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-compose
+          path: axiom-compose
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout rulespec-us
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-us
+          path: rulespec-us
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout rulespec-uk
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-uk
+          path: rulespec-uk
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout rulespec-be
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-be
+          path: rulespec-be
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install canonical runtime paths
+        run: |
+          mkdir -p "$HOME/TheAxiomFoundation"
+          mv axiom-rules-engine axiom-compose rulespec-us rulespec-uk rulespec-be "$HOME/TheAxiomFoundation/"
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -153,8 +186,8 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            axiom-rules/target
-          key: cargo-${{ runner.os }}-${{ hashFiles('axiom-rules/Cargo.lock') }}
+            ~/TheAxiomFoundation/axiom-rules-engine/target
+          key: cargo-${{ runner.os }}-axiom-rules-engine
           restore-keys: |
             cargo-${{ runner.os }}-
 
@@ -170,6 +203,14 @@ jobs:
         working-directory: axiom-oracles
         run: uv pip install --system -e '.[policyengine]'
 
+      - name: Install exact axiom-compose executable
+        run: uv sync --project "$HOME/TheAxiomFoundation/axiom-compose"
+
+      - name: Build exact Axiom engine binary
+        run: >-
+          cargo build --release --bin axiom-rules-engine
+          --manifest-path "$HOME/TheAxiomFoundation/axiom-rules-engine/Cargo.toml"
+
       - name: Cache pinned populace-us artifact (HF hub cache)
         uses: actions/cache@v4
         with:
@@ -184,13 +225,11 @@ jobs:
       - name: Rerun comparison (affected)
         env:
           AXIOM_ENCODE_REPO: ${{ github.workspace }}/axiom-encode
-          AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
           # Stamp the refreshed report as an affected-rerun (provenance.run_kind).
           AXIOM_ORACLES_RUN_KIND: affected-rerun
         working-directory: axiom-oracles
         run: |
           ln -sfn "$AXIOM_ENCODE_REPO" "$HOME/axiom-encode"
-          ln -sfn "$AXIOM_RULES_REPO" "$HOME/axiom-rules"
           python3 scripts/run_comparison.py ${{ matrix.name }} --summary
 
       - name: Refresh freshness data

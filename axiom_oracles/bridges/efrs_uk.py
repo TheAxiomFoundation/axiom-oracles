@@ -38,6 +38,11 @@ from .population import (
     populace_data_requirement,
     population_table,
 )
+from .rulespec_paths import (
+    require_axiom_binary,
+    require_rulespec_checkout,
+    resolve_rulespec_program,
+)
 
 DEFAULT_DATASET = ""
 WEEKS_IN_YEAR = 52
@@ -1921,22 +1926,16 @@ class UKEFRSComparisonReport:
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
-        "--root",
-        type=Path,
-        default=None,
-        help="Workspace root containing rulespec-uk and axiom-rules-engine",
-    )
-    parser.add_argument(
         "--rulespec-root",
         type=Path,
-        default=None,
-        help="rulespec-uk checkout; defaults to <root>/rulespec-uk",
+        required=True,
+        help="Exact canonical rulespec-uk country checkout.",
     )
     parser.add_argument(
-        "--axiom-rules-engine-path",
+        "--axiom-binary",
         type=Path,
-        default=None,
-        help="axiom-rules-engine checkout; defaults to <root>/axiom-rules-engine",
+        required=True,
+        help="Exact executable axiom-rules-engine binary.",
     )
     parser.add_argument("--year", type=int, default=2026)
     parser.add_argument(
@@ -1986,16 +1985,6 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         help="Published UK Populace dataset year to load.",
     )
     parser.add_argument(
-        "--universal-credit-program",
-        type=Path,
-        default=None,
-        help=(
-            "Optional RuleSpec program to use for Universal Credit surfaces. "
-            "This lets oracle runs compare a composed axiom-programs package "
-            "while keeping non-UC UK surfaces on their source RuleSpec files."
-        ),
-    )
-    parser.add_argument(
         "--tolerance",
         type=float,
         default=0.01,
@@ -2020,9 +2009,8 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
 
 def main(args: argparse.Namespace) -> int:
     report = compare_uk_efrs(
-        workspace_root=resolve_workspace_root(args.root),
         rulespec_root=args.rulespec_root,
-        axiom_rules_path=args.axiom_rules_engine_path,
+        axiom_binary=args.axiom_binary,
         year=args.year,
         sample_size=args.sample_size,
         surface=args.surface,
@@ -2031,7 +2019,6 @@ def main(args: argparse.Namespace) -> int:
         populace_year=args.populace_year,
         tolerance=args.tolerance,
         relative_tolerance=args.relative_tolerance,
-        universal_credit_program=getattr(args, "universal_credit_program", None),
         person_ids=tuple(args.person_ids or ()),
     )
     if args.json:
@@ -2187,9 +2174,8 @@ def main_hbai_coverage(args: argparse.Namespace) -> int:
 
 def compare_uk_efrs(
     *,
-    workspace_root: Path,
-    rulespec_root: Path | None,
-    axiom_rules_path: Path | None,
+    rulespec_root: Path,
+    axiom_binary: Path,
     year: int,
     sample_size: int,
     surface: str,
@@ -2198,13 +2184,10 @@ def compare_uk_efrs(
     populace_year: int,
     tolerance: float,
     relative_tolerance: float,
-    universal_credit_program: Path | None = None,
     person_ids: tuple[int, ...] = (),
 ) -> UKEFRSComparisonReport:
-    resolved_rulespec_root = (rulespec_root or workspace_root / "rulespec-uk").resolve()
-    resolved_axiom_rules_path = (
-        axiom_rules_path or workspace_root / "axiom-rules-engine"
-    ).resolve()
+    resolved_rulespec_root = require_rulespec_checkout(rulespec_root, country="uk")
+    resolved_axiom_binary = require_axiom_binary(axiom_binary)
     surfaces = list(SURFACE_SPECS) if surface == "all" else [surface]
     pe_data = load_policyengine_uk_data(
         year=year,
@@ -2219,15 +2202,11 @@ def compare_uk_efrs(
     surface_results: dict[str, list[dict[str, Any]]] = {}
     for selected_surface in surfaces:
         spec = SURFACE_SPECS[selected_surface]
-        if (
-            selected_surface in UNIVERSAL_CREDIT_REGULATION_36_SURFACES
-            and universal_credit_program is not None
-        ):
-            program = universal_credit_program.resolve()
-        else:
-            program = resolved_rulespec_root / spec.program
-        if not program.exists():
-            raise SystemExit(f"{selected_surface} RuleSpec not found: {program}")
+        program = resolve_rulespec_program(
+            resolved_rulespec_root,
+            jurisdiction="uk",
+            relative_path=spec.program,
+        )
         request = build_axiom_request(
             pe_data=pe_data,
             year=year,
@@ -2237,7 +2216,7 @@ def compare_uk_efrs(
             program=program,
             request=request,
             rulespec_root=resolved_rulespec_root,
-            axiom_rules_path=resolved_axiom_rules_path,
+            axiom_binary=resolved_axiom_binary,
             surface=selected_surface,
         )
     return compare_outputs(
@@ -3870,7 +3849,7 @@ def run_axiom_surface(
     program: Path,
     request: dict[str, Any],
     rulespec_root: Path,
-    axiom_rules_path: Path,
+    axiom_binary: Path,
     surface: str,
 ) -> list[dict[str, Any]]:
     if surface in UNIVERSAL_CREDIT_REGULATION_36_SURFACES:
@@ -3883,7 +3862,7 @@ def run_axiom_surface(
         program=program,
         request=request,
         rulespec_root=rulespec_root,
-        axiom_rules_path=axiom_rules_path,
+        axiom_binary=axiom_binary,
     )
 
 
@@ -3979,9 +3958,14 @@ def resolve_rulespec_import(import_ref: Any, *, rulespec_root: Path) -> Path | N
             return None
     else:
         path_ref = raw
-    candidate = rulespec_root / f"{path_ref}.yaml"
-    if candidate.exists():
-        return candidate.resolve()
+    checkout = require_rulespec_checkout(rulespec_root, country="uk")
+    candidate = checkout / "uk" / f"{path_ref}.yaml"
+    if candidate.is_file():
+        return resolve_rulespec_program(
+            checkout,
+            jurisdiction="uk",
+            relative_path=Path(f"{path_ref}.yaml"),
+        )
     return None
 
 
@@ -4913,7 +4897,9 @@ def build_housing_benefit_applicable_amount_request(
     queries: list[dict[str, Any]] = []
     for row in rows_for_surface(pe_data, "housing-benefit-applicable-amount"):
         entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_housing_benefit_applicable_amount_inputs(row).items():
+        for name, value in project_housing_benefit_applicable_amount_inputs(
+            row
+        ).items():
             inputs.append(
                 input_record(
                     f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
@@ -6492,9 +6478,7 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
         ]
     if surface == "marriage-allowance":
         return [
-            row
-            for row in persons
-            if money(row_value(row, "marriage_allowance", 0)) > 0
+            row for row in persons if money(row_value(row, "marriage_allowance", 0)) > 0
         ]
     if SURFACE_SPECS[surface].entity == "benunit":
         return benunits
@@ -7259,18 +7243,6 @@ def income_tax_component_entity_id(person_id: int, component: str) -> str:
 
 def benunit_entity_id(benunit_id: int) -> str:
     return f"benunit_{benunit_id}"
-
-
-def resolve_workspace_root(root: Path | None) -> Path:
-    if root is not None:
-        return root.resolve()
-    cwd = Path.cwd().resolve()
-    for candidate in [cwd, *cwd.parents, Path.home() / "TheAxiomFoundation"]:
-        if (candidate / "rulespec-uk").exists() and (
-            candidate / "axiom-rules-engine"
-        ).exists():
-            return candidate
-    return cwd
 
 
 def require_policyengine_uk_versions(command: str = "uk-populace-compare") -> None:

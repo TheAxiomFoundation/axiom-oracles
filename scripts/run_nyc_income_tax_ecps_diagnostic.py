@@ -21,7 +21,6 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import os
 import subprocess
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -32,49 +31,39 @@ from typing import Any
 from policyengine_us import Microsimulation
 
 from axiom_oracles.comparison.dispositions import apply_dispositions_from_dir
+from axiom_oracles.bridges.rulespec_paths import (
+    require_axiom_binary,
+    require_rulespec_checkout,
+    rulespec_engine_env,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
-RULESPEC_NY = Path(os.environ.get("AXIOM_RULESPEC_NY", Path.home() / "rulespec-us-ny"))
-RULESPEC_US = Path(os.environ.get("AXIOM_RULESPEC_US", Path.home() / "rulespec-us"))
-AXIOM_ENGINE = (
-    Path.home() / "axiom-rules-engine" / "target" / "release" / "axiom-rules-engine"
-)
-
 NYC_ECPS_DATASET = "hf://policyengine/policyengine-us-data/cities/NYC.h5"
-SCHOOL_PROGRAM = (
-    RULESPEC_NY
+SCHOOL_PROGRAM_RELATIVE = (
+    Path("us-ny")
     / "policies"
     / "tax"
     / "it-201-instructions"
     / "nyc-school-tax-credit-rate-reduction.yaml"
 )
-CDCC_PROGRAM = (
-    RULESPEC_NY
+CDCC_PROGRAM_RELATIVE = (
+    Path("us-ny")
     / "policies"
     / "tax"
     / "it-216-instructions"
     / "nyc-child-dependent-care-credit.yaml"
 )
-FINAL_PROGRAM = (
-    RULESPEC_US
-    / "us-ny"
-    / "policies"
-    / "income_tax"
-    / "nyc_composed_liability_pipeline.yaml"
+FINAL_PROGRAM_RELATIVE = (
+    Path("us-ny") / "policies" / "income_tax" / "nyc_composed_liability_pipeline.yaml"
 )
 
 SCHOOL_BASE = (
-    "us-ny:policies/tax/it-201-instructions/"
-    "nyc-school-tax-credit-rate-reduction"
+    "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction"
 )
-SCHOOL_OUTPUT = (
-    f"{SCHOOL_BASE}#nyc_school_tax_credit_rate_reduction_amount"
-)
-CDCC_BASE = (
-    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit"
-)
+SCHOOL_OUTPUT = f"{SCHOOL_BASE}#nyc_school_tax_credit_rate_reduction_amount"
+CDCC_BASE = "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit"
 CDCC_OUTPUT = f"{CDCC_BASE}#form_it216_line_24_nyc_child_dependent_care_credit"
 FINAL_BASE = "us-ny:policies/income_tax/nyc_composed_liability_pipeline"
 FINAL_OUTPUT = f"{FINAL_BASE}#nyc_pit_composed_income_tax"
@@ -110,6 +99,8 @@ class TaxUnitRows:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--rulespec-root", required=True, type=Path)
+    parser.add_argument("--axiom-binary", required=True, type=Path)
     parser.add_argument("--sample-size", type=int, default=0)
     parser.add_argument("--batch-size", type=int, default=5_000)
     parser.add_argument("--mismatch-limit", type=int, default=500)
@@ -121,31 +112,45 @@ def main() -> int:
     )
     parser.add_argument("--dashboard", action="store_true")
     args = parser.parse_args()
+    try:
+        rulespec_root = require_rulespec_checkout(args.rulespec_root, country="us")
+        axiom_binary = require_axiom_binary(args.axiom_binary)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     rows = _load_tax_unit_rows(sample_size=args.sample_size)
     print(f"Loaded {len(rows.tax_unit_ids):,} NYC ECPS tax units")
 
+    school_program = rulespec_root / SCHOOL_PROGRAM_RELATIVE
+    cdcc_program = rulespec_root / CDCC_PROGRAM_RELATIVE
+    final_program = rulespec_root / FINAL_PROGRAM_RELATIVE
     artifacts = {
-        SCHOOL_PROGRAM: Path("/tmp/nyc-school-rate.compiled.json"),
-        CDCC_PROGRAM: Path("/tmp/nyc-cdcc.compiled.json"),
-        FINAL_PROGRAM: Path("/tmp/nyc-final-income-tax.compiled.json"),
+        school_program: Path("/tmp/nyc-school-rate.compiled.json"),
+        cdcc_program: Path("/tmp/nyc-cdcc.compiled.json"),
+        final_program: Path("/tmp/nyc-final-income-tax.compiled.json"),
     }
     for program, artifact in artifacts.items():
-        _compile(program, artifact)
+        _compile(program, artifact, rulespec_root, axiom_binary)
 
     school_left = _run_school_axiom(
         rows,
-        artifacts[SCHOOL_PROGRAM],
+        artifacts[school_program],
+        program=school_program,
+        axiom_binary=axiom_binary,
         batch_size=args.batch_size,
     )
     cdcc_left = _run_cdcc_axiom(
         rows,
-        artifacts[CDCC_PROGRAM],
+        artifacts[cdcc_program],
+        program=cdcc_program,
+        axiom_binary=axiom_binary,
         batch_size=args.batch_size,
     )
     final_left = _run_final_axiom(
         rows,
-        artifacts[FINAL_PROGRAM],
+        artifacts[final_program],
+        program=final_program,
+        axiom_binary=axiom_binary,
         batch_size=args.batch_size,
     )
 
@@ -194,8 +199,7 @@ def main() -> int:
 
     if args.dashboard:
         target = (
-            DASHBOARD_DATA
-            / "axiom-policyengine-nyc-income-tax-components-ecps.json"
+            DASHBOARD_DATA / "axiom-policyengine-nyc-income-tax-components-ecps.json"
         )
         target.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
         _add_to_manifest(target.name)
@@ -218,8 +222,12 @@ def _load_tax_unit_rows(*, sample_size: int) -> TaxUnitRows:
     take = sample_size if sample_size and sample_size > 0 else len(tax_unit_ids)
     take = min(take, len(tax_unit_ids))
 
-    filing_status = [str(v) for v in _values(sim.calculate("filing_status", period=year))[:take]]
-    nyc_taxable_income = _floats(sim.calculate("nyc_taxable_income", period=year))[:take]
+    filing_status = [
+        str(v) for v in _values(sim.calculate("filing_status", period=year))[:take]
+    ]
+    nyc_taxable_income = _floats(sim.calculate("nyc_taxable_income", period=year))[
+        :take
+    ]
     pe_school_rate_reduction = _floats(
         sim.calculate("nyc_school_tax_credit_rate_reduction_amount", period=year)
     )[:take]
@@ -276,17 +284,26 @@ def _has_under_four_children(
         _values(sim.calculate("tax_unit_id", period=year, map_to="person"))
     )
     ages = _floats(sim.calculate("age", period=year, map_to="person"))
-    under_four_by_tax_unit = {tax_unit_id: False for tax_unit_id in selected_tax_unit_ids}
+    under_four_by_tax_unit = {
+        tax_unit_id: False for tax_unit_id in selected_tax_unit_ids
+    }
     for tax_unit_id, age in zip(person_tax_unit_ids, ages, strict=True):
         if tax_unit_id in selected and age < 4:
             under_four_by_tax_unit[tax_unit_id] = True
-    return [under_four_by_tax_unit[tax_unit_id] for tax_unit_id in selected_tax_unit_ids]
+    return [
+        under_four_by_tax_unit[tax_unit_id] for tax_unit_id in selected_tax_unit_ids
+    ]
 
 
-def _compile(program: Path, artifact: Path) -> None:
+def _compile(
+    program: Path,
+    artifact: Path,
+    rulespec_root: Path,
+    axiom_binary: Path,
+) -> None:
     subprocess.run(
         [
-            str(AXIOM_ENGINE),
+            str(axiom_binary),
             "compile",
             "--program",
             str(program),
@@ -297,6 +314,7 @@ def _compile(program: Path, artifact: Path) -> None:
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
+        env=rulespec_engine_env(rulespec_root),
     )
 
 
@@ -304,6 +322,8 @@ def _run_school_axiom(
     rows: TaxUnitRows,
     artifact: Path,
     *,
+    program: Path,
+    axiom_binary: Path,
     batch_size: int,
 ) -> list[float]:
     specs = []
@@ -328,8 +348,9 @@ def _run_school_axiom(
         )
     return _run_axiom_batches(
         specs,
-        program=SCHOOL_PROGRAM,
+        program=program,
         artifact=artifact,
+        axiom_binary=axiom_binary,
         output=SCHOOL_OUTPUT,
         batch_size=batch_size,
         label="school-rate",
@@ -340,6 +361,8 @@ def _run_cdcc_axiom(
     rows: TaxUnitRows,
     artifact: Path,
     *,
+    program: Path,
+    axiom_binary: Path,
     batch_size: int,
 ) -> list[float]:
     specs = []
@@ -356,7 +379,9 @@ def _run_cdcc_axiom(
                         rows.ny_cdcc[idx] > 0
                     ),
                     "form_it216_line_14_amount": rows.ny_cdcc[idx],
-                    "form_it216_line_23_amount": rows.under_four_childcare_expenses[idx],
+                    "form_it216_line_23_amount": rows.under_four_childcare_expenses[
+                        idx
+                    ],
                     "form_it216_line_3a_amount": expenses if expenses > 0 else 1,
                     "nyc_child_dependent_care_credit_limitation_table_decimal_amount": (
                         _nyc_cdcc_limitation_decimal(agi)
@@ -371,8 +396,9 @@ def _run_cdcc_axiom(
         )
     return _run_axiom_batches(
         specs,
-        program=CDCC_PROGRAM,
+        program=program,
         artifact=artifact,
+        axiom_binary=axiom_binary,
         output=CDCC_OUTPUT,
         batch_size=batch_size,
         label="cdcc",
@@ -383,6 +409,8 @@ def _run_final_axiom(
     rows: TaxUnitRows,
     artifact: Path,
     *,
+    program: Path,
+    axiom_binary: Path,
     batch_size: int,
 ) -> list[float]:
     specs = []
@@ -416,13 +444,21 @@ def _run_final_axiom(
                         rows.pe_nyc_eitc[idx]
                     ),
                     "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.fagi": agi,
-                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.has_child_under_four_years_old": rows.has_child_under_four[idx],
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.has_child_under_four_years_old": rows.has_child_under_four[
+                        idx
+                    ],
                     "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.qualifies_for_new_york_state_child_dependent_care_credit": (
                         rows.ny_cdcc[idx] > 0
                     ),
-                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_14_amount": rows.ny_cdcc[idx],
-                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_23_amount": rows.under_four_childcare_expenses[idx],
-                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_3a_amount": expenses if expenses > 0 else 1,
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_14_amount": rows.ny_cdcc[
+                        idx
+                    ],
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_23_amount": rows.under_four_childcare_expenses[
+                        idx
+                    ],
+                    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.form_it216_line_3a_amount": expenses
+                    if expenses > 0
+                    else 1,
                     "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit#input.nyc_child_dependent_care_credit_limitation_table_decimal_amount": (
                         _nyc_cdcc_limitation_decimal(agi)
                     ),
@@ -436,8 +472,9 @@ def _run_final_axiom(
         )
     return _run_axiom_batches(
         specs,
-        program=FINAL_PROGRAM,
+        program=program,
         artifact=artifact,
+        axiom_binary=axiom_binary,
         output=FINAL_OUTPUT,
         batch_size=batch_size,
         label="final-liability",
@@ -449,6 +486,7 @@ def _run_axiom_batches(
     *,
     program: Path,
     artifact: Path,
+    axiom_binary: Path,
     output: str,
     batch_size: int,
     label: str,
@@ -457,7 +495,9 @@ def _run_axiom_batches(
     total = len(specs)
     for start in range(0, total, batch_size):
         batch = specs[start : start + batch_size]
-        print(f"Running Axiom {label} batch {start + 1:,}-{start + len(batch):,}/{total:,}")
+        print(
+            f"Running Axiom {label} batch {start + 1:,}-{start + len(batch):,}/{total:,}"
+        )
         request = {
             "mode": "fast",
             "dataset": {
@@ -478,7 +518,7 @@ def _run_axiom_batches(
             ],
         }
         completed = subprocess.run(
-            [str(AXIOM_ENGINE), "run-compiled", "--artifact", str(artifact)],
+            [str(axiom_binary), "run-compiled", "--artifact", str(artifact)],
             input=json.dumps(request),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -502,11 +542,11 @@ def _input_record(
     name: str,
     value: Any,
 ) -> dict[str, Any]:
-    if program == SCHOOL_PROGRAM:
+    if program.name == SCHOOL_PROGRAM_RELATIVE.name:
         base = SCHOOL_BASE
-    elif program == CDCC_PROGRAM:
+    elif program.name == CDCC_PROGRAM_RELATIVE.name:
         base = CDCC_BASE
-    elif program == FINAL_PROGRAM:
+    elif program.name == FINAL_PROGRAM_RELATIVE.name:
         base = FINAL_BASE
     else:
         raise ValueError(f"unknown program: {program}")
@@ -576,7 +616,9 @@ def _comparison_rows(
                     "nyc_income_tax": rows.pe_nyc_income_tax[idx],
                     "nyc_school_tax_credit": rows.pe_nyc_school_tax_credit[idx],
                     "nyc_taxable_income": rows.nyc_taxable_income[idx],
-                    "nyc_unincorporated_business_credit": rows.pe_nyc_unincorporated_business_credit[idx],
+                    "nyc_unincorporated_business_credit": rows.pe_nyc_unincorporated_business_credit[
+                        idx
+                    ],
                     "population": "enhanced-cps",
                     "suite": SUITE,
                     "tax_unit_id": tax_unit_id,
@@ -675,11 +717,15 @@ def _build_report(
     match_count = compared - mismatch_count
     mismatches_by_concept = [
         {"value": value, "count": count}
-        for value, count in Counter(row["concept"] for row in mismatches_all).most_common()
+        for value, count in Counter(
+            row["concept"] for row in mismatches_all
+        ).most_common()
     ]
     mismatches_by_scenario = [
         {"value": value, "count": count}
-        for value, count in Counter(row["component"] for row in mismatches_all).most_common()
+        for value, count in Counter(
+            row["component"] for row in mismatches_all
+        ).most_common()
     ]
     diagnostics = _diagnostics(all_rows)
 
@@ -757,9 +803,7 @@ def _build_report(
             "mismatches_by_scenario": mismatches_by_scenario,
             "diagnostics": diagnostics,
             "sample_size": sample_size,
-            "stored_mismatch_example_count": min(
-                len(mismatches_all), mismatch_limit
-            ),
+            "stored_mismatch_example_count": min(len(mismatches_all), mismatch_limit),
             "weighted": {
                 "comparison_weight": compared,
                 "match_rate": (match_count / compared * 100) if compared else 100.0,
@@ -792,9 +836,7 @@ def _limit_mismatch_examples(
     }
     limited["mismatches"] = (report.get("mismatches") or [])[:mismatch_limit]
     limited["cases"] = [
-        row
-        for row in (report.get("cases") or [])
-        if row.get("case_id") in visible_ids
+        row for row in (report.get("cases") or []) if row.get("case_id") in visible_ids
     ]
     summary = dict(report.get("summary") or {})
     summary["stored_mismatch_example_count"] = len(limited["mismatches"])

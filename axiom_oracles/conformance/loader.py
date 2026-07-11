@@ -146,8 +146,7 @@ def parse(path: str | Path) -> Universe:
     schema = document.get("schema")
     if schema != CONFORMANCE_SCHEMA_VERSION:
         raise ValueError(
-            f"{path}: expected schema {CONFORMANCE_SCHEMA_VERSION!r}, got "
-            f"{schema!r}"
+            f"{path}: expected schema {CONFORMANCE_SCHEMA_VERSION!r}, got {schema!r}"
         )
     oracle = OracleIdentity.from_header(document["oracle"])
     policies: list[UniversePolicy] = []

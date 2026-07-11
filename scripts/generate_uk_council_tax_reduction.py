@@ -48,11 +48,12 @@ run_comparison.py reuses it), exactly like the state income-tax grid.
 from __future__ import annotations
 
 import json
-import os
 from dataclasses import dataclass
 from datetime import date, timezone
 from datetime import datetime
 from pathlib import Path
+
+from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -63,10 +64,6 @@ POLICYENGINE_UK_VERSION = "2.89.2"
 
 #: rulespec-uk checkout (the encoded England pension-age scheme + companion
 #: tests). Resolves from the environment, then the org-mirror default.
-RULESPEC_UK = Path(
-    os.environ.get("RULESPEC_UK_CHECKOUT")
-    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
-)
 
 #: Encoded program under comparison and its final award output.
 CTR_PROGRAM = "uk/policies/govuk/council-tax-reduction.yaml"
@@ -126,28 +123,116 @@ def _grid() -> list[CTRCase]:
     """
 
     return [
-        CTRCase("ctr-pa-single-full-below-aa", 70, 4000, 0, 0, 1800, False,
-                "full-award-income-below-applicable-amount"),
-        CTRCase("ctr-pa-single-full-income-at-aa", 70, 9000, 4000, 0, 1800, False,
-                "full-award-income-near-applicable-amount"),
-        CTRCase("ctr-pa-single-taper-interior-a", 70, 18312, 0, 0, 3000, False,
-                "taper-interior"),
-        CTRCase("ctr-pa-single-taper-interior-b", 70, 25164, 0, 0, 3000, False,
-                "taper-interior"),
-        CTRCase("ctr-pa-single-taper-interior-c", 70, 20000, 0, 0, 2500, False,
-                "taper-interior"),
-        CTRCase("ctr-pa-single-taper-to-zero", 70, 12000, 20000, 0, 1800, False,
-                "taper-exhausts-award"),
-        CTRCase("ctr-pa-single-capital-at-limit", 70, 4000, 0, 16000, 1800, False,
-                "capital-at-limit-eligible"),
-        CTRCase("ctr-pa-single-capital-over-limit", 70, 4000, 0, 20000, 1800, False,
-                "capital-over-limit-excluded"),
-        CTRCase("ctr-pa-single-high-council-tax", 72, 8000, 0, 0, 2600, False,
-                "full-award-high-liability"),
-        CTRCase("ctr-pa-couple-full-below-aa", 70, 6000, 0, 0, 2200, True,
-                "couple-full-award"),
-        CTRCase("ctr-pa-couple-taper-interior", 70, 24000, 0, 0, 2400, True,
-                "couple-taper-interior"),
+        CTRCase(
+            "ctr-pa-single-full-below-aa",
+            70,
+            4000,
+            0,
+            0,
+            1800,
+            False,
+            "full-award-income-below-applicable-amount",
+        ),
+        CTRCase(
+            "ctr-pa-single-full-income-at-aa",
+            70,
+            9000,
+            4000,
+            0,
+            1800,
+            False,
+            "full-award-income-near-applicable-amount",
+        ),
+        CTRCase(
+            "ctr-pa-single-taper-interior-a",
+            70,
+            18312,
+            0,
+            0,
+            3000,
+            False,
+            "taper-interior",
+        ),
+        CTRCase(
+            "ctr-pa-single-taper-interior-b",
+            70,
+            25164,
+            0,
+            0,
+            3000,
+            False,
+            "taper-interior",
+        ),
+        CTRCase(
+            "ctr-pa-single-taper-interior-c",
+            70,
+            20000,
+            0,
+            0,
+            2500,
+            False,
+            "taper-interior",
+        ),
+        CTRCase(
+            "ctr-pa-single-taper-to-zero",
+            70,
+            12000,
+            20000,
+            0,
+            1800,
+            False,
+            "taper-exhausts-award",
+        ),
+        CTRCase(
+            "ctr-pa-single-capital-at-limit",
+            70,
+            4000,
+            0,
+            16000,
+            1800,
+            False,
+            "capital-at-limit-eligible",
+        ),
+        CTRCase(
+            "ctr-pa-single-capital-over-limit",
+            70,
+            4000,
+            0,
+            20000,
+            1800,
+            False,
+            "capital-over-limit-excluded",
+        ),
+        CTRCase(
+            "ctr-pa-single-high-council-tax",
+            72,
+            8000,
+            0,
+            0,
+            2600,
+            False,
+            "full-award-high-liability",
+        ),
+        CTRCase(
+            "ctr-pa-couple-full-below-aa",
+            70,
+            6000,
+            0,
+            0,
+            2200,
+            True,
+            "couple-full-award",
+        ),
+        CTRCase(
+            "ctr-pa-couple-taper-interior",
+            70,
+            24000,
+            0,
+            0,
+            2400,
+            True,
+            "couple-taper-interior",
+        ),
     ]
 
 
@@ -207,7 +292,11 @@ def _policyengine_rows(cases: list[CTRCase]) -> dict[str, dict[str, float]]:
 
 
 def _axiom_awards(
-    cases: list[CTRCase], pe_rows: dict[str, dict[str, float]]
+    cases: list[CTRCase],
+    pe_rows: dict[str, dict[str, float]],
+    *,
+    rulespec_root: Path,
+    axiom_binary: Path,
 ) -> dict[str, float]:
     """Rulespec England pension-age award through the axiom rules engine.
 
@@ -223,8 +312,7 @@ def _axiom_awards(
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = RULESPEC_UK / CTR_PROGRAM
-    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+    program = rulespec_root / CTR_PROGRAM
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -251,10 +339,10 @@ def _axiom_awards(
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=binary,
+        binary_path=axiom_binary,
         default_entity="Household",
         default_entity_id="household",
-        rulespec_repo_roots=(RULESPEC_UK,),
+        rulespec_root=rulespec_root,
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [CTR_OUTPUT])
@@ -262,8 +350,7 @@ def _axiom_awards(
     for result in results:
         if result.errors:
             raise RuntimeError(
-                f"axiom rules engine failed for {result.household_id}: "
-                f"{result.errors}"
+                f"axiom rules engine failed for {result.household_id}: {result.errors}"
             )
         awards[str(result.household_id)] = float(result.values[CTR_OUTPUT])
     return awards
@@ -372,8 +459,7 @@ def build_report(
         "provenance": {
             "generated": datetime.now(timezone.utc).date().isoformat(),
             "generator": "scripts/generate_uk_council_tax_reduction.py",
-            "axiom_engine": "axiom rules engine over "
-            f"rulespec-uk {CTR_PROGRAM}",
+            "axiom_engine": f"axiom rules engine over rulespec-uk {CTR_PROGRAM}",
             "policyengine_uk": POLICYENGINE_UK_VERSION,
             "commensurability": (
                 "PolicyEngine-UK England pension-age Council Tax Reduction "
@@ -388,10 +474,16 @@ def build_report(
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
     cases = _grid()
     pe_rows = _policyengine_rows(cases)
-    axiom = _axiom_awards(cases, pe_rows)
+    axiom = _axiom_awards(
+        cases,
+        pe_rows,
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     report = build_report(cases, pe_rows, axiom)
 
     REPORTS.mkdir(exist_ok=True)

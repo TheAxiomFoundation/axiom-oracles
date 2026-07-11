@@ -120,21 +120,25 @@ def fixture_to_case(
             Concepts.PREGNANT: bool(member.get("is_pregnant", False)),
             Concepts.VETERAN: bool(member.get("is_veteran", False)),
         }
-        entities.append(Entity(
-            entity_id=f"sanity-person-{index}",
-            kind="person",
-            facts=person_facts,
-        ))
+        entities.append(
+            Entity(
+                entity_id=f"sanity-person-{index}",
+                kind="person",
+                facts=person_facts,
+            )
+        )
 
     # Household entity carries scope info for the FIPS filter.
     fips = {"CA": "06000000000000", "CO": "08000000000000"}.get(
         str(state_code).upper(), "06000000000000"
     )
-    entities.append(Entity(
-        entity_id="sanity-household",
-        kind="household",
-        facts={Concepts.STATE_CODE: state_code, **household_facts},
-    ))
+    entities.append(
+        Entity(
+            entity_id="sanity-household",
+            kind="household",
+            facts={Concepts.STATE_CODE: state_code, **household_facts},
+        )
+    )
 
     return Case(
         case_id=f"sanity-{fixture.id}",
@@ -159,8 +163,10 @@ def print_summary(summary: SanitySummary, *, stream=None) -> None:
         stream = sys.stdout
     print(f"\nSanity fixtures — concept: {summary.concept}", file=stream)
     print(f"Period: {summary.period}", file=stream)
-    print(f"Total checks: {len(summary.results)}; failed: {summary.fail_count}\n",
-          file=stream)
+    print(
+        f"Total checks: {len(summary.results)}; failed: {summary.fail_count}\n",
+        file=stream,
+    )
     by_fixture: dict[str, list[SanityResult]] = {}
     for r in summary.results:
         by_fixture.setdefault(r.fixture_id, []).append(r)

@@ -6,8 +6,9 @@ to conformant; close uk-pe `legacy_means_tested`. Validation year 2026, eval ≥
 Env for the local Rosetta EUROMOD regen (verified working this session):
 `EUROMOD_PYTHON=~/.venvs/axiom-euromod-x64/bin/python DOTNET_ROOT=~/.dotnet-x64
 PYTHONNET_RUNTIME=coreclr POLARS_SKIP_CPU_CHECK=1
-EUROMOD_MODEL_ROOT=~/Downloads/UKMOD_PUBLIC_B2026.03
-AXIOM_RULESPEC_REPO_ROOTS=~/TheAxiomFoundation` then `.venv/bin/python scripts/run_comparison.py <name> --summary`.
+EUROMOD_MODEL_ROOT=~/Downloads/UKMOD_PUBLIC_B2026.03` then
+`.venv/bin/python scripts/run_comparison.py <name> --summary`. Each comparison
+config supplies its exact `rulespec_root` and `axiom_binary`.
 
 ## Scoreboard
 - Start: UK covered 15/26, unexplained 0, axiom 0. uk-pe 14/25.

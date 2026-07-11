@@ -105,9 +105,7 @@ def taxcalc_input_for_case(
         "age_spouse": _age(spouse) if spouse is not None else 0,
         "blind_head": int(bool(head.fact(Concepts.BLIND, False))),
         "blind_spouse": (
-            int(bool(spouse.fact(Concepts.BLIND, False)))
-            if spouse is not None
-            else 0
+            int(bool(spouse.fact(Concepts.BLIND, False))) if spouse is not None else 0
         ),
         "e00200p": head_wages,
         "e00200s": spouse_wages,

@@ -107,9 +107,8 @@ def scope_contains(
         return False
 
     if container_scope.type == "census_tract":
-        return (
-            item_scope.type == "census_block"
-            and item_scope.geoid.startswith(container_scope.geoid)
+        return item_scope.type == "census_block" and item_scope.geoid.startswith(
+            container_scope.geoid
         )
 
     return False

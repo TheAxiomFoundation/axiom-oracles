@@ -61,9 +61,7 @@ def _maternity_leave_case(
                 ): True,
                 uncapped_daily_input: daily_income,
                 capped_daily_input: (
-                    DAILY_REMUNERATION_CAP_BE_2025
-                    if apply_daily_cap
-                    else daily_income
+                    DAILY_REMUNERATION_CAP_BE_2025 if apply_daily_cap else daily_income
                 ),
                 _maternity_input("belgium_maternity_first_30_working_days_count"): (
                     FIRST_30_WORKING_DAYS

@@ -228,9 +228,7 @@ def _capital_income_tax_case(case_id: str, annual_movable_income: float) -> Case
             "axiom_inputs": {
                 taxable_movable_income_input: 0.0,
             },
-            "euromod_inputs": [
-                _euromod_movable_income_input(annual_movable_income)
-            ],
+            "euromod_inputs": [_euromod_movable_income_input(annual_movable_income)],
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yiy_s": [taxable_movable_income_input],
             },

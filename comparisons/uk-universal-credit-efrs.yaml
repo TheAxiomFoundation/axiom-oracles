@@ -11,16 +11,11 @@ description: >-
   already compared here via universal-credit-award.
 
 runner:
-  type: axiom-encode-uk-efrs-compare
+  type: axiom-encode-uk-populace-compare
   axiom_encode_repo: $HOME/axiom-encode
-  axiom_rules_repo: $HOME/axiom-rules-engine
-  rulespec_root: $HOME/rulespec-uk-official
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
+  rulespec_root: $HOME/TheAxiomFoundation/rulespec-uk
   parameters:
-    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
-    axiom_program: $HOME/axiom-programs/uk/universal-credit/fy-2026-27.yaml
-    axiom_composed_program: /tmp/uk-universal-credit-fy-2026-27-composed.yaml
-    rulespec_roots:
-      - $HOME/rulespec-uk-official
     data_folder: $HOME/axiom-oracles/.axiom/policyengine-data
     sample_size: 0
     year: 2026

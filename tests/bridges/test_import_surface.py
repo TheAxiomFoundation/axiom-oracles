@@ -6,17 +6,14 @@ inside functions), and the documented public names must exist. axiom-encode
 re-exports these modules as thin shims, so a name disappearing here breaks
 the encoder's import paths and CLI — this test is the tripwire.
 
-The federal-tax and SNAP bridges were renamed ``ecps_tax`` -> ``tax_populace``
-and ``ecps_snap`` -> ``snap_populace`` (axiom-oracles#74). The old paths remain
-as deprecation shims — encode's shims swap them into ``sys.modules`` — so both
-the new module names (in ``MODULES``) and the old ones (in
-``DEPRECATED_MODULE_ALIASES``) are asserted here.
+The federal-tax and SNAP bridges use only their canonical ``tax_populace`` and
+``snap_populace`` names.  The pre-launch ``ecps_*`` aliases are intentionally
+absent.
 """
 
 from __future__ import annotations
 
 import importlib
-import warnings
 from pathlib import Path
 
 import pytest
@@ -37,14 +34,6 @@ MODULES = [
     "axiom_oracles.bridges.tax_populace",
     "axiom_oracles.bridges.us_populace",
 ]
-
-#: Deprecated module paths that must still import (encode's shims target these
-#: via ``sys.modules``). Importing each emits a DeprecationWarning and resolves
-#: to the renamed module object.
-DEPRECATED_MODULE_ALIASES = {
-    "axiom_oracles.bridges.ecps_snap": "axiom_oracles.bridges.snap_populace",
-    "axiom_oracles.bridges.ecps_tax": "axiom_oracles.bridges.tax_populace",
-}
 
 #: Names the package __init__ promises (see bridges/README.md).
 PACKAGE_EXPORTS = [
@@ -86,9 +75,12 @@ MODULE_SURFACE = {
         "load_policyengine_registry",
     ],
     "axiom_oracles.bridges.rulespec_paths": [
-        "_canonical_rulespec_compile_path",
+        "require_rulespec_module",
         "_rulespec_public_item_keys",
-        "_rulespec_repo_alias_parent",
+        "require_axiom_binary",
+        "require_rulespec_checkout",
+        "resolve_rulespec_program",
+        "rulespec_engine_env",
     ],
 }
 
@@ -96,31 +88,6 @@ MODULE_SURFACE = {
 @pytest.mark.parametrize("module_name", MODULES)
 def test_module_imports(module_name: str) -> None:
     importlib.import_module(module_name)
-
-
-@pytest.mark.parametrize(
-    ("deprecated", "target"), sorted(DEPRECATED_MODULE_ALIASES.items())
-)
-def test_deprecated_bridge_module_aliases_still_import(
-    deprecated: str, target: str
-) -> None:
-    """Old ecps_* bridge paths must resolve to the renamed module and warn.
-
-    encode's shims do ``sys.modules[...] = axiom_oracles.bridges.ecps_tax``, so
-    the old path must import, emit a DeprecationWarning, and be the *same*
-    module object as the renamed bridge — otherwise encode's monkeypatch
-    targets and attribute access would silently diverge.
-    """
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", DeprecationWarning)
-        with pytest.raises(DeprecationWarning):
-            importlib.import_module(deprecated)
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", DeprecationWarning)
-        legacy = importlib.import_module(deprecated)
-        renamed = importlib.import_module(target)
-    assert legacy is renamed
 
 
 def test_package_exports() -> None:
@@ -133,7 +100,9 @@ def test_package_exports() -> None:
 @pytest.mark.parametrize("module_name", sorted(MODULE_SURFACE))
 def test_module_surface(module_name: str) -> None:
     module = importlib.import_module(module_name)
-    missing = [name for name in MODULE_SURFACE[module_name] if not hasattr(module, name)]
+    missing = [
+        name for name in MODULE_SURFACE[module_name] if not hasattr(module, name)
+    ]
     assert not missing, f"{module_name} lost symbols: {missing}"
 
 

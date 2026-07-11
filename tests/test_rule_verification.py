@@ -5,6 +5,7 @@ These cover the pure join logic — grounding classification, manifest-path
 resolution, surface (oracle) indexing — plus a consistency check that the
 committed artifacts recompute correctly.
 """
+
 from __future__ import annotations
 
 import importlib.util

@@ -23,7 +23,9 @@ class _FakePolicyEngineModel:
 
 class _FakePolicyEngine:
     def __init__(self, definition_period: str) -> None:
-        self.us = type("FakeUS", (), {"model": _FakePolicyEngineModel(definition_period)})()
+        self.us = type(
+            "FakeUS", (), {"model": _FakePolicyEngineModel(definition_period)}
+        )()
 
 
 def test_policyengine_monthly_numeric_output_is_normalized_for_month_period() -> None:
@@ -67,9 +69,7 @@ def test_taxsim_package_runner_wraps_taxsim_format_rows() -> None:
 
         def run(self, show_progress=False):
             del show_progress
-            return [
-                {"taxsimid": "case-1", "fiitax": 100, "siitax": 25, "unused": 1}
-            ]
+            return [{"taxsimid": "case-1", "fiitax": 100, "siitax": 25, "unused": 1}]
 
     case = Case(
         case_id="case-1",
@@ -139,7 +139,9 @@ def test_taxsim_package_runner_projects_cases_and_maps_canonical_concepts() -> N
     assert results[0].values == {"fiitax": 100, "siitax": 25}
 
 
-def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets() -> None:
+def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets() -> (
+    None
+):
     captured_inputs = []
 
     class FakePolicyEngineTaxsimRunner:

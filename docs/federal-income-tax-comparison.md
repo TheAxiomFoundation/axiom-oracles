@@ -15,7 +15,7 @@ every other lane: `scripts/run_comparison.py` dispatches it, it is
 auto-discovered by the weekly matrix (`.github/workflows/comparisons.yml`),
 its output is normalized to the `axiom.comparison_report.v2` schema, and the
 committed dashboard artifact refreshes through this path (it is the first suite
-in `dashboard/scripts/regenerate_all.sh`).
+in `scripts/regenerate_all.sh`).
 
 ## Population: pinned Populace, with recorded identity
 
@@ -41,8 +41,8 @@ uv run scripts/run_comparison.py fiit-ecps --summary
 ```
 
 That reads [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml),
-clones `rulespec-us` fresh, builds the engine if needed, runs the comparison
-with the pinned PolicyEngine stack, writes a JSON report under `reports/`,
+requires the exact RuleSpec checkout and engine executable named there, runs
+the comparison with the pinned PolicyEngine stack, writes a JSON report under `reports/`,
 rewrites the dashboard data at
 `dashboard/public/data/axiom-policyengine-fiit-ecps.json`, and prints the
 headline agreement numbers.
@@ -55,20 +55,17 @@ uv run scripts/run_comparison.py --list
 
 ## What runs
 
-The harness is **`axiom-encode tax-populace-compare`** (the CLI also registers
-`tax-ecps-compare` as an alias for the identical command) — it lives in
-`axiom-encode`, not `axiom-oracles`. The ~17k LOC of oracle-bridge code stays
-in `axiom-encode`; A9 unified FIIT *operationally* by wrapping that harness in
-the standard runner, not by moving the bridge. The orchestrator in this repo
-dispatches to the right harness based on the `runner.type` field of the
-comparison YAML, takes care of the gotchas below, normalizes the output into
-the v2 schema, and lands the JSON report under `reports/`.
+The harness is **`axiom-encode tax-populace-compare`**. Its shared bridge code
+lives in `axiom_oracles.bridges.tax_populace`; axiom-encode imports that
+canonical module. The orchestrator dispatches from the comparison YAML,
+normalizes the output into the v2 schema, and lands the JSON report under
+`reports/`.
 
-### Deprecated for CI: the direct `axiom-encode tax-populace-compare` call
+### Direct `axiom-encode tax-populace-compare` calls
 
-Invoking `axiom-encode tax-populace-compare` directly (outside this repo's
-runner) still works and is fine for local development and residual triage. But
-it is **deprecated for CI / weekly reporting**: it does not normalize into the
+Invoking `axiom-encode tax-populace-compare` directly requires both
+`--rulespec-root` and `--axiom-binary` and remains useful for local development
+and residual triage. It is not the CI/reporting entrypoint: it does not normalize into the
 `axiom.comparison_report.v2` schema, does not land in the dashboard, and is not
 what refreshes the committed FIIT artifact. From now on the committed FIIT
 report refreshes only through `scripts/run_comparison.py fiit-ecps` (the weekly
@@ -81,18 +78,17 @@ that produces a reported number.
 The harness has four hard requirements that are not obvious:
 
 1. **`rulespec-us` checkout must be named exactly `rulespec-us`.** The engine
-   resolves `us:` import targets by looking for a directory named
-   `rulespec-us` in the search root. Anything else (`rulespec-us-main`,
-   `rulespec-us-clean`, etc.) produces a different namespace and every import
-   fails. The script enforces this by cloning to `<tmpdir>/rulespec-us`.
+   receives that country checkout directly. Workspaces, flat state roots, and
+   aliases such as `rulespec-us-main` or `rulespec-us-clean` are rejected.
 
-2. **`axiom-rules-engine` release binary must exist.** The runner probes
-   `$AXIOM_RULES_REPO/target/release/axiom-rules-engine` and runs
-   `cargo build --bin axiom-rules-engine --release` if it's missing.
+2. **`axiom-rules-engine` binary must already exist and be executable.** The
+   registry names the exact file with `axiom_binary`; the runner neither searches
+   for nor builds a substitute.
 
-3. **`AXIOM_RULESPEC_REPO_ROOTS` only matters for the lower-level
-   `axiom-oracles compare` path.** `tax-ecps-compare` takes
-   `--rulespec-root` directly.
+3. **RuleSpec and engine inputs are explicit.** `tax-populace-compare` requires
+   the exact `rulespec-us` checkout via `--rulespec-root` and the exact
+   executable via `--axiom-binary`. The bridge strips obsolete ambient-root
+   variables and passes only the explicit root argument to the engine.
 
 4. **`uv run --python 3.13 --no-project`** is the canonical invocation (the
    `python` key in `fiit-ecps.yaml` is the source of truth).
@@ -254,4 +250,4 @@ The dashboard consumes the generated aggregate report directly through
 - TheAxiomFoundation/axiom-encode#13 (Max's PR introducing the bridge and the
   original 99.04% number).
 - TheAxiomFoundation/axiom-encode/blob/main/src/axiom_encode/cli.py — the
-  `tax-ecps-compare` subcommand definition.
+  `tax-populace-compare` subcommand definition.

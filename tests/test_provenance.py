@@ -7,13 +7,14 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
+
 from axiom_oracles.provenance import (
     PROVENANCE_SCHEMA_VERSION,
     RUN_KINDS,
     build_provenance,
     dataset_provenance_from_identity,
     engine_provenance,
-    repo_slug_from_remote,
     resolve_run_kind,
     rulespec_provenance,
 )
@@ -64,20 +65,6 @@ def test_resolve_run_kind_env(monkeypatch):
 # --- repo slug + rulespec provenance ---------------------------------------
 
 
-def test_repo_slug_from_remote_forms():
-    assert (
-        repo_slug_from_remote("git@github.com:TheAxiomFoundation/rulespec-us.git")
-        == "TheAxiomFoundation/rulespec-us"
-    )
-    assert (
-        repo_slug_from_remote("https://github.com/TheAxiomFoundation/rulespec-us")
-        == "TheAxiomFoundation/rulespec-us"
-    )
-    # NEGATIVE: a non-GitHub remote yields no slug rather than a wrong one.
-    assert repo_slug_from_remote("file:///tmp/rulespec-us") is None
-    assert repo_slug_from_remote(None) is None
-
-
 def test_rulespec_provenance_uses_git_when_available(tmp_path):
     repo = tmp_path / "rulespec-us"
     repo.mkdir()
@@ -95,14 +82,16 @@ def test_rulespec_provenance_uses_git_when_available(tmp_path):
     assert entries[0]["sha"] and len(entries[0]["sha"]) == 40
 
 
-def test_rulespec_provenance_missing_path_records_name_with_null_sha(tmp_path):
-    entries = rulespec_provenance([tmp_path / "rulespec-us-co"])
-    assert entries == [{"repo": "TheAxiomFoundation/rulespec-us-co", "sha": None}]
+def test_rulespec_provenance_rejects_flat_missing_path(tmp_path):
+    with pytest.raises(ValueError, match="exact canonical"):
+        rulespec_provenance([tmp_path / "rulespec-us-co"])
 
 
-def test_rulespec_provenance_canonicalizes_uk_official_alias(tmp_path):
-    entries = rulespec_provenance([tmp_path / "rulespec-uk-official"])
-    assert entries == [{"repo": "TheAxiomFoundation/rulespec-uk", "sha": None}]
+def test_rulespec_provenance_rejects_alias_and_workspace(tmp_path):
+    with pytest.raises(ValueError, match="exact canonical"):
+        rulespec_provenance([tmp_path / "rulespec-uk-official"])
+    with pytest.raises(ValueError, match="exact canonical"):
+        rulespec_provenance([tmp_path])
 
 
 def test_rulespec_provenance_dedupes(tmp_path):
@@ -190,20 +179,30 @@ def test_build_run_provenance_threads_rulespecs_and_oracle(tmp_path, monkeypatch
     run_comparison = _load_run_comparison()
     output = tmp_path / "r.json"
     output.write_text(json.dumps({"suite": "ssi-ecps"}))
+    rulespec_root = tmp_path / "rulespec-us"
+    rulespec_root.mkdir()
+    axiom_binary = (
+        tmp_path / "axiom-rules-engine" / "target" / "release" / "axiom-rules-engine"
+    )
+    axiom_binary.parent.mkdir(parents=True)
+    axiom_binary.write_text("#!/bin/sh\nexit 0\n")
+    axiom_binary.chmod(0o755)
     config = {
         "name": "ssi-ecps",
         "runner": {
             "type": "axiom-oracles-compare",
-            "axiom_rules_repo": str(tmp_path / "missing-rules"),
+            "axiom_binary": str(axiom_binary),
             "parameters": {
                 "left": "axiom",
                 "right": "policyengine",
                 "population": "enhanced-cps",
-                "rulespec_roots": [str(tmp_path / "rulespec-us")],
+                "rulespec_root": str(rulespec_root),
             },
         },
     }
-    block = run_comparison._build_run_provenance(config, "axiom-oracles-compare", output)
+    block = run_comparison._build_run_provenance(
+        config, "axiom-oracles-compare", output
+    )
     assert block["schema"] == PROVENANCE_SCHEMA_VERSION
     assert block["oracle"]["name"] == "policyengine"
     assert block["rulespecs"] == [

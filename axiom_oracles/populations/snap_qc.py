@@ -477,10 +477,7 @@ class QcExclusionLog:
         return sum(self.counts.values())
 
     def summary(self) -> str:
-        lines = [
-            f"Loaded {self.total_loaded} units; "
-            f"excluded {self.total_excluded}."
-        ]
+        lines = [f"Loaded {self.total_loaded} units; excluded {self.total_excluded}."]
         for reason, count in sorted(self.counts.items()):
             description = _EXCLUSION_DESCRIPTIONS.get(reason, reason)
             lines.append(f"  {count:>7,d}  {description}")
@@ -571,9 +568,10 @@ def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
     cache_dir.mkdir(parents=True, exist_ok=True)
     destination = cache_dir / _csv_name(pin.fiscal_year)
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
-        with archive.open(pin.archive_member) as member, open(
-            destination, "wb"
-        ) as handle:
+        with (
+            archive.open(pin.archive_member) as member,
+            open(destination, "wb") as handle,
+        ):
             # Stream the ~92 MB member to disk instead of materializing it —
             # the compressed payload is already held for sha256 verification.
             shutil.copyfileobj(member, handle, length=8 * 1024 * 1024)

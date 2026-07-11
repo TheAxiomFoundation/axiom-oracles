@@ -83,9 +83,9 @@ def _registered_runner_types() -> set[str]:
 #: the RUNNERS registry, plus a static fallback if parsing ever fails so the
 #: gate degrades to "known set" rather than "everything is unbacked".
 _ORACLE_BACKED_RUNNERS = _registered_runner_types() or {
-    "axiom-encode-tax-ecps-compare",
-    "axiom-encode-uk-efrs-compare",
-    "axiom-encode-snap-ecps-compare",
+    "axiom-encode-tax-populace-compare",
+    "axiom-encode-uk-populace-compare",
+    "axiom-encode-snap-populace-compare",
     "axiom-oracles-compare",
     "euromod-synthetic-compare",
 }
@@ -153,8 +153,7 @@ def _fixture_oracle_problems(path: Path, doc: dict) -> list[str]:
         if "oracle" in fixture and str(fixture.get("oracle")).strip().lower() == "none":
             if not str(fixture.get("reason") or "").strip():
                 problems.append(
-                    f"{rel}: fixture {fid!r} has `oracle: none` without a "
-                    "`reason:`"
+                    f"{rel}: fixture {fid!r} has `oracle: none` without a `reason:`"
                 )
             continue
         expected = fixture.get("expected")
@@ -324,7 +323,9 @@ _PROGRAM_SUITE_TOKENS = {
 }
 
 
-def _suite_matches_program(suite: str, program: str | None, jurisdiction: str | None) -> bool:
+def _suite_matches_program(
+    suite: str, program: str | None, jurisdiction: str | None
+) -> bool:
     """Link a coverage (program, jurisdiction) row to a report suite.
 
     Suites are slugged like ``co-snap-ecps`` / ``ny-tanf-ecps`` / ``fiit-ecps``;

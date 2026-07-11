@@ -30,9 +30,7 @@ def test_census_place_geoid_projects_to_policyengine_inputs() -> None:
 
 
 def test_census_county_geoid_projects_to_policyengine_inputs() -> None:
-    assert pe_inputs_for_scope(
-        GeographyScope(type="census_county", geoid="36061")
-    ) == {
+    assert pe_inputs_for_scope(GeographyScope(type="census_county", geoid="36061")) == {
         "state_fips": 36,
         "county_fips": "36061",
     }

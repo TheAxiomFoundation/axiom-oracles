@@ -144,17 +144,13 @@ class Grid:
             seen_cases: set[str] = set()
             for case in case_set.cases:
                 if case.id in seen_cases:
-                    issues.append(
-                        f"{case_set.name}: duplicate case id {case.id!r}"
-                    )
+                    issues.append(f"{case_set.name}: duplicate case id {case.id!r}")
                 seen_cases.add(case.id)
                 if not case.period:
                     issues.append(f"{case_set.name}/{case.id}: missing period")
                 for entity in case.entities:
                     if not entity.id:
-                        issues.append(
-                            f"{case_set.name}/{case.id}: entity missing id"
-                        )
+                        issues.append(f"{case_set.name}/{case.id}: entity missing id")
         return issues
 
 
@@ -207,7 +203,9 @@ def load_grid(jurisdiction: str, grid_root: Path | None = None) -> Grid:
     root = grid_root or DEFAULT_GRID_ROOT
     path = root / f"{jurisdiction}.yaml"
     if not path.exists():
-        raise FileNotFoundError(f"No grid file for jurisdiction {jurisdiction!r}: {path}")
+        raise FileNotFoundError(
+            f"No grid file for jurisdiction {jurisdiction!r}: {path}"
+        )
     return load_grid_file(path)
 
 
@@ -322,9 +320,7 @@ def _entity_from_payload(payload: Any, *, source_file: Path) -> EntitySpec:
     if "id" not in payload:
         raise ValueError(f"{source_file}: entity missing 'id': {payload!r}")
     extra = {
-        key: value
-        for key, value in payload.items()
-        if key not in _ENTITY_RESERVED
+        key: value for key, value in payload.items() if key not in _ENTITY_RESERVED
     }
     age = payload.get("age")
     return EntitySpec(

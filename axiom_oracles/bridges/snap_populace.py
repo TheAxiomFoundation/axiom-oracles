@@ -20,7 +20,6 @@ import argparse
 import csv
 import json
 import math
-import os
 import subprocess
 import tempfile
 from calendar import monthrange
@@ -37,6 +36,14 @@ from .population import (
     format_dataset_identity,
     load_populace_dataset,
     populace_data_requirement,
+)
+from .rulespec_paths import (
+    require_rulespec_module,
+    require_axiom_binary,
+    require_rulespec_checkout,
+    resolve_rulespec_program,
+    rulespec_engine_env,
+    rulespec_root_args,
 )
 
 try:
@@ -69,7 +76,6 @@ COMMON_AXIOM_OUTPUT_ID_BY_LABEL = {
 class JurisdictionConfig:
     jurisdiction: str
     state_code: str
-    repo_name: str
     program_relative_path: Path
     output_id_by_label: dict[str, str]
     utility_allowance_labels: tuple[str, ...]
@@ -84,7 +90,6 @@ JURISDICTION_CONFIGS = {
     "us-co": JurisdictionConfig(
         jurisdiction="us-co",
         state_code="CO",
-        repo_name="rulespec-us-co",
         program_relative_path=Path(
             "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -124,7 +129,6 @@ JURISDICTION_CONFIGS = {
     "us-ca": JurisdictionConfig(
         jurisdiction="us-ca",
         state_code="CA",
-        repo_name="rulespec-us-ca",
         program_relative_path=Path(
             "policies/cdss/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -174,7 +178,6 @@ JURISDICTION_CONFIGS = {
     "us-az": JurisdictionConfig(
         jurisdiction="us-az",
         state_code="AZ",
-        repo_name="rulespec-us-az",
         program_relative_path=Path(
             "policies/des/faa5/na-eligibility-and-benefit-determination/"
             "fy-2026-benefit-calculation.yaml"
@@ -214,7 +217,6 @@ JURISDICTION_CONFIGS = {
     "us-ny": JurisdictionConfig(
         jurisdiction="us-ny",
         state_code="NY",
-        repo_name="rulespec-us-ny",
         program_relative_path=Path(
             "policies/otda/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -643,7 +645,10 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--program",
         type=Path,
         default=None,
-        help="Override the jurisdiction composition RuleSpec file.",
+        help=(
+            "Exact canonical jurisdiction program override. Defaults to the "
+            "configured path beneath --rulespec-root."
+        ),
     )
     parser.add_argument(
         "--test-template",
@@ -654,14 +659,14 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
     parser.add_argument(
         "--axiom-binary",
         type=Path,
-        default=None,
-        help="Path to the axiom-rules-engine binary. Defaults to a sibling checkout.",
+        required=True,
+        help="Exact executable axiom-rules-engine binary.",
     )
     parser.add_argument(
-        "--workspace-root",
+        "--rulespec-root",
         type=Path,
-        default=None,
-        help="Workspace containing axiom-rules-engine and rulespec-* repos.",
+        required=True,
+        help="Exact canonical rulespec-us country checkout.",
     )
     parser.add_argument("--write-csv", type=Path, default=None)
     parser.add_argument(
@@ -698,108 +703,39 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _workspace_candidates() -> list[Path]:
-    candidates = [
-        Path.cwd(),
-        Path.cwd().parent,
-        Path.home() / "TheAxiomFoundation",
-    ]
-    module_path = Path(__file__).resolve()
-    candidates.extend(module_path.parents)
-    return candidates
-
-
-def resolve_workspace_root(override: Path | None = None) -> Path:
-    if override is not None:
-        return override.resolve()
-    for candidate in _workspace_candidates():
-        if (candidate / "axiom-rules-engine").exists() or any(
-            candidate.glob("rulespec-*")
-        ):
-            return candidate.resolve()
-        if (candidate / "_axiom" / "axiom-rules-engine").exists():
-            return candidate.resolve()
-    return (Path.home() / "TheAxiomFoundation").resolve()
-
-
 def resolve_program_path(
-    config: JurisdictionConfig, workspace_root: Path, override: Path | None
+    config: JurisdictionConfig,
+    rulespec_root: Path,
+    override: Path | None,
 ) -> Path:
-    if override is not None:
-        return override.resolve()
-    cwd_program = Path.cwd() / config.program_relative_path
-    if cwd_program.exists():
-        return cwd_program.resolve()
-    return (workspace_root / config.repo_name / config.program_relative_path).resolve()
-
-
-def resolve_test_template_path(program: Path, override: Path | None) -> Path:
-    if override is not None:
-        return override.resolve()
-    return program.with_name(f"{program.stem}.test.yaml")
-
-
-def resolve_axiom_binary(workspace_root: Path, override: Path | None) -> Path:
-    if override is not None:
-        return override.resolve()
-    candidates = [
-        workspace_root
-        / "axiom-rules-engine"
-        / "target"
-        / "debug"
-        / "axiom-rules-engine",
-        workspace_root
-        / "_axiom"
-        / "axiom-rules-engine"
-        / "target"
-        / "debug"
-        / "axiom-rules-engine",
-        Path.cwd()
-        / "_axiom"
-        / "axiom-rules-engine"
-        / "target"
-        / "debug"
-        / "axiom-rules-engine",
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            return candidate.resolve()
-    return candidates[0].resolve()
-
-
-def axiom_rules_env(program: Path, workspace_root: Path) -> dict[str, str]:
-    env = os.environ.copy()
-    active_roots: list[Path] = []
-    current_repo = program.resolve()
-    for parent in current_repo.parents:
-        if parent.name.startswith("rulespec-"):
-            active_roots.append(parent)
-            break
-    roots = [
-        workspace_root / "rulespec-us",
-        workspace_root / "_axiom" / "rulespec-us",
-        program.parent,
-        program.parent.parent,
-    ]
-    roots.extend(sorted(workspace_root.glob("rulespec-*")))
-    roots.extend(sorted((workspace_root / "_axiom").glob("rulespec-*")))
-    existing = [path.resolve() for path in roots if path.exists()]
-    configured = [
-        Path(path).resolve()
-        for path in env.get("AXIOM_RULESPEC_REPO_ROOTS", "").split(os.pathsep)
-        if path
-    ]
-    unique_roots = []
-    seen: set[Path] = set()
-    for path in [*active_roots, *configured, *existing]:
-        if path in seen:
-            continue
-        seen.add(path)
-        unique_roots.append(path)
-    env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
-        str(path) for path in unique_roots
+    return resolve_rulespec_program(
+        rulespec_root,
+        jurisdiction=config.jurisdiction,
+        relative_path=config.program_relative_path,
+        override=override,
     )
-    return env
+
+
+def resolve_test_template_path(
+    program: Path,
+    override: Path | None,
+    *,
+    rulespec_root: Path,
+) -> Path:
+    candidate = (
+        Path(override).expanduser()
+        if override is not None
+        else program.with_name(f"{program.stem}.test.yaml")
+    )
+    return require_rulespec_module(candidate, rulespec_root)
+
+
+def resolve_axiom_binary(override: Path) -> Path:
+    return require_axiom_binary(override)
+
+
+def axiom_engine_env() -> dict[str, str]:
+    return rulespec_engine_env()
 
 
 def month_period(year: int, month: int) -> Period:
@@ -1555,6 +1491,7 @@ def compile_program(
     program: Path,
     output: Path,
     *,
+    rulespec_root: Path,
     env: dict[str, str],
 ) -> None:
     result = subprocess.run(
@@ -1563,6 +1500,7 @@ def compile_program(
             "compile",
             "--program",
             str(program),
+            *rulespec_root_args(rulespec_root),
             "--output",
             str(output),
         ],
@@ -1936,12 +1874,16 @@ def main(args: argparse.Namespace | None = None) -> int:
     if args is None:
         args = parse_args()
     config = JURISDICTION_CONFIGS[args.jurisdiction]
-    workspace_root = resolve_workspace_root(args.workspace_root)
-    program = resolve_program_path(config, workspace_root, args.program)
-    test_template = resolve_test_template_path(program, args.test_template)
-    axiom_binary = resolve_axiom_binary(workspace_root, args.axiom_binary)
+    rulespec_root = require_rulespec_checkout(args.rulespec_root, country="us")
+    program = resolve_program_path(config, rulespec_root, args.program)
+    test_template = resolve_test_template_path(
+        program,
+        args.test_template,
+        rulespec_root=rulespec_root,
+    )
+    axiom_binary = resolve_axiom_binary(args.axiom_binary)
     state = (args.state or config.state_code).upper()
-    env = axiom_rules_env(program, workspace_root)
+    env = axiom_engine_env()
     period = month_period(args.year, args.month)
     base_inputs = load_base_inputs(test_template)
     print(f"Jurisdiction: {config.jurisdiction}")
@@ -1969,7 +1911,13 @@ def main(args: argparse.Namespace | None = None) -> int:
     with tempfile.TemporaryDirectory(prefix=config.temp_prefix) as temp_dir:
         artifact = Path(temp_dir) / "program.compiled.json"
         print(f"Compiling {config.display_name} RuleSpec composition...")
-        compile_program(axiom_binary, program, artifact, env=env)
+        compile_program(
+            axiom_binary,
+            program,
+            artifact,
+            rulespec_root=rulespec_root,
+            env=env,
+        )
         print("Running the Axiom rules engine over projected Populace records...")
         results = run_axiom_cases(
             binary=axiom_binary,

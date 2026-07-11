@@ -1,11 +1,10 @@
 """Compare SSA wage-indexed amounts encoded in rulespec-us against PolicyEngine.
 
 The rulespec side is the set of ``kind: parameter`` rules under
-``rulespec-us/policies/ssa/*/2026.yaml`` (contribution and benefit base, PIA
+``rulespec-us/us/policies/ssa/*/2026.yaml`` (contribution and benefit base, PIA
 bend points, quarter of coverage, retirement earnings test exempt amounts,
-and substantial gainful activity). Each file's rules form a small dependency
-graph of literals and formulas (floor/max/arithmetic), which this script
-evaluates directly — the encoded computation, not a transcription.
+and substantial gainful activity). Each file is compiled and executed by the
+Axiom rules engine.
 
 The PolicyEngine side is the parameter system evaluated at 2026-01-01, with
 uprating applied.
@@ -15,27 +14,31 @@ health-thresholds parameter report, written to
 ``dashboard/public/data/axiom-policyengine-ssa-parameters.json``.
 
 Usage:
-    uv run python scripts/run_ssa_parameter_comparison.py
-    RULESPEC_US_ROOT=~/rulespec-us uv run python scripts/run_ssa_parameter_comparison.py
+    uv run python scripts/run_ssa_parameter_comparison.py \
+      --rulespec-root ~/TheAxiomFoundation/rulespec-us \
+      --axiom-binary ~/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
 """
 
 from __future__ import annotations
 
 import json
-import math
-import os
 import re
 from pathlib import Path
 
-import yaml
+from canonical_rulespec_runtime import parse_canonical_runtime_args
+
+from axiom_oracles.bridges.parameter_runtime import evaluate_rulespec_outputs
 
 PERIOD = "2026-01-01"
 SUITE = "ssa-parameters"
 REPO_ROOT = Path(__file__).resolve().parents[1]
-OUTPUT_PATH = REPO_ROOT / "dashboard" / "public" / "data" / "axiom-policyengine-ssa-parameters.json"
-RULESPEC_ROOT = Path(
-    os.environ.get("RULESPEC_US_ROOT", Path.home() / "rulespec-us")
-).expanduser()
+OUTPUT_PATH = (
+    REPO_ROOT
+    / "dashboard"
+    / "public"
+    / "data"
+    / "axiom-policyengine-ssa-parameters.json"
+)
 
 # (rulespec file, terminal rule name, PE accessor, description)
 # PE accessors receive the root parameter node at the comparison instant.
@@ -90,75 +93,6 @@ COMPARISONS = [
     },
 ]
 
-_NAME_RE = re.compile(r"[a-z_][a-z0-9_]*")
-_ALLOWED_FORMULA = re.compile(r"^[a-z0-9_+\-*/(),.\s]+$")
-
-
-def evaluate_rulespec_text(text: str, source: str = "<rulespec>") -> dict[str, float]:
-    """Evaluate the parameter rules in one rulespec document.
-
-    Rules reference each other by name; iterate until the dependency graph
-    settles. Formulas are restricted to arithmetic, floor(), max()/min(),
-    and boolean literals. Rules whose formulas need runtime facts (derived
-    eligibility logic, conditionals) simply stay unresolved — callers check
-    that the specific rules they compare did resolve.
-    """
-    doc = yaml.safe_load(text)
-    formulas: dict[str, str] = {}
-    tables: dict[str, dict] = {}
-    for rule in doc.get("rules", []):
-        versions = rule.get("versions") or []
-        if rule.get("kind") != "parameter" or not versions:
-            continue
-        # Table parameters carry a values mapping (e.g. payment standards
-        # keyed by assistance-unit size) instead of a formula.
-        table = versions[0].get("values")
-        if isinstance(table, dict):
-            tables[rule["name"]] = {k: float(v) for k, v in table.items()}
-            continue
-        formula = str(versions[0].get("formula", "")).strip()
-        if _ALLOWED_FORMULA.match(formula):
-            formulas[rule["name"]] = formula
-
-    values: dict[str, float] = dict(tables)
-    namespace = {
-        "floor": math.floor,
-        "max": max,
-        "min": min,
-        "true": True,
-        "false": False,
-    }
-    for _ in range(len(formulas) + 1):
-        progressed = False
-        for name, formula in formulas.items():
-            if name in values:
-                continue
-            deps = [
-                token
-                for token in _NAME_RE.findall(formula)
-                if token in formulas and token != name
-            ]
-            if any(dep not in values for dep in deps):
-                continue
-            try:
-                values[name] = float(
-                    eval(formula, {"__builtins__": {}}, {**namespace, **values})  # noqa: S307
-                )
-            except Exception:
-                continue
-            progressed = True
-        if not progressed:
-            break
-    return values
-
-
-def evaluate_rulespec_parameters(path: Path) -> dict[str, float]:
-    # The monorepo nests federal law under us/; older checkouts kept these
-    # files at the repo root.
-    if not path.exists():
-        path = RULESPEC_ROOT / "us" / path.relative_to(RULESPEC_ROOT)
-    return evaluate_rulespec_text(path.read_text(), source=path.name)
-
 
 def policyengine_value(parameters, accessor: str, period: str = PERIOD) -> float:
     """Resolve a PE parameter accessor like ``a.b.c`` or ``a.b[1].threshold``."""
@@ -181,7 +115,7 @@ def policyengine_value(parameters, accessor: str, period: str = PERIOD) -> float
     return float(node(period))
 
 
-def build_report() -> dict:
+def build_report(*, rulespec_root: Path, axiom_binary: Path) -> dict:
     from policyengine_us import CountryTaxBenefitSystem
 
     parameters = CountryTaxBenefitSystem().parameters
@@ -195,7 +129,20 @@ def build_report() -> dict:
     for spec in COMPARISONS:
         rel = spec["file"]
         if rel not in file_values:
-            file_values[rel] = evaluate_rulespec_parameters(RULESPEC_ROOT / rel)
+            module_ref = "us:" + rel.removesuffix(".yaml")
+            file_specs = [item for item in COMPARISONS if item["file"] == rel]
+            output_ids = [f"{module_ref}#{item['rule']}" for item in file_specs]
+            executed = evaluate_rulespec_outputs(
+                rulespec_root / "us" / rel,
+                output_ids,
+                rulespec_root=rulespec_root,
+                axiom_binary=axiom_binary,
+                period="2026",
+            )
+            file_values[rel] = {
+                item["rule"]: float(executed[output_id])
+                for item, output_id in zip(file_specs, output_ids, strict=True)
+            }
         axiom_value = file_values[rel][spec["rule"]]
         pe_value = policyengine_value(parameters, spec["pe_parameter"])
 
@@ -286,7 +233,7 @@ def build_report() -> dict:
         "mismatches": mismatches,
         "population": "rulespec-parameters",
         "schema_version": "axiom.comparison_report.v1",
-        "scope": {"period": PERIOD, "source": "rulespec-us/policies/ssa"},
+        "scope": {"period": PERIOD, "source": "rulespec-us/us/policies/ssa"},
         "suite": SUITE,
         "summary": {
             "comparison_count": comparison_count,
@@ -314,8 +261,12 @@ def build_report() -> dict:
     }
 
 
-def main() -> None:
-    report = build_report()
+def main(argv: list[str] | None = None) -> None:
+    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="us")
+    report = build_report(
+        rulespec_root=rulespec_root,
+        axiom_binary=axiom_binary,
+    )
     OUTPUT_PATH.write_text(json.dumps(report, indent=1, sort_keys=True) + "\n")
     summary = report["summary"]
     print(f"wrote {OUTPUT_PATH}")

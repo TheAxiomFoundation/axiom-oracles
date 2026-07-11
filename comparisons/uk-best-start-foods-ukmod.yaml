@@ -37,7 +37,7 @@ description: >-
 
 runner:
   type: euromod-synthetic-compare
-  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     suite: uk-best-start-foods
     population: synthetic
@@ -51,7 +51,7 @@ runner:
     # benefit is deterministically in payment (bsauc_s > 0) rather than a take-up
     # lottery realization; Best Start Foods' Elig_Cond then passports off UC.
     euromod_constant_overrides: $ISTUNochild=1.0,$ISTUChild=1.0
-    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-uk
     dashboard_filename: axiom-euromod-uk-best-start-foods.json
 
 artifacts:

@@ -295,9 +295,13 @@ class PopulaceUsCaseLoader:
     def _households(self, sim, period: int) -> list["_HouseholdRow"]:
         household_ids = _values(sim.calculate("household_id", period=period))
         size = len(household_ids)
-        weights = _calculate_values(sim, "household_weight", period, default=1, size=size)
+        weights = _calculate_values(
+            sim, "household_weight", period, default=1, size=size
+        )
         state_fips = _calculate_values(sim, "state_fips", period, default="", size=size)
-        county_fips = _calculate_values(sim, "county_fips", period, default="", size=size)
+        county_fips = _calculate_values(
+            sim, "county_fips", period, default="", size=size
+        )
         place_fips = _calculate_values(sim, "place_fips", period, default="", size=size)
         # housing_cost is an SPMUnit variable; map_to="household" sums across
         # SPM units per household so the result is one value per household.
@@ -377,7 +381,9 @@ class PopulaceUsCaseLoader:
             default=False,
             size=size,
         )
-        ages = _calculate_values(sim, "age", period, map_to="person", default=0, size=size)
+        ages = _calculate_values(
+            sim, "age", period, map_to="person", default=0, size=size
+        )
         employment_income = _calculate_values(
             sim,
             "employment_income",

@@ -1,92 +1,73 @@
-# axiom_oracles.bridges — shared oracle-bridge layer
+# `axiom_oracles.bridges`
 
-The PolicyEngine/Populace oracle bridge, extracted from the encoder
-(`axiom_encode.oracles.policyengine`) so that axiom-oracles owns one copy and
-other repos consume it as a package instead of duplicating it. This closes the
-June 9 architecture-review P1 item ("~17k LOC oracle bridge embedded in the
-encoder") and gives the duplicated `Case`/`Concepts` types (microsim
-DECISIONS.md D5) an installable home.
+This package owns the shared Axiom oracle bridges consumed by axiom-oracles
+and axiom-encode. Heavy PolicyEngine and Populace dependencies remain lazy so
+the package and its mapping registry can be imported without an oracle runtime.
 
-## Provenance
+## RuleSpec execution contract
 
-Copied verbatim from `TheAxiomFoundation/axiom-encode` @
-`a314fc624967b4e990beb7d9ffc429dae6e26642` (2026-07-05). The only edits are
-mechanical import rewrites (absolute `axiom_encode.*` imports became relative
-imports inside this package). `rulespec_paths.py` collects the
-`validator_pipeline` helpers `ecps_tax` needs, verbatim, so the bridge does
-not depend on the encoder harness. The ported test files under
-`tests/bridges/` are the same focused suites the encoder runs against these
-modules — passing them is the copy-fidelity contract.
+Every bridge uses one pre-launch RuleSpec layout:
+
+```text
+rulespec-<country>/
+  <jurisdiction>/
+    legislation/
+    policies/
+    programs/
+    regulations/
+    statutes/
+```
+
+Only `.yaml` files beneath those five roots are RuleSpec modules. Callers pass
+the exact `rulespec-<country>` checkout and the exact executable
+`axiom-rules-engine` binary. The bridges do not discover workspaces, sibling
+checkouts, `_axiom` directories, Git-origin aliases, environment-provided
+RuleSpec roots, flat `rulespec-<jurisdiction>` checkouts, or partially migrated
+layouts. Engine subprocesses receive only the caller-authorized checkout in
+the required explicit engine argument:
+
+The canonical CLI inputs are:
+
+```text
+--rulespec-root /path/to/rulespec-<country>
+--axiom-binary /path/to/axiom-rules-engine
+```
 
 ## Module map
 
-| Module | Origin (in axiom-encode) | What it does |
-|---|---|---|
-| `population.py` | `oracles/policyengine/population.py` | Pinned Populace artifact loading (`PopulacePin`, `POPULACE_PINS`, `load_populace_dataset`) — sha256-verified HF downloads, env overrides, unpinned escape hatch |
-| `tax_populace.py` | `oracles/policyengine/ecps_tax.py` | Federal income tax population comparison (Axiom RuleSpec vs PolicyEngine over pinned Populace). Renamed from `ecps_tax.py` — the data is populace-us, not Enhanced CPS (axiom-oracles#74); `ecps_tax.py` remains as a deprecation-alias shim |
-| `snap_populace.py` | `oracles/policyengine/ecps_snap.py` | SNAP population comparison harness. Renamed from `ecps_snap.py`; `ecps_snap.py` remains as a deprecation-alias shim |
-| `us_populace.py` | `oracles/policyengine/us_populace.py` | Generic US variable population comparison |
-| `medicaid_populace.py` | `oracles/policyengine/medicaid_populace.py` | Medicaid/MAGI population comparison |
-| `efrs_uk.py` | `oracles/policyengine/efrs_uk.py` | UK tax/benefit population comparison (EFRS) |
-| `adapters.py` | `oracles/policyengine/adapters.py` | Declarative PE-US variable adapters (`PolicyEngineUSVarAdapter`, `PE_US_VAR_ADAPTERS`) |
-| `registry.py` | `oracles/policyengine/registry.py` | Legal-ID keyed PE mapping registry (`load_policyengine_registry`), backed by `mappings/*.yaml` |
-| `coverage.py` | `oracles/policyengine/coverage.py` | Per-rule oracle coverage reports for rulespec repos, backed by `program_surfaces/*.yaml` |
-| `snapscreener.py` | `oracles/snapscreener.py` | SnapScreener diagnostic cross-check |
-| `jurisdiction.py` | `concepts/jurisdiction.py` | Jurisdiction prefix resolution for rulespec checkouts |
-| `repo_routing.py` | `repo_routing.py` | Rulespec monorepo/legacy checkout routing |
-| `rulespec_paths.py` | `harness/validator_pipeline.py` (extracted subset) | Canonical rulespec compile paths and public item-id aliases |
-| `mappings/*.yaml`, `program_surfaces/*.yaml` | same paths | Registry and coverage data files (packaged) |
+| Module | Purpose |
+|---|---|
+| `population.py` | Certified, hash-verified Populace artifact loading |
+| `tax_populace.py` | US federal tax population comparison |
+| `snap_populace.py` | SNAP population comparison |
+| `us_populace.py` | Generic direct-variable US comparison |
+| `medicaid_populace.py` | Medicaid population comparison |
+| `efrs_uk.py` | UK tax and benefit Populace comparison |
+| `coverage.py` | Canonical RuleSpec-to-PolicyEngine coverage reports |
+| `repo_routing.py` | Exact country-checkout and jurisdiction-root identity |
+| `rulespec_paths.py` | Exact module, checkout, binary, and engine-environment validation |
+| `adapters.py` | Declarative PolicyEngine-US variable adapters |
+| `registry.py` | Legal-ID keyed PolicyEngine oracle mapping registry |
+| `snapscreener.py` | SnapScreener diagnostic cross-check |
+
+The old `ecps_tax` and `ecps_snap` module aliases were removed. Import
+`tax_populace` and `snap_populace` directly.
 
 ## Public API
 
-Stable, importable without PolicyEngine installed (all heavy dependencies are
-lazy):
+`axiom_oracles.bridges` exports the shared engine-neutral case types,
+Populace pins and loader, and PolicyEngine registry types. Comparison modules
+are imported explicitly, for example:
 
-- `axiom_oracles.bridges` — `Case`, `Entity`, `Concepts`, `GeographyScope`
-  (the shared engine-neutral case types, re-exported from
-  `axiom_oracles.core`), `PopulacePin`, `POPULACE_PINS`,
-  `load_populace_dataset`, `resolve_populace_pin`, `PolicyEngineMapping`,
-  `PolicyEngineOracleRegistry`, `PolicyEngineOracleCoverage`,
-  `load_policyengine_registry`.
-- The comparison modules (`tax_populace`, `snap_populace`, `us_populace`,
-  `medicaid_populace`, `efrs_uk`, `coverage`, `adapters`, `registry`,
-  `population`, `snapscreener`) are imported explicitly, e.g.
-  `from axiom_oracles.bridges import tax_populace`. Their module-level surfaces
-  mirror the encoder originals name-for-name; the encoder re-exports them as
-  shims, so a symbol rename here is a breaking change for both repos.
-- `tax_populace` and `snap_populace` were renamed from `ecps_tax` / `ecps_snap`
-  (axiom-oracles#74 — every data path resolves the certified populace-us
-  artifact, never Enhanced CPS). The old module paths remain as deprecation
-  shims that re-export the renamed modules (and swap themselves into
-  `sys.modules`, so encode's own `ecps_tax` / `ecps_snap` shims keep working);
-  they emit a `DeprecationWarning`. Import the new names in new code.
+```python
+from axiom_oracles.bridges import tax_populace
+```
 
 `POPULACE_PINS` in `population.py` is the single certified pin table for
-`populace://` artifacts. `axiom_oracles.populations.populace_us` (formerly
-`enhanced_cps`) derives its `(repo_id, filename)`-keyed pin table from it, so a
-re-pin lands in exactly one place.
+`populace://` artifacts. `axiom_oracles.populations.populace_us` derives its
+repo-and-filename keyed view from that table.
 
-Underscored helpers inside modules (including all of `rulespec_paths.py`) are
-implementation detail shared with the encoder copy, not API.
-
-## Consumers
-
-- **axiom-encode** re-exports these modules under
-  `axiom_encode.oracles.policyengine.*` (thin shims), keeping its CLI and
-  import paths unchanged.
-- **axiom-oracles** itself: `populations/populace_us.py` (pin table) and,
-  as follow-ups, the `axiom-encode-*` comparison runners in
-  `scripts/run_comparison.py`, which today still shell out to the encoder CLI
-  in a separate pinned environment.
-
-## Follow-ups (deliberately out of scope here)
-
-- Point the `scripts/run_comparison.py` populace/EFRS lanes at this package
-  in-process instead of shelling out to `axiom-encode`.
-- Migrate encoder-internal callers (`cli.py`, `validator_pipeline.py`) to
-  import `axiom_oracles.bridges` directly, then delete the encoder shims.
-- De-duplicate `rulespec_paths.py` against `validator_pipeline` by making the
-  encoder import these helpers from here.
-- The `uv run --with … axiom-encode …` remediation strings in
-  `population.py` install messages still name the encoder CLI; parameterize
-  if a non-encoder consumer needs friendlier hints.
+Underscored helpers remain implementation details. The supported RuleSpec
+execution helpers are `require_rulespec_checkout`, `require_rulespec_module`,
+`resolve_rulespec_program`, `require_axiom_binary`, and `rulespec_engine_env` in
+`rulespec_paths.py`.

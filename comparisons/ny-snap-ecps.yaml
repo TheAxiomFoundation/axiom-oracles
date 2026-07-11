@@ -1,18 +1,19 @@
 # New York SNAP eligibility and benefit amount — Axiom vs PolicyEngine on the
-# Enhanced CPS. This comparison uses the encode-backed SNAP ECPS harness so the
+# the certified Populace US artifact. This comparison uses the encode-backed SNAP Populace harness so the
 # dashboard is generated from the same jurisdiction program projection used for
 # oracle parity work.
 
 name: ny-snap-ecps
 title: New York SNAP — Axiom vs PolicyEngine
 description: Compares New York SNAP eligibility produced by the composed
-  axiom-programs/us-ny/snap/fy-2026 spec against PolicyEngine on the
-  Enhanced CPS, filtered to New York households.
+  rulespec-us/us-ny/programs/snap/fy-2026 spec against PolicyEngine on the
+  the certified Populace US artifact, filtered to New York households.
 
 runner:
-  type: axiom-encode-snap-ecps-compare
+  type: axiom-encode-snap-populace-compare
   axiom_encode_repo: $HOME/axiom-encode
-  axiom_rules_repo: $HOME/axiom-rules-engine
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
+  rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
   parameters:
     jurisdiction: us-ny
     sample_size: 0

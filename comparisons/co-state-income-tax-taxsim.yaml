@@ -17,7 +17,7 @@ description: >-
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules
+  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
   parameters:
     left: axiom
     right: taxsim
@@ -25,7 +25,7 @@ runner:
     sample_size: 0
     period: "2026"
     concept: us:tax/state-income-tax#liability
-    axiom_rulespec_repo_roots: $HOME
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
 
 artifacts:
   report_basename: axiom-taxsim-co-state-income-tax-ecps

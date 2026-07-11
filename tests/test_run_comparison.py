@@ -3,6 +3,8 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 def load_run_comparison_module():
     module_path = Path(__file__).parents[1] / "scripts" / "run_comparison.py"
@@ -11,6 +13,13 @@ def load_run_comparison_module():
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
+
+
+def _executable(path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("#!/bin/sh\nexit 0\n")
+    path.chmod(0o755)
+    return path
 
 
 def test_resolve_path_uses_repo_env_override_when_config_path_is_missing(
@@ -28,23 +37,62 @@ def test_resolve_path_uses_repo_env_override_when_config_path_is_missing(
     assert resolved == override.resolve()
 
 
+def test_runner_inputs_reject_legacy_root_keys_and_binary_repo(tmp_path):
+    run_comparison = load_run_comparison_module()
+    rulespec_root = tmp_path / "rulespec-us"
+    rulespec_root.mkdir()
+
+    for legacy_key in (
+        "rulespec_roots",
+        "rulespec_remote",
+        "axiom_rulespec_repo_roots",
+    ):
+        runner = {
+            "rulespec_root": str(rulespec_root),
+            "parameters": {legacy_key: "legacy"},
+        }
+        try:
+            run_comparison._runner_rulespec_root(runner)
+        except SystemExit as exc:
+            assert "legacy RuleSpec routing" in str(exc)
+        else:  # pragma: no cover - explicit fail-closed assertion
+            raise AssertionError(f"accepted {legacy_key}")
+
+    try:
+        run_comparison._runner_axiom_binary(
+            {"axiom_rules_repo": str(tmp_path / "axiom-rules-engine")}
+        )
+    except SystemExit as exc:
+        assert "exact axiom_binary" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("accepted axiom_rules_repo")
+
+
+def test_runner_inputs_ignore_ambient_roots_and_reject_symlink_binary(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setenv("AXIOM_RULESPEC_ROOT", str(tmp_path / "ambient"))
+    monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(tmp_path / "ambient"))
+    with pytest.raises(SystemExit, match="explicit rulespec_root"):
+        run_comparison._runner_rulespec_root({"parameters": {}})
+
+    binary = _executable(tmp_path / "real-axiom-rules-engine")
+    alias = tmp_path / "axiom-rules-engine"
+    alias.symlink_to(binary)
+    with pytest.raises(SystemExit, match="symlinked"):
+        run_comparison._runner_axiom_binary({"axiom_binary": str(alias)})
+
+
 def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
     axiom_encode = tmp_path / "axiom-encode"
-    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
     rulespec = tmp_path / "workspace" / "rulespec-us"
     axiom_encode.mkdir()
-    axiom_rules.mkdir()
     rulespec.mkdir(parents=True)
     output = tmp_path / "report.json"
     calls = []
-
-    monkeypatch.setattr(
-        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
-    )
-    monkeypatch.setattr(
-        run_comparison, "_ensure_rulespec_us_checkout", lambda _remote: rulespec
-    )
 
     def fake_run(cmd, *, check, stdout=None, cwd=None):
         del check, cwd
@@ -55,11 +103,11 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
 
-    run_comparison._run_axiom_encode_tax_ecps_compare(
+    run_comparison._run_axiom_encode_tax_populace_compare(
         {
             "axiom_encode_repo": str(axiom_encode),
-            "axiom_rules_repo": str(axiom_rules),
-            "rulespec_remote": "https://example.test/rulespec-us.git",
+            "axiom_binary": str(axiom_binary),
+            "rulespec_root": str(rulespec),
             "parameters": {
                 "sample_size": 1000,
                 "year": 2026,
@@ -92,34 +140,32 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
 
 def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
-    axiom_rules = tmp_path / "axiom-rules-engine"
-    compose_binary = tmp_path / "axiom-compose"
-    program = tmp_path / "axiom-programs" / "us-al" / "snap" / "fy-2026.yaml"
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
+    compose_binary = _executable(tmp_path / "axiom-compose")
     rulespec_us = tmp_path / "rulespec-us"
-    rulespec_al = tmp_path / "rulespec-us-al"
-    composed = tmp_path / "al-snap-composed.yaml"
+    program = rulespec_us / "us-al/programs/snap/fy-2026.yaml"
+    composed = tmp_path / "outputs/axiom-composed/al-snap-composed.yaml"
     compiled = tmp_path / "al-snap-compiled.json"
     output = tmp_path / "report.json"
-    for path in (axiom_rules, rulespec_us, rulespec_al, program.parent):
-        path.mkdir(parents=True, exist_ok=True)
-    compose_binary.write_text("#!/bin/sh\n")
+    program.parent.mkdir(parents=True)
     program.write_text("program: us-al/snap\n")
     calls = []
-
-    monkeypatch.setattr(
-        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
-    )
 
     def fake_run(cmd, *, check, cwd=None, env=None):
         del check, cwd, env
         calls.append(cmd)
+        if cmd[0] == str(compose_binary.resolve()):
+            composed.parent.mkdir(parents=True, exist_ok=True)
+            composed.write_text("format: rulespec/v1\nrules: []\n")
+        elif cmd[0] == str(axiom_binary.resolve()):
+            compiled.write_text("{}\n")
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
 
     run_comparison._run_axiom_oracles_compare(
         {
-            "axiom_rules_repo": str(axiom_rules),
+            "axiom_binary": str(axiom_binary),
             "parameters": {
                 "left": "axiom",
                 "right": "policyengine",
@@ -134,8 +180,7 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
                 "axiom_program": str(program),
                 "axiom_composed_program": str(composed),
                 "axiom_compiled_program": str(compiled),
-                "rulespec_roots": [str(rulespec_us), str(rulespec_al)],
-                "axiom_rulespec_repo_roots": str(tmp_path),
+                "rulespec_root": str(rulespec_us),
                 "jurisdiction_fips": "01",
             },
         },
@@ -147,16 +192,16 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
         str(program.resolve()),
         "--rulespec-root",
         str(rulespec_us.resolve()),
-        "--rulespec-root",
-        str(rulespec_al.resolve()),
         "-o",
         str(composed.resolve()),
     ]
     assert calls[1] == [
-        str(axiom_rules.resolve() / "target" / "release" / "axiom-rules-engine"),
-        "compile",
+        str(axiom_binary.resolve()),
+        "compile-composed",
         "--program",
         str(composed.resolve()),
+        "--rulespec-root",
+        str(rulespec_us.resolve()),
         "--output",
         str(compiled.resolve()),
     ]
@@ -165,18 +210,142 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
     assert str(compiled.resolve()) in calls[2]
 
 
+def test_composer_rejects_program_outside_canonical_rulespec_root(tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
+    compose_binary = _executable(tmp_path / "axiom-compose")
+    rulespec_us = tmp_path / "rulespec-us"
+    (rulespec_us / "us").mkdir(parents=True)
+    legacy_program = tmp_path / "program.yaml"
+    legacy_program.write_text("program: us/test\n")
+
+    with pytest.raises(SystemExit, match="ProgramSpec must be an exact"):
+        run_comparison._ensure_composed_axiom_program(
+            {
+                "axiom_compose_binary": str(compose_binary),
+                "axiom_program": str(legacy_program),
+                "axiom_composed_program": str(
+                    tmp_path / "outputs/axiom-composed/test.yaml"
+                ),
+                "axiom_compiled_program": str(tmp_path / "compiled.json"),
+            },
+            axiom_binary,
+            rulespec_us,
+        )
+
+
+def test_composer_rejects_symlinked_executable(tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
+    real_composer = _executable(tmp_path / "real-axiom-compose")
+    composer_alias = tmp_path / "axiom-compose"
+    composer_alias.symlink_to(real_composer)
+    rulespec_us = tmp_path / "rulespec-us"
+    program = rulespec_us / "us-al/programs/snap/fy-2026.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text("program: us-al/snap\n")
+
+    with pytest.raises(SystemExit, match="symlinked"):
+        run_comparison._ensure_composed_axiom_program(
+            {
+                "axiom_compose_binary": str(composer_alias),
+                "axiom_program": str(program),
+                "axiom_composed_program": str(tmp_path / "axiom-composed/test.yaml"),
+                "axiom_compiled_program": str(tmp_path / "compiled.json"),
+            },
+            axiom_binary,
+            rulespec_us,
+        )
+
+
+def test_composer_rejects_symlinked_output_parent_before_writing(tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
+    composer = _executable(tmp_path / "axiom-compose")
+    rulespec_us = tmp_path / "checkout/rulespec-us"
+    program = rulespec_us / "us-al/programs/snap/fy-2026.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text("program: us-al/snap\n")
+    real_output = tmp_path / "real-output"
+    real_output.mkdir()
+    output_checkout = tmp_path / "outputs/rulespec-us"
+    output_checkout.parent.mkdir()
+    output_checkout.symlink_to(real_output, target_is_directory=True)
+
+    with pytest.raises(SystemExit, match="output path is symlinked"):
+        run_comparison._ensure_composed_axiom_program(
+            {
+                "axiom_compose_binary": str(composer),
+                "axiom_program": str(program),
+                "axiom_composed_program": str(
+                    output_checkout / "us-al/programs/oracles/test.yaml"
+                ),
+                "axiom_compiled_program": str(tmp_path / "compiled.json"),
+            },
+            axiom_binary,
+            rulespec_us,
+        )
+
+
+def test_compiler_rejects_symlinked_artifact_parent_before_writing(tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
+    composer = _executable(tmp_path / "axiom-compose")
+    rulespec_us = tmp_path / "checkout/rulespec-us"
+    program = rulespec_us / "us-al/programs/snap/fy-2026.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text("program: us-al/snap\n")
+    composed = tmp_path / "outputs/axiom-composed/test.yaml"
+    real_artifacts = tmp_path / "real-artifacts"
+    real_artifacts.mkdir()
+    artifact_alias = tmp_path / "artifacts"
+    artifact_alias.symlink_to(real_artifacts, target_is_directory=True)
+
+    with pytest.raises(SystemExit, match="output path is symlinked"):
+        run_comparison._ensure_composed_axiom_program(
+            {
+                "axiom_compose_binary": str(composer),
+                "axiom_program": str(program),
+                "axiom_composed_program": str(composed),
+                "axiom_compiled_program": str(artifact_alias / "compiled.json"),
+            },
+            axiom_binary,
+            rulespec_us,
+        )
+
+
+def test_snap_qc_cola_probe_rejects_dot_yml_modules(tmp_path):
+    run_comparison = load_run_comparison_module()
+    rulespec_us = tmp_path / "rulespec-us"
+    cola_dir = rulespec_us / "us/policies/usda/snap/fy-2024-cola"
+    cola_dir.mkdir(parents=True)
+    legacy = cola_dir / "allotments.yml"
+    legacy.write_text("rules: []\n")
+
+    reason = run_comparison._snap_qc_cola_marker_reason(rulespec_us, 2024)
+
+    assert reason is not None and "legacy .yml" in reason
+
+
+def test_snap_qc_cola_probe_accepts_canonical_yaml_module(tmp_path):
+    run_comparison = load_run_comparison_module()
+    rulespec_us = tmp_path / "rulespec-us"
+    module = rulespec_us / "us/policies/usda/snap/fy-2024-cola/allotments.yaml"
+    module.parent.mkdir(parents=True)
+    module.write_text("rules: []\n")
+
+    assert run_comparison._snap_qc_cola_marker_reason(rulespec_us, 2024) is None
+
+
 def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
     axiom_encode = tmp_path / "axiom-encode"
-    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
+    rulespec_us = tmp_path / "rulespec-us"
     axiom_encode.mkdir()
-    axiom_rules.mkdir()
+    rulespec_us.mkdir()
     output = tmp_path / "report.json"
     calls = []
-
-    monkeypatch.setattr(
-        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
-    )
 
     def fake_run(cmd, *, check, cwd=None):
         del check, cwd
@@ -201,10 +370,11 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
 
-    run_comparison._run_axiom_encode_snap_ecps_compare(
+    run_comparison._run_axiom_encode_snap_populace_compare(
         {
             "axiom_encode_repo": str(axiom_encode),
-            "axiom_rules_repo": str(axiom_rules),
+            "axiom_binary": str(axiom_binary),
+            "rulespec_root": str(rulespec_us),
             "parameters": {
                 "jurisdiction": "us-co",
                 "sample_size": 0,
@@ -220,9 +390,10 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     cmd = calls[0]
     assert cmd[:3] == ["uv", "run", "--directory"]
     assert str(axiom_encode.resolve()) in cmd
-    assert "snap-ecps-compare" in cmd
+    assert "snap-populace-compare" in cmd
     assert "--sample-size" not in cmd
     assert "--axiom-binary" in cmd
+    assert cmd[cmd.index("--rulespec-root") + 1] == str(rulespec_us.resolve())
 
     report = json.loads(output.read_text())
     assert report["schema_version"] == "axiom.comparison_report.v2"
@@ -304,17 +475,13 @@ def test_snap_qc_runner_writes_v2_shell_when_no_committed_report(monkeypatch, tm
 def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
     axiom_encode = tmp_path / "axiom-encode"
-    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
     rulespec_uk = tmp_path / "rulespec-uk"
     data_folder = tmp_path / "policyengine-data"
-    for path in (axiom_encode, axiom_rules, rulespec_uk, data_folder):
+    for path in (axiom_encode, rulespec_uk, data_folder):
         path.mkdir()
     output = tmp_path / "report.json"
     calls = []
-
-    monkeypatch.setattr(
-        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
-    )
 
     def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
         del check, cwd, capture_output, text
@@ -346,10 +513,10 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
 
-    run_comparison._run_axiom_encode_uk_efrs_compare(
+    run_comparison._run_axiom_encode_uk_populace_compare(
         {
             "axiom_encode_repo": str(axiom_encode),
-            "axiom_rules_repo": str(axiom_rules),
+            "axiom_binary": str(axiom_binary),
             "rulespec_root": str(rulespec_uk),
             "parameters": {
                 "sample_size": 100,
@@ -368,7 +535,7 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
 
     assert len(calls) == 2
     assert calls[0][:4] == ["uv", "run", "--python", "3.13"]
-    assert "uk-efrs-compare" in calls[0]
+    assert "uk-populace-compare" in calls[0]
     assert "policyengine[uk]==4.11.0" not in calls[0]
     assert "policyengine-uk==2.88.56" in calls[0]
     assert "--rulespec-root" in calls[0]
@@ -384,31 +551,20 @@ def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
     ]
 
 
-def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path):
+def test_uk_populace_runner_uses_canonical_rulespec_program(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
     axiom_encode = tmp_path / "axiom-encode"
-    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_binary = _executable(tmp_path / "axiom-rules-engine")
     rulespec_uk = tmp_path / "rulespec-uk"
     data_folder = tmp_path / "policyengine-data"
-    compose_binary = tmp_path / "axiom-compose"
-    program = tmp_path / "axiom-programs" / "uk" / "universal-credit" / "fy-2026-27.yaml"
-    composed = tmp_path / "uk-uc-composed.yaml"
     output = tmp_path / "report.json"
-    for path in (axiom_encode, axiom_rules, rulespec_uk, data_folder, program.parent):
+    for path in (axiom_encode, rulespec_uk, data_folder):
         path.mkdir(parents=True, exist_ok=True)
-    compose_binary.write_text("#!/bin/sh\n")
-    program.write_text("program: uk/universal-credit\n")
     calls = []
-
-    monkeypatch.setattr(
-        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
-    )
 
     def fake_run(cmd, *, check, cwd=None, capture_output=None, text=None):
         del check, cwd, capture_output, text
         calls.append(cmd)
-        if "uk-efrs-compare" not in cmd:
-            return subprocess.CompletedProcess(cmd, 0)
         payload = {
             "compared_persons": 1,
             "compared_benunits": 1,
@@ -425,10 +581,10 @@ def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path)
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
 
-    run_comparison._run_axiom_encode_uk_efrs_compare(
+    run_comparison._run_axiom_encode_uk_populace_compare(
         {
             "axiom_encode_repo": str(axiom_encode),
-            "axiom_rules_repo": str(axiom_rules),
+            "axiom_binary": str(axiom_binary),
             "rulespec_root": str(rulespec_uk),
             "parameters": {
                 "sample_size": 100,
@@ -437,26 +593,15 @@ def test_uk_efrs_runner_composes_universal_credit_program(monkeypatch, tmp_path)
                 "dataset": "enhanced_frs_2023_24",
                 "data_folder": str(data_folder),
                 "surface": "universal-credit-carer-element",
-                "axiom_compose_binary": str(compose_binary),
-                "axiom_program": str(program),
-                "axiom_composed_program": str(composed),
-                "rulespec_roots": [str(rulespec_uk)],
             },
         },
         output,
     )
 
-    assert calls[0] == [
-        str(compose_binary.resolve()),
-        str(program.resolve()),
-        "--rulespec-root",
-        str(rulespec_uk.resolve()),
-        "-o",
-        str(composed.resolve()),
-    ]
-    assert "uk-efrs-compare" in calls[1]
-    assert "--universal-credit-program" in calls[1]
-    assert str(composed.resolve()) in calls[1]
+    assert len(calls) == 1
+    assert "uk-populace-compare" in calls[0]
+    assert "--universal-credit-program" not in calls[0]
+    assert calls[0][calls[0].index("--rulespec-root") + 1] == str(rulespec_uk.resolve())
 
 
 def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
@@ -517,7 +662,7 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
                     "axiom": 75,
                     "policyengine": 100,
                     "diff": -25,
-                }
+                },
             ],
         },
         {},
@@ -971,7 +1116,9 @@ def _euromod_uk_registry_configs() -> list[dict]:
 def _system_year(euromod_system: str) -> int:
     """Parse the fiscal year off a EUROMOD-platform system name (UK_2026 -> 2026)."""
     digits = "".join(ch for ch in str(euromod_system) if ch.isdigit())
-    assert len(digits) == 4, f"cannot read a 4-digit year from system {euromod_system!r}"
+    assert len(digits) == 4, (
+        f"cannot read a 4-digit year from system {euromod_system!r}"
+    )
     return int(digits)
 
 

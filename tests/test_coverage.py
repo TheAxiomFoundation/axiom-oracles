@@ -21,15 +21,15 @@ def test_reports_unreferenced_eligibility_rules() -> None:
             ),
             _rule("snap_member_eligible"),
             _rule("snap_income_eligibility"),  # eligibility-looking, unreferenced
-            _rule("snap_asset_limit"),           # eligibility-looking, unreferenced
-            _rule("some_unrelated_rule"),        # not eligibility-looking, ignored
+            _rule("snap_asset_limit"),  # eligibility-looking, unreferenced
+            _rule("some_unrelated_rule"),  # not eligibility-looking, ignored
         ]
     }
     uncovered = find_uncovered_eligibility_rules(program, target="snap_eligible")
     assert "snap_income_eligibility" in uncovered
     assert "snap_asset_limit" in uncovered
     assert "snap_member_eligible" not in uncovered  # it IS referenced
-    assert "some_unrelated_rule" not in uncovered    # not eligibility-looking
+    assert "some_unrelated_rule" not in uncovered  # not eligibility-looking
 
 
 def test_transitive_references_are_credited() -> None:
@@ -76,7 +76,9 @@ def test_format_warning_returns_empty_when_no_gaps() -> None:
 
 
 def test_format_warning_includes_rule_names() -> None:
-    out = format_coverage_warning("snap_eligible", ["snap_income_eligibility", "snap_asset_limit"])
+    out = format_coverage_warning(
+        "snap_eligible", ["snap_income_eligibility", "snap_asset_limit"]
+    )
     assert "snap_income_eligibility" in out
     assert "snap_asset_limit" in out
     assert "COVERAGE GAP" in out

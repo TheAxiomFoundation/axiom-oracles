@@ -102,7 +102,7 @@ def _policyengine():
     if pe.us is None:
         raise RuntimeError(
             "Install the US PolicyEngine extra: uv pip install -e '.[policyengine]'"
-    )
+        )
     return pe
 
 
@@ -143,7 +143,9 @@ class PolicyEngineRunner(EngineAdapter):
         if not cases:
             return []
 
-        requested = tuple(variables) if variables is not None else tuple(cases[0].outputs)
+        requested = (
+            tuple(variables) if variables is not None else tuple(cases[0].outputs)
+        )
         pe_variables = self._policyengine_variables(requested)
         if not pe_variables:
             return [
@@ -207,7 +209,9 @@ class PolicyEngineRunner(EngineAdapter):
                         str(case.period),
                         _household_result_value(result, variable),
                     )
-                except Exception as exc:  # pragma: no cover - depends on PE variable set
+                except (
+                    Exception
+                ) as exc:  # pragma: no cover - depends on PE variable set
                     errors.append(f"{variable}: {exc}")
 
         return EngineResult(
@@ -243,7 +247,9 @@ class PolicyEngineRunner(EngineAdapter):
                         extra_variables=[variable],
                     )
                     values[variable] = _household_result_value(result, variable)
-                except Exception as exc:  # pragma: no cover - depends on PE variable set
+                except (
+                    Exception
+                ) as exc:  # pragma: no cover - depends on PE variable set
                     errors.append(f"{variable}: {exc}")
 
         return EngineResult(
@@ -774,9 +780,7 @@ class PolicyEngineRunner(EngineAdapter):
 
         array = np.asarray(value)
         if array.size != size:
-            raise ValueError(
-                f"expected {size} PolicyEngine values, got {array.size}"
-            )
+            raise ValueError(f"expected {size} PolicyEngine values, got {array.size}")
         if array.dtype == bool:
             return [bool(item) for item in array.tolist()]
         cleaned = np.nan_to_num(array, nan=0)

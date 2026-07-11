@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pytest
@@ -34,9 +35,28 @@ def _write_rulespec_file(path: Path, content: str) -> Path:
     return path
 
 
+def _coverage_root(path: Path, *, country: str = "us") -> Path:
+    """Return the one explicit canonical checkout created by a test fixture."""
+
+    if re.fullmatch(r"rulespec-[a-z]{2}", path.name):
+        return path
+    candidates = sorted(
+        child
+        for child in path.iterdir()
+        if child.is_dir() and re.fullmatch(r"rulespec-[a-z]{2}", child.name)
+    )
+    if len(candidates) == 1:
+        return candidates[0]
+    if not candidates:
+        checkout = path / f"rulespec-{country}"
+        checkout.mkdir()
+        return checkout
+    raise AssertionError(f"test must select one canonical checkout: {candidates}")
+
+
 def test_policyengine_coverage_classifies_executable_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/7/2014/e/2.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/7/2014/e/2.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_earned_income_deduction
@@ -52,7 +72,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/10-ccr-2506-1/4.999.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "regulations/10-ccr-2506-1/4.999.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_local_helper
@@ -63,7 +83,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/7/9999.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/7/9999.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_unclassified_new_output
@@ -79,7 +99,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert report["total_outputs"] == 4
     assert report["status_counts"] == {
@@ -165,7 +187,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 7
     assert report["status_counts"] == {
@@ -227,7 +249,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="medicaid")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
 
     assert report["status_counts"] == {"incomplete_comparable": 1}
     item = report["items"][0]
@@ -240,7 +264,9 @@ rules:
         for issue in item["upstream_completeness_issues"]
     )
 
-    candidates = build_policyengine_candidate_report(tmp_path, program="medicaid")
+    candidates = build_policyengine_candidate_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
     assert candidates["items"][0]["category"] == "incomplete_comparable"
     assert candidates["items"][0]["priority"] == "P1"
 
@@ -283,7 +309,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="aca_ptc")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="aca_ptc"
+    )
 
     assert report["total_outputs"] == 6
     assert report["status_counts"] == {"known_not_comparable": 6}
@@ -313,7 +341,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 2
     assert report["status_counts"] == {"known_not_comparable": 2}
@@ -373,7 +401,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="head_start")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="head_start"
+    )
 
     assert report["total_outputs"] == 9
     assert report["status_counts"] == {"known_not_comparable": 9}
@@ -430,7 +460,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="medicaid")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
 
     assert report["total_outputs"] == 5
     assert report["status_counts"] == {
@@ -448,7 +480,7 @@ rules:
 def test_policyengine_coverage_includes_program_spec_outputs(tmp_path):
     checkout = tmp_path / "rulespec-us"
     _write_rulespec_file(
-        checkout / "programs/us-fl/tca/fy-2026.yaml",
+        checkout / "us-fl/programs/tca/fy-2026.yaml",
         """program: us-fl/tca
 period: 2026-01
 outputs:
@@ -464,7 +496,7 @@ outputs:
     items_by_id = {item["legal_id"]: item for item in report["items"]}
     payment_standard = items_by_id["us-fl:programs/tca/fy-2026#fl_tca_payment_standard"]
     assert payment_standard["repo"] == "rulespec-us"
-    assert payment_standard["file"] == "programs/us-fl/tca/fy-2026.yaml"
+    assert payment_standard["file"] == "us-fl/programs/tca/fy-2026.yaml"
     assert payment_standard["kind"] == "program_output"
     assert payment_standard["program"] == "tca"
     assert payment_standard["rule_name"] == "fl_tca_payment_standard"
@@ -475,7 +507,7 @@ outputs:
 def test_policyengine_coverage_classifies_kansas_tanf_program_outputs(tmp_path):
     checkout = tmp_path / "rulespec-us"
     _write_rulespec_file(
-        checkout / "programs/us-ks/tanf/fy-2026.yaml",
+        checkout / "us-ks/programs/tanf/fy-2026.yaml",
         """program: us-ks/tanf
 period: 2026-01
 outputs:
@@ -514,7 +546,7 @@ outputs:
 def test_policyengine_coverage_classifies_new_york_tanf_program_output(tmp_path):
     checkout = tmp_path / "rulespec-us"
     _write_rulespec_file(
-        checkout / "programs/us-ny/tanf/fy-2026.yaml",
+        checkout / "us-ny/programs/tanf/fy-2026.yaml",
         """program: us-ny/tanf
 period: 2026-01
 outputs:
@@ -529,7 +561,7 @@ outputs:
     item = report["items"][0]
     assert item["legal_id"] == "us-ny:programs/tanf/fy-2026#ny_tanf"
     assert item["repo"] == "rulespec-us"
-    assert item["file"] == "programs/us-ny/tanf/fy-2026.yaml"
+    assert item["file"] == "us-ny/programs/tanf/fy-2026.yaml"
     assert item["kind"] == "program_output"
     assert item["program"] == "tanf"
     assert item["rule_name"] == "ny_tanf"
@@ -543,7 +575,7 @@ outputs:
 def test_policyengine_candidates_classify_program_spec_adjacent_targets(tmp_path):
     checkout = tmp_path / "rulespec-us"
     _write_rulespec_file(
-        checkout / "programs/us-fl/tca/fy-2026.yaml",
+        checkout / "us-fl/programs/tca/fy-2026.yaml",
         """program: us-fl/tca
 period: 2026-01
 outputs:
@@ -560,9 +592,9 @@ outputs:
     assert targets == {"fl_tca_payment_standard", "fl_tca"}
 
 
-def test_policyengine_coverage_includes_program_specs_from_workspace_root(tmp_path):
+def test_policyengine_coverage_includes_program_specs_from_explicit_checkout(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us/programs/us-fl/tca/fy-2026.yaml",
+        tmp_path / "rulespec-us/us-fl/programs/tca/fy-2026.yaml",
         """program: us-fl/tca
 period: 2026-01
 outputs:
@@ -570,16 +602,16 @@ outputs:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tca")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tca")
 
     assert report["total_outputs"] == 1
     item = report["items"][0]
     assert item["legal_id"] == "us-fl:programs/tca/fy-2026#fl_tca"
     assert item["repo"] == "rulespec-us"
-    assert item["file"] == "rulespec-us/programs/us-fl/tca/fy-2026.yaml"
+    assert item["file"] == "us-fl/programs/tca/fy-2026.yaml"
 
 
-def test_policyengine_coverage_deduplicates_migrated_legacy_checkouts(tmp_path):
+def test_policyengine_coverage_ignores_flat_sibling_checkout(tmp_path):
     content = """format: rulespec/v1
 rules:
   - name: co_state_tax_deduplicated_output
@@ -592,27 +624,26 @@ rules:
         tmp_path / "rulespec-us/us-co/statutes/39/example.yaml",
         content,
     )
-    _write_rulespec_file(
-        tmp_path / "rulespec-us-co/statutes/39/example.yaml",
-        content,
-    )
+    flat = tmp_path / "rulespec-us-co/statutes/39/example.yaml"
+    flat.parent.mkdir(parents=True)
+    flat.write_text(content, encoding="utf-8")
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["total_outputs"] == 1
-    assert report["duplicate_outputs_collapsed"] == 1
+    assert report["duplicate_outputs_collapsed"] == 0
     item = report["items"][0]
     assert (
         item["legal_id"] == "us-co:statutes/39/example#co_state_tax_deduplicated_output"
     )
-    assert item["file"] == "rulespec-us/us-co/statutes/39/example.yaml"
+    assert item["file"] == "us-co/statutes/39/example.yaml"
 
 
 def test_policyengine_candidate_report_sorts_same_priority_by_policybench_weight(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/7/snap-test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/7/snap-test.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_new_exact_variable
@@ -623,7 +654,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/9999.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/9999.yaml",
         """format: rulespec/v1
 rules:
   - name: new_income_tax_exact_variable
@@ -635,7 +666,7 @@ rules:
     )
 
     report = build_policyengine_candidate_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         policyengine_variables={
             "new_income_tax_exact_variable",
             "snap_new_exact_variable",
@@ -656,7 +687,7 @@ def test_policyengine_candidate_policybench_state_detection_ignores_is_prefix(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/25A.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/25A.yaml",
         """format: rulespec/v1
 rules:
   - name: is_eligible_for_american_opportunity_credit
@@ -668,7 +699,7 @@ rules:
     )
 
     report = build_policyengine_candidate_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         policyengine_variables={"is_eligible_for_american_opportunity_credit"},
     )
 
@@ -681,7 +712,7 @@ def test_policyengine_candidate_policybench_weights_mapped_title_26_credit_progr
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/25C.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/25C.yaml",
         """format: rulespec/v1
 rules:
   - name: energy_efficient_home_improvement_credit
@@ -693,7 +724,7 @@ rules:
     )
 
     report = build_policyengine_candidate_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         policyengine_variables={"energy_efficient_home_improvement_credit"},
     )
 
@@ -1319,7 +1350,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="vat")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="vat")
 
     assert report["total_outputs"] == 5
     assert report["status_counts"] == {"known_not_comparable": 5}
@@ -1469,7 +1500,7 @@ surfaces:
     )
 
     report = build_policyengine_cloud_queue_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         manifest_path=manifest,
     )
 
@@ -1553,7 +1584,7 @@ surfaces:
     )
 
     report = build_policyengine_cloud_queue_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         manifest_path=manifest,
     )
 
@@ -1589,7 +1620,7 @@ surfaces:
     )
 
     report = build_policyengine_cloud_queue_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         manifest_path=manifest,
         include_deferred_jurisdictions=False,
     )
@@ -2060,7 +2091,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="ssi_state_supplement",
     )
 
@@ -2203,7 +2234,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="ssi_state_supplement",
     )
     items_by_name = {item["rule_name"]: item for item in report["items"]}
@@ -2548,7 +2579,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="ssi_state_supplement",
     )
     items_by_name = {item["rule_name"]: item for item in report["items"]}
@@ -2846,7 +2877,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     items_by_rule = {item["rule_name"]: item for item in report["items"]}
@@ -3011,7 +3044,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -3073,7 +3106,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     items_by_name = {item["rule_name"]: item for item in report["items"]}
@@ -3109,7 +3142,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -3129,7 +3162,7 @@ def test_policyengine_coverage_classifies_federal_ssi_benefit_rate_intermediates
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1382/a/3.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1382/a/3.yaml",
         """format: rulespec/v1
 rules:
   - name: resource_limit_amount_for_paragraph_1_B_i_and_paragraph_2_B
@@ -3163,7 +3196,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1382/a/3.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1382/a/3.test.yaml",
         """- name: resource_limits_on_january_1989
   period: 1989-01
   input: {}
@@ -3173,7 +3206,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1382/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1382/b.yaml",
         """format: rulespec/v1
 rules:
   - name: statutory_base_annual_rate_without_eligible_spouse
@@ -3203,7 +3236,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1382f/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1382f/a.yaml",
         """format: rulespec/v1
 rules:
   - name: annual_rounding_multiple
@@ -3263,7 +3296,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1382f/c.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1382f/c.yaml",
         """format: rulespec/v1
 rules:
   - name: dollar_amount_increase_for_section_1382_a_1_a_and_b_1
@@ -3287,7 +3320,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1382a/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1382a/b.yaml",
         """format: rulespec/v1
 rules:
   - name: future_unmapped_ssi_income_exclusion
@@ -3299,7 +3332,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="ssi")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="ssi")
 
     assert report["total_outputs"] == 21
     assert report["status_counts"] == {
@@ -3422,7 +3455,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["total_outputs"] == 4
     assert report["status_counts"] == {"known_not_comparable": 4}
@@ -3441,7 +3474,9 @@ rules:
         == "unknown"
     )
 
-    tax_report = build_policyengine_coverage_report(tmp_path, program="tax")
+    tax_report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tax"
+    )
     assert tax_report["total_outputs"] == 3
     assert tax_report["status_counts"] == {"known_not_comparable": 3}
 
@@ -3483,7 +3518,7 @@ def test_policyengine_coverage_classifies_section_25c_outputs_not_comparable(
         for name in output_names
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/25C.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/25C.yaml",
         f"""format: rulespec/v1
 rules:
 {rules}
@@ -3491,7 +3526,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="ira_tax_credits",
     )
 
@@ -3517,7 +3552,7 @@ rules:
 
 def test_policyengine_coverage_classifies_7_cfr_275_admin_prefix(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/7-cfr/275/23/e/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/7-cfr/275/23/e/1.yaml",
         """format: rulespec/v1
 rules:
   - name: investment_liability_cap_rate
@@ -3541,7 +3576,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert report["total_outputs"] == 3
     assert report["status_counts"] == {"known_not_comparable": 3}
@@ -3554,7 +3591,7 @@ def test_policyengine_coverage_classifies_conclusive_agency_determinations(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/5/5566.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/5/5566.yaml",
         """format: rulespec/v1
 rules:
   - name: agency_determination_conclusive_as_to_death
@@ -3596,7 +3633,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/37/556.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/37/556.yaml",
         """format: rulespec/v1
 rules:
   - name: secretary_determination_conclusive
@@ -3608,7 +3645,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["status_counts"] == {"known_not_comparable": 7}
     assert {item["program"] for item in report["items"]} == {"unknown"}
@@ -3618,7 +3655,7 @@ rules:
 
 def test_policyengine_coverage_classifies_colorado_tanf_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/9-ccr-2503-6/3.606.1/F.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "regulations/9-ccr-2503-6/3.606.1/F.yaml",
         """format: rulespec/v1
 rules:
   - name: basic_cash_assistance_grant_standard
@@ -3634,7 +3671,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/9-ccr-2503-6/3.606.1/K.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "regulations/9-ccr-2503-6/3.606.1/K.yaml",
         """format: rulespec/v1
 rules:
   - name: basic_cash_assistance_authorized_grant_for_eligible_assistance_unit
@@ -3645,7 +3682,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
 
     assert report["total_outputs"] == 3
     assert report["status_counts"] == {"known_not_comparable": 3}
@@ -3663,7 +3702,8 @@ rules:
 def test_policyengine_coverage_classifies_arizona_tanf_exact_parameters(tmp_path):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-payment-standard-a1-2fa2.yaml",
         """format: rulespec/v1
 rules:
@@ -3684,7 +3724,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-payment-standard-a1-2fa2.test.yaml",
         """- name: a1_rate
   output:
@@ -3693,7 +3734,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-benefit-determination/earned-income-deduction.yaml",
         """format: rulespec/v1
 rules:
@@ -3714,7 +3756,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-benefit-determination/earned-income-deduction.test.yaml",
         """- name: earned_income_rate
   output:
@@ -3723,7 +3766,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-benefit-determination/cost-of-employment-deduction.yaml",
         """format: rulespec/v1
 rules:
@@ -3744,7 +3788,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-benefit-determination/cost-of-employment-deduction.test.yaml",
         """- name: cost_of_employment_amount
   output:
@@ -3753,7 +3798,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-benefit-determination/needy-family-test.yaml",
         """format: rulespec/v1
 rules:
@@ -3780,7 +3826,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/ca-benefit-determination/needy-family-test.test.yaml",
         """- name: needy_family_rates
   output:
@@ -3789,7 +3836,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
     items_by_id = {item["legal_id"]: item for item in report["items"]}
 
     exact_ids = {
@@ -3848,7 +3897,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
 
     assert report["untested_comparable"] == 0
     assert report["status_counts"] == {"known_not_comparable": 1}
@@ -3988,7 +4039,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
     items_by_id = {item["legal_id"]: item for item in report["items"]}
 
     assert report["total_outputs"] == 10
@@ -4031,7 +4084,8 @@ rules:
 def test_policyengine_coverage_classifies_calworks_exact_outputs(tmp_path):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ca"
+        / "rulespec-us"
+        / "us-ca"
         / "policies/cdss/calworks/maximum-aid-payment-region-1.yaml",
         """format: rulespec/v1
 rules:
@@ -4047,7 +4101,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ca"
+        / "rulespec-us"
+        / "us-ca"
         / "policies/cdss/calworks/maximum-aid-payment-region-1.test.yaml",
         """- name: non_exempt_more_than_ten_person_region_1_map
   period: 2024-10
@@ -4060,7 +4115,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ca"
+        / "rulespec-us"
+        / "us-ca"
         / "policies/cdss/calworks/maximum-aid-payment-region-2.yaml",
         """format: rulespec/v1
 rules:
@@ -4076,7 +4132,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ca"
+        / "rulespec-us"
+        / "us-ca"
         / "policies/cdss/calworks/maximum-aid-payment-region-2.test.yaml",
         """- name: exempt_one_person_region_2_map
   period: 2024-10
@@ -4089,7 +4146,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ca"
+        / "rulespec-us"
+        / "us-ca"
         / "policies/cdss/calworks/maximum-resource-limit.yaml",
         """format: rulespec/v1
 rules:
@@ -4105,7 +4163,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ca"
+        / "rulespec-us"
+        / "us-ca"
         / "policies/cdss/calworks/maximum-resource-limit.test.yaml",
         """- name: standard_calworks_resource_limit
   period: 2025-01
@@ -4116,7 +4175,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
     items_by_id = {item["legal_id"]: item for item in report["items"]}
 
     exact_ids = {
@@ -4151,7 +4212,8 @@ def test_policyengine_coverage_classifies_new_york_tanf_state_plan_outputs(
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ny"
+        / "rulespec-us"
+        / "us-ny"
         / "policies/otda/tanf-state-plan-2024-2026"
         / "financial-eligibility-and-income-disregards.yaml",
         """format: rulespec/v1
@@ -4170,7 +4232,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ny"
+        / "rulespec-us"
+        / "us-ny"
         / "policies/otda/tanf-state-plan-2024-2026"
         / "standard-of-need-and-monthly-grant.yaml",
         """format: rulespec/v1
@@ -4188,7 +4251,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
 
     assert report["total_outputs"] == 4
     assert report["status_counts"] == {"known_not_comparable": 4}
@@ -4287,7 +4352,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tanf")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tanf"
+    )
 
     assert report["total_outputs"] == 14
     assert report["status_counts"] == {"known_not_comparable": 14}
@@ -4323,7 +4390,7 @@ def test_policyengine_program_surface_marks_maine_tanf_known_not_comparable():
 
 def test_policyengine_coverage_infers_health_programs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/hcpf/health-coverage.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "regulations/hcpf/health-coverage.yaml",
         """format: rulespec/v1
 rules:
   - name: is_medicaid_eligible
@@ -4339,7 +4406,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/36B.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/36B.yaml",
         """format: rulespec/v1
 rules:
   - name: aca_ptc
@@ -4350,7 +4417,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "policies/cdhs/snap/vacation.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "policies/cdhs/snap/vacation.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_sick_vacation_bonus_earned_income
@@ -4361,7 +4428,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/n/5.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/n/5.yaml",
         """format: rulespec/v1
 rules:
   - name: activity_secondarily_treated_woody_fuels_by_lopping_scattering_piling_chipping_removing_from_site
@@ -4372,9 +4439,13 @@ rules:
 """,
     )
 
-    medicaid = build_policyengine_coverage_report(tmp_path, program="medicaid")
-    chip = build_policyengine_coverage_report(tmp_path, program="chip")
-    aca = build_policyengine_coverage_report(tmp_path, program="aca_ptc")
+    medicaid = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
+    chip = build_policyengine_coverage_report(_coverage_root(tmp_path), program="chip")
+    aca = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="aca_ptc"
+    )
 
     assert medicaid["total_outputs"] == 1
     assert medicaid["items"][0]["rule_name"] == "is_medicaid_eligible"
@@ -4382,7 +4453,9 @@ rules:
     assert chip["items"][0]["rule_name"] == "is_chip_eligible"
     assert aca["total_outputs"] == 1
     assert aca["items"][0]["rule_name"] == "aca_ptc"
-    health = build_policyengine_coverage_report(tmp_path, program="health")
+    health = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="health"
+    )
     assert {item["rule_name"] for item in health["items"]} == {
         "is_medicaid_eligible",
         "is_chip_eligible",
@@ -4395,7 +4468,8 @@ def test_policyengine_coverage_splits_combined_medicaid_chip_sources_by_rule_nam
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-co"
+        / "rulespec-us"
+        / "us-co"
         / "policies/cms/medicaid-chip-bhp-eligibility-levels.yaml",
         """format: rulespec/v1
 rules:
@@ -4417,9 +4491,13 @@ rules:
 """,
     )
 
-    chip = build_policyengine_coverage_report(tmp_path, program="chip")
-    medicaid = build_policyengine_coverage_report(tmp_path, program="medicaid")
-    health = build_policyengine_coverage_report(tmp_path, program="health")
+    chip = build_policyengine_coverage_report(_coverage_root(tmp_path), program="chip")
+    medicaid = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
+    health = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="health"
+    )
 
     assert [item["rule_name"] for item in chip["items"]] == [
         "children_separate_chip_income_standard"
@@ -4440,6 +4518,7 @@ def test_policyengine_coverage_classifies_colorado_medicaid_chip_thresholds(
     _write_rulespec_file(
         tmp_path
         / "rulespec-us"
+        / "us"
         / "policies/cms/medicaid-chip-bhp-eligibility-levels.yaml",
         """format: rulespec/v1
 rules:
@@ -4452,7 +4531,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-co"
+        / "rulespec-us"
+        / "us-co"
         / "policies/cms/colorado-medicaid-chip-bhp-eligibility-levels.yaml",
         """format: rulespec/v1
 rules:
@@ -4530,7 +4610,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-co"
+        / "rulespec-us"
+        / "us-co"
         / "policies/cms/colorado-medicaid-chip-bhp-eligibility-levels.test.yaml",
         """- name: colorado_effective_magi_limits
   output:
@@ -4543,9 +4624,13 @@ rules:
 """,
     )
 
-    medicaid = build_policyengine_coverage_report(tmp_path, program="medicaid")
-    chip = build_policyengine_coverage_report(tmp_path, program="chip")
-    health = build_policyengine_coverage_report(tmp_path, program="health")
+    medicaid = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
+    chip = build_policyengine_coverage_report(_coverage_root(tmp_path), program="chip")
+    health = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="health"
+    )
 
     assert medicaid["total_outputs"] == 10
     assert chip["total_outputs"] == 4
@@ -4645,6 +4730,7 @@ def test_policyengine_coverage_classifies_georgia_snap_medicaid_outputs(tmp_path
     _write_rulespec_file(
         tmp_path
         / "rulespec-us"
+        / "us"
         / "policies/cms/medicaid-chip-bhp-eligibility-levels.yaml",
         """format: rulespec/v1
 rules:
@@ -4657,7 +4743,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ga"
+        / "rulespec-us"
+        / "us-ga"
         / "policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml",
         """format: rulespec/v1
 rules:
@@ -4735,7 +4822,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ga"
+        / "rulespec-us"
+        / "us-ga"
         / "policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.test.yaml",
         """- name: georgia_effective_magi_limits
   output:
@@ -4747,7 +4835,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-ga" / "policies/dfcs/snap/3210/block-2.yaml",
+        tmp_path / "rulespec-us" / "us-ga" / "policies/dfcs/snap/3210/block-2.yaml",
         """format: rulespec/v1
 rules:
   - name: assistance_unit_member_receives_tanf_wsp_or_ssi
@@ -4763,7 +4851,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["total_outputs"] == 17
     assert report["status_counts"] == {
@@ -4829,7 +4917,7 @@ rules:
 
 def test_policyengine_coverage_classifies_aca_ptc_percentage_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "policies/irs/rev-proc-2025-25/aca-ptc.yaml",
+        tmp_path / "rulespec-us" / "us" / "policies/irs/rev-proc-2025-25/aca-ptc.yaml",
         """format: rulespec/v1
 rules:
   - name: applicable_percentage_band
@@ -4867,14 +4955,17 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "policies/irs/rev-proc-2025-25/aca-ptc.test.yaml",
+        tmp_path
+        / "rulespec-us"
+        / "us"
+        / "policies/irs/rev-proc-2025-25/aca-ptc.test.yaml",
         """- name: required_contribution_percentage_for_2026_plan_year
   output:
     us:policies/irs/rev-proc-2025-25/aca-ptc#required_contribution_percentage: 0.0996
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/36B/b/3/A.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/36B/b/3/A.yaml",
         """format: rulespec/v1
 rules:
   - name: applicable_percentage_income_tier
@@ -4916,7 +5007,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="aca_ptc")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="aca_ptc"
+    )
 
     assert report["total_outputs"] == 12
     assert report["status_counts"] == {
@@ -4957,7 +5050,7 @@ def test_policyengine_coverage_classifies_aca_ptc_family_size_not_comparable(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/36B.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/36B.yaml",
         """format: rulespec/v1
 rules:
   - name: family_size
@@ -4968,7 +5061,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="aca_ptc")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="aca_ptc"
+    )
 
     assert report["total_outputs"] == 1
     assert report["status_counts"] == {"known_not_comparable": 1}
@@ -4982,7 +5077,8 @@ rules:
 def test_policyengine_coverage_classifies_alabama_snap_manual_prefix(tmp_path):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-al"
+        / "rulespec-us"
+        / "us-al"
         / "policies/dhr/poe/chapter-07-work-requirements/710.yaml",
         """format: rulespec/v1
 rules:
@@ -4995,7 +5091,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-al"
+        / "rulespec-us"
+        / "us-al"
         / "policies/dhr/poe/chapter-09-income-and-deductions/900.yaml",
         """format: rulespec/v1
 rules:
@@ -5007,7 +5104,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert report["total_outputs"] == 2
     assert report["status_counts"] == {"known_not_comparable": 2}
@@ -5037,7 +5136,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["total_outputs"] == 1
     assert report["status_counts"] == {"known_not_comparable": 1}
@@ -5052,7 +5151,7 @@ rules:
 
 def test_policyengine_coverage_classifies_medicaid_work_requirement_prefixes(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1396a/xx.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1396a/xx.yaml",
         """format: rulespec/v1
 rules:
   - name: monthly_activity_hours_requirement
@@ -5068,7 +5167,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/552.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/552.yaml",
         """format: rulespec/v1
 rules:
   - name: monthly_community_engagement_hours_requirement
@@ -5079,7 +5178,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/554.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/554.yaml",
         """format: rulespec/v1
 rules:
   - name: dependent_child_maximum_age
@@ -5090,7 +5189,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/558.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/558.yaml",
         """format: rulespec/v1
 rules:
   - name: disenrollment_after_noncompliance_period
@@ -5101,7 +5200,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/603/i.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/603/i.yaml",
         """format: rulespec/v1
 rules:
   - name: alternative_household_income_method_required_for_medicaid_financial_eligibility
@@ -5112,7 +5211,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/603/j.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/603/j.yaml",
         """format: rulespec/v1
 rules:
   - name: magi_based_methods_do_not_apply_for_medicaid_eligibility
@@ -5123,7 +5222,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="medicaid")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
 
     assert report["total_outputs"] == 7
     assert report["status_counts"] == {
@@ -5175,7 +5276,7 @@ rules:
 
 def test_policyengine_coverage_classifies_medicaid_building_block_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/121.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/121.yaml",
         """format: rulespec/v1
 rules:
   - name: income_standard_must_use_higher_optional_categorically_needy_standard
@@ -5201,7 +5302,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/406.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/406.yaml",
         """format: rulespec/v1
 rules:
   - name: citizenship_documentation_verification_exempt
@@ -5217,7 +5318,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1396a/a/10.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1396a/a/10.yaml",
         """format: rulespec/v1
 rules:
   - name: adult_expansion_age_ceiling_years
@@ -5328,7 +5429,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1396d/a/i.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1396d/a/i.yaml",
         """format: rulespec/v1
 rules:
   - name: default_youth_age_ceiling_years
@@ -5359,7 +5460,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1396d/n.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1396d/n.yaml",
         """format: rulespec/v1
 rules:
   - name: child_age_attainment_threshold
@@ -5375,7 +5476,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/8/1612/b/2/G.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/8/1612/b/2/G.yaml",
         """format: rulespec/v1
 rules:
   - name: paragraph_1_nonapplication_exception_applies
@@ -5386,7 +5487,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/8/1613.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/8/1613.yaml",
         """format: rulespec/v1
 rules:
   - name: assistance_or_benefit_excluded_from_subsection_a_limitation
@@ -5402,7 +5503,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/8/1641/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/8/1641/b.yaml",
         """format: rulespec/v1
 rules:
   - name: minimum_parole_period_years
@@ -5418,7 +5519,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="medicaid")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
 
     assert report["total_outputs"] == 39
     assert report["status_counts"] == {"known_not_comparable": 39}
@@ -5429,7 +5532,7 @@ rules:
 
 def test_policyengine_coverage_classifies_ssi_resource_exclusion_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/42/1382b/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/42/1382b/a.yaml",
         """format: rulespec/v1
 rules:
   - name: alaska_native_stock_inalienability_exclusion_period_years
@@ -5480,7 +5583,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="ssi")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="ssi")
 
     assert report["total_outputs"] == 9
     assert report["status_counts"] == {"known_not_comparable": 9}
@@ -5491,7 +5594,7 @@ rules:
 
 def test_policyengine_coverage_classifies_medicaid_magi_prefixes(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/110.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/110.yaml",
         """format: rulespec/v1
 rules:
   - name: parent_or_caretaker_relative_eligible
@@ -5502,7 +5605,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/116.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/116.yaml",
         """format: rulespec/v1
 rules:
   - name: pregnant_woman_eligible
@@ -5513,7 +5616,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/118.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/118.yaml",
         """format: rulespec/v1
 rules:
   - name: infants_and_children_eligible
@@ -5524,7 +5627,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/42-cfr/435/119.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/42-cfr/435/119.yaml",
         """format: rulespec/v1
 rules:
   - name: adult_group_eligible
@@ -5535,7 +5638,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="medicaid")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="medicaid"
+    )
 
     assert report["total_outputs"] == 4
     assert report["status_counts"] == {"known_not_comparable": 4}
@@ -5555,7 +5660,8 @@ rules:
 def test_policyengine_coverage_classifies_nc_and_sc_snap_manual_prefixes(tmp_path):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-nc"
+        / "rulespec-us"
+        / "us-nc"
         / "policies/dhhs/fns/fns-600-simplified-nutritional-assistance-program-snap/page-1.yaml",
         """format: rulespec/v1
 rules:
@@ -5567,7 +5673,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-sc" / "policies/dss/snap-policy-manual/page-100.yaml",
+        tmp_path
+        / "rulespec-us"
+        / "us-sc"
+        / "policies/dss/snap-policy-manual/page-100.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_et_referral_required
@@ -5578,7 +5687,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert report["total_outputs"] == 2
     assert report["status_counts"] == {"known_not_comparable": 2}
@@ -5605,7 +5716,7 @@ rules:
         formula: earned_income * 0.2
 """
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/7/2014/e/2.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/7/2014/e/2.yaml",
         content,
     )
     _write_rulespec_file(
@@ -5613,11 +5724,14 @@ rules:
         / "rulespec-us"
         / "_axiom"
         / "rulespec-us"
+        / "us"
         / "statutes/7/2014/e/2.yaml",
         content,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert report["total_outputs"] == 1
     assert report["status_counts"] == {"comparable": 1}
@@ -5626,7 +5740,7 @@ rules:
 
 def test_policyengine_coverage_counts_derived_relation_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "regulations/7-cfr/273/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "regulations/7-cfr/273/1.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_unit
@@ -5643,7 +5757,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert report["total_outputs"] == 1
     assert report["items"][0]["legal_id"] == "us:regulations/7-cfr/273/1#snap_unit"
@@ -5652,7 +5768,7 @@ rules:
 
 def test_policyengine_coverage_uses_uk_registry_mappings(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/35.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/35.yaml",
         """format: rulespec/v1
 rules:
   - name: personal_allowance
@@ -5674,7 +5790,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/35.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/35.test.yaml",
         """- name: personal allowance
   period:
     period_kind: tax_year
@@ -5686,7 +5802,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -5704,7 +5820,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_uc_regulation_18_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2013/376/18.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2013/376/18.yaml",
         """format: rulespec/v1
 rules:
   - name: claimant_capital_for_prescribed_capital_limit
@@ -5728,7 +5844,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2013/376/18.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2013/376/18.test.yaml",
         """- name: capital
   period:
     period_kind: custom
@@ -5742,7 +5858,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="universal_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="universal_credit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -5768,6 +5886,7 @@ def test_policyengine_coverage_classifies_uk_universal_credit_schedule_outputs(
     _write_rulespec_file(
         tmp_path
         / "rulespec-uk"
+        / "uk"
         / "regulations/uksi/2013/376/schedule/4/paragraph/36.yaml",
         """format: rulespec/v1
 rules:
@@ -5785,6 +5904,7 @@ rules:
     _write_rulespec_file(
         tmp_path
         / "rulespec-uk"
+        / "uk"
         / "regulations/uksi/2013/376/schedule/10/paragraph/1.yaml",
         """format: rulespec/v1
 rules:
@@ -5801,6 +5921,7 @@ rules:
     _write_rulespec_file(
         tmp_path
         / "rulespec-uk"
+        / "uk"
         / "regulations/uksi/2013/376/schedule/5/paragraph/9.yaml",
         """format: rulespec/v1
 rules:
@@ -5816,7 +5937,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="universal_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="universal_credit"
+    )
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     statuses = {item["legal_id"]: item["status"] for item in report["items"]}
@@ -5842,7 +5965,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_income_tax_section_23_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/23.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/23.yaml",
         """format: rulespec/v1
 rules:
   - name: total_income
@@ -5909,7 +6032,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/23.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/23.test.yaml",
         """- name: income tax steps
   period:
     period_kind: tax_year
@@ -5927,7 +6050,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 3,
@@ -5955,7 +6078,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_income_tax_section_11d_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/11D.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/11D.yaml",
         """format: rulespec/v1
 rules:
   - name: savings_income_charged_at_savings_basic_rate
@@ -6033,7 +6156,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/11D.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/11D.test.yaml",
         """- name: savings income tax
   period:
     period_kind: tax_year
@@ -6052,7 +6175,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 5,
@@ -6099,7 +6222,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_income_tax_section_13_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/13.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/13.yaml",
         """format: rulespec/v1
 rules:
   - name: dividend_income_charged_at_dividend_ordinary_rate
@@ -6177,7 +6300,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2007/3/13.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2007/3/13.test.yaml",
         """- name: dividend income tax
   period:
     period_kind: tax_year
@@ -6196,7 +6319,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 2,
@@ -6225,7 +6348,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_class_1_ni_section_8_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/1992/4/8.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/1992/4/8.yaml",
         """format: rulespec/v1
 rules:
   - name: main_primary_percentage
@@ -6252,7 +6375,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/1992/4/8.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/1992/4/8.test.yaml",
         """- name: class 1 employee ni
   period:
     period_kind: custom
@@ -6267,7 +6390,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"comparable": 3}
     assert report["untested_comparable"] == 0
@@ -6299,7 +6422,7 @@ def test_policyengine_coverage_classifies_uk_pension_credit_section_1_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2002/16/1.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2002/16/1.yaml",
         """format: rulespec/v1
 rules:
   - name: qualifying_age
@@ -6324,7 +6447,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2002/16/1.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2002/16/1.test.yaml",
         """- name: claimant at qualifying age
   period:
     period_kind: custom
@@ -6338,7 +6461,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="pension_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="pension_credit"
+    )
 
     assert report["status_counts"] == {"comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -6361,7 +6486,7 @@ def test_policyengine_coverage_classifies_uk_pension_credit_section_3_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2002/16/3.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2002/16/3.yaml",
         """format: rulespec/v1
 rules:
   - name: maximum_savings_credit
@@ -6416,7 +6541,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2002/16/3.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2002/16/3.test.yaml",
         """- name: savings credit
   period:
     period_kind: tax_year
@@ -6432,7 +6557,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="pension_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="pension_credit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -6455,7 +6582,7 @@ def test_policyengine_coverage_classifies_uk_pension_credit_regulation_15_output
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/1792/15.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2002/1792/15.yaml",
         """format: rulespec/v1
 rules:
   - name: capital_treated_as_yielding_weekly_income
@@ -6478,7 +6605,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/1792/15.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2002/1792/15.test.yaml",
         """- name: deemed income
   period:
     period_kind: custom
@@ -6492,7 +6619,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="pension_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="pension_credit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -6517,7 +6646,10 @@ def test_policyengine_coverage_classifies_uk_pension_credit_schedule_iia_outputs
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/1792/schedule/IIA.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2002/1792/schedule/IIA.yaml",
         """format: rulespec/v1
 rules:
   - name: child_or_qualifying_young_person_weekly_amount
@@ -6571,7 +6703,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/1792/schedule/IIA.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2002/1792/schedule/IIA.test.yaml",
         """- name: child addition
   period:
     period_kind: custom
@@ -6588,7 +6723,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="pension_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="pension_credit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 5,
@@ -6621,7 +6758,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_wtc_schedule_2_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/2005/schedule/2.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2002/2005/schedule/2.yaml",
         """format: rulespec/v1
 rules:
   - name: wtc_basic_element_amount
@@ -6669,7 +6806,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/2005/schedule/2.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2002/2005/schedule/2.test.yaml",
         """- name: wtc schedule 2
   period:
     period_kind: tax_year
@@ -6686,7 +6826,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="working_tax_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="working_tax_credit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 5,
@@ -6724,7 +6866,7 @@ def test_policyengine_coverage_classifies_uk_child_tax_credit_element_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/2007/7.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2002/2007/7.yaml",
         """format: rulespec/v1
 rules:
   - name: ctc_family_element_amount
@@ -6737,7 +6879,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2002/2007/7.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2002/2007/7.test.yaml",
         """- name: ctc family element
   period:
     period_kind: tax_year
@@ -6749,7 +6891,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2024/247/3.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2024/247/3.yaml",
         """format: rulespec/v1
 rules:
   - name: ctc_individual_element_substituted_amount
@@ -6804,7 +6946,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2024/247/3.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2024/247/3.test.yaml",
         """- name: ctc uprating
   period:
     period_kind: tax_year
@@ -6822,7 +6964,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="child_tax_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="child_tax_credit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 6,
@@ -6857,7 +7001,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_pip_rate_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2013/377/24.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2013/377/24.yaml",
         """format: rulespec/v1
 rules:
   - name: pip_daily_living_standard_weekly_rate
@@ -6891,7 +7035,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2013/377/24.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2013/377/24.test.yaml",
         """- name: pip rates
   period:
     period_kind: week
@@ -6906,7 +7050,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="pip")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="pip")
 
     assert report["status_counts"] == {"comparable": 4}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -6941,7 +7085,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_pip_component_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2012/5/78.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2012/5/78.yaml",
         """format: rulespec/v1
 rules:
   - name: pip_daily_living_enhanced_rate_entitlement
@@ -6971,7 +7115,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2012/5/79.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2012/5/79.yaml",
         """format: rulespec/v1
 rules:
   - name: pip_mobility_standard_rate_entitlement
@@ -7001,7 +7145,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2012/5/77.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2012/5/77.yaml",
         """format: rulespec/v1
 rules:
   - name: personal_independence_payment_weekly_amount
@@ -7015,7 +7159,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2012/5/78.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2012/5/78.test.yaml",
         """- name: daily living amount
   period:
     period_kind: week
@@ -7029,7 +7173,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2012/5/79.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2012/5/79.test.yaml",
         """- name: mobility amount
   period:
     period_kind: week
@@ -7041,7 +7185,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2012/5/77.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2012/5/77.test.yaml",
         """- name: total amount
   period:
     period_kind: week
@@ -7053,7 +7197,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="pip")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="pip")
 
     assert report["status_counts"] == {
         "comparable": 4,
@@ -7107,7 +7251,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_tax_free_childcare_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2014/28/1.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2014/28/1.yaml",
         """format: rulespec/v1
 rules:
   - name: tax_free_childcare_top_up_payment_rate
@@ -7120,7 +7264,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2014/28/21.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2014/28/21.yaml",
         """format: rulespec/v1
 rules:
   - name: tax_free_childcare_top_up_element_rate
@@ -7133,7 +7277,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2015/448/15.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2015/448/15.yaml",
         """format: rulespec/v1
 rules:
   - name: tax_free_childcare_maximum_adjusted_net_income
@@ -7146,21 +7290,21 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2014/28/1.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2014/28/1.test.yaml",
         """- name: section_1_top_up_payment_rate
   output:
     uk:statutes/ukpga/2014/28/1#tax_free_childcare_top_up_payment_rate: 0.25
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2014/28/21.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2014/28/21.test.yaml",
         """- name: section_21_top_up_element_rate
   output:
     uk:statutes/ukpga/2014/28/21#tax_free_childcare_top_up_element_rate: 0.2
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2015/448/15.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2015/448/15.test.yaml",
         """- name: regulation_15_maximum_adjusted_net_income
   output:
     uk:regulations/uksi/2015/448/15#tax_free_childcare_maximum_adjusted_net_income: 100000
@@ -7168,7 +7312,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="tax_free_childcare",
     )
 
@@ -7205,7 +7349,7 @@ def test_policyengine_coverage_classifies_uk_sure_start_maternity_grant_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2005/3061/5.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2005/3061/5.yaml",
         """format: rulespec/v1
 rules:
   - name: sure_start_maternity_grant_amount
@@ -7218,14 +7362,16 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2005/3061/5.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2005/3061/5.test.yaml",
         """- name: sure_start_maternity_grant_2026_amount
   output:
     uk:regulations/uksi/2005/3061/5#sure_start_maternity_grant_amount: 500
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="ssmg")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="ssmg"
+    )
 
     assert report["status_counts"] == {"comparable": 1}
     assert report["untested_comparable"] == 0
@@ -7239,7 +7385,7 @@ def test_policyengine_coverage_classifies_uk_scottish_child_payment_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2020/351/20.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2020/351/20.yaml",
         """format: rulespec/v1
 rules:
   - name: scottish_child_payment_weekly_amount
@@ -7253,7 +7399,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2020/351/18.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2020/351/18.yaml",
         """format: rulespec/v1
 rules:
   - name: scottish_child_payment_maximum_child_age
@@ -7267,14 +7413,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2020/351/20.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2020/351/20.test.yaml",
         """- name: scottish_child_payment_2026_weekly_amount
   output:
     uk:regulations/ssi/2020/351/20#scottish_child_payment_weekly_amount: 28.20
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2020/351/18.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2020/351/18.test.yaml",
         """- name: scottish_child_payment_maximum_child_age
   output:
     uk:regulations/ssi/2020/351/18#scottish_child_payment_maximum_child_age: 16
@@ -7282,7 +7428,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="scottish_child_payment",
     )
 
@@ -7314,7 +7460,7 @@ def test_policyengine_coverage_classifies_uk_carer_support_payment_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2023/302/5.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2023/302/5.yaml",
         """format: rulespec/v1
 rules:
   - name: carer_support_payment_minimum_weekly_care_hours
@@ -7328,7 +7474,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2023/302/16.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2023/302/16.yaml",
         """format: rulespec/v1
 rules:
   - name: carer_support_payment_weekly_rate
@@ -7350,14 +7496,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2023/302/5.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2023/302/5.test.yaml",
         """- name: carer_support_payment_minimum_weekly_care_hours
   output:
     uk:regulations/ssi/2023/302/5#carer_support_payment_minimum_weekly_care_hours: 35
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/ssi/2023/302/16.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/ssi/2023/302/16.test.yaml",
         """- name: carer_support_payment_2026_weekly_rates
   output:
     uk:regulations/ssi/2023/302/16#carer_support_payment_weekly_rate: 86.45
@@ -7366,7 +7512,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="carer_support_payment",
     )
 
@@ -7407,7 +7553,7 @@ def test_policyengine_coverage_classifies_uk_cost_of_living_support_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2022/38/1.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2022/38/1.yaml",
         """format: rulespec/v1
 rules:
   - name: first_means_tested_additional_payment_amount
@@ -7437,7 +7583,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2022/38/5.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2022/38/5.yaml",
         """format: rulespec/v1
 rules:
   - name: disability_additional_payment_amount
@@ -7451,7 +7597,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2023/7/1.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2023/7/1.yaml",
         """format: rulespec/v1
 rules:
   - name: first_means_tested_additional_payment_amount
@@ -7489,7 +7635,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2023/7/5.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2023/7/5.yaml",
         """format: rulespec/v1
 rules:
   - name: disability_additional_payment_amount
@@ -7503,7 +7649,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2022/38/1.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2022/38/1.test.yaml",
         """- name: means_tested_additional_payment_total_2022
   output:
     uk:statutes/ukpga/2022/38/1#first_means_tested_additional_payment_amount: 326
@@ -7512,14 +7658,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2022/38/5.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2022/38/5.test.yaml",
         """- name: disability_additional_payment_amount_2022
   output:
     uk:statutes/ukpga/2022/38/5#disability_additional_payment_amount: 150
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2023/7/1.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2023/7/1.test.yaml",
         """- name: means_tested_additional_payment_total_2023
   output:
     uk:statutes/ukpga/2023/7/1#first_means_tested_additional_payment_amount: 301
@@ -7529,7 +7675,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2023/7/5.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2023/7/5.test.yaml",
         """- name: disability_additional_payment_amount_2023
   output:
     uk:statutes/ukpga/2023/7/5#disability_additional_payment_amount: 150
@@ -7537,7 +7683,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="cost_of_living_support_payment",
     )
 
@@ -7589,7 +7735,7 @@ def test_policyengine_coverage_classifies_uk_schedule_1_benefit_rate_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/schedule/1.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2026/148/schedule/1.yaml",
         """format: rulespec/v1
 rules:
   - name: attendance_allowance_higher_weekly_rate
@@ -7651,7 +7797,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/schedule/1.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2026/148/schedule/1.test.yaml",
         """- name: schedule 1 benefit rates
   period:
     period_kind: week
@@ -7670,7 +7819,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["status_counts"] == {
         "comparable": 4,
@@ -7711,7 +7860,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_winter_fuel_payment_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2025/969/3.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2025/969/3.yaml",
         """format: rulespec/v1
 rules:
   - name: winter_fuel_payment_under_80_standard_amount
@@ -7780,7 +7929,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2025/969/3.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2025/969/3.test.yaml",
         """- name: winter fuel payment amounts
   period:
     period_kind: custom
@@ -7802,7 +7951,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path, program="winter_fuel_allowance"
+        _coverage_root(tmp_path), program="winter_fuel_allowance"
     )
 
     assert report["status_counts"] == {
@@ -7839,7 +7988,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_dla_rate_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/article/14.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2026/148/article/14.yaml",
         """format: rulespec/v1
 rules:
   - name: dla_self_care_higher_substituted_amount
@@ -7915,7 +8064,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/article/14.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2026/148/article/14.test.yaml",
         """- name: article 14 dla rates
   period:
     period_kind: week
@@ -7936,7 +8088,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="dla")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="dla")
 
     assert report["status_counts"] == {"comparable": 10}
     assert report["untested_comparable"] == 0
@@ -7977,7 +8129,7 @@ rules:
 
 def test_policyengine_coverage_classifies_uk_tv_licence_fee_output(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2004/692/schedule/1.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2004/692/schedule/1.yaml",
         """format: rulespec/v1
 rules:
   - name: colour_tv_licence_general_form_issue_fee
@@ -7990,7 +8142,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2004/692/schedule/1.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2004/692/schedule/1.test.yaml",
         """- name: tv licence fee
   period:
     period_kind: custom
@@ -8003,7 +8158,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tv_licence")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="tv_licence"
+    )
 
     assert report["status_counts"] == {"comparable": 1}
     item = report["items"][0]
@@ -8020,7 +8177,7 @@ def test_policyengine_coverage_classifies_uk_state_pension_rate_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/article/4.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2026/148/article/4.yaml",
         """format: rulespec/v1
 rules:
   - name: category_a_basic_retirement_pension_substituted_amount
@@ -8040,7 +8197,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/article/4.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2026/148/article/4.test.yaml",
         """- name: article 4 basic state pension rate
   period:
     period_kind: week
@@ -8053,7 +8213,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/article/6.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2026/148/article/6.yaml",
         """format: rulespec/v1
 rules:
   - name: full_new_state_pension_substituted_amount
@@ -8073,7 +8233,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2026/148/article/6.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "regulations/uksi/2026/148/article/6.test.yaml",
         """- name: article 6 new state pension rate
   period:
     period_kind: week
@@ -8086,7 +8249,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="state_pension")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="state_pension"
+    )
 
     assert report["status_counts"] == {"comparable": 4}
     assert report["untested_comparable"] == 0
@@ -8113,7 +8278,7 @@ def test_policyengine_coverage_classifies_uk_state_pension_final_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/state-pension.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/state-pension.yaml",
         """format: rulespec/v1
 rules:
   - name: current_state_pension_flat_weekly_amount
@@ -8143,7 +8308,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/state-pension.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/state-pension.test.yaml",
         """- name: state pension final wrapper
   period:
     period_kind: week
@@ -8156,7 +8321,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="state_pension")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="state_pension"
+    )
 
     assert report["status_counts"] == {
         "comparable": 2,
@@ -8188,7 +8355,7 @@ def test_policyengine_coverage_classifies_uk_national_insurance_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/1992/4/1.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/1992/4/1.yaml",
         """format: rulespec/v1
 rules:
   - name: national_insurance_contribution
@@ -8202,7 +8369,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/1992/4/1.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/1992/4/1.test.yaml",
         """- name: national insurance final aggregate
   period:
     period_kind: tax_year
@@ -8214,7 +8381,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"comparable": 1}
     assert report["untested_comparable"] == 0
@@ -8230,7 +8397,7 @@ def test_policyengine_coverage_classifies_uk_universal_credit_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/universal-credit.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/universal-credit.yaml",
         """format: rulespec/v1
 rules:
   - name: universal_credit_annual_amount
@@ -8245,7 +8412,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/universal-credit.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/universal-credit.test.yaml",
         """- name: universal credit final annual amount
   period:
     period_kind: tax_year
@@ -8259,7 +8426,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="universal_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="universal_credit"
+    )
 
     assert report["status_counts"] == {"comparable": 1}
     assert report["untested_comparable"] == 0
@@ -8276,7 +8445,7 @@ def test_policyengine_coverage_classifies_uk_carers_allowance_final_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/carers-allowance.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/carers-allowance.yaml",
         """format: rulespec/v1
 rules:
   - name: carers_allowance_minimum_weekly_care_hours
@@ -8309,7 +8478,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/carers-allowance.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/carers-allowance.test.yaml",
         """- name: carers allowance final annual amount
   period:
     period_kind: tax_year
@@ -8326,7 +8495,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="carers_allowance")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="carers_allowance"
+    )
 
     assert report["status_counts"] == {
         "comparable": 2,
@@ -8358,7 +8529,7 @@ def test_policyengine_coverage_classifies_uk_pension_credit_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/pension-credit.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/pension-credit.yaml",
         """format: rulespec/v1
 rules:
   - name: pension_credit_annual_amount
@@ -8374,7 +8545,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/pension-credit.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/pension-credit.test.yaml",
         """- name: pension credit final annual amount
   period:
     period_kind: tax_year
@@ -8388,7 +8559,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="pension_credit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="pension_credit"
+    )
 
     items_by_id = {item["legal_id"]: item for item in report["items"]}
     final_amount = items_by_id[
@@ -8404,7 +8577,7 @@ def test_policyengine_coverage_classifies_uk_esa_income_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/esa-income.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/esa-income.yaml",
         """format: rulespec/v1
 rules:
   - name: income_related_esa_annual_amount
@@ -8420,7 +8593,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/esa-income.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/esa-income.test.yaml",
         """- name: income related ESA final annual amount
   period:
     period_kind: tax_year
@@ -8436,7 +8609,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="employment_and_support_allowance",
     )
 
@@ -8454,7 +8627,7 @@ def test_policyengine_coverage_classifies_uk_housing_benefit_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/housing-benefit.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/housing-benefit.yaml",
         """format: rulespec/v1
 rules:
   - name: housing_benefit_annual_amount
@@ -8470,7 +8643,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/housing-benefit.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/housing-benefit.test.yaml",
         """- name: housing benefit final annual amount
   period:
     period_kind: tax_year
@@ -8485,7 +8658,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="housing_benefit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="housing_benefit"
+    )
 
     items_by_id = {item["legal_id"]: item for item in report["items"]}
     final_amount = items_by_id[
@@ -8501,7 +8676,7 @@ def test_policyengine_coverage_classifies_uk_carer_support_payment_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/carer-support-payment.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/carer-support-payment.yaml",
         """format: rulespec/v1
 rules:
   - name: carer_support_payment_weeks_in_year
@@ -8525,7 +8700,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/carer-support-payment.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "policies/govuk/carer-support-payment.test.yaml",
         """- name: carer support payment final annual amount
   period:
     period_kind: tax_year
@@ -8543,7 +8721,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="carer_support_payment",
     )
 
@@ -8570,7 +8748,7 @@ def test_policyengine_coverage_classifies_uk_scottish_child_payment_final_output
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/scottish-child-payment.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/scottish-child-payment.yaml",
         """format: rulespec/v1
 rules:
   - name: scottish_child_payment_weeks_in_year
@@ -8594,7 +8772,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/scottish-child-payment.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "policies/govuk/scottish-child-payment.test.yaml",
         """- name: scottish child payment final annual amount
   period:
     period_kind: tax_year
@@ -8610,7 +8791,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="scottish_child_payment",
     )
 
@@ -8637,7 +8818,10 @@ def test_policyengine_coverage_classifies_uk_sda_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/severe-disablement-allowance.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "policies/govuk/severe-disablement-allowance.yaml",
         """format: rulespec/v1
 rules:
   - name: severe_disablement_allowance_weeks_in_year
@@ -8663,6 +8847,7 @@ rules:
     _write_rulespec_file(
         tmp_path
         / "rulespec-uk"
+        / "uk"
         / "policies/govuk/severe-disablement-allowance.test.yaml",
         """- name: severe disablement allowance final annual amount
   period:
@@ -8677,7 +8862,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="sda")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="sda")
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -8753,7 +8938,7 @@ def test_policyengine_coverage_classifies_uk_legacy_tariff_income_outputs(
     helper_name,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / f"{path}.yaml",
+        tmp_path / "rulespec-uk" / "uk" / f"{path}.yaml",
         f"""format: rulespec/v1
 rules:
   - name: {helper_name}
@@ -8776,7 +8961,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / f"{path}.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / f"{path}.test.yaml",
         f"""- name: tariff income
   period:
     period_kind: custom
@@ -8790,7 +8975,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program=program)
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program=program
+    )
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -8809,7 +8996,7 @@ rules:
 
 def test_policyengine_coverage_counts_uk_aliases_as_tested(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2006/965/2.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2006/965/2.yaml",
         """format: rulespec/v1
 rules:
   - name: child_benefit_enhanced_weekly_rate
@@ -8832,7 +9019,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2006/965/2.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2006/965/2.test.yaml",
         """- name: eldest child rate
   period:
     period_kind: custom
@@ -8845,7 +9032,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="child_benefit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="child_benefit"
+    )
 
     assert report["status_counts"] == {"comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -8864,7 +9053,7 @@ def test_policyengine_coverage_classifies_uk_child_benefit_entitlement_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/1992/4/141.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/1992/4/141.yaml",
         """format: rulespec/v1
 rules:
   - name: entitled_to_child_benefit_for_week
@@ -8904,7 +9093,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/1992/4/141.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/1992/4/141.test.yaml",
         """- name: child benefit entitlement
   period:
     period_kind: custom
@@ -8920,7 +9109,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="child_benefit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="child_benefit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 2,
@@ -8951,7 +9142,7 @@ def test_policyengine_coverage_classifies_uk_child_benefit_final_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/child-benefit.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/child-benefit.yaml",
         """format: rulespec/v1
 rules:
   - name: child_benefit_weekly_payment_periods_in_year
@@ -8973,7 +9164,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/child-benefit.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/child-benefit.test.yaml",
         """- name: child benefit final amount
   period:
     period_kind: custom
@@ -8988,7 +9179,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="child_benefit")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="child_benefit"
+    )
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -9015,7 +9208,8 @@ def test_policyengine_coverage_classifies_arizona_snap_medical_and_child_support
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/na-child-support-expense/allowable-deductions.yaml",
         """format: rulespec/v1
 rules:
@@ -9028,7 +9222,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/na-medical-expenses-and-deduction/medical-deduction.yaml",
         """format: rulespec/v1
 rules:
@@ -9056,7 +9251,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/na-medical-expenses-and-deduction/medical-deduction.test.yaml",
         """- name: medical_outputs_are_tested
   period: 2026-01
@@ -9068,7 +9264,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     items_by_id = {item["legal_id"]: item for item in report["items"]}
     child_support = items_by_id[
@@ -9109,7 +9307,8 @@ def test_policyengine_coverage_classifies_california_income_resource_bridge(
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-ca"
+        / "rulespec-us"
+        / "us-ca"
         / "policies/cdss/snap/fy-2026-benefit-calculation.yaml",
         """format: rulespec/v1
 rules:
@@ -9124,8 +9323,12 @@ rules:
 """,
     )
 
-    coverage = build_policyengine_coverage_report(tmp_path, program="snap")
-    candidates = build_policyengine_candidate_report(tmp_path, program="snap")
+    coverage = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
+    candidates = build_policyengine_candidate_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert coverage["status_counts"] == {"known_not_comparable": 1}
     item = coverage["items"][0]
@@ -9145,7 +9348,8 @@ def test_policyengine_coverage_classifies_arizona_snap_composition_outputs(
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml",
         """format: rulespec/v1
 rules:
@@ -9183,7 +9387,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.test.yaml",
         """- name: composition_outputs_are_tested
   period: 2026-01
@@ -9198,7 +9403,9 @@ rules:
 """,
     )
 
-    coverage = build_policyengine_coverage_report(tmp_path, program="snap")
+    coverage = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert coverage["status_counts"] == {"known_not_comparable": 6}
     composition_items = {
@@ -9270,8 +9477,7 @@ def test_policyengine_registry_classifies_snap_fy2024_cola_outputs():
     assert standard_table.parameter_key_input == "household_size"
 
     maximum_allotment = registry.mapping_for_legal_id(
-        "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
-        "#snap_maximum_allotment",
+        "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
         country="us",
     )
     assert maximum_allotment is not None
@@ -9300,7 +9506,8 @@ def test_policyengine_coverage_classifies_arizona_snap_utility_eligibility(
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/na-utility-expenses-and-allowances/utility-allowance-eligibility.yaml",
         """format: rulespec/v1
 rules:
@@ -9348,7 +9555,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/na-utility-expenses-and-allowances/utility-allowance-eligibility.test.yaml",
         """- name: utility_outputs_are_tested
   period: 2026-01
@@ -9362,7 +9570,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     utility_items = {
         item["rule_name"]: item
@@ -9408,7 +9618,8 @@ def test_policyengine_coverage_classifies_arizona_snap_shelter_deduction(
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/shelter-expenses-and-deduction/shelter-deduction.yaml",
         """format: rulespec/v1
 rules:
@@ -9446,7 +9657,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/shelter-expenses-and-deduction/shelter-deduction.test.yaml",
         """- name: shelter_outputs_are_tested
   period: 2026-01
@@ -9458,7 +9670,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     shelter_items = {
         item["rule_name"]: item
@@ -9494,7 +9708,8 @@ def test_policyengine_coverage_classifies_arizona_snap_dependent_care(
 ):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/dependent-care-expense/na-dependent-care.yaml",
         """format: rulespec/v1
 rules:
@@ -9542,7 +9757,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-az"
+        / "rulespec-us"
+        / "us-az"
         / "policies/des/faa5/dependent-care-expense/na-dependent-care.test.yaml",
         """- name: dependent_care_outputs_are_tested
   period: 2026-01
@@ -9554,7 +9770,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="snap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     dependent_care_items = {
         item["rule_name"]: item
@@ -9588,7 +9806,7 @@ rules:
 
 def test_policyengine_coverage_classifies_tax_parameter_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3101/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3101/a.yaml",
         """format: rulespec/v1
 rules:
   - name: oasdi_wage_tax_rate
@@ -9604,7 +9822,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/45A/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/45A/a.yaml",
         """format: rulespec/v1
 rules:
   - name: indian_employment_credit_rate
@@ -9615,7 +9833,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 3
     assert report["status_counts"] == {
@@ -9644,7 +9862,7 @@ rules:
 
 def test_policyengine_coverage_maps_colorado_income_tax_rate_parameter(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.7/c.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.7/c.yaml",
         """format: rulespec/v1
 rules:
   - name: individual_estate_trust_income_tax_rate
@@ -9655,7 +9873,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.7/c.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.7/c.test.yaml",
         """- name: rate for tax year beginning after january 2022
   period:
     period_kind: tax_year
@@ -9667,7 +9885,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"comparable": 1}
     item = report["items"][0]
@@ -9682,7 +9900,7 @@ rules:
 
 def test_policyengine_coverage_maps_colorado_1999_income_tax_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.5.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.5.yaml",
         """format: rulespec/v1
 rules:
   - name: subsection_1_5_individual_income_tax_rate
@@ -9702,7 +9920,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.5.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.5.test.yaml",
         """- name: rate applies to positive modified income
   period:
     period_kind: tax_year
@@ -9717,7 +9935,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -9738,7 +9956,8 @@ rules:
 def test_policyengine_coverage_maps_colorado_ccap_smi_limit(tmp_path):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-co"
+        / "rulespec-us"
+        / "us-co"
         / "regulations/8-ccr-1403-1/3.111/h-low-income-eligibility-guidelines.yaml",
         """format: rulespec/v1
 rules:
@@ -9771,7 +9990,8 @@ rules:
     )
     _write_rulespec_file(
         tmp_path
-        / "rulespec-us-co"
+        / "rulespec-us"
+        / "us-co"
         / "regulations/8-ccr-1403-1/3.111/h-low-income-eligibility-guidelines.test.yaml",
         """- name: family size four limit
   period: 2025-10
@@ -9782,7 +10002,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="ccap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="ccap"
+    )
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -9850,7 +10072,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="ccap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="ccap"
+    )
 
     assert report["status_counts"] == {"comparable": 2}
     assert report["untested_comparable"] == 0
@@ -9901,7 +10125,9 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="ccap")
+    report = build_policyengine_coverage_report(
+        _coverage_root(tmp_path), program="ccap"
+    )
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -9916,7 +10142,7 @@ rules:
 
 def test_policyengine_coverage_maps_colorado_taxable_income_base(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/2.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/2.yaml",
         """format: rulespec/v1
 rules:
   - name: federal_taxable_income_after_subsection_2_modifications
@@ -9931,7 +10157,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/2.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/2.test.yaml",
         """- name: taxable income base is tested
   period:
     period_kind: tax_year
@@ -9943,7 +10169,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"comparable": 1}
     item = report["items"][0]
@@ -9960,7 +10186,7 @@ def test_policyengine_coverage_classifies_remaining_colorado_104_adjustments(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/a.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/a.yaml",
         """format: rulespec/v1
 rules:
   - name: federal_net_operating_loss_carryover_addition_to_federal_taxable_income
@@ -9975,7 +10201,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/z.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/z.yaml",
         """format: rulespec/v1
 rules:
   - name: retroactive_cares_act_subtraction
@@ -9990,7 +10216,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -10010,7 +10236,7 @@ def test_policyengine_coverage_classifies_colorado_base_rates_not_comparable(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.7/a.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.7/a.yaml",
         """format: rulespec/v1
 rules:
   - name: individual_estate_trust_income_tax_rate_before_2020
@@ -10021,7 +10247,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.7/a.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.7/a.test.yaml",
         """- name: rate for tax year beginning in 2019
   period:
     period_kind: tax_year
@@ -10033,7 +10259,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.7/b.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.7/b.yaml",
         """format: rulespec/v1
 rules:
   - name: individual_estate_trust_income_tax_rate_before_2022
@@ -10044,7 +10270,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/1.7/b.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/1.7/b.test.yaml",
         """- name: rate for tax year beginning in 2021
   period:
     period_kind: tax_year
@@ -10056,7 +10282,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["legal_id"] for item in report["items"]} == {
@@ -10071,7 +10297,7 @@ def test_policyengine_coverage_maps_colorado_state_tax_and_us_interest_adjustmen
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/d.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/d.yaml",
         """format: rulespec/v1
 rules:
   - name: state_income_tax_deduction_addition_limit
@@ -10095,7 +10321,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/d.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/d.test.yaml",
         """- name: state income tax deduction addback outputs
   period:
     period_kind: tax_year
@@ -10108,7 +10334,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/a.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/a.yaml",
         """format: rulespec/v1
 rules:
   - name: united_states_possessions_obligations_interest_income_subtraction
@@ -10123,7 +10349,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/a.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/a.test.yaml",
         """- name: us obligations interest subtraction output
   period:
     period_kind: tax_year
@@ -10135,7 +10361,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 3
     assert report["status_counts"] == {
@@ -10164,7 +10390,7 @@ rules:
 
 def test_policyengine_coverage_classifies_colorado_deduction_addbacks(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/o.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/o.yaml",
         """format: rulespec/v1
 rules:
   - name: single_return_adjusted_gross_income_threshold_for_section_199a_addition
@@ -10190,7 +10416,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/o.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/o.test.yaml",
         """- name: qbi addback outputs
   period:
     period_kind: tax_year
@@ -10205,7 +10431,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/p.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/p.yaml",
         """format: rulespec/v1
 rules:
   - name: federal_adjusted_gross_income_threshold_for_itemized_deduction_addition
@@ -10231,7 +10457,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/p.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/p.test.yaml",
         """- name: itemized deduction addback outputs
   period:
     period_kind: tax_year
@@ -10246,7 +10472,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/p/5.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/p/5.yaml",
         """format: rulespec/v1
 rules:
   - name: federal_adjusted_gross_income_threshold
@@ -10277,7 +10503,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/p/5.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/p/5.test.yaml",
         """- name: subsection p5 deduction addback outputs
   period:
     period_kind: tax_year
@@ -10293,7 +10519,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/p/7.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/p/7.yaml",
         """format: rulespec/v1
 rules:
   - name: ongoing_federal_adjusted_gross_income_threshold
@@ -10329,7 +10555,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/3/p/7.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/3/p/7.test.yaml",
         """- name: subsection p7 deduction addback outputs
   period:
     period_kind: tax_year
@@ -10346,7 +10572,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/m.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/m.yaml",
         """format: rulespec/v1
 rules:
   - name: charitable_contribution_subtraction_floor
@@ -10363,7 +10589,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/m.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/m.test.yaml",
         """- name: charitable contribution subtraction outputs
   period:
     period_kind: tax_year
@@ -10376,7 +10602,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 21
     assert report["status_counts"] == {
@@ -10459,7 +10685,7 @@ def test_policyengine_coverage_classifies_colorado_military_retirement_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/y.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/y.yaml",
         """format: rulespec/v1
 rules:
   - name: military_retirement_benefits_cap_initial_phase
@@ -10495,7 +10721,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/y.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/y.test.yaml",
         """- name: military retirement cap outputs
   period:
     period_kind: tax_year
@@ -10512,7 +10738,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 4,
@@ -10544,7 +10770,7 @@ rules:
 
 def test_policyengine_coverage_classifies_colorado_pension_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/f.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/f.yaml",
         """format: rulespec/v1
 rules:
   - name: pension_annuity_subtraction_cap_for_age_fifty_five_to_sixty_four
@@ -10585,7 +10811,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-104/4/f.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-104/4/f.test.yaml",
         """- name: pension outputs
   period:
     period_kind: tax_year
@@ -10603,7 +10829,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 2,
@@ -10638,7 +10864,7 @@ rules:
 
 def test_policyengine_coverage_infers_unmapped_colorado_title_39_as_tax(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-999.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-999.yaml",
         """format: rulespec/v1
 rules:
   - name: unmapped_colorado_tax_output
@@ -10649,7 +10875,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 1
     # The jurisdiction-wide `us-co:` prefix mapping classifies the output as
@@ -10684,14 +10910,14 @@ def test_policyengine_coverage_classifies_colorado_amt_outputs(tmp_path):
         f"    us-co:statutes/39/39-22-105#{name}: 1" for name in output_names
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-105.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-105.yaml",
         f"""format: rulespec/v1
 rules:
 {rules}
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-105.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-105.test.yaml",
         f"""- name: colorado amt outputs
   period:
     period_kind: tax_year
@@ -10703,7 +10929,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == len(output_names)
     assert report["status_counts"] == {
@@ -10755,14 +10981,14 @@ def test_policyengine_coverage_classifies_colorado_ctc_45_outputs(tmp_path):
         f"    us-co:statutes/39/39-22-129/4.5#{name}: 1" for name in output_names
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-129/4.5.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-129/4.5.yaml",
         f"""format: rulespec/v1
 rules:
 {rules}
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-129/4.5.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-129/4.5.test.yaml",
         f"""- name: colorado ctc current-law outputs
   period:
     period_kind: tax_year
@@ -10774,7 +11000,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == len(output_names)
     assert report["status_counts"] == {
@@ -10854,7 +11080,7 @@ def test_policyengine_coverage_classifies_colorado_cdcc_outputs(tmp_path):
         for name in section_119_names
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-119.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-119.yaml",
         f"""format: rulespec/v1
 rules:
 {section_119_rules}
@@ -10864,7 +11090,7 @@ rules:
         f"    us-co:statutes/39/39-22-119#{name}: 1" for name in section_119_names
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-119.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-119.test.yaml",
         f"""- name: colorado cdcc outputs
   period:
     period_kind: tax_year
@@ -10897,7 +11123,7 @@ rules:
         for name in (section_1195_comparable_parameters + section_1195_remaining_names)
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-119.5.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-119.5.yaml",
         f"""format: rulespec/v1
 rules:
 {section_1195_parameter_rules}
@@ -10905,7 +11131,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-119.5.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-119.5.test.yaml",
         f"""- name: colorado low-income cdcc outputs
   period:
     period_kind: tax_year
@@ -10917,7 +11143,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == (
         len(section_119_names)
@@ -10998,14 +11224,14 @@ def test_policyengine_coverage_classifies_colorado_eitc_outputs(tmp_path):
         f"    us-co:statutes/39/39-22-123.5#{name}: 1" for name in output_names
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-123.5.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-123.5.yaml",
         f"""format: rulespec/v1
 rules:
 {rules}
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "statutes/39/39-22-123.5.test.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "statutes/39/39-22-123.5.test.yaml",
         f"""- name: colorado eitc outputs
   period:
     period_kind: tax_year
@@ -11017,7 +11243,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == len(output_names)
     assert report["status_counts"] == {"known_not_comparable": len(output_names)}
@@ -11048,7 +11274,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3102a_collection_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3102/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3102/a.yaml",
         """format: rulespec/v1
 rules:
   - name: paragraph_7C_or_10_cash_remuneration_deduction_threshold
@@ -11074,7 +11300,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -11087,7 +11313,7 @@ def test_policyengine_coverage_classifies_3102b_collection_liability_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3102/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3102/b.yaml",
         """format: rulespec/v1
 rules:
   - name: employer_liable_for_payment_of_deducted_tax
@@ -11103,7 +11329,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -11114,7 +11340,7 @@ rules:
 
 def test_policyengine_coverage_maps_3306_b_1_futa_wage_base(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/1.yaml",
         """format: rulespec/v1
 rules:
   - name: annual_remuneration_wage_base_limit
@@ -11135,7 +11361,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -11168,7 +11394,7 @@ def test_policyengine_coverage_classifies_3306_b_2_employer_plan_payment_exclusi
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/2.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/2.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11198,7 +11424,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -11216,7 +11442,7 @@ def test_policyengine_coverage_classifies_3306_b_4_post_work_sickness_exclusion(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/4.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/4.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11246,7 +11472,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11268,7 +11494,7 @@ def test_policyengine_coverage_classifies_3306_b_5_qualified_plan_exclusion(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/5.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/5.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11303,7 +11529,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11328,7 +11554,7 @@ def test_policyengine_coverage_classifies_3306_b_6_state_unemployment_exclusion(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/6.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/6.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11370,7 +11596,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11395,7 +11621,7 @@ def test_policyengine_coverage_classifies_3306_b_7_noncash_nonbusiness_exclusion
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/7.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/7.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11420,7 +11646,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -11438,7 +11664,7 @@ def test_policyengine_coverage_classifies_3306_b_9_section_217_exclusion(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/9.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/9.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11475,7 +11701,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11501,7 +11727,7 @@ def test_policyengine_coverage_classifies_3306_b_10_death_disability_exclusion(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/10.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/10.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11531,7 +11757,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -11549,7 +11775,7 @@ def test_policyengine_coverage_classifies_3306_b_11_noncash_agricultural_exclusi
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/11.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/11.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11573,7 +11799,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -11591,7 +11817,7 @@ def test_policyengine_coverage_classifies_3306_b_13_income_exclusion_benefits(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/13.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/13.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11624,7 +11850,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11650,7 +11876,7 @@ def test_policyengine_coverage_classifies_3306_b_14_meals_lodging_exclusion(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/14.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/14.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11681,7 +11907,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11707,7 +11933,7 @@ def test_policyengine_coverage_classifies_3306_b_15_survivor_estate_payment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/15.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/15.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11734,7 +11960,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -11752,7 +11978,7 @@ def test_policyengine_coverage_classifies_3306_b_16_income_exclusion_benefits(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/16.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/16.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11785,7 +12011,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11811,7 +12037,7 @@ def test_policyengine_coverage_classifies_3306_b_17_section_106_b_payments(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/17.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/17.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11842,7 +12068,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11868,7 +12094,7 @@ def test_policyengine_coverage_classifies_3306_b_18_section_106_d_payments(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/18.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/18.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11899,7 +12125,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11925,7 +12151,7 @@ def test_policyengine_coverage_classifies_3306_b_19_stock_remuneration(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/19.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/19.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -11962,7 +12188,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -11988,7 +12214,7 @@ def test_policyengine_coverage_classifies_3306_b_20_third_party_employer_treatme
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/b/20.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/b/20.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12010,7 +12236,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12025,7 +12251,7 @@ def test_policyengine_coverage_classifies_3306_c_1_agricultural_labor_employment
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/1.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12097,7 +12323,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 7}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12110,7 +12336,7 @@ def test_policyengine_coverage_classifies_3306_c_2_domestic_service_employment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/2.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/2.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12147,7 +12373,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12160,7 +12386,7 @@ def test_policyengine_coverage_classifies_3306_c_3_nonbusiness_service_employmen
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/3.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/3.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12225,7 +12451,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 6}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12238,7 +12464,7 @@ def test_policyengine_coverage_classifies_3306_c_4_vessel_aircraft_employment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/4.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/4.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12260,7 +12486,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12272,7 +12498,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_c_5_family_employment(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/5.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/5.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12316,7 +12542,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12329,7 +12555,7 @@ def test_policyengine_coverage_classifies_3306_c_6_federal_government_employment
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/6.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/6.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12363,7 +12589,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12376,7 +12602,7 @@ def test_policyengine_coverage_classifies_3306_c_7_state_tribal_employment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/7.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/7.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12429,7 +12655,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12442,7 +12668,7 @@ def test_policyengine_coverage_classifies_3306_c_8_exempt_organization_employmen
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/8.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/8.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12463,7 +12689,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12475,7 +12701,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_c_9_railroad_employment(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/9.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/9.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12496,7 +12722,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12510,7 +12736,7 @@ def test_policyengine_coverage_classifies_3306_c_10_educational_health_and_exemp
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/10.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/10.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12600,7 +12826,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 10}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12613,7 +12839,7 @@ def test_policyengine_coverage_classifies_3306_c_11_foreign_government_employmen
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/11.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/11.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12635,7 +12861,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12649,7 +12875,7 @@ def test_policyengine_coverage_classifies_3306_c_12_foreign_government_instrumen
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/12.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/12.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12671,7 +12897,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12685,7 +12911,7 @@ def test_policyengine_coverage_classifies_3306_c_13_health_training_employment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/13.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/13.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12720,7 +12946,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12733,7 +12959,7 @@ def test_policyengine_coverage_classifies_3306_c_14_insurance_commission_employm
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/14.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/14.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12752,7 +12978,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12766,7 +12992,7 @@ def test_policyengine_coverage_classifies_3306_c_15_newspaper_service_employment
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/15.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/15.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12801,7 +13027,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12814,7 +13040,7 @@ def test_policyengine_coverage_classifies_3306_c_16_international_organization_e
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/16.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/16.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12833,7 +13059,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12847,7 +13073,7 @@ def test_policyengine_coverage_classifies_3306_c_17_aquatic_life_employment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/17.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/17.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12888,7 +13114,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -12901,7 +13127,7 @@ def test_policyengine_coverage_classifies_3306_c_18_fishing_boat_employment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/18.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/18.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12920,7 +13146,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12934,7 +13160,7 @@ def test_policyengine_coverage_classifies_3306_c_19_nonresident_nonimmigrant_emp
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/19.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/19.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -12953,7 +13179,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -12967,7 +13193,7 @@ def test_policyengine_coverage_classifies_3306_c_20_organized_camp_employment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/c/20.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/c/20.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13036,7 +13262,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 8}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13047,7 +13273,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_a_employer_definition(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/a.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13094,7 +13320,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13105,7 +13331,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_d_pay_period_deeming(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/d.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/d.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13140,7 +13366,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13151,7 +13377,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_f_unemployment_fund(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/f.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/f.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13170,7 +13396,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -13183,7 +13409,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_g_contributions(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/g.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/g.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13204,7 +13430,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -13215,7 +13441,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_h_compensation(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/h.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/h.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13234,7 +13460,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -13247,7 +13473,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_i_employee_definition(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/i.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/i.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13266,7 +13492,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -13279,7 +13505,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_j_definitions(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/j.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/j.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13306,7 +13532,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13317,7 +13543,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3306_k_agricultural_labor(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3306/k.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3306/k.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13344,7 +13570,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13357,7 +13583,7 @@ def test_policyengine_coverage_classifies_3307_deduction_payment_treatment(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3307.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3307.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13386,7 +13612,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13399,7 +13625,7 @@ def test_policyengine_coverage_classifies_3308_instrumentality_exemption(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3308.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3308.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13429,7 +13655,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13440,7 +13666,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3311_short_title_output(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3311.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3311.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13457,7 +13683,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -13471,7 +13697,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3310_review_deadlines(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3310.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3310.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13500,7 +13726,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13510,7 +13736,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3303_state_reduced_rate_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3303.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3303.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13539,7 +13765,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13549,7 +13775,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3304_state_law_approval_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3304.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3304.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13566,7 +13792,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -13578,7 +13804,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3305_state_law_compliance_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3305.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3305.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13607,7 +13833,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13617,7 +13843,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3309_coverage_predicate_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3309.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3309.yaml",
         """format: rulespec/v1
 module:
   proof_validation:
@@ -13658,7 +13884,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13668,7 +13894,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3301_gross_futa_tax(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3301.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3301.yaml",
         """format: rulespec/v1
 rules:
   - name: federal_unemployment_excise_tax_rate
@@ -13684,7 +13910,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -13701,7 +13927,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3302_a_late_credit_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/a.yaml",
         """format: rulespec/v1
 rules:
   - name: late_paid_contributions_credit_percentage
@@ -13727,7 +13953,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -13759,7 +13985,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3302_b_additional_credit_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/b.yaml",
         """format: rulespec/v1
 rules:
   - name: additional_credit_comparison_rate_cap
@@ -13780,7 +14006,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -13806,7 +14032,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3302_c_1_credit_limit_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/c/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/c/1.yaml",
         """format: rulespec/v1
 rules:
   - name: total_credits_allowed_percentage_limit
@@ -13827,7 +14053,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -13855,7 +14081,7 @@ def test_policyengine_coverage_classifies_3302_e_successor_credit_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/e.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/e.yaml",
         """format: rulespec/v1
 rules:
   - name: successor_employer_credit_applies
@@ -13872,7 +14098,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -13886,7 +14112,7 @@ def test_policyengine_coverage_classifies_3302_f_credit_reduction_limitation_out
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/f.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/f.yaml",
         """format: rulespec/v1
 rules:
   - name: credit_reduction_limitation_wage_rate
@@ -13907,7 +14133,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -13919,7 +14145,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3202_collection_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3202.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3202.yaml",
         """format: rulespec/v1
 rules:
   - name: monthly_tip_collection_deadline_day
@@ -13940,7 +14166,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -13950,7 +14176,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3201_employee_rrta_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3201.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3201.yaml",
         """format: rulespec/v1
 rules:
   - name: tier_1_tax_tier_number
@@ -13976,7 +14202,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -13985,7 +14211,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3212_compensation_output(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3212.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3212.yaml",
         """format: rulespec/v1
 rules:
   - name: employee_representative_compensation_for_tax_ascertainment
@@ -13996,7 +14222,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -14009,7 +14235,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3221_employer_rrta_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3221.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3221.yaml",
         """format: rulespec/v1
 rules:
   - name: tier_1_applicable_rate
@@ -14045,7 +14271,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 6}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14056,7 +14282,7 @@ def test_policyengine_coverage_classifies_3241_a_applicable_percentage_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3241/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3241/a.yaml",
         """format: rulespec/v1
 rules:
   - name: applicable_percentage_for_section_3201_b_for_purposes_of_subsection_a
@@ -14072,7 +14298,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14083,7 +14309,7 @@ def test_policyengine_coverage_classifies_3241_c_account_ratio_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3241/c.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3241/c.yaml",
         """format: rulespec/v1
 rules:
   - name: most_recent_fiscal_year_count_for_average_account_benefits_ratio
@@ -14114,7 +14340,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14123,7 +14349,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3231_tip_timing_output(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231.yaml",
         """format: rulespec/v1
 rules:
   - name: tips_compensation_deemed_paid_on_day_for_section_3201_taxes
@@ -14134,7 +14360,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -14147,7 +14373,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3231_a_employer_definition_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/a.yaml",
         """format: rulespec/v1
 rules:
   - name: carrier_or_controlled_service_company_included
@@ -14188,7 +14414,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 7}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14197,7 +14423,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3231_b_employee_definition_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/b.yaml",
         """format: rulespec/v1
 rules:
   - name: coal_physical_operations_exclusion_applies
@@ -14213,7 +14439,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14222,7 +14448,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3401_withholding_definitions(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3401/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3401/b.yaml",
         """format: rulespec/v1
 rules:
   - name: payroll_period
@@ -14238,7 +14464,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3401/c.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3401/c.yaml",
         """format: rulespec/v1
 rules:
   - name: employee
@@ -14249,7 +14475,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3401/d.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3401/d.yaml",
         """format: rulespec/v1
 rules:
   - name: employer_for_subsection_a
@@ -14265,7 +14491,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3401/f.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3401/f.yaml",
         """format: rulespec/v1
 rules:
   - name: tips_included_in_wages_for_subsection_a
@@ -14287,7 +14513,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3401/h.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3401/h.yaml",
         """format: rulespec/v1
 rules:
   - name: active_duty_period_minimum_days_for_differential_wage_payment
@@ -14309,7 +14535,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 11}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14320,7 +14546,7 @@ def test_policyengine_coverage_classifies_3402a_withholding_table_wages(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/a.yaml",
         """format: rulespec/v1
 rules:
   - name: amount_of_wages_for_withholding_tables
@@ -14331,7 +14557,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14342,7 +14568,7 @@ def test_policyengine_coverage_classifies_3402b_withholding_period_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/b.yaml",
         """format: rulespec/v1
 rules:
   - name: miscellaneous_allowance_period_days_for_nonpayroll_period_wages
@@ -14368,7 +14594,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14379,7 +14605,7 @@ def test_policyengine_coverage_classifies_3402c_wage_bracket_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/c.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/c.yaml",
         """format: rulespec/v1
 rules:
   - name: wage_bracket_miscellaneous_period_days_for_nonpayroll_period_wages
@@ -14405,7 +14631,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14416,7 +14642,7 @@ def test_policyengine_coverage_classifies_3402d_withholding_liability_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/d.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/d.yaml",
         """format: rulespec/v1
 rules:
   - name: required_withholding_tax_not_collected_from_employer
@@ -14432,7 +14658,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14443,7 +14669,7 @@ def test_policyengine_coverage_classifies_3402e_wage_deeming_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/e.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/e.yaml",
         """format: rulespec/v1
 rules:
   - name: maximum_consecutive_days_for_payroll_period_deeming_rule
@@ -14474,7 +14700,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14485,7 +14711,7 @@ def test_policyengine_coverage_classifies_3402f_withholding_certificate_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/f.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/f.yaml",
         """format: rulespec/v1
 rules:
   - name: change_status_new_certificate_due_days
@@ -14521,7 +14747,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 6}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14532,7 +14758,7 @@ def test_policyengine_coverage_classifies_3402g_special_wage_withholding_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/g.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/g.yaml",
         """format: rulespec/v1
 rules:
   - name: special_wage_payment_regulatory_withholding_rule_applies
@@ -14543,7 +14769,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14554,7 +14780,7 @@ def test_policyengine_coverage_classifies_3402h_alternative_withholding_methods(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/h.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/h.yaml",
         """format: rulespec/v1
 rules:
   - name: average_wage_method_quarterly_adjustment_amount
@@ -14585,7 +14811,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14596,7 +14822,7 @@ def test_policyengine_coverage_classifies_3402i_requested_increased_withholding(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/i.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/i.yaml",
         """format: rulespec/v1
 rules:
   - name: employee_requested_increased_withholding_regulatory_authority
@@ -14612,7 +14838,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14623,7 +14849,7 @@ def test_policyengine_coverage_classifies_3402j_retail_commission_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/j.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/j.yaml",
         """format: rulespec/v1
 rules:
   - name: retail_commission_noncash_remuneration_withholding_not_required
@@ -14634,7 +14860,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14643,7 +14869,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3402k_tip_withholding_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/k.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/k.yaml",
         """format: rulespec/v1
 rules:
   - name: monthly_tip_statement_threshold_for_paragraph_16_b_permission
@@ -14669,7 +14895,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14678,7 +14904,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3402l_marital_status_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/l.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/l.yaml",
         """format: rulespec/v1
 rules:
   - name: employee_considered_not_married_for_married_certificate_disclosure
@@ -14699,7 +14925,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14710,7 +14936,7 @@ def test_policyengine_coverage_classifies_3402m_withholding_allowance_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/m.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/m.yaml",
         """format: rulespec/v1
 rules:
   - name: employee_entitled_to_additional_withholding_adjustment
@@ -14721,7 +14947,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14732,7 +14958,7 @@ def test_policyengine_coverage_classifies_3402n_no_liability_certificate_outputs
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/n.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/n.yaml",
         """format: rulespec/v1
 rules:
   - name: employer_withholding_not_required_for_no_liability_certificate_payment
@@ -14743,7 +14969,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14754,7 +14980,7 @@ def test_policyengine_coverage_classifies_3402o_nonwage_withholding_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/o.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/o.yaml",
         """format: rulespec/v1
 rules:
   - name: supplemental_unemployment_compensation_benefit
@@ -14770,7 +14996,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14781,7 +15007,7 @@ def test_policyengine_coverage_classifies_3402p_voluntary_withholding_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/p.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/p.yaml",
         """format: rulespec/v1
 rules:
   - name: unemployment_compensation_voluntary_withholding_rate
@@ -14797,7 +15023,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14808,7 +15034,7 @@ def test_policyengine_coverage_classifies_3402q_gambling_withholding_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/q.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/q.yaml",
         """format: rulespec/v1
 rules:
   - name: withholding_winnings_proceeds_threshold
@@ -14829,7 +15055,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14840,7 +15066,7 @@ def test_policyengine_coverage_classifies_3402r_indian_casino_profit_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/r.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/r.yaml",
         """format: rulespec/v1
 rules:
   - name: indian_casino_profit_payment_withholding_predicate
@@ -14856,7 +15082,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14867,7 +15093,7 @@ def test_policyengine_coverage_classifies_3402s_vehicle_fringe_benefit_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/s.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/s.yaml",
         """format: rulespec/v1
 rules:
   - name: vehicle_fringe_benefit
@@ -14888,7 +15114,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14899,7 +15125,7 @@ def test_policyengine_coverage_classifies_3402t_qualified_stock_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3402/t.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3402/t.yaml",
         """format: rulespec/v1
 rules:
   - name: qualified_stock_with_section_83_i_election
@@ -14920,7 +15146,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14929,7 +15155,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3403_withholding_liability(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3403.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3403.yaml",
         """format: rulespec/v1
 rules:
   - name: employer_liability_for_chapter_withholding_tax_payment
@@ -14945,7 +15171,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -14956,7 +15182,7 @@ def test_policyengine_coverage_classifies_3404_government_return_maker(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3404.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3404.yaml",
         """format: rulespec/v1
 rules:
   - name: government_employer_withholding_return_maker_authorized
@@ -14967,7 +15193,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     [item] = report["items"]
@@ -14980,7 +15206,7 @@ def test_policyengine_coverage_classifies_3405b_nonperiodic_distribution_withhol
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3405/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3405/b.yaml",
         """format: rulespec/v1
 rules:
   - name: nonperiodic_distribution_withholding_rate
@@ -15006,7 +15232,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15021,7 +15247,7 @@ def test_policyengine_coverage_classifies_3405_child_withholding_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3405/c.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3405/c.yaml",
         """format: rulespec/v1
 rules:
   - name: eligible_rollover_distribution_withholding_rate
@@ -15032,7 +15258,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     [item] = report["items"]
@@ -15045,7 +15271,7 @@ def test_policyengine_coverage_classifies_3406_child_backup_withholding_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3406/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3406/a.yaml",
         """format: rulespec/v1
 rules:
   - name: backup_withholding_requirement_applies
@@ -15061,7 +15287,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15076,7 +15302,7 @@ def test_policyengine_coverage_classifies_3127_religious_exemption_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3127.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3127.yaml",
         """format: rulespec/v1
 rules:
   - name: employer_application_meets_statutory_approval_prerequisites
@@ -15117,7 +15343,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 7}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15128,7 +15354,7 @@ def test_policyengine_coverage_classifies_3504_payroll_agent_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3504.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3504.yaml",
         """format: rulespec/v1
 rules:
   - name: secretary_may_designate_wage_control_person_to_perform_employer_acts
@@ -15149,7 +15375,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15160,7 +15386,7 @@ def test_policyengine_coverage_classifies_3502_deduction_disallowance_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3502.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3502.yaml",
         """format: rulespec/v1
 rules:
   - name: chapter_21_and_22_employment_taxes_allowed_as_subtitle_a_deduction
@@ -15181,7 +15407,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15192,7 +15418,7 @@ def test_policyengine_coverage_classifies_3503_cross_chapter_refund_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3503.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3503.yaml",
         """format: rulespec/v1
 rules:
   - name: chapter_21_or_22_tax_paid_for_period_without_liability
@@ -15213,7 +15439,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15224,7 +15450,7 @@ def test_policyengine_coverage_classifies_3505_third_party_liability_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3505.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3505.yaml",
         """format: rulespec/v1
 rules:
   - name: supplied_funds_liability_limit_rate
@@ -15270,7 +15496,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 8}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15284,7 +15510,7 @@ def test_policyengine_coverage_classifies_3506_sitter_placement_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3506.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3506.yaml",
         """format: rulespec/v1
 rules:
   - name: sitters
@@ -15305,7 +15531,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15320,7 +15546,7 @@ def test_policyengine_coverage_classifies_3508_worker_classification_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3508.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3508.yaml",
         """format: rulespec/v1
 rules:
   - name: qualified_real_estate_agent
@@ -15346,7 +15572,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15361,7 +15587,7 @@ def test_policyengine_coverage_classifies_3131_paid_leave_credit_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3131/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3131/a.yaml",
         """format: rulespec/v1
 rules:
   - name: qualified_sick_leave_wages_credit_rate
@@ -15377,7 +15603,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15392,7 +15618,7 @@ def test_policyengine_coverage_classifies_3509_misclassification_liability_outpu
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3509.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3509.yaml",
         """format: rulespec/v1
 rules:
   - name: default_withholding_liability_rate
@@ -15443,7 +15669,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 9}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15456,7 +15682,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3510_domestic_service_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3510.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3510.yaml",
         """format: rulespec/v1
 rules:
   - name: amount_withheld_from_domestic_service_remuneration_under_section_3402_p_agreement
@@ -15467,7 +15693,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15480,7 +15706,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3511_cpeo_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3511.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3511.yaml",
         """format: rulespec/v1
 rules:
   - name: related_party_nonapplication_applies
@@ -15531,7 +15757,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 9}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15542,7 +15768,7 @@ def test_policyengine_coverage_classifies_3231_c_employee_representative_outputs
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/c.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/c.yaml",
         """format: rulespec/v1
 rules:
   - name: regularly_assigned_or_employed_individual_qualifies
@@ -15563,7 +15789,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15572,7 +15798,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3231_d_service_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/d.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/d.yaml",
         """format: rulespec/v1
 rules:
   - name: basic_service_conditions_satisfied
@@ -15618,7 +15844,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 8}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15627,7 +15853,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3231_e_compensation_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/e.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/e.yaml",
         """format: rulespec/v1
 rules:
   - name: monthly_cash_tip_inclusion_threshold
@@ -15678,7 +15904,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 9}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15689,7 +15915,7 @@ def test_policyengine_coverage_classifies_3231_e_2_contribution_base_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/e/2.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/e/2.yaml",
         """format: rulespec/v1
 rules:
   - name: successor_employer_compensation_base_continuity_applies
@@ -15720,7 +15946,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15729,7 +15955,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3231_f_company_output(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/f.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/f.yaml",
         """format: rulespec/v1
 rules:
   - name: company
@@ -15740,7 +15966,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -15751,7 +15977,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3231_g_carrier_output(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3231/g.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3231/g.yaml",
         """format: rulespec/v1
 rules:
   - name: carrier
@@ -15762,7 +15988,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -15773,7 +15999,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3232_court_jurisdiction_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3232.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3232.yaml",
         """format: rulespec/v1
 rules:
   - name: district_court_jurisdiction_to_compel_employee_or_other_person
@@ -15794,7 +16020,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     assert {item["status"] for item in report["items"]} == {"known_not_comparable"}
@@ -15803,7 +16029,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3233_short_title_output(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3233.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3233.yaml",
         """format: rulespec/v1
 rules:
   - name: chapter_short_title
@@ -15815,7 +16041,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -15829,7 +16055,7 @@ def test_policyengine_coverage_classifies_3302_c_2_a_advance_reduction_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/c/2/A.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/c/2/A.yaml",
         """format: rulespec/v1
 rules:
   - name: second_consecutive_january1_advances_balance_reduction_rate
@@ -15855,7 +16081,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -15889,7 +16115,7 @@ def test_policyengine_coverage_classifies_3302_c_2_b_third_fourth_year_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/c/2/B.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/c/2/B.yaml",
         """format: rulespec/v1
 rules:
   - name: federal_unemployment_credit_reduction_benchmark_rate
@@ -15920,7 +16146,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 5}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -15954,7 +16180,7 @@ def test_policyengine_coverage_classifies_3302_c_2_c_fifth_succeeding_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/c/2/C.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/c/2/C.yaml",
         """format: rulespec/v1
 rules:
   - name: fifth_or_succeeding_benefit_cost_floor_rate
@@ -15995,7 +16221,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 7}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -16033,7 +16259,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3302_c_3_trade_act_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/c/3.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/c/3.yaml",
         """format: rulespec/v1
 rules:
   - name: trade_act_agreement_credit_reduction_rate
@@ -16059,7 +16285,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 4}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -16093,7 +16319,7 @@ def test_policyengine_coverage_classifies_3302_d_1_subsection_c_tax_outputs(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/d/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/d/1.yaml",
         """format: rulespec/v1
 rules:
   - name: subsection_c_tax_computation_rate
@@ -16109,7 +16335,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -16131,7 +16357,7 @@ def test_policyengine_coverage_classifies_3302_d_2_state_attribution_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/d/2.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/d/2.yaml",
         """format: rulespec/v1
 rules:
   - name: wages_attributable_to_particular_state_for_subsection_c
@@ -16142,7 +16368,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16158,7 +16384,7 @@ def test_policyengine_coverage_classifies_3302_d_4_state_rate_threshold_output(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/d/4.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/d/4.yaml",
         """format: rulespec/v1
 rules:
   - name: average_employer_contribution_rate_employee_payment_adjustment_threshold
@@ -16169,7 +16395,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16188,7 +16414,7 @@ def test_policyengine_coverage_classifies_3302_d_5_benefit_cost_rate_scalars(
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/d/5.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/d/5.yaml",
         """format: rulespec/v1
 rules:
   - name: benefit_cost_rate_compensation_lookback_years
@@ -16204,7 +16430,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -16224,7 +16450,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3302_d_6_rounding_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3302/d/6.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3302/d/6.yaml",
         """format: rulespec/v1
 rules:
   - name: subparagraph_b_or_c_percentage_rounding_multiple
@@ -16240,7 +16466,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     items_by_id = {item["legal_id"]: item for item in report["items"]}
@@ -16260,7 +16486,7 @@ rules:
 
 def test_policyengine_coverage_classifies_legacy_tax_procedural_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/68/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/68/b.yaml",
         """format: rulespec/v1
 rules:
   - name: section_68_applied_after_other_itemized_deduction_limitations
@@ -16271,7 +16497,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/443/a/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/443/a/1.yaml",
         """format: rulespec/v1
 rules:
   - name: annual_accounting_period_change_with_secretary_approval
@@ -16287,7 +16513,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 3}
     statuses_by_id = {item["legal_id"]: item["status"] for item in report["items"]}
@@ -16313,7 +16539,7 @@ rules:
 
 def test_policyengine_coverage_maps_section_1401_rate_leaf_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/a/rate.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/a/rate.yaml",
         """format: rulespec/v1
 rules:
   - name: old_age_survivors_and_disability_insurance_tax_rate
@@ -16324,14 +16550,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/a/rate.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/a/rate.test.yaml",
         """- name: section_1401_a_rate
   output:
     us:statutes/26/1401/a/rate#old_age_survivors_and_disability_insurance_tax_rate: 0.124
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/b/1/rate.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/b/1/rate.yaml",
         """format: rulespec/v1
 rules:
   - name: self_employment_income_tax_rate
@@ -16342,14 +16568,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/b/1/rate.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/b/1/rate.test.yaml",
         """- name: section_1401_b_1_rate
   output:
     us:statutes/26/1401/b/1/rate#self_employment_income_tax_rate: 0.029
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 2
     assert report["status_counts"] == {"comparable": 2}
@@ -16377,7 +16603,7 @@ rules:
 
 def test_policyengine_coverage_maps_section_1401_child_tax_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/a.yaml",
         """format: rulespec/v1
 rules:
   - name: old_age_survivors_and_disability_insurance_tax
@@ -16391,14 +16617,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/a.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/a.test.yaml",
         """- name: section_1401_a_tax
   output:
     us:statutes/26/1401/a#old_age_survivors_and_disability_insurance_tax: 0
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/b/1.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/b/1.yaml",
         """format: rulespec/v1
 rules:
   - name: self_employment_income_tax
@@ -16412,14 +16638,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1401/b/1.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1401/b/1.test.yaml",
         """- name: section_1401_b_1_tax
   output:
     us:statutes/26/1401/b/1#self_employment_income_tax: 0
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 2
     assert report["status_counts"] == {"comparable": 2}
@@ -16441,7 +16667,7 @@ def test_policyengine_coverage_maps_section_32_earned_income_to_adjusted_earning
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/32/c/2.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/32/c/2.yaml",
         """format: rulespec/v1
 rules:
   - name: earned_income
@@ -16453,7 +16679,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     items_by_id = {item["legal_id"]: item for item in report["items"]}
     item = items_by_id["us:statutes/26/32/c/2#earned_income"]
@@ -16465,7 +16691,7 @@ def test_policyengine_coverage_classifies_section_1402_b_self_employment_outputs
     tmp_path,
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1402/b.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1402/b.yaml",
         """format: rulespec/v1
 rules:
   - name: self_employment_income_inclusion_threshold
@@ -16500,7 +16726,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/1402/b.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/1402/b.test.yaml",
         """- name: section_1402_b
   output:
     us:statutes/26/1402/b#self_employment_income_inclusion_threshold: 400
@@ -16511,7 +16737,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -16552,6 +16778,7 @@ def test_policyengine_coverage_treats_ssa_policy_parameters_as_tax(tmp_path):
     _write_rulespec_file(
         tmp_path
         / "rulespec-us"
+        / "us"
         / "policies/ssa/contribution-and-benefit-base/2024.yaml",
         """format: rulespec/v1
 rules:
@@ -16565,6 +16792,7 @@ rules:
     _write_rulespec_file(
         tmp_path
         / "rulespec-us"
+        / "us"
         / "policies/ssa/contribution-and-benefit-base/2026.yaml",
         """format: rulespec/v1
 rules:
@@ -16581,7 +16809,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["total_outputs"] == 3
     statuses_by_id = {item["legal_id"]: item["status"] for item in report["items"]}
@@ -16669,7 +16897,7 @@ def test_policyengine_coverage_classifies_3121_wage_exclusions(
     tmp_path, subsection, rule_name
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / f"statutes/26/3121/a/{subsection}.yaml",
+        tmp_path / "rulespec-us" / "us" / f"statutes/26/3121/a/{subsection}.yaml",
         f"""format: rulespec/v1
 rules:
   - name: {rule_name}
@@ -16680,7 +16908,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16812,7 +17040,7 @@ def test_policyengine_coverage_classifies_3121_employment_exclusions(
     tmp_path, path, legal_id, rule_name
 ):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / path,
+        tmp_path / "rulespec-us" / "us" / path,
         f"""format: rulespec/v1
 rules:
   - name: {rule_name}
@@ -16823,7 +17051,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16833,7 +17061,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3121_c_pay_period_parameter(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3121/c.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3121/c.yaml",
         """format: rulespec/v1
 rules:
   - name: pay_period_max_consecutive_days
@@ -16844,7 +17072,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16854,7 +17082,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3121_a_7_threshold_parameter(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3121/a/7.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3121/a/7.yaml",
         """format: rulespec/v1
 rules:
   - name: cash_nontrade_service_annual_remuneration_threshold
@@ -16865,7 +17093,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16878,7 +17106,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3121_a_8_threshold_parameter(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3121/a/8.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3121/a/8.yaml",
         """format: rulespec/v1
 rules:
   - name: agricultural_labor_cash_remuneration_employee_threshold
@@ -16889,7 +17117,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16902,7 +17130,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3121_a_10_threshold_parameter(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3121/a/10.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3121/a/10.yaml",
         """format: rulespec/v1
 rules:
   - name: home_worker_cash_remuneration_annual_threshold
@@ -16913,7 +17141,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16926,7 +17154,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3121_a_5_subparts(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3121/a/5/D.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3121/a/5/D.yaml",
         """format: rulespec/v1
 rules:
   - name: section_403_b_annuity_contract_payment_excluded_from_wages
@@ -16942,7 +17170,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16955,7 +17183,7 @@ rules:
 
 def test_policyengine_coverage_classifies_408_p_subparts(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/408/p/2/A/i.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/408/p/2/A/i.yaml",
         """format: rulespec/v1
 rules:
   - name: employee_election_to_have_employer_make_payments_available
@@ -16969,7 +17197,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -16982,7 +17210,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3121_a_12_tip_threshold_parameter(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3121/a/12.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3121/a/12.yaml",
         """format: rulespec/v1
 rules:
   - name: monthly_cash_tip_threshold
@@ -16993,7 +17221,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -17003,7 +17231,7 @@ rules:
 
 def test_policyengine_coverage_classifies_3121_a_16_threshold_parameter(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3121/a/16.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3121/a/16.yaml",
         """format: rulespec/v1
 rules:
   - name: exempt_organization_remuneration_annual_threshold
@@ -17014,7 +17242,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"known_not_comparable": 1}
     item = report["items"][0]
@@ -17027,7 +17255,7 @@ rules:
 
 def test_policyengine_coverage_tracks_comparable_test_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3101/a.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3101/a.yaml",
         """format: rulespec/v1
 rules:
   - name: oasdi_wage_tax_rate
@@ -17043,7 +17271,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/3101/a.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/3101/a.test.yaml",
         """- name: oasdi
   input:
     us:statutes/26/3101/a#input.wages: 100000
@@ -17053,7 +17281,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     assert report["status_counts"] == {"comparable": 2}
     assert report["untested_comparable"] == 0
@@ -17064,7 +17292,7 @@ rules:
 
 def test_policyengine_coverage_tracks_mapping_alias_test_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/32.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/32.yaml",
         """format: rulespec/v1
 rules:
   - name: eitc_phase_in_rates
@@ -17083,14 +17311,14 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/26/32.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/26/32.test.yaml",
         """- name: selected_rate
   output:
     us:statutes/26/32#eitc_phase_in_rate: 0.34
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path, program="tax")
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path), program="tax")
 
     items_by_id = {item["legal_id"]: item for item in report["items"]}
     table_item = items_by_id["us:statutes/26/32#eitc_phase_in_rates"]
@@ -17102,7 +17330,7 @@ rules:
 
 def test_policyengine_candidates_prioritize_exact_unmapped_outputs(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/7/9999.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/7/9999.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_new_exact_variable
@@ -17118,7 +17346,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/7/9999.test.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/7/9999.test.yaml",
         """- name: base
   output:
     us:statutes/7/9999#snap_new_exact_variable: 1
@@ -17127,7 +17355,7 @@ rules:
     )
 
     report = build_policyengine_candidate_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="snap",
         policyengine_variables={"snap_new_exact_variable"},
     )
@@ -17156,7 +17384,7 @@ class snap_exact_variable_from_source_scan(Variable):
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us" / "statutes/7/9998.yaml",
+        tmp_path / "rulespec-us" / "us" / "statutes/7/9998.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_exact_variable_from_source_scan
@@ -17171,7 +17399,9 @@ rules:
         str(tmp_path / "policyengine-us"),
     )
 
-    report = build_policyengine_candidate_report(tmp_path, program="snap")
+    report = build_policyengine_candidate_report(
+        _coverage_root(tmp_path), program="snap"
+    )
 
     assert report["policyengine_variables_available"] is True
     assert report["category_counts"]["exact_variable_unmapped"] == 1
@@ -17182,7 +17412,7 @@ rules:
 
 def test_policyengine_candidates_report_known_adjacent_targets(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/10-ccr-2506-1/4.408.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "regulations/10-ccr-2506-1/4.408.yaml",
         """format: rulespec/v1
 rules:
   - name: passes_resource_test
@@ -17193,7 +17423,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/10-ccr-2506-1/4.408.test.yaml",
+        tmp_path
+        / "rulespec-us"
+        / "us-co"
+        / "regulations/10-ccr-2506-1/4.408.test.yaml",
         """- name: resources
   output:
     us-co:regulations/10-ccr-2506-1/4.408#passes_resource_test: holds
@@ -17201,7 +17434,7 @@ rules:
     )
 
     report = build_policyengine_candidate_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="snap",
         policyengine_variables=set(),
     )
@@ -17214,7 +17447,7 @@ rules:
 
 def test_policyengine_candidates_honor_registry_priority_overrides(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/10-ccr-2506-1/4.407.31.yaml",
+        tmp_path / "rulespec-us" / "us-co" / "regulations/10-ccr-2506-1/4.407.31.yaml",
         """format: rulespec/v1
 rules:
   - name: snap_individual_utility_allowance
@@ -17225,7 +17458,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-us-co" / "regulations/10-ccr-2506-1/4.407.31.test.yaml",
+        tmp_path
+        / "rulespec-us"
+        / "us-co"
+        / "regulations/10-ccr-2506-1/4.407.31.test.yaml",
         """- name: phone_only
   output:
     us-co:regulations/10-ccr-2506-1/4.407.31#snap_individual_utility_allowance: 97
@@ -17233,7 +17469,7 @@ rules:
     )
 
     report = build_policyengine_candidate_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="snap",
         policyengine_variables={"snap_individual_utility_allowance"},
     )
@@ -17246,7 +17482,7 @@ rules:
 
 def test_universal_credit_parameter_alias_counts_branch_output_test(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2013/376/36.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2013/376/36.yaml",
         """format: rulespec/v1
 rules:
   - name: standard_allowance_single_under_25_amount
@@ -17258,7 +17494,7 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "regulations/uksi/2013/376/36.test.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "regulations/uksi/2013/376/36.test.yaml",
         """- name: branch_selected_standard_allowance
   period: 2026-04
   output:
@@ -17266,7 +17502,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     item = report["items"][0]
     assert item["legal_id"] == (
@@ -17279,7 +17515,7 @@ rules:
 
 def test_universal_credit_source_helper_prefix_is_classified(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "statutes/ukpga/2012/5/2.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "statutes/ukpga/2012/5/2.yaml",
         """format: rulespec/v1
 rules:
   - name: universal_credit_claim_may_be_made
@@ -17290,7 +17526,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     item = report["items"][0]
     assert item["legal_id"] == (
@@ -17318,14 +17554,14 @@ def test_universal_credit_program_wrapper_outputs_are_classified(tmp_path):
         "universal_credit_maximum_amount",
     ]
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "programs/uk/universal-credit/fy-2026-27.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "programs/universal-credit/fy-2026-27.yaml",
         "program: uk/universal-credit\n"
         "period: 2026-04\n"
         "outputs:\n" + "\n".join(f"  - {output}" for output in outputs) + "\n",
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="universal_credit",
     )
 
@@ -17371,7 +17607,7 @@ def test_universal_credit_program_wrapper_outputs_are_classified(tmp_path):
 
 def test_universal_credit_program_wrapper_counts_source_test_evidence(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "programs/uk/universal-credit/fy-2026-27.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "programs/universal-credit/fy-2026-27.yaml",
         "program: uk/universal-credit\n"
         "period: 2026-04\n"
         "outputs:\n"
@@ -17398,7 +17634,7 @@ rules:
     )
 
     report = build_policyengine_coverage_report(
-        tmp_path,
+        _coverage_root(tmp_path),
         program="universal_credit",
     )
 
@@ -17413,7 +17649,7 @@ rules:
 
 def test_council_tax_reduction_policy_surface_is_classified(tmp_path):
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/council-tax-reduction.yaml",
+        tmp_path / "rulespec-uk" / "uk" / "policies/govuk/council-tax-reduction.yaml",
         """format: rulespec/v1
 rules:
   - name: council_tax_reduction_annual_amount
@@ -17435,7 +17671,10 @@ rules:
 """,
     )
     _write_rulespec_file(
-        tmp_path / "rulespec-uk" / "policies/govuk/council-tax-reduction.test.yaml",
+        tmp_path
+        / "rulespec-uk"
+        / "uk"
+        / "policies/govuk/council-tax-reduction.test.yaml",
         """- name: council_tax_reduction_award
   period: 2026
   output:
@@ -17445,7 +17684,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["status_counts"] == {
         "comparable": 1,
@@ -17474,7 +17713,8 @@ rules:
 def test_kingston_council_tax_reduction_policy_surface_is_classified(tmp_path):
     _write_rulespec_file(
         tmp_path
-        / "rulespec-uk-kingston-upon-thames"
+        / "rulespec-uk"
+        / "uk-kingston-upon-thames"
         / "policies/kingston-upon-thames/council-tax-reduction.yaml",
         """format: rulespec/v1
 rules:
@@ -17491,7 +17731,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["status_counts"] == {"known_not_comparable": 2}
     assert {item["program"] for item in report["items"]} == {"council_tax_reduction"}
@@ -17502,6 +17742,7 @@ def test_universal_credit_housing_schedule_prefixes_are_classified(tmp_path):
     _write_rulespec_file(
         tmp_path
         / "rulespec-uk"
+        / "uk"
         / "regulations/uksi/2013/376/schedule/4/paragraph/22.yaml",
         """format: rulespec/v1
 rules:
@@ -17515,6 +17756,7 @@ rules:
     _write_rulespec_file(
         tmp_path
         / "rulespec-uk"
+        / "uk"
         / "regulations/uksi/2013/376/schedule/5/paragraph/9.yaml",
         """format: rulespec/v1
 rules:
@@ -17528,6 +17770,7 @@ rules:
     _write_rulespec_file(
         tmp_path
         / "rulespec-uk"
+        / "uk"
         / "regulations/uksi/2013/376/schedule/10/paragraph/1.yaml",
         """format: rulespec/v1
 rules:
@@ -17539,7 +17782,7 @@ rules:
 """,
     )
 
-    report = build_policyengine_coverage_report(tmp_path)
+    report = build_policyengine_coverage_report(_coverage_root(tmp_path))
 
     assert report["total_outputs"] == 3
     assert report["status_counts"] == {"known_not_comparable": 3}

@@ -243,8 +243,16 @@ def test_mixed_locale_case_set_is_rejected() -> None:
     from axiom_oracles.grids.extract import case_set_skeleton
 
     cases = [
-        Case("a", "2026", metadata={"locale": "BE", "scope": {"type": "country", "geoid": "BE"}}),
-        Case("b", "2026", metadata={"locale": "UK", "scope": {"type": "country", "geoid": "UK"}}),
+        Case(
+            "a",
+            "2026",
+            metadata={"locale": "BE", "scope": {"type": "country", "geoid": "BE"}},
+        ),
+        Case(
+            "b",
+            "2026",
+            metadata={"locale": "UK", "scope": {"type": "country", "geoid": "UK"}},
+        ),
     ]
     with pytest.raises(ValueError, match="mixes locales"):
         case_set_skeleton("mixed-locale", cases)
@@ -385,7 +393,9 @@ def test_boundary_generator_is_deterministic() -> None:
             "regeneration; run scripts/generate_boundary_cases.py"
         )
         # Determinism proper: a second independent render is byte-identical.
-        second = gen._dump(gen.build_suggestions(registry_root, (jurisdiction,))[jurisdiction])
+        second = gen._dump(
+            gen.build_suggestions(registry_root, (jurisdiction,))[jurisdiction]
+        )
         assert rendered == second
 
 
@@ -425,17 +435,31 @@ def _mapped_concept(name: str, engine: str, parameter: str, *, dtype="Money") ->
     }
 
 
-def test_uk_boundary_allowlist_surfaces_mapped_allowance_style_concepts(tmp_path) -> None:
+def test_uk_boundary_allowlist_surfaces_mapped_allowance_style_concepts(
+    tmp_path,
+) -> None:
     # #135: an "allowance"-style boundary the GLOBAL threshold regex does not
     # catch (no threshold/limit/bracket token) must be surfaced for UK once it
     # carries a parameter_value mapping. Proven against a synthetic registry so
     # the test does not depend on the live corpus mapping these yet.
     gen = _load_boundary_gen()
     for name, param in [
-        ("savings_allowance", "gov.hmrc.income_tax.allowances.personal_savings_allowance.basic"),
-        ("dividend_nil_rate_allowance", "gov.hmrc.income_tax.allowances.dividend_allowance"),
-        ("applicable_work_allowance_amount", "gov.dwp.universal_credit.means_test.work_allowance"),
-        ("prescribed_capital_limit_for_single_claimant", "gov.dwp.universal_credit.means_test.capital.limit"),
+        (
+            "savings_allowance",
+            "gov.hmrc.income_tax.allowances.personal_savings_allowance.basic",
+        ),
+        (
+            "dividend_nil_rate_allowance",
+            "gov.hmrc.income_tax.allowances.dividend_allowance",
+        ),
+        (
+            "applicable_work_allowance_amount",
+            "gov.dwp.universal_credit.means_test.work_allowance",
+        ),
+        (
+            "prescribed_capital_limit_for_single_claimant",
+            "gov.dwp.universal_credit.means_test.capital.limit",
+        ),
     ]:
         # Sanity: the global regex genuinely does NOT match these names, so the
         # allowlist is doing the work (guards against the test passing because
@@ -470,9 +494,7 @@ def test_global_threshold_regex_still_applies_to_all_jurisdictions(tmp_path) -> 
     # surfaces for both US and UK (the base behaviour is preserved).
     gen = _load_boundary_gen()
     for jurisdiction, engine in [("us", "policyengine_us"), ("uk", "policyengine_uk")]:
-        concept = _mapped_concept(
-            "income_limit", engine, "gov.x.income_limit"
-        )
+        concept = _mapped_concept("income_limit", engine, "gov.x.income_limit")
         root = _write_registry(tmp_path, jurisdiction, [concept])
         payload = gen.build_suggestions(root, (jurisdiction,))[jurisdiction]
         emitted = {

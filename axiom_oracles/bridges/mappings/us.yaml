@@ -23495,7 +23495,8 @@ mappings:
     mapping_type: not_comparable
     rationale: California CalFresh MPP §63-503.434 state-specific rule; no direct PolicyEngine variable equivalent.
 
-  # Renamed during sibling-collision fix on rulespec-us-ca#4 (2026-05-14):
+  # Renamed during the pre-monorepo California sibling-collision fix (#4,
+  # 2026-05-14):
   # 63-405/532.yaml and 63-503/312.yaml had rule-name collisions with their
   # respective siblings; appending __per_532 / __per_312 made names unique.
   - legal_id: us-ca:regulations/mpp/63-405/532#person_meets_requirement_under_section_63_405_512__per_532
@@ -28461,13 +28462,13 @@ prefixes:
     country: us
     program: snap
     mapping_type: not_comparable
-    rationale: Legacy generated CA SNAP compose outputs are Axiom assembly points across federal and state rules. The dashboard compares the maintained axiom-programs composition instead of these stale compose artifacts.
+    rationale: Legacy generated CA SNAP compose outputs are Axiom assembly points across federal and state rules. The dashboard compares the maintained canonical RuleSpec program instead of these stale compose artifacts.
 
   - legal_id_prefix: us:_compose/ny-snap#
     country: us
     program: snap
     mapping_type: not_comparable
-    rationale: Legacy generated NY SNAP compose outputs are Axiom assembly points across federal and state rules. The dashboard compares the maintained axiom-programs composition instead of these stale compose artifacts.
+    rationale: Legacy generated NY SNAP compose outputs are Axiom assembly points across federal and state rules. The dashboard compares the maintained canonical RuleSpec program instead of these stale compose artifacts.
 
   - legal_id_prefix: us-tn:policies/dhs/snap/
     country: us

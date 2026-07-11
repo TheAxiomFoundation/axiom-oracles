@@ -20,7 +20,6 @@ from .adapters.axiom import (
     US_TAX_ORACLE_BRIDGE_TARGET,
     US_TAX_ORACLE_IMPORTS,
     US_TAX_ORACLE_PROGRAM_RULES,
-    US_SNAP_CO_COMPILED_ARTIFACT_PATH,
     attach_axiom_snap_co_inputs,
     attach_axiom_tax_inputs,
     attach_axiom_tax_itemization_choice,
@@ -43,7 +42,6 @@ from .comparison.report import (
     build_comparison_report,
 )
 from .conformance.compositions import (
-    AXIOM_RULESPEC_ROOT_ENV,
     load_composition,
     rulespec_imports_for_concepts,
 )
@@ -104,6 +102,7 @@ def _echo_resolved_axiom_composition(
     suite_name: str,
     engines: set[str],
     axiom_program: Path | None,
+    rulespec_root: Path | None,
 ) -> None:
     """Surface the recorded runnable program the axiom leg composes.
 
@@ -111,10 +110,8 @@ def _echo_resolved_axiom_composition(
     the suite's output concepts. If the suite has a committed composition record
     (``conformance/compositions/<jur>.yaml``, axiom-oracles#185) this echoes the
     resolved program modules so the run is reproducible outside the harness, and
-    — when ``AXIOM_RULESPEC_ROOT`` names a checkout — resolves them to concrete
-    files and flags any that are missing. Never fails a run: a suite with no
-    record (US/UK-PE suites) or an unset root is silent/soft. Backward
-    compatible: passing ``--axiom-program`` skips this entirely.
+    resolves them against the explicitly supplied canonical checkout and flags
+    missing files. Passing ``--axiom-program`` skips this composition lookup.
     """
 
     if "axiom" not in engines or axiom_program is not None:
@@ -126,14 +123,15 @@ def _echo_resolved_axiom_composition(
     if composition is None:
         return
     rels = ", ".join(composition.paths)
-    suffix = ""
-    root = os.environ.get(AXIOM_RULESPEC_ROOT_ENV)
-    if root:
-        resolved = composition.resolve(root)
-        suffix = f"; root {resolved.root}"
-        missing = resolved.missing_paths()
-        if missing:
-            suffix += "; WARNING missing " + ", ".join(str(p) for p in missing)
+    if rulespec_root is None:
+        raise click.ClickException(
+            "Axiom composition resolution requires --rulespec-root"
+        )
+    resolved = composition.resolve(rulespec_root)
+    suffix = f"; root {resolved.root}"
+    missing = resolved.missing_paths()
+    if missing:
+        suffix += "; WARNING missing " + ", ".join(str(p) for p in missing)
     click.echo(
         f"Resolved '{composition.suite}' composition from conformance record: "
         f"{len(composition.imports)} module(s) [{rels}] as {composition.entity}"
@@ -173,11 +171,19 @@ def coverage_check(compiled_program: Path, target: str) -> None:
 
 
 @cli.command("sanity")
-@click.argument("fixtures_file", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.argument(
+    "fixtures_file", type=click.Path(exists=True, dir_okay=False, path_type=Path)
+)
 @click.option("--left", default="axiom", type=click.Choice(["axiom", "policyengine"]))
-@click.option("--right", default="policyengine", type=click.Choice(["axiom", "policyengine"]))
+@click.option(
+    "--right", default="policyengine", type=click.Choice(["axiom", "policyengine"])
+)
 @click.option("--axiom-engine-binary", type=click.Path(path_type=Path, exists=True))
 @click.option("--axiom-compiled-program", type=click.Path(path_type=Path, exists=True))
+@click.option(
+    "--rulespec-root",
+    type=click.Path(path_type=Path, exists=True, file_okay=False),
+)
 @click.option("--jurisdiction-fips", type=str, default=None)
 def sanity_check(
     fixtures_file: Path,
@@ -185,6 +191,7 @@ def sanity_check(
     right: str,
     axiom_engine_binary: Path | None,
     axiom_compiled_program: Path | None,
+    rulespec_root: Path | None,
     jurisdiction_fips: str | None,
 ) -> None:
     """Run a comparison's sanity fixtures and verify expected per-engine outcomes.
@@ -209,27 +216,43 @@ def sanity_check(
         click.echo("No fixtures to run.", err=True)
         sys.exit(2)
 
-    cases = [
-        fixture_to_case(f, concept=concept, period=period) for f in fixtures
-    ]
+    cases = [fixture_to_case(f, concept=concept, period=period) for f in fixtures]
     concept_ids = (concept,)
+    if "axiom" in {left, right} and (
+        axiom_engine_binary is None or rulespec_root is None
+    ):
+        raise click.ClickException(
+            "Axiom sanity checks require --axiom-engine-binary and --rulespec-root"
+        )
 
     left_runner = _build_runner(
-        left, "api", None, None, concept_ids,
+        left,
+        "api",
+        None,
+        None,
+        concept_ids,
         axiom_compiled_program=axiom_compiled_program,
         axiom_engine_binary=axiom_engine_binary,
+        rulespec_root=rulespec_root,
         paired_engine=right,
     )
     right_runner = _build_runner(
-        right, "api", None, None, concept_ids,
+        right,
+        "api",
+        None,
+        None,
+        concept_ids,
         axiom_compiled_program=axiom_compiled_program,
         axiom_engine_binary=axiom_engine_binary,
+        rulespec_root=rulespec_root,
         paired_engine=left,
     )
 
     try:
         prepared = _prepare_cases_for_engines(
-            cases, {left, right}, concept_ids,
+            cases,
+            {left, right},
+            concept_ids,
             axiom_compiled_program=axiom_compiled_program,
             jurisdiction_fips=jurisdiction_fips,
         )
@@ -252,11 +275,16 @@ def sanity_check(
             expected = bool(fixture.expected[engine_name])
             engine_result = results_by_id.get(case.case_id)
             if engine_result is None:
-                summary.results.append(SanityResult(
-                    fixture_id=fixture.id, engine=engine_name,
-                    expected=expected, actual=None, matched=False,
-                    error="no result returned",
-                ))
+                summary.results.append(
+                    SanityResult(
+                        fixture_id=fixture.id,
+                        engine=engine_name,
+                        expected=expected,
+                        actual=None,
+                        matched=False,
+                        error="no result returned",
+                    )
+                )
                 continue
             # Engines key their output dicts differently — axiom uses bare
             # derived names (`snap_eligible`), PolicyEngine uses its
@@ -280,12 +308,16 @@ def sanity_check(
                     "engine returned no value for the requested concept "
                     f"(values={list(values)!r})"
                 )
-            summary.results.append(SanityResult(
-                fixture_id=fixture.id, engine=engine_name,
-                expected=expected, actual=actual,
-                matched=(bool(actual) == expected) if err is None else False,
-                error=err,
-            ))
+            summary.results.append(
+                SanityResult(
+                    fixture_id=fixture.id,
+                    engine=engine_name,
+                    expected=expected,
+                    actual=actual,
+                    matched=(bool(actual) == expected) if err is None else False,
+                    error=err,
+                )
+            )
 
     print_summary(summary)
     sys.exit(0 if summary.passed else 1)
@@ -398,14 +430,17 @@ def sanity_check(
 @click.option(
     "--axiom-program",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
-    envvar="AXIOM_RULESPEC_PROGRAM",
-    help="RuleSpec program YAML to execute for Axiom comparisons.",
+    help=("Exact .yaml program beneath the supplied canonical RuleSpec checkout."),
 )
 @click.option(
     "--axiom-engine-binary",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
-    envvar="AXIOM_RULES_ENGINE_BINARY",
-    help="Path to the axiom-rules executable.",
+    help="Exact executable path to the Axiom rules engine.",
+)
+@click.option(
+    "--rulespec-root",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    help="Exact canonical rulespec-<country> checkout used by the Axiom leg.",
 )
 @click.option(
     "--axiom-entity-id",
@@ -423,7 +458,6 @@ def sanity_check(
 @click.option(
     "--axiom-compiled-program",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
-    envvar="AXIOM_COMPILED_PROGRAM",
     help=(
         "Compiled program JSON (output of `axiom-rules-engine compile`). "
         "When provided alongside --jurisdiction-fips, the harness uses the "
@@ -472,6 +506,7 @@ def compare(
     accessnyc_python_path: Path | None,
     axiom_program: Path | None,
     axiom_engine_binary: Path | None,
+    rulespec_root: Path | None,
     axiom_entity_id: str,
     axiom_batch_size: int,
     axiom_compiled_program: Path | None,
@@ -484,6 +519,16 @@ def compare(
 
     if left == right:
         raise click.ClickException("Choose two different systems to compare.")
+    if "axiom" in {left, right}:
+        if rulespec_root is None:
+            raise click.ClickException(
+                "Axiom comparisons require --rulespec-root pointing to an exact "
+                "canonical rulespec-<country> checkout."
+            )
+        if axiom_engine_binary is None:
+            raise click.ClickException(
+                "Axiom comparisons require an explicit --axiom-engine-binary."
+            )
 
     gc_was_enabled = gc.isenabled()
     if gc_was_enabled:
@@ -493,7 +538,10 @@ def compare(
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
         _echo_resolved_axiom_composition(
-            report_suite or suite_name, {left, right}, axiom_program
+            report_suite or suite_name,
+            {left, right},
+            axiom_program,
+            rulespec_root,
         )
         cases = _load_population_cases(
             population=population,
@@ -507,7 +555,9 @@ def compare(
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [
-                case for case in cases if _household_in_jurisdiction(case, jurisdiction_fips)
+                case
+                for case in cases
+                if _household_in_jurisdiction(case, jurisdiction_fips)
             ]
         if not cases:
             raise click.ClickException(
@@ -551,6 +601,7 @@ def compare(
             axiom_program=axiom_program,
             axiom_compiled_program=axiom_compiled_program,
             axiom_engine_binary=axiom_engine_binary,
+            rulespec_root=rulespec_root,
             axiom_entity_id=axiom_entity_id,
             axiom_batch_size=axiom_batch_size,
             paired_engine=right,
@@ -564,6 +615,7 @@ def compare(
             axiom_program=axiom_program,
             axiom_compiled_program=axiom_compiled_program,
             axiom_engine_binary=axiom_engine_binary,
+            rulespec_root=rulespec_root,
             axiom_entity_id=axiom_entity_id,
             axiom_batch_size=axiom_batch_size,
             paired_engine=left,
@@ -582,7 +634,9 @@ def compare(
                 if stream_case_rows
                 else None,
             )
-            total_batches = (len(cases) + comparison_batch_size - 1) // comparison_batch_size
+            total_batches = (
+                len(cases) + comparison_batch_size - 1
+            ) // comparison_batch_size
             for batch_index, case_batch in enumerate(
                 _batched(cases, comparison_batch_size),
                 start=1,
@@ -927,26 +981,20 @@ def _prepare_cases_for_engines(
         prepared = attach_taxsim_inputs(prepared)
     if "taxcalc" in engines:
         prepared = attach_taxcalc_inputs(prepared)
-    if (
-        "axiom" in engines
-        and axiom_program is None
-        and _wants_tax(concept_ids)
-    ):
+    if "axiom" in engines and axiom_program is None and _wants_tax(concept_ids):
         if _needs_axiom_tax_itemization_choice(concept_ids):
             # The generated state-income-tax bridge currently implements
             # Colorado. Federal taxable-income and liability comparisons also
             # need the encoded state tax for SALT/itemization resolution.
             prepared = [case for case in prepared if _is_co_household(case)]
         prepared = attach_axiom_tax_inputs(prepared)
-        if (
-            engines & {"policyengine", "taxsim"}
-            and _needs_axiom_tax_itemization_choice(concept_ids)
+        if engines & {"policyengine", "taxsim"} and _needs_axiom_tax_itemization_choice(
+            concept_ids
         ):
             prepared = attach_axiom_tax_itemization_choice(prepared)
             if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
                 prepared = [
-                    _select_axiom_state_income_tax_candidate(case)
-                    for case in prepared
+                    _select_axiom_state_income_tax_candidate(case) for case in prepared
                 ]
     if "axiom" in engines and _wants_snap(concept_ids):
         # Two paths:
@@ -1012,7 +1060,7 @@ def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
     metadata = dict(case.metadata)
     metadata["axiom_result_selection"] = {
         "strategy": "min",
-        "output": "us:tax/oracle-bridge#state_income_tax",
+        "output": "us:programs/oracles/tax#state_income_tax",
     }
     return replace(case, metadata=metadata)
 
@@ -1038,6 +1086,7 @@ def _build_runner(
     axiom_program: Path | None = None,
     axiom_compiled_program: Path | None = None,
     axiom_engine_binary: Path | None = None,
+    rulespec_root: Path | None = None,
     axiom_entity_id: str = "tax_unit",
     axiom_batch_size: int = 5_000,
     paired_engine: str | None = None,
@@ -1064,19 +1113,13 @@ def _build_runner(
             return PolicyEngineTaxsimRunner()
         return PolicyEngineRunner(batch_size=100 if _wants_snap(concept_ids) else 5_000)
     if engine == "axiom":
-        # SNAP runs through a precompiled artifact (avoids re-compiling the
-        # CO RuleSpec module on every case and the engine's `kind: reiteration`
-        # support requirement). Tax concepts keep compiling fresh from the
-        # generated oracle bridge imports.
-        # When the caller passes --axiom-compiled-program (e.g. CA SNAP via
-        # axiom-programs), use that artifact instead of the bundled CO one.
-        wants_snap = _wants_snap(concept_ids) and axiom_program is None
-        if axiom_compiled_program is not None:
-            compiled_artifact = axiom_compiled_program
-        else:
-            compiled_artifact = (
-                US_SNAP_CO_COMPILED_ARTIFACT_PATH if wants_snap else None
+        if axiom_engine_binary is None or rulespec_root is None:
+            raise RuntimeError(
+                "Axiom runner construction requires explicit engine binary and "
+                "canonical RuleSpec root"
             )
+        wants_snap = _wants_snap(concept_ids)
+        compiled_artifact = axiom_compiled_program
         program_imports = ()
         generated_program_target = None
         program_rules = ()
@@ -1084,11 +1127,12 @@ def _build_runner(
         # (compose already resolved its imports); deriving imports from the
         # concept ids here would flip prune_unsupported_inputs and strip the
         # generic ECPS input records the artifact needs.
-        if (
-            axiom_program is None
-            and not wants_snap
-            and axiom_compiled_program is None
-        ):
+        if axiom_program is None and axiom_compiled_program is None:
+            if wants_snap:
+                raise click.ClickException(
+                    "SNAP comparisons require an explicit canonical --axiom-program "
+                    "or --axiom-compiled-program"
+                )
             if _wants_tax(concept_ids):
                 program_imports = _tax_oracle_imports_for_concepts(concept_ids)
                 generated_program_target = US_TAX_ORACLE_BRIDGE_TARGET
@@ -1096,18 +1140,22 @@ def _build_runner(
             else:
                 program_imports = _rulespec_imports_for_concepts(concept_ids)
                 generated_program_target = (
-                    program_imports[0] if program_imports else None
+                    f"{program_imports[0].split(':', maxsplit=1)[0]}:"
+                    "programs/oracles/comparison"
+                    if program_imports
+                    else None
                 )
         return AxiomRulesRunner(
             program_path=axiom_program,
             compiled_artifact_path=compiled_artifact,
             binary_path=axiom_engine_binary,
+            rulespec_root=rulespec_root,
             default_entity_id="household" if wants_snap else axiom_entity_id,
             default_entity="Household" if wants_snap else "TaxUnit",
             program_imports=program_imports,
             program_rules=program_rules,
             generated_program_target=generated_program_target,
-            prune_unsupported_inputs=bool(program_imports),
+            prune_unsupported_inputs=wants_snap or bool(program_imports),
             batch_size=axiom_batch_size,
         )
     if engine == "taxsim":
@@ -1187,9 +1235,7 @@ def _parse_euromod_switches(
         if not entry.strip():
             continue
         if "=" not in entry:
-            raise click.ClickException(
-                f"{env_var} entries must be name=on/off pairs."
-            )
+            raise click.ClickException(f"{env_var} entries must be name=on/off pairs.")
         name, value = entry.split("=", 1)
         normalized = value.strip().lower()
         if normalized in {"1", "true", "yes", "on"}:

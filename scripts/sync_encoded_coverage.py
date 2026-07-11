@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Regenerate encoded-program coverage from upstream corpus git trees.
+"""Regenerate encoded-program coverage from canonical RuleSpec checkouts.
 
-Local corpus checkouts drift hundreds of commits behind origin/main, so this
-script reads ``git ls-tree origin/main`` (after a fetch) for upstream rulespec
-repos, classifies rule files into (program family, jurisdiction) buckets, and
+The script reads only explicitly supplied ``rulespec-<country>`` checkouts,
+classifies canonical ``.yaml`` rule files into program/jurisdiction buckets, and
 rewrites the *generated* entries in ``dashboard/public/data/coverage_overview.json``'s
 ``axiom.programs`` list.
 
@@ -14,17 +13,25 @@ so classification gaps are visible instead of silently dropped.
 
 Usage::
 
-    python scripts/sync_encoded_coverage.py            # fetch + rewrite
-    python scripts/sync_encoded_coverage.py --no-fetch # offline rerun
+    python scripts/sync_encoded_coverage.py \
+      --rulespec-root ~/TheAxiomFoundation/rulespec-us \
+      --rulespec-root ~/TheAxiomFoundation/rulespec-ca
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import re
-import subprocess
 from collections import defaultdict
 from pathlib import Path
+
+from axiom_oracles.bridges.repo_routing import (
+    RULESPEC_ATOMIC_ROOTS,
+    canonical_rulespec_module_path,
+    iter_jurisdiction_content_dirs,
+)
+from axiom_oracles.bridges.rulespec_paths import require_rulespec_checkout
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COVERAGE_PATH = REPO_ROOT / "dashboard" / "public" / "data" / "coverage_overview.json"
@@ -64,7 +71,10 @@ STATE_RULES = {
         (r"^policies/des/faa5/(ca-|two-parent)", ("tanf", None)),
         (r"^policies/des/faa5/transitional-child-care", ("childcare_assistance", None)),
         (r"^policies/des/faa5/", ("snap", None)),
-        (r"^regulations/aac/title-6/chapter-5/article-49/", ("childcare_assistance", None)),
+        (
+            r"^regulations/aac/title-6/chapter-5/article-49/",
+            ("childcare_assistance", None),
+        ),
     ],
     "ca": [
         (r"^(policies/cdss/snap|regulations/mpp/)", ("snap", None)),
@@ -81,8 +91,14 @@ STATE_RULES = {
     "fl": [
         (r"ess-program-policy-manual/.*fs-tca", ("snap", None)),
         (r"ess-program-policy-manual/.*(cic-rap|tca)", ("tanf", None)),
-        (r"ess-program-policy-manual/.*(mfam|mssi)", ("medicaid_eligibility_groups", None)),
-        (r"^(policies/dcf/ess-program-policy-manual/|regulations/fac/65a-1/)", ("snap", None)),
+        (
+            r"ess-program-policy-manual/.*(mfam|mssi)",
+            ("medicaid_eligibility_groups", None),
+        ),
+        (
+            r"^(policies/dcf/ess-program-policy-manual/|regulations/fac/65a-1/)",
+            ("snap", None),
+        ),
     ],
     "il": [
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
@@ -141,33 +157,35 @@ SKIP_DIRS = re.compile(
 )
 
 
-def git(repo: Path, *args: str) -> str:
-    return subprocess.run(
-        ["git", "-C", str(repo), *args],
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout
+def rule_files(repo: Path) -> list[str]:
+    """Return canonical ``.yaml`` modules relative to one country checkout."""
 
-
-def rule_files(repo: Path, fetch: bool) -> list[str]:
-    if fetch:
-        subprocess.run(
-            ["git", "-C", str(repo), "fetch", "-q", "origin", "main"],
-            capture_output=True,
-            check=False,
-        )
-    try:
-        listing = git(repo, "ls-tree", "-r", "--name-only", "origin/main")
-    except subprocess.CalledProcessError:
-        return []
     out = []
-    for line in listing.splitlines():
-        if not line.endswith(".yaml") or line.endswith(".test.yaml"):
-            continue
-        if SKIP_DIRS.search(line):
-            continue
-        out.append(line)
+    for _jurisdiction, content_root in iter_jurisdiction_content_dirs(repo):
+        for root_name in RULESPEC_ATOMIC_ROOTS:
+            canonical_root = content_root / root_name
+            if not canonical_root.is_dir() or canonical_root.is_symlink():
+                continue
+            for path in canonical_root.rglob("*"):
+                relative = path.relative_to(repo).as_posix()
+                if path.is_symlink():
+                    raise ValueError(
+                        f"symlinked RuleSpec content is unsupported: {path}"
+                    )
+                if path.is_file() and path.suffix == ".yml":
+                    raise ValueError(
+                        f"legacy .yml RuleSpec module is unsupported: {path}"
+                    )
+                if path.suffix != ".yaml" or not path.is_file():
+                    continue
+                if (
+                    canonical_rulespec_module_path(path, content_root=content_root)
+                    is None
+                ):
+                    raise ValueError(f"noncanonical RuleSpec module path: {path}")
+                if relative.endswith(".test.yaml") or SKIP_DIRS.search(relative):
+                    continue
+                out.append(relative)
     return out
 
 
@@ -213,7 +231,13 @@ def classify_canada(path: str):
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--no-fetch", action="store_true")
+    parser.add_argument(
+        "--rulespec-root",
+        action="append",
+        type=Path,
+        required=True,
+        help="Exact canonical country checkout; repeat for each country.",
+    )
     args = parser.parse_args()
 
     buckets: dict[tuple[str, str], dict] = defaultdict(
@@ -221,33 +245,27 @@ def main() -> None:
     )
     unclassified: dict[str, int] = defaultdict(int)
 
-    # Upstream rulespec-us is a monorepo: us/ holds federal law, us-xx/ holds
-    # each state's tree. The standalone rulespec-us-xx checkouts under ~ are
-    # historical worktrees of the same content — reading only the monorepo
-    # avoids double counting.
-    repo = Path.home() / "rulespec-us"
-    for path in rule_files(repo, fetch=not args.no_fetch):
-        hit = classify(path)
-        if hit is None:
-            unclassified["/".join(path.split("/")[:3])] += 1
-            continue
-        family, jurisdiction = hit
-        bucket = buckets[(family, jurisdiction)]
-        bucket["count"] += 1
-        bucket["areas"].add("/".join(path.split("/")[1:4]))
-        bucket["repos"].add("rulespec-us")
-
-    canada_repo = Path.home() / "rulespec-ca"
-    for path in rule_files(canada_repo, fetch=not args.no_fetch):
-        hit = classify_canada(path)
-        if hit is None:
-            unclassified[f"rulespec-ca:{'/'.join(path.split('/')[:3])}"] += 1
-            continue
-        family, jurisdiction = hit
-        bucket = buckets[(family, jurisdiction)]
-        bucket["count"] += 1
-        bucket["areas"].add("/".join(path.split("/")[:3]))
-        bucket["repos"].add("rulespec-ca")
+    checkouts = [require_rulespec_checkout(path) for path in args.rulespec_root]
+    for repo in checkouts:
+        country = repo.name.removeprefix("rulespec-")
+        if country not in {"us", "ca"}:
+            parser.error(f"unsupported coverage classifier country: {country}")
+        for path in rule_files(repo):
+            if country == "us":
+                hit = classify(path)
+                area = "/".join(path.split("/")[1:4])
+            else:
+                _jurisdiction, _, content_path = path.partition("/")
+                hit = classify_canada(content_path)
+                area = "/".join(content_path.split("/")[:3])
+            if hit is None:
+                unclassified[f"{repo.name}:{'/'.join(path.split('/')[:3])}"] += 1
+                continue
+            family, jurisdiction = hit
+            bucket = buckets[(family, jurisdiction)]
+            bucket["count"] += 1
+            bucket["areas"].add(area)
+            bucket["repos"].add(repo.name)
 
     data = json.loads(COVERAGE_PATH.read_text())
     programs = data["axiom"]["programs"]
@@ -271,7 +289,7 @@ def main() -> None:
                 "jurisdiction": jurisdiction,
                 "status": "coverageOnly",
                 "generated": True,
-                "source": f"{repos} origin/main: {areas} ({bucket['count']} rule files)",
+                "source": f"{repos}: {areas} ({bucket['count']} rule files)",
                 "known_non_tanf_gaps": [
                     "encoded upstream; no comparison suite yet",
                 ],
@@ -281,7 +299,9 @@ def main() -> None:
     COVERAGE_PATH.write_text(json.dumps(data, indent=1) + "\n")
 
     total = sum(b["count"] for b in buckets.values())
-    print(f"classified {total} rule files into {len(buckets)} (family, jurisdiction) buckets")
+    print(
+        f"classified {total} rule files into {len(buckets)} (family, jurisdiction) buckets"
+    )
     for (family, jurisdiction), bucket in sorted(buckets.items()):
         marker = "manual" if (family, jurisdiction) in manual_keys else "generated"
         print(f"  {family:32} {jurisdiction:4} {bucket['count']:5} rules  [{marker}]")

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import math
-import os
+import re
 import subprocess
 import tempfile
 from calendar import monthrange
@@ -14,11 +14,20 @@ from typing import Any
 
 import yaml
 
+from ...bridges.rulespec_paths import (
+    require_axiom_binary,
+    require_axiom_compiled_artifact,
+    require_rulespec_checkout,
+    require_rulespec_module,
+    resolve_rulespec_module_ref,
+    rulespec_engine_env,
+    rulespec_root_args,
+)
 from ...comparison.mappings import engine_targets_for_concepts
+from ...core.case import Case
 from ...core.engine import EngineAdapter
 from ...core.household import Household
 from ...core.results import EngineResult
-from ...core.case import Case
 
 
 SubprocessRun = Callable[..., subprocess.CompletedProcess[str]]
@@ -32,7 +41,6 @@ AXIOM_RELATIONS_METADATA_KEY = "axiom_relations"
 AXIOM_ENTITY_ID_METADATA_KEY = "axiom_entity_id"
 AXIOM_ENTITY_METADATA_KEY = "axiom_entity"
 AXIOM_ALIAS_QUALIFIED_INPUTS_METADATA_KEY = "axiom_alias_qualified_inputs"
-AXIOM_RULESPEC_REPO_ROOTS_ENV = "AXIOM_RULESPEC_REPO_ROOTS"
 FLOAT_ZERO_TOLERANCE = 1e-9
 
 
@@ -46,34 +54,40 @@ class AxiomRulesRunner(EngineAdapter):
         *,
         program_path: str | Path | None = None,
         compiled_artifact_path: str | Path | None = None,
-        binary_path: str | Path | None = None,
+        binary_path: str | Path,
+        rulespec_root: str | Path,
         default_entity_id: str = "tax_unit",
         default_entity: str = "TaxUnit",
         mode: str = "explain",
         program_imports: tuple[str, ...] = (),
         program_rules: tuple[Mapping[str, Any], ...] = (),
         generated_program_target: str | None = None,
-        rulespec_repo_roots: tuple[str | Path, ...] = (),
         prune_unsupported_inputs: bool = False,
         batch_size: int = 5_000,
         subprocess_run: SubprocessRun = subprocess.run,
     ) -> None:
-        self.program_path = Path(program_path).expanduser() if program_path else None
+        self.rulespec_root = require_rulespec_checkout(Path(rulespec_root))
+        if program_path is not None:
+            self.program_path = require_rulespec_module(
+                Path(program_path).expanduser(),
+                self.rulespec_root,
+            )
+        else:
+            self.program_path = None
         self.compiled_artifact_path = (
-            Path(compiled_artifact_path).expanduser()
+            require_axiom_compiled_artifact(Path(compiled_artifact_path))
             if compiled_artifact_path
             else None
         )
-        self.binary_path = _resolve_binary_path(binary_path, self.program_path)
+        self.binary_path = require_axiom_binary(Path(binary_path))
         self.default_entity_id = default_entity_id
         self.default_entity = default_entity
         self.mode = mode
         self.program_imports = tuple(program_imports)
+        for module_ref in self.program_imports:
+            resolve_rulespec_module_ref(self.rulespec_root, module_ref)
         self.program_rules = tuple(program_rules)
         self.generated_program_target = generated_program_target
-        self.rulespec_repo_roots = tuple(
-            str(Path(root).expanduser()) for root in rulespec_repo_roots
-        )
         self.prune_unsupported_inputs = prune_unsupported_inputs
         self.batch_size = batch_size
         self._subprocess_run = subprocess_run
@@ -88,10 +102,12 @@ class AxiomRulesRunner(EngineAdapter):
         requested_outputs = variables or list(cases[0].outputs)
         output_targets = _output_targets(requested_outputs)
         with tempfile.TemporaryDirectory(prefix="axiom-oracles-") as temp_dir:
-            temp_path = Path(temp_dir)
+            temp_path = Path(temp_dir).resolve(strict=True)
             program_path = self._program_path(temp_path)
             artifact_path = self._artifact_path(temp_path, program_path)
-            output_aliases = _output_aliases_from_artifact(output_targets, artifact_path)
+            output_aliases = _output_aliases_from_artifact(
+                output_targets, artifact_path
+            )
             execution_targets = [
                 output_aliases.get(output, output) for output in output_targets
             ]
@@ -111,9 +127,7 @@ class AxiomRulesRunner(EngineAdapter):
                 artifact_path,
                 allowed_program_refs=allowed_program_refs,
             )
-            return [
-                _remap_output_aliases(result, output_aliases) for result in results
-            ]
+            return [_remap_output_aliases(result, output_aliases) for result in results]
 
     def run_households(
         self,
@@ -134,12 +148,14 @@ class AxiomRulesRunner(EngineAdapter):
         program_path = _generated_program_path(
             temp_dir,
             self.generated_program_target,
+            self.rulespec_root,
         )
         program_path.parent.mkdir(parents=True, exist_ok=True)
         program_path.write_text(
             yaml.safe_dump(
                 {
                     "format": "rulespec/v1",
+                    "module": {"kind": "composition"},
                     "imports": list(self.program_imports),
                     "rules": [dict(rule) for rule in self.program_rules],
                 },
@@ -153,20 +169,23 @@ class AxiomRulesRunner(EngineAdapter):
             return self.compiled_artifact_path
         if program_path is None:
             raise RuntimeError(
-                "Axiom comparisons require --axiom-program or "
-                "AXIOM_RULESPEC_PROGRAM."
+                "Axiom comparisons require an explicit program or compiled artifact."
             )
         artifact_path = temp_dir / "program.compiled.json"
+        compile_command = (
+            "compile" if self.program_path is not None else "compile-composed"
+        )
         process = self._subprocess_run(
             [
                 str(self.binary_path),
-                "compile",
+                compile_command,
                 "--program",
                 str(program_path),
+                *rulespec_root_args(self.rulespec_root),
                 "--output",
                 str(artifact_path),
             ],
-            env=self._compile_env(),
+            env=self._engine_env(),
             text=True,
             capture_output=True,
             check=False,
@@ -219,8 +238,7 @@ class AxiomRulesRunner(EngineAdapter):
                 for case in cases
             ]
         overlays_by_case = [
-            _case_input_record_overlays(case, _period_for_case(case))
-            for case in cases
+            _case_input_record_overlays(case, _period_for_case(case)) for case in cases
         ]
         if not any(overlays_by_case):
             return self._run_cases_once(
@@ -231,7 +249,9 @@ class AxiomRulesRunner(EngineAdapter):
             )
 
         overlay_count = len(overlays_by_case[0])
-        if not overlay_count or any(len(overlays) != overlay_count for overlays in overlays_by_case):
+        if not overlay_count or any(
+            len(overlays) != overlay_count for overlays in overlays_by_case
+        ):
             return [
                 self._run_case(
                     case,
@@ -550,15 +570,8 @@ class AxiomRulesRunner(EngineAdapter):
                 )
         return records
 
-    def _compile_env(self) -> dict[str, str]:
-        env = dict(os.environ)
-        if AXIOM_RULESPEC_REPO_ROOTS_ENV not in env:
-            roots = self.rulespec_repo_roots or _default_rulespec_repo_roots()
-            if roots:
-                env[AXIOM_RULESPEC_REPO_ROOTS_ENV] = os.pathsep.join(
-                    str(root) for root in roots
-                )
-        return env
+    def _engine_env(self) -> dict[str, str]:
+        return rulespec_engine_env()
 
     def _relation_records(
         self,
@@ -588,47 +601,15 @@ class AxiomRulesRunner(EngineAdapter):
         return records
 
 
-def _resolve_binary_path(
-    binary_path: str | Path | None,
-    program_path: Path | None,
+def _generated_program_path(
+    temp_dir: Path,
+    target: str | None,
+    rulespec_root: Path,
 ) -> Path:
-    if binary_path:
-        return Path(binary_path).expanduser()
-    env_binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
-    if env_binary:
-        return Path(env_binary).expanduser()
-    candidates = []
-    if program_path is not None:
-        for ancestor in program_path.resolve().parents:
-            candidates.append(
-                ancestor / "axiom-rules-engine/target/release/axiom-rules-engine"
-            )
-            candidates.append(ancestor / "axiom-rules-engine/target/release/axiom-rules")
-            candidates.append(
-                ancestor / "axiom-rules-engine/target/debug/axiom-rules-engine"
-            )
-            candidates.append(ancestor / "axiom-rules-engine/target/debug/axiom-rules")
-    candidates.extend(
-        [
-            Path.home()
-            / "TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine",
-            Path.home()
-            / "TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules",
-            Path.home()
-            / "TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules-engine",
-            Path.home()
-            / "TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules",
-        ]
-    )
-    for candidate in candidates:
-        if candidate.exists():
-            return candidate
-    return Path("axiom-rules")
-
-
-def _generated_program_path(temp_dir: Path, target: str | None) -> Path:
     if not target:
-        return temp_dir / "generated-program.yaml"
+        raise RuntimeError(
+            "generated RuleSpec programs require an explicit canonical module target"
+        )
     if "#" in target or ":" not in target:
         raise RuntimeError(
             "generated RuleSpec program target must be an absolute module target."
@@ -636,15 +617,23 @@ def _generated_program_path(temp_dir: Path, target: str | None) -> Path:
     prefix, relative = target.split(":", maxsplit=1)
     relative_path = Path(relative.strip("/"))
     if (
-        not prefix
+        re.fullmatch(r"[a-z]{2}(?:-[a-z0-9]+)*", prefix) is None
         or not relative_path.as_posix()
         or relative_path.is_absolute()
         or any(part == ".." for part in relative_path.parts)
+        or relative_path.parts[0] != "programs"
     ):
         raise RuntimeError(
-            "generated RuleSpec program target must be an absolute module target."
+            "generated RuleSpec program target must be an absolute canonical "
+            "<jurisdiction>:<content-root>/... module target."
         )
-    return temp_dir / f"rulespec-{prefix}" / relative_path.with_suffix(".yaml")
+    country = prefix.split("-", 1)[0]
+    if rulespec_root.name != f"rulespec-{country}":
+        raise RuntimeError(
+            f"generated RuleSpec target {target!r} does not belong to "
+            f"{rulespec_root.name}"
+        )
+    return temp_dir / "program.composed.yaml"
 
 
 def _output_targets(variables: list[str] | None) -> list[str]:
@@ -759,9 +748,7 @@ def _case_input_record_overlays(
     if raw_overlays is None:
         return []
     if not isinstance(raw_overlays, list | tuple):
-        raise RuntimeError(
-            "metadata['axiom_input_record_overlays'] must be a list."
-        )
+        raise RuntimeError("metadata['axiom_input_record_overlays'] must be a list.")
     return [
         _normalize_input_records(
             raw_overlay,
@@ -1020,17 +1007,20 @@ def _relation_tuples(value: Any) -> list[Any]:
     return [[value]]
 
 
-def _namespace_input_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+def _namespace_input_record(
+    record: Mapping[str, Any], namespace: str
+) -> dict[str, Any]:
     namespaced = dict(record)
     namespaced["entity_id"] = _namespace_entity_id(namespace, namespaced["entity_id"])
     return namespaced
 
 
-def _namespace_relation_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+def _namespace_relation_record(
+    record: Mapping[str, Any], namespace: str
+) -> dict[str, Any]:
     namespaced = dict(record)
     namespaced["tuple"] = [
-        _namespace_entity_id(namespace, value)
-        for value in namespaced.get("tuple", [])
+        _namespace_entity_id(namespace, value) for value in namespaced.get("tuple", [])
     ]
     return namespaced
 
@@ -1160,22 +1150,3 @@ def _collect_input_slots(node: Any, slots: set[str]) -> None:
         slots.add(node["name"])
     for value in node.values():
         _collect_input_slots(value, slots)
-
-
-def _default_rulespec_repo_roots() -> tuple[Path, ...]:
-    # AXIOM_RULESPEC_ROOT (singular) names one rulespec checkout, or the
-    # workspace that holds the rulespec-<country> checkouts, so `compare
-    # euromod axiom --suite X` resolves its composition with no --axiom-program
-    # (axiom-oracles#185). Module refs resolve as
-    # <root>/rulespec-<country>/<prefix>/<path>.yaml, so a path pointing straight
-    # at a rulespec-* checkout is lifted to its parent.
-    single = os.environ.get("AXIOM_RULESPEC_ROOT")
-    if single:
-        root = Path(single).expanduser()
-        if root.name.startswith("rulespec-"):
-            root = root.parent
-        return (root,)
-    candidate = Path.home() / "TheAxiomFoundation"
-    if candidate.exists():
-        return (candidate,)
-    return ()

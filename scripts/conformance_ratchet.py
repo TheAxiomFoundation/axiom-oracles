@@ -152,9 +152,7 @@ def main() -> int:
     # Write modes.
     if args.init:
         for jurisdiction, summary in summaries.items():
-            ratchets.setdefault(
-                jurisdiction, RatchetInvariant.from_summary(summary)
-            )
+            ratchets.setdefault(jurisdiction, RatchetInvariant.from_summary(summary))
         RATCHET_PATH.write_text(_serialize(ratchets))
         print(f"Seeded conformance/ratchet.yaml with {len(ratchets)} jurisdiction(s).")
         return 0

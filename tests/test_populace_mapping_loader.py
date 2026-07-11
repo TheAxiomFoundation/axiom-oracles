@@ -233,9 +233,10 @@ def test_default_yaml_maps_snap_income_slots_separately() -> None:
     assert mapping["snap_gross_monthly_earned_income"](case_facts, None) == 3000
     assert mapping["snap_total_monthly_unearned_income"](case_facts, None) == 1980
     assert mapping["snap_gross_monthly_income"](case_facts, None) == 4980
-    assert mapping["state_agency_rounds_thirty_percent_net_income_up"](
-        case_facts, None
-    ) is True
+    assert (
+        mapping["state_agency_rounds_thirty_percent_net_income_up"](case_facts, None)
+        is True
+    )
 
 
 def test_default_yaml_maps_ecps_snap_cases_as_non_initial_months() -> None:
@@ -283,9 +284,10 @@ def test_default_yaml_maps_snap_utility_allowance_projection_assumptions() -> No
         ]({}, None)
         is False
     )
-    assert mapping["liheaa_or_similar_energy_assistance_annual_payment_amount"](
-        {}, None
-    ) == 0
+    assert (
+        mapping["liheaa_or_similar_energy_assistance_annual_payment_amount"]({}, None)
+        == 0
+    )
     assert mapping["limited_utility_allowance_utility_count"]({}, None) == 0
     assert (
         mapping[
@@ -312,18 +314,17 @@ def test_default_yaml_maps_ma_categorical_assistance_inputs() -> None:
     }
 
     assert (
-        mapping["all_members_receive_or_authorized_for_ssi_or_eaedc"](
-            mixed_case, None
-        )
+        mapping["all_members_receive_or_authorized_for_ssi_or_eaedc"](mixed_case, None)
         is False
     )
-    assert mapping["all_members_receive_or_authorized_for_tafdc"](
-        mixed_case, None
-    ) is False
     assert (
-        mapping[
-            "all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc"
-        ](mixed_case, None)
+        mapping["all_members_receive_or_authorized_for_tafdc"](mixed_case, None)
+        is False
+    )
+    assert (
+        mapping["all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc"](
+            mixed_case, None
+        )
         is True
     )
 
@@ -338,9 +339,7 @@ def test_deprecated_ecps_mapping_loader_alias_resolves_to_populace_loader() -> N
     with warnings.catch_warnings():
         warnings.simplefilter("error", DeprecationWarning)
         with pytest.raises(DeprecationWarning):
-            importlib.import_module(
-                "axiom_oracles.adapters.axiom.ecps_mapping_loader"
-            )
+            importlib.import_module("axiom_oracles.adapters.axiom.ecps_mapping_loader")
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", DeprecationWarning)
@@ -348,6 +347,4 @@ def test_deprecated_ecps_mapping_loader_alias_resolves_to_populace_loader() -> N
             "axiom_oracles.adapters.axiom.ecps_mapping_loader"
         )
 
-    assert (
-        legacy.load_ecps_mapping_for_program is load_populace_mapping_for_program
-    )
+    assert legacy.load_ecps_mapping_for_program is load_populace_mapping_for_program

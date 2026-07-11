@@ -25,7 +25,7 @@ compositions:
       imports:
         - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline
       paths:
-        - rulespec-be/be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
+        - be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
     outputs:
       - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_worker_forfait_professional_expenses
     supplied_input_boundaries:
@@ -50,7 +50,7 @@ compositions:
       imports:
         - be:regulations/health_insurance/birth_leave/indemnity_rates
       paths:
-        - rulespec-be/be/regulations/health_insurance/birth_leave/indemnity_rates.yaml
+        - be/regulations/health_insurance/birth_leave/indemnity_rates.yaml
     outputs:
       - be:regulations/health_insurance/birth_leave/indemnity_rates#belgium_birth_leave_total_compensation_amount
     supplied_input_boundaries:
@@ -70,7 +70,7 @@ compositions:
       imports:
         - be:statutes/income_tax/movable_withholding/rates
       paths:
-        - rulespec-be/be/statutes/income_tax/movable_withholding/rates.yaml
+        - be/statutes/income_tax/movable_withholding/rates.yaml
     outputs:
       - be:statutes/income_tax/movable_withholding/rates#belgium_capital_income_separate_tax
     supplied_input_boundaries:
@@ -87,7 +87,7 @@ compositions:
       imports:
         - be:statutes/income_guarantee_for_elderly/payable_amount
       paths:
-        - rulespec-be/be/statutes/income_guarantee_for_elderly/payable_amount.yaml
+        - be/statutes/income_guarantee_for_elderly/payable_amount.yaml
     outputs:
       - be:statutes/income_guarantee_for_elderly/payable_amount#belgium_grapa_income_guarantee_for_elderly_annual_amount
     supplied_input_boundaries:
@@ -107,7 +107,7 @@ compositions:
       imports:
         - be:regulations/social_security/workers/employer_contributions
       paths:
-        - rulespec-be/be/regulations/social_security/workers/employer_contributions.yaml
+        - be/regulations/social_security/workers/employer_contributions.yaml
     outputs:
       - be:regulations/social_security/workers/employer_contributions#belgium_employer_social_security_ordinary_worker_contribution
     supplied_input_boundaries:
@@ -126,7 +126,7 @@ compositions:
       imports:
         - be:statutes/family_benefits/birth_allowance
       paths:
-        - rulespec-be/be/statutes/family_benefits/birth_allowance.yaml
+        - be/statutes/family_benefits/birth_allowance.yaml
     outputs:
       - be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount
     supplied_input_boundaries:
@@ -143,7 +143,7 @@ compositions:
       imports:
         - be:statutes/family_benefits/child_benefit_base_2025
       paths:
-        - rulespec-be/be/statutes/family_benefits/child_benefit_base_2025.yaml
+        - be/statutes/family_benefits/child_benefit_base_2025.yaml
     outputs:
       - be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount
     supplied_input_boundaries:
@@ -160,7 +160,7 @@ compositions:
       imports:
         - be-vlg:regulations/employment/jobbonus
       paths:
-        - rulespec-be/be-vlg/regulations/employment/jobbonus.yaml
+        - be-vlg/regulations/employment/jobbonus.yaml
     outputs:
       - be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount
     supplied_input_boundaries:
@@ -183,7 +183,7 @@ compositions:
       imports:
         - be-vlg:regulations/social_security/flemish_social_protection/premium
       paths:
-        - rulespec-be/be-vlg/regulations/social_security/flemish_social_protection/premium.yaml
+        - be-vlg/regulations/social_security/flemish_social_protection/premium.yaml
     outputs:
       - be-vlg:regulations/social_security/flemish_social_protection/premium#flanders_social_protection_annual_premium
     supplied_input_boundaries:
@@ -201,7 +201,7 @@ compositions:
       imports:
         - be:statutes/income_tax/individual/regional_surcharge
       paths:
-        - rulespec-be/be/statutes/income_tax/individual/regional_surcharge.yaml
+        - be/statutes/income_tax/individual/regional_surcharge.yaml
     outputs:
       - be:statutes/income_tax/individual/regional_surcharge#belgium_pit_local_municipal_additional_tax
     supplied_input_boundaries:
@@ -228,7 +228,7 @@ compositions:
       imports:
         - be:statutes/income_tax/individual/couple_pit_oracle_pipeline
       paths:
-        - rulespec-be/be/statutes/income_tax/individual/couple_pit_oracle_pipeline.yaml
+        - be/statutes/income_tax/individual/couple_pit_oracle_pipeline.yaml
     outputs:
       - be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding
     supplied_input_boundaries:
@@ -258,7 +258,7 @@ compositions:
       imports:
         - be:regulations/health_insurance/maternity/indemnity_rates
       paths:
-        - rulespec-be/be/regulations/health_insurance/maternity/indemnity_rates.yaml
+        - be/regulations/health_insurance/maternity/indemnity_rates.yaml
     outputs:
       - be:regulations/health_insurance/maternity/indemnity_rates#belgium_maternity_article_216_rest_period_amount
     supplied_input_boundaries:
@@ -280,7 +280,7 @@ compositions:
       imports:
         - be:statutes/social_security/non_labour_income_contributions
       paths:
-        - rulespec-be/be/statutes/social_security/non_labour_income_contributions.yaml
+        - be/statutes/social_security/non_labour_income_contributions.yaml
     outputs:
       - be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding
     supplied_input_boundaries:
@@ -299,7 +299,7 @@ compositions:
       imports:
         - be:statutes/property_tax/gross_withholding_and_supplied_centimes
       paths:
-        - rulespec-be/be/statutes/property_tax/gross_withholding_and_supplied_centimes.yaml
+        - be/statutes/property_tax/gross_withholding_and_supplied_centimes.yaml
     outputs:
       - be:statutes/property_tax/gross_withholding_and_supplied_centimes#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes
     supplied_input_boundaries:
@@ -322,7 +322,7 @@ compositions:
       imports:
         - be:statutes/income_tax/individual/regional_surcharge
       paths:
-        - rulespec-be/be/statutes/income_tax/individual/regional_surcharge.yaml
+        - be/statutes/income_tax/individual/regional_surcharge.yaml
     outputs:
       - be:statutes/income_tax/individual/regional_surcharge#belgium_pit_regional_additional_tax
     supplied_input_boundaries:
@@ -340,7 +340,7 @@ compositions:
       imports:
         - be:regulations/social_security/self_employed/contributions
       paths:
-        - rulespec-be/be/regulations/social_security/self_employed/contributions.yaml
+        - be/regulations/social_security/self_employed/contributions.yaml
     outputs:
       - be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution
     supplied_input_boundaries:
@@ -372,7 +372,7 @@ compositions:
       imports:
         - be:statutes/social_integration/payable_amount
       paths:
-        - rulespec-be/be/statutes/social_integration/payable_amount.yaml
+        - be/statutes/social_integration/payable_amount.yaml
     outputs:
       - be:statutes/social_integration/payable_amount#belgium_social_integration_income_support_annual_amount
     supplied_input_boundaries:
@@ -415,7 +415,7 @@ compositions:
       imports:
         - be:statutes/social_security/special_contribution
       paths:
-        - rulespec-be/be/statutes/social_security/special_contribution.yaml
+        - be/statutes/social_security/special_contribution.yaml
     outputs:
       - be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution
     supplied_input_boundaries:
@@ -435,7 +435,7 @@ compositions:
       imports:
         - be:statutes/education/study_allowance_routing
       paths:
-        - rulespec-be/be/statutes/education/study_allowance_routing.yaml
+        - be/statutes/education/study_allowance_routing.yaml
     outputs:
       - be:statutes/education/study_allowance_routing#belgium_study_allowance_annual_amount
     supplied_input_boundaries:
@@ -451,7 +451,7 @@ compositions:
       imports:
         - be:regulations/unemployment/pilot_oracle_pipeline
       paths:
-        - rulespec-be/be/regulations/unemployment/pilot_oracle_pipeline.yaml
+        - be/regulations/unemployment/pilot_oracle_pipeline.yaml
     outputs:
       - be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount
     supplied_input_boundaries:
@@ -473,7 +473,7 @@ compositions:
       imports:
         - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline
       paths:
-        - rulespec-be/be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
+        - be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
     outputs:
       - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit
     supplied_input_boundaries:
@@ -498,7 +498,7 @@ compositions:
       imports:
         - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline
       paths:
-        - rulespec-be/be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
+        - be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
     outputs:
       - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding
     supplied_input_boundaries:
@@ -524,8 +524,8 @@ compositions:
         - be:regulations/social_security/workers/employee_contributions
         - be:regulations/social_security/workers/work_bonus
       paths:
-        - rulespec-be/be/regulations/social_security/workers/employee_contributions.yaml
-        - rulespec-be/be/regulations/social_security/workers/work_bonus.yaml
+        - be/regulations/social_security/workers/employee_contributions.yaml
+        - be/regulations/social_security/workers/work_bonus.yaml
     outputs:
       - be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_article_38_contribution_before_reductions
       - be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution

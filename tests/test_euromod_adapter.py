@@ -71,8 +71,16 @@ def _single_earner(case_id: str, annual_income: float) -> Case:
     )
 
 
-def _uc_adult_row(idperson, *, partner_id=0, couple=False, is_head=True,
-                  tenure=1, monthly_rent=0.0, capital=0.0):
+def _uc_adult_row(
+    idperson,
+    *,
+    partner_id=0,
+    couple=False,
+    is_head=True,
+    tenure=1,
+    monthly_rent=0.0,
+    capital=0.0,
+):
     return {
         "idhh": 1,
         "idperson": idperson,
@@ -152,11 +160,19 @@ def _uc_couple_two_children(case_id: str, *, monthly_rent: float) -> Case:
         metadata={
             "euromod_inputs": [
                 _uc_adult_row(
-                    101, partner_id=102, couple=True, is_head=True,
-                    tenure=5, monthly_rent=monthly_rent,
+                    101,
+                    partner_id=102,
+                    couple=True,
+                    is_head=True,
+                    tenure=5,
+                    monthly_rent=monthly_rent,
                 ),
                 _uc_adult_row(
-                    102, partner_id=101, couple=True, is_head=False, tenure=5,
+                    102,
+                    partner_id=101,
+                    couple=True,
+                    is_head=False,
+                    tenure=5,
                 ),
                 _uc_child_row(103, 8, 101),
                 _uc_child_row(104, 5, 101),
@@ -282,8 +298,14 @@ class TestSubprocessContract:
             overrides=[("bsaoa_be", True)],
         )
 
-        assert "<Name>BE_2024</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>off</Switch>" in patched
-        assert "<Name>BE_2025</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>on</Switch>" in patched
+        assert (
+            "<Name>BE_2024</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>off</Switch>"
+            in patched
+        )
+        assert (
+            "<Name>BE_2025</Name>\n    <Policy>\n      <Name>bsaoa_be</Name>\n      <Switch>on</Switch>"
+            in patched
+        )
 
     def test_constant_patch_targets_named_system_and_group_only(self) -> None:
         xml = """
@@ -701,9 +723,10 @@ class TestSubprocessContract:
         assert _normalize_constant_overrides({"$f_cpi": ("2022", 1000)}) == (
             ("$f_cpi", "2022", "1000"),
         )
-        assert _normalize_constant_overrides(
-            [("$a", 1), ("$b", "2024", 2.5)]
-        ) == (("$a", "", "1"), ("$b", "2024", "2.5"))
+        assert _normalize_constant_overrides([("$a", 1), ("$b", "2024", 2.5)]) == (
+            ("$a", "", "1"),
+            ("$b", "2024", "2.5"),
+        )
         with pytest.raises(ValueError, match="non-empty strings"):
             _normalize_constant_overrides({"": 1.0})
         with pytest.raises(ValueError, match="numeric or string value"):
@@ -849,9 +872,7 @@ class TestBatchPositionIsolation:
         )
         country_dir = model_root / "XMLParam" / "Countries" / "BE"
         country_dir.mkdir(parents=True)
-        (country_dir / "BE.xml").write_text(
-            self.STUB_COUNTRY_XML, encoding="utf-8"
-        )
+        (country_dir / "BE.xml").write_text(self.STUB_COUNTRY_XML, encoding="utf-8")
         stub_dir = tmp_path / "stub-site"
         stub_dir.mkdir()
         (stub_dir / "euromod.py").write_text(self.STUB_ENGINE, encoding="utf-8")
@@ -862,9 +883,7 @@ class TestBatchPositionIsolation:
         self, lottery_model_root: Path
     ) -> None:
         incomes = [12_000.0, 24_000.0, 36_000.0]
-        cases = [
-            _single_earner(f"case-{int(income)}", income) for income in incomes
-        ]
+        cases = [_single_earner(f"case-{int(income)}", income) for income in incomes]
         runner = EuromodPlatformRunner(
             model_root=lottery_model_root,
             country="BE",
@@ -885,9 +904,7 @@ class TestBatchPositionIsolation:
         self, lottery_model_root: Path
     ) -> None:
         incomes = [12_000.0, 24_000.0, 36_000.0]
-        cases = [
-            _single_earner(f"case-{int(income)}", income) for income in incomes
-        ]
+        cases = [_single_earner(f"case-{int(income)}", income) for income in incomes]
         runner = EuromodPlatformRunner(
             model_root=lottery_model_root,
             country="BE",
@@ -970,13 +987,9 @@ class TestUkmodLive:
             gross = result.values["yem"]  # engine's own post-uprating gross
             expected_income_tax = (gross - 12_570.0) * 0.20
             expected_nics = (gross - 12_570.0) * 0.08
-            assert result.values["tin_s"] == pytest.approx(
-                expected_income_tax, abs=1.0
-            )
+            assert result.values["tin_s"] == pytest.approx(expected_income_tax, abs=1.0)
             # NICs compute on weekly-rounded thresholds; allow the rounding.
-            assert result.values["tscee_s"] == pytest.approx(
-                expected_nics, abs=12.0
-            )
+            assert result.values["tscee_s"] == pytest.approx(expected_nics, abs=12.0)
 
     def test_default_outputs_cover_the_standard_bridge_set(self, runner) -> None:
         results = runner.run_cases([_single_earner("uk-30k", 30_000.0)])
@@ -1069,9 +1082,7 @@ class TestEuromodBelgiumLive:
         )
         for result in results:
             gross = result.values["yem"]  # engine's post-uprating gross
-            assert result.values["tscee_s"] == pytest.approx(
-                gross * 0.1307, rel=1e-3
-            )
+            assert result.values["tscee_s"] == pytest.approx(gross * 0.1307, rel=1e-3)
 
     def test_pit_is_positive_and_progressive(self, runner) -> None:
         results = runner.run_cases(
@@ -1123,9 +1134,7 @@ class TestEuromodBelgiumLive:
             template_dataset="BE_training_data",
         )
 
-        results = runner.run_cases(
-            be_study_allowance_cases(), variables=["bed_s"]
-        )
+        results = runner.run_cases(be_study_allowance_cases(), variables=["bed_s"])
 
         assert [result.household_id for result in results] == list(anchors)
         for result in results:

@@ -191,9 +191,7 @@ def generate_universe(jurisdiction: str, model_root: Path) -> Universe:
     return Universe(jurisdiction=jurisdiction, oracle=oracle, policies=rows)
 
 
-def _process(
-    jurisdiction: str, *, check: bool, model_root: str | None
-) -> int:
+def _process(jurisdiction: str, *, check: bool, model_root: str | None) -> int:
     config = JURISDICTIONS[jurisdiction]
     output_path = CONFORMANCE_DIR / f"{jurisdiction}.yaml"
 
@@ -267,9 +265,7 @@ def _process(
     if check:
         if problems:
             for problem in problems:
-                sys.stderr.write(
-                    f"conformance[{jurisdiction}] INVALID: {problem}\n"
-                )
+                sys.stderr.write(f"conformance[{jurisdiction}] INVALID: {problem}\n")
             return 1
         if not output_path.exists():
             sys.stderr.write(
@@ -323,14 +319,18 @@ def main() -> int:
         nargs="?",
         help="Jurisdiction key (uk, be, pe-uk). Omit with --all.",
     )
-    parser.add_argument("--all", action="store_true", help="Process every jurisdiction.")
+    parser.add_argument(
+        "--all", action="store_true", help="Process every jurisdiction."
+    )
     parser.add_argument(
         "--check",
         action="store_true",
         help="Verify the committed universe matches a fresh regeneration.",
     )
     parser.add_argument("--model-root", help="Override the oracle model checkout path.")
-    parser.add_argument("--list", action="store_true", help="List configured jurisdictions.")
+    parser.add_argument(
+        "--list", action="store_true", help="List configured jurisdictions."
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -355,7 +355,9 @@ def main() -> int:
 
     rc = 0
     for jurisdiction in targets:
-        rc = max(rc, _process(jurisdiction, check=args.check, model_root=args.model_root))
+        rc = max(
+            rc, _process(jurisdiction, check=args.check, model_root=args.model_root)
+        )
     return rc
 
 

@@ -92,11 +92,21 @@ DEFAULT_GATE_OUTPUTS = [
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--compiled", required=True, type=Path)
+    parser.add_argument("--rulespec-root", required=True, type=Path)
+    parser.add_argument("--axiom-binary", required=True, type=Path)
     parser.add_argument("--fips", required=True, help="State FIPS (e.g. 36 for NY)")
-    parser.add_argument("--case-ids", nargs="+", required=True,
-                        help="ECPS case IDs to debug (e.g. ecps-7371)")
-    parser.add_argument("--sample-size", type=int, default=2000,
-                        help="ECPS sample size to scan for the case IDs")
+    parser.add_argument(
+        "--case-ids",
+        nargs="+",
+        required=True,
+        help="ECPS case IDs to debug (e.g. ecps-7371)",
+    )
+    parser.add_argument(
+        "--sample-size",
+        type=int,
+        default=2000,
+        help="ECPS sample size to scan for the case IDs",
+    )
     parser.add_argument(
         "--output",
         action="append",
@@ -123,11 +133,8 @@ def main(argv: list[str] | None = None) -> int:
 
     runner = AxiomRulesRunner(
         compiled_artifact_path=args.compiled,
-        binary_path=Path.home() / "axiom-rules-engine" / "target" / "release" / "axiom-rules-engine",
-        rulespec_repo_roots=[
-            str(Path.home() / "rulespec-us"),
-            str(Path.home() / f"rulespec-us-{_state_slug(args.fips)}"),
-        ],
+        binary_path=args.axiom_binary,
+        rulespec_root=args.rulespec_root,
     )
     # Ask one output at a time — different rules may demand different
     # input scopes; asking for all of them in one shot lets a single
@@ -145,18 +152,6 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  {output}: {value}", flush=True)
 
     return 0
-
-
-def _state_slug(fips: str) -> str:
-    return {
-        "01": "al",
-        "06": "ca",
-        "25": "ma",
-        "36": "ny",
-        "37": "nc",
-        "45": "sc",
-        "47": "tn",
-    }.get(fips, fips.lower())
 
 
 if __name__ == "__main__":

@@ -134,9 +134,7 @@ class EuromodUniverseBackend:
             / self.country
             / f"{self.country}.xml"
         )
-        self._varconfig_xml = (
-            self.model_root / "XMLParam" / "Config" / "VARCONFIG.xml"
-        )
+        self._varconfig_xml = self.model_root / "XMLParam" / "Config" / "VARCONFIG.xml"
 
     # -- registry (VARCONFIG) ------------------------------------------------
 
@@ -201,9 +199,7 @@ class EuromodUniverseBackend:
     def raw_policies(self) -> list[RawPolicy]:
         """Enumerate every policy in the target system with its output facts."""
         if not self._country_xml.exists():
-            raise FileNotFoundError(
-                f"Country XML not found at {self._country_xml}"
-            )
+            raise FileNotFoundError(f"Country XML not found at {self._country_xml}")
         registry = self._registry_variables()
         system_id = self._system_id()
         policies: list[RawPolicy] = []
@@ -217,9 +213,7 @@ class EuromodUniverseBackend:
                 element.clear()
         return policies
 
-    def _parse_policy(
-        self, element: ET.Element, registry: set[str]
-    ) -> RawPolicy:
+    def _parse_policy(self, element: ET.Element, registry: set[str]) -> RawPolicy:
         name = _text(element, "Name") or ""
         policy_type = _text(element, "Type")
         switch = _text(element, "Switch")
@@ -382,7 +376,11 @@ PE_UK_PROGRAM_SPINE: tuple[PolicyEngineProgram, ...] = (
     PolicyEngineProgram("fuel_duty", ("fuel_duty",)),
     PolicyEngineProgram(
         "child_benefit",
-        ("child_benefit", "child_benefit_respective_amount", "child_benefit_entitlement"),
+        (
+            "child_benefit",
+            "child_benefit_respective_amount",
+            "child_benefit_entitlement",
+        ),
     ),
     PolicyEngineProgram(
         "housing_benefit", ("housing_benefit", "housing_benefit_applicable_amount")
@@ -489,7 +487,9 @@ PE_US_PROGRAM_SPINE: tuple[PolicyEngineProgram, ...] = (
     PolicyEngineProgram("eitc", ("eitc",)),
     PolicyEngineProgram("ctc", ("ctc",)),
     PolicyEngineProgram("cdcc", ("cdcc",)),
-    PolicyEngineProgram("american_opportunity_credit", ("american_opportunity_credit",)),
+    PolicyEngineProgram(
+        "american_opportunity_credit", ("american_opportunity_credit",)
+    ),
     PolicyEngineProgram("lifetime_learning_credit", ("lifetime_learning_credit",)),
     PolicyEngineProgram("savers_credit", ("savers_credit",)),
     PolicyEngineProgram("elderly_disabled_credit", ("elderly_disabled_credit",)),
@@ -505,8 +505,12 @@ PE_US_PROGRAM_SPINE: tuple[PolicyEngineProgram, ...] = (
     PolicyEngineProgram("new_clean_vehicle_credit", ("new_clean_vehicle_credit",)),
     PolicyEngineProgram("used_clean_vehicle_credit", ("used_clean_vehicle_credit",)),
     # Payroll & SECA (6)
-    PolicyEngineProgram("employee_social_security_tax", ("employee_social_security_tax",)),
-    PolicyEngineProgram("employer_social_security_tax", ("employer_social_security_tax",)),
+    PolicyEngineProgram(
+        "employee_social_security_tax", ("employee_social_security_tax",)
+    ),
+    PolicyEngineProgram(
+        "employer_social_security_tax", ("employer_social_security_tax",)
+    ),
     PolicyEngineProgram("employee_medicare_tax", ("employee_medicare_tax",)),
     PolicyEngineProgram("employer_medicare_tax", ("employer_medicare_tax",)),
     PolicyEngineProgram("additional_medicare_tax", ("additional_medicare_tax",)),
@@ -720,7 +724,11 @@ class PolicyEngineVariableIndex:
         inserted = checkout not in sys.path
         if inserted:
             sys.path.insert(0, checkout)
-        stale = [m for m in sys.modules if m == self.package or m.startswith(self.package + ".")]
+        stale = [
+            m
+            for m in sys.modules
+            if m == self.package or m.startswith(self.package + ".")
+        ]
         saved = {m: sys.modules.pop(m) for m in stale}
         try:
             pkg = importlib.import_module(self.package)
@@ -822,9 +830,7 @@ class PolicyEngineUniverseBackend:
         ``subtracts`` composition. Bare inputs are not computed."""
         if self._index.has_formula(name):
             return True
-        return self.include_adds_subtracts and self._index.has_adds_or_subtracts(
-            name
-        )
+        return self.include_adds_subtracts and self._index.has_adds_or_subtracts(name)
 
     def pinned_version(self) -> str:
         """Pin the exact package version enumerated — a fact from the checkout.
@@ -845,7 +851,7 @@ class PolicyEngineUniverseBackend:
                     _, _, rhs = stripped.partition("=")
                     return rhs.strip().strip('"').strip("'")
             raise ValueError(
-                f"no `version = \"…\"` line in {pyproject}; cannot pin the "
+                f'no `version = "…"` line in {pyproject}; cannot pin the '
                 f"{self.package} version."
             )
         # No pyproject at the checkout root: use the installed distribution's

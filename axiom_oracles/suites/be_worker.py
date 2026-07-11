@@ -167,7 +167,9 @@ def _single_worker_pit_case(case_id: str, annual_income: float) -> Case:
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -197,7 +199,9 @@ def _single_worker_forfait_case(case_id: str, annual_income: float) -> Case:
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -227,7 +231,9 @@ def _single_worker_work_bonus_credit_case(case_id: str, annual_income: float) ->
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -257,7 +263,9 @@ def _single_worker_tax_income_list_case(case_id: str, annual_income: float) -> C
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -266,7 +274,9 @@ def _single_worker_tax_income_list_case(case_id: str, annual_income: float) -> C
             ): False,
             _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
             _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
-            _tax_income_list_input("belgium_euromod_ils_tax_include_pit_component"): True,
+            _tax_income_list_input(
+                "belgium_euromod_ils_tax_include_pit_component"
+            ): True,
             _tax_income_list_input(
                 "belgium_euromod_ils_tax_supplied_capital_income_tax_annual_amount"
             ): 0,
@@ -312,7 +322,9 @@ def _single_worker_disposable_income_list_case(
             ): 0,
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -321,7 +333,9 @@ def _single_worker_disposable_income_list_case(
             ): False,
             _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
             _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
-            _tax_income_list_input("belgium_euromod_ils_tax_include_pit_component"): True,
+            _tax_income_list_input(
+                "belgium_euromod_ils_tax_include_pit_component"
+            ): True,
             _tax_income_list_input(
                 "belgium_euromod_ils_tax_supplied_capital_income_tax_annual_amount"
             ): 0,
