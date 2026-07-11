@@ -51,17 +51,17 @@
       "concept": "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
       "description": "shelter deduction",
       "left_weighted_sum": 1153326549.655538,
-      "match_rate": 100,
-      "match_weight": 3663355.009217,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "match_rate": 99.883178,
+      "match_weight": 3658956.289306,
+      "mismatch_count": 1,
+      "mismatch_weight": 4398.719912,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 1153326549.655538,
-      "weighted_difference": 0,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 1153657902.765004,
+      "weighted_difference": -331353.109467,
+      "weighted_match_rate": 99.879926
     },
     {
       "category": "income",
@@ -72,17 +72,17 @@
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
       "description": "net income",
       "left_weighted_sum": 1961004355.828671,
-      "match_rate": 100,
-      "match_weight": 3663355.009217,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "match_rate": 98.247664,
+      "match_weight": 3596852.697996,
+      "mismatch_count": 15,
+      "mismatch_weight": 66502.311221,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 1961004355.828671,
-      "weighted_difference": 0,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 1961886587.204981,
+      "weighted_difference": -882231.376309,
+      "weighted_match_rate": 98.184661
     },
     {
       "category": "benefits",
@@ -114,17 +114,17 @@
       "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
       "description": "benefit",
       "left_weighted_sum": 1255069797.921564,
-      "match_rate": 100,
-      "match_weight": 3663355.009217,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "match_rate": 95.327103,
+      "match_weight": 3495150.844987,
+      "mismatch_count": 40,
+      "mismatch_weight": 168204.16423,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 1255069797.921564,
-      "weighted_difference": 0,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 1254780936.813985,
+      "weighted_difference": 288861.107579,
+      "weighted_match_rate": 95.408467
     }
   ],
   "case_count": 856,
@@ -579,8 +579,8 @@
     },
     {
       "case_id": "2024-202310-33334",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4868.459846,
       "yrmonth": 202310
     },
@@ -831,8 +831,8 @@
     },
     {
       "case_id": "2024-202311-33370",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4504.529887,
       "yrmonth": 202311
     },
@@ -922,8 +922,8 @@
     },
     {
       "case_id": "2024-202311-33383",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4768.460235,
       "yrmonth": 202311
     },
@@ -1195,8 +1195,8 @@
     },
     {
       "case_id": "2024-202312-33422",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 5004.674774,
       "yrmonth": 202312
     },
@@ -1223,8 +1223,8 @@
     },
     {
       "case_id": "2024-202312-33426",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4498.573579,
       "yrmonth": 202312
     },
@@ -1538,8 +1538,8 @@
     },
     {
       "case_id": "2024-202401-33471",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4881.992206,
       "yrmonth": 202401
     },
@@ -1643,8 +1643,8 @@
     },
     {
       "case_id": "2024-202401-33486",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4881.992206,
       "yrmonth": 202401
     },
@@ -1930,8 +1930,8 @@
     },
     {
       "case_id": "2024-202401-33527",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4888.064009,
       "yrmonth": 202401
     },
@@ -2000,8 +2000,8 @@
     },
     {
       "case_id": "2024-202402-33537",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3669.517005,
       "yrmonth": 202402
     },
@@ -2154,8 +2154,8 @@
     },
     {
       "case_id": "2024-202402-33559",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3742.808492,
       "yrmonth": 202402
     },
@@ -2511,8 +2511,8 @@
     },
     {
       "case_id": "2024-202403-33610",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4950.297612,
       "yrmonth": 202403
     },
@@ -2630,8 +2630,8 @@
     },
     {
       "case_id": "2024-202403-33627",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4426.370956,
       "yrmonth": 202403
     },
@@ -2756,8 +2756,8 @@
     },
     {
       "case_id": "2024-202403-33645",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4015.806034,
       "yrmonth": 202403
     },
@@ -2868,8 +2868,8 @@
     },
     {
       "case_id": "2024-202404-33661",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4452.315852,
       "yrmonth": 202404
     },
@@ -3169,8 +3169,8 @@
     },
     {
       "case_id": "2024-202404-33704",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4277.129991,
       "yrmonth": 202404
     },
@@ -3246,8 +3246,8 @@
     },
     {
       "case_id": "2024-202404-33715",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4569.106427,
       "yrmonth": 202404
     },
@@ -3309,8 +3309,8 @@
     },
     {
       "case_id": "2024-202404-33724",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4134.385955,
       "yrmonth": 202404
     },
@@ -3547,8 +3547,8 @@
     },
     {
       "case_id": "2024-202405-33758",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4229.172194,
       "yrmonth": 202405
     },
@@ -3561,8 +3561,8 @@
     },
     {
       "case_id": "2024-202405-33760",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4155.530258,
       "yrmonth": 202405
     },
@@ -3603,8 +3603,8 @@
     },
     {
       "case_id": "2024-202405-33766",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4347.341821,
       "yrmonth": 202405
     },
@@ -3792,8 +3792,8 @@
     },
     {
       "case_id": "2024-202405-33793",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4273.699872,
       "yrmonth": 202405
     },
@@ -3841,8 +3841,8 @@
     },
     {
       "case_id": "2024-202405-33800",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3810.086751,
       "yrmonth": 202405
     },
@@ -3855,8 +3855,8 @@
     },
     {
       "case_id": "2024-202405-33802",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3875.16568,
       "yrmonth": 202405
     },
@@ -4191,8 +4191,8 @@
     },
     {
       "case_id": "2024-202406-33850",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3632.394873,
       "yrmonth": 202406
     },
@@ -4212,15 +4212,15 @@
     },
     {
       "case_id": "2024-202406-33853",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3577.118687,
       "yrmonth": 202406
     },
     {
       "case_id": "2024-202406-33854",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3591.435985,
       "yrmonth": 202406
     },
@@ -4513,8 +4513,8 @@
     },
     {
       "case_id": "2024-202407-33896",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4459.59241,
       "yrmonth": 202407
     },
@@ -4555,8 +4555,8 @@
     },
     {
       "case_id": "2024-202407-33902",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4487.748426,
       "yrmonth": 202407
     },
@@ -4639,8 +4639,8 @@
     },
     {
       "case_id": "2024-202407-33914",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4630.309375,
       "yrmonth": 202407
     },
@@ -4667,8 +4667,8 @@
     },
     {
       "case_id": "2024-202407-33918",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 394.061728,
       "yrmonth": 202407
     },
@@ -4702,8 +4702,8 @@
     },
     {
       "case_id": "2024-202407-33923",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4290.878545,
       "yrmonth": 202407
     },
@@ -4926,8 +4926,8 @@
     },
     {
       "case_id": "2024-202407-33955",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4090.614355,
       "yrmonth": 202407
     },
@@ -5108,8 +5108,8 @@
     },
     {
       "case_id": "2024-202408-33981",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4892.86654,
       "yrmonth": 202408
     },
@@ -5164,8 +5164,8 @@
     },
     {
       "case_id": "2024-202408-33989",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 3469.126748,
       "yrmonth": 202408
     },
@@ -5402,8 +5402,8 @@
     },
     {
       "case_id": "2024-202408-34023",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 5059.253563,
       "yrmonth": 202408
     },
@@ -5577,8 +5577,8 @@
     },
     {
       "case_id": "2024-202409-34048",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4118.489429,
       "yrmonth": 202409
     },
@@ -5745,8 +5745,8 @@
     },
     {
       "case_id": "2024-202409-34072",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4179.626821,
       "yrmonth": 202409
     },
@@ -5829,8 +5829,8 @@
     },
     {
       "case_id": "2024-202409-34084",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4089.365975,
       "yrmonth": 202409
     },
@@ -6095,15 +6095,15 @@
     },
     {
       "case_id": "2024-202409-34122",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "benefit",
       "weight": 4008.712725,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-34123",
-      "matched": true,
-      "stage": null,
+      "matched": false,
+      "stage": "net_income",
       "weight": 4007.086403,
       "yrmonth": 202409
     },
@@ -6198,11 +6198,1092 @@
   "locales": [
     "US-CO"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "axiom": {
+        "benefit": 705,
+        "gross_income": 569,
+        "maximum_allotment": 766,
+        "net_income": 200.5,
+        "shelter_deduction": 170.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202310-33334",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 706,
+        "gross_income": 569,
+        "maximum_allotment": 766,
+        "net_income": 200,
+        "shelter_deduction": 171,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202310-33334",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4868.459846,
+      "yrmonth": 202310
+    },
+    {
+      "axiom": {
+        "benefit": 82,
+        "gross_income": 1188,
+        "maximum_allotment": 291,
+        "net_income": 696.2,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202311-33370",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 81,
+        "gross_income": 1188,
+        "maximum_allotment": 291,
+        "net_income": 697,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202311-33370",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4504.529887,
+      "yrmonth": 202311
+    },
+    {
+      "axiom": {
+        "benefit": 280,
+        "gross_income": 823,
+        "maximum_allotment": 291,
+        "net_income": 33.5,
+        "shelter_deduction": 591.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202311-33383",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 281,
+        "gross_income": 823,
+        "maximum_allotment": 291,
+        "net_income": 33,
+        "shelter_deduction": 592,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202311-33383",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4768.460235,
+      "yrmonth": 202311
+    },
+    {
+      "axiom": {
+        "benefit": 1048,
+        "gross_income": 1628,
+        "maximum_allotment": 1386,
+        "net_income": 1123.5,
+        "shelter_deduction": 225.5,
+        "standard_deduction": 279
+      },
+      "case_id": "2024-202312-33422",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 1049,
+        "gross_income": 1628,
+        "maximum_allotment": 1386,
+        "net_income": 1123,
+        "shelter_deduction": 226,
+        "standard_deduction": 279
+      },
+      "qc_case_id": "2024-202312-33422",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 5004.674774,
+      "yrmonth": 202312
+    },
+    {
+      "axiom": {
+        "benefit": 356,
+        "gross_income": 883,
+        "maximum_allotment": 535,
+        "net_income": 596.4,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202312-33426",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 355,
+        "gross_income": 883,
+        "maximum_allotment": 535,
+        "net_income": 597,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202312-33426",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4498.573579,
+      "yrmonth": 202312
+    },
+    {
+      "axiom": {
+        "benefit": 289,
+        "gross_income": 432,
+        "maximum_allotment": 291,
+        "net_income": 4.6,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202401-33471",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": 2,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 291,
+        "gross_income": 432,
+        "maximum_allotment": 291,
+        "net_income": 0,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202401-33471",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4881.992206,
+      "yrmonth": 202401
+    },
+    {
+      "axiom": {
+        "benefit": 284,
+        "gross_income": 364,
+        "maximum_allotment": 291,
+        "net_income": 23,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202401-33486",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": 7,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 291,
+        "gross_income": 364,
+        "maximum_allotment": 291,
+        "net_income": 0,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202401-33486",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4881.992206,
+      "yrmonth": 202401
+    },
+    {
+      "axiom": {
+        "benefit": 287,
+        "gross_income": 264,
+        "maximum_allotment": 291,
+        "net_income": 13.2,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202401-33527",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 286,
+        "gross_income": 264,
+        "maximum_allotment": 291,
+        "net_income": 14,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202401-33527",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4888.064009,
+      "yrmonth": 202401
+    },
+    {
+      "axiom": {
+        "benefit": 157,
+        "gross_income": 943,
+        "maximum_allotment": 291,
+        "net_income": 443.5,
+        "shelter_deduction": 301.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202402-33537",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 158,
+        "gross_income": 943,
+        "maximum_allotment": 291,
+        "net_income": 443,
+        "shelter_deduction": 302,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202402-33537",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3669.517005,
+      "yrmonth": 202402
+    },
+    {
+      "axiom": {
+        "benefit": 175,
+        "gross_income": 981,
+        "maximum_allotment": 291,
+        "net_income": 383.5,
+        "shelter_deduction": 399.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202402-33559",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 176,
+        "gross_income": 981,
+        "maximum_allotment": 291,
+        "net_income": 383,
+        "shelter_deduction": 400,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202402-33559",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3742.808492,
+      "yrmonth": 202402
+    },
+    {
+      "axiom": {
+        "benefit": 405,
+        "gross_income": 1125,
+        "maximum_allotment": 535,
+        "net_income": 430.5,
+        "shelter_deduction": 496.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202403-33610",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 406,
+        "gross_income": 1125,
+        "maximum_allotment": 535,
+        "net_income": 430,
+        "shelter_deduction": 497,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202403-33610",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4950.297612,
+      "yrmonth": 202403
+    },
+    {
+      "axiom": {
+        "benefit": 38,
+        "gross_income": 1171,
+        "maximum_allotment": 291,
+        "net_income": 840.5,
+        "shelter_deduction": 132.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202403-33627",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 39,
+        "gross_income": 1171,
+        "maximum_allotment": 291,
+        "net_income": 840,
+        "shelter_deduction": 133,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202403-33627",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4426.370956,
+      "yrmonth": 202403
+    },
+    {
+      "axiom": {
+        "benefit": 92,
+        "gross_income": 2778,
+        "maximum_allotment": 535,
+        "net_income": 1476.6,
+        "shelter_deduction": 547.8,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202403-33645",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 91,
+        "gross_income": 2778,
+        "maximum_allotment": 535,
+        "net_income": 1477,
+        "shelter_deduction": 548,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202403-33645",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4015.806034,
+      "yrmonth": 202403
+    },
+    {
+      "axiom": {
+        "benefit": 178,
+        "gross_income": 963,
+        "maximum_allotment": 291,
+        "net_income": 373.5,
+        "shelter_deduction": 391.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202404-33661",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 179,
+        "gross_income": 963,
+        "maximum_allotment": 291,
+        "net_income": 373,
+        "shelter_deduction": 392,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202404-33661",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4452.315852,
+      "yrmonth": 202404
+    },
+    {
+      "axiom": {
+        "benefit": 126,
+        "gross_income": 1414,
+        "maximum_allotment": 291,
+        "net_income": 549.8,
+        "shelter_deduction": 383.4,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202404-33704",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 125,
+        "gross_income": 1414,
+        "maximum_allotment": 291,
+        "net_income": 551,
+        "shelter_deduction": 383,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202404-33704",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4277.129991,
+      "yrmonth": 202404
+    },
+    {
+      "axiom": {
+        "benefit": 204,
+        "gross_income": 629,
+        "maximum_allotment": 291,
+        "net_income": 288,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202404-33715",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": 11,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 215,
+        "gross_income": 629,
+        "maximum_allotment": 291,
+        "net_income": 251,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202404-33715",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4569.106427,
+      "yrmonth": 202404
+    },
+    {
+      "axiom": {
+        "benefit": 80,
+        "gross_income": 1059,
+        "maximum_allotment": 291,
+        "net_income": 700.5,
+        "shelter_deduction": 160.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202404-33724",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 81,
+        "gross_income": 1059,
+        "maximum_allotment": 291,
+        "net_income": 700,
+        "shelter_deduction": 161,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202404-33724",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4134.385955,
+      "yrmonth": 202404
+    },
+    {
+      "axiom": {
+        "benefit": 191,
+        "gross_income": 963,
+        "maximum_allotment": 291,
+        "net_income": 330.5,
+        "shelter_deduction": 434.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202405-33758",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 192,
+        "gross_income": 963,
+        "maximum_allotment": 291,
+        "net_income": 330,
+        "shelter_deduction": 435,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202405-33758",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4229.172194,
+      "yrmonth": 202405
+    },
+    {
+      "axiom": {
+        "benefit": 138,
+        "gross_income": 849,
+        "maximum_allotment": 291,
+        "net_income": 508,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202405-33760",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": 11,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 149,
+        "gross_income": 849,
+        "maximum_allotment": 291,
+        "net_income": 471,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202405-33760",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4155.530258,
+      "yrmonth": 202405
+    },
+    {
+      "axiom": {
+        "benefit": 262,
+        "gross_income": 368,
+        "maximum_allotment": 291,
+        "net_income": 96.4,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202405-33766",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 261,
+        "gross_income": 368,
+        "maximum_allotment": 291,
+        "net_income": 97,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202405-33766",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4347.341821,
+      "yrmonth": 202405
+    },
+    {
+      "axiom": {
+        "benefit": 207,
+        "gross_income": 773,
+        "maximum_allotment": 291,
+        "net_income": 277.4,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202405-33793",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": 11,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 218,
+        "gross_income": 773,
+        "maximum_allotment": 291,
+        "net_income": 241,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202405-33793",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4273.699872,
+      "yrmonth": 202405
+    },
+    {
+      "axiom": {
+        "benefit": 278,
+        "gross_income": 3959,
+        "maximum_allotment": 1155,
+        "net_income": 2923.2,
+        "shelter_deduction": 0,
+        "standard_deduction": 244
+      },
+      "case_id": "2024-202405-33800",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 277,
+        "gross_income": 3959,
+        "maximum_allotment": 1155,
+        "net_income": 2924,
+        "shelter_deduction": 0,
+        "standard_deduction": 244
+      },
+      "qc_case_id": "2024-202405-33800",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3810.086751,
+      "yrmonth": 202405
+    },
+    {
+      "axiom": {
+        "benefit": 316,
+        "gross_income": 4227,
+        "maximum_allotment": 1155,
+        "net_income": 2796.4,
+        "shelter_deduction": 341.2,
+        "standard_deduction": 244
+      },
+      "case_id": "2024-202405-33802",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 315,
+        "gross_income": 4227,
+        "maximum_allotment": 1155,
+        "net_income": 2797,
+        "shelter_deduction": 341,
+        "standard_deduction": 244
+      },
+      "qc_case_id": "2024-202405-33802",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3875.16568,
+      "yrmonth": 202405
+    },
+    {
+      "axiom": {
+        "benefit": 957,
+        "gross_income": 3584,
+        "maximum_allotment": 1532,
+        "net_income": 1916.2,
+        "shelter_deduction": 672,
+        "standard_deduction": 279
+      },
+      "case_id": "2024-202406-33850",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 956,
+        "gross_income": 3584,
+        "maximum_allotment": 1532,
+        "net_income": 1917,
+        "shelter_deduction": 672,
+        "standard_deduction": 279
+      },
+      "qc_case_id": "2024-202406-33850",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3632.394873,
+      "yrmonth": 202406
+    },
+    {
+      "axiom": {
+        "benefit": 86,
+        "gross_income": 2378,
+        "maximum_allotment": 535,
+        "net_income": 1496.6,
+        "shelter_deduction": 207.8,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202406-33853",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 85,
+        "gross_income": 2378,
+        "maximum_allotment": 535,
+        "net_income": 1497,
+        "shelter_deduction": 208,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202406-33853",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3577.118687,
+      "yrmonth": 202406
+    },
+    {
+      "axiom": {
+        "benefit": 583,
+        "gross_income": 2688,
+        "maximum_allotment": 1155,
+        "net_income": 1906.4,
+        "shelter_deduction": 0,
+        "standard_deduction": 244
+      },
+      "case_id": "2024-202406-33854",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 582,
+        "gross_income": 2688,
+        "maximum_allotment": 1155,
+        "net_income": 1907,
+        "shelter_deduction": 0,
+        "standard_deduction": 244
+      },
+      "qc_case_id": "2024-202406-33854",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3591.435985,
+      "yrmonth": 202406
+    },
+    {
+      "axiom": {
+        "benefit": 497,
+        "gross_income": 943,
+        "maximum_allotment": 535,
+        "net_income": 123.5,
+        "shelter_deduction": 621.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202407-33896",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 498,
+        "gross_income": 943,
+        "maximum_allotment": 535,
+        "net_income": 123,
+        "shelter_deduction": 622,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202407-33896",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4459.59241,
+      "yrmonth": 202407
+    },
+    {
+      "axiom": {
+        "benefit": 248,
+        "gross_income": 823,
+        "maximum_allotment": 291,
+        "net_income": 140.5,
+        "shelter_deduction": 484.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202407-33902",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 249,
+        "gross_income": 823,
+        "maximum_allotment": 291,
+        "net_income": 140,
+        "shelter_deduction": 485,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202407-33902",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4487.748426,
+      "yrmonth": 202407
+    },
+    {
+      "axiom": {
+        "benefit": 290,
+        "gross_income": 920,
+        "maximum_allotment": 291,
+        "net_income": 0.5,
+        "shelter_deduction": 556.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202407-33914",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 291,
+        "gross_income": 920,
+        "maximum_allotment": 291,
+        "net_income": 0,
+        "shelter_deduction": 557,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202407-33914",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4630.309375,
+      "yrmonth": 202407
+    },
+    {
+      "axiom": {
+        "benefit": 127,
+        "gross_income": 6000,
+        "maximum_allotment": 1386,
+        "net_income": 4193.5,
+        "shelter_deduction": 667.5,
+        "standard_deduction": 279
+      },
+      "case_id": "2024-202407-33918",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 128,
+        "gross_income": 6000,
+        "maximum_allotment": 1386,
+        "net_income": 4193,
+        "shelter_deduction": 668,
+        "standard_deduction": 279
+      },
+      "qc_case_id": "2024-202407-33918",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 394.061728,
+      "yrmonth": 202407
+    },
+    {
+      "axiom": {
+        "benefit": 180,
+        "gross_income": 710,
+        "maximum_allotment": 291,
+        "net_income": 369,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202407-33923",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": 11,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 191,
+        "gross_income": 710,
+        "maximum_allotment": 291,
+        "net_income": 332,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202407-33923",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4290.878545,
+      "yrmonth": 202407
+    },
+    {
+      "axiom": {
+        "benefit": 133,
+        "gross_income": 1528,
+        "maximum_allotment": 291,
+        "net_income": 526.6,
+        "shelter_deduction": 497.8,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202407-33955",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 132,
+        "gross_income": 1528,
+        "maximum_allotment": 291,
+        "net_income": 527,
+        "shelter_deduction": 498,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202407-33955",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4090.614355,
+      "yrmonth": 202407
+    },
+    {
+      "axiom": {
+        "benefit": 1072,
+        "gross_income": 3954,
+        "maximum_allotment": 1970,
+        "net_income": 2993.2,
+        "shelter_deduction": 0,
+        "standard_deduction": 279
+      },
+      "case_id": "2024-202408-33981",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 1071,
+        "gross_income": 3954,
+        "maximum_allotment": 1970,
+        "net_income": 2994,
+        "shelter_deduction": 0,
+        "standard_deduction": 279
+      },
+      "qc_case_id": "2024-202408-33981",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4892.86654,
+      "yrmonth": 202408
+    },
+    {
+      "axiom": {
+        "benefit": 80,
+        "gross_income": 899,
+        "maximum_allotment": 291,
+        "net_income": 700.5,
+        "shelter_deduction": 0.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202408-33989",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 81,
+        "gross_income": 899,
+        "maximum_allotment": 291,
+        "net_income": 700,
+        "shelter_deduction": 1,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202408-33989",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 3469.126748,
+      "yrmonth": 202408
+    },
+    {
+      "axiom": {
+        "benefit": 970,
+        "gross_income": 344,
+        "maximum_allotment": 973,
+        "net_income": 9.8,
+        "shelter_deduction": 57.4,
+        "standard_deduction": 208
+      },
+      "case_id": "2024-202408-34023",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 969,
+        "gross_income": 344,
+        "maximum_allotment": 973,
+        "net_income": 11,
+        "shelter_deduction": 57,
+        "standard_deduction": 208
+      },
+      "qc_case_id": "2024-202408-34023",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 5059.253563,
+      "yrmonth": 202408
+    },
+    {
+      "axiom": {
+        "benefit": 91,
+        "gross_income": 1001,
+        "maximum_allotment": 291,
+        "net_income": 663.5,
+        "shelter_deduction": 139.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202409-34048",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 92,
+        "gross_income": 1001,
+        "maximum_allotment": 291,
+        "net_income": 663,
+        "shelter_deduction": 140,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202409-34048",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4118.489429,
+      "yrmonth": 202409
+    },
+    {
+      "axiom": {
+        "benefit": 176,
+        "gross_income": 3019,
+        "maximum_allotment": 766,
+        "net_income": 1965.8,
+        "shelter_deduction": 251.4,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202409-34072",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": -1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 175,
+        "gross_income": 3019,
+        "maximum_allotment": 766,
+        "net_income": 1967,
+        "shelter_deduction": 251,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202409-34072",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4179.626821,
+      "yrmonth": 202409
+    },
+    {
+      "axiom": {
+        "benefit": 285,
+        "gross_income": 3011,
+        "maximum_allotment": 766,
+        "net_income": 1600.2,
+        "shelter_deduction": 610.6,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202409-34084",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 286,
+        "gross_income": 3011,
+        "maximum_allotment": 766,
+        "net_income": 1600,
+        "shelter_deduction": 611,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202409-34084",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4089.365975,
+      "yrmonth": 202409
+    },
+    {
+      "axiom": {
+        "benefit": 226,
+        "gross_income": 1001,
+        "maximum_allotment": 291,
+        "net_income": 213.5,
+        "shelter_deduction": 589.5,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202409-34122",
+      "concept": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+      "difference": 1,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 227,
+        "gross_income": 1001,
+        "maximum_allotment": 291,
+        "net_income": 213,
+        "shelter_deduction": 590,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202409-34122",
+      "received_minimum_benefit": false,
+      "stage": "benefit",
+      "weight": 4008.712725,
+      "yrmonth": 202409
+    },
+    {
+      "axiom": {
+        "benefit": 218,
+        "gross_income": 728,
+        "maximum_allotment": 291,
+        "net_income": 241.4,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "case_id": "2024-202409-34123",
+      "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+      "difference": 11,
+      "kind": "amount_difference",
+      "qc": {
+        "benefit": 229,
+        "gross_income": 728,
+        "maximum_allotment": 291,
+        "net_income": 205,
+        "shelter_deduction": 0,
+        "standard_deduction": 198
+      },
+      "qc_case_id": "2024-202409-34123",
+      "received_minimum_benefit": false,
+      "stage": "net_income",
+      "weight": 4007.086403,
+      "yrmonth": 202409
+    }
+  ],
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-11T19:36:51Z",
+    "generated_at": "2026-07-08T20:45:34Z",
     "generated_by": "scripts/run_comparison.py::co-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6213,46 +7294,26 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "b53ce208771085030939db4b9691762506b6bca2"
+        "sha": "67cd100040f07317c067379d92a39bb1f3451caf"
       }
     ],
     "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
-  "schema_version": "axiom.comparison_report.v2.1",
+  "schema_version": "axiom.comparison_report.v2",
   "scope": null,
   "suite": "co-snap-qc",
   "summary": {
     "comparison_count": 856,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
-        "explained_residual": 0,
-        "unexplained": 0,
-        "upstream_engine_gap": 0
-      },
-      "dispositions_file": "dispositions/co-snap-qc.yaml",
-      "expired_entries": [
-        "homeless-shelter-deduction-cap-stale-143",
-        "whole-dollar-rounding-convention",
-        "whole-dollar-rounding-convention-net-income"
-      ],
-      "explained_rate": 100,
-      "orphaned_entries": [],
-      "raw_match_rate": 100,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 0
-    },
     "error_case_count": 0,
     "exclusions": {
       "by_reason": {},
       "total_excluded": 0,
       "total_loaded": 856
     },
-    "match_count": 856,
-    "match_rate": 100,
-    "mismatch_count": 0,
+    "match_count": 816,
+    "match_rate": 95.327103,
+    "mismatch_count": 40,
     "provenance": {
       "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine",
       "fiscal_year": 2024,
@@ -6271,7 +7332,7 @@
           "us-co/regulations/10-ccr-2506-1/4.407.31.yaml": "d373620707c58558261814f99709c40b1d9c423c0df2b1202e96e1702ff92131",
           "us-co/regulations/10-ccr-2506-1/4.408.2.yaml": "4117a54e621d393bdfd98d7919d47ae896551397a0a188703356e832077cc04e",
           "us-co/regulations/10-ccr-2506-1/4.408.yaml": "2da03ac3e36421501f90d938f62f56bdd39e871891f35eec192866971dc33b68",
-          "us/regulations/7-cfr/273/10.yaml": "b30b75666b34a4c625c480b6a243340c40994e37d5cc9334142c9fd3723ddf78",
+          "us/regulations/7-cfr/273/10.yaml": "2c1e091b5f2032b17366616dfbada70765257393fe22e0c9ec1b2a5a3010b475",
           "us/regulations/7-cfr/273/8.yaml": "2eb57902785375c837abb8d7a1b7326c20926b1cedd93463c64bbc0ca8981aee",
           "us/regulations/7-cfr/273/9.yaml": "9ce1454e8d41621559d88ac8bff912e7fcf6618a54c9c48feb9de621de2baf36",
           "us/statutes/7/2017/a.yaml": "772f90b2817a0c5f421d90288cf2e76b490fccf06b4c4ce7731350eb9de61da9"
@@ -6282,7 +7343,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-co-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-i5cwdibh/rulespec-us-main-snapqc",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-61de8e1v/rulespec-us-snap-fy2024",
         "patches": [
           {
             "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
@@ -6327,12 +7388,12 @@
           "us-co/regulations/10-ccr-2506-1/4.407.3.yaml": 3,
           "us-co/regulations/10-ccr-2506-1/4.408.2.yaml": 1,
           "us-co/regulations/10-ccr-2506-1/4.408.yaml": 2,
-          "us/regulations/7-cfr/273/10.yaml": 5,
+          "us/regulations/7-cfr/273/10.yaml": 4,
           "us/regulations/7-cfr/273/8.yaml": 1,
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-fy2024",
         "schema": "axiom_oracles.rulespec_overlay.v1"
       },
       "period": "2026-01",
@@ -6343,15 +7404,24 @@
         "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
         "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-fy2024"
     },
-    "stages": [],
+    "stages": [
+      {
+        "count": 10,
+        "stage": "net_income"
+      },
+      {
+        "count": 30,
+        "stage": "benefit"
+      }
+    ],
     "weighted": {
       "comparison_weight": 3663355.009217,
       "error_case_weight": 0,
-      "match_rate": 100,
-      "match_weight": 3663355.009217,
-      "mismatch_weight": 0
+      "match_rate": 95.408467,
+      "match_weight": 3495150.844987,
+      "mismatch_weight": 168204.16423
     }
   }
 }

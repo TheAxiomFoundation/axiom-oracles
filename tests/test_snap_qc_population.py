@@ -85,6 +85,8 @@ _FIXTURE_COLUMNS = [
     "FSNETEST",
     "STATUS",
     "AMTERR",
+    "FSNELDER",
+    "FSNDIS",
 ] + [f"{prefix}{i}" for i in (1, 2) for prefix in _PERSON_COLUMNS]
 
 
@@ -719,3 +721,19 @@ def test_raw_row_is_read_only(tmp_path) -> None:
     units, _ = load_qc_units(2024, data_dir=directory)
     with pytest.raises(TypeError):
         units[0].raw["FSBEN"] = "999"
+
+
+def test_unit_elderly_or_disabled_uses_file_counts(tmp_path) -> None:
+    rows = [dict(_ROW_ELDERLY_MAX_ALLOTMENT), dict(_ROW_EARNER_SHELTER)]
+    rows[0]["FSNELDER"] = "1"
+    rows[0]["FSNDIS"] = "0"
+    rows[1]["FSNELDER"] = "0"
+    rows[1]["FSNDIS"] = "0"
+    text = _fixture_csv_text_for_rows(rows)
+    directory = tmp_path / "qc"
+    directory.mkdir()
+    (directory / "qc_pub_fy2024.csv").write_text(text)
+    units, _ = load_qc_units(2024, data_dir=directory)
+    by_month = {u.yrmonth: u for u in units}
+    assert by_month[202401].unit_has_elderly_or_disabled is True
+    assert by_month[202402].unit_has_elderly_or_disabled is False

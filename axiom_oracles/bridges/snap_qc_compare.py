@@ -100,12 +100,12 @@ FY2024_MAX_ALLOTMENT_48_STATES = {
 }
 FY2024_MAX_ALLOTMENT_ADDITIONAL_MEMBER = 219
 
-#: ``FSMEDEXP`` is the allowable medical expense *in excess of $35* (codebook
-#: PDF p.84), and the QC recomputation sets ``FSMEDDED = MAX(0, FSMEDEXP)`` —
-#: it does not model Colorado's standard medical deduction demonstration
-#: ($165 standard; Table F.4), only the statutory excess. The statutory engine
-#: computes ``total - 35``, so the mapper feeds ``FSMEDEXP + 35`` and the
-#: engine's deduction reproduces ``FSMEDDED`` exactly.
+#: ``FSMEDDED`` is the medical deduction FNS applied (codebook PDF p.84). In
+#: ordinary states it equals the reported excess ``FSMEDEXP``, but in
+#: standard-medical-deduction demonstration states it can be a flat standard
+#: that differs (10 FY2024 rows nationally). The statutory engine computes
+#: ``total - 35``, so the mapper feeds ``FSMEDDED + 35`` and the engine's
+#: deduction reproduces the applied amount in both kinds of state.
 _MEDICAL_EXCESS_THRESHOLD = 35.0
 
 #: Overlay parameter-patch rule name -> utility tier. The fiscal-year SUA
@@ -392,6 +392,16 @@ def map_qc_unit(
         _money(getattr(unit, "liquid_resources", 0) or 0),
     )
 
+    # Unit-level elderly-or-disabled status comes from the file's own
+    # constructed counts (FSNELDER/FSNDIS) when present: members include
+    # non-participants whose income counts but whose age or disability does
+    # not confer unit status, so a member-derived OR can overstate it (one
+    # real Colorado row: a disabled non-participant made the unit look
+    # uncapped for shelter while FNS applied the cap). The engine only
+    # consumes any-member-is-elderly-or-disabled, so the unit flag rides on
+    # the first member.
+    unit_ed = getattr(unit, "unit_has_elderly_or_disabled", None)
+
     member_inputs: list[dict[str, Any]] = []
     for member in members:
         member_dict = dict(base_member)
@@ -404,9 +414,13 @@ def map_qc_unit(
         # cap, medical deduction entitlement, gross-test exemption). This oracle
         # validates benefit computation, not work screening.
         member_dict.update(snap_populace.project_work_member_inputs(True))
-        elderly = bool(
-            (member.age is not None and member.age >= 60) or member.elderly_or_disabled
-        )
+        if unit_ed is None:
+            elderly = bool(
+                (member.age is not None and member.age >= 60)
+                or member.elderly_or_disabled
+            )
+        else:
+            elderly = bool(unit_ed) and not member_inputs
         set_input_value(member_dict, "snap_member_is_elderly_or_disabled", elderly)
         member_inputs.append(member_dict)
 
