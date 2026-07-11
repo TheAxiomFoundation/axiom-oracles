@@ -401,10 +401,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "c6a1992f6e942cff93223ba2334632ae2146a169",
+      "axiom_rules_engine_sha": "de0efdc73b469132ee268e1c832e8f7148b91431",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-08T15:21:56Z",
+    "generated_at": "2026-07-11T03:50:34Z",
     "generated_by": "scripts/run_comparison.py::be-work-bonus-credit",
     "oracle": {
       "euromod_country": "BE",
