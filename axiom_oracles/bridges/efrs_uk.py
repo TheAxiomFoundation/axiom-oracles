@@ -19,8 +19,6 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Callable
 
-import yaml
-
 from .tax_populace import (
     _version_tuple,
     input_record,
@@ -2217,7 +2215,6 @@ def compare_uk_efrs(
             request=request,
             rulespec_root=resolved_rulespec_root,
             axiom_binary=resolved_axiom_binary,
-            surface=selected_surface,
         )
     return compare_outputs(
         pe_data=pe_data,
@@ -3850,151 +3847,13 @@ def run_axiom_surface(
     request: dict[str, Any],
     rulespec_root: Path,
     axiom_binary: Path,
-    surface: str,
 ) -> list[dict[str, Any]]:
-    if surface in UNIVERSAL_CREDIT_REGULATION_36_SURFACES:
-        return run_axiom_parameter_outputs(
-            program=program,
-            request=request,
-            rulespec_root=rulespec_root,
-        )
     return run_axiom_program(
         program=program,
         request=request,
         rulespec_root=rulespec_root,
         axiom_binary=axiom_binary,
     )
-
-
-def run_axiom_parameter_outputs(
-    *,
-    program: Path,
-    request: dict[str, Any],
-    rulespec_root: Path,
-) -> list[dict[str, Any]]:
-    results: list[dict[str, Any]] = []
-    parameter_cache: dict[str, dict[str, float]] = {}
-    for query in request.get("queries", []):
-        period_start = str((query.get("period") or {}).get("start") or "")
-        if period_start not in parameter_cache:
-            parameter_cache[period_start] = rulespec_scalar_parameter_values(
-                program,
-                rulespec_root=rulespec_root,
-                period_start=period_start,
-            )
-        parameter_values = parameter_cache[period_start]
-        outputs: dict[str, dict[str, Any]] = {}
-        for output in query.get("outputs", []):
-            if output not in parameter_values:
-                raise SystemExit(f"unknown RuleSpec scalar parameter: {output}")
-            outputs[output] = {"value": {"value": str(parameter_values[output])}}
-        results.append({"outputs": outputs})
-    return results
-
-
-def rulespec_scalar_parameter_values(
-    program: Path, *, rulespec_root: Path, period_start: str
-) -> dict[str, float]:
-    return _rulespec_scalar_parameter_values(
-        program.resolve(),
-        rulespec_root=rulespec_root.resolve(),
-        period_start=period_start,
-        seen=set(),
-    )
-
-
-def _rulespec_scalar_parameter_values(
-    program: Path,
-    *,
-    rulespec_root: Path,
-    period_start: str,
-    seen: set[Path],
-) -> dict[str, float]:
-    if program in seen:
-        return {}
-    seen.add(program)
-    payload = yaml.safe_load(program.read_text()) or {}
-    values: dict[str, float] = {}
-    try:
-        base = rule_base_from_program(program)
-    except ValueError:
-        base = None
-    for rule in payload.get("rules") or []:
-        if str(rule.get("kind") or "").strip() != "parameter":
-            continue
-        if base is None:
-            continue
-        version = effective_parameter_version(rule.get("versions") or [], period_start)
-        if version is None:
-            continue
-        formula = str(version.get("formula") or "").strip().replace("_", "")
-        try:
-            value = float(formula)
-        except ValueError:
-            continue
-        values[f"{base}#{rule['name']}"] = value
-    for import_ref in payload.get("imports") or []:
-        imported = resolve_rulespec_import(import_ref, rulespec_root=rulespec_root)
-        if imported is None:
-            continue
-        values.update(
-            _rulespec_scalar_parameter_values(
-                imported,
-                rulespec_root=rulespec_root,
-                period_start=period_start,
-                seen=seen,
-            )
-        )
-    return values
-
-
-def resolve_rulespec_import(import_ref: Any, *, rulespec_root: Path) -> Path | None:
-    raw = str(import_ref or "").strip()
-    if not raw:
-        return None
-    if ":" in raw:
-        repo_prefix, path_ref = raw.split(":", 1)
-        if repo_prefix != "uk":
-            return None
-    else:
-        path_ref = raw
-    checkout = require_rulespec_checkout(rulespec_root, country="uk")
-    candidate = checkout / "uk" / f"{path_ref}.yaml"
-    if candidate.is_file():
-        return resolve_rulespec_program(
-            checkout,
-            jurisdiction="uk",
-            relative_path=Path(f"{path_ref}.yaml"),
-        )
-    return None
-
-
-def effective_parameter_version(
-    versions: list[dict[str, Any]],
-    period_start: str,
-) -> dict[str, Any] | None:
-    eligible = [
-        version
-        for version in versions
-        if str(version.get("effective_from") or "") <= period_start
-    ]
-    if not eligible:
-        return None
-    return max(eligible, key=lambda version: str(version.get("effective_from") or ""))
-
-
-def rule_base_from_program(program: Path) -> str:
-    parts = program.with_suffix("").parts
-    if "regulations" in parts:
-        index = parts.index("regulations")
-        return "uk:" + "/".join(parts[index:])
-    if "statutes" in parts:
-        index = parts.index("statutes")
-        return "uk:" + "/".join(parts[index:])
-    if "policies" in parts:
-        index = parts.index("policies")
-        return "uk:" + "/".join(parts[index:])
-    raise ValueError(f"cannot infer UK RuleSpec base from {program}")
 
 
 def build_axiom_request(
