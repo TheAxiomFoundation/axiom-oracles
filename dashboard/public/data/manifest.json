@@ -135,6 +135,7 @@
     "axiom-policyengine-taxsim-me-income-tax-liability.json",
     "axiom-policyengine-taxsim-mn-income-tax-liability.json",
     "axiom-snapqc-ca-snap.json",
-    "axiom-snapqc-ny-snap.json"
+    "axiom-snapqc-ny-snap.json",
+    "axiom-euromod-dk-child-youth-benefit.json"
   ]
 }

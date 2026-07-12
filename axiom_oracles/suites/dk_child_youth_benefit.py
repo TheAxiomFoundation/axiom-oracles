@@ -1,0 +1,262 @@
+"""Denmark child and youth benefit suite for the EUROMOD ``bfachnm_s`` oracle.
+
+The børne- og ungeydelse (child and youth benefit) is a non-means-tested family
+transfer whose age-banded base amount (børneydelse under 15, ungeydelse 15-17)
+is reduced by a § 1 a income taper. This suite runs a single-parent, one-child
+grid against the JRC EUROMOD release's Danish system (EUROMOD_RELEASES_J2.0+,
+system DK_2025, dataset DK_training_data) and grades the composed Axiom pipeline
+``single_recipient_annual_child_youth_benefit`` against EUROMOD's ``bfachnm_s``.
+
+Household composition is expressed as explicit EUROMOD input rows so the
+dependent-child linkage the allocation depends on is exact: EUROMOD allocates
+``bfachnm_s`` to the dependent child row (``Allocate share_between IsDepChild``),
+so each case carries one responsible adult and one child that links to the head
+through ``idmother`` and carries the dependent-child code ``dec``. Monetary case
+facts are annual (the Axiom concept convention); the DK dataset is monthly, so
+``yem`` is supplied monthly (annual / 12) and the monthly ``bfachnm_s`` output is
+annualised by the adapter (x12).
+
+Single-recipient by design. EUROMOD implements a pre-2022 spousal income test in
+the taper for DK_2022-DK_2025 (filed upstream as ec-jrc #18,
+``euromod_issues.json`` euromod-dk-2025-bfachnm-pre2022-spousal-taper), and the
+Axiom pipeline models the single-recipient § 1 a taper only (the § 1 a couple
+apportionment is future work). The graded grid is therefore restricted to
+single-parent households, where the two sides implement the same mechanism and
+the spousal-test divergence cannot arise. Couple semantics are deliberately
+excluded from the graded surface.
+
+Verified EUROMOD conventions (executed against EUROMOD_RELEASES_J2.0+, DK_2025):
+
+- The child/youth benefit column is ``bfachnm_s`` (policy ``bfachnm_dk``),
+  computed from the DK_2025 constants 21168 / 16764 / 13188 (age <=2 / 3-6 />6),
+  the § 20-regulated bundfradrag 917000, and the 2 pct. taper rate. It is
+  monthly and the adapter annualises it. The base amounts reproduce the official
+  2025 Skattestyrelsen satser, which the Axiom side also reproduces from the
+  2011-niveau bases and a consumer_price_index_change_since_2009 of 0.285.
+
+- The engine's mellemskat income concept ``tintbto_s`` equals 0.92 x ``yem`` on
+  this dataset (no uprating; AM-bidrag 8%). The suite bridges the engine's own
+  ``tintbto_s`` into the composed module's ``middle_tax_basis`` input via
+  ``EUROMOD_TO_AXIOM_INPUT_BRIDGE`` so the Axiom taper runs on EUROMOD's own
+  income base rather than a re-projected one. Both outputs are annual, so the
+  bridge applies no divisor (verified: the bridged value is the annual
+  0.92 x yem the engine reports).
+
+- The EUROMOD input rows pin every income/benefit/expense column to 0 and set the
+  demographics explicitly (the adapter's worker zero-fills the full DK schema and
+  overlays these rows), so the head's ``tintbto_s`` is exactly 0.92 x yem and
+  ``bfachnm_s`` is exactly the statutory entitlement (verified per case in the
+  regenerate run: 21168 / 16764 / 13188 / 13188 at yem 300000 for ages
+  1 / 5 / 10 / 16, then 16704 / 11184 / 0 for age 5 at yem 1000000 / 1300000 /
+  2000000). Expected outputs are only ever the executed values from the
+  regenerate run.
+"""
+
+from __future__ import annotations
+
+from ..core.case import Case, Concepts, Entity
+
+
+DK_SCOPE = {"type": "country", "geoid": "DK"}
+DK_METADATA = {
+    "locale": "DK",
+    "scope": DK_SCOPE,
+    "axiom_entity": "Person",
+    "axiom_entity_id": "recipient",
+}
+
+# The composed child/youth benefit pipeline (rulespec-dk). Its single-recipient
+# annual output and its Person-level inputs are addressed under this module id.
+CYB_MODULE = "dk:statutes/composed/boerne-og-ungeydelse-pipeline"
+
+EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
+
+# The consumer-price-index change since 2009 that reproduces the official 2025
+# satser exactly (16992 x 1.246 -> round/12 -> 21168, etc.), and the § 1 a, stk. 3
+# § 20-regulated bundfradrag for 2025 (917000 kr.), supplied because
+# personskatteloven is not yet a captured dk corpus scope.
+_DK_CPI_2025 = 0.285
+_DK_CURRENT_YEAR_ALLOWANCE_2025 = 917_000
+# Any value: the suite sets qualifying retirement contributions to 0, so the
+# § 1 a, stk. 4-5 cap never binds and the income basis equals the mellemskat
+# basis. Pinned to the pensionsbeskatningslovens § 16, stk. 1 grundbeløb order.
+_DK_PENSION_CONTRIBUTION_CAP = 61_200
+
+# EUROMOD DK demographic codes.
+_LES_INACTIVE = 7  # head labour status carried by the DK training adults
+_LES_CHILD = 0
+_DMS_SINGLE = 1
+_DEC_DEPENDENT_CHILD = 1
+_LOC = 5
+_AMRTN_OWNER = 1
+_DRGUR = 1
+
+# Single-parent one-child grid: four ages at a below-threshold income crossing
+# the four age bands, then age 5 across an income sweep that straddles and
+# exhausts the § 1 a taper (tintbto = 0.92 x yem: 920000 / 1196000 / 1840000
+# against the 917000 bundfradrag).
+_GRID: tuple[tuple[int, float], ...] = (
+    (1, 300_000.0),
+    (5, 300_000.0),
+    (10, 300_000.0),
+    (16, 300_000.0),
+    (5, 1_000_000.0),
+    (5, 1_300_000.0),
+    (5, 2_000_000.0),
+)
+
+
+def dk_child_youth_benefit_cases() -> list[Case]:
+    """Single-parent child/youth benefit cases for the EUROMOD DK_2025 oracle."""
+
+    return [
+        _child_youth_benefit_case(child_age=age, head_annual_income=income)
+        for age, income in _GRID
+    ]
+
+
+def _child_youth_benefit_case(*, child_age: int, head_annual_income: float) -> Case:
+    return Case(
+        case_id=f"dk-child-youth-benefit-age{child_age}-yem{int(head_annual_income)}",
+        period="2025",
+        metadata={
+            **DK_METADATA,
+            "scenario": "single-parent-child-youth-benefit",
+            "child_age": child_age,
+            "head_annual_earnings": head_annual_income,
+            "axiom_inputs": _axiom_inputs(child_age),
+            "euromod_inputs": [
+                _adult_row(idperson=101, annual_income=head_annual_income),
+                _child_row(idperson=102, age=child_age, mother_id=101),
+            ],
+            # Bridge the engine's own mellemskat basis (annual 0.92 x yem) into the
+            # composed module's middle_tax_basis input. Both are annual, so no
+            # divisor is applied; the Axiom taper then runs on EUROMOD's income
+            # base with the same 917000 bundfradrag EUROMOD DK_2025 uses.
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
+                "tintbto_s": {"inputs": [_cyb_input("middle_tax_basis")]},
+            },
+        },
+        entities=_entities(child_age=child_age, head_annual_income=head_annual_income),
+        outputs=(Concepts.DK_CHILD_YOUTH_BENEFIT,),
+    )
+
+
+def _axiom_inputs(child_age: int) -> dict[str, float | bool | int]:
+    under_3, age_3_6, age_7_14, age_15_17 = _age_band_flags(child_age)
+    return {
+        _cyb_input("child_is_under_3_years_old"): under_3,
+        _cyb_input("child_is_at_least_3_and_under_7_years_old"): age_3_6,
+        _cyb_input("child_is_at_least_7_and_under_15_years_old"): age_7_14,
+        _cyb_input("young_person_is_at_least_15_and_under_18_years_old"): age_15_17,
+        _cyb_input("consumer_price_index_change_since_2009"): _DK_CPI_2025,
+        _cyb_input("calendar_year_uses_2012_adjustment"): False,
+        _cyb_input("calendar_year_uses_2013_or_later_adjustment"): True,
+        _cyb_input(
+            "qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum"
+        ): 0,
+        _cyb_input("applicable_pension_contribution_cap"): _DK_PENSION_CONTRIBUTION_CAP,
+        _cyb_input(
+            "current_year_income_reduction_allowance"
+        ): _DK_CURRENT_YEAR_ALLOWANCE_2025,
+    }
+
+
+def _age_band_flags(child_age: int) -> tuple[bool, bool, bool, bool]:
+    return (
+        child_age < 3,
+        3 <= child_age < 7,
+        7 <= child_age < 15,
+        15 <= child_age < 18,
+    )
+
+
+def _cyb_input(name: str) -> str:
+    return f"{CYB_MODULE}#input.{name}"
+
+
+def _entities(*, child_age: int, head_annual_income: float) -> tuple[Entity, ...]:
+    """Concept-keyed entities mirroring the explicit EUROMOD rows.
+
+    Both engine sides are driven by explicit inputs (the EUROMOD ``euromod_inputs``
+    rows and the Axiom ``axiom_inputs`` / bridge), so these entities only describe
+    the single-parent family the case models; neither runner projects them.
+    """
+
+    return (
+        Entity(
+            entity_id="recipient",
+            kind="person",
+            facts={
+                Concepts.PERSON_AGE: 35,
+                Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                Concepts.YEARLY_EARNED_INCOME: head_annual_income,
+            },
+        ),
+        Entity(
+            entity_id="child",
+            kind="person",
+            facts={
+                Concepts.PERSON_AGE: child_age,
+                Concepts.HOUSEHOLD_RELATION: "Child",
+            },
+        ),
+    )
+
+
+def _adult_row(*, idperson: int, annual_income: float) -> dict[str, float | int]:
+    """The single responsible adult: single, head, earning ``annual_income``.
+
+    Every income/benefit/expense column stays 0 (the worker zero-fills the DK
+    schema); only demographics and monthly ``yem`` are set, so ``tintbto_s`` is
+    exactly 0.92 x ``yem`` and no imputed income leaks through labour-status
+    fields.
+    """
+
+    return {
+        "idperson": idperson,
+        "idpartner": 0,
+        "idmother": 0,
+        "idfather": 0,
+        "dag": 35,
+        "dgn": 0,
+        "dms": _DMS_SINGLE,
+        "dhr": 1,
+        "dec": 0,
+        "les": _LES_INACTIVE,
+        "lhw": 0,
+        "liwmy": 0,
+        "liwwh": 0,
+        "loc": _LOC,
+        "amrtn": _AMRTN_OWNER,
+        "drgur": _DRGUR,
+        "dwt": 1_000.0,
+        "ddi": 0,
+        "yem": annual_income / 12.0,
+    }
+
+
+def _child_row(*, idperson: int, age: int, mother_id: int) -> dict[str, float | int]:
+    """The dependent child EUROMOD allocates ``bfachnm_s`` to (IsDepChild)."""
+
+    return {
+        "idperson": idperson,
+        "idpartner": 0,
+        "idmother": mother_id,
+        "idfather": 0,
+        "dag": age,
+        "dgn": 1,
+        "dms": _DMS_SINGLE,
+        "dhr": 0,
+        "dec": _DEC_DEPENDENT_CHILD,
+        "les": _LES_CHILD,
+        "lhw": 0,
+        "liwmy": 0,
+        "liwwh": 0,
+        "loc": _LOC,
+        "amrtn": _AMRTN_OWNER,
+        "drgur": _DRGUR,
+        "dwt": 1_000.0,
+        "ddi": 0,
+        "yem": 0.0,
+    }
