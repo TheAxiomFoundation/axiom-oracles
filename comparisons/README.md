@@ -113,11 +113,14 @@ intermediates against the QC file's own recomputed values. Unlike the
 the oracle lives in this repo, so there is no encoder CLI to shell out to.
 
 FY2024 law is evaluated through a sparse compile-time overlay (SNAP COLA module
-ids rewritten from the in-repo fy-2026 vintage to `fy-2024-cola`, plus four
-Colorado standard-utility-allowance amount patches) at the nominal period
-`2026-01`, because the federal-regulation and Colorado-manual chain is snapshot-
+ids rewritten from the in-repo fy-2026 vintage to `fy-2024-cola`, plus the
+state's standard-utility-allowance amount patches — four Colorado amounts,
+seven New York regional amounts, one California amount) at the nominal period
+`2026-01`, because the federal-regulation and state-manual chain is snapshot-
 dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see the
-playbook and TheAxiomFoundation/rulespec-us#759). The runner **skips gracefully**
+playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
+`ny-snap-qc` (847 reviews including the 107 NYSCAP units), and `ca-snap-qc`
+(883 reviews). The runner **skips gracefully**
 — re-emitting the committed dashboard report, exactly like
 `euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file

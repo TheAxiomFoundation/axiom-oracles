@@ -1,4 +1,4 @@
-"""Validate Colorado SNAP RuleSpec output against the SNAP QC administrative file.
+"""Validate state SNAP RuleSpec output against the SNAP QC administrative file.
 
 The USDA SNAP Quality Control (QC) public-use file is a monthly sample of
 active-case reviews. Each record carries the case's reported benefit
@@ -20,13 +20,40 @@ constructed intermediates let us check stage by stage.
 
 The FY 2024 evaluation runs through a compile-time overlay
 (:mod:`axiom_oracles.bridges.rulespec_overlay`) because the rulespec-us monorepo
-wires the Colorado composition to the FY 2026 COLA parameter set. The overlay
-rewrites the cola module ids to ``fy-2024-cola`` and patches the four Colorado
-SUA amounts, then the engine runs at the nominal period ``2026-01``: the chain
-module versions are snapshot-dated to their 2025-10-01 effective dates, so a
-true-FY-2024 period cannot select them today. Once
+wires each state composition to the FY 2026 COLA parameter set. The overlay
+rewrites the cola module ids to ``fy-2024-cola`` and patches the state's
+standard-utility-allowance amounts, then the engine runs at the nominal period
+``2026-01``: the chain module versions are snapshot-dated to their 2025-10-01
+effective dates, so a true-FY-2024 period cannot select them today. Once
 TheAxiomFoundation/rulespec-us#759 inverts parameter selection to be
 period-driven, the overlay and the nominal period both retire.
+
+Jurisdictions
+-------------
+Each :data:`QC_JURISDICTIONS` entry wraps a ``snap_populace``
+``JurisdictionConfig`` (composition, output ids, relations) with the QC
+specifics: the fiscal-year overlay, the QC ``STATE`` FIPS code, how the
+overlay's SUA patch rules map to QC utility tiers (and, for New York, to the
+regional schedules), and the state's child-support election:
+
+* ``us-co`` — Colorado elects the 7 USC 2014(e)(4) child-support *exclusion*
+  (netted out of the compared gross income); unearned income is itemized into
+  the 10 CCR 2506-1 section 4.404 categories; four statewide SUA tiers.
+* ``us-ny`` — child support is a *deduction* (fed through the federal
+  273.10/2014(e)(6) inputs); three SUA tiers on three regional schedules
+  (New York City, Nassau/Suffolk, rest of state) — the public file carries no
+  sub-state geography, so the mapper infers the region from the QC-applied
+  ``UTIL`` amount, which is authoritative over ``SUA1`` (§7 of the playbook);
+  every in-scope FY 2024 row is categorically eligible, projected through the
+  18 NYCRR 387.14(a)(5) public-assistance path member facts; NYSCAP units
+  (``SSI_CAP = 4``) are in scope because they follow the regular benefit
+  determination.
+* ``us-ca`` — child support is fed as a deduction; the encoded CalFresh chain
+  carries only the heating/cooling SUA, so limited/telephone-tier units ride
+  their applied ``UTIL`` as an incurred shelter cost; the homeless shelter
+  deduction feeds the federal claimed-amount input from the file's own
+  ``HOMELESS_DED``; categorical eligibility rides the federal
+  resource-exemption flag.
 
 Cross-lane note: this module reads QC unit/member/expected objects by the
 frozen shapes in ``axiom_oracles.populations.snap_qc`` (Lane A). Beyond the
@@ -45,9 +72,9 @@ import json
 import os
 import shutil
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 import yaml
 
@@ -63,13 +90,17 @@ from .snap_populace import (
     month_period,
     outputs_by_reference,
     output_to_python,
+    project_deduction_inputs,
     resolve_axiom_binary,
     resolve_workspace_root,
     run_axiom_cases,
     set_input_value,
 )
 
-SUITE = "co-snap-qc"
+
+def suite_name(jurisdiction: str) -> str:
+    """``us-co`` -> ``co-snap-qc``, matching the comparison registry names."""
+    return f"{jurisdiction.split('-', 1)[1]}-snap-qc"
 
 #: Everything is evaluated at this nominal month; see the module docstring and
 #: TheAxiomFoundation/rulespec-us#759 for why true-period evaluation is not yet
@@ -100,47 +131,51 @@ FY2024_MAX_ALLOTMENT_48_STATES = {
 }
 FY2024_MAX_ALLOTMENT_ADDITIONAL_MEMBER = 219
 
-#: ``FSMEDDED`` is the medical deduction FNS applied (codebook PDF p.84). In
-#: ordinary states it equals the reported excess ``FSMEDEXP``, but in
-#: standard-medical-deduction demonstration states it can be a flat standard
-#: that differs (10 FY2024 rows nationally). The statutory engine computes
-#: ``total - 35``, so the mapper feeds ``FSMEDDED + 35`` and the engine's
-#: deduction reproduces the applied amount in both kinds of state.
-_MEDICAL_EXCESS_THRESHOLD = 35.0
-
-#: Overlay parameter-patch rule name -> utility tier. The fiscal-year SUA
-#: amounts are owned by the overlay spec's ``parameter_patches`` (the values
-#: the engine actually computes with); :func:`sua_amounts_from_overlay`
-#: derives the mapper's per-tier standard table from that single source so
-#: the two can never drift.
-_SUA_PATCH_RULE_TO_TIER = {
-    "colorado_snap_heating_cooling_utility_allowance_amount": "heating_cooling",
-    "colorado_snap_basic_utility_allowance_amount": "limited",
-    "colorado_snap_one_utility_allowance_amount": "one_utility",
-    "colorado_snap_telephone_utility_allowance_amount": "telephone",
-}
+#: Statewide (single-schedule) SUA region key. Jurisdictions with one schedule
+#: per tier use this; New York's regional schedules use the region names the
+#: encoded 18 NYCRR 387.12(f)(3)(v) rules branch on.
+STATEWIDE = "statewide"
 
 
-def sua_amounts_from_overlay(spec: Any) -> dict[str, float]:
-    """Derive the per-tier standard utility allowance table from an overlay spec.
+def sua_amounts_from_overlay(
+    spec: Any, config: "QcJurisdiction"
+) -> dict[str, dict[str, float]]:
+    """Derive the tier -> region -> amount SUA table from an overlay spec.
 
-    Reads the ``to`` value of each SUA parameter patch (QC technical
-    documentation Table F.7 amounts, the values the patched engine computes
-    with) and adds the zero ``none`` tier. Raises if the spec does not patch
-    all four Colorado allowances — a partial table would silently misroute the
-    UTIL-versus-standard comparison in :func:`map_qc_unit`.
+    The fiscal-year SUA amounts are owned by the overlay spec's
+    ``parameter_patches`` (the values the patched engine computes with);
+    this derives the mapper's standard table from that single source so the
+    two can never drift. The jurisdiction's ``sua_tier_by_patch_rule`` names
+    the patch rules it expects; a missing patch raises, because a partial
+    table would silently misroute the UTIL-versus-standard comparison in
+    :func:`map_qc_unit`. The zero ``none`` tier is always present.
     """
-    amounts: dict[str, float] = {"none": 0.0}
+    amounts: dict[str, dict[str, float]] = {"none": {STATEWIDE: 0.0}}
+    seen: set[str] = set()
     for patch in spec.parameter_patches:
-        tier = _SUA_PATCH_RULE_TO_TIER.get(patch.rule)
-        if tier is not None:
-            amounts[tier] = float(patch.to_value)
-    missing = set(_SUA_PATCH_RULE_TO_TIER.values()) - set(amounts)
+        target = config.sua_tier_by_patch_rule.get(patch.rule)
+        if target is None:
+            continue
+        tier, region = target
+        amounts.setdefault(tier, {})[region] = float(patch.to_value)
+        seen.add(patch.rule)
+    missing = set(config.sua_tier_by_patch_rule) - seen
     if missing:
         raise ValueError(
             f"overlay spec {spec.name!r} does not patch the "
             f"{sorted(missing)} standard utility allowance amounts"
         )
+    for tier, entries in amounts.items():
+        values = list(entries.values())
+        if len(set(values)) != len(values):
+            # Region inference matches the QC-applied UTIL amount against the
+            # schedule, so two regions sharing an amount within a tier would
+            # misroute silently (all FY2024 amounts are distinct).
+            raise ValueError(
+                f"overlay spec {spec.name!r}: tier {tier!r} has duplicate "
+                f"standard amounts across regions ({sorted(entries.items())}); "
+                "UTIL-based region inference would be ambiguous"
+            )
     return amounts
 
 #: The seven Colorado utility-cost flags (10 CCR 2506-1 section 4.407.31) that
@@ -161,7 +196,17 @@ _TELEPHONE_FLAG = "household_pays_telephone_service_cost"
 
 @dataclass(frozen=True)
 class QcJurisdiction:
-    """A QC comparison target: a SNAP composition plus its FY overlay."""
+    """A QC comparison target: a SNAP composition plus its FY overlay.
+
+    ``sua_tier_by_patch_rule`` maps each overlay SUA parameter-patch rule to
+    the ``(tier, region)`` it standardizes, tying the mapper's UTIL-matching
+    table to the amounts the patched engine computes with.
+    ``child_support_convention`` is the state's 7 USC 2014(e)(4) election:
+    ``"exclusion"`` states remove child support paid from countable gross
+    income (so the compared gross nets the QC-booked deduction out of
+    FSGRINC), while ``"deduction"`` states feed it through the federal
+    deduction inputs and compare gross unadjusted.
+    """
 
     base: snap_populace.JurisdictionConfig
     overlay: str
@@ -169,6 +214,16 @@ class QcJurisdiction:
     program: Path
     supported_fiscal_years: tuple[int, ...]
     state_fips: int
+    sua_tier_by_patch_rule: Mapping[str, tuple[str, str]] = field(
+        default_factory=dict
+    )
+    child_support_convention: str = "deduction"
+    #: Compared-label output ids that replace the ``base`` config's for the QC
+    #: replay only (applied before the overlay rewrite). New York uses this to
+    #: score the 273.10 regulatory chain — the whole-dollar computation FNS
+    #: applies — instead of the composition's statutory-chain surface; see the
+    #: us-ny entry.
+    output_id_overrides: Mapping[str, str] = field(default_factory=dict)
 
 
 QC_JURISDICTIONS = {
@@ -179,6 +234,92 @@ QC_JURISDICTIONS = {
         program=Path("us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml"),
         supported_fiscal_years=(2024,),
         state_fips=8,
+        sua_tier_by_patch_rule={
+            "colorado_snap_heating_cooling_utility_allowance_amount": (
+                "heating_cooling",
+                STATEWIDE,
+            ),
+            "colorado_snap_basic_utility_allowance_amount": ("limited", STATEWIDE),
+            "colorado_snap_one_utility_allowance_amount": (
+                "one_utility",
+                STATEWIDE,
+            ),
+            "colorado_snap_telephone_utility_allowance_amount": (
+                "telephone",
+                STATEWIDE,
+            ),
+        },
+        child_support_convention="exclusion",
+    ),
+    "us-ny": QcJurisdiction(
+        base=JURISDICTION_CONFIGS["us-ny"],
+        overlay="us-ny-snap-fy2024",
+        template=Path("us-ny/policies/otda/snap/fy-2026-benefit-calculation.test.yaml"),
+        program=Path("us-ny/policies/otda/snap/fy-2026-benefit-calculation.yaml"),
+        supported_fiscal_years=(2024,),
+        state_fips=36,
+        sua_tier_by_patch_rule={
+            # 18 NYCRR 387.12(f)(3)(v)(a): heating/cooling, three regions.
+            "heating_cooling_standard_amount_new_york_city": (
+                "heating_cooling",
+                "new_york_city",
+            ),
+            "heating_cooling_standard_amount_nassau_suffolk": (
+                "heating_cooling",
+                "nassau_suffolk",
+            ),
+            "heating_cooling_standard_amount_rest_of_state": (
+                "heating_cooling",
+                "rest_of_state",
+            ),
+            # (v)(b): utilities-other-than-heating (the QC "limited" tier).
+            "utilities_standard_amount_new_york_city": ("limited", "new_york_city"),
+            "utilities_standard_amount_nassau_suffolk": ("limited", "nassau_suffolk"),
+            "utilities_standard_amount_rest_of_state": ("limited", "rest_of_state"),
+            # (v)(c): telephone-only, one statewide amount; rest_of_state
+            # leaves both encoded region flags false.
+            "telephone_standard_allowance_amount": ("telephone", "rest_of_state"),
+        },
+        child_support_convention="deduction",
+        # The composition's public benefit surface rides the pure-statutory
+        # 2014(e)/2017(a) chain, which carries cents; FNS's Minimodel — and
+        # New York's own system (QC tech doc footnote 20) — compute in whole
+        # dollars under the 273.10(e)(1)(ii)(A) election, which the encoded
+        # 273.10 chain implements (rulespec-us#826). The replay therefore
+        # scores the 273.10 regulatory chain, fed by the same projected
+        # inputs (map_qc_unit pins its shelter total to the composition's
+        # own allowable shelter costs). Wiring the composition's public
+        # surface to the rounded chain is the companion rulespec-us finding.
+        output_id_overrides={
+            "snap_regular_month_allotment": (
+                "us:regulations/7-cfr/273/10#snap_monthly_allotment"
+            ),
+            "snap_net_income": (
+                "us:regulations/7-cfr/273/10#snap_net_monthly_income"
+            ),
+            "snap_excess_shelter_deduction": (
+                "us:regulations/7-cfr/273/10"
+                "#snap_excess_shelter_deduction_for_net_income"
+            ),
+        },
+    ),
+    "us-ca": QcJurisdiction(
+        base=JURISDICTION_CONFIGS["us-ca"],
+        overlay="us-ca-snap-fy2024",
+        template=Path("us-ca/policies/cdss/snap/fy-2026-benefit-calculation.test.yaml"),
+        program=Path("us-ca/policies/cdss/snap/fy-2026-benefit-calculation.yaml"),
+        supported_fiscal_years=(2024,),
+        state_fips=6,
+        # The encoded CalFresh chain carries only the heating/cooling SUA;
+        # limited- and telephone-tier QC units (Table F.7: 158 and 19 dollars)
+        # ride their applied UTIL amount as an incurred shelter cost.
+        sua_tier_by_patch_rule={
+            "snap_standard_utility_allowance_amount": (
+                "heating_cooling",
+                STATEWIDE,
+            ),
+        },
+        child_support_convention="deduction",
     ),
 }
 
@@ -232,14 +373,29 @@ _LABELS: tuple[_Label, ...] = (
 # --------------------------------------------------------------------------- #
 
 
+#: Every QC utility tier the loader can produce (``UtilityTier`` values).
+_KNOWN_TIERS = frozenset(
+    {"heating_cooling", "limited", "one_utility", "telephone", "none"}
+)
+
+#: The 18 NYCRR 387.14(a)(5) public-assistance categorical member fact. Fully
+#: qualified because it lives on the categorical relation's member surface,
+#: not the composition test template's member entry.
+_NY_CATEGORICAL_MEMBER_INPUT = (
+    "us-ny:regulations/18-nycrr/387/14/a/5#input."
+    "member_receives_family_assistance_nonemergency_safety_net_or_ssi_benefits"
+)
+
+
 def map_qc_unit(
     unit: Any,
     base_inputs: dict[str, Any],
     base_member: dict[str, Any],
     *,
-    sua_amount_by_tier: dict[str, float],
+    config: QcJurisdiction,
+    sua_amount_by_tier: dict[str, dict[str, float]],
 ) -> ProjectedCase:
-    """Project one QC unit onto the Colorado SNAP composition input surface.
+    """Project one QC unit onto a state SNAP composition input surface.
 
     ``base_inputs`` is the composition test template's household input mapping
     (legal-reference keyed, relations excluded) and ``base_member`` is one
@@ -247,13 +403,16 @@ def map_qc_unit(
     copied and overridden per :data:`snap_populace.set_input_value` friendly
     names; work, student, SSN, and citizenship member facts keep the template's
     passing defaults because the replay validates benefit computation, not
-    eligibility screening. ``sua_amount_by_tier`` is the per-tier standard
-    utility allowance table derived from the overlay spec via
+    eligibility screening. ``sua_amount_by_tier`` is the tier -> region ->
+    amount standard utility allowance table derived from the overlay spec via
     :func:`sua_amounts_from_overlay` — the same amounts the patched engine
-    computes with.
+    computes with. The per-jurisdiction income, deduction, utility, homeless,
+    and categorical-eligibility projections are keyed on
+    ``config.base.jurisdiction`` (see the module docstring).
     """
     inputs = dict(base_inputs)
     members = list(unit.members)
+    jurisdiction = config.base.jurisdiction
 
     if getattr(unit, "certified_size", None) is None:
         raise ValueError(
@@ -262,135 +421,90 @@ def map_qc_unit(
             "come from load_qc_units"
         )
 
-    set_input_value(
-        inputs,
-        "snap_countable_earned_income",
-        _money(_call(unit, "earned_income")),
-    )
-
-    # 4.404 itemized unearned income. The category sums come from the same
-    # per-source member fields whose total reproduces FSUNEARN exactly.
-    retirement_disability = sum(
-        _source(member, "social_security") + _source(member, "ssi")
-        for member in members
-    )
-    assistance = sum(
-        _source(member, "tanf") + _source(member, "general_assistance")
-        for member in members
-    )
-    direct_support = sum(
-        _source(member, "child_support") + _source(member, "alimony")
-        for member in members
-    )
-    total_unearned = _call(unit, "unearned_income")
-    other_unearned = total_unearned - retirement_disability - assistance - direct_support
-    if other_unearned < -0.005:
-        raise ValueError(
-            f"QC unit {getattr(unit, 'case_id', '?')}: itemized unearned "
-            f"categories exceed the unit total by {-other_unearned:.2f}; the "
-            "per-source fields no longer reconstruct FSUNEARN"
-        )
-    set_input_value(inputs, "retirement_disability_payments", _money(retirement_disability))
-    set_input_value(inputs, "assistance_payments", _money(assistance))
-    set_input_value(inputs, "direct_support_and_alimony_payments", _money(direct_support))
-    set_input_value(
-        inputs, "other_gain_or_benefit_payments", _money(max(0.0, other_unearned))
-    )
+    for name, value in _income_resource_inputs(jurisdiction, unit, members).items():
+        set_input_value(inputs, name, value)
 
     set_input_value(inputs, "household_size", int(unit.certified_size))
 
     # Shelter and utilities. The QC-applied allowance (UTIL) is authoritative:
-    # when it matches the tier's standard amount the tier flags exercise the
-    # encoded allowance rules; when it is present but different (actual
-    # expenses, SUA1 = 2, or a prorated allowance) the amount rides as an
-    # incurred shelter cost instead; when UTIL is missing entirely the tier's
-    # standard is presumed (the codebook edited SUA1 for consistency with
-    # UTIL, so a recorded tier with a blank amount means the standard applied).
-    # Units receiving the standard homeless shelter deduction (HOMEDED = 3)
-    # take the flat-deduction path: the QC file zeroes FSSLTDED for them by
+    # when it matches an encoded standard amount the tier (and, for New York,
+    # region) flags exercise the encoded allowance rules; when it is present
+    # but different (actual expenses, SUA1 = 2, a prorated allowance, or a
+    # tier the jurisdiction does not encode) the amount rides as an incurred
+    # shelter cost instead; when UTIL is missing entirely the tier's standard
+    # is presumed where that is unambiguous (a single schedule). Units
+    # receiving the standard homeless shelter deduction (HOMEDED = 3) take the
+    # flat-deduction path: the QC file zeroes FSSLTDED for them by
     # construction, so no utility flag is raised at all.
-    shelter_costs = _money(getattr(unit, "shelter_expense", 0) or 0)
-    utility_flags = _utility_flag_inputs(unit.utility_tier)
-    homeless_claimed = bool(getattr(unit, "homeless_deduction_claimed", False))
-    raw_utility_amount = getattr(unit, "utility_amount", None)
-    tier = str(getattr(unit.utility_tier, "value", unit.utility_tier))
-    if tier not in sua_amount_by_tier:
-        raise ValueError(f"unknown SNAP QC utility tier {tier!r}")
-    standard_amount = _money(sua_amount_by_tier[tier])
-    if homeless_claimed:
-        utility_flags = {name: False for name in utility_flags}
-    elif (
-        raw_utility_amount is not None
-        and _money(raw_utility_amount) != standard_amount
-    ):
-        utility_flags = {name: False for name in utility_flags}
-        shelter_costs = _money(shelter_costs + _money(raw_utility_amount))
+    shelter_costs, matched_sua_amount, utility_flags = (
+        _project_shelter_and_utilities(jurisdiction, unit, sua_amount_by_tier)
+    )
     set_input_value(inputs, "household_shelter_costs_incurred", shelter_costs)
     for name, value in utility_flags.items():
         set_input_value(inputs, name, value)
+    if jurisdiction == "us-ny":
+        # The scored 273.10 chain's inputs that no New York composition rule
+        # binds and the composition test template does not carry. The shelter
+        # total is pinned to the same total the composition's shelter_costs
+        # rule computes (incurred costs plus the matched standard allowance),
+        # so the regulatory and statutory chains always agree on shelter.
+        # QC reviews are active ongoing cases, so the initial-month proration
+        # path stays off, and New York's whole-dollar system rounds the
+        # thirty-percent reduction up (the ceil and floor branches coincide
+        # for whole-dollar maximum allotments in any case).
+        inputs[
+            "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
+        ] = _money(shelter_costs + matched_sua_amount)
+        inputs["us:regulations/7-cfr/273/10#input.household_initial_month"] = False
+        inputs[
+            "us:regulations/7-cfr/273/10#input."
+            "state_agency_rounds_thirty_percent_net_income_up"
+        ] = True
+        inputs["us:regulations/7-cfr/273/10#input.household_size"] = int(
+            unit.certified_size
+        )
 
-    # Standard homeless shelter deduction (7 USC 2014(e)(6)(D); 10 CCR 2506-1
-    # section 4.407.3(C)): a flat deduction replacing the excess-shelter path.
-    # The two sub-elections stay False by construction: HOMEDED = 3 is defined
-    # as receiving the STANDARD homeless deduction (a verified-higher-costs
-    # election would be HOMEDED = 4, which carries its actuals in RENT and
-    # takes the ordinary excess-shelter path), and a free-shelter month would
-    # have produced no deduction and therefore not HOMEDED = 3.
-    set_input_value(
-        inputs, "all_household_members_experiencing_homelessness", homeless_claimed
-    )
-    set_input_value(inputs, "homeless_household_has_shelter_costs", homeless_claimed)
-    set_input_value(inputs, "homeless_household_free_shelter_all_month", False)
-    set_input_value(inputs, "verified_higher_homeless_shelter_costs", False)
+    homeless_claimed = bool(getattr(unit, "homeless_deduction_claimed", False))
+    for name, value in _homeless_inputs(jurisdiction, unit, homeless_claimed).items():
+        set_input_value(inputs, name, value)
 
     dependent_care = _money(getattr(unit, "dependent_care_expense", 0) or 0)
-    set_input_value(
-        inputs,
-        "dependent_care_expense_necessary_for_work_or_training",
-        dependent_care > 0,
-    )
-    set_input_value(inputs, "dependent_care_expenses_paid", dependent_care)
-    set_input_value(inputs, "dependent_care_reimbursed_or_paid_by_other_program", 0)
 
-    child_support_paid = _money(getattr(unit, "child_support_expense", 0) or 0)
-    set_input_value(inputs, "child_support_payment_verified", child_support_paid > 0)
-    set_input_value(
-        inputs,
-        "child_support_payment_history_months",
-        3 if child_support_paid > 0 else 0,
+    # Child support: feed the deduction FNS actually applied (FSCSDED), not
+    # the reported payment (FSCSEXP). The two match wherever a payment was
+    # allowed, but the file carries rows whose reported payment was not
+    # allowed as a deduction (FSCSDED = 0), and the applied amount is what
+    # enters FSTOTDED — the same applied-amount convention the medical feed
+    # uses.
+    child_support_deduction = _money(
+        getattr(getattr(unit, "expected", None), "child_support_deduction", None)
+        or 0
     )
-    set_input_value(inputs, "average_monthly_child_support_paid", child_support_paid)
-    set_input_value(inputs, "estimated_monthly_child_support_paid", child_support_paid)
 
-    # Reconstruct the deduction FNS actually applied. FSMEDDED equals the
-    # excess FSMEDEXP in ordinary states, but in standard-medical-deduction
+    # Reconstruct the medical deduction FNS actually applied. FSMEDDED equals
+    # the excess FSMEDEXP in ordinary states, but in standard-medical-deduction
     # demonstration states it is a flat standard that differs from the excess
-    # (10 FY2024 rows nationally, none in Colorado), so the applied deduction
-    # — not the reported excess — is the operative amount. Feeding it plus the
-    # $35 threshold makes the engine's ``total - 35`` reproduce FSMEDDED in
-    # both kinds of state.
+    # (10 FY2024 rows nationally), so the applied deduction — not the
+    # reported excess — is the operative amount. project_deduction_inputs
+    # feeds it plus the $35 threshold, so the engine's ``total - 35``
+    # reproduces FSMEDDED in both kinds of state.
     applied_medical = getattr(
         getattr(unit, "expected", None), "medical_deduction", None
     )
     if applied_medical is None:
         applied_medical = getattr(unit, "medical_expenses", 0) or 0
     applied_medical = _money(applied_medical)
-    set_input_value(
-        inputs,
-        "total_medical_expenses",
-        _money(applied_medical + _MEDICAL_EXCESS_THRESHOLD)
-        if applied_medical > 0
-        else 0,
-    )
 
-    set_input_value(
-        inputs, "snap_basic_categorical_eligible", bool(unit.categorically_eligible)
-    )
-    set_input_value(
-        inputs,
-        "liquid_resource_current_redemption_rate",
-        _money(getattr(unit, "liquid_resources", 0) or 0),
-    )
+    for name, value in project_deduction_inputs(
+        config.base,
+        dependent_care_deduction=dependent_care,
+        child_support_deduction=child_support_deduction,
+        medical_deduction=applied_medical,
+    ).items():
+        set_input_value(inputs, name, value)
+
+    for name, value in _categorical_inputs(jurisdiction, unit, dependent_care).items():
+        set_input_value(inputs, name, value)
 
     # Unit-level elderly-or-disabled status comes from the file's own
     # constructed counts (FSNELDER/FSNDIS) when present: members include
@@ -422,6 +536,17 @@ def map_qc_unit(
         else:
             elderly = bool(unit_ed) and not member_inputs
         set_input_value(member_dict, "snap_member_is_elderly_or_disabled", elderly)
+        if jurisdiction == "us-ny":
+            # Every in-scope FY 2024 New York row is categorically eligible
+            # (CAT_ELIG 1/2/3), so the replay raises the 387.14(a)(5)
+            # public-assistance path on every member — the same
+            # passing-defaults convention the work pin uses, because the
+            # oracle validates benefit computation, not eligibility
+            # adjudication. run_axiom_cases enrolls each member in the
+            # categorical relation alongside member_of_household.
+            member_dict[_NY_CATEGORICAL_MEMBER_INPUT] = bool(
+                unit.categorically_eligible
+            )
         member_inputs.append(member_dict)
 
     entity_id = _entity_id(unit)
@@ -434,9 +559,251 @@ def map_qc_unit(
     )
 
 
-def _utility_flag_inputs(utility_tier: Any) -> dict[str, bool]:
-    """Map a QC utility tier to the seven Colorado utility-cost flags."""
-    tier = str(getattr(utility_tier, "value", utility_tier))
+def _income_resource_inputs(
+    jurisdiction: str, unit: Any, members: list[Any]
+) -> dict[str, Any]:
+    """Project unit income and countable resources onto the state's inputs."""
+    earned = _money(_call(unit, "earned_income"))
+    total_unearned = _call(unit, "unearned_income")
+    liquid = _money(getattr(unit, "liquid_resources", 0) or 0)
+    if jurisdiction == "us-ny":
+        return {
+            "snap_countable_earned_income": earned,
+            "snap_countable_unearned_income": _money(total_unearned),
+            "snap_gross_monthly_earned_income": earned,
+            "snap_total_monthly_unearned_income": _money(total_unearned),
+            "snap_income_exclusions": 0,
+            "snap_countable_financial_resources": liquid,
+        }
+    if jurisdiction == "us-ca":
+        return {
+            "snap_gross_monthly_earned_income": earned,
+            "snap_total_monthly_unearned_income": _money(total_unearned),
+            "snap_countable_financial_resources": liquid,
+        }
+
+    # Colorado: 4.404 itemized unearned income. The category sums come from
+    # the same per-source member fields whose total reproduces FSUNEARN
+    # exactly.
+    retirement_disability = sum(
+        _source(member, "social_security") + _source(member, "ssi")
+        for member in members
+    )
+    assistance = sum(
+        _source(member, "tanf") + _source(member, "general_assistance")
+        for member in members
+    )
+    direct_support = sum(
+        _source(member, "child_support") + _source(member, "alimony")
+        for member in members
+    )
+    other_unearned = (
+        total_unearned - retirement_disability - assistance - direct_support
+    )
+    if other_unearned < -0.005:
+        raise ValueError(
+            f"QC unit {getattr(unit, 'case_id', '?')}: itemized unearned "
+            f"categories exceed the unit total by {-other_unearned:.2f}; the "
+            "per-source fields no longer reconstruct FSUNEARN"
+        )
+    return {
+        "snap_countable_earned_income": earned,
+        "retirement_disability_payments": _money(retirement_disability),
+        "assistance_payments": _money(assistance),
+        "direct_support_and_alimony_payments": _money(direct_support),
+        "other_gain_or_benefit_payments": _money(max(0.0, other_unearned)),
+        "liquid_resource_current_redemption_rate": liquid,
+    }
+
+
+def _categorical_inputs(
+    jurisdiction: str, unit: Any, dependent_care: float
+) -> dict[str, Any]:
+    """Project the QC categorical-eligibility finding onto the state's inputs.
+
+    Every retained QC unit is eligible by construction, so these inputs are
+    passing values for the eligibility gates the benefit chain is composed
+    behind — not an adjudication of the state's categorical paths.
+    """
+    categorically_eligible = bool(unit.categorically_eligible)
+    if jurisdiction == "us-ny":
+        # The member-level public-assistance path fact is raised in
+        # map_qc_unit's member loop; these household facts feed the BBCE
+        # paths' antecedents from the unit's own record.
+        return {
+            "household_has_out_of_pocket_dependent_care_expenses": (
+                dependent_care > 0
+            ),
+            "household_has_earned_income_budgeted_for_snap": (
+                _money(_call(unit, "earned_income")) > 0
+            ),
+        }
+    if jurisdiction == "us-ca":
+        return {
+            "snap_categorically_eligible_for_resource_exemption": (
+                categorically_eligible
+            ),
+        }
+    return {"snap_basic_categorical_eligible": categorically_eligible}
+
+
+def _homeless_inputs(
+    jurisdiction: str, unit: Any, homeless_claimed: bool
+) -> dict[str, Any]:
+    """Project the HOMEDED = 3 flat-deduction path onto the state's inputs.
+
+    Standard homeless shelter deduction (7 USC 2014(e)(6)(D)): a flat
+    deduction replacing the excess-shelter path. Colorado (10 CCR 2506-1
+    section 4.407.3(C)) and New York (18 NYCRR 387.12(f)(3)(vi)) encode the
+    same four household facts; the two sub-elections stay False by
+    construction, because HOMEDED = 3 is defined as receiving the STANDARD
+    homeless deduction (a verified-higher-costs election would be HOMEDED = 4,
+    which carries its actuals in RENT and takes the ordinary excess-shelter
+    path), and a free-shelter month would have produced no deduction and
+    therefore not HOMEDED = 3. California's composition instead feeds the
+    federal 273.10 claimed-amount input, so the file's own applied
+    HOMELESS_DED rides through ``min(claimed, indexed maximum)``.
+    """
+    if jurisdiction == "us-ca":
+        claimed = (
+            _money(getattr(unit, "homeless_deduction_amount", 0) or 0)
+            if homeless_claimed
+            else 0
+        )
+        return {"snap_claimed_homeless_shelter_deduction": claimed}
+    inputs: dict[str, Any] = {
+        "all_household_members_experiencing_homelessness": homeless_claimed,
+        "homeless_household_has_shelter_costs": homeless_claimed,
+        "homeless_household_free_shelter_all_month": False,
+        "verified_higher_homeless_shelter_costs": False,
+    }
+    if jurisdiction == "us-ny":
+        # New York's flat path flows through the 387.12(f)(3)(vi) allowable
+        # shelter costs, not the federal claimed-amount deduction, and the
+        # composition test template does not carry the 273.10 input — the
+        # engine still requires it, so it is pinned to zero by full reference,
+        # exactly as the snap_populace New York projection does. (No FY 2024
+        # New York row claims the standard homeless deduction.)
+        inputs[
+            "us:regulations/7-cfr/273/10#input."
+            "snap_claimed_homeless_shelter_deduction"
+        ] = 0
+    return inputs
+
+
+def _project_shelter_and_utilities(
+    jurisdiction: str,
+    unit: Any,
+    sua_amount_by_tier: dict[str, dict[str, float]],
+) -> tuple[float, float, dict[str, bool]]:
+    """Resolve shelter costs and utility flags per the UTIL-authoritative rule.
+
+    Returns the (possibly UTIL-augmented) incurred shelter cost, the matched
+    standard allowance amount (zero when no encoded standard matched — the
+    allowance either rode into the shelter cost or the unit has none), and the
+    jurisdiction's utility flag inputs. The region is inferred by matching the
+    QC-applied UTIL amount against the encoded schedule — for New York's three
+    regional schedules that is the only region signal the public file carries.
+    """
+    shelter_costs = _money(getattr(unit, "shelter_expense", 0) or 0)
+    homeless_claimed = bool(getattr(unit, "homeless_deduction_claimed", False))
+    tier = str(getattr(unit.utility_tier, "value", unit.utility_tier))
+    if tier not in _KNOWN_TIERS:
+        raise ValueError(f"unknown SNAP QC utility tier {tier!r}")
+    raw_utility_amount = getattr(unit, "utility_amount", None)
+    entries = sua_amount_by_tier.get(tier)
+
+    matched_region: str | None = None
+    if homeless_claimed:
+        # Flat-deduction path: no utility flag, and the applied allowance does
+        # not ride as a cost (FSSLTDED is zeroed by construction).
+        pass
+    elif entries is None:
+        # The jurisdiction does not encode this tier (for example California's
+        # limited and telephone allowances): the applied allowance rides as an
+        # incurred shelter cost, which reproduces the file's arithmetic.
+        if raw_utility_amount is not None:
+            shelter_costs = _money(shelter_costs + _money(raw_utility_amount))
+    elif raw_utility_amount is None:
+        # A recorded tier with a blank UTIL cell means the standard applied
+        # (the codebook edited SUA1 for consistency with UTIL) — presumable
+        # only when the jurisdiction has a single schedule. With multiple
+        # regional schedules the standard is ambiguous, and falling through
+        # silently would understate shelter; no FY2024 row hits this, so it
+        # fails loudly instead of guessing a region.
+        if len(entries) == 1:
+            matched_region = next(iter(entries))
+        else:
+            raise ValueError(
+                f"QC unit {getattr(unit, 'case_id', '?')}: utility tier "
+                f"{tier!r} has no recorded UTIL amount and {len(entries)} "
+                "regional schedules; the standard allowance is ambiguous"
+            )
+    else:
+        applied = _money(raw_utility_amount)
+        matched_region = next(
+            (
+                region
+                for region, amount in entries.items()
+                if _money(amount) == applied
+            ),
+            None,
+        )
+        if matched_region is None:
+            shelter_costs = _money(shelter_costs + applied)
+
+    flags = _utility_flag_inputs(
+        jurisdiction,
+        tier if matched_region is not None else "none",
+        matched_region,
+    )
+    matched_amount = (
+        _money(entries[matched_region])
+        if matched_region is not None and entries is not None
+        else 0.0
+    )
+    return shelter_costs, matched_amount, flags
+
+
+def _utility_flag_inputs(
+    jurisdiction: str, tier: str, region: str | None
+) -> dict[str, bool]:
+    """Map a matched QC utility tier (and region) to the state's cost flags."""
+    if jurisdiction == "us-ny":
+        # 18 NYCRR 387.12(f)(3)(v)(a)-(c): the three allowance rules branch on
+        # the heating/cooling, other-utilities, and telephone facts plus the
+        # two region facts; the central-meter and HEAP-entitlement facts stay
+        # False (the QC file carries no central-meter fact, and the HEAP arm
+        # only widens eligibility the heating/cooling fact already grants).
+        return {
+            _HEATING_COOLING_FLAG: tier == "heating_cooling",
+            (
+                "household_in_central_meter_housing_charged_only_for_"
+                "excess_heating_or_cooling"
+            ): False,
+            "household_entitled_to_heap_or_liheaa_payment": False,
+            (
+                "household_billed_separately_for_non_telephone_standard_utility"
+            ): tier == "limited",
+            (
+                "household_incurred_or_anticipated_basic_service_cost_for_"
+                "one_telephone"
+            ): tier == "telephone",
+            "household_resides_in_new_york_city": region == "new_york_city",
+            "household_resides_in_nassau_or_suffolk_county": (
+                region == "nassau_suffolk"
+            ),
+        }
+    if jurisdiction == "us-ca":
+        # The encoded CalFresh chain carries a single heating/cooling SUA.
+        return {
+            (
+                "household_has_heating_and_cooling_costs_separate_from_"
+                "rent_or_mortgage"
+            ): tier == "heating_cooling",
+        }
+
+    # Colorado: the seven 10 CCR 2506-1 section 4.407.31 utility-cost flags.
     flags = {name: False for name in _NON_HEATING_UTILITY_FLAGS}
     flags[_HEATING_COOLING_FLAG] = False
     flags[_TELEPHONE_FLAG] = False
@@ -554,12 +921,13 @@ def run_snap_qc_comparison(
         # duplicate-rule error. The materialized overlay is complete on its own.
         env = axiom_rules_env(build.program_path, workspace_root)
         env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
-        sua_amount_by_tier = sua_amounts_from_overlay(spec)
+        sua_amount_by_tier = sua_amounts_from_overlay(spec, config)
         cases = [
             map_qc_unit(
                 unit,
                 base_inputs,
                 base_member,
+                config=config,
                 sua_amount_by_tier=sua_amount_by_tier,
             )
             for unit in units
@@ -587,6 +955,7 @@ def run_snap_qc_comparison(
             rulespec_root=rulespec_root,
             axiom_binary=axiom_binary,
             pins=_pins_for(snap_qc_population, fiscal_year),
+            child_support_convention=config.child_support_convention,
         )
     finally:
         if not keep_overlay:
@@ -636,6 +1005,7 @@ def _output_id_by_label(
     """Build the compared label -> output-id map, overlay-rewritten."""
     base_ids = dict(config.base.output_id_by_label)
     base_ids["snap_standard_deduction"] = _PRE_REWRITE_STANDARD_DEDUCTION_ID
+    base_ids.update(config.output_id_overrides)
     pre_rewrite = {label.label: base_ids[label.label] for label in _LABELS}
     return rewrite_output_ids(pre_rewrite, module_id_rewrites)
 
@@ -660,7 +1030,9 @@ def _build_report(
     rulespec_root: Path,
     axiom_binary: Path,
     pins: Any,
+    child_support_convention: str = "deduction",
 ) -> dict:
+    suite = suite_name(jurisdiction)
     locale = "-".join(part.upper() for part in jurisdiction.split("-"))
     aggregates = {label.label: _fresh_bucket() for label in _LABELS}
     # Concept id per stage: the compared output whose divergence localizes a
@@ -702,7 +1074,9 @@ def _build_report(
                         "error": f"missing output {output_id}",
                     }
                 )
-            expected_value = _expected_value(label, unit)
+            expected_value = _expected_value(
+                label, unit, child_support_convention=child_support_convention
+            )
             axiom_values[label.stage] = axiom_value
             expected_values[label.stage] = expected_value
             match = _matches(
@@ -798,7 +1172,7 @@ def _build_report(
 
     return {
         "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
-        "suite": SUITE,
+        "suite": suite,
         "population": "snap-qc-puf",
         "engines": {"left": "snap-qc", "right": "axiom"},
         "locales": [locale],
@@ -812,7 +1186,7 @@ def _build_report(
         "cases": case_rows,
         "provenance": {
             "schema": "axiom_oracles.provenance.v1",
-            "generated_by": f"axiom_oracles.bridges.snap_qc_compare::{SUITE}",
+            "generated_by": f"axiom_oracles.bridges.snap_qc_compare::{suite}",
             "oracle": {
                 "name": "snap-qc",
                 "fiscal_year": fiscal_year,
@@ -968,7 +1342,9 @@ def _first_divergent_stage(matches: dict[str, bool | None]) -> str | None:
     return None
 
 
-def _expected_value(label: _Label, unit: Any) -> float | None:
+def _expected_value(
+    label: _Label, unit: Any, *, child_support_convention: str = "deduction"
+) -> float | None:
     if label.label == "snap_maximum_allotment":
         return float(_fy2024_max_allotment(unit.certified_size))
     if label.expected_attr is None:
@@ -976,13 +1352,16 @@ def _expected_value(label: _Label, unit: Any) -> float | None:
     value = getattr(unit.expected, label.expected_attr, None)
     if value is None:
         return None
-    if label.expected_attr == "gross_income":
-        # Colorado elects the 7 USC 2014(e)(4) child-support income exclusion,
-        # so the composition removes child support paid from countable gross
-        # income; the QC file books the same amount as a deduction instead
-        # (FSCSDED; the FSCSEXP codebook entry notes the state split). Net
-        # income is identical either way, so the gross comparison nets the
-        # QC-recorded deduction out of FSGRINC.
+    if (
+        label.expected_attr == "gross_income"
+        and child_support_convention == "exclusion"
+    ):
+        # Exclusion states (Colorado's 7 USC 2014(e)(4) election) remove child
+        # support paid from countable gross income in the composition; the QC
+        # file books the same amount as a deduction instead (FSCSDED; the
+        # FSCSEXP codebook entry notes the state split). Net income is
+        # identical either way, so the gross comparison nets the QC-recorded
+        # deduction out of FSGRINC. Deduction states compare gross unadjusted.
         child_support = getattr(unit.expected, "child_support_deduction", None)
         if child_support:
             return float(value) - float(child_support)

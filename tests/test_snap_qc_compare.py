@@ -113,10 +113,18 @@ def _member(**kwargs):
     )
 
 
-#: The per-tier standard amounts come from the shipped overlay spec — the same
+#: The per-tier standard amounts come from the shipped overlay specs — the same
 #: single source the run path derives them from — so the tests can never pin a
 #: stale copy of the FY 2024 values.
-_SUA_AMOUNTS = sc.sua_amounts_from_overlay(load_overlay_spec("us-co-snap-fy2024"))
+_SUA_AMOUNTS = sc.sua_amounts_from_overlay(
+    load_overlay_spec("us-co-snap-fy2024"), sc.QC_JURISDICTIONS["us-co"]
+)
+_NY_SUA_AMOUNTS = sc.sua_amounts_from_overlay(
+    load_overlay_spec("us-ny-snap-fy2024"), sc.QC_JURISDICTIONS["us-ny"]
+)
+_CA_SUA_AMOUNTS = sc.sua_amounts_from_overlay(
+    load_overlay_spec("us-ca-snap-fy2024"), sc.QC_JURISDICTIONS["us-ca"]
+)
 
 
 def _unit(**kwargs):
@@ -143,7 +151,7 @@ def _unit(**kwargs):
     # an explicit utility_amount must not evaluate the table lookup at all.
     if "utility_amount" not in values:
         tier = str(getattr(values["utility_tier"], "value", values["utility_tier"]))
-        values["utility_amount"] = _SUA_AMOUNTS[tier]
+        values["utility_amount"] = _SUA_AMOUNTS[tier][sc.STATEWIDE]
     members = values["members"]
     values.setdefault(
         "earned_income",
@@ -161,6 +169,7 @@ def _map(unit, base_inputs=None, base_member=None):
         unit,
         base_inputs if base_inputs is not None else _base_inputs(),
         base_member if base_member is not None else _base_member(),
+        config=sc.QC_JURISDICTIONS["us-co"],
         sua_amount_by_tier=_SUA_AMOUNTS,
     )
 
@@ -260,10 +269,10 @@ def test_map_qc_unit_nonstandard_utility_amount_rides_as_shelter_cost() -> None:
 
 
 def test_expected_gross_nets_out_child_support_deduction() -> None:
-    # Colorado elects the 7 USC 2014(e)(4) child-support income exclusion, so
-    # the QC-recorded deduction is netted out of FSGRINC for the gross label.
-    # In deduction states FSCSDED equals FSCSEXP; in exclusion states FSCSDED
-    # is 0 and the netting is skipped — the FY2024 file has no partial rows.
+    # Exclusion states (Colorado's 7 USC 2014(e)(4) election) net the
+    # QC-recorded deduction out of FSGRINC for the gross label; deduction
+    # states (New York, California) compare gross unadjusted, because their
+    # compositions deduct the same amount after the gross stage.
     label = next(
         label for label in sc._LABELS if label.expected_attr == "gross_income"
     )
@@ -272,7 +281,14 @@ def test_expected_gross_nets_out_child_support_deduction() -> None:
             benefit=81, gross_income=1469.0, child_support_deduction=281.0
         )
     )
-    assert sc._expected_value(label, unit) == 1188.0
+    assert (
+        sc._expected_value(label, unit, child_support_convention="exclusion")
+        == 1188.0
+    )
+    assert (
+        sc._expected_value(label, unit, child_support_convention="deduction")
+        == 1469.0
+    )
 
 
 def test_map_qc_unit_missing_utility_amount_presumes_tier_standard() -> None:
@@ -290,7 +306,7 @@ def test_map_qc_unit_accepts_utility_tier_enum_instances() -> None:
     inputs = _map(
         _unit(
             utility_tier=UtilityTier.TELEPHONE,
-            utility_amount=_SUA_AMOUNTS["telephone"],
+            utility_amount=_SUA_AMOUNTS["telephone"][sc.STATEWIDE],
         )
     ).inputs
     assert inputs[PHONE] is True
@@ -332,7 +348,7 @@ def test_validate_months_rejects_calendar_month_integers() -> None:
     sc._validate_months((202310, 202409), 2024)
 
 
-def test_sua_amounts_from_overlay_requires_all_four_patches() -> None:
+def test_sua_amounts_from_overlay_requires_all_expected_patches() -> None:
     spec = SimpleNamespace(
         name="partial",
         parameter_patches=[
@@ -343,7 +359,23 @@ def test_sua_amounts_from_overlay_requires_all_four_patches() -> None:
         ],
     )
     with pytest.raises(ValueError, match="does not patch"):
-        sc.sua_amounts_from_overlay(spec)
+        sc.sua_amounts_from_overlay(spec, sc.QC_JURISDICTIONS["us-co"])
+
+
+def test_sua_amounts_from_overlay_builds_ny_regional_table() -> None:
+    assert _NY_SUA_AMOUNTS["heating_cooling"] == {
+        "new_york_city": 992.0,
+        "nassau_suffolk": 923.0,
+        "rest_of_state": 819.0,
+    }
+    assert _NY_SUA_AMOUNTS["limited"] == {
+        "new_york_city": 391.0,
+        "nassau_suffolk": 363.0,
+        "rest_of_state": 332.0,
+    }
+    assert _NY_SUA_AMOUNTS["telephone"] == {"rest_of_state": 31.0}
+    assert _CA_SUA_AMOUNTS["heating_cooling"] == {sc.STATEWIDE: 596.0}
+    assert "limited" not in _CA_SUA_AMOUNTS
 
 
 @pytest.mark.parametrize(
@@ -356,15 +388,39 @@ def test_map_qc_unit_elderly_or_disabled_flag(age, elderly_flag, expected) -> No
     assert inputs.member_inputs[0][ELDERLY] is expected
 
 
-def test_map_qc_unit_projects_dependent_care_and_child_support_expense() -> None:
+def test_map_qc_unit_projects_dependent_care_and_child_support_deduction() -> None:
+    # The child-support feed is the deduction FNS applied (FSCSDED), not the
+    # reported payment: the file carries rows whose reported FSCSEXP was not
+    # allowed as a deduction, and the applied amount is what enters FSTOTDED.
     inputs = _map(
-        _unit(dependent_care_expense=120.0, child_support_expense=80.0),
+        _unit(
+            dependent_care_expense=120.0,
+            child_support_expense=80.0,
+            expected=SimpleNamespace(
+                benefit=291, medical_deduction=None, child_support_deduction=80.0
+            ),
+        ),
     ).inputs
     assert inputs[DEPCARE_NEC] is True
     assert inputs[DEPCARE_PAID] == 120
     assert inputs[CS_VERIFIED] is True
     assert inputs[CS_MONTHS] == 3
     assert inputs[CS_AVG] == 80
+
+
+def test_map_qc_unit_disallowed_child_support_payment_feeds_zero() -> None:
+    # A reported payment with FSCSDED = 0 must not produce an engine-side
+    # deduction (two real FY2024 New York rows).
+    inputs = _map(
+        _unit(
+            child_support_expense=139.0,
+            expected=SimpleNamespace(
+                benefit=291, medical_deduction=None, child_support_deduction=0.0
+            ),
+        ),
+    ).inputs
+    assert inputs[CS_VERIFIED] is False
+    assert inputs[CS_AVG] == 0
 
 
 # --------------------------------------------------------------------------- #
@@ -569,7 +625,8 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
         unit,
         base_inputs,
         base_member,
-        sua_amount_by_tier=sc.sua_amounts_from_overlay(spec),
+        config=config,
+        sua_amount_by_tier=sc.sua_amounts_from_overlay(spec, config),
     )
     results = sc._run_cases(
         binary=_ENGINE,
@@ -604,3 +661,312 @@ def test_unit_level_elderly_or_disabled_overrides_member_flags() -> None:
     assert case.member_inputs[0][ELDERLY] is False
     case = _map(_unit(members=[_member(age=30)], unit_has_elderly_or_disabled=True))
     assert case.member_inputs[0][ELDERLY] is True
+
+
+# --------------------------------------------------------------------------- #
+# New York and California per-jurisdiction projections
+# --------------------------------------------------------------------------- #
+
+NY_COMP = "us-ny:policies/otda/snap/fy-2026-benefit-calculation"
+NY_SUA_A = "us-ny:regulations/18-nycrr/387/12/f/3/v/a"
+NY_SUA_B = "us-ny:regulations/18-nycrr/387/12/f/3/v/b"
+NY_SUA_C = "us-ny:regulations/18-nycrr/387/12/f/3/v/c"
+NY_HOMELESS = "us-ny:regulations/18-nycrr/387/12/f/3/vi"
+NY_CATEG = "us-ny:regulations/18-nycrr/387/14/a/5"
+NY_HEAT = (
+    f"{NY_SUA_A}#input."
+    "household_incurred_or_anticipated_heating_or_cooling_costs_separate_from_"
+    "rent_or_mortgage"
+)
+NY_NYC = f"{NY_SUA_A}#input.household_resides_in_new_york_city"
+NY_NASSAU = f"{NY_SUA_A}#input.household_resides_in_nassau_or_suffolk_county"
+NY_LIMITED = (
+    f"{NY_SUA_B}#input.household_billed_separately_for_non_telephone_standard_utility"
+)
+NY_PHONE = (
+    f"{NY_SUA_C}#input."
+    "household_incurred_or_anticipated_basic_service_cost_for_one_telephone"
+)
+NY_SHELTER = f"{NY_COMP}#input.household_shelter_costs_incurred"
+NY_EARNED = f"{NY_COMP}#input.snap_countable_earned_income"
+NY_UNEARNED = f"{NY_COMP}#input.snap_countable_unearned_income"
+NY_GROSS_EARNED = "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income"
+NY_CS_2014 = "us:statutes/7/2014/e/6/A#input.child_support_deduction"
+NY_CS_273 = (
+    "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_child_support_payments"
+)
+NY_UTILITY_KEYS = (NY_HEAT, NY_NYC, NY_NASSAU, NY_LIMITED, NY_PHONE)
+
+
+def _ny_base_inputs() -> dict:
+    base = {
+        NY_EARNED: 0,
+        NY_UNEARNED: 0,
+        NY_GROSS_EARNED: 0,
+        "us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income": 0,
+        "us:regulations/7-cfr/273/10#input.snap_income_exclusions": 0,
+        "us:regulations/7-cfr/273/8#input.snap_countable_financial_resources": 0,
+        "us:policies/usda/snap/fy-2026-cola/maximum-allotments#input.household_size": 1,
+        NY_SHELTER: 0,
+        NY_HEAT: True,
+        f"{NY_SUA_A}#input.household_in_central_meter_housing_charged_only_for_excess_heating_or_cooling": False,
+        f"{NY_SUA_A}#input.household_entitled_to_heap_or_liheaa_payment": False,
+        NY_NYC: False,
+        NY_NASSAU: False,
+        NY_LIMITED: False,
+        NY_PHONE: False,
+        f"{NY_HOMELESS}#input.all_household_members_experiencing_homelessness": False,
+        f"{NY_HOMELESS}#input.homeless_household_has_shelter_costs": False,
+        f"{NY_HOMELESS}#input.homeless_household_free_shelter_all_month": False,
+        f"{NY_HOMELESS}#input.verified_higher_homeless_shelter_costs": False,
+        f"{NY_CATEG}#input.household_has_out_of_pocket_dependent_care_expenses": False,
+        f"{NY_CATEG}#input.household_has_earned_income_budgeted_for_snap": False,
+        "us:statutes/7/2014/e/6/A#input.dependent_care_deduction": 0,
+        NY_CS_2014: 0,
+        "us:statutes/7/2014/e/6/A#input.medical_deduction": 0,
+    }
+    return base
+
+
+def _map_ny(unit):
+    return sc.map_qc_unit(
+        unit,
+        _ny_base_inputs(),
+        _base_member(),
+        config=sc.QC_JURISDICTIONS["us-ny"],
+        sua_amount_by_tier=_NY_SUA_AMOUNTS,
+    )
+
+
+@pytest.mark.parametrize(
+    "tier, util, true_flags",
+    [
+        ("heating_cooling", 992.0, {NY_HEAT, NY_NYC}),
+        ("heating_cooling", 923.0, {NY_HEAT, NY_NASSAU}),
+        ("heating_cooling", 819.0, {NY_HEAT}),
+        ("limited", 391.0, {NY_LIMITED, NY_NYC}),
+        ("limited", 332.0, {NY_LIMITED}),
+        ("telephone", 31.0, {NY_PHONE}),
+        ("none", 0.0, set()),
+    ],
+)
+def test_ny_region_and_tier_inferred_from_util(tier, util, true_flags) -> None:
+    inputs = _map_ny(_unit(utility_tier=tier, utility_amount=util)).inputs
+    for flag in NY_UTILITY_KEYS:
+        assert inputs[flag] is (flag in true_flags), flag
+    assert inputs[NY_SHELTER] == 500
+
+
+def test_ny_nonstandard_util_rides_as_shelter_cost() -> None:
+    # UTIL 922 is one dollar off the Nassau/Suffolk HCSUA standard — a real
+    # FY2024 New York pattern (footnote 20: the state system auto-generates
+    # SUAs). It matches no encoded schedule, so it rides as an incurred cost.
+    inputs = _map_ny(
+        _unit(utility_tier="heating_cooling", utility_amount=922.0)
+    ).inputs
+    assert all(inputs[flag] is False for flag in NY_UTILITY_KEYS)
+    assert inputs[NY_SHELTER] == 1422
+
+
+def test_ny_income_feeds_countable_and_gross_inputs() -> None:
+    member = _member(_earned=1000.0, _unearned=300.0)
+    inputs = _map_ny(_unit(members=[member])).inputs
+    assert inputs[NY_EARNED] == 1000
+    assert inputs[NY_UNEARNED] == 300
+    assert inputs[NY_GROSS_EARNED] == 1000
+    assert (
+        inputs["us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income"]
+        == 300
+    )
+
+
+def test_ny_child_support_feeds_both_deduction_inputs() -> None:
+    unit = _unit(
+        expected=SimpleNamespace(
+            benefit=291, medical_deduction=None, child_support_deduction=80.0
+        )
+    )
+    inputs = _map_ny(unit).inputs
+    assert inputs[NY_CS_2014] == 80
+    assert inputs[NY_CS_273] == 80
+
+
+def test_ny_categorical_member_flag_rides_on_every_member() -> None:
+    members = [_member(_earned=1000.0), _member(index=1)]
+    case = _map_ny(_unit(members=members, categorically_eligible=True))
+    assert all(
+        member[sc._NY_CATEGORICAL_MEMBER_INPUT] is True
+        for member in case.member_inputs
+    )
+    assert (
+        case.inputs[f"{NY_CATEG}#input.household_has_earned_income_budgeted_for_snap"]
+        is True
+    )
+
+
+CA_COMP = "us-ca:policies/cdss/snap/fy-2026-benefit-calculation"
+CA_SUA = "us-ca:policies/cdss/snap/standard-utility-allowance"
+CA_HEAT = (
+    f"{CA_SUA}#input."
+    "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage"
+)
+CA_SHELTER = f"{CA_COMP}#input.household_shelter_costs_incurred"
+CA_HOMELESS_CLAIMED = (
+    "us:regulations/7-cfr/273/10#input.snap_claimed_homeless_shelter_deduction"
+)
+CA_CATEG = (
+    "us:regulations/7-cfr/273/8#input.snap_categorically_eligible_for_resource_exemption"
+)
+
+
+def _ca_base_inputs() -> dict:
+    return {
+        "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income": 0,
+        "us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income": 0,
+        "us:regulations/7-cfr/273/8#input.snap_countable_financial_resources": 0,
+        "us:policies/usda/snap/fy-2026-cola/maximum-allotments#input.household_size": 1,
+        CA_SHELTER: 0,
+        CA_HEAT: False,
+        CA_HOMELESS_CLAIMED: 0,
+        CA_CATEG: False,
+        "us:statutes/7/2014/e/6/A#input.dependent_care_deduction": 0,
+        "us:statutes/7/2014/e/6/A#input.child_support_deduction": 0,
+        "us:statutes/7/2014/e/6/A#input.medical_deduction": 0,
+        "us:regulations/7-cfr/273/10#input.household_entitled_to_excess_medical_deduction": False,
+        "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_dependent_care_expenses": 0,
+        "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_child_support_payments": 0,
+        "us:regulations/7-cfr/273/10#input.snap_total_medical_expenses": 0,
+    }
+
+
+def _map_ca(unit):
+    return sc.map_qc_unit(
+        unit,
+        _ca_base_inputs(),
+        _base_member(),
+        config=sc.QC_JURISDICTIONS["us-ca"],
+        sua_amount_by_tier=_CA_SUA_AMOUNTS,
+    )
+
+
+def test_ca_heating_flag_when_util_matches_standard() -> None:
+    inputs = _map_ca(
+        _unit(utility_tier="heating_cooling", utility_amount=596.0)
+    ).inputs
+    assert inputs[CA_HEAT] is True
+    assert inputs[CA_SHELTER] == 500
+
+
+def test_ca_unencoded_tier_rides_as_shelter_cost() -> None:
+    # California encodes only the heating/cooling SUA; a telephone-tier unit's
+    # applied 19-dollar allowance rides as an incurred shelter cost.
+    inputs = _map_ca(_unit(utility_tier="telephone", utility_amount=19.0)).inputs
+    assert inputs[CA_HEAT] is False
+    assert inputs[CA_SHELTER] == 519
+
+
+def test_ca_homeless_claim_feeds_applied_amount() -> None:
+    unit = _unit(
+        homeless_deduction_claimed=True,
+        homeless_deduction_amount=180.0,
+        utility_tier="none",
+        utility_amount=0.0,
+    )
+    inputs = _map_ca(unit).inputs
+    assert inputs[CA_HOMELESS_CLAIMED] == 180
+    assert _map_ca(_unit()).inputs[CA_HOMELESS_CLAIMED] == 0
+
+
+def test_ca_categorical_rides_resource_exemption_flag() -> None:
+    inputs = _map_ca(_unit(categorically_eligible=True)).inputs
+    assert inputs[CA_CATEG] is True
+
+
+def test_output_id_overrides_replace_base_ids_before_rewrite() -> None:
+    # New York scores the 273.10 regulatory chain (whole-dollar computation)
+    # instead of the composition's statutory-chain surface.
+    config = sc.QC_JURISDICTIONS["us-ny"]
+    spec = load_overlay_spec(config.overlay)
+    ids = sc._output_id_by_label(config, spec.module_id_rewrites)
+    assert ids["snap_regular_month_allotment"] == (
+        "us:regulations/7-cfr/273/10#snap_monthly_allotment"
+    )
+    assert ids["snap_net_income"] == (
+        "us:regulations/7-cfr/273/10#snap_net_monthly_income"
+    )
+    assert ids["snap_excess_shelter_deduction"] == (
+        "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income"
+    )
+    # The standard deduction still rides the overlay-rewritten COLA module.
+    assert ids["snap_standard_deduction"] == (
+        "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction"
+    )
+
+
+def test_ny_pins_the_federal_shelter_chain_inputs() -> None:
+    case = _map_ny(_unit(utility_tier="heating_cooling", utility_amount=819.0))
+    inputs = case.inputs
+    assert inputs[
+        "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
+    ] == 1319  # 500 incurred + 819 rest-of-state HCSUA
+    assert (
+        inputs["us:regulations/7-cfr/273/10#input.household_initial_month"] is False
+    )
+    assert inputs["us:regulations/7-cfr/273/10#input.household_size"] == 1
+    # A nonstandard allowance rides into the incurred cost, so the pinned
+    # federal total equals the augmented incurred cost alone.
+    case = _map_ny(_unit(utility_tier="heating_cooling", utility_amount=922.0))
+    assert case.inputs[
+        "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
+    ] == 1422
+
+
+def test_ny_blank_util_on_multi_schedule_tier_raises() -> None:
+    # A recorded tier with a blank UTIL is presumable only against a single
+    # schedule; with New York's three regional schedules the standard is
+    # ambiguous and must fail loudly rather than silently understate shelter
+    # (zero FY2024 rows hit this).
+    with pytest.raises(ValueError, match="ambiguous"):
+        _map_ny(_unit(utility_tier="heating_cooling", utility_amount=None))
+
+
+def test_blank_util_on_single_schedule_tier_still_presumes() -> None:
+    # The Colorado presumption is unchanged: one schedule, standard presumed.
+    inputs = _map(_unit(utility_tier="heating_cooling", utility_amount=None)).inputs
+    assert inputs[HEAT] is True
+
+
+def test_sua_amounts_from_overlay_rejects_duplicate_regional_amounts() -> None:
+    # Region inference matches UTIL against the schedule; two regions sharing
+    # an amount within a tier would misroute silently.
+    spec = SimpleNamespace(
+        name="dup",
+        parameter_patches=[
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_new_york_city",
+                to_value="900",
+            ),
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_nassau_suffolk",
+                to_value="900",
+            ),
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_rest_of_state",
+                to_value="819",
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_new_york_city", to_value="391"
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_nassau_suffolk", to_value="363"
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_rest_of_state", to_value="332"
+            ),
+            SimpleNamespace(
+                rule="telephone_standard_allowance_amount", to_value="31"
+            ),
+        ],
+    )
+    with pytest.raises(ValueError, match="duplicate standard amounts"):
+        sc.sua_amounts_from_overlay(spec, sc.QC_JURISDICTIONS["us-ny"])

@@ -85,7 +85,11 @@ Household expenses and resources
     it, 4 = homeless applying actual expenses toward excess shelter) ->
     ``homeless`` (codes 2-4) and ``homeless_deduction_claimed`` (code 3;
     the constructed ``HOMELESS_DED`` is positive only for these units and
-    ``FSSLTDED`` is zeroed for them by construction).
+    ``FSSLTDED`` is zeroed for them by construction);
+    ``HOMELESS_DED`` homeless shelter deduction applied (p86) ->
+    ``homeless_deduction_amount`` — the whole-dollar deduction the Minimodel
+    subtracted for ``HOMEDED = 3`` units, which jurisdictions whose
+    composition takes a claimed-amount input (California) feed directly.
 
 Expected (QC-constructed benefit computation)
     ``FSBEN`` final calculated benefit (p87) -> ``benefit``;
@@ -427,6 +431,12 @@ class QcUnit:
     weight: float | None
     expected: QcExpected
     raw: Mapping[str, str]
+    #: The homeless shelter deduction the Minimodel applied (``HOMELESS_DED``,
+    #: whole dollars; positive only for ``HOMEDED = 3`` units). Jurisdictions
+    #: whose composition takes a claimed-amount input (California's
+    #: ``snap_claimed_homeless_shelter_deduction``) feed this directly.
+    #: Declared last with a default so existing constructors stay valid.
+    homeless_deduction_amount: float | None = None
 
     def earned_income(self) -> float:
         """Total earned income across members (reproduces FSEARN)."""
@@ -443,7 +453,12 @@ class QcUnit:
 
 #: Unit uses the Minnesota Family Investment Program benefit procedure (MN_FIP).
 EXCLUSION_MFIP = "mfip"
-#: Unit uses an SSI Combined Application Project benefit procedure (SSI_CAP).
+#: Unit uses an SSI Combined Application Project benefit procedure. NYSCAP
+#: (``SSI_CAP = 4``) is *not* excluded: unlike the standard-benefit and
+#: standardized-shelter CAPs, NYSCAP units "went through the standard editing
+#: process that non-SSI-CAP households undergo" and "all SNAP deductions apply"
+#: (FY 2024 tech doc, SSI-CAP benefit calculations and the SSI_CAP codebook
+#: note), so their FSBEN is an ordinary Minimodel recomputation.
 EXCLUSION_SSI_CAP = "ssi_cap"
 #: Data-quality guard: no constructed benefit to replay (FSBEN missing or 0).
 EXCLUSION_MISSING_BENEFIT = "missing_benefit"
@@ -453,7 +468,10 @@ EXCLUSION_MISSING_SIZE = "missing_certified_size"
 #: Human-readable descriptions for :meth:`QcExclusionLog.summary`.
 _EXCLUSION_DESCRIPTIONS = {
     EXCLUSION_MFIP: "MFIP unit (separate benefit procedure; MN_FIP=1)",
-    EXCLUSION_SSI_CAP: "SSI-CAP unit (separate benefit procedure; SSI_CAP!=0)",
+    EXCLUSION_SSI_CAP: (
+        "SSI-CAP unit (separate benefit procedure; SSI_CAP not in {0, 4} — "
+        "NYSCAP follows the regular benefit determination and is kept)"
+    ),
     EXCLUSION_MISSING_BENEFIT: "no constructed benefit (FSBEN missing or 0)",
     EXCLUSION_MISSING_SIZE: "no certified unit size (CERTHHSZ missing or 0)",
 }
@@ -738,6 +756,7 @@ def _build_unit(
         homeless_deduction_claimed=_homeless_deduction_claimed(
             _int(row.get("HOMEDED"))
         ),
+        homeless_deduction_amount=_num(row.get("HOMELESS_DED")),
         unit_has_elderly_or_disabled=_unit_elderly_or_disabled(row),
         categorically_eligible=_categorically_eligible(_int(row.get("CAT_ELIG"))),
         liquid_resources=_num(row.get("LIQRESOR")),
@@ -766,7 +785,13 @@ def _exclusion_reason(
         if _int(row.get("MN_FIP")) == 1:
             return EXCLUSION_MFIP
         ssi_cap = _int(row.get("SSI_CAP"))
-        if ssi_cap is not None and ssi_cap != 0:
+        # NYSCAP (SSI_CAP = 4) stays: those units are edited under the regular
+        # SNAP benefit determination ("went through the standard editing
+        # process that non-SSI-CAP households undergo" — FY 2024 tech doc,
+        # SSI-CAP benefit calculations), so FSBEN is replayable. Every other
+        # nonzero code uses a separate benefit procedure with deductions and
+        # net income coded missing.
+        if ssi_cap is not None and ssi_cap not in (0, 4):
             return EXCLUSION_SSI_CAP
     if _num(row.get("FSBEN")) in (None, 0.0):
         return EXCLUSION_MISSING_BENEFIT

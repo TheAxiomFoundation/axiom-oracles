@@ -476,6 +476,34 @@ def test_include_special_programs_keeps_mfip_units(tmp_path) -> None:
     assert 3 in {u.certified_size for u in units}
 
 
+def test_nyscap_units_are_kept_and_other_ssi_cap_codes_excluded(tmp_path) -> None:
+    # NYSCAP (SSI_CAP = 4) follows the regular SNAP benefit determination
+    # ("went through the standard editing process that non-SSI-CAP households
+    # undergo" — FY2024 tech doc), so it is replayable; every other nonzero
+    # code uses a separate benefit procedure and stays excluded.
+    import csv as _csv
+    import io as _io
+
+    rows = []
+    for ssi_cap in ("0", "1", "2", "3", "4"):
+        row = dict(_ROW_ELDERLY_MAX_ALLOTMENT)
+        row["SSI_CAP"] = ssi_cap
+        row["STATE"] = "36"
+        rows.append(row)
+    buffer = _io.StringIO()
+    writer = _csv.DictWriter(buffer, fieldnames=_FIXTURE_COLUMNS, restval=".")
+    writer.writeheader()
+    for row in rows:
+        writer.writerow(row)
+    (tmp_path / "qc_pub_fy2024.csv").write_text(buffer.getvalue(), encoding="utf-8")
+
+    units, log = load_qc_units(2024, data_dir=tmp_path)
+    assert log.total_loaded == 2  # SSI_CAP 0 and 4
+    assert log.counts[EXCLUSION_SSI_CAP] == 3  # codes 1, 2, 3
+    raw_codes = {unit.raw["SSI_CAP"] for unit in units}
+    assert raw_codes == {"0", "4"}
+
+
 def test_state_filter_scopes_without_counting_out_of_scope_rows(tmp_path) -> None:
     _write_fixture(tmp_path)
     co_units, co_log = load_qc_units(2024, data_dir=tmp_path, state_fips=8)
@@ -652,12 +680,20 @@ def test_live_fy2024_row_counts() -> None:
     units, log = load_qc_units(2024)
     assert log.total_loaded + log.total_excluded == 44_891
     assert log.counts[EXCLUSION_MFIP] == 98
-    assert log.counts[EXCLUSION_SSI_CAP] == 874
-    assert log.total_loaded == 43_919
+    # SSI_CAP codes 1/2/3 (255 + 473 + 39); the 107 NYSCAP rows (code 4, all
+    # New York) follow the regular benefit determination and are kept.
+    assert log.counts[EXCLUSION_SSI_CAP] == 767
+    assert log.total_loaded == 44_026
     assert len(units) == log.total_loaded
 
     co_units, co_log = load_qc_units(2024, state_fips=8)
     assert len(co_units) == 856
+
+    ny_units, _ = load_qc_units(2024, state_fips=36)
+    assert len(ny_units) == 847  # 740 regular + 107 NYSCAP
+
+    ca_units, _ = load_qc_units(2024, state_fips=6)
+    assert len(ca_units) == 883
     assert co_log.total_excluded == 0
 
     # Member income reproduces the QC-constructed unit aggregates exactly.

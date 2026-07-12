@@ -5,11 +5,13 @@ microdata rather than against a second engine. It replays the USDA SNAP Quality
 Control public-use file (PUF) through the Axiom RuleSpec SNAP composition and
 checks the file's own recomputed benefit and stage intermediates against Axiom's.
 This playbook is the standing recipe — the one a future contributor follows to add
-a fiscal year, add a state, or triage a mismatch class. The first jurisdiction is
-Colorado FY2024:
+a fiscal year, add a state, or triage a mismatch class. Three jurisdictions run
+for FY2024 — Colorado (the pilot), New York, and California:
 
 ```bash
 uv run scripts/run_comparison.py co-snap-qc --summary
+uv run scripts/run_comparison.py ny-snap-qc --summary
+uv run scripts/run_comparison.py ca-snap-qc --summary
 ```
 
 That runs the real replay where the `axiom-rules-engine` binary, a rulespec-us
@@ -220,12 +222,58 @@ Colorado parameters exactly.
   stale CFR literal $143 where the statute indexes it ($179.66 in FY 2024) —
   TheAxiomFoundation/rulespec-us#761, fixed by rulespec-us#765 (the cap now binds
   from the fiscal-year COLA policy module).
-- **Child support: exclusion, not deduction.** Colorado elects the 7 USC
-  2014(e)(4) child-support income exclusion, so the composition removes child
-  support paid from countable gross income while the QC file books the same
-  amount as a deduction (`FSCSDED`; the `FSCSEXP` codebook entry documents the
-  state split). Net income is identical either way; the gross-income comparison
-  nets `FSCSDED` out of `FSGRINC`.
+- **Child support: feed the applied deduction, and net gross only for
+  exclusion states.** The engine feed is `FSCSDED` — the deduction FNS
+  applied — not the reported payment `FSCSEXP`: the two match wherever a
+  payment was allowed, but the file carries rows whose reported payment was
+  not allowed as a deduction (two FY2024 New York rows), and the applied
+  amount is what enters `FSTOTDED` (the same applied-amount convention the
+  medical feed uses). The state's 7 USC 2014(e)(4) election is the
+  jurisdiction's `child_support_convention`: Colorado elects the *exclusion*,
+  so its composition removes child support paid from countable gross income
+  and the gross-income comparison nets `FSCSDED` out of `FSGRINC`; New York
+  and California treat it as a *deduction* through the federal 273.10 /
+  2014(e)(6) inputs, and their gross comparison is unadjusted. Net income is
+  identical either way.
+- **NYSCAP is in scope.** New York's SSI-CAP (`SSI_CAP = 4`, 107 FY2024 rows)
+  is not excluded with the other CAP codes: NYSCAP units "went through the
+  standard editing process that non-SSI-CAP households undergo" and all SNAP
+  deductions apply to them (tech doc, SSI-CAP benefit calculations and the
+  SSI_CAP codebook note), so their FSBEN is an ordinary Minimodel
+  recomputation. The loader keeps `SSI_CAP` 0 and 4 and excludes every other
+  nonzero code.
+- **Regional SUA schedules are inferred from UTIL.** New York publishes three
+  schedules (New York City 992/391/31, Nassau/Suffolk 923/363/31, rest of
+  state 819/332/31 in FY 2024) and the public file carries no sub-state
+  geography, so the mapper matches the QC-applied `UTIL` amount against the
+  encoded schedule to set the region facts. An amount matching no schedule —
+  including New York's handful of off-by-a-dollar auto-generated allowances
+  (footnote 20 of the tech doc's Minimodel chapter) — rides as an incurred
+  shelter cost, which reproduces the file's arithmetic exactly. A tier the
+  jurisdiction does not encode at all (California's limited and telephone
+  allowances; the chain carries only the 596-dollar heating/cooling SUA)
+  falls back the same way.
+- **New York is scored on the 273.10 regulatory chain.** The New York
+  composition's public benefit surface rides the pure-statutory
+  2014(e)/2017(a) chain, which carries cents; FNS's Minimodel — and New
+  York's own system — compute in whole dollars under the 273.10(e)(1)(ii)(A)
+  election, which the encoded 273.10 chain implements (rulespec-us#826).
+  First-run finding: 33 of 847 New York reviews diverged by exactly one
+  dollar through the statutory surface (26 low, 7 high — half-dollar shelter
+  fractions and earned-income-deduction cents). The `us-ny` jurisdiction
+  therefore carries `output_id_overrides` pointing the compared benefit, net
+  income, and excess-shelter deduction at the 273.10 rules, and the mapper
+  pins the chain's unbound inputs (`snap_total_allowable_shelter_expenses`
+  mirrors the composition's own allowable shelter costs). Wiring the
+  composition's public surface to the rounded chain is the companion
+  rulespec-us finding; once that lands, the overrides and pins retire.
+- **California's homeless deduction feeds the claimed-amount input.** The
+  CalFresh composition consumes the federal
+  `snap_claimed_homeless_shelter_deduction` rather than household facts, so
+  `HOMEDED = 3` units feed the file's own applied `HOMELESS_DED` and the
+  engine's `min(claimed, indexed maximum)` (nearest-dollar per #826)
+  reproduces it. Colorado and New York encode the same four household facts,
+  so their flat path rides the flags.
 - **Whole-dollar rounding is encoded.** The encoded chain originally carried
   cents (20 percent earned-income deduction, half-income shelter subtraction)
   where the FNS Minimodel computes with whole dollars at each step; when the
@@ -272,19 +320,44 @@ Colorado parameters exactly.
    `bridges/snap_qc_compare.py` wrapping `snap_populace.JURISDICTION_CONFIGS`
    `["us-<st>"]`, its fy-2024 composition and test template, `state_fips`, and
    `supported_fiscal_years`. `load_qc_units(..., state_fips=…)` filters the national
-   file to that state.
-2. **SUA sources.** The state's standard utility allowances come from tech doc
+   file to that state. Set `child_support_convention` to the state's 2014(e)(4)
+   election, map the overlay's SUA patch rules to `(tier, region)` pairs in
+   `sua_tier_by_patch_rule` (region `STATEWIDE` for single-schedule states), and
+   use `output_id_overrides` where the scored chain differs from the
+   composition's ecps surface (§7, New York).
+2. **Per-state projections.** `map_qc_unit` dispatches income/resource,
+   categorical-eligibility, homeless, and utility-flag projections on the
+   jurisdiction; a new state adds its branch to `_income_resource_inputs`,
+   `_categorical_inputs`, `_homeless_inputs`, and `_utility_flag_inputs`,
+   reusing `snap_populace.project_deduction_inputs`' existing per-state
+   deduction dictionaries. Pre-flight the state's QC subset first with the
+   committed reference script — it replicates the Minimodel arithmetic in
+   pandas over the file's own inputs, predicting the replay ceiling and
+   profiling `UTIL`/`SUA1`/`HOMEDED`/`CAT_ELIG`/child-support quirks before
+   any engine run:
+
+   ```bash
+   uv run --with pandas scripts/snap_qc_preflight.py --state-fips 36
+   # new states: --sua tier=amount ... straight from Table F.7
+   ```
+3. **Unbound engine inputs.** A composition that leaves imported-module inputs
+   unbound (New York's federal shelter chain) surfaces them as `missing input`
+   engine errors on first run; pin each by full legal reference to the value
+   the composition's own chain computes, so both chains always agree.
+4. **SUA sources.** The state's standard utility allowances come from tech doc
    Appendix F, Table F.7 (PDF p.183) cross-checked against the state's FNS SUA memo or
    state manual; encode them as the overlay's parameter patches (or as fy-{YYYY}-cola
    state modules once #759 lands). Some states publish tiered SUAs by household size
    (Arizona, Hawaii) — encode the tier the composition selects.
-3. **Special-program caveats.** Check the state against the demonstration and CAP
+5. **Special-program caveats.** Check the state against the demonstration and CAP
    tables before trusting its deduction chain. Standard-medical-deduction-demonstration
    states (Table F.4 / Table III.4, PDF p.181 / printed p.34) need the §7 medical
-   transform; SSI-CAP states (Tables F.9–F.23) and MFIP (Minnesota only) are excluded
-   per §4 because their benefits bypass the deduction chain. A state that standardizes
-   shelter for SSI-CAP (Table F.23, PDF p.192) has those deductions coded missing and
-   must not be scored on them.
+   transform — the applied-deduction feed already covers them (California).
+   SSI-CAP states (Tables F.9–F.23) and MFIP (Minnesota only) are excluded
+   per §4 because their benefits bypass the deduction chain — except NYSCAP
+   (§7), which follows the regular rules and stays in scope. A state that
+   standardizes shelter for SSI-CAP (Table F.23, PDF p.192) has those
+   deductions coded missing and must not be scored on them.
 
 ## Track record
 
@@ -295,7 +368,19 @@ deduction 198, excess-shelter deduction 672, HCSUA 560 — to the dollar. Runnin
 full 856-review Colorado subset turns the editing guarantee into a benefit-computation
 match rate and a stage-keyed mismatch taxonomy, so a real encoding gap shows up as a
 dispositioned class against administrative ground truth rather than as a green light
-nobody checked.
+nobody checked. Colorado's first run scored 816/856 and surfaced two federal
+encoding findings (the stale homeless-cap literal, rulespec-us#765, and the
+whole-dollar computation, #826) plus one mapper fix before reaching 856/856
+with every stage comparison exact at zero tolerance.
+
+New York and California joined for FY2024 on the same arc. California ran
+883/883 benefit-exact with all 5,298 stage comparisons exact at zero tolerance
+on its first successful run — the federal chain fixes Colorado surfaced carry
+over intact. New York's first run scored 814/847: all 33 divergences were the
+one-dollar whole-dollar class through the composition's statutory-chain
+surface (§7), and scoring the 273.10 regulatory chain took the suite to
+847/847 — including all 107 NYSCAP units — with all 5,082 stage comparisons
+exact at zero tolerance.
 
 That is exactly how the pilot played out. The first run matched 816 of 856
 benefits (95.3%) with every residual classified; the classifications surfaced
