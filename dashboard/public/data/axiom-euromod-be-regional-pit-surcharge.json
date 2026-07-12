@@ -258,7 +258,7 @@
       "axiom_rules_engine_sha": "de0efdc73b469132ee268e1c832e8f7148b91431",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-11T08:19:35Z",
+    "generated_at": "2026-07-12T04:06:05Z",
     "generated_by": "scripts/run_comparison.py::be-regional-pit-surcharge",
     "oracle": {
       "euromod_country": "BE",
