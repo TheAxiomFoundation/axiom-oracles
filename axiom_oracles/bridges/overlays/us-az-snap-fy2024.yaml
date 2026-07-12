@@ -1,0 +1,49 @@
+schema: axiom_oracles.rulespec_overlay.v1
+name: us-az-snap-fy2024
+program: us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml
+notes: >-
+  Compile-time overlay replaying the Arizona Nutrition Assistance benefit
+  composition against fiscal year 2024 federal parameters: the three USDA
+  cola module ids rewrite to fy-2024-cola and the five FAA6.J.09 utility
+  allowance amounts patch to the FY 2024 values in QC technical
+  documentation Table F.7 (Arizona publishes participant-bracket schedules:
+  SUA 318/431, LUA 150/202, TUA 47). Same union-not-shadowing materialized
+  root and #759 retirement path as the us-co spec.
+module_id_rewrites:
+  # Full module ids (not a bare substring): every occurrence across the
+  # rewrite files is a canonical id in an import or proof target.
+  us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
+  us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
+  us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
+rewrite_files:
+  - us/statutes/7/2017/a.yaml
+  - us/regulations/7-cfr/273/8.yaml
+  - us/regulations/7-cfr/273/9.yaml
+  - us/regulations/7-cfr/273/10.yaml
+  - us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml
+parameter_patches:
+  - file: us-az/policies/des/faa6/utility-allowance-current-amount.yaml
+    rule: az_standard_utility_allowance_amount_1_to_3
+    from: "323"
+    to: "318"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-az/policies/des/faa6/utility-allowance-current-amount.yaml
+    rule: az_standard_utility_allowance_amount_4_plus
+    from: "438"
+    to: "431"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-az/policies/des/faa6/utility-allowance-current-amount.yaml
+    rule: az_limited_utility_allowance_amount_1_to_3
+    from: "149"
+    to: "150"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-az/policies/des/faa6/utility-allowance-current-amount.yaml
+    rule: az_limited_utility_allowance_amount_4_plus
+    from: "201"
+    to: "202"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-az/policies/des/faa6/utility-allowance-current-amount.yaml
+    rule: az_telephone_utility_allowance_amount
+    from: "44"
+    to: "47"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183

@@ -5,13 +5,14 @@ microdata rather than against a second engine. It replays the USDA SNAP Quality
 Control public-use file (PUF) through the Axiom RuleSpec SNAP composition and
 checks the file's own recomputed benefit and stage intermediates against Axiom's.
 This playbook is the standing recipe — the one a future contributor follows to add
-a fiscal year, add a state, or triage a mismatch class. Three jurisdictions run
-for FY2024 — Colorado (the pilot), New York, and California:
+a fiscal year, add a state, or triage a mismatch class. Six jurisdictions run
+for FY2024 — Colorado (the pilot), New York, California, Arizona, Georgia,
+and Maryland:
 
 ```bash
-uv run scripts/run_comparison.py co-snap-qc --summary
-uv run scripts/run_comparison.py ny-snap-qc --summary
-uv run scripts/run_comparison.py ca-snap-qc --summary
+for suite in co ny ca az ga md; do
+  uv run scripts/run_comparison.py "$suite-snap-qc" --summary
+done
 ```
 
 That runs the real replay where the `axiom-rules-engine` binary, a rulespec-us
@@ -268,6 +269,21 @@ Colorado parameters exactly.
   the 273.10 rules (whose whole-dollar values the QC constructed
   intermediates carry); the mapper pins only the chain's three genuine inputs
   (initial month off, thirty-percent rounding election, household size).
+- **Arizona's brackets ride the region axis.** FAA6.J.09 sizes the SUA and
+  LUA by participant bracket (1–3 / 4+); the overlay patches both amounts
+  per tier and the mapper identifies the bracket from the QC-applied UTIL,
+  exactly as New York's regions are identified. The engine derives the
+  bracket from the unit's own size, so a UTIL matching the *other*
+  bracket's standard is unreproducible through the tier flags and rides as
+  an incurred shelter cost instead (one FY2024 row: a 3-participant unit
+  with the 4+ SUA applied). Arizona's budgetary-unit eligibility is an
+  input bridge fed true — every retained review is eligible by
+  construction.
+- **Maryland's mid-year vintages fall out of UTIL matching.** The FY2024
+  file carries October–December 2023 amounts (505/309) and January–
+  September 2024 amounts (551/337); the overlay patches the latter, and the
+  earlier-vintage rows match no encoded standard, riding their applied UTIL
+  as an incurred shelter cost — no special-casing required.
 - **California's homeless deduction feeds the claimed-amount input.** The
   CalFresh composition consumes the federal
   `snap_claimed_homeless_shelter_deduction` rather than household facts, so
@@ -374,7 +390,8 @@ encoding findings (the stale homeless-cap literal, rulespec-us#765, and the
 whole-dollar computation, #826) plus one mapper fix before reaching 856/856
 with every stage comparison exact at zero tolerance.
 
-New York and California joined for FY2024 on the same arc. California ran
+New York, California, Arizona, Georgia, and Maryland joined for FY2024 on
+the same arc. California ran
 883/883 benefit-exact with all 5,298 stage comparisons exact at zero tolerance
 on its first successful run — the federal chain fixes Colorado surfaced carry
 over intact. New York's first run scored 814/847: all 33 divergences were the
@@ -382,6 +399,14 @@ one-dollar whole-dollar class through the composition's statutory-chain
 surface (§7), and scoring the 273.10 regulatory chain took the suite to
 847/847 — including all 107 NYSCAP units — with all 5,082 stage comparisons
 exact at zero tolerance.
+
+Arizona, Georgia, and Maryland (rulespec-us#842) each encoded their FY2026
+SUA amounts from primary sources and a composition on the 273.10 chain
+before their suites ran. Georgia (945/945) and Maryland (722/722) were
+first-run clean at zero stage tolerance; Arizona's single first-run
+divergence (921/922) was the bracket-inconsistent UTIL row above,
+dispositioned as a mapper convention, after which 922/922 stage comparisons
+reproduce exactly.
 
 That is exactly how the pilot played out. The first run matched 816 of 856
 benefits (95.3%) with every residual classified; the classifications surfaced
