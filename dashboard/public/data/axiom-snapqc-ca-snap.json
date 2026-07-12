@@ -6391,7 +6391,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-12T16:20:32Z",
+    "generated_at": "2026-07-12T19:37:24Z",
     "generated_by": "scripts/run_comparison.py::ca-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6401,11 +6401,11 @@
     },
     "rulespecs": [
       {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "8e9d6b209c278073e574af02be876dd9cd13dce1"
+        "repo": "TheAxiomFoundation/rulespec-us-main-snapqc",
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
