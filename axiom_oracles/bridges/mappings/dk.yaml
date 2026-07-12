@@ -3,16 +3,22 @@ prefixes:
     country: dk
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: No executable Denmark household oracle is wired yet. The
-      intended parity oracle is EUROMOD's Denmark systems (public European
-      Commission JRC release, runnable per-case on the EUROMOD engine), but
-      wiring it needs a dk prefix runner, a pinned EUROMOD release, and
-      synthetic per-case households (the public release ships no Danish
-      input microdata); Statistics Denmark's Lovmodellen is
-      government-internal and unavailable. PolicyEngine has no Denmark
-      model. The rulespec-dk pilot outputs (børne- og ungeydelsesloven § 1
-      base amounts and § 1 a income taper) assert statutory 2011-/2010-
-      niveau bases from the captured retsinformation.dk provisions in
-      companion tests. Exact mappings should be added only after an
-      EUROMOD-DK per-case target is implemented and verified
-      (rulespec-dk#1 tracks the lane).
+    rationale: No Denmark comparison target is wired yet. The EUROMOD
+      platform side is already in place - the probed public JRC release
+      (EUROMOD_RELEASES_J2.0+, euromod_country_readiness.json, probed
+      2026-07-02) runs Denmark systems DK_2007..DK_2025 on the generic
+      platform runner using the shipped DK_training_data (2,397 synthetic,
+      non-representative rows; fine for per-case probes, not for
+      distributional work). What remains is the Denmark-specific oracle
+      surface, dk legal-ID to EUROMOD output bridge mappings, per-case
+      comparison suites against the appropriate DK system, and a pinned
+      release configuration - plus a system for the 2026 policy year once
+      the release carries one (DK_2025 is the latest probed). External
+      context, verified outside this repository - PolicyEngine has no
+      Denmark model and Statistics Denmark's Lovmodellen is
+      government-internal. The rulespec-dk pilot outputs (borne- og
+      ungeydelsesloven, section 1 base amounts and section 1 a income
+      taper; TheAxiomFoundation/rulespec-dk#1) assert statutory bases from
+      captured retsinformation.dk provisions in companion tests until the
+      oracle surface lands. Exact mappings should replace this prefix only
+      after a verified per-case EUROMOD-DK target exists.
