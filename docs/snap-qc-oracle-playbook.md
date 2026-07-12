@@ -330,11 +330,16 @@ Colorado parameters exactly.
    jurisdiction; a new state adds its branch to `_income_resource_inputs`,
    `_categorical_inputs`, `_homeless_inputs`, and `_utility_flag_inputs`,
    reusing `snap_populace.project_deduction_inputs`' existing per-state
-   deduction dictionaries. Pre-flight the state's QC subset first (replicate
-   the Minimodel arithmetic in pandas over `FSGRINC`/deductions/`FSSLTDED`/
-   `FSNETINC`/`FSBEN`) — it predicts the replay ceiling, surfaces the state's
-   editing quirks, and profiles `UTIL`/`SUA1`/`HOMEDED`/`CAT_ELIG` before any
-   engine run.
+   deduction dictionaries. Pre-flight the state's QC subset first with the
+   committed reference script — it replicates the Minimodel arithmetic in
+   pandas over the file's own inputs, predicting the replay ceiling and
+   profiling `UTIL`/`SUA1`/`HOMEDED`/`CAT_ELIG`/child-support quirks before
+   any engine run:
+
+   ```bash
+   uv run --with pandas scripts/snap_qc_preflight.py --state-fips 36
+   # new states: --sua tier=amount ... straight from Table F.7
+   ```
 3. **Unbound engine inputs.** A composition that leaves imported-module inputs
    unbound (New York's federal shelter chain) surfaces them as `missing input`
    engine errors on first run; pin each by full legal reference to the value

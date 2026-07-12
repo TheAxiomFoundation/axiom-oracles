@@ -165,6 +165,17 @@ def sua_amounts_from_overlay(
             f"overlay spec {spec.name!r} does not patch the "
             f"{sorted(missing)} standard utility allowance amounts"
         )
+    for tier, entries in amounts.items():
+        values = list(entries.values())
+        if len(set(values)) != len(values):
+            # Region inference matches the QC-applied UTIL amount against the
+            # schedule, so two regions sharing an amount within a tier would
+            # misroute silently (all FY2024 amounts are distinct).
+            raise ValueError(
+                f"overlay spec {spec.name!r}: tier {tier!r} has duplicate "
+                f"standard amounts across regions ({sorted(entries.items())}); "
+                "UTIL-based region inference would be ambiguous"
+            )
     return amounts
 
 #: The seven Colorado utility-cost flags (10 CCR 2506-1 section 4.407.31) that
@@ -360,21 +371,6 @@ _LABELS: tuple[_Label, ...] = (
 # --------------------------------------------------------------------------- #
 # Projection: QC unit -> RuleSpec input surface
 # --------------------------------------------------------------------------- #
-
-
-#: Every tier the loader can emit; a tier outside this set is a loader drift.
-_KNOWN_TIERS = frozenset(
-    {"heating_cooling", "limited", "one_utility", "telephone", "none"}
-)
-
-#: New York categorical member fact (18 NYCRR 387.14(a)(5)): the
-#: public-assistance path is satisfied when every categorical-relation member
-#: carries it, which projects the file's own CAT_ELIG adjudication without
-#: re-deriving which BBCE path applied.
-_NY_CATEGORICAL_MEMBER_INPUT = (
-    "us-ny:regulations/18-nycrr/387/14/a/5#input."
-    "member_receives_family_assistance_nonemergency_safety_net_or_ssi_benefits"
-)
 
 
 #: Every QC utility tier the loader can produce (``UtilityTier`` values).
@@ -729,8 +725,20 @@ def _project_shelter_and_utilities(
         if raw_utility_amount is not None:
             shelter_costs = _money(shelter_costs + _money(raw_utility_amount))
     elif raw_utility_amount is None:
+        # A recorded tier with a blank UTIL cell means the standard applied
+        # (the codebook edited SUA1 for consistency with UTIL) — presumable
+        # only when the jurisdiction has a single schedule. With multiple
+        # regional schedules the standard is ambiguous, and falling through
+        # silently would understate shelter; no FY2024 row hits this, so it
+        # fails loudly instead of guessing a region.
         if len(entries) == 1:
             matched_region = next(iter(entries))
+        else:
+            raise ValueError(
+                f"QC unit {getattr(unit, 'case_id', '?')}: utility tier "
+                f"{tier!r} has no recorded UTIL amount and {len(entries)} "
+                "regional schedules; the standard allowance is ambiguous"
+            )
     else:
         applied = _money(raw_utility_amount)
         matched_region = next(

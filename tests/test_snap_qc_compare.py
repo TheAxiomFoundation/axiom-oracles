@@ -919,3 +919,54 @@ def test_ny_pins_the_federal_shelter_chain_inputs() -> None:
     assert case.inputs[
         "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
     ] == 1422
+
+
+def test_ny_blank_util_on_multi_schedule_tier_raises() -> None:
+    # A recorded tier with a blank UTIL is presumable only against a single
+    # schedule; with New York's three regional schedules the standard is
+    # ambiguous and must fail loudly rather than silently understate shelter
+    # (zero FY2024 rows hit this).
+    with pytest.raises(ValueError, match="ambiguous"):
+        _map_ny(_unit(utility_tier="heating_cooling", utility_amount=None))
+
+
+def test_blank_util_on_single_schedule_tier_still_presumes() -> None:
+    # The Colorado presumption is unchanged: one schedule, standard presumed.
+    inputs = _map(_unit(utility_tier="heating_cooling", utility_amount=None)).inputs
+    assert inputs[HEAT] is True
+
+
+def test_sua_amounts_from_overlay_rejects_duplicate_regional_amounts() -> None:
+    # Region inference matches UTIL against the schedule; two regions sharing
+    # an amount within a tier would misroute silently.
+    spec = SimpleNamespace(
+        name="dup",
+        parameter_patches=[
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_new_york_city",
+                to_value="900",
+            ),
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_nassau_suffolk",
+                to_value="900",
+            ),
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_rest_of_state",
+                to_value="819",
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_new_york_city", to_value="391"
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_nassau_suffolk", to_value="363"
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_rest_of_state", to_value="332"
+            ),
+            SimpleNamespace(
+                rule="telephone_standard_allowance_amount", to_value="31"
+            ),
+        ],
+    )
+    with pytest.raises(ValueError, match="duplicate standard amounts"):
+        sc.sua_amounts_from_overlay(spec, sc.QC_JURISDICTIONS["us-ny"])
