@@ -493,6 +493,22 @@ class Concepts:
         "#belgium_capital_income_separate_tax"
     )
 
+    # Composed Denmark børne- og ungeydelse pipeline (rulespec-dk) that wires the
+    # § 1 age-band base amount (after the § 1, stk. 3 CPI regulation and the
+    # 12/24-krone rounding) and the § 1 a income taper from a supplied recipient
+    # income basis and current-year bundfradrag, so an end-to-end EUROMOD DK_2025
+    # comparison (child and youth benefit bfachnm_s) can run. Single-recipient
+    # scope: one recipient receives the full amount and the § 1 a taper runs on
+    # that recipient's own income basis. The § 1 a couple apportionment
+    # (ligedeling of the combined benefit and the separate per-parent taper) is
+    # out of scope, so the graded grid is single-parent households — which also
+    # sidesteps the pre-2022 spousal taper EUROMOD keeps in DK_2022-DK_2025
+    # (euromod_issues.json euromod-dk-2025-bfachnm-pre2022-spousal-taper).
+    DK_CHILD_YOUTH_BENEFIT = (
+        "dk:statutes/composed/boerne-og-ungeydelse-pipeline"
+        "#single_recipient_annual_child_youth_benefit"
+    )
+
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
     EMPLOYER_OASDI = "us:tax/payroll#employer_oasdi"

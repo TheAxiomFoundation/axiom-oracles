@@ -258,6 +258,14 @@
       "source": "comparisons/de-income-tax-liability.yaml"
     },
     {
+      "suite": "dk-child-youth-benefit",
+      "report": "axiom-euromod-dk-child-youth-benefit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-dk"
+      ],
+      "source": "comparisons/dk-child-youth-benefit-euromod.yaml"
+    },
+    {
       "suite": "fiit-ecps",
       "report": "axiom-policyengine-fiit-ecps.json",
       "repos": [

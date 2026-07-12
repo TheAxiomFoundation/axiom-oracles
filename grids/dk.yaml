@@ -1,0 +1,130 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: dk
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  dk-child-youth-benefit:
+    locale: DK
+    entity: Person
+    entity_id: recipient
+    outputs:
+    - dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit
+    cases:
+    - id: dk-child-youth-benefit-age1-yem300000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 1
+        head_annual_earnings: 300000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 300000.0
+      - id: child
+        kind: person
+        age: 1
+        relation: Child
+    - id: dk-child-youth-benefit-age5-yem300000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 5
+        head_annual_earnings: 300000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 300000.0
+      - id: child
+        kind: person
+        age: 5
+        relation: Child
+    - id: dk-child-youth-benefit-age10-yem300000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 10
+        head_annual_earnings: 300000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 300000.0
+      - id: child
+        kind: person
+        age: 10
+        relation: Child
+    - id: dk-child-youth-benefit-age16-yem300000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 16
+        head_annual_earnings: 300000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 300000.0
+      - id: child
+        kind: person
+        age: 16
+        relation: Child
+    - id: dk-child-youth-benefit-age5-yem1000000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 5
+        head_annual_earnings: 1000000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1000000.0
+      - id: child
+        kind: person
+        age: 5
+        relation: Child
+    - id: dk-child-youth-benefit-age5-yem1300000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 5
+        head_annual_earnings: 1300000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1300000.0
+      - id: child
+        kind: person
+        age: 5
+        relation: Child
+    - id: dk-child-youth-benefit-age5-yem2000000
+      period: '2025'
+      scenario: single-parent-child-youth-benefit
+      parameters:
+        child_age: 5
+        head_annual_earnings: 2000000.0
+      entities:
+      - id: recipient
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 2000000.0
+      - id: child
+        kind: person
+        age: 5
+        relation: Child
