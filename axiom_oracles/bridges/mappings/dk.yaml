@@ -1,0 +1,18 @@
+prefixes:
+  - legal_id_prefix: "dk:"
+    country: dk
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: No executable Denmark household oracle is wired yet. The
+      intended parity oracle is EUROMOD's Denmark systems (public European
+      Commission JRC release, runnable per-case on the EUROMOD engine), but
+      wiring it needs a dk prefix runner, a pinned EUROMOD release, and
+      synthetic per-case households (the public release ships no Danish
+      input microdata); Statistics Denmark's Lovmodellen is
+      government-internal and unavailable. PolicyEngine has no Denmark
+      model. The rulespec-dk pilot outputs (børne- og ungeydelsesloven § 1
+      base amounts and § 1 a income taper) assert statutory 2011-/2010-
+      niveau bases from the captured retsinformation.dk provisions in
+      companion tests. Exact mappings should be added only after an
+      EUROMOD-DK per-case target is implemented and verified
+      (rulespec-dk#1 tracks the lane).
