@@ -1,0 +1,73 @@
+schema: axiom_oracles.rulespec_overlay.v1
+name: us-ny-snap-fy2024
+program: us-ny/policies/otda/snap/fy-2026-benefit-calculation.yaml
+notes: >-
+  Compile-time overlay that replays the New York SNAP benefit composition
+  against fiscal year 2024 federal parameters. The rulespec-us monorepo ships
+  the composition wired to the FY 2026 cost-of-living (COLA) parameter set, so
+  this overlay rewrites the three USDA cola module ids (fy-2026-cola ->
+  fy-2024-cola) across the composition and every module that imports them, then
+  patches the seven New York standard-utility-allowance amounts down to their
+  FY 2024 values. New York publishes three regional schedules (New York City,
+  Nassau/Suffolk, rest of state) for the heating/cooling and utilities
+  allowances and a single statewide telephone allowance; the FY 2024 amounts
+  come from the QC technical documentation Table F.7 (PDF page 183), which
+  lists New York City 992/391/31, Long Island 923/363/31, and rest of state
+  819/332/31. The overlay is materialized as a single self-contained rulespec
+  root and compiled with that root alone, for the same union-not-shadowing
+  engine reason recorded in the us-co-snap-fy2024 spec. This is a stopgap:
+  once TheAxiomFoundation/rulespec-us#759 lands the parameter-set inversion,
+  the fiscal year becomes a run-time choice and this overlay retires.
+module_id_rewrites:
+  # Full module ids (not a bare substring): every occurrence across the
+  # rewrite files is a canonical id in an import or proof target, and full
+  # ids can never rewrite prose that merely mentions a fiscal year.
+  us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
+  us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
+  us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
+rewrite_files:
+  - us/statutes/7/2017/a.yaml
+  - us/regulations/7-cfr/273/8.yaml
+  - us/regulations/7-cfr/273/9.yaml
+  - us/regulations/7-cfr/273/10.yaml
+  - us-ny/regulations/18-nycrr/387/10.yaml
+  - us-ny/regulations/18-nycrr/387/12/a.yaml
+  - us-ny/regulations/18-nycrr/387/12/f/3/vi.yaml
+  - us-ny/regulations/18-nycrr/387/14/a/5.yaml
+  - us-ny/policies/otda/snap/fy-2026-benefit-calculation.yaml
+parameter_patches:
+  - file: us-ny/regulations/18-nycrr/387/12/f/3/v/a.yaml
+    rule: heating_cooling_standard_amount_new_york_city
+    from: "1062"
+    to: "992"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ny/regulations/18-nycrr/387/12/f/3/v/a.yaml
+    rule: heating_cooling_standard_amount_nassau_suffolk
+    from: "988"
+    to: "923"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ny/regulations/18-nycrr/387/12/f/3/v/a.yaml
+    rule: heating_cooling_standard_amount_rest_of_state
+    from: "877"
+    to: "819"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ny/regulations/18-nycrr/387/12/f/3/v/b.yaml
+    rule: utilities_standard_amount_new_york_city
+    from: "419"
+    to: "391"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ny/regulations/18-nycrr/387/12/f/3/v/b.yaml
+    rule: utilities_standard_amount_nassau_suffolk
+    from: "388"
+    to: "363"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ny/regulations/18-nycrr/387/12/f/3/v/b.yaml
+    rule: utilities_standard_amount_rest_of_state
+    from: "355"
+    to: "332"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ny/regulations/18-nycrr/387/12/f/3/v/c.yaml
+    rule: telephone_standard_allowance_amount
+    from: "32"
+    to: "31"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183

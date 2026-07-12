@@ -175,6 +175,15 @@
       "source": "comparisons/ca-snap-ecps.yaml"
     },
     {
+      "suite": "ca-snap-qc",
+      "report": "axiom-snapqc-ca-snap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-ca"
+      ],
+      "source": "comparisons/ca-snap-qc.yaml"
+    },
+    {
       "suite": "ca-tanf-ecps",
       "report": "axiom-policyengine-ca-tanf-ecps.json",
       "repos": [
@@ -449,6 +458,15 @@
         "TheAxiomFoundation/rulespec-us-ny"
       ],
       "source": "comparisons/ny-snap-ecps.yaml"
+    },
+    {
+      "suite": "ny-snap-qc",
+      "report": "axiom-snapqc-ny-snap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-ny"
+      ],
+      "source": "comparisons/ny-snap-qc.yaml"
     },
     {
       "suite": "ny-tanf-ecps",
