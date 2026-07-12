@@ -25,7 +25,6 @@ AXIOM_SNAP_QC_DATA_DIR, then the ~/.cache/axiom-oracles/snap-qc cache.
 from __future__ import annotations
 
 import argparse
-import math
 import os
 from pathlib import Path
 
