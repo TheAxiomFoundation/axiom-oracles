@@ -883,13 +883,14 @@ def test_ca_categorical_rides_resource_exemption_flag() -> None:
 
 
 def test_output_id_overrides_replace_base_ids_before_rewrite() -> None:
-    # New York scores the 273.10 regulatory chain (whole-dollar computation)
-    # instead of the composition's statutory-chain surface.
+    # New York's headline compares the composition's issued benefit
+    # (rulespec-us#836); the net and shelter stages ride the 273.10 rules,
+    # whose whole-dollar values are what the QC intermediates carry.
     config = sc.QC_JURISDICTIONS["us-ny"]
     spec = load_overlay_spec(config.overlay)
     ids = sc._output_id_by_label(config, spec.module_id_rewrites)
     assert ids["snap_regular_month_allotment"] == (
-        "us:regulations/7-cfr/273/10#snap_monthly_allotment"
+        "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_benefit"
     )
     assert ids["snap_net_income"] == (
         "us:regulations/7-cfr/273/10#snap_net_monthly_income"
@@ -903,22 +904,28 @@ def test_output_id_overrides_replace_base_ids_before_rewrite() -> None:
     )
 
 
-def test_ny_pins_the_federal_shelter_chain_inputs() -> None:
+def test_ny_pins_only_the_genuine_federal_inputs() -> None:
+    # The chain's shelter total and claimed homeless deduction are
+    # composition rules since rulespec-us#836 — pinning them would collide
+    # with the defined rules — so only the three genuine inputs are pinned.
     case = _map_ny(_unit(utility_tier="heating_cooling", utility_amount=819.0))
     inputs = case.inputs
-    assert inputs[
+    assert (
         "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
-    ] == 1319  # 500 incurred + 819 rest-of-state HCSUA
+        not in inputs
+    )
+    assert (
+        "us:regulations/7-cfr/273/10#input.snap_claimed_homeless_shelter_deduction"
+        not in inputs
+    )
     assert (
         inputs["us:regulations/7-cfr/273/10#input.household_initial_month"] is False
     )
+    assert inputs[
+        "us:regulations/7-cfr/273/10#input."
+        "state_agency_rounds_thirty_percent_net_income_up"
+    ] is True
     assert inputs["us:regulations/7-cfr/273/10#input.household_size"] == 1
-    # A nonstandard allowance rides into the incurred cost, so the pinned
-    # federal total equals the augmented incurred cost alone.
-    case = _map_ny(_unit(utility_tier="heating_cooling", utility_amount=922.0))
-    assert case.inputs[
-        "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
-    ] == 1422
 
 
 def test_ny_blank_util_on_multi_schedule_tier_raises() -> None:

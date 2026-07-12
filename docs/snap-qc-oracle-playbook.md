@@ -253,20 +253,21 @@ Colorado parameters exactly.
   jurisdiction does not encode at all (California's limited and telephone
   allowances; the chain carries only the 596-dollar heating/cooling SUA)
   falls back the same way.
-- **New York is scored on the 273.10 regulatory chain.** The New York
-  composition's public benefit surface rides the pure-statutory
-  2014(e)/2017(a) chain, which carries cents; FNS's Minimodel — and New
-  York's own system — compute in whole dollars under the 273.10(e)(1)(ii)(A)
-  election, which the encoded 273.10 chain implements (rulespec-us#826).
-  First-run finding: 33 of 847 New York reviews diverged by exactly one
-  dollar through the statutory surface (26 low, 7 high — half-dollar shelter
-  fractions and earned-income-deduction cents). The `us-ny` jurisdiction
-  therefore carries `output_id_overrides` pointing the compared benefit, net
-  income, and excess-shelter deduction at the 273.10 rules, and the mapper
-  pins the chain's unbound inputs (`snap_total_allowable_shelter_expenses`
-  mirrors the composition's own allowable shelter costs). Wiring the
-  composition's public surface to the rounded chain is the companion
-  rulespec-us finding; once that lands, the overrides and pins retire.
+- **New York's headline is the composition's issued benefit.** The New York
+  composition's statutory 2014(e)/2017(a) chain carries cents; FNS's
+  Minimodel — and New York's own system — compute in whole dollars under the
+  273.10(e)(1)(ii)(A) election, which the encoded 273.10 chain implements
+  (rulespec-us#826). First-run finding: 33 of 847 New York reviews diverged
+  by exactly one dollar through the statutory surface (26 low, 7 high —
+  half-dollar shelter fractions and earned-income-deduction cents), filed as
+  rulespec-us#830 and fixed by rulespec-us#836, which exposes the issued
+  benefit (`snap_benefit`, initial-month aware) on the 273.10 chain and binds
+  the chain's shelter and claimed-homeless inputs from New York's own rules.
+  The `us-ny` jurisdiction's `output_id_overrides` point the compared benefit
+  at that composition surface and the net-income and excess-shelter stages at
+  the 273.10 rules (whose whole-dollar values the QC constructed
+  intermediates carry); the mapper pins only the chain's three genuine inputs
+  (initial month off, thirty-percent rounding election, household size).
 - **California's homeless deduction feeds the claimed-amount input.** The
   CalFresh composition consumes the federal
   `snap_claimed_homeless_shelter_deduction` rather than household facts, so

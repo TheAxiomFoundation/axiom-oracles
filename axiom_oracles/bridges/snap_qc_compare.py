@@ -281,18 +281,20 @@ QC_JURISDICTIONS = {
             "telephone_standard_allowance_amount": ("telephone", "rest_of_state"),
         },
         child_support_convention="deduction",
-        # The composition's public benefit surface rides the pure-statutory
-        # 2014(e)/2017(a) chain, which carries cents; FNS's Minimodel — and
-        # New York's own system (QC tech doc footnote 20) — compute in whole
-        # dollars under the 273.10(e)(1)(ii)(A) election, which the encoded
-        # 273.10 chain implements (rulespec-us#826). The replay therefore
-        # scores the 273.10 regulatory chain, fed by the same projected
-        # inputs (map_qc_unit pins its shelter total to the composition's
-        # own allowable shelter costs). Wiring the composition's public
-        # surface to the rounded chain is the companion rulespec-us finding.
+        # The composition's statutory 2014(e)/2017(a) chain carries cents;
+        # FNS's Minimodel — and New York's own system (QC tech doc footnote
+        # 20) — compute in whole dollars under the 273.10(e)(1)(ii)(A)
+        # election. Since TheAxiomFoundation/rulespec-us#836 the composition
+        # exposes the issued benefit on the encoded 273.10 chain as
+        # snap_benefit (binding the chain's shelter input to New York's
+        # 387.12(f)(3)(vi) allowable shelter costs), so the headline compares
+        # the composition's own public surface; the net-income and
+        # excess-shelter stages stay on the 273.10 rules, whose whole-dollar
+        # values are what the QC constructed intermediates carry.
         output_id_overrides={
             "snap_regular_month_allotment": (
-                "us:regulations/7-cfr/273/10#snap_monthly_allotment"
+                "us-ny:policies/otda/snap/fy-2026-benefit-calculation"
+                "#snap_benefit"
             ),
             "snap_net_income": (
                 "us:regulations/7-cfr/273/10#snap_net_monthly_income"
@@ -443,18 +445,15 @@ def map_qc_unit(
     for name, value in utility_flags.items():
         set_input_value(inputs, name, value)
     if jurisdiction == "us-ny":
-        # The scored 273.10 chain's inputs that no New York composition rule
-        # binds and the composition test template does not carry. The shelter
-        # total is pinned to the same total the composition's shelter_costs
-        # rule computes (incurred costs plus the matched standard allowance),
-        # so the regulatory and statutory chains always agree on shelter.
-        # QC reviews are active ongoing cases, so the initial-month proration
-        # path stays off, and New York's whole-dollar system rounds the
-        # thirty-percent reduction up (the ceil and floor branches coincide
-        # for whole-dollar maximum allotments in any case).
-        inputs[
-            "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
-        ] = _money(shelter_costs + matched_sua_amount)
+        # The scored 273.10 chain's genuine inputs — facts no composition rule
+        # binds and the composition test template does not carry. (The chain's
+        # shelter total and claimed homeless deduction are composition rules
+        # since TheAxiomFoundation/rulespec-us#836, so they are engine-derived
+        # from the same projected facts, not pinned.) QC reviews are active
+        # ongoing cases, so the initial-month proration path stays off, and
+        # New York's whole-dollar system rounds the thirty-percent reduction
+        # up (the ceil and floor branches coincide for whole-dollar maximum
+        # allotments in any case).
         inputs["us:regulations/7-cfr/273/10#input.household_initial_month"] = False
         inputs[
             "us:regulations/7-cfr/273/10#input."
@@ -671,24 +670,16 @@ def _homeless_inputs(
             else 0
         )
         return {"snap_claimed_homeless_shelter_deduction": claimed}
-    inputs: dict[str, Any] = {
+    # New York's flat path flows through the 387.12(f)(3)(vi) allowable
+    # shelter costs, and the composition binds the federal claimed-amount
+    # input to zero itself (TheAxiomFoundation/rulespec-us#836) — nothing to
+    # pin. (No FY 2024 New York row claims the standard homeless deduction.)
+    return {
         "all_household_members_experiencing_homelessness": homeless_claimed,
         "homeless_household_has_shelter_costs": homeless_claimed,
         "homeless_household_free_shelter_all_month": False,
         "verified_higher_homeless_shelter_costs": False,
     }
-    if jurisdiction == "us-ny":
-        # New York's flat path flows through the 387.12(f)(3)(vi) allowable
-        # shelter costs, not the federal claimed-amount deduction, and the
-        # composition test template does not carry the 273.10 input — the
-        # engine still requires it, so it is pinned to zero by full reference,
-        # exactly as the snap_populace New York projection does. (No FY 2024
-        # New York row claims the standard homeless deduction.)
-        inputs[
-            "us:regulations/7-cfr/273/10#input."
-            "snap_claimed_homeless_shelter_deduction"
-        ] = 0
-    return inputs
 
 
 def _project_shelter_and_utilities(
