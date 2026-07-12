@@ -303,7 +303,7 @@
       "axiom_rules_engine_sha": "de0efdc73b469132ee268e1c832e8f7148b91431",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-10T19:57:53Z",
+    "generated_at": "2026-07-12T08:37:38Z",
     "generated_by": "scripts/run_comparison.py::be-local-municipal-pit",
     "oracle": {
       "euromod_country": "BE",
