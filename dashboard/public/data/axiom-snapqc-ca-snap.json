@@ -6391,7 +6391,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-12T13:43:48Z",
+    "generated_at": "2026-07-12T16:20:32Z",
     "generated_by": "scripts/run_comparison.py::ca-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6402,7 +6402,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "b53ce208771085030939db4b9691762506b6bca2"
+        "sha": "8e9d6b209c278073e574af02be876dd9cd13dce1"
       }
     ],
     "run_kind": "manual",
@@ -6456,7 +6456,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-ca-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-zqh_ytzf/rulespec-us-main-snapqc",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-eva_r6we/rulespec-us-main-snapqc",
         "patches": [
           {
             "file": "us-ca/policies/cdss/snap/standard-utility-allowance.yaml",

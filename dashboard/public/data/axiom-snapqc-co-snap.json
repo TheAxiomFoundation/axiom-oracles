@@ -6202,7 +6202,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-11T19:36:51Z",
+    "generated_at": "2026-07-12T16:21:39Z",
     "generated_by": "scripts/run_comparison.py::co-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6213,7 +6213,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "b53ce208771085030939db4b9691762506b6bca2"
+        "sha": "8e9d6b209c278073e574af02be876dd9cd13dce1"
       }
     ],
     "run_kind": "manual",
@@ -6232,12 +6232,8 @@
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": "dispositions/co-snap-qc.yaml",
-      "expired_entries": [
-        "homeless-shelter-deduction-cap-stale-143",
-        "whole-dollar-rounding-convention",
-        "whole-dollar-rounding-convention-net-income"
-      ],
+      "dispositions_file": null,
+      "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 100,
@@ -6254,7 +6250,7 @@
     "match_rate": 100,
     "mismatch_count": 0,
     "provenance": {
-      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine",
+      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules-engine",
       "fiscal_year": 2024,
       "overlay": {
         "file_sha256": {
@@ -6282,7 +6278,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-co-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-i5cwdibh/rulespec-us-main-snapqc",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-yd3l98ya/rulespec-us-main-snapqc",
         "patches": [
           {
             "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
