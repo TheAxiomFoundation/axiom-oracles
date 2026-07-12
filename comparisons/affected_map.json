@@ -61,6 +61,15 @@
       "source": "comparisons/az-snap-ecps.yaml"
     },
     {
+      "suite": "az-snap-qc",
+      "report": "axiom-snapqc-az-snap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-az"
+      ],
+      "source": "comparisons/az-snap-qc.yaml"
+    },
+    {
       "suite": "az-tanf-deductions",
       "report": "axiom-policyengine-az-tanf-deductions.json",
       "repos": [
@@ -298,6 +307,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ga-snap-qc",
+      "report": "axiom-snapqc-ga-snap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-ga"
+      ],
+      "source": "comparisons/ga-snap-qc.yaml"
+    },
+    {
       "suite": "ga-tanf-ecps",
       "report": "axiom-policyengine-ga-tanf-ecps.json",
       "repos": [
@@ -377,6 +395,15 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/md-income-tax-liability.yaml"
+    },
+    {
+      "suite": "md-snap-qc",
+      "report": "axiom-snapqc-md-snap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-md"
+      ],
+      "source": "comparisons/md-snap-qc.yaml"
     },
     {
       "suite": "md-tca-payments",

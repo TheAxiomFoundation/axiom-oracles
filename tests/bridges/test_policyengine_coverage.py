@@ -9154,7 +9154,7 @@ rules:
     versions:
       - effective_from: '2025-10-01'
         formula: earned_income + unearned_income
-  - name: snap_net_income
+  - name: na_net_income
     kind: derived
     versions:
       - effective_from: '2025-10-01'
@@ -9164,17 +9164,12 @@ rules:
     versions:
       - effective_from: '2025-10-01'
         formula: income_eligible and resource_eligible
-  - name: snap_maximum_allotment
-    kind: derived
-    versions:
-      - effective_from: '2025-10-01'
-        formula: thrift_food_plan_amount
   - name: snap_excess_shelter_deduction
     kind: derived
     versions:
       - effective_from: '2025-10-01'
         formula: shelter_deduction
-  - name: snap_regular_month_allotment
+  - name: na_regular_month_allotment
     kind: derived
     versions:
       - effective_from: '2025-10-01'
@@ -9190,17 +9185,16 @@ rules:
   input: {}
   output:
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_gross_monthly_income: 2000
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_net_income: 1200
+    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#na_net_income: 1200
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_eligible: holds
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_maximum_allotment: 768
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_excess_shelter_deduction: 350
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_regular_month_allotment: 408
+    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#na_regular_month_allotment: 408
 """,
     )
 
     coverage = build_policyengine_coverage_report(tmp_path, program="snap")
 
-    assert coverage["status_counts"] == {"known_not_comparable": 6}
+    assert coverage["status_counts"] == {"known_not_comparable": 5}
     composition_items = {
         item["rule_name"]: item
         for item in coverage["items"]
@@ -9208,11 +9202,10 @@ rules:
     }
     assert set(composition_items) == {
         "snap_gross_monthly_income",
-        "snap_net_income",
+        "na_net_income",
         "snap_eligible",
-        "snap_maximum_allotment",
         "snap_excess_shelter_deduction",
-        "snap_regular_month_allotment",
+        "na_regular_month_allotment",
     }
     assert {item["status"] for item in composition_items.values()} == {
         "known_not_comparable"
@@ -9224,7 +9217,7 @@ rules:
         == "snap_gross_income"
     )
     assert (
-        composition_items["snap_net_income"]["policyengine_variable"]
+        composition_items["na_net_income"]["policyengine_variable"]
         == "snap_net_income"
     )
     assert (
@@ -9232,15 +9225,11 @@ rules:
         == "is_snap_eligible"
     )
     assert (
-        composition_items["snap_maximum_allotment"]["policyengine_variable"]
-        == "snap_max_allotment"
-    )
-    assert (
         composition_items["snap_excess_shelter_deduction"]["policyengine_variable"]
         == "snap_excess_shelter_expense_deduction"
     )
     assert (
-        composition_items["snap_regular_month_allotment"]["policyengine_variable"]
+        composition_items["na_regular_month_allotment"]["policyengine_variable"]
         == "snap"
     )
 

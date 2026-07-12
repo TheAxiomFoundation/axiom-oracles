@@ -33,6 +33,7 @@ runner:
     jurisdiction: us-ny
     fiscal_year: 2024
     sample_size: 0
+    stage_tolerance: 0
     dashboard_filename: axiom-snapqc-ny-snap.json
 
 artifacts:

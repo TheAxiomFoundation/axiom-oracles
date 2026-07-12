@@ -6132,7 +6132,7 @@
       "parent": null,
       "priority": "normal",
       "relative_tolerance": 0,
-      "tolerance": 1.0
+      "tolerance": 0.0
     },
     {
       "category": "deductions",
@@ -6143,7 +6143,7 @@
       "parent": null,
       "priority": "normal",
       "relative_tolerance": 0,
-      "tolerance": 1.0
+      "tolerance": 0.0
     },
     {
       "category": "deductions",
@@ -6154,7 +6154,7 @@
       "parent": null,
       "priority": "normal",
       "relative_tolerance": 0,
-      "tolerance": 1.0
+      "tolerance": 0.0
     },
     {
       "category": "income",
@@ -6165,7 +6165,7 @@
       "parent": null,
       "priority": "normal",
       "relative_tolerance": 0,
-      "tolerance": 1.0
+      "tolerance": 0.0
     },
     {
       "category": "benefits",
@@ -6176,7 +6176,7 @@
       "parent": null,
       "priority": "normal",
       "relative_tolerance": 0,
-      "tolerance": 1.0
+      "tolerance": 0.0
     },
     {
       "category": "benefits",
@@ -6202,7 +6202,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-12T16:21:39Z",
+    "generated_at": "2026-07-12T23:45:07Z",
     "generated_by": "scripts/run_comparison.py::co-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6213,7 +6213,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "8e9d6b209c278073e574af02be876dd9cd13dce1"
+        "sha": "2e3e0821b833e293e2ed63b2faad900c03b98e7b"
       }
     ],
     "run_kind": "manual",
@@ -6278,7 +6278,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-co-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-yd3l98ya/rulespec-us-main-snapqc",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-t6zbdpy2/rulespec-us-main-snapqc",
         "patches": [
           {
             "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",

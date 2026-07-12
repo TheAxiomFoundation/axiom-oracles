@@ -1,0 +1,31 @@
+name: az-snap-qc
+title: Arizona SNAP — Axiom vs USDA SNAP QC administrative data
+description: >-
+  Replays Arizona SNAP Quality Control public-use reviews (FY2024, 922
+  in-scope active-case reviews) through the Axiom RuleSpec composition and
+  compares the constructed benefit (FSBEN) and its stage intermediates
+  against the QC file's own recomputed values, exactly like the co/ny/ca
+  suites. Arizona sizes its SUA and LUA by participant bracket (FAA6.J.09); the bracket is identified from the QC-applied UTIL amount, and a bracket-inconsistent UTIL rides as an incurred shelter cost. All 922 reviews reproduce exactly at zero stage tolerance. FY2024 law is evaluated through a sparse compile-time
+  overlay (fy-2026 cola module ids rewritten to fy-2024-cola plus the
+  state's Table F.7 SUA amount patches) at the nominal period 2026-01
+  (TheAxiomFoundation/rulespec-us#759 retires the overlay). Runs where the
+  engine binary, a rulespec-us checkout with the fy-2024-cola modules and
+  the state's SNAP layer (rulespec-us#842), and the QC file all exist;
+  elsewhere the registry re-emits the committed dashboard report.
+documentation: docs/snap-qc-oracle-playbook.md
+
+runner:
+  type: snap-qc-compare
+  parameters:
+    jurisdiction: us-az
+    fiscal_year: 2024
+    sample_size: 0
+    stage_tolerance: 0
+    dashboard_filename: axiom-snapqc-az-snap.json
+
+artifacts:
+  report_basename: axiom-snapqc-az-snap
+
+dashboard:
+  filename: axiom-snapqc-az-snap.json
+  suite: az-snap-qc

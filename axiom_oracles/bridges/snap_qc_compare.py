@@ -323,6 +323,73 @@ QC_JURISDICTIONS = {
         },
         child_support_convention="deduction",
     ),
+    "us-az": QcJurisdiction(
+        base=JURISDICTION_CONFIGS["us-az"],
+        overlay="us-az-snap-fy2024",
+        template=Path(
+            "us-az/policies/des/faa5/na-eligibility-and-benefit-determination/"
+            "fy-2026-benefit-calculation.test.yaml"
+        ),
+        program=Path(
+            "us-az/policies/des/faa5/na-eligibility-and-benefit-determination/"
+            "fy-2026-benefit-calculation.yaml"
+        ),
+        supported_fiscal_years=(2024,),
+        state_fips=4,
+        # Arizona sizes its SUA and LUA by participant bracket (FAA6.J.09);
+        # the bracket rides the region axis, so UTIL matching identifies it
+        # the same way New York's regions are identified.
+        sua_tier_by_patch_rule={
+            "az_standard_utility_allowance_amount_1_to_3": (
+                "heating_cooling",
+                "1_to_3",
+            ),
+            "az_standard_utility_allowance_amount_4_plus": (
+                "heating_cooling",
+                "4_plus",
+            ),
+            "az_limited_utility_allowance_amount_1_to_3": ("limited", "1_to_3"),
+            "az_limited_utility_allowance_amount_4_plus": ("limited", "4_plus"),
+            "az_telephone_utility_allowance_amount": ("telephone", STATEWIDE),
+        },
+        child_support_convention="deduction",
+    ),
+    "us-ga": QcJurisdiction(
+        base=JURISDICTION_CONFIGS["us-ga"],
+        overlay="us-ga-snap-fy2024",
+        template=Path("us-ga/policies/dfcs/snap/fy-2026-benefit-calculation.test.yaml"),
+        program=Path("us-ga/policies/dfcs/snap/fy-2026-benefit-calculation.yaml"),
+        supported_fiscal_years=(2024,),
+        state_fips=13,
+        sua_tier_by_patch_rule={
+            "ga_heating_cooling_standard_utility_allowance_amount": (
+                "heating_cooling",
+                STATEWIDE,
+            ),
+            "ga_limited_standard_utility_allowance_amount": ("limited", STATEWIDE),
+            "ga_telephone_standard_amount": ("telephone", STATEWIDE),
+        },
+        child_support_convention="deduction",
+    ),
+    "us-md": QcJurisdiction(
+        base=JURISDICTION_CONFIGS["us-md"],
+        overlay="us-md-snap-fy2024",
+        template=Path(
+            "us-md/policies/dhs/fia/snap/fy-2026-benefit-calculation.test.yaml"
+        ),
+        program=Path("us-md/policies/dhs/fia/snap/fy-2026-benefit-calculation.yaml"),
+        supported_fiscal_years=(2024,),
+        state_fips=24,
+        # The overlay patches the January-September 2024 amounts; the
+        # October-December 2023 vintage rows (505/309) match no encoded
+        # standard and ride their applied UTIL as an incurred shelter cost.
+        sua_tier_by_patch_rule={
+            "md_standard_utility_allowance_amount": ("heating_cooling", STATEWIDE),
+            "md_limited_utility_allowance_amount": ("limited", STATEWIDE),
+            "md_telephone_allowance_amount": ("telephone", STATEWIDE),
+        },
+        child_support_convention="deduction",
+    ),
 }
 
 
@@ -427,6 +494,20 @@ def map_qc_unit(
         set_input_value(inputs, name, value)
 
     set_input_value(inputs, "household_size", int(unit.certified_size))
+    if jurisdiction == "us-az":
+        # Arizona's FAA6.J.09 bracket counts NA participants, with
+        # disqualified participants included even though they are excluded
+        # from the benefit household size (FAA5, Disqualified NA
+        # Participant's Effect on the NA). The QC file carries only the
+        # certified (benefit) size, so that feeds the bracket; when the
+        # QC-applied allowance contradicts it, the bracket-consistency guard
+        # in _project_shelter_and_utilities rides the allowance as a shelter
+        # cost instead of guessing an unobserved participant count.
+        set_input_value(
+            inputs,
+            "az_utility_allowance_participant_count",
+            int(unit.certified_size),
+        )
 
     # Shelter and utilities. The QC-applied allowance (UTIL) is authoritative:
     # when it matches an encoded standard amount the tier (and, for New York,
@@ -574,11 +655,19 @@ def _income_resource_inputs(
             "snap_income_exclusions": 0,
             "snap_countable_financial_resources": liquid,
         }
-    if jurisdiction == "us-ca":
+    if jurisdiction in ("us-ca", "us-ga", "us-md"):
         return {
             "snap_gross_monthly_earned_income": earned,
             "snap_total_monthly_unearned_income": _money(total_unearned),
             "snap_countable_financial_resources": liquid,
+        }
+    if jurisdiction == "us-az":
+        # Arizona's eligibility determination is an input bridge (the file
+        # already adjudicated every retained review eligible), and nothing
+        # queried consumes the 273.8 resource chain.
+        return {
+            "snap_gross_monthly_earned_income": earned,
+            "snap_total_monthly_unearned_income": _money(total_unearned),
         }
 
     # Colorado: 4.404 itemized unearned income. The category sums come from
@@ -637,12 +726,16 @@ def _categorical_inputs(
                 _money(_call(unit, "earned_income")) > 0
             ),
         }
-    if jurisdiction == "us-ca":
+    if jurisdiction in ("us-ca", "us-ga", "us-md"):
         return {
             "snap_categorically_eligible_for_resource_exemption": (
                 categorically_eligible
             ),
         }
+    if jurisdiction == "us-az":
+        # The composition's eligibility surface is the budgetary-unit bridge
+        # input; every retained QC review is eligible by construction.
+        return {"na_budgetary_unit_is_eligible": True}
     return {"snap_basic_categorical_eligible": categorically_eligible}
 
 
@@ -663,7 +756,7 @@ def _homeless_inputs(
     federal 273.10 claimed-amount input, so the file's own applied
     HOMELESS_DED rides through ``min(claimed, indexed maximum)``.
     """
-    if jurisdiction == "us-ca":
+    if jurisdiction in ("us-ca", "us-az", "us-ga", "us-md"):
         claimed = (
             _money(getattr(unit, "homeless_deduction_amount", 0) or 0)
             if homeless_claimed
@@ -740,6 +833,19 @@ def _project_shelter_and_utilities(
             ),
             None,
         )
+        if (
+            matched_region in ("1_to_3", "4_plus")
+            and jurisdiction == "us-az"
+        ):
+            # Arizona's engine derives the bracket from the unit's own
+            # participant count, so a UTIL that matches the OTHER bracket's
+            # standard cannot be reproduced through the tier flags (one real
+            # FY2024 row: a 3-participant unit whose applied SUA is the 4+
+            # amount). UTIL is authoritative — it rides as an incurred
+            # shelter cost instead, which reproduces the file arithmetic.
+            expected = "1_to_3" if int(unit.certified_size) <= 3 else "4_plus"
+            if matched_region != expected:
+                matched_region = None
         if matched_region is None:
             shelter_costs = _money(shelter_costs + applied)
 
@@ -792,6 +898,58 @@ def _utility_flag_inputs(
                 "household_has_heating_and_cooling_costs_separate_from_"
                 "rent_or_mortgage"
             ): tier == "heating_cooling",
+        }
+    if jurisdiction == "us-az":
+        # FAA5 utility-allowance eligibility judgments: the three base
+        # prerequisites plus the tier-selecting obligation facts; the LIHEAP
+        # and energy-assistance arms stay False (the heating-obligation fact
+        # already grants the SUA), and the FAA6 amounts select the
+        # participant bracket from household size inside the engine.
+        any_tier = tier in ("heating_cooling", "limited", "telephone")
+        return {
+            "budgetary_unit_billed_separately_for_utility_expenses": any_tier,
+            "budgetary_unit_obligated_to_pay_allowable_utility_expenses": any_tier,
+            "budgetary_unit_has_verified_allowable_utility_expenses": any_tier,
+            (
+                "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_"
+                "separately_from_rent_or_mortgage_on_regular_basis"
+            ): tier == "heating_cooling",
+            "budgetary_unit_received_liheap_payment": False,
+            "liheap_annual_payment_amount": 0,
+            "liheap_payment_received_in_application_month_or_lookback_period": False,
+            "budgetary_unit_has_participant_who_is_elderly_or_has_disability": False,
+            (
+                "budgetary_unit_heating_or_cooling_expenses_exceed_"
+                "energy_assistance_payments"
+            ): False,
+            (
+                "budgetary_unit_obligated_to_pay_at_least_two_non_heating_"
+                "or_non_cooling_utility_expenses"
+            ): tier == "limited",
+            "budgetary_unit_obligated_to_pay_only_telephone_expense": (
+                tier == "telephone"
+            ),
+        }
+    if jurisdiction == "us-ga":
+        return {
+            (
+                "household_qualifies_for_heating_cooling_standard_"
+                "utility_allowance"
+            ): tier == "heating_cooling",
+            "household_qualifies_for_limited_standard_utility_allowance": (
+                tier == "limited"
+            ),
+            "household_qualifies_for_telephone_standard": tier == "telephone",
+        }
+    if jurisdiction == "us-md":
+        return {
+            "household_qualifies_for_standard_utility_allowance": (
+                tier == "heating_cooling"
+            ),
+            "household_qualifies_for_limited_utility_allowance": (
+                tier == "limited"
+            ),
+            "household_qualifies_for_telephone_allowance": tier == "telephone",
         }
 
     # Colorado: the seven 10 CCR 2506-1 section 4.407.31 utility-cost flags.

@@ -180,29 +180,19 @@ JURISDICTION_CONFIGS = {
             "fy-2026-benefit-calculation.yaml"
         ),
         output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_regular_month_allotment": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_regular_month_allotment"
+                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_benefit"
             ),
             "snap_gross_monthly_income": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_gross_monthly_income"
+                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_gross_monthly_income"
             ),
-            "snap_net_income": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_net_income"
-            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
             "snap_eligible": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_eligible"
-            ),
-            "snap_maximum_allotment": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_maximum_allotment"
+                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_eligible"
             ),
             "snap_excess_shelter_deduction": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+                "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income"
             ),
         },
         utility_allowance_labels=(),
@@ -210,6 +200,70 @@ JURISDICTION_CONFIGS = {
         member_entity_type="Person",
         temp_prefix="az-snap-pe-populace-",
         display_name="Arizona SNAP",
+    ),
+    "us-ga": JurisdictionConfig(
+        jurisdiction="us-ga",
+        state_code="GA",
+        repo_name="rulespec-us-ga",
+        program_relative_path=Path(
+            "policies/dfcs/snap/fy-2026-benefit-calculation.yaml"
+        ),
+        output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
+            "snap_regular_month_allotment": (
+                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_benefit"
+            ),
+            "snap_gross_monthly_income": (
+                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_gross_monthly_income"
+            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+            "snap_eligible": (
+                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_eligible"
+            ),
+            "snap_excess_shelter_deduction": (
+                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+            ),
+        },
+        utility_allowance_labels=(),
+        relation_id=(
+            "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#relation.member_of_household"
+        ),
+        member_entity_type="Person",
+        temp_prefix="ga-snap-pe-populace-",
+        display_name="Georgia SNAP",
+        additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
+    ),
+    "us-md": JurisdictionConfig(
+        jurisdiction="us-md",
+        state_code="MD",
+        repo_name="rulespec-us-md",
+        program_relative_path=Path(
+            "policies/dhs/fia/snap/fy-2026-benefit-calculation.yaml"
+        ),
+        output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
+            "snap_regular_month_allotment": (
+                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_benefit"
+            ),
+            "snap_gross_monthly_income": (
+                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_gross_monthly_income"
+            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+            "snap_eligible": (
+                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_eligible"
+            ),
+            "snap_excess_shelter_deduction": (
+                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+            ),
+        },
+        utility_allowance_labels=(),
+        relation_id=(
+            "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#relation.member_of_household"
+        ),
+        member_entity_type="Person",
+        temp_prefix="md-snap-pe-populace-",
+        display_name="Maryland SNAP",
+        additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
     ),
     "us-ny": JurisdictionConfig(
         jurisdiction="us-ny",
@@ -956,6 +1010,35 @@ def project_deduction_inputs(
             "dependent_care_deduction": dependent_care_deduction,
             "child_support_deduction": child_support_deduction,
             "medical_deduction": medical_deduction,
+            "household_entitled_to_excess_medical_deduction": medical_deduction > 0,
+            "snap_allowable_monthly_dependent_care_expenses": (
+                dependent_care_deduction
+            ),
+            "snap_allowable_monthly_child_support_payments": child_support_deduction,
+            "snap_total_medical_expenses": medical_expenses_for_deduction(
+                medical_deduction
+            ),
+        }
+    if config.jurisdiction in ("us-ga", "us-md"):
+        # CA-shaped: both the 2014(e)(6)(A) statutory inputs and the 273.10
+        # regulatory inputs, which these CA-pattern compositions import.
+        return {
+            "dependent_care_deduction": dependent_care_deduction,
+            "child_support_deduction": child_support_deduction,
+            "medical_deduction": medical_deduction,
+            "household_entitled_to_excess_medical_deduction": medical_deduction > 0,
+            "snap_allowable_monthly_dependent_care_expenses": (
+                dependent_care_deduction
+            ),
+            "snap_allowable_monthly_child_support_payments": child_support_deduction,
+            "snap_total_medical_expenses": medical_expenses_for_deduction(
+                medical_deduction
+            ),
+        }
+    if config.jurisdiction == "us-az":
+        # Arizona's composition rides the 273.10 chain only (no 2014(e)
+        # statutory imports), so just the regulatory inputs.
+        return {
             "household_entitled_to_excess_medical_deduction": medical_deduction > 0,
             "snap_allowable_monthly_dependent_care_expenses": (
                 dependent_care_deduction

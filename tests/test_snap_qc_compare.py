@@ -977,3 +977,71 @@ def test_sua_amounts_from_overlay_rejects_duplicate_regional_amounts() -> None:
     )
     with pytest.raises(ValueError, match="duplicate standard amounts"):
         sc.sua_amounts_from_overlay(spec, sc.QC_JURISDICTIONS["us-ny"])
+
+
+def test_az_bracket_inconsistent_util_rides_as_shelter_cost() -> None:
+    # A 3-participant Arizona unit whose applied UTIL equals the 4+ bracket
+    # SUA cannot be reproduced through the tier flags (the engine derives the
+    # bracket from the unit's own size), so the applied amount rides as an
+    # incurred shelter cost — one real FY2024 row.
+    config = sc.QC_JURISDICTIONS["us-az"]
+    spec = load_overlay_spec(config.overlay)
+    table = sc.sua_amounts_from_overlay(spec, config)
+    unit = _unit(
+        certified_size=3, utility_tier="heating_cooling", utility_amount=431.0
+    )
+    shelter, matched, flags = sc._project_shelter_and_utilities(
+        "us-az", unit, table
+    )
+    assert shelter == 931  # 500 incurred + 431 applied
+    assert matched == 0.0
+    unit = _unit(
+        certified_size=3, utility_tier="heating_cooling", utility_amount=318.0
+    )
+    shelter, matched, flags = sc._project_shelter_and_utilities(
+        "us-az", unit, table
+    )
+    assert shelter == 500
+    assert matched == 318.0
+
+
+@pytest.mark.parametrize(
+    "jurisdiction, tier, expected_true",
+    [
+        (
+            "us-ga",
+            "heating_cooling",
+            {"household_qualifies_for_heating_cooling_standard_utility_allowance"},
+        ),
+        ("us-ga", "limited", {"household_qualifies_for_limited_standard_utility_allowance"}),
+        ("us-ga", "telephone", {"household_qualifies_for_telephone_standard"}),
+        ("us-ga", "none", set()),
+        ("us-md", "heating_cooling", {"household_qualifies_for_standard_utility_allowance"}),
+        ("us-md", "limited", {"household_qualifies_for_limited_utility_allowance"}),
+        ("us-md", "telephone", {"household_qualifies_for_telephone_allowance"}),
+        ("us-md", "none", set()),
+    ],
+)
+def test_ga_md_qualification_flags(jurisdiction, tier, expected_true) -> None:
+    flags = sc._utility_flag_inputs(jurisdiction, tier, sc.STATEWIDE)
+    for name, value in flags.items():
+        assert value is (name in expected_true), (jurisdiction, tier, name)
+
+
+def test_az_flag_emission_sets_prerequisites_and_tier_obligation() -> None:
+    flags = sc._utility_flag_inputs("us-az", "heating_cooling", "1_to_3")
+    assert flags["budgetary_unit_billed_separately_for_utility_expenses"] is True
+    assert flags[
+        "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_"
+        "separately_from_rent_or_mortgage_on_regular_basis"
+    ] is True
+    assert flags[
+        "budgetary_unit_obligated_to_pay_only_telephone_expense"
+    ] is False
+    none_flags = sc._utility_flag_inputs("us-az", "none", None)
+    assert none_flags["budgetary_unit_billed_separately_for_utility_expenses"] is False
+
+
+def test_az_categorical_feeds_the_eligibility_bridge() -> None:
+    inputs = sc._categorical_inputs("us-az", _unit(), 0)
+    assert inputs == {"na_budgetary_unit_is_eligible": True}
