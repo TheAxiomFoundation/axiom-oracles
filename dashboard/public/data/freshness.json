@@ -106,7 +106,7 @@
     },
     {
       "suite": "be-article-51-forfait",
-      "generated_at": "2026-07-12T08:37:39Z",
+      "generated_at": "2026-07-12T14:03:04Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
