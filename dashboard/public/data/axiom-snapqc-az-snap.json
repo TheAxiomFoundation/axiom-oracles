@@ -6664,7 +6664,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-13T03:04:47Z",
+    "generated_at": "2026-07-13T07:58:16Z",
     "generated_by": "scripts/run_comparison.py::az-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6675,7 +6675,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "04d9d7ccda133b3f3d8c015aaf9000e3bc14903a"
+        "sha": "c739eade060091b16513483933b00182eaf25c3f"
       }
     ],
     "run_kind": "manual",
@@ -6731,7 +6731,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-az-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-bk6d_nwa/rulespec-us-snap-sua-states",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-t8pwjzfp/rulespec-us-main-snapqc",
         "patches": [
           {
             "file": "us-az/policies/des/faa6/utility-allowance-current-amount.yaml",
@@ -6777,7 +6777,7 @@
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states",
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
         "schema": "axiom_oracles.rulespec_overlay.v1"
       },
       "period": "2026-01",
@@ -6788,7 +6788,7 @@
         "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
         "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states"
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
     },
     "stages": [],
     "weighted": {
