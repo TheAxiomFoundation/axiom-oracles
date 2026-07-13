@@ -275,6 +275,14 @@
       "source": "comparisons/de-income-tax-liability.yaml"
     },
     {
+      "suite": "de-tanf-ecps",
+      "report": "axiom-policyengine-de-tanf-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-de"
+      ],
+      "source": "comparisons/de-tanf-ecps.yaml"
+    },
+    {
       "suite": "dk-child-youth-benefit",
       "report": "axiom-euromod-dk-child-youth-benefit.json",
       "repos": [

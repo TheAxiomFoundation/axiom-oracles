@@ -44,6 +44,16 @@
         "conformant": true
       },
       {
+        "date": "2026-07-09",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
+      },
+      {
         "date": "2026-07-10",
         "in_scope": 23,
         "covered": 23,
@@ -96,6 +106,16 @@
         "conformant": true
       },
       {
+        "date": "2026-07-09",
+        "in_scope": 21,
+        "covered": 21,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
+      },
+      {
         "date": "2026-07-10",
         "in_scope": 21,
         "covered": 21,
@@ -138,6 +158,16 @@
         "conformant": true
       },
       {
+        "date": "2026-07-09",
+        "in_scope": 23,
+        "covered": 23,
+        "uncovered": 0,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 0,
+        "conformant": true
+      },
+      {
         "date": "2026-07-10",
         "in_scope": 23,
         "covered": 23,
@@ -167,6 +197,16 @@
         "unexplained": 0,
         "axiom_attributed_open": 0,
         "gap": 107,
+        "conformant": false
+      },
+      {
+        "date": "2026-07-09",
+        "in_scope": 137,
+        "covered": 42,
+        "uncovered": 95,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 95,
         "conformant": false
       },
       {
