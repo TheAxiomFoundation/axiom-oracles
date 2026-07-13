@@ -79,7 +79,7 @@ def build_suite_report(suite: dict, period: str, parameters) -> dict:
     for spec in suite["comparisons"]:
         if spec["file"] not in file_cache:
             file_cache[spec["file"]] = evaluate_rulespec_text(
-                upstream_text(spec["file"]), source=spec["file"]
+                upstream_text(spec["file"]), source=spec["file"], as_of=period
             )
         left = axiom_value(file_cache[spec["file"]], spec)
         right = policyengine_value(parameters, spec["pe"], period)

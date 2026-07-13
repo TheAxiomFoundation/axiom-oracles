@@ -94,14 +94,34 @@ _NAME_RE = re.compile(r"[a-z_][a-z0-9_]*")
 _ALLOWED_FORMULA = re.compile(r"^[a-z0-9_+\-*/(),.\s]+$")
 
 
-def evaluate_rulespec_text(text: str, source: str = "<rulespec>") -> dict[str, float]:
+def _version_as_of(versions: list[dict], as_of: str | None) -> dict:
+    """The version block effective at ``as_of`` (ISO date), else the first.
+
+    Multi-version parameters (e.g. Maine's FFY2022–FFY2026 TANF charts)
+    carry one block per vintage; comparing versions[0] silently evaluates
+    the oldest law. ISO date strings order lexically, so pick the latest
+    ``effective_from`` at or before the comparison instant.
+    """
+    if not as_of:
+        return versions[0]
+    dated = sorted(
+        (v for v in versions if str(v.get("effective_from", "")) <= as_of),
+        key=lambda v: str(v.get("effective_from", "")),
+    )
+    return dated[-1] if dated else versions[0]
+
+
+def evaluate_rulespec_text(
+    text: str, source: str = "<rulespec>", as_of: str | None = None
+) -> dict[str, float]:
     """Evaluate the parameter rules in one rulespec document.
 
     Rules reference each other by name; iterate until the dependency graph
     settles. Formulas are restricted to arithmetic, floor(), max()/min(),
     and boolean literals. Rules whose formulas need runtime facts (derived
     eligibility logic, conditionals) simply stay unresolved — callers check
-    that the specific rules they compare did resolve.
+    that the specific rules they compare did resolve. ``as_of`` selects the
+    version block effective at that date (default: the first block).
     """
     doc = yaml.safe_load(text)
     formulas: dict[str, str] = {}
@@ -110,13 +130,14 @@ def evaluate_rulespec_text(text: str, source: str = "<rulespec>") -> dict[str, f
         versions = rule.get("versions") or []
         if rule.get("kind") != "parameter" or not versions:
             continue
+        version = _version_as_of(versions, as_of)
         # Table parameters carry a values mapping (e.g. payment standards
         # keyed by assistance-unit size) instead of a formula.
-        table = versions[0].get("values")
+        table = version.get("values")
         if isinstance(table, dict):
             tables[rule["name"]] = {k: float(v) for k, v in table.items()}
             continue
-        formula = str(versions[0].get("formula", "")).strip()
+        formula = str(version.get("formula", "")).strip()
         if _ALLOWED_FORMULA.match(formula):
             formulas[rule["name"]] = formula
 
@@ -157,7 +178,7 @@ def evaluate_rulespec_parameters(path: Path) -> dict[str, float]:
     # files at the repo root.
     if not path.exists():
         path = RULESPEC_ROOT / "us" / path.relative_to(RULESPEC_ROOT)
-    return evaluate_rulespec_text(path.read_text(), source=path.name)
+    return evaluate_rulespec_text(path.read_text(), source=path.name, as_of=PERIOD)
 
 
 def policyengine_value(parameters, accessor: str, period: str = PERIOD) -> float:
