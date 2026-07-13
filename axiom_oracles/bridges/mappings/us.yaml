@@ -4854,6 +4854,46 @@ mappings:
     candidate_priority: P4
     rationale: California CalFresh eligibility composition combines state and federal Axiom outputs; PE eligibility is adjacent but computed from PE's own eligibility graph.
 
+  - legal_id: us:policies/usda/snap/state-plan-composition#snap_ssn_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_eligible
+    candidate_priority: P4
+    rationale: Federal state-plan composition household SSN-requirement wrapper (zero ineligible members); PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us:policies/usda/snap/state-plan-composition#snap_work_requirement_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_eligible
+    candidate_priority: P4
+    rationale: Federal state-plan composition household work-requirement wrapper (zero ineligible members); PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us:policies/usda/snap/state-plan-composition#snap_student_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_eligible
+    candidate_priority: P4
+    rationale: Federal state-plan composition household student-rule wrapper (zero ineligible members); PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us:policies/usda/snap/state-plan-composition#snap_household_residency_and_citizenship_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_eligible
+    candidate_priority: P4
+    rationale: Federal state-plan composition residency plus citizenship-count wrapper; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us:policies/usda/snap/state-plan-composition#snap_initial_month_issued_allotment
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap
+    candidate_priority: P4
+    rationale: Federal state-plan composition initial-month allotment after the 273.10(e)(2)(ii)(B) minimum-issuance floor; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
   - legal_id: us:policies/usda/snap/state-plan-composition#snap_benefit
     country: us
     program: snap
