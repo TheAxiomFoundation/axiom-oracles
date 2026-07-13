@@ -545,7 +545,7 @@
     },
     {
       "suite": "de-income-tax-liability",
-      "generated_at": "2026-07-10T09:59:10Z",
+      "generated_at": "2026-07-13T09:52:48Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
