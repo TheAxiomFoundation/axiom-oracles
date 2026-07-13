@@ -10,7 +10,7 @@ for FY2024 — Colorado (the pilot), New York, California, Arizona, Georgia,
 and Maryland:
 
 ```bash
-for suite in co ny ca az ga md; do
+for suite in co ny ca az ga md tx; do
   uv run scripts/run_comparison.py "$suite-snap-qc" --summary
 done
 ```

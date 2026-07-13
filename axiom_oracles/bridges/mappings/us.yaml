@@ -4894,6 +4894,110 @@ mappings:
     candidate_priority: P4
     rationale: Federal state-plan composition initial-month allotment after the 273.10(e)(2)(ii)(B) minimum-issuance floor; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
 
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#snap_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_eligible
+    candidate_priority: P4
+    rationale: Texas FY 2026 composition eligibility surface (identity over tx_snap_eligible); PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#tx_snap_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_eligible
+    candidate_priority: P4
+    rationale: Texas FY 2026 composition residency, member, and income/resource conjunction; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#tx_income_and_resource_eligible
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: is_snap_eligible
+    candidate_priority: P4
+    rationale: Texas FY 2026 composition categorical-or-(resource-and-income) judgment; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#tx_applied_utility_allowance
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_utility_allowance
+    candidate_priority: P4
+    rationale: Texas FY 2026 composition SUA-else-BUA-else-telephone selection per Works Handbook A-1420; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#shelter_costs
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: housing_cost
+    candidate_priority: P4
+    rationale: Texas FY 2026 composition incurred shelter costs plus the applied utility allowance; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#snap_total_allowable_shelter_expenses
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_excess_shelter_expense_deduction
+    candidate_priority: P4
+    rationale: Texas FY 2026 composition 273.10 shelter-input binding; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#snap_excess_shelter_deduction
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_excess_shelter_expense_deduction
+    candidate_priority: P4
+    rationale: Texas FY 2026 composition 273.10 excess-shelter identity; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/snap-utility-allowance-amounts#tx_standard_utility_allowance_amount
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_utility_allowance
+    candidate_priority: P4
+    rationale: Texas FY 2026 SUA amount parameter (Works Handbook C-121.1); PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/snap-utility-allowance-amounts#tx_basic_utility_allowance_amount
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_utility_allowance
+    candidate_priority: P4
+    rationale: Texas FY 2026 BUA amount parameter (Works Handbook C-121.1); PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/snap-utility-allowance-amounts#tx_telephone_standard_amount
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_utility_allowance
+    candidate_priority: P4
+    rationale: Texas FY 2026 telephone standard parameter (Works Handbook C-121.1); PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/snap-utility-allowance-amounts#tx_standard_utility_allowance
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_utility_allowance
+    candidate_priority: P4
+    rationale: Texas FY 2026 derived Household surface for the SUA delegated-setting record; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/snap-utility-allowance-amounts#tx_basic_utility_allowance
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_utility_allowance
+    candidate_priority: P4
+    rationale: Texas FY 2026 derived Household surface for the BUA delegated-setting record; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
+  - legal_id: us-tx:policies/hhs/texas-works-handbook/snap-utility-allowance-amounts#tx_telephone_standard
+    country: us
+    program: snap
+    mapping_type: not_comparable
+    policyengine_variable: snap_utility_allowance
+    candidate_priority: P4
+    rationale: Texas FY 2026 derived Household surface for the telephone delegated-setting record; PolicyEngine's nearest surface is adjacent but computed from PE's own graph.
+
   - legal_id: us:policies/usda/snap/state-plan-composition#snap_benefit
     country: us
     program: snap

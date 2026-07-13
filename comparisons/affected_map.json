@@ -625,6 +625,15 @@
       "source": "comparisons/tn-snap-ecps.yaml"
     },
     {
+      "suite": "tx-snap-qc",
+      "report": "axiom-snapqc-tx-snap.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us-tx"
+      ],
+      "source": "comparisons/tx-snap-qc.yaml"
+    },
+    {
       "suite": "tx-tanf-parameters",
       "report": "axiom-policyengine-tx-tanf-parameters.json",
       "repos": [

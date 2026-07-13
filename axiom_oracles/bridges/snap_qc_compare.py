@@ -390,6 +390,24 @@ QC_JURISDICTIONS = {
         },
         child_support_convention="deduction",
     ),
+    "us-tx": QcJurisdiction(
+        base=JURISDICTION_CONFIGS["us-tx"],
+        overlay="us-tx-snap-fy2024",
+        template=Path(
+            "us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.test.yaml"
+        ),
+        program=Path(
+            "us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml"
+        ),
+        supported_fiscal_years=(2024,),
+        state_fips=48,
+        sua_tier_by_patch_rule={
+            "tx_standard_utility_allowance_amount": ("heating_cooling", STATEWIDE),
+            "tx_basic_utility_allowance_amount": ("limited", STATEWIDE),
+            "tx_telephone_standard_amount": ("telephone", STATEWIDE),
+        },
+        child_support_convention="deduction",
+    ),
 }
 
 
@@ -653,7 +671,7 @@ def _income_resource_inputs(
             "snap_income_exclusions": 0,
             "snap_countable_financial_resources": liquid,
         }
-    if jurisdiction in ("us-ca", "us-ga", "us-md"):
+    if jurisdiction in ("us-ca", "us-ga", "us-md", "us-tx"):
         return {
             "snap_gross_monthly_earned_income": earned,
             "snap_total_monthly_unearned_income": _money(total_unearned),
@@ -724,7 +742,7 @@ def _categorical_inputs(
                 _money(_call(unit, "earned_income")) > 0
             ),
         }
-    if jurisdiction in ("us-ca", "us-ga", "us-md"):
+    if jurisdiction in ("us-ca", "us-ga", "us-md", "us-tx"):
         return {
             "snap_categorically_eligible_for_resource_exemption": (
                 categorically_eligible
@@ -754,7 +772,7 @@ def _homeless_inputs(
     federal 273.10 claimed-amount input, so the file's own applied
     HOMELESS_DED rides through ``min(claimed, indexed maximum)``.
     """
-    if jurisdiction in ("us-ca", "us-az", "us-ga", "us-md"):
+    if jurisdiction in ("us-ca", "us-az", "us-ga", "us-md", "us-tx"):
         claimed = (
             _money(getattr(unit, "homeless_deduction_amount", 0) or 0)
             if homeless_claimed
@@ -948,6 +966,18 @@ def _utility_flag_inputs(
                 tier == "limited"
             ),
             "household_qualifies_for_telephone_allowance": tier == "telephone",
+        }
+    if jurisdiction == "us-tx":
+        # Texas Works Handbook A-1420: SUA (heating/cooling, block 69), BUA
+        # (non-heating utilities, block 72), telephone standard (block 77).
+        return {
+            "household_qualifies_for_standard_utility_allowance": (
+                tier == "heating_cooling"
+            ),
+            "household_qualifies_for_basic_utility_allowance": (
+                tier == "limited"
+            ),
+            "household_qualifies_for_telephone_standard": tier == "telephone",
         }
 
     # Colorado: the seven 10 CCR 2506-1 section 4.407.31 utility-cost flags.
