@@ -71,6 +71,9 @@ _TAXSIM_STATE = {
     "AL": 1,
     "ID": 13,
     "KY": 18,
+    # Arizona (TAXSIM SOI code 3). Its rulespec-us composed pilot landed on main,
+    # so an affected-rerun against rulespec-us main finds the companion fixtures.
+    "AZ": 3,
 }
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
@@ -122,6 +125,11 @@ _PE_VAR = {
     "ME": "me_income_tax_before_refundable_credits",
     "MN": "mn_income_tax_before_refundable_credits",
     "CT": "ct_income_tax_before_refundable_credits",
+    # Arizona levies a single flat rate (43-1011) on Arizona taxable income (AGI
+    # less the 43-1041 standard deduction). az_income_tax equals
+    # az_income_tax_before_refundable_credits on this childless grid (no refundable
+    # credits active), so the final variable is the pipeline's exact target.
+    "AZ": "az_income_tax",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -309,6 +317,11 @@ _TOL = {
     "ME": (1.0, 0.0),
     "MN": (1.0, 0.0),
     "CT": (1.0, 0.0),
+    # Arizona reproduces PolicyEngine exactly (flat 2.5% on AGI less the standard
+    # deduction; no rounding residual). A $1 absolute band catches any structural
+    # error without absorbing the 2024-to-2026 standard-deduction indexation on
+    # the TAXSIM leg.
+    "AZ": (1.0, 0.0),
 }
 
 

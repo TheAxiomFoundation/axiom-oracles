@@ -52,6 +52,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "az-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-az-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/az-income-tax-liability.yaml"
+    },
+    {
       "suite": "az-snap-ecps",
       "report": "axiom-policyengine-az-snap-ecps.json",
       "repos": [
