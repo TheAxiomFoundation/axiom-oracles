@@ -139,6 +139,7 @@
     "axiom-euromod-dk-child-youth-benefit.json",
     "axiom-snapqc-az-snap.json",
     "axiom-snapqc-ga-snap.json",
-    "axiom-snapqc-md-snap.json"
+    "axiom-snapqc-md-snap.json",
+    "axiom-policyengine-taxsim-ky-income-tax-liability.json"
   ]
 }
