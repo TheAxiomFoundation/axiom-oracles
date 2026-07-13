@@ -293,7 +293,7 @@ QC_JURISDICTIONS = {
         # values are what the QC constructed intermediates carry.
         output_id_overrides={
             "snap_regular_month_allotment": (
-                "us-ny:policies/otda/snap/fy-2026-benefit-calculation"
+                "us:policies/usda/snap/state-plan-composition"
                 "#snap_benefit"
             ),
             "snap_net_income": (
@@ -648,8 +648,6 @@ def _income_resource_inputs(
     liquid = _money(getattr(unit, "liquid_resources", 0) or 0)
     if jurisdiction == "us-ny":
         return {
-            "snap_countable_earned_income": earned,
-            "snap_countable_unearned_income": _money(total_unearned),
             "snap_gross_monthly_earned_income": earned,
             "snap_total_monthly_unearned_income": _money(total_unearned),
             "snap_income_exclusions": 0,

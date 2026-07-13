@@ -26,6 +26,7 @@ module_id_rewrites:
   us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
   us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
 rewrite_files:
+  - us/policies/usda/snap/state-plan-composition.yaml
   - us/statutes/7/2017/a.yaml
   - us/regulations/7-cfr/273/8.yaml
   - us/regulations/7-cfr/273/9.yaml
@@ -34,7 +35,6 @@ rewrite_files:
   - us-ny/regulations/18-nycrr/387/12/a.yaml
   - us-ny/regulations/18-nycrr/387/12/f/3/vi.yaml
   - us-ny/regulations/18-nycrr/387/14/a/5.yaml
-  - us-ny/policies/otda/snap/fy-2026-benefit-calculation.yaml
 parameter_patches:
   - file: us-ny/regulations/18-nycrr/387/12/f/3/v/a.yaml
     rule: heating_cooling_standard_amount_new_york_city

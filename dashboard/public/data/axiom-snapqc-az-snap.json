@@ -6,7 +6,7 @@
       "comparison_count": 922,
       "comparison_weight": 5291271.784231,
       "components": [],
-      "concept": "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_gross_monthly_income",
+      "concept": "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income",
       "description": "gross income",
       "left_weighted_sum": 5217787029.278996,
       "match_rate": 100,
@@ -111,7 +111,7 @@
       "comparison_count": 922,
       "comparison_weight": 5291271.784231,
       "components": [],
-      "concept": "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_benefit",
+      "concept": "us:policies/usda/snap/state-plan-composition#snap_benefit",
       "description": "benefit",
       "left_weighted_sum": 1912131318.926462,
       "match_rate": 100,
@@ -6590,7 +6590,7 @@
       "comparison": "amount",
       "components": [],
       "description": "gross income",
-      "id": "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_gross_monthly_income",
+      "id": "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income",
       "parent": null,
       "priority": "normal",
       "relative_tolerance": 0,
@@ -6645,7 +6645,7 @@
       "comparison": "amount",
       "components": [],
       "description": "benefit",
-      "id": "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_benefit",
+      "id": "us:policies/usda/snap/state-plan-composition#snap_benefit",
       "parent": null,
       "priority": "high",
       "relative_tolerance": 0,
@@ -6664,7 +6664,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-12T23:45:45Z",
+    "generated_at": "2026-07-13T03:04:47Z",
     "generated_by": "scripts/run_comparison.py::az-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6675,7 +6675,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "2e3e0821b833e293e2ed63b2faad900c03b98e7b"
+        "sha": "04d9d7ccda133b3f3d8c015aaf9000e3bc14903a"
       }
     ],
     "run_kind": "manual",
@@ -6718,8 +6718,8 @@
       "fiscal_year": 2024,
       "overlay": {
         "file_sha256": {
-          "us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml": "6de64fa6f970b8de10828eeb5ad7838ad5ef159a8c726e0e105a3ba5acec7ac1",
           "us-az/policies/des/faa6/utility-allowance-current-amount.yaml": "fb56650faa84bdd51f84995552cd13027c9f78367850d9d9547a5265339451be",
+          "us/policies/usda/snap/state-plan-composition.yaml": "fe8dcffc9789aff549822d37bb963d8b86c292796d4ea834a97f94e26538740d",
           "us/regulations/7-cfr/273/10.yaml": "b30b75666b34a4c625c480b6a243340c40994e37d5cc9334142c9fd3723ddf78",
           "us/regulations/7-cfr/273/8.yaml": "2eb57902785375c837abb8d7a1b7326c20926b1cedd93463c64bbc0ca8981aee",
           "us/regulations/7-cfr/273/9.yaml": "9ce1454e8d41621559d88ac8bff912e7fcf6618a54c9c48feb9de621de2baf36",
@@ -6731,7 +6731,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-az-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-athe8s5f/rulespec-us-main-snapqc",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-bk6d_nwa/rulespec-us-snap-sua-states",
         "patches": [
           {
             "file": "us-az/policies/des/faa6/utility-allowance-current-amount.yaml",
@@ -6771,13 +6771,13 @@
         ],
         "program": "us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml",
         "rewrite_counts": {
-          "us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml": 3,
+          "us/policies/usda/snap/state-plan-composition.yaml": 3,
           "us/regulations/7-cfr/273/10.yaml": 5,
           "us/regulations/7-cfr/273/8.yaml": 1,
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states",
         "schema": "axiom_oracles.rulespec_overlay.v1"
       },
       "period": "2026-01",
@@ -6788,7 +6788,7 @@
         "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
         "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states"
     },
     "stages": [],
     "weighted": {

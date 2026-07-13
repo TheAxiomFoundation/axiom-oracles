@@ -9149,11 +9149,6 @@ def test_policyengine_coverage_classifies_arizona_snap_composition_outputs(
         / "policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml",
         """format: rulespec/v1
 rules:
-  - name: snap_gross_monthly_income
-    kind: derived
-    versions:
-      - effective_from: '2025-10-01'
-        formula: earned_income + unearned_income
   - name: na_net_income
     kind: derived
     versions:
@@ -9184,7 +9179,7 @@ rules:
   period: 2026-01
   input: {}
   output:
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_gross_monthly_income: 2000
+    us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income: 2000
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#na_net_income: 1200
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_eligible: holds
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_excess_shelter_deduction: 350
@@ -9194,14 +9189,13 @@ rules:
 
     coverage = build_policyengine_coverage_report(tmp_path, program="snap")
 
-    assert coverage["status_counts"] == {"known_not_comparable": 5}
+    assert coverage["status_counts"] == {"known_not_comparable": 4}
     composition_items = {
         item["rule_name"]: item
         for item in coverage["items"]
         if item["file"].endswith("fy-2026-benefit-calculation.yaml")
     }
     assert set(composition_items) == {
-        "snap_gross_monthly_income",
         "na_net_income",
         "snap_eligible",
         "snap_excess_shelter_deduction",
@@ -9212,10 +9206,6 @@ rules:
     }
     assert {item["candidate_priority"] for item in composition_items.values()} == {"P4"}
     assert {item["tested"] for item in composition_items.values()} == {True}
-    assert (
-        composition_items["snap_gross_monthly_income"]["policyengine_variable"]
-        == "snap_gross_income"
-    )
     assert (
         composition_items["na_net_income"]["policyengine_variable"]
         == "snap_net_income"
