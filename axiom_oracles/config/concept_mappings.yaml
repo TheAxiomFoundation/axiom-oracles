@@ -1864,6 +1864,16 @@ concepts:
       axiom: ga_tanf_annual_benefit
       policyengine: ga_tanf
 
+  us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit:
+    description: DE TANF benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: de_tanf_annual_benefit
+      policyengine: de_tanf
+
   us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit:
     description: KS TANF maximum benefit standard (annualized)
     category: cash

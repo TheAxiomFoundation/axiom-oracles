@@ -254,7 +254,8 @@ policies:
     output_vars:
       - de_tanf
     in_scope: true
-    suite: null
+    suite: de-tanf-ecps
+    note: Covered by de-tanf-ecps — Delaware TANF (de_tanf) vs PE-2026 at population scale (781/781 match, 0 unexplained).
   - id: us-pe:early_head_start
     oracle_policy_name: early_head_start
     oracle_policy_type: rules

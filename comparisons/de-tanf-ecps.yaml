@@ -1,0 +1,40 @@
+# Delaware TANF -- Axiom vs PolicyEngine on Enhanced CPS, Delaware households.
+
+name: de-tanf-ecps
+title: Delaware TANF -- Axiom vs PolicyEngine
+description: >-
+  Compares the monthly Delaware TANF benefit from the composed us-de/tanf program
+  (16 DE Admin. Code 4007 payment standard by budget size, 4008 185%-of-standard-of-need
+  gross-income test and $90 applicant net-income test, and the grant =
+  min(payment standard, 50% of the standard-of-need deficit after the $90 + $30 +
+  1/3 earned-income disregard)) against PolicyEngine's de_tanf on Enhanced CPS
+  households in Delaware. Refresh the rulespec root after pulling ~/rulespec-us with:
+  rsync -a --delete --exclude .axiom ~/rulespec-us/us-de/ ~/.axiom-oracles/roots/rulespec-us-de/
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    suite: de-tanf-ecps
+    concepts:
+      - us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    jurisdiction_fips: "10"
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-oracles/programs/us-de/tanf/fy-2026.yaml
+    axiom_composed_program: /tmp/de-tanf-composed.yaml
+    axiom_compiled_program: /tmp/de-tanf-compiled.json
+    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    rulespec_roots:
+      - $HOME/.axiom-oracles/roots/rulespec-us-de
+
+artifacts:
+  report_basename: axiom-policyengine-de-tanf-ecps
+
+dashboard:
+  filename: axiom-policyengine-de-tanf-ecps.json
+  suite: de-tanf-ecps
