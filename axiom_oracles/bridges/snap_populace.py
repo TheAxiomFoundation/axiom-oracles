@@ -131,7 +131,7 @@ JURISDICTION_CONFIGS = {
         output_id_by_label={
             **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_regular_month_allotment": (
-                "us-ca:policies/cdss/snap/fy-2026-benefit-calculation#snap_benefit"
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
             ),
             "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
             "snap_eligible": (
@@ -164,7 +164,7 @@ JURISDICTION_CONFIGS = {
         },
         utility_allowance_labels=("snap_standard_utility_allowance",),
         relation_id=(
-            "us-ca:policies/cdss/snap/fy-2026-benefit-calculation#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="ca-snap-pe-populace-",
@@ -182,10 +182,10 @@ JURISDICTION_CONFIGS = {
         output_id_by_label={
             **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_regular_month_allotment": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_benefit"
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
             ),
             "snap_gross_monthly_income": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_gross_monthly_income"
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
             ),
             "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
             "snap_eligible": (
@@ -211,10 +211,10 @@ JURISDICTION_CONFIGS = {
         output_id_by_label={
             **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_regular_month_allotment": (
-                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_benefit"
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
             ),
             "snap_gross_monthly_income": (
-                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_gross_monthly_income"
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
             ),
             "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
             "snap_eligible": (
@@ -226,7 +226,7 @@ JURISDICTION_CONFIGS = {
         },
         utility_allowance_labels=(),
         relation_id=(
-            "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="ga-snap-pe-populace-",
@@ -243,10 +243,10 @@ JURISDICTION_CONFIGS = {
         output_id_by_label={
             **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_regular_month_allotment": (
-                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_benefit"
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
             ),
             "snap_gross_monthly_income": (
-                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_gross_monthly_income"
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
             ),
             "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
             "snap_eligible": (
@@ -258,7 +258,7 @@ JURISDICTION_CONFIGS = {
         },
         utility_allowance_labels=(),
         relation_id=(
-            "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="md-snap-pe-populace-",
@@ -275,7 +275,7 @@ JURISDICTION_CONFIGS = {
         output_id_by_label={
             **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_gross_monthly_income": (
-                "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_gross_monthly_income"
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
             ),
             "snap_eligible": (
                 "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_eligible"
@@ -335,7 +335,7 @@ JURISDICTION_CONFIGS = {
             "snap_individual_utility_allowance",
         ),
         relation_id=(
-            "us-ny:policies/otda/snap/fy-2026-benefit-calculation"
+            "us:policies/usda/snap/state-plan-composition"
             "#relation.member_of_household"
         ),
         member_entity_type="Person",
@@ -966,8 +966,6 @@ def project_income_resource_inputs(
     assets = money(values["snap_assets"][idx])
     if config.jurisdiction == "us-ny":
         return {
-            "snap_countable_earned_income": earned_income,
-            "snap_countable_unearned_income": unearned_income,
             "snap_gross_monthly_earned_income": earned_income,
             "snap_total_monthly_unearned_income": unearned_income,
             "snap_income_exclusions": 0,
@@ -1005,39 +1003,10 @@ def project_deduction_inputs(
     child_support_deduction: float,
     medical_deduction: float,
 ) -> dict[str, Any]:
-    if config.jurisdiction == "us-ca":
-        return {
-            "dependent_care_deduction": dependent_care_deduction,
-            "child_support_deduction": child_support_deduction,
-            "medical_deduction": medical_deduction,
-            "household_entitled_to_excess_medical_deduction": medical_deduction > 0,
-            "snap_allowable_monthly_dependent_care_expenses": (
-                dependent_care_deduction
-            ),
-            "snap_allowable_monthly_child_support_payments": child_support_deduction,
-            "snap_total_medical_expenses": medical_expenses_for_deduction(
-                medical_deduction
-            ),
-        }
-    if config.jurisdiction in ("us-ga", "us-md"):
-        # CA-shaped: both the 2014(e)(6)(A) statutory inputs and the 273.10
-        # regulatory inputs, which these CA-pattern compositions import.
-        return {
-            "dependent_care_deduction": dependent_care_deduction,
-            "child_support_deduction": child_support_deduction,
-            "medical_deduction": medical_deduction,
-            "household_entitled_to_excess_medical_deduction": medical_deduction > 0,
-            "snap_allowable_monthly_dependent_care_expenses": (
-                dependent_care_deduction
-            ),
-            "snap_allowable_monthly_child_support_payments": child_support_deduction,
-            "snap_total_medical_expenses": medical_expenses_for_deduction(
-                medical_deduction
-            ),
-        }
-    if config.jurisdiction == "us-az":
-        # Arizona's composition rides the 273.10 chain only (no 2014(e)
-        # statutory imports), so just the regulatory inputs.
+    if config.jurisdiction in ("us-ca", "us-ga", "us-md", "us-az"):
+        # These compositions ride the federal state-plan module's 273.10
+        # chain only (the 2014(e) statutory modules are not composed), so
+        # just the regulatory inputs.
         return {
             "household_entitled_to_excess_medical_deduction": medical_deduction > 0,
             "snap_allowable_monthly_dependent_care_expenses": (

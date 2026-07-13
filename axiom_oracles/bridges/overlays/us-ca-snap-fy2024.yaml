@@ -26,11 +26,11 @@ module_id_rewrites:
   us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
   us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
 rewrite_files:
+  - us/policies/usda/snap/state-plan-composition.yaml
   - us/statutes/7/2017/a.yaml
   - us/regulations/7-cfr/273/8.yaml
   - us/regulations/7-cfr/273/9.yaml
   - us/regulations/7-cfr/273/10.yaml
-  - us-ca/policies/cdss/snap/fy-2026-benefit-calculation.yaml
 parameter_patches:
   - file: us-ca/policies/cdss/snap/standard-utility-allowance.yaml
     rule: snap_standard_utility_allowance_amount

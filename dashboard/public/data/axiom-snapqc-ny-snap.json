@@ -6,7 +6,7 @@
       "comparison_count": 847,
       "comparison_weight": 18654938.443026,
       "components": [],
-      "concept": "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_gross_monthly_income",
+      "concept": "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income",
       "description": "gross income",
       "left_weighted_sum": 21416559258.439377,
       "match_rate": 100,
@@ -111,7 +111,7 @@
       "comparison_count": 847,
       "comparison_weight": 18654938.443026,
       "components": [],
-      "concept": "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_benefit",
+      "concept": "us:policies/usda/snap/state-plan-composition#snap_benefit",
       "description": "benefit",
       "left_weighted_sum": 6649115465.227492,
       "match_rate": 100,
@@ -6065,7 +6065,7 @@
       "comparison": "amount",
       "components": [],
       "description": "gross income",
-      "id": "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_gross_monthly_income",
+      "id": "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income",
       "parent": null,
       "priority": "normal",
       "relative_tolerance": 0,
@@ -6120,7 +6120,7 @@
       "comparison": "amount",
       "components": [],
       "description": "benefit",
-      "id": "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_benefit",
+      "id": "us:policies/usda/snap/state-plan-composition#snap_benefit",
       "parent": null,
       "priority": "high",
       "relative_tolerance": 0,
@@ -6139,7 +6139,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-12T23:45:19Z",
+    "generated_at": "2026-07-13T03:04:24Z",
     "generated_by": "scripts/run_comparison.py::ny-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6150,7 +6150,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "2e3e0821b833e293e2ed63b2faad900c03b98e7b"
+        "sha": "04d9d7ccda133b3f3d8c015aaf9000e3bc14903a"
       }
     ],
     "run_kind": "manual",
@@ -6193,7 +6193,6 @@
       "fiscal_year": 2024,
       "overlay": {
         "file_sha256": {
-          "us-ny/policies/otda/snap/fy-2026-benefit-calculation.yaml": "e7ac8529e55ee4ef2a856d411ec2ddf9945ffa17f4919ca044419592c42cac26",
           "us-ny/regulations/18-nycrr/387/10.yaml": "26308b83b04ef67335946832b52adc96cf34e44c726b2ca175b3ba4ee51c0bf0",
           "us-ny/regulations/18-nycrr/387/12/a.yaml": "842862e2dce69faa760a5e88dc292144d4082623061580f53e2b7a3054f294de",
           "us-ny/regulations/18-nycrr/387/12/f/3/v/a.yaml": "0c7700815e648d30a3596f52014abbd7a82d6020fa4d35223fb317ea3391fb6e",
@@ -6201,6 +6200,7 @@
           "us-ny/regulations/18-nycrr/387/12/f/3/v/c.yaml": "d3521b33d4db029336a99be1a60df6a7265dc51082fe3742e63a308ad1fd9d13",
           "us-ny/regulations/18-nycrr/387/12/f/3/vi.yaml": "f2f2c7fd1494e3e54d7822d91b4025bacbc0e8a93f5200dfeb6133c87084a60d",
           "us-ny/regulations/18-nycrr/387/14/a/5.yaml": "7bf8fef4f1cbd3d0ecc8639d901f8650da73cf9193c6e11e857af0ed384844be",
+          "us/policies/usda/snap/state-plan-composition.yaml": "fe8dcffc9789aff549822d37bb963d8b86c292796d4ea834a97f94e26538740d",
           "us/regulations/7-cfr/273/10.yaml": "b30b75666b34a4c625c480b6a243340c40994e37d5cc9334142c9fd3723ddf78",
           "us/regulations/7-cfr/273/8.yaml": "2eb57902785375c837abb8d7a1b7326c20926b1cedd93463c64bbc0ca8981aee",
           "us/regulations/7-cfr/273/9.yaml": "9ce1454e8d41621559d88ac8bff912e7fcf6618a54c9c48feb9de621de2baf36",
@@ -6212,7 +6212,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-ny-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-mwhm01av/rulespec-us-main-snapqc",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-1694pwe4/rulespec-us-snap-sua-states",
         "patches": [
           {
             "file": "us-ny/regulations/18-nycrr/387/12/f/3/v/a.yaml",
@@ -6266,17 +6266,17 @@
         ],
         "program": "us-ny/policies/otda/snap/fy-2026-benefit-calculation.yaml",
         "rewrite_counts": {
-          "us-ny/policies/otda/snap/fy-2026-benefit-calculation.yaml": 3,
           "us-ny/regulations/18-nycrr/387/10.yaml": 3,
           "us-ny/regulations/18-nycrr/387/12/a.yaml": 2,
           "us-ny/regulations/18-nycrr/387/12/f/3/vi.yaml": 2,
           "us-ny/regulations/18-nycrr/387/14/a/5.yaml": 4,
+          "us/policies/usda/snap/state-plan-composition.yaml": 3,
           "us/regulations/7-cfr/273/10.yaml": 5,
           "us/regulations/7-cfr/273/8.yaml": 1,
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states",
         "schema": "axiom_oracles.rulespec_overlay.v1"
       },
       "period": "2026-01",
@@ -6287,7 +6287,7 @@
         "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
         "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states"
     },
     "stages": [],
     "weighted": {

@@ -6202,7 +6202,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-12T23:45:07Z",
+    "generated_at": "2026-07-13T03:04:13Z",
     "generated_by": "scripts/run_comparison.py::co-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6213,7 +6213,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "2e3e0821b833e293e2ed63b2faad900c03b98e7b"
+        "sha": "04d9d7ccda133b3f3d8c015aaf9000e3bc14903a"
       }
     ],
     "run_kind": "manual",
@@ -6278,7 +6278,7 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-co-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-t6zbdpy2/rulespec-us-main-snapqc",
+        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-1p_a5m3i/rulespec-us-snap-sua-states",
         "patches": [
           {
             "file": "us-co/regulations/10-ccr-2506-1/4.407.31.yaml",
@@ -6328,7 +6328,7 @@
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states",
         "schema": "axiom_oracles.rulespec_overlay.v1"
       },
       "period": "2026-01",
@@ -6339,7 +6339,7 @@
         "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
         "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-sua-states"
     },
     "stages": [],
     "weighted": {

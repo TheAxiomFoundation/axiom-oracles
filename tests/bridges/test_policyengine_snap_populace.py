@@ -100,8 +100,6 @@ def test_new_york_projector_uses_federal_income_and_resource_inputs():
     projected = project_income_resource_inputs(JURISDICTION_CONFIGS["us-ny"], values, 0)
 
     assert projected == {
-        "snap_countable_earned_income": 123.45,
-        "snap_countable_unearned_income": 67.89,
         "snap_gross_monthly_earned_income": 123.45,
         "snap_total_monthly_unearned_income": 67.89,
         "snap_income_exclusions": 0,
@@ -151,9 +149,6 @@ def test_california_projectors_use_california_snap_input_surface():
         child_support_deduction=34,
         medical_deduction=200,
     ) == {
-        "dependent_care_deduction": 12,
-        "child_support_deduction": 34,
-        "medical_deduction": 200,
         "household_entitled_to_excess_medical_deduction": True,
         "snap_allowable_monthly_dependent_care_expenses": 12,
         "snap_allowable_monthly_child_support_payments": 34,

@@ -688,8 +688,6 @@ NY_PHONE = (
     "household_incurred_or_anticipated_basic_service_cost_for_one_telephone"
 )
 NY_SHELTER = f"{NY_COMP}#input.household_shelter_costs_incurred"
-NY_EARNED = f"{NY_COMP}#input.snap_countable_earned_income"
-NY_UNEARNED = f"{NY_COMP}#input.snap_countable_unearned_income"
 NY_GROSS_EARNED = "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income"
 NY_CS_2014 = "us:statutes/7/2014/e/6/A#input.child_support_deduction"
 NY_CS_273 = (
@@ -700,8 +698,6 @@ NY_UTILITY_KEYS = (NY_HEAT, NY_NYC, NY_NASSAU, NY_LIMITED, NY_PHONE)
 
 def _ny_base_inputs() -> dict:
     base = {
-        NY_EARNED: 0,
-        NY_UNEARNED: 0,
         NY_GROSS_EARNED: 0,
         "us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income": 0,
         "us:regulations/7-cfr/273/10#input.snap_income_exclusions": 0,
@@ -768,11 +764,9 @@ def test_ny_nonstandard_util_rides_as_shelter_cost() -> None:
     assert inputs[NY_SHELTER] == 1422
 
 
-def test_ny_income_feeds_countable_and_gross_inputs() -> None:
+def test_ny_income_feeds_gross_inputs() -> None:
     member = _member(_earned=1000.0, _unearned=300.0)
     inputs = _map_ny(_unit(members=[member])).inputs
-    assert inputs[NY_EARNED] == 1000
-    assert inputs[NY_UNEARNED] == 300
     assert inputs[NY_GROSS_EARNED] == 1000
     assert (
         inputs["us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income"]
@@ -890,7 +884,7 @@ def test_output_id_overrides_replace_base_ids_before_rewrite() -> None:
     spec = load_overlay_spec(config.overlay)
     ids = sc._output_id_by_label(config, spec.module_id_rewrites)
     assert ids["snap_regular_month_allotment"] == (
-        "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_benefit"
+        "us:policies/usda/snap/state-plan-composition#snap_benefit"
     )
     assert ids["snap_net_income"] == (
         "us:regulations/7-cfr/273/10#snap_net_monthly_income"
