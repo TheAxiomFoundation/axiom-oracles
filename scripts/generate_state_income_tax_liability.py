@@ -74,6 +74,12 @@ _TAXSIM_STATE = {
     # Arizona (TAXSIM SOI code 3). Its rulespec-us composed pilot landed on main,
     # so an affected-rerun against rulespec-us main finds the companion fixtures.
     "AZ": 3,
+    # Georgia, Michigan, and North Carolina flat-tax pilots (rulespec-us
+    # C.R.S.-wave state coverage): composed pipelines and companion fixtures
+    # landed on rulespec-us main 2026-07-08.
+    "GA": 11,
+    "MI": 23,
+    "NC": 34,
 }
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
@@ -130,6 +136,19 @@ _PE_VAR = {
     # az_income_tax_before_refundable_credits on this childless grid (no refundable
     # credits active), so the final variable is the pipeline's exact target.
     "AZ": "az_income_tax",
+    # Georgia's before-non-refundable-credits variable is the exact 48-7-20
+    # flat-tax analog (AGI less the 48-7-27 standard deduction); the childless
+    # grid activates none of the 48-7-29 / low-income / CDCC credits, so it
+    # equals the final ga_income_tax here.
+    "GA": "ga_income_tax_before_non_refundable_credits",
+    # Michigan's before-non-refundable-credits variable is the exact MCL 206.51
+    # flat-tax analog (AGI less the 206.30 personal exemptions); the grid
+    # activates no homestead/heating/EITC credits.
+    "MI": "mi_income_tax_before_non_refundable_credits",
+    # North Carolina's before-credits variable is the exact 105-153.7 flat-tax
+    # analog (AGI less the 105-153.5(a) standard deduction); the grid activates
+    # no child deduction or 105-153.10 credits.
+    "NC": "nc_income_tax_before_credits",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -322,6 +341,12 @@ _TOL = {
     # error without absorbing the 2024-to-2026 standard-deduction indexation on
     # the TAXSIM leg.
     "AZ": (1.0, 0.0),
+    # Georgia, Michigan, and North Carolina are flat taxes in the same shape as
+    # Arizona: a $1 absolute band catches structural errors without absorbing
+    # each state's 2024-to-2026 rate/deduction vintage on the TAXSIM leg.
+    "GA": (1.0, 0.0),
+    "MI": (1.0, 0.0),
+    "NC": (1.0, 0.0),
 }
 
 

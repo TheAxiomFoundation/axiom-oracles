@@ -323,6 +323,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ga-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ga-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ga-income-tax-liability.yaml"
+    },
+    {
       "suite": "ga-snap-qc",
       "report": "axiom-snapqc-ga-snap.json",
       "repos": [
@@ -454,6 +462,14 @@
       "source": "comparisons/medicaid-magi-co-ecps.yaml"
     },
     {
+      "suite": "mi-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-mi-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/mi-income-tax-liability.yaml"
+    },
+    {
       "suite": "mi-ssp-payments",
       "report": "axiom-policyengine-mi-ssp-payments.json",
       "repos": [
@@ -476,6 +492,14 @@
         "TheAxiomFoundation/rulespec-us-mn"
       ],
       "source": "comparisons/mn-tanf-ecps.yaml"
+    },
+    {
+      "suite": "nc-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-nc-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/nc-income-tax-liability.yaml"
     },
     {
       "suite": "nc-snap-ecps",

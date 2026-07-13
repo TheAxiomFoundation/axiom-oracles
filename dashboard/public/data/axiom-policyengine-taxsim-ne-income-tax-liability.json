@@ -119,7 +119,7 @@
   "population": "case-grid",
   "provenance": {
     "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "generated": "2026-07-08",
+    "generated": "2026-07-13",
     "generator": "scripts/generate_state_income_tax_liability.py",
     "note": "axiom-vs-PolicyEngine matches every case at the 2026 validation year; the mismatches array carries the axiom-vs-TAXSIM-2024 residuals, whose 2024-to-2026 indexation vintage is dispositioned."
   },

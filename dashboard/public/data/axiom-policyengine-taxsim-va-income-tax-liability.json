@@ -1,109 +1,5 @@
 {
   "case_count": 6,
-  "cases": [
-    {
-      "axiom": 910.9,
-      "axiom_vs_policyengine": {
-        "difference": -2.4414062522737368e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -14.379999999999995,
-        "match": false
-      },
-      "case_id": "va-single-30000",
-      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 910.9000244140625,
-      "taxsim_2024": 925.28
-    },
-    {
-      "axiom": 2635.9,
-      "axiom_vs_policyengine": {
-        "difference": 9.765625009094947e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -14.38000000000011,
-        "match": false
-      },
-      "case_id": "va-single-60000",
-      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 2635.89990234375,
-      "taxsim_2024": 2650.28
-    },
-    {
-      "axiom": 7810.9,
-      "axiom_vs_policyengine": {
-        "difference": 9.765624963620212e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -14.38000000000011,
-        "match": false
-      },
-      "case_id": "va-single-150000",
-      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 7810.89990234375,
-      "taxsim_2024": 7825.28
-    },
-    {
-      "axiom": 2079.3,
-      "axiom_vs_policyengine": {
-        "difference": -4.882812481810106e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -28.75,
-        "match": false
-      },
-      "case_id": "va-married-60000",
-      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 2079.300048828125,
-      "taxsim_2024": 2108.05
-    },
-    {
-      "axiom": 5529.3,
-      "axiom_vs_policyengine": {
-        "difference": 0.00019531250018189894,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -28.75,
-        "match": false
-      },
-      "case_id": "va-married-120000",
-      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 5529.2998046875,
-      "taxsim_2024": 5558.05
-    },
-    {
-      "axiom": 15879.3,
-      "axiom_vs_policyengine": {
-        "difference": 0.00019531249927240424,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -28.75,
-        "match": false
-      },
-      "case_id": "va-married-300000",
-      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 15879.2998046875,
-      "taxsim_2024": 15908.05
-    }
-  ],
   "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-va:policies/income_tax/pilot_liability_pipeline",
@@ -222,17 +118,10 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "engine": {},
-    "generated_at": "2026-07-13T15:23:11Z",
-    "generated_by": "scripts/run_comparison.py::va-income-tax-liability",
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
-      }
-    ],
-    "run_kind": "affected-rerun",
-    "schema": "axiom_oracles.provenance.v1"
+    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
+    "generated": "2026-07-13",
+    "generator": "scripts/generate_state_income_tax_liability.py",
+    "note": "axiom-vs-PolicyEngine matches every case at the 2026 validation year; the mismatches array carries the axiom-vs-TAXSIM-2024 residuals, whose 2024-to-2026 indexation vintage is dispositioned."
   },
   "schema_version": "axiom.comparison_report.v2.1",
   "suite": "va-income-tax-liability",
@@ -266,5 +155,109 @@
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026
+  "validation_year": 2026,
+  "cases": [
+    {
+      "axiom": 910.9,
+      "axiom_vs_policyengine": {
+        "difference": -2.4414062522737368e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -14.379999999999995,
+        "match": false
+      },
+      "case_id": "va-single-30000",
+      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 910.9000244140625,
+      "taxsim_2024": 925.28
+    },
+    {
+      "axiom": 2635.9,
+      "axiom_vs_policyengine": {
+        "difference": 9.765625009094947e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -14.38000000000011,
+        "match": false
+      },
+      "case_id": "va-single-60000",
+      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 2635.89990234375,
+      "taxsim_2024": 2650.28
+    },
+    {
+      "axiom": 7810.9,
+      "axiom_vs_policyengine": {
+        "difference": 9.765624963620212e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -14.38000000000011,
+        "match": false
+      },
+      "case_id": "va-single-150000",
+      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 7810.89990234375,
+      "taxsim_2024": 7825.28
+    },
+    {
+      "axiom": 2079.3,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812481810106e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -28.75,
+        "match": false
+      },
+      "case_id": "va-married-60000",
+      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 2079.300048828125,
+      "taxsim_2024": 2108.05
+    },
+    {
+      "axiom": 5529.3,
+      "axiom_vs_policyengine": {
+        "difference": 0.00019531250018189894,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -28.75,
+        "match": false
+      },
+      "case_id": "va-married-120000",
+      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 5529.2998046875,
+      "taxsim_2024": 5558.05
+    },
+    {
+      "axiom": 15879.3,
+      "axiom_vs_policyengine": {
+        "difference": 0.00019531249927240424,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -28.75,
+        "match": false
+      },
+      "case_id": "va-married-300000",
+      "concept": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 15879.2998046875,
+      "taxsim_2024": 15908.05
+    }
+  ]
 }
