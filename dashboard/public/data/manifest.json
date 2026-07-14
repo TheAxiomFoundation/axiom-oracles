@@ -148,6 +148,7 @@
     "axiom-policyengine-de-tanf-ecps.json",
     "axiom-snapqc-tx-snap.json",
     "axiom-policyengine-csfp-parameters.json",
-    "axiom-policyengine-irs-adjustment-parameters.json"
+    "axiom-policyengine-irs-adjustment-parameters.json",
+    "axiom-policyengine-hi-income-tax-parameters.json"
   ]
 }

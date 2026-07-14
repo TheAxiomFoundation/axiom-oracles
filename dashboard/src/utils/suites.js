@@ -281,6 +281,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 291,
   },
+  "hi-income-tax-parameters": {
+    family: "state_income_tax",
+    jurisdiction: "HI",
+    label: "Hawaii income tax amounts",
+    region: "us",
+    kind: "parameter",
+    order: 118,
+  },
   "irs-adjustment-parameters": {
     family: "federal_income_tax",
     jurisdiction: "US",

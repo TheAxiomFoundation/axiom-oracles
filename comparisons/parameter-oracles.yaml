@@ -225,6 +225,68 @@ suites:
         pe: gov.irs.deductions.itemized.limitation.obbb.rate
         tolerance: 1e-6
 
+  # Hawaii income-tax amounts (HRS 235). The estate/trust exemption amounts
+  # in 235-54 have no PolicyEngine analog (PE does not model fiduciary
+  # returns) and stay in the upstream pending ledger.
+  - suite: hi-income-tax-parameters
+    category: tax
+    locales: [HI]
+    comparisons:
+      - file: us-hi/statutes/235-54.yaml
+        rule: individual_personal_exemption_unit_amount
+        description: Hawaii personal exemption unit amount
+        pe: gov.states.hi.tax.income.exemptions.base
+      - file: us-hi/statutes/235-54.yaml
+        rule: blind_deaf_or_totally_disabled_person_exemption_amount
+        description: Hawaii blind/deaf/disabled exemption amount
+        pe: gov.states.hi.tax.income.exemptions.disabled
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: credit_amount_per_qualified_exemption
+        description: Hawaii low-income household renters credit, per exemption
+        pe: gov.states.hi.tax.income.credits.lihrtc.amount
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: senior_double_credit_age_threshold
+        description: Hawaii renters credit senior double-exemption age
+        pe: gov.states.hi.tax.income.credits.lihrtc.aged_age_threshold
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: adjusted_gross_income_credit_threshold
+        description: Hawaii renters credit AGI ceiling
+        pe: gov.states.hi.tax.income.credits.lihrtc.eligibility.agi_limit
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: rent_paid_credit_threshold
+        description: Hawaii renters credit minimum rent paid
+        pe: gov.states.hi.tax.income.credits.lihrtc.eligibility.rent_threshold
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_per_exemption
+        key: 0
+        description: Hawaii food/excise credit per exemption, single, lowest AGI band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[0].amount
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_per_exemption
+        key: 4
+        description: Hawaii food/excise credit per exemption, single, highest paying band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[4].amount
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_band_upper_bound
+        key: 0
+        description: Hawaii food/excise credit first AGI band bound, single
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[1].threshold
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_band_upper_bound
+        key: 4
+        description: Hawaii food/excise credit single credit-ending AGI bound
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[5].threshold
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: non_single_return_food_excise_credit_per_exemption
+        key: 5
+        description: Hawaii food/excise credit per exemption, joint, 40-50k band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.joint[5].amount
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: non_single_return_food_excise_credit_per_exemption
+        key: 6
+        description: Hawaii food/excise credit per exemption, joint, 50-60k band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.joint[6].amount
+
   - suite: ga-tanf-standards
     category: cash
     locales: [GA]
