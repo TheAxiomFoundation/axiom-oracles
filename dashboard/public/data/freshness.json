@@ -480,14 +480,14 @@
     },
     {
       "suite": "co-snap-qc",
-      "generated_at": "2026-07-13T07:57:44Z",
-      "run_kind": "manual",
+      "generated_at": "2026-07-14T19:51:05Z",
+      "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
         "TheAxiomFoundation/rulespec-us-co"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": "c739eade060091b16513483933b00182eaf25c3f"
+        "TheAxiomFoundation/rulespec-us-main-snapqc": null
       },
       "unstamped": false
     },
