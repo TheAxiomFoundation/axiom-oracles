@@ -283,7 +283,7 @@
     },
     {
       "suite": "be-pensioner-contributions",
-      "generated_at": "2026-07-14T14:23:34Z",
+      "generated_at": "2026-07-14T19:51:05Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
