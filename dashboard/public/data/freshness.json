@@ -251,7 +251,7 @@
     },
     {
       "suite": "be-local-municipal-pit",
-      "generated_at": "2026-07-13T19:58:35Z",
+      "generated_at": "2026-07-14T03:43:33Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
