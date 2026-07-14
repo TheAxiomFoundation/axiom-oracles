@@ -163,6 +163,68 @@ suites:
         description: Lifeline income limit (share of federal poverty guidelines)
         pe: gov.fcc.lifeline.fpg_limit
 
+  - suite: csfp-parameters
+    category: food
+    locales: [US]
+    comparisons:
+      - file: us/regulations/7-cfr/247/9/b.yaml
+        rule: maximum_csfp_household_income_limit_fpg_ratio
+        description: CSFP maximum household income limit (share of federal poverty guidelines)
+        pe: gov.usda.csfp.fpg_limit
+
+  # Federal IRC adjustment/deduction constants. Only unindexed statutory
+  # amounts and OBBBA current-year figures are compared — the encoded
+  # statutory BASES of indexed amounts (e.g. the 219(b) $5,000 deductible
+  # base, the 221 $50k/$100k MAGI threshold bases, the 223(b) $2,250/$4,500
+  # HSA bases) deliberately are not, because PolicyEngine holds the indexed
+  # current-year values, a different quantity by design.
+  - suite: irs-adjustment-parameters
+    category: tax
+    locales: [US]
+    comparisons:
+      - file: us/statutes/26/164.yaml
+        rule: applicable_limitation_amount_for_taxable_year_beginning_in_calendar_year_2026
+        description: SALT deduction limitation, tax year 2026 (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.cap.JOINT
+      - file: us/statutes/26/164.yaml
+        rule: modified_adjusted_gross_income_threshold_for_taxable_year_beginning_in_calendar_year_2026
+        description: SALT limitation MAGI phaseout threshold, tax year 2026 (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.phase_out.threshold.JOINT
+      - file: us/statutes/26/164.yaml
+        rule: modified_adjusted_gross_income_phaseout_rate
+        description: SALT limitation MAGI phaseout rate (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.phase_out.rate
+      - file: us/statutes/26/164.yaml
+        rule: applicable_limitation_amount_phaseout_floor
+        description: SALT limitation phaseout floor (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.phase_out.floor.amount.JOINT
+      - file: us/statutes/26/221.yaml
+        rule: statutory_student_loan_interest_deduction_cap
+        description: Student loan interest deduction cap (unindexed)
+        pe: gov.irs.ald.student_loan_interest.cap.SINGLE
+      - file: us/statutes/26/221.yaml
+        rule: student_loan_interest_phaseout_range_other_return
+        description: Student loan interest phaseout range, non-joint (unindexed)
+        pe: gov.irs.ald.student_loan_interest.reduction.divisor.SINGLE
+      - file: us/statutes/26/221.yaml
+        rule: student_loan_interest_phaseout_range_joint_return
+        description: Student loan interest phaseout range, joint (unindexed)
+        pe: gov.irs.ald.student_loan_interest.reduction.divisor.JOINT
+      - file: us/statutes/26/219/b.yaml
+        rule: catch_up_age_threshold
+        description: IRA catch-up contribution age threshold
+        pe: gov.irs.gross_income.retirement_contributions.catch_up.age_threshold
+      - file: us/statutes/26/219/b.yaml
+        rule: catch_up_applicable_amount_base
+        description: IRA catch-up contribution amount ($100-rounded indexation holds it at the base)
+        pe: gov.irs.gross_income.retirement_contributions.catch_up.limit.ira
+      - file: us/statutes/26/68.yaml
+        axiom_formula: itemized_deduction_reduction_numerator / itemized_deduction_reduction_denominator
+        rule: itemized_deduction_reduction_numerator
+        description: Itemized-deduction limitation rate, 2/37 (OBBBA section 68)
+        pe: gov.irs.deductions.itemized.limitation.obbb.rate
+        tolerance: 1e-6
+
   - suite: ga-tanf-standards
     category: cash
     locales: [GA]

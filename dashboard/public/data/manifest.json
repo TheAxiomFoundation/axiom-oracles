@@ -146,6 +146,8 @@
     "axiom-snapqc-md-snap.json",
     "axiom-policyengine-taxsim-ky-income-tax-liability.json",
     "axiom-policyengine-de-tanf-ecps.json",
-    "axiom-snapqc-tx-snap.json"
+    "axiom-snapqc-tx-snap.json",
+    "axiom-policyengine-csfp-parameters.json",
+    "axiom-policyengine-irs-adjustment-parameters.json"
   ]
 }

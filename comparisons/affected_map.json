@@ -259,6 +259,14 @@
       "source": "comparisons/co-tanf-ecps.yaml"
     },
     {
+      "suite": "csfp-parameters",
+      "report": "axiom-policyengine-csfp-parameters.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
       "suite": "ct-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ct-income-tax-liability.json",
       "repos": [
@@ -370,6 +378,14 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/il-income-tax-liability.yaml"
+    },
+    {
+      "suite": "irs-adjustment-parameters",
+      "report": "axiom-policyengine-irs-adjustment-parameters.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "ks-tanf-ecps",
