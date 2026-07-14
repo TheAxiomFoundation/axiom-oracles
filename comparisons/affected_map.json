@@ -372,6 +372,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ia-income-tax-parameters",
+      "report": "axiom-policyengine-ia-income-tax-parameters.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-ia"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
       "suite": "id-income-tax-liability",
       "report": "axiom-policyengine-taxsim-id-income-tax-liability.json",
       "repos": [

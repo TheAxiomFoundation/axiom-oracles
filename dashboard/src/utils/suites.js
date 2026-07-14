@@ -289,6 +289,14 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 118,
   },
+  "ia-income-tax-parameters": {
+    family: "state_income_tax",
+    jurisdiction: "IA",
+    label: "Iowa income tax exemption credits",
+    region: "us",
+    kind: "parameter",
+    order: 119,
+  },
   "irs-adjustment-parameters": {
     family: "federal_income_tax",
     jurisdiction: "US",

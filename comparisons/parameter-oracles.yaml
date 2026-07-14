@@ -287,6 +287,31 @@ suites:
         description: Hawaii food/excise credit per exemption, joint, 50-60k band
         pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.joint[6].amount
 
+  # Iowa income-tax exemption credits (Iowa Code 422.12). The joint/HoH $80
+  # credit is two $40 personal exemptions in PolicyEngine's formula (not a
+  # separate parameter), and the tuition and firefighter/EMS/reserve-officer
+  # credits have no PolicyEngine model — those stay in the pending ledger.
+  - suite: ia-income-tax-parameters
+    category: tax
+    locales: [IA]
+    comparisons:
+      - file: us-ia/statutes/422/12.yaml
+        rule: estate_trust_single_or_separate_return_personal_exemption_credit
+        description: Iowa personal exemption credit (single/separate)
+        pe: gov.states.ia.tax.income.credits.exemption.personal
+      - file: us-ia/statutes/422/12.yaml
+        rule: dependent_personal_exemption_credit
+        description: Iowa dependent exemption credit
+        pe: gov.states.ia.tax.income.credits.exemption.dependent
+      - file: us-ia/statutes/422/12.yaml
+        rule: age_sixty_five_additional_exemption_credit
+        description: Iowa age-65 additional exemption credit
+        pe: gov.states.ia.tax.income.credits.exemption.additional
+      - file: us-ia/statutes/422/12.yaml
+        rule: blind_additional_exemption_credit
+        description: Iowa blind additional exemption credit
+        pe: gov.states.ia.tax.income.credits.exemption.additional
+
   - suite: ga-tanf-standards
     category: cash
     locales: [GA]
