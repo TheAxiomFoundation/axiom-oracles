@@ -11,6 +11,17 @@ name: Affected suite rerun
 #   report provenance.rulespecs     the SHA each report last ran against
 #   scripts/select_affected_suites  diffs current repo HEADs vs those SHAs
 #
+# Each matrix job commits its refreshed report via
+# scripts/commit_refreshed_report.sh, which atomically regenerates every
+# derived, CI-validated artifact (conformance scoreboard + detail + history
+# snapshot, burn-down, freshness), self-checks the tree against ci.yml's
+# staleness gates, and rebuilds the commit from scratch on the current tip on
+# every push attempt so concurrent sibling pushes can't leave main stale or
+# conflicted. The ratchet (conformance/ratchet.yaml) is never re-pinned from
+# this bot path — re-pinning after a genuine improvement stays a deliberate
+# human action, and a genuine regression is MEANT to fail ci.yml's ratchet
+# gate on main.
+#
 # See scripts/select_affected_suites.py and comparisons/README.md.
 
 on:
@@ -193,25 +204,12 @@ jobs:
           ln -sfn "$AXIOM_RULES_REPO" "$HOME/axiom-rules"
           python3 scripts/run_comparison.py ${{ matrix.name }} --summary
 
-      - name: Refresh freshness data
+      - name: Commit refreshed report + derived conformance artifacts
         working-directory: axiom-oracles
+        # Regenerates freshness + scoreboard/detail/history/burn-down with the
+        # report, self-checks against ci.yml's staleness gates, and retries by
+        # rebuilding on the current tip (never rebasing) across sibling pushes.
+        # Fails loudly if the push never lands.
         run: |
-          python3 scripts/check_vacuous_gate.py || true
-
-      - name: Commit refreshed report
-        working-directory: axiom-oracles
-        run: |
-          if git diff --quiet -- dashboard/public/data/; then
-            echo "no report changes for ${{ matrix.name }}"
-            exit 0
-          fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard/public/data/
-          git commit -m "data: refresh ${{ matrix.name }} (affected rerun $(date +%Y-%m-%d))"
-          # Serialize commits across the matrix: rebase onto any sibling push.
-          branch="${{ github.event.repository.default_branch }}"
-          for attempt in 1 2 3 4 5; do
-            git pull --rebase origin "$branch" && \
-              git push origin "HEAD:$branch" && break || sleep $((RANDOM % 10 + 5))
-          done
+          scripts/commit_refreshed_report.sh "${{ matrix.name }}" \
+            "${{ github.event.repository.default_branch }}"

@@ -361,6 +361,28 @@ def _freshness_comparable(doc: dict) -> dict:
     return stable
 
 
+def _write_freshness(freshness: dict) -> None:
+    """Write freshness.json idempotently.
+
+    When nothing comparable changed, keep the committed file byte-for-byte —
+    including its doc-level ``generated_at`` — so the file honors its own
+    contract ("only changes when a report or the affected map changes") and
+    the affected-rerun bot never churns a timestamp-only diff into a commit.
+    The stamp thus reads "when the comparable content last changed", not "when
+    the generator last ran".
+    """
+    if FRESHNESS_OUTPUT.exists():
+        try:
+            committed = json.loads(FRESHNESS_OUTPUT.read_text())
+        except json.JSONDecodeError:
+            committed = None
+        if committed is not None and _freshness_comparable(
+            committed
+        ) == _freshness_comparable(freshness):
+            return
+    FRESHNESS_OUTPUT.write_text(json.dumps(freshness, indent=2) + "\n")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -408,10 +430,10 @@ def main() -> int:
             sys.stderr.write(f"vacuous-gate FAILED: {problem}\n")
         # Still write freshness so the data refresh isn't blocked by an unrelated
         # schema problem the author is mid-fixing; but signal failure.
-        FRESHNESS_OUTPUT.write_text(json.dumps(freshness, indent=2) + "\n")
+        _write_freshness(freshness)
         return 1
 
-    FRESHNESS_OUTPUT.write_text(json.dumps(freshness, indent=2) + "\n")
+    _write_freshness(freshness)
     print(
         f"Wrote {FRESHNESS_OUTPUT.relative_to(REPO_ROOT)}: "
         f"{len(freshness['suites'])} suites, "

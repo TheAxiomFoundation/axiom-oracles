@@ -162,9 +162,15 @@ exercise. The **affected-rerun** workflow
 (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
 resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
 selects only the suites whose report ran against an older SHA — those get rerun
-and their refreshed reports committed. The weekly full matrix
-(`comparisons.yml`) stays the backstop. Regenerate the map after adding a
-comparison: `uv run scripts/generate_affected_map.py`.
+and their refreshed reports committed via `scripts/commit_refreshed_report.sh`,
+which regenerates every derived, CI-validated artifact in the same commit
+(freshness, conformance scoreboard + detail, the daily history snapshot, and
+the burn-down), self-checks the tree against ci.yml's staleness gates before
+pushing, and rebuilds the commit from scratch on the current tip on every push
+attempt so concurrent matrix siblings can't strand main stale or conflicted.
+The conformance ratchet is never re-pinned from that bot path. The weekly full
+matrix (`comparisons.yml`) stays the backstop. Regenerate the map after adding
+a comparison: `uv run scripts/generate_affected_map.py`.
 
 ## Vacuous-verification gate (O3)
 

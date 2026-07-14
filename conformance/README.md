@@ -50,7 +50,13 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 | `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v1`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), the query entity, the supplied-input surface, and the engine→input bridge — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated
-snapshots by `scripts/conformance_burndown.py`.
+snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
+appends the daily snapshot and regenerates the scoreboard, detail, and
+burn-down atomically with every report refresh it commits
+(`scripts/commit_refreshed_report.sh`), so these derived artifacts can never
+lag a bot-pushed report. The ratchet is the exception: it is never re-pinned
+by the bot — advance it deliberately with `uv run
+scripts/conformance_ratchet.py` after a genuine improvement.
 
 ## Universe facts are generated, not hand-invented
 
