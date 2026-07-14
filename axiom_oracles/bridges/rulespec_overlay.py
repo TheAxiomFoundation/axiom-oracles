@@ -233,12 +233,15 @@ def build_overlay(
         )
 
     file_sha256 = {relative: _sha256(overlay_root / relative) for relative in changed}
+    # overlay_root (the per-run materialization tempdir) is deliberately NOT
+    # recorded: it is nondeterministic machine-local state that would make
+    # committed reports differ run-to-run; file_sha256 already pins the
+    # materialized content and rulespec_root pins the checkout replayed.
     provenance = {
         "overlay": spec.name,
         "schema": OVERLAY_SPEC_SCHEMA_VERSION,
         "program": spec.program,
         "rulespec_root": str(rulespec_root),
-        "overlay_root": str(overlay_root),
         "module_id_rewrites": dict(spec.module_id_rewrites),
         "rewrite_counts": rewrite_counts,
         "patches": patch_records,

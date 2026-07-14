@@ -1039,3 +1039,18 @@ def test_az_flag_emission_sets_prerequisites_and_tier_obligation() -> None:
 def test_az_categorical_feeds_the_eligibility_bridge() -> None:
     inputs = sc._categorical_inputs("us-az", _unit(), 0)
     assert inputs == {"na_budgetary_unit_is_eligible": True}
+
+
+@pytest.mark.parametrize(
+    "tier, expected_true",
+    [
+        ("heating_cooling", {"household_qualifies_for_standard_utility_allowance"}),
+        ("limited", {"household_qualifies_for_basic_utility_allowance"}),
+        ("telephone", {"household_qualifies_for_telephone_standard"}),
+        ("none", set()),
+    ],
+)
+def test_tx_qualification_flags(tier, expected_true) -> None:
+    flags = sc._utility_flag_inputs("us-tx", tier, sc.STATEWIDE)
+    for name, value in flags.items():
+        assert value is (name in expected_true), (tier, name)

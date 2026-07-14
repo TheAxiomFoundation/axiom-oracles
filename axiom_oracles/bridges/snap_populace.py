@@ -265,6 +265,38 @@ JURISDICTION_CONFIGS = {
         display_name="Maryland SNAP",
         additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
     ),
+    "us-tx": JurisdictionConfig(
+        jurisdiction="us-tx",
+        state_code="TX",
+        repo_name="rulespec-us-tx",
+        program_relative_path=Path(
+            "policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml"
+        ),
+        output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
+            "snap_regular_month_allotment": (
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
+            ),
+            "snap_gross_monthly_income": (
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
+            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+            "snap_eligible": (
+                "us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#snap_eligible"
+            ),
+            "snap_excess_shelter_deduction": (
+                "us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+            ),
+        },
+        utility_allowance_labels=(),
+        relation_id=(
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
+        ),
+        member_entity_type="Person",
+        temp_prefix="tx-snap-pe-populace-",
+        display_name="Texas SNAP",
+        additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
+    ),
     "us-ny": JurisdictionConfig(
         jurisdiction="us-ny",
         state_code="NY",
@@ -1003,7 +1035,7 @@ def project_deduction_inputs(
     child_support_deduction: float,
     medical_deduction: float,
 ) -> dict[str, Any]:
-    if config.jurisdiction in ("us-ca", "us-ga", "us-md", "us-az"):
+    if config.jurisdiction in ("us-ca", "us-ga", "us-md", "us-az", "us-tx"):
         # These compositions ride the federal state-plan module's 273.10
         # chain only (the 2014(e) statutory modules are not composed), so
         # just the regulatory inputs.

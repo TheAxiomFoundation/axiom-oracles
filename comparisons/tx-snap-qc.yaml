@@ -1,0 +1,34 @@
+name: tx-snap-qc
+title: Texas SNAP — Axiom vs USDA SNAP QC administrative data
+description: >-
+  Replays Texas SNAP Quality Control public-use reviews (FY2024, 906
+  in-scope active-case reviews) through the Axiom RuleSpec composition and
+  compares the constructed benefit (FSBEN) and its stage intermediates
+  against the QC file's own recomputed values, exactly like the co/ny/ca/
+  az/ga/md suites. Texas' three statewide Works Handbook standards (SUA,
+  BUA, telephone) ride the qualification-flag inputs; the composition is
+  built on the federal state-plan module. FY2024 law is evaluated through
+  a sparse compile-time overlay (fy-2026 cola module ids rewritten to
+  fy-2024-cola plus the state's Table F.7 utility amount patches) at the
+  nominal period 2026-01 (TheAxiomFoundation/rulespec-us#759 retires the
+  overlay). Runs where the engine binary, a rulespec-us checkout with the
+  fy-2024-cola modules and the state's SNAP layer
+  (rulespec-us#888), and the QC file all exist; elsewhere the registry
+  re-emits the committed dashboard report.
+documentation: docs/snap-qc-oracle-playbook.md
+
+runner:
+  type: snap-qc-compare
+  parameters:
+    jurisdiction: us-tx
+    fiscal_year: 2024
+    sample_size: 0
+    stage_tolerance: 0
+    dashboard_filename: axiom-snapqc-tx-snap.json
+
+artifacts:
+  report_basename: axiom-snapqc-tx-snap
+
+dashboard:
+  filename: axiom-snapqc-tx-snap.json
+  suite: tx-snap-qc

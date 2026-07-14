@@ -145,6 +145,7 @@
     "axiom-snapqc-ga-snap.json",
     "axiom-snapqc-md-snap.json",
     "axiom-policyengine-taxsim-ky-income-tax-liability.json",
-    "axiom-policyengine-de-tanf-ecps.json"
+    "axiom-policyengine-de-tanf-ecps.json",
+    "axiom-snapqc-tx-snap.json"
   ]
 }
