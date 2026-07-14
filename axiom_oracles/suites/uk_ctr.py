@@ -7,8 +7,9 @@ named English working-age councils (Merton, Kingston upon Thames, Newham,
 Westminster, Oxford); UKMOD is national. For every *other* English council's
 working-age scheme neither models the actual local rules — they fall back to a
 survey-reported figure (PolicyEngine) or a national treatment (UKMOD). entitledto
-models every council, so it is the only per-council ground truth, which is why
-this suite's oracle is the recorded entitledto calculator rather than an engine.
+models every council, so it is the only per-council reference source (entitledto
+publishes estimates, not authoritative awards), which is why this suite's oracle
+is the recorded entitledto calculator rather than an engine.
 
 The grid is eight hand-checkable cases chosen for CTR leverage:
 
@@ -23,7 +24,7 @@ The grid is eight hand-checkable cases chosen for CTR leverage:
    national prescribed scheme even in a council with its own working-age scheme.
 7. Manchester working-age single earner — an *unsupported* English council;
    PolicyEngine falls back to the reported benefit, so entitledto is the only
-   ground truth. Same £11k single-renter profile as (3) and (5).
+   reference. Same £11k single-renter profile as (3) and (5).
 8. Birmingham working-age couple with one child — a second unsupported council.
 
 Cases (3), (5) and (7) share an identical single-renter, £11,000-earnings profile

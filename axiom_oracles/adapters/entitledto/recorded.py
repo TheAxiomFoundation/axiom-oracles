@@ -1,25 +1,29 @@
 """Recorded-fixture oracle for the entitledto benefits calculator.
 
-entitledto sells API access and its legal notices bar automated data
-collection (``fixtures/uk_ctr/CAPTURE-PROTOCOL.md``), so — unlike the ACCESS NYC
-adapter, which can call a sandbox API or run the open-source engine — this
-adapter never probes entitledto live. It compares against **recorded** calculator
-responses: a human runs each case once, by hand, on the public calculator and
-records the result (with provenance) into a fixture JSON. This runner replays
-those fixtures. It is the ACCESS-NYC-synthetic-report pattern taken to its
-logical end: the recording *is* the oracle, and live access is only the (human,
-out-of-band) capture step, never something CI does.
+entitledto sells API access and its legal notices bar automated *and* systematic
+data collection (`fixtures/uk_ctr/CAPTURE-PROTOCOL.md`), so — unlike the ACCESS
+NYC adapter, which can call a sandbox API or run the open-source engine — this
+adapter never probes entitledto. It compares against **recorded** calculator
+responses that a person captures once, out of band, under entitledto's express
+permission, and records (with provenance) into a fixture JSON. This runner
+replays those fixtures; live access is never something the code or CI does.
 
-A fixture that has not been captured yet is a ``pending_capture`` stub: it
-carries the exact inputs to enter but ``outputs: null``. The runner surfaces it
-as an errored :class:`EngineResult` with no values, so a pending case can never
-be mistaken for a real £0 award or produce a spurious match — an uncaptured
-fixture stays uncaptured until a human fills it, and is never invented.
+The load-bearing safety property is **fail-closed replay**: a fixture is graded
+only if it declares itself `captured` *and* passes `validate_capture`. So an
+uncaptured stub, a half-filled fixture, or a malformed value (a boolean, a
+negative, a non-finite number, an unknown output key, a missing council-tax
+liability) is surfaced as an errored :class:`EngineResult` with no values — it
+can never be mistaken for a real £0 award or produce a spurious match. The code
+cannot authenticate that a human's recorded number is truthful; the human
+capturer is that trust boundary. What the code *can* and does enforce is that a
+value is present, well-formed, and provenance-complete before it is ever graded,
+and that nothing is invented in place of a missing capture.
 """
 
 from __future__ import annotations
 
 import json
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -30,19 +34,19 @@ from ...core.results import EngineResult
 
 CAPTURE_STATUS_PENDING = "pending_capture"
 CAPTURE_STATUS_CAPTURED = "captured"
+_CAPTURE_STATUSES = (CAPTURE_STATUS_PENDING, CAPTURE_STATUS_CAPTURED)
 
 # The output rows an entitledto result page shows that this oracle records. The
-# EngineResult is keyed by these names; the concept registry points each CTR /
-# UC / HB / PC concept's ``entitledto`` target at the matching name.
+# EngineResult is keyed by these names.
 OUTPUT_FIELDS = (
     "council_tax_reduction",
     "universal_credit",
     "housing_benefit",
     "pension_credit",
 )
+_OUTPUT_KEYS = frozenset(OUTPUT_FIELDS)
 
-# Provenance fields every fixture must carry so a recorded value is auditable
-# and reproducible without this session's context.
+# Provenance every fixture must carry so a recorded value is auditable.
 _REQUIRED_PROVENANCE = (
     "calculator",
     "calculator_url",
@@ -53,9 +57,30 @@ _REQUIRED_PROVENANCE = (
     "capture_status",
 )
 
-# Default fixtures live next to the adapter so the runner resolves them in a
-# source checkout (how the comparison harness runs) without configuration.
+# Additional provenance a *captured* fixture must carry.
+_REQUIRED_CAPTURED_PROVENANCE = (
+    "capture_date",
+    "captured_by",
+    # entitledto derives the council tax bill from postcode + band (after any
+    # single-person discount), so the actual liability it used must be recorded
+    # — the report reconciles PolicyEngine and the statutory hand-check to it.
+    "entitledto_council_tax_liability_gbp",
+)
+
 DEFAULT_FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "uk_ctr"
+
+
+def _is_number(value: Any) -> bool:
+    """A real, finite, non-boolean number (JSON ``true`` must not read as 1)."""
+    return (
+        isinstance(value, int | float)
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+    )
+
+
+def _nonneg_number(value: Any) -> bool:
+    return _is_number(value) and value >= 0
 
 
 @dataclass(frozen=True)
@@ -75,16 +100,16 @@ class RecordedCapture:
 
     @property
     def is_captured(self) -> bool:
-        return self.capture_status == CAPTURE_STATUS_CAPTURED and self.outputs is not None
+        """True only for a captured fixture that passes strict validation."""
+        return self.capture_status == CAPTURE_STATUS_CAPTURED and not validate_capture(
+            self
+        )
 
     def annual_value(self, field: str) -> float | None:
-        """Annual GBP for an output row, or ``None`` when not recorded."""
+        """Annual GBP for an output row, or ``None`` when absent/invalid."""
         if not self.outputs:
             return None
-        entry = self.outputs.get(field)
-        if entry is None:
-            return None
-        return _annual_gbp(entry)
+        return _annual_gbp(self.outputs.get(field))
 
 
 def load_capture(path: str | Path) -> RecordedCapture:
@@ -103,10 +128,22 @@ def load_capture(path: str | Path) -> RecordedCapture:
 def load_captures_by_id(
     fixtures_dir: str | Path | None = None,
 ) -> dict[str, RecordedCapture]:
+    """Load fixtures keyed by case id; reject duplicate ids and id/filename mismatch."""
     directory = Path(fixtures_dir) if fixtures_dir else DEFAULT_FIXTURES_DIR
     captures: dict[str, RecordedCapture] = {}
     for path in sorted(directory.glob("*.json")):
         capture = load_capture(path)
+        if capture.case_id != path.stem:
+            raise ValueError(
+                f"fixture {path.name} declares case_id {capture.case_id!r} that does "
+                f"not match its filename stem {path.stem!r}"
+            )
+        if capture.case_id in captures:
+            prior = captures[capture.case_id].source_path
+            raise ValueError(
+                f"duplicate fixture case_id {capture.case_id!r} in {path.name} "
+                f"(already loaded from {prior.name if prior else '?'})"
+            )
         captures[capture.case_id] = capture
     return captures
 
@@ -114,33 +151,69 @@ def load_captures_by_id(
 def validate_capture(capture: RecordedCapture) -> list[str]:
     """Return the fixture's provenance/integrity problems (empty == valid).
 
-    Enforced both by the test suite and, at capture time, before a human commits
-    a filled fixture — a ``captured`` fixture missing provenance or a CTR amount
-    is a loud failure, never a silently accepted (or invented) value.
+    Enforced by the runner before any grading, by the test suite, and at capture
+    time before a human commits a filled fixture. A ``captured`` fixture missing
+    provenance, a council-tax liability, or a well-formed CTR amount — or carrying
+    a boolean / negative / non-finite / unknown-key output — is a loud failure,
+    never a silently graded (or invented) value.
     """
     problems: list[str] = []
     for field in _REQUIRED_PROVENANCE:
-        if not capture.provenance.get(field):
+        if capture.provenance.get(field) in (None, ""):
             problems.append(f"provenance missing {field!r}")
 
     status = capture.capture_status
-    if status not in (CAPTURE_STATUS_PENDING, CAPTURE_STATUS_CAPTURED):
+    if status not in _CAPTURE_STATUSES:
         problems.append(f"unknown capture_status {status!r}")
+        return problems
 
     if status == CAPTURE_STATUS_PENDING:
         if capture.outputs is not None:
             problems.append("pending_capture fixture must have outputs: null")
-    else:  # captured
-        for field in ("capture_date", "captured_by"):
-            if not capture.provenance.get(field):
-                problems.append(f"captured fixture missing provenance {field!r}")
-        if not capture.outputs:
-            problems.append("captured fixture must record outputs")
-        elif capture.annual_value("council_tax_reduction") is None:
-            problems.append(
-                "captured fixture must record a council_tax_reduction annual amount"
-            )
+        return problems
+
+    # captured
+    for field in _REQUIRED_CAPTURED_PROVENANCE:
+        if capture.provenance.get(field) in (None, ""):
+            problems.append(f"captured fixture missing provenance {field!r}")
+    liability = capture.provenance.get("entitledto_council_tax_liability_gbp")
+    if liability not in (None, "") and not _nonneg_number(liability):
+        problems.append(
+            "provenance entitledto_council_tax_liability_gbp must be a non-negative number"
+        )
+
+    outputs = capture.outputs
+    if not isinstance(outputs, dict) or not outputs:
+        problems.append("captured fixture must record outputs")
+        return problems
+    unknown = set(outputs) - _OUTPUT_KEYS
+    if unknown:
+        problems.append(f"captured fixture has unknown output keys {sorted(unknown)}")
+    for field, entry in outputs.items():
+        if field not in _OUTPUT_KEYS:
+            continue
+        problems.extend(f"output {field}: {p}" for p in _output_entry_problems(entry))
+    if "council_tax_reduction" not in outputs:
+        problems.append("captured fixture must record a council_tax_reduction amount")
     return problems
+
+
+def _output_entry_problems(entry: Any) -> list[str]:
+    """Strict shape check for one recorded output row (no lenient coercion)."""
+    if isinstance(entry, bool):
+        return ["must be a number or object, not a boolean"]
+    if isinstance(entry, int | float):
+        return [] if _nonneg_number(entry) else ["must be a finite non-negative number"]
+    if not isinstance(entry, dict):
+        return ["must be a number or an object with annual/weekly/monthly gbp"]
+    present = [k for k in ("annual_gbp", "weekly_gbp", "monthly_gbp") if k in entry]
+    if not present:
+        return ["needs one of annual_gbp / weekly_gbp / monthly_gbp"]
+    return [
+        f"{k} must be a finite non-negative number"
+        for k in present
+        if not _nonneg_number(entry[k])
+    ]
 
 
 class EntitledToRecordedRunner(EngineAdapter):
@@ -160,26 +233,32 @@ class EntitledToRecordedRunner(EngineAdapter):
         del variables
         return [self._result_for_case(case) for case in cases]
 
+    def _errored(self, case_id: int | str, raw: Any, *errors: str) -> EngineResult:
+        return EngineResult(
+            engine=self.name, household_id=case_id, values={}, raw=raw, errors=errors
+        )
+
     def _result_for_case(self, case: Case) -> EngineResult:
         capture = self._captures.get(str(case.case_id))
         if capture is None:
-            return EngineResult(
-                engine=self.name,
-                household_id=case.case_id,
-                values={},
-                raw=None,
-                errors=(f"no entitledto fixture for case {case.case_id!r}",),
+            return self._errored(
+                case.case_id, None, f"no entitledto fixture for case {case.case_id!r}"
             )
-        if not capture.is_captured:
-            return EngineResult(
-                engine=self.name,
-                household_id=case.case_id,
-                values={},
-                raw={"provenance": capture.provenance, "inputs": capture.inputs},
-                errors=(
-                    f"{capture.capture_status}: entitledto output not yet captured "
-                    f"for case {case.case_id!r}",
-                ),
+        problems = validate_capture(capture)
+        raw = {"provenance": capture.provenance, "inputs": capture.inputs}
+        if capture.capture_status == CAPTURE_STATUS_PENDING:
+            errors = (
+                f"pending_capture: entitledto output not yet captured for "
+                f"case {case.case_id!r}",
+            )
+            if problems:
+                errors = errors + (f"malformed pending stub: {problems}",)
+            return self._errored(case.case_id, raw, *errors)
+        # claims captured
+        if problems:
+            # Fail closed: a captured fixture that does not validate is never graded.
+            return self._errored(
+                case.case_id, raw, f"invalid capture, not graded: {problems}"
             )
         values = {
             field: capture.annual_value(field)
@@ -195,15 +274,20 @@ class EntitledToRecordedRunner(EngineAdapter):
 
 
 def _annual_gbp(entry: Any) -> float | None:
-    """Annualise a recorded output row (explicit annual wins; else week/month)."""
-    if isinstance(entry, int | float):
-        return float(entry)
+    """Annualise a recorded output row; ``None`` for absent or malformed values.
+
+    Rejects booleans (JSON ``true``/``false`` must not read as 1/0), non-finite,
+    and negative values, so a malformed capture yields ``None`` rather than a
+    spurious number. Explicit annual wins; otherwise week/month is annualised.
+    """
+    if _is_number(entry):
+        return float(entry) if entry >= 0 else None
     if not isinstance(entry, dict):
         return None
-    if entry.get("annual_gbp") is not None:
+    if _nonneg_number(entry.get("annual_gbp")):
         return float(entry["annual_gbp"])
-    if entry.get("weekly_gbp") is not None:
+    if _nonneg_number(entry.get("weekly_gbp")):
         return round(float(entry["weekly_gbp"]) * 52.0, 2)
-    if entry.get("monthly_gbp") is not None:
+    if _nonneg_number(entry.get("monthly_gbp")):
         return round(float(entry["monthly_gbp"]) * 12.0, 2)
     return None

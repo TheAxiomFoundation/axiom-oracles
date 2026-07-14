@@ -2,9 +2,9 @@
   "provenance": {
     "engine": "policyengine-uk",
     "version": "2.89.2",
-    "computed": "2026-07-13",
     "period": "2026",
-    "method": "Constructed single-household situations (no survey data). claims_all_entitled_benefits forced True so would_claim=1. council_tax supplied as input; savings = capital. Unsupported councils return council_tax_benefit_reported (0 on a constructed household), so their council_tax_reduction is 0.",
+    "method": "Constructed single-household situations derived from uk_ctr_cases() (no survey data). claims_all_entitled_benefits forced True so would_claim=1. council_tax supplied as input; savings = capital. Unsupported councils return council_tax_benefit_reported (0 on a constructed household).",
+    "generator": "scripts/generate_uk_ctr_pe_reference.py",
     "ctr_national_scheme_parameters": {
       "england_pensioner": {
         "maximum_support_rate": 1.0,

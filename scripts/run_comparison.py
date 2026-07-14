@@ -724,14 +724,6 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
-    elif runner_type == "uk-ctr-entitledto-recorded":
-        # The oracle is the recorded entitledto calculator (per-council CTR);
-        # the report also carries committed PolicyEngine-UK reference values.
-        oracle = {
-            "name": "entitledto",
-            "access": "recorded-fixtures",
-            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
-        }
     elif runner_type == "uk-capital-gains-tax-grid":
         oracle = {
             "name": "policyengine",
@@ -2276,24 +2268,6 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
-def _run_uk_ctr_entitledto_recorded(runner: dict, output: Path) -> None:
-    """UK Council Tax Reduction: recorded entitledto oracle vs PolicyEngine-UK.
-
-    entitledto is the per-council CTR ground truth, captured by hand (its legal
-    notices bar automated collection) into recorded fixtures. This runner never
-    probes entitledto — it replays the committed fixtures and the committed
-    PolicyEngine-UK reference values into the report. While fixtures are pending
-    capture the report grades nothing; it is regenerated after a human captures
-    them (see the adapter's CAPTURE-PROTOCOL.md). Params are optional overrides
-    for the fixtures dir and PE reference path.
-    """
-    del runner
-    from axiom_oracles.adapters.entitledto.report import build_uk_ctr_report
-
-    report = build_uk_ctr_report()
-    output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
-
-
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -2303,7 +2277,6 @@ RUNNERS = {
     "snap-qc-compare": _run_snap_qc_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
     "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,
-    "uk-ctr-entitledto-recorded": _run_uk_ctr_entitledto_recorded,
     "uk-capital-gains-tax-grid": _run_uk_capital_gains_tax_grid,
     "uk-business-rates-grid": _run_uk_business_rates_grid,
     "uk-lbtt-ltt-grid": _run_uk_lbtt_ltt_grid,

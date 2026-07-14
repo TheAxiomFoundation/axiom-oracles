@@ -1,9 +1,11 @@
-"""entitledto recorded-fixture oracle: mapper, runner, provenance, comparator."""
+"""entitledto recorded-fixture oracle: mapper, fail-closed runner, provenance, comparator."""
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
+
+import pytest
 
 from axiom_oracles.adapters.entitledto import (
     CAPTURE_STATUS_CAPTURED,
@@ -11,6 +13,7 @@ from axiom_oracles.adapters.entitledto import (
     EntitledToInputMapper,
     EntitledToRecordedRunner,
     load_capture,
+    load_captures_by_id,
     validate_capture,
 )
 from axiom_oracles.comparison.comparator import Comparator
@@ -19,14 +22,14 @@ from axiom_oracles.core.case import Case, Concepts, Entity
 from axiom_oracles.core.results import EngineResult
 from axiom_oracles.suites.uk_ctr import uk_ctr_cases
 
-
-# --- input mapper ----------------------------------------------------------
+_CID = "ctr-eng-wa-kingston-single-earner"
 
 
 def _kingston_case() -> Case:
-    return next(
-        c for c in uk_ctr_cases() if c.case_id == "ctr-eng-wa-kingston-single-earner"
-    )
+    return next(c for c in uk_ctr_cases() if c.case_id == _CID)
+
+
+# --- input mapper ----------------------------------------------------------
 
 
 def test_mapper_projects_case_to_entitledto_record() -> None:
@@ -42,6 +45,7 @@ def test_mapper_projects_case_to_entitledto_record() -> None:
     assert record["council_tax"] == {"band": "D", "annual_liability_gbp": 2171.0}
     assert record["housing"]["tenure"] == "private_rent"
     assert record["housing"]["assessed_for_rent_rebate"] is True
+    assert record["income_basis"].startswith("annual GBP, gross")
     assert record["adults"] == [
         {
             "role": "claimant",
@@ -77,132 +81,65 @@ def test_owner_occupier_is_not_assessed_for_rent_rebate() -> None:
     assert record["housing"]["assessed_for_rent_rebate"] is False
 
 
-# --- recorded runner: pending vs captured ----------------------------------
+def test_mapper_reads_non_person_and_child_entities() -> None:
+    # A household with a non-person entity (must be ignored) and a child (must be
+    # a child, not an adult), plus an adult with no explicit relation (claimant).
+    case = Case(
+        case_id="x",
+        period="2026",
+        metadata={"couple": False, "claimant_employment_income": 9000.0},
+        entities=(
+            Entity("home", "household", {}),  # non-person: ignored
+            Entity("adult", "person", {Concepts.PERSON_AGE: 41}),  # no relation
+            Entity("kid", "person", {Concepts.PERSON_AGE: 7,
+                                     Concepts.HOUSEHOLD_RELATION: "Child"}),
+        ),
+    )
+    record = EntitledToInputMapper().map_case(case)
+    assert len(record["adults"]) == 1
+    assert record["adults"][0]["age"] == 41
+    assert record["adults"][0]["employment_income_annual_gbp"] == 9000.0
+    assert record["children"] == [{"age": 7}]
 
 
-def _write_fixture(path: Path, *, captured: bool, ctr_annual: float = 1181.0) -> None:
+# --- recorded runner: fail-closed replay -----------------------------------
+
+
+def _captured_fixture(*, ctr, liability=2171.0, **overrides) -> dict:
+    provenance = {
+        "capture_status": CAPTURE_STATUS_CAPTURED,
+        "calculator": "entitledto",
+        "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+        "scheme_year": "2026-27",
+        "council_name": "Kingston upon Thames",
+        "council_gss_code": "E09000021",
+        "council_tax_band": "D",
+        "capture_date": "2026-07-14",
+        "captured_by": "tester",
+        "entitledto_council_tax_liability_gbp": liability,
+    }
+    provenance.update(overrides.pop("provenance", {}))
     fixture = {
-        "case_id": "ctr-eng-wa-kingston-single-earner",
+        "case_id": _CID,
         "oracle": "entitledto",
-        "provenance": {
-            "capture_status": CAPTURE_STATUS_CAPTURED
-            if captured
-            else CAPTURE_STATUS_PENDING,
-            "calculator": "entitledto",
-            "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
-            "scheme_year": "2026-27",
-            "council_name": "Kingston upon Thames",
-            "council_gss_code": "E09000021",
-            "council_tax_band": "D",
-            "capture_date": "2026-07-14" if captured else None,
-            "captured_by": "tester" if captured else None,
-        },
-        "inputs": {"synthetic": True},
-        "outputs": {
-            "council_tax_reduction": {"annual_gbp": ctr_annual, "weekly_gbp": 22.71},
-            "universal_credit": {"annual_gbp": 4510.0},
-        }
-        if captured
-        else None,
+        "provenance": provenance,
+        "inputs": {},
+        "outputs": {"council_tax_reduction": ctr, "universal_credit": {"annual_gbp": 4510.0}},
     }
+    fixture.update(overrides)
+    return fixture
+
+
+def _write(dir_: Path, fixture: dict, name: str = f"{_CID}.json") -> Path:
+    path = dir_ / name
     path.write_text(json.dumps(fixture))
+    return path
 
 
-def test_runner_reports_pending_as_errored_with_no_values(tmp_path: Path) -> None:
-    _write_fixture(tmp_path / "ctr-eng-wa-kingston-single-earner.json", captured=False)
-    runner = EntitledToRecordedRunner(fixtures_dir=tmp_path)
-
-    [result] = runner.run_cases([_kingston_case()])
-
-    assert result.engine == "entitledto"
-    assert result.values == {}  # never a spurious £0
-    assert result.errors and "pending_capture" in result.errors[0]
-
-
-def test_runner_replays_captured_values(tmp_path: Path) -> None:
-    _write_fixture(tmp_path / "ctr-eng-wa-kingston-single-earner.json", captured=True)
-    runner = EntitledToRecordedRunner(fixtures_dir=tmp_path)
-
-    [result] = runner.run_cases([_kingston_case()])
-
-    assert result.values["council_tax_reduction"] == 1181.0
-    assert result.values["universal_credit"] == 4510.0
-    assert not result.errors
-
-
-def test_runner_reports_missing_fixture(tmp_path: Path) -> None:
-    runner = EntitledToRecordedRunner(fixtures_dir=tmp_path)
-    [result] = runner.run_cases([_kingston_case()])
-    assert result.values == {}
-    assert result.errors and "no entitledto fixture" in result.errors[0]
-
-
-def test_weekly_only_output_is_annualised(tmp_path: Path) -> None:
-    fixture = {
-        "case_id": "ctr-eng-wa-kingston-single-earner",
+def _pending_fixture() -> dict:
+    return {
+        "case_id": _CID,
         "oracle": "entitledto",
-        "provenance": {
-            "capture_status": CAPTURE_STATUS_CAPTURED,
-            "calculator": "entitledto",
-            "calculator_url": "x",
-            "scheme_year": "2026-27",
-            "council_name": "Kingston upon Thames",
-            "council_gss_code": "E09000021",
-            "council_tax_band": "D",
-            "capture_date": "2026-07-14",
-            "captured_by": "tester",
-        },
-        "inputs": {},
-        "outputs": {"council_tax_reduction": {"weekly_gbp": 20.0}},
-    }
-    path = tmp_path / "ctr-eng-wa-kingston-single-earner.json"
-    path.write_text(json.dumps(fixture))
-    runner = EntitledToRecordedRunner(fixtures_dir=tmp_path)
-    [result] = runner.run_cases([_kingston_case()])
-    assert result.values["council_tax_reduction"] == 1040.0  # 20 * 52
-
-
-# --- provenance validation -------------------------------------------------
-
-
-def test_validate_accepts_pending_stub(tmp_path: Path) -> None:
-    path = tmp_path / "c.json"
-    _write_fixture(path, captured=False)
-    assert validate_capture(load_capture(path)) == []
-
-
-def test_validate_accepts_complete_capture(tmp_path: Path) -> None:
-    path = tmp_path / "c.json"
-    _write_fixture(path, captured=True)
-    assert validate_capture(load_capture(path)) == []
-
-
-def test_validate_rejects_captured_without_outputs(tmp_path: Path) -> None:
-    fixture = {
-        "case_id": "c",
-        "provenance": {
-            "capture_status": CAPTURE_STATUS_CAPTURED,
-            "calculator": "entitledto",
-            "calculator_url": "x",
-            "scheme_year": "2026-27",
-            "council_name": "Kingston upon Thames",
-            "council_gss_code": "E09000021",
-            "council_tax_band": "D",
-            "capture_date": "2026-07-14",
-            "captured_by": "tester",
-        },
-        "inputs": {},
-        "outputs": None,
-    }
-    path = tmp_path / "c.json"
-    path.write_text(json.dumps(fixture))
-    problems = validate_capture(load_capture(path))
-    assert any("outputs" in p for p in problems)
-
-
-def test_validate_rejects_pending_with_outputs(tmp_path: Path) -> None:
-    fixture = {
-        "case_id": "c",
         "provenance": {
             "capture_status": CAPTURE_STATUS_PENDING,
             "calculator": "entitledto",
@@ -213,32 +150,125 @@ def test_validate_rejects_pending_with_outputs(tmp_path: Path) -> None:
             "council_tax_band": "D",
         },
         "inputs": {},
-        "outputs": {"council_tax_reduction": {"annual_gbp": 1181.0}},
+        "outputs": None,
     }
-    path = tmp_path / "c.json"
-    path.write_text(json.dumps(fixture))
+
+
+def test_runner_reports_pending_as_errored_with_no_values(tmp_path: Path) -> None:
+    _write(tmp_path, _pending_fixture())
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values == {}  # never a spurious £0
+    assert result.errors and "pending_capture" in result.errors[0]
+
+
+def test_runner_replays_valid_captured_values(tmp_path: Path) -> None:
+    _write(tmp_path, _captured_fixture(ctr={"annual_gbp": 1181.0, "weekly_gbp": 22.71}))
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values["council_tax_reduction"] == 1181.0
+    assert result.values["universal_credit"] == 4510.0
+    assert not result.errors
+
+
+def test_runner_reports_missing_fixture(tmp_path: Path) -> None:
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values == {}
+    assert result.errors and "no entitledto fixture" in result.errors[0]
+
+
+def test_weekly_only_output_is_annualised(tmp_path: Path) -> None:
+    _write(tmp_path, _captured_fixture(ctr={"weekly_gbp": 20.0}))
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values["council_tax_reduction"] == 1040.0  # 20 * 52
+
+
+# --- fail-closed: malformed "captured" fixtures are never graded ------------
+
+
+@pytest.mark.parametrize(
+    "ctr",
+    [
+        False,  # JSON boolean must NOT read as 0 and match a PE £0
+        True,
+        -5.0,  # negative
+        {"annual_gbp": False},
+        {"annual_gbp": -1.0},
+        {"weekly_gbp": float("nan")},
+        {"foo": 1.0},  # no annual/weekly/monthly
+    ],
+)
+def test_malformed_captured_ctr_is_not_graded(tmp_path: Path, ctr) -> None:
+    _write(tmp_path, _captured_fixture(ctr=ctr))
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values == {}
+    assert result.errors and "invalid capture" in result.errors[0]
+
+
+def test_captured_missing_liability_is_not_graded(tmp_path: Path) -> None:
+    fixture = _captured_fixture(ctr={"annual_gbp": 1181.0})
+    del fixture["provenance"]["entitledto_council_tax_liability_gbp"]
+    _write(tmp_path, fixture)
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values == {}
+    assert result.errors and "invalid capture" in result.errors[0]
+
+
+def test_captured_unknown_output_key_is_not_graded(tmp_path: Path) -> None:
+    fixture = _captured_fixture(ctr={"annual_gbp": 1181.0})
+    fixture["outputs"]["not_a_benefit"] = {"annual_gbp": 5.0}
+    _write(tmp_path, fixture)
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values == {}
+
+
+def test_duplicate_case_ids_raise(tmp_path: Path) -> None:
+    _write(tmp_path, _pending_fixture(), name=f"{_CID}.json")
+    dup = _pending_fixture()
+    (tmp_path / "other.json").write_text(json.dumps(dup))  # same case_id, different filename
+    with pytest.raises(ValueError, match="does not match its filename stem|duplicate"):
+        load_captures_by_id(tmp_path)
+
+
+# --- provenance validation -------------------------------------------------
+
+
+def test_validate_accepts_pending_stub(tmp_path: Path) -> None:
+    path = _write(tmp_path, _pending_fixture())
+    assert validate_capture(load_capture(path)) == []
+
+
+def test_validate_accepts_complete_capture(tmp_path: Path) -> None:
+    path = _write(tmp_path, _captured_fixture(ctr={"annual_gbp": 1181.0}))
+    assert validate_capture(load_capture(path)) == []
+
+
+def test_validate_rejects_captured_without_outputs(tmp_path: Path) -> None:
+    fixture = _captured_fixture(ctr={"annual_gbp": 1181.0})
+    fixture["outputs"] = None
+    path = _write(tmp_path, fixture)
+    assert any("outputs" in p for p in validate_capture(load_capture(path)))
+
+
+def test_validate_rejects_pending_with_outputs(tmp_path: Path) -> None:
+    fixture = _pending_fixture()
+    fixture["outputs"] = {"council_tax_reduction": {"annual_gbp": 1181.0}}
+    path = _write(tmp_path, fixture)
+    assert any("pending_capture" in p for p in validate_capture(load_capture(path)))
+
+
+def test_validate_rejects_boolean_ctr(tmp_path: Path) -> None:
+    path = _write(tmp_path, _captured_fixture(ctr=False))
     problems = validate_capture(load_capture(path))
-    assert any("pending_capture" in p for p in problems)
+    assert any("council_tax_reduction" in p for p in problems)
 
 
 # --- comparator wiring -----------------------------------------------------
 
 
 def test_recorded_oracle_grades_against_policyengine(tmp_path: Path) -> None:
-    """A captured entitledto value compares to a PolicyEngine value through the
-    existing Comparator, keyed by the CTR concept's per-engine targets."""
-    _write_fixture(
-        tmp_path / "ctr-eng-wa-kingston-single-earner.json",
-        captured=True,
-        ctr_annual=1181.0,
-    )
-    entitledto = EntitledToRecordedRunner(fixtures_dir=tmp_path)
-    [left] = entitledto.run_cases([_kingston_case()])
-    right = EngineResult(
-        engine="policyengine",
-        household_id="ctr-eng-wa-kingston-single-earner",
-        values={"council_tax_reduction": 1181.0},
-    )
+    """A valid captured entitledto value compares to a PolicyEngine value through
+    the existing Comparator, keyed by the CTR concept's per-engine targets."""
+    _write(tmp_path, _captured_fixture(ctr={"annual_gbp": 1181.0}))
+    [left] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
     mapping = ProgramMapping(
         standard="uk:policies/govuk/council-tax-reduction"
         "#council_tax_reduction_annual_amount",
@@ -246,34 +276,14 @@ def test_recorded_oracle_grades_against_policyengine(tmp_path: Path) -> None:
         category="benefits",
         comparison="amount",
         tolerance=0.01,
-        targets={
-            "entitledto": "council_tax_reduction",
-            "policyengine": "council_tax_reduction",
-        },
+        targets={"entitledto": "council_tax_reduction", "policyengine": "council_tax_reduction"},
     )
+    right = EngineResult("policyengine", _CID, {"council_tax_reduction": 1181.0})
     [comparison] = Comparator([mapping]).compare([left], [right])
-    assert comparison.match_count == 1
-    assert comparison.mismatch_count == 0
+    assert comparison.match_count == 1 and comparison.mismatch_count == 0
 
-    # A per-council divergence (entitledto models the local scheme; PE returns
-    # the reported fallback) surfaces as a mismatch, not a silent pass.
-    right_gap = EngineResult(
-        engine="policyengine",
-        household_id="ctr-eng-wa-kingston-single-earner",
-        values={"council_tax_reduction": 0.0},
-    )
+    # A per-council divergence surfaces as a mismatch, not a silent pass.
+    right_gap = EngineResult("policyengine", _CID, {"council_tax_reduction": 0.0})
     [gap] = Comparator([mapping]).compare([left], [right_gap])
     assert gap.mismatch_count == 1
     assert gap.mismatches()[0].difference == 1181.0
-
-
-def test_entity_kind_helper_omits_non_person_children() -> None:
-    case = Case(
-        case_id="x",
-        period="2026",
-        metadata={"couple": False},
-        entities=(Entity("claimant", "person", {Concepts.PERSON_AGE: 40}),),
-    )
-    record = EntitledToInputMapper().map_case(case)
-    assert record["children"] == []
-    assert record["adults"][0]["age"] == 40

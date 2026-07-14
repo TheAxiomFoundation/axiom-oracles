@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Write the UK-CTR entitledto calculator-oracle report to reports/.
+"""Write the UK-CTR entitledto calculator-oracle report on demand.
 
 Reads the recorded entitledto fixtures and the committed PolicyEngine-UK
-reference values, and writes the combined report. While fixtures are
-``pending_capture`` the report grades nothing; re-run it after capturing
-fixtures to grade entitledto against PolicyEngine and the statutory hand-check.
+reference values and writes the combined report (default: gitignored ``reports/``
+scratch dir). While fixtures are ``pending_capture`` the report grades nothing;
+re-run it after capturing fixtures to grade entitledto against PolicyEngine and
+the statutory hand-check. The builder is fail-closed — an inconsistent
+fixture/reference set raises rather than emitting a defaulted award.
 
-    python scripts/run_uk_ctr_entitledto_report.py            # write report
-    python scripts/run_uk_ctr_entitledto_report.py --check    # CI drift gate
+    python scripts/run_uk_ctr_entitledto_report.py
+    python scripts/run_uk_ctr_entitledto_report.py --output /tmp/uk-ctr.json
 """
 
 from __future__ import annotations
@@ -23,39 +25,21 @@ if str(REPO_ROOT) not in sys.path:
 
 from axiom_oracles.adapters.entitledto.report import build_uk_ctr_report  # noqa: E402
 
-DEFAULT_OUTPUT = REPO_ROOT / "reports" / "axiom-entitledto-uk-council-tax-reduction.json"
-
-
-def render(report: dict) -> str:
-    return json.dumps(report, indent=2, ensure_ascii=False) + "\n"
+DEFAULT_OUTPUT = REPO_ROOT / "reports" / "axiom-uk-council-tax-reduction-entitledto.json"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument(
-        "--check",
-        action="store_true",
-        help="Fail if the committed report differs from a fresh build.",
-    )
     args = parser.parse_args()
 
-    rendered = render(build_uk_ctr_report())
-    if args.check:
-        if not args.output.exists() or args.output.read_text() != rendered:
-            sys.stderr.write(
-                "UK-CTR entitledto report out of date; run "
-                "scripts/run_uk_ctr_entitledto_report.py\n"
-            )
-            return 1
-        return 0
-
+    report = build_uk_ctr_report()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(rendered)
-    report = json.loads(rendered)
+    args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+    cap = report["capture"]
     print(
-        f"Wrote {args.output.name}: {report['capture']['captured']} captured, "
-        f"{report['capture']['pending']} pending"
+        f"Wrote {args.output.name}: {cap['captured']} captured, {cap['pending']} "
+        f"pending, {cap['invalid']} invalid, {cap['graded']} graded"
     )
     return 0
 

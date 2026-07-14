@@ -1,4 +1,4 @@
-"""UK-CTR calculator-oracle report builder + run_comparison runner."""
+"""UK-CTR calculator-oracle report builder: fail-closed, pending, and captured grading."""
 
 from __future__ import annotations
 
@@ -6,30 +6,30 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 from axiom_oracles.adapters.entitledto import CAPTURE_STATUS_CAPTURED
 from axiom_oracles.adapters.entitledto.report import (
     DEFAULT_PE_REFERENCE,
+    _hand_computed_statutory,
     build_uk_ctr_report,
 )
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
+_CID = "ctr-eng-wa-kingston-single-earner"
 
 
 def test_pending_report_grades_nothing_but_carries_pe_and_statutory() -> None:
     report = build_uk_ctr_report()
-    assert report["capture"] == {
-        "status": "pending_capture",
-        "captured": 0,
-        "pending": 8,
-        "protocol": "axiom_oracles/adapters/entitledto/fixtures/uk_ctr/"
-        "CAPTURE-PROTOCOL.md",
-    }
-    assert report["summary"]["comparison_count"] == 0
+    assert report["capture"]["captured"] == 0
+    assert report["capture"]["pending"] == 8
+    assert report["capture"]["graded"] == 0
+    assert report["summary"]["graded_comparison_count"] == 0
+    assert "not agreements" in report["summary"]["note"]
     assert len(report["cases"]) == 8
     by_id = {c["case_id"]: c for c in report["cases"]}
 
-    # National schemes: the statutory hand-check equals PolicyEngine exactly
-    # (PE implements the national statute), so PE is a sound oracle there.
+    # National schemes: statutory hand-check equals PolicyEngine exactly.
     for cid in (
         "ctr-eng-pa-birmingham-couple-gc",
         "ctr-eng-pa-cornwall-single-taper",
@@ -42,27 +42,65 @@ def test_pending_report_grades_nothing_but_carries_pe_and_statutory() -> None:
             row["policyengine"]["annual_gbp"]
         ), cid
 
-    # Unsupported councils: PolicyEngine returns 0 (reported fallback) and the
-    # national formula does not apply, so entitledto is the only ground truth.
-    for cid in (
-        "ctr-eng-wa-manchester-single-earner",
-        "ctr-eng-wa-birmingham-couple-1kid",
-    ):
+    # Unsupported councils: PolicyEngine returns 0; national formula does not apply.
+    for cid in ("ctr-eng-wa-manchester-single-earner", "ctr-eng-wa-birmingham-couple-1kid"):
         row = by_id[cid]
         assert row["policyengine"]["scheme_supported"] is False
         assert row["policyengine"]["annual_gbp"] == 0.0
         assert row["hand_computed_statutory"]["annual_gbp"] is None
 
-    # Kingston's local scheme is a real per-council award PE models but the
-    # national formula cannot reproduce.
-    kingston = by_id["ctr-eng-wa-kingston-single-earner"]
+    kingston = by_id[_CID]
     assert kingston["policyengine"]["annual_gbp"] == 1181.0
     assert kingston["hand_computed_statutory"]["annual_gbp"] is None
+    assert kingston["entitledto"]["status"] == "pending_capture"
+    assert kingston["entitledto"]["errors"]  # the pending reason is surfaced
 
 
-def _write_captured(dir_: Path, ctr_annual: float) -> None:
+def test_independent_statutory_hand_check() -> None:
+    # Not fed PolicyEngine's parameters: pins the national formula against a
+    # hand-worked case. Single pensioner, liability £2,000, applicable amount
+    # £13,312, applicable income £16,114, capital £5,000 (< £16,000):
+    #   2000 - 0.20 * (16114 - 13312) = 2000 - 560.40 = 1439.60
+    out = _hand_computed_statutory(
+        scheme="england-pension-age-prescribed",
+        liability=2000.0,
+        applicable_amount=13312.0,
+        applicable_income=16114.0,
+        capital=5000.0,
+        params={"england_pensioner": {
+            "maximum_support_rate": 1.0, "withdrawal_rate": 0.2, "capital_limit": 16000.0}},
+    )
+    assert out["annual_gbp"] == 1439.60
+
+    # Capital over the £16,000 limit extinguishes the award.
+    over = _hand_computed_statutory(
+        scheme="scotland-working-age-national",
+        liability=1300.0, applicable_amount=4969.0, applicable_income=5000.0,
+        capital=16001.0,
+        params={"scotland": {"maximum_support_rate": 1.0, "withdrawal_rate": 0.2,
+                             "capital_limit": 16000.0}},
+    )
+    assert over["annual_gbp"] == 0.0
+
+    # A local scheme has no national formula.
+    local = _hand_computed_statutory(
+        scheme="manchester-working-age-local", liability=1600.0,
+        applicable_amount=4969.0, applicable_income=15510.0, capital=3000.0, params={})
+    assert local["annual_gbp"] is None
+
+
+def _seed_pending(dir_: Path) -> None:
+    """Copy the committed pending fixtures so the report's bijection holds."""
+    from axiom_oracles.adapters.entitledto.recorded import DEFAULT_FIXTURES_DIR
+
+    for src in DEFAULT_FIXTURES_DIR.glob("*.json"):
+        (dir_ / src.name).write_text(src.read_text())
+
+
+def _write_captured(dir_: Path, ctr_annual: float, liability: float = 2171.0) -> None:
+    _seed_pending(dir_)
     fixture = {
-        "case_id": "ctr-eng-wa-kingston-single-earner",
+        "case_id": _CID,
         "oracle": "entitledto",
         "provenance": {
             "capture_status": CAPTURE_STATUS_CAPTURED,
@@ -74,11 +112,12 @@ def _write_captured(dir_: Path, ctr_annual: float) -> None:
             "council_tax_band": "D",
             "capture_date": "2026-07-14",
             "captured_by": "tester",
+            "entitledto_council_tax_liability_gbp": liability,
         },
         "inputs": {},
         "outputs": {"council_tax_reduction": {"annual_gbp": ctr_annual}},
     }
-    (dir_ / "ctr-eng-wa-kingston-single-earner.json").write_text(json.dumps(fixture))
+    (dir_ / f"{_CID}.json").write_text(json.dumps(fixture))
 
 
 def test_captured_case_grades_against_policyengine(tmp_path: Path) -> None:
@@ -86,53 +125,68 @@ def test_captured_case_grades_against_policyengine(tmp_path: Path) -> None:
     report = build_uk_ctr_report(fixtures_dir=tmp_path)
     assert report["capture"]["captured"] == 1
     assert report["capture"]["pending"] == 7
-    kingston = next(
-        c for c in report["cases"] if c["case_id"] == "ctr-eng-wa-kingston-single-earner"
-    )
+    kingston = next(c for c in report["cases"] if c["case_id"] == _CID)
     assert kingston["status"] == "captured"
     assert kingston["entitledto"]["annual_gbp"] == 1181.0
     assert kingston["entitledto_vs_policyengine"]["match"] is True
-    assert report["summary"]["comparison_count"] == 1
+    assert kingston["policyengine_liability_parity"]["match"] is True
+    assert report["summary"]["graded_comparison_count"] == 1
     assert report["summary"]["match_count"] == 1
 
 
 def test_captured_divergence_surfaces_as_mismatch(tmp_path: Path) -> None:
     _write_captured(tmp_path, ctr_annual=900.0)  # differs from PE 1181
     report = build_uk_ctr_report(fixtures_dir=tmp_path)
-    kingston = next(
-        c for c in report["cases"] if c["case_id"] == "ctr-eng-wa-kingston-single-earner"
-    )
+    kingston = next(c for c in report["cases"] if c["case_id"] == _CID)
     assert kingston["entitledto_vs_policyengine"]["match"] is False
     assert kingston["entitledto_vs_policyengine"]["difference"] == 900.0 - 1181.0
     assert report["summary"]["mismatch_count"] == 1
 
 
-def test_committed_pe_reference_is_present() -> None:
+def test_captured_liability_mismatch_is_flagged(tmp_path: Path) -> None:
+    # entitledto's derived liability (e.g. after a single-person discount) differs
+    # from PolicyEngine's modelled liability; the report must flag the parity gap.
+    _write_captured(tmp_path, ctr_annual=1181.0, liability=1628.25)  # 75% of 2171
+    report = build_uk_ctr_report(fixtures_dir=tmp_path)
+    kingston = next(c for c in report["cases"] if c["case_id"] == _CID)
+    parity = kingston["policyengine_liability_parity"]
+    assert parity["match"] is False
+    assert parity["entitledto_liability"] == 1628.25
+    assert parity["reference_liability"] == 2171.0
+    assert kingston["council_tax_liability"] == 1628.25  # statutory uses captured liability
+
+
+def test_missing_pe_reference_row_raises(tmp_path: Path) -> None:
+    reference = json.loads(DEFAULT_PE_REFERENCE.read_text())
+    reference["cases"].pop(_CID)  # drop a row → must not default to a full award
+    ref_path = tmp_path / "ref.json"
+    ref_path.write_text(json.dumps(reference))
+    with pytest.raises(ValueError, match="no PolicyEngine reference row"):
+        build_uk_ctr_report(pe_reference_path=ref_path)
+
+
+def test_committed_pe_reference_schema() -> None:
     reference = json.loads(DEFAULT_PE_REFERENCE.read_text())
     assert reference["provenance"]["engine"] == "policyengine-uk"
-    assert reference["provenance"]["version"] == "2.89.2"
-    assert set(reference["cases"]) == {
-        "ctr-eng-pa-birmingham-couple-gc",
-        "ctr-eng-pa-cornwall-single-taper",
-        "ctr-sco-wa-glasgow-single-earner",
-        "ctr-wal-wa-cardiff-couple-2kids",
-        "ctr-eng-wa-kingston-single-earner",
-        "ctr-eng-pa-kingston-single",
-        "ctr-eng-wa-manchester-single-earner",
-        "ctr-eng-wa-birmingham-couple-1kid",
-    }
+    assert reference["provenance"]["generator"] == "scripts/generate_uk_ctr_pe_reference.py"
+    assert set(reference["cases"]) == {str(c) for c in _suite_ids()}
 
 
-def test_runner_registered_and_writes_report(tmp_path: Path) -> None:
-    path = _REPO_ROOT / "scripts" / "run_comparison.py"
-    spec = importlib.util.spec_from_file_location("run_comparison_ukctr", path)
+def _suite_ids():
+    from axiom_oracles.suites.uk_ctr import uk_ctr_cases
+
+    return [c.case_id for c in uk_ctr_cases()]
+
+
+def test_pe_reference_reproduces_from_policyengine() -> None:
+    # Reproducibility gate: when PolicyEngine-UK is importable, the committed
+    # reference case values must equal a fresh generation from the suite cases.
+    pytest.importorskip("policyengine_uk")
+    path = _REPO_ROOT / "scripts" / "generate_uk_ctr_pe_reference.py"
+    spec = importlib.util.spec_from_file_location("gen_pe_ref", path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
-    assert "uk-ctr-entitledto-recorded" in module.RUNNERS
-
-    output = tmp_path / "report.json"
-    module.RUNNERS["uk-ctr-entitledto-recorded"]({}, output)
-    written = json.loads(output.read_text())
-    assert written["suite"] == "uk-ctr"
-    assert written["capture"]["pending"] == 8
+    committed = json.loads(DEFAULT_PE_REFERENCE.read_text())
+    fresh = module.build_reference()
+    assert committed["cases"] == fresh["cases"]

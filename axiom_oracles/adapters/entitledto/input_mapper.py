@@ -87,6 +87,10 @@ class EntitledToInputMapper:
             "adults": self._adults(case, couple),
             "children": self._children(case),
             "capital_gbp": _money(meta.get(CAPITAL)),
+            # All adult income amounts below are annual GBP, gross (before income
+            # tax and National Insurance); entitledto's calculator asks for gross
+            # pay and applies its own tax/NI model, so gross is the entry basis.
+            "income_basis": "annual GBP, gross (before income tax and National Insurance)",
         }
         return record
 

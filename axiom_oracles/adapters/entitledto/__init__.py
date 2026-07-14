@@ -1,6 +1,6 @@
 """entitledto benefits-calculator oracle (recorded fixtures).
 
-The per-council ground truth for UK Council Tax Reduction: entitledto models
+The most complete per-council reference for UK Council Tax Reduction: entitledto models
 every billing authority's CTR scheme, where PolicyEngine-UK models only the
 three national schemes plus five named English councils, and UKMOD is national.
 entitledto exposes no open-source engine and bars automated access, so this is

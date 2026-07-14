@@ -2,28 +2,39 @@
 
 These fixtures are the **recorded** side of the entitledto Council Tax Reduction
 oracle. They ship as `pending_capture` stubs — inputs filled, `outputs: null` —
-and a human fills the outputs by running each case once on the public
-calculator. This document is that procedure.
+and are filled only under the permission described below. This document is that
+procedure.
 
-## Why capture is manual (read first)
+## Permission first (read before capturing anything)
 
-entitledto is a commercial product. Its legal notices state:
+entitledto is a commercial product. Capturing this eight-case research grid is
+**not** sanctioned by the free public calculator's terms, for two independent
+reasons:
 
-> "You must not conduct any systematic or automated data collection activities
-> (including without limitation scraping, data mining, data extraction and data
-> harvesting) on or in relation to our website without our express written
-> consent."
-> — entitledto legal notices, https://www.entitledto.co.uk/legal-notices/
+- **Systematic collection is barred without written consent.** entitledto's legal
+  notices state: *"You must not conduct any systematic or automated data
+  collection activities (including without limitation scraping, data mining, data
+  extraction and data harvesting) on or in relation to our website without our
+  express written consent"* (https://www.entitledto.co.uk/legal-notices). Running
+  a defined grid of hypothetical households and recording the outputs is
+  systematic collection — the "systematic" bar applies even though a person, not
+  a script, does the typing.
+- **The free calculator is capped and personal-use.** Its current terms restrict
+  the free site to personal use, limit unregistered users to a small number of
+  calculations per day, and restrict saving/republishing of results. (Confirm the
+  current figures on the live terms before relying on them; they have changed over
+  time.)
 
-So the adapter never drives entitledto programmatically, and **CI never
-captures**. The only permitted path is a person using the free public calculator
-as intended — one case at a time, human-paced, for a small research cross-check.
-Do not script it, do not bulk-run it, and **never invent, estimate, or
-back-fill a value**: an uncaptured fixture stays `pending_capture`.
+**So do not capture these cases on the free calculator.** Capture requires
+entitledto's **express written consent** — in practice a research or API licence
+(see the lane report's commercial-API section and the draft outreach). Until that
+is in hand, every fixture stays `pending_capture`. The adapter never probes
+entitledto, and **no value is ever invented, estimated, or back-filled** — an
+uncaptured fixture stays uncaptured.
 
-If entitledto grants written API/research access (see the report's
-commercial-API section), capture moves to that sanctioned channel and this
-manual path is retired.
+Once permission is granted, capture through the sanctioned channel (the licensed
+API, or a manual run entitledto has explicitly authorised), following the steps
+below.
 
 ## What to enter (per case)
 
@@ -31,22 +42,25 @@ Each `<case_id>.json` carries an `inputs` block that is the exact manual-entry
 record for that case — relationship status, postcode (which selects the billing
 authority and its CTR scheme), council tax band and modelled annual liability,
 tenure and rent, each adult's ages and incomes, children's ages, and capital.
-Enter those, taking the defaults entitledto offers for anything not listed
-(no disabilities, no carer, no existing benefits in payment).
+Enter those, taking the calculator's defaults for anything not listed (no
+disabilities, no carer, no existing benefits in payment). All adult income
+amounts are **annual GBP, gross** (before income tax and National Insurance),
+per the record's `income_basis`.
 
 Council tax liability is **entitledto-derived**: it computes the bill from the
-postcode and band. Enter the band shown in `council_tax.band`; if entitledto
-lets you type the annual council tax, enter `council_tax.annual_liability_gbp`.
-Then **record the council tax liability entitledto actually used** in
-`provenance.entitledto_council_tax_liability_gbp` — the reconciliation step
-re-runs PolicyEngine and the statutory hand-check against *that* liability so the
-schemes stay commensurable (the annual liability in `inputs` is the modelled
-placeholder until then).
+postcode and band (and applies any single-person 25% discount). Enter the band
+shown in `council_tax.band`. Then **record the council-tax liability entitledto
+actually used** in `provenance.entitledto_council_tax_liability_gbp` — this is a
+*required* field for a captured fixture, because the report reconciles the
+statutory hand-check (and flags PolicyEngine parity) against that liability, not
+the modelled placeholder in `inputs`.
 
 ## What to record
 
 On the results page, record the **annual** amount for each row the calculator
-shows (also note the weekly figure it displays, for provenance):
+shows. Annual is authoritative; also note the weekly figure for provenance, but
+do not derive the annual from a penny-rounded weekly (£22.71 × 52 = £1,180.92 ≠
+£1,181 — a rounding gap wider than the £0.01 comparison tolerance).
 
 | fixture output key      | entitledto result row                          |
 |-------------------------|------------------------------------------------|
@@ -59,11 +73,11 @@ Then edit the fixture:
 
 1. Set `provenance.capture_status` to `"captured"`.
 2. Set `provenance.capture_date` (ISO date) and `provenance.captured_by`.
-3. Set `provenance.calculator_version` if the results page shows a scheme/version
+3. Set `provenance.entitledto_council_tax_liability_gbp` to the liability
+   entitledto used (required).
+4. Set `provenance.calculator_version` if the results page shows a scheme/version
    or "rates as at" date; else record the date you ran it.
-4. Set `provenance.entitledto_council_tax_liability_gbp` to the liability
-   entitledto used.
-5. Fill `outputs`, e.g.:
+5. Fill `outputs` with **annual** amounts, e.g.:
 
 ```json
 "outputs": {
@@ -74,22 +88,14 @@ Then edit the fixture:
 }
 ```
 
-`annual_gbp` is authoritative; `weekly_gbp` / `monthly_gbp` are provenance. If
-you only have the weekly figure, record `weekly_gbp` and the runner annualises
-(×52). Record `0.0` for a row the calculator shows as nil; omit a row that does
-not apply (e.g. Pension Credit for a working-age case).
+`annual_gbp` is authoritative. Record `0.0` for a row the calculator shows as
+nil; omit a row that does not apply (e.g. Pension Credit for a working-age case).
+Values must be finite, non-negative numbers — never a boolean, and never blank.
 
-## Pacing and scope
+## Validation (before committing a capture)
 
-- One case at a time, with several seconds of genuine reading between steps.
-- At most the eight cases in this directory per session.
-- Accept the cookie banner as you normally would; do not circumvent any login
-  wall or bot check.
-
-## After capturing
-
-Run the validator before committing — it fails loudly on a half-filled fixture,
-so a `captured` fixture can never ship without provenance and a CTR amount:
+Run the validator; it fails loudly on a half-filled or malformed fixture, and the
+runner refuses to grade anything that does not pass (fail-closed):
 
 ```python
 from axiom_oracles.adapters.entitledto import load_captures_by_id, validate_capture
@@ -98,8 +104,8 @@ for cid, cap in load_captures_by_id().items():
     assert not problems, (cid, problems)
 ```
 
-Then rebuild the comparison report so the captured cases grade against
-PolicyEngine-UK and the statutory hand-check:
+Then rebuild the report so the captured cases grade against PolicyEngine-UK and
+the statutory hand-check:
 
 ```
 python scripts/run_uk_ctr_entitledto_report.py

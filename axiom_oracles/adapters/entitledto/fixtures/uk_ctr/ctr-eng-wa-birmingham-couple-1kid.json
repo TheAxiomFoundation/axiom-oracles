@@ -13,7 +13,8 @@
     "capture_date": null,
     "captured_by": null,
     "calculator_version": null,
-    "notes": "Pending manual capture. entitledto's legal notices prohibit systematic or automated data collection, so a human must run this case once on the public calculator and record the outputs per CAPTURE-PROTOCOL.md. Do not invent or estimate values: an uncaptured fixture stays pending."
+    "entitledto_council_tax_liability_gbp": null,
+    "notes": "Pending capture. Capturing this research grid requires entitledto's express written consent (see CAPTURE-PROTOCOL.md); the free calculator's terms bar systematic collection. Do not invent or estimate values: an uncaptured fixture stays pending."
   },
   "inputs": {
     "calculator": "entitledto",
@@ -58,7 +59,8 @@
         "age": 8
       }
     ],
-    "capital_gbp": 2000.0
+    "capital_gbp": 2000.0,
+    "income_basis": "annual GBP, gross (before income tax and National Insurance)"
   },
   "outputs": null
 }
