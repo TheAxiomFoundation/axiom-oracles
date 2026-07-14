@@ -339,6 +339,14 @@
       "source": "comparisons/ga-income-tax-liability.yaml"
     },
     {
+      "suite": "ga-snap-ecps",
+      "report": "axiom-policyengine-ga-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ga-snap-ecps.yaml"
+    },
+    {
       "suite": "ga-snap-qc",
       "report": "axiom-snapqc-ga-snap.json",
       "repos": [
