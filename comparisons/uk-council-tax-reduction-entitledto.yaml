@@ -1,0 +1,40 @@
+# Council Tax Reduction — recorded entitledto calculator vs PolicyEngine-UK, on
+# the eight-case uk-ctr grid. entitledto is the only per-council CTR ground truth
+# (it models every billing authority's scheme); PolicyEngine-UK models the three
+# national schemes plus five named English councils, and UKMOD is national. So
+# this oracle exists to measure the per-council gap the engine oracles cannot.
+#
+# entitledto is a commercial product whose legal notices prohibit automated data
+# collection, so the oracle compares against RECORDED fixtures: a human captures
+# each case once on the public calculator (see the adapter's CAPTURE-PROTOCOL.md)
+# and this runner replays them. Live probing is never done in CI. While the
+# fixtures are pending capture the report grades nothing — it lists, per case, the
+# committed PolicyEngine-UK reference and the statutory hand-check, and what
+# entitledto still has to fill.
+#
+# Run (reads committed fixtures + PE reference; no engine or network needed):
+#   uv run python scripts/run_comparison.py uk-council-tax-reduction-entitledto
+# or directly:
+#   python scripts/run_uk_ctr_entitledto_report.py
+
+name: uk-council-tax-reduction-entitledto
+title: UK Council Tax Reduction — entitledto (per-council) vs PolicyEngine
+description: >-
+  Compares the recorded entitledto Council Tax Reduction calculator (the
+  per-council ground truth) against PolicyEngine-UK council_tax_reduction (2.89.2)
+  and a statutory hand-check on an eight-case grid spanning the England
+  pension-age, Scotland and Wales national schemes, the PolicyEngine-supported
+  Kingston upon Thames local scheme, and two unsupported English councils
+  (Manchester, Birmingham) where PolicyEngine falls back to the reported benefit.
+  Fixtures are captured by hand; live automated access is barred by entitledto's
+  terms.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-ctr-entitledto-recorded
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+
+artifacts:
+  report_basename: axiom-entitledto-uk-council-tax-reduction

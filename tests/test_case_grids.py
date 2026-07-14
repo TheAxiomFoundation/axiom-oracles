@@ -65,7 +65,7 @@ def test_expected_jurisdictions_present() -> None:
 
 @pytest.mark.parametrize(
     "jurisdiction,expected_sets,expected_cases",
-    [("us", 2, 44), ("be", 30, 128), ("uk", 25, 135), ("dk", 1, 7)],
+    [("us", 2, 44), ("be", 30, 128), ("uk", 26, 143), ("dk", 1, 7)],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
     grid = load_grid(jurisdiction)

@@ -1,0 +1,53 @@
+{
+  "case_id": "ctr-sco-wa-glasgow-single-earner",
+  "oracle": "entitledto",
+  "provenance": {
+    "capture_status": "pending_capture",
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "scheme_year": "2026-27",
+    "council_name": "Glasgow City",
+    "council_gss_code": "S12000049",
+    "council_tax_band": "B",
+    "ctr_scheme": "scotland-working-age-national",
+    "capture_date": null,
+    "captured_by": null,
+    "calculator_version": null,
+    "notes": "Pending manual capture. entitledto's legal notices prohibit systematic or automated data collection, so a human must run this case once on the public calculator and record the outputs per CAPTURE-PROTOCOL.md. Do not invent or estimate values: an uncaptured fixture stays pending."
+  },
+  "inputs": {
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "calculation_date": "2026-07-13",
+    "scheme_year": "2026-27",
+    "relationship_status": "single",
+    "country": "Scotland",
+    "ctr_scheme": "scotland-working-age-national",
+    "local_authority": {
+      "name": "Glasgow City",
+      "gss_code": "S12000049",
+      "postcode": "G1 1XW"
+    },
+    "council_tax": {
+      "band": "B",
+      "annual_liability_gbp": 1300.0
+    },
+    "housing": {
+      "tenure": "private_rent",
+      "monthly_rent_gbp": 583.33,
+      "assessed_for_rent_rebate": true
+    },
+    "adults": [
+      {
+        "role": "claimant",
+        "age": 30,
+        "employment_income_annual_gbp": 11000.0,
+        "state_pension_annual_gbp": 0.0,
+        "private_pension_annual_gbp": 0.0
+      }
+    ],
+    "children": [],
+    "capital_gbp": 1000.0
+  },
+  "outputs": null
+}

@@ -714,6 +714,12 @@
       "source": "comparisons/uk-council-tax-reduction.yaml"
     },
     {
+      "suite": "uk-council-tax-reduction-entitledto",
+      "report": null,
+      "repos": [],
+      "source": "comparisons/uk-council-tax-reduction-entitledto.yaml"
+    },
+    {
       "suite": "uk-employer-nic",
       "report": "axiom-euromod-uk-employer-nic.json",
       "repos": [

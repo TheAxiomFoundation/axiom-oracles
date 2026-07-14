@@ -1,0 +1,64 @@
+{
+  "case_id": "ctr-eng-wa-birmingham-couple-1kid",
+  "oracle": "entitledto",
+  "provenance": {
+    "capture_status": "pending_capture",
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "scheme_year": "2026-27",
+    "council_name": "Birmingham",
+    "council_gss_code": "E08000025",
+    "council_tax_band": "B",
+    "ctr_scheme": "birmingham-working-age-local",
+    "capture_date": null,
+    "captured_by": null,
+    "calculator_version": null,
+    "notes": "Pending manual capture. entitledto's legal notices prohibit systematic or automated data collection, so a human must run this case once on the public calculator and record the outputs per CAPTURE-PROTOCOL.md. Do not invent or estimate values: an uncaptured fixture stays pending."
+  },
+  "inputs": {
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "calculation_date": "2026-07-13",
+    "scheme_year": "2026-27",
+    "relationship_status": "couple",
+    "country": "England",
+    "ctr_scheme": "birmingham-working-age-local",
+    "local_authority": {
+      "name": "Birmingham",
+      "gss_code": "E08000025",
+      "postcode": "B1 1BB"
+    },
+    "council_tax": {
+      "band": "B",
+      "annual_liability_gbp": 1400.0
+    },
+    "housing": {
+      "tenure": "social_rent",
+      "monthly_rent_gbp": 500.0,
+      "assessed_for_rent_rebate": true
+    },
+    "adults": [
+      {
+        "role": "claimant",
+        "age": 35,
+        "employment_income_annual_gbp": 16000.0,
+        "state_pension_annual_gbp": 0.0,
+        "private_pension_annual_gbp": 0.0
+      },
+      {
+        "role": "partner",
+        "age": 33,
+        "employment_income_annual_gbp": 0.0,
+        "state_pension_annual_gbp": 0.0,
+        "private_pension_annual_gbp": 0.0
+      }
+    ],
+    "children": [
+      {
+        "age": 8
+      }
+    ],
+    "capital_gbp": 2000.0
+  },
+  "outputs": null
+}

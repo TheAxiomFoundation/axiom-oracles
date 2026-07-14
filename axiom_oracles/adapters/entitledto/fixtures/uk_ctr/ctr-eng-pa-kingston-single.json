@@ -1,0 +1,53 @@
+{
+  "case_id": "ctr-eng-pa-kingston-single",
+  "oracle": "entitledto",
+  "provenance": {
+    "capture_status": "pending_capture",
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "scheme_year": "2026-27",
+    "council_name": "Kingston upon Thames",
+    "council_gss_code": "E09000021",
+    "council_tax_band": "D",
+    "ctr_scheme": "england-pension-age-prescribed",
+    "capture_date": null,
+    "captured_by": null,
+    "calculator_version": null,
+    "notes": "Pending manual capture. entitledto's legal notices prohibit systematic or automated data collection, so a human must run this case once on the public calculator and record the outputs per CAPTURE-PROTOCOL.md. Do not invent or estimate values: an uncaptured fixture stays pending."
+  },
+  "inputs": {
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "calculation_date": "2026-07-13",
+    "scheme_year": "2026-27",
+    "relationship_status": "single",
+    "country": "England",
+    "ctr_scheme": "england-pension-age-prescribed",
+    "local_authority": {
+      "name": "Kingston upon Thames",
+      "gss_code": "E09000021",
+      "postcode": "KT1 1EU"
+    },
+    "council_tax": {
+      "band": "D",
+      "annual_liability_gbp": 2171.0
+    },
+    "housing": {
+      "tenure": "owner",
+      "monthly_rent_gbp": 0.0,
+      "assessed_for_rent_rebate": false
+    },
+    "adults": [
+      {
+        "role": "claimant",
+        "age": 70,
+        "employment_income_annual_gbp": 0.0,
+        "state_pension_annual_gbp": 9000.0,
+        "private_pension_annual_gbp": 0.0
+      }
+    ],
+    "children": [],
+    "capital_gbp": 4000.0
+  },
+  "outputs": null
+}
