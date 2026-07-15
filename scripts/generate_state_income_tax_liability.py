@@ -13,8 +13,8 @@ grid for its RCW 82.87 tax.
   committed ``.test.yaml`` fixtures, which ``axiom-encode test`` verifies equal
   the engine output to full decimal precision, so they are the engine's values
   rather than an independent re-implementation.
-* **policyengine** — PolicyEngine ``ca_income_tax`` / ``ny_income_tax`` /
-  ``il_income_tax`` / ``ma_income_tax`` computed live at the 2026 tax year.
+* **policyengine** — the configured per-state PolicyEngine liability target in
+  ``_PE_VAR``, computed live at the 2026 tax year.
 * **taxsim** — the pinned TAXSIM binary's ``siitax``. The pinned binary is a
   1960-2024 federal/state calculator (it abandons law year 2026), so the TAXSIM
   leg is run at 2024, its latest available law year; the 2024-to-2026 bracket
