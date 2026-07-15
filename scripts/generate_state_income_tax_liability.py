@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """Generate the composed state income-tax liability comparison reports.
 
-For each of California, New York, Illinois, and Massachusetts this script runs
-the same modest case grid (single and married filers at incomes that cross the
-state's brackets) through three independent computations and records a v2
-comparison report plus the per-case residuals:
+For each registered state liability suite this script runs a modest single- and
+married-filer grid through three independent computations and records a v2
+comparison report plus the per-case residuals. Most states use wage-income cases
+that cross their brackets; Washington uses a dedicated long-term-capital-gains
+grid for its RCW 82.87 tax.
 
 * **axiom** — the composed liability pipeline in rulespec-us
   (``us-XX/policies/income_tax/pilot_liability_pipeline``), evaluated through
@@ -80,6 +81,22 @@ _TAXSIM_STATE = {
     "GA": 11,
     "MI": 23,
     "NC": 34,
+    # Second all-state liability wave. Each pipeline landed together with an
+    # engine-verified six-case fixture in the state-income-tax campaign.
+    "DC": 9,
+    "HI": 12,
+    "IA": 16,
+    "IN": 15,
+    "LA": 19,
+    "MT": 27,
+    "NM": 32,
+    "OK": 37,
+    "OR": 38,
+    "RI": 40,
+    "WI": 50,
+    # Washington's individual-income-tax surface is its RCW 82.87 capital-gains
+    # excise tax, so it uses a capital-gains-specific grid below.
+    "WA": 48,
 }
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
@@ -149,6 +166,21 @@ _PE_VAR = {
     # analog (AGI less the 105-153.5(a) standard deduction); the grid activates
     # no child deduction or 105-153.10 credits.
     "NC": "nc_income_tax_before_credits",
+    # Second all-state liability wave. These targets are the closest statutory
+    # analogs of the composed core schedules and exclude only credits or other
+    # post-schedule adjustments that the narrow pilots intentionally omit.
+    "DC": "dc_income_tax_before_credits",
+    "HI": "hi_income_tax_before_non_refundable_credits",
+    "IA": "ia_income_tax_before_credits",
+    "IN": "in_income_tax_before_refundable_credits",
+    "LA": "la_income_tax_before_non_refundable_credits",
+    "MT": "mt_income_tax",
+    "NM": "nm_income_tax_before_non_refundable_credits",
+    "OK": "ok_income_tax_before_credits",
+    "OR": "or_income_tax_before_credits",
+    "RI": "ri_income_tax_before_non_refundable_credits",
+    "WI": "wi_income_tax_before_credits",
+    "WA": "wa_income_tax_before_refundable_credits",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -171,9 +203,9 @@ class Case:
     wages: float
 
 
-# Modest grid: single and married filers at incomes crossing the brackets.
-# CA/NY are progressive, IL is flat, MA is flat plus a surtax that these
-# incomes stay below.
+# Modest grid: single and married filers at incomes crossing common liability
+# thresholds. Washington substitutes a long-term-capital-gains grid because its
+# individual-tax surface is the RCW 82.87 capital-gains excise tax.
 def _grid() -> list[Case]:
     cases: list[Case] = []
     plan = {
@@ -181,7 +213,13 @@ def _grid() -> list[Case]:
         "married": [60000, 120000, 300000],
     }
     for state in _STATES:
-        for filing, incomes in plan.items():
+        state_plan = plan
+        if state == "WA":
+            state_plan = {
+                "single": [300000, 600000, 1500000],
+                "married": [600000, 1200000, 3000000],
+            }
+        for filing, incomes in state_plan.items():
             for inc in incomes:
                 cases.append(
                     Case(
@@ -220,8 +258,18 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
             name = case["name"]
             # Map the fixture case to (state, filing, income) by its supplied AGI.
             inputs = case["input"]
-            agi_key = next(k for k in inputs if k.endswith("adjusted_gross_income"))
-            agi = int(round(float(inputs[agi_key])))
+            agi_key = next(
+                (k for k in inputs if k.endswith("adjusted_gross_income")),
+                None,
+            )
+            # Rate-only pilots transparently accept completed-return taxable
+            # income. Their fixture name still pins the wage/capital-gain grid
+            # case used by the live oracle leg (for example single_30000).
+            agi = (
+                int(round(float(inputs[agi_key])))
+                if agi_key is not None
+                else int(name.rsplit("_", 1)[-1])
+            )
             filing = (
                 "married"
                 if name.startswith("joint")
@@ -239,7 +287,12 @@ def _policyengine_liability(case: Case) -> float:
     from policyengine_us import Simulation
 
     year = VALIDATION_YEAR
-    people = {"head": {"age": {year: 40}, "employment_income": {year: case.wages}}}
+    income_variable = (
+        "long_term_capital_gains" if case.state == "WA" else "employment_income"
+    )
+    people = {
+        "head": {"age": {year: 40}, income_variable: {year: case.wages}}
+    }
     members = ["head"]
     if case.filing == "married":
         people["spouse"] = {"age": {year: 40}, "employment_income": {year: 0}}
@@ -271,8 +324,9 @@ def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
                 "page": 40,
                 "sage": 40 if mstat == 2 else 0,
                 "depx": 0,
-                "pwages": case.wages,
+                "pwages": 0 if case.state == "WA" else case.wages,
                 "swages": 0,
+                "ltcg": case.wages if case.state == "WA" else 0,
                 "idtl": 2,
             }
         )
@@ -347,6 +401,18 @@ _TOL = {
     "GA": (1.0, 0.0),
     "MI": (1.0, 0.0),
     "NC": (1.0, 0.0),
+    "DC": (1.0, 0.0),
+    "HI": (1.0, 0.0),
+    "IA": (1.0, 0.0),
+    "IN": (1.0, 0.0),
+    "LA": (1.0, 0.0),
+    "MT": (1.0, 0.0),
+    "NM": (1.0, 0.0),
+    "OK": (1.0, 0.0),
+    "OR": (1.0, 0.0),
+    "RI": (1.0, 0.0),
+    "WI": (1.0, 0.0),
+    "WA": (1.0, 0.0),
 }
 
 
@@ -381,12 +447,17 @@ def _build_report(
         ts_ok = _match(ax, ts_v, tol, rel)
         pe_matches += int(pe_ok)
         taxsim_matches += int(ts_ok)
+        income_key = (
+            "long_term_capital_gains"
+            if state == "WA"
+            else "employment_income"
+        )
         report_cases.append(
             {
                 "case_id": case.case_id,
                 "concept": concept,
                 "filing_status": case.filing,
-                "employment_income": case.wages,
+                income_key: case.wages,
                 "axiom": ax,
                 "policyengine": pe_v,
                 "taxsim_2024": ts_v,
@@ -414,9 +485,26 @@ def _build_report(
                     "difference": ax - ts_v,
                 }
             )
-    comparison_count = n
+        if not pe_ok:
+            mismatches.append(
+                {
+                    "case_id": case.case_id,
+                    "concept": concept,
+                    "kind": "policyengine_amount_difference",
+                    "engines": ["axiom", "policyengine"],
+                    "left_engine": "axiom",
+                    "right_engine": "policyengine",
+                    "left": ax,
+                    "right": pe_v,
+                    "difference": ax - pe_v,
+                }
+            )
+    # Each case always has two independent pairwise comparisons. Keep the
+    # denominator stable even when one engine moves from mismatch to match, so
+    # raw-match metrics remain comparable and monotonic across reruns.
+    comparison_count = n * 2
     mismatch_count = len(mismatches)
-    match_count = comparison_count - mismatch_count
+    match_count = pe_matches + taxsim_matches
     return {
         "schema_version": "axiom.comparison_report.v2",
         "suite": f"{state.lower()}-income-tax-liability",
@@ -447,9 +535,9 @@ def _build_report(
             "generator": "scripts/generate_state_income_tax_liability.py",
             "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
             "note": (
-                "axiom-vs-PolicyEngine matches every case at the 2026 validation "
-                "year; the mismatches array carries the axiom-vs-TAXSIM-2024 "
-                "residuals, whose 2024-to-2026 indexation vintage is dispositioned."
+                "The mismatches array carries TAXSIM-2024 law-vintage residuals"
+                " and any source-grounded Axiom-versus-PolicyEngine residuals;"
+                " each must be dispositioned without widening tolerance."
             ),
         },
     }

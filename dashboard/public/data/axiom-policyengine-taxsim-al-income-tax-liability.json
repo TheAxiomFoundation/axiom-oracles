@@ -119,16 +119,16 @@
   "population": "case-grid",
   "provenance": {
     "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "generated": "2026-07-13",
+    "generated": "2026-07-15",
     "generator": "scripts/generate_state_income_tax_liability.py",
-    "note": "axiom-vs-PolicyEngine matches every case at the 2026 validation year; the mismatches array carries the axiom-vs-TAXSIM-2024 residuals, whose 2024-to-2026 indexation vintage is dispositioned."
+    "note": "The mismatches array carries TAXSIM-2024 law-vintage residuals and any source-grounded Axiom-versus-PolicyEngine residuals; each must be dispositioned without widening tolerance."
   },
   "schema_version": "axiom.comparison_report.v2.1",
   "suite": "al-income-tax-liability",
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
     "axiom_vs_taxsim_2024_match_rate": 0.0,
-    "comparison_count": 6,
+    "comparison_count": 12,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -141,11 +141,11 @@
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 0,
+      "raw_match_rate": 50,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
-    "match_count": 0,
+    "match_count": 6,
     "mismatch_count": 6,
     "policyengine_matches": 6,
     "taxsim_2024_matches": 0

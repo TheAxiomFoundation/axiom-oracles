@@ -1,118 +1,118 @@
 {
   "case_count": 6,
-  "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
+  "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
   "engines": {
-    "axiom": "us-md:policies/income_tax/pilot_liability_pipeline",
-    "policyengine": "md_income_tax_before_refundable_credits",
+    "axiom": "us-wa:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "wa_income_tax_before_refundable_credits",
     "taxsim": "siitax"
   },
   "mismatches": [
     {
-      "case_id": "md-single-30000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "difference": -33.25,
+      "case_id": "wa-single-300000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
+      "difference": -980.0,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "md-taxsim-2024-vintage-single-30000"
+        "id": "wa-taxsim-2024-single-300000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 1059.0,
+      "left": 1120.0,
       "left_engine": "axiom",
-      "right": 1092.25,
+      "right": 2100.0,
       "right_engine": "taxsim"
     },
     {
-      "case_id": "md-single-60000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "difference": -33.25,
+      "case_id": "wa-single-600000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
+      "difference": -980.0,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "md-taxsim-2024-vintage-single-60000"
+        "id": "wa-taxsim-2024-single-600000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 2484.0,
+      "left": 22120.0,
       "left_engine": "axiom",
-      "right": 2517.25,
+      "right": 23100.0,
       "right_engine": "taxsim"
     },
     {
-      "case_id": "md-single-150000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "difference": -36.75,
+      "case_id": "wa-single-1500000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
+      "difference": 5284.0,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "md-taxsim-2024-vintage-single-150000"
+        "id": "wa-taxsim-2024-single-1500000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 7039.5,
+      "left": 91384.0,
       "left_engine": "axiom",
-      "right": 7076.25,
+      "right": 86100.0,
       "right_engine": "taxsim"
     },
     {
-      "case_id": "md-married-60000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "difference": -66.50500000000011,
+      "case_id": "wa-married-600000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
+      "difference": -980.0,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "md-taxsim-2024-vintage-married-60000"
+        "id": "wa-taxsim-2024-married-600000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 2168.125,
+      "left": 22120.0,
       "left_engine": "axiom",
-      "right": 2234.63,
+      "right": 23100.0,
       "right_engine": "taxsim"
     },
     {
-      "case_id": "md-married-120000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "difference": -66.50500000000011,
+      "case_id": "wa-married-1200000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
+      "difference": -980.0,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "md-taxsim-2024-vintage-married-120000"
+        "id": "wa-taxsim-2024-married-1200000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 5018.125,
+      "left": 64120.0,
       "left_engine": "axiom",
-      "right": 5084.63,
+      "right": 65100.0,
       "right_engine": "taxsim"
     },
     {
-      "case_id": "md-married-300000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "difference": -77.0,
+      "case_id": "wa-married-3000000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
+      "difference": 48784.0,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "md-taxsim-2024-vintage-married-300000"
+        "id": "wa-taxsim-2024-married-3000000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 14695.75,
+      "left": 239884.0,
       "left_engine": "axiom",
-      "right": 14772.75,
+      "right": 191100.0,
       "right_engine": "taxsim"
     }
   ],
@@ -124,7 +124,7 @@
     "note": "The mismatches array carries TAXSIM-2024 law-vintage residuals and any source-grounded Axiom-versus-PolicyEngine residuals; each must be dispositioned without widening tolerance."
   },
   "schema_version": "axiom.comparison_report.v2.1",
-  "suite": "md-income-tax-liability",
+  "suite": "wa-income-tax-liability",
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
     "axiom_vs_taxsim_2024_match_rate": 0.0,
@@ -137,7 +137,7 @@
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": "dispositions/md-income-tax-liability.yaml",
+      "dispositions_file": "dispositions/wa-income-tax-liability.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
@@ -158,106 +158,106 @@
   "validation_year": 2026,
   "cases": [
     {
-      "axiom": 1059.0,
+      "axiom": 1120.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
       },
       "axiom_vs_taxsim_2024": {
-        "difference": -33.25,
+        "difference": -980.0,
         "match": false
       },
-      "case_id": "md-single-30000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
+      "case_id": "wa-single-300000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
       "filing_status": "single",
-      "policyengine": 1059.0,
-      "taxsim_2024": 1092.25
+      "long_term_capital_gains": 300000.0,
+      "policyengine": 1120.0,
+      "taxsim_2024": 2100.0
     },
     {
-      "axiom": 2484.0,
+      "axiom": 22120.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
       },
       "axiom_vs_taxsim_2024": {
-        "difference": -33.25,
+        "difference": -980.0,
         "match": false
       },
-      "case_id": "md-single-60000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
+      "case_id": "wa-single-600000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
       "filing_status": "single",
-      "policyengine": 2484.0,
-      "taxsim_2024": 2517.25
+      "long_term_capital_gains": 600000.0,
+      "policyengine": 22120.0,
+      "taxsim_2024": 23100.0
     },
     {
-      "axiom": 7039.5,
+      "axiom": 91384.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
       },
       "axiom_vs_taxsim_2024": {
-        "difference": -36.75,
+        "difference": 5284.0,
         "match": false
       },
-      "case_id": "md-single-150000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
+      "case_id": "wa-single-1500000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
       "filing_status": "single",
-      "policyengine": 7039.5,
-      "taxsim_2024": 7076.25
+      "long_term_capital_gains": 1500000.0,
+      "policyengine": 91384.0,
+      "taxsim_2024": 86100.0
     },
     {
-      "axiom": 2168.125,
+      "axiom": 22120.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
       },
       "axiom_vs_taxsim_2024": {
-        "difference": -66.50500000000011,
+        "difference": -980.0,
         "match": false
       },
-      "case_id": "md-married-60000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
+      "case_id": "wa-married-600000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
       "filing_status": "married",
-      "policyengine": 2168.125,
-      "taxsim_2024": 2234.63
+      "long_term_capital_gains": 600000.0,
+      "policyengine": 22120.0,
+      "taxsim_2024": 23100.0
     },
     {
-      "axiom": 5018.125,
+      "axiom": 64120.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
       },
       "axiom_vs_taxsim_2024": {
-        "difference": -66.50500000000011,
+        "difference": -980.0,
         "match": false
       },
-      "case_id": "md-married-120000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
+      "case_id": "wa-married-1200000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
       "filing_status": "married",
-      "policyengine": 5018.125,
-      "taxsim_2024": 5084.63
+      "long_term_capital_gains": 1200000.0,
+      "policyengine": 64120.0,
+      "taxsim_2024": 65100.0
     },
     {
-      "axiom": 14695.75,
+      "axiom": 239884.0,
       "axiom_vs_policyengine": {
         "difference": 0.0,
         "match": true
       },
       "axiom_vs_taxsim_2024": {
-        "difference": -77.0,
+        "difference": 48784.0,
         "match": false
       },
-      "case_id": "md-married-300000",
-      "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
+      "case_id": "wa-married-3000000",
+      "concept": "us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability",
       "filing_status": "married",
-      "policyengine": 14695.75,
-      "taxsim_2024": 14772.75
+      "long_term_capital_gains": 3000000.0,
+      "policyengine": 239884.0,
+      "taxsim_2024": 191100.0
     }
   ]
 }

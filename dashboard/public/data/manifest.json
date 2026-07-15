@@ -153,6 +153,18 @@
     "axiom-policyengine-ia-income-tax-parameters.json",
     "axiom-policyengine-ga-snap-ecps.json",
     "axiom-policyengine-taxsim-ne-income-tax-liability.json",
-    "axiom-policyengine-taxsim-ct-income-tax-liability.json"
+    "axiom-policyengine-taxsim-ct-income-tax-liability.json",
+    "axiom-policyengine-taxsim-dc-income-tax-liability.json",
+    "axiom-policyengine-taxsim-hi-income-tax-liability.json",
+    "axiom-policyengine-taxsim-ia-income-tax-liability.json",
+    "axiom-policyengine-taxsim-in-income-tax-liability.json",
+    "axiom-policyengine-taxsim-la-income-tax-liability.json",
+    "axiom-policyengine-taxsim-mt-income-tax-liability.json",
+    "axiom-policyengine-taxsim-nm-income-tax-liability.json",
+    "axiom-policyengine-taxsim-ok-income-tax-liability.json",
+    "axiom-policyengine-taxsim-or-income-tax-liability.json",
+    "axiom-policyengine-taxsim-ri-income-tax-liability.json",
+    "axiom-policyengine-taxsim-wa-income-tax-liability.json",
+    "axiom-policyengine-taxsim-wi-income-tax-liability.json"
   ]
 }
