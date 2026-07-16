@@ -444,6 +444,14 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ks-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-ks-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ks-income-tax-liability.yaml"
+    },
+    {
       "suite": "ks-tanf-ecps",
       "report": "axiom-policyengine-ks-tanf-ecps.json",
       "repos": [
@@ -596,6 +604,14 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/nc-snap-ecps.yaml"
+    },
+    {
+      "suite": "nd-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-nd-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/nd-income-tax-liability.yaml"
     },
     {
       "suite": "ne-income-tax-liability",

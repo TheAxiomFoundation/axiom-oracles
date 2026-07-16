@@ -520,7 +520,8 @@ policies:
     output_vars:
       - ks_income_tax
     in_scope: true
-    suite: null
+    suite: ks-income-tax-liability
+    note: Covered by ks-income-tax-liability — Kansas resident wage-earner core; the source-grounded Axiom schedule matches PolicyEngine ks_income_tax_before_credits within one cent on all six 2026 cases, while TAXSIM residuals are fully dispositioned as 2024 law-vintage differences.
   - id: us-pe:ks_tanf
     oracle_policy_name: ks_tanf
     oracle_policy_type: rules
@@ -721,7 +722,8 @@ policies:
     output_vars:
       - nd_income_tax
     in_scope: true
-    suite: null
+    suite: nd-income-tax-liability
+    note: Covered by nd-income-tax-liability — North Dakota resident wage-earner core using the Tax Commissioner's official 2026 indexed schedule; TAXSIM 2024 residuals and PolicyEngine-US's stale 2025 thresholds are fully dispositioned with zero unexplained differences.
   - id: us-pe:nd_tanf
     oracle_policy_name: nd_tanf
     oracle_policy_type: rules
