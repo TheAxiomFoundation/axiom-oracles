@@ -110,10 +110,13 @@
     "policyengine": "ma_income_tax",
     "taxsim": "siitax"
   },
-  "mismatches": [],
+  "mismatches": [
+
+  ],
   "population": "case-grid",
   "provenance": {
-    "engine": {},
+    "engine": {
+    },
     "generated_at": "2026-07-15T19:45:18Z",
     "generated_by": "scripts/run_comparison.py::ma-income-tax-liability",
     "rulespecs": [
@@ -130,7 +133,7 @@
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
     "axiom_vs_taxsim_2024_match_rate": 100.0,
-    "comparison_count": 6,
+    "comparison_count": 12,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -140,14 +143,18 @@
         "upstream_engine_gap": 0
       },
       "dispositions_file": null,
-      "expired_entries": [],
+      "expired_entries": [
+
+      ],
       "explained_rate": 100,
-      "orphaned_entries": [],
+      "orphaned_entries": [
+
+      ],
       "raw_match_rate": 100,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
-    "match_count": 6,
+    "match_count": 12,
     "mismatch_count": 0,
     "policyengine_matches": 6,
     "taxsim_2024_matches": 6

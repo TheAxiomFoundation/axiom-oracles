@@ -1,109 +1,5 @@
 {
   "case_count": 6,
-  "cases": [
-    {
-      "axiom": 688.275,
-      "axiom_vs_policyengine": {
-        "difference": -2.4414062522737368e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -87.97500000000002,
-        "match": false
-      },
-      "case_id": "nc-single-30000",
-      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 688.2750244140625,
-      "taxsim_2024": 776.25
-    },
-    {
-      "axiom": 1885.275,
-      "axiom_vs_policyengine": {
-        "difference": -2.441406240905053e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -240.9749999999999,
-        "match": false
-      },
-      "case_id": "nc-single-60000",
-      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 1885.2750244140625,
-      "taxsim_2024": 2126.25
-    },
-    {
-      "axiom": 5476.275,
-      "axiom_vs_policyengine": {
-        "difference": -0.0003906250003637979,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -699.9750000000004,
-        "match": false
-      },
-      "case_id": "nc-single-150000",
-      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 5476.275390625,
-      "taxsim_2024": 6176.25
-    },
-    {
-      "axiom": 1376.55,
-      "axiom_vs_policyengine": {
-        "difference": -4.8828125045474735e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -175.95000000000005,
-        "match": false
-      },
-      "case_id": "nc-married-60000",
-      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 1376.550048828125,
-      "taxsim_2024": 1552.5
-    },
-    {
-      "axiom": 3770.55,
-      "axiom_vs_policyengine": {
-        "difference": -4.882812481810106e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -481.9499999999998,
-        "match": false
-      },
-      "case_id": "nc-married-120000",
-      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 3770.550048828125,
-      "taxsim_2024": 4252.5
-    },
-    {
-      "axiom": 10952.55,
-      "axiom_vs_policyengine": {
-        "difference": -0.0007812500007275958,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -1399.9500000000007,
-        "match": false
-      },
-      "case_id": "nc-married-300000",
-      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 10952.55078125,
-      "taxsim_2024": 12352.5
-    }
-  ],
   "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-nc:policies/income_tax/pilot_liability_pipeline",
@@ -266,5 +162,109 @@
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026
+  "validation_year": 2026,
+  "cases": [
+    {
+      "axiom": 688.275,
+      "axiom_vs_policyengine": {
+        "difference": -2.4414062522737368e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -87.97500000000002,
+        "match": false
+      },
+      "case_id": "nc-single-30000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 688.2750244140625,
+      "taxsim_2024": 776.25
+    },
+    {
+      "axiom": 1885.275,
+      "axiom_vs_policyengine": {
+        "difference": -2.441406240905053e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -240.9749999999999,
+        "match": false
+      },
+      "case_id": "nc-single-60000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1885.2750244140625,
+      "taxsim_2024": 2126.25
+    },
+    {
+      "axiom": 5476.275,
+      "axiom_vs_policyengine": {
+        "difference": -0.0003906250003637979,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -699.9750000000004,
+        "match": false
+      },
+      "case_id": "nc-single-150000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 5476.275390625,
+      "taxsim_2024": 6176.25
+    },
+    {
+      "axiom": 1376.55,
+      "axiom_vs_policyengine": {
+        "difference": -4.8828125045474735e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -175.95000000000005,
+        "match": false
+      },
+      "case_id": "nc-married-60000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1376.550048828125,
+      "taxsim_2024": 1552.5
+    },
+    {
+      "axiom": 3770.55,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812481810106e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -481.9499999999998,
+        "match": false
+      },
+      "case_id": "nc-married-120000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 3770.550048828125,
+      "taxsim_2024": 4252.5
+    },
+    {
+      "axiom": 10952.55,
+      "axiom_vs_policyengine": {
+        "difference": -0.0007812500007275958,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -1399.9500000000007,
+        "match": false
+      },
+      "case_id": "nc-married-300000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 10952.55078125,
+      "taxsim_2024": 12352.5
+    }
+  ]
 }

@@ -24,7 +24,9 @@
     "policyengine_matches": 6,
     "taxsim_2024_matches": 6
   },
-  "mismatches": [],
+  "mismatches": [
+
+  ],
   "cases": [
     {
       "case_id": "il-single-30000",
@@ -130,9 +132,17 @@
     }
   ],
   "provenance": {
-    "generated": "2026-07-15",
-    "generator": "scripts/generate_state_income_tax_liability.py",
-    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "note": "The mismatches array carries TAXSIM-2024 law-vintage residuals and any source-grounded Axiom-versus-PolicyEngine residuals; each must be dispositioned without widening tolerance."
+    "engine": {
+    },
+    "generated_at": "2026-07-14T03:44:04Z",
+    "generated_by": "scripts/run_comparison.py::il-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
   }
 }
