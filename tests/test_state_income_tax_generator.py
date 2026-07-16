@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -42,3 +43,14 @@ def test_summary_counts_both_pairwise_legs_regardless_of_pe_match_status():
         )["summary"]
         assert summary["comparison_count"] == 4
         assert summary["match_count"] + summary["mismatch_count"] == 4
+
+
+def test_committed_state_income_tax_reports_are_dispositioned_v21():
+    reports = (
+        Path(__file__).parents[1] / "dashboard" / "public" / "data"
+    ).glob("axiom-policyengine-taxsim-*-income-tax-liability.json")
+
+    for path in reports:
+        report = json.loads(path.read_text())
+        assert report["schema_version"] == "axiom.comparison_report.v2.1", path
+        assert isinstance(report["summary"].get("dispositioned"), dict), path
