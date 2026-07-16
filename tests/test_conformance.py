@@ -598,6 +598,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "wa-income-tax-liability",
         "wi-income-tax-liability",
         "wv-income-tax-liability",
+        "vt-income-tax-liability",
         "al-tanf-ecps",
         "ga-tanf-ecps",
         "de-tanf-ecps",

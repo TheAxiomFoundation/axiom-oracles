@@ -1145,7 +1145,8 @@ policies:
     output_vars:
       - vt_income_tax
     in_scope: true
-    suite: null
+    suite: vt-income-tax-liability
+    note: Covered by vt-income-tax-liability — the Axiom 2026 sections 5811/5822/5823 resident wage-earner pipeline matches PolicyEngine vt_income_tax_before_non_refundable_credits on all six cases. It applies the current annually indexed four-rate schedule and, only when federal AGI exceeds $150,000, the greater of schedule tax or the three-percent federal-AGI minimum. Pinned TAXSIM 2024 indexation-vintage residuals are dispositioned from its detailed state calculation and the official 2024 Vermont booklet and rate schedules.
   - id: us-pe:vt_reach_up
     oracle_policy_name: vt_reach_up
     oracle_policy_type: rules

@@ -103,6 +103,7 @@ _TAXSIM_STATE = {
     "MS": 25,
     "NH": 30,
     "WV": 49,
+    "VT": 46,
     "WI": 50,
     # Washington's individual-income-tax surface is its RCW 82.87 capital-gains
     # excise tax, so it uses a capital-gains-specific grid below.
@@ -204,6 +205,10 @@ _PE_VAR = {
     # West Virginia's before-non-refundable-credits variable is the exact
     # section 11-21-4J schedule-tax analog for 2026.
     "WV": "wv_income_tax_before_non_refundable_credits",
+    # Vermont's before-non-refundable-credits variable is the section 5822
+    # schedule-or-three-percent-minimum analog; the narrow pipeline excludes
+    # the later charitable and other nonrefundable credits.
+    "VT": "vt_income_tax_before_non_refundable_credits",
     "WI": "wi_income_tax_before_credits",
     "WA": "wa_income_tax_before_refundable_credits",
 }
@@ -446,6 +451,7 @@ _TOL = {
     "MS": (1.0, 0.0),
     "NH": (1.0, 0.0),
     "WV": (1.0, 0.0),
+    "VT": (1.0, 0.0),
     "WI": (1.0, 0.0),
     "WA": (1.0, 0.0),
 }

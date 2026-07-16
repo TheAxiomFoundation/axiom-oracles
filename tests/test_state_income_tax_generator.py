@@ -57,6 +57,7 @@ def test_recent_state_income_tax_oracle_registrations():
         "MS": (25, "ms_income_tax_before_credits_unit"),
         "NH": (30, "nh_income_tax_before_refundable_credits"),
         "WV": (49, "wv_income_tax_before_non_refundable_credits"),
+        "VT": (46, "vt_income_tax_before_non_refundable_credits"),
     }
     for state, (taxsim_code, policyengine_target) in expected.items():
         assert generator._TAXSIM_STATE[state] == taxsim_code

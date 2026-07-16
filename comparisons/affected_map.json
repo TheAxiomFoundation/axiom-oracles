@@ -1155,6 +1155,14 @@
       "source": "comparisons/va-income-tax-liability.yaml"
     },
     {
+      "suite": "vt-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-vt-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/vt-income-tax-liability.yaml"
+    },
+    {
       "suite": "wa-income-tax-liability",
       "report": "axiom-policyengine-taxsim-wa-income-tax-liability.json",
       "repos": [
