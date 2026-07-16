@@ -440,10 +440,9 @@ def _build_report(
     report_cases = []
     # `mismatches` uses the standard v2 schema (concept, case_id, kind, left,
     # right) so scripts/apply_dispositions.py can join the committed dispositions
-    # against these rows and validate that every residual is explained. The
-    # axiom-vs-PolicyEngine comparison matches on every case, so only the
-    # axiom-vs-TAXSIM-2024 residuals become mismatch rows (axiom is `left`,
-    # TAXSIM 2024 is `right`); the indexation-vintage dispositions pin those.
+    # against these rows and validate that every residual is explained. Either
+    # pairwise leg can emit a mismatch row (axiom is `left`); the dispositions
+    # pin every expected PolicyEngine or TAXSIM residual.
     mismatches: list[dict] = []
     pe_matches = 0
     taxsim_matches = 0

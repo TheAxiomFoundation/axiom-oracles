@@ -723,7 +723,7 @@ policies:
       - nd_income_tax
     in_scope: true
     suite: nd-income-tax-liability
-    note: Covered by nd-income-tax-liability — North Dakota resident wage-earner core using the Tax Commissioner's official 2026 indexed schedule; TAXSIM 2024 residuals and PolicyEngine-US's stale 2025 thresholds are fully dispositioned with zero unexplained differences.
+    note: Covered by nd-income-tax-liability — North Dakota resident wage-earner core using the Tax Commissioner's official 2026 indexed schedule; TAXSIM 2024 residuals and the repository-certified PolicyEngine-US 1.752.2 comparison pin's stale 2025 thresholds are fully dispositioned with zero unexplained differences.
   - id: us-pe:nd_tanf
     oracle_policy_name: nd_tanf
     oracle_policy_type: rules
