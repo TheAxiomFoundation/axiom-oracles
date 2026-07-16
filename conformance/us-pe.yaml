@@ -783,7 +783,8 @@ policies:
     output_vars:
       - nh_income_tax
     in_scope: true
-    suite: null
+    suite: nh-income-tax-liability
+    note: Covered by nh-income-tax-liability — RSA Chapter 77 was repealed in its entirety effective January 1, 2025, so the 2026 result is no imposed Chapter 77 tax, not an operative zero-percent schedule. Axiom, PolicyEngine, and pinned TAXSIM 2024 return zero on all six wage-only grid cases; the TAXSIM agreement is observational because its 2024 Chapter 77 tax applied only to interest and dividends.
   - id: us-pe:nj_income_tax
     oracle_policy_name: nj_income_tax
     oracle_policy_type: rules
@@ -1206,7 +1207,8 @@ policies:
     output_vars:
       - wv_income_tax
     in_scope: true
-    suite: null
+    suite: wv-income-tax-liability
+    note: Covered by wv-income-tax-liability — the Axiom 2026 section 11-21-4J schedule matches PolicyEngine wv_income_tax_before_non_refundable_credits on all six resident wage-earner cases; pinned TAXSIM 2024 rate-vintage residuals are dispositioned from the official 2024 instructions. The RuleSpec boundary switches to a supplied section 11-21-4H result beginning in 2027 rather than carrying the 4J schedule forward.
   - id: us-pe:wv_works
     oracle_policy_name: wv_works
     oracle_policy_type: rules

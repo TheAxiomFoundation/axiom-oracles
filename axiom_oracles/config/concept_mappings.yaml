@@ -2837,3 +2837,31 @@ concepts:
         scope: {type: country, geoid: US}
       policyengine: ms_income_tax_before_credits_unit
       taxsim: siitax
+  us-nh:policies/income_tax/pilot_liability_pipeline#nh_pit_pilot_income_tax_liability:
+    description: New Hampshire Chapter 77 repeal-result liability (no tax imposed after repeal, not an active zero-rate schedule)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-NH]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: nh_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: nh_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
+    description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-WV]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: wv_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: wv_income_tax_before_non_refundable_credits
+      taxsim: siitax

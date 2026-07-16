@@ -1,0 +1,270 @@
+{
+  "case_count": 6,
+  "cases": [
+    {
+      "axiom": 727.3,
+      "axiom_vs_policyengine": {
+        "difference": 1.2207031204525265e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -87.40000000000009,
+        "match": false
+      },
+      "case_id": "wv-single-30000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 727.2999877929688,
+      "taxsim_2024": 814.7
+    },
+    {
+      "axiom": 1866.1,
+      "axiom_vs_policyengine": {
+        "difference": 2.441406240905053e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -223.0,
+        "match": false
+      },
+      "case_id": "wv-single-60000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1866.0999755859375,
+      "taxsim_2024": 2089.1
+    },
+    {
+      "axiom": 5980.9,
+      "axiom_vs_policyengine": {
+        "difference": 9.765624963620212e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -708.2000000000007,
+        "match": false
+      },
+      "case_id": "wv-single-150000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 5980.89990234375,
+      "taxsim_2024": 6689.1
+    },
+    {
+      "axiom": 1781.7,
+      "axiom_vs_policyengine": {
+        "difference": 4.8828125045474735e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -213.0,
+        "match": false
+      },
+      "case_id": "wv-married-60000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1781.699951171875,
+      "taxsim_2024": 1994.7
+    },
+    {
+      "axiom": 4515.3,
+      "axiom_vs_policyengine": {
+        "difference": 0.00019531250018189894,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -535.3999999999996,
+        "match": false
+      },
+      "case_id": "wv-married-120000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 4515.2998046875,
+      "taxsim_2024": 5050.7
+    },
+    {
+      "axiom": 12759.3,
+      "axiom_vs_policyengine": {
+        "difference": 0.00019531249927240424,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -1507.4000000000015,
+        "match": false
+      },
+      "case_id": "wv-married-300000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 12759.2998046875,
+      "taxsim_2024": 14266.7
+    }
+  ],
+  "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-wv:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "wv_income_tax_before_non_refundable_credits",
+    "taxsim": "siitax"
+  },
+  "mismatches": [
+    {
+      "case_id": "wv-single-30000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "difference": -87.40000000000009,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wv-taxsim-2024-single-30000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 727.3,
+      "left_engine": "axiom",
+      "right": 814.7,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "wv-single-60000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "difference": -223.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wv-taxsim-2024-single-60000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1866.1,
+      "left_engine": "axiom",
+      "right": 2089.1,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "wv-single-150000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "difference": -708.2000000000007,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wv-taxsim-2024-single-150000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 5980.9,
+      "left_engine": "axiom",
+      "right": 6689.1,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "wv-married-60000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "difference": -213.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wv-taxsim-2024-married-60000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1781.7,
+      "left_engine": "axiom",
+      "right": 1994.7,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "wv-married-120000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "difference": -535.3999999999996,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wv-taxsim-2024-married-120000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 4515.3,
+      "left_engine": "axiom",
+      "right": 5050.7,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "wv-married-300000",
+      "concept": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+      "difference": -1507.4000000000015,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "wv-taxsim-2024-married-300000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 12759.3,
+      "left_engine": "axiom",
+      "right": 14266.7,
+      "right_engine": "taxsim"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-16T16:11:11Z",
+    "generated_by": "scripts/run_comparison.py::wv-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": null
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "wv-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_2024_match_rate": 0.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 6,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/wv-income-tax-liability.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 50,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 6,
+    "mismatch_count": 6,
+    "policyengine_matches": 6,
+    "taxsim_2024_matches": 0
+  },
+  "taxsim_law_year": 2024,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

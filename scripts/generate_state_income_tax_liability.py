@@ -101,6 +101,8 @@ _TAXSIM_STATE = {
     "MO": 26,
     "AR": 4,
     "MS": 25,
+    "NH": 30,
+    "WV": 49,
     "WI": 50,
     # Washington's individual-income-tax surface is its RCW 82.87 capital-gains
     # excise tax, so it uses a capital-gains-specific grid below.
@@ -195,6 +197,13 @@ _PE_VAR = {
     "MO": "mo_income_tax_before_credits",
     "AR": "ar_income_tax_before_non_refundable_credits_unit",
     "MS": "ms_income_tax_before_credits_unit",
+    # New Hampshire's zero is the legal consequence of RSA Chapter 77's
+    # repeal, not an operative zero-rate schedule. PolicyEngine retains legacy
+    # Chapter 77 base machinery but gates the tax out at 2026.
+    "NH": "nh_income_tax_before_refundable_credits",
+    # West Virginia's before-non-refundable-credits variable is the exact
+    # section 11-21-4J schedule-tax analog for 2026.
+    "WV": "wv_income_tax_before_non_refundable_credits",
     "WI": "wi_income_tax_before_credits",
     "WA": "wa_income_tax_before_refundable_credits",
 }
@@ -435,6 +444,8 @@ _TOL = {
     "MO": (1.0, 0.0),
     "AR": (1.0, 0.0),
     "MS": (1.0, 0.0),
+    "NH": (1.0, 0.0),
+    "WV": (1.0, 0.0),
     "WI": (1.0, 0.0),
     "WA": (1.0, 0.0),
 }
