@@ -2781,3 +2781,31 @@ concepts:
         scope: {type: country, geoid: US}
       policyengine: nd_income_tax_before_credits
       taxsim: siitax
+  us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability:
+    description: Pennsylvania personal income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-PA]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: pa_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: pa_income_tax_before_forgiveness
+      taxsim: siitax
+  us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability:
+    description: Missouri individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MO]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: mo_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: mo_income_tax_before_credits
+      taxsim: siitax

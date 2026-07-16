@@ -45,12 +45,14 @@ def test_summary_counts_both_pairwise_legs_regardless_of_pe_match_status():
         assert summary["match_count"] + summary["mismatch_count"] == 4
 
 
-def test_kansas_and_north_dakota_oracle_registrations():
+def test_recent_state_income_tax_oracle_registrations():
     generator = _load_generator()
 
     expected = {
         "KS": (17, "ks_income_tax_before_credits"),
         "ND": (35, "nd_income_tax_before_credits"),
+        "PA": (39, "pa_income_tax_before_forgiveness"),
+        "MO": (26, "mo_income_tax_before_credits"),
     }
     for state, (taxsim_code, policyengine_target) in expected.items():
         assert generator._TAXSIM_STATE[state] == taxsim_code

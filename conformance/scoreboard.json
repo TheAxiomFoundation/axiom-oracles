@@ -71,8 +71,8 @@
       "jurisdiction": "us-pe",
       "oracle": "policyengine-us_1.767.3/us",
       "policies_in_scope": 137,
-      "covered": 62,
-      "covered_pct": 45.2555,
+      "covered": 64,
+      "covered_pct": 46.7153,
       "excluded": 11,
       "excluded_by_reason": {
         "input_carrying": 7,
@@ -116,7 +116,6 @@
         "md_tca",
         "me_tanf",
         "mi_fip",
-        "mo_income_tax",
         "mo_tanf",
         "ms_income_tax",
         "ms_tanf",
@@ -134,7 +133,6 @@
         "oh_owf",
         "ok_tanf",
         "or_tanf",
-        "pa_income_tax",
         "pa_tanf",
         "qualified_business_income_deduction",
         "reduced_price_school_meals",
@@ -162,7 +160,7 @@
         "wy_power"
       ],
       "blocking_reasons": [
-        "75 of 137 in-scope policies are not covered by a live suite: aca_ptc, additional_medicare_tax, ak_atap, alternative_minimum_tax, ar_income_tax, ar_tea, chip, commodity_supplemental_food_program, ct_tfa, dc_tanf, early_head_start, elderly_disabled_credit, energy_efficient_home_improvement_credit, fl_tca, foreign_tax_credit, free_school_meals, head_start, hi_tanf, high_efficiency_electric_home_rebate, ia_fip, id_tafi, il_tanf, in_tanf, itemized_taxable_income_deductions, ky_ktap, la_fitap, lifetime_learning_credit, ma_tafdc, md_tca, me_tanf, mi_fip, mo_income_tax, mo_tanf, ms_income_tax, ms_tanf, mt_tanf, nc_tanf, nd_tanf, ne_adc, net_investment_income_tax, new_clean_vehicle_credit, nh_fanf, nh_income_tax, nj_wfnj, nm_works, nv_tanf, oh_owf, ok_tanf, or_tanf, pa_income_tax, pa_tanf, qualified_business_income_deduction, reduced_price_school_meals, residential_clean_energy_credit, residential_efficiency_electrification_rebate, ri_works, salt_deduction, savers_credit, sc_tanf, sd_tanf, self_employment_tax, spm_unit_capped_housing_subsidy, taxable_income, tn_ff, tx_tanf, used_clean_vehicle_credit, ut_fep, va_tanf, vt_income_tax, vt_reach_up, wi_works, wic, wv_income_tax, wv_works, wy_power"
+        "73 of 137 in-scope policies are not covered by a live suite: aca_ptc, additional_medicare_tax, ak_atap, alternative_minimum_tax, ar_income_tax, ar_tea, chip, commodity_supplemental_food_program, ct_tfa, dc_tanf, early_head_start, elderly_disabled_credit, energy_efficient_home_improvement_credit, fl_tca, foreign_tax_credit, free_school_meals, head_start, hi_tanf, high_efficiency_electric_home_rebate, ia_fip, id_tafi, il_tanf, in_tanf, itemized_taxable_income_deductions, ky_ktap, la_fitap, lifetime_learning_credit, ma_tafdc, md_tca, me_tanf, mi_fip, mo_tanf, ms_income_tax, ms_tanf, mt_tanf, nc_tanf, nd_tanf, ne_adc, net_investment_income_tax, new_clean_vehicle_credit, nh_fanf, nh_income_tax, nj_wfnj, nm_works, nv_tanf, oh_owf, ok_tanf, or_tanf, pa_tanf, qualified_business_income_deduction, reduced_price_school_meals, residential_clean_energy_credit, residential_efficiency_electrification_rebate, ri_works, salt_deduction, savers_credit, sc_tanf, sd_tanf, self_employment_tax, spm_unit_capped_housing_subsidy, taxable_income, tn_ff, tx_tanf, used_clean_vehicle_credit, ut_fep, va_tanf, vt_income_tax, vt_reach_up, wi_works, wic, wv_income_tax, wv_works, wy_power"
       ]
     }
   ]

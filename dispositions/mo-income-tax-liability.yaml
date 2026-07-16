@@ -1,0 +1,106 @@
+schema: axiom_oracles.dispositions.v1
+suite: mo-income-tax-liability
+updated: "2026-07-16"
+entries:
+  - id: mo-taxsim-2024-single-30000
+    concept: us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability
+    case_id: mo-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply Missouri's official 2026 indexed schedule
+        under sections 143.011 and 143.021; the pinned TAXSIM leg applies 2024
+        law. The exact residual is the law-vintage and indexed-base difference.
+      upstream_url: https://dor.mo.gov/forms/MO-1040ES_2026.pdf
+      arithmetic:
+        - expression: "456.123 - 532.56"
+          equals: -76.437
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 456.123, right: 532.56}
+  - id: mo-taxsim-2024-single-60000
+    concept: us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability
+    case_id: mo-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply Missouri's official 2026 indexed schedule
+        under sections 143.011 and 143.021; the pinned TAXSIM leg applies 2024
+        law. The exact residual is the law-vintage and indexed-base difference.
+      upstream_url: https://dor.mo.gov/forms/MO-1040ES_2026.pdf
+      arithmetic:
+        - expression: "1847.417 - 1922.09"
+          equals: -74.673
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 1847.417, right: 1922.09}
+  - id: mo-taxsim-2024-single-150000
+    concept: us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability
+    case_id: mo-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply Missouri's official 2026 indexed schedule
+        under sections 143.011 and 143.021; the pinned TAXSIM leg applies 2024
+        law. The exact residual is the law-vintage and indexed-base difference.
+      upstream_url: https://dor.mo.gov/forms/MO-1040ES_2026.pdf
+      arithmetic:
+        - expression: "6112.808 - 6319.71"
+          equals: -206.902
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 6112.808, right: 6319.71}
+  - id: mo-taxsim-2024-married-60000
+    concept: us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability
+    case_id: mo-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply Missouri's official 2026 indexed schedule
+        under sections 143.011 and 143.021; the pinned TAXSIM leg applies 2024
+        law. The exact residual is the law-vintage and indexed-base difference.
+      upstream_url: https://dor.mo.gov/forms/MO-1040ES_2026.pdf
+      arithmetic:
+        - expression: "1106.086 - 1250.81"
+          equals: -144.724
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 1106.086, right: 1250.81}
+  - id: mo-taxsim-2024-married-120000
+    concept: us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability
+    case_id: mo-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply Missouri's official 2026 indexed schedule
+        under sections 143.011 and 143.021; the pinned TAXSIM leg applies 2024
+        law. The exact residual is the law-vintage and indexed-base difference.
+      upstream_url: https://dor.mo.gov/forms/MO-1040ES_2026.pdf
+      arithmetic:
+        - expression: "3922.514 - 4143.86"
+          equals: -221.346
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 3922.514, right: 4143.86}
+  - id: mo-taxsim-2024-married-300000
+    concept: us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability
+    case_id: mo-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply Missouri's official 2026 indexed schedule
+        under sections 143.011 and 143.021; the pinned TAXSIM leg applies 2024
+        law. The exact residual is the law-vintage and indexed-base difference.
+      upstream_url: https://dor.mo.gov/forms/MO-1040ES_2026.pdf
+      arithmetic:
+        - expression: "12406.108 - 12818.91"
+          equals: -412.802
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 12406.108, right: 12818.91}

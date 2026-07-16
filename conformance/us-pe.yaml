@@ -664,7 +664,8 @@ policies:
     output_vars:
       - mo_income_tax
     in_scope: true
-    suite: null
+    suite: mo-income-tax-liability
+    note: Covered by mo-income-tax-liability — Missouri ordinary resident wage-earner core under the official 2026 schedule; the Axiom pipeline matches PolicyEngine mo_income_tax_before_credits within $1 on all six cases, while all TAXSIM residuals are dispositioned as 2024 law-vintage differences.
   - id: us-pe:mo_tanf
     oracle_policy_name: mo_tanf
     oracle_policy_type: rules
@@ -891,7 +892,8 @@ policies:
     output_vars:
       - pa_income_tax
     in_scope: true
-    suite: null
+    suite: pa-income-tax-liability
+    note: Covered by pa-income-tax-liability — Pennsylvania ordinary resident wage-earner core; the source-grounded Axiom pipeline matches PolicyEngine pa_income_tax_before_forgiveness and pinned TAXSIM 2024 on all six cases.
   - id: us-pe:pa_tanf
     oracle_policy_name: pa_tanf
     oracle_policy_type: rules

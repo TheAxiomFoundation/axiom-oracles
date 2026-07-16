@@ -582,6 +582,14 @@
       "source": "comparisons/mn-tanf-ecps.yaml"
     },
     {
+      "suite": "mo-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-mo-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/mo-income-tax-liability.yaml"
+    },
+    {
       "suite": "mt-income-tax-liability",
       "report": "axiom-policyengine-taxsim-mt-income-tax-liability.json",
       "repos": [
@@ -711,6 +719,14 @@
         "TheAxiomFoundation/rulespec-us-or"
       ],
       "source": "comparisons/or-snap-ecps.yaml"
+    },
+    {
+      "suite": "pa-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-pa-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/pa-income-tax-liability.yaml"
     },
     {
       "suite": "pell-parameters",
