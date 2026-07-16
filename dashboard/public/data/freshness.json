@@ -70,13 +70,15 @@
     },
     {
       "suite": "az-income-tax-liability",
-      "generated_at": null,
-      "run_kind": null,
+      "generated_at": "2026-07-16T08:39:41Z",
+      "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "ran_against": {},
-      "unstamped": true
+      "ran_against": {
+        "TheAxiomFoundation/rulespec-us": null
+      },
+      "unstamped": false
     },
     {
       "suite": "az-snap-ecps",
