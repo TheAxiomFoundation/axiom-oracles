@@ -785,7 +785,8 @@ policies:
     output_vars:
       - nj_income_tax
     in_scope: true
-    suite: null
+    suite: nj-income-tax-liability
+    note: Covered by nj-income-tax-liability — New Jersey resident wage-earner core; the Axiom pipeline matches PolicyEngine nj_main_income_tax and pinned TAXSIM 2024 on all six 2026 grid cases.
   - id: us-pe:nj_wfnj
     oracle_policy_name: nj_wfnj
     oracle_policy_type: rules
@@ -972,7 +973,8 @@ policies:
     output_vars:
       - sc_income_tax
     in_scope: true
-    suite: null
+    suite: sc-income-tax-liability
+    note: Covered by sc-income-tax-liability — South Carolina resident wage-earner core; the Axiom pipeline matches PolicyEngine sc_income_tax_before_non_refundable_credits on all six 2026 cases, while the TAXSIM residuals are fully dispositioned as the 2024-versus-Act-110-of-2026 law-vintage difference.
   - id: us-pe:sc_tanf
     oracle_policy_name: sc_tanf
     oracle_policy_type: rules

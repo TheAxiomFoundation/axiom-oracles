@@ -606,6 +606,14 @@
       "source": "comparisons/ne-income-tax-liability.yaml"
     },
     {
+      "suite": "nj-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-nj-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/nj-income-tax-liability.yaml"
+    },
+    {
       "suite": "nm-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nm-income-tax-liability.json",
       "repos": [
@@ -703,6 +711,14 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ri-income-tax-liability.yaml"
+    },
+    {
+      "suite": "sc-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-sc-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/sc-income-tax-liability.yaml"
     },
     {
       "suite": "sc-snap-ecps",

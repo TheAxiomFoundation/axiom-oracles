@@ -165,6 +165,8 @@
     "axiom-policyengine-taxsim-or-income-tax-liability.json",
     "axiom-policyengine-taxsim-ri-income-tax-liability.json",
     "axiom-policyengine-taxsim-wa-income-tax-liability.json",
-    "axiom-policyengine-taxsim-wi-income-tax-liability.json"
+    "axiom-policyengine-taxsim-wi-income-tax-liability.json",
+    "axiom-policyengine-taxsim-nj-income-tax-liability.json",
+    "axiom-policyengine-taxsim-sc-income-tax-liability.json"
   ]
 }
