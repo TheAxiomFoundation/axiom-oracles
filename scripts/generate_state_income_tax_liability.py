@@ -99,6 +99,8 @@ _TAXSIM_STATE = {
     "ND": 35,
     "PA": 39,
     "MO": 26,
+    "AR": 4,
+    "MS": 25,
     "WI": 50,
     # Washington's individual-income-tax surface is its RCW 82.87 capital-gains
     # excise tax, so it uses a capital-gains-specific grid below.
@@ -191,6 +193,8 @@ _PE_VAR = {
     "ND": "nd_income_tax_before_credits",
     "PA": "pa_income_tax_before_forgiveness",
     "MO": "mo_income_tax_before_credits",
+    "AR": "ar_income_tax_before_non_refundable_credits_unit",
+    "MS": "ms_income_tax_before_credits_unit",
     "WI": "wi_income_tax_before_credits",
     "WA": "wa_income_tax_before_refundable_credits",
 }
@@ -429,6 +433,8 @@ _TOL = {
     "ND": (1.0, 0.0),
     "PA": (1.0, 0.0),
     "MO": (1.0, 0.0),
+    "AR": (1.0, 0.0),
+    "MS": (1.0, 0.0),
     "WI": (1.0, 0.0),
     "WA": (1.0, 0.0),
 }

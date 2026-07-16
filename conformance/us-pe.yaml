@@ -92,7 +92,8 @@ policies:
     output_vars:
       - ar_income_tax
     in_scope: true
-    suite: null
+    suite: ar-income-tax-liability
+    note: Covered by ar-income-tax-liability — Arkansas ordinary resident wage-earner core under Act 2 of 2026; the source-grounded Axiom pipeline matches PolicyEngine ar_income_tax_before_non_refundable_credits_unit within $1 on all six cases, while TAXSIM residuals are dispositioned as 2024 law-vintage and final-liability-scope differences.
   - id: us-pe:ar_tea
     oracle_policy_name: ar_tea
     oracle_policy_type: rules
@@ -679,7 +680,8 @@ policies:
     output_vars:
       - ms_income_tax
     in_scope: true
-    suite: null
+    suite: ms-income-tax-liability
+    note: Covered by ms-income-tax-liability — Mississippi ordinary resident wage-earner core under section 27-7-5; the Axiom pipeline matches PolicyEngine ms_income_tax_before_credits_unit on all six 2026 cases, while TAXSIM residuals are dispositioned as the 2024 4.7-percent rate vintage.
   - id: us-pe:ms_tanf
     oracle_policy_name: ms_tanf
     oracle_policy_type: rules
