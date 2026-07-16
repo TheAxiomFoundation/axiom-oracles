@@ -361,7 +361,7 @@
     },
     {
       "suite": "be-work-bonus-credit",
-      "generated_at": "2026-07-16T14:33:34Z",
+      "generated_at": "2026-07-16T19:39:45Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
