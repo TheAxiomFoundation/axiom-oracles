@@ -1160,7 +1160,7 @@
     },
     {
       "suite": "uk-attendance-allowance-pe",
-      "generated_at": "2026-07-13T09:54:38Z",
+      "generated_at": "2026-07-16T14:34:46Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-uk"
