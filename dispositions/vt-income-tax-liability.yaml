@@ -52,16 +52,24 @@ entries:
     disposition: explained_residual
     evidence:
       mechanism: >-
-        Federal AGI equals $150,000, so section 5822's minimum-tax condition
-        does not activate. Axiom and PolicyEngine apply the 2026 indexed
-        schedule; pinned TAXSIM applies the official 2024 single thresholds to
-        its detailed $137,510 taxable base after its internal $5,112 exemption
-        and $7,378 standard deduction.
+        Federal AGI equals $150,000, so section 5822's strict "exceeds"
+        condition and the Axiom branch do not activate the minimum. PolicyEngine's
+        inclusive SingleAmount threshold computes a $4,500 minimum at exactly
+        $150,000, but its max still selects the $7,529.01 indexed schedule, so
+        the selected target matches the statutory outcome. Pinned TAXSIM applies
+        the official 2024 single thresholds to its detailed $137,510 taxable
+        base after its internal $5,112 exemption and $7,378 standard deduction.
       upstream_url: https://tax.vermont.gov/sites/tax/files/documents/RateSched-2024.pdf
       arithmetic:
         - expression: "0.0335 * 47900 + 0.066 * (116000 - 47900) + 0.076 * ((150000 - 5112 - 7378) - 116000)"
           equals: 7734.01
           tolerance: 0.001
+        - expression: "0.03 * 150000"
+          equals: 4500
+          tolerance: 0.001
+        - expression: "7529.011005 - 4500"
+          equals: 3029.011005
+          tolerance: 0.0001
         - expression: "7529.011005 - 7734.01"
           equals: -204.998995
           tolerance: 0.0001
@@ -133,6 +141,12 @@ entries:
           tolerance: 0.001
         - expression: "16365.92 - 16365.84"
           equals: 0.08
+          tolerance: 0.0001
+        - expression: "0.03 * 300000"
+          equals: 9000
+          tolerance: 0.001
+        - expression: "16008.330875 - 9000"
+          equals: 7008.330875
           tolerance: 0.0001
         - expression: "16008.330875 - 16365.84"
           equals: -357.509125
