@@ -88,9 +88,11 @@ Then edit the fixture:
 }
 ```
 
-`annual_gbp` is authoritative. Record `0.0` for a row the calculator shows as
-nil; omit a row that does not apply (e.g. Pension Credit for a working-age case).
-Values must be finite, non-negative numbers — never a boolean, and never blank.
+`annual_gbp` is authoritative and required — every recorded row is an object
+with an explicit `annual_gbp` (a bare number is rejected as period-ambiguous).
+Record `{"annual_gbp": 0.0}` for a row the calculator shows as nil; omit a row
+that does not apply (e.g. Pension Credit for a working-age case). Values must
+be finite, non-negative numbers — never a boolean, and never blank.
 
 ## Validation (before committing a capture)
 

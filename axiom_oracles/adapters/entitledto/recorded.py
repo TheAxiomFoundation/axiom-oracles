@@ -204,15 +204,16 @@ def _output_entry_problems(entry: Any) -> list[str]:
     ``annual_gbp`` is required: the capture protocol records the calculator's
     annual figure as authoritative, and a penny-rounded weekly figure annualised
     by ×52 can differ from it by up to ±£0.26 — wider than the £0.01 comparison
-    tolerance. Weekly/monthly figures are optional corroboration only, and when
-    present must reconcile with the annual to within £1.
+    tolerance. A bare number is rejected outright — it is ambiguous about
+    period, so nothing would stop a weekly figure being graded as annual.
+    Weekly/monthly figures are optional corroboration only, and when present
+    must reconcile with the annual to within £1.
     """
-    if isinstance(entry, bool):
-        return ["must be a number or object, not a boolean"]
-    if isinstance(entry, int | float):
-        return [] if _nonneg_number(entry) else ["must be a finite non-negative number"]
-    if not isinstance(entry, dict):
-        return ["must be a number or an object with an annual_gbp amount"]
+    if not isinstance(entry, dict) or isinstance(entry, bool):
+        return [
+            "must be an object with an explicit annual_gbp amount "
+            "(a bare value is ambiguous about period)"
+        ]
     if "annual_gbp" not in entry:
         return [
             "needs annual_gbp (annual is authoritative; a penny-rounded weekly or "
@@ -296,14 +297,13 @@ def _annual_gbp(entry: Any) -> float | None:
     """The recorded annual amount; ``None`` for absent or malformed values.
 
     Rejects booleans (JSON ``true``/``false`` must not read as 1/0), non-finite,
-    and negative values, so a malformed capture yields ``None`` rather than a
-    spurious number. Only the explicit annual figure is ever graded — weekly and
-    monthly figures are corroboration, never annualised into a graded value
-    (penny-rounding makes ×52/×12 wider than the comparison tolerance).
+    negative, and bare numeric values (period-ambiguous), so a malformed
+    capture yields ``None`` rather than a spurious number. Only the explicit
+    ``annual_gbp`` figure is ever graded — weekly and monthly figures are
+    corroboration, never annualised into a graded value (penny-rounding makes
+    ×52/×12 wider than the comparison tolerance).
     """
-    if _is_number(entry):
-        return float(entry) if entry >= 0 else None
-    if not isinstance(entry, dict):
+    if not isinstance(entry, dict) or isinstance(entry, bool):
         return None
     if _nonneg_number(entry.get("annual_gbp")):
         return float(entry["annual_gbp"])

@@ -205,10 +205,12 @@ def test_weekly_corroboration_must_reconcile_with_annual(tmp_path: Path) -> None
         False,  # JSON boolean must NOT read as 0 and match a PE £0
         True,
         -5.0,  # negative
+        1181.0,  # bare number: period-ambiguous, must not grade as annual
+        0.0,  # bare zero: would silently match a PE £0
         {"annual_gbp": False},
         {"annual_gbp": -1.0},
         {"weekly_gbp": float("nan")},
-        {"foo": 1.0},  # no annual/weekly/monthly
+        {"foo": 1.0},  # no annual_gbp
     ],
 )
 def test_malformed_captured_ctr_is_not_graded(tmp_path: Path, ctr) -> None:
