@@ -482,7 +482,7 @@
     },
     {
       "suite": "co-snap-qc",
-      "generated_at": "2026-07-16T19:40:15Z",
+      "generated_at": "2026-07-17T08:33:19Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us",
