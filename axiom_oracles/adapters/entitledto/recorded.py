@@ -199,21 +199,40 @@ def validate_capture(capture: RecordedCapture) -> list[str]:
 
 
 def _output_entry_problems(entry: Any) -> list[str]:
-    """Strict shape check for one recorded output row (no lenient coercion)."""
+    """Strict shape check for one recorded output row (no lenient coercion).
+
+    ``annual_gbp`` is required: the capture protocol records the calculator's
+    annual figure as authoritative, and a penny-rounded weekly figure annualised
+    by ×52 can differ from it by up to ±£0.26 — wider than the £0.01 comparison
+    tolerance. Weekly/monthly figures are optional corroboration only, and when
+    present must reconcile with the annual to within £1.
+    """
     if isinstance(entry, bool):
         return ["must be a number or object, not a boolean"]
     if isinstance(entry, int | float):
         return [] if _nonneg_number(entry) else ["must be a finite non-negative number"]
     if not isinstance(entry, dict):
-        return ["must be a number or an object with annual/weekly/monthly gbp"]
-    present = [k for k in ("annual_gbp", "weekly_gbp", "monthly_gbp") if k in entry]
-    if not present:
-        return ["needs one of annual_gbp / weekly_gbp / monthly_gbp"]
-    return [
+        return ["must be a number or an object with an annual_gbp amount"]
+    if "annual_gbp" not in entry:
+        return [
+            "needs annual_gbp (annual is authoritative; a penny-rounded weekly or "
+            "monthly figure cannot be annualised within the £0.01 tolerance)"
+        ]
+    problems = [
         f"{k} must be a finite non-negative number"
-        for k in present
-        if not _nonneg_number(entry[k])
+        for k in ("annual_gbp", "weekly_gbp", "monthly_gbp")
+        if k in entry and not _nonneg_number(entry[k])
     ]
+    if problems:
+        return problems
+    annual = float(entry["annual_gbp"])
+    for key, factor in (("weekly_gbp", 52.0), ("monthly_gbp", 12.0)):
+        if key in entry and abs(float(entry[key]) * factor - annual) > 1.0:
+            problems.append(
+                f"{key} does not corroborate annual_gbp "
+                f"({entry[key]} × {factor:g} vs {annual})"
+            )
+    return problems
 
 
 class EntitledToRecordedRunner(EngineAdapter):
@@ -274,11 +293,13 @@ class EntitledToRecordedRunner(EngineAdapter):
 
 
 def _annual_gbp(entry: Any) -> float | None:
-    """Annualise a recorded output row; ``None`` for absent or malformed values.
+    """The recorded annual amount; ``None`` for absent or malformed values.
 
     Rejects booleans (JSON ``true``/``false`` must not read as 1/0), non-finite,
     and negative values, so a malformed capture yields ``None`` rather than a
-    spurious number. Explicit annual wins; otherwise week/month is annualised.
+    spurious number. Only the explicit annual figure is ever graded — weekly and
+    monthly figures are corroboration, never annualised into a graded value
+    (penny-rounding makes ×52/×12 wider than the comparison tolerance).
     """
     if _is_number(entry):
         return float(entry) if entry >= 0 else None
@@ -286,8 +307,4 @@ def _annual_gbp(entry: Any) -> float | None:
         return None
     if _nonneg_number(entry.get("annual_gbp")):
         return float(entry["annual_gbp"])
-    if _nonneg_number(entry.get("weekly_gbp")):
-        return round(float(entry["weekly_gbp"]) * 52.0, 2)
-    if _nonneg_number(entry.get("monthly_gbp")):
-        return round(float(entry["monthly_gbp"]) * 12.0, 2)
     return None

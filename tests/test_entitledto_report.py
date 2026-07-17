@@ -143,9 +143,10 @@ def test_captured_divergence_surfaces_as_mismatch(tmp_path: Path) -> None:
     assert report["summary"]["mismatch_count"] == 1
 
 
-def test_captured_liability_mismatch_is_flagged(tmp_path: Path) -> None:
+def test_captured_liability_mismatch_is_not_graded(tmp_path: Path) -> None:
     # entitledto's derived liability (e.g. after a single-person discount) differs
-    # from PolicyEngine's modelled liability; the report must flag the parity gap.
+    # from PolicyEngine's modelled liability: the two awards priced different
+    # bills, so the pair is reported descriptively, never as a match/mismatch.
     _write_captured(tmp_path, ctr_annual=1181.0, liability=1628.25)  # 75% of 2171
     report = build_uk_ctr_report(fixtures_dir=tmp_path)
     kingston = next(c for c in report["cases"] if c["case_id"] == _CID)
@@ -154,6 +155,44 @@ def test_captured_liability_mismatch_is_flagged(tmp_path: Path) -> None:
     assert parity["entitledto_liability"] == 1628.25
     assert parity["reference_liability"] == 2171.0
     assert kingston["council_tax_liability"] == 1628.25  # statutory uses captured liability
+    vs_pe = kingston["entitledto_vs_policyengine"]
+    assert vs_pe["graded"] is False
+    assert "liability differs" in vs_pe["not_graded_reason"]
+    assert report["summary"]["graded_comparison_count"] == 0
+    assert report["summary"]["match_count"] == 0
+    assert report["summary"]["mismatch_count"] == 0
+    assert report["summary"]["captured_not_graded_count"] == 1
+    assert report["capture"]["captured"] == 1
+
+
+def test_captured_unsupported_scheme_is_not_graded(tmp_path: Path) -> None:
+    # PolicyEngine does not model Manchester's working-age scheme — its value is
+    # the constructed-household fallback, not the scheme, so a captured
+    # Manchester fixture must not manufacture a match or a mismatch.
+    manchester = "ctr-eng-wa-manchester-single-earner"
+    _seed_pending(tmp_path)
+    reference = json.loads(DEFAULT_PE_REFERENCE.read_text())
+    pe_row = reference["cases"][manchester]
+    assert pe_row["scheme_supported"] is False
+    fixture = json.loads((tmp_path / f"{manchester}.json").read_text())
+    fixture["provenance"].update(
+        {
+            "capture_status": CAPTURE_STATUS_CAPTURED,
+            "capture_date": "2026-07-14",
+            "captured_by": "tester",
+            "entitledto_council_tax_liability_gbp": pe_row["council_tax"],
+        }
+    )
+    fixture["outputs"] = {"council_tax_reduction": {"annual_gbp": 750.0}}
+    (tmp_path / f"{manchester}.json").write_text(json.dumps(fixture))
+
+    report = build_uk_ctr_report(fixtures_dir=tmp_path)
+    row = next(c for c in report["cases"] if c["case_id"] == manchester)
+    vs_pe = row["entitledto_vs_policyengine"]
+    assert vs_pe["graded"] is False
+    assert "does not model" in vs_pe["not_graded_reason"]
+    assert report["summary"]["graded_comparison_count"] == 0
+    assert report["summary"]["captured_not_graded_count"] == 1
 
 
 def test_missing_pe_reference_row_raises(tmp_path: Path) -> None:

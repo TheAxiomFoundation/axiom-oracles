@@ -21,6 +21,14 @@ report grades nothing — it is a truthful "0 captured / 8 pending" artifact. On
 a fixture is captured (and validates), the same builder grades entitledto against
 PolicyEngine and the statutory hand-check, reconciled to the council-tax
 liability entitledto actually used.
+
+A captured case enters the graded match/mismatch counts only when the pair is
+commensurable: PolicyEngine must actually model the council's scheme
+(``scheme_supported``), and PolicyEngine's council-tax liability must equal the
+liability entitledto derived. A capture failing either condition is reported
+descriptively (``captured_not_graded``) with the reason — an unsupported
+council's fallback value or a differently-priced liability must never
+manufacture a match or a mismatch.
 """
 
 from __future__ import annotations
@@ -154,6 +162,7 @@ def build_uk_ctr_report(
     captured = 0
     pending = 0
     invalid = 0
+    captured_not_graded = 0
     match_count = 0
     mismatch_count = 0
 
@@ -216,30 +225,55 @@ def build_uk_ctr_report(
 
         if is_captured:
             captured += 1
-            # PolicyEngine was computed at the modelled liability; flag when the
-            # captured entitledto liability differs so PE parity is caveated
-            # (re-run PolicyEngine at the entitledto liability for exact parity).
+            # PolicyEngine was computed at the modelled liability; when the
+            # captured entitledto liability differs the two awards are not
+            # commensurable (re-run PolicyEngine at the entitledto liability
+            # for exact parity).
+            parity_match = abs(pe_liability - liability) < 0.01
             row["policyengine_liability_parity"] = {
                 "reference_liability": round(pe_liability, 2),
                 "entitledto_liability": round(liability, 2),
-                "match": abs(pe_liability - liability) < 0.01,
+                "match": parity_match,
             }
-            right = EngineResult(
-                engine="policyengine",
-                household_id=cid,
-                values={"council_tax_reduction": pe["council_tax_reduction"]},
-            )
-            [comparison] = comparator.compare([left], [right])
-            for vc in comparison.comparisons:
+            # Grade only commensurable pairs: PolicyEngine must actually model
+            # this council's scheme (an unsupported council's value is the
+            # constructed-household fallback, not the scheme), and both engines
+            # must have priced the same council-tax liability. Everything else
+            # is reported descriptively, never as a match or mismatch.
+            scheme_supported = bool(pe["scheme_supported"])
+            if scheme_supported and parity_match:
+                right = EngineResult(
+                    engine="policyengine",
+                    household_id=cid,
+                    values={"council_tax_reduction": pe["council_tax_reduction"]},
+                )
+                [comparison] = comparator.compare([left], [right])
+                for vc in comparison.comparisons:
+                    row["entitledto_vs_policyengine"] = {
+                        "graded": True,
+                        "difference": vc.difference,
+                        "match": vc.matches,
+                    }
+                    match_count += int(vc.matches)
+                    mismatch_count += int(not vc.matches)
+            else:
+                reasons = []
+                if not scheme_supported:
+                    reasons.append(
+                        "policyengine does not model this council's scheme "
+                        "(fallback value, not the scheme)"
+                    )
+                if not parity_match:
+                    reasons.append(
+                        "policyengine liability differs from the captured "
+                        "entitledto liability (re-run PolicyEngine at "
+                        f"{round(liability, 2)} for a gradeable pair)"
+                    )
                 row["entitledto_vs_policyengine"] = {
-                    "difference": vc.difference,
-                    "match": vc.matches,
-                    "policyengine_liability_parity": row[
-                        "policyengine_liability_parity"
-                    ]["match"],
+                    "graded": False,
+                    "not_graded_reason": "; ".join(reasons),
                 }
-                match_count += int(vc.matches)
-                mismatch_count += int(not vc.matches)
+                captured_not_graded += 1
             if statutory["annual_gbp"] is not None and entitledto_value is not None:
                 row["entitledto_vs_statutory"] = {
                     "difference": round(entitledto_value - statutory["annual_gbp"], 2)
@@ -270,6 +304,7 @@ def build_uk_ctr_report(
             "captured": captured,
             "pending": pending,
             "invalid": invalid,
+            "captured_not_graded": captured_not_graded,
             "graded": graded,
             "protocol": (
                 "axiom_oracles/adapters/entitledto/fixtures/uk_ctr/CAPTURE-PROTOCOL.md"
@@ -280,11 +315,15 @@ def build_uk_ctr_report(
             "graded_comparison_count": graded,
             "match_count": match_count,
             "mismatch_count": mismatch_count,
+            "captured_not_graded_count": captured_not_graded,
             "pending_count": pending,
             "invalid_count": invalid,
             "note": (
                 "Nothing is graded until entitledto fixtures are captured; "
-                "pending cases are not agreements."
+                "pending cases are not agreements. A captured case is graded "
+                "against PolicyEngine only when PolicyEngine models the "
+                "council's scheme and both engines priced the same council-tax "
+                "liability; other captures are reported descriptively."
             ),
         },
         "cases": case_rows,

@@ -175,10 +175,25 @@ def test_runner_reports_missing_fixture(tmp_path: Path) -> None:
     assert result.errors and "no entitledto fixture" in result.errors[0]
 
 
-def test_weekly_only_output_is_annualised(tmp_path: Path) -> None:
+def test_weekly_only_output_is_rejected_not_annualised(tmp_path: Path) -> None:
+    # The protocol records the calculator's annual figure as authoritative; a
+    # penny-rounded weekly ×52 can drift up to ±£0.26 — wider than the £0.01
+    # tolerance — so a weekly-only capture must fail closed, never grade.
     _write(tmp_path, _captured_fixture(ctr={"weekly_gbp": 20.0}))
     [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
-    assert result.values["council_tax_reduction"] == 1040.0  # 20 * 52
+    assert result.values == {}
+    assert result.errors and "invalid capture" in result.errors[0]
+    assert "annual_gbp" in result.errors[0]
+
+
+def test_weekly_corroboration_must_reconcile_with_annual(tmp_path: Path) -> None:
+    # 25.00 × 52 = 1300 — £119 away from the recorded annual: a typo, not
+    # rounding. The validator must reject it rather than silently grade the
+    # annual figure.
+    _write(tmp_path, _captured_fixture(ctr={"annual_gbp": 1181.0, "weekly_gbp": 25.0}))
+    [result] = EntitledToRecordedRunner(fixtures_dir=tmp_path).run_cases([_kingston_case()])
+    assert result.values == {}
+    assert result.errors and "does not corroborate" in result.errors[0]
 
 
 # --- fail-closed: malformed "captured" fixtures are never graded ------------

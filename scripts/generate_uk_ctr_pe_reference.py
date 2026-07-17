@@ -10,9 +10,11 @@ the households it claims to describe.
 
 Requires ``policyengine-uk`` (installed separately — heavy, PE-env only), so CI
 skips it; ``tests/test_entitledto_report.py`` runs it only when PE is importable.
+Pin the engine to the committed reference's version — an unpinned install floats
+to the latest release and ``--check`` will refuse the version mismatch:
 
-    uv run --with policyengine-uk python scripts/generate_uk_ctr_pe_reference.py
-    uv run --with policyengine-uk python scripts/generate_uk_ctr_pe_reference.py --check
+    uv run --with policyengine-uk==2.89.2 python scripts/generate_uk_ctr_pe_reference.py
+    uv run --with policyengine-uk==2.89.2 python scripts/generate_uk_ctr_pe_reference.py --check
 """
 
 from __future__ import annotations
@@ -180,12 +182,33 @@ def main() -> int:
     if args.check:
         committed = json.loads(args.output.read_text())
         fresh = json.loads(rendered)
-        # Compare the case values (the load-bearing part); provenance version can
-        # move with the PE release.
+        # A check against a different engine release proves nothing about the
+        # committed reference — same values under another version is a silent
+        # provenance lie, different values is a confusing red herring.
+        committed_version = committed["provenance"]["version"]
+        fresh_version = fresh["provenance"]["version"]
+        if committed_version != fresh_version:
+            sys.stderr.write(
+                f"policyengine-uk {fresh_version} installed but the committed "
+                f"reference was generated with {committed_version}; install the "
+                f"pinned version (uv run --with policyengine-uk=="
+                f"{committed_version} …) or regenerate the reference.\n"
+            )
+            return 1
         if committed["cases"] != fresh["cases"]:
             sys.stderr.write("PE reference case values differ from a fresh run.\n")
             return 1
-        print("PE reference case values match a fresh PolicyEngine-UK run.")
+        committed_params = committed["provenance"]["ctr_national_scheme_parameters"]
+        fresh_params = fresh["provenance"]["ctr_national_scheme_parameters"]
+        if committed_params != fresh_params:
+            sys.stderr.write(
+                "PE reference CTR scheme parameters differ from a fresh run.\n"
+            )
+            return 1
+        print(
+            "PE reference matches a fresh PolicyEngine-UK "
+            f"{fresh_version} run (cases + scheme parameters)."
+        )
         return 0
     args.output.write_text(rendered)
     print(f"Wrote {args.output}")
