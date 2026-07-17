@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-15T08:42:23Z",
+    "generated_at": "2026-07-17T08:33:47Z",
     "generated_by": "scripts/run_comparison.py::mn-income-tax-liability",
     "rulespecs": [
       {
