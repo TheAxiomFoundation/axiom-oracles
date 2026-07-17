@@ -8,6 +8,8 @@ This repo is the home for executable program comparisons across:
 - TAXSIM
 - Atlanta Fed PRD
 - ACCESS NYC
+- UKMOD / EUROMOD (recorded and live)
+- entitledto (recorded per-council UK Council Tax Reduction reference)
 - Axiom RuleSpec/runtime programs
 
 The core idea is to keep each external system behind an adapter, then compare
@@ -25,6 +27,7 @@ here.
 Thin concept-keyed cases
         |
         +-- ACCESS NYC adapter
+        +-- entitledto adapter (recorded fixtures)
         +-- PolicyEngine adapter
         +-- TAXSIM adapter
         +-- PRD adapter
@@ -330,6 +333,45 @@ see no coverage until those imputation stages land
 For the CLI, `axiom-oracles compare euromod axiom ...` reads
 `EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,
 `EUROMOD_DATASET`, and `EUROMOD_PYTHON` from the environment.
+
+## entitledto UK Council Tax Reduction oracle (recorded fixtures)
+
+Council Tax Reduction is set scheme-by-scheme by ~300 English billing
+authorities (plus the three national GB schemes). PolicyEngine-UK and UKMOD are
+national on the working-age side — PolicyEngine adds only five named English
+councils — so neither is a per-council oracle. entitledto
+(https://www.entitledto.co.uk/) models every council, making it the most
+complete per-council CTR reference (its figures are estimates, not authoritative
+awards).
+
+entitledto is a commercial product whose legal notices prohibit systematic *and*
+automated data collection and restrict the free calculator to personal use, so
+this is a **recorded** oracle, not a live one
+(`axiom_oracles/adapters/entitledto/`). Capturing this research grid requires
+entitledto's express written consent (a research/API licence); under that
+permission a person captures each case once and records the result — with
+provenance (capture date, council, scheme year, entitledto-derived council-tax
+liability, URL) — into a fixture JSON, and the runner replays it. Fixtures ship
+as `pending_capture` stubs (inputs filled, `outputs: null`) and grading is
+**fail-closed**: a fixture is graded only if it is `captured` and passes
+`validate_capture`, so an uncaptured or malformed fixture is surfaced as an
+error, never a spurious £0 or invented value. Terms and the exact capture steps
+are in `axiom_oracles/adapters/entitledto/fixtures/uk_ctr/CAPTURE-PROTOCOL.md`.
+
+The `uk-ctr` suite is an eight-case grid across the England pension-age,
+Scotland and Wales national schemes, the PolicyEngine-supported Kingston upon
+Thames local scheme, and two unsupported councils (Manchester, Birmingham). The
+on-demand report combines, per case, the recorded entitledto value, the
+committed PolicyEngine-UK 2.89.2 reference, and a statutory hand-check
+(reconciled to entitledto's council-tax liability once captured):
+
+```bash
+python scripts/run_uk_ctr_entitledto_report.py
+```
+
+Wiring this into the weekly comparison matrix is a follow-up for once fixtures
+are captured under licence (a pending oracle grades nothing, so it is kept out of
+the auto-run matrix until then).
 
 ## SNAP QC administrative data oracle
 
