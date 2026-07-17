@@ -407,7 +407,7 @@
       "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-13T19:57:24Z",
+    "generated_at": "2026-07-16T03:45:54Z",
     "generated_by": "scripts/run_comparison.py::be-article-51-forfait",
     "oracle": {
       "euromod_country": "BE",

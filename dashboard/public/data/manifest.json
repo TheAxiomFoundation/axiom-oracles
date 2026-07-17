@@ -146,6 +146,13 @@
     "axiom-snapqc-md-snap.json",
     "axiom-policyengine-taxsim-ky-income-tax-liability.json",
     "axiom-policyengine-de-tanf-ecps.json",
-    "axiom-snapqc-tx-snap.json"
+    "axiom-snapqc-tx-snap.json",
+    "axiom-policyengine-csfp-parameters.json",
+    "axiom-policyengine-irs-adjustment-parameters.json",
+    "axiom-policyengine-hi-income-tax-parameters.json",
+    "axiom-policyengine-ia-income-tax-parameters.json",
+    "axiom-policyengine-ga-snap-ecps.json",
+    "axiom-policyengine-taxsim-ne-income-tax-liability.json",
+    "axiom-policyengine-taxsim-ct-income-tax-liability.json"
   ]
 }
