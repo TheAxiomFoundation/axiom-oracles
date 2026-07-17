@@ -119,7 +119,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-16T08:41:22Z",
+    "generated_at": "2026-07-17T14:13:14Z",
     "generated_by": "scripts/run_comparison.py::va-income-tax-liability",
     "rulespecs": [
       {
