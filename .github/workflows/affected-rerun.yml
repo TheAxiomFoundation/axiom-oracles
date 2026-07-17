@@ -198,20 +198,42 @@ jobs:
         run: |
           python3 scripts/check_vacuous_gate.py || true
 
-      - name: Commit refreshed report
+      - name: Commit refreshed report + derived conformance scoreboard
         working-directory: axiom-oracles
         run: |
-          if git diff --quiet -- dashboard/public/data/; then
-            echo "no report changes for ${{ matrix.name }}"
-            exit 0
-          fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard/public/data/
-          git commit -m "data: refresh ${{ matrix.name }} (affected rerun $(date +%Y-%m-%d))"
-          # Serialize commits across the matrix: rebase onto any sibling push.
+          if git diff --quiet -- dashboard/public/data/; then
+            echo "no report changes for ${{ matrix.name }}"
+          else
+            git add dashboard/public/data/
+            git commit -m "data: refresh ${{ matrix.name }} (affected rerun $(date +%Y-%m-%d))"
+          fi
+          # Serialize commits across the matrix: rebase onto any sibling push,
+          # then re-derive the conformance scoreboard against the REBASED tree
+          # before pushing. A report push that skips the scoreboard regen turns
+          # main red at the `conformance_scoreboard.py --check` CI gate (the
+          # 2026-07-15 ma-income-tax-liability refresh did exactly that), and a
+          # sibling job's report landing between regen and push would re-stale
+          # it — so the regen runs after every rebase, and a failed attempt's
+          # scoreboard commit is dropped and re-derived on the next attempt.
           branch="${{ github.event.repository.default_branch }}"
+          base=$(git rev-parse HEAD)
           for attempt in 1 2 3 4 5; do
-            git pull --rebase origin "$branch" && \
-              git push origin "HEAD:$branch" && break || sleep $((RANDOM % 10 + 5))
+            git rebase --abort 2>/dev/null || true
+            git reset --hard "$base"
+            if git pull --rebase origin "$branch"; then
+              base=$(git rev-parse HEAD)
+              python3 scripts/conformance_scoreboard.py
+              if ! git diff --quiet -- conformance/ dashboard/public/data/; then
+                git add conformance/ dashboard/public/data/
+                git commit -m "data: regenerate conformance scoreboard (affected rerun $(date +%Y-%m-%d))"
+              fi
+              if git push origin "HEAD:$branch"; then
+                exit 0
+              fi
+            fi
+            sleep $((RANDOM % 10 + 5))
           done
+          echo "failed to push ${{ matrix.name }} after 5 attempts" >&2
+          exit 1

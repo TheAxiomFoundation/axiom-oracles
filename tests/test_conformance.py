@@ -1171,6 +1171,38 @@ def test_scoreboard_check_passes_when_committed_matches():
     assert _run_check(sb) == 0
 
 
+def test_affected_rerun_workflow_regenerates_scoreboard_before_pushing():
+    """The report-pushing automation must re-derive the conformance scoreboard.
+
+    ``conformance/detail/<jur>.json`` carries fields copied verbatim from the
+    committed comparison reports, so a workflow that pushes a refreshed report
+    without regenerating the scoreboard turns main red at the
+    ``conformance_scoreboard.py --check`` CI gate (the 2026-07-15
+    ma-income-tax-liability affected rerun did exactly that). Pin the
+    invariant: every pushing step in affected-rerun.yml runs the scoreboard
+    regen before ``git push`` and stages ``conformance/`` alongside
+    ``dashboard/public/data/``.
+    """
+    import yaml
+
+    workflow = yaml.safe_load(
+        (REPO_ROOT / ".github" / "workflows" / "affected-rerun.yml").read_text()
+    )
+    push_scripts = [
+        step.get("run") or ""
+        for job in workflow["jobs"].values()
+        for step in job.get("steps", [])
+        if "git push" in (step.get("run") or "")
+    ]
+    assert push_scripts, "affected-rerun.yml no longer pushes; update this test"
+    for script in push_scripts:
+        assert "scripts/conformance_scoreboard.py" in script
+        assert script.index("scripts/conformance_scoreboard.py") < script.index(
+            "git push"
+        )
+        assert "git add conformance/ dashboard/public/data/" in script
+
+
 def test_ratchet_check_fails_when_committed_floor_is_beaten_down(tmp_path):
     """NEGATIVE: lowering committed covered_min below the live scoreboard, then
     forcing a regression, must fail --check.
