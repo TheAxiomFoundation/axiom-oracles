@@ -167,7 +167,7 @@
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
     "axiom_vs_taxsim_2024_match_rate": 66.67,
-    "comparison_count": 6,
+    "comparison_count": 12,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -183,11 +183,11 @@
       ],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 66.666667,
+      "raw_match_rate": 83.333333,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
-    "match_count": 4,
+    "match_count": 10,
     "mismatch_count": 2,
     "policyengine_matches": 6,
     "taxsim_2024_matches": 4
