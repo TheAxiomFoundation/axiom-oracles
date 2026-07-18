@@ -205,7 +205,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-15T08:41:17Z",
+    "generated_at": "2026-07-18T08:16:52Z",
     "generated_by": "scripts/run_comparison.py::ca-income-tax-liability",
     "rulespecs": [
       {
