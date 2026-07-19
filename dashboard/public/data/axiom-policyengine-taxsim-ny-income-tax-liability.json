@@ -151,7 +151,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-18T13:57:45Z",
+    "generated_at": "2026-07-19T04:04:33Z",
     "generated_by": "scripts/run_comparison.py::ny-income-tax-liability",
     "rulespecs": [
       {
