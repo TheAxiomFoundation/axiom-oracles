@@ -343,7 +343,7 @@
     },
     {
       "suite": "be-study-allowance",
-      "generated_at": "2026-07-18T19:39:55Z",
+      "generated_at": "2026-07-19T14:00:24Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
