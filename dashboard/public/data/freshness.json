@@ -26,7 +26,7 @@
     },
     {
       "suite": "al-income-tax-liability",
-      "generated_at": "2026-07-17T19:40:51Z",
+      "generated_at": "2026-07-19T04:02:54Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
