@@ -8,6 +8,14 @@ export function formatCurrency(value) {
   });
 }
 
+/** Age in fractional days of an ISO timestamp, or null when unparsable. */
+export function ageDays(generatedAt) {
+  if (!generatedAt) return null;
+  const when = Date.parse(generatedAt);
+  if (Number.isNaN(when)) return null;
+  return (Date.now() - when) / 86400000;
+}
+
 export function formatPct(value, decimals = 1) {
   if (value == null) return "—";
   return `${Number(value).toFixed(decimals)}%`;
