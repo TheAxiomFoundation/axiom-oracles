@@ -159,7 +159,7 @@
     },
     {
       "suite": "be-capital-income-tax",
-      "generated_at": "2026-07-19T13:59:50Z",
+      "generated_at": "2026-07-20T14:37:49Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
