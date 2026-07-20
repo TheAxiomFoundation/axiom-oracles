@@ -18,7 +18,7 @@ import { suiteMeta, suiteLabel } from "../utils/suites";
  * its own.
  */
 
-function ageDays(generatedAt) {
+export function ageDays(generatedAt) {
   if (!generatedAt) return null;
   const when = Date.parse(generatedAt);
   if (Number.isNaN(when)) return null;
@@ -140,7 +140,10 @@ export default function FreshnessRegister({ freshness, region }) {
   ).length;
 
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <section
+      id="freshness"
+      style={{ display: "flex", flexDirection: "column", gap: 10 }}
+    >
       <div className="section-eyebrow">Report freshness</div>
       <p style={{ fontSize: 13, color: "var(--ink-mute)", margin: 0 }}>
         How current each verification report is, versus the rulespec repos it

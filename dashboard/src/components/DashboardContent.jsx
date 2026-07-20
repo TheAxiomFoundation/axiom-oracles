@@ -3,14 +3,17 @@
 import { useState, useEffect, useMemo } from "react";
 import { loadOracleData, buildNWayData } from "../utils/data";
 import { suiteRegion } from "../utils/suites";
+import { buildProgramRows } from "../utils/programs";
 import { engineLabel } from "../utils/format";
 import OverviewHero from "./OverviewHero";
 import ConformanceCard from "./ConformanceCard";
 import BelgiumEuromodCoverage from "./BelgiumEuromodCoverage";
 import RuleVerification from "./RuleVerification";
 import GapLedger from "./GapLedger";
+import ProgramExceptions from "./ProgramExceptions";
 import ProgramStatusTable from "./ProgramStatusTable";
 import ProgramPage from "./ProgramPage";
+import StatusStrip from "./StatusStrip";
 import FreshnessRegister from "./FreshnessRegister";
 import AgreementMatrix from "./AgreementMatrix";
 import ProgramBreakdown from "./ProgramBreakdown";
@@ -275,14 +278,11 @@ export default function DashboardContent() {
   );
   const isBelgium = jurisdiction === "be";
 
+  // Program rollups for the needs-review queue.
+  const programRows = buildProgramRows(withData);
+
   const mainView = (
     <>
-      <OracleFilter
-        available={availableOracles}
-        selected={selectedOracles}
-        onToggle={toggleOracle}
-      />
-
       {isBelgium ? (
         <BelgiumEuromodCoverage
           coverage={data.euromodCoverage}
@@ -292,10 +292,44 @@ export default function DashboardContent() {
         <OverviewHero reports={withData} />
       )}
 
+      <StatusStrip
+        reports={withData}
+        knownCauses={data.knownCauses || []}
+        freshness={data.freshness}
+        region={jurisdiction}
+      />
+
       <ConformanceCard region={jurisdiction} />
       {jurisdiction === "uk" && <ConformanceCard region="uk-pe" />}
 
-      <ProgramStatusTable reports={withData} onOpen={openProgram} />
+      {/* The oracle chips filter every number on the page, but they're a
+          power-user lens — they live with the program views, not above the
+          verdict. The table carries the program inventory; the needs-review
+          queue follows with the work; the rule-verification KPI section
+          below owns the coverage burn-down. */}
+      <div className="table-group" id="programs">
+        <OracleFilter
+          available={availableOracles}
+          selected={selectedOracles}
+          onToggle={toggleOracle}
+        />
+        {/* Keyed so each country gets a fresh collapse state — which
+            families auto-open depends on that country's members. */}
+        <ProgramStatusTable
+          key={jurisdiction}
+          reports={withData}
+          onOpen={openProgram}
+        />
+        <ProgramExceptions
+          rows={programRows}
+          knownCauses={data.knownCauses || []}
+          onOpen={openProgram}
+        />
+      </div>
+
+      {/* The coverage story, promoted: every encoded rule and the
+          executable-surface burn-down, right behind the program views. */}
+      {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
 
       <GapLedger
         reports={withData}
@@ -303,8 +337,6 @@ export default function DashboardContent() {
         coverageOverview={data.coverageOverview}
         region={jurisdiction}
       />
-
-      {jurisdiction === "us" && <RuleVerification region={jurisdiction} />}
 
       <FreshnessRegister freshness={data.freshness} region={jurisdiction} />
 

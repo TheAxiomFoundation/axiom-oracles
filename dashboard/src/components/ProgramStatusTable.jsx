@@ -1,24 +1,54 @@
 "use client";
 
+import { useState } from "react";
 import { engineLabel, formatAgreementRate } from "../utils/format";
 import { rateColor } from "../utils/colors";
+import { buildProgramRows, rowVerdict } from "../utils/programs";
 import {
   US_STATE_NAMES,
-  suiteMeta,
-  reportMetric,
-  nearMetric,
+  FAMILY_LABELS,
   rateStatus,
-  isAxiomPair,
-  otherOracle,
   programKey,
 } from "../utils/suites";
 
 /**
- * The overview's program table: one row per program (family ×
- * jurisdiction), one dot per oracle it is verified against. Every row is
- * a door into the program page, where the run detail, triangulation, and
- * case explorer live.
+ * The overview's program table, grouped by program family so 40+ rows read
+ * as ~a dozen programs. Each row leads with one scannable verdict — a status
+ * dot and the program-level roll-up rate — with the per-oracle breakdown as
+ * supporting detail. Multi-jurisdiction families collapse behind a header
+ * carrying the family roll-up; a family opens by default whenever a member
+ * is diverging, so the broken thing is never folded away. A toolbar (text
+ * search + status tiers) keeps the table navigable as the program count
+ * grows. Every program row is a door into the program page, where the run
+ * detail, triangulation, and case explorer live.
  */
+
+const TIERS = [
+  { id: "all", label: "All" },
+  { id: "verified", label: "Verified" },
+  { id: "flagged", label: "Flagged" },
+  { id: "params", label: "Parameter-only" },
+];
+
+function matchesTier(row, tier) {
+  if (tier === "all") return true;
+  if (tier === "params") return row.total === 0 && (row.paramTotal || 0) > 0;
+  const status = rateStatus(rowVerdict(row).rate);
+  if (tier === "flagged") return status !== "verified";
+  return status === tier;
+}
+
+function matchesQuery(row, query) {
+  if (!query) return true;
+  const hay = [
+    row.meta.label,
+    US_STATE_NAMES[row.meta.jurisdiction] || row.meta.jurisdiction || "",
+    FAMILY_LABELS[row.meta.family] || row.meta.family || "",
+  ]
+    .join(" ")
+    .toLowerCase();
+  return hay.includes(query.toLowerCase());
+}
 
 function OracleRate({ run, tagged }) {
   const near = run.near;
@@ -44,47 +74,226 @@ function OracleRate({ run, tagged }) {
   );
 }
 
-export default function ProgramStatusTable({ reports, onOpen }) {
-  const programs = new Map();
-  for (const report of reports || []) {
-    if (!isAxiomPair(report)) continue;
-    if (!(report.aggregates || []).length) continue;
-    const meta = suiteMeta(report.suite);
-    if (meta.kind === "diagnostic") continue;
-    const key = programKey(meta);
-    if (!programs.has(key)) {
-      programs.set(key, { meta, runs: [], total: 0, mismatches: 0 });
-    }
-    const entry = programs.get(key);
-    // Prefer the household run's meta for the row label — a family that
-    // has both (SSI) should read as the program, not its parameter probe.
-    if (meta.kind === "household" && entry.meta.kind !== "household") {
-      entry.meta = meta;
-    }
-    const metric = reportMetric(report);
-    entry.runs.push({
-      oracle: otherOracle(report),
-      metric,
-      near: nearMetric(report),
-      kind: meta.kind,
-      suite: report.suite,
+function OracleBreakdown({ runs }) {
+  const byOracle = new Map();
+  for (const run of runs) {
+    if (run.metric.rate == null) continue;
+    if (!byOracle.has(run.oracle)) byOracle.set(run.oracle, []);
+    byOracle.get(run.oracle).push(run);
+  }
+  return [...byOracle.entries()]
+    .sort(
+      (a, b) =>
+        Math.max(...b[1].map((r) => r.metric.total)) -
+        Math.max(...a[1].map((r) => r.metric.total)),
+    )
+    .map(([oracle, oracleRuns]) => {
+      // Household rate first; a parameter probe rides along as "params N%".
+      // When the program is ONLY a parameter check the checks column already
+      // says so — no tag.
+      const ordered = oracleRuns.sort((a, b) =>
+        a.kind === b.kind
+          ? b.metric.total - a.metric.total
+          : a.kind === "household"
+            ? -1
+            : 1,
+      );
+      const mixed = ordered.some((r) => r.kind === "household");
+      return (
+        <span key={oracle} className="pst-oracle-group">
+          <span className="pst-oracle-name">{engineLabel(oracle)}</span>
+          {ordered.map((run, i) => (
+            <span key={run.suite} className="pst-oracle-run">
+              {i > 0 && (
+                <span className="pst-oracle-sep" aria-hidden="true">
+                  ·
+                </span>
+              )}
+              <OracleRate
+                run={run}
+                tagged={mixed && run.kind === "parameter"}
+              />
+            </span>
+          ))}
+        </span>
+      );
     });
-    // Program-level rate rolls up household runs only, so a parameter
-    // probe never dilutes (or inflates) a measured population figure.
-    if (meta.kind === "household") {
-      entry.total += metric.total;
-      entry.mismatches += metric.mismatches;
-    } else {
-      entry.paramTotal = (entry.paramTotal || 0) + metric.total;
-    }
+}
+
+function checksLabel(total, paramTotal) {
+  if (total > 0) return `${total.toLocaleString()} checks`;
+  const n = paramTotal || 0;
+  return `${n.toLocaleString()} parameter ${n === 1 ? "check" : "checks"}`;
+}
+
+function ProgramRow({ row, nested, onOpen }) {
+  const verdict = rowVerdict(row);
+  const where = US_STATE_NAMES[row.meta.jurisdiction] || row.meta.jurisdiction;
+  return (
+    <button
+      type="button"
+      className={`pst-row${nested ? " pst-row-nested" : ""}`}
+      onClick={() => onOpen(programKey(row.meta))}
+      title={`Open ${row.meta.label}`}
+    >
+      <span className="pst-label">
+        <span
+          className="pst-dot"
+          style={{ background: rateColor(verdict.rate) }}
+          aria-hidden="true"
+        />
+        {row.meta.label}
+      </span>
+      <span className="mono pst-where">{where}</span>
+      <span className="pst-oracles">
+        <OracleBreakdown runs={row.runs} />
+      </span>
+      <span className="mono pst-checks">
+        {checksLabel(row.total, row.paramTotal)}
+      </span>
+      <span
+        className="mono pst-rate"
+        style={{ color: rateColor(verdict.rate) }}
+      >
+        {formatAgreementRate(verdict.rate, verdict.mismatches)}
+      </span>
+      <span className="pst-arrow" aria-hidden="true">
+        →
+      </span>
+    </button>
+  );
+}
+
+function FamilyGroup({ group, open, onToggle, onOpen }) {
+  const worst = group.members[0]; // members are sorted worst-first
+  const worstVerdict = rowVerdict(worst);
+  const allStates = group.members.every(
+    (m) => US_STATE_NAMES[m.meta.jurisdiction],
+  );
+  return (
+    <div className="pst-group">
+      <button
+        type="button"
+        className="pst-row pst-group-head"
+        onClick={onToggle}
+        aria-expanded={open}
+        title={`${open ? "Collapse" : "Expand"} ${group.label}`}
+      >
+        <span className="pst-label">
+          <span
+            className="pst-dot"
+            style={{ background: rateColor(group.verdict.rate) }}
+            aria-hidden="true"
+          />
+          {group.label}
+        </span>
+        <span className="mono pst-where">
+          {group.members.length} {allStates ? "states" : "jurisdictions"}
+        </span>
+        <span className="pst-oracles">
+          {!open && rateStatus(worstVerdict.rate) !== "verified" && (
+            <span className="pst-group-worst">
+              lowest: {worst.meta.label}{" "}
+              <span
+                className="mono pst-oracle-rate"
+                style={{ color: rateColor(worstVerdict.rate) }}
+              >
+                {formatAgreementRate(worstVerdict.rate, worstVerdict.mismatches)}
+              </span>
+            </span>
+          )}
+        </span>
+        <span className="mono pst-checks">
+          {checksLabel(group.total, group.paramTotal)}
+        </span>
+        <span
+          className="mono pst-rate"
+          style={{ color: rateColor(group.verdict.rate) }}
+        >
+          {formatAgreementRate(group.verdict.rate, group.verdict.mismatches)}
+        </span>
+        <span className="pst-arrow pst-chevron" data-open={open || undefined}>
+          ▸
+        </span>
+      </button>
+      {open &&
+        group.members.map((member) => (
+          <ProgramRow
+            key={programKey(member.meta)}
+            row={member}
+            nested
+            onOpen={onOpen}
+          />
+        ))}
+    </div>
+  );
+}
+
+export default function ProgramStatusTable({ reports, onOpen }) {
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const allRows = buildProgramRows(reports);
+
+  const tierCounts = { all: allRows.length };
+  for (const tier of TIERS.slice(1)) {
+    tierCounts[tier.id] = allRows.filter((r) => matchesTier(r, tier.id)).length;
   }
 
-  const rows = [...programs.values()].sort(
-    (a, b) =>
-      a.meta.order - b.meta.order ||
-      String(a.meta.jurisdiction).localeCompare(String(b.meta.jurisdiction)),
+  const rows = allRows.filter(
+    (r) => matchesTier(r, statusFilter) && matchesQuery(r, query),
   );
-  if (!rows.length) return null;
+
+  // Group program rows by family; inside a family the worst rate leads.
+  const families = new Map();
+  for (const row of rows) {
+    const family = row.meta.family;
+    if (!families.has(family)) families.set(family, []);
+    families.get(family).push(row);
+  }
+  const groups = [...families.entries()]
+    .map(([family, members]) => {
+      members.sort(
+        (a, b) =>
+          (rowVerdict(a).rate ?? 101) - (rowVerdict(b).rate ?? 101) ||
+          String(a.meta.jurisdiction).localeCompare(
+            String(b.meta.jurisdiction),
+          ),
+      );
+      const total = members.reduce((n, m) => n + m.total, 0);
+      const mismatches = members.reduce((n, m) => n + m.mismatches, 0);
+      const paramTotal = members.reduce((n, m) => n + (m.paramTotal || 0), 0);
+      const paramMismatches = members.reduce(
+        (n, m) => n + (m.paramMismatches || 0),
+        0,
+      );
+      return {
+        family,
+        label: FAMILY_LABELS[family] || family,
+        members,
+        total,
+        paramTotal,
+        verdict: rowVerdict({ total, mismatches, paramTotal, paramMismatches }),
+        order: Math.min(...members.map((m) => m.meta.order)),
+      };
+    })
+    .sort((a, b) => a.order - b.order);
+
+  // Groups start collapsed: the needs-review queue below carries flagged
+  // programs, and a collapsed header still previews its worst member.
+  const [openFamilies, setOpenFamilies] = useState(() => new Set());
+  const toggleFamily = (family) =>
+    setOpenFamilies((prev) => {
+      const next = new Set(prev);
+      if (next.has(family)) next.delete(family);
+      else next.add(family);
+      return next;
+    });
+
+  // An active search or tier filter opens every surviving group — the
+  // members are what the reader asked for.
+  const filtering = Boolean(query) || statusFilter !== "all";
+
+  if (!allRows.length) return null;
 
   return (
     <section className="card-flat">
@@ -97,87 +306,59 @@ export default function ProgramStatusTable({ reports, onOpen }) {
           </div>
         </div>
       </div>
+      <div className="pst-toolbar">
+        <input
+          type="search"
+          className="pst-search"
+          placeholder="Filter programs…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Filter programs by name"
+        />
+        <div className="pst-tiers" role="group" aria-label="Status filter">
+          {TIERS.map((tier) => {
+            if (tier.id !== "all" && tierCounts[tier.id] === 0) return null;
+            const active = statusFilter === tier.id;
+            return (
+              <button
+                key={tier.id}
+                type="button"
+                aria-pressed={active}
+                className={`pst-tier-chip${active ? " pst-tier-chip-on" : ""}`}
+                onClick={() => setStatusFilter(active ? "all" : tier.id)}
+              >
+                {tier.label}
+                <span className="mono pst-tier-count">
+                  {tierCounts[tier.id]}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
       <div className="pst-body">
-        {rows.map((row) => {
-          const key = programKey(row.meta);
-          const where = US_STATE_NAMES[row.meta.jurisdiction] || row.meta.jurisdiction;
-          return (
-            <button
-              key={key}
-              type="button"
-              className="pst-row"
-              onClick={() => onOpen(key)}
-              title={`Open ${row.meta.label}`}
-            >
-              <span className="pst-label">{row.meta.label}</span>
-              <span className="mono pst-where">{where}</span>
-              <span className="pst-oracles">
-                {(() => {
-                  const byOracle = new Map();
-                  for (const run of row.runs) {
-                    if (run.metric.rate == null) continue;
-                    if (!byOracle.has(run.oracle)) byOracle.set(run.oracle, []);
-                    byOracle.get(run.oracle).push(run);
-                  }
-                  return [...byOracle.entries()]
-                    .sort(
-                      (a, b) =>
-                        Math.max(...b[1].map((r) => r.metric.total)) -
-                        Math.max(...a[1].map((r) => r.metric.total)),
-                    )
-                    .map(([oracle, runs]) => {
-                      // Household rate first; a parameter probe rides along
-                      // as "params N%". When the program is ONLY a parameter
-                      // check the checks column already says so — no tag.
-                      const ordered = runs.sort((a, b) =>
-                        a.kind === b.kind
-                          ? b.metric.total - a.metric.total
-                          : a.kind === "household"
-                            ? -1
-                            : 1,
-                      );
-                      const mixed = ordered.some(
-                        (r) => r.kind === "household",
-                      );
-                      return (
-                        <span key={oracle} className="pst-oracle-group">
-                          <span className="pst-oracle-name">
-                            {engineLabel(oracle)}
-                          </span>
-                          {ordered.map((run, i) => (
-                            <span key={run.suite} className="pst-oracle-run">
-                              {i > 0 && (
-                                <span
-                                  className="pst-oracle-sep"
-                                  aria-hidden="true"
-                                >
-                                  ·
-                                </span>
-                              )}
-                              <OracleRate
-                                run={run}
-                                tagged={mixed && run.kind === "parameter"}
-                              />
-                            </span>
-                          ))}
-                        </span>
-                      );
-                    });
-                })()}
-              </span>
-              <span className="mono pst-checks">
-                {row.total > 0
-                  ? `${row.total.toLocaleString()} checks`
-                  : `${(row.paramTotal || 0).toLocaleString()} parameter ${
-                      (row.paramTotal || 0) === 1 ? "check" : "checks"
-                    }`}
-              </span>
-              <span className="pst-arrow" aria-hidden="true">
-                →
-              </span>
-            </button>
-          );
-        })}
+        {groups.map((group) =>
+          group.members.length === 1 ? (
+            <ProgramRow
+              key={programKey(group.members[0].meta)}
+              row={group.members[0]}
+              onOpen={onOpen}
+            />
+          ) : (
+            <FamilyGroup
+              key={group.family}
+              group={group}
+              open={filtering || openFamilies.has(group.family)}
+              onToggle={() => toggleFamily(group.family)}
+              onOpen={onOpen}
+            />
+          ),
+        )}
+        {groups.length === 0 && (
+          <div className="pst-empty">
+            No programs match{query ? ` “${query}”` : " the current filter"}.
+          </div>
+        )}
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import {
   otherOracle,
   runAnchor,
 } from "../utils/suites";
+import { causeFor, coverageRegion } from "../utils/programs";
 
 /**
  * The open-gaps ledger: every measured disagreement, rolled up across all
@@ -21,20 +22,6 @@ import {
  * Below the ledger, documented encoding gaps (work known before any run)
  * are listed per program.
  */
-
-function causeFor(knownCauses, report, concept, kind) {
-  const candidates = (knownCauses || []).filter(
-    (c) => c.suite === report.suite && c.concept === concept && c.kind === kind,
-  );
-  return (
-    candidates.find(
-      (c) =>
-        c.engines &&
-        c.engines.left === report.engines?.left &&
-        c.engines.right === report.engines?.right,
-    ) || candidates.find((c) => !c.engines)
-  );
-}
 
 function buildLedger(reports, knownCauses) {
   const rows = [];
@@ -120,17 +107,10 @@ function programGapLabel(program) {
   return j && j !== "US" && j !== "UK" ? `${place} ${family}` : family;
 }
 
-function programRegion(program) {
-  if (program.jurisdiction === "UK") return "uk";
-  if (program.jurisdiction === "BE") return "be";
-  if (program.jurisdiction === "CAN") return "ca";
-  return "us";
-}
-
 function DocumentedGaps({ coveragePrograms, region }) {
   const withGaps = (coveragePrograms || [])
     .filter((p) => (p.known_non_tanf_gaps || []).length > 0)
-    .filter((p) => programRegion(p) === region);
+    .filter((p) => coverageRegion(p) === region);
   if (!withGaps.length) return null;
 
   return (
@@ -174,7 +154,7 @@ export default function GapLedger({ reports, knownCauses, coverageOverview, regi
   const totalAffected = rows.reduce((n, r) => n + r.count, 0);
 
   return (
-    <section className="card-flat">
+    <section className="card-flat" id="open-gaps">
       <div className="section-head">
         <div>
           <div className="section-eyebrow">Open gaps</div>

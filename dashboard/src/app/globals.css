@@ -359,6 +359,10 @@ a.cite:hover {
 .hero-stat {
   display: flex;
   flex-direction: column;
+  /* Tiles stretch to the tallest sibling (one may carry an extra
+     "within $100" line); center the content so shorter tiles don't
+     hug the top edge. */
+  justify-content: center;
   gap: 5px;
   padding: 8px 12px;
   border: 1px solid var(--hairline);
@@ -388,6 +392,63 @@ a.cite:hover {
 }
 
 /* ── Program status table ── */
+.pst-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 0 20px 12px;
+}
+.pst-search {
+  font: inherit;
+  font-size: 12.5px;
+  padding: 5px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 7px;
+  background: var(--paper-elevated);
+  color: var(--ink);
+  min-width: 200px;
+}
+.pst-search:focus {
+  outline: none;
+  border-color: var(--hairline-strong);
+}
+.pst-tiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pst-tier-chip {
+  appearance: none;
+  font: inherit;
+  font-size: 11.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.pst-tier-chip:hover {
+  border-color: var(--hairline-strong);
+}
+.pst-tier-chip-on {
+  border-color: var(--ink-soft);
+  color: var(--ink);
+}
+.pst-tier-count {
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+.pst-empty {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--ink-mute);
+  border-top: 1px solid var(--hairline);
+}
 .pst-body {
   display: flex;
   flex-direction: column;
@@ -398,7 +459,7 @@ a.cite:hover {
   border: none;
   border-top: 1px solid var(--hairline);
   display: grid;
-  grid-template-columns: minmax(200px, 1.3fr) 100px 1.6fr 130px 20px;
+  grid-template-columns: minmax(200px, 1.3fr) 96px 1.5fr 110px 72px 20px;
   align-items: center;
   gap: 12px;
   padding: 9px 20px;
@@ -406,16 +467,48 @@ a.cite:hover {
   text-align: left;
   cursor: pointer;
   color: inherit;
+  width: 100%;
 }
-.pst-row:first-child {
+.pst-body > .pst-row:first-child,
+.pst-body > .pst-group:first-child .pst-row:first-child {
   border-top: none;
 }
 .pst-row:hover {
   background: var(--paper-elevated);
 }
+.pst-group {
+  display: flex;
+  flex-direction: column;
+}
+.pst-group-head .pst-label {
+  font-weight: 500;
+}
+.pst-row-nested .pst-label {
+  padding-left: 22px;
+  color: var(--ink-soft);
+}
+.pst-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+.pst-chevron {
+  transition: transform 0.15s ease;
+}
+.pst-chevron[data-open] {
+  transform: rotate(90deg);
+}
+.pst-group-worst {
+  font-size: 11px;
+  color: var(--ink-mute);
+}
 .pst-label {
   font-size: 13px;
   color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
 }
 .pst-where {
   font-size: 10.5px;
@@ -785,6 +878,100 @@ a.cite:hover {
   color: var(--ink-mute);
   margin: 0 0 24px;
   max-width: 640px;
+}
+
+/* The health strip under the hero: the two numbers that qualify the verdict. */
+.status-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: -12px; /* tucks under the hero, tighter than the section gap */
+}
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  padding: 6px 13px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  background: var(--paper-elevated, transparent);
+}
+.status-chip-link:hover {
+  border-color: var(--hairline-strong);
+}
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--ink-mute);
+}
+.status-chip[data-tone="good"] .status-dot {
+  background: var(--good);
+}
+.status-chip[data-tone="warn"] .status-dot {
+  background: var(--warn);
+}
+.status-chip[data-tone="bad"] .status-dot {
+  background: var(--bad);
+}
+
+/* Anchor targets scroll clear of the sticky topbar. */
+#programs,
+#needs-review,
+#open-gaps,
+#freshness {
+  scroll-margin-top: 72px;
+}
+
+/* ── Needs-review queue ── */
+.exc-list {
+  display: flex;
+  flex-direction: column;
+}
+.exc-row {
+  appearance: none;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--hairline);
+  display: grid;
+  grid-template-columns: minmax(200px, 1.6fr) 110px 72px 150px 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 20px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  width: 100%;
+}
+.exc-row:first-child {
+  border-top: none;
+}
+.exc-row:hover {
+  background: var(--paper-elevated);
+}
+.exc-rate {
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.exc-unexplained {
+  font-size: 10.5px;
+  color: var(--ink-mute);
+  text-align: right;
+}
+
+
+/* The oracle chips sit with the table they filter. */
+.table-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .oracle-filter {
