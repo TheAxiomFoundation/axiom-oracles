@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { loadOracleData } from "../utils/data";
+import { loadSuiteCases } from "../utils/caseData";
 import { causeFor, countUnexplained } from "../utils/programs";
 import {
   ageDays,
@@ -25,13 +26,12 @@ import {
  * The oracle is the first-class object: trust comes from WHO checked the
  * work. The page is one argument, top to bottom:
  *   1. Thesis — every encoding is checked against independent engines.
- *   2. The roster — one dossier card per oracle: identity, scope, verdict,
- *      and validation state. Click through for the full dossier.
- *   3. The validation ledger — every known discrepancy class ends in an
- *      action: a filed issue, a schema-validated disposition, a documented
- *      cause, or it is OPEN and says so. "Nothing ignored" is inspectable,
- *      not asserted.
- *   4. Coverage — the executable-surface burn-down; what is encoded at all
+ *   2. The roster — one card per oracle: identity, scope, verdict, and
+ *      validation state. A card opens into the oracle's full record, where
+ *      every discrepancy class ends in an action — a filed issue, a
+ *      schema-validated disposition, a documented cause, or it is OPEN and
+ *      says so — plus the per-household evidence.
+ *   3. Coverage — the executable-surface burn-down; what is encoded at all
  *      is the Axiom app's story.
  * Jurisdiction is an attribute here, not the navigation.
  */
@@ -78,6 +78,23 @@ const ORACLE_IDENTITY = {
 };
 
 const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE" };
+
+/**
+ * The unit of counting is the household case: one household compared once,
+ * no matter how many concepts (liability, CTC, EITC, …) that comparison
+ * covers — component concepts roll up into their parent, and a household's
+ * concept-by-concept comparisons are the evidence, not extra households.
+ */
+function reportHouseholds(report) {
+  return Number.isFinite(report.case_count)
+    ? report.case_count
+    : (report.cases || []).length;
+}
+
+function compactCount(n) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)} million`;
+  return n.toLocaleString();
+}
 
 /** One discrepancy class = a (suite, concept, kind) mismatch bucket. */
 function buildClasses(reports, knownCauses) {
@@ -184,8 +201,6 @@ function lastRunLabel(days) {
 
 function OracleCard({ oracle, selected, onSelect }) {
   const id = ORACLE_IDENTITY[oracle.id] || {};
-  const openCount = oracle.classes.filter((c) => c.action === "open").length;
-  const actioned = oracle.classes.length - openCount;
   return (
     <button
       type="button"
@@ -205,7 +220,10 @@ function OracleCard({ oracle, selected, onSelect }) {
       </div>
       <div className="v2-card-name">{engineLabel(oracle.id)}</div>
       <p className="v2-card-what">{id.what}</p>
-      <div className="v2-card-stats">
+      <div
+        className="v2-card-stats"
+        title={`${oracle.checks.toLocaleString()} individual checks across these households`}
+      >
         <Stat
           value={
             <span style={{ color: rateColor(oracle.rate) }}>
@@ -214,42 +232,218 @@ function OracleCard({ oracle, selected, onSelect }) {
           }
           label="agreement"
         />
-        <Stat value={oracle.checks.toLocaleString()} label="checks" />
+        <Stat value={oracle.households.toLocaleString()} label="households" />
         <Stat value={oracle.programs.size} label="programs" />
-      </div>
-      <div className="v2-card-validation">
-        {oracle.unexplained > 0 ? (
-          <span className="v2-vchip v2-vchip-warn">
-            {oracle.unexplained.toLocaleString()} unexplained
-          </span>
-        ) : (
-          <span className="v2-vchip v2-vchip-good">
-            every disagreement explained
-          </span>
-        )}
-        {openCount > 0 && (
-          <span className="v2-vchip v2-vchip-warn">
-            {openCount} open {openCount === 1 ? "class" : "classes"}
-          </span>
-        )}
-        {actioned > 0 && (
-          <span className="v2-vchip">
-            {actioned} {actioned === 1 ? "class" : "classes"} actioned
-          </span>
-        )}
       </div>
       <div className="mono v2-card-foot">
         <span>{lastRunLabel(oracle.lastRunDays)}</span>
         <span className="v2-card-open">
-          {selected ? "close dossier" : "open dossier →"}
+          {selected ? "close" : "full record →"}
         </span>
       </div>
     </button>
   );
 }
 
-function Dossier({ oracle, onOpenProgram }) {
-  const id = ORACLE_IDENTITY[oracle.id] || {};
+function caseValue(v) {
+  if (typeof v === "boolean") return v ? "yes" : "no";
+  if (typeof v === "number") return `$${Math.round(v).toLocaleString()}`;
+  return v == null ? "—" : String(v);
+}
+
+function conceptShort(conceptId, labels) {
+  const known = labels.get(conceptId);
+  if (known) return known;
+  const tail = String(conceptId).split("#").pop().replaceAll(/[_-]/g, " ");
+  // Short tails are acronyms (eitc, ctc); longer ones read as phrases.
+  return tail.length <= 4
+    ? tail.toUpperCase()
+    : tail.charAt(0).toUpperCase() + tail.slice(1);
+}
+
+/**
+ * The bottom of the drill: individual households, their inputs, and — when
+ * the engines disagree — both engines' answers side by side. Reads the
+ * per-suite case artifacts (matches carry inputs only; outputs are stored
+ * for disagreements, where they are the evidence).
+ */
+function HouseholdBrowser({ oracle }) {
+  const suites = useMemo(
+    () => [...new Set(oracle.reports.map((r) => r.suite))],
+    [oracle],
+  );
+  const conceptLabels = useMemo(() => {
+    const labels = new Map();
+    for (const report of oracle.reports) {
+      for (const agg of report.aggregates || []) {
+        if (agg.description) labels.set(agg.concept, agg.description);
+      }
+    }
+    return labels;
+  }, [oracle]);
+  const [suite, setSuite] = useState(suites[0]);
+  const [cases, setCases] = useState(undefined); // undefined = loading
+  const [onlyDisagreements, setOnlyDisagreements] = useState(false);
+  const [limit, setLimit] = useState(12);
+
+  const activeSuite = suites.includes(suite) ? suite : suites[0];
+
+  useEffect(() => {
+    let live = true;
+    setCases(undefined);
+    setLimit(12);
+    loadSuiteCases(activeSuite).then((d) => {
+      if (live) setCases(d);
+    });
+    return () => {
+      live = false;
+    };
+  }, [activeSuite]);
+  const rows = useMemo(() => {
+    if (!cases?.cases) return [];
+    let out = cases.cases;
+    if (onlyDisagreements) out = out.filter((c) => (c.m || []).length > 0);
+    // Worst disagreement first; agreeing households after.
+    return [...out].sort((a, b) => {
+      const worst = (c) =>
+        Math.max(0, ...(c.m || []).map((m) => Math.abs(m.d || 0)));
+      return worst(b) - worst(a);
+    });
+  }, [cases, onlyDisagreements]);
+
+  const totalCompared = cases?.index?.total_cases ?? cases?.cases?.length ?? 0;
+  const inputsMissing = Boolean(
+    cases?.cases?.length &&
+      cases.cases
+        .slice(0, 50)
+        .every((c) => !(c.h?.n || (c.h?.a || []).length)),
+  );
+
+  return (
+    <div className="v2-hh">
+      <div className="v2-hh-head">
+        <span className="mono v2-dossier-colhead">Households</span>
+      </div>
+      <div className="v2-hh-controls">
+        <select
+          className="input-pill v2-hh-select"
+          value={activeSuite}
+          onChange={(e) => setSuite(e.target.value)}
+          aria-label="Verification suite"
+        >
+          {suites.map((s) => (
+            <option key={s} value={s}>
+              {suiteLabel(s)}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          className={`v2-toggle${onlyDisagreements ? " v2-toggle-on" : ""}`}
+          aria-pressed={onlyDisagreements}
+          onClick={() => setOnlyDisagreements(!onlyDisagreements)}
+        >
+          <span className="v2-toggle-mark" aria-hidden="true" />
+          only disagreements
+        </button>
+      </div>
+      {cases?.cases &&
+        (cases.index?.partial === "mismatch-only" || inputsMissing) && (
+          <p className="v2-hh-note">
+            {cases.index?.partial === "mismatch-only" &&
+              `This artifact stores only the disagreeing households — the other ${(
+                totalCompared - cases.cases.length
+              ).toLocaleString()} matched on every compared value. `}
+            {inputsMissing &&
+              "Household inputs are not yet captured by this suite's harness."}
+          </p>
+        )}
+      {cases === undefined ? (
+        <p className="v2-empty">Loading household cases…</p>
+      ) : cases === null ? (
+        <p className="v2-empty">
+          No per-household case artifacts for this suite yet.
+        </p>
+      ) : rows.length === 0 ? (
+        <p className="v2-empty">
+          {onlyDisagreements
+            ? "No disagreeing households in this suite — every compared value matches."
+            : "No households in this suite."}
+        </p>
+      ) : (
+        <>
+          {rows.slice(0, limit).map((c) => (
+            <div key={c.id} className="v2-hh-row">
+              <div className="v2-hh-who">
+                <span className="mono v2-hh-id">{c.id}</span>
+                {(c.h?.n || (c.h?.a || []).length > 0) && (
+                  <span className="v2-hh-inputs">
+                    {c.h?.n || (c.h?.a || []).length} ppl
+                    {(c.h?.a || []).length > 0 &&
+                      ` · ages ${(c.h.a || []).join(", ")}`}
+                    {c.h?.e != null &&
+                      ` · $${Number(c.h.e).toLocaleString()} earned`}
+                  </span>
+                )}
+              </div>
+              <div className="v2-hh-outcomes">
+                {(c.m || []).length === 0 ? (
+                  <span className="v2-hh-agree">
+                    engines agree on every compared value
+                  </span>
+                ) : (
+                  (c.m || []).map((m, i) => (
+                    <div key={i} className="v2-hh-outcome">
+                      <span className="v2-hh-concept">
+                        {conceptShort(m.c, conceptLabels)}
+                      </span>
+                      <span className="mono v2-hh-values">
+                        <span className="v2-hh-eng">Axiom</span>{" "}
+                        {caseValue(m.l)}
+                        <span className="v2-hh-eng">
+                          {" "}
+                          {engineLabel(oracle.id)}
+                        </span>{" "}
+                        {caseValue(m.x)}
+                        {typeof m.d === "number" && m.d !== 0 && (
+                          <span className="v2-hh-diff">
+                            {" "}
+                            Δ ${Math.abs(Math.round(m.d)).toLocaleString()}
+                          </span>
+                        )}
+                      </span>
+                      {m.e ? (
+                        <span className="v2-action v2-action-doc">
+                          explained
+                        </span>
+                      ) : (
+                        <span className="v2-action v2-action-open">
+                          unexplained
+                        </span>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          ))}
+          {rows.length > limit && (
+            <button
+              type="button"
+              className="mono v2-hh-more"
+              onClick={() => setLimit(limit + 24)}
+            >
+              show {Math.min(24, rows.length - limit)} more of{" "}
+              {rows.length.toLocaleString()}
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function OracleRecord({ oracle, onOpenProgram }) {
   const programRows = useMemo(() => {
     const byProgram = new Map();
     for (const report of oracle.reports) {
@@ -262,36 +456,25 @@ function Dossier({ oracle, onOpenProgram }) {
           region: meta.region,
           total: 0,
           mismatches: 0,
+          households: 0,
         });
       }
       const entry = byProgram.get(key);
       const m = reportMetric(report);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.households += reportHouseholds(report);
     }
     return [...byProgram.values()]
       .map((p) => ({
         ...p,
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
       }))
-      .sort((a, b) => (a.rate ?? 101) - (b.rate ?? 101));
+      .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1));
   }, [oracle]);
 
   return (
     <section className="card-flat v2-dossier">
-      <div className="section-head">
-        <div>
-          <div className="section-eyebrow">
-            Dossier · {ORACLE_IDENTITY[oracle.id]?.org || "independent engine"}
-          </div>
-          <div className="section-title">{engineLabel(oracle.id)}</div>
-        </div>
-        {id.url && (
-          <a href={id.url} target="_blank" rel="noreferrer" className="cite">
-            {id.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
-          </a>
-        )}
-      </div>
       <div className="v2-dossier-body">
         <div className="v2-dossier-col">
           <div className="mono v2-dossier-colhead">
@@ -309,8 +492,11 @@ function Dossier({ oracle, onOpenProgram }) {
               <span className="mono v2-region">
                 {REGION_LABELS[p.region] || p.region}
               </span>
-              <span className="mono v2-prog-checks">
-                {p.total.toLocaleString()}
+              <span
+                className="mono v2-prog-checks"
+                title={`${p.households.toLocaleString()} households · ${p.total.toLocaleString()} checks`}
+              >
+                {p.households.toLocaleString()}
               </span>
               <span
                 className="mono v2-prog-rate"
@@ -322,24 +508,40 @@ function Dossier({ oracle, onOpenProgram }) {
           ))}
         </div>
         <div className="v2-dossier-col">
-          <div className="mono v2-dossier-colhead">
-            Discrepancy classes · every one ends in an action
-          </div>
+          <div className="mono v2-dossier-colhead">Discrepancy classes</div>
           {oracle.classes.length === 0 ? (
             <p className="v2-empty">
               No measured disagreements with this oracle.
             </p>
           ) : (
-            oracle.classes.map((row, i) => (
-              <ClassRow
-                key={`${row.suite}-${row.conceptLabel}-${row.kind}-${i}`}
-                row={row}
-                showOracle={false}
-              />
-            ))
+            <>
+              {oracle.classes.slice(0, 8).map((row, i) => (
+                <ClassRow
+                  key={`${row.suite}-${row.conceptLabel}-${row.kind}-${i}`}
+                  row={row}
+                  showOracle={false}
+                />
+              ))}
+              {oracle.classes.length > 8 && (
+                <details className="v2-ledger-more">
+                  <summary>
+                    show all {oracle.classes.length} classes
+                  </summary>
+                  {oracle.classes.slice(8).map((row, i) => (
+                    <ClassRow
+                      key={`rest-${row.suite}-${row.conceptLabel}-${row.kind}-${i}`}
+                      row={row}
+                      showOracle={false}
+                    />
+                  ))}
+                </details>
+              )}
+            </>
           )}
         </div>
       </div>
+      {/* Keyed by oracle so the suite selection resets with the record. */}
+      <HouseholdBrowser key={oracle.id} oracle={oracle} />
     </section>
   );
 }
@@ -390,6 +592,7 @@ export default function OraclesV2() {
           reports: [],
           checks: 0,
           mismatches: 0,
+          households: 0,
           regions: new Set(),
           programs: new Set(),
           lastRunDays: null,
@@ -400,6 +603,7 @@ export default function OraclesV2() {
       const m = reportMetric(report);
       entry.checks += m.total;
       entry.mismatches += m.mismatches;
+      entry.households += reportHouseholds(report);
       const meta = suiteMeta(report.suite);
       entry.regions.add(meta.region);
       entry.programs.add(`${meta.family}__${meta.jurisdiction}`);
@@ -423,6 +627,7 @@ export default function OraclesV2() {
       checks: oracles.reduce((n, o) => n + o.checks, 0),
       mismatches: oracles.reduce((n, o) => n + o.mismatches, 0),
       unexplained: oracles.reduce((n, o) => n + o.unexplained, 0),
+      households: oracles.reduce((n, o) => n + o.households, 0),
       programs: new Set(oracles.flatMap((o) => [...o.programs])).size,
     };
     totals.rate =
@@ -430,11 +635,7 @@ export default function OraclesV2() {
         ? ((totals.checks - totals.mismatches) / totals.checks) * 100
         : null;
 
-    const classes = buildClasses(verification, data.knownCauses || []);
-    const actionCounts = { open: 0, filed: 0, documented: 0, dispositioned: 0 };
-    for (const row of classes) actionCounts[row.action] += 1;
-
-    return { oracles, totals, classes, actionCounts, crossChecks, verification };
+    return { oracles, totals, crossChecks, verification };
   }, [data]);
 
   // The program explorer is the drill-down layer: runs, triangulation, and
@@ -469,12 +670,8 @@ export default function OraclesV2() {
     );
   }
 
-  const { oracles, totals, classes, actionCounts, crossChecks } = model;
+  const { oracles, totals, crossChecks } = model;
   const selectedOracle = oracles.find((o) => o.id === selected);
-  const actionedTotal =
-    actionCounts.filed + actionCounts.documented + actionCounts.dispositioned;
-  const openRows = classes.filter((c) => c.action === "open");
-  const actionedRows = classes.filter((c) => c.action !== "open");
 
   return (
     <>
@@ -516,45 +713,24 @@ export default function OraclesV2() {
           <h1 className="v2-thesis">
             Axiom never grades its own work. Every encoding is checked against{" "}
             <em>{oracles.length}</em> independent engines —{" "}
-            <em>{(totals.checks / 1e6).toFixed(1)} million</em> checks,{" "}
+            <em>{compactCount(totals.households)}</em> households,{" "}
             <em style={{ color: rateColor(totals.rate) }}>
               {formatAgreementRate(totals.rate, totals.mismatches)}
             </em>{" "}
             agreement, and every disagreement traced to an action.
           </h1>
           <p className="v2-hero-sub">
-            An oracle is an independent implementation of the same law. When
-            Axiom and an oracle disagree, the disagreement is triaged in the
-            open: explained with a schema-validated disposition, filed as an
-            issue upstream, or kept visibly open until someone does.
+            An oracle is an independent implementation of the same law. A
+            household counts once, no matter how many programs and credits are
+            compared for it — concept by concept, those comparisons add up to{" "}
+            {compactCount(totals.checks)} individual checks behind the
+            agreement rate. When Axiom and an oracle disagree, the
+            disagreement is triaged in the open: explained with a
+            schema-validated disposition, filed as an issue upstream, or kept
+            visibly open until someone does.
             {crossChecks > 0 &&
               ` Oracles are also cross-checked against each other (${crossChecks} arbitration runs), so a wrong oracle cannot silently win.`}
           </p>
-          <div className="v2-trustline">
-            <Stat
-              value={classes.length}
-              label="discrepancy classes"
-            />
-            <Stat
-              value={actionedTotal}
-              label="actioned"
-              tone="good"
-            />
-            <Stat
-              value={actionCounts.filed}
-              label="issues filed"
-            />
-            <Stat
-              value={actionCounts.open}
-              label="open"
-              tone={actionCounts.open > 0 ? "warn" : "good"}
-            />
-            <Stat
-              value={totals.unexplained.toLocaleString()}
-              label="unexplained checks"
-              tone={totals.unexplained > 0 ? "warn" : "good"}
-            />
-          </div>
         </section>
 
         {/* 2 · The roster */}
@@ -562,7 +738,7 @@ export default function OraclesV2() {
           <div className="v2-section-head">
             <span className="section-eyebrow">The oracles</span>
             <span className="v2-section-title">
-              Who checks Axiom's work — open a dossier for the full record
+              Who checks Axiom's work — open one for the full record
             </span>
           </div>
           <div className="v2-roster">
@@ -578,44 +754,11 @@ export default function OraclesV2() {
             ))}
           </div>
           {selectedOracle && (
-            <Dossier oracle={selectedOracle} onOpenProgram={openProgram} />
+            <OracleRecord oracle={selectedOracle} onOpenProgram={openProgram} />
           )}
         </section>
 
-        {/* 3 · The validation ledger */}
-        <section className="card-flat">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Validation ledger</div>
-              <div className="section-title">
-                {classes.length} discrepancy classes ·{" "}
-                {actionCounts.open === 0
-                  ? "all actioned"
-                  : `${actionCounts.open} still open`}
-              </div>
-            </div>
-            <span className="mono v2-ledger-key">
-              filed {actionCounts.filed} · documented {actionCounts.documented}{" "}
-              · dispositioned {actionCounts.dispositioned} · open{" "}
-              {actionCounts.open}
-            </span>
-          </div>
-          <div className="v2-ledger">
-            {openRows.map((row, i) => (
-              <ClassRow key={`open-${i}`} row={row} />
-            ))}
-            <details className="v2-ledger-more" open={openRows.length === 0}>
-              <summary>
-                {actionedRows.length} actioned classes — the explained record
-              </summary>
-              {actionedRows.map((row, i) => (
-                <ClassRow key={`act-${i}`} row={row} />
-              ))}
-            </details>
-          </div>
-        </section>
-
-        {/* 4 · Coverage */}
+        {/* 3 · Coverage */}
         {ruleSummary && (
           <section className="v2-coverage">
             <div className="v2-coverage-text">

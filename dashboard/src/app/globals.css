@@ -792,13 +792,6 @@ body {
   margin: 0;
 }
 
-.v2-trustline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-
 .v2-stat {
   display: flex;
   flex-direction: column;
@@ -935,31 +928,9 @@ body {
   background: var(--paper-warm);
 }
 
-.v2-card-validation {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
 
-.v2-vchip {
-  font-size: 11px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  border: 1px solid var(--hairline);
-  color: var(--ink-soft);
-}
 
-.v2-vchip-good {
-  border-color: transparent;
-  background: var(--good-bg);
-  color: var(--good);
-}
 
-.v2-vchip-warn {
-  border-color: transparent;
-  background: var(--warn-bg);
-  color: var(--warn);
-}
 
 .v2-card-foot {
   display: flex;
@@ -1096,16 +1067,7 @@ a.v2-action-filed:hover {
   color: var(--good);
 }
 
-.v2-ledger {
-  padding: 4px 20px 16px;
-  display: flex;
-  flex-direction: column;
-}
 
-.v2-ledger-key {
-  font-size: 10.5px;
-  color: var(--ink-mute);
-}
 
 .v2-ledger-more > summary {
   cursor: pointer;
@@ -1174,4 +1136,174 @@ a.v2-action-filed:hover {
     border-left: none;
     border-top: 1px solid var(--hairline);
   }
+}
+
+/* ── v2 household browser — inputs and both engines' answers ── */
+.v2-hh {
+  border-top: 1px solid var(--hairline);
+  padding: 14px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.v2-hh-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.v2-hh-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 2px 0 10px;
+}
+.v2-hh-note {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-mute);
+  margin: 0 0 8px;
+  max-width: 640px;
+}
+.v2-hh-select {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+.v2-hh-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.v2-hh-count {
+  margin-left: auto;
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+.v2-hh-row {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 10px 0;
+  border-top: 1px solid var(--hairline);
+}
+.v2-hh-who {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.v2-hh-id {
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+.v2-hh-inputs {
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.v2-hh-outcomes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.v2-hh-outcome {
+  display: grid;
+  grid-template-columns: minmax(110px, 170px) 1fr auto;
+  align-items: baseline;
+  gap: 8px 14px;
+}
+.v2-hh-eng {
+  color: var(--ink-mute);
+  font-size: 10.5px;
+}
+.v2-hh-concept {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.v2-hh-values {
+  font-size: 11.5px;
+  color: var(--ink);
+}
+.v2-hh-diff {
+  color: var(--bad);
+  font-weight: 600;
+}
+.v2-hh-agree {
+  font-size: 12px;
+  color: var(--good);
+}
+.v2-hh-more {
+  appearance: none;
+  background: none;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font: inherit;
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-start;
+}
+.v2-hh-more:hover {
+  border-color: var(--hairline-strong);
+}
+@media (max-width: 700px) {
+  .v2-hh-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* ── Inputs ── */
+.input-pill {
+  background: var(--paper-elevated);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 120ms ease;
+}
+.input-pill:focus {
+  border-color: var(--hairline-strong);
+}
+
+/* Toggle chip — pill-language boolean filter. */
+.v2-toggle {
+  appearance: none;
+  font: inherit;
+  font-size: 11.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.v2-toggle:hover {
+  border-color: var(--hairline-strong);
+}
+.v2-toggle-mark {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--hairline-strong);
+  background: transparent;
+  flex: none;
+}
+.v2-toggle-on {
+  border-color: var(--ink-soft);
+  color: var(--ink);
+}
+.v2-toggle-on .v2-toggle-mark {
+  border-color: var(--accent);
+  background: var(--accent);
 }
