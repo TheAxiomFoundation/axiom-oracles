@@ -66,14 +66,22 @@
 - Added an explicit Germany dashboard route and jurisdiction toggle. The DE
   suite no longer falls through the two-letter `DE` US-state heuristic, and
   GETTSIM now has a first-class engine label in report views.
+- Ran the full 13-case lane against live EUROMOD J2.0+ / DE_2025 and GETTSIM
+  1.2.1 at policy date 2025-06-30. The run produced 78 comparisons: 66 exact-
+  tolerance matches, 12 expected amount differences, and 0 engine errors.
+- Published the dispositioned v2.1 dashboard report and manifest entry. All 12
+  differences are covered by the three filed findings (9 + 2 + 1), yielding an
+  84.615385% raw match rate, 100% explained rate, and no unexplained, expired,
+  or orphaned DE dispositions.
+- Regenerated freshness metadata and added committed-report invariants for the
+  engine pair/configuration, exact mismatch coordinates, and disposition counts.
+  Ruff passed and 46 report/runner/disposition tests passed.
 
 ## Next
 
-1. Run both live engines, validate the exact 66/78 raw matches and 12
-   dispositioned rows, and commit the generated report.
-2. Add live-gated anchors for each engine, update the DE playbooks, and
+1. Add live-gated anchors for each engine, update the DE playbooks, and
    document the realized lane.
-3. Run Ruff plus the full and GETTSIM-specific test commands.
-4. Finalize this ledger and write the handoff report to `FINAL_REPORT.md`
+2. Run Ruff plus the full and GETTSIM-specific test commands.
+3. Finalize this ledger and write the handoff report to `FINAL_REPORT.md`
    (no separate output path was provided), without pushing or opening a pull
    request.

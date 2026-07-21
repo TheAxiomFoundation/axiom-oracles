@@ -154,6 +154,7 @@
     "axiom-policyengine-ga-snap-ecps.json",
     "axiom-policyengine-taxsim-ne-income-tax-liability.json",
     "axiom-policyengine-taxsim-ct-income-tax-liability.json",
-    "axiom-policyengine-taxsim-co-income-tax-liability.json"
+    "axiom-policyengine-taxsim-co-income-tax-liability.json",
+    "euromod-gettsim-de-worker-dual-oracle.json"
   ]
 }
