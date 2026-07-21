@@ -51,7 +51,8 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated
 snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
-appends the daily snapshot and regenerates the scoreboard, detail, and
+regenerates the dispositions merge (and its EUROMOD-BE coverage rollup),
+appends the daily snapshot, and regenerates the scoreboard, detail, and
 burn-down atomically with every report refresh it commits
 (`scripts/commit_refreshed_report.sh`), so these derived artifacts can never
 lag a bot-pushed report. The ratchet is the exception: it is never re-pinned

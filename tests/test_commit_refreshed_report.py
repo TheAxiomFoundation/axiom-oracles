@@ -17,6 +17,8 @@ import os
 import shutil
 import subprocess
 import sys
+import time
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -30,9 +32,25 @@ REPORT = "dashboard/public/data/axiom-policyengine-taxsim-il-income-tax-liabilit
 SIBLING_REPORT = (
     "dashboard/public/data/axiom-policyengine-taxsim-ky-income-tax-liability.json"
 )
-#: Everything the script and its regeneration scripts read or write.
-SEED_DIRS = ("scripts", "axiom_oracles", "comparisons", "conformance")
+#: Everything the script and its regeneration scripts read or write. `docs`
+#: and `reports` (plus the root-level *.md files copied in seed_repo) are
+#: dispositions EVIDENCE sources: schema validation fails on dangling paths.
+SEED_DIRS = (
+    "scripts",
+    "axiom_oracles",
+    "comparisons",
+    "conformance",
+    "dispositions",
+    "docs",
+    "reports",
+)
 SEED_DATA = "dashboard/public/data"
+#: The EUROMOD-BE coverage rollup — maintained only by apply_dispositions.py,
+#: aggregated from every be-* report, gated by ci.yml's `--check`.
+BE_ROLLUP = "axiom_oracles/data/euromod_be_coverage.json"
+#: A BE report with NO dispositions file: the merge never rewrites it, but it
+#: still feeds the rollup — so perturbing it drifts the rollup and nothing else.
+BE_REPORT = "dashboard/public/data/axiom-euromod-be-article-51-forfait.json"
 
 #: Hermetic git: no user/system config (no signing hooks, no identity — the
 #: script must supply the bot identity itself, exactly as on a CI runner).
@@ -61,6 +79,8 @@ def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     for d in SEED_DIRS:
         shutil.copytree(REPO_ROOT / d, seed / d, ignore=ignore)
     shutil.copytree(REPO_ROOT / SEED_DATA, seed / SEED_DATA, ignore=ignore)
+    for md in REPO_ROOT.glob("*.md"):  # dispositions evidence (e.g. PROGRESS.md)
+        shutil.copy2(md, seed / md.name)
     _git(seed, "init", "-q", "-b", "main")
     _git(seed, "add", "-A")
     _git(seed, "commit", "-q", "-m", "seed")
@@ -98,20 +118,30 @@ def _run_script(
     )
 
 
-def _perturb_report(clone: Path, report: str = REPORT) -> None:
-    """Change the report the way a rerun does: a score-bearing dispositioned
-    rate (flips the conformance detail — the #282 incident field) plus the
-    provenance timestamp (flips freshness.json)."""
+def _perturb_report(clone: Path, report: str = REPORT) -> str:
+    """Change the report the way a rerun does and return a sentinel that
+    proves THIS refresh landed.
+
+    Moves score-bearing summary counts (match → mismatch: flips the
+    conformance detail and the freshness register — the #282 incident class)
+    and stamps a unique provenance timestamp. Only fields the dispositions
+    merge PRESERVES are touched: for suites with a dispositions file,
+    apply_dispositions.py recomputes the `summary.dispositioned` block from
+    the mismatch rows, so perturbing that block would be silently reverted by
+    the regeneration and the test could not tell a landed refresh from a
+    clobbered one.
+    """
     path = clone / report
     doc = json.loads(path.read_text())
-    dispositioned = doc["summary"]["dispositioned"]
-    dispositioned["explained_rate"] = (
-        100 if dispositioned.get("explained_rate") is None else None
+    doc["summary"]["match_count"] -= 1
+    doc["summary"]["mismatch_count"] = doc["summary"].get("mismatch_count", 0) + 1
+    sentinel = (
+        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+        + f".{uuid.uuid4().hex[:8]}Z"
     )
-    doc["provenance"]["generated_at"] = datetime.now(timezone.utc).strftime(
-        "%Y-%m-%dT%H:%M:%SZ"
-    )
+    doc["provenance"]["generated_at"] = sentinel
     path.write_text(json.dumps(doc, indent=2) + "\n")
+    return sentinel
 
 
 def _staleness_gate(clone: Path, script: str) -> subprocess.CompletedProcess:
@@ -128,13 +158,15 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
     """Clone origin's tip and assert ci.yml's staleness gates all pass on it."""
     verify = _clone(origin, tmp_path / f"verify-{len(list(tmp_path.iterdir()))}")
     for script in (
+        "apply_dispositions.py",
         "conformance_scoreboard.py",
         "conformance_burndown.py",
         "check_vacuous_gate.py",
     ):
         result = _staleness_gate(verify, script)
         assert result.returncode == 0, (
-            f"{script} --check failed on the pushed tip:\n{result.stderr}"
+            f"{script} --check failed on the pushed tip:\n"
+            f"stdout: {result.stdout}\nstderr: {result.stderr}"
         )
     return verify
 
@@ -144,13 +176,40 @@ def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
     freshness, and burn-down — the pushed tip passes ci.yml's staleness gates
     (the 2026-07-14 incident tree could not have been pushed)."""
     clone = _clone(origin, tmp_path / "job")
-    _perturb_report(clone)
+    sentinel = _perturb_report(clone)
     result = _run_script(clone)
     assert result.returncode == 0, result.stderr
 
     verify = _assert_origin_tip_green(origin, tmp_path)
     pushed = json.loads((verify / REPORT).read_text())
-    assert pushed["summary"]["dispositioned"]["explained_rate"] is None
+    assert pushed["provenance"]["generated_at"] == sentinel
+
+
+def test_be_refresh_regenerates_euromod_coverage_rollup(origin, tmp_path):
+    """A BE report refresh drifts the EUROMOD-BE coverage rollup — maintained
+    ONLY by apply_dispositions.py and gated by ci.yml's
+    `apply_dispositions.py --check` — so the pushed tip must carry a
+    regenerated rollup, not the seed one (BE suites are in the bot matrix)."""
+    clone = _clone(origin, tmp_path / "job")
+    before = json.loads((clone / BE_ROLLUP).read_text())["dispositioned_parity"]
+
+    # Flip one comparison from match to mismatch: the rollup's aggregate
+    # match_count / raw_match_rate must move, or this test cannot discriminate.
+    path = clone / BE_REPORT
+    doc = json.loads(path.read_text())
+    doc["summary"]["match_count"] -= 1
+    doc["summary"]["mismatch_count"] += 1
+    path.write_text(json.dumps(doc, indent=2) + "\n")
+
+    result = _run_script(clone, "be-article-51-forfait")
+    assert result.returncode == 0, result.stderr
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    after = json.loads((verify / BE_ROLLUP).read_text())["dispositioned_parity"]
+    assert after["match_count"] == before["match_count"] - 1, (
+        "the pushed rollup must be regenerated from the refreshed BE report"
+    )
+    assert after != before
 
 
 def test_concurrent_siblings_never_leave_main_stale(origin, tmp_path):
@@ -160,8 +219,8 @@ def test_concurrent_siblings_never_leave_main_stale(origin, tmp_path):
     including the intermediate one — stays gate-green."""
     job_a = _clone(origin, tmp_path / "job-a")
     job_b = _clone(origin, tmp_path / "job-b")  # cloned BEFORE a's push
-    _perturb_report(job_a, REPORT)
-    _perturb_report(job_b, SIBLING_REPORT)
+    sentinel_a = _perturb_report(job_a, REPORT)
+    sentinel_b = _perturb_report(job_b, SIBLING_REPORT)
 
     result_a = _run_script(job_a, "il-income-tax-liability")
     assert result_a.returncode == 0, result_a.stderr
@@ -173,9 +232,9 @@ def test_concurrent_siblings_never_leave_main_stale(origin, tmp_path):
     assert _git(origin, "rev-parse", "main") != intermediate
 
     verify = _assert_origin_tip_green(origin, tmp_path)
-    for report in (REPORT, SIBLING_REPORT):
+    for report, sentinel in ((REPORT, sentinel_a), (SIBLING_REPORT, sentinel_b)):
         doc = json.loads((verify / report).read_text())
-        assert doc["summary"]["dispositioned"]["explained_rate"] is None, (
+        assert doc["provenance"]["generated_at"] == sentinel, (
             f"{report}: a sibling push clobbered this refresh"
         )
 
@@ -242,10 +301,166 @@ def test_self_heals_preexisting_staleness(origin, tmp_path):
     _assert_origin_tip_green(origin, tmp_path)
 
 
+def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path):
+    """A sibling advances main BETWEEN this leg's rebuild and its push — the
+    genuine race. A pre-receive hook rejects the leg's first push (git forbids
+    moving refs from inside the hook, so the test thread performs the advance
+    while the leg sleeps out its retry delay, gated on the hook's marker
+    file). The leg must rebuild on the sibling's tip and land a tree that
+    keeps BOTH refreshes — and, because the sibling pushed a raw report with
+    no derived regen (the old broken-bot shape), the leg's regeneration must
+    heal that too: the final tip passes every gate."""
+    # The sibling's commit: a raw report perturbation with NO derived
+    # regeneration, exactly what the pre-fix bot pushed. Kept local until the
+    # leg's first push is rejected.
+    sibling = _clone(origin, tmp_path / "sibling")
+    sentinel_sibling = _perturb_report(sibling, SIBLING_REPORT)
+    _git(sibling, "add", "--", "dashboard/public/data/")
+    _git(sibling, "commit", "-q", "-m", "data: sibling refresh (no derived regen)")
+    sibling_sha = _git(sibling, "rev-parse", "HEAD")
+
+    marker = origin / "rejected-once"
+    hook = origin / "hooks" / "pre-receive"
+    hook.write_text(
+        "#!/bin/sh\n"
+        f'marker="{marker}"\n'
+        "while read old new ref; do\n"
+        '  if [ "$ref" = "refs/heads/main" ] && [ ! -f "$marker" ]; then\n'
+        '    touch "$marker"\n'
+        '    echo "simulated concurrent sibling push" >&2\n'
+        "    exit 1\n"
+        "  fi\n"
+        "done\n"
+        "exit 0\n"
+    )
+    hook.chmod(0o755)
+
+    clone = _clone(origin, tmp_path / "job")
+    sentinel = _perturb_report(clone)
+    proc = subprocess.Popen(
+        [str(clone / SCRIPT), "il-income-tax-liability", "main"],
+        cwd=clone,
+        env={
+            **os.environ,
+            **GIT_ENV,
+            "PYTHON": sys.executable,
+            "MAX_ATTEMPTS": "4",
+            "PUSH_RETRY_DELAY": "3",
+        },
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    # Wait for the hook to reject the leg's first push, then advance main with
+    # the sibling's commit inside the leg's retry sleep (marker now exists, so
+    # the hook lets the sibling through).
+    deadline = time.monotonic() + 120
+    while not marker.exists():
+        assert time.monotonic() < deadline, "leg never attempted its first push"
+        assert proc.poll() is None, proc.communicate()[1]
+        time.sleep(0.05)
+    _git(sibling, "push", "-q", "origin", "HEAD:main")
+    stdout, stderr = proc.communicate(timeout=240)
+    assert proc.returncode == 0, stderr
+    assert "push rejected (attempt 1" in stderr
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert sibling_sha in _git(verify, "rev-list", "HEAD"), (
+        "the sibling's mid-race commit must survive as an ancestor"
+    )
+    for report, expected in ((REPORT, sentinel), (SIBLING_REPORT, sentinel_sibling)):
+        doc = json.loads((verify / report).read_text())
+        assert doc["provenance"]["generated_at"] == expected, (
+            f"{report}: one of the racing refreshes was lost"
+        )
+
+
+def _add_first_time_report(clone: Path, suite: str) -> str:
+    """Simulate run_comparison.py landing a brand-new suite: write its first
+    report and append its filename to the shared manifest."""
+    filename = f"axiom-policyengine-{suite}.json"
+    doc = json.loads((clone / REPORT).read_text())
+    doc["suite"] = suite
+    (clone / SEED_DATA / filename).write_text(json.dumps(doc, indent=2) + "\n")
+    manifest_path = clone / SEED_DATA / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["reports"].append(filename)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    return filename
+
+
+def test_first_time_reports_from_racing_legs_merge_manifest(origin, tmp_path):
+    """Two legs each land a brand-new suite; the second leg's clone predates
+    the first leg's push. manifest.json is shared and append-only — restoring
+    the second leg's stale copy would drop the first leg's entry, so the
+    script must replay its own ADDITIONS onto the winning tip instead."""
+    job_a = _clone(origin, tmp_path / "job-a")
+    job_b = _clone(origin, tmp_path / "job-b")  # cloned BEFORE a's push
+    file_a = _add_first_time_report(job_a, "zz-fake-a")
+    file_b = _add_first_time_report(job_b, "zz-fake-b")
+
+    result_a = _run_script(job_a, "zz-fake-a")
+    assert result_a.returncode == 0, result_a.stderr
+    result_b = _run_script(job_b, "zz-fake-b")
+    assert result_b.returncode == 0, result_b.stderr
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    manifest = json.loads((verify / SEED_DATA / "manifest.json").read_text())
+    for filename in (file_a, file_b):
+        assert filename in manifest["reports"], (
+            f"{filename} dropped from the shared manifest by the racing leg"
+        )
+        assert (verify / SEED_DATA / filename).exists()
+
+
+def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
+    """check_vacuous_gate.py exiting 1 can be a schema alarm (tolerated in
+    write mode) — but it can also be a crash that never wrote freshness. The
+    verify step runs the `--check` arbiter, so a tree whose freshness can't
+    be proven fresh is never pushed.
+
+    The failure is injected via a PYTHON wrapper OUTSIDE the repo (an in-repo
+    stub would be reverted by the retry loop's `git reset --hard`): every
+    check_vacuous_gate.py invocation exits 1 without writing, exactly the
+    crash shape — so the perturbed report's freshness is genuinely stale and
+    the arbiter must block the push."""
+    wrapper = tmp_path / "bin" / "python-wrapper"
+    wrapper.parent.mkdir()
+    wrapper.write_text(
+        "#!/bin/sh\n"
+        'case "$*" in *check_vacuous_gate.py*) exit 1 ;; esac\n'
+        f'exec "{sys.executable}" "$@"\n'
+    )
+    wrapper.chmod(0o755)
+
+    clone = _clone(origin, tmp_path / "job")
+    before = _git(origin, "rev-parse", "main")
+    _perturb_report(clone)
+    result = subprocess.run(
+        [str(clone / SCRIPT), "il-income-tax-liability", "main"],
+        cwd=clone,
+        env={
+            **os.environ,
+            **GIT_ENV,
+            "PYTHON": str(wrapper),
+            "MAX_ATTEMPTS": "2",
+            "PUSH_RETRY_DELAY": "0",
+        },
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0, (
+        "a vacuous-gate failure the arbiter can't clear must fail the job"
+    )
+    assert _git(origin, "rev-parse", "main") == before, (
+        "nothing may be pushed when the freshness gate can't be verified"
+    )
+
+
 def test_no_changes_second_run_is_a_noop(origin, tmp_path):
-    """Back-to-back runs with nothing new: the first may commit the daily
-    history snapshot (idempotent per day); the second must exit cleanly
-    without committing anything."""
+    """Back-to-back runs with nothing new: both take the fast no-op path (the
+    checked-out tree already passes every gate), pushing nothing — the daily
+    history snapshot only lands alongside an actual refresh."""
     first = _clone(origin, tmp_path / "first")
     result = _run_script(first)
     assert result.returncode == 0, result.stderr

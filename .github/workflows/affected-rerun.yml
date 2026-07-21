@@ -13,8 +13,9 @@ name: Affected suite rerun
 #
 # Each matrix job commits its refreshed report via
 # scripts/commit_refreshed_report.sh, which atomically regenerates every
-# derived, CI-validated artifact (conformance scoreboard + detail + history
-# snapshot, burn-down, freshness), self-checks the tree against ci.yml's
+# derived, CI-validated artifact (dispositioned reports + the EUROMOD-BE
+# coverage rollup, conformance scoreboard + detail + history snapshot,
+# burn-down, freshness), self-checks the tree against ci.yml's
 # staleness gates, and rebuilds the commit from scratch on the current tip on
 # every push attempt so concurrent sibling pushes can't leave main stale or
 # conflicted. The ratchet (conformance/ratchet.yaml) is never re-pinned from
