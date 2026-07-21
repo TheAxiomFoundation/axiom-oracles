@@ -285,7 +285,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-14T14:26:24Z",
+    "generated_at": "2026-07-21T17:11:24Z",
     "generated_by": "scripts/run_comparison.py::uk-tv-licence",
     "rulespecs": [
       {
