@@ -59,6 +59,7 @@
     },
     {
       "suite": "ar-income-tax-liability",
+      "name": "ar-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ar-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -326,6 +327,7 @@
     },
     {
       "suite": "dc-income-tax-liability",
+      "name": "dc-income-tax-liability",
       "report": "axiom-policyengine-taxsim-dc-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -450,6 +452,7 @@
     },
     {
       "suite": "hi-income-tax-liability",
+      "name": "hi-income-tax-liability",
       "report": "axiom-policyengine-taxsim-hi-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -467,6 +470,7 @@
     },
     {
       "suite": "ia-income-tax-liability",
+      "name": "ia-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ia-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -502,6 +506,7 @@
     },
     {
       "suite": "in-income-tax-liability",
+      "name": "in-income-tax-liability",
       "report": "axiom-policyengine-taxsim-in-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -519,6 +524,7 @@
     },
     {
       "suite": "ks-income-tax-liability",
+      "name": "ks-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ks-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -546,6 +552,7 @@
     },
     {
       "suite": "la-income-tax-liability",
+      "name": "la-income-tax-liability",
       "report": "axiom-policyengine-taxsim-la-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -672,6 +679,7 @@
     },
     {
       "suite": "mo-income-tax-liability",
+      "name": "mo-income-tax-liability",
       "report": "axiom-policyengine-taxsim-mo-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -680,6 +688,7 @@
     },
     {
       "suite": "ms-income-tax-liability",
+      "name": "ms-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ms-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -688,6 +697,7 @@
     },
     {
       "suite": "mt-income-tax-liability",
+      "name": "mt-income-tax-liability",
       "report": "axiom-policyengine-taxsim-mt-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -714,6 +724,7 @@
     },
     {
       "suite": "nd-income-tax-liability",
+      "name": "nd-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nd-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -731,6 +742,7 @@
     },
     {
       "suite": "nh-income-tax-liability",
+      "name": "nh-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nh-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -739,6 +751,7 @@
     },
     {
       "suite": "nj-income-tax-liability",
+      "name": "nj-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nj-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -747,6 +760,7 @@
     },
     {
       "suite": "nm-income-tax-liability",
+      "name": "nm-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nm-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -811,6 +825,7 @@
     },
     {
       "suite": "ok-income-tax-liability",
+      "name": "ok-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ok-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -819,6 +834,7 @@
     },
     {
       "suite": "or-income-tax-liability",
+      "name": "or-income-tax-liability",
       "report": "axiom-policyengine-taxsim-or-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -837,6 +853,7 @@
     },
     {
       "suite": "pa-income-tax-liability",
+      "name": "pa-income-tax-liability",
       "report": "axiom-policyengine-taxsim-pa-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -854,6 +871,7 @@
     },
     {
       "suite": "ri-income-tax-liability",
+      "name": "ri-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ri-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -862,6 +880,7 @@
     },
     {
       "suite": "sc-income-tax-liability",
+      "name": "sc-income-tax-liability",
       "report": "axiom-policyengine-taxsim-sc-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1295,6 +1314,7 @@
     },
     {
       "suite": "vt-income-tax-liability",
+      "name": "vt-income-tax-liability",
       "report": "axiom-policyengine-taxsim-vt-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1303,6 +1323,7 @@
     },
     {
       "suite": "wa-income-tax-liability",
+      "name": "wa-income-tax-liability",
       "report": "axiom-policyengine-taxsim-wa-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1329,6 +1350,7 @@
     },
     {
       "suite": "wi-income-tax-liability",
+      "name": "wi-income-tax-liability",
       "report": "axiom-policyengine-taxsim-wi-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1337,6 +1359,7 @@
     },
     {
       "suite": "wv-income-tax-liability",
+      "name": "wv-income-tax-liability",
       "report": "axiom-policyengine-taxsim-wv-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
