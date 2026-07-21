@@ -166,6 +166,21 @@ and their refreshed reports committed. The weekly full matrix
 (`comparisons.yml`) stays the backstop. Regenerate the map after adding a
 comparison: `uv run scripts/generate_affected_map.py`.
 
+After the rerun matrix, a **`reconcile`** job regenerates every report-derived
+aggregate once, on the full refreshed report set, and commits them in the same
+run: dispositioned reports + the EUROMOD-BE coverage rollup
+(`scripts/apply_dispositions.py`), the freshness registry
+(`scripts/check_vacuous_gate.py`), the conformance scoreboard + per-policy detail
+(`scripts/conformance_scoreboard.py`), and the burn-down
+(`scripts/conformance_burndown.py`). This is not optional bookkeeping — those
+aggregates are *derived* from the committed reports, so a report refresh that
+skipped them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
+stale and reds `conformance_scoreboard.py --check` on **every open PR** until
+someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident, fixed
+reactively in #282). It runs once at the end rather than per matrix leg because
+each leg only sees a partial view of the report set — the scoreboard must be
+computed from all of them, so per-leg regeneration would race.
+
 ## Vacuous-verification gate (O3)
 
 `scripts/check_vacuous_gate.py` (blocking in CI) enforces that every comparison
