@@ -144,10 +144,10 @@ class GettsimRunner:
     ) -> None:
         try:
             self.policy_date = date.fromisoformat(policy_date_str)
-        except ValueError as exc:
+        except (TypeError, ValueError) as exc:
             raise GettsimInputError(
                 f"policy_date_str {policy_date_str!r} is not a valid ISO date "
-                f"(expected YYYY-MM-DD)"
+                f"string (expected 'YYYY-MM-DD')"
             ) from exc
         self.policy_date_str = policy_date_str
         self.rounding = rounding

@@ -41,12 +41,15 @@ a contradictory person (an ``alter=40`` adult whose defaulted
 ``alter_monate=0`` is a benefit-establishing newborn). The projection instead
 resolves the four columns jointly against the policy date:
 
-- birth month defaults to January when not supplied;
-- a supplied ``geburtsjahr`` fixes the birth date; otherwise a supplied
-  ``alter`` (or ``alter_monate``, or :data:`DEFAULT_ALTER`) back-derives it;
-- the remaining columns are computed from the birth date, using the convention
-  that the birthday has passed in the policy month (month precision — the
-  template carries no day-of-birth input);
+- a supplied ``geburtsjahr`` fixes the birth date (month from ``geburtsmonat``
+  or January); otherwise a supplied ``alter_monate`` fixes it exactly;
+  otherwise a supplied ``alter`` (or :data:`DEFAULT_ALTER`) back-derives it,
+  combined with the supplied ``geburtsmonat`` where present or with the
+  birthday-in-the-policy-month convention where not (which keeps
+  ``alter_monate == alter * 12`` for age-only cases);
+- the remaining columns are computed from the birth date at month precision
+  (the template carries no day-of-birth input; the birthday counts as passed
+  in the birth month itself);
 - any supplied value that contradicts the derived birth date raises
   :class:`GettsimInputError` instead of silently running a chimera household.
 
@@ -93,6 +96,17 @@ NO_LINK = -1
 #: from the default template (the complex-household escape hatch).
 KNOWN_GROUPING_IDS: frozenset[str] = frozenset(
     {"hh_id", "wthh_id", "bg_id", "eg_id", "fg_id", "sn_id"}
+)
+
+#: Link columns owned by the structured relationship fields; supplying them raw
+#: would bypass the graph validation (one-sided or self links run silently).
+STRUCTURED_LINK_COLUMNS: frozenset[str] = frozenset(
+    {
+        "familie__p_id_ehepartner",
+        "familie__p_id_elternteil_1",
+        "familie__p_id_elternteil_2",
+        "kindergeld__p_id_empfänger",
+    }
 )
 
 #: The jointly-derived demographic leaves (one birth-date fact, four columns).
@@ -289,22 +303,26 @@ def resolve_demographics(
 
     One birth date explains all four columns, so the rules are:
 
-    1. ``geburtsmonat`` comes from the case or defaults to January.
-    2. The birth *year* comes from ``geburtsjahr`` if supplied; else it is
-       back-derived from ``alter`` (or ``alter_monate``), else from
-       :data:`DEFAULT_ALTER`.
-    3. ``alter`` and ``alter_monate`` are computed from the birth date at the
-       policy date, on the month-precision convention that the birthday has
-       passed in the birth month itself (the template has no day-of-birth
-       input).
+    1. A supplied ``geburtsjahr`` fixes the birth date (month from
+       ``geburtsmonat``, defaulting to January).
+    2. Otherwise a supplied ``alter_monate`` fixes the birth date exactly;
+       otherwise a supplied ``alter`` — or :data:`DEFAULT_ALTER` — back-derives
+       it, honouring a supplied ``geburtsmonat`` and otherwise placing the
+       birthday in the policy month (so ``alter_monate == alter * 12`` for
+       age-only cases).
+    3. All four columns are then computed from that birth date at month
+       precision (the template has no day-of-birth input; the birthday counts
+       as passed in the birth month itself).
     4. Any supplied value that disagrees with the computed one raises
        :class:`GettsimInputError` — a contradictory person must never run.
 
     Returns the resolved ``{leaf: value}`` for the four leaves.
     """
     for leaf in DEMOGRAPHIC_LEAVES:
-        value = supplied.get(leaf)
-        if value is not None and (isinstance(value, bool) or not isinstance(value, int)):
+        if leaf not in supplied:
+            continue
+        value = supplied[leaf]
+        if isinstance(value, bool) or not isinstance(value, int):
             raise GettsimInputError(
                 f"person {person_index}: {leaf} must be an integer, got {value!r}"
             )
@@ -336,6 +354,17 @@ def resolve_demographics(
             # Birthday-in-policy-month convention: a supplied age A resolves to
             # exactly A*12 months, so alter and alter_monate stay in lockstep.
             birth_index = policy_index - supplied["alter"] * 12
+    elif "geburtsmonat" in supplied:
+        # A lone birth month combines with the default age: the default adult
+        # born in that month, with the birthday-passed convention deciding the
+        # year.
+        month = supplied["geburtsmonat"]
+        year = (
+            policy_date.year
+            - DEFAULT_ALTER
+            - (1 if policy_date.month < month else 0)
+        )
+        birth_index = year * 12 + (month - 1)
     else:
         birth_index = policy_index - DEFAULT_ALTER * 12
 
@@ -424,10 +453,19 @@ def project_case(
                     f"person {index}: 'p_id' is reserved — person order defines "
                     f"p_id (person i has p_id i)"
                 )
-            if qname in KNOWN_GROUPING_IDS and qname not in template_qnames:
+            if qname in KNOWN_GROUPING_IDS:
                 raise GettsimInputError(
                     f"person {index}: grouping id {qname!r} must be supplied "
-                    f"via the case's grouping_ids field, not per person"
+                    f"via the case's grouping_ids field, not per person (one "
+                    f"channel, no silent overwrites)"
+                )
+            if qname in STRUCTURED_LINK_COLUMNS:
+                raise GettsimInputError(
+                    f"person {index}: link column {qname!r} must be set via "
+                    f"the structured relationship fields (spouse_pairs / "
+                    f"parents / kindergeld_recipients), which validate the "
+                    f"graph — raw links can be one-sided or self-referential "
+                    f"without error"
                 )
             if qname not in template_qnames:
                 raise GettsimInputError(
@@ -452,23 +490,12 @@ def project_case(
     # 3. Relationship links (index i has p_id i, so links are the indices).
     _apply_links(case, data, n)
 
-    # 4. Optional explicit grouping ids (complex households).
-    person_supplied_grouping = {
-        qname
-        for person in case.persons
-        for qname in normalize_person_inputs(person)
-        if qname in KNOWN_GROUPING_IDS
-    }
+    # 4. Optional explicit grouping ids (complex households; the only channel).
     for gid, per_person in case.grouping_ids.items():
         if gid not in KNOWN_GROUPING_IDS:
             raise GettsimInputError(
                 f"unknown grouping id {gid!r}; expected one of "
                 f"{sorted(KNOWN_GROUPING_IDS)}"
-            )
-        if gid in person_supplied_grouping:
-            raise GettsimInputError(
-                f"grouping id {gid!r} is set both per person and in "
-                f"grouping_ids — use one channel"
             )
         if len(per_person) != n:
             raise GettsimInputError(
@@ -477,9 +504,53 @@ def project_case(
             )
         data[gid] = list(per_person)
 
-    # 5. Build the nested mapper (leaves are the flat column names).
+    # 5. Validate the final projected link graph — including link columns that
+    #    have no structured channel and were set per person.
+    _validate_link_columns(data, n)
+
+    # 6. Build the nested mapper (leaves are the flat column names).
     mapper = _build_mapper(data.keys(), template_qnames)
     return ProjectedInputs(data=data, mapper=mapper, n_persons=n)
+
+
+def _validate_link_columns(data: Mapping[str, list[Any]], n: int) -> None:
+    """Check every projected ``p_id...`` link column against the final graph.
+
+    Applies to raw per-person links (columns without a structured channel,
+    e.g. ``bürgergeld__p_id_einstandspartner``) as much as to the structured
+    ones: values are ints in ``{-1} ∪ 0..n-1``, never self-referential, and
+    ``familie__p_id_ehepartner`` must be symmetric.
+    """
+    for qname, column in data.items():
+        leaf = qname.rsplit("__", 1)[-1]
+        if qname == "p_id" or "p_id" not in leaf:
+            continue
+        for index, value in enumerate(column):
+            if isinstance(value, bool) or not isinstance(value, int):
+                raise GettsimInputError(
+                    f"link column {qname!r} for person {index} must be an "
+                    f"integer person index or {NO_LINK}, got {value!r}"
+                )
+            if value == NO_LINK:
+                continue
+            if value < 0 or value >= n:
+                raise GettsimInputError(
+                    f"link column {qname!r} for person {index} references "
+                    f"person index {value}, outside 0..{n - 1}"
+                )
+            if value == index:
+                raise GettsimInputError(
+                    f"link column {qname!r} links person {index} to itself"
+                )
+    ehepartner = data.get("familie__p_id_ehepartner")
+    if ehepartner is not None:
+        for index, partner in enumerate(ehepartner):
+            if partner != NO_LINK and ehepartner[partner] != index:
+                raise GettsimInputError(
+                    f"familie__p_id_ehepartner is asymmetric: person {index} "
+                    f"links to {partner}, but person {partner} links to "
+                    f"{ehepartner[partner]}"
+                )
 
 
 def _apply_links(case: GettsimCase, data: dict[str, list[Any]], n: int) -> None:
@@ -487,7 +558,13 @@ def _apply_links(case: GettsimCase, data: dict[str, list[Any]], n: int) -> None:
         return data.setdefault(qname, [NO_LINK] * n)
 
     linked: set[int] = set()
-    for left, right in case.spouse_pairs:
+    for pair in case.spouse_pairs:
+        if not isinstance(pair, Sequence) or len(pair) != 2:
+            raise GettsimInputError(
+                f"spouse_pairs entries must be (left, right) index pairs, "
+                f"got {pair!r}"
+            )
+        left, right = pair
         _check_index(left, n, "spouse_pairs")
         _check_index(right, n, "spouse_pairs")
         if left == right:
@@ -505,7 +582,13 @@ def _apply_links(case: GettsimCase, data: dict[str, list[Any]], n: int) -> None:
         column[left] = right
         column[right] = left
 
-    for child, (parent_1, parent_2) in case.parents.items():
+    for child, parent_pair in case.parents.items():
+        if not isinstance(parent_pair, Sequence) or len(parent_pair) != 2:
+            raise GettsimInputError(
+                f"parents entries must be (parent_1, parent_2) pairs "
+                f"(either may be None), got {parent_pair!r} for child {child!r}"
+            )
+        parent_1, parent_2 = parent_pair
         _check_index(child, n, "parents")
         for parent in (parent_1, parent_2):
             if parent is None:

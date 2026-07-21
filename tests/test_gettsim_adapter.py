@@ -185,6 +185,31 @@ class TestResolveDemographics:
         )
         assert resolved["alter_monate"] == 125
 
+    def test_lone_geburtsmonat_combines_with_the_default_age(self) -> None:
+        # A lone birth month is a valid sparse shape for every month, not just
+        # the policy month: the default adult born in that month.
+        for month in range(1, 13):
+            resolved = resolve_demographics(
+                {"geburtsmonat": month}, LANE_DATE, person_index=0
+            )
+            assert resolved["geburtsmonat"] == month
+            assert resolved["alter"] == 40
+            expected_year = 1985 if month <= LANE_DATE.month else 1984
+            assert resolved["geburtsjahr"] == expected_year
+
+    def test_alter_with_geburtsmonat_honours_the_month(self) -> None:
+        resolved = resolve_demographics(
+            {"alter": 30, "geburtsmonat": 11}, LANE_DATE, person_index=0
+        )
+        # Birthday (November) not yet passed in June → born 1994.
+        assert resolved["geburtsjahr"] == 1994
+        assert resolved["geburtsmonat"] == 11
+        assert resolved["alter"] == 30
+
+    def test_none_demographic_raises_typed_error(self) -> None:
+        with pytest.raises(GettsimInputError, match="must be an integer"):
+            resolve_demographics({"alter": None}, LANE_DATE, person_index=0)
+
     def test_contradictory_alter_and_geburtsjahr_raise(self) -> None:
         with pytest.raises(GettsimInputError, match="contradicts the birth date"):
             resolve_demographics(
@@ -302,22 +327,56 @@ class TestProjection:
         with pytest.raises(GettsimInputError, match="reserved"):
             project_case(case, STUB_TEMPLATE, policy_date=LANE_DATE)
 
-    def test_non_template_grouping_id_in_person_is_redirected(self) -> None:
-        # bg_id is not a template input at the 2025 dates; per-person supply
-        # must point at the grouping_ids field instead of half-working.
-        case = GettsimCase(persons=[{"bg_id": 0}])
-        with pytest.raises(GettsimInputError, match="grouping_ids field"):
+    def test_grouping_ids_have_a_single_channel(self) -> None:
+        # Every grouping id — including template-backed hh_id — goes through
+        # the grouping_ids field, so the two channels can never silently
+        # overwrite each other.
+        for qname in ("bg_id", "hh_id"):
+            case = GettsimCase(persons=[{qname: 0}])
+            with pytest.raises(GettsimInputError, match="grouping_ids field"):
+                project_case(case, STUB_TEMPLATE, policy_date=LANE_DATE)
+
+    def test_structured_link_columns_cannot_be_set_raw(self) -> None:
+        # Raw links bypass the graph validation (one-sided or self links run
+        # silently and can shift joint assessment by thousands of euros).
+        case = GettsimCase(persons=[{"familie__p_id_ehepartner": 1}, {}])
+        with pytest.raises(GettsimInputError, match="structured relationship"):
             project_case(case, STUB_TEMPLATE, policy_date=LANE_DATE)
 
-    def test_grouping_id_in_both_channels_raises(self) -> None:
-        # hh_id IS a template input, so a person may carry it — but not while
-        # grouping_ids also sets it (silent overwrite either way).
-        case = GettsimCase(
-            persons=[{"hh_id": 0}],
-            grouping_ids={"hh_id": [1]},
+    def test_raw_link_columns_without_a_channel_are_graph_validated(self) -> None:
+        # Link columns with no structured channel stay settable per person but
+        # the final graph is still checked: range, self-links, integer type.
+        template = dict(STUB_TEMPLATE)
+        template[("bürgergeld", "p_id_einstandspartner")] = "IntColumn"
+        out_of_range = GettsimCase(
+            persons=[{"bürgergeld__p_id_einstandspartner": 99}, {}]
         )
-        with pytest.raises(GettsimInputError, match="both per person and in"):
-            project_case(case, STUB_TEMPLATE, policy_date=LANE_DATE)
+        with pytest.raises(GettsimInputError, match="outside 0..1"):
+            project_case(out_of_range, template, policy_date=LANE_DATE)
+        self_link = GettsimCase(
+            persons=[{"bürgergeld__p_id_einstandspartner": 0}, {}]
+        )
+        with pytest.raises(GettsimInputError, match="to itself"):
+            project_case(self_link, template, policy_date=LANE_DATE)
+        valid = GettsimCase(
+            persons=[{"bürgergeld__p_id_einstandspartner": 1}, {}]
+        )
+        projected = project_case(valid, template, policy_date=LANE_DATE)
+        assert projected.data["bürgergeld__p_id_einstandspartner"] == [1, NO_LINK]
+
+    def test_malformed_relationship_tuples_raise_typed_errors(self) -> None:
+        with pytest.raises(GettsimInputError, match="index pairs"):
+            project_case(
+                GettsimCase(persons=[{}, {}], spouse_pairs=[(0,)]),
+                STUB_TEMPLATE,
+                policy_date=LANE_DATE,
+            )
+        with pytest.raises(GettsimInputError, match="parent_1, parent_2"):
+            project_case(
+                GettsimCase(persons=[{}, {}], parents={1: (0,)}),
+                STUB_TEMPLATE,
+                policy_date=LANE_DATE,
+            )
 
     def test_unknown_grouping_id_is_rejected(self) -> None:
         case = GettsimCase(persons=[{"alter": 40}], grouping_ids={"xx_id": [0]})
@@ -418,6 +477,8 @@ class TestDependencyGuard:
     def test_invalid_policy_date_raises_typed_error(self) -> None:
         with pytest.raises(GettsimInputError, match="not a valid ISO date"):
             GettsimRunner(policy_date_str="not-a-date")
+        with pytest.raises(GettsimInputError, match="not a valid ISO date"):
+            GettsimRunner(policy_date_str=None)
 
 
 class TestTargetLeafValidation:
