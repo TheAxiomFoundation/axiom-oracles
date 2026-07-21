@@ -5,7 +5,6 @@ import { loadOracleData } from "../utils/data";
 import { loadSuiteCases } from "../utils/caseData";
 import { causeFor, countUnexplained } from "../utils/programs";
 import {
-  ageDays,
   engineLabel,
   formatAgreementRate,
   mismatchKindLabel,
@@ -31,8 +30,6 @@ import {
  *      every discrepancy class ends in an action — a filed issue, a
  *      schema-validated disposition, a documented cause, or it is OPEN and
  *      says so — plus the per-household evidence.
- *   3. Coverage — the executable-surface burn-down; what is encoded at all
- *      is the Axiom app's story.
  * Jurisdiction is an attribute here, not the navigation.
  */
 
@@ -192,13 +189,6 @@ function Stat({ value, label, tone }) {
   );
 }
 
-function lastRunLabel(days) {
-  if (days == null) return "not stamped";
-  if (days < 1) return "ran today";
-  if (days < 2) return "ran 1 day ago";
-  return `ran ${Math.round(days)} days ago`;
-}
-
 function OracleCard({ oracle, selected, onSelect }) {
   const id = ORACLE_IDENTITY[oracle.id] || {};
   return (
@@ -236,7 +226,6 @@ function OracleCard({ oracle, selected, onSelect }) {
         <Stat value={oracle.programs.size} label="programs" />
       </div>
       <div className="mono v2-card-foot">
-        <span>{lastRunLabel(oracle.lastRunDays)}</span>
         <span className="v2-card-open">
           {selected ? "close" : "full record →"}
         </span>
@@ -443,10 +432,27 @@ function HouseholdBrowser({ oracle }) {
   );
 }
 
+const REGION_ORDER = ["us", "ca", "uk", "be"];
+
 function OracleRecord({ oracle, onOpenProgram }) {
+  // Multi-country oracles get a country scope; single-country ones don't
+  // need the chrome. Scoping filters programs, classes, and households.
+  const regions = REGION_ORDER.filter((r) => oracle.regions.has(r));
+  const [region, setRegion] = useState(null);
+  const scoped = useMemo(() => {
+    if (!region) return oracle;
+    return {
+      ...oracle,
+      reports: oracle.reports.filter(
+        (r) => suiteMeta(r.suite).region === region,
+      ),
+      classes: oracle.classes.filter((c) => c.region === region),
+    };
+  }, [oracle, region]);
+
   const programRows = useMemo(() => {
     const byProgram = new Map();
-    for (const report of oracle.reports) {
+    for (const report of scoped.reports) {
       const meta = suiteMeta(report.suite);
       const key = `${meta.family}__${meta.jurisdiction}`;
       if (!byProgram.has(key)) {
@@ -471,10 +477,25 @@ function OracleRecord({ oracle, onOpenProgram }) {
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
       }))
       .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1));
-  }, [oracle]);
+  }, [scoped]);
 
   return (
     <section className="card-flat v2-dossier">
+      {regions.length > 1 && (
+        <div className="v2-scope" role="group" aria-label="Country">
+          {[null, ...regions].map((r) => (
+            <button
+              key={r ?? "all"}
+              type="button"
+              className={`v2-scope-chip${region === r ? " v2-scope-chip-on" : ""}`}
+              aria-pressed={region === r}
+              onClick={() => setRegion(r)}
+            >
+              {r ? REGION_LABELS[r] || r : "All countries"}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="v2-dossier-body">
         <div className="v2-dossier-col">
           <div className="mono v2-dossier-colhead">
@@ -509,25 +530,25 @@ function OracleRecord({ oracle, onOpenProgram }) {
         </div>
         <div className="v2-dossier-col">
           <div className="mono v2-dossier-colhead">Discrepancy classes</div>
-          {oracle.classes.length === 0 ? (
+          {scoped.classes.length === 0 ? (
             <p className="v2-empty">
               No measured disagreements with this oracle.
             </p>
           ) : (
             <>
-              {oracle.classes.slice(0, 8).map((row, i) => (
+              {scoped.classes.slice(0, 8).map((row, i) => (
                 <ClassRow
                   key={`${row.suite}-${row.conceptLabel}-${row.kind}-${i}`}
                   row={row}
                   showOracle={false}
                 />
               ))}
-              {oracle.classes.length > 8 && (
+              {scoped.classes.length > 8 && (
                 <details className="v2-ledger-more">
                   <summary>
-                    show all {oracle.classes.length} classes
+                    show all {scoped.classes.length} classes
                   </summary>
-                  {oracle.classes.slice(8).map((row, i) => (
+                  {scoped.classes.slice(8).map((row, i) => (
                     <ClassRow
                       key={`rest-${row.suite}-${row.conceptLabel}-${row.kind}-${i}`}
                       row={row}
@@ -540,8 +561,8 @@ function OracleRecord({ oracle, onOpenProgram }) {
           )}
         </div>
       </div>
-      {/* Keyed by oracle so the suite selection resets with the record. */}
-      <HouseholdBrowser key={oracle.id} oracle={oracle} />
+      {/* Keyed so the suite selection resets with the record and scope. */}
+      <HouseholdBrowser key={`${oracle.id}-${region ?? "all"}`} oracle={scoped} />
     </section>
   );
 }
@@ -551,16 +572,11 @@ export default function OraclesV2() {
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState(null);
   const [programId, setProgramId] = useState(null);
-  const [ruleSummary, setRuleSummary] = useState(null);
 
   useEffect(() => {
     loadOracleData("")
       .then(setData)
       .catch((e) => setError(e.message));
-    fetch("/data/rule_verification_summary.json")
-      .then((r) => (r.ok ? r.json() : null))
-      .then(setRuleSummary)
-      .catch(() => {});
     // Deep-link an open program (?program=…), read once on mount.
     const fromUrl = new URLSearchParams(window.location.search).get("program");
     if (fromUrl) setProgramId(fromUrl);
@@ -576,13 +592,6 @@ export default function OraclesV2() {
     );
     const crossChecks = data.reports.filter((r) => !isAxiomPair(r)).length;
 
-    const suiteAge = new Map(
-      (data.freshness?.suites || []).map((s) => [
-        s.suite,
-        s.unstamped ? null : ageDays(s.generated_at),
-      ]),
-    );
-
     const byOracle = new Map();
     for (const report of verification) {
       const id = otherOracle(report);
@@ -595,7 +604,6 @@ export default function OraclesV2() {
           households: 0,
           regions: new Set(),
           programs: new Set(),
-          lastRunDays: null,
         });
       }
       const entry = byOracle.get(id);
@@ -607,11 +615,6 @@ export default function OraclesV2() {
       const meta = suiteMeta(report.suite);
       entry.regions.add(meta.region);
       entry.programs.add(`${meta.family}__${meta.jurisdiction}`);
-      const age = suiteAge.get(report.suite);
-      if (age != null) {
-        entry.lastRunDays =
-          entry.lastRunDays == null ? age : Math.min(entry.lastRunDays, age);
-      }
     }
 
     const oracles = [...byOracle.values()]
@@ -692,7 +695,13 @@ export default function OraclesV2() {
               />
             </a>
             <span className="brand-divider" aria-hidden="true" />
-            <span className="brand-product">Oracles</span>
+            <span className="brand-product" aria-label="Oracles">
+              OR
+              <span className="brand-flip" aria-hidden="true">
+                A
+              </span>
+              CLES
+            </span>
           </span>
         </div>
       </header>
@@ -709,38 +718,26 @@ export default function OraclesV2() {
           <>
         {/* 1 · Thesis */}
         <section className="v2-hero">
-          <div className="section-eyebrow">Independent verification</div>
           <h1 className="v2-thesis">
-            Axiom never grades its own work. Every encoding is checked against{" "}
-            <em>{oracles.length}</em> independent engines —{" "}
-            <em>{compactCount(totals.households)}</em> households,{" "}
+            Axiom never grades its own work —{" "}
+            <em>{compactCount(totals.households)}</em> households checked
+            against <em>{oracles.length}</em> independent engines,{" "}
             <em style={{ color: rateColor(totals.rate) }}>
               {formatAgreementRate(totals.rate, totals.mismatches)}
             </em>{" "}
-            agreement, and every disagreement traced to an action.
+            agreement.
           </h1>
-          <p className="v2-hero-sub">
-            An oracle is an independent implementation of the same law. A
-            household counts once, no matter how many programs and credits are
-            compared for it — concept by concept, those comparisons add up to{" "}
-            {compactCount(totals.checks)} individual checks behind the
-            agreement rate. When Axiom and an oracle disagree, the
-            disagreement is triaged in the open: explained with a
-            schema-validated disposition, filed as an issue upstream, or kept
-            visibly open until someone does.
-            {crossChecks > 0 &&
-              ` Oracles are also cross-checked against each other (${crossChecks} arbitration runs), so a wrong oracle cannot silently win.`}
+          <p
+            className="v2-hero-sub"
+            title={`${compactCount(totals.checks)} concept-level checks behind the agreement rate${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
+          >
+            Every disagreement is triaged in the open — dispositioned, filed
+            upstream, or kept visibly open until someone acts.
           </p>
         </section>
 
         {/* 2 · The roster */}
         <section className="v2-section">
-          <div className="v2-section-head">
-            <span className="section-eyebrow">The oracles</span>
-            <span className="v2-section-title">
-              Who checks Axiom's work — open one for the full record
-            </span>
-          </div>
           <div className="v2-roster">
             {oracles.map((oracle) => (
               <OracleCard
@@ -754,49 +751,13 @@ export default function OraclesV2() {
             ))}
           </div>
           {selectedOracle && (
-            <OracleRecord oracle={selectedOracle} onOpenProgram={openProgram} />
+            <OracleRecord
+              key={selectedOracle.id}
+              oracle={selectedOracle}
+              onOpenProgram={openProgram}
+            />
           )}
         </section>
-
-        {/* 3 · Coverage */}
-        {ruleSummary && (
-          <section className="v2-coverage">
-            <div className="v2-coverage-text">
-              <span className="section-eyebrow">Coverage · US corpus</span>
-              <p>
-                <strong className="mono">
-                  {ruleSummary.surfaces.executable} of{" "}
-                  {ruleSummary.surfaces.total}
-                </strong>{" "}
-                program surfaces have an executable oracle today — the tracked
-                burn-down across{" "}
-                {ruleSummary.rules.total.toLocaleString()} encoded rules. What
-                is encoded at all lives in the{" "}
-                <a
-                  href={`${AXIOM_APP_URL}/axiom/encoded`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="cite"
-                >
-                  Axiom app
-                </a>
-                .
-              </p>
-            </div>
-            <div
-              className="v2-burndown"
-              role="img"
-              aria-label={`${ruleSummary.surfaces.executable} of ${ruleSummary.surfaces.total} surfaces executable`}
-            >
-              <div
-                className="v2-burndown-fill"
-                style={{
-                  width: `${(ruleSummary.surfaces.executable / ruleSummary.surfaces.total) * 100}%`,
-                }}
-              />
-            </div>
-          </section>
-        )}
 
           </>
         )}
