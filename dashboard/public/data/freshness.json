@@ -267,7 +267,7 @@
     },
     {
       "suite": "be-marital-quotient",
-      "generated_at": "2026-07-20T20:03:58Z",
+      "generated_at": "2026-07-21T09:08:14Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
