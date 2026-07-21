@@ -43,43 +43,51 @@ columns** (a `None` leaf is rejected — an oracle needs every output named).
 ## 2. The verified seed case
 
 A single worker at €4,000/month gross, policy date 2025-06-01 (identical amounts
-at the lane date 2025-06-30), all four social-insurance legs statute-exact by
-hand:
+at the lane date 2025-06-30). The social-insurance legs carry their statutory
+arithmetic; the income tax is an engine-pinned regression value (the §32a tariff
+plus deduction chain is not hand-derived):
 
 | output (`tt_target`) | leaf | amount |
 |---|---|---|
-| `sozialversicherung.kranken.beitrag.betrag_versicherter_m` | health | **342.00** (8.55% incl. half the average Zusatzbeitrag) |
-| `sozialversicherung.rente.beitrag.betrag_versicherter_m` | pension | **372.00** (9.3%) |
-| `sozialversicherung.arbeitslosen.beitrag.betrag_versicherter_m` | unemployment | **52.00** (1.3%) |
-| `sozialversicherung.pflege.beitrag.betrag_versicherter_m` | long-term care | **96.00** (2.4% childless) |
-| `einkommensteuer.betrag_y_sn` | income tax (annual) | **6,433** |
+| `sozialversicherung.kranken.beitrag.betrag_versicherter_m` | health | **342.00** = 4,000 × (14.6 % + 2.5 % average Zusatzbeitrag 2025) / 2 |
+| `sozialversicherung.rente.beitrag.betrag_versicherter_m` | pension | **372.00** = 4,000 × 18.6 % / 2 (BSV 2018, continued for 2025 by RVBeitrSBek 2025) |
+| `sozialversicherung.arbeitslosen.beitrag.betrag_versicherter_m` | unemployment | **52.00** = 4,000 × 2.6 % / 2 |
+| `sozialversicherung.pflege.beitrag.betrag_versicherter_m` | long-term care | **96.00** = 4,000 × (3.6 % / 2 + 0.6 % childless surcharge); 3.6 % per PBAV 2025 |
+| `einkommensteuer.betrag_y_sn` | income tax (annual) | **6,433** (engine-pinned) |
 | `kindergeld.betrag_m`, `solidaritätszuschlag.betrag_y_sn` | Kindergeld / Soli | **0** |
 
-A one-child household (parent + child, `parents={1: (0, None)}`,
-`kindergeld_recipients={1: 0}`) pays the recipient **255.00/month** Kindergeld at
-the 2025 date (the 2026 amount is 259.00 — the value moves with the policy date,
-so pinning 255.00 pins the 2025 validation year).
+A one-child household (parent + child born 2015, `parents={1: (0, None)}`,
+`kindergeld_recipients={1: 0}`) pays the recipient **255.00/month** Kindergeld
+at the 2025 dates and **259.00/month** at 2026-01-01 — the two staged amounts of
+the Steuerfortentwicklungsgesetz (BGBl. 2024 I Nr. 449, Art. 1/Art. 2 amending
+§ 66(1) EStG). The test suite executes *both* dates, which pins the 2025
+validation year and proves the date parameterisation end to end.
 
 GETTSIM's float arithmetic leaves ~1e-13 noise (342.00 stored as
-341.99999999999994), so pin expectations with a cent tolerance
-(`pytest.approx(..., abs=0.01)`), which is the tolerance the comparison layer
-applies anyway.
+341.99999999999994). The adapter tests pin with `abs=1e-6` — wide enough for the
+noise, tight enough that a real cent-level regression fails. The comparison
+layer's per-concept `tolerance` defaults to **zero** (`comparison/mappings.py`),
+so when the DE mappings are wired they must set an explicit cent tolerance
+(`tolerance=0.01`) per money concept; nothing applies one automatically.
 
 ## 3. API gotchas for suite authors
 
 These are the sharp edges the adapter absorbs; know them before writing a suite.
 
-- **Discover the full template, not per-target templates.** GETTSIM's per-target
-  input templates miss transitive dependencies. The adapter discovers the full
-  template once (`MainTarget.templates.input_data_dtypes.tree`, 81 columns at the
-  2025 dates), defaults every column, and overlays the case — "add until clean"
-  by construction. Requesting a deep target (e.g. Bürgergeld) then needs no
-  hand-added inputs.
+- **Discover the full template — one uniform route.** The adapter discovers the
+  full template once (`MainTarget.templates.input_data_dtypes.tree`, 81 columns
+  at the 2025 dates), defaults every column, and overlays the case — "add until
+  clean" by construction, and target choice can never change which inputs
+  exist. (Per-target templates computed fine in spot probes on 1.2.1, but the
+  full template is what the adapter uses and tests.)
 - **The mapper is a nested tree.** `InputData.df_and_mapper` wants a nested
   mapper whose leaves are the flat DataFrame column names; a flat `{tuple: name}`
-  dict silently maps almost nothing. The adapter builds it from the template.
+  dict is rejected loudly (`TypeError`: path elements must be strings). The
+  adapter builds the nested tree from the template.
 - **`tt_targets` leaves are strings that name output columns.** `None` → an
-  unnamed column; the adapter rejects `None` leaves.
+  unnamed column; the adapter rejects `None` leaves, and rejects duplicate
+  aliases (GETTSIM returns one column per alias, so a repeated alias would
+  silently drop a requested target).
 - **Defaults are dtype-first, with value guards — never a `"jahr"` substring
   heuristic.** Several template columns carry `jahr` while being booleans
   (`bürgergeld__bezug_im_vorjahr`) or money amounts
@@ -90,8 +98,14 @@ These are the sharp edges the adapter absorbs; know them before writing a suite.
     table, size 121);
   - `jahr_renteneintritt` is a **year** → 2020 (0 underruns the
     Besteuerungsanteil table, indexed `year − 1940`);
-  - `steuerklasse` → 1, `mietstufe_hh` → 3 (valid lookup keys);
-  - `geburtsjahr` and `alter` are case demographics (defaults 1980 / 40).
+  - `steuerklasse` → 1, `mietstufe_hh` → 3 (valid lookup keys).
+- **The four demographics resolve jointly, never per column.** `alter`,
+  `alter_monate`, `geburtsjahr`, and `geburtsmonat` describe one birth date, so
+  the adapter derives the missing ones from whichever the case supplies plus
+  the policy date (default: a coherent 40-year-old), and **raises on
+  contradictions** — independent per-column defaults would invent a chimera
+  person (an `alter=40` adult whose defaulted `alter_monate=0` is a
+  benefit-establishing newborn for Elterngeld-class rules).
 - **`p_id` links use −1 for "none".** `p_id` is the person's 0-based index; every
   other `p_id…` column (`familie__p_id_ehepartner`,
   `familie__p_id_elternteil_1/2`, `kindergeld__p_id_empfänger`,
@@ -140,8 +154,12 @@ couple files.
 
 GETTSIM is deterministic (no random draws), so a case reproduces exactly at a
 policy date. The exact `gettsim.__version__` is recorded in every
-`GettsimRunResult` and in `run_metadata()`; the `gettsim` extra pins the version
-(`pyproject.toml`), and the seed amounts above are verified against it.
+`GettsimRunResult` and in `run_metadata()`, and the runner **refuses to run** a
+version outside `SUPPORTED_GETTSIM_VERSIONS` — the metadata pin alone
+(`gettsim==1.2`) leaves the `ttsim-backend` requirement open (`>=1.2`), so only
+the `uv.lock` fork pins the full resolution and an ad-hoc install can drift.
+Install through the lock (`uv sync --extra gettsim`), and extend
+`SUPPORTED_GETTSIM_VERSIONS` only after re-validating the pinned expectations.
 
 **Version quirk.** The installable PyPI distribution is `gettsim==1.2`, but
 `gettsim.__version__` reports `"1.2.1"` (the `ttsim-backend` engine version it
@@ -152,10 +170,13 @@ the reported version.
 **Dependency conflict.** GETTSIM's `ttsim-backend` transitively conflicts with
 the PolicyEngine dependency tree, so `pyproject.toml` declares the `gettsim`
 extra as conflicting with the `policyengine` and `taxsim` extras
-(`[tool.uv] conflicts`). `uv` locks each fork separately and CI only syncs
-`[dev]`, so nothing ever installs both; run German comparisons in a dedicated
+(`[tool.uv] conflicts`). `uv` locks each fork separately, so nothing ever
+installs both; run German comparisons in a dedicated
 `uv sync --extra gettsim` environment (GETTSIM installs cleanly on the repo's
-Python 3.13 and 3.14 — the conflict is with PolicyEngine, not a Python version).
+Python 3.13 and 3.14 — the conflict is with PolicyEngine, not a Python
+version). The main CI job syncs `[dev]`; the dedicated `gettsim-live` CI job
+syncs the gettsim fork and runs the live adapter tests, so a broken adapter
+cannot ride in on skips.
 
 ## 6. Wiring a DE comparison suite (follow-up, once encodings exist)
 
@@ -174,13 +195,15 @@ income-tax/SSC and family-benefit suites.
 
 ## Dependency
 
-GETTSIM is an optional heavy dependency, imported lazily. Install the extra only
-to run German comparisons:
+GETTSIM is an optional heavy dependency, imported lazily. Install it through
+the locked fork (a bare `uv pip install` bypasses `uv.lock` and can drift the
+`ttsim-backend` engine under the same distribution pin):
 
 ```bash
-uv pip install -e ".[gettsim,dev]"
+uv sync --extra gettsim --extra dev
 ```
 
-Tests that need it use `pytest.importorskip("gettsim")` and skip cleanly when it
-is absent; the projection, defaulting, and input-guard logic are pure and tested
-without it.
+Tests that need it are gated with a `skipif` marker on import availability and
+skip cleanly when it is absent; the projection, defaulting, and input-guard
+logic are pure and tested without it. The `gettsim-live` CI job runs the gated
+tests with the fork installed.

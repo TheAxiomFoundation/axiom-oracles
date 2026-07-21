@@ -10,22 +10,30 @@ The runner takes a :class:`GettsimCase` (hypothetical German household) plus a
 ``tt_targets`` tree (nested, with string leaves naming output columns), and:
 
 1. discovers the *full* input template for the policy date
-   (``MainTarget.templates.input_data_dtypes.tree``) — the reliable route,
-   because per-target templates miss transitive dependencies;
+   (``MainTarget.templates.input_data_dtypes.tree``) — one uniform route that
+   closes over every dependency of every target, so target choice can never
+   change which inputs exist;
 2. defaults every column and overlays the case (see :mod:`.case`);
 3. validates the case's input paths (GETTSIM ignores unknown inputs silently)
-   and the requested targets (GETTSIM raises on unknown targets);
+   and the requested targets (GETTSIM raises on unknown targets; the adapter
+   additionally refuses duplicate output aliases, which would otherwise
+   silently drop a requested target);
 4. runs GETTSIM and returns a flat ``{output_name: [value per person]}`` dict in
    ``p_id`` order, with the exact ``gettsim`` version recorded in the result.
 
 GETTSIM is an optional heavy dependency: it is imported lazily, so importing
-this module (and running the pure projection tests) never requires it.
+this module (and running the pure projection tests) never requires it. The
+runner asserts the installed version is one the adapter was validated against
+(:data:`SUPPORTED_GETTSIM_VERSIONS`) — the ``uv.lock`` fork pins the full
+resolution, but ad-hoc installs can drift, and drifted behavior must fail loud,
+not shift oracle values quietly.
 """
 
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from datetime import date
 from functools import lru_cache
 from typing import Any
 
@@ -41,6 +49,10 @@ from .errors import (
 #: The Germany lane's validation policy date — rules in force 30 June 2025,
 #: aligned to the EUROMOD ``DE_2025`` snapshot.
 LANE_POLICY_DATE = "2025-06-30"
+
+#: ``gettsim.__version__`` values this adapter's pinned expectations were
+#: validated against (the ``gettsim==1.2`` distribution reports "1.2.1").
+SUPPORTED_GETTSIM_VERSIONS: frozenset[str] = frozenset({"1.2.1"})
 
 
 @dataclass(frozen=True)
@@ -75,14 +87,31 @@ class GettsimRunResult:
 
 
 def _gettsim() -> Any:
-    """Import GETTSIM lazily, or raise a clear typed error."""
+    """Import GETTSIM lazily, or raise a clear typed error.
+
+    Also asserts the installed version is one the adapter's pinned oracle
+    expectations were validated against: the metadata pin (``gettsim==1.2``)
+    leaves the ``ttsim-backend`` requirement open below the ``uv.lock`` fork,
+    so an ad-hoc install can drift — and a drifted engine must fail loud
+    instead of shifting oracle values quietly.
+    """
     try:
         import gettsim
     except ImportError as exc:  # pragma: no cover - exercised via the guard test
         raise GettsimNotInstalledError(
-            "GETTSIM is not installed. Install the adapter's extra: "
-            "uv pip install -e '.[gettsim]' (or 'uv pip install gettsim')."
+            "GETTSIM is not installed. Install the adapter's locked fork: "
+            "uv sync --extra gettsim (see docs/gettsim-oracle-playbook.md)."
         ) from exc
+    version = str(getattr(gettsim, "__version__", "unknown"))
+    if version not in SUPPORTED_GETTSIM_VERSIONS:
+        raise GettsimAdapterError(
+            f"installed gettsim reports __version__={version!r}, which this "
+            f"adapter has not been validated against (supported: "
+            f"{sorted(SUPPORTED_GETTSIM_VERSIONS)}). Install via the locked "
+            f"fork (uv sync --extra gettsim) or extend "
+            f"SUPPORTED_GETTSIM_VERSIONS after re-validating the pinned "
+            f"expectations."
+        )
     return gettsim
 
 
@@ -96,10 +125,13 @@ class GettsimRunner:
 
     Args:
         policy_date_str: The policy date GETTSIM parameterises the tax-benefit
-            system to. Defaults to the lane date :data:`LANE_POLICY_DATE`
-            (2025-06-30).
+            system to, as an ISO date. Defaults to the lane date
+            :data:`LANE_POLICY_DATE` (2025-06-30).
         rounding: Whether GETTSIM applies statutory rounding (the model default;
             keep ``True`` for statute-exact amounts).
+
+    Raises:
+        GettsimInputError: If ``policy_date_str`` is not a valid ISO date.
     """
 
     name = "gettsim"
@@ -110,6 +142,13 @@ class GettsimRunner:
         policy_date_str: str = LANE_POLICY_DATE,
         rounding: bool = True,
     ) -> None:
+        try:
+            self.policy_date = date.fromisoformat(policy_date_str)
+        except ValueError as exc:
+            raise GettsimInputError(
+                f"policy_date_str {policy_date_str!r} is not a valid ISO date "
+                f"(expected YYYY-MM-DD)"
+            ) from exc
         self.policy_date_str = policy_date_str
         self.rounding = rounding
 
@@ -174,7 +213,9 @@ class GettsimRunner:
             case = GettsimCase.from_mapping(case)
 
         gettsim = _gettsim()
-        projected = project_case(case, self.flat_input_template())
+        projected = project_case(
+            case, self.flat_input_template(), policy_date=self.policy_date
+        )
         frame = self._data_frame(projected)
 
         values = self._run_gettsim(gettsim, frame, projected, targets, target_leaves)
@@ -235,20 +276,34 @@ class GettsimRunner:
 
 
 def _target_leaves(targets: Mapping[str, Any]) -> list[str]:
-    """The string leaves of a ``tt_targets`` tree, in order, deduplicated.
+    """The string leaves of a ``tt_targets`` tree, in order.
 
     ``None`` leaves (GETTSIM's "unnamed result column") are rejected: an oracle
-    needs every output named so it can be read back and compared.
+    needs every output named so it can be read back and compared. Duplicate
+    aliases are rejected too — GETTSIM returns one result column per alias, so
+    a repeated alias would silently drop one of the requested targets.
     """
     leaves: list[str] = []
-    for path, leaf in flatten_tree(targets).items():
+    alias_paths: dict[str, tuple[str, ...]] = {}
+    try:
+        flat_targets = flatten_tree(targets)
+    except GettsimInputError as exc:
+        raise GettsimTargetError(f"invalid tt_targets tree: {exc}") from exc
+    for path, leaf in flat_targets.items():
         if not isinstance(leaf, str) or not leaf:
             raise GettsimTargetError(
                 f"tt_target at {'__'.join(path)!r} must have a non-empty string "
                 f"leaf naming its output column (got {leaf!r})."
             )
-        if leaf not in leaves:
-            leaves.append(leaf)
+        if leaf in alias_paths:
+            raise GettsimTargetError(
+                f"output alias {leaf!r} is used by both "
+                f"{'__'.join(alias_paths[leaf])!r} and {'__'.join(path)!r} — "
+                f"GETTSIM returns one column per alias, so one target would be "
+                f"silently dropped. Use distinct aliases."
+            )
+        alias_paths[leaf] = path
+        leaves.append(leaf)
     if not leaves:
         raise GettsimTargetError("no tt_targets requested (empty targets tree)")
     return leaves
@@ -271,6 +326,7 @@ def _coerce(value: Any) -> Value:
 @lru_cache(maxsize=None)
 def _input_template_tree(policy_date_str: str, rounding: bool) -> dict[str, Any]:
     """Discover and cache the full input-dtype template for a policy date."""
+    _gettsim()  # typed not-installed / unsupported-version errors first
     from gettsim import MainTarget, main
 
     return main(

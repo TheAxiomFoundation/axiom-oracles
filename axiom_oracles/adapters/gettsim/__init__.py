@@ -12,6 +12,7 @@ from .case import (
     flatten_tree,
     normalize_person_inputs,
     project_case,
+    resolve_demographics,
 )
 from .errors import (
     GettsimAdapterError,
@@ -42,4 +43,5 @@ __all__ = [
     "gettsim_version",
     "normalize_person_inputs",
     "project_case",
+    "resolve_demographics",
 ]
