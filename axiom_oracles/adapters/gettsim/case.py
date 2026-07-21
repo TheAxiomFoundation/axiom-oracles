@@ -109,6 +109,13 @@ STRUCTURED_LINK_COLUMNS: frozenset[str] = frozenset(
     }
 )
 
+#: Partnership link leaves: both directions must agree (a one-sided link
+#: silently changes GETTSIM's Bedarfsgemeinschaft derivation). Parent, payer,
+#: and recipient links are directional and carry no symmetry requirement.
+SYMMETRIC_LINK_LEAVES: frozenset[str] = frozenset(
+    {"p_id_ehepartner", "p_id_einstandspartner"}
+)
+
 #: The jointly-derived demographic leaves (one birth-date fact, four columns).
 DEMOGRAPHIC_LEAVES: frozenset[str] = frozenset(
     {"alter", "alter_monate", "geburtsjahr", "geburtsmonat"}
@@ -171,7 +178,9 @@ class GettsimCase:
 
         Accepts exactly the constructor's fields (``persons`` required); any
         other key is rejected so a typo (``spouse_pair``) cannot silently drop
-        a relationship.
+        a relationship. Person indices must be real integers — booleans,
+        floats, and ``None`` raise instead of being coerced (``False`` would
+        silently alias person 0, ``1.9`` would truncate to person 1).
         """
         unknown = set(map(str, spec)) - CASE_FIELDS
         if unknown:
@@ -185,16 +194,75 @@ class GettsimCase:
             )
         return cls(
             persons=list(spec["persons"]),
-            spouse_pairs=[tuple(pair) for pair in spec.get("spouse_pairs", ())],
-            parents={int(k): tuple(v) for k, v in spec.get("parents", {}).items()},
+            spouse_pairs=[
+                (
+                    _strict_index(pair[0], "spouse_pairs"),
+                    _strict_index(pair[1], "spouse_pairs"),
+                )
+                for pair in _pairs(spec.get("spouse_pairs", ()), "spouse_pairs")
+            ],
+            parents={
+                _strict_index(k, "parents"): (
+                    None if v[0] is None else _strict_index(v[0], "parents"),
+                    None if v[1] is None else _strict_index(v[1], "parents"),
+                )
+                for k, v in _pair_items(spec.get("parents", {}), "parents")
+            },
             kindergeld_recipients={
-                int(k): int(v)
+                _strict_index(k, "kindergeld_recipients"): _strict_index(
+                    v, "kindergeld_recipients"
+                )
                 for k, v in spec.get("kindergeld_recipients", {}).items()
             },
             grouping_ids={
                 str(k): list(v) for k, v in spec.get("grouping_ids", {}).items()
             },
         )
+
+
+def _strict_index(value: Any, field_name: str) -> int:
+    """A person index must be a real int — no bool/float/None coercion."""
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise GettsimInputError(
+            f"{field_name} person index must be an integer, got {value!r}"
+        )
+    return value
+
+
+def _pairs(entries: Any, field_name: str) -> list[Sequence[Any]]:
+    """Each entry must be a two-element non-string sequence."""
+    validated: list[Sequence[Any]] = []
+    for entry in entries:
+        if (
+            isinstance(entry, (str, bytes, bytearray))
+            or not isinstance(entry, Sequence)
+            or len(entry) != 2
+        ):
+            raise GettsimInputError(
+                f"{field_name} entries must be two-element index pairs, "
+                f"got {entry!r}"
+            )
+        validated.append(entry)
+    return validated
+
+
+def _pair_items(
+    entries: Mapping[Any, Any], field_name: str
+) -> list[tuple[Any, Sequence[Any]]]:
+    """Each mapping value must be a two-element non-string sequence."""
+    validated: list[tuple[Any, Sequence[Any]]] = []
+    for key, value in entries.items():
+        if (
+            isinstance(value, (str, bytes, bytearray))
+            or not isinstance(value, Sequence)
+            or len(value) != 2
+        ):
+            raise GettsimInputError(
+                f"{field_name} entries must be two-element pairs, "
+                f"got {value!r} for {key!r}"
+            )
+        validated.append((key, value))
+    return validated
 
 
 @dataclass(frozen=True)
@@ -542,14 +610,15 @@ def _validate_link_columns(data: Mapping[str, list[Any]], n: int) -> None:
                 raise GettsimInputError(
                     f"link column {qname!r} links person {index} to itself"
                 )
-    ehepartner = data.get("familie__p_id_ehepartner")
-    if ehepartner is not None:
-        for index, partner in enumerate(ehepartner):
-            if partner != NO_LINK and ehepartner[partner] != index:
+    for qname, column in data.items():
+        if qname.rsplit("__", 1)[-1] not in SYMMETRIC_LINK_LEAVES:
+            continue
+        for index, partner in enumerate(column):
+            if partner != NO_LINK and column[partner] != index:
                 raise GettsimInputError(
-                    f"familie__p_id_ehepartner is asymmetric: person {index} "
-                    f"links to {partner}, but person {partner} links to "
-                    f"{ehepartner[partner]}"
+                    f"{qname} is asymmetric: person {index} links to "
+                    f"{partner}, but person {partner} links to "
+                    f"{column[partner]}"
                 )
 
 
@@ -559,7 +628,11 @@ def _apply_links(case: GettsimCase, data: dict[str, list[Any]], n: int) -> None:
 
     linked: set[int] = set()
     for pair in case.spouse_pairs:
-        if not isinstance(pair, Sequence) or len(pair) != 2:
+        if (
+            isinstance(pair, (str, bytes, bytearray))
+            or not isinstance(pair, Sequence)
+            or len(pair) != 2
+        ):
             raise GettsimInputError(
                 f"spouse_pairs entries must be (left, right) index pairs, "
                 f"got {pair!r}"
@@ -583,7 +656,11 @@ def _apply_links(case: GettsimCase, data: dict[str, list[Any]], n: int) -> None:
         column[right] = left
 
     for child, parent_pair in case.parents.items():
-        if not isinstance(parent_pair, Sequence) or len(parent_pair) != 2:
+        if (
+            isinstance(parent_pair, (str, bytes, bytearray))
+            or not isinstance(parent_pair, Sequence)
+            or len(parent_pair) != 2
+        ):
             raise GettsimInputError(
                 f"parents entries must be (parent_1, parent_2) pairs "
                 f"(either may be None), got {parent_pair!r} for child {child!r}"
@@ -628,8 +705,13 @@ def _build_mapper(
     return mapper
 
 
-def _check_index(index: int, n: int, field_name: str) -> None:
-    if not isinstance(index, int) or index < 0 or index >= n:
+def _check_index(index: Any, n: int, field_name: str) -> None:
+    if (
+        isinstance(index, bool)
+        or not isinstance(index, int)
+        or index < 0
+        or index >= n
+    ):
         raise GettsimInputError(
             f"{field_name} references person index {index!r}, outside 0..{n - 1}"
         )

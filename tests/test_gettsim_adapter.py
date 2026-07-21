@@ -345,7 +345,10 @@ class TestProjection:
 
     def test_raw_link_columns_without_a_channel_are_graph_validated(self) -> None:
         # Link columns with no structured channel stay settable per person but
-        # the final graph is still checked: range, self-links, integer type.
+        # the final graph is still checked: range, self-links, integer type —
+        # and partnership columns must be symmetric (a one-sided
+        # Einstandspartner silently changes the Bedarfsgemeinschaft
+        # derivation).
         template = dict(STUB_TEMPLATE)
         template[("bürgergeld", "p_id_einstandspartner")] = "IntColumn"
         out_of_range = GettsimCase(
@@ -358,11 +361,28 @@ class TestProjection:
         )
         with pytest.raises(GettsimInputError, match="to itself"):
             project_case(self_link, template, policy_date=LANE_DATE)
-        valid = GettsimCase(
+        one_sided = GettsimCase(
             persons=[{"bürgergeld__p_id_einstandspartner": 1}, {}]
         )
-        projected = project_case(valid, template, policy_date=LANE_DATE)
-        assert projected.data["bürgergeld__p_id_einstandspartner"] == [1, NO_LINK]
+        with pytest.raises(GettsimInputError, match="asymmetric"):
+            project_case(one_sided, template, policy_date=LANE_DATE)
+        three_cycle = GettsimCase(
+            persons=[
+                {"bürgergeld__p_id_einstandspartner": 1},
+                {"bürgergeld__p_id_einstandspartner": 2},
+                {"bürgergeld__p_id_einstandspartner": 0},
+            ]
+        )
+        with pytest.raises(GettsimInputError, match="asymmetric"):
+            project_case(three_cycle, template, policy_date=LANE_DATE)
+        reciprocal = GettsimCase(
+            persons=[
+                {"bürgergeld__p_id_einstandspartner": 1},
+                {"bürgergeld__p_id_einstandspartner": 0},
+            ]
+        )
+        projected = project_case(reciprocal, template, policy_date=LANE_DATE)
+        assert projected.data["bürgergeld__p_id_einstandspartner"] == [1, 0]
 
     def test_malformed_relationship_tuples_raise_typed_errors(self) -> None:
         with pytest.raises(GettsimInputError, match="index pairs"):
@@ -436,6 +456,31 @@ class TestCaseFromMapping:
         )
         assert case.n_persons == 2
         assert case.spouse_pairs == [(0, 1)]
+
+    def test_malformed_relationship_containers_raise_typed_errors(self) -> None:
+        with pytest.raises(GettsimInputError, match="two-element index pairs"):
+            GettsimCase.from_mapping({"persons": [{}, {}], "spouse_pairs": [None]})
+        with pytest.raises(GettsimInputError, match="two-element index pairs"):
+            GettsimCase.from_mapping(
+                {"persons": [{}, {}], "spouse_pairs": [bytes([0, 1])]}
+            )
+        with pytest.raises(GettsimInputError, match="two-element pairs"):
+            GettsimCase.from_mapping({"persons": [{}, {}], "parents": {1: None}})
+
+    def test_person_indices_are_never_coerced(self) -> None:
+        # False would silently alias person 0; 1.9 would truncate to person 1.
+        with pytest.raises(GettsimInputError, match="must be an integer"):
+            GettsimCase.from_mapping(
+                {"persons": [{}, {}], "parents": {False: (1, None)}}
+            )
+        with pytest.raises(GettsimInputError, match="must be an integer"):
+            GettsimCase.from_mapping(
+                {"persons": [{}, {}], "kindergeld_recipients": {0.5: 1.9}}
+            )
+        with pytest.raises(GettsimInputError, match="must be an integer"):
+            GettsimCase.from_mapping(
+                {"persons": [{}, {}], "spouse_pairs": [(0, 1.0)]}
+            )
 
 
 class TestNormalizePersonInputs:
