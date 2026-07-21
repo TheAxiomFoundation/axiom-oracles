@@ -50,6 +50,11 @@ from axiom_oracles.adapters.gettsim.case import (
     DEFAULT_RENTENEINTRITT_JAHR,
     NO_LINK,
 )
+from axiom_oracles.suites.de_worker import (
+    DE_GETTSIM_TARGETS,
+    de_worker_dual_oracle_cases,
+    reduce_gettsim_household_values,
+)
 
 LANE_DATE = date(2025, 6, 30)
 
@@ -622,6 +627,77 @@ SEED_TARGETS = {
     "kindergeld": {"betrag_m": "kindergeld_m"},
     "solidaritätszuschlag": {"betrag_y_sn": "soli_y_sn"},
 }
+
+
+@gettsim_required
+class TestGettsimGermanyGridLive:
+    """Live anchors using the comparison lane's canonical projections."""
+
+    ALIASES = {
+        "tax": "einkommensteuer.betrag_y_sn",
+        "soli": "solidaritätszuschlag.betrag_y_sn",
+        "health": (
+            "sozialversicherung.kranken.beitrag.betrag_versicherter_m"
+        ),
+        "pension": "sozialversicherung.rente.beitrag.betrag_versicherter_m",
+        "unemployment": (
+            "sozialversicherung.arbeitslosen.beitrag.betrag_versicherter_m"
+        ),
+        "care": "sozialversicherung.pflege.beitrag.betrag_versicherter_m",
+        "kindergeld": "kindergeld.betrag_m",
+    }
+    ANCHORS = {
+        "single-w-1200": {
+            "tax": 0.0,
+            "soli": 0.0,
+            "health": 88.95112781954887,
+            "pension": 96.75385833003561,
+            "unemployment": 13.524732884843688,
+            "care": 26.038467222002375,
+            "kindergeld": 0.0,
+        },
+        "parent-2children-4000": {
+            "tax": 6_241.0,
+            "soli": 0.0,
+            "health": 372.5357142857142,
+            "pension": 405.21428571428567,
+            "unemployment": 56.64285714285714,
+            "care": 67.53571428571428,
+            "kindergeld": 510.0,
+        },
+    }
+
+    @pytest.fixture(scope="class")
+    def runner(self) -> GettsimRunner:
+        return GettsimRunner(policy_date_str="2025-06-30")
+
+    @pytest.mark.parametrize("case_id", ["single-w-1200", "parent-2children-4000"])
+    def test_canonical_grid_anchor(self, runner, case_id) -> None:
+        cases = {case.case_id: case for case in de_worker_dual_oracle_cases()}
+        projected = GettsimCase.from_mapping(cases[case_id].metadata["gettsim_case"])
+        result = runner.run_case(projected, DE_GETTSIM_TARGETS)
+        reduced = reduce_gettsim_household_values(result.values)
+
+        assert result.gettsim_version == GETTSIM_VERSION
+        assert result.policy_date_str == "2025-06-30"
+        for name, expected in self.ANCHORS[case_id].items():
+            assert reduced[self.ALIASES[name]] == pytest.approx(
+                expected, abs=FLOAT_NOISE
+            )
+
+    def test_joint_tax_target_is_replicated_then_max_reduced(self, runner) -> None:
+        cases = {case.case_id: case for case in de_worker_dual_oracle_cases()}
+        projected = GettsimCase.from_mapping(
+            cases["couple-4000-2000"].metadata["gettsim_case"]
+        )
+        result = runner.run_case(projected, DE_GETTSIM_TARGETS)
+        tax_alias = self.ALIASES["tax"]
+
+        assert result.values[tax_alias] == pytest.approx(
+            [8_687.0, 8_687.0], abs=FLOAT_NOISE
+        )
+        reduced = reduce_gettsim_household_values(result.values)
+        assert reduced[tax_alias] == pytest.approx(8_687.0, abs=FLOAT_NOISE)
 
 
 @gettsim_required

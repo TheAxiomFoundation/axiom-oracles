@@ -7,6 +7,8 @@ tests execute real models and are gated on environment variables:
   openly downloadable from github.com/centreformicrosimulation/UKMOD-PUBLIC).
 - ``EUROMOD_MODEL_ROOT_BE`` — a EUROMOD release directory (e.g.
   ``EUROMOD_RELEASES_J2.0+``, openly downloadable from the JRC).
+- ``EUROMOD_MODEL_ROOT_DE`` — the same release directory, used with the
+  DE_2025 system and the DE_2024_b1_2015_03_e2 dataset configuration.
 - ``EUROMOD_PYTHON`` — the EUROMOD execution environment: an x86_64
   interpreter with the ``euromod`` connector and a .NET runtime
   (``DOTNET_ROOT``). On Apple Silicon this is a Rosetta venv.
@@ -45,6 +47,7 @@ from axiom_oracles.core.case import Case, Concepts, Entity
 
 UKMOD_MODEL_ROOT = os.environ.get("UKMOD_MODEL_ROOT")
 EUROMOD_MODEL_ROOT_BE = os.environ.get("EUROMOD_MODEL_ROOT_BE")
+EUROMOD_MODEL_ROOT_DE = os.environ.get("EUROMOD_MODEL_ROOT_DE")
 EUROMOD_PYTHON = os.environ.get("EUROMOD_PYTHON")
 EUROMOD_DATASET_BE = os.environ.get("EUROMOD_DATASET_BE", "BE_training_data")
 EUROMOD_TEMPLATE_DATASET_BE = os.environ.get(
@@ -1062,6 +1065,70 @@ class TestUkmodLive:
         assert household_award > single_award
         floor = 628.10 + 339.00 + 292.81 + 900.0
         assert household_award == pytest.approx(floor, abs=0.01)
+
+
+@pytest.mark.skipif(
+    not (EUROMOD_MODEL_ROOT_DE and EUROMOD_PYTHON),
+    reason=(
+        "set EUROMOD_MODEL_ROOT_DE and EUROMOD_PYTHON to run the live "
+        "EUROMOD Germany oracle"
+    ),
+)
+class TestEuromodGermanyLive:
+    """Live anchors from the canonical DE dual-oracle worker grid."""
+
+    OUTPUTS = (
+        "tsceehl_s",
+        "tsceepi_s",
+        "tsceeui_s",
+        "tsceeci_s",
+        "tin_s",
+        "bch00_s",
+        "yem",
+    )
+    ANCHORS = {
+        "single-w-1200": {
+            "tsceehl_s": 88.95112781954889,
+            "tsceepi_s": 96.75385833003561,
+            "tsceeui_s": 13.524732884843688,
+            "tsceeci_s": 24.968737633557577,
+            "tin_s": 0.0,
+            "bch00_s": 0.0,
+            "yem": 15_685.714285714286,
+        },
+        "parent-2children-4000": {
+            "tsceehl_s": 372.5357142857143,
+            "tsceepi_s": 405.21428571428567,
+            "tsceeui_s": 56.64285714285714,
+            "tsceeci_s": 67.53571428571428,
+            "tin_s": 3_416.008586249796,
+            "bch00_s": 510.0,
+            "yem": 52_285.71428571428,
+        },
+    }
+
+    @pytest.fixture(scope="class")
+    def runner(self) -> EuromodPlatformRunner:
+        return EuromodPlatformRunner(
+            model_root=EUROMOD_MODEL_ROOT_DE,
+            country="DE",
+            system="DE_2025",
+            dataset="DE_2024_b1_2015_03_e2",
+            template_dataset="DE_training_data",
+            extra_columns=["drgn1"],
+        )
+
+    @pytest.mark.parametrize("case_id", ["single-w-1200", "parent-2children-4000"])
+    def test_canonical_grid_anchor(self, runner, case_id) -> None:
+        from axiom_oracles.suites.de_worker import de_worker_dual_oracle_cases
+
+        cases = {case.case_id: case for case in de_worker_dual_oracle_cases()}
+        [result] = runner.run_cases([cases[case_id]], variables=list(self.OUTPUTS))
+
+        assert result.errors == ()
+        assert result.household_id == case_id
+        for variable, expected in self.ANCHORS[case_id].items():
+            assert result.values[variable] == pytest.approx(expected, abs=1e-6)
 
 
 @pytest.mark.skipif(

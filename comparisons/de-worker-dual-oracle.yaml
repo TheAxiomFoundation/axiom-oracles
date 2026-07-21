@@ -8,6 +8,7 @@ description: >-
   monthly wages under DE_2024_b1_2015_03_e2; GETTSIM receives the exact 61/56
   mirror so both engines price the same uprated gross. On hosts without both
   optional engines, the runner re-emits the committed report.
+documentation: docs/de-dual-oracle-playbook.md
 
 runner:
   type: gettsim-synthetic-compare

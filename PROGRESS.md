@@ -10,8 +10,10 @@
 - The engine-neutral DE concepts, exact 13-case projections, canonical grid,
   and monthly/annual output contracts are implemented and pure-tested.
 - The `gettsim-synthetic-compare` runner, DE comparison configuration, and
-  three filed-finding dispositions are implemented and focused-tested. The
-  next coherent step is the real two-engine run and committed report.
+  three filed-finding dispositions are implemented and focused-tested.
+- The real two-engine report is committed, both live test gates pass, and the
+  realized lane is documented. Full-repository validation and the final
+  handoff report remain.
 
 ## Done
 
@@ -76,12 +78,21 @@
 - Regenerated freshness metadata and added committed-report invariants for the
   engine pair/configuration, exact mismatch coordinates, and disposition counts.
   Ruff passed and 46 report/runner/disposition tests passed.
+- Added live-gated canonical-grid anchors to the existing engine-specific test
+  files. EUROMOD pins the 1,200 EUR Midijob and two-child cases under the exact
+  DE dataset/template/`drgn1` configuration. GETTSIM pins the same two cases
+  and proves a joint `*_y_sn` tax target is replicated and MAX-reduced.
+- Marked §6 of the GETTSIM playbook as realized and added the DE operating
+  playbook covering `yemmy`/hours/months, `drgn1`, the 61/56 bridge,
+  `tin_s`-includes-Soli, monthly/annual units, `*_y_sn` MAX, the grid, and all
+  three filed findings. The comparison registry links to that playbook.
+- Live verification: the EUROMOD Germany selection passed 3 tests (33
+  deselected); the dedicated locked GETTSIM environment passed all 73 adapter
+  tests. GETTSIM emitted only its documented internal divide/grouping warnings.
 
 ## Next
 
-1. Add live-gated anchors for each engine, update the DE playbooks, and
-   document the realized lane.
-2. Run Ruff plus the full and GETTSIM-specific test commands.
-3. Finalize this ledger and write the handoff report to `FINAL_REPORT.md`
+1. Run Ruff plus the full repository test and derived-artifact checks.
+2. Finalize this ledger and write the handoff report to `FINAL_REPORT.md`
    (no separate output path was provided), without pushing or opening a pull
    request.
