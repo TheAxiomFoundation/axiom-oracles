@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
+from pathlib import Path
 
 from axiom_oracles.adapters.canada_official.child_family import (
     _parse_amount_rows,
@@ -20,9 +21,11 @@ from axiom_oracles.suites.ca_cra_family_benefits import (
     ca_cra_family_benefit_cases,
 )
 from axiom_oracles.suites.ca_cra_pdoc import (
+    PDOC_MODULE,
     PDOC_OUTPUTS,
     ca_cra_pdoc_cases,
 )
+from scripts.run_canada_official_comparison import _axiom_runner
 
 
 def test_parse_child_family_amount_rows_and_annualize() -> None:
@@ -139,3 +142,17 @@ def test_canada_official_registry_covers_numeric_and_non_numeric_surfaces() -> N
     assert get_oracle("cra-pdoc").implemented is True
     assert get_oracle("canada-benefits-finder").comparison_role == "coverage"
     assert get_oracle("statcan-spsdm").mode == "licensed_local_model"
+
+
+def test_official_comparison_wrapper_does_not_shadow_imported_module(
+    tmp_path: Path,
+) -> None:
+    runner = _axiom_runner(
+        tmp_path / "rulespec-ca",
+        tmp_path / "axiom-rules-engine",
+        module=PDOC_MODULE,
+        entity="Person",
+        entity_id="person",
+    )
+    assert runner.program_imports == (PDOC_MODULE,)
+    assert runner.generated_program_target is None

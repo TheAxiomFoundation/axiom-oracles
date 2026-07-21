@@ -84,14 +84,12 @@ def run_family_benefits(
         ),
     ]
     official_results = ChildFamilyBenefitsRunner().run_cases(cases, concepts)
-    axiom_results = AxiomRulesRunner(
-        binary_path=axiom_binary,
-        default_entity="Family",
-        default_entity_id="family",
-        program_imports=(FAMILY_MODULE,),
-        generated_program_target=FAMILY_MODULE,
-        rulespec_repo_roots=(rulespec_root,),
-        prune_unsupported_inputs=True,
+    axiom_results = _axiom_runner(
+        rulespec_root,
+        axiom_binary,
+        module=FAMILY_MODULE,
+        entity="Family",
+        entity_id="family",
     ).run_cases(cases, concepts)
     comparisons = Comparator(mappings).compare(official_results, axiom_results)
     report = build_comparison_report(
@@ -130,14 +128,12 @@ def run_pdoc(
         _pdoc_mapping(INCOME_TAX, "Combined income-tax deduction"),
     ]
     official_results = PdocRunner().run_cases(cases, concepts)
-    axiom_results = AxiomRulesRunner(
-        binary_path=axiom_binary,
-        default_entity="Person",
-        default_entity_id="person",
-        program_imports=(PDOC_MODULE,),
-        generated_program_target=PDOC_MODULE,
-        rulespec_repo_roots=(rulespec_root,),
-        prune_unsupported_inputs=True,
+    axiom_results = _axiom_runner(
+        rulespec_root,
+        axiom_binary,
+        module=PDOC_MODULE,
+        entity="Person",
+        entity_id="person",
     ).run_cases(cases, concepts)
     comparisons = Comparator(mappings).compare(official_results, axiom_results)
     report = build_comparison_report(
@@ -175,6 +171,24 @@ def _mapping(concept: str, description: str, *, tolerance: float) -> ProgramMapp
         locales=("CA",),
         scope={"type": "country", "geoid": "CA"},
         targets={"canada-child-family": concept, "axiom": concept},
+    )
+
+
+def _axiom_runner(
+    rulespec_root: Path,
+    axiom_binary: Path,
+    *,
+    module: str,
+    entity: str,
+    entity_id: str,
+) -> AxiomRulesRunner:
+    return AxiomRulesRunner(
+        binary_path=axiom_binary,
+        default_entity=entity,
+        default_entity_id=entity_id,
+        program_imports=(module,),
+        rulespec_repo_roots=(rulespec_root,),
+        prune_unsupported_inputs=True,
     )
 
 
