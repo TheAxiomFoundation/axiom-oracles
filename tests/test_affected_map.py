@@ -199,3 +199,61 @@ def test_selector_unknown_head_does_not_force_rerun():
     reports = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "aaa"}])}
     selected = sel.select(AFF_MAP, {}, reports)  # no heads at all
     assert not any(s["suite"] == "s1" for s in selected)
+
+
+# --- runnable names: what the rerun matrix may dispatch ----------------------
+#
+# The 2026-07-20/21 affected reruns crashed ~50 matrix legs with "unknown
+# comparison": the matrix dispatched dashboard suite keys (uk-benefit-cap) and
+# parameter-lane suite names (ssi-parameters), neither of which
+# run_comparison.py knows. The map now records each entry's registry `name`
+# (null = not CI-runnable) and the selector dispatches exactly those.
+
+
+def test_map_registry_entries_carry_their_registry_name():
+    gen = _load("generate_affected_map.py")
+    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
+    # Dashboard suite key and registry name differ for the ukmod suites —
+    # dispatching the suite key is exactly the "unknown comparison" crash.
+    assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
+    # Parameter suites have no registry runner: run_parameter_comparisons.py
+    # (manual lane) owns them, so the map must mark them non-dispatchable.
+    assert entries["ssi-parameters"]["name"] is None
+    assert all("name" in e for e in entries.values())
+
+
+def test_selector_decisions_carry_the_registry_name():
+    sel = _load("select_affected_suites.py")
+    amap = {
+        "suites": [
+            {
+                "suite": "uk-benefit-cap",
+                "name": "uk-benefit-cap-ukmod",
+                "repos": ["owner/rulespec-uk"],
+            }
+        ]
+    }
+    selected = sel.select(amap, {"owner/rulespec-uk": "bbb"}, {})
+    assert selected[0]["name"] == "uk-benefit-cap-ukmod"
+
+
+def test_runnable_names_dispatches_registry_names_not_suite_keys(capsys):
+    sel = _load("select_affected_suites.py")
+    selected = [
+        {"suite": "uk-benefit-cap", "name": "uk-benefit-cap-ukmod"},
+        {"suite": "s1", "name": "s1"},
+        {"suite": "ssi-parameters", "name": None},  # manual parameter lane
+        {"suite": "s1-again", "name": "s1"},  # duplicate runner
+    ]
+    names = sel.runnable_names(selected)
+    assert names == ["uk-benefit-cap-ukmod", "s1"]
+    err = capsys.readouterr().err
+    assert "ssi-parameters" in err and "no CI-runnable registry name" in err
+
+
+def test_runnable_names_skips_entries_missing_the_name_field():
+    """NEGATIVE: a decision with no name key (a stale map regenerated without
+    the field) must be skipped, not dispatched under its suite key — the suite
+    key is what crashed the matrix."""
+    sel = _load("select_affected_suites.py")
+    assert sel.runnable_names([{"suite": "uk-benefit-cap"}]) == []

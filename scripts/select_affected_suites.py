@@ -24,8 +24,17 @@ A suite is selected when, for any affected repo:
 * the recorded SHA differs from the repo's current HEAD (rules moved → run).
 
 A suite whose every affected repo's HEAD equals what its report already ran
-against is fresh and skipped. Output is the newline- or JSON-listed set of
-suite names, ready to feed the matrix.
+against is fresh and skipped.
+
+Selection is per report suite, but the rerun matrix must dispatch each entry's
+``name`` — the ``run_comparison.py`` registry name recorded in the affected
+map. The two often coincide but not always (dashboard suite ``uk-benefit-cap``
+runs under registry name ``uk-benefit-cap-ukmod``), and entries with a null
+``name`` (parameter suites, which only the manual
+``run_parameter_comparisons.py`` lane can run) are excluded from ``lines``/
+``matrix`` output entirely — dispatching either wrong class crashes the leg
+with "unknown comparison". The ``json`` format keeps every selected decision,
+including non-runnable ones, for diagnostics.
 
 Usage:
     uv run scripts/select_affected_suites.py --heads-json heads.json
@@ -72,16 +81,27 @@ def select(
         repos = entry.get("repos", [])
         if not repos:
             continue
+        name = entry.get("name")
         report = reports_by_suite.get(suite)
         if report is None:
             selected.append(
-                {"suite": suite, "reason": "no committed report", "repos": repos}
+                {
+                    "suite": suite,
+                    "name": name,
+                    "reason": "no committed report",
+                    "repos": repos,
+                }
             )
             continue
         ran_against = _report_ran_against(report)
         if not ran_against:
             selected.append(
-                {"suite": suite, "reason": "report has no provenance", "repos": repos}
+                {
+                    "suite": suite,
+                    "name": name,
+                    "reason": "report has no provenance",
+                    "repos": repos,
+                }
             )
             continue
         reasons: list[str] = []
@@ -101,9 +121,40 @@ def select(
                 )
         if reasons:
             selected.append(
-                {"suite": suite, "reason": "; ".join(reasons), "repos": repos}
+                {
+                    "suite": suite,
+                    "name": name,
+                    "reason": "; ".join(reasons),
+                    "repos": repos,
+                }
             )
     return selected
+
+
+def runnable_names(selected: list[dict]) -> list[str]:
+    """The deduplicated registry names the rerun matrix can dispatch.
+
+    Decisions whose map entry has no registry ``name`` (parameter suites — run
+    by the manual ``run_parameter_comparisons.py`` lane, not by
+    ``run_comparison.py``) are dropped: dispatching them crashes the matrix
+    leg with "unknown comparison". Order follows first appearance.
+    """
+    names: list[str] = []
+    skipped: list[str] = []
+    for decision in selected:
+        name = decision.get("name")
+        if not name:
+            skipped.append(decision["suite"])
+        elif name not in names:
+            names.append(name)
+    if skipped:
+        print(
+            f"note: {len(skipped)} stale suite(s) have no CI-runnable registry "
+            f"name and are left to the manual parameter lane: "
+            + ", ".join(sorted(skipped)),
+            file=sys.stderr,
+        )
+    return names
 
 
 def main() -> int:
@@ -143,10 +194,14 @@ def main() -> int:
     if args.format == "json":
         print(json.dumps(selected, indent=2))
     elif args.format == "matrix":
-        print(json.dumps({"include": [{"name": s["suite"]} for s in selected]}))
+        print(
+            json.dumps(
+                {"include": [{"name": n} for n in runnable_names(selected)]}
+            )
+        )
     else:
-        for s in selected:
-            print(s["suite"])
+        for name in runnable_names(selected):
+            print(name)
     return 0
 
 

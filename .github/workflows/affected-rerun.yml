@@ -96,7 +96,13 @@ jobs:
           import json
           from pathlib import Path
           m = json.loads(Path("comparisons/affected_map.json").read_text())
-          names = [e["suite"] for e in m["suites"] if e.get("repos")]
+          # Dispatch registry names, never dashboard suite keys, and skip
+          # entries with no CI-runnable name (parameter suites) — either
+          # crashes the leg with "unknown comparison".
+          names: list = []
+          for e in m["suites"]:
+              if e.get("repos") and e.get("name") and e["name"] not in names:
+                  names.append(e["name"])
           print(json.dumps({"include": [{"name": n} for n in names]}))
           PY
           )
