@@ -267,3 +267,13 @@ Wired in `.github/workflows/ci.yml`, following the repo's existing gate patterns
 * **Burn-down freshness** — regenerated series == committed.
 
 Every gate has negative tests in `tests/test_conformance.py` proving it can fail.
+
+The scoreboard/detail are derived from the committed comparison reports, so
+anything that refreshes a report must regenerate them in the same change or the
+freshness gate reds main. Interactive PRs do this by hand; the automated
+**affected-rerun** bot does it per matrix leg via
+`scripts/commit_refreshed_report.sh` (see `comparisons/README.md` →
+*Affected-comparison map + rerun*, and the behavioral tests in
+`tests/test_commit_refreshed_report.py`). Both trace back to the
+2026-07-14 incident (#282), where four income-tax report refreshes redded main
+for every open PR until the scoreboard was regenerated manually.

@@ -209,6 +209,14 @@
       "source": "comparisons/ca-tanf-ecps.yaml"
     },
     {
+      "suite": "co-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-co-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/co-income-tax-liability.yaml"
+    },
+    {
       "suite": "co-snap-ecps",
       "report": "axiom-policyengine-co-snap-ecps.json",
       "repos": [
@@ -339,6 +347,14 @@
       "source": "comparisons/ga-income-tax-liability.yaml"
     },
     {
+      "suite": "ga-snap-ecps",
+      "report": "axiom-policyengine-ga-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ga-snap-ecps.yaml"
+    },
+    {
       "suite": "ga-snap-qc",
       "report": "axiom-snapqc-ga-snap.json",
       "repos": [
@@ -368,6 +384,14 @@
       "report": "axiom-policyengine-hi-income-tax-parameters.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us-hi"
+      ],
+      "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "ia-income-tax-parameters",
+      "report": "axiom-policyengine-ia-income-tax-parameters.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us-ia"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },

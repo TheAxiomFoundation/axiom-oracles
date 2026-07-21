@@ -8,6 +8,8 @@ This repo is the home for executable program comparisons across:
 - TAXSIM
 - Atlanta Fed PRD
 - ACCESS NYC
+- UKMOD / EUROMOD (recorded and live)
+- entitledto (recorded per-council UK Council Tax Reduction reference)
 - Axiom RuleSpec/runtime programs
 
 The core idea is to keep each external system behind an adapter, then compare
@@ -25,6 +27,7 @@ here.
 Thin concept-keyed cases
         |
         +-- ACCESS NYC adapter
+        +-- entitledto adapter (recorded fixtures)
         +-- PolicyEngine adapter
         +-- TAXSIM adapter
         +-- PRD adapter
@@ -77,6 +80,13 @@ replatform:
 
 ```bash
 uv pip install -e ".[accessnyc-python,dev]"
+```
+
+Install the GETTSIM extra only when running German (GETTSIM) comparisons — via
+the locked fork, since a bare pip install can drift the pinned engine:
+
+```bash
+uv sync --extra gettsim --extra dev
 ```
 
 ## ACCESS NYC Rule Audit
@@ -330,6 +340,90 @@ see no coverage until those imputation stages land
 For the CLI, `axiom-oracles compare euromod axiom ...` reads
 `EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,
 `EUROMOD_DATASET`, and `EUROMOD_PYTHON` from the environment.
+
+## entitledto UK Council Tax Reduction oracle (recorded fixtures)
+
+Council Tax Reduction is set scheme-by-scheme by ~300 English billing
+authorities (plus the three national GB schemes). PolicyEngine-UK and UKMOD are
+national on the working-age side — PolicyEngine adds only five named English
+councils — so neither is a per-council oracle. entitledto
+(https://www.entitledto.co.uk/) models every council, making it the most
+complete per-council CTR reference (its figures are estimates, not authoritative
+awards).
+
+entitledto is a commercial product whose legal notices prohibit systematic *and*
+automated data collection and restrict the free calculator to personal use, so
+this is a **recorded** oracle, not a live one
+(`axiom_oracles/adapters/entitledto/`). Capturing this research grid requires
+entitledto's express written consent (a research/API licence); under that
+permission a person captures each case once and records the result — with
+provenance (capture date, council, scheme year, entitledto-derived council-tax
+liability, URL) — into a fixture JSON, and the runner replays it. Fixtures ship
+as `pending_capture` stubs (inputs filled, `outputs: null`) and grading is
+**fail-closed**: a fixture is graded only if it is `captured` and passes
+`validate_capture`, so an uncaptured or malformed fixture is surfaced as an
+error, never a spurious £0 or invented value. Terms and the exact capture steps
+are in `axiom_oracles/adapters/entitledto/fixtures/uk_ctr/CAPTURE-PROTOCOL.md`.
+
+The `uk-ctr` suite is an eight-case grid across the England pension-age,
+Scotland and Wales national schemes, the PolicyEngine-supported Kingston upon
+Thames local scheme, and two unsupported councils (Manchester, Birmingham). The
+on-demand report combines, per case, the recorded entitledto value, the
+committed PolicyEngine-UK 2.89.2 reference, and a statutory hand-check
+(reconciled to entitledto's council-tax liability once captured):
+
+```bash
+python scripts/run_uk_ctr_entitledto_report.py
+```
+
+Wiring this into the weekly comparison matrix is a follow-up for once fixtures
+are captured under licence (a pending oracle grades nothing, so it is kept out of
+the auto-run matrix until then).
+
+## GETTSIM oracle (Germany)
+
+`GettsimRunner` is the **second, independent** German comparison oracle in the
+dual-oracle lane (`rulespec-de#1`), running alongside `EuromodPlatformRunner`.
+GETTSIM (the German Taxes and Transfers SIMulator, IZA and an academic
+consortium) is pure Python with an explicit policy DAG, date-parameterized,
+deterministic, and free of take-up randomness — so it is fast and reproducible,
+the complement to the EUROMOD engine path. No licensed microdata is needed;
+per-case validation uses hypothetical households.
+
+```python
+from axiom_oracles.adapters.gettsim import GettsimCase, GettsimRunner
+
+runner = GettsimRunner(policy_date_str="2025-06-30")  # rules in force 30 Jun 2025
+
+result = runner.compute(
+    GettsimCase.single_person({"einnahmen__bruttolohn_m": 4000.0}),
+    {"sozialversicherung": {"kranken": {"beitrag": {"betrag_versicherter_m": "health_ee_m"}}}},
+)
+# {"health_ee_m": [342.0]}  -- one value per person, in p_id order
+```
+
+The runner discovers GETTSIM's full input template for the policy date, defaults
+every column (dtype-first, with the age/year table-lookup guards), resolves the
+four birth-date demographics jointly (contradictions raise), overlays the case,
+and computes the requested `tt_targets` (a nested tree whose string leaves name
+the output columns). Conventions the adapter owns: input paths are validated
+against the template and unknown paths raise `GettsimInputError` (GETTSIM
+ignores unknown inputs silently); unknown targets and duplicate output aliases
+raise `GettsimTargetError`; `run_case()` returns a `GettsimRunResult` carrying
+the exact `gettsim` version alongside the values (`compute()` returns the bare
+values dict), and the runner refuses to run an engine version outside its
+validated set; `p_id` links use −1, and only `hh_id` is an input grouping id
+(GETTSIM derives the finer `wthh/bg/eg/fg/sn` ids for simple households, and
+the case can supply them for complex ones — the tests show the explicit ids
+changing the Bürgergeld means test). The verified seed — a €4,000/month
+worker — reproduces health 342.00 / pension 372.00 / unemployment 52.00 /
+long-term care 96.00 / income tax 6,433, and a one-child household pays
+255.00/month Kindergeld at the 2025 dates and 259.00 at 2026-01-01 (the two
+SteFeG stages, executed as tests). GETTSIM is an optional heavy dependency,
+imported lazily; the `gettsim-live` CI job runs the live tests with the locked
+fork installed. See `docs/gettsim-oracle-playbook.md` for the full API-gotcha
+notes and the DE comparison-suite wiring (a follow-up, once `rulespec-de` has
+encodings).
 
 ## SNAP QC administrative data oracle
 

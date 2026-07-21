@@ -173,6 +173,18 @@ The conformance ratchet is never re-pinned from that bot path. The weekly full
 matrix (`comparisons.yml`) stays the backstop. Regenerate the map after adding
 a comparison: `uv run scripts/generate_affected_map.py`.
 
+Regenerating these aggregates with the report is not optional bookkeeping —
+they are *derived* from the committed reports, so a report refresh that skips
+them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
+stale and reds `conformance_scoreboard.py --check` on **every open PR** until
+someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident,
+fixed reactively in #282). Regeneration happens per matrix leg, inside the
+push-retry loop, because each attempt rebuilds on the current tip: an
+aggregate recomputed there is consistent with every report committed so far,
+so every intermediate push is gate-green — there is no post-matrix red window
+and nothing for a separate reconcile pass to repair (#283's post-matrix job,
+briefly on main, is superseded by this; see `tests/test_commit_refreshed_report.py`).
+
 ## Vacuous-verification gate (O3)
 
 `scripts/check_vacuous_gate.py` (blocking in CI) enforces that every comparison
