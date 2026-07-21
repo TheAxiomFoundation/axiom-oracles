@@ -6,6 +6,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 SCRIPTS = Path(__file__).parents[1] / "scripts"
 
 
@@ -145,9 +147,13 @@ def test_parameter_suite_entries_use_file_prefix():
 
 AFF_MAP = {
     "suites": [
-        {"suite": "s1", "repos": ["owner/rulespec-us"]},
-        {"suite": "s2", "repos": ["owner/rulespec-us", "owner/rulespec-us-co"]},
-        {"suite": "no-repos", "repos": []},
+        {"suite": "s1", "name": "s1", "repos": ["owner/rulespec-us"]},
+        {
+            "suite": "s2",
+            "name": "s2",
+            "repos": ["owner/rulespec-us", "owner/rulespec-us-co"],
+        },
+        {"suite": "no-repos", "name": "no-repos", "repos": []},
     ]
 }
 
@@ -237,7 +243,7 @@ def test_selector_decisions_carry_the_registry_name():
     assert selected[0]["name"] == "uk-benefit-cap-ukmod"
 
 
-def test_runnable_names_dispatches_registry_names_not_suite_keys(capsys):
+def test_runnable_names_dispatches_registry_names_not_suite_keys():
     sel = _load("select_affected_suites.py")
     selected = [
         {"suite": "uk-benefit-cap", "name": "uk-benefit-cap-ukmod"},
@@ -245,15 +251,97 @@ def test_runnable_names_dispatches_registry_names_not_suite_keys(capsys):
         {"suite": "ssi-parameters", "name": None},  # manual parameter lane
         {"suite": "s1-again", "name": "s1"},  # duplicate runner
     ]
-    names = sel.runnable_names(selected)
-    assert names == ["uk-benefit-cap-ukmod", "s1"]
-    err = capsys.readouterr().err
-    assert "ssi-parameters" in err and "no CI-runnable registry name" in err
+    assert sel.runnable_names(selected) == ["uk-benefit-cap-ukmod", "s1"]
+    assert sel.manual_suites(selected) == ["ssi-parameters"]
 
 
-def test_runnable_names_skips_entries_missing_the_name_field():
-    """NEGATIVE: a decision with no name key (a stale map regenerated without
-    the field) must be skipped, not dispatched under its suite key — the suite
-    key is what crashed the matrix."""
+@pytest.mark.parametrize(
+    "bad_entry",
+    [
+        {"suite": "drifted", "repos": ["o/r"]},  # name key missing entirely
+        {"suite": "empty", "name": "", "repos": ["o/r"]},
+        {"suite": "blank", "name": "   ", "repos": ["o/r"]},
+        {"suite": "zero", "name": 0, "repos": ["o/r"]},
+        {"suite": "false", "name": False, "repos": ["o/r"]},
+        {"suite": "number", "name": 123, "repos": ["o/r"]},
+        {"suite": "list", "name": ["x"], "repos": ["o/r"]},
+    ],
+)
+def test_selection_fails_loudly_on_malformed_name(bad_entry):
+    """NEGATIVE: only an explicit JSON null means "manual lane". A missing or
+    malformed `name` is map drift — silently skipping it would shrink the
+    matrix while looking green, so both selection paths must fail loudly."""
     sel = _load("select_affected_suites.py")
-    assert sel.runnable_names([{"suite": "uk-benefit-cap"}]) == []
+    amap = {"suites": [bad_entry]}
+    with pytest.raises(SystemExit, match="regenerate"):
+        sel.select(amap, {}, {})
+    with pytest.raises(SystemExit, match="regenerate"):
+        sel.force_all_selection(amap)
+
+
+def test_force_all_matches_normal_dispatch_rules():
+    """force_all selects every repo-bearing entry — same validation, same
+    null-name manual routing, same dedup — so the workflow's two paths cannot
+    drift (the old inline force_all branch dispatched raw suite keys)."""
+    sel = _load("select_affected_suites.py")
+    amap = {
+        "suites": [
+            {"suite": "uk-x", "name": "uk-x-ukmod", "repos": ["o/uk"]},
+            {"suite": "manual", "name": None, "repos": ["o/us"]},
+            {"suite": "plain", "name": "plain", "repos": ["o/us"]},
+            {"suite": "unmapped", "name": "unmapped", "repos": []},
+        ]
+    }
+    selected = sel.force_all_selection(amap)
+    assert [d["suite"] for d in selected] == ["uk-x", "manual", "plain"]
+    assert all(d["reason"] == "force_all" for d in selected)
+    assert sel.runnable_names(selected) == ["uk-x-ukmod", "plain"]
+    assert sel.manual_suites(selected) == ["manual"]
+
+
+def test_github_format_emits_output_lines(monkeypatch, capsys):
+    """The workflow consumes the selector via --format github: one
+    $GITHUB_OUTPUT line per key, matrix JSON single-line, manual accounting
+    present."""
+    sel = _load("select_affected_suites.py")
+    monkeypatch.setattr(
+        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
+    )
+    assert sel.main() == 0
+    out = capsys.readouterr().out.splitlines()
+    keys = dict(line.split("=", 1) for line in out if "=" in line)
+    matrix = json.loads(keys["matrix"])
+    assert int(keys["count"]) == len(matrix["include"]) > 0
+    assert int(keys["manual_count"]) == len(keys["manual"].split())
+    assert "ssi-parameters" in keys["manual"]
+
+
+def test_every_runnable_map_name_resolves_in_the_registry():
+    """EXHAUSTIVE: every non-null name in a fresh build_map() must load
+    through run_comparison.py's real resolver (config file exists, internal
+    name matches, runner registered) — the invariant whose violation crashed
+    ~50 matrix legs per run. Also pins uniqueness: duplicate registry names
+    across map entries would silently collapse into one leg."""
+    gen = _load("generate_affected_map.py")
+    rc = _load("run_comparison.py")
+    entries = gen.build_map()["suites"]
+
+    names = [e["name"] for e in entries if e["name"] is not None]
+    assert len(names) == len(set(names)), "duplicate registry names in the map"
+    suites = [e["suite"] for e in entries]
+    assert len(suites) == len(set(suites)), "duplicate suite keys in the map"
+
+    for name in names:
+        config = rc._load_comparison(name)  # raises on unknown comparison
+        assert config["name"] == name, (
+            f"{name}: config file stem and internal name diverge"
+        )
+        assert config["runner"]["type"] in rc.RUNNERS, (
+            f"{name}: runner type {config['runner']['type']!r} not registered"
+        )
+
+    for entry in entries:
+        if entry["name"] is None:
+            assert entry["source"] == "comparisons/parameter-oracles.yaml", (
+                f"{entry['suite']}: only parameter suites may be non-runnable"
+            )

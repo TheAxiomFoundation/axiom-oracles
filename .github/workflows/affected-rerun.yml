@@ -17,7 +17,9 @@ on:
   workflow_dispatch:
     inputs:
       force_all:
-        description: "Rerun every mapped suite regardless of freshness"
+        description: >-
+          Rerun every CI-runnable mapped suite regardless of freshness
+          (manual parameter suites are reported, not dispatched)
         required: false
         default: "false"
   repository_dispatch:
@@ -90,31 +92,35 @@ jobs:
 
       - name: Select stale-affected suites
         id: select
+        # One code path for both modes: the selector validates the map's
+        # dispatch names (registry name or explicit null — anything else
+        # fails loudly), dedups, and emits matrix/count/manual_count/manual
+        # as $GITHUB_OUTPUT lines. Dispatching dashboard suite keys or
+        # parameter-lane names crashed ~50 legs/run with "unknown comparison".
         run: |
+          args=(--heads-json heads.json --format github)
           if [ "${{ inputs.force_all }}" = "true" ]; then
-            matrix=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          m = json.loads(Path("comparisons/affected_map.json").read_text())
-          # Dispatch registry names, never dashboard suite keys, and skip
-          # entries with no CI-runnable name (parameter suites) — either
-          # crashes the leg with "unknown comparison".
-          names: list = []
-          for e in m["suites"]:
-              if e.get("repos") and e.get("name") and e["name"] not in names:
-                  names.append(e["name"])
-          print(json.dumps({"include": [{"name": n} for n in names]}))
-          PY
-          )
-          else
-            matrix=$(python3 scripts/select_affected_suites.py \
-              --heads-json heads.json --format matrix)
+            args+=(--force-all)
           fi
-          count=$(python3 -c "import json,sys; print(len(json.loads(sys.argv[1])['include']))" "$matrix")
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-          echo "count=$count" >> "$GITHUB_OUTPUT"
-          echo "Selected $count suite(s) to rerun:" >> "$GITHUB_STEP_SUMMARY"
-          python3 -c "import json,sys; [print('-',x['name']) for x in json.loads(sys.argv[1])['include']]" "$matrix" >> "$GITHUB_STEP_SUMMARY" || true
+          python3 scripts/select_affected_suites.py "${args[@]}" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize selection
+        run: |
+          count='${{ steps.select.outputs.count }}'
+          manual_count='${{ steps.select.outputs.manual_count }}'
+          {
+            echo "Selected $count CI-runnable suite(s) to rerun:"
+            python3 -c "import json,sys; [print('-', x['name']) for x in json.loads(sys.argv[1])['include']]" \
+              '${{ steps.select.outputs.matrix }}' || true
+            if [ "$manual_count" != "0" ]; then
+              echo ""
+              echo "$manual_count stale suite(s) have no CI-runnable registry name and await the manual parameter lane (scripts/run_parameter_comparisons.py):"
+              for s in ${{ steps.select.outputs.manual }}; do echo "- $s"; done
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$manual_count" != "0" ]; then
+            echo "::warning::$manual_count stale parameter suite(s) need the manual lane: ${{ steps.select.outputs.manual }}"
+          fi
 
   rerun:
     needs: select

@@ -9,7 +9,10 @@ leaving the weekly full matrix as the backstop.
 
 Inputs:
 
-* ``comparisons/affected_map.json`` — suite → affected rulespec repos.
+* ``comparisons/affected_map.json`` — suite → affected rulespec repos, plus
+  each entry's ``name``: the ``run_comparison.py`` registry name the rerun
+  matrix must dispatch (explicit ``null`` = not CI-runnable; parameter suites
+  run only under the manual ``run_parameter_comparisons.py`` lane).
 * ``dashboard/public/data/<report>.json`` — each report's
   ``provenance.rulespecs`` (``[{repo, sha}]``) records the SHA it ran against.
 * current HEADs — a JSON map ``{"owner/repo": "<sha>"}`` passed via
@@ -24,20 +27,25 @@ A suite is selected when, for any affected repo:
 * the recorded SHA differs from the repo's current HEAD (rules moved → run).
 
 A suite whose every affected repo's HEAD equals what its report already ran
-against is fresh and skipped.
+against is fresh and skipped. ``--force-all`` bypasses the staleness logic and
+selects every mapped entry (the workflow's force_all input) — the same
+validation, filtering, and dispatch rules apply, so the two workflow paths
+cannot drift.
 
 Selection is per report suite, but the rerun matrix must dispatch each entry's
-``name`` — the ``run_comparison.py`` registry name recorded in the affected
-map. The two often coincide but not always (dashboard suite ``uk-benefit-cap``
-runs under registry name ``uk-benefit-cap-ukmod``), and entries with a null
-``name`` (parameter suites, which only the manual
-``run_parameter_comparisons.py`` lane can run) are excluded from ``lines``/
-``matrix`` output entirely — dispatching either wrong class crashes the leg
-with "unknown comparison". The ``json`` format keeps every selected decision,
+``name``. The two often coincide but not always (dashboard suite
+``uk-benefit-cap`` runs under registry name ``uk-benefit-cap-ukmod``;
+``dk-child-youth-benefit`` under ``dk-child-youth-benefit-euromod``), and
+entries with an explicit null ``name`` are excluded from ``lines``/``matrix``/
+``github`` output entirely — dispatching either wrong class crashes the leg
+with "unknown comparison". A MISSING or malformed ``name`` is a map-schema
+error and fails loudly: silently skipping it would let a drifted map empty the
+matrix while looking green. The ``json`` format keeps every selected decision,
 including non-runnable ones, for diagnostics.
 
 Usage:
     uv run scripts/select_affected_suites.py --heads-json heads.json
+    uv run scripts/select_affected_suites.py --force-all --format github
     echo '{"TheAxiomFoundation/rulespec-us":"abc…"}' | \
         uv run scripts/select_affected_suites.py --heads-json - --format json
 """
@@ -63,6 +71,31 @@ def _load_heads(source: str) -> dict[str, str]:
     return {str(k): str(v) for k, v in data.items()}
 
 
+def _registry_name(entry: dict) -> str | None:
+    """The entry's validated registry name, or None for an explicit manual entry.
+
+    Only an explicit JSON ``null`` means "not CI-runnable" (the parameter
+    suites). A missing key or any other falsey/non-string value is a
+    map-schema error — regenerate the map — and fails loudly rather than
+    silently shrinking the matrix.
+    """
+    suite = entry.get("suite", "<unnamed>")
+    if "name" not in entry:
+        raise SystemExit(
+            f"affected map entry {suite!r} lacks the `name` field; "
+            "regenerate with `uv run scripts/generate_affected_map.py`"
+        )
+    name = entry["name"]
+    if name is None:
+        return None
+    if not isinstance(name, str) or not name.strip():
+        raise SystemExit(
+            f"affected map entry {suite!r} has a malformed registry name "
+            f"{name!r}; regenerate with `uv run scripts/generate_affected_map.py`"
+        )
+    return name
+
+
 def _report_ran_against(report: dict) -> dict[str, str | None]:
     """{repo: sha-or-None} the report's provenance says it ran against."""
     rulespecs = (report.get("provenance") or {}).get("rulespecs") or []
@@ -78,10 +111,10 @@ def select(
     selected: list[dict] = []
     for entry in affected_map.get("suites", []):
         suite = entry["suite"]
+        name = _registry_name(entry)  # validate every entry, selected or not
         repos = entry.get("repos", [])
         if not repos:
             continue
-        name = entry.get("name")
         report = reports_by_suite.get(suite)
         if report is None:
             selected.append(
@@ -131,45 +164,72 @@ def select(
     return selected
 
 
+def force_all_selection(affected_map: dict) -> list[dict]:
+    """Every mapped, repo-bearing entry, freshness ignored (force_all).
+
+    Runs the same per-entry validation as ``select`` so the workflow's
+    force_all path cannot drift from the normal one.
+    """
+    selected: list[dict] = []
+    for entry in affected_map.get("suites", []):
+        name = _registry_name(entry)
+        if not entry.get("repos"):
+            continue
+        selected.append(
+            {
+                "suite": entry["suite"],
+                "name": name,
+                "reason": "force_all",
+                "repos": entry["repos"],
+            }
+        )
+    return selected
+
+
 def runnable_names(selected: list[dict]) -> list[str]:
     """The deduplicated registry names the rerun matrix can dispatch.
 
-    Decisions whose map entry has no registry ``name`` (parameter suites — run
-    by the manual ``run_parameter_comparisons.py`` lane, not by
-    ``run_comparison.py``) are dropped: dispatching them crashes the matrix
-    leg with "unknown comparison". Order follows first appearance.
+    Decisions whose map entry has an explicit null ``name`` (parameter suites
+    — run by the manual ``run_parameter_comparisons.py`` lane, not by
+    ``run_comparison.py``) are excluded: dispatching them crashes the matrix
+    leg with "unknown comparison". Malformed names never reach here —
+    ``_registry_name`` fails loudly during selection. Order follows first
+    appearance.
     """
     names: list[str] = []
-    skipped: list[str] = []
     for decision in selected:
         name = decision.get("name")
-        if not name:
-            skipped.append(decision["suite"])
-        elif name not in names:
+        if name is not None and name not in names:
             names.append(name)
-    if skipped:
-        print(
-            f"note: {len(skipped)} stale suite(s) have no CI-runnable registry "
-            f"name and are left to the manual parameter lane: "
-            + ", ".join(sorted(skipped)),
-            file=sys.stderr,
-        )
     return names
+
+
+def manual_suites(selected: list[dict]) -> list[str]:
+    """Selected suites with no CI-runnable registry name (manual lane)."""
+    return sorted(d["suite"] for d in selected if d.get("name") is None)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--heads-json",
-        required=True,
-        help="Path to a {repo: sha} JSON map, or - for stdin.",
+        help="Path to a {repo: sha} JSON map, or - for stdin. Required "
+        "unless --force-all.",
+    )
+    parser.add_argument(
+        "--force-all",
+        action="store_true",
+        help="Select every mapped suite regardless of freshness (the "
+        "workflow's force_all input). Dispatch rules are identical.",
     )
     parser.add_argument(
         "--format",
-        choices=("lines", "json", "matrix"),
+        choices=("lines", "json", "matrix", "github"),
         default="lines",
-        help="lines: one suite per line; json: full decisions; matrix: "
-        "GitHub Actions include-list JSON.",
+        help="lines: one registry name per line; json: full decisions "
+        "(including non-runnable ones); matrix: GitHub Actions include-list "
+        "JSON; github: $GITHUB_OUTPUT lines (matrix, count, manual_count, "
+        "manual).",
     )
     args = parser.parse_args()
 
@@ -178,29 +238,48 @@ def main() -> int:
             "comparisons/affected_map.json missing; run generate_affected_map.py"
         )
     affected_map = json.loads(AFFECTED_MAP.read_text())
-    heads = _load_heads(args.heads_json)
 
-    reports_by_suite: dict[str, dict] = {}
-    for path in sorted(DASHBOARD_DATA_DIR.glob("*.json")):
-        try:
-            data = json.loads(path.read_text())
-        except json.JSONDecodeError:
-            continue
-        if isinstance(data, dict) and data.get("suite"):
-            reports_by_suite[data["suite"]] = data
+    if args.force_all:
+        selected = force_all_selection(affected_map)
+    else:
+        if not args.heads_json:
+            raise SystemExit("--heads-json is required unless --force-all")
+        heads = _load_heads(args.heads_json)
+        reports_by_suite: dict[str, dict] = {}
+        for path in sorted(DASHBOARD_DATA_DIR.glob("*.json")):
+            try:
+                data = json.loads(path.read_text())
+            except json.JSONDecodeError:
+                continue
+            if isinstance(data, dict) and data.get("suite"):
+                reports_by_suite[data["suite"]] = data
+        selected = select(affected_map, heads, reports_by_suite)
 
-    selected = select(affected_map, heads, reports_by_suite)
+    names = runnable_names(selected)
+    manual = manual_suites(selected)
+    if manual:
+        print(
+            f"note: {len(manual)} stale suite(s) have no CI-runnable registry "
+            f"name and are left to the manual parameter lane: "
+            + ", ".join(manual),
+            file=sys.stderr,
+        )
 
     if args.format == "json":
         print(json.dumps(selected, indent=2))
     elif args.format == "matrix":
+        print(json.dumps({"include": [{"name": n} for n in names]}))
+    elif args.format == "github":
+        # One line per $GITHUB_OUTPUT key; the matrix JSON is single-line.
         print(
-            json.dumps(
-                {"include": [{"name": n} for n in runnable_names(selected)]}
-            )
+            "matrix="
+            + json.dumps({"include": [{"name": n} for n in names]})
         )
+        print(f"count={len(names)}")
+        print(f"manual_count={len(manual)}")
+        print("manual=" + " ".join(manual))
     else:
-        for name in runnable_names(selected):
+        for name in names:
             print(name)
     return 0
 
