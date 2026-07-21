@@ -141,7 +141,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-21T17:10:45Z",
+    "generated_at": "2026-07-21T20:07:11Z",
     "generated_by": "scripts/run_comparison.py::uk-vat",
     "rulespecs": [
       {
