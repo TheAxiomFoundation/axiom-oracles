@@ -180,6 +180,50 @@ def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets()
     assert results[0].values == {"income_tax": 100, "state_income_tax": 25}
 
 
+def test_policyengine_taxsim_pairs_prefer_canonical_concepts_on_shared_columns() -> None:
+    from axiom_oracles.adapters.policyengine.taxsim_runner import (
+        _taxsim_to_policyengine_pairs,
+    )
+
+    # The state pilot concepts share TAXSIM's `siitax` with the canonical
+    # state-liability concept. The canonical mapping is declared first, so it
+    # must claim the column no matter how many pilots are requested after it;
+    # the pilots' PolicyEngine variables are not produced by the
+    # policyengine-taxsim emulator and must stay unmapped rather than
+    # clobbering `state_income_tax` (the last-writer-wins regression the
+    # 2026-07-21 ECPS run surfaced).
+    pairs = _taxsim_to_policyengine_pairs(
+        [
+            "state_income_tax",
+            "nc_income_tax_before_credits",
+            "co_income_tax_before_non_refundable_credits",
+        ]
+    )
+    assert pairs["siitax"] == "state_income_tax"
+
+
+def test_policyengine_taxsim_pairs_carry_aggregates_for_list_targets() -> None:
+    from axiom_oracles.adapters.policyengine.taxsim_runner import (
+        _taxsim_to_policyengine_pairs,
+    )
+
+    # Concepts whose PolicyEngine target is a summed list (employee_fica,
+    # tax_before_credits) map their TAXSIM aggregate onto the first list
+    # component; the comparator sums the components that are present, so the
+    # concept-level value reproduces the aggregate exactly.
+    pairs = _taxsim_to_policyengine_pairs(
+        [
+            "employee_social_security_tax",
+            "employee_medicare_tax",
+            "self_employment_tax",
+            "income_tax_main_rates",
+            "capital_gains_tax",
+        ]
+    )
+    assert pairs["tfica"] == "employee_social_security_tax"
+    assert pairs["v19"] == "income_tax_main_rates"
+
+
 def test_prd_package_runner_wraps_external_prd_households() -> None:
     passed_households = []
     passed_programs = []

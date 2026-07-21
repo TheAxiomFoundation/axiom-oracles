@@ -350,7 +350,7 @@ def sanity_check(
     default=None,
     show_default="auto",
     help=(
-        "Validation period. Defaults to 2024 for TAXSIM comparisons and "
+        "Validation period. Defaults to 2026 for TAXSIM comparisons and "
         "2026-05 otherwise."
     ),
 )
