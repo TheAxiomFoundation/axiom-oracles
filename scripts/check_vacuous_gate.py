@@ -4,11 +4,11 @@
 Two guards, one entrypoint:
 
 1. **Oracle-backed check (blocking).** Every registry comparison config must
-   actually compare against a real oracle — a config that verifies nothing is
-   the definition of vacuous verification. A config passes when its runner type
-   pairs Axiom against an external oracle (PolicyEngine, EUROMOD, …) *and*, for
-   the generic ``axiom-oracles-compare`` runner, names a non-``none`` ``right``
-   engine. A config that intentionally has no oracle yet must opt out
+   actually compare real independent engines — a config that verifies nothing is
+   the definition of vacuous verification. A config passes when its registered
+   runner type fixes a real external pair (including direct oracle cross-checks)
+   and, for the generic ``axiom-oracles-compare`` runner, names a non-``none``
+   ``right`` engine. A config that intentionally has no oracle yet must opt out
    explicitly with a top-level ``oracle: none`` **and** a ``reason:`` string;
    silence is a failure. The same rule applies per fixture case: each
    ``<name>.fixtures.yaml`` fixture must declare an ``expected`` outcome for at
@@ -60,8 +60,8 @@ _RUN_COMPARISON = REPO_ROOT / "scripts" / "run_comparison.py"
 def _registered_runner_types() -> set[str]:
     """The keys of run_comparison.py's ``RUNNERS`` table.
 
-    Every registered runner compares Axiom against an external oracle, so
-    registry membership *is* the oracle-backed criterion — deriving the set
+    Every registered runner executes a real comparison pair, so registry
+    membership *is* the oracle-backed criterion — deriving the set
     from the source of truth means a newly-registered runner (e.g. a UKMOD
     lane added concurrently) can't silently fall out of the gate's coverage.
     Parsed statically (regex) rather than imported so this stays cheap and
@@ -79,15 +79,16 @@ def _registered_runner_types() -> set[str]:
     return set(re.findall(r'"([^"]+)"\s*:', block.group(1)))
 
 
-#: Runner types whose very shape pairs Axiom against a real external oracle —
-#: the RUNNERS registry, plus a static fallback if parsing ever fails so the
-#: gate degrades to "known set" rather than "everything is unbacked".
+#: Runner types whose very shape fixes a real comparison pair — the RUNNERS
+#: registry, plus a static fallback if parsing ever fails so the gate degrades
+#: to "known set" rather than "everything is unbacked".
 _ORACLE_BACKED_RUNNERS = _registered_runner_types() or {
     "axiom-encode-tax-ecps-compare",
     "axiom-encode-uk-efrs-compare",
     "axiom-encode-snap-ecps-compare",
     "axiom-oracles-compare",
     "euromod-synthetic-compare",
+    "gettsim-synthetic-compare",
 }
 
 

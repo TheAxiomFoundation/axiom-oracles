@@ -50,6 +50,15 @@ def test_generic_compare_with_real_right_passes():
     assert problems == []
 
 
+def test_direct_oracle_crosscheck_runner_passes():
+    gate = _load_gate()
+    problems = gate._config_oracle_problems(
+        "de-worker-dual-oracle",
+        {"runner": {"type": "gettsim-synthetic-compare"}},
+    )
+    assert problems == []
+
+
 def test_oracle_none_without_reason_fails():
     """NEGATIVE: opting out of an oracle requires a reason."""
     gate = _load_gate()

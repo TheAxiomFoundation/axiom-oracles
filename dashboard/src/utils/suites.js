@@ -34,6 +34,7 @@ export const JURISDICTION_LABELS = {
   US: "Federal (US)",
   UK: "United Kingdom",
   BE: "Belgium",
+  DEU: "Germany",
   CAN: "Canada",
   NYC: "New York City",
 };
@@ -68,6 +69,7 @@ export const FAMILY_LABELS = {
   be_social_security: "Belgium social security",
   be_social_assistance: "Belgium social assistance",
   be_health_insurance: "Belgium health insurance",
+  de_worker_tax_contributions: "Germany worker tax and social insurance",
   canada_personal_income_tax: "Canada personal income tax",
   canada_family_benefits: "Canada family and disability benefits",
 };
@@ -513,6 +515,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 322,
   },
+  "de-worker-dual-oracle": {
+    family: "de_worker_tax_contributions",
+    jurisdiction: "DEU",
+    label: "Germany worker tax and social insurance",
+    region: "de",
+    kind: "household",
+    order: 600,
+  },
   "nyc-income-tax-gap": {
     family: "nyc_income_tax",
     jurisdiction: "NYC",
@@ -572,7 +582,9 @@ export function suiteMeta(suite) {
         ? "be"
         : slug.startsWith("ca-")
           ? "ca"
-          : "us",
+          : slug.startsWith("de-")
+            ? "de"
+            : "us",
     kind: "household",
     order: 500,
   };

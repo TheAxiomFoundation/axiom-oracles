@@ -19,9 +19,9 @@ engine-specific projection adds. Concretely, from a
   engine-projection payloads and not the redundant, already-captured entity
   or scope bookkeeping.
 
-It drops ``axiom_inputs``, ``euromod_inputs``, ``euromod_to_axiom_input_bridge``
-and the ``*_applied`` bridge echo — all re-derivable from the skeleton by the
-suite factory.
+It drops ``axiom_inputs``, ``euromod_inputs``, ``gettsim_case``,
+``euromod_to_axiom_input_bridge`` and the ``*_applied`` bridge echo — all
+re-derivable from the skeleton by the suite factory.
 """
 
 from __future__ import annotations
@@ -37,6 +37,7 @@ _PROJECTION_METADATA_KEYS = frozenset(
     {
         "axiom_inputs",
         "euromod_inputs",
+        "gettsim_case",
         "euromod_to_axiom_input_bridge",
         "euromod_to_axiom_input_bridge_applied",
         "axiom_alias_qualified_inputs",

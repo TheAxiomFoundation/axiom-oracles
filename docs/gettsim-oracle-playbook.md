@@ -178,20 +178,34 @@ version). The main CI job syncs `[dev]`; the dedicated `gettsim-live` CI job
 syncs the gettsim fork and runs the live adapter tests, so a broken adapter
 cannot ride in on skips.
 
-## 6. Wiring a DE comparison suite (follow-up, once encodings exist)
+## 6. Germany dual-oracle suite (realized)
 
-No DE encodings exist yet, so this adapter ships **without** comparison suites or
-registry entries — adapter + tests only. When `rulespec-de` lands its first
-instrument, wire the dual-oracle comparison the way the EUROMOD playbook
-describes (§6 there): add durable-id concepts in `core/case.py` pointing at the
-rulespec modules, map them to GETTSIM `tt_target` leaves *and* EUROMOD output
-columns in `comparison/mappings`, add a `de-worker-*` synthetic suite over the
-income grid the encoding exercises, and record model findings (GETTSIM →
-`iza-institute-of-labor-economics/gettsim`; EUROMOD →
-`ec-jrc/JRC-EUROMOD-software-source-code`) versus encoding findings (on
-`rulespec-de`). The single-worker seed and the Kindergeld case in
-`tests/test_gettsim_adapter.py` are the ready anchors for the first
-income-tax/SSC and family-benefit suites.
+The direct `de-worker-dual-oracle` lane is now registered and published. It
+compares EUROMOD DE_2025 directly with GETTSIM 1.2.1 over the canonical
+13-household worker grid; it is an oracle cross-check, not an Axiom conformance
+claim, so its generated affected-map entry deliberately has no rulespec edge.
+
+- `axiom_oracles/suites/de_worker.py` owns the shared case grid and the
+  engine-specific projections.
+- `axiom_oracles/config/concept_mappings.yaml` maps the four monthly employee
+  contribution legs, annual income tax including Soli, and monthly Kindergeld
+  at a one-cent absolute tolerance.
+- `comparisons/de-worker-dual-oracle.yaml` selects the registered
+  `gettsim-synthetic-compare` runner. The process hosting the runner has
+  GETTSIM installed; the existing EUROMOD adapter delegates to
+  `EUROMOD_PYTHON`.
+- `dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json` is the
+  committed live evidence. Hosts without both optional engines re-emit that
+  report, while unsupported installed engine versions still fail loudly.
+- `dispositions/de-worker-dual-oracle.yaml` records the three filed upstream
+  model findings. The repository's schema calls these
+  `upstream_engine_gap`; the evidence and issue link identify the model at
+  fault.
+
+The detailed engine contract, reductions, reproducible run command, and filed
+findings are in `docs/de-dual-oracle-playbook.md`. A future Axiom DE encoding
+can add a separate conformance comparison against these baselines without
+changing this direct cross-oracle lane.
 
 ## Dependency
 
