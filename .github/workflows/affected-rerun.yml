@@ -139,7 +139,7 @@ jobs:
           path: axiom-oracles
           # Pin the default branch explicitly so the commit step pushes to a
           # real branch (schedule/repository_dispatch would otherwise leave a
-          # detached HEAD, breaking the pull/push below).
+          # detached HEAD, breaking the fetch/reset/push in the commit script).
           ref: ${{ github.event.repository.default_branch }}
 
       - name: Checkout axiom-encode

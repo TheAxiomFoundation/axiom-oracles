@@ -90,14 +90,14 @@ def _run_check(sb, monkeypatch) -> int:
 
 
 def _regenerate(sb) -> None:
-    """Exactly what the reconcile job's `conformance_scoreboard.py` run does."""
+    """Exactly what the per-leg `conformance_scoreboard.py` regeneration does."""
     document, details = sb.build_scoreboard()
     sb.write_all(document, details)
 
 
 def test_report_refresh_reds_the_scoreboard_until_regenerated(tmp_path, monkeypatch):
     """A committed report refresh leaves the scoreboard stale (``--check`` fails);
-    regenerating — what the reconcile job does — makes it pass again. This is the
+    regenerating — what the per-leg commit script does — makes it pass again. This is the
     2026-07-14 incident (#282) reproduced as an automated gate."""
     sb, data, conf = _sandbox_scoreboard(tmp_path)
     (conf / "tx.yaml").write_text(_minimal_universe_yaml())
@@ -116,7 +116,7 @@ def test_report_refresh_reds_the_scoreboard_until_regenerated(tmp_path, monkeypa
         "no longer fails, the --check gate has stopped guarding staleness"
     )
 
-    # Regenerate (the reconcile job) → green again, no human in the loop.
+    # Regenerate (the per-leg commit script) → green again, no human in the loop.
     _regenerate(sb)
     assert _run_check(sb, monkeypatch) == 0
 

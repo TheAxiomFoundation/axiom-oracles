@@ -18,7 +18,6 @@ import shutil
 import subprocess
 import sys
 import time
-import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -122,22 +121,30 @@ def _perturb_report(clone: Path, report: str = REPORT) -> str:
     """Change the report the way a rerun does and return a sentinel that
     proves THIS refresh landed.
 
-    Moves score-bearing summary counts (match → mismatch: flips the
-    conformance detail and the freshness register — the #282 incident class)
-    and stamps a unique provenance timestamp. Only fields the dispositions
-    merge PRESERVES are touched: for suites with a dispositions file,
-    apply_dispositions.py recomputes the `summary.dispositioned` block from
-    the mismatch rows, so perturbing that block would be silently reverted by
-    the regeneration and the test could not tell a landed refresh from a
-    clobbered one.
+    Moves score-bearing summary counts direction-aware (a report with matches
+    loses one to mismatch and vice versa, so counts stay valid — flipping the
+    conformance detail and the freshness register, the #282 incident class)
+    and stamps a fresh, format-valid provenance timestamp. Only fields the
+    dispositions merge PRESERVES are touched: for suites with a dispositions
+    file, apply_dispositions.py recomputes the `summary.dispositioned` block
+    from the mismatch rows, so perturbing that block would be silently
+    reverted by the regeneration and the test could not tell a landed refresh
+    from a clobbered one. The sentinel discriminates because it differs from
+    the committed historical timestamp, and it honors the repository's
+    `%Y-%m-%dT%H:%M:%SZ` provenance format.
     """
     path = clone / report
     doc = json.loads(path.read_text())
-    doc["summary"]["match_count"] -= 1
-    doc["summary"]["mismatch_count"] = doc["summary"].get("mismatch_count", 0) + 1
-    sentinel = (
-        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-        + f".{uuid.uuid4().hex[:8]}Z"
+    summary = doc["summary"]
+    if summary["match_count"] > 0:
+        summary["match_count"] -= 1
+        summary["mismatch_count"] = summary.get("mismatch_count", 0) + 1
+    else:
+        summary["match_count"] += 1
+        summary["mismatch_count"] = max(summary.get("mismatch_count", 1) - 1, 0)
+    sentinel = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    assert doc["provenance"]["generated_at"] != sentinel, (
+        "committed report timestamp collides with now; cannot discriminate"
     )
     doc["provenance"]["generated_at"] = sentinel
     path.write_text(json.dumps(doc, indent=2) + "\n")
@@ -303,30 +310,38 @@ def test_self_heals_preexisting_staleness(origin, tmp_path):
 
 def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path):
     """A sibling advances main BETWEEN this leg's rebuild and its push — the
-    genuine race. A pre-receive hook rejects the leg's first push (git forbids
-    moving refs from inside the hook, so the test thread performs the advance
-    while the leg sleeps out its retry delay, gated on the hook's marker
-    file). The leg must rebuild on the sibling's tip and land a tree that
-    keeps BOTH refreshes — and, because the sibling pushed a raw report with
-    no derived regen (the old broken-bot shape), the leg's regeneration must
-    heal that too: the final tip passes every gate."""
+    genuine race, made deterministic with a two-marker barrier: the hook
+    intercepting the leg's first push signals the test thread (`racing`),
+    then BLOCKS until the test has pushed the sibling commit through and
+    touched `sibling-landed`, and only then rejects. The leg's retry
+    therefore always fetches a tip the sibling has already advanced — no
+    timing window. (git forbids moving refs from inside a hook, so the
+    advance must come from outside.) The leg must rebuild on the sibling's
+    tip and land a tree that keeps BOTH refreshes — and, because the sibling
+    pushed a raw report with no derived regen (the old broken-bot shape), the
+    leg's regeneration must heal that too: the final tip passes every gate."""
     # The sibling's commit: a raw report perturbation with NO derived
     # regeneration, exactly what the pre-fix bot pushed. Kept local until the
-    # leg's first push is rejected.
+    # leg's first push is intercepted.
     sibling = _clone(origin, tmp_path / "sibling")
     sentinel_sibling = _perturb_report(sibling, SIBLING_REPORT)
     _git(sibling, "add", "--", "dashboard/public/data/")
     _git(sibling, "commit", "-q", "-m", "data: sibling refresh (no derived regen)")
     sibling_sha = _git(sibling, "rev-parse", "HEAD")
 
-    marker = origin / "rejected-once"
+    racing = origin / "racing"
+    landed = origin / "sibling-landed"
     hook = origin / "hooks" / "pre-receive"
     hook.write_text(
         "#!/bin/sh\n"
-        f'marker="{marker}"\n'
+        f'racing="{racing}"\nlanded="{landed}"\n'
         "while read old new ref; do\n"
-        '  if [ "$ref" = "refs/heads/main" ] && [ ! -f "$marker" ]; then\n'
-        '    touch "$marker"\n'
+        '  if [ "$ref" = "refs/heads/main" ] && [ ! -f "$racing" ]; then\n'
+        '    touch "$racing"\n'
+        "    i=0\n"
+        '    while [ ! -f "$landed" ] && [ "$i" -lt 1200 ]; do\n'
+        "      sleep 0.1; i=$((i + 1))\n"
+        "    done\n"
         '    echo "simulated concurrent sibling push" >&2\n'
         "    exit 1\n"
         "  fi\n"
@@ -345,21 +360,21 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
             **GIT_ENV,
             "PYTHON": sys.executable,
             "MAX_ATTEMPTS": "4",
-            "PUSH_RETRY_DELAY": "3",
+            "PUSH_RETRY_DELAY": "0",
         },
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
     )
-    # Wait for the hook to reject the leg's first push, then advance main with
-    # the sibling's commit inside the leg's retry sleep (marker now exists, so
-    # the hook lets the sibling through).
+    # Hook has signaled the leg's first push; land the sibling (its push sees
+    # `racing` set, so the hook waves it through), then release the hook.
     deadline = time.monotonic() + 120
-    while not marker.exists():
+    while not racing.exists():
         assert time.monotonic() < deadline, "leg never attempted its first push"
         assert proc.poll() is None, proc.communicate()[1]
         time.sleep(0.05)
     _git(sibling, "push", "-q", "origin", "HEAD:main")
+    landed.touch()
     stdout, stderr = proc.communicate(timeout=240)
     assert proc.returncode == 0, stderr
     assert "push rejected (attempt 1" in stderr
@@ -377,13 +392,18 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
 
 def _add_first_time_report(clone: Path, suite: str) -> str:
     """Simulate run_comparison.py landing a brand-new suite: write its first
-    report and append its filename to the shared manifest."""
+    report and append its filename to the shared manifest (creating the
+    manifest if the tree has none — run_comparison does the same)."""
     filename = f"axiom-policyengine-{suite}.json"
     doc = json.loads((clone / REPORT).read_text())
     doc["suite"] = suite
     (clone / SEED_DATA / filename).write_text(json.dumps(doc, indent=2) + "\n")
     manifest_path = clone / SEED_DATA / "manifest.json"
-    manifest = json.loads(manifest_path.read_text())
+    manifest = (
+        json.loads(manifest_path.read_text())
+        if manifest_path.exists()
+        else {"reports": []}
+    )
     manifest["reports"].append(filename)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     return filename
@@ -411,6 +431,34 @@ def test_first_time_reports_from_racing_legs_merge_manifest(origin, tmp_path):
             f"{filename} dropped from the shared manifest by the racing leg"
         )
         assert (verify / SEED_DATA / filename).exists()
+
+
+def test_first_time_reports_race_when_head_has_no_manifest(origin, tmp_path):
+    """Same manifest race, but HEAD has NO committed manifest — the file is
+    brand-new (untracked) in both legs. The untracked collector must exclude
+    it exactly like the tracked path, or the second leg restores its stale
+    whole-file copy and drops the first leg's entry."""
+    setup = _clone(origin, tmp_path / "setup")
+    _git(setup, "rm", "-q", "--", f"{SEED_DATA}/manifest.json")
+    _git(setup, "commit", "-q", "-m", "seed variant: no manifest yet")
+    _git(setup, "push", "-q", "origin", "HEAD:main")
+
+    job_a = _clone(origin, tmp_path / "job-a")
+    job_b = _clone(origin, tmp_path / "job-b")  # cloned BEFORE a's push
+    file_a = _add_first_time_report(job_a, "zz-fake-a")
+    file_b = _add_first_time_report(job_b, "zz-fake-b")
+
+    result_a = _run_script(job_a, "zz-fake-a")
+    assert result_a.returncode == 0, result_a.stderr
+    result_b = _run_script(job_b, "zz-fake-b")
+    assert result_b.returncode == 0, result_b.stderr
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    manifest = json.loads((verify / SEED_DATA / "manifest.json").read_text())
+    for filename in (file_a, file_b):
+        assert filename in manifest["reports"], (
+            f"{filename} dropped: the untracked manifest was restored verbatim"
+        )
 
 
 def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
@@ -458,13 +506,21 @@ def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
 
 
 def test_no_changes_second_run_is_a_noop(origin, tmp_path):
-    """Back-to-back runs with nothing new: both take the fast no-op path (the
+    """Back-to-back runs with nothing new: BOTH take the fast no-op path (the
     checked-out tree already passes every gate), pushing nothing — the daily
-    history snapshot only lands alongside an actual refresh."""
+    history snapshot only lands alongside an actual refresh. The tip is
+    captured BEFORE the first run and the no-op message asserted on both, so
+    a variant that pushes a snapshot-churn commit on the first idle run (the
+    pre-amendment behavior) fails here."""
+    tip = _git(origin, "rev-parse", "main")
+
     first = _clone(origin, tmp_path / "first")
     result = _run_script(first)
     assert result.returncode == 0, result.stderr
-    tip = _git(origin, "rev-parse", "main")
+    assert "no report or derived-artifact changes" in result.stdout
+    assert _git(origin, "rev-parse", "main") == tip, (
+        "an idle run must not churn a commit"
+    )
     _assert_origin_tip_green(origin, tmp_path)
 
     second = _clone(origin, tmp_path / "second")

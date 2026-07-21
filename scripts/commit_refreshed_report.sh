@@ -128,6 +128,10 @@ while IFS= read -r -d '' path; do
   if [ -e "$path" ]; then private+=("$path"); else deletions+=("$path"); fi
 done < <(git diff HEAD --name-only -z -- "${derived_paths[@]}")
 while IFS= read -r -d '' path; do
+  # The manifest is shared even when brand-new (HEAD without one): restoring
+  # it verbatim would drop a racing sibling's entry, so it is excluded here
+  # too and its additions replayed instead.
+  [ "$path" = "$manifest" ] && continue
   private+=("$path")
 done < <(git ls-files --others --exclude-standard -z -- "${derived_paths[@]}")
 
