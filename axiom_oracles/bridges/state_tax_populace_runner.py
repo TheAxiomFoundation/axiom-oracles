@@ -1,10 +1,9 @@
-"""Route the pinned US Populace into state income-tax comparison scopes.
+"""Route and execute reviewed state income-tax Populace comparisons.
 
-This module performs population accounting only.  It does not execute a
-blocked RuleSpec program and it does not substitute PolicyEngine outputs for
-unresolved Axiom inputs.  That separation lets the campaign audit the entire
-national denominator before individual state projection contracts become
-runnable.
+Population accounting remains independent of execution.  Runnable projections
+are limited to exact sources admitted by the declarative contract; unresolved
+slots remain blocked, and PolicyEngine values may enter Axiom only through the
+independently reviewed upstream-boundary allowlist.
 """
 
 from __future__ import annotations
@@ -439,10 +438,85 @@ def calculate_policyengine_targets(
     return targets
 
 
+def calculate_policyengine_projection_inputs(
+    *,
+    dataset: Any,
+    raw_tax_units: Any,
+    routes: Iterable[TaxUnitRoute],
+    year: int,
+    contract: StateTaxPopulaceContract | Mapping[str, Any] | None = None,
+    microsimulation_factory: Callable[[Any], Any] | None = None,
+) -> dict[str, dict[str, dict[int | str, float]]]:
+    """Calculate only allowlisted upstream PE inputs for ready states."""
+
+    resolved_contract = (
+        load_state_tax_populace_contract()
+        if contract is None
+        else validate_state_tax_populace_contract(contract)
+    )
+    if year != resolved_contract.validation_year:
+        raise StateTaxPopulationRoutingError(
+            f"projection year must be {resolved_contract.validation_year}; got {year}"
+        )
+    _require_columns(raw_tax_units, {"tax_unit_id"}, "tax_unit")
+    tax_unit_ids = [_clean_id(value) for value in raw_tax_units["tax_unit_id"]]
+    selected_states = {
+        route.state
+        for route in routes
+        if route.disposition == DISPOSITION_READY and route.state is not None
+    }
+    if microsimulation_factory is None:
+        try:
+            from policyengine_us import Microsimulation
+        except ImportError as exc:  # pragma: no cover - optional runtime dependency
+            raise RuntimeError(
+                "Install the PolicyEngine extra to calculate state-tax inputs."
+            ) from exc
+
+        def microsimulation_factory(source: Any) -> Any:
+            return Microsimulation(dataset=source)
+
+    sim = microsimulation_factory(dataset)
+    projections: dict[str, dict[str, dict[int | str, float]]] = {}
+    for state in sorted(selected_states):
+        jurisdiction = resolved_contract.by_state()[state]
+        state_inputs: dict[str, dict[int | str, float]] = {}
+        for slot in jurisdiction.inputs:
+            if (
+                slot.source_kind != "pe_upstream_boundary"
+                or not slot.policyengine_variable
+            ):
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: runtime projector does not support ready source "
+                    f"{slot.source_kind!r} for {slot.slot}"
+                )
+            values = _array_values(
+                sim.calculate(slot.policyengine_variable, period=year)
+            )
+            if len(values) != len(tax_unit_ids):
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: PolicyEngine boundary "
+                    f"{slot.policyengine_variable!r} returned {len(values)} rows "
+                    f"for {len(tax_unit_ids)} tax units"
+                )
+            state_inputs[slot.slot] = {
+                tax_unit_id: _finite_number(
+                    value, label=slot.policyengine_variable
+                )
+                for tax_unit_id, value in zip(tax_unit_ids, values, strict=True)
+            }
+        projections[state] = state_inputs
+    return projections
+
+
 def compare_ready_state_tax_units(
     *,
     routes: Iterable[TaxUnitRoute],
     policyengine_targets: Mapping[str, Mapping[int | str, float]],
+    policyengine_projection_inputs: Mapping[
+        str, Mapping[str, Mapping[int | str, float]]
+    ]
+    | None = None,
     year: int,
     rulespec_root: Path,
     axiom_rules_path: Path,
@@ -452,10 +526,9 @@ def compare_ready_state_tax_units(
 ) -> dict[str, Any]:
     """Execute every ready state once and compare all selected tax units.
 
-    The current contract makes only New Hampshire runnable.  Future states are
-    accepted automatically only after every declared input/relation becomes
-    ready; until projection code is added for those source kinds this function
-    fails closed rather than treating their inputs as zero.
+    Ready inputs must be supplied by the exact runtime projection surface and
+    match the contract slot-for-slot.  Relations and unsupported source kinds
+    fail closed rather than receiving implicit values.
     """
 
     resolved_contract = (
@@ -484,20 +557,33 @@ def compare_ready_state_tax_units(
     all_mismatches: list[dict[str, Any]] = []
     for state, state_routes in sorted(selected_by_state.items()):
         jurisdiction = resolved_contract.by_state()[state]
-        if jurisdiction.inputs or jurisdiction.relations:
+        if jurisdiction.relations:
             raise StateTaxPopulationRoutingError(
-                f"{state}: ready projection slots require a runtime projector; "
-                "refusing implicit values"
+                f"{state}: ready relations require a runtime projector; "
+                "refusing implicit relations"
+            )
+        declared_slots = {slot.slot for slot in jurisdiction.inputs}
+        state_projection_inputs = dict(
+            (policyengine_projection_inputs or {}).get(state, {})
+        )
+        supplied_slots = set(state_projection_inputs)
+        if supplied_slots != declared_slots:
+            missing = sorted(declared_slots - supplied_slots)
+            extra = sorted(supplied_slots - declared_slots)
+            raise StateTaxPopulationRoutingError(
+                f"{state}: projected input inventory mismatch; "
+                f"missing={missing}, extra={extra}"
             )
         state_targets = policyengine_targets.get(state)
         if state_targets is None:
             raise StateTaxPopulationRoutingError(
                 f"{state}: missing PolicyEngine target results"
             )
-        request = _constant_state_request(
+        request = _state_request(
             routes=state_routes,
             year=year,
             output=jurisdiction.output,
+            projected_inputs=state_projection_inputs,
         )
         program = _program_path(rulespec_root, jurisdiction.program)
         results = axiom_runner(
@@ -588,24 +674,49 @@ def compare_ready_state_tax_units(
     }
 
 
-def _constant_state_request(
-    *, routes: Iterable[TaxUnitRoute], year: int, output: str
+def _state_request(
+    *,
+    routes: Iterable[TaxUnitRoute],
+    year: int,
+    output: str,
+    projected_inputs: Mapping[str, Mapping[int | str, float]],
 ) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
         "end": f"{year:04d}-12-31",
     }
+    route_rows = tuple(routes)
+    inputs: list[dict[str, Any]] = []
+    if projected_inputs:
+        from .tax_populace import input_record
+
+        for route in route_rows:
+            for slot, values in sorted(projected_inputs.items()):
+                if route.tax_unit_id not in values:
+                    raise StateTaxPopulationRoutingError(
+                        f"projected input {slot!r} omitted tax_unit_id "
+                        f"{route.tax_unit_id}"
+                    )
+                value = _finite_number(values[route.tax_unit_id], label=slot)
+                inputs.append(
+                    input_record(
+                        slot,
+                        _tax_unit_entity_id(route.tax_unit_id),
+                        interval,
+                        value,
+                    )
+                )
     return {
         "mode": "explain",
-        "dataset": {"inputs": [], "relations": []},
+        "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
                 "entity_id": _tax_unit_entity_id(route.tax_unit_id),
                 "period": interval,
                 "outputs": [output],
             }
-            for route in routes
+            for route in route_rows
         ],
     }
 

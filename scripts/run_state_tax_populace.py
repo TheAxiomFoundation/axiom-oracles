@@ -11,6 +11,7 @@ from axiom_oracles.bridges.population import load_populace_dataset, population_t
 from axiom_oracles.bridges.state_tax_populace import load_state_tax_populace_contract
 from axiom_oracles.bridges.state_tax_populace_runner import (
     calculate_policyengine_targets,
+    calculate_policyengine_projection_inputs,
     compare_ready_state_tax_units,
     population_routing_report,
     route_tax_units,
@@ -64,6 +65,13 @@ def main(argv: list[str] | None = None) -> int:
         year=args.year,
         contract=contract,
     )
+    projection_inputs = calculate_policyengine_projection_inputs(
+        dataset=dataset,
+        raw_tax_units=raw_tax_units,
+        routes=routes,
+        year=args.year,
+        contract=contract,
+    )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
         "dataset_identity": identity,
@@ -79,6 +87,7 @@ def main(argv: list[str] | None = None) -> int:
         "comparison": compare_ready_state_tax_units(
             routes=routes,
             policyengine_targets=targets,
+            policyengine_projection_inputs=projection_inputs,
             year=args.year,
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
