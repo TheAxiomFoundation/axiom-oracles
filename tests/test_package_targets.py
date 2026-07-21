@@ -362,7 +362,7 @@ def test_cli_preparation_does_not_use_oracles_as_input_providers(monkeypatch) ->
 
 
 def test_cli_defaults_taxsim_comparisons_to_supported_tax_year() -> None:
-    assert _resolve_period(None, "policyengine", "taxsim") == "2024"
+    assert _resolve_period(None, "policyengine", "taxsim") == "2026"
     assert _resolve_period(None, "accessnyc", "policyengine") == "2026-05"
     assert _resolve_period("2023", "policyengine", "taxsim") == "2023"
 

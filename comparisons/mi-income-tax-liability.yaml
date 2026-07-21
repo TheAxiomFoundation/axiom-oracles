@@ -7,9 +7,11 @@
 # Michigan taxable income (Michigan AGI less the section 206.30 personal
 # exemptions, $5,950 per person in 2026).
 #
-# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
-# supported law year (2024) because the pinned binary abandons 2026; the
-# 2024-to-2026 personal-exemption indexation ($5,600 to $5,950) is recorded in
+# PolicyEngine and TAXSIM both run at the 2026 validation year: the pinned
+# policyengine-taxsim 2.30.0 binary models 2026 law (its missing 2026
+# qualifying-child credit machinery is not exercised by this childless grid),
+# but its 2026 state module projects several parameters instead of applying
+# enacted amounts; each residual is decomposed exactly in
 # dispositions/mi-income-tax-liability.yaml rather than absorbed by tolerance.
 #
 # Run locally:
@@ -21,14 +23,14 @@ description: >-
   Compares the composed Michigan income-tax liability pipeline encoded in
   Axiom RuleSpec (us-mi/policies/income_tax/pilot_liability_pipeline) against
   PolicyEngine (mi_income_tax_before_non_refundable_credits) at 2026 and
-  TAXSIM (siitax) at 2024 on a modest grid of single and married filers.
+  TAXSIM (siitax) at 2026 on a modest grid of single and married filers.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: MI
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     # Links this suite to the rulespec-us monorepo in the affected map
     # so a change to the composed pipeline triggers a re-run.
     rulespec_roots:

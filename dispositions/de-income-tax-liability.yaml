@@ -1,0 +1,165 @@
+schema: axiom_oracles.dispositions.v1
+suite: de-income-tax-liability
+updated: '2026-07-21'
+entries:
+- id: de-taxsim-2026-parameter-projection-single-30000
+  concept: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  case_id: de-single-30000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Delaware module
+      extrapolates the section 1108 standard deduction to 3,347.52 (the
+      enacted amount is 3,250) and the fixed 110-dollar section 1110 personal
+      credit to about 113.31 per filer (netting 113.31), while the pipeline
+      applies the enacted deduction and nets the enacted 110-dollar credit.
+      Residual = (988.12 - 1,081.12) + 113.31 = 20.31. TAXSIM 2026-projection
+      drift on fixed statutory amounts, not a pipeline defect; the pipeline
+      matches PolicyEngine at 2026 to the cent on every grid case.
+    arithmetic:
+    - expression: 1081.12 - 113.31
+      equals: 967.81
+      tolerance: 0.02
+    - expression: (988.12 - 1081.12) + 113.31
+      equals: 20.31
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 988.125
+    right: 967.81
+- id: de-taxsim-2026-parameter-projection-single-60000
+  concept: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  case_id: de-single-60000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Delaware module
+      extrapolates the section 1108 standard deduction to 3,347.52 (the
+      enacted amount is 3,250) and the fixed 110-dollar section 1110 personal
+      credit to about 113.31 per filer (netting 113.31), while the pipeline
+      applies the enacted deduction and nets the enacted 110-dollar credit.
+      Residual = (2,653.12 - 2,746.12) + 113.31 = 20.31. TAXSIM
+      2026-projection drift on fixed statutory amounts, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent on every grid
+      case.
+    arithmetic:
+    - expression: 2746.12 - 113.31
+      equals: 2632.81
+      tolerance: 0.02
+    - expression: (2653.12 - 2746.12) + 113.31
+      equals: 20.31
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 2653.125
+    right: 2632.81
+- id: de-taxsim-2026-parameter-projection-single-150000
+  concept: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  case_id: de-single-150000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Delaware module
+      extrapolates the section 1108 standard deduction to 3,347.52 (the
+      enacted amount is 3,250) and the fixed 110-dollar section 1110 personal
+      credit to about 113.30 per filer (netting 113.30), while the pipeline
+      applies the enacted deduction and nets the enacted 110-dollar credit.
+      Residual = (8,559.00 - 8,632.06) + 113.30 = 40.24. TAXSIM
+      2026-projection drift on fixed statutory amounts, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent on every grid
+      case.
+    arithmetic:
+    - expression: 8632.06 - 113.3
+      equals: 8518.76
+      tolerance: 0.02
+    - expression: (8559.0 - 8632.06) + 113.3
+      equals: 40.24
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 8559.0
+    right: 8518.76
+- id: de-taxsim-2026-parameter-projection-married-60000
+  concept: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  case_id: de-married-60000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Delaware module
+      extrapolates the section 1108 standard deduction to 6,695.04 (the
+      enacted amount is 6,500) and the fixed 110-dollar section 1110 personal
+      credit to about 113.30 per filer (netting 226.60), while the pipeline
+      applies the enacted deduction and nets the enacted 220-dollar credit.
+      Residual = (2,362.75 - 2,560.33) + 226.60 = 29.02. TAXSIM
+      2026-projection drift on fixed statutory amounts, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent on every grid
+      case.
+    arithmetic:
+    - expression: 2560.33 - 226.6
+      equals: 2333.73
+      tolerance: 0.02
+    - expression: (2362.75 - 2560.33) + 226.6
+      equals: 29.02
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 2362.75
+    right: 2333.73
+- id: de-taxsim-2026-parameter-projection-married-120000
+  concept: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  case_id: de-married-120000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Delaware module
+      extrapolates the section 1108 standard deduction to 6,695.04 (the
+      enacted amount is 6,500) and the fixed 110-dollar section 1110 personal
+      credit to about 113.31 per filer (netting 226.61), while the pipeline
+      applies the enacted deduction and nets the enacted 220-dollar credit.
+      Residual = (6,254.50 - 6,431.13) + 226.61 = 49.98. TAXSIM
+      2026-projection drift on fixed statutory amounts, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent on every grid
+      case.
+    arithmetic:
+    - expression: 6431.13 - 226.61
+      equals: 6204.52
+      tolerance: 0.02
+    - expression: (6254.5 - 6431.13) + 226.61
+      equals: 49.98
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 6254.5
+    right: 6204.52
+- id: de-taxsim-2026-parameter-projection-married-300000
+  concept: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  case_id: de-married-300000
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Delaware module
+      extrapolates the section 1108 standard deduction to 6,695.04 (the
+      enacted amount is 6,500) and the fixed 110-dollar section 1110 personal
+      credit to about 113.31 per filer (netting 226.61), while the pipeline
+      applies the enacted deduction and nets the enacted 220-dollar credit.
+      Residual = (18,134.50 - 18,311.13) + 226.61 = 49.98. TAXSIM
+      2026-projection drift on fixed statutory amounts, not a pipeline defect;
+      the pipeline matches PolicyEngine at 2026 to the cent on every grid
+      case.
+    arithmetic:
+    - expression: 18311.13 - 226.61
+      equals: 18084.52
+      tolerance: 0.02
+    - expression: (18134.5 - 18311.13) + 226.61
+      equals: 49.98
+      tolerance: 0.02
+  expires_on_source_change: true
+  pinned:
+    left: 18134.5
+    right: 18084.52

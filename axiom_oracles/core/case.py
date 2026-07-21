@@ -513,3 +513,5 @@ class Concepts:
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
     EMPLOYER_OASDI = "us:tax/payroll#employer_oasdi"
     EMPLOYER_MEDICARE = "us:tax/payroll#employer_medicare"
+    # Employee-side FICA plus SECA — the scope of TAXSIM's `tfica` column.
+    EMPLOYEE_FICA = "us:tax/payroll#employee_fica"

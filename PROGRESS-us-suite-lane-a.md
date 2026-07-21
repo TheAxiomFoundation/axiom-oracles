@@ -1,9 +1,36 @@
 # US pipeline/suite lane A — oracle-side coverage (states A–M + OH)
 
 Turns merged rulespec-us state income-tax cores into us-pe covered rows: a
-per-case suite vs pinned PolicyEngine-US (penny-exact) and TAXSIM-2024, coverage
-registration in `conformance/us-pe.yaml`, and a scoreboard regen. Mirrors the
-#561 CA/NY/IL/MA pilot pattern.
+per-case suite vs pinned PolicyEngine-US (penny-exact) and TAXSIM (2026 since
+the realignment below; 2024 before it), coverage registration in
+`conformance/us-pe.yaml`, and a scoreboard regen. Mirrors the #561 CA/NY/IL/MA
+pilot pattern.
+
+## Done: TAXSIM 2026 realignment (2026-07-21)
+
+All 21 state suites moved from `taxsim_law_year: 2024` to 2026 — the pinned
+policyengine-taxsim 2.30.0 binary (cdate-20260521) models 2026 law, so all
+three engines now compare at the same validation year and the 2024→2026
+indexation-vintage disposition class is retired. Findings, verified
+empirically against the binary:
+
+- Federal 2026 models the OBBBA rate schedule/standard deduction, childless
+  EITC, and FICA/SECA, but the qualifying-child credit machinery is absent
+  (CTC collapses to the $500 ODC path; ACTC/CDCC/EITC-with-children return
+  zero; 2025 models all of them incl. the $2,200 CTC). Documented in
+  `docs/policyengine-taxsim.md`; the childless grids never exercise it.
+- State modules at 2026 are projections: fractional extrapolated deductions/
+  credits, and un-enacted rates in KY (4.0% vs enacted 3.5%), NC (4.25% vs
+  3.99%), GA (5.19% vs 4.99%), UT (4.50% vs 4.45%). CO's staxbc now matches
+  the pipeline to the cent (residual = its projected TABOR refund netting).
+- Raw TAXSIM match moved: NY 4/6→6/6, CA 1/6→4/6, IL stays 6/6; MA 6/6→0/6
+  and DE 6/6→0/6 (projection drift on fixed statutory amounts). All 110
+  residual rows re-dispositioned as `explained_residual` with exact
+  staxbc/credit decompositions from TAXSIM's own idtl=2 detail;
+  `apply_dispositions --check`, scoreboard/ratchet/burndown, pytest (1422),
+  and ruff all green. New TAXSIM concept mappings landed alongside:
+  AGI↔v10, CDCC↔v24 (with the 2026 gap note), and the summed
+  `us:tax/payroll#employee_fica`↔tfica scope.
 
 ## Done: OH (Ohio)
 

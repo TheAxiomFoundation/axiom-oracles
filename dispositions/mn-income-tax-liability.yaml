@@ -1,94 +1,160 @@
 schema: axiom_oracles.dispositions.v1
 suite: mn-income-tax-liability
-updated: '2026-07-09'
+updated: '2026-07-21'
 entries:
-- id: mn-taxsim-2024-vintage-single-30000
+- id: mn-taxsim-2026-indexation-projection-single-30000
   concept: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
   case_id: mn-single-30000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: TAXSIM runs at its latest 2024 law year. Minnesota indexes the section 290.06 subdivision 2c brackets and the section 290.0123 standard deduction under section 270C.22; the residual is the 2024-to-2026 law-year difference between the TAXSIM 2024 Minnesota base and the 2026 PolicyEngine base (which for the top married case also carries the section 290.091 alternative minimum tax). The pipeline reports 789.125; TAXSIM 2024 reports 475.24. Law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine mn_income_tax_before_refundable_credits at 2026 to the cent.
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Minnesota module
+      extrapolates the section 290.06 subdivision 2c brackets and the section
+      290.0123 standard deduction to fractional projected values (implied
+      deduction 15,398.59), giving staxbc 781.18 against the pipeline's
+      enacted 789.12, and its siitax additionally nets a projected 390.58
+      credit at this income (exactly half its own before-credit tax) from its
+      2026 credit model, with no enacted analog for this childless no-rent
+      case. Residual = (789.12 - 781.18) + 390.58 = 398.52. TAXSIM 2026
+      projection, not a pipeline defect; the pipeline matches PolicyEngine at
+      2026 to the cent on every grid case.
     arithmetic:
-    - expression: 789.125 - 475.24
-      equals: 313.885
-      tolerance: 0.01
+    - expression: 781.18 - 390.58
+      equals: 390.6
+      tolerance: 0.02
+    - expression: (789.12 - 781.18) + 390.58
+      equals: 398.52
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 789.125
-    right: 475.24
-- id: mn-taxsim-2024-vintage-single-60000
+    right: 390.6
+- id: mn-taxsim-2026-indexation-projection-single-60000
   concept: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
   case_id: mn-single-60000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: TAXSIM runs at its latest 2024 law year. Minnesota indexes the section 290.06 subdivision 2c brackets and the section 290.0123 standard deduction under section 270C.22; the residual is the 2024-to-2026 law-year difference between the TAXSIM 2024 Minnesota base and the 2026 PolicyEngine base (which for the top married case also carries the section 290.091 alternative minimum tax). The pipeline reports 2560.005; TAXSIM 2024 reports 2629.4. Law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine mn_income_tax_before_refundable_credits at 2026 to the cent.
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Minnesota module
+      extrapolates the section 290.06 subdivision 2c brackets and the section
+      290.0123 standard deduction to fractional projected values (implied
+      deduction 15,398.59), giving staxbc 2,546.46 against the pipeline's
+      enacted 2,560.01. Residual = (2,560.01 - 2,546.46) + 0.00 = 13.55.
+      TAXSIM 2026 projection, not a pipeline defect; the pipeline matches
+      PolicyEngine at 2026 to the cent on every grid case.
     arithmetic:
-    - expression: 2560.005 - 2629.4
-      equals: -69.395
-      tolerance: 0.01
+    - expression: 2546.46 - 0.0
+      equals: 2546.46
+      tolerance: 0.02
+    - expression: (2560.01 - 2546.46) + 0.0
+      equals: 13.55
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 2560.005
-    right: 2629.4
-- id: mn-taxsim-2024-vintage-single-150000
+    right: 2546.46
+- id: mn-taxsim-2026-indexation-projection-single-150000
   concept: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
   case_id: mn-single-150000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: TAXSIM runs at its latest 2024 law year. Minnesota indexes the section 290.06 subdivision 2c brackets and the section 290.0123 standard deduction under section 270C.22; the residual is the 2024-to-2026 law-year difference between the TAXSIM 2024 Minnesota base and the 2026 PolicyEngine base (which for the top married case also carries the section 290.091 alternative minimum tax). The pipeline reports 8946.075; TAXSIM 2024 reports 9078.41. Law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine mn_income_tax_before_refundable_credits at 2026 to the cent.
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Minnesota module
+      extrapolates the section 290.06 subdivision 2c brackets and the section
+      290.0123 standard deduction to fractional projected values (implied
+      deduction 15,398.59), giving staxbc 8,922.67 against the pipeline's
+      enacted 8,946.08. Residual = (8,946.08 - 8,922.67) + 0.00 = 23.41.
+      TAXSIM 2026 projection, not a pipeline defect; the pipeline matches
+      PolicyEngine at 2026 to the cent on every grid case.
     arithmetic:
-    - expression: 8946.075 - 9078.41
-      equals: -132.335
-      tolerance: 0.01
+    - expression: 8922.67 - 0.0
+      equals: 8922.67
+      tolerance: 0.02
+    - expression: (8946.08 - 8922.67) + 0.0
+      equals: 23.41
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 8946.075
-    right: 9078.41
-- id: mn-taxsim-2024-vintage-married-60000
+    right: 8922.67
+- id: mn-taxsim-2026-indexation-projection-married-60000
   concept: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
   case_id: mn-married-60000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: TAXSIM runs at its latest 2024 law year. Minnesota indexes the section 290.06 subdivision 2c brackets and the section 290.0123 standard deduction under section 270C.22; the residual is the 2024-to-2026 law-year difference between the TAXSIM 2024 Minnesota base and the 2026 PolicyEngine base (which for the top married case also carries the section 290.091 alternative minimum tax). The pipeline reports 1575.575; TAXSIM 2024 reports 1650.48. Law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine mn_income_tax_before_refundable_credits at 2026 to the cent.
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Minnesota module
+      extrapolates the section 290.06 subdivision 2c brackets and the section
+      290.0123 standard deduction to fractional projected values (implied
+      deduction 30,797.19), giving staxbc 1,562.35 against the pipeline's
+      enacted 1,575.58. Residual = (1,575.58 - 1,562.35) + 0.00 = 13.23.
+      TAXSIM 2026 projection, not a pipeline defect; the pipeline matches
+      PolicyEngine at 2026 to the cent on every grid case.
     arithmetic:
-    - expression: 1575.575 - 1650.48
-      equals: -74.905
-      tolerance: 0.01
+    - expression: 1562.35 - 0.0
+      equals: 1562.35
+      tolerance: 0.02
+    - expression: (1575.58 - 1562.35) + 0.0
+      equals: 13.23
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 1575.575
-    right: 1650.48
-- id: mn-taxsim-2024-vintage-married-120000
+    right: 1562.35
+- id: mn-taxsim-2026-indexation-projection-married-120000
   concept: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
   case_id: mn-married-120000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: TAXSIM runs at its latest 2024 law year. Minnesota indexes the section 290.06 subdivision 2c brackets and the section 290.0123 standard deduction under section 270C.22; the residual is the 2024-to-2026 law-year difference between the TAXSIM 2024 Minnesota base and the 2026 PolicyEngine base (which for the top married case also carries the section 290.091 alternative minimum tax). The pipeline reports 5376.45; TAXSIM 2024 reports 5506.02. Law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine mn_income_tax_before_refundable_credits at 2026 to the cent.
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Minnesota module
+      extrapolates the section 290.06 subdivision 2c brackets and the section
+      290.0123 standard deduction to fractional projected values (implied
+      deduction 30,797.19), giving staxbc 5,354.58 against the pipeline's
+      enacted 5,376.45. Residual = (5,376.45 - 5,354.58) + 0.00 = 21.87.
+      TAXSIM 2026 projection, not a pipeline defect; the pipeline matches
+      PolicyEngine at 2026 to the cent on every grid case.
     arithmetic:
-    - expression: 5376.45 - 5506.02
-      equals: -129.57
-      tolerance: 0.01
+    - expression: 5354.58 - 0.0
+      equals: 5354.58
+      tolerance: 0.02
+    - expression: (5376.45 - 5354.58) + 0.0
+      equals: 21.87
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 5376.45
-    right: 5506.02
-- id: mn-taxsim-2024-vintage-married-300000
+    right: 5354.58
+- id: mn-taxsim-2026-indexation-projection-married-300000
   concept: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
   case_id: mn-married-300000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: TAXSIM runs at its latest 2024 law year. Minnesota indexes the section 290.06 subdivision 2c brackets and the section 290.0123 standard deduction under section 270C.22; the residual is the 2024-to-2026 law-year difference between the TAXSIM 2024 Minnesota base and the 2026 PolicyEngine base (which for the top married case also carries the section 290.091 alternative minimum tax). The pipeline reports 18727.87575; TAXSIM 2024 reports 18816.48. Law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine mn_income_tax_before_refundable_credits at 2026 to the cent.
+    mechanism: |-
+      Both engines run at the 2026 law year. TAXSIM's 2026 Minnesota module
+      extrapolates the section 290.06 subdivision 2c brackets and the section
+      290.0123 standard deduction to fractional projected values (implied
+      deduction 29,180.79), giving staxbc 18,502.10 against the pipeline's
+      enacted 18,727.88 (for this top married case the pipeline side also
+      carries the section 290.091 alternative minimum tax, which TAXSIM's
+      projected schedule does not reproduce). Residual = (18,727.88 -
+      18,502.10) + 0.00 = 225.78. TAXSIM 2026 projection, not a pipeline
+      defect; the pipeline matches PolicyEngine at 2026 to the cent on every
+      grid case.
     arithmetic:
-    - expression: 18727.87575 - 18816.48
-      equals: -88.6043
-      tolerance: 0.01
+    - expression: 18502.1 - 0.0
+      equals: 18502.1
+      tolerance: 0.02
+    - expression: (18727.88 - 18502.1) + 0.0
+      equals: 225.78
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 18727.87575
-    right: 18816.48
+    right: 18502.1

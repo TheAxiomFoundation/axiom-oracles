@@ -1,119 +1,60 @@
 schema: axiom_oracles.dispositions.v1
 suite: ca-income-tax-liability
-updated: '2026-07-13'
-# California composed progressive-liability pipeline vs PolicyEngine (2026) and
-# TAXSIM (2024) on the six-case grid. The pipeline matches PolicyEngine
-# ca_income_tax_before_refundable_credits to the cent on all six cases (the exact
-# RTC 17041 bracket tax less the RTC 17054 nonrefundable personal exemption
-# credit), so the PolicyEngine leg needs no disposition. Against TAXSIM's 2024
-# law year, every case diverges: California indexes its brackets, standard
-# deduction, and exemption credit by the California CPI each year (TAXSIM's 2024
-# run uses the 2024 schedule), and TAXSIM's siitax additionally nets the
-# refundable California EITC that this statutory core excludes. Both are
-# indexation-and-scope vintage differences, dispositioned below.
-# Re-pinned 2026-07-13: the repo venv realignment (policyengine-taxsim 2.30.0)
-# shifted the TAXSIM-2024 CA leg by the updated exemption-credit data; the
-# single-30000 case now matches outright and its entry is removed.
+updated: '2026-07-21'
 entries:
-- id: ca-taxsim-2024-bracket-indexation-vintage
+- id: ca-taxsim-2026-projection-and-credit-scope-single-30000
   concept: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
-  case_id: ca-married-300000
+  case_id: ca-single-30000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: TAXSIM runs at its latest 2024 law year; the 2026 pipeline uses the California
-      brackets, standard deduction, and exemption credit carried forward from the Franchise
-      Tax Board 2025 published schedule under the section 17041(h) CCPI indexation. For
-      the married 300,000-dollar filer the 2026 pipeline reports 19241.60 and TAXSIM 2024
-      reports 19656.28, a 414.68-dollar gap. The 2024 brackets are narrower (less inflation
-      indexation), so the same taxable income reaches higher marginal rates sooner, raising
-      the 2024 tax above the 2026 value; the gap is the two years of bracket indexation,
-      not a pipeline defect.
+    mechanism: |-
+      Both engines run at the 2026 law year. The pipeline's before-refundable-
+      credits target nets the enacted section 17054 exemption credit but
+      excludes the refundable CalEITC; TAXSIM's siitax nets both its projected
+      exemption credit (157.59) and its projected CalEITC (35.64), and its
+      2026 module extrapolates the standard deduction and exemption credit to
+      fractional projected values (staxbc 368.34). Residual = (216.11 -
+      368.34) + 193.23 = 41.00, dominated by the CalEITC scope difference and
+      the exemption-credit projection. TAXSIM 2026 projection plus refundable-
+      credit scope, not a pipeline defect; the pipeline matches PolicyEngine
+      at 2026 to the cent on every grid case.
     arithmetic:
-    - expression: 19241.6 - 19656.28
-      equals: -414.68
-      tolerance: 0.01
+    - expression: 368.34 - 193.23
+      equals: 175.11
+      tolerance: 0.02
+    - expression: (216.11 - 368.34) + 193.23
+      equals: 41.0
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
-    left: 19241.6
-    right: 19656.28
-- id: ca-taxsim-2024-bracket-indexation-vintage-single-60000
-  concept: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
-  case_id: ca-single-60000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: For the single 60,000-dollar filer the 2026 pipeline reports 1602.86 and
-      TAXSIM 2024 reports 1696.16, a -93.30-dollar gap. TAXSIM runs at its latest 2024 law
-      year with narrower (less inflation-indexed) brackets, so the same taxable income is
-      taxed slightly higher in 2024; the gap is the 2024-to- 2026 bracket indexation plus,
-      at lower incomes, the refundable California EITC that TAXSIM nets and this statutory
-      core excludes.
-    arithmetic:
-    - expression: 1602.86 - 1696.16
-      equals: -93.3
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 1602.86
-    right: 1696.16
-- id: ca-taxsim-2024-bracket-indexation-vintage-single-150000
-  concept: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
-  case_id: ca-single-150000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: For the single 150,000-dollar filer the 2026 pipeline reports 9620.80 and
-      TAXSIM 2024 reports 9828.14, a -207.34-dollar gap. TAXSIM runs at its latest 2024
-      law year with narrower (less inflation-indexed) brackets, so the same taxable income
-      is taxed slightly higher in 2024; the gap is the 2024-to- 2026 bracket indexation
-      plus, at lower incomes, the refundable California EITC that TAXSIM nets and this statutory
-      core excludes.
-    arithmetic:
-    - expression: 9620.8 - 9828.14
-      equals: -207.34
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 9620.8
-    right: 9828.14
-- id: ca-taxsim-2024-bracket-indexation-vintage-married-60000
+    left: 216.11175341179944
+    right: 175.11
+- id: ca-taxsim-2026-projection-and-credit-scope-married-60000
   concept: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
   case_id: ca-married-60000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: For the married 60,000-dollar filer the 2026 pipeline reports 432.22 and
-      TAXSIM 2024 reports 465.28, a -33.06-dollar gap. TAXSIM runs at its latest 2024 law
-      year with narrower (less inflation-indexed) brackets, so the same taxable income is
-      taxed slightly higher in 2024; the gap is the 2024-to- 2026 bracket indexation plus,
-      at lower incomes, the refundable California EITC that TAXSIM nets and this statutory
-      core excludes.
+    mechanism: |-
+      Both engines run at the 2026 law year. The pipeline's before-refundable-
+      credits target nets the enacted section 17054 exemption credit but
+      excludes the refundable CalEITC; TAXSIM's siitax nets both its projected
+      exemption credit (315.18) and its projected CalEITC (0.00), and its 2026
+      module extrapolates the standard deduction and exemption credit to
+      fractional projected values (staxbc 736.68). Residual = (432.22 -
+      736.68) + 315.18 = 10.72, dominated by the CalEITC scope difference and
+      the exemption-credit projection. TAXSIM 2026 projection plus refundable-
+      credit scope, not a pipeline defect; the pipeline matches PolicyEngine
+      at 2026 to the cent on every grid case.
     arithmetic:
-    - expression: 432.22 - 465.28
-      equals: -33.06
-      tolerance: 0.01
+    - expression: 736.68 - 315.18
+      equals: 421.5
+      tolerance: 0.02
+    - expression: (432.22 - 736.68) + 315.18
+      equals: 10.72
+      tolerance: 0.02
   expires_on_source_change: true
   pinned:
-    left: 432.22
-    right: 465.28
-- id: ca-taxsim-2024-bracket-indexation-vintage-married-120000
-  concept: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
-  case_id: ca-married-120000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: For the married 120,000-dollar filer the 2026 pipeline reports 3205.72 and
-      TAXSIM 2024 reports 3392.32, a -186.60-dollar gap. TAXSIM runs at its latest 2024
-      law year with narrower (less inflation-indexed) brackets, so the same taxable income
-      is taxed slightly higher in 2024; the gap is the 2024-to- 2026 bracket indexation
-      plus, at lower incomes, the refundable California EITC that TAXSIM nets and this statutory
-      core excludes.
-    arithmetic:
-    - expression: 3205.72 - 3392.32
-      equals: -186.6
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 3205.72
-    right: 3392.32
+    left: 432.2235068235989
+    right: 421.5

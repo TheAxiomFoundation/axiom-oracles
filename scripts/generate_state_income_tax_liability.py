@@ -14,10 +14,16 @@ comparison report plus the per-case residuals:
   rather than an independent re-implementation.
 * **policyengine** — PolicyEngine ``ca_income_tax`` / ``ny_income_tax`` /
   ``il_income_tax`` / ``ma_income_tax`` computed live at the 2026 tax year.
-* **taxsim** — the pinned TAXSIM binary's ``siitax``. The pinned binary is a
-  1960-2024 federal/state calculator (it abandons law year 2026), so the TAXSIM
-  leg is run at 2024, its latest available law year; the 2024-to-2026 bracket
-  and exemption indexation vintage is recorded in the dispositions rather than
+* **taxsim** — the pinned TAXSIM binary's ``siitax``. The pinned
+  policyengine-taxsim 2.30.0 binary models law year 2026 rate schedules and
+  the OBBBA standard deduction, so the TAXSIM leg runs at the same 2026
+  validation year as the other two engines. The binary's 2026 law year does
+  NOT model the qualifying-child credit machinery (CTC beyond the $500 ODC
+  path, ACTC, CDCC, and EITC with children all return zero at 2026, verified
+  empirically); this grid is childless wage-only cases, so that gap is not
+  exercised here. Remaining residuals are semantic — ``siitax`` is final
+  liability net of credits/rebates while the axiom side is tax before
+  non-refundable credits — and are recorded in the dispositions rather than
   absorbed by tolerance.
 
 Nothing here invents a value: the axiom side is the engine fixture, the
@@ -45,7 +51,13 @@ REPORTS = REPO_ROOT / "reports"
 DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 
 VALIDATION_YEAR = 2026
-TAXSIM_YEAR = 2024  # pinned binary abandons 2026; latest available law year
+# The pinned 2.30.0 binary models 2026 rate schedules and the OBBBA standard
+# deduction, so the childless wage-only grid can run TAXSIM at the validation
+# year itself. (The binary's 2026 qualifying-child credit machinery is absent —
+# CTC/ACTC/CDCC/EITC-with-children return zero — but no grid case has
+# dependents, so that gap is never exercised here.)
+TAXSIM_YEAR = VALIDATION_YEAR
+_TAXSIM_KEY = f"taxsim_{TAXSIM_YEAR}"
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
 _TAXSIM_STATE = {
@@ -156,9 +168,9 @@ _PE_VAR = {
     # Colorado's before-non-refundable variable is the exact 39-22-104(1.7)(c)
     # flat-tax analog on this grid, and it matches the composed pipeline to the
     # cent at the pinned policyengine-us on all six cases. The 39-22-627
-    # temporary-rate mechanism is inactive at the 2026 validation year. TAXSIM
-    # residuals are 2024-vintage plus a concept difference (siitax nets the 2024
-    # TABOR sales-tax refund); each is decomposed exactly in dispositions.
+    # temporary-rate mechanism is inactive at the 2026 validation year. Any
+    # TAXSIM residual is a concept difference (siitax is final liability net of
+    # modeled credits/refunds); each is decomposed exactly in dispositions.
     "CO": "co_income_tax_before_non_refundable_credits",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
@@ -316,32 +328,31 @@ _TOL = {
     "MA": (1.0, 0.0),
     # Ohio reproduces PolicyEngine to the cent (the residual is PolicyEngine's
     # float32 rounding, under a tenth of a cent); a $1 absolute band catches any
-    # structural bracket error without absorbing the indexation vintage.
+    # structural bracket error without absorbing TAXSIM scope differences.
     "OH": (1.0, 0.0),
     # Virginia matches PolicyEngine exactly (fixed statutory brackets, no
     # rounding); a $1 band catches structural bracket errors without absorbing
-    # the TAXSIM standard-deduction vintage.
+    # TAXSIM scope differences.
     "VA": (1.0, 0.0),
     # Utah is a single flat rate on the taxable base; exact match.
     "UT": (1.0, 0.0),
     # Alabama, Idaho, and Kentucky each reproduce PolicyEngine to a hundredth of
     # a cent (the residual is PolicyEngine's float32 rounding); a $1 absolute
-    # band catches any structural bracket error without absorbing the
-    # 2024-to-2026 rate/deduction vintage carried by the TAXSIM leg.
+    # band catches any structural bracket error without absorbing any TAXSIM
+    # scope difference carried by the TAXSIM leg.
     "AL": (1.0, 0.0),
     "ID": (1.0, 0.0),
     "KY": (1.0, 0.0),
     # Nebraska reproduces PolicyEngine to the cent (the residual is PolicyEngine's
     # float32 rounding, under a tenth of a cent); a $1 band catches structural
-    # bracket errors without absorbing the TAXSIM rate-compression and indexation
-    # vintage.
+    # bracket errors without absorbing TAXSIM scope differences.
     "NE": (1.0, 0.0),
     # Delaware, Maryland, Maine, Minnesota, and Connecticut each reproduce
     # PolicyEngine to the cent (residual is PolicyEngine's float32 rounding); a $1
-    # absolute band catches any structural bracket error without absorbing the
-    # 2024-to-2026 vintage on the TAXSIM leg. Maryland's TAXSIM residual also
-    # carries the county/local income tax that siitax includes but the state-only
-    # target excludes; that scope gap is dispositioned, not absorbed by tolerance.
+    # absolute band catches any structural bracket error without absorbing TAXSIM
+    # scope differences. Maryland's TAXSIM residual carries the county/local
+    # income tax that siitax includes but the state-only target excludes; that
+    # scope gap is dispositioned, not absorbed by tolerance.
     "DE": (1.0, 0.0),
     "MD": (1.0, 0.0),
     "ME": (1.0, 0.0),
@@ -349,12 +360,11 @@ _TOL = {
     "CT": (1.0, 0.0),
     # Arizona reproduces PolicyEngine exactly (flat 2.5% on AGI less the standard
     # deduction; no rounding residual). A $1 absolute band catches any structural
-    # error without absorbing the 2024-to-2026 standard-deduction indexation on
-    # the TAXSIM leg.
+    # error without absorbing TAXSIM scope differences.
     "AZ": (1.0, 0.0),
     # Georgia, Michigan, and North Carolina are flat taxes in the same shape as
     # Arizona: a $1 absolute band catches structural errors without absorbing
-    # each state's 2024-to-2026 rate/deduction vintage on the TAXSIM leg.
+    # each state's TAXSIM scope differences.
     "GA": (1.0, 0.0),
     "MI": (1.0, 0.0),
     "NC": (1.0, 0.0),
@@ -378,8 +388,10 @@ def _build_report(
     # right) so scripts/apply_dispositions.py can join the committed dispositions
     # against these rows and validate that every residual is explained. The
     # axiom-vs-PolicyEngine comparison matches on every case, so only the
-    # axiom-vs-TAXSIM-2024 residuals become mismatch rows (axiom is `left`,
-    # TAXSIM 2024 is `right`); the indexation-vintage dispositions pin those.
+    # axiom-vs-TAXSIM residuals become mismatch rows (axiom is `left`, TAXSIM
+    # is `right`); with both engines at the 2026 law year the residuals are
+    # semantic (siitax nets credits/rebates the before-credit axiom concept
+    # does not), and the dispositions pin those.
     mismatches: list[dict] = []
     pe_matches = 0
     taxsim_matches = 0
@@ -403,12 +415,12 @@ def _build_report(
                 "employment_income": case.wages,
                 "axiom": ax,
                 "policyengine": pe_v,
-                "taxsim_2024": ts_v,
+                _TAXSIM_KEY: ts_v,
                 "axiom_vs_policyengine": {
                     "difference": ax - pe_v,
                     "match": pe_ok,
                 },
-                "axiom_vs_taxsim_2024": {
+                f"axiom_vs_{_TAXSIM_KEY}": {
                     "difference": ax - ts_v,
                     "match": ts_ok,
                 },
@@ -450,9 +462,11 @@ def _build_report(
             "match_count": match_count,
             "mismatch_count": mismatch_count,
             "axiom_vs_policyengine_match_rate": round(100.0 * pe_matches / n, 2),
-            "axiom_vs_taxsim_2024_match_rate": round(100.0 * taxsim_matches / n, 2),
+            f"axiom_vs_{_TAXSIM_KEY}_match_rate": round(
+                100.0 * taxsim_matches / n, 2
+            ),
             "policyengine_matches": pe_matches,
-            "taxsim_2024_matches": taxsim_matches,
+            f"{_TAXSIM_KEY}_matches": taxsim_matches,
         },
         "mismatches": mismatches,
         "cases": report_cases,
@@ -462,8 +476,9 @@ def _build_report(
             "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
             "note": (
                 "axiom-vs-PolicyEngine matches every case at the 2026 validation "
-                "year; the mismatches array carries the axiom-vs-TAXSIM-2024 "
-                "residuals, whose 2024-to-2026 indexation vintage is dispositioned."
+                f"year; the mismatches array carries the axiom-vs-TAXSIM-"
+                f"{TAXSIM_YEAR} residuals, whose semantic scope differences "
+                "(siitax nets credits/rebates) are dispositioned."
             ),
         },
     }
@@ -490,8 +505,9 @@ def main() -> int:
         print(
             f"{state}: PE match {s['axiom_vs_policyengine_match_rate']}% "
             f"({s['policyengine_matches']}/{report['case_count']}), "
-            f"TAXSIM-2024 match {s['axiom_vs_taxsim_2024_match_rate']}% "
-            f"({s['taxsim_2024_matches']}/{report['case_count']})"
+            f"TAXSIM-{TAXSIM_YEAR} match "
+            f"{s[f'axiom_vs_{_TAXSIM_KEY}_match_rate']}% "
+            f"({s[f'{_TAXSIM_KEY}_matches']}/{report['case_count']})"
         )
     return 0
 

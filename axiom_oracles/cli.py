@@ -59,7 +59,16 @@ NYC_BENEFITS_DATASET_URL = (
     "$select=program_code&$limit=5000"
 )
 DEFAULT_PERIOD = "2026-05"
-TAXSIM_DEFAULT_PERIOD = "2024"
+# The pinned policyengine-taxsim 2.30.0 binary (see adapters/taxsim/
+# taxsim_pins.json) models law year 2026 rate schedules, the OBBBA standard
+# deduction, childless EITC, and FICA/SECA, so TAXSIM comparisons default to
+# the same 2026 validation year as every other lane. Known 2026 gap, verified
+# empirically against the pinned binary: the qualifying-child credit machinery
+# is absent at 2026 — CTC collapses to the $500 ODC path, and ACTC, CDCC, and
+# EITC-with-children return zero (2025 models all of them, including the OBBBA
+# $2,200 CTC). Comparisons of child-credit concepts at 2026 must treat TAXSIM
+# zeros as an NBER gap, not evidence.
+TAXSIM_DEFAULT_PERIOD = "2026"
 MAX_CONSOLE_MISMATCHES = 50
 EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY = "euromod_to_axiom_input_bridge"
 
