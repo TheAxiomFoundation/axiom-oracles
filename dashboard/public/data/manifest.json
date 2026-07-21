@@ -177,6 +177,7 @@
     "axiom-policyengine-taxsim-nh-income-tax-liability.json",
     "axiom-policyengine-taxsim-wv-income-tax-liability.json",
     "axiom-policyengine-taxsim-vt-income-tax-liability.json",
-    "axiom-policyengine-taxsim-co-income-tax-liability.json"
+    "axiom-policyengine-taxsim-co-income-tax-liability.json",
+    "euromod-gettsim-de-worker-dual-oracle.json"
   ]
 }

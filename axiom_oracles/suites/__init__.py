@@ -43,6 +43,7 @@ from .be_worker import (
     be_worker_tax_income_list_cases,
 )
 from .dk_child_youth_benefit import dk_child_youth_benefit_cases
+from .de_worker import de_worker_dual_oracle_cases
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
 from .uk_income_tax import (
@@ -118,6 +119,7 @@ def available_suites() -> tuple[str, ...]:
         "be-unemployment",
         "be-pensioner-contributions",
         "dk-child-youth-benefit",
+        "de-worker-dual-oracle",
         "uk-worker-pit",
         "uk-personal-allowance",
         "uk-worker-nic",
@@ -214,6 +216,8 @@ def load_suite(name: str):
         return be_pensioner_contributions_cases()
     if name == "dk-child-youth-benefit":
         return dk_child_youth_benefit_cases()
+    if name == "de-worker-dual-oracle":
+        return de_worker_dual_oracle_cases()
     if name == "uk-worker-pit":
         return uk_worker_pit_cases()
     if name == "uk-personal-allowance":
@@ -301,6 +305,7 @@ __all__ = [
     "be_worker_ssc_cases",
     "be_worker_tax_income_list_cases",
     "dk_child_youth_benefit_cases",
+    "de_worker_dual_oracle_cases",
     "load_suite",
     "nyc_basic_cases",
     "nyc_synthetic_cases",

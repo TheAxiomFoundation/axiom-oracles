@@ -7,6 +7,8 @@ tests execute real models and are gated on environment variables:
   openly downloadable from github.com/centreformicrosimulation/UKMOD-PUBLIC).
 - ``EUROMOD_MODEL_ROOT_BE`` — a EUROMOD release directory (e.g.
   ``EUROMOD_RELEASES_J2.0+``, openly downloadable from the JRC).
+- ``EUROMOD_MODEL_ROOT_DE`` — the same release directory, used with the
+  DE_2025 system and the DE_2024_b1_2015_03_e2 dataset configuration.
 - ``EUROMOD_PYTHON`` — the EUROMOD execution environment: an x86_64
   interpreter with the ``euromod`` connector and a .NET runtime
   (``DOTNET_ROOT``). On Apple Silicon this is a Rosetta venv.
@@ -45,6 +47,7 @@ from axiom_oracles.core.case import Case, Concepts, Entity
 
 UKMOD_MODEL_ROOT = os.environ.get("UKMOD_MODEL_ROOT")
 EUROMOD_MODEL_ROOT_BE = os.environ.get("EUROMOD_MODEL_ROOT_BE")
+EUROMOD_MODEL_ROOT_DE = os.environ.get("EUROMOD_MODEL_ROOT_DE")
 EUROMOD_PYTHON = os.environ.get("EUROMOD_PYTHON")
 EUROMOD_DATASET_BE = os.environ.get("EUROMOD_DATASET_BE", "BE_training_data")
 EUROMOD_TEMPLATE_DATASET_BE = os.environ.get(
@@ -379,6 +382,45 @@ class TestSubprocessContract:
 
         assert result.values["khooo_s"] == pytest.approx(2_244.6)
         assert result.values["tprhm_s"] == pytest.approx(1_040.8120416)
+        assert result.values["tin_s"] == pytest.approx(1_200.0)
+
+    def test_germany_monthly_outputs_stay_monthly_but_tin_is_annualized(
+        self,
+    ) -> None:
+        monthly_outputs = {
+            "tsceehl_s": 372.5357142857143,
+            "tsceepi_s": 405.2142857142856,
+            "tsceeui_s": 56.64285714285714,
+            "tsceeci_s": 104.57142857142856,
+            "bch00_s": 255.0,
+        }
+        payload = {
+            "columns": [*monthly_outputs, "tin_s"],
+            "missing": [],
+            "idhh": [1],
+            "values": {
+                **{key: [value] for key, value in monthly_outputs.items()},
+                "tin_s": [100.0],
+            },
+        }
+
+        def run(argv, **kwargs):
+            Path(argv[3]).write_text(json.dumps(payload))
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="DE",
+            system="DE_2025",
+            subprocess_run=run,
+        )
+        result = runner.run_cases(
+            [_single_earner("de", 48_000.0)],
+            variables=[*monthly_outputs, "tin_s"],
+        )[0]
+
+        for output, expected in monthly_outputs.items():
+            assert result.values[output] == pytest.approx(expected)
         assert result.values["tin_s"] == pytest.approx(1_200.0)
 
     def test_worker_error_reaches_every_case(self) -> None:
@@ -1026,6 +1068,70 @@ class TestUkmodLive:
 
 
 @pytest.mark.skipif(
+    not (EUROMOD_MODEL_ROOT_DE and EUROMOD_PYTHON),
+    reason=(
+        "set EUROMOD_MODEL_ROOT_DE and EUROMOD_PYTHON to run the live "
+        "EUROMOD Germany oracle"
+    ),
+)
+class TestEuromodGermanyLive:
+    """Live anchors from the canonical DE dual-oracle worker grid."""
+
+    OUTPUTS = (
+        "tsceehl_s",
+        "tsceepi_s",
+        "tsceeui_s",
+        "tsceeci_s",
+        "tin_s",
+        "bch00_s",
+        "yem",
+    )
+    ANCHORS = {
+        "single-w-1200": {
+            "tsceehl_s": 88.95112781954889,
+            "tsceepi_s": 96.75385833003561,
+            "tsceeui_s": 13.524732884843688,
+            "tsceeci_s": 24.968737633557577,
+            "tin_s": 0.0,
+            "bch00_s": 0.0,
+            "yem": 15_685.714285714286,
+        },
+        "parent-2children-4000": {
+            "tsceehl_s": 372.5357142857143,
+            "tsceepi_s": 405.21428571428567,
+            "tsceeui_s": 56.64285714285714,
+            "tsceeci_s": 67.53571428571428,
+            "tin_s": 3_416.008586249796,
+            "bch00_s": 510.0,
+            "yem": 52_285.71428571428,
+        },
+    }
+
+    @pytest.fixture(scope="class")
+    def runner(self) -> EuromodPlatformRunner:
+        return EuromodPlatformRunner(
+            model_root=EUROMOD_MODEL_ROOT_DE,
+            country="DE",
+            system="DE_2025",
+            dataset="DE_2024_b1_2015_03_e2",
+            template_dataset="DE_training_data",
+            extra_columns=["drgn1"],
+        )
+
+    @pytest.mark.parametrize("case_id", ["single-w-1200", "parent-2children-4000"])
+    def test_canonical_grid_anchor(self, runner, case_id) -> None:
+        from axiom_oracles.suites.de_worker import de_worker_dual_oracle_cases
+
+        cases = {case.case_id: case for case in de_worker_dual_oracle_cases()}
+        [result] = runner.run_cases([cases[case_id]], variables=list(self.OUTPUTS))
+
+        assert result.errors == ()
+        assert result.household_id == case_id
+        for variable, expected in self.ANCHORS[case_id].items():
+            assert result.values[variable] == pytest.approx(expected, abs=1e-6)
+
+
+@pytest.mark.skipif(
     not (EUROMOD_MODEL_ROOT_BE and EUROMOD_PYTHON),
     reason=(
         "set EUROMOD_MODEL_ROOT_BE and EUROMOD_PYTHON to run the live "
@@ -1133,3 +1239,53 @@ class TestEuromodBelgiumLive:
             assert result.values["bed_s"] == pytest.approx(
                 anchors[result.household_id], abs=0.02
             )
+
+
+class TestExtraColumns:
+    """Extra template columns for model-required variables missing from demo data."""
+
+    def test_worker_template_extends_header_with_extra_columns(self) -> None:
+        template = euromod_worker._dataset_template(
+            ["idhh", "idperson", "yem"], ["drgn1", "yem"]
+        )
+        assert list(template) == ["idhh", "idperson", "yem", "drgn1"]
+        assert template["drgn1"] == 0.0
+
+    def test_runner_passes_extra_columns_and_rows_keep_them(self, tmp_path) -> None:
+        captured: dict = {}
+
+        def run(argv, **kwargs):
+            captured["job"] = json.loads(Path(argv[2]).read_text())
+            Path(argv[3]).write_text(
+                json.dumps(
+                    {
+                        "columns": ["tin_s"],
+                        "missing": [],
+                        "idhh": [1],
+                        "values": {"tin_s": [0.0]},
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="DE",
+            system="DE_2025",
+            extra_columns=["drgn1"],
+            subprocess_run=run,
+        )
+        case = Case(
+            case_id="de-extra",
+            period="2025",
+            entities=(Entity(entity_id="head", kind="person", facts={}),),
+            metadata={
+                "euromod_inputs": [
+                    {"idhh": 1, "idperson": 101, "yem": 4000.0, "drgn1": 9}
+                ]
+            },
+        )
+        runner.run_cases([case], variables=["tin_s"])
+
+        assert captured["job"]["extra_columns"] == ["drgn1"]
+        assert captured["job"]["rows"][0]["drgn1"] == 9

@@ -82,6 +82,13 @@ replatform:
 uv pip install -e ".[accessnyc-python,dev]"
 ```
 
+Install the GETTSIM extra only when running German (GETTSIM) comparisons — via
+the locked fork, since a bare pip install can drift the pinned engine:
+
+```bash
+uv sync --extra gettsim --extra dev
+```
+
 ## ACCESS NYC Rule Audit
 
 The static audit does not need API credentials. It inspects the public Drools
@@ -372,6 +379,51 @@ python scripts/run_uk_ctr_entitledto_report.py
 Wiring this into the weekly comparison matrix is a follow-up for once fixtures
 are captured under licence (a pending oracle grades nothing, so it is kept out of
 the auto-run matrix until then).
+
+## GETTSIM oracle (Germany)
+
+`GettsimRunner` is the **second, independent** German comparison oracle in the
+dual-oracle lane (`rulespec-de#1`), running alongside `EuromodPlatformRunner`.
+GETTSIM (the German Taxes and Transfers SIMulator, IZA and an academic
+consortium) is pure Python with an explicit policy DAG, date-parameterized,
+deterministic, and free of take-up randomness — so it is fast and reproducible,
+the complement to the EUROMOD engine path. No licensed microdata is needed;
+per-case validation uses hypothetical households.
+
+```python
+from axiom_oracles.adapters.gettsim import GettsimCase, GettsimRunner
+
+runner = GettsimRunner(policy_date_str="2025-06-30")  # rules in force 30 Jun 2025
+
+result = runner.compute(
+    GettsimCase.single_person({"einnahmen__bruttolohn_m": 4000.0}),
+    {"sozialversicherung": {"kranken": {"beitrag": {"betrag_versicherter_m": "health_ee_m"}}}},
+)
+# {"health_ee_m": [342.0]}  -- one value per person, in p_id order
+```
+
+The runner discovers GETTSIM's full input template for the policy date, defaults
+every column (dtype-first, with the age/year table-lookup guards), resolves the
+four birth-date demographics jointly (contradictions raise), overlays the case,
+and computes the requested `tt_targets` (a nested tree whose string leaves name
+the output columns). Conventions the adapter owns: input paths are validated
+against the template and unknown paths raise `GettsimInputError` (GETTSIM
+ignores unknown inputs silently); unknown targets and duplicate output aliases
+raise `GettsimTargetError`; `run_case()` returns a `GettsimRunResult` carrying
+the exact `gettsim` version alongside the values (`compute()` returns the bare
+values dict), and the runner refuses to run an engine version outside its
+validated set; `p_id` links use −1, and only `hh_id` is an input grouping id
+(GETTSIM derives the finer `wthh/bg/eg/fg/sn` ids for simple households, and
+the case can supply them for complex ones — the tests show the explicit ids
+changing the Bürgergeld means test). The verified seed — a €4,000/month
+worker — reproduces health 342.00 / pension 372.00 / unemployment 52.00 /
+long-term care 96.00 / income tax 6,433, and a one-child household pays
+255.00/month Kindergeld at the 2025 dates and 259.00 at 2026-01-01 (the two
+SteFeG stages, executed as tests). GETTSIM is an optional heavy dependency,
+imported lazily; the `gettsim-live` CI job runs the live tests with the locked
+fork installed. See `docs/gettsim-oracle-playbook.md` for the full API-gotcha
+notes and the DE comparison-suite wiring (a follow-up, once `rulespec-de` has
+encodings).
 
 ## SNAP QC administrative data oracle
 
