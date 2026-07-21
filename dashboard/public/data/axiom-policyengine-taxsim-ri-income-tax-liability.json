@@ -1,5 +1,109 @@
 {
   "case_count": 6,
+  "cases": [
+    {
+      "axiom": 521.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -22.5,
+        "match": false
+      },
+      "case_id": "ri-single-30000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 521.25,
+      "taxsim_2024": 543.75
+    },
+    {
+      "axiom": 1646.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -22.5,
+        "match": false
+      },
+      "case_id": "ri-single-60000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1646.25,
+      "taxsim_2024": 1668.75
+    },
+    {
+      "axiom": 5561.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -52.88000000000011,
+        "match": false
+      },
+      "case_id": "ri-single-150000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 5561.25,
+      "taxsim_2024": 5614.13
+    },
+    {
+      "axiom": 1042.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -43.13000000000011,
+        "match": false
+      },
+      "case_id": "ri-married-60000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1042.5,
+      "taxsim_2024": 1085.63
+    },
+    {
+      "axiom": 3371.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -79.01000000000022,
+        "match": false
+      },
+      "case_id": "ri-married-120000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 3371.5,
+      "taxsim_2024": 3450.51
+    },
+    {
+      "axiom": 14918.54,
+      "axiom_vs_policyengine": {
+        "difference": -3.9062499126885086e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -93.81999999999971,
+        "match": false
+      },
+      "case_id": "ri-married-300000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 14918.5400390625,
+      "taxsim_2024": 15012.36
+    }
+  ],
   "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-ri:policies/income_tax/pilot_liability_pipeline",
@@ -118,15 +222,16 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "generated_at": "2026-07-21T17:24:34Z",
-    "generated_by": "scripts/generate_state_income_tax_liability.py::ri-income-tax-liability",
+    "engine": {},
+    "generated_at": "2026-07-21T20:04:36Z",
+    "generated_by": "scripts/run_comparison.py::ri-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -161,109 +266,5 @@
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026,
-  "cases": [
-    {
-      "axiom": 521.25,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -22.5,
-        "match": false
-      },
-      "case_id": "ri-single-30000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 521.25,
-      "taxsim_2024": 543.75
-    },
-    {
-      "axiom": 1646.25,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -22.5,
-        "match": false
-      },
-      "case_id": "ri-single-60000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 1646.25,
-      "taxsim_2024": 1668.75
-    },
-    {
-      "axiom": 5561.25,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -52.88000000000011,
-        "match": false
-      },
-      "case_id": "ri-single-150000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 5561.25,
-      "taxsim_2024": 5614.13
-    },
-    {
-      "axiom": 1042.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -43.13000000000011,
-        "match": false
-      },
-      "case_id": "ri-married-60000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 1042.5,
-      "taxsim_2024": 1085.63
-    },
-    {
-      "axiom": 3371.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -79.01000000000022,
-        "match": false
-      },
-      "case_id": "ri-married-120000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 3371.5,
-      "taxsim_2024": 3450.51
-    },
-    {
-      "axiom": 14918.54,
-      "axiom_vs_policyengine": {
-        "difference": -3.9062499126885086e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -93.81999999999971,
-        "match": false
-      },
-      "case_id": "ri-married-300000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 14918.5400390625,
-      "taxsim_2024": 15012.36
-    }
-  ]
+  "validation_year": 2026
 }
