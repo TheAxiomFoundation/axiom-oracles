@@ -2,6 +2,8 @@
 
 ## State
 
+- Status: **complete**. Deliverables 1–6 are implemented, committed, and
+  validated; no push or pull request was made.
 - Branch: `feat/de-dual-oracle-suites`.
 - Starting point: `13d064d`, including EUROMOD `extra_columns` support.
 - Architecture discovery is complete. The implementation will instantiate one
@@ -12,8 +14,7 @@
 - The `gettsim-synthetic-compare` runner, DE comparison configuration, and
   three filed-finding dispositions are implemented and focused-tested.
 - The real two-engine report is committed, both live test gates pass, and the
-  realized lane is documented. Full-repository validation and the final
-  handoff report remain.
+  realized lane is documented.
 
 ## Done
 
@@ -89,10 +90,18 @@
 - Live verification: the EUROMOD Germany selection passed 3 tests (33
   deselected); the dedicated locked GETTSIM environment passed all 73 adapter
   tests. GETTSIM emitted only its documented internal divide/grouping warnings.
+- Full validation passed: Ruff reported no violations; the repository suite
+  passed 1,505 tests with 33 optional-engine skips; the affected map,
+  dispositions, and vacuous/freshness gate all validate. Pytest emitted only
+  the pre-existing macOS temporary-directory cleanup warning.
+- Wrote the requested handoff to `FINAL_REPORT.md`, including the full changed-
+  file inventory, commands, test results, repository-pattern decisions, and
+  open-question status.
 
 ## Next
 
-1. Run Ruff plus the full repository test and derived-artifact checks.
-2. Finalize this ledger and write the handoff report to `FINAL_REPORT.md`
-   (no separate output path was provided), without pushing or opening a pull
-   request.
+1. The orchestrating session can review the commits and choose whether to push
+   the branch or open a pull request.
+2. Re-run the live lane before accepting a future EUROMOD/GETTSIM source or
+   version change; the pinned report tests and expiring dispositions will make
+   any changed coordinates visible.
