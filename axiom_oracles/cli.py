@@ -39,6 +39,7 @@ from .comparison.mappings import (
     engine_targets_for_concepts,
 )
 from .comparison.report import (
+    FULL_CASE_INPUT_LIMIT,
     ComparisonReportAccumulator,
     build_comparison_report,
 )
@@ -535,6 +536,9 @@ def compare(
                 case_rows_path=Path(report_dir) / "cases.jsonl"
                 if stream_case_rows
                 else None,
+                # Small suites persist full evidence: raw input records and
+                # matched values, so a report alone reproduces the run.
+                include_inputs=len(cases) <= FULL_CASE_INPUT_LIMIT,
             )
             total_batches = (len(cases) + comparison_batch_size - 1) // comparison_batch_size
             for batch_index, case_batch in enumerate(

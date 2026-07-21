@@ -59,6 +59,9 @@ def test_streaming_report_matches_in_memory_report(tmp_path) -> None:
         scope=None,
         mappings=[mapping],
         case_rows_path=case_rows_path,
+        # Mirror the CLI, which resolves this by suite size (small → full
+        # evidence) — matching build_comparison_report's default above.
+        include_inputs=True,
     )
     accumulator.add_batch(cases[:1], comparisons[:1])
     accumulator.add_batch(cases[1:], comparisons[1:])

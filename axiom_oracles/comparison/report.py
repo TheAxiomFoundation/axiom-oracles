@@ -27,6 +27,13 @@ class MismatchKind:
     VALUE_MISMATCH = "value_mismatch"
 
 
+# Below this case count a suite is small enough to carry full evidence —
+# every household's raw input records and both engines' values for MATCHED
+# variables too, so a disagreement (or agreement) can be reproduced from the
+# report alone. Large suites keep the compact household_summary only.
+FULL_CASE_INPUT_LIMIT = 5_000
+
+
 def build_comparison_report(
     *,
     suite_name: str,
@@ -36,15 +43,23 @@ def build_comparison_report(
     cases: list[Case],
     mappings: list[ProgramMapping],
     comparisons: list[HouseholdComparison],
+    include_inputs: bool | None = None,
 ) -> dict:
-    """Build the stable JSON report shared by CLI, apps, and oracle wrappers."""
+    """Build the stable JSON report shared by CLI, apps, and oracle wrappers.
 
+    ``include_inputs=None`` (the default) resolves by suite size: suites at or
+    under ``FULL_CASE_INPUT_LIMIT`` cases persist full per-case evidence.
+    """
+
+    if include_inputs is None:
+        include_inputs = len(comparisons) <= FULL_CASE_INPUT_LIMIT
     accumulator = ComparisonReportAccumulator(
         suite_name=suite_name,
         population=population,
         locales=locales,
         scope=scope,
         mappings=mappings,
+        include_inputs=include_inputs,
     )
     accumulator.add_batch(cases, comparisons)
     return accumulator.to_dict()
@@ -67,7 +82,9 @@ class ComparisonReportAccumulator:
         scope: GeographyScope | None,
         mappings: list[ProgramMapping],
         case_rows_path: Path | None = None,
+        include_inputs: bool = False,
     ) -> None:
+        self.include_inputs = include_inputs
         self.suite_name = suite_name
         self.population = population
         self.locales = set(locales)
@@ -132,7 +149,12 @@ class ComparisonReportAccumulator:
         )
         self._error_rows.extend(_error_rows(comparisons))
         self._append_case_rows(
-            _case_rows(comparisons, cases_by_id, self._mappings_by_id)
+            _case_rows(
+                comparisons,
+                cases_by_id,
+                self._mappings_by_id,
+                include_inputs=self.include_inputs,
+            )
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
@@ -313,23 +335,41 @@ def _case_rows(
     comparisons: list[HouseholdComparison],
     cases_by_id: dict[int | str, Case],
     mappings_by_id: dict[str, ProgramMapping],
+    *,
+    include_inputs: bool = False,
 ) -> list[dict]:
-    return [
-        {
+    rows = []
+    for item in comparisons:
+        row = {
             "case_id": item.household_id,
             "left_engine": item.left_engine,
             "right_engine": item.right_engine,
             "left_errors": list(item.left_errors),
             "right_errors": list(item.right_errors),
-            "metadata": _case_report_metadata(cases_by_id.get(item.household_id)),
+            "metadata": _case_report_metadata(
+                cases_by_id.get(item.household_id),
+                include_inputs=include_inputs,
+            ),
             "match_rate": item.match_rate,
             "mismatches": [
                 _case_mismatch_row(mismatch, mappings_by_id)
                 for mismatch in item.mismatches()
             ],
         }
-        for item in comparisons
-    ]
+        if include_inputs:
+            # Matched values are evidence too: with them, the report alone
+            # reproduces every compared value, not just the disagreements.
+            row["matches"] = [
+                {
+                    "concept": comparison.variable,
+                    "left": comparison.left_value,
+                    "right": comparison.right_value,
+                }
+                for comparison in item.comparisons
+                if comparison.matches
+            ]
+        rows.append(row)
+    return rows
 
 
 def _case_mismatch_row(
@@ -350,25 +390,25 @@ def _case_mismatch_row(
     }
 
 
-def _case_report_metadata(case: Case | None) -> dict:
+def _case_report_metadata(
+    case: Case | None,
+    *,
+    include_inputs: bool = False,
+) -> dict:
     if case is None:
         return {}
     metadata = dict(case.metadata)
-    compact = {
-        key: value
-        for key, value in metadata.items()
-        if key
-        not in {
-            "axiom_input_records",
-            "axiom_input_record_overlays",
-            "axiom_relations",
-        }
-    }
-    for key in (
+    stripped = {
         "axiom_input_records",
         "axiom_input_record_overlays",
         "axiom_relations",
-    ):
+    }
+    compact = {
+        key: value
+        for key, value in metadata.items()
+        if include_inputs or key not in stripped
+    }
+    for key in stripped:
         value = metadata.get(key)
         if isinstance(value, list | tuple):
             compact[f"{key}_count"] = len(value)

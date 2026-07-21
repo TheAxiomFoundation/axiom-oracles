@@ -101,7 +101,7 @@ def compact_case(case: dict, explained: dict) -> dict:
         if kind:
             row["e"] = kind
         mismatches.append(row)
-    return {
+    row = {
         "id": case.get("case_id"),
         "r": case.get("match_rate"),
         "h": {
@@ -111,20 +111,33 @@ def compact_case(case: dict, explained: dict) -> dict:
         },
         "m": mismatches,
     }
+    # Small-suite reports carry full evidence (raw input records, matched
+    # values) — pass it through so the dashboard can show complete cases.
+    records = (case.get("metadata") or {}).get("axiom_input_records")
+    if records:
+        row["i"] = records
+    matches = case.get("matches")
+    if matches:
+        row["v"] = [
+            {"c": m.get("concept"), "l": m.get("left"), "x": m.get("right")}
+            for m in matches
+        ]
+    return row
 
 
 def normalize_mismatch(m: dict) -> dict:
     """Standard and fiit-harness mismatch rows -> one shape."""
     if "entity_id" in m and "case_id" not in m:
-        # fiit harness: entity_id/surface/axiom/policyengine/diff
+        # fiit harness: entity_id/surface/axiom/policyengine/diff, plus the
+        # household context (ages/earned) newer runs attach to each row.
         return {
             "case_id": m.get("entity_id"),
             "concept": m.get("surface"),
             "left": m.get("axiom"),
             "right": m.get("policyengine"),
             "difference": m.get("diff"),
-            "ages": [],
-            "earned": None,
+            "ages": [int(a) for a in (m.get("ages") or [])],
+            "earned": m.get("earned"),
         }
     return {
         "case_id": m.get("case_id"),

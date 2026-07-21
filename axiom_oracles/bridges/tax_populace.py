@@ -534,6 +534,10 @@ class TaxComparisonRow:
     axiom: float
     policyengine: float
     diff: float
+    # Who the household is — member ages and total employment income —
+    # so a mismatch row is reviewable without reopening the dataset.
+    ages: tuple[int, ...] = ()
+    earned: float | None = None
 
 
 @dataclass(frozen=True)
@@ -2760,6 +2764,9 @@ def compare_outputs(
     }
     tax_units = pe_data["tax_units"].reset_index(drop=True)
     persons = pe_data["persons"].reset_index(drop=True)
+    # Built lazily on the first mismatch; household context is best-effort
+    # extra evidence and must never break a comparison run.
+    persons_by_tax_unit: dict[int, list[Any]] | None = None
     compared_values = 0
     for surface, axiom_outputs in axiom_outputs_by_surface.items():
         output_specs = SURFACE_OUTPUTS[surface]
@@ -2799,6 +2806,20 @@ def compare_outputs(
                     relative_tolerance=relative_tolerance,
                 ):
                     summary[summary_key]["mismatches"] += 1
+                    if surface in PAYROLL_SURFACES:
+                        members = [pe_row]
+                    else:
+                        if persons_by_tax_unit is None:
+                            try:
+                                persons_by_tax_unit = (
+                                    group_person_rows_by_tax_unit(persons)
+                                )
+                            except (KeyError, TypeError, ValueError):
+                                persons_by_tax_unit = {}
+                        members = persons_by_tax_unit.get(
+                            int(source_ids[index]), []
+                        )
+                    ages, earned = _household_context(members)
                     mismatches.append(
                         TaxComparisonRow(
                             surface=surface,
@@ -2807,6 +2828,8 @@ def compare_outputs(
                             axiom=axiom_value,
                             policyengine=pe_value,
                             diff=diff,
+                            ages=ages,
+                            earned=earned,
                         )
                     )
     return TaxComparisonReport(
@@ -2917,6 +2940,21 @@ def print_report(
     print("Projection notes:")
     for note in report.projection_notes:
         print(f"  - {note}")
+
+
+def _household_context(members: list[Any]) -> tuple[tuple[int, ...], float | None]:
+    """Best-effort (ages, earned income) for a mismatch row's household."""
+    try:
+        ages = tuple(
+            int(money(person["age"])) for person in members if "age" in person
+        )
+    except (KeyError, TypeError, ValueError):
+        ages = ()
+    try:
+        earned = person_money_sum(members, "employment_income")
+    except (KeyError, TypeError, ValueError):
+        earned = None
+    return ages, earned
 
 
 def group_person_rows_by_tax_unit(persons: Any) -> dict[int, list[Any]]:

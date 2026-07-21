@@ -123,7 +123,7 @@ def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
     assert report["aggregates"][0]["missing_left_count"] == 1
 
 
-def test_report_compacts_generated_axiom_metadata() -> None:
+def _metadata_fixture_report(*, include_inputs: bool | None) -> dict:
     mapping = ProgramMapping(
         standard="us:test#income_tax",
         description="Federal income tax",
@@ -136,7 +136,7 @@ def test_report_compacts_generated_axiom_metadata() -> None:
         [EngineResult("policyengine", "case-1", {"income_tax": 0})],
     )
 
-    report = build_comparison_report(
+    return build_comparison_report(
         suite_name="taxsim-fixture",
         population="synthetic",
         locales=set(),
@@ -155,7 +155,12 @@ def test_report_compacts_generated_axiom_metadata() -> None:
         ],
         mappings=[mapping],
         comparisons=comparisons,
+        include_inputs=include_inputs,
     )
+
+
+def test_report_compacts_generated_axiom_metadata() -> None:
+    report = _metadata_fixture_report(include_inputs=False)
 
     metadata = report["cases"][0]["metadata"]
     assert metadata["household_weight"] == 10
@@ -165,3 +170,16 @@ def test_report_compacts_generated_axiom_metadata() -> None:
     assert "axiom_input_records" not in metadata
     assert "axiom_input_record_overlays" not in metadata
     assert "axiom_relations" not in metadata
+
+
+def test_small_suite_default_keeps_full_evidence() -> None:
+    # include_inputs=None resolves by suite size; one case is well under the
+    # limit, so the report keeps raw inputs and matched values.
+    report = _metadata_fixture_report(include_inputs=None)
+
+    case = report["cases"][0]
+    assert case["metadata"]["axiom_input_records"] == [{"name": "large"}]
+    assert case["metadata"]["axiom_input_records_count"] == 1
+    assert case["matches"] == [
+        {"concept": "us:test#income_tax", "left": 0, "right": 0}
+    ]
