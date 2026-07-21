@@ -171,7 +171,7 @@
     },
     {
       "suite": "be-elderly-income-support",
-      "generated_at": "2026-07-21T03:54:39Z",
+      "generated_at": "2026-07-21T09:08:13Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-be"
