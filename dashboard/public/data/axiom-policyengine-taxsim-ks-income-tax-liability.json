@@ -1,109 +1,5 @@
 {
   "case_count": 6,
-  "cases": [
-    {
-      "axiom": 896.22,
-      "axiom_vs_policyengine": {
-        "difference": 2.929687502728484e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 1.0400000000000773,
-        "match": false
-      },
-      "case_id": "ks-single-30000",
-      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 896.219970703125,
-      "taxsim_2024": 895.18
-    },
-    {
-      "axiom": 2548.313,
-      "axiom_vs_policyengine": {
-        "difference": 0.003917968750101863,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 1.1130000000002838,
-        "match": false
-      },
-      "case_id": "ks-single-60000",
-      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 2548.30908203125,
-      "taxsim_2024": 2547.2
-    },
-    {
-      "axiom": 7570.313,
-      "axiom_vs_policyengine": {
-        "difference": 0.003917968750101863,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 1.1130000000002838,
-        "match": false
-      },
-      "case_id": "ks-single-150000",
-      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 7570.30908203125,
-      "taxsim_2024": 7569.2
-    },
-    {
-      "axiom": 1738.88,
-      "axiom_vs_policyengine": {
-        "difference": -4.882812390860636e-06,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 2.0800000000001546,
-        "match": false
-      },
-      "case_id": "ks-married-60000",
-      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 1738.8800048828125,
-      "taxsim_2024": 1736.8
-    },
-    {
-      "axiom": 5039.152,
-      "axiom_vs_policyengine": {
-        "difference": 0.0035625000000436557,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 2.231999999999971,
-        "match": false
-      },
-      "case_id": "ks-married-120000",
-      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 5039.1484375,
-      "taxsim_2024": 5036.92
-    },
-    {
-      "axiom": 15083.152,
-      "axiom_vs_policyengine": {
-        "difference": 0.0035625000000436557,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 2.231999999999971,
-        "match": false
-      },
-      "case_id": "ks-married-300000",
-      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 15083.1484375,
-      "taxsim_2024": 15080.92
-    }
-  ],
   "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-ks:policies/income_tax/pilot_liability_pipeline",
@@ -222,13 +118,12 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "engine": {},
-    "generated_at": "2026-07-16T15:15:42Z",
-    "generated_by": "scripts/run_comparison.py::ks-income-tax-liability",
+    "generated_at": "2026-07-21T17:14:31Z",
+    "generated_by": "scripts/generate_state_income_tax_liability.py::ks-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
+        "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399"
       }
     ],
     "run_kind": "manual",
@@ -266,5 +161,109 @@
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026
+  "validation_year": 2026,
+  "cases": [
+    {
+      "axiom": 896.22,
+      "axiom_vs_policyengine": {
+        "difference": 2.929687502728484e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 1.0400000000000773,
+        "match": false
+      },
+      "case_id": "ks-single-30000",
+      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 896.219970703125,
+      "taxsim_2024": 895.18
+    },
+    {
+      "axiom": 2548.313,
+      "axiom_vs_policyengine": {
+        "difference": 0.003917968750101863,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 1.1130000000002838,
+        "match": false
+      },
+      "case_id": "ks-single-60000",
+      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 2548.30908203125,
+      "taxsim_2024": 2547.2
+    },
+    {
+      "axiom": 7570.313,
+      "axiom_vs_policyengine": {
+        "difference": 0.003917968750101863,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 1.1130000000002838,
+        "match": false
+      },
+      "case_id": "ks-single-150000",
+      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 7570.30908203125,
+      "taxsim_2024": 7569.2
+    },
+    {
+      "axiom": 1738.88,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812390860636e-06,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 2.0800000000001546,
+        "match": false
+      },
+      "case_id": "ks-married-60000",
+      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1738.8800048828125,
+      "taxsim_2024": 1736.8
+    },
+    {
+      "axiom": 5039.152,
+      "axiom_vs_policyengine": {
+        "difference": 0.0035625000000436557,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 2.231999999999971,
+        "match": false
+      },
+      "case_id": "ks-married-120000",
+      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 5039.1484375,
+      "taxsim_2024": 5036.92
+    },
+    {
+      "axiom": 15083.152,
+      "axiom_vs_policyengine": {
+        "difference": 0.0035625000000436557,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 2.231999999999971,
+        "match": false
+      },
+      "case_id": "ks-married-300000",
+      "concept": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 15083.1484375,
+      "taxsim_2024": 15080.92
+    }
+  ]
 }

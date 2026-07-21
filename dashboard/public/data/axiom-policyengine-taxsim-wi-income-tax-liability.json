@@ -190,10 +190,16 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "generated": "2026-07-15",
-    "generator": "scripts/generate_state_income_tax_liability.py",
-    "note": "The mismatches array carries TAXSIM-2024 law-vintage residuals and any source-grounded Axiom-versus-PolicyEngine residuals; each must be dispositioned without widening tolerance."
+    "generated_at": "2026-07-21T17:14:31Z",
+    "generated_by": "scripts/generate_state_income_tax_liability.py::wi-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
   "suite": "wi-income-tax-liability",

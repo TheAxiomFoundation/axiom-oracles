@@ -1,5 +1,58 @@
 {
   "case_count": 6,
+  "concept": "us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-ma:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "ma_income_tax",
+    "taxsim": "siitax"
+  },
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "generated_at": "2026-07-21T17:14:31Z",
+    "generated_by": "scripts/generate_state_income_tax_liability.py::ma-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "ma-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_2024_match_rate": 100.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 12,
+    "mismatch_count": 0,
+    "policyengine_matches": 6,
+    "taxsim_2024_matches": 6
+  },
+  "taxsim_law_year": 2024,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026,
   "cases": [
     {
       "axiom": 1180.0,
@@ -103,63 +156,5 @@
       "policyengine": 14460.0,
       "taxsim_2024": 14460.0
     }
-  ],
-  "concept": "us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability",
-  "engines": {
-    "axiom": "us-ma:policies/income_tax/pilot_liability_pipeline",
-    "policyengine": "ma_income_tax",
-    "taxsim": "siitax"
-  },
-  "mismatches": [],
-  "population": "case-grid",
-  "provenance": {
-    "engine": {},
-    "generated_at": "2026-07-20T20:04:32Z",
-    "generated_by": "scripts/run_comparison.py::ma-income-tax-liability",
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
-      }
-    ],
-    "run_kind": "affected-rerun",
-    "schema": "axiom_oracles.provenance.v1"
-  },
-  "schema_version": "axiom.comparison_report.v2.1",
-  "suite": "ma-income-tax-liability",
-  "summary": {
-    "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_2024_match_rate": 100.0,
-    "comparison_count": 12,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
-        "explained_residual": 0,
-        "unexplained": 0,
-        "upstream_engine_gap": 0
-      },
-      "dispositions_file": null,
-      "expired_entries": [
-
-      ],
-      "explained_rate": 100,
-      "orphaned_entries": [
-
-      ],
-      "raw_match_rate": 100,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 0
-    },
-    "match_count": 12,
-    "mismatch_count": 0,
-    "policyengine_matches": 6,
-    "taxsim_2024_matches": 6
-  },
-  "taxsim_law_year": 2024,
-  "tolerance": {
-    "absolute": 1.0,
-    "relative": 0.0
-  },
-  "validation_year": 2026
+  ]
 }

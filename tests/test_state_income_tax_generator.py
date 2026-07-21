@@ -73,6 +73,39 @@ def test_recent_state_income_tax_oracle_registrations():
         )
 
 
+def test_finalize_report_adds_v21_dispositions_and_provenance():
+    generator = _load_generator()
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "suite": "test-state-income-tax-liability",
+        "summary": {
+            "comparison_count": 0,
+            "match_count": 0,
+            "mismatch_count": 0,
+        },
+        "mismatches": [],
+        "cases": [],
+    }
+    generated_at = "2026-07-21T17:00:00Z"
+    rulespecs = [
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399",
+        }
+    ]
+
+    finalized = generator._finalize_report(
+        report,
+        generated_at=generated_at,
+        rulespecs=rulespecs,
+    )
+
+    assert finalized["schema_version"] == "axiom.comparison_report.v2.1"
+    assert isinstance(finalized["summary"]["dispositioned"], dict)
+    assert finalized["provenance"]["generated_at"] == generated_at
+    assert finalized["provenance"]["rulespecs"] == rulespecs
+
+
 def test_committed_state_income_tax_reports_are_dispositioned_v21():
     reports = (
         Path(__file__).parents[1] / "dashboard" / "public" / "data"

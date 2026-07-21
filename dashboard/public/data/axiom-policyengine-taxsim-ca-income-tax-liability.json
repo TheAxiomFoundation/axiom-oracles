@@ -100,16 +100,15 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "engine": {},
-    "generated_at": "2026-07-18T08:16:52Z",
-    "generated_by": "scripts/run_comparison.py::ca-income-tax-liability",
+    "generated_at": "2026-07-21T17:14:31Z",
+    "generated_by": "scripts/generate_state_income_tax_liability.py::ca-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
+        "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

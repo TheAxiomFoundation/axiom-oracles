@@ -31,12 +31,17 @@ policyengine-taxsim installed):
 
 from __future__ import annotations
 
-import json
 import sys
 import warnings
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
+
+from axiom_oracles.comparison.dispositions import (
+    apply_dispositions_from_dir,
+    report_json_text,
+)
+from axiom_oracles.provenance import build_provenance, rulespec_provenance
 
 warnings.filterwarnings("ignore")
 
@@ -597,6 +602,29 @@ def _build_report(
     }
 
 
+def _finalize_report(
+    report: dict,
+    *,
+    generated_at: str,
+    rulespecs: list[dict],
+) -> dict:
+    """Attach dispositions and v2.1 provenance before publishing a report."""
+    finalized = apply_dispositions_from_dir(
+        report,
+        REPO_ROOT / "dispositions",
+        repo_root=REPO_ROOT,
+    )
+    finalized["provenance"] = build_provenance(
+        generated_by=(
+            "scripts/generate_state_income_tax_liability.py::"
+            f"{report['suite']}"
+        ),
+        rulespecs=rulespecs,
+        generated_at=generated_at,
+    )
+    return finalized
+
+
 def main() -> int:
     cases = _grid()
     axiom = _axiom_liabilities()
@@ -605,15 +633,18 @@ def main() -> int:
     REPORTS.mkdir(exist_ok=True)
     DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    rulespecs = rulespec_provenance([RULESPEC_US])
     for state in _STATES:
-        report = _build_report(state, cases, axiom, pe, taxsim)
+        report = _finalize_report(
+            _build_report(state, cases, axiom, pe, taxsim),
+            generated_at=generated_at,
+            rulespecs=rulespecs,
+        )
         basename = f"axiom-policyengine-taxsim-{state.lower()}-income-tax-liability"
-        (REPORTS / f"{basename}-{stamp}.json").write_text(
-            json.dumps(report, indent=2) + "\n"
-        )
-        (DASH_PUBLIC / f"{basename}.json").write_text(
-            json.dumps(report, indent=2) + "\n"
-        )
+        serialized = report_json_text(report)
+        (REPORTS / f"{basename}-{stamp}.json").write_text(serialized)
+        (DASH_PUBLIC / f"{basename}.json").write_text(serialized)
         s = report["summary"]
         print(
             f"{state}: PE match {s['axiom_vs_policyengine_match_rate']}% "
