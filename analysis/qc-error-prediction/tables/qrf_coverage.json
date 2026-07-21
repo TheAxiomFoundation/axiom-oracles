@@ -1,0 +1,263 @@
+{
+  "design": "5-fold out-of-fold verified-input predictive bands; issued RAWBEN flagged",
+  "metadata": {
+    "classifier": {
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "max_iter": 200,
+      "max_leaf_nodes": 15
+    },
+    "estimator": "scikit-learn HistGradientBoosting",
+    "quantile": {
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "max_iter": 250,
+      "max_leaf_nodes": 15
+    },
+    "seed": 294
+  },
+  "overall": [
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.0743702518992403,
+      "error_flagged": 186,
+      "errors": 2501,
+      "flagged": 398,
+      "group": "all",
+      "n": 6081,
+      "non_error_coverage": 0.9391061452513967
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.27668932427029186,
+      "error_flagged": 692,
+      "errors": 2501,
+      "flagged": 1550,
+      "group": "all",
+      "n": 6081,
+      "non_error_coverage": 0.7891061452513967
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.0059976009596161535,
+      "error_flagged": 15,
+      "errors": 2501,
+      "flagged": 33,
+      "group": "all",
+      "n": 6081,
+      "non_error_coverage": 0.9960893854748604
+    }
+  ],
+  "per_state": [
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.0859106529209622,
+      "error_flagged": 25,
+      "errors": 291,
+      "flagged": 65,
+      "group": "az",
+      "n": 922,
+      "non_error_coverage": 0.9334389857369255
+    },
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.04145077720207254,
+      "error_flagged": 16,
+      "errors": 386,
+      "flagged": 35,
+      "group": "ca",
+      "n": 883,
+      "non_error_coverage": 0.9517102615694165
+    },
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.07213114754098361,
+      "error_flagged": 22,
+      "errors": 305,
+      "flagged": 52,
+      "group": "co",
+      "n": 856,
+      "non_error_coverage": 0.9437386569872959
+    },
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.08744394618834081,
+      "error_flagged": 39,
+      "errors": 446,
+      "flagged": 73,
+      "group": "ga",
+      "n": 945,
+      "non_error_coverage": 0.9298597194388778
+    },
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.08503401360544217,
+      "error_flagged": 25,
+      "errors": 294,
+      "flagged": 47,
+      "group": "md",
+      "n": 722,
+      "non_error_coverage": 0.9509345794392523
+    },
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.0659025787965616,
+      "error_flagged": 23,
+      "errors": 349,
+      "flagged": 51,
+      "group": "ny",
+      "n": 847,
+      "non_error_coverage": 0.9437751004016064
+    },
+    {
+      "band": "q5-q95",
+      "error_flag_rate_recall": 0.08372093023255814,
+      "error_flagged": 36,
+      "errors": 430,
+      "flagged": 75,
+      "group": "tx",
+      "n": 906,
+      "non_error_coverage": 0.9222689075630253
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.3161512027491409,
+      "error_flagged": 92,
+      "errors": 291,
+      "flagged": 244,
+      "group": "az",
+      "n": 922,
+      "non_error_coverage": 0.8082408874801902
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.21502590673575128,
+      "error_flagged": 83,
+      "errors": 386,
+      "flagged": 187,
+      "group": "ca",
+      "n": 883,
+      "non_error_coverage": 0.8189134808853119
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.2754098360655738,
+      "error_flagged": 84,
+      "errors": 305,
+      "flagged": 222,
+      "group": "co",
+      "n": 856,
+      "non_error_coverage": 0.7876588021778584
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.2802690582959641,
+      "error_flagged": 125,
+      "errors": 446,
+      "flagged": 241,
+      "group": "ga",
+      "n": 945,
+      "non_error_coverage": 0.7875751503006012
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.3401360544217687,
+      "error_flagged": 100,
+      "errors": 294,
+      "flagged": 203,
+      "group": "md",
+      "n": 722,
+      "non_error_coverage": 0.7710280373831776
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.20916905444126074,
+      "error_flagged": 73,
+      "errors": 349,
+      "flagged": 202,
+      "group": "ny",
+      "n": 847,
+      "non_error_coverage": 0.7610441767068273
+    },
+    {
+      "band": "q10-q90",
+      "error_flag_rate_recall": 0.313953488372093,
+      "error_flagged": 135,
+      "errors": 430,
+      "flagged": 251,
+      "group": "tx",
+      "n": 906,
+      "non_error_coverage": 0.7815126050420168
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.010309278350515464,
+      "error_flagged": 3,
+      "errors": 291,
+      "flagged": 8,
+      "group": "az",
+      "n": 922,
+      "non_error_coverage": 0.9920760697305864
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.007772020725388601,
+      "error_flagged": 3,
+      "errors": 386,
+      "flagged": 4,
+      "group": "ca",
+      "n": 883,
+      "non_error_coverage": 0.9979879275653923
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.006557377049180328,
+      "error_flagged": 2,
+      "errors": 305,
+      "flagged": 5,
+      "group": "co",
+      "n": 856,
+      "non_error_coverage": 0.9945553539019963
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.004484304932735426,
+      "error_flagged": 2,
+      "errors": 446,
+      "flagged": 3,
+      "group": "ga",
+      "n": 945,
+      "non_error_coverage": 0.9979959919839679
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.006802721088435374,
+      "error_flagged": 2,
+      "errors": 294,
+      "flagged": 5,
+      "group": "md",
+      "n": 722,
+      "non_error_coverage": 0.9953271028037384
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.0057306590257879654,
+      "error_flagged": 2,
+      "errors": 349,
+      "flagged": 4,
+      "group": "ny",
+      "n": 847,
+      "non_error_coverage": 1.0
+    },
+    {
+      "band": "q1-q99",
+      "error_flag_rate_recall": 0.002325581395348837,
+      "error_flagged": 1,
+      "errors": 430,
+      "flagged": 4,
+      "group": "tx",
+      "n": 906,
+      "non_error_coverage": 0.9957983193277311
+    }
+  ]
+}

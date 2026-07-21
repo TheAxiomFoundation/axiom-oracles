@@ -1,0 +1,60 @@
+{
+  "definition": "STATUS in {2,3} and AMTERR > 0",
+  "rows": [
+    {
+      "correct": 631,
+      "errors": 291,
+      "excluded": 3,
+      "loaded": 922,
+      "state": "az"
+    },
+    {
+      "correct": 497,
+      "errors": 386,
+      "excluded": 0,
+      "loaded": 883,
+      "state": "ca"
+    },
+    {
+      "correct": 551,
+      "errors": 305,
+      "excluded": 0,
+      "loaded": 856,
+      "state": "co"
+    },
+    {
+      "correct": 499,
+      "errors": 446,
+      "excluded": 0,
+      "loaded": 945,
+      "state": "ga"
+    },
+    {
+      "correct": 428,
+      "errors": 294,
+      "excluded": 23,
+      "loaded": 722,
+      "state": "md"
+    },
+    {
+      "correct": 498,
+      "errors": 349,
+      "excluded": 38,
+      "loaded": 847,
+      "state": "ny"
+    },
+    {
+      "correct": 476,
+      "errors": 430,
+      "excluded": 49,
+      "loaded": 906,
+      "state": "tx"
+    }
+  ],
+  "total": {
+    "correct": 3580,
+    "errors": 2501,
+    "excluded": 113,
+    "loaded": 6081
+  }
+}
