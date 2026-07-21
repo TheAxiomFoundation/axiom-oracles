@@ -151,6 +151,14 @@ class EuromodPlatformRunner(EngineAdapter):
             The standing use is neutralizing stochastic take-up corrections
             (e.g. ``{"$bed_FlTakeUp": 1.0}``) so benefit outputs are the
             statutory entitlement instead of a take-up draw.
+        extra_columns: Standard EUROMOD input variables the model conditions
+            on but the template dataset's schema omits, added to the worker's
+            zero-filled template so case rows can set them. The standing use
+            is Germany's Bundesland ``drgn1``: DE_training_data has no
+            ``drgn1`` column, yet the DE pension and unemployment
+            contribution functions are gated on West/East ``drgn1`` lists —
+            without the column every row fails both gates and those
+            contributions are silently zero.
         python_executable: Interpreter for the EUROMOD execution
             environment; defaults to ``$EUROMOD_PYTHON`` then
             ``sys.executable``.
@@ -177,6 +185,7 @@ class EuromodPlatformRunner(EngineAdapter):
             list[PolicySwitchOverride] | tuple[PolicySwitchOverride, ...] | None
         ) = None,
         constant_overrides: Any = None,
+        extra_columns: list[str] | tuple[str, ...] | None = None,
         python_executable: str | Path | None = None,
         dotnet_root: str | Path | None = None,
         timeout: float = 900.0,
@@ -193,6 +202,7 @@ class EuromodPlatformRunner(EngineAdapter):
         self.switches = _normalize_switches(switches)
         self.policy_switch_overrides = _normalize_switches(policy_switch_overrides)
         self.constant_overrides = _normalize_constant_overrides(constant_overrides)
+        self.extra_columns = tuple(str(name) for name in (extra_columns or ()))
         self.python_executable = str(
             python_executable
             or os.environ.get("EUROMOD_PYTHON")
@@ -355,6 +365,7 @@ class EuromodPlatformRunner(EngineAdapter):
             "switches": list(switches),
             "policy_switch_overrides": list(policy_switch_overrides),
             "constant_overrides": [list(override) for override in constant_overrides],
+            "extra_columns": list(self.extra_columns),
         }
         worker = Path(__file__).parent / "_runner.py"
         env = dict(os.environ)

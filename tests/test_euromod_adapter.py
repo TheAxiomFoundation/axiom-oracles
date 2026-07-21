@@ -1133,3 +1133,53 @@ class TestEuromodBelgiumLive:
             assert result.values["bed_s"] == pytest.approx(
                 anchors[result.household_id], abs=0.02
             )
+
+
+class TestExtraColumns:
+    """Extra template columns for model-required variables missing from demo data."""
+
+    def test_worker_template_extends_header_with_extra_columns(self) -> None:
+        template = euromod_worker._dataset_template(
+            ["idhh", "idperson", "yem"], ["drgn1", "yem"]
+        )
+        assert list(template) == ["idhh", "idperson", "yem", "drgn1"]
+        assert template["drgn1"] == 0.0
+
+    def test_runner_passes_extra_columns_and_rows_keep_them(self, tmp_path) -> None:
+        captured: dict = {}
+
+        def run(argv, **kwargs):
+            captured["job"] = json.loads(Path(argv[2]).read_text())
+            Path(argv[3]).write_text(
+                json.dumps(
+                    {
+                        "columns": ["tin_s"],
+                        "missing": [],
+                        "idhh": [1],
+                        "values": {"tin_s": [0.0]},
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="DE",
+            system="DE_2025",
+            extra_columns=["drgn1"],
+            subprocess_run=run,
+        )
+        case = Case(
+            case_id="de-extra",
+            period="2025",
+            entities=(Entity(entity_id="head", kind="person", facts={}),),
+            metadata={
+                "euromod_inputs": [
+                    {"idhh": 1, "idperson": 101, "yem": 4000.0, "drgn1": 9}
+                ]
+            },
+        )
+        runner.run_cases([case], variables=["tin_s"])
+
+        assert captured["job"]["extra_columns"] == ["drgn1"]
+        assert captured["job"]["rows"][0]["drgn1"] == 9

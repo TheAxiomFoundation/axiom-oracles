@@ -288,6 +288,23 @@ def _patch_policy_switch(
     return f"{system_xml[:policy_start]}{patched_policy}{system_xml[policy_end:]}"
 
 
+def _dataset_template(header, extra_columns):
+    """Zero-filled input template: dataset header plus caller-named extras.
+
+    ``extra_columns`` are standard EUROMOD variables the model conditions on
+    but the bundled demo dataset omits (e.g. Germany's Bundesland ``drgn1``,
+    which gates the West/East pension and unemployment contribution
+    functions). They join the template — and therefore the DataFrame column
+    set — so case rows can set them like any schema column; without the
+    column every row fails those gates and the contributions are silently
+    zero.
+    """
+    template = {str(name): 0.0 for name in header}
+    for name in extra_columns:
+        template.setdefault(str(name), 0.0)
+    return template
+
+
 def _rows_by_household(rows: list) -> dict:
     """Group input rows by ``idhh``, preserving first-appearance order.
 
@@ -325,7 +342,8 @@ def main() -> None:
         header = handle.readline().rstrip("\n").split("\t")
     header = [name.strip() for name in header if name.strip()]
 
-    template = {name: 0.0 for name in header}
+    template = _dataset_template(header, job.get("extra_columns") or [])
+    header = list(template)
     households = _rows_by_household(job["rows"])
 
     requested = job.get("outputs") or []
