@@ -255,3 +255,46 @@ def test_build_freshness_stores_no_time_dependent_state(monkeypatch, tmp_path):
     assert "co-snap-ecps" in surface["suites"]
     suite_entry = next(s for s in fresh["suites"] if s["suite"] == "co-snap-ecps")
     assert suite_entry["generated_at"] == old
+
+
+def test_write_freshness_is_idempotent_when_comparable_equal(monkeypatch, tmp_path):
+    """A regeneration with no comparable change must keep the committed file
+    byte-for-byte (its doc-level generated_at included) — otherwise every
+    6-hourly affected rerun would churn a timestamp-only diff into a commit.
+    """
+    gate = _load_gate()
+    out = tmp_path / "freshness.json"
+    monkeypatch.setattr(gate, "FRESHNESS_OUTPUT", out)
+    committed = {
+        "generated_at": "2026-01-01T00:00:00Z",
+        "suites": [{"suite": "s", "generated_at": "2026-05-01T00:00:00Z"}],
+    }
+    out.write_text(json.dumps(committed, indent=2) + "\n")
+    before = out.read_text()
+
+    regenerated = {**committed, "generated_at": "2026-02-02T00:00:00Z"}
+    gate._write_freshness(regenerated)
+    assert out.read_text() == before  # untouched, stamp preserved
+
+
+def test_write_freshness_rewrites_on_comparable_change(monkeypatch, tmp_path):
+    """NEGATIVE: a report-fact change (per-suite generated_at) must rewrite the
+    file — idempotency must not become staleness."""
+    gate = _load_gate()
+    out = tmp_path / "freshness.json"
+    monkeypatch.setattr(gate, "FRESHNESS_OUTPUT", out)
+    out.write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-01-01T00:00:00Z",
+                "suites": [{"suite": "s", "generated_at": "2026-05-01T00:00:00Z"}],
+            }
+        )
+        + "\n"
+    )
+    rerun = {
+        "generated_at": "2026-02-02T00:00:00Z",
+        "suites": [{"suite": "s", "generated_at": "2026-06-01T00:00:00Z"}],
+    }
+    gate._write_freshness(rerun)
+    assert json.loads(out.read_text()) == rerun

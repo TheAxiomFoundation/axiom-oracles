@@ -177,24 +177,28 @@ exercise. The **affected-rerun** workflow
 (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
 resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
 selects only the suites whose report ran against an older SHA — those get rerun
-and their refreshed reports committed. The weekly full matrix
-(`comparisons.yml`) stays the backstop. Regenerate the map after adding a
-comparison: `uv run scripts/generate_affected_map.py`.
+and their refreshed reports committed via `scripts/commit_refreshed_report.sh`,
+which regenerates every derived, CI-validated artifact in the same commit
+(the dispositions merge + EUROMOD-BE coverage rollup, freshness, conformance
+scoreboard + detail, the daily history snapshot, and
+the burn-down), self-checks the tree against ci.yml's staleness gates before
+pushing, and rebuilds the commit from scratch on the current tip on every push
+attempt so concurrent matrix siblings can't strand main stale or conflicted.
+The conformance ratchet is never re-pinned from that bot path. The weekly full
+matrix (`comparisons.yml`) stays the backstop. Regenerate the map after adding
+a comparison: `uv run scripts/generate_affected_map.py`.
 
-After the rerun matrix, a **`reconcile`** job regenerates every report-derived
-aggregate once, on the full refreshed report set, and commits them in the same
-run: dispositioned reports + the EUROMOD-BE coverage rollup
-(`scripts/apply_dispositions.py`), the freshness registry
-(`scripts/check_vacuous_gate.py`), the conformance scoreboard + per-policy detail
-(`scripts/conformance_scoreboard.py`), and the burn-down
-(`scripts/conformance_burndown.py`). This is not optional bookkeeping — those
-aggregates are *derived* from the committed reports, so a report refresh that
-skipped them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
+Regenerating these aggregates with the report is not optional bookkeeping —
+they are *derived* from the committed reports, so a report refresh that skips
+them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
 stale and reds `conformance_scoreboard.py --check` on **every open PR** until
-someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident, fixed
-reactively in #282). It runs once at the end rather than per matrix leg because
-each leg only sees a partial view of the report set — the scoreboard must be
-computed from all of them, so per-leg regeneration would race.
+someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident,
+fixed reactively in #282). Regeneration happens per matrix leg, inside the
+push-retry loop, because each attempt rebuilds on the current tip: an
+aggregate recomputed there is consistent with every report committed so far,
+so every intermediate push is gate-green — there is no post-matrix red window
+and nothing for a separate reconcile pass to repair (#283's post-matrix job,
+briefly on main, is superseded by this; see `tests/test_commit_refreshed_report.py`).
 
 ## Vacuous-verification gate (O3)
 
