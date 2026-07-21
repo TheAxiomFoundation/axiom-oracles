@@ -439,12 +439,25 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-05T19:41:18Z",
+    "generated_at": "2026-07-21T17:10:47Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-savings-ukmod",
-    "run_kind": "manual",
+    "oracle": {
+      "euromod_country": "UK",
+      "euromod_dataset": "training_data",
+      "euromod_release": "B2026.03",
+      "euromod_system": "UK_2026",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
