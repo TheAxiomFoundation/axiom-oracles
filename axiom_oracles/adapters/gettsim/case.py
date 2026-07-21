@@ -192,6 +192,20 @@ class GettsimCase:
             raise GettsimInputError(
                 "a GETTSIM case mapping must contain a 'persons' list"
             )
+        for field_name in ("persons", "spouse_pairs"):
+            value = spec.get(field_name, ())
+            if isinstance(value, (str, bytes, bytearray, Mapping)) or not isinstance(
+                value, Sequence
+            ):
+                raise GettsimInputError(
+                    f"{field_name} must be a sequence, got {value!r}"
+                )
+        for field_name in ("parents", "kindergeld_recipients", "grouping_ids"):
+            value = spec.get(field_name, {})
+            if not isinstance(value, Mapping):
+                raise GettsimInputError(
+                    f"{field_name} must be a mapping, got {value!r}"
+                )
         return cls(
             persons=list(spec["persons"]),
             spouse_pairs=[
@@ -587,7 +601,8 @@ def _validate_link_columns(data: Mapping[str, list[Any]], n: int) -> None:
     Applies to raw per-person links (columns without a structured channel,
     e.g. ``bürgergeld__p_id_einstandspartner``) as much as to the structured
     ones: values are ints in ``{-1} ∪ 0..n-1``, never self-referential, and
-    ``familie__p_id_ehepartner`` must be symmetric.
+    every partnership column (:data:`SYMMETRIC_LINK_LEAVES`) must be
+    symmetric.
     """
     for qname, column in data.items():
         leaf = qname.rsplit("__", 1)[-1]

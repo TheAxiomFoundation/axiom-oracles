@@ -467,6 +467,25 @@ class TestCaseFromMapping:
         with pytest.raises(GettsimInputError, match="two-element pairs"):
             GettsimCase.from_mapping({"persons": [{}, {}], "parents": {1: None}})
 
+    def test_malformed_outer_containers_raise_typed_errors(self) -> None:
+        with pytest.raises(GettsimInputError, match="spouse_pairs must be a sequence"):
+            GettsimCase.from_mapping({"persons": [{}, {}], "spouse_pairs": None})
+        with pytest.raises(GettsimInputError, match="spouse_pairs must be a sequence"):
+            # A dict would silently iterate as its keys.
+            GettsimCase.from_mapping(
+                {"persons": [{}, {}], "spouse_pairs": {(0, 1): "ignored"}}
+            )
+        with pytest.raises(GettsimInputError, match="parents must be a mapping"):
+            GettsimCase.from_mapping({"persons": [{}, {}], "parents": []})
+        with pytest.raises(
+            GettsimInputError, match="kindergeld_recipients must be a mapping"
+        ):
+            GettsimCase.from_mapping(
+                {"persons": [{}, {}], "kindergeld_recipients": []}
+            )
+        with pytest.raises(GettsimInputError, match="persons must be a sequence"):
+            GettsimCase.from_mapping({"persons": {}})
+
     def test_person_indices_are_never_coerced(self) -> None:
         # False would silently alias person 0; 1.9 would truncate to person 1.
         with pytest.raises(GettsimInputError, match="must be an integer"):
