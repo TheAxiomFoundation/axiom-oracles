@@ -23,48 +23,6 @@
     }
   ],
   "case_count": 5,
-  "concepts": [
-    {
-      "category": "tax",
-      "comparison": "amount",
-      "components": [],
-      "description": "UK income tax liability (single employee)",
-      "id": "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_income_tax_liability",
-      "parent": null,
-      "priority": "high",
-      "relative_tolerance": 0.0002,
-      "tolerance": 1
-    }
-  ],
-  "engines": {
-    "left": "euromod",
-    "right": "axiom"
-  },
-  "errors": [],
-  "locales": [
-    "UK"
-  ],
-  "mismatches": [],
-  "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2",
-  "scope": null,
-  "suite": "uk-worker-pit",
-  "summary": {
-    "comparison_count": 5,
-    "error_count": 0,
-    "errors_by_engine": [],
-    "match_count": 5,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
-    "weighted": {
-      "comparison_weight": 5,
-      "match_rate": 100,
-      "match_weight": 5,
-      "mismatch_weight": 0
-    }
-  },
   "cases": [
     {
       "case_id": "uk-worker-pit-30k",
@@ -366,5 +324,90 @@
       "right_engine": "axiom",
       "right_errors": []
     }
-  ]
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK income tax liability (single employee)",
+      "id": "uk:statutes/income_tax/individual/pilot_worker_oracle_pipeline#uk_pit_pilot_income_tax_liability",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0002,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-21T17:11:35Z",
+    "generated_by": "scripts/run_comparison.py::uk-worker-pit-ukmod",
+    "oracle": {
+      "euromod_country": "UK",
+      "euromod_dataset": "training_data",
+      "euromod_release": "B2026.03",
+      "euromod_system": "UK_2026",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-worker-pit",
+  "summary": {
+    "comparison_count": 5,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 5,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 5,
+      "match_rate": 100,
+      "match_weight": 5,
+      "mismatch_weight": 0
+    }
+  }
 }
