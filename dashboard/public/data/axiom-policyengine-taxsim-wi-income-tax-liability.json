@@ -1,5 +1,109 @@
 {
   "case_count": 6,
+  "cases": [
+    {
+      "axiom": 595.76665234375,
+      "axiom_vs_policyengine": {
+        "difference": -0.8757426757812254,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -40.153347656249935,
+        "match": false
+      },
+      "case_id": "wi-single-30000",
+      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 596.6423950195312,
+      "taxsim_2024": 635.92
+    },
+    {
+      "axiom": 2074.16665234375,
+      "axiom_vs_policyengine": {
+        "difference": -0.8758281250002256,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -241.2233476562501,
+        "match": false
+      },
+      "case_id": "wi-single-60000",
+      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 2075.04248046875,
+      "taxsim_2024": 2315.39
+    },
+    {
+      "axiom": 7309.36,
+      "axiom_vs_policyengine": {
+        "difference": 2.1729882812496726,
+        "match": false
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -216.90000000000055,
+        "match": false
+      },
+      "case_id": "wi-single-150000",
+      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 7307.18701171875,
+      "taxsim_2024": 7526.26
+    },
+    {
+      "axiom": 1538.213140625,
+      "axiom_vs_policyengine": {
+        "difference": -1.136346679687449,
+        "match": false
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -94.57685937499991,
+        "match": false
+      },
+      "case_id": "wi-married-60000",
+      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1539.3494873046875,
+      "taxsim_2024": 1632.79
+    },
+    {
+      "axiom": 5075.54240625,
+      "axiom_vs_policyengine": {
+        "difference": 2.957933593749658,
+        "match": false
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -366.1875937499999,
+        "match": false
+      },
+      "case_id": "wi-married-120000",
+      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 5072.58447265625,
+      "taxsim_2024": 5441.73
+    },
+    {
+      "axiom": 15021.11,
+      "axiom_vs_policyengine": {
+        "difference": 2.957656250000582,
+        "match": false
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -289.1700000000001,
+        "match": false
+      },
+      "case_id": "wi-married-300000",
+      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 15018.15234375,
+      "taxsim_2024": 15310.28
+    }
+  ],
   "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-wi:policies/income_tax/pilot_liability_pipeline",
@@ -190,15 +294,16 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "generated_at": "2026-07-21T17:24:34Z",
-    "generated_by": "scripts/generate_state_income_tax_liability.py::wi-income-tax-liability",
+    "engine": {},
+    "generated_at": "2026-07-21T20:05:51Z",
+    "generated_by": "scripts/run_comparison.py::wi-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -233,109 +338,5 @@
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026,
-  "cases": [
-    {
-      "axiom": 595.76665234375,
-      "axiom_vs_policyengine": {
-        "difference": -0.8757426757812254,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -40.153347656249935,
-        "match": false
-      },
-      "case_id": "wi-single-30000",
-      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 596.6423950195312,
-      "taxsim_2024": 635.92
-    },
-    {
-      "axiom": 2074.16665234375,
-      "axiom_vs_policyengine": {
-        "difference": -0.8758281250002256,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -241.2233476562501,
-        "match": false
-      },
-      "case_id": "wi-single-60000",
-      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 2075.04248046875,
-      "taxsim_2024": 2315.39
-    },
-    {
-      "axiom": 7309.36,
-      "axiom_vs_policyengine": {
-        "difference": 2.1729882812496726,
-        "match": false
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -216.90000000000055,
-        "match": false
-      },
-      "case_id": "wi-single-150000",
-      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 7307.18701171875,
-      "taxsim_2024": 7526.26
-    },
-    {
-      "axiom": 1538.213140625,
-      "axiom_vs_policyengine": {
-        "difference": -1.136346679687449,
-        "match": false
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -94.57685937499991,
-        "match": false
-      },
-      "case_id": "wi-married-60000",
-      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 1539.3494873046875,
-      "taxsim_2024": 1632.79
-    },
-    {
-      "axiom": 5075.54240625,
-      "axiom_vs_policyengine": {
-        "difference": 2.957933593749658,
-        "match": false
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -366.1875937499999,
-        "match": false
-      },
-      "case_id": "wi-married-120000",
-      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 5072.58447265625,
-      "taxsim_2024": 5441.73
-    },
-    {
-      "axiom": 15021.11,
-      "axiom_vs_policyengine": {
-        "difference": 2.957656250000582,
-        "match": false
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -289.1700000000001,
-        "match": false
-      },
-      "case_id": "wi-married-300000",
-      "concept": "us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 15018.15234375,
-      "taxsim_2024": 15310.28
-    }
-  ]
+  "validation_year": 2026
 }
