@@ -114,6 +114,8 @@ def _suite_jurisdiction(suite_name: str) -> str:
     locales = {case.locale for case in cases}
     if locales == {"BE"}:
         return "be"
+    if locales == {"CA-ON"}:
+        return "ca"
     if locales == {"DK"}:
         return "dk"
     if locales == {"DE"}:

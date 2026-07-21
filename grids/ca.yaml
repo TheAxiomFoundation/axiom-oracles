@@ -1,0 +1,125 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: ca
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  ca-cra-family-benefits:
+    locale: CA-ON
+    entity: Family
+    entity_id: family
+    outputs:
+    - ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_child_benefit_annual_amount
+    - ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#child_disability_benefit_annual_amount
+    - ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_groceries_and_essentials_benefit_annual_amount
+    cases:
+    - id: ca-cra-family-low-income-two-children
+      period: '2026-07-01'
+      scenario: cra-child-family-benefits
+      parameters:
+        canada_child_family:
+          tax_year: 2025
+          province: 'ON'
+          marital_status: SINGLE
+          applicant_date_of_birth: '1990-01-01'
+          children:
+          - name: Child 1
+            date_of_birth: '2018-01-01'
+          - name: Child 2
+            date_of_birth: '2022-01-01'
+          net_income: 30000
+          working_income: 30000
+        canada_child_family_outputs:
+          canada_child_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_child_benefit_annual_amount
+          child_disability_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#child_disability_benefit_annual_amount
+          canada_groceries_and_essentials_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_groceries_and_essentials_benefit_annual_amount
+    - id: ca-cra-family-ccb-first-phaseout
+      period: '2026-07-01'
+      scenario: cra-child-family-benefits
+      parameters:
+        canada_child_family:
+          tax_year: 2025
+          province: 'ON'
+          marital_status: SINGLE
+          applicant_date_of_birth: '1990-01-01'
+          children:
+          - name: Child 1
+            date_of_birth: '2022-01-01'
+          net_income: 45000
+          working_income: 45000
+        canada_child_family_outputs:
+          canada_child_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_child_benefit_annual_amount
+          child_disability_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#child_disability_benefit_annual_amount
+          canada_groceries_and_essentials_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_groceries_and_essentials_benefit_annual_amount
+    - id: ca-cra-family-disabled-child
+      period: '2026-07-01'
+      scenario: cra-child-family-benefits
+      parameters:
+        canada_child_family:
+          tax_year: 2025
+          province: 'ON'
+          marital_status: SINGLE
+          applicant_date_of_birth: '1990-01-01'
+          children:
+          - name: Child 1
+            date_of_birth: '2018-01-01'
+            disabled: true
+          net_income: 90000
+          working_income: 90000
+        canada_child_family_outputs:
+          canada_child_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_child_benefit_annual_amount
+          child_disability_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#child_disability_benefit_annual_amount
+          canada_groceries_and_essentials_benefit: ca:policies/cra/benefits-2026/federal-family-and-climate-benefits#canada_groceries_and_essentials_benefit_annual_amount
+  ca-cra-pdoc:
+    locale: CA-ON
+    entity: Person
+    entity_id: person
+    outputs:
+    - ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_cpp_employee_contribution_per_period
+    - ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_ei_employee_premium_per_period
+    - ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_estimated_tax_deduction_per_period
+    cases:
+    - id: ca-cra-pdoc-biweekly-2000
+      period: '2026-07-20'
+      scenario: cra-pdoc-ontario-salary
+      parameters:
+        canada_pdoc:
+          jurisdiction: ONTARIO
+          payPeriodFrequency: BI_WEEKLY
+          incomeAmount: 2000
+        canada_pdoc_outputs:
+          cpp_employee_contribution: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_cpp_employee_contribution_per_period
+          ei_employee_premium: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_ei_employee_premium_per_period
+          income_tax: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_estimated_tax_deduction_per_period
+        canada_pdoc_output_basis: per_period
+    - id: ca-cra-pdoc-monthly-3000
+      period: '2026-07-20'
+      scenario: cra-pdoc-ontario-salary
+      parameters:
+        canada_pdoc:
+          jurisdiction: ONTARIO
+          payPeriodFrequency: MONTHLY_12PP
+          incomeAmount: 3000
+        canada_pdoc_outputs:
+          cpp_employee_contribution: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_cpp_employee_contribution_per_period
+          ei_employee_premium: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_ei_employee_premium_per_period
+          income_tax: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_estimated_tax_deduction_per_period
+        canada_pdoc_output_basis: per_period
+    - id: ca-cra-pdoc-weekly-1000
+      period: '2026-07-20'
+      scenario: cra-pdoc-ontario-salary
+      parameters:
+        canada_pdoc:
+          jurisdiction: ONTARIO
+          payPeriodFrequency: WEEKLY_52PP
+          incomeAmount: 1000
+        canada_pdoc_outputs:
+          cpp_employee_contribution: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_cpp_employee_contribution_per_period
+          ei_employee_premium: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_ei_employee_premium_per_period
+          income_tax: ca:policies/cra/t4127-2026/ontario-salary-payroll#pdoc_estimated_tax_deduction_per_period
+        canada_pdoc_output_basis: per_period

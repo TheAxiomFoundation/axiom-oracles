@@ -42,6 +42,7 @@ GRID_ROOT = _REPO_ROOT / "grids"
 # ``case.locale`` values the suites emit (``BE``, ``UK``, ``US-NY-NYC``, ...).
 _JURISDICTION_BY_COUNTRY = {
     "BE": "be",
+    "CA": "ca",
     "DE": "de",
     "DK": "dk",
     "UK": "uk",
@@ -149,7 +150,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--jurisdiction",
-        help="Only write/check this jurisdiction (us, be, de, dk, uk).",
+        help="Only write/check this jurisdiction (us, be, ca, de, dk, uk).",
     )
     parser.add_argument(
         "--check",

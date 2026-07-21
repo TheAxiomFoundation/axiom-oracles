@@ -13,6 +13,7 @@ packages = ["axiom_oracles"]
 "grids/us.yaml" = "grids/us.yaml"
 "grids/be.yaml" = "grids/be.yaml"
 "grids/de.yaml" = "grids/de.yaml"
+"grids/ca.yaml" = "grids/ca.yaml"
 "grids/uk.yaml" = "grids/uk.yaml"
 "grids/README.md" = "grids/README.md"
 
