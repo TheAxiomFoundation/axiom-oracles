@@ -1,0 +1,41 @@
+name: de-worker-dual-oracle
+title: Germany workers — EUROMOD vs GETTSIM
+description: >-
+  Directly compares EUROMOD DE_2025 with GETTSIM 1.2.1 at 2025-06-30 over the
+  canonical 13-household German worker grid. The compared household amounts are
+  the four monthly employee social-insurance legs, annual income tax including
+  the solidarity surcharge, and monthly Kindergeld. EUROMOD receives nominal
+  monthly wages under DE_2024_b1_2015_03_e2; GETTSIM receives the exact 61/56
+  mirror so both engines price the same uprated gross. On hosts without both
+  optional engines, the runner re-emits the committed report.
+
+runner:
+  type: gettsim-synthetic-compare
+  parameters:
+    suite: de-worker-dual-oracle
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    concepts:
+      - de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual
+      - de:policies/worker_dual_oracle_baseline#kindergeld_monthly
+    euromod_model_root: $EUROMOD_MODEL_ROOT_DE
+    euromod_country: DE
+    euromod_system: DE_2025
+    euromod_dataset: DE_2024_b1_2015_03_e2
+    euromod_template_dataset: DE_training_data
+    euromod_extra_columns: [drgn1]
+    gettsim_policy_date: "2025-06-30"
+    gettsim_version: "1.2.1"
+    dashboard_filename: euromod-gettsim-de-worker-dual-oracle.json
+
+artifacts:
+  report_basename: euromod-gettsim-de-worker-dual-oracle
+
+dashboard:
+  filename: euromod-gettsim-de-worker-dual-oracle.json
+  suite: de-worker-dual-oracle

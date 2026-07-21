@@ -135,6 +135,21 @@ whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
 `keep_overlay`, and `dashboard_filename` (the committed report the skip path
 re-emits). See [docs/snap-qc-oracle-playbook.md](../docs/snap-qc-oracle-playbook.md).
 
+### `gettsim-synthetic-compare`
+
+The direct Germany dual-oracle lane. It loads a registered synthetic suite in
+process, runs EUROMOD DE_2025 through the existing `EUROMOD_PYTHON` subprocess
+adapter, runs GETTSIM through the host interpreter, and writes the same pairwise
+v2 report with `euromod` on the left and `gettsim` on the right. If either
+optional engine is unavailable, it re-emits the committed dashboard report.
+
+Required `parameters`: `suite`, `period`, `sample_size` (`0` runs the whole
+grid), the EUROMOD country/system/dataset/template configuration, and the
+GETTSIM policy date/version. `euromod_extra_columns` carries model-required
+inputs absent from the template dataset; Germany pins `[drgn1]`. See
+`comparisons/de-worker-dual-oracle.yaml` and
+`docs/de-dual-oracle-playbook.md` for the live invocation and engine contracts.
+
 ## Adding a new runner type
 
 If a comparison needs invocation logic neither runner provides, register a

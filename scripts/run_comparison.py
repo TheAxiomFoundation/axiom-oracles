@@ -784,6 +784,23 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "euromod_system": params.get("euromod_system"),
             "euromod_dataset": params.get("euromod_dataset"),
         }
+    elif runner_type == "gettsim-synthetic-compare":
+        # The Germany lane is a direct pair: record both independent oracle
+        # stacks in the oracle block; there is intentionally no Axiom engine
+        # identity for this baseline report.
+        oracle = {
+            "name": "euromod-gettsim",
+            "euromod_release": _euromod_release_from_model_root(
+                params.get("euromod_model_root")
+            ),
+            "euromod_country": params.get("euromod_country"),
+            "euromod_system": params.get("euromod_system"),
+            "euromod_dataset": params.get("euromod_dataset"),
+            "gettsim_version": params.get("gettsim_version", "1.2.1"),
+            "gettsim_policy_date": params.get(
+                "gettsim_policy_date", "2025-06-30"
+            ),
+        }
     elif runner_type == "snap-qc-compare":
         # The USDA SNAP QC public-use file is the oracle; its identity is the
         # pinned posting for the fiscal year (immutable, sha256-verified by the
@@ -1712,6 +1729,219 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
+def _gettsim_synthetic_skip_reason(
+    params: dict,
+) -> tuple[str | None, Path | None]:
+    """Return the unavailable-runtime reason and resolved DE model root."""
+
+    model_root_raw = params.get("euromod_model_root") or os.environ.get(
+        "EUROMOD_MODEL_ROOT_DE", ""
+    )
+    model_root = _expand_path(model_root_raw) if model_root_raw else None
+    if model_root is None or not model_root.exists():
+        return "EUROMOD model root unavailable", model_root
+    if not os.environ.get("EUROMOD_PYTHON"):
+        return "EUROMOD_PYTHON unset", model_root
+
+    from axiom_oracles.adapters.gettsim import (
+        GettsimNotInstalledError,
+        gettsim_version,
+    )
+
+    try:
+        gettsim_version()
+    except GettsimNotInstalledError as exc:
+        return f"GETTSIM unavailable ({type(exc).__name__}: {exc})", model_root
+    return None, model_root
+
+
+def _reemit_gettsim_synthetic_report(
+    params: dict,
+    output: Path,
+    reason: str,
+) -> None:
+    """Re-emit the committed direct-oracle report on engine-less runners."""
+
+    dashboard_filename = str(params.get("dashboard_filename", ""))
+    committed = DASHBOARD_DATA_DIR / dashboard_filename
+    print(
+        f"Germany dual-oracle engines not runnable here ({reason}); "
+        "re-emitting the committed dashboard report."
+    )
+    if dashboard_filename and committed.exists():
+        output.write_text(committed.read_text())
+        return
+
+    euromod_unavailable = reason.startswith("EUROMOD")
+    unavailable_side = "left" if euromod_unavailable else "right"
+    unavailable_engine = "euromod" if euromod_unavailable else "gettsim"
+    error = {
+        "case_id": None,
+        "side": unavailable_side,
+        "engine": unavailable_engine,
+        "error": f"skipped: {reason}",
+    }
+    output.write_text(
+        json.dumps(
+            {
+                "schema_version": "axiom.comparison_report.v2",
+                "suite": params.get("suite", "de-worker-dual-oracle"),
+                "population": "synthetic",
+                "engines": {"left": "euromod", "right": "gettsim"},
+                "locales": ["DE"],
+                "scope": {"type": "country", "geoid": "DE"},
+                "concepts": [],
+                "case_count": 0,
+                "summary": {
+                    "match_count": 0,
+                    "mismatch_count": 0,
+                    "comparison_count": 0,
+                    "weighted": {
+                        "comparison_weight": 0,
+                        "match_weight": 0,
+                        "mismatch_weight": 0,
+                        "match_rate": 0,
+                    },
+                    "mismatches_by_concept": [],
+                    "mismatches_by_kind": [],
+                    "mismatches_by_scenario": [],
+                    "error_count": 1,
+                    "errors_by_engine": [
+                        {"value": unavailable_engine, "count": 1}
+                    ],
+                },
+                "aggregates": [],
+                "mismatches": [],
+                "errors": [error],
+                "cases": [],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
+    )
+
+
+def _run_gettsim_synthetic_compare(runner: dict, output: Path) -> None:
+    """Direct EUROMOD DE_2025 ↔ GETTSIM synthetic household comparison.
+
+    The host interpreter supplies GETTSIM; EUROMOD continues to execute through
+    the existing x64 ``EUROMOD_PYTHON`` subprocess adapter. Like the established
+    EUROMOD synthetic runner, an engine-less CI host re-emits the committed
+    dashboard report rather than turning optional local runtimes into failures.
+    """
+
+    from axiom_oracles.adapters.euromod import EuromodPlatformRunner
+    from axiom_oracles.adapters.gettsim import GettsimCase, GettsimRunner
+    from axiom_oracles.comparison.comparator import Comparator
+    from axiom_oracles.comparison.mappings import comparable_mappings
+    from axiom_oracles.comparison.report import build_comparison_report
+    from axiom_oracles.core.results import EngineResult
+    from axiom_oracles.suites import load_suite
+    from axiom_oracles.suites.de_worker import (
+        DE_GETTSIM_TARGETS,
+        reduce_gettsim_household_values,
+    )
+
+    params = runner["parameters"]
+    skip_reason, model_root = _gettsim_synthetic_skip_reason(params)
+    if skip_reason is not None or model_root is None:
+        _reemit_gettsim_synthetic_report(
+            params,
+            output,
+            skip_reason or "EUROMOD model root unavailable",
+        )
+        return
+
+    cases = load_suite(str(params["suite"]))
+    sample_size = int(params.get("sample_size", 0) or 0)
+    if sample_size > 0:
+        cases = cases[:sample_size]
+    locales = {case.locale for case in cases if case.locale}
+    scope = cases[0].scope if cases else None
+    selected_concepts = set(params.get("concepts") or ()) or {
+        output_id for case in cases for output_id in case.outputs
+    }
+    mappings = comparable_mappings(
+        "euromod",
+        "gettsim",
+        locales=locales,
+        scope=scope,
+        concepts=selected_concepts,
+    )
+    if not mappings:
+        raise RuntimeError("Germany dual-oracle suite selected no comparable mappings")
+
+    euromod_variables = list(
+        dict.fromkeys(
+            target
+            for mapping in mappings
+            for target in [mapping.target_for_engine("euromod")]
+            if isinstance(target, str)
+        )
+    )
+    euromod = EuromodPlatformRunner(
+        model_root=model_root,
+        country=str(params.get("euromod_country", "DE")),
+        system=str(params.get("euromod_system", "DE_2025")),
+        dataset=str(params.get("euromod_dataset", "DE_2024_b1_2015_03_e2")),
+        template_dataset=str(
+            params.get("euromod_template_dataset", "DE_training_data")
+        ),
+        extra_columns=tuple(params.get("euromod_extra_columns") or ("drgn1",)),
+        python_executable=os.environ["EUROMOD_PYTHON"],
+    )
+    euromod_results = euromod.run_cases(cases, variables=euromod_variables)
+
+    gettsim = GettsimRunner(
+        policy_date_str=str(params.get("gettsim_policy_date", "2025-06-30")),
+    )
+    gettsim_results: list[EngineResult] = []
+    for case in cases:
+        try:
+            gettsim_case = GettsimCase.from_mapping(case.metadata["gettsim_case"])
+            raw = gettsim.run_case(gettsim_case, DE_GETTSIM_TARGETS)
+            gettsim_results.append(
+                EngineResult(
+                    engine="gettsim",
+                    household_id=case.case_id,
+                    values=reduce_gettsim_household_values(raw.values),
+                    raw=raw,
+                )
+            )
+        except Exception as exc:
+            gettsim_results.append(
+                EngineResult(
+                    engine="gettsim",
+                    household_id=case.case_id,
+                    values={},
+                    errors=(f"{type(exc).__name__}: {exc}",),
+                )
+            )
+
+    comparisons = Comparator(mappings).compare(euromod_results, gettsim_results)
+    report = build_comparison_report(
+        suite_name=str(params["suite"]),
+        population="synthetic",
+        locales=locales,
+        scope=scope,
+        cases=cases,
+        mappings=mappings,
+        comparisons=comparisons,
+    )
+    report["engine_metadata"] = {
+        "euromod": {
+            "country": euromod.country,
+            "system": euromod.system,
+            "dataset": euromod.dataset,
+            "template_dataset": euromod.template_dataset,
+            "extra_columns": list(euromod.extra_columns),
+        },
+        "gettsim": gettsim.run_metadata(),
+    }
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+
+
 def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     """Composed state income-tax liability grid: pipeline vs PolicyEngine + TAXSIM.
 
@@ -2274,6 +2504,7 @@ RUNNERS = {
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
+    "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
     "snap-qc-compare": _run_snap_qc_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
     "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,

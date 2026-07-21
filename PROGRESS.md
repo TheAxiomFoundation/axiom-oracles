@@ -9,6 +9,9 @@
   pairwise v2 report, suite registry, canonical grid, and runner registry.
 - The engine-neutral DE concepts, exact 13-case projections, canonical grid,
   and monthly/annual output contracts are implemented and pure-tested.
+- The `gettsim-synthetic-compare` runner, DE comparison configuration, and
+  three filed-finding dispositions are implemented and focused-tested. The
+  next coherent step is the real two-engine run and committed report.
 
 ## Done
 
@@ -43,16 +46,31 @@
 - Pure verification: Ruff passed on touched Python files; 552 focused tests
   passed (6 live tests deselected). The only output was pre-existing pytest temp
   cleanup warnings on macOS.
+- Registered `gettsim-synthetic-compare` as a direct in-process cross-oracle
+  runner. It preflights both live engines, executes EUROMOD through the existing
+  delegated interpreter and GETTSIM in-process, applies the configured household
+  reductions, emits v2.1 provenance/engine metadata, honors `sample_size`, and
+  re-emits committed evidence when an engine is unavailable.
+- Added `comparisons/de-worker-dual-oracle.yaml` and the three supplied finding
+  dispositions. Their selectors cover the expected 9 EUROMOD income-tax rows,
+  2 EUROMOD child-benefit rows, and 1 GETTSIM Midijob care-insurance row.
+- Kept direct-oracle comparisons out of rulespec dependency inference: the DE
+  affected-map entry intentionally has `repos: []`, because neither side is an
+  Axiom rulespec implementation.
+- Tightened unavailable-engine behavior so an unsupported or broken GETTSIM
+  runtime fails loudly rather than being mistaken for an optional-engine skip;
+  empty reports now attribute each unavailable side to the correct engine.
+- Focused runner verification: Ruff passed; 102 tests passed. The generated
+  affected map and all disposition files validate, with the expected note that
+  the DE suite has no committed dashboard report until the next step.
 
 ## Next
 
-1. Implement the registered dual runner, comparison config, live
-   skip/re-emission behavior, and provenance.
-2. Run both live engines and commit the generated dashboard report and the
-   three expected dispositions.
-3. Add live-gated anchors for each engine, update the DE playbooks, and
+1. Add Germany dashboard routing, run both live engines, validate the exact
+   66/78 raw matches and 12 dispositioned rows, and commit the generated report.
+2. Add live-gated anchors for each engine, update the DE playbooks, and
    document the realized lane.
-4. Run Ruff plus the full and GETTSIM-specific test commands.
-5. Finalize this ledger and write the handoff report to `FINAL_REPORT.md`
+3. Run Ruff plus the full and GETTSIM-specific test commands.
+4. Finalize this ledger and write the handoff report to `FINAL_REPORT.md`
    (no separate output path was provided), without pushing or opening a pull
    request.
