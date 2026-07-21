@@ -336,6 +336,7 @@
     },
     {
       "suite": "de-worker-dual-oracle",
+      "name": "de-worker-dual-oracle",
       "report": "euromod-gettsim-de-worker-dual-oracle.json",
       "repos": [],
       "source": "comparisons/de-worker-dual-oracle.yaml"
