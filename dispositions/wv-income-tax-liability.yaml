@@ -1,0 +1,124 @@
+schema: axiom_oracles.dispositions.v1
+suite: wv-income-tax-liability
+updated: "2026-07-16"
+entries:
+  - id: wv-taxsim-2024-single-30000
+    concept: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
+    case_id: wv-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the 2026 section 11-21-4J schedule;
+        pinned TAXSIM applies the official 2024 Schedule I rates to the same
+        $28,000 completed-return taxable base after the $2,000 exemption.
+      upstream_url: https://tax.wv.gov/Documents/PIT/2024/it140.PersonalIncomeTaxFormsAndInstructions.2024.pdf
+      arithmetic:
+        - expression: "708.50 + 0.0354 * (28000 - 25000)"
+          equals: 814.7
+          tolerance: 0.02
+        - expression: "727.3 - 814.7"
+          equals: -87.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 727.3, right: 814.7}
+  - id: wv-taxsim-2024-single-60000
+    concept: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
+    case_id: wv-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the 2026 section 11-21-4J schedule;
+        pinned TAXSIM applies the official 2024 Schedule I rates to the same
+        $58,000 completed-return taxable base after the $2,000 exemption.
+      upstream_url: https://tax.wv.gov/Documents/PIT/2024/it140.PersonalIncomeTaxFormsAndInstructions.2024.pdf
+      arithmetic:
+        - expression: "1239.50 + 0.0472 * (58000 - 40000)"
+          equals: 2089.1
+          tolerance: 0.02
+        - expression: "1866.1 - 2089.1"
+          equals: -223
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 1866.1, right: 2089.1}
+  - id: wv-taxsim-2024-single-150000
+    concept: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
+    case_id: wv-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the 2026 section 11-21-4J schedule;
+        pinned TAXSIM applies the official 2024 Schedule I rates to the same
+        $148,000 completed-return taxable base after the $2,000 exemption.
+      upstream_url: https://tax.wv.gov/Documents/PIT/2024/it140.PersonalIncomeTaxFormsAndInstructions.2024.pdf
+      arithmetic:
+        - expression: "2183.50 + 0.0512 * (148000 - 60000)"
+          equals: 6689.1
+          tolerance: 0.02
+        - expression: "5980.9 - 6689.1"
+          equals: -708.2
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 5980.9, right: 6689.1}
+  - id: wv-taxsim-2024-married-60000
+    concept: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
+    case_id: wv-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the 2026 section 11-21-4J schedule;
+        pinned TAXSIM applies the official 2024 Schedule I rates to the same
+        $56,000 completed-return taxable base after two $2,000 exemptions.
+      upstream_url: https://tax.wv.gov/Documents/PIT/2024/it140.PersonalIncomeTaxFormsAndInstructions.2024.pdf
+      arithmetic:
+        - expression: "1239.50 + 0.0472 * (56000 - 40000)"
+          equals: 1994.7
+          tolerance: 0.02
+        - expression: "1781.7 - 1994.7"
+          equals: -213
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 1781.7, right: 1994.7}
+  - id: wv-taxsim-2024-married-120000
+    concept: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
+    case_id: wv-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the 2026 section 11-21-4J schedule;
+        pinned TAXSIM applies the official 2024 Schedule I rates to the same
+        $116,000 completed-return taxable base after two $2,000 exemptions.
+      upstream_url: https://tax.wv.gov/Documents/PIT/2024/it140.PersonalIncomeTaxFormsAndInstructions.2024.pdf
+      arithmetic:
+        - expression: "2183.50 + 0.0512 * (116000 - 60000)"
+          equals: 5050.7
+          tolerance: 0.02
+        - expression: "4515.3 - 5050.7"
+          equals: -535.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 4515.3, right: 5050.7}
+  - id: wv-taxsim-2024-married-300000
+    concept: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
+    case_id: wv-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the 2026 section 11-21-4J schedule;
+        pinned TAXSIM applies the official 2024 Schedule I rates to the same
+        $296,000 completed-return taxable base after two $2,000 exemptions.
+      upstream_url: https://tax.wv.gov/Documents/PIT/2024/it140.PersonalIncomeTaxFormsAndInstructions.2024.pdf
+      arithmetic:
+        - expression: "2183.50 + 0.0512 * (296000 - 60000)"
+          equals: 14266.7
+          tolerance: 0.02
+        - expression: "12759.3 - 14266.7"
+          equals: -1507.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 12759.3, right: 14266.7}

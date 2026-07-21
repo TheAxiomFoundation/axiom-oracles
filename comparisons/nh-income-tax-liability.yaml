@@ -1,0 +1,26 @@
+name: nh-income-tax-liability
+title: New Hampshire Chapter 77 repeal result — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the legal consequence of New Hampshire RSA Chapter 77's repeal in
+  Axiom RuleSpec against PolicyEngine
+  (nh_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at its
+  latest supported law year, 2024, on the standard six-case wage grid. The
+  2026 zero is no imposed Chapter 77 tax after repeal, not an active zero-rate
+  schedule; TAXSIM's 2024 zero on these cases reflects their lack of taxable
+  interest and dividends.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: NH
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-nh-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-nh-income-tax-liability.json
+  suite: nh-income-tax-liability

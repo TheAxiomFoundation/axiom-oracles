@@ -1,0 +1,118 @@
+schema: axiom_oracles.dispositions.v1
+suite: wa-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: wa-taxsim-2024-single-300000
+    concept: us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability
+    case_id: wa-single-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The pinned TAXSIM 2024 result uses the $270,000 standard deduction and
+        predates the 2.90-percent additional tax effective in 2025, while Axiom
+        and PolicyEngine use the projected $284,000 deduction and the 2026 law.
+        The exact difference is therefore a law-vintage residual.
+      arithmetic:
+        - expression: "1120 - 2100"
+          equals: -980
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1120
+      right: 2100
+  - id: wa-taxsim-2024-single-600000
+    concept: us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability
+    case_id: wa-single-600000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The pinned TAXSIM 2024 result uses the $270,000 standard deduction and
+        predates the 2.90-percent additional tax effective in 2025, while Axiom
+        and PolicyEngine use the projected $284,000 deduction and the 2026 law.
+        The exact difference is therefore a law-vintage residual.
+      arithmetic:
+        - expression: "22120 - 23100"
+          equals: -980
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 22120
+      right: 23100
+  - id: wa-taxsim-2024-single-1500000
+    concept: us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability
+    case_id: wa-single-1500000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The pinned TAXSIM 2024 result uses the $270,000 standard deduction and
+        predates the 2.90-percent additional tax effective in 2025, while Axiom
+        and PolicyEngine use the projected $284,000 deduction and the 2026 law.
+        The exact difference is therefore a law-vintage residual.
+      arithmetic:
+        - expression: "91384 - 86100"
+          equals: 5284
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 91384
+      right: 86100
+  - id: wa-taxsim-2024-married-600000
+    concept: us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability
+    case_id: wa-married-600000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The pinned TAXSIM 2024 result uses the $270,000 standard deduction and
+        predates the 2.90-percent additional tax effective in 2025, while Axiom
+        and PolicyEngine use the projected $284,000 deduction and the 2026 law.
+        The exact difference is therefore a law-vintage residual.
+      arithmetic:
+        - expression: "22120 - 23100"
+          equals: -980
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 22120
+      right: 23100
+  - id: wa-taxsim-2024-married-1200000
+    concept: us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability
+    case_id: wa-married-1200000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The pinned TAXSIM 2024 result uses the $270,000 standard deduction and
+        predates the 2.90-percent additional tax effective in 2025, while Axiom
+        and PolicyEngine use the projected $284,000 deduction and the 2026 law.
+        The exact difference is therefore a law-vintage residual.
+      arithmetic:
+        - expression: "64120 - 65100"
+          equals: -980
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 64120
+      right: 65100
+  - id: wa-taxsim-2024-married-3000000
+    concept: us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability
+    case_id: wa-married-3000000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The pinned TAXSIM 2024 result uses the $270,000 standard deduction and
+        predates the 2.90-percent additional tax effective in 2025, while Axiom
+        and PolicyEngine use the projected $284,000 deduction and the 2026 law.
+        The exact difference is therefore a law-vintage residual.
+      arithmetic:
+        - expression: "239884 - 191100"
+          equals: 48784
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 239884
+      right: 191100

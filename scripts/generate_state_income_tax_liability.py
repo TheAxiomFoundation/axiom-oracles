@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """Generate the composed state income-tax liability comparison reports.
 
-For each of California, New York, Illinois, and Massachusetts this script runs
-the same modest case grid (single and married filers at incomes that cross the
-state's brackets) through three independent computations and records a v2
-comparison report plus the per-case residuals:
+For each registered state liability suite this script runs a modest single- and
+married-filer grid through three independent computations and records a v2
+comparison report plus the per-case residuals. Most states use wage-income cases
+that cross their brackets; Washington uses a dedicated long-term-capital-gains
+grid for its RCW 82.87 tax.
 
 * **axiom** — the composed liability pipeline in rulespec-us
   (``us-XX/policies/income_tax/pilot_liability_pipeline``), evaluated through
@@ -12,8 +13,8 @@ comparison report plus the per-case residuals:
   committed ``.test.yaml`` fixtures, which ``axiom-encode test`` verifies equal
   the engine output to full decimal precision, so they are the engine's values
   rather than an independent re-implementation.
-* **policyengine** — PolicyEngine ``ca_income_tax`` / ``ny_income_tax`` /
-  ``il_income_tax`` / ``ma_income_tax`` computed live at the 2026 tax year.
+* **policyengine** — the configured per-state PolicyEngine liability target in
+  ``_PE_VAR``, computed live at the 2026 tax year.
 * **taxsim** — the pinned TAXSIM binary's ``siitax``. The pinned binary is a
   1960-2024 federal/state calculator (it abandons law year 2026), so the TAXSIM
   leg is run at 2024, its latest available law year; the 2024-to-2026 bracket
@@ -30,12 +31,17 @@ policyengine-taxsim installed):
 
 from __future__ import annotations
 
-import json
 import sys
 import warnings
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
+
+from axiom_oracles.comparison.dispositions import (
+    apply_dispositions_from_dir,
+    report_json_text,
+)
+from axiom_oracles.provenance import build_provenance, rulespec_provenance
 
 warnings.filterwarnings("ignore")
 
@@ -80,6 +86,33 @@ _TAXSIM_STATE = {
     "GA": 11,
     "MI": 23,
     "NC": 34,
+    # Second all-state liability wave. Each pipeline landed together with an
+    # engine-verified six-case fixture in the state-income-tax campaign.
+    "DC": 9,
+    "HI": 12,
+    "IA": 16,
+    "IN": 15,
+    "LA": 19,
+    "MT": 27,
+    "NM": 32,
+    "OK": 37,
+    "OR": 38,
+    "RI": 40,
+    "NJ": 31,
+    "SC": 41,
+    "KS": 17,
+    "ND": 35,
+    "PA": 39,
+    "MO": 26,
+    "AR": 4,
+    "MS": 25,
+    "NH": 30,
+    "WV": 49,
+    "VT": 46,
+    "WI": 50,
+    # Washington's individual-income-tax surface is its RCW 82.87 capital-gains
+    # excise tax, so it uses a capital-gains-specific grid below.
+    "WA": 48,
     # Colorado (TAXSIM SOI code 6). Its rulespec-us composed pilot pipeline
     # (rulespec-us#942) applies the flat 39-22-104(1.7)(c) tax with the encoded
     # rate imported hash-pinned from the statute module.
@@ -153,6 +186,40 @@ _PE_VAR = {
     # analog (AGI less the 105-153.5(a) standard deduction); the grid activates
     # no child deduction or 105-153.10 credits.
     "NC": "nc_income_tax_before_credits",
+    # Second all-state liability wave. These targets are the closest statutory
+    # analogs of the composed core schedules and exclude only credits or other
+    # post-schedule adjustments that the narrow pilots intentionally omit.
+    "DC": "dc_income_tax_before_credits",
+    "HI": "hi_income_tax_before_non_refundable_credits",
+    "IA": "ia_income_tax_before_credits",
+    "IN": "in_income_tax_before_refundable_credits",
+    "LA": "la_income_tax_before_non_refundable_credits",
+    "MT": "mt_income_tax",
+    "NM": "nm_income_tax_before_non_refundable_credits",
+    "OK": "ok_income_tax_before_credits",
+    "OR": "or_income_tax_before_credits",
+    "RI": "ri_income_tax_before_non_refundable_credits",
+    "NJ": "nj_main_income_tax",
+    "SC": "sc_income_tax_before_non_refundable_credits",
+    "KS": "ks_income_tax_before_credits",
+    "ND": "nd_income_tax_before_credits",
+    "PA": "pa_income_tax_before_forgiveness",
+    "MO": "mo_income_tax_before_credits",
+    "AR": "ar_income_tax_before_non_refundable_credits_unit",
+    "MS": "ms_income_tax_before_credits_unit",
+    # New Hampshire's zero is the legal consequence of RSA Chapter 77's
+    # repeal, not an operative zero-rate schedule. PolicyEngine retains legacy
+    # Chapter 77 base machinery but gates the tax out at 2026.
+    "NH": "nh_income_tax_before_refundable_credits",
+    # West Virginia's before-non-refundable-credits variable is the exact
+    # section 11-21-4J schedule-tax analog for 2026.
+    "WV": "wv_income_tax_before_non_refundable_credits",
+    # Vermont's before-non-refundable-credits variable is the section 5822
+    # schedule-or-three-percent-minimum analog; the narrow pipeline excludes
+    # the later charitable and other nonrefundable credits.
+    "VT": "vt_income_tax_before_non_refundable_credits",
+    "WI": "wi_income_tax_before_credits",
+    "WA": "wa_income_tax_before_refundable_credits",
     # Colorado's before-non-refundable variable is the exact 39-22-104(1.7)(c)
     # flat-tax analog on this grid, and it matches the composed pipeline to the
     # cent at the pinned policyengine-us on all six cases. The 39-22-627
@@ -182,9 +249,9 @@ class Case:
     wages: float
 
 
-# Modest grid: single and married filers at incomes crossing the brackets.
-# CA/NY are progressive, IL is flat, MA is flat plus a surtax that these
-# incomes stay below.
+# Modest grid: single and married filers at incomes crossing common liability
+# thresholds. Washington substitutes a long-term-capital-gains grid because its
+# individual-tax surface is the RCW 82.87 capital-gains excise tax.
 def _grid() -> list[Case]:
     cases: list[Case] = []
     plan = {
@@ -192,7 +259,13 @@ def _grid() -> list[Case]:
         "married": [60000, 120000, 300000],
     }
     for state in _STATES:
-        for filing, incomes in plan.items():
+        state_plan = plan
+        if state == "WA":
+            state_plan = {
+                "single": [300000, 600000, 1500000],
+                "married": [600000, 1200000, 3000000],
+            }
+        for filing, incomes in state_plan.items():
             for inc in incomes:
                 cases.append(
                     Case(
@@ -231,8 +304,18 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
             name = case["name"]
             # Map the fixture case to (state, filing, income) by its supplied AGI.
             inputs = case["input"]
-            agi_key = next(k for k in inputs if k.endswith("adjusted_gross_income"))
-            agi = int(round(float(inputs[agi_key])))
+            agi_key = next(
+                (k for k in inputs if k.endswith("adjusted_gross_income")),
+                None,
+            )
+            # Rate-only pilots transparently accept completed-return taxable
+            # income. Their fixture name still pins the wage/capital-gain grid
+            # case used by the live oracle leg (for example single_30000).
+            agi = (
+                int(round(float(inputs[agi_key])))
+                if agi_key is not None
+                else int(name.rsplit("_", 1)[-1])
+            )
             filing = (
                 "married"
                 if name.startswith("joint")
@@ -250,7 +333,12 @@ def _policyengine_liability(case: Case) -> float:
     from policyengine_us import Simulation
 
     year = VALIDATION_YEAR
-    people = {"head": {"age": {year: 40}, "employment_income": {year: case.wages}}}
+    income_variable = (
+        "long_term_capital_gains" if case.state == "WA" else "employment_income"
+    )
+    people = {
+        "head": {"age": {year: 40}, income_variable: {year: case.wages}}
+    }
     members = ["head"]
     if case.filing == "married":
         people["spouse"] = {"age": {year: 40}, "employment_income": {year: 0}}
@@ -282,8 +370,9 @@ def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
                 "page": 40,
                 "sage": 40 if mstat == 2 else 0,
                 "depx": 0,
-                "pwages": case.wages,
+                "pwages": 0 if case.state == "WA" else case.wages,
                 "swages": 0,
+                "ltcg": case.wages if case.state == "WA" else 0,
                 "idtl": 2,
             }
         )
@@ -358,6 +447,29 @@ _TOL = {
     "GA": (1.0, 0.0),
     "MI": (1.0, 0.0),
     "NC": (1.0, 0.0),
+    "DC": (1.0, 0.0),
+    "HI": (1.0, 0.0),
+    "IA": (1.0, 0.0),
+    "IN": (1.0, 0.0),
+    "LA": (1.0, 0.0),
+    "MT": (1.0, 0.0),
+    "NM": (1.0, 0.0),
+    "OK": (1.0, 0.0),
+    "OR": (1.0, 0.0),
+    "RI": (1.0, 0.0),
+    "NJ": (1.0, 0.0),
+    "SC": (1.0, 0.0),
+    "KS": (1.0, 0.0),
+    "ND": (1.0, 0.0),
+    "PA": (1.0, 0.0),
+    "MO": (1.0, 0.0),
+    "AR": (1.0, 0.0),
+    "MS": (1.0, 0.0),
+    "NH": (1.0, 0.0),
+    "WV": (1.0, 0.0),
+    "VT": (1.0, 0.0),
+    "WI": (1.0, 0.0),
+    "WA": (1.0, 0.0),
     # Colorado reproduces PolicyEngine to the cent on all six grid cases; a
     # $1 absolute band catches structural errors without absorbing anything.
     "CO": (1.0, 0.0),
@@ -376,10 +488,9 @@ def _build_report(
     report_cases = []
     # `mismatches` uses the standard v2 schema (concept, case_id, kind, left,
     # right) so scripts/apply_dispositions.py can join the committed dispositions
-    # against these rows and validate that every residual is explained. The
-    # axiom-vs-PolicyEngine comparison matches on every case, so only the
-    # axiom-vs-TAXSIM-2024 residuals become mismatch rows (axiom is `left`,
-    # TAXSIM 2024 is `right`); the indexation-vintage dispositions pin those.
+    # against these rows and validate that every residual is explained. Either
+    # pairwise leg can emit a mismatch row (axiom is `left`); the dispositions
+    # pin every expected PolicyEngine or TAXSIM residual.
     mismatches: list[dict] = []
     pe_matches = 0
     taxsim_matches = 0
@@ -395,12 +506,17 @@ def _build_report(
         ts_ok = _match(ax, ts_v, tol, rel)
         pe_matches += int(pe_ok)
         taxsim_matches += int(ts_ok)
+        income_key = (
+            "long_term_capital_gains"
+            if state == "WA"
+            else "employment_income"
+        )
         report_cases.append(
             {
                 "case_id": case.case_id,
                 "concept": concept,
                 "filing_status": case.filing,
-                "employment_income": case.wages,
+                income_key: case.wages,
                 "axiom": ax,
                 "policyengine": pe_v,
                 "taxsim_2024": ts_v,
@@ -428,9 +544,26 @@ def _build_report(
                     "difference": ax - ts_v,
                 }
             )
-    comparison_count = n
+        if not pe_ok:
+            mismatches.append(
+                {
+                    "case_id": case.case_id,
+                    "concept": concept,
+                    "kind": "policyengine_amount_difference",
+                    "engines": ["axiom", "policyengine"],
+                    "left_engine": "axiom",
+                    "right_engine": "policyengine",
+                    "left": ax,
+                    "right": pe_v,
+                    "difference": ax - pe_v,
+                }
+            )
+    # Each case always has two independent pairwise comparisons. Keep the
+    # denominator stable even when one engine moves from mismatch to match, so
+    # raw-match metrics remain comparable and monotonic across reruns.
+    comparison_count = n * 2
     mismatch_count = len(mismatches)
-    match_count = comparison_count - mismatch_count
+    match_count = pe_matches + taxsim_matches
     return {
         "schema_version": "axiom.comparison_report.v2",
         "suite": f"{state.lower()}-income-tax-liability",
@@ -461,12 +594,35 @@ def _build_report(
             "generator": "scripts/generate_state_income_tax_liability.py",
             "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
             "note": (
-                "axiom-vs-PolicyEngine matches every case at the 2026 validation "
-                "year; the mismatches array carries the axiom-vs-TAXSIM-2024 "
-                "residuals, whose 2024-to-2026 indexation vintage is dispositioned."
+                "The mismatches array carries TAXSIM-2024 law-vintage residuals"
+                " and any source-grounded Axiom-versus-PolicyEngine residuals;"
+                " each must be dispositioned without widening tolerance."
             ),
         },
     }
+
+
+def _finalize_report(
+    report: dict,
+    *,
+    generated_at: str,
+    rulespecs: list[dict],
+) -> dict:
+    """Attach dispositions and v2.1 provenance before publishing a report."""
+    finalized = apply_dispositions_from_dir(
+        report,
+        REPO_ROOT / "dispositions",
+        repo_root=REPO_ROOT,
+    )
+    finalized["provenance"] = build_provenance(
+        generated_by=(
+            "scripts/generate_state_income_tax_liability.py::"
+            f"{report['suite']}"
+        ),
+        rulespecs=rulespecs,
+        generated_at=generated_at,
+    )
+    return finalized
 
 
 def main() -> int:
@@ -477,15 +633,18 @@ def main() -> int:
     REPORTS.mkdir(exist_ok=True)
     DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    rulespecs = rulespec_provenance([RULESPEC_US])
     for state in _STATES:
-        report = _build_report(state, cases, axiom, pe, taxsim)
+        report = _finalize_report(
+            _build_report(state, cases, axiom, pe, taxsim),
+            generated_at=generated_at,
+            rulespecs=rulespecs,
+        )
         basename = f"axiom-policyengine-taxsim-{state.lower()}-income-tax-liability"
-        (REPORTS / f"{basename}-{stamp}.json").write_text(
-            json.dumps(report, indent=2) + "\n"
-        )
-        (DASH_PUBLIC / f"{basename}.json").write_text(
-            json.dumps(report, indent=2) + "\n"
-        )
+        serialized = report_json_text(report)
+        (REPORTS / f"{basename}-{stamp}.json").write_text(serialized)
+        (DASH_PUBLIC / f"{basename}.json").write_text(serialized)
         s = report["summary"]
         print(
             f"{state}: PE match {s['axiom_vs_policyengine_match_rate']}% "

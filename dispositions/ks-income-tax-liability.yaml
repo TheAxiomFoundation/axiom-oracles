@@ -1,0 +1,106 @@
+schema: axiom_oracles.dispositions.v1
+suite: ks-income-tax-liability
+updated: "2026-07-16"
+entries:
+  - id: ks-taxsim-2024-single-30000
+    concept: us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability
+    case_id: ks-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the current Kansas 2026 statutory schedule
+        and deductions, while the pinned TAXSIM leg applies 2024 law. The exact
+        residual is the law-vintage and indexed-base difference.
+      upstream_url: https://www.ksrevenue.gov/pdf/k-40es26.pdf
+      arithmetic:
+        - expression: "896.22 - 895.18"
+          equals: 1.04
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 896.22, right: 895.18}
+  - id: ks-taxsim-2024-single-60000
+    concept: us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability
+    case_id: ks-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the current Kansas 2026 statutory schedule
+        and deductions, while the pinned TAXSIM leg applies 2024 law. The exact
+        residual is the law-vintage and indexed-base difference.
+      upstream_url: https://www.ksrevenue.gov/pdf/k-40es26.pdf
+      arithmetic:
+        - expression: "2548.313 - 2547.2"
+          equals: 1.113
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 2548.313, right: 2547.2}
+  - id: ks-taxsim-2024-single-150000
+    concept: us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability
+    case_id: ks-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the current Kansas 2026 statutory schedule
+        and deductions, while the pinned TAXSIM leg applies 2024 law. The exact
+        residual is the law-vintage and indexed-base difference.
+      upstream_url: https://www.ksrevenue.gov/pdf/k-40es26.pdf
+      arithmetic:
+        - expression: "7570.313 - 7569.2"
+          equals: 1.113
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 7570.313, right: 7569.2}
+  - id: ks-taxsim-2024-married-60000
+    concept: us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability
+    case_id: ks-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the current Kansas 2026 statutory schedule
+        and deductions, while the pinned TAXSIM leg applies 2024 law. The exact
+        residual is the law-vintage and indexed-base difference.
+      upstream_url: https://www.ksrevenue.gov/pdf/k-40es26.pdf
+      arithmetic:
+        - expression: "1738.88 - 1736.8"
+          equals: 2.08
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 1738.88, right: 1736.8}
+  - id: ks-taxsim-2024-married-120000
+    concept: us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability
+    case_id: ks-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the current Kansas 2026 statutory schedule
+        and deductions, while the pinned TAXSIM leg applies 2024 law. The exact
+        residual is the law-vintage and indexed-base difference.
+      upstream_url: https://www.ksrevenue.gov/pdf/k-40es26.pdf
+      arithmetic:
+        - expression: "5039.152 - 5036.92"
+          equals: 2.232
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 5039.152, right: 5036.92}
+  - id: ks-taxsim-2024-married-300000
+    concept: us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability
+    case_id: ks-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine apply the current Kansas 2026 statutory schedule
+        and deductions, while the pinned TAXSIM leg applies 2024 law. The exact
+        residual is the law-vintage and indexed-base difference.
+      upstream_url: https://www.ksrevenue.gov/pdf/k-40es26.pdf
+      arithmetic:
+        - expression: "15083.152 - 15080.92"
+          equals: 2.232
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 15083.152, right: 15080.92}

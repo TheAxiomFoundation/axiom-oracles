@@ -1,0 +1,23 @@
+name: ks-income-tax-liability
+title: Kansas income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Kansas ordinary resident wage-earner income-tax
+  pipeline in Axiom RuleSpec against PolicyEngine (ks_income_tax_before_credits)
+  at 2026 and TAXSIM (siitax) at its latest supported law year, 2024, on the
+  standard six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: KS
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ks-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ks-income-tax-liability.json
+  suite: ks-income-tax-liability

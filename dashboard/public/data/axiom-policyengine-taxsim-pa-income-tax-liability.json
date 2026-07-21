@@ -1,0 +1,160 @@
+{
+  "case_count": 6,
+  "concept": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-pa:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "pa_income_tax_before_forgiveness",
+    "taxsim": "siitax"
+  },
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "generated_at": "2026-07-21T17:24:34Z",
+    "generated_by": "scripts/generate_state_income_tax_liability.py::pa-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "0ddfa1215cb5e0298b5c849c6738b2dfe5c77399"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "pa-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_2024_match_rate": 100.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 12,
+    "mismatch_count": 0,
+    "policyengine_matches": 6,
+    "taxsim_2024_matches": 6
+  },
+  "taxsim_law_year": 2024,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026,
+  "cases": [
+    {
+      "axiom": 921.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "pa-single-30000",
+      "concept": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 921.0,
+      "taxsim_2024": 921.0
+    },
+    {
+      "axiom": 1842.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "pa-single-60000",
+      "concept": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1842.0,
+      "taxsim_2024": 1842.0
+    },
+    {
+      "axiom": 4605.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "pa-single-150000",
+      "concept": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 4605.0,
+      "taxsim_2024": 4605.0
+    },
+    {
+      "axiom": 1842.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "pa-married-60000",
+      "concept": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1842.0,
+      "taxsim_2024": 1842.0
+    },
+    {
+      "axiom": 3684.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "pa-married-120000",
+      "concept": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 3684.0,
+      "taxsim_2024": 3684.0
+    },
+    {
+      "axiom": 9210.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "pa-married-300000",
+      "concept": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 9210.0,
+      "taxsim_2024": 9210.0
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: mt-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: mt-taxsim-2024-single-30000
+    concept: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+    case_id: mt-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Montana's temporary 2026 ordinary-income schedule and current taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the law-vintage difference.
+      arithmetic:
+        - expression: "653.3 - 723.8"
+          equals: -70.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 653.3
+      right: 723.8
+  - id: mt-taxsim-2024-single-60000
+    concept: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+    case_id: mt-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Montana's temporary 2026 ordinary-income schedule and current taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the law-vintage difference.
+      arithmetic:
+        - expression: "2063.3 - 2432.6"
+          equals: -369.3
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2063.3
+      right: 2432.6
+  - id: mt-taxsim-2024-single-150000
+    concept: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+    case_id: mt-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Montana's temporary 2026 ordinary-income schedule and current taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the law-vintage difference.
+      arithmetic:
+        - expression: "7114.1 - 7742.6"
+          equals: -628.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 7114.1
+      right: 7742.6
+  - id: mt-taxsim-2024-married-60000
+    concept: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+    case_id: mt-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Montana's temporary 2026 ordinary-income schedule and current taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the law-vintage difference.
+      arithmetic:
+        - expression: "1306.6 - 1447.6"
+          equals: -141
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1306.6
+      right: 1447.6
+  - id: mt-taxsim-2024-married-120000
+    concept: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+    case_id: mt-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Montana's temporary 2026 ordinary-income schedule and current taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the law-vintage difference.
+      arithmetic:
+        - expression: "4126.6 - 4865.2"
+          equals: -738.6
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 4126.6
+      right: 4865.2
+  - id: mt-taxsim-2024-married-300000
+    concept: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+    case_id: mt-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Montana's temporary 2026 ordinary-income schedule and current taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the law-vintage difference.
+      arithmetic:
+        - expression: "14228.2 - 15485.2"
+          equals: -1257
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 14228.2
+      right: 15485.2

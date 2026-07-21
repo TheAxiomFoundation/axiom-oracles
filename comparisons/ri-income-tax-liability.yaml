@@ -1,0 +1,22 @@
+name: ri-income-tax-liability
+title: Rhode Island income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Rhode Island resident wage-earner income-tax pipeline in
+  Axiom RuleSpec against PolicyEngine (ri_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
+  (siitax) at its latest supported law year, 2024, on the standard six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: RI
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ri-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ri-income-tax-liability.json
+  suite: ri-income-tax-liability

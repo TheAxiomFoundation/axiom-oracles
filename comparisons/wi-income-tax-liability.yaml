@@ -1,0 +1,22 @@
+name: wi-income-tax-liability
+title: Wisconsin income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Wisconsin resident wage-earner income-tax pipeline in
+  Axiom RuleSpec against PolicyEngine (wi_income_tax_before_credits) at 2026 and
+  TAXSIM (siitax) at 2024 on the standard six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: WI
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-wi-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-wi-income-tax-liability.json
+  suite: wi-income-tax-liability
