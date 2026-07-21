@@ -110,14 +110,11 @@
     "policyengine": "de_income_tax_before_refundable_credits",
     "taxsim": "siitax"
   },
-  "mismatches": [
-
-  ],
+  "mismatches": [],
   "population": "case-grid",
   "provenance": {
-    "engine": {
-    },
-    "generated_at": "2026-07-13T19:59:55Z",
+    "engine": {},
+    "generated_at": "2026-07-21T09:08:44Z",
     "generated_by": "scripts/run_comparison.py::de-income-tax-liability",
     "rulespecs": [
       {

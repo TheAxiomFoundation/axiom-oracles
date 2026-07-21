@@ -217,6 +217,14 @@
       "source": "comparisons/ca-tanf-ecps.yaml"
     },
     {
+      "suite": "co-income-tax-liability",
+      "report": "axiom-policyengine-taxsim-co-income-tax-liability.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/co-income-tax-liability.yaml"
+    },
+    {
       "suite": "co-snap-ecps",
       "report": "axiom-policyengine-co-snap-ecps.json",
       "repos": [

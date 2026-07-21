@@ -1,0 +1,69 @@
+{
+  "case_id": "ctr-wal-wa-cardiff-couple-2kids",
+  "oracle": "entitledto",
+  "provenance": {
+    "capture_status": "pending_capture",
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "scheme_year": "2026-27",
+    "council_name": "Cardiff",
+    "council_gss_code": "W06000015",
+    "council_tax_band": "C",
+    "ctr_scheme": "wales-working-age-national",
+    "capture_date": null,
+    "captured_by": null,
+    "calculator_version": null,
+    "entitledto_council_tax_liability_gbp": null,
+    "notes": "Pending capture. Capturing this research grid requires entitledto's express written consent (see CAPTURE-PROTOCOL.md); the free calculator's terms bar systematic collection. Do not invent or estimate values: an uncaptured fixture stays pending."
+  },
+  "inputs": {
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "calculation_date": "2026-07-13",
+    "scheme_year": "2026-27",
+    "relationship_status": "couple",
+    "country": "Wales",
+    "ctr_scheme": "wales-working-age-national",
+    "local_authority": {
+      "name": "Cardiff",
+      "gss_code": "W06000015",
+      "postcode": "CF10 1EP"
+    },
+    "council_tax": {
+      "band": "C",
+      "annual_liability_gbp": 1500.0
+    },
+    "housing": {
+      "tenure": "social_rent",
+      "monthly_rent_gbp": 500.0,
+      "assessed_for_rent_rebate": true
+    },
+    "adults": [
+      {
+        "role": "claimant",
+        "age": 35,
+        "employment_income_annual_gbp": 22000.0,
+        "state_pension_annual_gbp": 0.0,
+        "private_pension_annual_gbp": 0.0
+      },
+      {
+        "role": "partner",
+        "age": 35,
+        "employment_income_annual_gbp": 0.0,
+        "state_pension_annual_gbp": 0.0,
+        "private_pension_annual_gbp": 0.0
+      }
+    ],
+    "children": [
+      {
+        "age": 5
+      },
+      {
+        "age": 3
+      }
+    ],
+    "capital_gbp": 500.0,
+    "income_basis": "annual GBP, gross (before income tax and National Insurance)"
+  },
+  "outputs": null
+}
