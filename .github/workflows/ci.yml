@@ -32,6 +32,9 @@ jobs:
       - name: Validate per-rule verification KPI data
         run: uv run scripts/check_rule_verification.py
 
+      - name: Validate state-tax Populace projection contract
+        run: uv run scripts/check_state_tax_populace_contract.py
+
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check
 
