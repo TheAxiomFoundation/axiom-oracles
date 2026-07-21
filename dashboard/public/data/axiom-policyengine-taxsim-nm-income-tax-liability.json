@@ -118,7 +118,7 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "generated_at": "2026-07-21T17:14:31Z",
+    "generated_at": "2026-07-21T17:24:34Z",
     "generated_by": "scripts/generate_state_income_tax_liability.py::nm-income-tax-liability",
     "rulespecs": [
       {

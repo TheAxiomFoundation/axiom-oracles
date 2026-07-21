@@ -23,160 +23,6 @@
     }
   ],
   "case_count": 12,
-  "concepts": [
-    {
-      "category": "benefits",
-      "comparison": "amount",
-      "components": [],
-      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
-      "id": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
-      "parent": null,
-      "priority": "high",
-      "relative_tolerance": 0,
-      "tolerance": 1
-    }
-  ],
-  "engines": {
-    "left": "euromod",
-    "right": "axiom"
-  },
-  "errors": [],
-  "locales": [
-    "UK"
-  ],
-  "mismatches": [
-    {
-      "ages": null,
-      "case_id": "uk-pc-single-income0",
-      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
-      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
-      "difference": -238.0,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-transition-zeroes-single-income0"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 238.0,
-      "scenario": "household-pension-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-pc-single-income6000",
-      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
-      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
-      "difference": -122.93150684931508,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-transition-zeroes-single-income6000"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 122.93150684931508,
-      "scenario": "household-pension-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-pc-single-income8000",
-      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
-      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
-      "difference": -84.57534246575347,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-transition-zeroes-single-income8000"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 84.57534246575347,
-      "scenario": "household-pension-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-pc-single-income12000",
-      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
-      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
-      "difference": -7.86301369863017,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-transition-zeroes-single-income12000"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 7.86301369863017,
-      "scenario": "household-pension-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    }
-  ],
-  "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2.1",
-  "scope": null,
-  "suite": "uk-pension-credit",
-  "summary": {
-    "comparison_count": 12,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
-        "explained_residual": 0,
-        "unexplained": 0,
-        "upstream_engine_gap": 4
-      },
-      "dispositions_file": "dispositions/uk-pension-credit.yaml",
-      "expired_entries": [],
-      "explained_rate": 100,
-      "orphaned_entries": [],
-      "raw_match_rate": 66.666667,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 0
-    },
-    "error_count": 0,
-    "errors_by_engine": [],
-    "match_count": 8,
-    "mismatch_count": 4,
-    "mismatches_by_concept": [
-      {
-        "count": 4,
-        "value": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount"
-      }
-    ],
-    "mismatches_by_kind": [
-      {
-        "count": 4,
-        "value": "amount_difference"
-      }
-    ],
-    "mismatches_by_scenario": [
-      {
-        "count": 4,
-        "value": "household-pension-credit"
-      }
-    ],
-    "weighted": {
-      "comparison_weight": 12,
-      "match_rate": 66.666667,
-      "match_weight": 8,
-      "mismatch_weight": 4
-    }
-  },
   "cases": [
     {
       "case_id": "uk-pc-single-income0",
@@ -1430,5 +1276,186 @@
       "right_engine": "axiom",
       "right_errors": []
     }
-  ]
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "id": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income0",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -238.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income0"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 238.0,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income6000",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -122.93150684931508,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income6000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 122.93150684931508,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income8000",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -84.57534246575347,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income8000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 84.57534246575347,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-pc-single-income12000",
+      "concept": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount",
+      "description": "UK Pension Credit household award (hypothetical pensioner benefit unit)",
+      "difference": -7.86301369863017,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-transition-zeroes-single-income12000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 7.86301369863017,
+      "scenario": "household-pension-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-21T17:09:55Z",
+    "generated_by": "scripts/run_comparison.py::uk-pension-credit-ukmod",
+    "oracle": {
+      "euromod_country": "UK",
+      "euromod_dataset": "training_data",
+      "euromod_release": "B2026.03",
+      "euromod_system": "UK_2026",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-pension-credit",
+  "summary": {
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 4
+      },
+      "dispositions_file": "dispositions/uk-pension-credit.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 66.666667,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 8,
+    "mismatch_count": 4,
+    "mismatches_by_concept": [
+      {
+        "count": 4,
+        "value": "uk:policies/pension_credit_composed_award_pipeline#pc_pilot_award_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 4,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 4,
+        "value": "household-pension-credit"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 12,
+      "match_rate": 66.666667,
+      "match_weight": 8,
+      "mismatch_weight": 4
+    }
+  }
 }

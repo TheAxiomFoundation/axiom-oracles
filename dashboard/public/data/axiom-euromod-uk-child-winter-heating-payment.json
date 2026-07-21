@@ -162,10 +162,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-07T23:51:42Z",
+    "generated_at": "2026-07-21T17:10:05Z",
     "generated_by": "scripts/run_comparison.py::uk-child-winter-heating-payment-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -177,10 +177,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "9be8d6fea64806fca7802be4cdc3a66617363ae9"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

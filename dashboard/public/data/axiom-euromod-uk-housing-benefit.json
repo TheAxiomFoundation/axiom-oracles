@@ -705,10 +705,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-07T16:27:55Z",
+    "generated_at": "2026-07-21T17:10:37Z",
     "generated_by": "scripts/run_comparison.py::uk-housing-benefit-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -720,10 +720,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "17fc102363f7a9a32a2751e9f8cf92d5bdc1c79c"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

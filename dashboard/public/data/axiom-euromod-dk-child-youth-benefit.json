@@ -746,8 +746,11 @@
       "population": "synthetic",
       "source": "config"
     },
-    "engine": {},
-    "generated_at": "2026-07-12T18:03:42Z",
+    "engine": {
+      "axiom_rules_engine_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-21T17:08:15Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-euromod",
     "oracle": {
       "euromod_country": "DK",
@@ -759,10 +762,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-dk",
-        "sha": "2fb1f9b520e8d682caf81a1d9ec04360d4b7db37"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
