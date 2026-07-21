@@ -60,6 +60,10 @@ DERIVED_OUTPUTS: dict[str, tuple[str, ...]] = {
 #   - Belgium property-tax outputs are already annual-law amounts in BE_2025:
 #     the model applies annual cadastral-income tests (for example
 #     ``khooo<=745#y``) and the raw ``tprhm_s`` value is the annual levy.
+#   - Germany's employee social-insurance legs and Kindergeld are compared as
+#     monthly amounts, exactly as DE_2025 emits them. ``tin_s`` is intentionally
+#     absent because the DE comparison contract is annual income tax including
+#     Solidaritaetszuschlag.
 #   - The UKMOD Universal Credit award ``bsauc_s`` is a monthly assessment-
 #     period amount whose Axiom counterpart (the composed pilot's
 #     ``uc_pilot_award_amount``) is also monthly, so the comparison is
@@ -69,6 +73,11 @@ NON_ANNUALIZED_OUTPUTS: frozenset[str] = frozenset(
         "khooo_s",
         "tprhm_s",
         "tprhmtr_s",
+        "tsceepi_s",
+        "tsceehl_s",
+        "tsceeci_s",
+        "tsceeui_s",
+        "bch00_s",
         "bsauc_s",
         # UKMOD's UC benefit-cap reduction ``brduc_s`` is a monthly assessment-
         # period amount whose Axiom counterpart (the composed pilot's

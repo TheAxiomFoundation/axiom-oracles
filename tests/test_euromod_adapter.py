@@ -381,6 +381,45 @@ class TestSubprocessContract:
         assert result.values["tprhm_s"] == pytest.approx(1_040.8120416)
         assert result.values["tin_s"] == pytest.approx(1_200.0)
 
+    def test_germany_monthly_outputs_stay_monthly_but_tin_is_annualized(
+        self,
+    ) -> None:
+        monthly_outputs = {
+            "tsceehl_s": 372.5357142857143,
+            "tsceepi_s": 405.2142857142856,
+            "tsceeui_s": 56.64285714285714,
+            "tsceeci_s": 104.57142857142856,
+            "bch00_s": 255.0,
+        }
+        payload = {
+            "columns": [*monthly_outputs, "tin_s"],
+            "missing": [],
+            "idhh": [1],
+            "values": {
+                **{key: [value] for key, value in monthly_outputs.items()},
+                "tin_s": [100.0],
+            },
+        }
+
+        def run(argv, **kwargs):
+            Path(argv[3]).write_text(json.dumps(payload))
+            return subprocess.CompletedProcess(argv, 0, "", "")
+
+        runner = EuromodPlatformRunner(
+            model_root="/nonexistent",
+            country="DE",
+            system="DE_2025",
+            subprocess_run=run,
+        )
+        result = runner.run_cases(
+            [_single_earner("de", 48_000.0)],
+            variables=[*monthly_outputs, "tin_s"],
+        )[0]
+
+        for output, expected in monthly_outputs.items():
+            assert result.values[output] == pytest.approx(expected)
+        assert result.values["tin_s"] == pytest.approx(1_200.0)
+
     def test_worker_error_reaches_every_case(self) -> None:
         def run(argv, **kwargs):
             Path(argv[3]).write_text(json.dumps({"error": "boom"}))

@@ -12,6 +12,7 @@ packages = ["axiom_oracles"]
 [tool.hatch.build.targets.wheel.force-include]
 "grids/us.yaml" = "grids/us.yaml"
 "grids/be.yaml" = "grids/be.yaml"
+"grids/de.yaml" = "grids/de.yaml"
 "grids/uk.yaml" = "grids/uk.yaml"
 "grids/README.md" = "grids/README.md"
 
