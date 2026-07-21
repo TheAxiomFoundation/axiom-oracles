@@ -135,14 +135,20 @@ def repos_for_registry_config(config: dict) -> set[str]:
         if slug:
             repos.add(slug)
 
-    concepts = params.get("concepts") or (
-        [params["concept"]] if params.get("concept") else []
-    )
-    for concept in concepts:
-        prefix = _concept_prefix(str(concept))
-        slug = _repo_from_prefix(prefix) if prefix else None
-        if slug:
-            repos.add(slug)
+    # Direct oracle-to-oracle baselines use durable concept ids to name the
+    # compared amounts, but they do not execute the jurisdiction's RuleSpec.
+    # Treating those ids as dependencies would make the affected-rerun selector
+    # rerun (and merely re-emit) the baseline whenever rulespec-de moves, while
+    # its report correctly carries no rulespec provenance.
+    if runner.get("type") != "gettsim-synthetic-compare":
+        concepts = params.get("concepts") or (
+            [params["concept"]] if params.get("concept") else []
+        )
+        for concept in concepts:
+            prefix = _concept_prefix(str(concept))
+            slug = _repo_from_prefix(prefix) if prefix else None
+            if slug:
+                repos.add(slug)
 
     # The encoder SNAP lane (axiom-encode-snap-ecps-compare) names its state as
     # `jurisdiction: us-ca` and runs the state's axiom-programs SNAP spec over

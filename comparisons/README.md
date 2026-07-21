@@ -135,6 +135,21 @@ whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
 `keep_overlay`, and `dashboard_filename` (the committed report the skip path
 re-emits). See [docs/snap-qc-oracle-playbook.md](../docs/snap-qc-oracle-playbook.md).
 
+### `gettsim-synthetic-compare`
+
+The direct Germany dual-oracle lane. It loads a registered synthetic suite in
+process, runs EUROMOD DE_2025 through the existing `EUROMOD_PYTHON` subprocess
+adapter, runs GETTSIM through the host interpreter, and writes the same pairwise
+v2 report with `euromod` on the left and `gettsim` on the right. If either
+optional engine is unavailable, it re-emits the committed dashboard report.
+
+Required `parameters`: `suite`, `period`, `sample_size` (`0` runs the whole
+grid), the EUROMOD country/system/dataset/template configuration, and the
+GETTSIM policy date/version. `euromod_extra_columns` carries model-required
+inputs absent from the template dataset; Germany pins `[drgn1]`. See
+`comparisons/de-worker-dual-oracle.yaml` and
+`docs/de-dual-oracle-playbook.md` for the live invocation and engine contracts.
+
 ## Adding a new runner type
 
 If a comparison needs invocation logic neither runner provides, register a
@@ -162,9 +177,28 @@ exercise. The **affected-rerun** workflow
 (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
 resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
 selects only the suites whose report ran against an older SHA — those get rerun
-and their refreshed reports committed. The weekly full matrix
-(`comparisons.yml`) stays the backstop. Regenerate the map after adding a
-comparison: `uv run scripts/generate_affected_map.py`.
+and their refreshed reports committed via `scripts/commit_refreshed_report.sh`,
+which regenerates every derived, CI-validated artifact in the same commit
+(the dispositions merge + EUROMOD-BE coverage rollup, freshness, conformance
+scoreboard + detail, the daily history snapshot, and
+the burn-down), self-checks the tree against ci.yml's staleness gates before
+pushing, and rebuilds the commit from scratch on the current tip on every push
+attempt so concurrent matrix siblings can't strand main stale or conflicted.
+The conformance ratchet is never re-pinned from that bot path. The weekly full
+matrix (`comparisons.yml`) stays the backstop. Regenerate the map after adding
+a comparison: `uv run scripts/generate_affected_map.py`.
+
+Regenerating these aggregates with the report is not optional bookkeeping —
+they are *derived* from the committed reports, so a report refresh that skips
+them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
+stale and reds `conformance_scoreboard.py --check` on **every open PR** until
+someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident,
+fixed reactively in #282). Regeneration happens per matrix leg, inside the
+push-retry loop, because each attempt rebuilds on the current tip: an
+aggregate recomputed there is consistent with every report committed so far,
+so every intermediate push is gate-green — there is no post-matrix red window
+and nothing for a separate reconcile pass to repair (#283's post-matrix job,
+briefly on main, is superseded by this; see `tests/test_commit_refreshed_report.py`).
 
 ## Vacuous-verification gate (O3)
 

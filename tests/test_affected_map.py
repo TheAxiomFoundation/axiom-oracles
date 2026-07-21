@@ -86,6 +86,27 @@ def test_concept_prefix_maps_to_repo():
     assert "TheAxiomFoundation/rulespec-us-co" in repos
 
 
+def test_direct_oracle_baseline_has_no_rulespec_dependency():
+    """A EUROMOD↔GETTSIM baseline names DE concepts but runs no RuleSpec."""
+
+    gam = _load("generate_affected_map.py")
+    repos = gam.repos_for_registry_config(
+        {
+            "name": "de-worker-dual-oracle",
+            "runner": {
+                "type": "gettsim-synthetic-compare",
+                "parameters": {
+                    "concepts": [
+                        "de:policies/worker_dual_oracle_baseline#kindergeld_monthly"
+                    ],
+                },
+            },
+        }
+    )
+
+    assert repos == set()
+
+
 def test_snap_encoder_lane_adds_state_and_federal():
     gam = _load("generate_affected_map.py")
     repos = gam.repos_for_registry_config(

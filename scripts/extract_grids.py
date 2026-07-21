@@ -40,7 +40,13 @@ GRID_ROOT = _REPO_ROOT / "grids"
 
 # Map a country locale/scope to a grid jurisdiction filename. Locales are the
 # ``case.locale`` values the suites emit (``BE``, ``UK``, ``US-NY-NYC``, ...).
-_JURISDICTION_BY_COUNTRY = {"BE": "be", "DK": "dk", "UK": "uk", "US": "us"}
+_JURISDICTION_BY_COUNTRY = {
+    "BE": "be",
+    "DE": "de",
+    "DK": "dk",
+    "UK": "uk",
+    "US": "us",
+}
 
 
 def _country_of(cases: list[Case]) -> str:
@@ -143,7 +149,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--jurisdiction",
-        help="Only write/check this jurisdiction (us, be, uk).",
+        help="Only write/check this jurisdiction (us, be, de, dk, uk).",
     )
     parser.add_argument(
         "--check",

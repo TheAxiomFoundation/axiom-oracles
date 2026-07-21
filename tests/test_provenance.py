@@ -211,3 +211,44 @@ def test_build_run_provenance_threads_rulespecs_and_oracle(tmp_path, monkeypatch
     ]
     # dataset falls back to the config population when no identity is present.
     assert block["dataset"]["population"] == "enhanced-cps"
+
+
+def test_direct_de_oracle_provenance_has_both_engines_and_no_rulespecs(
+    tmp_path, monkeypatch
+):
+    run_comparison = _load_run_comparison()
+    model_root = tmp_path / "EUROMOD_RELEASES_J2.0+"
+    model_root.mkdir()
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "de-worker-dual-oracle"}))
+    config = {
+        "name": "de-worker-dual-oracle",
+        "runner": {
+            "type": "gettsim-synthetic-compare",
+            "parameters": {
+                "population": "synthetic",
+                "euromod_model_root": str(model_root),
+                "euromod_country": "DE",
+                "euromod_system": "DE_2025",
+                "euromod_dataset": "DE_2024_b1_2015_03_e2",
+                "gettsim_version": "1.2.1",
+                "gettsim_policy_date": "2025-06-30",
+            },
+        },
+    }
+
+    block = run_comparison._build_run_provenance(
+        config, "gettsim-synthetic-compare", output
+    )
+
+    assert block.get("rulespecs", []) == []
+    assert block.get("engine", {}) == {}
+    assert block["oracle"] == {
+        "name": "euromod-gettsim",
+        "euromod_release": "J2.0+",
+        "euromod_country": "DE",
+        "euromod_system": "DE_2025",
+        "euromod_dataset": "DE_2024_b1_2015_03_e2",
+        "gettsim_version": "1.2.1",
+        "gettsim_policy_date": "2025-06-30",
+    }
