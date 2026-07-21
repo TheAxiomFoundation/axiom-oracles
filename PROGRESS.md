@@ -63,11 +63,14 @@
 - Focused runner verification: Ruff passed; 102 tests passed. The generated
   affected map and all disposition files validate, with the expected note that
   the DE suite has no committed dashboard report until the next step.
+- Added an explicit Germany dashboard route and jurisdiction toggle. The DE
+  suite no longer falls through the two-letter `DE` US-state heuristic, and
+  GETTSIM now has a first-class engine label in report views.
 
 ## Next
 
-1. Add Germany dashboard routing, run both live engines, validate the exact
-   66/78 raw matches and 12 dispositioned rows, and commit the generated report.
+1. Run both live engines, validate the exact 66/78 raw matches and 12
+   dispositioned rows, and commit the generated report.
 2. Add live-gated anchors for each engine, update the DE playbooks, and
    document the realized lane.
 3. Run Ruff plus the full and GETTSIM-specific test commands.

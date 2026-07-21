@@ -60,6 +60,7 @@ export function engineLabel(name) {
     accessnyc: "ACCESS NYC",
     prd: "PRD",
     euromod: "EUROMOD",
+    gettsim: "GETTSIM",
   };
   return labels[name] || name;
 }
