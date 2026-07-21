@@ -80,6 +80,10 @@ _TAXSIM_STATE = {
     "GA": 11,
     "MI": 23,
     "NC": 34,
+    # Colorado (TAXSIM SOI code 6). Its rulespec-us composed pilot pipeline
+    # (rulespec-us#942) applies the flat 39-22-104(1.7)(c) tax with the encoded
+    # rate imported hash-pinned from the statute module.
+    "CO": 6,
 }
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
@@ -149,6 +153,13 @@ _PE_VAR = {
     # analog (AGI less the 105-153.5(a) standard deduction); the grid activates
     # no child deduction or 105-153.10 credits.
     "NC": "nc_income_tax_before_credits",
+    # Colorado's before-non-refundable variable is the exact 39-22-104(1.7)(c)
+    # flat-tax analog on this grid, and it matches the composed pipeline to the
+    # cent at the pinned policyengine-us on all six cases. The 39-22-627
+    # temporary-rate mechanism is inactive at the 2026 validation year. TAXSIM
+    # residuals are 2024-vintage plus a concept difference (siitax nets the 2024
+    # TABOR sales-tax refund); each is decomposed exactly in dispositions.
+    "CO": "co_income_tax_before_non_refundable_credits",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -347,6 +358,9 @@ _TOL = {
     "GA": (1.0, 0.0),
     "MI": (1.0, 0.0),
     "NC": (1.0, 0.0),
+    # Colorado reproduces PolicyEngine to the cent on all six grid cases; a
+    # $1 absolute band catches structural errors without absorbing anything.
+    "CO": (1.0, 0.0),
 }
 
 

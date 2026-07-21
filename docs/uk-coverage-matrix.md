@@ -243,3 +243,45 @@ suite; "PE-blocked" = PolicyEngine-UK must add the variable first.
     IS/JSA/ESA/WTC/CTC final entitlement (only tariff/rates encoded). Fix the
     documented WTC 30-hour element PE bug (£1,015 vs £1,010.22) in passing. →
     IS Regs 1987 / JSA Regs 1996 / ESA Regs 2008 / WTC & CTC Regs 2002.
+
+## Council Tax Reduction — per-council reference (entitledto oracle)
+
+Row 29 records CTR against the two *engine* oracles (PolicyEngine-UK, UKMOD),
+both of which are **national** on the working-age side: PolicyEngine models the
+three national schemes (England pension-age, Scotland, Wales) plus five named
+English councils (Merton, Kingston upon Thames, Newham, Westminster, Oxford);
+UKMOD models the country grain only. For every *other* English billing
+authority's working-age scheme neither reproduces the local rules — PolicyEngine
+falls back to the survey-reported benefit (`council_tax_benefit_reported`, i.e.
+`0` on a constructed household). There are ~300 English billing authorities, so
+this is a large blind spot the engine oracles structurally cannot close.
+
+The `entitledto` recorded-fixture oracle
+(`axiom_oracles/adapters/entitledto/`, suite `uk-ctr`; its report artifact is
+`reports/axiom-uk-council-tax-reduction-entitledto.json`, deliberately
+uncommitted until fixtures are captured) closes it: entitledto models every
+council's CTR scheme, so it is the most complete per-council reference
+(entitledto publishes estimates, not authoritative awards). It is a *recorded*
+oracle — entitledto's legal notices bar systematic collection on the free
+public calculator, so every fixture ships as a `pending_capture` stub and is
+filled only through a channel entitledto has expressly authorised (a research
+or API licence; `fixtures/uk_ctr/CAPTURE-PROTOCOL.md` is the procedure and the
+permission gate). The runner replays recorded responses with provenance; CI
+never probes entitledto, and nothing grades until real captures exist.
+
+The eight-case grid demonstrates the gap at one income point: an identical single
+private-renter earning £11,000 returns, on PolicyEngine-UK 2.89.2, **£0** in
+Scotland (national scheme, tapered out because PolicyEngine counts the UC award
+itself as CTR applicable income — applicable income £15,510 vs a £4,969 applicable
+amount), **£1,181** in Kingston upon Thames (a supported local scheme), and **£0**
+in Manchester (an unsupported council → reported fallback). entitledto models
+the local scheme for all three — its estimate is the only per-council reference
+available for the ~295 councils the engine oracles cannot express (no captured
+values exist yet; the grid's PolicyEngine and statutory columns are computed,
+the entitledto column is pending capture). How these slot into the coverage
+classifier: today a per-council CTR output is `known_not_comparable`/`unmapped`
+against the PolicyEngine registry (`bridges/mappings/uk.yaml`, axiom-oracles#78
+/ #278) because no PolicyEngine variable models that council; once its
+entitledto fixtures are captured, the council's CTR award becomes `comparable`
+against the entitledto oracle — a per-council comparability the
+PolicyEngine-only classifier cannot express.
