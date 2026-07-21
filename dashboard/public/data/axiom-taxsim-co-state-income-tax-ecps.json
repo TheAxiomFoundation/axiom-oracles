@@ -54625,10 +54625,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_sha": "0c39023e0d0b82aee9ec561f37a1b73547b66d86",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-07T03:55:53Z",
+    "generated_at": "2026-07-21T15:15:37Z",
     "generated_by": "scripts/run_comparison.py::co-state-income-tax-taxsim",
     "oracle": {
       "name": "taxsim",
@@ -54684,6 +54684,7 @@
         "value": null
       }
     ],
+    "stored_mismatch_example_count": 530,
     "weighted": {
       "comparison_weight": 3123439.813952,
       "match_rate": 62.552695,
