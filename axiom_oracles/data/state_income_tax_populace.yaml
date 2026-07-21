@@ -298,21 +298,15 @@ jurisdictions:
     target: ut_income_tax_before_credits
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ut/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: RuleSpec accepts one completed-return Utah taxable-income boundary and imports the statutory 4.45% rate. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of ut_income_tax_before_credits for all 1,251 positive-weight routed Utah tax units, with no differences above the $1 tolerance.
   inputs:
-  - slot: us-ut:policies/income_tax/pilot_liability_pipeline#input.ut_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ut:policies/income_tax/pilot_liability_pipeline#input.ut_pit_pilot_supplied_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ut:policies/income_tax/pilot_liability_pipeline#input.ut_pit_pilot_supplied_subtractions
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ut:policies/income_tax/pilot_liability_pipeline#input.ut_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Utah Code 59-10-104 imposes tax on state taxable income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine ut_taxable_income is a direct upstream dependency of the distinct comparison target ut_income_tax_before_credits; rulespec-us#955 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: ut_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: VA
   fips: '51'

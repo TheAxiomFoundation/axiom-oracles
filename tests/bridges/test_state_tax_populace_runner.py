@@ -12,6 +12,7 @@ from axiom_oracles.bridges.state_tax_populace_runner import (
     TaxUnitRoute,
     _is_official_github_remote,
     calculate_policyengine_targets,
+    calculate_policyengine_projection_inputs,
     compare_ready_state_tax_units,
     population_routing_report,
     route_tax_units,
@@ -237,6 +238,101 @@ def test_policyengine_target_calculation_is_limited_to_ready_states() -> None:
     )
 
     assert targets == {"NH": {1: 0.0, 2: 0.0}}
+
+
+def test_policyengine_projection_calculation_uses_only_reviewed_boundaries() -> None:
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            return [-100, 25000]
+
+    routes = (
+        TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "CA", "06", 1, DISPOSITION_BLOCKED),
+    )
+    raw_tax_units = pd.DataFrame({"tax_unit_id": [1, 2]})
+
+    projections = calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=raw_tax_units,
+        routes=routes,
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )
+
+    slot = (
+        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
+        "ut_pit_pilot_state_taxable_income"
+    )
+    assert calls == [("ut_taxable_income", 2026)]
+    assert projections == {"UT": {slot: {1: -100.0, 2: 25000.0}}}
+
+
+def test_ready_ut_comparison_projects_exact_declared_input(tmp_path) -> None:
+    slot = (
+        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
+        "ut_pit_pilot_state_taxable_income"
+    )
+    routes = (TaxUnitRoute(9, 1, "UT", "49", 3.0, DISPOSITION_READY),)
+    calls = []
+
+    def fake_axiom_runner(**kwargs):
+        calls.append(kwargs)
+        query = kwargs["request"]["queries"][0]
+        output = query["outputs"][0]
+        return [
+            {
+                "entity_id": query["entity_id"],
+                "outputs": {output: {"value": {"value": "445"}}},
+            }
+        ]
+
+    report = compare_ready_state_tax_units(
+        routes=routes,
+        policyengine_targets={"UT": {9: 445.0}},
+        policyengine_projection_inputs={"UT": {slot: {9: 10000.0}}},
+        year=2026,
+        rulespec_root=tmp_path / "rulespec-us",
+        axiom_rules_path=tmp_path / "axiom-rules",
+        axiom_runner=fake_axiom_runner,
+    )
+
+    assert report["mismatch_count"] == 0
+    assert calls[0]["request"]["dataset"]["inputs"] == [
+        {
+            "name": slot,
+            "entity": "Entity",
+            "entity_id": "state-tax-unit-9",
+            "interval": {
+                "period_kind": "tax_year",
+                "start": "2026-01-01",
+                "end": "2026-12-31",
+            },
+            "value": {"kind": "decimal", "value": "10000.0"},
+        }
+    ]
+
+
+def test_ready_ut_comparison_rejects_missing_projection_input(tmp_path) -> None:
+    routes = (TaxUnitRoute(9, 1, "UT", "49", 3.0, DISPOSITION_READY),)
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError, match="projected input inventory mismatch"
+    ):
+        compare_ready_state_tax_units(
+            routes=routes,
+            policyengine_targets={"UT": {9: 445.0}},
+            policyengine_projection_inputs={"UT": {}},
+            year=2026,
+            rulespec_root=tmp_path / "rulespec-us",
+            axiom_rules_path=tmp_path / "axiom-rules",
+            axiom_runner=lambda **_: [],
+        )
 
 
 def test_campaign_dataset_identity_requires_the_certified_pin() -> None:

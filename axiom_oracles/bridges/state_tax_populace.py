@@ -106,22 +106,30 @@ EXPECTED_STATE_FIPS = {
     "WV": "54",
 }
 EXPECTED_STATE_CODES = frozenset(EXPECTED_STATE_FIPS)
-EXPECTED_EXPLICIT_INPUT_COUNT = 257
+EXPECTED_EXPLICIT_INPUT_COUNT = 255
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "c11918d1dc03e80f60fc1a321c3f61ec961eac5fd4a51e1fa2f99864d3f25a20"
+    "ed80846d730f502f01c6596b60693104d0dc6916a3a43f0b655daba57e52282c"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
     "af96f31eb1164c77a10807579f4d72bbc09f0082deefee4341378476d30e492d"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "cfae6977195932346f5e8dea1d2a6e64118524ef8e1973ddbed8380f06e82b45"
+    "ca15a04bc1a5336fbf32bb101986ba9b4d23e321c1b4760007ee77cb27d99fac"
 )
-# No PolicyEngine-derived projection boundary has completed independent legal
-# and dependency-graph review yet.  Add exact (state, slot, variable) tuples
-# here only through the review-fix cycle that makes the corresponding state
-# population-ready.
-ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset()
+# Exact boundaries admitted only after independent legal and dependency-graph
+# review.  The comparison target itself is forbidden below, so these remain
+# upstream inputs rather than circular alignment values.
+ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
+    {
+        (
+            "UT",
+            "us-ut:policies/income_tax/pilot_liability_pipeline#input."
+            "ut_pit_pilot_state_taxable_income",
+            "ut_taxable_income",
+        )
+    }
+)
 
 _FORBIDDEN_ALIGNMENT_KEYS = frozenset(
     {

@@ -36,7 +36,7 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 44
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 257
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 255
     assert sum(len(item.relations) for item in contract.jurisdictions) == 1
     assert len({item.program for item in contract.jurisdictions}) == 44
     assert len({item.output for item in contract.jurisdictions}) == 44
@@ -92,24 +92,28 @@ def test_contract_rejects_comparison_registry_drift(
         validate_state_tax_populace_contract(document)
 
 
-def test_packaged_contract_is_nh_only_ready() -> None:
+def test_packaged_contract_has_reviewed_nh_and_ut_ready() -> None:
     contract = load_state_tax_populace_contract()
     summary = readiness_summary(contract)
 
     assert summary == {
         "jurisdiction_count": 44,
-        "ready_count": 1,
-        "blocked_count": 43,
-        "ready_states": ["NH"],
-        "blocked_states": sorted(EXPECTED_STATE_CODES - {"NH"}),
+        "ready_count": 2,
+        "blocked_count": 42,
+        "ready_states": ["NH", "UT"],
+        "blocked_states": sorted(EXPECTED_STATE_CODES - {"NH", "UT"}),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 1,
         "blocked_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
     }
     nh = contract.by_state()["NH"]
     assert nh.inputs == ()
     assert nh.relations == ()
+    ut = contract.by_state()["UT"]
+    assert len(ut.inputs) == 1
+    assert ut.inputs[0].source_kind == "pe_upstream_boundary"
+    assert ut.inputs[0].policyengine_variable == "ut_taxable_income"
 
 
 def test_contract_forbids_filtered_population_slices() -> None:
@@ -120,13 +124,15 @@ def test_contract_forbids_filtered_population_slices() -> None:
         validate_state_tax_populace_contract(document)
 
 
-def test_every_unresolved_slot_is_explicitly_blocked_with_evidence() -> None:
+def test_every_slot_has_status_consistent_source_and_evidence() -> None:
     contract = load_state_tax_populace_contract()
 
     for jurisdiction in contract.jurisdictions:
         for slot in (*jurisdiction.inputs, *jurisdiction.relations):
-            assert slot.source_kind == "blocked"
-            assert slot.status == "blocked"
+            if slot.status == "blocked":
+                assert slot.source_kind == "blocked"
+            else:
+                assert slot.source_kind != "blocked"
             assert slot.evidence
 
 
@@ -193,7 +199,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 257"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 255"):
         validate_state_tax_populace_contract(document)
 
 

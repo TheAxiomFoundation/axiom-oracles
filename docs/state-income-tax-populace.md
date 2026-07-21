@@ -10,7 +10,7 @@ name is retained for compatibility, but the dataset is the certified
 
 The committed state liability reports exercise 44 RuleSpec modules with 270
 hand-computed cases. Forty-three modules are intentionally narrow pilots and New
-Hampshire is a grounded repeal-to-zero module. Across the pilots there are 257
+Hampshire is a grounded repeal-to-zero module. Across the pilots there are 255
 explicit caller-supplied inputs. Most are completed-return boundaries or
 schedule values, including adjusted or taxable income, deductions, exemptions,
 credits, bracket selection, recapture, and state-specific capital-gain facts.
@@ -115,8 +115,8 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
   --sample-size-per-state 0 --output /tmp/state-tax-populace-routing.json
 ```
 
-Execute all currently ready states (New Hampshire only until source-backed
-projection contracts land):
+Execute all currently ready states (New Hampshire and Utah; later states remain
+blocked until their source-backed projection contracts land):
 
 ```bash
 uv run --extra policyengine scripts/run_state_tax_populace.py \
