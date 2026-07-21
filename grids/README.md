@@ -27,10 +27,10 @@ It deliberately does **not** store the per-engine projections: the RuleSpec
 
 | File | What |
 | --- | --- |
-| `us.yaml`, `be.yaml`, `uk.yaml` | Adopted canonical grids. Generated from the live suites; do not hand-edit. |
+| `us.yaml`, `be.yaml`, `ca.yaml`, `uk.yaml` | Adopted canonical grids. Generated from the live suites; do not hand-edit. |
 | `<cc>.suggested.yaml` | Boundary-case proposals from the generator. **Not** adopted, **not** loaded. |
 
-`us.yaml` and `be.yaml` are extracted from the suites that ship on `main`.
+`us.yaml`, `be.yaml`, and `ca.yaml` are extracted from the suites that ship on `main`.
 `uk.yaml` ships ahead of the UK worker suites (they land with the UKMOD work);
 its equivalence check activates automatically once those suites are importable.
 

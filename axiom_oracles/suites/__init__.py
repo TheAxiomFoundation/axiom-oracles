@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from .be_birth_leave import be_birth_leave_cases
+from .ca_cra_family_benefits import ca_cra_family_benefit_cases
+from .ca_cra_pdoc import ca_cra_pdoc_cases
 from .be_social_assistance import (
     be_elderly_income_support_cases,
     be_social_assistance_cases,
@@ -86,6 +88,8 @@ from .uk_worker import (
 
 def available_suites() -> tuple[str, ...]:
     return (
+        "ca-cra-family-benefits",
+        "ca-cra-pdoc",
         "nyc-basic",
         "nyc-synthetic",
         "be-worker-pit",
@@ -150,6 +154,10 @@ def available_suites() -> tuple[str, ...]:
 
 
 def load_suite(name: str):
+    if name == "ca-cra-family-benefits":
+        return ca_cra_family_benefit_cases()
+    if name == "ca-cra-pdoc":
+        return ca_cra_pdoc_cases()
     if name == "nyc-basic":
         return nyc_basic_cases()
     if name == "nyc-synthetic":
@@ -277,6 +285,8 @@ __all__ = [
     "available_suites",
     "be_article_51_forfait_cases",
     "be_birth_leave_cases",
+    "ca_cra_family_benefit_cases",
+    "ca_cra_pdoc_cases",
     "be_capital_income_tax_cases",
     "be_elderly_income_support_cases",
     "be_employer_ssc_cases",
