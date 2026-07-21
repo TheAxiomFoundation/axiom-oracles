@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-20T20:05:11Z",
+    "generated_at": "2026-07-21T03:55:12Z",
     "generated_by": "scripts/run_comparison.py::ne-income-tax-liability",
     "rulespecs": [
       {
