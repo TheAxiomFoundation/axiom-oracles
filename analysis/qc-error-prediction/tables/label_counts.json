@@ -1,9 +1,10 @@
 {
-  "definition": "STATUS in {2,3} and AMTERR > 0",
+  "definition": "any-variance: STATUS in {2,3} and AMTERR > 0; official: STATUS in {2,3} and AMTERR > 56 (FY2024 tolerance threshold, QC technical documentation)",
   "rows": [
     {
       "correct": 631,
       "errors": 291,
+      "errors_official": 101,
       "excluded": 3,
       "loaded": 922,
       "state": "az"
@@ -11,6 +12,7 @@
     {
       "correct": 497,
       "errors": 386,
+      "errors_official": 118,
       "excluded": 0,
       "loaded": 883,
       "state": "ca"
@@ -18,6 +20,7 @@
     {
       "correct": 551,
       "errors": 305,
+      "errors_official": 110,
       "excluded": 0,
       "loaded": 856,
       "state": "co"
@@ -25,6 +28,7 @@
     {
       "correct": 499,
       "errors": 446,
+      "errors_official": 177,
       "excluded": 0,
       "loaded": 945,
       "state": "ga"
@@ -32,6 +36,7 @@
     {
       "correct": 428,
       "errors": 294,
+      "errors_official": 108,
       "excluded": 23,
       "loaded": 722,
       "state": "md"
@@ -39,6 +44,7 @@
     {
       "correct": 498,
       "errors": 349,
+      "errors_official": 114,
       "excluded": 38,
       "loaded": 847,
       "state": "ny"
@@ -46,6 +52,7 @@
     {
       "correct": 476,
       "errors": 430,
+      "errors_official": 143,
       "excluded": 49,
       "loaded": 906,
       "state": "tx"
@@ -54,6 +61,7 @@
   "total": {
     "correct": 3580,
     "errors": 2501,
+    "errors_official": 871,
     "excluded": 113,
     "loaded": 6081
   }

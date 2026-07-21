@@ -98,6 +98,7 @@ def extract_state(state, rulespec_root, binary):
     root = resolve_workspace_root(None)
     base = load_base_inputs(rulespec_root / cfg.template)
     member = _load_base_member(rulespec_root / cfg.template, cfg.base.relation_id)
+    benefit_id = stage_ids["benefit"]
     overlay = Path(tempfile.mkdtemp(prefix=f"qc-pilot-{state}-"))
     try:
         build = build_overlay(spec, rulespec_root, overlay)
@@ -105,16 +106,20 @@ def extract_state(state, rulespec_root, binary):
         env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
         sua = sua_amounts_from_overlay(spec, cfg)
         variants = ("base", "earned", "unearned", "shelter", "dependent_care", "child_support", "medical")
-        projected = []
+        # The base variant needs the full internal-stage output surface; the six
+        # perturbation variants only need the compared benefit output, which
+        # keeps the debug engine's per-case cost near the nightly replay's.
+        blocks = {}
         for kind in variants:
-            projected.extend(map_qc_unit(u if kind == "base" else proxy(u, kind), base, member,
-                                         config=cfg, sua_amount_by_tier=sua) for u in units)
-        results = _run_cases(binary=binary, program_path=build.program_path, cases=projected,
-                             period=month_period(*NOMINAL_PERIOD), output_ids=requested,
-                             config=cfg, env=env)
+            projected = [map_qc_unit(u if kind == "base" else proxy(u, kind), base, member,
+                                     config=cfg, sua_amount_by_tier=sua) for u in units]
+            blocks[kind] = _run_cases(binary=binary, program_path=build.program_path, cases=projected,
+                                      period=month_period(*NOMINAL_PERIOD),
+                                      output_ids=(requested if kind == "base" else [benefit_id]),
+                                      config=cfg, env=env)
     finally:
         shutil.rmtree(overlay, ignore_errors=True)
-    n = len(units); blocks = {k: results[i*n:(i+1)*n] for i, k in enumerate(variants)}
+    n = len(units)
     rows = []
     for i, unit in enumerate(units):
         row = raw_row(unit, state, log.total_excluded)
@@ -137,10 +142,17 @@ def extract_state(state, rulespec_root, binary):
                    engine_shelter_cap_slack=capped-uncapped,
                    engine_minimum_slack=unbounded-minimum,
                    engine_max_slack=maxa-unbounded)
-        base_ben = row["engine_issued_allotment"]
-        for kind in variants[1:]: row[f"engine_sensitivity_{kind}_10"] = value(blocks[kind][i], EXTRA_OUTPUTS["issued_allotment"]) - base_ben
+        base_ben = value(base_result, benefit_id)
+        row["engine_benefit"] = base_ben
+        for kind in variants[1:]: row[f"engine_sensitivity_{kind}_10"] = value(blocks[kind][i], benefit_id) - base_ben
         rows.append(row)
-    return rows, {"state": state, "loaded": n, "excluded": log.total_excluded, "exclusions": dict(log.counts)}
+    # Identity check: the engine benefit must reproduce FSBEN case-for-case —
+    # the replay theorem the seven suites prove nightly. A nonzero count means
+    # the wide-output request or this extractor changed evaluation semantics.
+    mismatches = [r["case_id"] for r in rows if r["engine_benefit"] != r["verified_benefit"]]
+    return rows, {"state": state, "loaded": n, "excluded": log.total_excluded,
+                  "exclusions": dict(log.counts), "fsben_identity_mismatches": len(mismatches),
+                  "fsben_identity_mismatch_cases": mismatches[:20]}
 
 def analytical_state(state):
     """Deadline fallback: encoded-chain algebra over bridge-grounded QC inputs."""
@@ -177,16 +189,21 @@ def main():
     # Internal-stage queries are substantially wider than the parity runner's
     # ordinary six-output request; smaller payloads avoid debug-engine slowdown.
     qc_compare.CHUNK_SIZE = 50
-    ap = argparse.ArgumentParser(); ap.add_argument("--states", nargs="*", default=STATES); ap.add_argument("--engine",action="store_true"); args = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument("--states", nargs="*", default=STATES); ap.add_argument("--engine",action="store_true"); ap.add_argument("--out", default="features.parquet"); args = ap.parse_args()
     rules = Path(os.environ["AXIOM_SNAP_QC_RULESPEC_ROOT"])
     binary = resolve_axiom_binary(resolve_workspace_root(None), Path(os.environ["AXIOM_SNAP_QC_AXIOM_BINARY"]))
     CACHE.mkdir(parents=True, exist_ok=True)
     rows=[]; universe=[]
     for state in args.states:
-        r,u=(extract_state(state,rules,binary) if args.engine else analytical_state(state)); rows.extend(r); universe.append(u); print(state, len(r), flush=True)
+        r,u=(extract_state(state,rules,binary) if args.engine else analytical_state(state)); rows.extend(r); universe.append(u); print(state, len(r), u.get("fsben_identity_mismatches"), flush=True)
     df=pd.DataFrame(rows).sort_values(["state","case_id"]).reset_index(drop=True)
-    df.to_parquet(CACHE/"features.parquet", index=False)
-    (CACHE/"universe.json").write_text(json.dumps(universe,indent=2,sort_keys=True)+"\n")
-    print(CACHE/"features.parquet", len(df))
+    df["mode"] = "engine" if args.engine else "analytical"
+    df.to_parquet(CACHE/args.out, index=False)
+    stem = Path(args.out).stem
+    (CACHE/f"universe-{stem}.json").write_text(json.dumps(universe,indent=2,sort_keys=True)+"\n")
+    bad = sum(u.get("fsben_identity_mismatches") or 0 for u in universe)
+    if args.engine and bad:
+        raise SystemExit(f"FSBEN identity FAILED: {bad} mismatching case(s); see universe-{stem}.json")
+    print(CACHE/args.out, len(df))
 
 if __name__ == "__main__": main()
