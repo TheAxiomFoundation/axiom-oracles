@@ -1621,7 +1621,7 @@
     },
     {
       "suite": "va-income-tax-liability",
-      "generated_at": "2026-07-21T03:55:47Z",
+      "generated_at": "2026-07-21T14:34:01Z",
       "run_kind": "affected-rerun",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
