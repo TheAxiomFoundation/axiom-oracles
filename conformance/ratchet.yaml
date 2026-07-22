@@ -20,7 +20,11 @@ ratchets:
   axiom_attributed_open_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  covered_min: 68
+  # Intentional reclassification: the former Arkansas broad-liability grid
+  # referenced a RuleSpec output and six fixtures that no longer exist. The
+  # narrow Person-grain Act 2 component remains Populace-validated, but it is
+  # not equivalent to broad ar_income_tax and does not count as suite coverage.
+  covered_min: 67
   unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 137

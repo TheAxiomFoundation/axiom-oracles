@@ -17,9 +17,9 @@ def test_contract_check_reports_readiness(capsys) -> None:
 
     output = capsys.readouterr().out
     assert "44 jurisdictions" in output
-    assert "26 ready" in output
-    assert "18 blocked" in output
-    assert "171 explicit inputs" in output
+    assert "27 ready" in output
+    assert "17 blocked" in output
+    assert "167 explicit inputs" in output
 
 
 def test_contract_check_json_is_machine_readable(capsys) -> None:
@@ -28,6 +28,7 @@ def test_contract_check_json_is_machine_readable(capsys) -> None:
     output = json.loads(capsys.readouterr().out)
     assert output["ready_states"] == [
         "AL",
+        "AR",
         "AZ",
         "CT",
         "DE",
@@ -54,7 +55,7 @@ def test_contract_check_json_is_machine_readable(capsys) -> None:
         "VT",
         "WV",
     ]
-    assert len(output["blocked_states"]) == 18
+    assert len(output["blocked_states"]) == 17
 
 
 def test_contract_check_fails_closed_for_missing_override(tmp_path, capsys) -> None:
@@ -77,7 +78,10 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
     monkeypatch.setattr(
         "scripts.check_state_tax_populace_contract.importlib.util.module_from_spec",
         lambda spec: SimpleNamespace(
-            _STATES=tuple(item.state for item in contract.jurisdictions),
+            _STATES=(),
+            _POPULACE_STATES=tuple(
+                item.state for item in contract.jurisdictions
+            ),
             VALIDATION_YEAR=2026,
             _TAXSIM_STATE={item.state: item.taxsim_state_code for item in contract.jurisdictions},
             _MODULE={item.state: item.program for item in contract.jurisdictions},
@@ -92,6 +96,10 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
             },
             _TOL={
                 item.state: (item.tolerance, item.relative_tolerance)
+                for item in contract.jurisdictions
+            },
+            _POPULACE_AGGREGATION={
+                item.state: item.comparison_aggregation
                 for item in contract.jurisdictions
             },
         ),

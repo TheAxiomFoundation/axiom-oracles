@@ -99,6 +99,7 @@ def main(argv: list[str] | None = None) -> int:
     targets = calculate_policyengine_targets(
         dataset=dataset,
         raw_tax_units=raw_tax_units,
+        raw_persons=raw_persons,
         routes=comparison_routes,
         year=args.year,
         contract=contract,

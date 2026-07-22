@@ -73,8 +73,9 @@ def _validate_generator_registry(contract) -> None:
 
     errors: list[str] = []
     states = tuple(item.state for item in contract.jurisdictions)
-    if set(states) != set(generator._STATES):
-        errors.append("jurisdiction set differs from generator _STATES")
+    registry_states = getattr(generator, "_POPULACE_STATES", generator._STATES)
+    if set(states) != set(registry_states):
+        errors.append("jurisdiction set differs from generator Populace states")
     if contract.validation_year != generator.VALIDATION_YEAR:
         errors.append("validation year differs from generator VALIDATION_YEAR")
     for item in contract.jurisdictions:
@@ -82,10 +83,17 @@ def _validate_generator_registry(contract) -> None:
         generated = (
             generator._TAXSIM_STATE.get(state),
             generator._MODULE.get(state),
-            generator._LIABILITY_OUTPUT.get(state),
-            generator._PE_VAR.get(state),
+            getattr(generator, "_POPULACE_OUTPUT", {}).get(
+                state, generator._LIABILITY_OUTPUT.get(state)
+            ),
+            getattr(generator, "_POPULACE_PE_VAR", {}).get(
+                state, generator._PE_VAR.get(state)
+            ),
             getattr(generator, "_POPULACE_TOL", {}).get(
                 state, generator._TOL.get(state)
+            ),
+            getattr(generator, "_POPULACE_AGGREGATION", {}).get(
+                state, "tax_unit"
             ),
         )
         expected = (
@@ -94,6 +102,7 @@ def _validate_generator_registry(contract) -> None:
             item.output,
             item.policyengine_target,
             (item.tolerance, item.relative_tolerance),
+            item.comparison_aggregation,
         )
         if generated != expected:
             errors.append(f"{state} registry metadata differs from generator")

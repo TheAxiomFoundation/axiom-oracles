@@ -58,15 +58,6 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
-      "suite": "ar-income-tax-liability",
-      "name": "ar-income-tax-liability",
-      "report": "axiom-policyengine-taxsim-ar-income-tax-liability.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-us"
-      ],
-      "source": "comparisons/ar-income-tax-liability.yaml"
-    },
-    {
       "suite": "az-income-tax-liability",
       "name": "az-income-tax-liability",
       "report": "axiom-policyengine-taxsim-az-income-tax-liability.json",

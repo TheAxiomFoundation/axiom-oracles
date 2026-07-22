@@ -159,7 +159,12 @@ def test_recent_state_income_tax_oracle_registrations():
         assert generator._TAXSIM_STATE[state] == taxsim_code
         assert generator._PE_VAR[state] == policyengine_target
         assert generator._TOL[state] == tolerance
-        assert state in generator._STATES
+        assert state in generator._POPULACE_STATES
+        if state == "AR":
+            assert state not in generator._STATES
+            assert "Person-grain" in generator._GRID_EXCLUDED_STATES[state]
+        else:
+            assert state in generator._STATES
         assert generator._MODULE[state] == (
             f"us-{state.lower()}:policies/income_tax/pilot_liability_pipeline"
         )
@@ -167,6 +172,22 @@ def test_recent_state_income_tax_oracle_registrations():
             f"{generator._MODULE[state]}"
             f"#{state.lower()}_pit_pilot_income_tax_liability"
         )
+
+
+def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:
+    generator = _load_generator()
+
+    assert "AR" in generator._TAXSIM_STATE
+    assert "AR" in generator._POPULACE_STATES
+    assert "AR" not in generator._STATES
+    assert generator._POPULACE_OUTPUT["AR"].endswith(
+        "#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    )
+    assert (
+        generator._POPULACE_PE_VAR["AR"]
+        == "ar_income_tax_before_non_refundable_credits_indiv"
+    )
+    assert generator._POPULACE_AGGREGATION["AR"] == "person_sum_to_tax_unit"
 
 
 def test_finalize_report_adds_v21_dispositions_and_provenance():
