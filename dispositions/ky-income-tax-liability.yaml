@@ -1,184 +1,148 @@
 schema: axiom_oracles.dispositions.v1
 suite: ky-income-tax-liability
-updated: '2026-07-21'
+updated: '2026-07-08'
 entries:
-- id: ky-taxsim-2026-unenacted-rate-retention-single-30000
+- id: ky-taxsim-2024-vintage-single-30000
   concept: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
   case_id: ky-single-30000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year, but TAXSIM's 2026 Kentucky module
-      retains the 4.0 per cent section 141.020 rate (HB 1 (2025) set the
-      enacted 2026 rate to 3.5 per cent) on an extrapolated section 141.081
-      standard deduction of 3,368.12 (the enacted amount is 3,344): 0.04 x
-      (30,000 - 3,368.12) = 1,065.28 reproduces TAXSIM to the cent, while the
-      pipeline's enacted 0.035 x (30,000 - 3,344) = 932.96. The residual is
-      the un-enacted rate retention plus deduction projection, not a pipeline
-      defect; the pipeline matches PolicyEngine at 2026 to the cent on every
-      grid case.
+    mechanism: TAXSIM runs at its latest 2024 law year. Kentucky's section 141.020
+      flat rate stepped down from 4.0 per cent (2024) to 3.5 per cent (2026) and
+      the section 141.081 standard deduction was indexed (3,160 in 2024 to 3,344
+      in 2026), so the 2026 tax is lower than TAXSIM's 2024 computation. The 2024
+      schedule 0.04*(AGI-3,160) reproduces TAXSIM to the cent. The pipeline reports
+      932.96; TAXSIM 2024 reports 1073.60. Pinned-2024-law-year vintage, not a pipeline
+      defect; the pipeline matches PolicyEngine at 2026 to the cent.
     arithmetic:
-    - expression: 0.04 * (30000.0 - 3368.12)
-      equals: 1065.28
-      tolerance: 0.02
-    - expression: 0.035 * (30000.0 - 3344)
-      equals: 932.96
-      tolerance: 0.02
-    - expression: 932.96 - 1065.28
-      equals: -132.32
+    - expression: 932.95615 - 1073.6
+      equals: -140.6438
+      tolerance: 0.01
+    - expression: 0.04*(30000-3160)
+      equals: 1073.6
       tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 932.95615
-    right: 1065.28
-- id: ky-taxsim-2026-unenacted-rate-retention-single-60000
+    right: 1073.6
+- id: ky-taxsim-2024-vintage-single-60000
   concept: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
   case_id: ky-single-60000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year, but TAXSIM's 2026 Kentucky module
-      retains the 4.0 per cent section 141.020 rate (HB 1 (2025) set the
-      enacted 2026 rate to 3.5 per cent) on an extrapolated section 141.081
-      standard deduction of 3,368.12 (the enacted amount is 3,344): 0.04 x
-      (60,000 - 3,368.12) = 2,265.28 reproduces TAXSIM to the cent, while the
-      pipeline's enacted 0.035 x (60,000 - 3,344) = 1,982.96. The residual is
-      the un-enacted rate retention plus deduction projection, not a pipeline
-      defect; the pipeline matches PolicyEngine at 2026 to the cent on every
-      grid case.
+    mechanism: TAXSIM runs at its latest 2024 law year. Kentucky's section 141.020
+      flat rate stepped down from 4.0 per cent (2024) to 3.5 per cent (2026) and
+      the section 141.081 standard deduction was indexed (3,160 in 2024 to 3,344
+      in 2026), so the 2026 tax is lower than TAXSIM's 2024 computation. The 2024
+      schedule 0.04*(AGI-3,160) reproduces TAXSIM to the cent. The pipeline reports
+      1982.96; TAXSIM 2024 reports 2273.60. Pinned-2024-law-year vintage, not a
+      pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.
     arithmetic:
-    - expression: 0.04 * (60000.0 - 3368.12)
-      equals: 2265.28
-      tolerance: 0.02
-    - expression: 0.035 * (60000.0 - 3344)
-      equals: 1982.96
-      tolerance: 0.02
-    - expression: 1982.96 - 2265.28
-      equals: -282.32
+    - expression: 1982.95615 - 2273.6
+      equals: -290.6438
+      tolerance: 0.01
+    - expression: 0.04*(60000-3160)
+      equals: 2273.6
       tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 1982.95615
-    right: 2265.28
-- id: ky-taxsim-2026-unenacted-rate-retention-single-150000
+    right: 2273.6
+- id: ky-taxsim-2024-vintage-single-150000
   concept: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
   case_id: ky-single-150000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year, but TAXSIM's 2026 Kentucky module
-      retains the 4.0 per cent section 141.020 rate (HB 1 (2025) set the
-      enacted 2026 rate to 3.5 per cent) on an extrapolated section 141.081
-      standard deduction of 3,368.12 (the enacted amount is 3,344): 0.04 x
-      (150,000 - 3,368.12) = 5,865.28 reproduces TAXSIM to the cent, while the
-      pipeline's enacted 0.035 x (150,000 - 3,344) = 5,132.96. The residual is
-      the un-enacted rate retention plus deduction projection, not a pipeline
-      defect; the pipeline matches PolicyEngine at 2026 to the cent on every
-      grid case.
+    mechanism: TAXSIM runs at its latest 2024 law year. Kentucky's section 141.020
+      flat rate stepped down from 4.0 per cent (2024) to 3.5 per cent (2026) and
+      the section 141.081 standard deduction was indexed (3,160 in 2024 to 3,344
+      in 2026), so the 2026 tax is lower than TAXSIM's 2024 computation. The 2024
+      schedule 0.04*(AGI-3,160) reproduces TAXSIM to the cent. The pipeline reports
+      5132.96; TAXSIM 2024 reports 5873.60. Pinned-2024-law-year vintage, not a
+      pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.
     arithmetic:
-    - expression: 0.04 * (150000.0 - 3368.12)
-      equals: 5865.28
-      tolerance: 0.02
-    - expression: 0.035 * (150000.0 - 3344)
-      equals: 5132.96
-      tolerance: 0.02
-    - expression: 5132.96 - 5865.28
-      equals: -732.32
+    - expression: 5132.95615 - 5873.6
+      equals: -740.6439
+      tolerance: 0.01
+    - expression: 0.04*(150000-3160)
+      equals: 5873.6
       tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 5132.95615
-    right: 5865.28
-- id: ky-taxsim-2026-unenacted-rate-retention-married-60000
+    right: 5873.6
+- id: ky-taxsim-2024-vintage-married-60000
   concept: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
   case_id: ky-married-60000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year, but TAXSIM's 2026 Kentucky module
-      retains the 4.0 per cent section 141.020 rate (HB 1 (2025) set the
-      enacted 2026 rate to 3.5 per cent) on an extrapolated section 141.081
-      standard deduction of 3,368.12 (the enacted amount is 3,344): 0.04 x
-      (60,000 - 3,368.12) = 2,265.28 reproduces TAXSIM to the cent, while the
-      pipeline's enacted 0.035 x (60,000 - 3,344) = 1,982.96. The residual is
-      the un-enacted rate retention plus deduction projection, not a pipeline
-      defect; the pipeline matches PolicyEngine at 2026 to the cent on every
-      grid case.
+    mechanism: TAXSIM runs at its latest 2024 law year. Kentucky's section 141.020
+      flat rate stepped down from 4.0 per cent (2024) to 3.5 per cent (2026) and
+      the section 141.081 standard deduction was indexed (3,160 in 2024 to 3,344
+      in 2026), so the 2026 tax is lower than TAXSIM's 2024 computation. The 2024
+      schedule 0.04*(AGI-3,160) reproduces TAXSIM to the cent. The pipeline reports
+      1982.96; TAXSIM 2024 reports 2273.60. Pinned-2024-law-year vintage, not a
+      pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.
     arithmetic:
-    - expression: 0.04 * (60000.0 - 3368.12)
-      equals: 2265.28
-      tolerance: 0.02
-    - expression: 0.035 * (60000.0 - 3344)
-      equals: 1982.96
-      tolerance: 0.02
-    - expression: 1982.96 - 2265.28
-      equals: -282.32
+    - expression: 1982.95615 - 2273.6
+      equals: -290.6438
+      tolerance: 0.01
+    - expression: 0.04*(60000-3160)
+      equals: 2273.6
       tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 1982.95615
-    right: 2265.28
-- id: ky-taxsim-2026-unenacted-rate-retention-married-120000
+    right: 2273.6
+- id: ky-taxsim-2024-vintage-married-120000
   concept: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
   case_id: ky-married-120000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year, but TAXSIM's 2026 Kentucky module
-      retains the 4.0 per cent section 141.020 rate (HB 1 (2025) set the
-      enacted 2026 rate to 3.5 per cent) on an extrapolated section 141.081
-      standard deduction of 3,368.12 (the enacted amount is 3,344): 0.04 x
-      (120,000 - 3,368.12) = 4,665.28 reproduces TAXSIM to the cent, while the
-      pipeline's enacted 0.035 x (120,000 - 3,344) = 4,082.96. The residual is
-      the un-enacted rate retention plus deduction projection, not a pipeline
-      defect; the pipeline matches PolicyEngine at 2026 to the cent on every
-      grid case.
+    mechanism: TAXSIM runs at its latest 2024 law year. Kentucky's section 141.020
+      flat rate stepped down from 4.0 per cent (2024) to 3.5 per cent (2026) and
+      the section 141.081 standard deduction was indexed (3,160 in 2024 to 3,344
+      in 2026), so the 2026 tax is lower than TAXSIM's 2024 computation. The 2024
+      schedule 0.04*(AGI-3,160) reproduces TAXSIM to the cent. The pipeline reports
+      4082.96; TAXSIM 2024 reports 4673.60. Pinned-2024-law-year vintage, not a
+      pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.
     arithmetic:
-    - expression: 0.04 * (120000.0 - 3368.12)
-      equals: 4665.28
-      tolerance: 0.02
-    - expression: 0.035 * (120000.0 - 3344)
-      equals: 4082.96
-      tolerance: 0.02
-    - expression: 4082.96 - 4665.28
-      equals: -582.32
+    - expression: 4082.95615 - 4673.6
+      equals: -590.6439
+      tolerance: 0.01
+    - expression: 0.04*(120000-3160)
+      equals: 4673.6
       tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 4082.95615
-    right: 4665.28
-- id: ky-taxsim-2026-unenacted-rate-retention-married-300000
+    right: 4673.6
+- id: ky-taxsim-2024-vintage-married-300000
   concept: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
   case_id: ky-married-300000
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year, but TAXSIM's 2026 Kentucky module
-      retains the 4.0 per cent section 141.020 rate (HB 1 (2025) set the
-      enacted 2026 rate to 3.5 per cent) on an extrapolated section 141.081
-      standard deduction of 3,368.12 (the enacted amount is 3,344): 0.04 x
-      (300,000 - 3,368.12) = 11,865.28 reproduces TAXSIM to the cent, while
-      the pipeline's enacted 0.035 x (300,000 - 3,344) = 10,382.96. The
-      residual is the un-enacted rate retention plus deduction projection, not
-      a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent
-      on every grid case.
+    mechanism: TAXSIM runs at its latest 2024 law year. Kentucky's section 141.020
+      flat rate stepped down from 4.0 per cent (2024) to 3.5 per cent (2026) and
+      the section 141.081 standard deduction was indexed (3,160 in 2024 to 3,344
+      in 2026), so the 2026 tax is lower than TAXSIM's 2024 computation. The 2024
+      schedule 0.04*(AGI-3,160) reproduces TAXSIM to the cent. The pipeline reports
+      10382.96; TAXSIM 2024 reports 11873.60. Pinned-2024-law-year vintage, not
+      a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.
     arithmetic:
-    - expression: 0.04 * (300000.0 - 3368.12)
-      equals: 11865.28
-      tolerance: 0.02
-    - expression: 0.035 * (300000.0 - 3344)
-      equals: 10382.96
-      tolerance: 0.02
-    - expression: 10382.96 - 11865.28
-      equals: -1482.32
+    - expression: 10382.95615 - 11873.6
+      equals: -1490.6439
+      tolerance: 0.01
+    - expression: 0.04*(300000-3160)
+      equals: 11873.6
       tolerance: 0.02
   expires_on_source_change: true
   pinned:
     left: 10382.95615
-    right: 11865.28
+    right: 11873.6

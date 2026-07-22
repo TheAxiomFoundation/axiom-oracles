@@ -6,9 +6,8 @@
 # H.B. 106 of 2025) on Utah taxable income, before the 59-10-1018 taxpayer credit.
 #
 # PolicyEngine runs at the 2026 validation year against ut_income_tax_before_credits
-# (the pure flat tax). TAXSIM also runs at 2026, but its module applies a
-# projected 4.50% rate instead of the enacted 4.45% and nets its projected
-# 59-10-1018 taxpayer credit that the before-credits core excludes; both are
+# (the pure flat tax). TAXSIM runs at its latest supported law year (2024); the
+# 2024-to-2026 rate vintage and TAXSIM's inclusion of the taxpayer credit are
 # recorded in dispositions/ut-income-tax-liability.yaml rather than absorbed by
 # tolerance.
 #
@@ -20,7 +19,7 @@ title: Utah income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Utah income-tax liability pipeline encoded in Axiom
   RuleSpec (us-ut/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (ut_income_tax_before_credits) at 2026 and TAXSIM (siitax) at 2026
+  PolicyEngine (ut_income_tax_before_credits) at 2026 and TAXSIM (siitax) at 2024
   on a modest grid of single and married filers.
 
 runner:
@@ -28,7 +27,7 @@ runner:
   parameters:
     state: UT
     period: "2026"
-    taxsim_law_year: 2026
+    taxsim_law_year: 2024
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

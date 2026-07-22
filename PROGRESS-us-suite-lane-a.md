@@ -6,7 +6,23 @@ the realignment below; 2024 before it), coverage registration in
 `conformance/us-pe.yaml`, and a scoreboard regen. Mirrors the #561 CA/NY/IL/MA
 pilot pattern.
 
-## Done: TAXSIM 2026 realignment (2026-07-21)
+## Parked: state-grid TAXSIM-2026 flip (2026-07-22)
+
+The 2026 realignment below was implemented and fully dispositioned for the
+then-21 state grid suites, but is PARKED (reverted to main's TAXSIM-2024
+grid lane) after merging main: the rulespec-us "PIT promotion" wave
+(2026-07-21 evening, still in flight) replaced the pilot grid fixtures with
+supplied-taxable-income boundary fixtures that no longer contain the six
+grid cases, so the generator's axiom leg needs the promotion workstream's
+redesign before any regeneration — at 2026 or 2024. Main's own scheduled
+affected reruns are already red on this. The complete 2026 flip
+(generator, 44 suite headers, dispositions) lives in this branch's history
+(commits 5f4aa8f and the pre-revert merge resolution) and re-applies
+mechanically once the fixture contract settles. What stays live from the
+realignment: the 2026 CLI default, the tfica/AGI/CDCC/v28 mappings, the
+PE-emulator fixes, and the axiom↔TAXSIM intersection lane.
+
+## Done (parked): TAXSIM 2026 realignment (2026-07-21)
 
 All 21 state suites moved from `taxsim_law_year: 2024` to 2026 — the pinned
 policyengine-taxsim 2.30.0 binary (cdate-20260521) models 2026 law, so all

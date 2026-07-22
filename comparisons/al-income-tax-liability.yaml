@@ -5,12 +5,10 @@
 # axiom rules engine (its liabilities are the engine-verified companion-test
 # fixtures). Alabama applies section 40-18-5 graduated (2/4/5 per cent) to Alabama taxable income.
 #
-# PolicyEngine and TAXSIM both run at the 2026 validation year: the pinned
-# policyengine-taxsim 2.30.0 binary models 2026 law (its missing 2026
-# qualifying-child credit machinery is not exercised by this childless grid),
-# but its 2026 state module projects several parameters instead of applying
-# enacted amounts; each residual is decomposed exactly in
-# dispositions/al-income-tax-liability.yaml rather than absorbed by tolerance.
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 vintage is recorded in dispositions/al-income-tax-liability.yaml
+# rather than absorbed by tolerance.
 #
 # Run locally:
 #   uv run python scripts/run_comparison.py al-income-tax-liability
@@ -20,7 +18,7 @@ title: Alabama income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Alabama income-tax liability pipeline encoded in Axiom
   RuleSpec (us-al/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (al_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2026 on a modest grid of
+  PolicyEngine (al_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
   single and married filers crossing the state's brackets.
 
 runner:
@@ -28,7 +26,7 @@ runner:
   parameters:
     state: AL
     period: "2026"
-    taxsim_law_year: 2026
+    taxsim_law_year: 2024
     # Links this suite to the rulespec-us monorepo in the affected map
     # so a change to the composed pipeline triggers a re-run.
     rulespec_roots:

@@ -1,175 +1,126 @@
 schema: axiom_oracles.dispositions.v1
 suite: va-income-tax-liability
-updated: '2026-07-21'
+updated: "2026-07-08"
+# Virginia composed progressive-liability pipeline vs PolicyEngine (2026) and
+# TAXSIM (2024) on the six-case grid. The pipeline matches PolicyEngine
+# va_income_tax_before_non_refundable_credits exactly on all six cases (Virginia
+# brackets are statutory fixed amounts, so there is no indexation rounding), so
+# the PolicyEngine leg needs no disposition.
+#
+# Against TAXSIM's 2024 law year every case diverges by a constant per-filer
+# amount ($14.38 single, $28.75 married): Virginia raised its section 58.1-322.03
+# standard deduction between 2024 and 2026 (from $8,500 to $8,750 single, doubled
+# for joint), so TAXSIM's 2024 run applies the smaller deduction, leaving $250
+# more taxable income per filer taxed at the 5.75 per cent top marginal rate
+# (250 x 0.0575 = 14.375). All six residuals are the 2024-to-2026 standard-
+# deduction vintage, dispositioned below.
 entries:
-- id: va-taxsim-2026-parameter-projection-and-credit-single-30000
-  concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
-  case_id: va-single-30000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year. TAXSIM's 2026 Virginia module
-      extrapolates the section 58.1-322.03 standard deduction to 9,012.56 (the
-      enacted amount is 8,750) and the fixed 930-dollar personal exemption to
-      a fractional projection (implied combined offset 9,970.46), giving
-      staxbc 886.47 against the pipeline's enacted 910.90; its siitax then
-      nets a flat 206.00 (206.00 per filer, identical on every grid case) from
-      its projected 2026 credit model, which has no enacted analog at these
-      incomes. Residual = (910.90 - 886.47) + 206.00 = 230.43. TAXSIM 2026
-      parameter projection plus its modeled credit, not a pipeline defect; the
-      pipeline matches PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 886.47 - 206.0
-      equals: 680.47
-      tolerance: 0.02
-    - expression: (910.9 - 886.47) + 206.0
-      equals: 230.43
-      tolerance: 0.02
-  expires_on_source_change: true
-  pinned:
-    left: 910.9
-    right: 680.47
-- id: va-taxsim-2026-parameter-projection-and-credit-single-60000
-  concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
-  case_id: va-single-60000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year. TAXSIM's 2026 Virginia module
-      extrapolates the section 58.1-322.03 standard deduction to 9,012.56 (the
-      enacted amount is 8,750) and the fixed 930-dollar personal exemption to
-      a fractional projection (implied combined offset 9,970.46), giving
-      staxbc 2,611.47 against the pipeline's enacted 2,635.90; its siitax then
-      nets a flat 206.00 (206.00 per filer, identical on every grid case) from
-      its projected 2026 credit model, which has no enacted analog at these
-      incomes. Residual = (2,635.90 - 2,611.47) + 206.00 = 230.43. TAXSIM 2026
-      parameter projection plus its modeled credit, not a pipeline defect; the
-      pipeline matches PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 2611.47 - 206.0
-      equals: 2405.47
-      tolerance: 0.02
-    - expression: (2635.9 - 2611.47) + 206.0
-      equals: 230.43
-      tolerance: 0.02
-  expires_on_source_change: true
-  pinned:
-    left: 2635.9
-    right: 2405.47
-- id: va-taxsim-2026-parameter-projection-and-credit-single-150000
-  concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
-  case_id: va-single-150000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year. TAXSIM's 2026 Virginia module
-      extrapolates the section 58.1-322.03 standard deduction to 9,012.56 (the
-      enacted amount is 8,750) and the fixed 930-dollar personal exemption to
-      a fractional projection (implied combined offset 9,970.46), giving
-      staxbc 7,786.47 against the pipeline's enacted 7,810.90; its siitax then
-      nets a flat 206.00 (206.00 per filer, identical on every grid case) from
-      its projected 2026 credit model, which has no enacted analog at these
-      incomes. Residual = (7,810.90 - 7,786.47) + 206.00 = 230.43. TAXSIM 2026
-      parameter projection plus its modeled credit, not a pipeline defect; the
-      pipeline matches PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 7786.47 - 206.0
-      equals: 7580.47
-      tolerance: 0.02
-    - expression: (7810.9 - 7786.47) + 206.0
-      equals: 230.43
-      tolerance: 0.02
-  expires_on_source_change: true
-  pinned:
-    left: 7810.9
-    right: 7580.47
-- id: va-taxsim-2026-parameter-projection-and-credit-married-60000
-  concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
-  case_id: va-married-60000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year. TAXSIM's 2026 Virginia module
-      extrapolates the section 58.1-322.03 standard deduction to 18,025.11
-      (the enacted amount is 17,500) and the fixed 930-dollar personal
-      exemption to a fractional projection (implied combined offset
-      19,940.92), giving staxbc 2,038.17 against the pipeline's enacted
-      2,079.30; its siitax then nets a flat 412.00 (206.00 per filer,
-      identical on every grid case) from its projected 2026 credit model,
-      which has no enacted analog at these incomes. Residual = (2,079.30 -
-      2,038.17) + 412.00 = 453.13. TAXSIM 2026 parameter projection plus its
-      modeled credit, not a pipeline defect; the pipeline matches PolicyEngine
-      at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 2038.17 - 412.0
-      equals: 1626.17
-      tolerance: 0.02
-    - expression: (2079.3 - 2038.17) + 412.0
-      equals: 453.13
-      tolerance: 0.02
-  expires_on_source_change: true
-  pinned:
-    left: 2079.3
-    right: 1626.17
-- id: va-taxsim-2026-parameter-projection-and-credit-married-120000
-  concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
-  case_id: va-married-120000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year. TAXSIM's 2026 Virginia module
-      extrapolates the section 58.1-322.03 standard deduction to 18,025.11
-      (the enacted amount is 17,500) and the fixed 930-dollar personal
-      exemption to a fractional projection (implied combined offset
-      19,940.92), giving staxbc 5,488.17 against the pipeline's enacted
-      5,529.30; its siitax then nets a flat 412.00 (206.00 per filer,
-      identical on every grid case) from its projected 2026 credit model,
-      which has no enacted analog at these incomes. Residual = (5,529.30 -
-      5,488.17) + 412.00 = 453.13. TAXSIM 2026 parameter projection plus its
-      modeled credit, not a pipeline defect; the pipeline matches PolicyEngine
-      at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 5488.17 - 412.0
-      equals: 5076.17
-      tolerance: 0.02
-    - expression: (5529.3 - 5488.17) + 412.0
-      equals: 453.13
-      tolerance: 0.02
-  expires_on_source_change: true
-  pinned:
-    left: 5529.3
-    right: 5076.17
-- id: va-taxsim-2026-parameter-projection-and-credit-married-300000
-  concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
-  case_id: va-married-300000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      Both engines run at the 2026 law year. TAXSIM's 2026 Virginia module
-      extrapolates the section 58.1-322.03 standard deduction to 18,025.11
-      (the enacted amount is 17,500) and the fixed 930-dollar personal
-      exemption to a fractional projection (implied combined offset
-      19,940.92), giving staxbc 15,838.17 against the pipeline's enacted
-      15,879.30; its siitax then nets a flat 412.00 (206.00 per filer,
-      identical on every grid case) from its projected 2026 credit model,
-      which has no enacted analog at these incomes. Residual = (15,879.30 -
-      15,838.17) + 412.00 = 453.13. TAXSIM 2026 parameter projection plus its
-      modeled credit, not a pipeline defect; the pipeline matches PolicyEngine
-      at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 15838.17 - 412.0
-      equals: 15426.17
-      tolerance: 0.02
-    - expression: (15879.3 - 15838.17) + 412.0
-      equals: 453.13
-      tolerance: 0.02
-  expires_on_source_change: true
-  pinned:
-    left: 15879.3
-    right: 15426.17
+  - id: va-taxsim-2024-std-deduction-vintage-single-30000
+    concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
+    case_id: va-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The 2026 pipeline reports 910.90 and TAXSIM 2024 reports 925.28, a
+        14.38-dollar gap. TAXSIM's 2024 Virginia run uses the smaller 2024 standard
+        deduction, leaving 250 dollars more taxable income taxed at the 5.75 per
+        cent top rate (250 x 0.0575 = 14.375). The residual is the 2024-to-2026
+        standard-deduction vintage, not a pipeline defect.
+      arithmetic:
+        - expression: "910.9 - 925.28"
+          equals: -14.38
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 910.9
+      right: 925.28
+  - id: va-taxsim-2024-std-deduction-vintage-single-60000
+    concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
+    case_id: va-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The 2026 pipeline reports 2635.90 and TAXSIM 2024 reports 2650.28, the
+        same 14.38-dollar single-filer standard-deduction vintage (250 dollars of
+        additional 2024 taxable income at the 5.75 per cent top rate).
+      arithmetic:
+        - expression: "2635.9 - 2650.28"
+          equals: -14.38
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2635.9
+      right: 2650.28
+  - id: va-taxsim-2024-std-deduction-vintage-single-150000
+    concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
+    case_id: va-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The 2026 pipeline reports 7810.90 and TAXSIM 2024 reports 7825.28, the
+        same 14.38-dollar single-filer standard-deduction vintage at the 5.75 per
+        cent top rate.
+      arithmetic:
+        - expression: "7810.9 - 7825.28"
+          equals: -14.38
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 7810.9
+      right: 7825.28
+  - id: va-taxsim-2024-std-deduction-vintage-married-60000
+    concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
+    case_id: va-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The 2026 pipeline reports 2079.30 and TAXSIM 2024 reports 2108.05, a
+        28.75-dollar gap: the married standard-deduction vintage is twice the
+        single amount (500 dollars of additional 2024 taxable income at the 5.75
+        per cent top rate = 28.75).
+      arithmetic:
+        - expression: "2079.3 - 2108.05"
+          equals: -28.75
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2079.3
+      right: 2108.05
+  - id: va-taxsim-2024-std-deduction-vintage-married-120000
+    concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
+    case_id: va-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The 2026 pipeline reports 5529.30 and TAXSIM 2024 reports 5558.05, the
+        same 28.75-dollar married standard-deduction vintage.
+      arithmetic:
+        - expression: "5529.3 - 5558.05"
+          equals: -28.75
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5529.3
+      right: 5558.05
+  - id: va-taxsim-2024-std-deduction-vintage-married-300000
+    concept: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
+    case_id: va-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The 2026 pipeline reports 15879.30 and TAXSIM 2024 reports 15908.05, the
+        same 28.75-dollar married standard-deduction vintage.
+      arithmetic:
+        - expression: "15879.3 - 15908.05"
+          equals: -28.75
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 15879.3
+      right: 15908.05

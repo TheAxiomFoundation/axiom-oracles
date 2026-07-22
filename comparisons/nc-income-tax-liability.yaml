@@ -8,13 +8,11 @@
 # (North Carolina AGI less the section 105-153.5(a) standard deduction,
 # $12,750 single / $25,500 joint).
 #
-# PolicyEngine and TAXSIM both run at the 2026 validation year: the pinned
-# policyengine-taxsim 2.30.0 binary models 2026 law (its missing 2026
-# qualifying-child credit machinery is not exercised by this childless grid),
-# but its North Carolina module retains the 2025 step-down rate (4.25%)
-# instead of the enacted 3.99% on an extrapolated deduction; each residual is
-# decomposed exactly in dispositions/nc-income-tax-liability.yaml rather than
-# absorbed by tolerance.
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 rate step-down (4.5% to 3.99% on an unchanged deduction) is
+# recorded in dispositions/nc-income-tax-liability.yaml rather than absorbed
+# by tolerance.
 #
 # Run locally:
 #   uv run python scripts/run_comparison.py nc-income-tax-liability
@@ -25,14 +23,14 @@ description: >-
   Compares the composed North Carolina income-tax liability pipeline encoded
   in Axiom RuleSpec (us-nc/policies/income_tax/pilot_liability_pipeline)
   against PolicyEngine (nc_income_tax_before_credits) at 2026 and TAXSIM
-  (siitax) at 2026 on a modest grid of single and married filers.
+  (siitax) at 2024 on a modest grid of single and married filers.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: NC
     period: "2026"
-    taxsim_law_year: 2026
+    taxsim_law_year: 2024
     # Links this suite to the rulespec-us monorepo in the affected map
     # so a change to the composed pipeline triggers a re-run.
     rulespec_roots:

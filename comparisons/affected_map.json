@@ -309,6 +309,7 @@
     },
     {
       "suite": "co-tax-intersection-taxsim",
+      "name": "co-tax-intersection-taxsim",
       "report": "axiom-taxsim-co-tax-intersection-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"

@@ -7,14 +7,11 @@
 # schedule) on Georgia taxable net income (Georgia AGI less the section
 # 48-7-27 standard deduction, $15,000 single / $30,000 joint under HB463).
 #
-# PolicyEngine and TAXSIM both run at the 2026 validation year: the pinned
-# policyengine-taxsim 2.30.0 binary models 2026 law (its missing 2026
-# qualifying-child credit machinery is not exercised by this childless grid),
-# but its Georgia module applies the un-accelerated HB 1015 step-down rate
-# (5.19%) instead of the enacted 4.99% on an extrapolated pre-HB463
-# deduction; each residual is decomposed exactly in
-# dispositions/ga-income-tax-liability.yaml rather than absorbed by
-# tolerance.
+# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
+# supported law year (2024) because the pinned binary abandons 2026; the
+# 2024-to-2026 rate step-down (5.39% to 4.99%) and deduction vintage are
+# recorded in dispositions/ga-income-tax-liability.yaml rather than absorbed
+# by tolerance.
 #
 # Run locally:
 #   uv run python scripts/run_comparison.py ga-income-tax-liability
@@ -25,14 +22,14 @@ description: >-
   Compares the composed Georgia income-tax liability pipeline encoded in Axiom
   RuleSpec (us-ga/policies/income_tax/pilot_liability_pipeline) against
   PolicyEngine (ga_income_tax_before_non_refundable_credits) at 2026 and
-  TAXSIM (siitax) at 2026 on a modest grid of single and married filers.
+  TAXSIM (siitax) at 2024 on a modest grid of single and married filers.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: GA
     period: "2026"
-    taxsim_law_year: 2026
+    taxsim_law_year: 2024
     # Links this suite to the rulespec-us monorepo in the affected map
     # so a change to the composed pipeline triggers a re-run.
     rulespec_roots:

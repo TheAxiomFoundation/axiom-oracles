@@ -6,10 +6,10 @@
 # four and forty one-hundredths per cent to Colorado taxable income, with the rate
 # imported hash-pinned from the encoded statute module.
 #
-# PolicyEngine and TAXSIM both run at the 2026 validation year and TAXSIM's
-# before-credit Colorado tax (staxbc) reproduces the pipeline to the cent on
-# all six cases; its siitax nets a projected 2026 TABOR sales-tax refund the
-# before-non-refundable-credits concept excludes, so each residual is that
+# PolicyEngine runs at the 2026 validation year and matches the pipeline to
+# the cent on all six cases. TAXSIM runs at its latest supported law year
+# (2024) and its siitax nets the modeled 2024 TABOR sales-tax refund, so each
+# TAXSIM residual decomposes into the 2024 rate/deduction vintage plus that
 # netted refund — pinned per case in dispositions/co-income-tax-liability.yaml
 # rather than absorbed by tolerance.
 #
@@ -22,14 +22,14 @@ description: >-
   Compares the composed Colorado income-tax liability pipeline encoded in Axiom
   RuleSpec (us-co/policies/income_tax/pilot_liability_pipeline) against
   PolicyEngine (co_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
-  (siitax) at 2026 on the standard modest grid of single and married filers.
+  (siitax) at 2024 on the standard modest grid of single and married filers.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: CO
     period: "2026"
-    taxsim_law_year: 2026
+    taxsim_law_year: 2024
     # Links this suite to the rulespec-us monorepo in the affected map
     # so a change to the composed pipeline triggers a re-run.
     rulespec_roots:
