@@ -51,7 +51,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-22T04:01:54Z",
+    "generated_at": "2026-07-22T09:13:19Z",
     "generated_by": "scripts/run_comparison.py::uk-tax-free-childcare-pe",
     "oracle": {
       "name": "policyengine",
