@@ -1,0 +1,23 @@
+{
+ "suite": "be-worker-pit",
+ "updated": "2026-07-05",
+ "entries": [
+  {
+   "id": "work-bonus-credit-uncapped-ab-bases",
+   "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 tinfe_be computes the refundable Article 289ter/1 low-wage work-bonus tax credit from the pre-cap scheduled i_tsceerdA_s and i_tsceerdB_s amounts, while CIR 92 Article 289ter/1 bases the credit on the work-bonus reductions actually granted, so the source-backed RuleSpec caps the A/B credit bases by the Article 38 personal contribution before reductions. Only the 10k low-wage case is affected; the 30k and 60k worker PIT control cases match within tolerance.",
+   "cases": [
+    "be-worker-pit-10k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "-1504.848888 - -724.481556",
+     "equals": -780.367332
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12"
+  }
+ ]
+}

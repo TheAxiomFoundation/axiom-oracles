@@ -1372,6 +1372,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    if params.get("include_case_inputs"):
+        cmd.append("--include-case-inputs")
     if params.get("comparison_batch_size"):
         comparison_batch_size = params["comparison_batch_size"]
     elif any(

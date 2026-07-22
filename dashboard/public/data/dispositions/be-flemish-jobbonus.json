@@ -1,0 +1,71 @@
+{
+ "suite": "be-flemish-jobbonus",
+ "updated": "2026-07-05",
+ "entries": [
+  {
+   "id": "stale-maximum-and-missing-2025-top-up-full-time",
+   "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 bwkrg_be pays its older 600 EUR annual maximum with no 2025 fixed top-up. The Flemish implementing order consolidated as of 1 January 2025 sets a 650 EUR maximum plus a 50 EUR fixed top-up when payable, which is what the source-backed RuleSpec returns for the full-time low-wage band.",
+   "cases": [
+    "be-flemish-jobbonus-low-wage-full-time",
+    "be-flemish-jobbonus-threshold-wage-full-time"
+   ],
+   "arithmetic": [
+    {
+     "expression": "650 + 50",
+     "equals": 700
+    },
+    {
+     "expression": "700 - 600",
+     "equals": 100
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+  },
+  {
+   "id": "stale-maximum-and-unscaled-top-up-half-time",
+   "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "The half-time low-wage case scales the same stale schedule: the 2025 order scales the 650 EUR maximum by the 0.5 work fraction and adds the unscaled 50 EUR fixed top-up, while EUROMOD scales its older 600 EUR maximum and pays no top-up.",
+   "cases": [
+    "be-flemish-jobbonus-low-wage-half-time"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.5 * 650 + 50",
+     "equals": 375
+    },
+    {
+     "expression": "0.5 * 600",
+     "equals": 300
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+  },
+  {
+   "id": "stale-degressive-thresholds-upper-band",
+   "concept": "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "In the degressive band EUROMOD BE_2025 uses the older 1,800/2,500 EUR monthly wage thresholds, 600 EUR maximum, 20 EUR small-payment threshold, and no floor or top-up, against the 2025 order's 2,115/3,114.99 EUR thresholds, 650 EUR maximum, 50 EUR floor, and 50 EUR top-up. After bridging EUROMOD's yemeq_s into Axiom monthly gross, both upper-band residuals equal the same threshold, floor, and top-up gap filed upstream. The Brussels non-Flanders zero case and the tiny part-time suppression case match, isolating the residual to the stale amount schedule.",
+   "cases": [
+    "be-flemish-jobbonus-upper-band-full-time",
+    "be-flemish-jobbonus-high-wage-full-time"
+   ],
+   "arithmetic": [
+    {
+     "expression": "550.1752838032716 - 381.17678205043353",
+     "equals": 168.998502
+    },
+    {
+     "expression": "222.7512669593568 - 53.75603944668728",
+     "equals": 168.995228
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/10"
+  }
+ ]
+}

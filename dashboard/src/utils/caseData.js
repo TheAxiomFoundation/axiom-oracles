@@ -3,6 +3,20 @@
 // this caches per suite so the explorer and triangulation share one fetch.
 
 const cache = new Map();
+const dispositionCache = new Map();
+
+/**
+ * The suite's disposition explanations (dispositions/<suite>.yaml shipped
+ * as JSON): id, concept, kind, category, prose mechanism, linked issue.
+ */
+export async function loadSuiteDispositions(suite) {
+  if (dispositionCache.has(suite)) return dispositionCache.get(suite);
+  const promise = fetch(`/data/dispositions/${suite}.json`)
+    .then((r) => (r.ok ? r.json() : null))
+    .catch(() => null);
+  dispositionCache.set(suite, promise);
+  return promise;
+}
 
 export async function loadSuiteCases(suite) {
   if (cache.has(suite)) return cache.get(suite);

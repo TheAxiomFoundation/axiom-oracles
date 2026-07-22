@@ -1,0 +1,74 @@
+{
+ "suite": "be-special-social-security-contribution",
+ "updated": "2026-07-05",
+ "entries": [
+  {
+   "id": "single-maximum-contribution-exceeded",
+   "concept": "be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 tsceesp_be exceeds the Law of 30 March 1994 Article 108 single-household maximum: the statute caps the contribution at 731.28 EUR above 60,181.95 EUR household income, which is what the source-backed RuleSpec returns for the bridged il_taxabley base of 67,440.48 EUR.",
+   "cases": [
+    "be-special-social-security-single-80k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "743.8640246399998 - 731.28",
+     "equals": 12.584025
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7"
+  },
+  {
+   "id": "joint-one-earner-missing-1-3-percent-band",
+   "concept": "be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 returns the flat 123.95 EUR band value and does not apply the statutory joint-assessment 1.3 percent band above 21,070.96 EUR. The Axiom value reproduces the Article 108 middle band exactly from the bridged il_taxabley base.",
+   "cases": [
+    "be-special-social-security-joint-one-earner-30k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "123.95 + 0.013 * (24663.415480329604 - 21070.96)",
+     "equals": 170.651921
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7"
+  },
+  {
+   "id": "joint-two-earner-mid-band-missing-1-3-percent-band",
+   "concept": "be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Same missing joint 1.3 percent band in the middle of the Article 108 schedule: EUROMOD stays at the flat 123.95 EUR value while the Axiom value reproduces the statutory band formula exactly from the bridged il_taxabley base.",
+   "cases": [
+    "be-special-social-security-joint-two-earner-30k-20k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "123.95 + 0.013 * (39833.86833701546 - 21070.96)",
+     "equals": 367.867808
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7"
+  },
+  {
+   "id": "joint-two-earner-plateau-misplaced-band",
+   "concept": "be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Article 108 sets a joint-assessment plateau of 632.39 EUR from 60,181.96 through 74,688.00 EUR household income; the bridged il_taxabley base of 64,268.32 EUR sits inside that plateau, so the source-backed RuleSpec returns 632.39. EUROMOD BE_2025 instead starts its 1.3 percent band in the plateau range.",
+   "cases": [
+    "be-special-social-security-joint-two-earner-60k-20k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "632.39 - 177.3310556877799",
+     "equals": 455.058944
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/7"
+  }
+ ]
+}

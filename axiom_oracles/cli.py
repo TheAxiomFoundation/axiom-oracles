@@ -399,6 +399,17 @@ def sanity_check(
     ),
 )
 @click.option(
+    "--include-case-inputs/--no-include-case-inputs",
+    "include_case_inputs",
+    default=None,
+    help=(
+        "Persist every case's raw input records and matched values in the "
+        "report. Defaults by loaded-case count, which overcounts for suites "
+        "whose jurisdiction filter runs inside the bridge (state tax) — pass "
+        "the flag explicitly for those."
+    ),
+)
+@click.option(
     "--comparison-batch-size",
     type=click.IntRange(min=1),
     default=5_000,
@@ -434,6 +445,7 @@ def compare(
     axiom_batch_size: int,
     axiom_compiled_program: Path | None,
     jurisdiction_fips: str | None,
+    include_case_inputs: bool | None,
     comparison_batch_size: int,
     output_path: Path | None,
     json_output: bool,
@@ -537,8 +549,15 @@ def compare(
                 if stream_case_rows
                 else None,
                 # Small suites persist full evidence: raw input records and
-                # matched values, so a report alone reproduces the run.
-                include_inputs=len(cases) <= FULL_CASE_INPUT_LIMIT,
+                # matched values, so a report alone reproduces the run. The
+                # loaded-case count overstates suites whose jurisdiction
+                # filter runs inside the bridge (state tax slices), so an
+                # explicit --include-case-inputs wins over the heuristic.
+                include_inputs=(
+                    include_case_inputs
+                    if include_case_inputs is not None
+                    else len(cases) <= FULL_CASE_INPUT_LIMIT
+                ),
             )
             total_batches = (len(cases) + comparison_batch_size - 1) // comparison_batch_size
             for batch_index, case_batch in enumerate(

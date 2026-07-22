@@ -16,6 +16,10 @@ runner:
     period: "2026"
     concept: us:tax/state-income-tax#liability
     axiom_rulespec_repo_roots: $HOME
+    # The CO slice is ~1,200 tax units — well under FULL_CASE_INPUT_LIMIT —
+    # but the jurisdiction filter runs inside the tax bridge, so the CLI's
+    # loaded-case heuristic sees the whole national ECPS. Force evidence on.
+    include_case_inputs: true
 
 artifacts:
   report_basename: axiom-policyengine-co-state-income-tax-ecps

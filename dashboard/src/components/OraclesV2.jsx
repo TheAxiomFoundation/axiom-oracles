@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { loadOracleData } from "../utils/data";
-import { loadSuiteCases } from "../utils/caseData";
 import { causeFor, countUnexplained } from "../utils/programs";
 import {
   engineLabel,
@@ -11,12 +10,16 @@ import {
 } from "../utils/format";
 import { rateColor } from "../utils/colors";
 import ProgramPage from "./ProgramPage";
+import DispositionNote from "./DispositionNote";
+import HouseholdsView from "./Households";
 import {
   suiteMeta,
   suiteLabel,
   reportMetric,
+  topLevelAggregates,
   isAxiomPair,
   otherOracle,
+  JURISDICTION_LABELS,
 } from "../utils/suites";
 
 /**
@@ -93,23 +96,49 @@ function compactCount(n) {
   return n.toLocaleString();
 }
 
-/** One discrepancy class = a (suite, concept, kind) mismatch bucket. */
+/**
+ * One discrepancy class = a (suite, concept, kind) mismatch bucket.
+ * Large suites slim the recorded mismatch list, so bucket counts from it
+ * are lower bounds — except when a concept shows a single kind, where the
+ * aggregate's exact mismatch_count applies (and must, so these figures
+ * never contradict the run totals).
+ */
 function buildClasses(reports, knownCauses) {
   const rows = [];
   for (const report of reports) {
     const descriptions = new Map(
       (report.aggregates || []).map((a) => [a.concept, a.description]),
     );
+    const aggMismatches = new Map();
+    for (const agg of topLevelAggregates(report.aggregates)) {
+      aggMismatches.set(
+        agg.concept,
+        (aggMismatches.get(agg.concept) || 0) + (agg.mismatch_count || 0),
+      );
+    }
+    const list = report.mismatches || [];
+    const truncated = (report.summary?.mismatch_count ?? 0) > list.length;
     const buckets = new Map();
-    for (const m of report.mismatches || []) {
+    for (const m of list) {
       const key = `${m.concept}::${m.kind}`;
       buckets.set(key, (buckets.get(key) || 0) + 1);
+    }
+    const kindsPerConcept = new Map();
+    for (const key of buckets.keys()) {
+      const concept = key.split("::")[0];
+      kindsPerConcept.set(concept, (kindsPerConcept.get(concept) || 0) + 1);
     }
     const dispositioned = Boolean(
       report.summary?.dispositioned?.dispositions_file,
     );
-    for (const [key, count] of buckets) {
+    for (const [key, recorded] of buckets) {
       const [concept, kind] = key.split("::");
+      const singleKind = kindsPerConcept.get(concept) === 1;
+      const count =
+        singleKind && aggMismatches.has(concept)
+          ? aggMismatches.get(concept)
+          : recorded;
+      const lowerBound = truncated && !singleKind;
       const cause = causeFor(knownCauses, report, concept, kind);
       const action = cause?.issue_url
         ? "filed"
@@ -120,11 +149,13 @@ function buildClasses(reports, knownCauses) {
             : "open";
       rows.push({
         count,
+        lowerBound,
         suite: report.suite,
         program: suiteLabel(report.suite),
         region: suiteMeta(report.suite).region,
         oracle: otherOracle(report),
         engines: report.engines,
+        concept,
         conceptLabel: descriptions.get(concept) || concept,
         kind,
         cause,
@@ -160,22 +191,119 @@ function ActionChip({ row }) {
   return <span className="v2-action v2-action-doc">dispositioned</span>;
 }
 
-function ClassRow({ row, showOracle = true }) {
-  return (
-    <div className="v2-class-row">
-      <span className="mono v2-class-count">{row.count.toLocaleString()}</span>
-      <div className="v2-class-body">
-        <div className="v2-class-label">
-          {row.cause?.label || mismatchKindLabel(row.kind, row.engines)}
-        </div>
-        <div className="mono v2-class-meta">
-          {row.program}
-          {showOracle && row.oracle && <> · vs {engineLabel(row.oracle)}</>}
-          {" · "}
-          {row.conceptLabel}
-        </div>
+/**
+ * Discrepancy classes grouped by program: a program header with its case
+ * total, then one line per class — count, what differs, which concept,
+ * and where the triage stands. Explained classes (documented, filed, or
+ * dispositioned) expand on click to show WHY. Programs with open classes
+ * surface first; the long tail collapses behind a summary that still
+ * states its size.
+ */
+function ClassLedger({ classes }) {
+  const [openKey, setOpenKey] = useState(null);
+  const byProgram = new Map();
+  for (const row of classes) {
+    if (!byProgram.has(row.program)) {
+      byProgram.set(row.program, {
+        program: row.program,
+        rows: [],
+        total: 0,
+        open: 0,
+      });
+    }
+    const g = byProgram.get(row.program);
+    g.rows.push(row);
+    g.total += row.count;
+    if (row.action === "open") g.open += 1;
+  }
+  const groups = [...byProgram.values()].sort(
+    (a, b) => (b.open > 0) - (a.open > 0) || b.total - a.total,
+  );
+
+  // Show whole programs until ~10 class lines are on screen; the rest
+  // fold away. Never split a program across the fold.
+  const shown = [];
+  let lines = 0;
+  let i = 0;
+  while (i < groups.length && (lines < 10 || shown.length === 0)) {
+    shown.push(groups[i]);
+    lines += groups[i].rows.length;
+    i += 1;
+  }
+  const rest = groups.slice(i);
+  const restClasses = rest.reduce((n, g) => n + g.rows.length, 0);
+
+  const renderGroup = (g) => (
+    <div key={g.program} className="v2-ledger-group">
+      <div className="v2-ledger-prog">
+        <span className="v2-ledger-progname">{g.program}</span>
       </div>
-      <ActionChip row={row} />
+      {g.rows.map((row, ri) => {
+        const key = `${row.suite}:${row.concept}:${row.kind}`;
+        const explainable = row.action !== "open";
+        const isOpen = openKey === key;
+        return (
+          <div key={ri}>
+            <div
+              className={`v2-ledger-row${explainable ? " v2-ledger-click" : ""}`}
+              onClick={
+                explainable
+                  ? () => setOpenKey(isOpen ? null : key)
+                  : undefined
+              }
+            >
+              <span
+                className="mono v2-ledger-count"
+                title={
+                  row.lowerBound
+                    ? "Counted from the recorded mismatch rows — the true count may be higher"
+                    : undefined
+                }
+              >
+                {row.lowerBound ? "≥" : ""}
+                {row.count.toLocaleString()}
+              </span>
+              <span className="v2-ledger-what">
+                {row.cause?.label ||
+                  mismatchKindLabel(row.kind, row.engines)}
+                <span className="v2-ledger-concept">
+                  {row.conceptLabel}
+                  {explainable && (
+                    <>
+                      {" · "}
+                      <span className="v2-ledger-why">
+                        {isOpen ? "hide details" : "see details"}
+                      </span>
+                    </>
+                  )}
+                </span>
+              </span>
+              <ActionChip row={row} />
+            </div>
+            {isOpen &&
+              (row.cause?.description ? (
+                <div className="v2-expl">{row.cause.description}</div>
+              ) : (
+                <DispositionNote row={row} />
+              ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <div className="v2-ledger">
+      {shown.map(renderGroup)}
+      {rest.length > 0 && (
+        <details className="v2-ledger-more">
+          <summary>
+            show {restClasses} more class{restClasses === 1 ? "" : "es"}{" "}
+            across {rest.length} program{rest.length === 1 ? "" : "s"}
+          </summary>
+          {rest.map(renderGroup)}
+        </details>
+      )}
     </div>
   );
 }
@@ -234,212 +362,60 @@ function OracleCard({ oracle, selected, onSelect }) {
   );
 }
 
-function caseValue(v) {
-  if (typeof v === "boolean") return v ? "yes" : "no";
-  if (typeof v === "number") return `$${Math.round(v).toLocaleString()}`;
-  return v == null ? "—" : String(v);
-}
-
-function conceptShort(conceptId, labels) {
-  const known = labels.get(conceptId);
-  if (known) return known;
-  const tail = String(conceptId).split("#").pop().replaceAll(/[_-]/g, " ");
-  // Short tails are acronyms (eitc, ctc); longer ones read as phrases.
-  return tail.length <= 4
-    ? tail.toUpperCase()
-    : tail.charAt(0).toUpperCase() + tail.slice(1);
-}
-
-/**
- * The bottom of the drill: individual households, their inputs, and — when
- * the engines disagree — both engines' answers side by side. Reads the
- * per-suite case artifacts (matches carry inputs only; outputs are stored
- * for disagreements, where they are the evidence).
- */
-function HouseholdBrowser({ oracle }) {
-  const suites = useMemo(
-    () => [...new Set(oracle.reports.map((r) => r.suite))],
-    [oracle],
-  );
-  const conceptLabels = useMemo(() => {
-    const labels = new Map();
-    for (const report of oracle.reports) {
-      for (const agg of report.aggregates || []) {
-        if (agg.description) labels.set(agg.concept, agg.description);
-      }
-    }
-    return labels;
-  }, [oracle]);
-  const [suite, setSuite] = useState(suites[0]);
-  const [cases, setCases] = useState(undefined); // undefined = loading
-  const [onlyDisagreements, setOnlyDisagreements] = useState(false);
-  const [limit, setLimit] = useState(12);
-
-  const activeSuite = suites.includes(suite) ? suite : suites[0];
-
-  useEffect(() => {
-    let live = true;
-    setCases(undefined);
-    setLimit(12);
-    loadSuiteCases(activeSuite).then((d) => {
-      if (live) setCases(d);
-    });
-    return () => {
-      live = false;
-    };
-  }, [activeSuite]);
-  const rows = useMemo(() => {
-    if (!cases?.cases) return [];
-    let out = cases.cases;
-    if (onlyDisagreements) out = out.filter((c) => (c.m || []).length > 0);
-    // Worst disagreement first; agreeing households after.
-    return [...out].sort((a, b) => {
-      const worst = (c) =>
-        Math.max(0, ...(c.m || []).map((m) => Math.abs(m.d || 0)));
-      return worst(b) - worst(a);
-    });
-  }, [cases, onlyDisagreements]);
-
-  const totalCompared = cases?.index?.total_cases ?? cases?.cases?.length ?? 0;
-  const inputsMissing = Boolean(
-    cases?.cases?.length &&
-      cases.cases
-        .slice(0, 50)
-        .every((c) => !(c.h?.n || (c.h?.a || []).length)),
-  );
-
-  return (
-    <div className="v2-hh">
-      <div className="v2-hh-head">
-        <span className="mono v2-dossier-colhead">Households</span>
-      </div>
-      <div className="v2-hh-controls">
-        <select
-          className="input-pill v2-hh-select"
-          value={activeSuite}
-          onChange={(e) => setSuite(e.target.value)}
-          aria-label="Verification suite"
-        >
-          {suites.map((s) => (
-            <option key={s} value={s}>
-              {suiteLabel(s)}
-            </option>
-          ))}
-        </select>
-        <button
-          type="button"
-          className={`v2-toggle${onlyDisagreements ? " v2-toggle-on" : ""}`}
-          aria-pressed={onlyDisagreements}
-          onClick={() => setOnlyDisagreements(!onlyDisagreements)}
-        >
-          <span className="v2-toggle-mark" aria-hidden="true" />
-          only disagreements
-        </button>
-      </div>
-      {cases?.cases &&
-        (cases.index?.partial === "mismatch-only" || inputsMissing) && (
-          <p className="v2-hh-note">
-            {cases.index?.partial === "mismatch-only" &&
-              `This artifact stores only the disagreeing households — the other ${(
-                totalCompared - cases.cases.length
-              ).toLocaleString()} matched on every compared value. `}
-            {inputsMissing &&
-              "Household inputs are not yet captured by this suite's harness."}
-          </p>
-        )}
-      {cases === undefined ? (
-        <p className="v2-empty">Loading household cases…</p>
-      ) : cases === null ? (
-        <p className="v2-empty">
-          No per-household case artifacts for this suite yet.
-        </p>
-      ) : rows.length === 0 ? (
-        <p className="v2-empty">
-          {onlyDisagreements
-            ? "No disagreeing households in this suite — every compared value matches."
-            : "No households in this suite."}
-        </p>
-      ) : (
-        <>
-          {rows.slice(0, limit).map((c) => (
-            <div key={c.id} className="v2-hh-row">
-              <div className="v2-hh-who">
-                <span className="mono v2-hh-id">{c.id}</span>
-                {(c.h?.n || (c.h?.a || []).length > 0) && (
-                  <span className="v2-hh-inputs">
-                    {c.h?.n || (c.h?.a || []).length} ppl
-                    {(c.h?.a || []).length > 0 &&
-                      ` · ages ${(c.h.a || []).join(", ")}`}
-                    {c.h?.e != null &&
-                      ` · $${Number(c.h.e).toLocaleString()} earned`}
-                  </span>
-                )}
-              </div>
-              <div className="v2-hh-outcomes">
-                {(c.m || []).length === 0 ? (
-                  <span className="v2-hh-agree">
-                    engines agree on every compared value
-                  </span>
-                ) : (
-                  (c.m || []).map((m, i) => (
-                    <div key={i} className="v2-hh-outcome">
-                      <span className="v2-hh-concept">
-                        {conceptShort(m.c, conceptLabels)}
-                      </span>
-                      <span className="mono v2-hh-values">
-                        <span className="v2-hh-eng">Axiom</span>{" "}
-                        {caseValue(m.l)}
-                        <span className="v2-hh-eng">
-                          {" "}
-                          {engineLabel(oracle.id)}
-                        </span>{" "}
-                        {caseValue(m.x)}
-                        {typeof m.d === "number" && m.d !== 0 && (
-                          <span className="v2-hh-diff">
-                            {" "}
-                            Δ ${Math.abs(Math.round(m.d)).toLocaleString()}
-                          </span>
-                        )}
-                      </span>
-                      {m.e ? (
-                        <span className="v2-action v2-action-doc">
-                          explained
-                        </span>
-                      ) : (
-                        <span className="v2-action v2-action-open">
-                          unexplained
-                        </span>
-                      )}
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
-          {rows.length > limit && (
-            <button
-              type="button"
-              className="mono v2-hh-more"
-              onClick={() => setLimit(limit + 24)}
-            >
-              show {Math.min(24, rows.length - limit)} more of{" "}
-              {rows.length.toLocaleString()}
-            </button>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
 const REGION_ORDER = ["us", "ca", "uk", "be"];
 
-function OracleRecord({ oracle, onOpenProgram }) {
-  // Multi-country oracles get a country scope; single-country ones don't
-  // need the chrome. Scoping filters programs, classes, and households.
+function ProgRow({ p, onOpenProgram }) {
+  return (
+    <button
+      type="button"
+      className="v2-prog-row"
+      onClick={() => onOpenProgram(p.key)}
+      title={`Open ${p.label} in the program explorer`}
+    >
+      <span className="v2-prog-label">
+        {p.label}
+        {p.oracles && p.oracles.size > 0 && (
+          <span className="mono v2-prog-oracles">
+            vs {[...p.oracles].map(engineLabel).join(", ")}
+          </span>
+        )}
+      </span>
+      <span className="mono v2-region">
+        {REGION_LABELS[p.region] || p.region}
+      </span>
+      <span
+        className="mono v2-prog-checks"
+        title={`${p.households.toLocaleString()} households · ${p.total.toLocaleString()} checks`}
+      >
+        {p.households.toLocaleString()}
+        <span className="v2-prog-unit"> households</span>
+      </span>
+      <span
+        className="mono v2-prog-rate"
+        style={{ color: rateColor(p.rate) }}
+      >
+        {formatAgreementRate(p.rate, p.mismatches)}
+        <span className="v2-prog-unit"> agree</span>
+      </span>
+    </button>
+  );
+}
+
+const programKeyOf = (suite) => {
+  const meta = suiteMeta(suite);
+  return `${meta.family}__${meta.jurisdiction}`;
+};
+
+function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
+  // One filter bar scopes the whole record: country chips + program select
+  // apply to the alignment census, the discrepancy classes, and the
+  // household browser alike.
   const regions = REGION_ORDER.filter((r) => oracle.regions.has(r));
   const [region, setRegion] = useState(null);
-  const scoped = useMemo(() => {
+  const [program, setProgram] = useState(null);
+  const [query, setQuery] = useState("");
+
+  const regionScoped = useMemo(() => {
     if (!region) return oracle;
     return {
       ...oracle,
@@ -452,7 +428,7 @@ function OracleRecord({ oracle, onOpenProgram }) {
 
   const programRows = useMemo(() => {
     const byProgram = new Map();
-    for (const report of scoped.reports) {
+    for (const report of regionScoped.reports) {
       const meta = suiteMeta(report.suite);
       const key = `${meta.family}__${meta.jurisdiction}`;
       if (!byProgram.has(key)) {
@@ -476,14 +452,60 @@ function OracleRecord({ oracle, onOpenProgram }) {
         ...p,
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
       }))
-      .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1));
-  }, [scoped]);
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [regionScoped]);
+
+  // A stale program selection (after a scope change) falls back to all.
+  const activeProgram = programRows.some((p) => p.key === program)
+    ? program
+    : null;
+
+  // The search box narrows to every program whose name matches; the
+  // dropdown pins exactly one. Either way the whole record follows.
+  const q = query.trim().toLowerCase();
+  const matchedKeys = useMemo(() => {
+    if (activeProgram || !q) return null;
+    return new Set(
+      programRows
+        .filter((p) => p.label.toLowerCase().includes(q))
+        .map((p) => p.key),
+    );
+  }, [programRows, activeProgram, q]);
+
+  const scoped = useMemo(() => {
+    if (!activeProgram && !matchedKeys) return regionScoped;
+    const keep = (suite) => {
+      const key = programKeyOf(suite);
+      return activeProgram ? key === activeProgram : matchedKeys.has(key);
+    };
+    return {
+      ...regionScoped,
+      reports: regionScoped.reports.filter((r) => keep(r.suite)),
+      classes: regionScoped.classes.filter((c) => keep(c.suite)),
+    };
+  }, [regionScoped, activeProgram, matchedKeys]);
+
+  const visibleRows = activeProgram
+    ? programRows.filter((p) => p.key === activeProgram)
+    : matchedKeys
+      ? programRows.filter((p) => matchedKeys.has(p.key))
+      : programRows;
+  // Highest alignment first: fully agreeing programs alphabetically,
+  // then the rest by descending rate — all visible, nothing folded away.
+  const alignmentRows = [
+    ...[...visibleRows]
+      .filter((p) => p.mismatches === 0)
+      .sort((a, b) => a.label.localeCompare(b.label)),
+    ...[...visibleRows]
+      .filter((p) => p.mismatches > 0)
+      .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1)),
+  ];
 
   return (
     <section className="card-flat v2-dossier">
-      {regions.length > 1 && (
-        <div className="v2-scope" role="group" aria-label="Country">
-          {[null, ...regions].map((r) => (
+      <div className="v2-scope" role="group" aria-label="Scope">
+        {regions.length > 1 &&
+          [null, ...regions].map((r) => (
             <button
               key={r ?? "all"}
               type="button"
@@ -494,75 +516,72 @@ function OracleRecord({ oracle, onOpenProgram }) {
               {r ? REGION_LABELS[r] || r : "All countries"}
             </button>
           ))}
-        </div>
-      )}
-      <div className="v2-dossier-body">
+        <input
+          className="input-pill v2-scope-search"
+          type="search"
+          placeholder="search programs…"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setProgram(null);
+          }}
+          aria-label="Search programs"
+        />
+        <select
+          className="input-pill v2-scope-select"
+          value={activeProgram ?? ""}
+          onChange={(e) => {
+            setProgram(e.target.value || null);
+            setQuery("");
+          }}
+          aria-label="Program"
+        >
+          <option value="">All programs · {programRows.length}</option>
+          {programRows.map((p) => (
+            <option key={p.key} value={p.key}>
+              {p.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="v2-record-stack">
         <div className="v2-dossier-col">
           <div className="mono v2-dossier-colhead">
-            Programs verified against {engineLabel(oracle.id)}
+            Program alignment against {engineLabel(oracle.id)}
           </div>
-          {programRows.map((p) => (
-            <button
-              key={p.key}
-              type="button"
-              className="v2-prog-row"
-              onClick={() => onOpenProgram(p.key)}
-              title={`Open ${p.label} in the program explorer`}
-            >
-              <span className="v2-prog-label">{p.label}</span>
-              <span className="mono v2-region">
-                {REGION_LABELS[p.region] || p.region}
-              </span>
-              <span
-                className="mono v2-prog-checks"
-                title={`${p.households.toLocaleString()} households · ${p.total.toLocaleString()} checks`}
-              >
-                {p.households.toLocaleString()}
-              </span>
-              <span
-                className="mono v2-prog-rate"
-                style={{ color: rateColor(p.rate) }}
-              >
-                {formatAgreementRate(p.rate, p.mismatches)}
-              </span>
-            </button>
-          ))}
+          {alignmentRows.length === 0 && (
+            <p className="v2-empty">No programs in this scope.</p>
+          )}
+          <div className="v2-prog-grid">
+            {alignmentRows.map((p) => (
+              <ProgRow key={p.key} p={p} onOpenProgram={onOpenProgram} />
+            ))}
+          </div>
         </div>
+
         <div className="v2-dossier-col">
           <div className="mono v2-dossier-colhead">Discrepancy classes</div>
           {scoped.classes.length === 0 ? (
             <p className="v2-empty">
-              No measured disagreements with this oracle.
+              No measured disagreements in this scope.
             </p>
           ) : (
-            <>
-              {scoped.classes.slice(0, 8).map((row, i) => (
-                <ClassRow
-                  key={`${row.suite}-${row.conceptLabel}-${row.kind}-${i}`}
-                  row={row}
-                  showOracle={false}
-                />
-              ))}
-              {scoped.classes.length > 8 && (
-                <details className="v2-ledger-more">
-                  <summary>
-                    show all {scoped.classes.length} classes
-                  </summary>
-                  {scoped.classes.slice(8).map((row, i) => (
-                    <ClassRow
-                      key={`rest-${row.suite}-${row.conceptLabel}-${row.kind}-${i}`}
-                      row={row}
-                      showOracle={false}
-                    />
-                  ))}
-                </details>
-              )}
-            </>
+            <ClassLedger classes={scoped.classes} />
           )}
         </div>
       </div>
-      {/* Keyed so the suite selection resets with the record and scope. */}
-      <HouseholdBrowser key={`${oracle.id}-${region ?? "all"}`} oracle={scoped} />
+      {onBrowseHouseholds && (
+        <div className="v2-record-foot">
+          <button
+            type="button"
+            className="pp-browse"
+            onClick={onBrowseHouseholds}
+          >
+            Browse the households →
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -570,17 +589,36 @@ function OracleRecord({ oracle, onOpenProgram }) {
 export default function OraclesV2() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [selected, setSelected] = useState(null);
-  const [programId, setProgramId] = useState(null);
+  // Three-level drill: {} overview · {oracle}|{program} detail ·
+  // {view:"households", oracle?|program?} evidence. Mirrored in the URL.
+  const [route, setRoute] = useState({});
+  const [overviewRegion, setOverviewRegion] = useState(null);
+  const [overviewJurisdiction, setOverviewJurisdiction] = useState(null);
+  const [overviewQuery, setOverviewQuery] = useState("");
 
   useEffect(() => {
     loadOracleData("")
       .then(setData)
       .catch((e) => setError(e.message));
-    // Deep-link an open program (?program=…), read once on mount.
-    const fromUrl = new URLSearchParams(window.location.search).get("program");
-    if (fromUrl) setProgramId(fromUrl);
+    // Deep-link, read once on mount.
+    const params = new URLSearchParams(window.location.search);
+    const next = {};
+    if (params.get("oracle")) next.oracle = params.get("oracle");
+    if (params.get("program")) next.program = params.get("program");
+    if (params.get("view") === "households") next.view = "households";
+    setRoute(next);
   }, []);
+
+  const navigate = (next) => {
+    setRoute(next);
+    const url = new URL(window.location.href);
+    for (const k of ["oracle", "program", "view"]) url.searchParams.delete(k);
+    if (next.oracle) url.searchParams.set("oracle", next.oracle);
+    if (next.program) url.searchParams.set("program", next.program);
+    if (next.view) url.searchParams.set("view", next.view);
+    window.history.replaceState(null, "", url);
+    window.scrollTo(0, 0);
+  };
 
   const model = useMemo(() => {
     if (!data) return null;
@@ -641,20 +679,37 @@ export default function OraclesV2() {
     return { oracles, totals, crossChecks, verification };
   }, [data]);
 
-  // The program explorer is the drill-down layer: runs, triangulation, and
-  // the case-level unexplained queue live there.
-  const openProgram = (key) => {
-    setProgramId(key);
-    const url = new URL(window.location.href);
-    url.searchParams.set("program", key);
-    window.history.replaceState(null, "", url);
-  };
-  const closeProgram = () => {
-    setProgramId(null);
-    const url = new URL(window.location.href);
-    url.searchParams.delete("program");
-    window.history.replaceState(null, "", url);
-  };
+  // Level 1's program census: every verified program across every oracle.
+  const allPrograms = useMemo(() => {
+    if (!model) return [];
+    const byProgram = new Map();
+    for (const report of model.verification) {
+      const meta = suiteMeta(report.suite);
+      const key = `${meta.family}__${meta.jurisdiction}`;
+      if (!byProgram.has(key)) {
+        byProgram.set(key, {
+          key,
+          label: meta.label,
+          region: meta.region,
+          jurisdiction: meta.jurisdiction,
+          total: 0,
+          mismatches: 0,
+          households: 0,
+          oracles: new Set(),
+        });
+      }
+      const entry = byProgram.get(key);
+      const m = reportMetric(report);
+      entry.total += m.total;
+      entry.mismatches += m.mismatches;
+      entry.households += reportHouseholds(report);
+      entry.oracles.add(otherOracle(report));
+    }
+    return [...byProgram.values()].map((p) => ({
+      ...p,
+      rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
+    }));
+  }, [model]);
 
   if (error) {
     return (
@@ -674,7 +729,69 @@ export default function OraclesV2() {
   }
 
   const { oracles, totals, crossChecks } = model;
-  const selectedOracle = oracles.find((o) => o.id === selected);
+  const routeOracle = oracles.find((o) => o.id === route.oracle);
+
+  // Households scope: the axiom-pair reports level 3 browses.
+  const householdReports =
+    route.view === "households"
+      ? route.program
+        ? model.verification.filter(
+            (r) => programKeyOf(r.suite) === route.program,
+          )
+        : routeOracle
+          ? routeOracle.reports
+          : model.verification
+      : [];
+  const householdTitle = route.program
+    ? suiteMeta(
+        (householdReports[0] || {}).suite || route.program,
+      ).label
+    : routeOracle
+      ? `vs ${engineLabel(routeOracle.id)}`
+      : "all programs";
+
+  // The overview census: country-scoped, disagreeing programs worst-first,
+  // then the fully-agreeing ones alphabetically — all visible.
+  const censusRegions = REGION_ORDER.filter((r) =>
+    allPrograms.some((p) => p.region === r),
+  );
+  // A country with several jurisdictions (the US, for now) gets a second
+  // filter level. Jurisdictions offered are the ones the country's
+  // programs actually carry; a stale pick falls back to all.
+  const censusJurisdictions = overviewRegion
+    ? [
+        ...new Set(
+          allPrograms
+            .filter((p) => p.region === overviewRegion && p.jurisdiction)
+            .map((p) => p.jurisdiction),
+        ),
+      ].sort((a, b) =>
+        (JURISDICTION_LABELS[a] || a).localeCompare(
+          JURISDICTION_LABELS[b] || b,
+        ),
+      )
+    : [];
+  const activeJurisdiction = censusJurisdictions.includes(
+    overviewJurisdiction,
+  )
+    ? overviewJurisdiction
+    : null;
+
+  const censusQuery = overviewQuery.trim().toLowerCase();
+  const censusPrograms = allPrograms.filter(
+    (p) =>
+      (!overviewRegion || p.region === overviewRegion) &&
+      (!activeJurisdiction || p.jurisdiction === activeJurisdiction) &&
+      (!censusQuery || p.label.toLowerCase().includes(censusQuery)),
+  );
+  const censusRows = [
+    ...[...censusPrograms]
+      .filter((p) => p.mismatches === 0)
+      .sort((a, b) => a.label.localeCompare(b.label)),
+    ...[...censusPrograms]
+      .filter((p) => p.mismatches > 0)
+      .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1)),
+  ];
 
   return (
     <>
@@ -706,59 +823,186 @@ export default function OraclesV2() {
         </div>
       </header>
       <main className="v2-main">
-        {programId ? (
+        {route.view === "households" ? (
+          /* ── Level 3 · the households ── */
+          <HouseholdsView
+            title={householdTitle}
+            reports={householdReports}
+            backLabel={
+              route.program
+                ? "back to the program"
+                : routeOracle
+                  ? `back to ${engineLabel(routeOracle.id)}`
+                  : "back to overview"
+            }
+            onBack={() =>
+              navigate(
+                route.program
+                  ? { program: route.program }
+                  : routeOracle
+                    ? { oracle: routeOracle.id }
+                    : {},
+              )
+            }
+          />
+        ) : route.program ? (
+          /* ── Level 2 · one program ── */
           <ProgramPage
-            programId={programId}
+            programId={route.program}
             reports={model.verification}
             knownCauses={data.knownCauses || []}
             coverageOverview={data.coverageOverview}
-            onBack={closeProgram}
+            onBack={() => navigate({})}
+            onBrowseHouseholds={() =>
+              navigate({ view: "households", program: route.program })
+            }
           />
-        ) : (
+        ) : routeOracle ? (
+          /* ── Level 2 · one oracle ── */
           <>
-        {/* 1 · Thesis */}
-        <section className="v2-hero">
-          <h1 className="v2-thesis">
-            Axiom never grades its own work —{" "}
-            <em>{compactCount(totals.households)}</em> households checked
-            against <em>{oracles.length}</em> independent engines,{" "}
-            <em style={{ color: rateColor(totals.rate) }}>
-              {formatAgreementRate(totals.rate, totals.mismatches)}
-            </em>{" "}
-            agreement.
-          </h1>
-          <p
-            className="v2-hero-sub"
-            title={`${compactCount(totals.checks)} concept-level checks behind the agreement rate${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
-          >
-            Every disagreement is triaged in the open — dispositioned, filed
-            upstream, or kept visibly open until someone acts.
-          </p>
-        </section>
-
-        {/* 2 · The roster */}
-        <section className="v2-section">
-          <div className="v2-roster">
-            {oracles.map((oracle) => (
-              <OracleCard
-                key={oracle.id}
-                oracle={oracle}
-                selected={selected === oracle.id}
-                onSelect={() =>
-                  setSelected(selected === oracle.id ? null : oracle.id)
-                }
-              />
-            ))}
-          </div>
-          {selectedOracle && (
+            <div className="pp-head">
+              <button
+                type="button"
+                className="pp-back"
+                onClick={() => navigate({})}
+              >
+                ← all oracles
+              </button>
+              <h1 className="pp-title">
+                {engineLabel(routeOracle.id)}
+                <span className="mono pp-where">
+                  {" "}
+                  · {(ORACLE_IDENTITY[routeOracle.id] || {}).org ||
+                    "independent engine"}
+                </span>
+              </h1>
+              <p className="v2-oracle-what">
+                {(ORACLE_IDENTITY[routeOracle.id] || {}).what}
+                {(ORACLE_IDENTITY[routeOracle.id] || {}).url && (
+                  <>
+                    {" "}
+                    <a
+                      className="cite"
+                      href={ORACLE_IDENTITY[routeOracle.id].url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {ORACLE_IDENTITY[routeOracle.id].url.replace(
+                        /^https?:\/\//,
+                        "",
+                      )}
+                    </a>
+                  </>
+                )}
+              </p>
+            </div>
             <OracleRecord
-              key={selectedOracle.id}
-              oracle={selectedOracle}
-              onOpenProgram={openProgram}
+              key={routeOracle.id}
+              oracle={routeOracle}
+              onOpenProgram={(key) => navigate({ program: key })}
+              onBrowseHouseholds={() =>
+                navigate({ view: "households", oracle: routeOracle.id })
+              }
             />
-          )}
-        </section>
+          </>
+        ) : (
+          /* ── Level 1 · the overview ── */
+          <>
+            <section className="v2-hero">
+              <h1 className="v2-thesis">
+                Axiom never grades its own work —{" "}
+                <em>{compactCount(totals.households)}</em> households checked
+                against <em>{oracles.length}</em> independent engines,{" "}
+                <em style={{ color: rateColor(totals.rate) }}>
+                  {formatAgreementRate(totals.rate, totals.mismatches)}
+                </em>{" "}
+                agreement.
+              </h1>
+              <p
+                className="v2-hero-sub"
+                title={`${compactCount(totals.checks)} concept-level checks behind the agreement rate${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
+              >
+                Every disagreement is triaged in the open — dispositioned,
+                filed upstream, or kept visibly open until someone acts.
+              </p>
+            </section>
 
+            <section className="v2-section">
+              <div className="mono v2-dossier-colhead">The oracles</div>
+              <div className="v2-roster">
+                {oracles.map((oracle) => (
+                  <OracleCard
+                    key={oracle.id}
+                    oracle={oracle}
+                    selected={false}
+                    onSelect={() => navigate({ oracle: oracle.id })}
+                  />
+                ))}
+              </div>
+            </section>
+
+            <section className="card-flat v2-dossier">
+              <div className="v2-scope" role="group" aria-label="Country">
+                {censusRegions.length > 1 &&
+                  [null, ...censusRegions].map((r) => (
+                    <button
+                      key={r ?? "all"}
+                      type="button"
+                      className={`v2-scope-chip${
+                        overviewRegion === r ? " v2-scope-chip-on" : ""
+                      }`}
+                      aria-pressed={overviewRegion === r}
+                      onClick={() => {
+                        setOverviewRegion(r);
+                        setOverviewJurisdiction(null);
+                      }}
+                    >
+                      {r ? REGION_LABELS[r] || r : "All countries"}
+                    </button>
+                  ))}
+                {censusJurisdictions.length > 1 && (
+                  <select
+                    className="input-pill v2-scope-select"
+                    value={activeJurisdiction ?? ""}
+                    onChange={(e) =>
+                      setOverviewJurisdiction(e.target.value || null)
+                    }
+                    aria-label="Jurisdiction"
+                  >
+                    <option value="">All jurisdictions</option>
+                    {censusJurisdictions.map((j) => (
+                      <option key={j} value={j}>
+                        {JURISDICTION_LABELS[j] || j}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                <input
+                  className="input-pill v2-scope-search"
+                  type="search"
+                  placeholder="search programs…"
+                  value={overviewQuery}
+                  onChange={(e) => setOverviewQuery(e.target.value)}
+                  aria-label="Search programs"
+                />
+              </div>
+              <div className="v2-dossier-col">
+                {censusRows.length === 0 && (
+                  <p className="v2-empty">
+                    No programs match that search in this scope.
+                  </p>
+                )}
+                <div className="v2-prog-grid">
+                  {censusRows.map((p) => (
+                    <ProgRow
+                      key={p.key}
+                      p={p}
+                      onOpenProgram={(key) => navigate({ program: key })}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
           </>
         )}
 

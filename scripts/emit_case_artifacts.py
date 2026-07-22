@@ -112,10 +112,26 @@ def compact_case(case: dict, explained: dict) -> dict:
         "m": mismatches,
     }
     # Small-suite reports carry full evidence (raw input records, matched
-    # values) — pass it through so the dashboard can show complete cases.
+    # values). The dashboard copy keeps only the substantive inputs — most
+    # records are zero/false defaults, and shipping all ~600 per case makes
+    # the artifact two orders of magnitude heavier than the site can carry.
+    # `i0` records how many defaults were dropped; the full report under
+    # reports/ remains the complete record.
     records = (case.get("metadata") or {}).get("axiom_input_records")
     if records:
-        row["i"] = records
+        kept = []
+        dropped = 0
+        for r in records:
+            value = r.get("value")
+            if value is None or value is False or value == 0 or value == "":
+                dropped += 1
+                continue
+            kept.append(
+                {"n": r.get("name"), "v": value, "e": r.get("entity_id")}
+            )
+        row["i"] = kept
+        if dropped:
+            row["i0"] = dropped
     matches = case.get("matches")
     if matches:
         row["v"] = [

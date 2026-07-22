@@ -1,0 +1,29 @@
+{
+ "suite": "nyc-income-tax-gap",
+ "updated": "2026-07-06",
+ "entries": [
+  {
+   "id": "school-rate-second-band-rounded-base-convention",
+   "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "The three synthetic NYC school-tax rate-reduction mismatches are second-band cases. Axiom follows the IT-201 instruction table's printed rounded base amounts ($21 for single/separate and $25 for head of household), while PolicyEngine derives the carry-in from the first-band threshold and rate. The joint/surviving-spouse first-band controls and over-limit control match.",
+   "cases": [
+    "nyc-school-rate-single-20k",
+    "nyc-school-rate-head-20k",
+    "nyc-school-rate-separate-20k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "21 - 12000 * 0.00171",
+     "equals": 0.48
+    },
+    {
+     "expression": "25 - 14400 * 0.00171",
+     "equals": 0.376
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/8947"
+  }
+ ]
+}

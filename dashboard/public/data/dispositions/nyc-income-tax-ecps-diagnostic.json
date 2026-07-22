@@ -1,0 +1,52 @@
+{
+ "suite": "nyc-income-tax-ecps-diagnostic",
+ "updated": "2026-07-07",
+ "entries": [
+  {
+   "id": "school-rate-second-band-rounded-base-convention",
+   "concept": "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction#nyc_school_tax_credit_rate_reduction_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Every NYC ECPS school-tax rate-reduction mismatch is a second-band case. Axiom follows the IT-201 instruction table's printed rounded base amounts ($37, $21, and $25), while PolicyEngine models the component as a marginal-rate table and derives the carry-in from the first-band threshold and rate. That produces constant sub-dollar residuals by filing-status group, with first-band, zero/negative, and over-limit cases matching.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "37 - 21600 * 0.00171",
+     "equals": 0.064
+    },
+    {
+     "expression": "21 - 12000 * 0.00171",
+     "equals": 0.48
+    },
+    {
+     "expression": "25 - 14400 * 0.00171",
+     "equals": 0.376
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/8947"
+  },
+  {
+   "id": "final-liability-section-1701-printed-base-convention",
+   "concept": "us-ny:policies/income_tax/nyc_composed_liability_pipeline#nyc_pit_composed_income_tax",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "The composed NYC final-liability ECPS residuals are produced by the same printed-base-versus-derived-carry-in convention at the section 11-1701 base-tax layer. Axiom follows NYC Administrative Code section 11-1701's printed base-tax amounts and then composes the separate section 11-1704.1 fourteen-percent additional tax. PolicyEngine uses the current IT-201 combined marginal rates and derives carry-ins from thresholds and combined rates, producing stable sub-dollar residuals for tax units above the final section 11-1701 bracket threshold.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "1591 * 1.14 - (12000 * 0.03078 + 13000 * 0.03762 + 25000 * 0.03819)",
+     "equals": 0.57
+    },
+    {
+     "expression": "2863 * 1.14 - (21600 * 0.03078 + 23400 * 0.03762 + 45000 * 0.03819)",
+     "equals": 0.114
+    },
+    {
+     "expression": "1909 * 1.14 - (14400 * 0.03078 + 15600 * 0.03762 + 30000 * 0.03819)",
+     "equals": 0.456
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/8947"
+  }
+ ]
+}

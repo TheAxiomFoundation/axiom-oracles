@@ -1,0 +1,27 @@
+{
+ "suite": "be-cadastral-income-indexation",
+ "updated": "2026-07-05",
+ "entries": [
+  {
+   "id": "indexed-cadastral-income-left-unrounded",
+   "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 tprhm_be computes khooo_s as the raw product khooo * 2.2446 and returns 2,244.60 for the 1,000 EUR unindexed cadastral income, while CIR 92 Article 518 requires rounding the indexed cadastral income to the nearest euro, giving 2,245. The 5,000 EUR exact-multiple control case matches at 11,223.",
+   "cases": [
+    "be-cadastral-income-indexation-2025-rounding"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1000 * 2.2446",
+     "equals": 2244.6
+    },
+    {
+     "expression": "2245 - 2244.6",
+     "equals": 0.4
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/14"
+  }
+ ]
+}

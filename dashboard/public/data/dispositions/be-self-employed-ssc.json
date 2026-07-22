@@ -1,0 +1,61 @@
+{
+ "suite": "be-self-employed-ssc",
+ "updated": "2026-07-05",
+ "entries": [
+  {
+   "id": "secondary-below-threshold-charged-quarterly-minimum",
+   "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 tscse_be charges the 96.44 EUR quarterly low limit even though the secondary-activity income is below the indexed Royal Decree No. 38 Article 12 section 2 threshold, under which no contribution is due. The source-backed RuleSpec returns zero.",
+   "cases": [
+    "be-self-employed-ssc-secondary-1k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "96.44 * 4",
+     "equals": 385.76
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/6"
+  },
+  {
+   "id": "secondary-threshold-treated-as-allowance",
+   "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 subtracts the indexed Article 12 section 2 threshold from professional income before applying the 20.50 percent rate, treating an eligibility threshold as a deductible allowance. Royal Decree No. 38 applies the rate to the stated income bands once the threshold is reached, which is what the source-backed RuleSpec does.",
+   "cases": [
+    "be-self-employed-ssc-secondary-10k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "10550.22392834293 * 0.205",
+     "equals": 2162.795905
+    },
+    {
+     "expression": "2162.7959053103004 - 1777.0351053103009",
+     "equals": 385.7608
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/6"
+  },
+  {
+   "id": "post-pension-threshold-treated-as-allowance",
+   "concept": "be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Same threshold-as-allowance mechanism on the post-pension path: EUROMOD BE_2025 subtracts the indexed Article 13 section 1 threshold before applying the 14.70 percent rate, while the source-backed RuleSpec applies the rate to the stated income bands once the threshold is reached.",
+   "cases": [
+    "be-self-employed-ssc-post-pension-10k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "10550.22392834293 * 0.147",
+     "equals": 1550.882917
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/6"
+  }
+ ]
+}

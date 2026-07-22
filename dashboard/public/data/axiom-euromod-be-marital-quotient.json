@@ -432,11 +432,8 @@
       "population": "synthetic",
       "source": "config"
     },
-    "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
-      "axiom_rules_engine_version": "0.1.0"
-    },
-    "generated_at": "2026-07-06T19:12:55Z",
+    "engine": {},
+    "generated_at": "2026-07-21T15:16:13Z",
     "generated_by": "scripts/run_comparison.py::be-marital-quotient",
     "oracle": {
       "euromod_country": "BE",
@@ -448,7 +445,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": "a69bfa61458630ac574b779f7d9d47de2afaba8b"
+        "sha": null
       }
     ],
     "run_kind": "manual",
