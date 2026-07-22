@@ -134,7 +134,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-22T04:08:55Z",
+    "generated_at": "2026-07-22T09:13:44Z",
     "generated_by": "scripts/run_comparison.py::uk-winter-fuel-payment-pe",
     "oracle": {
       "name": "policyengine",
