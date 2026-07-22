@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-22T04:00:24Z",
+    "generated_at": "2026-07-22T09:08:37Z",
     "generated_by": "scripts/run_comparison.py::ky-income-tax-liability",
     "rulespecs": [
       {
