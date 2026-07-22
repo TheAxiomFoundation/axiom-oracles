@@ -2191,17 +2191,16 @@ concepts:
       policyengine: ma_income_tax
       taxsim: siitax
 
-  us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability:
-    description: New York personal income tax liability (resident; Tax Law s.601 bracket tax plus the s.601(d) supplemental recapture)
+  us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax:
+    description: New York 2026 Tax Law section 601 main income tax before supplemental tax and credits
     category: tax
     comparison: amount
-    # PolicyEngine ny_income_tax at 2026 and this pipeline share the DTF-indexed
-    # brackets and standard deduction and the section 601(d) supplemental
-    # recapture, so they reproduce to the dollar; TAXSIM's 2024 law year differs
-    # by the bracket indexation between 2024 and 2026. Dispositioned in
-    # dispositions/ny-income-tax-liability.yaml.
-    tolerance: 5
-    relative_tolerance: 0.02
+    # The statute publishes rounded cumulative bracket bases while PolicyEngine
+    # represents the same schedules as continuous marginal scales. The reviewed
+    # full-Populace difference is at most $2.12. Supplemental tax and credits are
+    # deliberately outside this mapping.
+    tolerance: 2.25
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-NY]
     scope:
@@ -2209,11 +2208,11 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ny_pit_pilot_income_tax_liability
+        name: ny_pit_pilot_main_income_tax
         scope:
           type: country
           geoid: US
-      policyengine: ny_income_tax
+      policyengine: ny_main_income_tax
       taxsim: siitax
 
   us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability:
