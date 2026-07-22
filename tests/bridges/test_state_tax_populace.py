@@ -36,7 +36,7 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 44
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 184
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 183
     assert sum(len(item.relations) for item in contract.jurisdictions) == 1
     assert len({item.program for item in contract.jurisdictions}) == 44
     assert len({item.output for item in contract.jurisdictions}) == 44
@@ -98,14 +98,15 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
 
     assert summary == {
         "jurisdiction_count": 44,
-        "ready_count": 24,
-        "blocked_count": 20,
+        "ready_count": 25,
+        "blocked_count": 19,
         "ready_states": [
             "AL",
             "AZ",
             "CT",
             "DE",
             "GA",
+            "HI",
             "IA",
             "IL",
             "IN",
@@ -134,6 +135,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "CT",
                 "DE",
                 "GA",
+                "HI",
                 "IA",
                 "IL",
                 "IN",
@@ -157,7 +159,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 52,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 56,
         "blocked_relation_count": 0,
     }
     nh = contract.by_state()["NH"]
@@ -176,6 +178,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ],
         "DE": ["de_taxable_income_indv", "de_files_separately"],
         "GA": ["ga_taxable_income"],
+        "HI": ["hi_taxable_income"],
         "IL": ["il_taxable_income", "recapture_of_investment_credit"],
         "IA": [
             "ia_taxable_income_consolidated",
@@ -284,6 +287,25 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
     ]
     assert de.relations[0].source_kind == "raw_populace"
     assert contract.by_state()["VT"].relations == ()
+    hi = contract.by_state()["HI"]
+    assert hi.policyengine_target == "hi_income_tax_before_non_refundable_credits"
+    assert (hi.tolerance, hi.relative_tolerance) == (1.0, 0.0)
+    assert hi.relations == ()
+    hi_derived = [item for item in hi.inputs if item.source_kind == "derived"]
+    assert [item.policyengine_variable for item in hi_derived] == [
+        "filing_status",
+        "filing_status",
+        None,
+    ]
+    assert [item.policyengine_transform for item in hi_derived] == [
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_head_of_household",
+        "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10",
+    ]
+    assert hi_derived[-1].policyengine_variables == (
+        "net_capital_gain",
+        "long_term_capital_gains",
+    )
     nm_derived = [
         item
         for item in contract.by_state()["NM"].inputs
@@ -417,7 +439,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 184"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 183"):
         validate_state_tax_populace_contract(document)
 
 

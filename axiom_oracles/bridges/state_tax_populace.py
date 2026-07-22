@@ -106,16 +106,16 @@ EXPECTED_STATE_FIPS = {
     "WV": "54",
 }
 EXPECTED_STATE_CODES = frozenset(EXPECTED_STATE_FIPS)
-EXPECTED_EXPLICIT_INPUT_COUNT = 184
+EXPECTED_EXPLICIT_INPUT_COUNT = 183
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "ec3648d40af61d8b6ba3f3f27eea8113aab7aedd6f0e737ec13862dd2c0f6e56"
+    "745284f55aaef543ea516193187ad195004a589857c387c766a4aa82d54f6c5d"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
     "dc54e88716a7018751bb8ec1964253db202e77ec492397507c3bddbcb3b5482f"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "9f91ec40a4888e3b332dce0910bfd3e99abee8f800424e6ebb41eb3274390e73"
+    "b56559497c9c93adb81f7732d4842c1e1b57599b4076fb18c9474bb33219976d"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -187,6 +187,12 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "us-ga:policies/income_tax/pilot_liability_pipeline#input."
             "ga_pit_pilot_state_taxable_income",
             "ga_taxable_income",
+        ),
+        (
+            "HI",
+            "us-hi:policies/income_tax/pilot_liability_pipeline#input."
+            "hi_pit_pilot_state_taxable_income",
+            "hi_taxable_income",
         ),
         (
             "IA",
@@ -335,6 +341,13 @@ ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES: frozenset[
             "person_filer_role_or",
         ),
         (
+            "HI",
+            "us-hi:policies/income_tax/pilot_liability_pipeline#input."
+            "hi_pit_pilot_capital_gains_worksheet_line_10",
+            ("net_capital_gain", "long_term_capital_gains"),
+            "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10",
+        ),
+        (
             "MT",
             "us-mt:policies/income_tax/pilot_liability_pipeline#input."
             "mt_pit_pilot_section_1222_net_long_term_capital_gain",
@@ -359,6 +372,20 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "ia_pit_pilot_head_or_spouse_age_65_or_older",
             "greater_age_head_spouse",
             "greater_than_or_equal_65",
+        ),
+        (
+            "HI",
+            "us-hi:policies/income_tax/pilot_liability_pipeline#input."
+            "hi_pit_pilot_filing_status_joint_or_surviving_spouse",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "HI",
+            "us-hi:policies/income_tax/pilot_liability_pipeline#input."
+            "hi_pit_pilot_filing_status_head_of_household",
+            "filing_status",
+            "filing_status_is_head_of_household",
         ),
         (
             "CT",

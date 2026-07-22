@@ -660,6 +660,76 @@ def test_new_jersey_population_assumption_fails_closed(
         )
 
 
+def test_hawaii_completed_capital_gains_worksheet_projection() -> None:
+    calls = []
+    values = {
+        "person_id": [11, 12, 21],
+        "tax_unit_id": [1, 1, 2],
+        "long_term_capital_gains": [30_000.0, -5_000.0, -2_000.0],
+        "net_capital_gain": [40_000.0, 10_000.0],
+        "hi_taxable_income": [100_000.0, 50_000.0],
+        "filing_status": ["JOINT", "HEAD_OF_HOUSEHOLD"],
+    }
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period, map_to=None):
+            calls.append((variable, period))
+            if variable == "tax_unit_id":
+                assert map_to == "person"
+            else:
+                assert map_to is None
+            return values[variable]
+
+    projections = calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2]}),
+        raw_persons=pd.DataFrame(
+            {
+                "person_id": [11, 12, 21],
+                "person_tax_unit_id": [1, 1, 2],
+            }
+        ),
+        routes=(
+            TaxUnitRoute(1, 1, "HI", "15", 1, DISPOSITION_READY),
+            TaxUnitRoute(2, 2, "HI", "15", 1, DISPOSITION_READY),
+        ),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )
+
+    prefix = "us-hi:policies/income_tax/pilot_liability_pipeline#input."
+    assert projections["HI"] == {
+        f"{prefix}hi_pit_pilot_state_taxable_income": {
+            1: 100_000.0,
+            2: 50_000.0,
+        },
+        f"{prefix}hi_pit_pilot_filing_status_joint_or_surviving_spouse": {
+            1: True,
+            2: False,
+        },
+        f"{prefix}hi_pit_pilot_filing_status_head_of_household": {
+            1: False,
+            2: True,
+        },
+        f"{prefix}hi_pit_pilot_capital_gains_worksheet_line_10": {
+            1: 25_000.0,
+            2: 0.0,
+        },
+    }
+    assert calls == [
+        ("person_id", 2026),
+        ("tax_unit_id", 2026),
+        ("long_term_capital_gains", 2026),
+        ("hi_taxable_income", 2026),
+        ("filing_status", 2026),
+        ("filing_status", 2026),
+        ("net_capital_gain", 2026),
+    ]
+
+
 def test_reviewed_montana_person_sums_and_capital_gain_transform() -> None:
     calls = []
     values = {

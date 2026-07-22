@@ -17,9 +17,9 @@ def test_contract_check_reports_readiness(capsys) -> None:
 
     output = capsys.readouterr().out
     assert "44 jurisdictions" in output
-    assert "24 ready" in output
-    assert "20 blocked" in output
-    assert "184 explicit inputs" in output
+    assert "25 ready" in output
+    assert "19 blocked" in output
+    assert "183 explicit inputs" in output
 
 
 def test_contract_check_json_is_machine_readable(capsys) -> None:
@@ -32,6 +32,7 @@ def test_contract_check_json_is_machine_readable(capsys) -> None:
         "CT",
         "DE",
         "GA",
+        "HI",
         "IA",
         "IL",
         "IN",
@@ -52,7 +53,7 @@ def test_contract_check_json_is_machine_readable(capsys) -> None:
         "VT",
         "WV",
     ]
-    assert len(output["blocked_states"]) == 20
+    assert len(output["blocked_states"]) == 19
 
 
 def test_contract_check_fails_closed_for_missing_override(tmp_path, capsys) -> None:
