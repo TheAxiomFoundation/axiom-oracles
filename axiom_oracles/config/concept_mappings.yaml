@@ -1647,7 +1647,13 @@ concepts:
       # `taxbc`. AMT is excluded because `taxbc` excludes it too (Tax-Calculator
       # adds `c09600` separately); the AMT concept maps `taxcalc: c09600` alone.
       policyengine: [income_tax_main_rates, capital_gains_tax]
-      taxsim: v19
+      # TAXSIM's v28 is federal tax before credits WITH the capital-gains
+      # preferential-rate worksheet and WITHOUT NIIT (verified: fiitax =
+      # v28 - credits + niit on the pinned 2.30.0 binary), matching this
+      # concept's taxbc scope. v19 is the schedule tax on taxable income
+      # with NO preferential rates — mapping it here overstated TAXSIM by
+      # the full ordinary-vs-preferential spread on capital-gains units.
+      taxsim: v28
       taxcalc: taxbc
 
   us:tax/federal-income-tax#nonrefundable_credits:

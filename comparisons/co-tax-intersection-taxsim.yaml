@@ -1,0 +1,63 @@
+# Every Axiom/TAXSIM shared tax concept — Axiom vs NBER TAXSIM on Enhanced CPS.
+#
+# The full axiom<->taxsim concept intersection in one lane: the nine federal
+# concepts (liability, standard deduction, taxable income, tax before credits,
+# EITC, CTC, CDCC, AMT, employee-side FICA+SECA) plus Colorado state income
+# tax, all served by the composed oracle-bridge program and compared against
+# the pinned TAXSIM-35 binary's idtl=2 decomposition at the 2026 law year.
+# Population is the certified Colorado Enhanced CPS slice — the oracle
+# bridge's SALT itemization leg is Colorado-scoped, so the federal concepts
+# run over the same jurisdiction as the state leg.
+#
+# Known TAXSIM-side gap (docs/policyengine-taxsim.md): the pinned binary's
+# 2026 law year does not model the qualifying-child credit machinery — CTC
+# collapses to the $500 ODC path and ACTC/CDCC/EITC-with-children return
+# zero — so child-credit residuals on units with children read as NBER gaps,
+# not Axiom defects.
+#
+# Known Axiom-side scope carve-out: the composed program excludes
+# us:statutes/26/1411 (NIIT) until the upstream duplicate-rule encoding is
+# fixed (911/a and 911/a/1 both define
+# foreign_earned_income_excluded_from_gross_income; see
+# _tax_oracle_imports_for_concepts in axiom_oracles/cli.py). TAXSIM's fiitax
+# includes NIIT, so units above the 1411 thresholds carry a liability
+# residual equal to TAXSIM's own `niit` output column.
+
+name: co-tax-intersection-taxsim
+title: Shared tax concepts — Axiom vs TAXSIM
+description: >-
+  Compares every concept mapped for both Axiom and TAXSIM — federal income
+  tax liability, standard deduction, taxable income, tax before credits,
+  EITC, CTC, CDCC, AMT, employee-side FICA+SECA, and Colorado state income
+  tax — over Colorado Enhanced CPS tax units at the 2026 law year.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules
+  parameters:
+    left: axiom
+    right: taxsim
+    population: enhanced-cps
+    # 0 = full population: sampling happens before the Colorado preparation
+    # filter, so a small national sample can leave zero Colorado units.
+    sample_size: 0
+    period: "2026"
+    concepts:
+      - us:tax/federal-income-tax#liability
+      - us:tax/federal-income-tax#standard_deduction
+      - us:tax/federal-income-tax#taxable_income
+      - us:tax/federal-income-tax#tax_before_credits
+      - us:tax/federal-income-tax#eitc
+      - us:tax/federal-income-tax#ctc
+      - us:tax/federal-income-tax#cdcc
+      - us:tax/federal-income-tax#amt
+      - us:tax/payroll#employee_fica
+      - us:tax/state-income-tax#liability
+    axiom_rulespec_repo_roots: $HOME
+
+artifacts:
+  report_basename: axiom-taxsim-co-tax-intersection-ecps
+
+dashboard:
+  filename: axiom-taxsim-co-tax-intersection-ecps.json
+  suite: co-tax-intersection-taxsim

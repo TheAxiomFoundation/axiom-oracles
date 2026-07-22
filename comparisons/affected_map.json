@@ -267,6 +267,14 @@
       "source": "comparisons/co-tanf-ecps.yaml"
     },
     {
+      "suite": "co-tax-intersection-taxsim",
+      "report": "axiom-taxsim-co-tax-intersection-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/co-tax-intersection-taxsim.yaml"
+    },
+    {
       "suite": "csfp-parameters",
       "report": "axiom-policyengine-csfp-parameters.json",
       "repos": [

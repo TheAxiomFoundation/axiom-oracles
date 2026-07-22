@@ -739,6 +739,42 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="Oracle composition bridge applying 26 USC 1402(a) before 26 USC 1401",
         formula="max(0, net_earnings_from_self_employment)",
     ),
+    # us:statutes/26/1402/a defers its executable net-earnings rule, so the
+    # tax-unit name is supplied by aggregating the existing person-level
+    # person_self_employment_net_earnings_after_paragraph_12 machinery — no
+    # new computation, only the same member aggregation the SE-tax ALD rule
+    # uses. The encoded us:statutes/26/1402/b `self_employment_income`
+    # (which replaces the dropped shim; see
+    # _tax_oracle_program_rules_for_concepts) consumes this name.
+    _generated_tax_unit_rule(
+        "net_earnings_from_self_employment",
+        dtype="Money",
+        unit="USD",
+        source=(
+            "Oracle composition bridge summing member-level 26 USC 1402(a) "
+            "net earnings for the encoded us:statutes/26/1402/b rules"
+        ),
+        formula=(
+            "sum_where("
+            "business_income_of_tax_unit, "
+            "person_self_employment_net_earnings_after_paragraph_12, "
+            "person_has_positive_self_employment_income_for_agi"
+            ")"
+        ),
+    ),
+    # The encoded 1402/b rule tests its 1402(b)(2) threshold against this
+    # leaf; the operand is the same 1402(a) net earnings the rule includes
+    # when the test passes, so it aliases the aggregate above.
+    _generated_tax_unit_rule(
+        "net_earnings_from_self_employment_for_paragraph_2_threshold_test",
+        dtype="Money",
+        unit="USD",
+        source=(
+            "Oracle composition bridge supplying the 26 USC 1402(b)(2) "
+            "threshold-test operand from the section 1402(a) net earnings"
+        ),
+        formula="net_earnings_from_self_employment",
+    ),
     _generated_tax_unit_rule(
         "self_employment_1401_taxes",
         dtype="Money",

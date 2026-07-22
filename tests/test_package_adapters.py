@@ -221,7 +221,7 @@ def test_policyengine_taxsim_pairs_carry_aggregates_for_list_targets() -> None:
         ]
     )
     assert pairs["tfica"] == "employee_social_security_tax"
-    assert pairs["v19"] == "income_tax_main_rates"
+    assert pairs["v28"] == "income_tax_main_rates"
 
 
 def test_prd_package_runner_wraps_external_prd_households() -> None:
