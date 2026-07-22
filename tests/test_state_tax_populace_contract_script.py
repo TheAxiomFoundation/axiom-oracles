@@ -16,8 +16,8 @@ def test_contract_check_reports_readiness(capsys) -> None:
     assert main([]) == 0
 
     output = capsys.readouterr().out
-    assert "44 jurisdictions" in output
-    assert "29 ready" in output
+    assert "43 jurisdictions" in output
+    assert "28 ready" in output
     assert "15 blocked" in output
     assert "162 explicit inputs" in output
     assert "2 explicit relations" in output
@@ -45,7 +45,6 @@ def test_contract_check_json_is_machine_readable(capsys) -> None:
         "MS",
         "MT",
         "NC",
-        "NH",
         "NJ",
         "NM",
         "NY",
@@ -92,7 +91,7 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
             _PE_VAR={
                 item.state: (
                     "drifted_target"
-                    if item.state == "NH"
+                    if item.state == "NJ"
                     else item.policyengine_target
                 )
                 for item in contract.jurisdictions
@@ -108,5 +107,5 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
         ),
     )
 
-    with pytest.raises(StateTaxPopulaceContractError, match="NH registry metadata"):
+    with pytest.raises(StateTaxPopulaceContractError, match="NJ registry metadata"):
         _validate_generator_registry(contract)

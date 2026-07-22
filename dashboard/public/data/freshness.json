@@ -1107,18 +1107,6 @@
       "unstamped": false
     },
     {
-      "suite": "nh-income-tax-liability",
-      "generated_at": "2026-07-22T09:08:34Z",
-      "run_kind": "affected-rerun",
-      "affected_repos": [
-        "TheAxiomFoundation/rulespec-us"
-      ],
-      "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
-      },
-      "unstamped": false
-    },
-    {
       "suite": "nj-income-tax-liability",
       "generated_at": "2026-07-22T09:07:40Z",
       "run_kind": "affected-rerun",

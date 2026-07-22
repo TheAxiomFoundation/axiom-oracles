@@ -25,7 +25,10 @@ ratchets:
   # credits are narrower than the corresponding broad final liabilities. Those
   # source-faithful surfaces remain Populace-validated without counting as final
   # ar_income_tax, co_income_tax, or ms_income_tax suite coverage.
-  covered_min: 65
+  # New Hampshire's Chapter 77 tax was also intentionally reclassified: repeal
+  # made the retained PolicyEngine output inapplicable after 2024, so its
+  # constant-zero diagnostic is not current-law coverage.
+  covered_min: 64
   unexplained_max: 0
   axiom_attributed_open_max: 0
-  policies_in_scope: 137
+  policies_in_scope: 136

@@ -279,7 +279,6 @@ def test_recent_state_income_tax_oracle_registrations():
         "MO": (26, "mo_income_tax_before_credits", (1.0, 0.0)),
         "AR": (4, "ar_income_tax_before_non_refundable_credits_unit", (1.0, 0.0)),
         "MS": (25, "ms_income_tax_before_credits_unit", (1.0, 0.0)),
-        "NH": (30, "nh_income_tax_before_refundable_credits", (1.0, 0.0)),
         "WV": (49, "wv_income_tax_before_non_refundable_credits", (1.0, 0.0)),
         "VT": (46, "vt_income_tax_before_non_refundable_credits", (0.01, 1e-7)),
         "CO": (6, "co_income_tax_before_non_refundable_credits", (1.0, 0.0)),
@@ -302,6 +301,10 @@ def test_recent_state_income_tax_oracle_registrations():
             f"#{state.lower()}_pit_pilot_income_tax_liability"
         )
     assert generator._POPULACE_TOL["CO"] == (0.01, 1e-7)
+
+    assert "NH" not in generator._TAXSIM_STATE
+    assert "NH" not in generator._POPULACE_STATES
+    assert "NH" not in generator._STATES
 
 
 def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:

@@ -31,6 +31,7 @@ def _contract():
     [
         ("XX", "unknown campaign state abbreviation.*XX"),
         ("ca", "requested campaign state.*not ready: CA"),
+        ("NH", "no broad current PIT: NH"),
     ],
 )
 def test_invalid_requested_state_fails_before_dataset_load(

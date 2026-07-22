@@ -243,6 +243,11 @@ class UniversePolicy:
                     f"{self.id}: oracle_dataset_lacks_input requires a `note` naming "
                     "the absent activating input and the probe evidence pointer"
                 )
+            if self.exclusion_reason == "oracle_models_repealed_law" and not self.note:
+                problems.append(
+                    f"{self.id}: oracle_models_repealed_law requires a `note` "
+                    "recording the repeal citation and probe evidence pointer"
+                )
             # comparability is an in-scope concept; an excluded row must not carry
             # a non-default value (it would be meaningless).
             if self.comparability != "full":

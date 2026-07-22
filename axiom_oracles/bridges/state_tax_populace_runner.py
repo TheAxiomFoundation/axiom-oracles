@@ -30,6 +30,7 @@ from .state_tax_populace import (
 NO_BROAD_PIT_FIPS = {
     "AK": "02",
     "FL": "12",
+    "NH": "33",
     "NV": "32",
     "SD": "46",
     "TN": "47",

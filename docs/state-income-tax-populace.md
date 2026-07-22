@@ -1,16 +1,16 @@
 # State income tax over the full US Populace
 
-This campaign extends the 44 state and District of Columbia individual-income-
-tax pilot pipelines from their six-case verification grids to the complete,
-sha256-pinned US Populace validation population. The historical `ecps` command
-name is retained for compatibility, but the dataset is the certified
+This campaign extends current-law individual-income-tax pilot pipelines for 42
+states plus the District of Columbia from their six-case verification grids to
+the complete, sha256-pinned US Populace validation population. The historical
+`ecps` command name is retained for compatibility, but the dataset is the certified
 `populace-us` artifact rather than Enhanced CPS.
 
 ## Why the grid runner cannot simply use a larger sample
 
-The committed state liability reports exercise 43 RuleSpec modules with 258
-hand-computed cases. Forty-two modules are intentionally narrow pilots and New
-Hampshire is a grounded repeal-to-zero module. The initial pilots exposed 255
+The current-law campaign exercises 42 RuleSpec modules with 252 hand-computed
+cases. New Hampshire's separate repeal-result module is documentary rather than
+a current-law tax instrument and is outside this campaign. The initial pilots exposed 255
 explicit caller-supplied inputs; reviewed promotions for Georgia, Iowa, Illinois,
 Indiana, Kansas, Louisiana, Michigan, North Carolina, Pennsylvania, South
 Carolina, Utah, Virginia, Arizona, Arkansas, Oklahoma, Alabama, Connecticut,
@@ -127,13 +127,13 @@ credits; it is not a claim of complete final Colorado liability.
 
 ## National denominator
 
-The 44 pilot jurisdictions cover broad individual income taxes, including DC
-and Washington's capital-gains tax. A national router must also account for the
-seven jurisdictions without a broad current PIT: Alaska, Florida, Nevada, South
-Dakota, Tennessee, Texas, and Wyoming. They must be represented by grounded
-no-tax/repeal results or explicit non-applicability records; absence is not
-treated as zero. New Hampshire's 2026 Chapter 77 repeal is already grounded in
-its pilot module.
+The 43 current-law pilot jurisdictions cover broad individual income taxes,
+including DC and Washington's capital-gains tax. A national router must also
+account for the eight states without a broad current PIT: Alaska, Florida, New
+Hampshire, Nevada, South Dakota, Tennessee, Texas, and Wyoming. They are
+represented by explicit non-applicability records; absence is not treated as
+zero. New Hampshire's documentary RuleSpec module grounds Chapter 77's repeal,
+but its constant repeal result is not executed or counted as tax coverage.
 
 ## Delivery sequence
 
@@ -171,7 +171,7 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
 
 Execute all currently ready states (Alabama, Arizona, Arkansas, Colorado, Connecticut,
 Delaware, Georgia, Hawaii, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan,
-Mississippi, Montana, New Mexico, New York, North Carolina, New Hampshire, New
+Mississippi, Montana, New Mexico, New York, North Carolina, New
 Jersey, Ohio, Oklahoma, Pennsylvania, South Carolina, Utah, Virginia, Vermont,
 and West Virginia; later states remain blocked until their source-backed
 projection contracts land):

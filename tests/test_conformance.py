@@ -133,6 +133,24 @@ def test_oracle_dataset_lacks_input_requires_a_note():
     assert replace(row, note="lpb input absent from BE HHoT schema; see #160").validate() == []
 
 
+def test_oracle_models_repealed_law_requires_a_note():
+    row = UniversePolicy(
+        id="us-pe:nh_income_tax",
+        oracle_policy_name="nh_income_tax",
+        output_vars=("nh_income_tax",),
+        in_scope=False,
+        exclusion_reason="oracle_models_repealed_law",
+    )
+    assert any(
+        "oracle_models_repealed_law requires a `note`" in problem
+        for problem in row.validate()
+    )
+    assert replace(
+        row,
+        note="RSA Chapter 77 repealed; see the positive-I&D PolicyEngine probe.",
+    ).validate() == []
+
+
 def test_oracle_dataset_lacks_input_keeps_the_observable_output_var():
     """Unlike extension_not_available (no OutputVar), this reason carries a real
     queryable surface — the whole point is the output IS observable, just never
@@ -570,7 +588,6 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "me-income-tax-liability",
         "mn-income-tax-liability",
         "mo-income-tax-liability",
-        "nh-income-tax-liability",
         "ct-income-tax-liability",
         "az-income-tax-liability",
         "ga-income-tax-liability",
@@ -622,6 +639,12 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert by_name["co_income_tax"].suite is None
     assert by_name["ca_income_tax"].suite == "ca-income-tax-liability"
     assert by_name["ny_income_tax"].suite is None
+    nh_income_tax = by_name["nh_income_tax"]
+    assert nh_income_tax.in_scope is False
+    assert nh_income_tax.exclusion_reason == "oracle_models_repealed_law"
+    assert nh_income_tax.suite is None
+    assert nh_income_tax.note
+    assert "probe_us_nh_repealed_income_tax.py" in nh_income_tax.note
     # Per-state TANF suites bind their state's variable (incl. renamed ones).
     assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
 

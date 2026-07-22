@@ -41,7 +41,7 @@ def _frames():
     households = pd.DataFrame(
         {
             "household_id": [1, 2, 3, 4],
-            "state_fips": [33, 6, 48, 36],
+            "state_fips": [17, 6, 48, 36],
             "household_weight": [12, 13, 14, 15],
         }
     )
@@ -57,12 +57,27 @@ def test_routes_every_tax_unit_after_person_household_geography_join() -> None:
     )
 
     by_id = {route.tax_unit_id: route for route in routes}
-    assert by_id[10].state == "NH"
+    assert by_id[10].state == "IL"
     assert by_id[10].weight == 2.5
     assert by_id[10].disposition == DISPOSITION_READY
     assert by_id[20].disposition == DISPOSITION_BLOCKED
     assert by_id[30].disposition == DISPOSITION_NO_BROAD_PIT
     assert by_id[40].disposition == DISPOSITION_NONPOSITIVE_WEIGHT
+
+
+def test_new_hampshire_routes_as_no_current_broad_pit() -> None:
+    tax_units, persons, households = _frames()
+    households.loc[households["household_id"] == 1, "state_fips"] = 33
+
+    routes = route_tax_units(
+        raw_tax_units=tax_units,
+        raw_persons=persons,
+        raw_households=households,
+    )
+
+    nh_route = next(route for route in routes if route.tax_unit_id == 10)
+    assert nh_route.state == "NH"
+    assert nh_route.disposition == DISPOSITION_NO_BROAD_PIT
 
 
 def test_falls_back_to_household_weight_when_tax_unit_weight_is_absent() -> None:
@@ -123,8 +138,8 @@ def test_nonfinite_population_weights_fail_closed(weight: float) -> None:
 
 def test_sampling_occurs_per_state_after_readiness_filtering() -> None:
     routes = (
-        TaxUnitRoute(9, 1, "NH", "33", 1, DISPOSITION_READY),
-        TaxUnitRoute(2, 2, "NH", "33", 1, DISPOSITION_READY),
+        TaxUnitRoute(9, 1, "IL", "17", 1, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "IL", "17", 1, DISPOSITION_READY),
         TaxUnitRoute(7, 3, "CA", "06", 1, DISPOSITION_READY),
         TaxUnitRoute(1, 4, "CA", "06", 1, DISPOSITION_BLOCKED),
         TaxUnitRoute(3, 5, "TX", "48", 1, DISPOSITION_NO_BROAD_PIT),
@@ -134,7 +149,7 @@ def test_sampling_occurs_per_state_after_readiness_filtering() -> None:
 
     assert [(route.state, route.tax_unit_id) for route in selected] == [
         ("CA", 7),
-        ("NH", 2),
+        ("IL", 2),
     ]
 
 
@@ -170,7 +185,7 @@ def test_report_accounts_for_all_51_jurisdictions_and_every_unit() -> None:
         DISPOSITION_NONPOSITIVE_WEIGHT: 0,
     }
     assert report["errored_count"] == 0
-    assert report["states"]["NH"]["selected_count"] == 1
+    assert report["states"]["IL"]["selected_count"] == 1
     assert report["states"]["CA"]["dispositions"] == {
         DISPOSITION_BLOCKED: 1
     }
@@ -181,9 +196,13 @@ def test_report_accounts_for_all_51_jurisdictions_and_every_unit() -> None:
 
 
 def test_ready_comparison_runs_one_compiled_state_batch(tmp_path) -> None:
+    slot = (
+        "us-ut:policies/income_tax/pilot_liability_pipeline#input."
+        "ut_pit_pilot_state_taxable_income"
+    )
     routes = (
-        TaxUnitRoute(2, 1, "NH", "33", 2.5, DISPOSITION_READY),
-        TaxUnitRoute(5, 2, "NH", "33", 3.5, DISPOSITION_READY),
+        TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),
+        TaxUnitRoute(5, 2, "UT", "49", 3.5, DISPOSITION_READY),
         TaxUnitRoute(7, 3, "CA", "06", 4, DISPOSITION_BLOCKED),
     )
     calls = []
@@ -201,7 +220,10 @@ def test_ready_comparison_runs_one_compiled_state_batch(tmp_path) -> None:
 
     report = compare_ready_state_tax_units(
         routes=routes,
-        policyengine_targets={"NH": {2: 0.0, 5: 0.0}},
+        policyengine_targets={"UT": {2: 0.0, 5: 0.0}},
+        policyengine_projection_inputs={
+            "UT": {slot: {2: 0.0, 5: 0.0}}
+        },
         year=2026,
         rulespec_root=tmp_path / "rulespec-us",
         axiom_rules_path=tmp_path / "axiom-rules",
@@ -211,7 +233,7 @@ def test_ready_comparison_runs_one_compiled_state_batch(tmp_path) -> None:
     assert report["ready_state_count"] == 1
     assert report["compared_count"] == 2
     assert report["mismatch_count"] == 0
-    assert report["states"]["NH"]["weighted_compared_tax_units"] == 6
+    assert report["states"]["UT"]["weighted_compared_tax_units"] == 6
     assert len(calls) == 1
     assert len(calls[0]["request"]["queries"]) == 2
 
@@ -227,7 +249,7 @@ def test_policyengine_target_calculation_is_limited_to_ready_states() -> None:
             return [0, 0]
 
     routes = (
-        TaxUnitRoute(1, 1, "NH", "33", 1, DISPOSITION_READY),
+        TaxUnitRoute(1, 1, "UT", "49", 1, DISPOSITION_READY),
         TaxUnitRoute(2, 2, "CA", "06", 1, DISPOSITION_BLOCKED),
     )
     raw_tax_units = pd.DataFrame({"tax_unit_id": [1, 2]})
@@ -240,7 +262,7 @@ def test_policyengine_target_calculation_is_limited_to_ready_states() -> None:
         microsimulation_factory=FakeSimulation,
     )
 
-    assert targets == {"NH": {1: 0.0, 2: 0.0}}
+    assert targets == {"UT": {1: 0.0, 2: 0.0}}
 
 
 def test_arkansas_person_target_is_validated_and_summed_to_tax_units() -> None:

@@ -13,6 +13,7 @@ from axiom_oracles.bridges.state_tax_populace import (
     load_state_tax_populace_contract,
 )
 from axiom_oracles.bridges.state_tax_populace_runner import (
+    NO_BROAD_PIT_FIPS,
     calculate_policyengine_targets,
     calculate_policyengine_projection_inputs,
     compare_ready_state_tax_units,
@@ -45,7 +46,15 @@ def _requested_states(
     raw_states: list[str] | None, *, contract: StateTaxPopulaceContract
 ) -> set[str]:
     requested = {state.strip().upper() for state in (raw_states or [])}
-    unknown = sorted(requested - set(contract.by_state()))
+    not_applicable = sorted(requested & set(NO_BROAD_PIT_FIPS))
+    if not_applicable:
+        raise SystemExit(
+            "requested state(s) have no broad current PIT: "
+            + ", ".join(not_applicable)
+        )
+    unknown = sorted(
+        requested - set(contract.by_state()) - set(NO_BROAD_PIT_FIPS)
+    )
     if unknown:
         raise SystemExit(
             "unknown campaign state abbreviation(s): " + ", ".join(unknown)

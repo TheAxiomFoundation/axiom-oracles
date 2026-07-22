@@ -1405,20 +1405,6 @@ jurisdictions:
       order, cardinality, and TaxUnit-link validation. The reviewed RuleSpec
       declares (Person, TaxUnit), which is also the tuple order required by the
       pinned engine's current sum_where lowering.
-- state: NH
-  fips: '33'
-  taxsim_state_code: 30
-  jurisdiction: us-nh
-  program: us-nh:policies/income_tax/pilot_liability_pipeline
-  output: us-nh:policies/income_tax/pilot_liability_pipeline#nh_pit_pilot_income_tax_liability
-  policyengine:
-    target: nh_income_tax_before_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: ready
-  evidence: us-nh/policies/income_tax/pilot_liability_pipeline.test.yaml proves the 2026 repeal-result pipeline has no runtime inputs.
-  inputs: []
-  relations: []
 - state: WV
   fips: '54'
   taxsim_state_code: 49
