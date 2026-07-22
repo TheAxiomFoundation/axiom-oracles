@@ -133,6 +133,24 @@ def test_oracle_dataset_lacks_input_requires_a_note():
     assert replace(row, note="lpb input absent from BE HHoT schema; see #160").validate() == []
 
 
+def test_oracle_models_repealed_law_requires_a_note():
+    row = UniversePolicy(
+        id="us-pe:nh_income_tax",
+        oracle_policy_name="nh_income_tax",
+        output_vars=("nh_income_tax",),
+        in_scope=False,
+        exclusion_reason="oracle_models_repealed_law",
+    )
+    assert any(
+        "oracle_models_repealed_law requires a `note`" in problem
+        for problem in row.validate()
+    )
+    assert replace(
+        row,
+        note="RSA Chapter 77 repealed; see the positive-I&D PolicyEngine probe.",
+    ).validate() == []
+
+
 def test_oracle_dataset_lacks_input_keeps_the_observable_output_var():
     """Unlike extension_not_available (no OutputVar), this reason carries a real
     queryable surface — the whole point is the output IS observable, just never
@@ -547,58 +565,19 @@ def test_us_pe_state_programs_are_per_state():
 def test_us_pe_covered_programs_name_a_live_pe_suite():
     """Every covered us-pe program points at a live PolicyEngine-US suite that
     runs vs PE-2026 — the day-one registrations (federal income tax + payroll via
-    fiit-ecps, SSI, SNAP, Medicaid categorical, CO/CA/NY/IL/MA/OH state income
-    tax, and the per-state TANF suites)."""
+    fiit-ecps, SSI, SNAP, Medicaid categorical, reviewed state income-tax
+    comparisons, and the per-state TANF suites)."""
+    import re
+
     universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
     live_pe_suites = {
         "fiit-ecps",
         "ssi-ecps",
         "ca-snap-ecps",
         "medicaid-magi-co-ecps",
-        "co-state-income-tax-ecps",
-        "ca-income-tax-liability",
-        "ny-income-tax-liability",
-        "il-income-tax-liability",
-        "ma-income-tax-liability",
-        "oh-income-tax-liability",
-        "va-income-tax-liability",
-        "ut-income-tax-liability",
         "al-income-tax-liability",
-        "id-income-tax-liability",
-        "ky-income-tax-liability",
-        "ne-income-tax-liability",
-        "de-income-tax-liability",
-        "md-income-tax-liability",
-        "me-income-tax-liability",
-        "mn-income-tax-liability",
-        "mo-income-tax-liability",
-        "ar-income-tax-liability",
-        "nh-income-tax-liability",
-        "ct-income-tax-liability",
-        "az-income-tax-liability",
-        "ga-income-tax-liability",
-        "mi-income-tax-liability",
         "nc-income-tax-liability",
-        "dc-income-tax-liability",
-        "hi-income-tax-liability",
-        "ia-income-tax-liability",
-        "in-income-tax-liability",
-        "ks-income-tax-liability",
-        "la-income-tax-liability",
-        "mt-income-tax-liability",
-        "nd-income-tax-liability",
-        "nm-income-tax-liability",
-        "nj-income-tax-liability",
-        "ok-income-tax-liability",
-        "or-income-tax-liability",
-        "pa-income-tax-liability",
         "ms-income-tax-liability",
-        "ri-income-tax-liability",
-        "sc-income-tax-liability",
-        "wa-income-tax-liability",
-        "wi-income-tax-liability",
-        "wv-income-tax-liability",
-        "vt-income-tax-liability",
         "al-tanf-ecps",
         "ga-tanf-ecps",
         "de-tanf-ecps",
@@ -618,9 +597,81 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert by_name[program].suite == "fiit-ecps", program
     # SNAP is one national row registered to its canonical (largest) suite.
     assert by_name["snap"].suite == "ca-snap-ecps"
-    # State income tax: CO at population scale, CA/NY/IL/MA composed grids.
-    assert by_name["co_income_tax"].suite == "co-state-income-tax-ecps"
-    assert by_name["ca_income_tax"].suite == "ca-income-tax-liability"
+    # State income-tax coverage counts only a comparison that proves the final
+    # public variable. These blocked grids exercise useful narrower components,
+    # but none proves the corresponding final liability.
+    assert by_name["co_income_tax"].suite is None
+    assert by_name["ny_income_tax"].suite is None
+    nh_income_tax = by_name["nh_income_tax"]
+    assert nh_income_tax.in_scope is False
+    assert nh_income_tax.exclusion_reason == "oracle_models_repealed_law"
+    assert nh_income_tax.suite is None
+    assert nh_income_tax.note
+    assert "probe_us_nh_repealed_income_tax.py" in nh_income_tax.note
+    narrow_state_targets = {
+        "az_income_tax": "az_income_tax_before_non_refundable_credits",
+        "ca_income_tax": "ca_income_tax_before_refundable_credits",
+        "ct_income_tax": "ct_income_tax_before_refundable_credits",
+        "dc_income_tax": "dc_income_tax_before_credits",
+        "de_income_tax": "de_income_tax_before_non_refundable_credits_unit",
+        "ga_income_tax": "ga_income_tax_before_non_refundable_credits",
+        "hi_income_tax": "hi_income_tax_before_non_refundable_credits",
+        "ia_income_tax": "ia_income_tax_before_credits",
+        "id_income_tax": "id_income_tax_before_refundable_credits",
+        "il_income_tax": "il_income_tax_before_non_refundable_credits",
+        "in_income_tax": "in_agi_tax",
+        "ks_income_tax": "ks_income_tax_before_credits",
+        "ky_income_tax": "ky_income_tax_before_refundable_credits",
+        "la_income_tax": "la_income_tax_before_non_refundable_credits",
+        "ma_income_tax": "ma_income_tax",
+        "md_income_tax": "md_income_tax_before_credits",
+        "me_income_tax": "me_income_tax_before_refundable_credits",
+        "mi_income_tax": "mi_income_tax_before_non_refundable_credits",
+        "mn_income_tax": "mn_income_tax_before_refundable_credits",
+        "mo_income_tax": "mo_income_tax_before_credits",
+        "mt_income_tax": "mt_income_tax_before_non_refundable_credits_joint",
+        "nd_income_tax": "nd_income_tax_before_credits",
+        "ne_income_tax": "ne_income_tax_before_credits",
+        "nj_income_tax": "nj_main_income_tax",
+        "nm_income_tax": "nm_income_tax_before_non_refundable_credits",
+        "oh_income_tax": "oh_income_tax_before_non_refundable_credits",
+        "ok_income_tax": "ok_income_tax_before_credits",
+        "or_income_tax": "or_income_tax_before_credits",
+        "pa_income_tax": "pa_income_tax_before_forgiveness",
+        "ri_income_tax": "ri_income_tax_before_non_refundable_credits",
+        "sc_income_tax": "sc_income_tax_before_non_refundable_credits",
+        "ut_income_tax": "ut_income_tax_before_credits",
+        "va_income_tax": "va_income_tax_before_non_refundable_credits",
+        "vt_income_tax": "vt_income_tax_before_non_refundable_credits",
+        "wa_income_tax": "wa_income_tax_before_refundable_credits",
+        "wi_income_tax": "wi_income_tax_before_credits",
+        "wv_income_tax": "wv_income_tax_before_non_refundable_credits",
+    }
+    for final_variable, compared_surface in narrow_state_targets.items():
+        row = by_name[final_variable]
+        assert row.in_scope is True, final_variable
+        assert row.suite is None, final_variable
+        assert compared_surface in row.note, final_variable
+    # Alabama and North Carolina are the two reviewed 2026 exceptions: their
+    # narrower targets are provably identical to the generated final variables
+    # over every positive-weight routed Populace tax unit.
+    final_equivalent_state_targets = {
+        "al_income_tax": ("al_income_tax_before_non_refundable_credits", "1,632"),
+        "nc_income_tax": ("nc_income_tax_before_credits", "2,169"),
+    }
+    for final_variable, (compared_surface, population_count) in (
+        final_equivalent_state_targets.items()
+    ):
+        row = by_name[final_variable]
+        assert row.suite == f"{final_variable[:2]}-income-tax-liability"
+        assert compared_surface in row.note
+        assert population_count in row.note
+    covered_state_income_taxes = {
+        variable
+        for variable, row in by_name.items()
+        if re.fullmatch(r"[a-z]{2}_income_tax", variable) and row.suite is not None
+    }
+    assert covered_state_income_taxes == set(final_equivalent_state_targets)
     # Per-state TANF suites bind their state's variable (incl. renamed ones).
     assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
 

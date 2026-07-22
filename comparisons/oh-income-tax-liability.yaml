@@ -4,9 +4,8 @@
 # rulespec-us pipeline us-oh/policies/income_tax/pilot_liability_pipeline,
 # evaluated through the axiom rules engine (its liabilities are the
 # engine-verified companion-test fixtures). Ohio applies the section 5747.02
-# graduated tax (no tax up to $26,050, then $332 plus 2.75 per cent of the
-# excess) to Ohio taxable income, less the section 5747.98 nonrefundable
-# exemption credit.
+# schedule (no tax up to $26,050, then $332 plus 2.75 per cent of the excess)
+# to completed-return Ohio taxable nonbusiness income before credits.
 #
 # PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
 # supported law year (2024) because the pinned binary abandons 2026; the
@@ -21,7 +20,7 @@ title: Ohio income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Ohio income-tax liability pipeline encoded in Axiom
   RuleSpec (us-oh/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (oh_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
+  PolicyEngine (oh_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
   single and married filers crossing the state's no-tax threshold and bracket.
 
 runner:

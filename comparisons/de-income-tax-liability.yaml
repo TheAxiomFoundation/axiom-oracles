@@ -1,6 +1,5 @@
-# Delaware composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
-# on a modest case grid (single and married filers at incomes that cross the
-# state's brackets). The Axiom side is the composed rulespec-us pipeline
+# Delaware section 1102 schedule tax — Axiom pipeline vs PolicyEngine and TAXSIM
+# on a modest case grid. The Axiom side is the composed rulespec-us pipeline
 # us-de/policies/income_tax/pilot_liability_pipeline, evaluated through the
 # axiom rules engine (its liabilities are the engine-verified companion-test
 # fixtures).
@@ -16,10 +15,11 @@
 name: de-income-tax-liability
 title: Delaware income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares the composed Delaware income-tax liability pipeline encoded in Axiom
-  RuleSpec (us-de/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (de_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
-  single and married filers crossing the state's brackets.
+  Compares the Delaware section 1102(a)(14) schedule and strict separate-versus-
+  combined branch selection encoded in Axiom RuleSpec against PolicyEngine
+  (de_income_tax_before_non_refundable_credits_unit) at 2026 and TAXSIM (siitax)
+  at 2024 on a modest grid. Nonrefundable and refundable credits are outside the
+  Axiom/PolicyEngine core compared here.
 
 runner:
   type: state-income-tax-liability-grid

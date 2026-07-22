@@ -27,9 +27,9 @@ REPO_ROOT = Path(__file__).parents[1]
 SCRIPT = "scripts/commit_refreshed_report.sh"
 #: A committed report the tests perturb the way a rerun would (score-bearing
 #: dispositioned rate + provenance timestamp) — the exact 2026-07-14 class.
-REPORT = "dashboard/public/data/axiom-policyengine-taxsim-il-income-tax-liability.json"
+REPORT = "dashboard/public/data/axiom-policyengine-taxsim-al-income-tax-liability.json"
 SIBLING_REPORT = (
-    "dashboard/public/data/axiom-policyengine-taxsim-ky-income-tax-liability.json"
+    "dashboard/public/data/axiom-policyengine-taxsim-nc-income-tax-liability.json"
 )
 #: Everything the script and its regeneration scripts read or write. `docs`
 #: and `reports` (plus the root-level *.md files copied in seed_repo) are
@@ -100,7 +100,7 @@ def _clone(origin: Path, dst: Path) -> Path:
 
 
 def _run_script(
-    clone: Path, suite: str = "il-income-tax-liability", attempts: str = "4"
+    clone: Path, suite: str = "al-income-tax-liability", attempts: str = "4"
 ) -> subprocess.CompletedProcess:
     return subprocess.run(
         [str(clone / SCRIPT), suite, "main"],
@@ -229,12 +229,12 @@ def test_concurrent_siblings_never_leave_main_stale(origin, tmp_path):
     sentinel_a = _perturb_report(job_a, REPORT)
     sentinel_b = _perturb_report(job_b, SIBLING_REPORT)
 
-    result_a = _run_script(job_a, "il-income-tax-liability")
+    result_a = _run_script(job_a, "al-income-tax-liability")
     assert result_a.returncode == 0, result_a.stderr
     intermediate = _git(origin, "rev-parse", "main")
     _assert_origin_tip_green(origin, tmp_path)
 
-    result_b = _run_script(job_b, "ky-income-tax-liability")
+    result_b = _run_script(job_b, "nc-income-tax-liability")
     assert result_b.returncode == 0, result_b.stderr
     assert _git(origin, "rev-parse", "main") != intermediate
 
@@ -353,7 +353,7 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
     clone = _clone(origin, tmp_path / "job")
     sentinel = _perturb_report(clone)
     proc = subprocess.Popen(
-        [str(clone / SCRIPT), "il-income-tax-liability", "main"],
+        [str(clone / SCRIPT), "al-income-tax-liability", "main"],
         cwd=clone,
         env={
             **os.environ,
@@ -485,7 +485,7 @@ def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
     before = _git(origin, "rev-parse", "main")
     _perturb_report(clone)
     result = subprocess.run(
-        [str(clone / SCRIPT), "il-income-tax-liability", "main"],
+        [str(clone / SCRIPT), "al-income-tax-liability", "main"],
         cwd=clone,
         env={
             **os.environ,

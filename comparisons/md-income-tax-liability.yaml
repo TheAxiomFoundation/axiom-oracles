@@ -18,7 +18,7 @@ title: Maryland income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Maryland income-tax liability pipeline encoded in Axiom
   RuleSpec (us-md/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (md_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
+  PolicyEngine (md_income_tax_before_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
   single and married filers crossing the state's brackets.
 
 runner:

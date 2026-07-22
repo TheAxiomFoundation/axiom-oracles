@@ -34,13 +34,13 @@ def _first_input(document: dict) -> tuple[dict, dict]:
 def test_packaged_contract_has_exact_campaign_inventory() -> None:
     contract = load_state_tax_populace_contract()
 
-    assert len(contract.jurisdictions) == 44
+    assert len(contract.jurisdictions) == 43
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 255
-    assert sum(len(item.relations) for item in contract.jurisdictions) == 1
-    assert len({item.program for item in contract.jurisdictions}) == 44
-    assert len({item.output for item in contract.jurisdictions}) == 44
-    assert len({item.policyengine_target for item in contract.jurisdictions}) == 44
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 162
+    assert sum(len(item.relations) for item in contract.jurisdictions) == 2
+    assert len({item.program for item in contract.jurisdictions}) == 43
+    assert len({item.output for item in contract.jurisdictions}) == 43
+    assert len({item.policyengine_target for item in contract.jurisdictions}) == 43
 
 
 @pytest.mark.parametrize(
@@ -92,28 +92,309 @@ def test_contract_rejects_comparison_registry_drift(
         validate_state_tax_populace_contract(document)
 
 
-def test_packaged_contract_has_reviewed_nh_and_ut_ready() -> None:
+def test_contract_pins_arkansas_person_aggregation_surface() -> None:
+    contract = load_state_tax_populace_contract()
+    arkansas = contract.by_state()["AR"]
+
+    assert arkansas.output.endswith(
+        "#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    )
+    assert (
+        arkansas.policyengine_target
+        == "ar_income_tax_before_non_refundable_credits_indiv"
+    )
+    assert arkansas.comparison_aggregation == "person_sum_to_tax_unit"
+
+    document = _document()
+    _state(document, "AR")["policyengine"]["aggregation"] = "max_person"
+    with pytest.raises(
+        StateTaxPopulaceContractError,
+        match="unsupported comparison aggregation|reviewed surface allowlist",
+    ):
+        validate_state_tax_populace_contract(document)
+
+
+def test_packaged_contract_has_reviewed_ready_states() -> None:
     contract = load_state_tax_populace_contract()
     summary = readiness_summary(contract)
 
     assert summary == {
-        "jurisdiction_count": 44,
-        "ready_count": 2,
-        "blocked_count": 42,
-        "ready_states": ["NH", "UT"],
-        "blocked_states": sorted(EXPECTED_STATE_CODES - {"NH", "UT"}),
+        "jurisdiction_count": 43,
+        "ready_count": 28,
+        "blocked_count": 15,
+        "ready_states": [
+            "AL",
+            "AR",
+            "AZ",
+            "CO",
+            "CT",
+            "DE",
+            "GA",
+            "HI",
+            "IA",
+            "IL",
+            "IN",
+            "KS",
+            "LA",
+            "MI",
+            "MS",
+            "MT",
+            "NC",
+            "NJ",
+            "NM",
+            "NY",
+            "OH",
+            "OK",
+            "PA",
+            "SC",
+            "UT",
+            "VA",
+            "VT",
+            "WV",
+        ],
+        "blocked_states": sorted(
+            EXPECTED_STATE_CODES
+            - {
+                "AL",
+                "AZ",
+                "AR",
+                "CO",
+                "CT",
+                "DE",
+                "GA",
+                "HI",
+                "IA",
+                "IL",
+                "IN",
+                "KS",
+                "LA",
+                "MI",
+                "MS",
+                "MT",
+                "NC",
+                "NJ",
+                "NM",
+                "NY",
+                "OH",
+                "OK",
+                "PA",
+                "SC",
+                "UT",
+                "VA",
+                "VT",
+                "WV",
+            }
+        ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 1,
-        "blocked_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 63,
+        "blocked_relation_count": 0,
     }
-    nh = contract.by_state()["NH"]
-    assert nh.inputs == ()
-    assert nh.relations == ()
-    ut = contract.by_state()["UT"]
-    assert len(ut.inputs) == 1
-    assert ut.inputs[0].source_kind == "pe_upstream_boundary"
-    assert ut.inputs[0].policyengine_variable == "ut_taxable_income"
+    assert "NH" not in contract.by_state()
+    expected_boundaries = {
+        "AL": ["al_taxable_income"],
+        "AZ": ["az_taxable_income"],
+        "AR": ["ar_taxable_income_indiv"],
+        "CT": [
+            "ct_taxable_income",
+            "ct_agi",
+            "ct_personal_credit_rate",
+            "ct_amt",
+            "ct_property_tax_credit_potential",
+            "ct_stillborn_credit",
+        ],
+        "CO": ["co_taxable_income"],
+        "DE": ["de_taxable_income_indv", "de_files_separately"],
+        "GA": ["ga_taxable_income"],
+        "HI": ["hi_taxable_income"],
+        "IL": ["il_taxable_income", "recapture_of_investment_credit"],
+        "IA": [
+            "ia_taxable_income_consolidated",
+            "ia_modified_income",
+            "ia_alternate_tax_eligible",
+        ],
+        "IN": ["in_agi"],
+        "KS": ["ks_taxable_income", "tax_unit_is_joint"],
+        "LA": ["la_taxable_income"],
+        "MI": ["mi_taxable_income"],
+        "MS": ["ms_taxable_income_indiv", "ms_taxable_income_joint"],
+        "NC": ["nc_taxable_income"],
+        "NM": ["nm_taxable_income"],
+        "OH": ["oh_taxable_income"],
+        "OK": ["ok_taxable_income"],
+        "PA": ["pa_adjusted_taxable_income"],
+        "SC": ["sc_taxable_income"],
+        "UT": ["ut_taxable_income"],
+        "VA": ["va_taxable_income"],
+        "VT": ["vt_normal_income_tax", "adjusted_gross_income"],
+        "WV": ["wv_taxable_income"],
+    }
+    for state, variables in expected_boundaries.items():
+        inputs = [
+            item
+            for item in contract.by_state()[state].inputs
+            if item.source_kind == "pe_upstream_boundary"
+        ]
+        assert [item.policyengine_variable for item in inputs] == variables
+        assert all(item.source_kind == "pe_upstream_boundary" for item in inputs)
+    va_derived = [
+        item
+        for item in contract.by_state()["VA"].inputs
+        if item.source_kind == "derived"
+    ]
+    assert [item.policyengine_variable for item in va_derived] == ["va_must_file"]
+    assert [item.policyengine_transform for item in va_derived] == [
+        "zero_one_to_boolean"
+    ]
+    ok_derived = [
+        item
+        for item in contract.by_state()["OK"].inputs
+        if item.source_kind == "derived"
+    ]
+    assert [item.policyengine_variable for item in ok_derived] == ["filing_status"]
+    assert [item.policyengine_transform for item in ok_derived] == [
+        "filing_status_joint_surviving_spouse_or_head"
+    ]
+    al_derived = [
+        item
+        for item in contract.by_state()["AL"].inputs
+        if item.source_kind == "derived"
+    ]
+    assert [item.policyengine_variable for item in al_derived] == ["filing_status"]
+    assert [item.policyengine_transform for item in al_derived] == [
+        "filing_status_joint_or_surviving_spouse"
+    ]
+    ct_derived = [
+        item
+        for item in contract.by_state()["CT"].inputs
+        if item.source_kind == "derived"
+    ]
+    assert [item.policyengine_variable for item in ct_derived] == [
+        "filing_status",
+        "filing_status",
+        "filing_status",
+    ]
+    assert [item.policyengine_transform for item in ct_derived] == [
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_head_of_household",
+        "filing_status_is_separate",
+    ]
+    de = contract.by_state()["DE"]
+    assert de.policyengine_target == (
+        "de_income_tax_before_non_refundable_credits_unit"
+    )
+    assert (de.tolerance, de.relative_tolerance) == (0.01, 1e-7)
+    assert [item.slot for item in de.inputs] == [
+        "us-de:policies/income_tax/pilot_liability_pipeline#input."
+        "de_pit_pilot_supplied_separate_taxable_income",
+        "us-de:policies/income_tax/pilot_liability_pipeline#input."
+        "de_pit_pilot_taxpayer_is_included",
+        "us-de:policies/income_tax/pilot_liability_pipeline#input."
+        "de_pit_pilot_supplied_combined_taxable_income",
+        "us-de:policies/income_tax/pilot_liability_pipeline#input."
+        "de_pit_pilot_files_separately",
+    ]
+    de_derived = [item for item in de.inputs if item.source_kind == "derived"]
+    assert [
+        (
+            item.policyengine_variable,
+            item.policyengine_variables,
+            item.policyengine_transform,
+        )
+        for item in de_derived
+    ] == [
+        (
+            None,
+            ("is_tax_unit_head", "is_tax_unit_spouse"),
+            "person_filer_role_or",
+        ),
+        ("de_taxable_income_joint", (), "person_sum_to_tax_unit"),
+    ]
+    assert [item.slot for item in de.relations] == [
+        "us-de:policies/income_tax/pilot_liability_pipeline#relation."
+        "de_pit_pilot_taxpayer_of_tax_unit"
+    ]
+    assert de.relations[0].source_kind == "raw_populace"
+    ms = contract.by_state()["MS"]
+    assert [item.slot for item in ms.inputs] == [
+        "us-ms:policies/income_tax/pilot_liability_pipeline#input."
+        "ms_pit_pilot_supplied_taxable_income_indiv",
+        "us-ms:policies/income_tax/pilot_liability_pipeline#input."
+        "ms_pit_pilot_supplied_taxable_income_joint",
+    ]
+    assert [item.slot for item in ms.relations] == [
+        "us-ms:policies/income_tax/pilot_liability_pipeline#relation."
+        "ms_pit_pilot_person_of_tax_unit"
+    ]
+    assert ms.relations[0].source_kind == "raw_populace"
+    assert contract.by_state()["VT"].relations == ()
+    hi = contract.by_state()["HI"]
+    assert hi.policyengine_target == "hi_income_tax_before_non_refundable_credits"
+    assert (hi.tolerance, hi.relative_tolerance) == (1.0, 0.0)
+    assert hi.relations == ()
+    hi_derived = [item for item in hi.inputs if item.source_kind == "derived"]
+    assert [item.policyengine_variable for item in hi_derived] == [
+        "filing_status",
+        "filing_status",
+        None,
+    ]
+    assert [item.policyengine_transform for item in hi_derived] == [
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_head_of_household",
+        "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10",
+    ]
+    assert hi_derived[-1].policyengine_variables == (
+        "net_capital_gain",
+        "long_term_capital_gains",
+    )
+    nm_derived = [
+        item
+        for item in contract.by_state()["NM"].inputs
+        if item.source_kind == "derived"
+    ]
+    assert [item.policyengine_variable for item in nm_derived] == [
+        "filing_status",
+        "filing_status",
+    ]
+    assert [item.policyengine_transform for item in nm_derived] == [
+        "filing_status_is_separate",
+        "filing_status_joint_surviving_spouse_or_head",
+    ]
+    wv_derived = [
+        item
+        for item in contract.by_state()["WV"].inputs
+        if item.source_kind == "derived"
+    ]
+    assert [item.policyengine_variable for item in wv_derived] == ["filing_status"]
+    assert [item.policyengine_transform for item in wv_derived] == [
+        "filing_status_is_separate"
+    ]
+    mt_derived = [
+        item
+        for item in contract.by_state()["MT"].inputs
+        if item.source_kind == "derived"
+    ]
+    assert contract.by_state()["MT"].policyengine_target == (
+        "mt_income_tax_before_non_refundable_credits_joint"
+    )
+    assert [item.policyengine_variable for item in mt_derived] == [
+        "mt_taxable_income_joint",
+        None,
+        "filing_status",
+        "filing_status",
+    ]
+    assert [item.policyengine_variables for item in mt_derived] == [
+        (),
+        ("long_term_capital_gains", "short_term_capital_gains"),
+        (),
+        (),
+    ]
+    assert [item.policyengine_transform for item in mt_derived] == [
+        "person_sum_to_tax_unit",
+        "person_sums_to_net_long_term_capital_gain",
+        "filing_status_joint_or_surviving_spouse",
+        "filing_status_is_head_of_household",
+    ]
 
 
 def test_contract_forbids_filtered_population_slices() -> None:
@@ -157,7 +438,7 @@ def test_contract_rejects_missing_jurisdiction_evidence() -> None:
 def test_contract_rejects_missing_or_extra_pit_state() -> None:
     missing = _document()
     missing["jurisdictions"].pop()
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 44"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 43"):
         validate_state_tax_populace_contract(missing)
 
     extra = _document()
@@ -199,7 +480,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 255"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 162"):
         validate_state_tax_populace_contract(document)
 
 
@@ -284,7 +565,62 @@ def test_contract_rejects_pe_metadata_on_other_source_kind() -> None:
     _, slot = _first_input(document)
     slot["policyengine_variable"] = "adjusted_gross_income"
 
-    with pytest.raises(StateTaxPopulaceContractError, match="requires source_kind"):
+    with pytest.raises(StateTaxPopulaceContractError, match="incompatible"):
+        validate_state_tax_populace_contract(document)
+
+
+def test_contract_rejects_unreviewed_derived_transform() -> None:
+    document = _document()
+    slot = next(
+        item
+        for item in _state(document, "IA")["inputs"]
+        if item["source_kind"] == "derived"
+    )
+    slot["policyengine_transform"] = "greater_than_or_equal_64"
+
+    with pytest.raises(StateTaxPopulaceContractError, match="transform allowlist"):
+        validate_state_tax_populace_contract(document)
+
+
+def test_contract_rejects_unreviewed_multi_source_derived_boundary() -> None:
+    document = _document()
+    slot = next(
+        item
+        for item in _state(document, "MT")["inputs"]
+        if "policyengine_variables" in item
+    )
+    slot["policyengine_variables"] = [
+        "short_term_capital_gains",
+        "long_term_capital_gains",
+    ]
+
+    with pytest.raises(StateTaxPopulaceContractError, match="transform allowlist"):
+        validate_state_tax_populace_contract(document)
+
+
+def test_contract_rejects_ambiguous_single_and_multi_source_metadata() -> None:
+    document = _document()
+    slot = next(
+        item
+        for item in _state(document, "MT")["inputs"]
+        if "policyengine_variables" in item
+    )
+    slot["policyengine_variable"] = "long_term_capital_gains"
+
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly one of"):
+        validate_state_tax_populace_contract(document)
+
+
+def test_contract_rejects_unreviewed_statutory_constant() -> None:
+    document = _document()
+    slot = next(
+        item
+        for item in _state(document, "IA")["inputs"]
+        if item["source_kind"] == "statutory_constant"
+    )
+    slot["constant_value"] = 0.039
+
+    with pytest.raises(StateTaxPopulaceContractError, match="constant allowlist"):
         validate_state_tax_populace_contract(document)
 
 

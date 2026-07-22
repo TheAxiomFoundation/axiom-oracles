@@ -2,7 +2,7 @@ name: in-income-tax-liability
 title: Indiana income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Indiana resident wage-earner income-tax pipeline in
-  Axiom RuleSpec against PolicyEngine (in_income_tax_before_refundable_credits) at 2026 and TAXSIM
+  Axiom RuleSpec against PolicyEngine (in_agi_tax) at 2026 and TAXSIM
   (siitax) at its latest supported law year, 2024, on the standard six-case grid.
 
 runner:

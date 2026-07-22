@@ -1,9 +1,10 @@
-# New York composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
+# New York section 601 main income tax — Axiom vs PolicyEngine and TAXSIM
 # on a modest case grid (single and married filers at incomes that cross the
 # state's brackets). The Axiom side is the composed rulespec-us pipeline
 # us-ny/policies/income_tax/pilot_liability_pipeline, evaluated through the
 # axiom rules engine (its liabilities are the engine-verified companion-test
-# fixtures). New York is progressive (Tax Law s.601 brackets, 3.9-10.9 per cent) plus the s.601(d) supplemental recapture.
+# fixtures). New York is progressive (Tax Law s.601 brackets, 3.9-10.9 per
+# cent). Section 601(d-5) supplemental tax and credits are outside this suite.
 #
 # PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
 # supported law year (2024) because the pinned binary abandons 2026; the
@@ -14,12 +15,14 @@
 #   uv run python scripts/run_comparison.py ny-income-tax-liability
 
 name: ny-income-tax-liability
-title: New York income tax liability — Axiom vs PolicyEngine and TAXSIM
+title: New York main income tax — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares the composed New York income-tax liability pipeline encoded in Axiom
+  Compares the complete 2026 Tax Law section 601 main-income-tax schedules in Axiom
   RuleSpec (us-ny/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (ny_income_tax) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
-  single and married filers crossing the state's brackets.
+  PolicyEngine (ny_main_income_tax) at 2026 and TAXSIM (siitax) at 2024 on a
+  modest grid of single and married filers crossing the state's brackets.
+  Supplemental tax and credits are deliberately excluded from the Axiom and
+  PolicyEngine comparison target.
 
 runner:
   type: state-income-tax-liability-grid

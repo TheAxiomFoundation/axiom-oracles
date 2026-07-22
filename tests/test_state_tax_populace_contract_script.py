@@ -16,18 +16,48 @@ def test_contract_check_reports_readiness(capsys) -> None:
     assert main([]) == 0
 
     output = capsys.readouterr().out
-    assert "44 jurisdictions" in output
-    assert "2 ready" in output
-    assert "42 blocked" in output
-    assert "255 explicit inputs" in output
+    assert "43 jurisdictions" in output
+    assert "28 ready" in output
+    assert "15 blocked" in output
+    assert "162 explicit inputs" in output
+    assert "2 explicit relations" in output
 
 
 def test_contract_check_json_is_machine_readable(capsys) -> None:
     assert main(["--json"]) == 0
 
     output = json.loads(capsys.readouterr().out)
-    assert output["ready_states"] == ["NH", "UT"]
-    assert len(output["blocked_states"]) == 42
+    assert output["ready_states"] == [
+        "AL",
+        "AR",
+        "AZ",
+        "CO",
+        "CT",
+        "DE",
+        "GA",
+        "HI",
+        "IA",
+        "IL",
+        "IN",
+        "KS",
+        "LA",
+        "MI",
+        "MS",
+        "MT",
+        "NC",
+        "NJ",
+        "NM",
+        "NY",
+        "OH",
+        "OK",
+        "PA",
+        "SC",
+        "UT",
+        "VA",
+        "VT",
+        "WV",
+    ]
+    assert len(output["blocked_states"]) == 15
 
 
 def test_contract_check_fails_closed_for_missing_override(tmp_path, capsys) -> None:
@@ -50,7 +80,10 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
     monkeypatch.setattr(
         "scripts.check_state_tax_populace_contract.importlib.util.module_from_spec",
         lambda spec: SimpleNamespace(
-            _STATES=tuple(item.state for item in contract.jurisdictions),
+            _STATES=(),
+            _POPULACE_STATES=tuple(
+                item.state for item in contract.jurisdictions
+            ),
             VALIDATION_YEAR=2026,
             _TAXSIM_STATE={item.state: item.taxsim_state_code for item in contract.jurisdictions},
             _MODULE={item.state: item.program for item in contract.jurisdictions},
@@ -58,7 +91,7 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
             _PE_VAR={
                 item.state: (
                     "drifted_target"
-                    if item.state == "NH"
+                    if item.state == "NJ"
                     else item.policyengine_target
                 )
                 for item in contract.jurisdictions
@@ -67,8 +100,12 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
                 item.state: (item.tolerance, item.relative_tolerance)
                 for item in contract.jurisdictions
             },
+            _POPULACE_AGGREGATION={
+                item.state: item.comparison_aggregation
+                for item in contract.jurisdictions
+            },
         ),
     )
 
-    with pytest.raises(StateTaxPopulaceContractError, match="NH registry metadata"):
+    with pytest.raises(StateTaxPopulaceContractError, match="NJ registry metadata"):
         _validate_generator_registry(contract)

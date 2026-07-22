@@ -2,7 +2,8 @@ name: mt-income-tax-liability
 title: Montana income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Montana resident wage-earner income-tax pipeline in
-  Axiom RuleSpec against PolicyEngine (mt_income_tax) at 2026 and TAXSIM
+  Axiom RuleSpec against PolicyEngine
+  (mt_income_tax_before_non_refundable_credits_joint) at 2026 and TAXSIM
   (siitax) at its latest supported law year, 2024, on the standard six-case grid.
 
 runner:
