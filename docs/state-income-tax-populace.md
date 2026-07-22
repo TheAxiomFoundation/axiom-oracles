@@ -14,8 +14,8 @@ Hampshire is a grounded repeal-to-zero module. The initial pilots exposed 255
 explicit caller-supplied inputs; reviewed promotions for Georgia, Iowa, Illinois,
 Indiana, Kansas, Louisiana, Michigan, North Carolina, Pennsylvania, South
 Carolina, Utah, Virginia, Arizona, Oklahoma, Alabama, Connecticut, Delaware,
-Hawaii, New Mexico, West Virginia, Montana, Ohio, New Jersey, and Vermont reduce
-the current contract to 183 inputs and one explicit relation. Most
+Hawaii, New Mexico, New York, West Virginia, Montana, Ohio, New Jersey, and
+Vermont reduce the current contract to 171 inputs and one explicit relation. Most
 remaining inputs are completed-return boundaries or schedule values, including
 adjusted or taxable income, deductions, exemptions, credits, bracket selection,
 recapture, and state-specific capital-gain facts.
@@ -148,7 +148,7 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
 
 Execute all currently ready states (Alabama, Arizona, Connecticut, Delaware,
 Georgia, Hawaii, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan, Montana,
-New Mexico, North
+New Mexico, New York, North
 Carolina, New Hampshire, New Jersey, Ohio, Oklahoma, Pennsylvania, South
 Carolina, Utah, Virginia, Vermont, and West Virginia; later states remain blocked
 until their source-backed projection contracts land):

@@ -547,7 +547,7 @@ def test_us_pe_state_programs_are_per_state():
 def test_us_pe_covered_programs_name_a_live_pe_suite():
     """Every covered us-pe program points at a live PolicyEngine-US suite that
     runs vs PE-2026 — the day-one registrations (federal income tax + payroll via
-    fiit-ecps, SSI, SNAP, Medicaid categorical, CO/CA/NY/IL/MA/OH state income
+    fiit-ecps, SSI, SNAP, Medicaid categorical, CO/CA/IL/MA/OH state income
     tax, and the per-state TANF suites)."""
     universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
     live_pe_suites = {
@@ -557,7 +557,6 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "medicaid-magi-co-ecps",
         "co-state-income-tax-ecps",
         "ca-income-tax-liability",
-        "ny-income-tax-liability",
         "il-income-tax-liability",
         "ma-income-tax-liability",
         "oh-income-tax-liability",
@@ -618,9 +617,12 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert by_name[program].suite == "fiit-ecps", program
     # SNAP is one national row registered to its canonical (largest) suite.
     assert by_name["snap"].suite == "ca-snap-ecps"
-    # State income tax: CO at population scale, CA/NY/IL/MA composed grids.
+    # State income tax: CO at population scale and CA/IL/MA composed grids.
+    # New York's live grid targets only section 601 main tax, so it deliberately
+    # does not cover the generated final ny_income_tax universe row.
     assert by_name["co_income_tax"].suite == "co-state-income-tax-ecps"
     assert by_name["ca_income_tax"].suite == "ca-income-tax-liability"
+    assert by_name["ny_income_tax"].suite is None
     # Per-state TANF suites bind their state's variable (incl. renamed ones).
     assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
 

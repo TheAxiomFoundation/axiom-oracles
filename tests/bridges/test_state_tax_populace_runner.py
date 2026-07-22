@@ -517,6 +517,64 @@ def test_reviewed_connecticut_projection_covers_all_filing_statuses() -> None:
     }
 
 
+def test_reviewed_new_york_projection_covers_all_filing_statuses() -> None:
+    calls = []
+    values = {
+        "ny_taxable_income": [10_000, 20_000, 30_000, 40_000, 50_000],
+        "filing_status": [
+            "SINGLE",
+            "JOINT",
+            "SEPARATE",
+            "HEAD_OF_HOUSEHOLD",
+            "SURVIVING_SPOUSE",
+        ],
+    }
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            assert period == 2026
+            return values[variable]
+
+    projections = calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2, 3, 4, 5]}),
+        routes=tuple(
+            TaxUnitRoute(index, index, "NY", "36", 1, DISPOSITION_READY)
+            for index in range(1, 6)
+        ),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )["NY"]
+
+    prefix = "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+    assert projections[f"{prefix}ny_pit_pilot_state_taxable_income"] == {
+        1: 10_000.0,
+        2: 20_000.0,
+        3: 30_000.0,
+        4: 40_000.0,
+        5: 50_000.0,
+    }
+    assert projections[
+        f"{prefix}ny_pit_pilot_filing_status_joint_or_surviving_spouse"
+    ] == {1: False, 2: True, 3: False, 4: False, 5: True}
+    assert projections[f"{prefix}ny_pit_pilot_filing_status_head_of_household"] == {
+        1: False,
+        2: False,
+        3: False,
+        4: True,
+        5: False,
+    }
+    assert calls == [
+        ("ny_taxable_income", 2026),
+        ("filing_status", 2026),
+        ("filing_status", 2026),
+    ]
+
+
 def test_vermont_projection_proves_zero_interest_scope_without_relations() -> None:
     values = {
         "us_govt_interest": [0.0, float("nan")],

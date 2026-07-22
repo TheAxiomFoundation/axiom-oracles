@@ -101,74 +101,34 @@ jurisdictions:
   taxsim_state_code: 33
   jurisdiction: us-ny
   program: us-ny:policies/income_tax/pilot_liability_pipeline
-  output: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
+  output: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax
   policyengine:
-    target: ny_income_tax
-    tolerance: 5.0
-    relative_tolerance: 0.02
-  status: blocked
-  evidence: us-ny/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: ny_main_income_tax
+    tolerance: 2.25
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: Tax Law section 601(a)(1)(B)(vii), (b)(1)(B)(vii), and (c)(1)(B)(vii) provide every 2026 main-income-tax band for joint or surviving-spouse, head-of-household, and single or married-separate returns. The reviewed RuleSpec applies the statute's published cumulative bases to completed-return New York taxable income and explicitly excludes section 601(d-5) supplemental tax and all credits. Independent statutory arithmetic and a full certified-Populace probe covered all 3,741 positive-weight routed New York TaxUnits; the maximum difference from PolicyEngine's continuous marginal-scale implementation was $2.12 because the statute publishes rounded cumulative bases.
   inputs:
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_5
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_6
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_5
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_6
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_supplemental_recapture
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Tax Law section 601 imposes the main schedule on completed-return New York taxable income. PolicyEngine ny_taxable_income is a direct upstream dependency of the distinct ny_main_income_tax target, and the reviewed RuleSpec accepts that amount without reconstructing modifications, deductions, exemptions, residency, or allocation.
+    policyengine_variable: ny_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_filing_status_joint_or_surviving_spouse
+    source_kind: derived
+    status: ready
+    evidence: Tax Law section 601(a) supplies the joint and surviving-spouse schedule. The reviewed strict transform derives exactly those two classifications from the upstream canonical PolicyEngine filing_status enum.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_or_surviving_spouse
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_filing_status_head_of_household
+    source_kind: derived
+    status: ready
+    evidence: Tax Law section 601(b) supplies the head-of-household schedule. The reviewed strict transform derives that classification from the upstream canonical filing_status enum; single and married-separate filers fall through to section 601(c).
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_head_of_household
   relations: []
 - state: IL
   fips: '17'

@@ -36,6 +36,7 @@ import warnings
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
+import re
 
 from axiom_oracles.comparison.dispositions import (
     apply_dispositions_from_dir,
@@ -120,12 +121,13 @@ _TAXSIM_STATE = {
 }
 # PolicyEngine target per state. CA uses the before-refundable-credits variable;
 # IL and OH use their before-non-refundable-credits schedule-tax variables, the
-# exact statutory analogs of those cores. NY and MA have no refundable credits for these
-# childless cases, so the final variable is identical to the
-# before-refundable-credits value.
+# exact statutory analogs of those cores. New York uses the narrower section
+# 601 main-tax target because the supplemental-tax implementation diverges from
+# the statute; Massachusetts has no refundable credits for these childless
+# cases.
 _PE_VAR = {
     "CA": "ca_income_tax_before_refundable_credits",
-    "NY": "ny_income_tax",
+    "NY": "ny_main_income_tax",
     "IL": "il_income_tax_before_non_refundable_credits",
     "MA": "ma_income_tax",
     "OH": "oh_income_tax_before_non_refundable_credits",
@@ -237,6 +239,9 @@ _LIABILITY_OUTPUT = {
     st: f"{_MODULE[st]}#{st.lower()}_pit_pilot_income_tax_liability"
     for st in _TAXSIM_STATE
 }
+_LIABILITY_OUTPUT["NY"] = (
+    f"{_MODULE['NY']}#ny_pit_pilot_main_income_tax"
+)
 
 
 @dataclass
@@ -288,7 +293,7 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
     import yaml
 
     out: dict[tuple[str, str, int], float] = {}
-    for state in _TAXSIM_STATE:
+    for state in _STATES:
         test_file = (
             RULESPEC_US
             / f"us-{state.lower()}"
@@ -300,19 +305,30 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
         liab_key = _LIABILITY_OUTPUT[state]
         for case in doc:
             name = case["name"]
-            # Map the fixture case to (state, filing, income) by its supplied AGI.
             inputs = case["input"]
             agi_key = next(
                 (k for k in inputs if k.endswith("adjusted_gross_income")),
                 None,
             )
-            # Rate-only pilots transparently accept completed-return taxable
-            # income. Their fixture name still pins the wage/capital-gain grid
-            # case used by the live oracle leg (for example single_30000).
+            grid_name = re.fullmatch(r"(single|married|joint)_(\d+)", name)
+            if state == "NY" and agi_key is None and grid_name is None:
+                # Comprehensive boundary suites may contain many more cases
+                # than the six standard comparison-grid fixtures. Only names
+                # that explicitly bind a filing family and employment-income
+                # case belong to New York's rate-only report.
+                continue
+            # Preserve the existing adjusted-gross-income and fixture-suffix
+            # mapping for every other state. New York's rate-only pilot accepts
+            # completed-return taxable income, so its strict fixture name pins
+            # the wage grid case instead.
             agi = (
                 int(round(float(inputs[agi_key])))
                 if agi_key is not None
-                else int(name.rsplit("_", 1)[-1])
+                else (
+                    int(grid_name.group(2))
+                    if state == "NY"
+                    else int(name.rsplit("_", 1)[-1])
+                )
             )
             filing = (
                 "married"
@@ -398,7 +414,7 @@ def _match(left: float, right: float, tolerance: float, rel: float) -> bool:
 # Per-state comparison tolerances mirror the concept-mapping entries.
 _TOL = {
     "CA": (5.0, 0.02),
-    "NY": (5.0, 0.02),
+    "NY": (2.25, 0.0000001),
     "IL": (5.0, 0.02),
     "MA": (1.0, 0.0),
     # Ohio's legacy grid retains a $1 band; the full-Populace registry below

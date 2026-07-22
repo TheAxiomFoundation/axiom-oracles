@@ -828,9 +828,8 @@ policies:
     output_vars:
       - ny_income_tax
     in_scope: true
-    suite: ny-income-tax-liability
-    note: Covered by ny-income-tax-liability — the New York composed liability pipeline run 3-way vs PE-2026
-      and TAXSIM; axiom-vs-PE matches on the grid (top-line match_count reflects the TAXSIM-2024 leg).
+    suite: null
+    note: In-scope uncovered — ny-income-tax-liability now validates only the complete 2026 Tax Law section 601 main-tax schedules. The section 601(d-5) supplemental tax and credits needed for the final ny_income_tax program remain outside that suite.
   - id: us-pe:ny_tanf
     oracle_policy_name: ny_tanf
     oracle_policy_type: rules

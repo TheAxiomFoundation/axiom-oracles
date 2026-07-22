@@ -106,16 +106,22 @@ EXPECTED_STATE_FIPS = {
     "WV": "54",
 }
 EXPECTED_STATE_CODES = frozenset(EXPECTED_STATE_FIPS)
-EXPECTED_EXPLICIT_INPUT_COUNT = 183
+EXPECTED_OUTPUT_OVERRIDES = {
+    "NY": (
+        "us-ny:policies/income_tax/pilot_liability_pipeline"
+        "#ny_pit_pilot_main_income_tax"
+    ),
+}
+EXPECTED_EXPLICIT_INPUT_COUNT = 171
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "745284f55aaef543ea516193187ad195004a589857c387c766a4aa82d54f6c5d"
+    "b68cdb5830c94a4fe533895584739e04e04307daacb3c3116833149e66e83ae2"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "dc54e88716a7018751bb8ec1964253db202e77ec492397507c3bddbcb3b5482f"
+    "08561f0309938e065e2f02170355c9511186c97a7e84e5059aabef4d20e9e9f6"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "b56559497c9c93adb81f7732d4842c1e1b57599b4076fb18c9474bb33219976d"
+    "6bbb185f153ad0c26a7742c328283ea72b6a672c97b76c6578ff76ed3eeb54ed"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -271,6 +277,12 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "us-nm:policies/income_tax/pilot_liability_pipeline#input."
             "nm_pit_pilot_state_taxable_income",
             "nm_taxable_income",
+        ),
+        (
+            "NY",
+            "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+            "ny_pit_pilot_state_taxable_income",
+            "ny_taxable_income",
         ),
         (
             "OK",
@@ -463,6 +475,20 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "nm_pit_pilot_filing_status_joint_head_or_surviving",
             "filing_status",
             "filing_status_joint_surviving_spouse_or_head",
+        ),
+        (
+            "NY",
+            "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+            "ny_pit_pilot_filing_status_joint_or_surviving_spouse",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "NY",
+            "us-ny:policies/income_tax/pilot_liability_pipeline#input."
+            "ny_pit_pilot_filing_status_head_of_household",
+            "filing_status",
+            "filing_status_is_head_of_household",
         ),
         (
             "NJ",
@@ -991,8 +1017,9 @@ def _validate_jurisdiction(
     )
     if item.program != expected_program:
         errors.append(f"{item.state}: unexpected program {item.program!r}")
-    expected_output = (
-        f"{expected_program}#{item.state.lower()}_pit_pilot_income_tax_liability"
+    expected_output = EXPECTED_OUTPUT_OVERRIDES.get(
+        item.state,
+        f"{expected_program}#{item.state.lower()}_pit_pilot_income_tax_liability",
     )
     if item.output != expected_output:
         errors.append(f"{item.state}: unexpected output {item.output!r}")

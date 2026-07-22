@@ -45,6 +45,102 @@ def test_summary_counts_both_pairwise_legs_regardless_of_pe_match_status():
         assert summary["match_count"] + summary["mismatch_count"] == 4
 
 
+def test_axiom_liabilities_ignores_non_grid_boundary_fixtures(tmp_path):
+    generator = _load_generator()
+    output = (
+        "us-ny:policies/income_tax/pilot_liability_pipeline"
+        "#ny_pit_pilot_main_income_tax"
+    )
+    fixture_path = (
+        tmp_path
+        / "us-ny"
+        / "policies"
+        / "income_tax"
+        / "pilot_liability_pipeline.test.yaml"
+    )
+    fixture_path.parent.mkdir(parents=True)
+
+    boundary_cases = [
+        {
+            "name": f"single_schedule_boundary_{index}",
+            "input": {},
+            "output": {output: index},
+        }
+        for index in range(52)
+    ]
+    grid_values = {
+        "single_30000": 1023.4,
+        "single_60000": 2643.4,
+        "single_150000": 7810.65,
+        "joint_60000": 2040.7,
+        "joint_120000": 5280.7,
+        "joint_300000": 15612.6,
+    }
+    grid_cases = [
+        {"name": name, "input": {}, "output": {output: value}}
+        for name, value in grid_values.items()
+    ]
+    fixture_path.write_text(json.dumps(boundary_cases + grid_cases))
+
+    generator.RULESPEC_US = tmp_path
+    generator._STATES = ("NY",)
+    generator._LIABILITY_OUTPUT["NY"] = output
+
+    assert generator._axiom_liabilities() == {
+        ("NY", "single", 30_000): 1023.4,
+        ("NY", "single", 60_000): 2643.4,
+        ("NY", "single", 150_000): 7810.65,
+        ("NY", "married", 60_000): 2040.7,
+        ("NY", "married", 120_000): 5280.7,
+        ("NY", "married", 300_000): 15612.6,
+    }
+
+
+def test_axiom_liabilities_preserves_adjusted_gross_income_mapping(tmp_path):
+    generator = _load_generator()
+    output = (
+        "us-al:policies/income_tax/pilot_liability_pipeline"
+        "#al_pit_pilot_income_tax_liability"
+    )
+    fixture_path = (
+        tmp_path
+        / "us-al"
+        / "policies"
+        / "income_tax"
+        / "pilot_liability_pipeline.test.yaml"
+    )
+    fixture_path.parent.mkdir(parents=True)
+    fixture_path.write_text(
+        json.dumps(
+            [
+                {
+                    "name": "single_standard_grid_case",
+                    "input": {
+                        "us-al:example#al_adjusted_gross_income": 30_000
+                    },
+                    "output": {output: 1_000},
+                },
+                {
+                    "name": "married_standard_grid_case",
+                    "input": {
+                        "us-al:example#al_adjusted_gross_income": 60_000
+                    },
+                    "output": {output: 2_000},
+                },
+            ]
+        )
+    )
+
+    generator.RULESPEC_US = tmp_path
+    generator._STATES = ("AL",)
+    generator._LIABILITY_OUTPUT["AL"] = output
+
+    assert generator._axiom_liabilities() == {
+        ("AL", "single", 30_000): 1_000.0,
+        ("AL", "married", 60_000): 2_000.0,
+    }
+
+
 def test_recent_state_income_tax_oracle_registrations():
     generator = _load_generator()
 
