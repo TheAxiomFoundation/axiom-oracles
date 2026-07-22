@@ -75,8 +75,16 @@ routed tax unit. Filtered slices are forbidden by the v1 contract until stable,
 source-backed exclusion predicates and per-reason ledgers are implemented and
 independently reviewed.
 
-Delaware, Hawaii, and Montana are the current ready-state projections that cross a
-PolicyEngine entity boundary. Delaware validates certified Person identity,
+Arkansas, Delaware, Hawaii, and Montana are the current ready-state projections
+that cross a PolicyEngine entity boundary. Arkansas remains a deliberately
+narrow Person-grain Act 2 schedule component: the runner validates certified
+Person identity, ordering, cardinality, and every TaxUnit link; evaluates both
+`ar_pit_pilot_income_tax_before_non_refundable_credits_indiv` and
+`ar_income_tax_before_non_refundable_credits_indiv` at Person grain; then sums
+each side to TaxUnit only for comparison and population accounting. This does
+not relabel the component as broad final Arkansas liability, and the exact
+aggregation mode, Axiom output, and PolicyEngine target are state-allowlisted.
+Delaware validates certified Person identity,
 order, cardinality, and every TaxUnit link before projecting separate taxable
 income at Person grain, summing the combined taxable-income candidate to
 TaxUnit, and emitting raw relation membership for every Person linked by the
@@ -146,9 +154,9 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
   --sample-size-per-state 0 --output /tmp/state-tax-populace-routing.json
 ```
 
-Execute all currently ready states (Alabama, Arizona, Connecticut, Delaware,
-Georgia, Hawaii, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan, Montana,
-New Mexico, New York, North
+Execute all currently ready states (Alabama, Arizona, Arkansas, Connecticut,
+Delaware, Georgia, Hawaii, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan,
+Montana, New Mexico, New York, North
 Carolina, New Hampshire, New Jersey, Ohio, Oklahoma, Pennsylvania, South
 Carolina, Utah, Virginia, Vermont, and West Virginia; later states remain blocked
 until their source-backed projection contracts land):

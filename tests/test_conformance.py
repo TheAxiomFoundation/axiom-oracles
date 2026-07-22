@@ -571,7 +571,6 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "me-income-tax-liability",
         "mn-income-tax-liability",
         "mo-income-tax-liability",
-        "ar-income-tax-liability",
         "nh-income-tax-liability",
         "ct-income-tax-liability",
         "az-income-tax-liability",

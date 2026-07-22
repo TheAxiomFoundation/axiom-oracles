@@ -36,7 +36,7 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 44
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 171
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 167
     assert sum(len(item.relations) for item in contract.jurisdictions) == 1
     assert len({item.program for item in contract.jurisdictions}) == 44
     assert len({item.output for item in contract.jurisdictions}) == 44
@@ -92,16 +92,39 @@ def test_contract_rejects_comparison_registry_drift(
         validate_state_tax_populace_contract(document)
 
 
+def test_contract_pins_arkansas_person_aggregation_surface() -> None:
+    contract = load_state_tax_populace_contract()
+    arkansas = contract.by_state()["AR"]
+
+    assert arkansas.output.endswith(
+        "#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    )
+    assert (
+        arkansas.policyengine_target
+        == "ar_income_tax_before_non_refundable_credits_indiv"
+    )
+    assert arkansas.comparison_aggregation == "person_sum_to_tax_unit"
+
+    document = _document()
+    _state(document, "AR")["policyengine"]["aggregation"] = "max_person"
+    with pytest.raises(
+        StateTaxPopulaceContractError,
+        match="unsupported comparison aggregation|reviewed surface allowlist",
+    ):
+        validate_state_tax_populace_contract(document)
+
+
 def test_packaged_contract_has_reviewed_ready_states() -> None:
     contract = load_state_tax_populace_contract()
     summary = readiness_summary(contract)
 
     assert summary == {
         "jurisdiction_count": 44,
-        "ready_count": 26,
-        "blocked_count": 18,
+        "ready_count": 27,
+        "blocked_count": 17,
         "ready_states": [
             "AL",
+            "AR",
             "AZ",
             "CT",
             "DE",
@@ -133,6 +156,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             - {
                 "AL",
                 "AZ",
+                "AR",
                 "CT",
                 "DE",
                 "GA",
@@ -147,9 +171,9 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "NC",
                 "NH",
                 "NJ",
-                    "NM",
-                    "NY",
-                    "OH",
+                "NM",
+                "NY",
+                "OH",
                 "OK",
                 "PA",
                 "SC",
@@ -161,7 +185,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 59,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 60,
         "blocked_relation_count": 0,
     }
     nh = contract.by_state()["NH"]
@@ -170,6 +194,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
     expected_boundaries = {
         "AL": ["al_taxable_income"],
         "AZ": ["az_taxable_income"],
+        "AR": ["ar_taxable_income_indiv"],
         "CT": [
             "ct_taxable_income",
             "ct_agi",
@@ -441,7 +466,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 171"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 167"):
         validate_state_tax_populace_contract(document)
 
 

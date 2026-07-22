@@ -19,6 +19,7 @@ from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
 
 from .state_tax_populace import (
+    DEFAULT_COMPARISON_AGGREGATION,
     EXPECTED_STATE_FIPS,
     StateTaxPopulaceContract,
     load_state_tax_populace_contract,
@@ -56,6 +57,13 @@ _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
     ),
 }
 
+# Exact Person-grain comparison targets permitted to be summed to the
+# campaign's TaxUnit accounting grain.  These are outputs, not RuleSpec input
+# sources, and therefore remain separate from the upstream-boundary allowlist.
+_REVIEWED_PERSON_TARGETS_BY_STATE = {
+    "AR": frozenset({"ar_income_tax_before_non_refundable_credits_indiv"}),
+}
+
 # Exact categorical facts used to establish that a legally distinct branch is
 # absent from the selected certified population. These assertions are separate
 # from RuleSpec input projection: they may only narrow the comparison scope by
@@ -76,6 +84,12 @@ _REVIEWED_PE_ZERO_ASSUMPTIONS_BY_STATE = {
 # prevents a newly declared input from silently changing entity grain.  These
 # slots are intentionally staged before the DE/DC contract entries themselves.
 _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
+    "AR": frozenset(
+        {
+            "us-ar:policies/income_tax/pilot_liability_pipeline#input."
+            "ar_pit_pilot_individual_taxable_income",
+        }
+    ),
     "DC": frozenset(
         {
             "us-dc:policies/income_tax/pilot_liability_pipeline#input."
@@ -473,6 +487,7 @@ def calculate_policyengine_targets(
     *,
     dataset: Any,
     raw_tax_units: Any,
+    raw_persons: Any | None = None,
     routes: Iterable[TaxUnitRoute],
     year: int,
     contract: StateTaxPopulaceContract | Mapping[str, Any] | None = None,
@@ -510,6 +525,21 @@ def calculate_policyengine_targets(
     targets: dict[str, dict[int | str, float]] = {}
     for state in sorted(selected_states):
         jurisdiction = resolved_contract.by_state()[state]
+        comparison_aggregation = getattr(
+            jurisdiction,
+            "comparison_aggregation",
+            DEFAULT_COMPARISON_AGGREGATION,
+        )
+        if comparison_aggregation == "person_sum_to_tax_unit":
+            targets[state] = _reviewed_person_target_sums(
+                state=state,
+                sim=sim,
+                variable=jurisdiction.policyengine_target,
+                raw_persons=raw_persons,
+                tax_unit_ids=tax_unit_ids,
+                year=year,
+            )
+            continue
         values = _array_values(
             sim.calculate(jurisdiction.policyengine_target, period=year)
         )
@@ -1002,6 +1032,11 @@ def compare_ready_state_tax_units(
             declared_relations=tuple(slot.slot for slot in jurisdiction.relations),
             raw_persons=raw_persons,
             all_tax_unit_ids=all_tax_unit_ids,
+            comparison_aggregation=getattr(
+                jurisdiction,
+                "comparison_aggregation",
+                DEFAULT_COMPARISON_AGGREGATION,
+            ),
         )
         program = _program_path(rulespec_root, jurisdiction.program)
         try:
@@ -1015,29 +1050,72 @@ def compare_ready_state_tax_units(
             raise StateTaxPopulationRoutingError(
                 f"{state}: Axiom execution failed: {exc}"
             ) from exc
-        if len(results) != len(state_routes):
+        comparison_aggregation = getattr(
+            jurisdiction,
+            "comparison_aggregation",
+            DEFAULT_COMPARISON_AGGREGATION,
+        )
+        persons_by_tax_unit: dict[int | str, list[int | str]] = {}
+        if comparison_aggregation == "person_sum_to_tax_unit":
+            persons_by_tax_unit = _selected_person_members(
+                state=state,
+                raw_persons=raw_persons,
+                all_tax_unit_ids=all_tax_unit_ids,
+                selected_tax_unit_ids={route.tax_unit_id for route in state_routes},
+            )
+            expected_result_count = sum(map(len, persons_by_tax_unit.values()))
+        else:
+            expected_result_count = len(state_routes)
+        if len(results) != expected_result_count:
             raise StateTaxPopulationRoutingError(
                 f"{state}: Axiom returned {len(results)} results for "
-                f"{len(state_routes)} selected tax units"
+                f"{expected_result_count} selected comparison entities"
             )
+
+        axiom_values: dict[int | str, float] = {}
+        if comparison_aggregation == "person_sum_to_tax_unit":
+            result_index = 0
+            for route in state_routes:
+                total = 0.0
+                for person_id in persons_by_tax_unit[route.tax_unit_id]:
+                    result = results[result_index]
+                    result_index += 1
+                    expected_entity = _person_entity_id(person_id)
+                    if result.get("entity_id") != expected_entity:
+                        raise StateTaxPopulationRoutingError(
+                            f"{state}: Axiom result order/entity mismatch; expected "
+                            f"{expected_entity!r}, got {result.get('entity_id')!r}"
+                        )
+                    outputs = result.get("outputs") or {}
+                    if jurisdiction.output not in outputs:
+                        raise StateTaxPopulationRoutingError(
+                            f"{state}: Axiom result omitted {jurisdiction.output!r}"
+                        )
+                    total += _output_number(outputs[jurisdiction.output])
+                axiom_values[route.tax_unit_id] = total
+        else:
+            for route, result in zip(state_routes, results, strict=True):
+                expected_entity = _tax_unit_entity_id(route.tax_unit_id)
+                if result.get("entity_id") != expected_entity:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: Axiom result order/entity mismatch; expected "
+                        f"{expected_entity!r}, got {result.get('entity_id')!r}"
+                    )
+                outputs = result.get("outputs") or {}
+                if jurisdiction.output not in outputs:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: Axiom result omitted {jurisdiction.output!r}"
+                    )
+                axiom_values[route.tax_unit_id] = _output_number(
+                    outputs[jurisdiction.output]
+                )
 
         mismatches: list[dict[str, Any]] = []
         max_abs_diff = 0.0
         max_relative_diff = 0.0
         weighted_mismatch_tax_units = 0.0
-        for route, result in zip(state_routes, results, strict=True):
-            expected_entity = _tax_unit_entity_id(route.tax_unit_id)
-            if result.get("entity_id") != expected_entity:
-                raise StateTaxPopulationRoutingError(
-                    f"{state}: Axiom result order/entity mismatch; expected "
-                    f"{expected_entity!r}, got {result.get('entity_id')!r}"
-                )
-            outputs = result.get("outputs") or {}
-            if jurisdiction.output not in outputs:
-                raise StateTaxPopulationRoutingError(
-                    f"{state}: Axiom result omitted {jurisdiction.output!r}"
-                )
-            axiom_value = _output_number(outputs[jurisdiction.output])
+        for route in state_routes:
+            axiom_value = axiom_values[route.tax_unit_id]
             if route.tax_unit_id not in state_targets:
                 raise StateTaxPopulationRoutingError(
                     f"{state}: target omitted tax_unit_id {route.tax_unit_id}"
@@ -1074,6 +1152,7 @@ def compare_ready_state_tax_units(
             "policyengine_target": jurisdiction.policyengine_target,
             "tolerance": jurisdiction.tolerance,
             "relative_tolerance": jurisdiction.relative_tolerance,
+            "comparison_aggregation": comparison_aggregation,
             "compared_count": len(state_routes),
             "weighted_compared_tax_units": sum(route.weight for route in state_routes),
             "mismatch_count": len(mismatches),
@@ -1107,6 +1186,7 @@ def _state_request(
     declared_relations: tuple[str, ...] = (),
     raw_persons: Any | None = None,
     all_tax_unit_ids: set[int | str] | None = None,
+    comparison_aggregation: str = DEFAULT_COMPARISON_AGGREGATION,
 ) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
@@ -1120,12 +1200,13 @@ def _state_request(
         for slot in projected_inputs
         if _is_reviewed_person_input_slot(state=state, slot=slot)
     }
-    if person_slots and not declared_relations:
+    person_output = comparison_aggregation == "person_sum_to_tax_unit"
+    if person_slots and not declared_relations and not person_output:
         raise StateTaxPopulationRoutingError(
             f"{state}: reviewed Person inputs require an explicitly declared "
             "state-allowlisted relation"
         )
-    needs_people = bool(person_slots or declared_relations)
+    needs_people = bool(person_slots or declared_relations or person_output)
     persons_by_tax_unit: dict[int | str, list[int | str]] = {}
     if needs_people:
         persons_by_tax_unit = _selected_person_members(
@@ -1134,23 +1215,24 @@ def _state_request(
             all_tax_unit_ids=(all_tax_unit_ids or selected_tax_unit_ids),
             selected_tax_unit_ids=selected_tax_unit_ids,
         )
-        filer_slot = _REVIEWED_PERSON_FILER_SLOT_BY_STATE.get(state)
-        if filer_slot is None or filer_slot not in projected_inputs:
-            raise StateTaxPopulationRoutingError(
-                f"{state}: declared Person inputs/relations require the exact "
-                "reviewed taxpayer-inclusion input"
-            )
-        inclusion_values = projected_inputs[filer_slot]
-        for tax_unit_id, person_ids in persons_by_tax_unit.items():
-            for person_id in person_ids:
-                if person_id not in inclusion_values:
-                    raise StateTaxPopulationRoutingError(
-                        f"{state}: projected Person input {filer_slot!r} omitted "
-                        f"person_id {person_id}"
-                    )
-                _strict_boolean(
-                    inclusion_values[person_id], label=f"{state}:{filer_slot}"
+        if declared_relations:
+            filer_slot = _REVIEWED_PERSON_FILER_SLOT_BY_STATE.get(state)
+            if filer_slot is None or filer_slot not in projected_inputs:
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: declared Person inputs/relations require the exact "
+                    "reviewed taxpayer-inclusion input"
                 )
+            inclusion_values = projected_inputs[filer_slot]
+            for tax_unit_id, person_ids in persons_by_tax_unit.items():
+                for person_id in person_ids:
+                    if person_id not in inclusion_values:
+                        raise StateTaxPopulationRoutingError(
+                            f"{state}: projected Person input {filer_slot!r} omitted "
+                            f"person_id {person_id}"
+                        )
+                    _strict_boolean(
+                        inclusion_values[person_id], label=f"{state}:{filer_slot}"
+                    )
     inputs: list[dict[str, Any]] = []
     if projected_inputs:
         from .tax_populace import input_record
@@ -1219,11 +1301,23 @@ def _state_request(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
             {
-                "entity_id": _tax_unit_entity_id(route.tax_unit_id),
+                "entity_id": (
+                    _person_entity_id(entity_id)
+                    if person_output
+                    else _tax_unit_entity_id(entity_id)
+                ),
                 "period": interval,
                 "outputs": [output],
             }
-            for route in route_rows
+            for entity_id in (
+                [
+                    person_id
+                    for route in route_rows
+                    for person_id in persons_by_tax_unit[route.tax_unit_id]
+                ]
+                if person_output
+                else [route.tax_unit_id for route in route_rows]
+            )
         ],
     }
 
@@ -1636,6 +1730,40 @@ def _reviewed_person_sums(
             by_tax_unit[tax_unit_id] += _finite_number(value, label=variable)
         sums[variable] = [by_tax_unit[tax_unit_id] for tax_unit_id in tax_unit_ids]
     return sums
+
+
+def _reviewed_person_target_sums(
+    *,
+    state: str,
+    sim: Any,
+    variable: str,
+    raw_persons: Any | None,
+    tax_unit_ids: list[int | str],
+    year: int,
+) -> dict[int | str, float]:
+    """Sum one exact allowlisted Person comparison target to TaxUnit grain."""
+
+    if variable not in _REVIEWED_PERSON_TARGETS_BY_STATE.get(state, frozenset()):
+        raise StateTaxPopulationRoutingError(
+            f"{state}: unsupported Person comparison target {variable!r}"
+        )
+    _, person_values = _reviewed_person_values(
+        state=state,
+        sim=sim,
+        variables={variable},
+        raw_persons=raw_persons,
+        tax_unit_ids=tax_unit_ids,
+        year=year,
+    )
+    person_tax_unit_ids = [
+        _clean_id(value) for value in raw_persons["person_tax_unit_id"]
+    ]
+    totals = {tax_unit_id: 0.0 for tax_unit_id in tax_unit_ids}
+    for tax_unit_id, value in zip(
+        person_tax_unit_ids, person_values[variable], strict=True
+    ):
+        totals[tax_unit_id] += _finite_number(value, label=variable)
+    return totals
 
 
 def _output_number(output: Any) -> float:

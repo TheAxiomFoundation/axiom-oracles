@@ -92,8 +92,8 @@ policies:
     output_vars:
       - ar_income_tax
     in_scope: true
-    suite: ar-income-tax-liability
-    note: Covered by ar-income-tax-liability — Arkansas ordinary resident wage-earner core under Act 2 of 2026; the source-grounded Axiom pipeline matches PolicyEngine ar_income_tax_before_non_refundable_credits_unit within $1 on all six cases, while TAXSIM residuals are dispositioned as 2024 law-vintage and final-liability-scope differences.
+    suite: null
+    note: The state-tax Populace campaign validates the narrower Arkansas Act 2 individual schedule component ar_income_tax_before_non_refundable_credits_indiv at Person grain and sums both sides to TaxUnit only for accounting. The reviewed RuleSpec does not expose broad final ar_income_tax or the former six-case liability-grid output, so that stale grid suite has been retired and broad ar_income_tax remains uncovered.
   - id: us-pe:ar_tea
     oracle_policy_name: ar_tea
     oracle_policy_type: rules

@@ -56,6 +56,26 @@ ALLOWED_SOURCE_KINDS = frozenset(
     }
 )
 ALLOWED_STATUSES = frozenset({"ready", "blocked"})
+DEFAULT_COMPARISON_AGGREGATION = "tax_unit"
+ALLOWED_COMPARISON_AGGREGATIONS = frozenset(
+    {DEFAULT_COMPARISON_AGGREGATION, "person_sum_to_tax_unit"}
+)
+
+# Nonstandard comparison surfaces remain exact state/output/target/aggregation
+# allowlists.  This permits a source-faithful Person component to be compared
+# at the campaign's TaxUnit accounting grain without relabeling it as broad
+# liability or opening generic entity/result selection controls.
+ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
+    {
+        (
+            "AR",
+            "us-ar:policies/income_tax/pilot_liability_pipeline#"
+            "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv",
+            "ar_income_tax_before_non_refundable_credits_indiv",
+            "person_sum_to_tax_unit",
+        ),
+    }
+)
 
 # The personal-income-tax campaign covers the 43 states with a modeled PIT
 # surface plus DC.  States without an applicable broad PIT surface are absent.
@@ -112,16 +132,16 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "#ny_pit_pilot_main_income_tax"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 171
+EXPECTED_EXPLICIT_INPUT_COUNT = 167
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "b68cdb5830c94a4fe533895584739e04e04307daacb3c3116833149e66e83ae2"
+    "7eddbfcbfd25cd37c9ccf18201874d1e326915f1e03921fbdfe1a831959eeb97"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "08561f0309938e065e2f02170355c9511186c97a7e84e5059aabef4d20e9e9f6"
+    "9e742bb9a85c1065d4336ab734c6bf3f1b9ea99588a98d0277c7612ed60cc52e"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "6bbb185f153ad0c26a7742c328283ea72b6a672c97b76c6578ff76ed3eeb54ed"
+    "d9d0f3147bab5f9d693bd31c864c62f799d28c021214828eb52f997e3f7edb30"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -133,6 +153,12 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "us-al:policies/income_tax/pilot_liability_pipeline#input."
             "al_pit_pilot_state_taxable_income",
             "al_taxable_income",
+        ),
+        (
+            "AR",
+            "us-ar:policies/income_tax/pilot_liability_pipeline#input."
+            "ar_pit_pilot_individual_taxable_income",
+            "ar_taxable_income_indiv",
         ),
         (
             "AZ",
@@ -569,6 +595,7 @@ class StateTaxJurisdictionContract:
     policyengine_target: str
     tolerance: float
     relative_tolerance: float
+    comparison_aggregation: str
     status: str
     evidence: str
     inputs: tuple[ProjectionSource, ...]
@@ -888,7 +915,7 @@ def _parse_jurisdiction(
         policyengine = {}
     _reject_unknown_keys(
         policyengine,
-        {"target", "tolerance", "relative_tolerance"},
+        {"target", "tolerance", "relative_tolerance", "aggregation"},
         f"{label}.policyengine",
         errors,
     )
@@ -912,6 +939,9 @@ def _parse_jurisdiction(
     )
     tolerance = policyengine.get("tolerance")
     relative_tolerance = policyengine.get("relative_tolerance")
+    comparison_aggregation = policyengine.get(
+        "aggregation", DEFAULT_COMPARISON_AGGREGATION
+    )
     if not isinstance(tolerance, int | float) or isinstance(tolerance, bool):
         errors.append(f"{label}.policyengine.tolerance must be numeric")
         tolerance = 0
@@ -920,6 +950,9 @@ def _parse_jurisdiction(
     ):
         errors.append(f"{label}.policyengine.relative_tolerance must be numeric")
         relative_tolerance = 0
+    if not isinstance(comparison_aggregation, str):
+        errors.append(f"{label}.policyengine.aggregation must be a string")
+        comparison_aggregation = ""
 
     inputs = _parse_slots(raw.get("inputs"), label=f"{label}.inputs", errors=errors)
     relations = _parse_slots(
@@ -941,6 +974,7 @@ def _parse_jurisdiction(
         ),
         tolerance=float(tolerance),
         relative_tolerance=float(relative_tolerance),
+        comparison_aggregation=comparison_aggregation,
         status=_required_text(raw, "status", label, errors),
         evidence=_required_text(raw, "evidence", label, errors),
         inputs=inputs,
@@ -1021,8 +1055,29 @@ def _validate_jurisdiction(
         item.state,
         f"{expected_program}#{item.state.lower()}_pit_pilot_income_tax_liability",
     )
-    if item.output != expected_output:
+    comparison_surface = (
+        item.state,
+        item.output,
+        item.policyengine_target,
+        item.comparison_aggregation,
+    )
+    if item.comparison_aggregation not in ALLOWED_COMPARISON_AGGREGATIONS:
+        errors.append(
+            f"{item.state}: unsupported comparison aggregation "
+            f"{item.comparison_aggregation!r}"
+        )
+    if item.output != expected_output and (
+        comparison_surface not in ALLOWED_NONSTANDARD_COMPARISON_SURFACES
+    ):
         errors.append(f"{item.state}: unexpected output {item.output!r}")
+    if (
+        item.comparison_aggregation != DEFAULT_COMPARISON_AGGREGATION
+        and comparison_surface not in ALLOWED_NONSTANDARD_COMPARISON_SURFACES
+    ):
+        errors.append(
+            f"{item.state}: comparison aggregation is not in the independently "
+            "reviewed surface allowlist"
+        )
 
     for slot in (*item.inputs, *item.relations):
         _validate_slot(slot, jurisdiction=item, errors=errors)
@@ -1290,6 +1345,7 @@ def _jurisdiction_registry_sha256(
             item.policyengine_target,
             item.tolerance,
             item.relative_tolerance,
+            item.comparison_aggregation,
         )
         for item in jurisdictions
     ]
@@ -1378,6 +1434,12 @@ def _contract_to_document(contract: StateTaxPopulaceContract) -> dict[str, Any]:
                     "target": item.policyengine_target,
                     "tolerance": item.tolerance,
                     "relative_tolerance": item.relative_tolerance,
+                    **(
+                        {"aggregation": item.comparison_aggregation}
+                        if item.comparison_aggregation
+                        != DEFAULT_COMPARISON_AGGREGATION
+                        else {}
+                    ),
                 },
                 "status": item.status,
                 "evidence": item.evidence,

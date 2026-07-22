@@ -1314,34 +1314,39 @@ jurisdictions:
   taxsim_state_code: 4
   jurisdiction: us-ar
   program: us-ar:policies/income_tax/pilot_liability_pipeline
-  output: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+  output: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
   policyengine:
-    target: ar_income_tax_before_non_refundable_credits_unit
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ar/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: ar_income_tax_before_non_refundable_credits_indiv
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    aggregation: person_sum_to_tax_unit
+  status: ready
+  evidence: >-
+    Arkansas Act 2 of 2026 section 1 supplies the complete 2026
+    individual/separate schedule and all twenty-nine bracket-adjustment rows.
+    The reviewed RuleSpec deliberately remains at Person grain and accepts
+    completed-return individual taxable income; it does not claim broad final
+    TaxUnit liability. The campaign validates certified Person identity,
+    ordering, cardinality, and every Person-to-TaxUnit link, evaluates the
+    distinct Axiom and PolicyEngine individual before-nonrefundable-credit
+    outputs, and sums each side to TaxUnit only for population accounting.
+    Independent statutory reconstruction and full certified-Populace review
+    covered all 1,475 positive-weight routed Arkansas TaxUnits and their 2,816
+    people with no tolerance failures; maximum absolute difference was $0.08
+    and maximum relative difference was 5.76649e-8.
   inputs:
-  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_bracket_adjustment
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_individual_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      Arkansas Act 2 section 1 applies its individual schedule to individual
+      net taxable income. PolicyEngine ar_taxable_income_indiv is a distinct
+      Person-grain completed-return ancestor of
+      ar_income_tax_before_non_refundable_credits_indiv. The reviewed projector
+      verifies certified Person identity, order, cardinality, and TaxUnit links
+      before supplying this exact upstream boundary.
+    policyengine_variable: ar_taxable_income_indiv
+    policyengine_relationship: upstream
   relations: []
 - state: MS
   fips: '28'

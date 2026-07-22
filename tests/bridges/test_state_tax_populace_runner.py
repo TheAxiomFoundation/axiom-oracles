@@ -243,6 +243,108 @@ def test_policyengine_target_calculation_is_limited_to_ready_states() -> None:
     assert targets == {"NH": {1: 0.0, 2: 0.0}}
 
 
+def test_arkansas_person_target_is_validated_and_summed_to_tax_units() -> None:
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period, map_to=None):
+            calls.append((variable, period, map_to))
+            return {
+                "person_id": [11, 12, 21],
+                "tax_unit_id": [1, 1, 2],
+                "ar_income_tax_before_non_refundable_credits_indiv": [
+                    100.0,
+                    200.0,
+                    50.0,
+                ],
+            }[variable]
+
+    targets = calculate_policyengine_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2]}),
+        raw_persons=pd.DataFrame(
+            {
+                "person_id": [11, 12, 21],
+                "person_tax_unit_id": [1, 1, 2],
+            }
+        ),
+        routes=(
+            TaxUnitRoute(1, 1, "AR", "05", 1, DISPOSITION_READY),
+            TaxUnitRoute(2, 2, "AR", "05", 1, DISPOSITION_READY),
+        ),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )
+
+    assert targets == {"AR": {1: 300.0, 2: 50.0}}
+    assert calls == [
+        ("person_id", 2026, None),
+        ("tax_unit_id", 2026, "person"),
+        ("ar_income_tax_before_non_refundable_credits_indiv", 2026, None),
+    ]
+
+
+def test_arkansas_person_outputs_are_summed_before_tax_unit_comparison(
+    tmp_path,
+) -> None:
+    prefix = "us-ar:policies/income_tax/pilot_liability_pipeline"
+    slot = f"{prefix}#input.ar_pit_pilot_individual_taxable_income"
+    output = f"{prefix}#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    raw_persons = pd.DataFrame(
+        {
+            "person_id": [11, 12, 21],
+            "person_tax_unit_id": [1, 1, 2],
+        }
+    )
+    routes = (
+        TaxUnitRoute(1, 1, "AR", "05", 2, DISPOSITION_READY),
+        TaxUnitRoute(2, 2, "AR", "05", 3, DISPOSITION_READY),
+    )
+    calls = []
+
+    def fake_axiom_runner(**kwargs):
+        calls.append(kwargs["request"])
+        values = [100.0, 200.0, 50.0]
+        return [
+            {
+                "entity_id": query["entity_id"],
+                "outputs": {output: {"value": {"value": str(value)}}},
+            }
+            for query, value in zip(
+                kwargs["request"]["queries"], values, strict=True
+            )
+        ]
+
+    report = compare_ready_state_tax_units(
+        routes=routes,
+        raw_persons=raw_persons,
+        known_tax_unit_ids={1, 2},
+        policyengine_targets={"AR": {1: 300.0, 2: 50.0}},
+        policyengine_projection_inputs={
+            "AR": {slot: {11: 10_000.0, 12: 20_000.0, 21: 5_000.0}}
+        },
+        year=2026,
+        rulespec_root=tmp_path / "rulespec-us",
+        axiom_rules_path=tmp_path / "axiom-rules",
+        axiom_runner=fake_axiom_runner,
+    )
+
+    assert report["mismatch_count"] == 0
+    assert report["compared_count"] == 2
+    assert report["states"]["AR"]["comparison_aggregation"] == (
+        "person_sum_to_tax_unit"
+    )
+    assert [query["entity_id"] for query in calls[0]["queries"]] == [
+        "state-tax-person-11",
+        "state-tax-person-12",
+        "state-tax-person-21",
+    ]
+    assert calls[0]["dataset"]["relations"] == []
+
+
 def test_policyengine_projection_calculation_uses_only_reviewed_boundaries() -> None:
     calls = []
 

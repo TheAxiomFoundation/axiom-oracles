@@ -228,9 +228,26 @@ _PE_VAR = {
     # TABOR sales-tax refund); each is decomposed exactly in dispositions.
     "CO": "co_income_tax_before_non_refundable_credits",
 }
-# Ordered state list; new states append here so the grid, reports, and main loop
-# all pick them up. Derived from _TAXSIM_STATE insertion order.
-_STATES = tuple(_TAXSIM_STATE)
+# The Populace registry covers every declared campaign jurisdiction, including
+# narrow surfaces that are intentionally not valid legacy six-case grids.
+_POPULACE_STATES = tuple(_TAXSIM_STATE)
+
+# Arkansas's reviewed 2026 RuleSpec exposes only a Person-grain schedule
+# component and boundary fixtures. It has no broad liability output or six
+# standard grid fixtures, so retaining it here would silently reuse a deleted
+# concept. Keep the reason explicit and independently testable while the
+# Populace campaign validates the narrow component truthfully.
+_GRID_EXCLUDED_STATES = {
+    "AR": (
+        "reviewed RuleSpec exposes only the Person-grain Act 2 schedule "
+        "component; no broad liability output or six-case grid fixtures"
+    ),
+}
+
+# Ordered grid state list; new eligible states append through _TAXSIM_STATE.
+_STATES = tuple(
+    state for state in _TAXSIM_STATE if state not in _GRID_EXCLUDED_STATES
+)
 _MODULE = {
     st: f"us-{st.lower()}:policies/income_tax/pilot_liability_pipeline"
     for st in _TAXSIM_STATE
@@ -242,6 +259,22 @@ _LIABILITY_OUTPUT = {
 _LIABILITY_OUTPUT["NY"] = (
     f"{_MODULE['NY']}#ny_pit_pilot_main_income_tax"
 )
+
+# The Populace campaign may validate a narrower source-faithful surface than
+# the legacy six-case grid. Keep these explicit so the grid's historical broad
+# concept and artifacts do not get relabeled.
+_POPULACE_OUTPUT = {
+    "AR": (
+        f"{_MODULE['AR']}#"
+        "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+    ),
+}
+_POPULACE_PE_VAR = {
+    "AR": "ar_income_tax_before_non_refundable_credits_indiv",
+}
+_POPULACE_AGGREGATION = {
+    "AR": "person_sum_to_tax_unit",
+}
 
 
 @dataclass
@@ -499,6 +532,7 @@ _TOL = {
 # Populace registry check.
 _POPULACE_TOL = {
     "AL": (0.01, 0.0000001),
+    "AR": (0.01, 0.0000001),
     "AZ": (0.01, 0.0000001),
     "GA": (0.01, 0.0000001),
     "IL": (1.0, 0.0),
