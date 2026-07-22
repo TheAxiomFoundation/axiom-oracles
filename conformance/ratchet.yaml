@@ -20,11 +20,12 @@ ratchets:
   axiom_attributed_open_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  # Intentional reclassifications: the Arkansas Act 2 Person-grain component is
-  # not broad ar_income_tax, and Mississippi's section 27-7-5 schedule before
-  # credits is not broad final ms_income_tax. Both narrower surfaces remain
-  # Populace-validated but do not count as final-liability suite coverage.
-  covered_min: 66
+  # Intentional reclassifications: the Arkansas Act 2 Person-grain component,
+  # Colorado statutory base tax, and Mississippi section 27-7-5 schedule before
+  # credits are narrower than the corresponding broad final liabilities. Those
+  # source-faithful surfaces remain Populace-validated without counting as final
+  # ar_income_tax, co_income_tax, or ms_income_tax suite coverage.
+  covered_min: 65
   unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 137

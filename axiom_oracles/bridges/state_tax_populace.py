@@ -132,16 +132,16 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "#ny_pit_pilot_main_income_tax"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 165
+EXPECTED_EXPLICIT_INPUT_COUNT = 162
 EXPECTED_EXPLICIT_RELATION_COUNT = 2
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "3ab73541eeaa1c7d412b9c83dee3da47cad8d301b764344db6915d7bd33fd8e8"
+    "16968a1ffe1c4c57db7dda305922b5a716b12c7461403ffb0a59e5abb3d7fd4a"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "9e742bb9a85c1065d4336ab734c6bf3f1b9ea99588a98d0277c7612ed60cc52e"
+    "750cb289782394ed2dd0a30e0666de4a9a1f47fbe48388d65d525251d29cb77b"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "b49f68c8018d1e106cedc889a1dff2cc498efbf2d010a87b0b641122326652ba"
+    "eda4cec2643c87422ce31bb78954bda117bd41c8b40a681934035137baf5679a"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -201,6 +201,12 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "us-ct:policies/income_tax/pilot_liability_pipeline#input."
             "ct_pit_pilot_stillborn_credit",
             "ct_stillborn_credit",
+        ),
+        (
+            "CO",
+            "us-co:policies/income_tax/pilot_liability_pipeline#input."
+            "co_pit_pilot_state_taxable_income",
+            "co_taxable_income",
         ),
         (
             "DE",

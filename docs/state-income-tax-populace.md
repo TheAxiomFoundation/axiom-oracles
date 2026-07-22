@@ -13,10 +13,10 @@ hand-computed cases. Forty-two modules are intentionally narrow pilots and New
 Hampshire is a grounded repeal-to-zero module. The initial pilots exposed 255
 explicit caller-supplied inputs; reviewed promotions for Georgia, Iowa, Illinois,
 Indiana, Kansas, Louisiana, Michigan, North Carolina, Pennsylvania, South
-Carolina, Utah, Virginia, Arizona, Oklahoma, Alabama, Connecticut, Delaware,
-Hawaii, Mississippi, New Mexico, New York, West Virginia, Montana, Ohio, New
-Jersey, and Vermont reduce the current contract to 165 inputs and two explicit
-relations.
+Carolina, Utah, Virginia, Arizona, Arkansas, Oklahoma, Alabama, Connecticut,
+Colorado, Delaware, Hawaii, Mississippi, New Mexico, New York, West Virginia,
+Montana, Ohio, New Jersey, and Vermont reduce the current contract to 162 inputs
+and two explicit relations.
 
 Most remaining inputs are completed-return boundaries or schedule values,
 including adjusted or taxable income, deductions, exemptions, credits, bracket
@@ -119,6 +119,12 @@ those intervening amounts, so the reviewed oracle proxy supplies
 `max(0, min(net_capital_gain, sum(long_term_capital_gains)))` and fails closed
 on identity, membership, or nonfinite-value drift.
 
+Colorado validates the narrow C.R.S. section 39-22-104(1.7)(c) base tax. Its
+sole input is completed-return Colorado taxable income, projected from the
+distinct upstream `co_taxable_income` boundary. The compared output stops
+before the separate section 39-22-627 temporary rate adjustment and all
+credits; it is not a claim of complete final Colorado liability.
+
 ## National denominator
 
 The 44 pilot jurisdictions cover broad individual income taxes, including DC
@@ -163,7 +169,7 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
   --sample-size-per-state 0 --output /tmp/state-tax-populace-routing.json
 ```
 
-Execute all currently ready states (Alabama, Arizona, Arkansas, Connecticut,
+Execute all currently ready states (Alabama, Arizona, Arkansas, Colorado, Connecticut,
 Delaware, Georgia, Hawaii, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan,
 Mississippi, Montana, New Mexico, New York, North Carolina, New Hampshire, New
 Jersey, Ohio, Oklahoma, Pennsylvania, South Carolina, Utah, Virginia, Vermont,

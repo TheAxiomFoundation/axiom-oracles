@@ -1,10 +1,12 @@
-# Colorado composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
+# Colorado section 39-22-104 base tax — Axiom vs PolicyEngine and TAXSIM
 # on the standard modest case grid (single and married filers). The Axiom side is
 # the composed rulespec-us pipeline us-co/policies/income_tax/pilot_liability_pipeline,
 # evaluated through the axiom rules engine (its liabilities are the engine-verified
 # companion-test fixtures). Colorado applies the section 39-22-104(1.7)(c) flat
-# four and forty one-hundredths per cent to Colorado taxable income, with the rate
-# imported hash-pinned from the encoded statute module.
+# four and forty one-hundredths per cent to completed-return Colorado taxable
+# income, with the rate imported hash-pinned from the encoded statute module.
+# The Axiom scope stops before section 39-22-627 temporary rate adjustments and
+# all credits.
 #
 # PolicyEngine runs at the 2026 validation year and matches the pipeline to
 # the cent on all six cases. TAXSIM runs at its latest supported law year
@@ -17,12 +19,14 @@
 #   uv run python scripts/run_comparison.py co-income-tax-liability
 
 name: co-income-tax-liability
-title: Colorado income tax liability — Axiom vs PolicyEngine and TAXSIM
+title: Colorado section 39-22-104 base tax — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares the composed Colorado income-tax liability pipeline encoded in Axiom
+  Compares the narrow Colorado section 39-22-104(1.7)(c) base-tax pipeline in Axiom
   RuleSpec (us-co/policies/income_tax/pilot_liability_pipeline) against
   PolicyEngine (co_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
   (siitax) at 2024 on the standard modest grid of single and married filers.
+  Section 39-22-627 temporary rate adjustments and credits are outside the
+  encoded Axiom scope.
 
 runner:
   type: state-income-tax-liability-grid
