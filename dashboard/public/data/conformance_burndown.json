@@ -292,11 +292,11 @@
       {
         "date": "2026-07-22",
         "in_scope": 137,
-        "covered": 69,
-        "uncovered": 68,
+        "covered": 66,
+        "uncovered": 71,
         "unexplained": 0,
         "axiom_attributed_open": 0,
-        "gap": 68,
+        "gap": 71,
         "conformant": false
       }
     ]

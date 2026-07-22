@@ -1358,34 +1358,53 @@ jurisdictions:
     target: ms_income_tax_before_credits_unit
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
+  status: ready
   evidence: >-
-    A full certified-Populace probe found that PolicyEngine applies
-    Mississippi's 2026 zero band and 4% schedule to each person's taxable
-    income before aggregating to the TaxUnit target. Aggregate
-    ms_taxable_income therefore loses the number of $10,000 zero bands: 118 of
-    1,497 routed units differed by more than $1, with a $400.0007 maximum
-    residual. Promotion requires person-level taxable-income inputs and
-    filing/entity relationships; the current four-input TaxUnit pilot remains
-    blocked.
+    Mississippi Code section 27-7-5(1) provides the complete calendar-year
+    2026 schedule before credits: no tax through $10,000 and 4 percent above
+    that amount. The reviewed RuleSpec applies the schedule independently to
+    both completed-return taxable-income candidates for every related Person,
+    aggregates both candidate taxes through the certified Person-to-TaxUnit
+    relation, and selects the separate total only when it is strictly lower,
+    with ties selecting the joint total. A full certified-Populace run covered
+    all 1,497 positive-weight routed Mississippi TaxUnits with zero differences
+    outside the declared $1 tolerance and a $0.4000000004 maximum absolute
+    residual.
   inputs:
-  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  relations: []
+  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_taxable_income_indiv
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      Section 27-7-5 applies its schedule to completed-return taxable income.
+      PolicyEngine ms_taxable_income_indiv is the Person-grain separate-return
+      candidate directly upstream of the distinct
+      ms_income_tax_before_credits_unit target. The reviewed RuleSpec clamps
+      the supplied amount to zero and independently computes its schedule tax;
+      it does not consume PolicyEngine's candidate tax or filing selector.
+    policyengine_variable: ms_taxable_income_indiv
+    policyengine_relationship: upstream
+  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_taxable_income_joint
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      PolicyEngine ms_taxable_income_joint is the Person-grain joint-return
+      completed-taxable-income candidate directly upstream of the distinct
+      target. The reviewed RuleSpec independently applies section 27-7-5 to
+      this candidate and reconstructs the target's strict lower-tax comparison,
+      so no target, candidate-tax output, or ms_files_separately result is used
+      as an input.
+    policyengine_variable: ms_taxable_income_joint
+    policyengine_relationship: upstream
+  relations:
+  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#relation.ms_pit_pilot_person_of_tax_unit
+    source_kind: raw_populace
+    status: ready
+    evidence: >-
+      The relation includes every Person in each selected TaxUnit using the
+      certified raw person_tax_unit_id column after exact Person identity,
+      order, cardinality, and TaxUnit-link validation. The reviewed RuleSpec
+      declares (Person, TaxUnit), which is also the tuple order required by the
+      pinned engine's current sum_where lowering.
 - state: NH
   fips: '33'
   taxsim_state_code: 30

@@ -2915,7 +2915,7 @@ concepts:
         scope: {type: country, geoid: US}
       policyengine: ar_income_tax_before_non_refundable_credits_indiv
   us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability:
-    description: Mississippi individual income tax liability (ordinary resident wage-earner core)
+    description: Mississippi section 27-7-5 schedule tax before credits, after the lower separate-or-joint candidate comparison
     category: tax
     comparison: amount
     tolerance: 1

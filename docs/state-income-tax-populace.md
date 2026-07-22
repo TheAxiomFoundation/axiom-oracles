@@ -8,17 +8,19 @@ name is retained for compatibility, but the dataset is the certified
 
 ## Why the grid runner cannot simply use a larger sample
 
-The committed state liability reports exercise 44 RuleSpec modules with 270
-hand-computed cases. Forty-three modules are intentionally narrow pilots and New
+The committed state liability reports exercise 43 RuleSpec modules with 258
+hand-computed cases. Forty-two modules are intentionally narrow pilots and New
 Hampshire is a grounded repeal-to-zero module. The initial pilots exposed 255
 explicit caller-supplied inputs; reviewed promotions for Georgia, Iowa, Illinois,
 Indiana, Kansas, Louisiana, Michigan, North Carolina, Pennsylvania, South
 Carolina, Utah, Virginia, Arizona, Oklahoma, Alabama, Connecticut, Delaware,
-Hawaii, New Mexico, New York, West Virginia, Montana, Ohio, New Jersey, and
-Vermont reduce the current contract to 171 inputs and one explicit relation. Most
-remaining inputs are completed-return boundaries or schedule values, including
-adjusted or taxable income, deductions, exemptions, credits, bracket selection,
-recapture, and state-specific capital-gain facts.
+Hawaii, Mississippi, New Mexico, New York, West Virginia, Montana, Ohio, New
+Jersey, and Vermont reduce the current contract to 165 inputs and two explicit
+relations.
+
+Most remaining inputs are completed-return boundaries or schedule values,
+including adjusted or taxable income, deductions, exemptions, credits, bracket
+selection, recapture, and state-specific capital-gain facts.
 
 Using PolicyEngine's target liability, or a downstream value derived from that
 target, to fill those inputs would turn the comparison into an output-alignment
@@ -75,7 +77,8 @@ routed tax unit. Filtered slices are forbidden by the v1 contract until stable,
 source-backed exclusion predicates and per-reason ledgers are implemented and
 independently reviewed.
 
-Arkansas, Delaware, Hawaii, and Montana are the current ready-state projections
+Arkansas, Delaware, Hawaii, Mississippi, and Montana are the current
+ready-state projections
 that cross a PolicyEngine entity boundary. Arkansas remains a deliberately
 narrow Person-grain Act 2 schedule component: the runner validates certified
 Person identity, ordering, cardinality, and every TaxUnit link; evaluates both
@@ -101,6 +104,12 @@ members and unknown tax-unit links, and only then sums the allowlisted Montana
 taxable-income, long-term-gain, and short-term-gain arrays to TaxUnit. The net
 long-term amount is reconstructed as `max(0, min(sum(LTCG), sum(LTCG) +
 sum(STCG)))`; no generic Person-to-TaxUnit transform is exposed.
+Mississippi projects both completed-return taxable-income candidates at Person
+grain after the same fail-closed identity and membership checks. It emits the
+certified raw `(Person, TaxUnit)` relation for every member, independently
+applies section 27-7-5's zero band and rate to both candidate sets, aggregates
+both sets, and selects the separate total only when strictly lower. It never
+uses PolicyEngine's candidate tax amounts or `ms_files_separately` selector.
 Hawaii uses the same fail-closed Person identity and membership projector only
 for the source-required sum of `long_term_capital_gains`; taxable income, net
 capital gain, and filing status remain TaxUnit-grain upstream boundaries. The
@@ -156,10 +165,10 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
 
 Execute all currently ready states (Alabama, Arizona, Arkansas, Connecticut,
 Delaware, Georgia, Hawaii, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan,
-Montana, New Mexico, New York, North
-Carolina, New Hampshire, New Jersey, Ohio, Oklahoma, Pennsylvania, South
-Carolina, Utah, Virginia, Vermont, and West Virginia; later states remain blocked
-until their source-backed projection contracts land):
+Mississippi, Montana, New Mexico, New York, North Carolina, New Hampshire, New
+Jersey, Ohio, Oklahoma, Pennsylvania, South Carolina, Utah, Virginia, Vermont,
+and West Virginia; later states remain blocked until their source-backed
+projection contracts land):
 
 ```bash
 uv run --extra policyengine scripts/run_state_tax_populace.py \
