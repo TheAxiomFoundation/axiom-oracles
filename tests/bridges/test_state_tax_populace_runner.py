@@ -677,6 +677,36 @@ def test_reviewed_new_york_projection_covers_all_filing_statuses() -> None:
     ]
 
 
+def test_reviewed_colorado_projection_uses_completed_taxable_income() -> None:
+    calls = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period):
+            calls.append((variable, period))
+            return [0.0, 12_345.67]
+
+    projections = calculate_policyengine_projection_inputs(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [11, 22]}),
+        routes=(
+            TaxUnitRoute(11, 1, "CO", "08", 1, DISPOSITION_READY),
+            TaxUnitRoute(22, 2, "CO", "08", 1, DISPOSITION_READY),
+        ),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+    )["CO"]
+
+    slot = (
+        "us-co:policies/income_tax/pilot_liability_pipeline#input."
+        "co_pit_pilot_state_taxable_income"
+    )
+    assert projections[slot] == {11: 0.0, 22: 12_345.67}
+    assert calls == [("co_taxable_income", 2026)]
+
+
 def test_vermont_projection_proves_zero_interest_scope_without_relations() -> None:
     values = {
         "us_govt_interest": [0.0, float("nan")],

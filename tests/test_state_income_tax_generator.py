@@ -47,15 +47,44 @@ def test_summary_counts_both_pairwise_legs_regardless_of_pe_match_status():
         assert summary["match_count"] + summary["mismatch_count"] == 4
 
 
-def test_axiom_liabilities_ignores_non_grid_boundary_fixtures(tmp_path):
+@pytest.mark.parametrize(
+    ("state", "output", "grid_values"),
+    [
+        (
+            "NY",
+            "us-ny:policies/income_tax/pilot_liability_pipeline"
+            "#ny_pit_pilot_main_income_tax",
+            {
+                "single_30000": 1023.4,
+                "single_60000": 2643.4,
+                "single_150000": 7810.65,
+                "joint_60000": 2040.7,
+                "joint_120000": 5280.7,
+                "joint_300000": 15612.6,
+            },
+        ),
+        (
+            "CO",
+            "us-co:policies/income_tax/pilot_liability_pipeline"
+            "#co_pit_pilot_income_tax_liability",
+            {
+                "single_30000": 611.6,
+                "single_60000": 1931.6,
+                "single_150000": 5891.6,
+                "joint_60000": 1223.2,
+                "joint_120000": 3863.2,
+                "joint_300000": 11783.2,
+            },
+        ),
+    ],
+)
+def test_axiom_liabilities_ignores_non_grid_boundary_fixtures(
+    tmp_path, state, output, grid_values
+):
     generator = _load_generator()
-    output = (
-        "us-ny:policies/income_tax/pilot_liability_pipeline"
-        "#ny_pit_pilot_main_income_tax"
-    )
     fixture_path = (
         tmp_path
-        / "us-ny"
+        / f"us-{state.lower()}"
         / "policies"
         / "income_tax"
         / "pilot_liability_pipeline.test.yaml"
@@ -70,14 +99,6 @@ def test_axiom_liabilities_ignores_non_grid_boundary_fixtures(tmp_path):
         }
         for index in range(52)
     ]
-    grid_values = {
-        "single_30000": 1023.4,
-        "single_60000": 2643.4,
-        "single_150000": 7810.65,
-        "joint_60000": 2040.7,
-        "joint_120000": 5280.7,
-        "joint_300000": 15612.6,
-    }
     grid_cases = [
         {"name": name, "input": {}, "output": {output: value}}
         for name, value in grid_values.items()
@@ -85,16 +106,16 @@ def test_axiom_liabilities_ignores_non_grid_boundary_fixtures(tmp_path):
     fixture_path.write_text(json.dumps(boundary_cases + grid_cases))
 
     generator.RULESPEC_US = tmp_path
-    generator._STATES = ("NY",)
-    generator._LIABILITY_OUTPUT["NY"] = output
+    generator._STATES = (state,)
+    generator._LIABILITY_OUTPUT[state] = output
 
     assert generator._axiom_liabilities() == {
-        ("NY", "single", 30_000): 1023.4,
-        ("NY", "single", 60_000): 2643.4,
-        ("NY", "single", 150_000): 7810.65,
-        ("NY", "married", 60_000): 2040.7,
-        ("NY", "married", 120_000): 5280.7,
-        ("NY", "married", 300_000): 15612.6,
+        (
+            state,
+            "married" if name.startswith("joint") else "single",
+            int(name.rsplit("_", 1)[-1]),
+        ): value
+        for name, value in grid_values.items()
     }
 
 
@@ -151,7 +172,7 @@ def test_axiom_liabilities_extracts_only_mississippi_canonical_grid(tmp_path):
     generator.RULESPEC_US = tmp_path
     generator._STATES = ("MS",)
 
-    assert generator._STRICT_GRID_FIXTURE_STATES == frozenset({"MS", "NY"})
+    assert generator._STRICT_GRID_FIXTURE_STATES == frozenset({"CO", "MS", "NY"})
     assert generator._axiom_liabilities() == {
         ("MS", "single", 30_000): 468.0,
         ("MS", "single", 60_000): 1668.0,
@@ -162,7 +183,7 @@ def test_axiom_liabilities_extracts_only_mississippi_canonical_grid(tmp_path):
     }
 
 
-@pytest.mark.parametrize("state", ["MS", "NY"])
+@pytest.mark.parametrize("state", ["CO", "MS", "NY"])
 def test_strict_grid_states_ignore_noncanonical_agi_fixture(tmp_path, state):
     generator = _load_generator()
     output = generator._LIABILITY_OUTPUT[state]
@@ -261,6 +282,7 @@ def test_recent_state_income_tax_oracle_registrations():
         "NH": (30, "nh_income_tax_before_refundable_credits", (1.0, 0.0)),
         "WV": (49, "wv_income_tax_before_non_refundable_credits", (1.0, 0.0)),
         "VT": (46, "vt_income_tax_before_non_refundable_credits", (0.01, 1e-7)),
+        "CO": (6, "co_income_tax_before_non_refundable_credits", (1.0, 0.0)),
     }
     for state, (taxsim_code, policyengine_target, tolerance) in expected.items():
         assert generator._TAXSIM_STATE[state] == taxsim_code
@@ -279,6 +301,7 @@ def test_recent_state_income_tax_oracle_registrations():
             f"{generator._MODULE[state]}"
             f"#{state.lower()}_pit_pilot_income_tax_liability"
         )
+    assert generator._POPULACE_TOL["CO"] == (0.01, 1e-7)
 
 
 def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:

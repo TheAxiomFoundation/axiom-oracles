@@ -36,7 +36,7 @@ def test_packaged_contract_has_exact_campaign_inventory() -> None:
 
     assert len(contract.jurisdictions) == 44
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
-    assert sum(len(item.inputs) for item in contract.jurisdictions) == 165
+    assert sum(len(item.inputs) for item in contract.jurisdictions) == 162
     assert sum(len(item.relations) for item in contract.jurisdictions) == 2
     assert len({item.program for item in contract.jurisdictions}) == 44
     assert len({item.output for item in contract.jurisdictions}) == 44
@@ -120,12 +120,13 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
 
     assert summary == {
         "jurisdiction_count": 44,
-        "ready_count": 28,
-        "blocked_count": 16,
+        "ready_count": 29,
+        "blocked_count": 15,
         "ready_states": [
             "AL",
             "AR",
             "AZ",
+            "CO",
             "CT",
             "DE",
             "GA",
@@ -158,6 +159,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "AL",
                 "AZ",
                 "AR",
+                "CO",
                 "CT",
                 "DE",
                 "GA",
@@ -187,7 +189,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
         "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 62,
+        "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 63,
         "blocked_relation_count": 0,
     }
     nh = contract.by_state()["NH"]
@@ -205,6 +207,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             "ct_property_tax_credit_potential",
             "ct_stillborn_credit",
         ],
+        "CO": ["co_taxable_income"],
         "DE": ["de_taxable_income_indv", "de_files_separately"],
         "GA": ["ga_taxable_income"],
         "HI": ["hi_taxable_income"],
@@ -481,7 +484,7 @@ def test_contract_rejects_incomplete_explicit_slot_inventory() -> None:
     jurisdiction, _ = _first_input(document)
     jurisdiction["inputs"].pop()
 
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 165"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 162"):
         validate_state_tax_populace_contract(document)
 
 

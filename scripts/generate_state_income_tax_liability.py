@@ -256,6 +256,7 @@ _LIABILITY_OUTPUT = {
     st: f"{_MODULE[st]}#{st.lower()}_pit_pilot_income_tax_liability"
     for st in _TAXSIM_STATE
 }
+
 _LIABILITY_OUTPUT["NY"] = (
     f"{_MODULE['NY']}#ny_pit_pilot_main_income_tax"
 )
@@ -280,7 +281,7 @@ _POPULACE_AGGREGATION = {
 # addition to the six canonical liability-grid fixtures. For these states only,
 # accept strict ``(single|married|joint)_<income>`` names and skip everything
 # else. Other states retain the legacy AGI/suffix extraction behavior.
-_STRICT_GRID_FIXTURE_STATES = frozenset({"MS", "NY"})
+_STRICT_GRID_FIXTURE_STATES = frozenset({"CO", "MS", "NY"})
 
 
 @dataclass
@@ -541,6 +542,7 @@ _POPULACE_TOL = {
     "AL": (0.01, 0.0000001),
     "AR": (0.01, 0.0000001),
     "AZ": (0.01, 0.0000001),
+    "CO": (0.01, 0.0000001),
     "GA": (0.01, 0.0000001),
     "IL": (1.0, 0.0),
     "LA": (0.01, 0.0000001),
