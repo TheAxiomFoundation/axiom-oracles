@@ -84,7 +84,9 @@ def _validate_generator_registry(contract) -> None:
             generator._MODULE.get(state),
             generator._LIABILITY_OUTPUT.get(state),
             generator._PE_VAR.get(state),
-            generator._TOL.get(state),
+            getattr(generator, "_POPULACE_TOL", {}).get(
+                state, generator._TOL.get(state)
+            ),
         )
         expected = (
             item.taxsim_state_code,

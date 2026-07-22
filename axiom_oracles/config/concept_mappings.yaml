@@ -2144,7 +2144,7 @@ concepts:
     description: Illinois individual income tax liability (flat 4.95 per cent on base income after the standard exemption)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine il_income_tax_before_refundable_credits, the
+    # Compared against PolicyEngine il_income_tax_before_non_refundable_credits, the
     # exact statutory analog of this core (4.95 per cent on base income after the
     # standard exemption); the pipeline reproduces it to the cent across the
     # grid. PolicyEngine's final il_income_tax additionally adds the use tax and
@@ -2165,7 +2165,7 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: il_income_tax_before_refundable_credits
+      policyengine: il_income_tax_before_non_refundable_credits
       taxsim: siitax
 
   us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability:
@@ -2217,16 +2217,11 @@ concepts:
       taxsim: siitax
 
   us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability:
-    description: Ohio nonbusiness income tax liability (resident wage earner; section 5747.02 graduated tax less the section 5747.98 nonrefundable exemption credit)
+    description: Ohio nonbusiness income tax liability before nonrefundable credits (section 5747.02 tax-year-2026 schedule on completed-return Ohio taxable nonbusiness income)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine oh_income_tax_before_refundable_credits, the
-    # exact statutory analog of this core (the section 5747.02 graduated tax on
-    # Ohio taxable income less the section 5747.98 nonrefundable exemption
-    # credit); the pipeline reproduces it to the cent across the grid (the
-    # residual is PolicyEngine's float32 rounding, under a tenth of a cent).
-    # PolicyEngine's final oh_income_tax additionally nets the Ohio refundable
-    # credits, which are zero for these childless wage cases. Against TAXSIM 2024
+    # Compared against PolicyEngine oh_income_tax_before_non_refundable_credits,
+    # the exact section 5747.02 schedule-tax analog before credits. Against TAXSIM 2024
     # every case diverges by the Ohio 2024-to-2026 schedule vintage (the House
     # Bill 33 base-amount indexation and the pre-2025 3.5 per cent top rate above
     # 100,000), dispositioned in dispositions/oh-income-tax-liability.yaml. The
@@ -2243,7 +2238,7 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: oh_income_tax_before_refundable_credits
+      policyengine: oh_income_tax_before_non_refundable_credits
       taxsim: siitax
 
   us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability:
@@ -2303,9 +2298,8 @@ concepts:
     description: Alabama income tax liability (resident wage earner; the section 40-18-5 graduated tax (2/4/5 per cent) on Alabama taxable income (Alabama AGI less the section 40-18-15 deductions and the section 40-18-19 exemptions))
     category: tax
     comparison: amount
-    # Compared against PolicyEngine al_income_tax_before_refundable_credits, the exact statutory analog of
-    # this core; the pipeline reproduces it to a hundredth of a cent across the
-    # grid (the residual is PolicyEngine's float32 rounding). al_income_tax equals the before-refundable-credits value on this grid (no refundable credits).
+    # Compared against PolicyEngine al_income_tax_before_non_refundable_credits,
+    # the exact section 40-18-5 schedule-tax analog before credits.
     # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
     # dispositioned in dispositions/al-income-tax-liability.yaml. The tight
     # absolute tolerance catches structural bracket errors.
@@ -2321,7 +2315,7 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: al_income_tax_before_refundable_credits
+      policyengine: al_income_tax_before_non_refundable_credits
       taxsim: siitax
   us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability:
     description: Idaho income tax liability (resident wage earner; the section 63-3024 tax (5.3 per cent) on Idaho taxable income above the indexed filing-status no-tax threshold)
@@ -2401,15 +2395,12 @@ concepts:
       policyengine: ne_income_tax_before_credits
       taxsim: siitax
   us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability:
-    description: Delaware income tax liability (resident wage earner; the section 1102 graduated tax on Delaware taxable income (AGI less the section 1108 standard deduction) less the section 1110 personal credit)
+    description: Delaware section 1102(a)(14) schedule tax before nonrefundable credits, selecting between aggregate separate-return and combined-return taxable-income candidates
     category: tax
     comparison: amount
-    # Compared against PolicyEngine de_income_tax_before_refundable_credits, the exact
-    # statutory analog of this core; the pipeline reproduces it to the cent across the
-    # grid. de_income_tax nets the refundable EITC, which the section 1102/1110 core
-    # excludes. Delaware fixes its brackets and the 3,250/6,500 standard deduction, so
-    # the pipeline also matches TAXSIM 2024 (no 2024-to-2026 vintage). The tight
-    # absolute tolerance catches structural bracket errors.
+    # Compared against PolicyEngine's unit-level tax before nonrefundable credits,
+    # the exact analog of the encoded schedule and strict lower-pre-credit-tax
+    # branch selector. Later Delaware targets subtract credits outside this core.
     tolerance: 1
     priority: high
     locales: [US-DE]
@@ -2422,15 +2413,15 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: de_income_tax_before_refundable_credits
+      policyengine: de_income_tax_before_non_refundable_credits_unit
       taxsim: siitax
   us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability:
     description: Maryland STATE income tax liability (resident wage earner; the section 10-105 graduated state tax on Maryland taxable income; the county income tax is a separate PolicyEngine variable, excluded)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine md_income_tax_before_refundable_credits, the STATE
-    # tax only (the county income tax is a separate variable); the pipeline reproduces
-    # it to the cent across the grid. Against TAXSIM 2024 every case diverges by the
+    # Compared against PolicyEngine md_income_tax_before_credits, the state schedule
+    # tax before credits (county income tax is a separate variable). The pipeline
+    # reproduces it to the cent across the childless grid. Against TAXSIM 2024 every case diverges by the
     # 700-dollar-per-filer standard-deduction vintage (TAXSIM adds no county tax here),
     # dispositioned in dispositions/md-income-tax-liability.yaml. The tight absolute
     # tolerance catches structural bracket errors.
@@ -2446,7 +2437,7 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: md_income_tax_before_refundable_credits
+      policyengine: md_income_tax_before_credits
       taxsim: siitax
   us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability:
     description: Maine income tax liability (resident wage earner; the indexed section 5111 graduated tax on Maine taxable income (AGI less the section 5124-C standard deduction and section 5126-A exemption))
@@ -2497,16 +2488,14 @@ concepts:
       policyengine: mn_income_tax_before_refundable_credits
       taxsim: siitax
   us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability:
-    description: Connecticut income tax liability (resident wage earner; the section 12-700 graduated tax less the net section 12-703 personal credit / section 12-700(b) three-per-cent phase-out recapture)
+    description: Connecticut income tax liability before refundable credits (complete section 12-700 schedules, phaseout and recapture, personal credit, AMT, and ordered property-tax/stillborn nonrefundable credits)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine ct_income_tax_before_refundable_credits, the exact
-    # statutory analog of this core; the pipeline reproduces it to the cent across the
-    # grid (the supplied credit nets the section 12-703 personal credit and the section
-    # 12-700(b) recapture). Against TAXSIM 2024 every case diverges by the exemption,
-    # credit, and recapture indexation vintage, dispositioned in
-    # dispositions/ct-income-tax-liability.yaml. The tight absolute tolerance catches
-    # structural bracket errors.
+    # Compared against PolicyEngine ct_income_tax_before_refundable_credits, the
+    # exact analog of the complete encoded schedule, phaseout/recapture, personal
+    # credit, AMT, and ordered nonrefundable-credit pipeline. Against TAXSIM 2024,
+    # differences from the 2024-to-2026 indexation and credit scope are
+    # dispositioned rather than absorbed into the national contract tolerance.
     tolerance: 1
     priority: high
     locales: [US-CT]
@@ -2691,7 +2680,7 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: in_income_tax_before_refundable_credits
+      policyengine: in_agi_tax
       taxsim: siitax
   us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability:
     description: Louisiana individual income tax liability (ordinary resident wage-earner core)
@@ -2712,7 +2701,7 @@ concepts:
       policyengine: la_income_tax_before_non_refundable_credits
       taxsim: siitax
   us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability:
-    description: Montana individual income tax liability (ordinary resident wage-earner core)
+    description: Montana individual income tax liability (complete 2026 ordinary and net-long-term-capital-gain schedules)
     category: tax
     comparison: amount
     tolerance: 1
@@ -2727,7 +2716,7 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: mt_income_tax
+      policyengine: mt_income_tax_before_non_refundable_credits_joint
       taxsim: siitax
   us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability:
     description: New Mexico individual income tax liability (ordinary resident wage-earner core)
@@ -2970,7 +2959,7 @@ concepts:
       policyengine: wv_income_tax_before_non_refundable_credits
       taxsim: siitax
   us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability:
-    description: Vermont individual income tax liability (current indexed section 5822 schedule and three-percent federal-AGI minimum)
+    description: Vermont individual income tax liability before nonrefundable credits (completed current-year normal-tax boundary and independently encoded section 5822 three-percent federal-AGI minimum)
     category: tax
     comparison: amount
     tolerance: 1

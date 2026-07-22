@@ -49,20 +49,20 @@ def test_recent_state_income_tax_oracle_registrations():
     generator = _load_generator()
 
     expected = {
-        "KS": (17, "ks_income_tax_before_credits"),
-        "ND": (35, "nd_income_tax_before_credits"),
-        "PA": (39, "pa_income_tax_before_forgiveness"),
-        "MO": (26, "mo_income_tax_before_credits"),
-        "AR": (4, "ar_income_tax_before_non_refundable_credits_unit"),
-        "MS": (25, "ms_income_tax_before_credits_unit"),
-        "NH": (30, "nh_income_tax_before_refundable_credits"),
-        "WV": (49, "wv_income_tax_before_non_refundable_credits"),
-        "VT": (46, "vt_income_tax_before_non_refundable_credits"),
+        "KS": (17, "ks_income_tax_before_credits", (1.0, 0.0)),
+        "ND": (35, "nd_income_tax_before_credits", (1.0, 0.0)),
+        "PA": (39, "pa_income_tax_before_forgiveness", (1.0, 0.0)),
+        "MO": (26, "mo_income_tax_before_credits", (1.0, 0.0)),
+        "AR": (4, "ar_income_tax_before_non_refundable_credits_unit", (1.0, 0.0)),
+        "MS": (25, "ms_income_tax_before_credits_unit", (1.0, 0.0)),
+        "NH": (30, "nh_income_tax_before_refundable_credits", (1.0, 0.0)),
+        "WV": (49, "wv_income_tax_before_non_refundable_credits", (1.0, 0.0)),
+        "VT": (46, "vt_income_tax_before_non_refundable_credits", (0.01, 1e-7)),
     }
-    for state, (taxsim_code, policyengine_target) in expected.items():
+    for state, (taxsim_code, policyengine_target, tolerance) in expected.items():
         assert generator._TAXSIM_STATE[state] == taxsim_code
         assert generator._PE_VAR[state] == policyengine_target
-        assert generator._TOL[state] == (1.0, 0.0)
+        assert generator._TOL[state] == tolerance
         assert state in generator._STATES
         assert generator._MODULE[state] == (
             f"us-{state.lower()}:policies/income_tax/pilot_liability_pipeline"

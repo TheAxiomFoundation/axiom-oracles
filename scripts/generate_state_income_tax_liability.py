@@ -118,21 +118,17 @@ _TAXSIM_STATE = {
     # rate imported hash-pinned from the statute module.
     "CO": 6,
 }
-# PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
-# variable, the exact statutory analog of each core (the final ca_income_tax /
-# il_income_tax additionally net the refundable CalEITC/Young Child credit and
-# the Illinois EITC/use tax, and oh_income_tax nets the Ohio refundable credits,
-# which these cores exclude). NY and MA have no refundable credits for these
+# PolicyEngine target per state. CA uses the before-refundable-credits variable;
+# IL and OH use their before-non-refundable-credits schedule-tax variables, the
+# exact statutory analogs of those cores. NY and MA have no refundable credits for these
 # childless cases, so the final variable is identical to the
-# before-refundable-credits value. Ohio also has no refundable credit active for
-# the childless wage grid, so oh_income_tax_before_refundable_credits equals
-# oh_income_tax here.
+# before-refundable-credits value.
 _PE_VAR = {
     "CA": "ca_income_tax_before_refundable_credits",
     "NY": "ny_income_tax",
-    "IL": "il_income_tax_before_refundable_credits",
+    "IL": "il_income_tax_before_non_refundable_credits",
     "MA": "ma_income_tax",
-    "OH": "oh_income_tax_before_refundable_credits",
+    "OH": "oh_income_tax_before_non_refundable_credits",
     # Virginia's before-non-refundable-credits variable is the exact 58.1-320
     # bracket-tax analog; on the childless grid it equals the final va_income_tax
     # (no VA credits).
@@ -147,7 +143,7 @@ _PE_VAR = {
     # additionally nets the refundable grocery credit that the 63-3024 core
     # excludes; Kentucky's final ky_income_tax nets the refundable/family-size
     # credits that the 141.020 flat core excludes.
-    "AL": "al_income_tax_before_refundable_credits",
+    "AL": "al_income_tax_before_non_refundable_credits",
     "ID": "id_income_tax_before_refundable_credits",
     "KY": "ky_income_tax_before_refundable_credits",
     # Nebraska's before-credits variable is the pure 77-2715.03 four-bracket
@@ -155,16 +151,18 @@ _PE_VAR = {
     # deduction). The before-refundable variable nets the 77-2716.01 personal
     # exemption credit (a post-tax nonrefundable credit) that this core excludes.
     "NE": "ne_income_tax_before_credits",
-    # Delaware, Maryland, Maine, Minnesota, and Connecticut use the
-    # before-refundable-credits variable, the exact statutory analog of each
-    # composed pipeline. Delaware's final de_income_tax nets the refundable EITC;
-    # Maryland's md_income_tax_before_refundable_credits is the STATE tax only (the
-    # county tax md_county_tax is a separate variable the pipeline excludes); Maine
-    # and Minnesota net their refundable credits in the final variable; Connecticut
-    # nets the refundable EITC/property-tax credit. On this childless grid each
-    # before-refundable variable is the pipeline's exact target.
-    "DE": "de_income_tax_before_refundable_credits",
-    "MD": "md_income_tax_before_refundable_credits",
+    # Maine, Minnesota, and Connecticut use a before-refundable-credits variable
+    # as the exact statutory analog of each composed pipeline. Delaware instead
+    # targets the unit-level tax before nonrefundable credits because its promoted
+    # RuleSpec encodes the section 1102 schedule and branch selection, not credits.
+    # Delaware's later variables net nonrefundable credits and refundable EITC;
+    # Maine and Minnesota net their refundable credits in the final variable;
+    # Connecticut's target excludes refundable EITC while subtracting the ordered
+    # property-tax and stillborn nonrefundable credits encoded by RuleSpec.
+    # Maryland uses the state-only before-credits target: county tax is separate,
+    # and the before-refundable target additionally subtracts nonrefundable credits.
+    "DE": "de_income_tax_before_non_refundable_credits_unit",
+    "MD": "md_income_tax_before_credits",
     "ME": "me_income_tax_before_refundable_credits",
     "MN": "mn_income_tax_before_refundable_credits",
     "CT": "ct_income_tax_before_refundable_credits",
@@ -172,7 +170,7 @@ _PE_VAR = {
     # less the 43-1041 standard deduction). az_income_tax equals
     # az_income_tax_before_refundable_credits on this childless grid (no refundable
     # credits active), so the final variable is the pipeline's exact target.
-    "AZ": "az_income_tax",
+    "AZ": "az_income_tax_before_non_refundable_credits",
     # Georgia's before-non-refundable-credits variable is the exact 48-7-20
     # flat-tax analog (AGI less the 48-7-27 standard deduction); the childless
     # grid activates none of the 48-7-29 / low-income / CDCC credits, so it
@@ -192,9 +190,9 @@ _PE_VAR = {
     "DC": "dc_income_tax_before_credits",
     "HI": "hi_income_tax_before_non_refundable_credits",
     "IA": "ia_income_tax_before_credits",
-    "IN": "in_income_tax_before_refundable_credits",
+    "IN": "in_agi_tax",
     "LA": "la_income_tax_before_non_refundable_credits",
-    "MT": "mt_income_tax",
+    "MT": "mt_income_tax_before_non_refundable_credits_joint",
     "NM": "nm_income_tax_before_non_refundable_credits",
     "OK": "ok_income_tax_before_credits",
     "OR": "or_income_tax_before_credits",
@@ -403,9 +401,8 @@ _TOL = {
     "NY": (5.0, 0.02),
     "IL": (5.0, 0.02),
     "MA": (1.0, 0.0),
-    # Ohio reproduces PolicyEngine to the cent (the residual is PolicyEngine's
-    # float32 rounding, under a tenth of a cent); a $1 absolute band catches any
-    # structural bracket error without absorbing the indexation vintage.
+    # Ohio's legacy grid retains a $1 band; the full-Populace registry below
+    # applies the tighter reviewed absolute-or-relative tolerance.
     "OH": (1.0, 0.0),
     # Virginia matches PolicyEngine exactly (fixed statutory brackets, no
     # rounding); a $1 band catches structural bracket errors without absorbing
@@ -425,17 +422,22 @@ _TOL = {
     # bracket errors without absorbing the TAXSIM rate-compression and indexation
     # vintage.
     "NE": (1.0, 0.0),
-    # Delaware, Maryland, Maine, Minnesota, and Connecticut each reproduce
-    # PolicyEngine to the cent (residual is PolicyEngine's float32 rounding); a $1
-    # absolute band catches any structural bracket error without absorbing the
-    # 2024-to-2026 vintage on the TAXSIM leg. Maryland's TAXSIM residual also
+    # Maryland, Maine, and Minnesota reproduce PolicyEngine to the cent (residual
+    # is PolicyEngine's float32 rounding); a $1 absolute band catches structural
+    # bracket errors without absorbing the 2024-to-2026 vintage on the TAXSIM leg.
+    # Maryland's TAXSIM residual also
     # carries the county/local income tax that siitax includes but the state-only
     # target excludes; that scope gap is dispositioned, not absorbed by tolerance.
-    "DE": (1.0, 0.0),
+    # Delaware's full-population maximum absolute residual is $0.232, while every
+    # value is within either one cent or 1e-7 relative error.
+    "DE": (0.01, 0.0000001),
     "MD": (1.0, 0.0),
     "ME": (1.0, 0.0),
     "MN": (1.0, 0.0),
-    "CT": (1.0, 0.0),
+    # Connecticut's full-population maximum absolute residual is $0.4592, while
+    # every value is within either one cent or 1e-7 relative error. The combined
+    # tolerance rejects structural drift without failing large-value float noise.
+    "CT": (0.01, 0.0000001),
     # Arizona reproduces PolicyEngine exactly (flat 2.5% on AGI less the standard
     # deduction; no rounding residual). A $1 absolute band catches any structural
     # error without absorbing the 2024-to-2026 standard-deduction indexation on
@@ -457,7 +459,7 @@ _TOL = {
     "OK": (1.0, 0.0),
     "OR": (1.0, 0.0),
     "RI": (1.0, 0.0),
-    "NJ": (1.0, 0.0),
+    "NJ": (1.0, 0.0000001),
     "SC": (1.0, 0.0),
     "KS": (1.0, 0.0),
     "ND": (1.0, 0.0),
@@ -467,12 +469,31 @@ _TOL = {
     "MS": (1.0, 0.0),
     "NH": (1.0, 0.0),
     "WV": (1.0, 0.0),
-    "VT": (1.0, 0.0),
+    "VT": (0.01, 0.0000001),
     "WI": (1.0, 0.0),
     "WA": (1.0, 0.0),
     # Colorado reproduces PolicyEngine to the cent on all six grid cases; a
     # $1 absolute band catches structural errors without absorbing anything.
     "CO": (1.0, 0.0),
+}
+
+# Full-Populace contracts may use tighter reviewed tolerances than the legacy
+# mixed PolicyEngine/TAXSIM case grids. The grid tolerances above retain room
+# for TAXSIM law-vintage differences; these overrides apply only to the pinned
+# Populace registry check.
+_POPULACE_TOL = {
+    "AL": (0.01, 0.0000001),
+    "AZ": (0.01, 0.0000001),
+    "GA": (0.01, 0.0000001),
+    "IL": (1.0, 0.0),
+    "LA": (0.01, 0.0000001),
+    "MT": (0.01, 0.0000001),
+    "NM": (0.01, 0.0000001),
+    "OH": (0.01, 0.0000001),
+    "OK": (0.01, 0.0000001),
+    "SC": (0.01, 0.0000001),
+    "VA": (0.01, 0.0000001),
+    "WV": (0.01, 0.0000001),
 }
 
 

@@ -106,16 +106,16 @@ EXPECTED_STATE_FIPS = {
     "WV": "54",
 }
 EXPECTED_STATE_CODES = frozenset(EXPECTED_STATE_FIPS)
-EXPECTED_EXPLICIT_INPUT_COUNT = 255
+EXPECTED_EXPLICIT_INPUT_COUNT = 184
 EXPECTED_EXPLICIT_RELATION_COUNT = 1
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "ed80846d730f502f01c6596b60693104d0dc6916a3a43f0b655daba57e52282c"
+    "ec3648d40af61d8b6ba3f3f27eea8113aab7aedd6f0e737ec13862dd2c0f6e56"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "af96f31eb1164c77a10807579f4d72bbc09f0082deefee4341378476d30e492d"
+    "dc54e88716a7018751bb8ec1964253db202e77ec492397507c3bddbcb3b5482f"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "ca15a04bc1a5336fbf32bb101986ba9b4d23e321c1b4760007ee77cb27d99fac"
+    "9f91ec40a4888e3b332dce0910bfd3e99abee8f800424e6ebb41eb3274390e73"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -123,11 +123,351 @@ EXPECTED_SOURCE_METADATA_SHA256 = (
 ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
     {
         (
+            "AL",
+            "us-al:policies/income_tax/pilot_liability_pipeline#input."
+            "al_pit_pilot_state_taxable_income",
+            "al_taxable_income",
+        ),
+        (
+            "AZ",
+            "us-az:policies/income_tax/pilot_liability_pipeline#input."
+            "az_pit_pilot_state_taxable_income",
+            "az_taxable_income",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_state_taxable_income",
+            "ct_taxable_income",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_adjusted_gross_income",
+            "ct_agi",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_personal_credit_rate",
+            "ct_personal_credit_rate",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_alternative_minimum_tax",
+            "ct_amt",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_property_tax_credit_potential",
+            "ct_property_tax_credit_potential",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_stillborn_credit",
+            "ct_stillborn_credit",
+        ),
+        (
+            "DE",
+            "us-de:policies/income_tax/pilot_liability_pipeline#input."
+            "de_pit_pilot_supplied_separate_taxable_income",
+            "de_taxable_income_indv",
+        ),
+        (
+            "DE",
+            "us-de:policies/income_tax/pilot_liability_pipeline#input."
+            "de_pit_pilot_files_separately",
+            "de_files_separately",
+        ),
+        (
+            "GA",
+            "us-ga:policies/income_tax/pilot_liability_pipeline#input."
+            "ga_pit_pilot_state_taxable_income",
+            "ga_taxable_income",
+        ),
+        (
+            "IA",
+            "us-ia:policies/income_tax/pilot_liability_pipeline#input."
+            "ia_pit_pilot_state_taxable_income",
+            "ia_taxable_income_consolidated",
+        ),
+        (
+            "IA",
+            "us-ia:policies/income_tax/pilot_liability_pipeline#input."
+            "ia_pit_pilot_modified_income",
+            "ia_modified_income",
+        ),
+        (
+            "IA",
+            "us-ia:policies/income_tax/pilot_liability_pipeline#input."
+            "ia_pit_pilot_alternate_tax_eligible",
+            "ia_alternate_tax_eligible",
+        ),
+        (
+            "IL",
+            "us-il:policies/income_tax/pilot_liability_pipeline#input."
+            "il_pit_pilot_state_taxable_income",
+            "il_taxable_income",
+        ),
+        (
+            "IL",
+            "us-il:policies/income_tax/pilot_liability_pipeline#input."
+            "il_pit_pilot_recapture_of_investment_credit",
+            "recapture_of_investment_credit",
+        ),
+        (
+            "IN",
+            "us-in:policies/income_tax/pilot_liability_pipeline#input."
+            "in_pit_pilot_indiana_adjusted_gross_income",
+            "in_agi",
+        ),
+        (
+            "KS",
+            "us-ks:policies/income_tax/pilot_liability_pipeline#input."
+            "ks_pit_pilot_state_taxable_income",
+            "ks_taxable_income",
+        ),
+        (
+            "KS",
+            "us-ks:policies/income_tax/pilot_liability_pipeline#input."
+            "ks_pit_pilot_filing_status_joint",
+            "tax_unit_is_joint",
+        ),
+        (
+            "LA",
+            "us-la:policies/income_tax/pilot_liability_pipeline#input."
+            "la_pit_pilot_louisiana_taxable_income",
+            "la_taxable_income",
+        ),
+        (
+            "MI",
+            "us-mi:policies/income_tax/pilot_liability_pipeline#input."
+            "mi_pit_pilot_state_taxable_income",
+            "mi_taxable_income",
+        ),
+        (
+            "NC",
+            "us-nc:policies/income_tax/pilot_liability_pipeline#input."
+            "nc_pit_pilot_state_taxable_income",
+            "nc_taxable_income",
+        ),
+        (
+            "NJ",
+            "us-nj:policies/income_tax/pilot_liability_pipeline#input."
+            "nj_pit_pilot_state_taxable_income",
+            "nj_taxable_income",
+        ),
+        (
+            "NM",
+            "us-nm:policies/income_tax/pilot_liability_pipeline#input."
+            "nm_pit_pilot_state_taxable_income",
+            "nm_taxable_income",
+        ),
+        (
+            "OK",
+            "us-ok:policies/income_tax/pilot_liability_pipeline#input."
+            "ok_pit_pilot_state_taxable_income",
+            "ok_taxable_income",
+        ),
+        (
+            "OH",
+            "us-oh:policies/income_tax/pilot_liability_pipeline#input."
+            "oh_pit_pilot_state_taxable_income",
+            "oh_taxable_income",
+        ),
+        (
+            "PA",
+            "us-pa:policies/income_tax/pilot_liability_pipeline#input."
+            "pa_pit_pilot_state_taxable_income",
+            "pa_adjusted_taxable_income",
+        ),
+        (
+            "SC",
+            "us-sc:policies/income_tax/pilot_liability_pipeline#input."
+            "sc_pit_pilot_state_taxable_income",
+            "sc_taxable_income",
+        ),
+        (
             "UT",
             "us-ut:policies/income_tax/pilot_liability_pipeline#input."
             "ut_pit_pilot_state_taxable_income",
             "ut_taxable_income",
-        )
+        ),
+        (
+            "VA",
+            "us-va:policies/income_tax/pilot_liability_pipeline#input."
+            "va_pit_pilot_state_taxable_income",
+            "va_taxable_income",
+        ),
+        (
+            "VT",
+            "us-vt:policies/income_tax/pilot_liability_pipeline#input."
+            "vt_pit_pilot_supplied_normal_income_tax",
+            "vt_normal_income_tax",
+        ),
+        (
+            "VT",
+            "us-vt:policies/income_tax/pilot_liability_pipeline#input."
+            "vt_pit_pilot_federal_adjusted_gross_income",
+            "adjusted_gross_income",
+        ),
+        (
+            "WV",
+            "us-wv:policies/income_tax/pilot_liability_pipeline#input."
+            "wv_pit_pilot_state_taxable_income",
+            "wv_taxable_income",
+        ),
+    }
+)
+
+ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES: frozenset[
+    tuple[str, str, tuple[str, ...], str]
+] = frozenset(
+    {
+        (
+            "DE",
+            "us-de:policies/income_tax/pilot_liability_pipeline#input."
+            "de_pit_pilot_taxpayer_is_included",
+            ("is_tax_unit_head", "is_tax_unit_spouse"),
+            "person_filer_role_or",
+        ),
+        (
+            "MT",
+            "us-mt:policies/income_tax/pilot_liability_pipeline#input."
+            "mt_pit_pilot_section_1222_net_long_term_capital_gain",
+            ("long_term_capital_gains", "short_term_capital_gains"),
+            "person_sums_to_net_long_term_capital_gain",
+        ),
+    }
+)
+
+ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
+    {
+        (
+            "AL",
+            "us-al:policies/income_tax/pilot_liability_pipeline#input."
+            "al_pit_pilot_joint_schedule_applies",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "IA",
+            "us-ia:policies/income_tax/pilot_liability_pipeline#input."
+            "ia_pit_pilot_head_or_spouse_age_65_or_older",
+            "greater_age_head_spouse",
+            "greater_than_or_equal_65",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_filing_status_joint_or_surviving_spouse",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_filing_status_head_of_household",
+            "filing_status",
+            "filing_status_is_head_of_household",
+        ),
+        (
+            "CT",
+            "us-ct:policies/income_tax/pilot_liability_pipeline#input."
+            "ct_pit_pilot_filing_status_separate",
+            "filing_status",
+            "filing_status_is_separate",
+        ),
+        (
+            "DE",
+            "us-de:policies/income_tax/pilot_liability_pipeline#input."
+            "de_pit_pilot_supplied_combined_taxable_income",
+            "de_taxable_income_joint",
+            "person_sum_to_tax_unit",
+        ),
+        (
+            "VA",
+            "us-va:policies/income_tax/pilot_liability_pipeline#input."
+            "va_pit_pilot_must_file",
+            "va_must_file",
+            "zero_one_to_boolean",
+        ),
+        (
+            "OK",
+            "us-ok:policies/income_tax/pilot_liability_pipeline#input."
+            "ok_pit_pilot_filing_status_uses_wide_schedule",
+            "filing_status",
+            "filing_status_joint_surviving_spouse_or_head",
+        ),
+        (
+            "MT",
+            "us-mt:policies/income_tax/pilot_liability_pipeline#input."
+            "mt_pit_pilot_state_taxable_income",
+            "mt_taxable_income_joint",
+            "person_sum_to_tax_unit",
+        ),
+        (
+            "MT",
+            "us-mt:policies/income_tax/pilot_liability_pipeline#input."
+            "mt_pit_pilot_filing_status_joint_or_surviving_spouse",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "MT",
+            "us-mt:policies/income_tax/pilot_liability_pipeline#input."
+            "mt_pit_pilot_filing_status_head_of_household",
+            "filing_status",
+            "filing_status_is_head_of_household",
+        ),
+        (
+            "NM",
+            "us-nm:policies/income_tax/pilot_liability_pipeline#input."
+            "nm_pit_pilot_filing_status_married_separate",
+            "filing_status",
+            "filing_status_is_separate",
+        ),
+        (
+            "NM",
+            "us-nm:policies/income_tax/pilot_liability_pipeline#input."
+            "nm_pit_pilot_filing_status_joint_head_or_surviving",
+            "filing_status",
+            "filing_status_joint_surviving_spouse_or_head",
+        ),
+        (
+            "NJ",
+            "us-nj:policies/income_tax/pilot_liability_pipeline#input."
+            "nj_pit_pilot_filing_status_joint_head_or_surviving",
+            "filing_status",
+            "filing_status_joint_surviving_spouse_or_head",
+        ),
+        (
+            "WV",
+            "us-wv:policies/income_tax/pilot_liability_pipeline#input."
+            "wv_pit_pilot_filing_status_is_separate",
+            "filing_status",
+            "filing_status_is_separate",
+        ),
+    }
+)
+
+ALLOWED_STATUTORY_CONSTANTS: frozenset[tuple[str, str, float]] = frozenset(
+    {
+        (
+            "IA",
+            "us-ia:policies/income_tax/pilot_liability_pipeline#input."
+            "ia_pit_pilot_supplied_regular_tax_rate",
+            0.038,
+        ),
+        (
+            "IA",
+            "us-ia:policies/income_tax/pilot_liability_pipeline#input."
+            "ia_pit_pilot_supplied_alternate_tax_rate",
+            0.043,
+        ),
     }
 )
 
@@ -157,7 +497,10 @@ class ProjectionSource:
     status: str
     evidence: str
     policyengine_variable: str | None = None
+    policyengine_variables: tuple[str, ...] = ()
     policyengine_relationship: str | None = None
+    policyengine_transform: str | None = None
+    constant_value: float | bool | None = None
 
 
 @dataclass(frozen=True)
@@ -572,7 +915,10 @@ def _parse_slots(
                 "status",
                 "evidence",
                 "policyengine_variable",
+                "policyengine_variables",
                 "policyengine_relationship",
+                "policyengine_transform",
+                "constant_value",
             },
             item_label,
             errors,
@@ -586,8 +932,17 @@ def _parse_slots(
                 policyengine_variable=_optional_text(
                     raw, "policyengine_variable", item_label, errors
                 ),
+                policyengine_variables=_optional_text_list(
+                    raw, "policyengine_variables", item_label, errors
+                ),
                 policyengine_relationship=_optional_text(
                     raw, "policyengine_relationship", item_label, errors
+                ),
+                policyengine_transform=_optional_text(
+                    raw, "policyengine_transform", item_label, errors
+                ),
+                constant_value=_optional_scalar(
+                    raw, "constant_value", item_label, errors
                 ),
             )
         )
@@ -681,10 +1036,88 @@ def _validate_slot(
                 f"{label}: PE boundary is not in the independently reviewed "
                 "upstream allowlist"
             )
-    elif slot.policyengine_variable or slot.policyengine_relationship:
+        if slot.policyengine_transform is not None:
+            errors.append(f"{label}: direct PE boundary may not declare a transform")
+        if slot.policyengine_variables:
+            errors.append(
+                f"{label}: direct PE boundary may not declare multiple variables"
+            )
+        if slot.constant_value is not None:
+            errors.append(f"{label}: direct PE boundary may not declare a constant")
+    elif slot.source_kind == "derived":
+        if bool(slot.policyengine_variable) == bool(slot.policyengine_variables):
+            errors.append(
+                f"{label}: derived PE boundary requires exactly one of "
+                "policyengine_variable or policyengine_variables"
+            )
+        if slot.policyengine_relationship != "upstream":
+            errors.append(
+                f"{label}: derived PE boundary relationship must be 'upstream'"
+            )
+        source_variables = slot.policyengine_variables or (
+            (slot.policyengine_variable,) if slot.policyengine_variable else ()
+        )
+        if jurisdiction.policyengine_target in source_variables:
+            errors.append(
+                f"{label}: derived PE boundary may not reuse comparison target "
+                f"{jurisdiction.policyengine_target!r}"
+            )
+        if not slot.policyengine_transform:
+            errors.append(f"{label}: derived PE boundary requires a transform")
+        if slot.policyengine_variables:
+            boundary = (
+                jurisdiction.state,
+                slot.slot,
+                slot.policyengine_variables,
+                slot.policyengine_transform or "",
+            )
+            allowed = boundary in ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES
+        else:
+            boundary = (
+                jurisdiction.state,
+                slot.slot,
+                slot.policyengine_variable or "",
+                slot.policyengine_transform or "",
+            )
+            allowed = boundary in ALLOWED_DERIVED_PE_BOUNDARIES
+        if not allowed:
+            errors.append(
+                f"{label}: derived PE boundary is not in the independently "
+                "reviewed transform allowlist"
+            )
+        if slot.constant_value is not None:
+            errors.append(f"{label}: derived PE boundary may not declare a constant")
+    elif slot.source_kind == "statutory_constant":
+        if slot.constant_value is None:
+            errors.append(f"{label}: statutory constant requires constant_value")
+        elif isinstance(slot.constant_value, bool):
+            errors.append(f"{label}: statutory constant must be numeric")
+        elif (
+            jurisdiction.state,
+            slot.slot,
+            float(slot.constant_value),
+        ) not in ALLOWED_STATUTORY_CONSTANTS:
+            errors.append(
+                f"{label}: statutory constant is not in the independently "
+                "reviewed constant allowlist"
+            )
+        if (
+            slot.policyengine_variable
+            or slot.policyengine_variables
+            or slot.policyengine_relationship
+            or slot.policyengine_transform
+        ):
+            errors.append(f"{label}: statutory constant may not declare PE metadata")
+    elif (
+        slot.policyengine_variable
+        or slot.policyengine_variables
+        or slot.policyengine_relationship
+        or slot.policyengine_transform
+        or slot.constant_value is not None
+    ):
         errors.append(
-            f"{label}: PolicyEngine boundary metadata requires "
-            "source_kind 'pe_upstream_boundary'"
+            f"{label}: projection metadata is incompatible with "
+            f"source_kind {slot.source_kind!r}"
         )
 
 
@@ -708,6 +1141,40 @@ def _optional_text(
         errors.append(f"{label}.{key} must be a non-empty string when provided")
         return None
     return value.strip()
+
+
+def _optional_text_list(
+    mapping: Mapping[str, Any], key: str, label: str, errors: list[str]
+) -> tuple[str, ...]:
+    value = mapping.get(key)
+    if value is None:
+        return ()
+    if not isinstance(value, list) or not value:
+        errors.append(f"{label}.{key} must be a non-empty list of strings")
+        return ()
+    normalized: list[str] = []
+    for index, item in enumerate(value):
+        if not isinstance(item, str) or not item.strip():
+            errors.append(f"{label}.{key}[{index}] must be a non-empty string")
+            continue
+        normalized.append(item.strip())
+    if len(set(normalized)) != len(normalized):
+        errors.append(f"{label}.{key} may not contain duplicate variables")
+    return tuple(normalized)
+
+
+def _optional_scalar(
+    mapping: Mapping[str, Any], key: str, label: str, errors: list[str]
+) -> float | bool | None:
+    value = mapping.get(key)
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int | float):
+        return float(value)
+    errors.append(f"{label}.{key} must be numeric or boolean when provided")
+    return None
 
 
 def _required_int(
@@ -788,7 +1255,10 @@ def _source_metadata_sha256(
             slot.status,
             slot.evidence,
             slot.policyengine_variable,
+            slot.policyengine_variables,
             slot.policyengine_relationship,
+            slot.policyengine_transform,
+            slot.constant_value,
         )
         for item in jurisdictions
         for kind, slots in (("inputs", item.inputs), ("relations", item.relations))
@@ -874,6 +1344,12 @@ def _slot_to_document(slot: ProjectionSource) -> dict[str, Any]:
     }
     if slot.policyengine_variable:
         document["policyengine_variable"] = slot.policyengine_variable
+    if slot.policyengine_variables:
+        document["policyengine_variables"] = list(slot.policyengine_variables)
     if slot.policyengine_relationship:
         document["policyengine_relationship"] = slot.policyengine_relationship
+    if slot.policyengine_transform:
+        document["policyengine_transform"] = slot.policyengine_transform
+    if slot.constant_value is not None:
+        document["constant_value"] = slot.constant_value
     return document

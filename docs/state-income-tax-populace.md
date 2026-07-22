@@ -10,10 +10,15 @@ name is retained for compatibility, but the dataset is the certified
 
 The committed state liability reports exercise 44 RuleSpec modules with 270
 hand-computed cases. Forty-three modules are intentionally narrow pilots and New
-Hampshire is a grounded repeal-to-zero module. Across the pilots there are 255
-explicit caller-supplied inputs. Most are completed-return boundaries or
-schedule values, including adjusted or taxable income, deductions, exemptions,
-credits, bracket selection, recapture, and state-specific capital-gain facts.
+Hampshire is a grounded repeal-to-zero module. The initial pilots exposed 255
+explicit caller-supplied inputs; reviewed promotions for Georgia, Iowa, Illinois,
+Indiana, Kansas, Louisiana, Michigan, North Carolina, Pennsylvania, South
+Carolina, Utah, Virginia, Arizona, Oklahoma, Alabama, Connecticut, Delaware, New
+Mexico, West Virginia, Montana, Ohio, New Jersey, and Vermont reduce the current
+contract to 184 inputs and one explicit relation. Most
+remaining inputs are completed-return boundaries or schedule values, including
+adjusted or taxable income, deductions, exemptions, credits, bracket selection,
+recapture, and state-specific capital-gain facts.
 
 Using PolicyEngine's target liability, or a downstream value derived from that
 target, to fill those inputs would turn the comparison into an output-alignment
@@ -70,6 +75,25 @@ routed tax unit. Filtered slices are forbidden by the v1 contract until stable,
 source-backed exclusion predicates and per-reason ledgers are implemented and
 independently reviewed.
 
+Delaware and Montana are the current ready-state projections that cross a
+PolicyEngine entity boundary. Delaware validates certified Person identity,
+order, cardinality, and every TaxUnit link before projecting separate taxable
+income at Person grain, summing the combined taxable-income candidate to
+TaxUnit, and emitting raw relation membership for every Person linked by the
+certified `person_tax_unit_id` column. An explicit reviewed Boolean-OR of
+PolicyEngine's upstream `is_tax_unit_head` and `is_tax_unit_spouse` roles
+controls inclusion inside `sum_where`; zero-filer units validly aggregate to
+zero. The pinned engine's current aggregation lowering reads the related Person
+from runtime tuple slot 0 and current TaxUnit from slot 1, so the adapter emits
+`(Person, TaxUnit)` pending an engine/RuleSpec follow-up to preserve declared
+relation argument labels. Montana's projector is likewise state- and
+variable-specific:
+it verifies the certified Person IDs and order, rejects duplicate or missing
+members and unknown tax-unit links, and only then sums the allowlisted Montana
+taxable-income, long-term-gain, and short-term-gain arrays to TaxUnit. The net
+long-term amount is reconstructed as `max(0, min(sum(LTCG), sum(LTCG) +
+sum(STCG)))`; no generic Person-to-TaxUnit transform is exposed.
+
 ## National denominator
 
 The 44 pilot jurisdictions cover broad individual income taxes, including DC
@@ -88,9 +112,8 @@ its pilot module.
    complete filing-status, exemption, dependent, deduction, high-bracket, and
    credit scope.
 3. Handle special systems separately: California high brackets and surcharge,
-   Massachusetts Parts A/B/C and surtax, Vermont per-taxpayer aggregation,
-   Washington sourcing/loss/deduction rules, and West Virginia's supplied
-   schedule boundary.
+   Massachusetts Parts A/B/C and surtax, Vermont's completed indexed-normal-tax
+   boundary, and Washington sourcing/loss/deduction rules.
 4. Run the entire pinned population, triage every residual, and fix source-backed
    Axiom gaps before recording any genuine oracle or bridge divergence.
 5. Publish the canonical v2.1 report only after every residual is dispositioned,
@@ -115,13 +138,35 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
   --sample-size-per-state 0 --output /tmp/state-tax-populace-routing.json
 ```
 
-Execute all currently ready states (New Hampshire and Utah; later states remain
-blocked until their source-backed projection contracts land):
+Execute all currently ready states (Alabama, Arizona, Connecticut, Delaware,
+Georgia, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan, Montana, New Mexico, North
+Carolina, New Hampshire, New Jersey, Ohio, Oklahoma, Pennsylvania, South
+Carolina, Utah, Virginia, Vermont, and West Virginia; later states remain blocked
+until their source-backed projection contracts land):
 
 ```bash
 uv run --extra policyengine scripts/run_state_tax_populace.py \
   --sample-size-per-state 0 \
   --rulespec-root /path/to/rulespec-us \
-  --axiom-rules-path /path/to/axiom-rules \
+  --axiom-rules-path /path/to/axiom-rules-engine \
   --output /tmp/state-tax-populace-report.json
 ```
+
+For a bounded execution, repeat the case-insensitive `--state` option. Unknown
+or currently blocked jurisdictions fail before the dataset is loaded:
+
+```bash
+uv run --extra policyengine scripts/run_state_tax_populace.py \
+  --state NJ --state NM \
+  --sample-size-per-state 0 \
+  --rulespec-root /path/to/rulespec-us \
+  --axiom-rules-path /path/to/axiom-rules-engine \
+  --output /tmp/nj-nm-state-tax-populace-report.json
+```
+
+The report records normalized requested abbreviations in `requested_states`.
+Its routing section always retains the full certified national denominator;
+only target calculation, input projection, and comparison are restricted to
+the requested ready jurisdictions. This selects whole jurisdictions, not a
+filtered population slice: every eligible unit in each selected state remains
+in scope.

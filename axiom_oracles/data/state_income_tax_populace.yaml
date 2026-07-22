@@ -177,36 +177,24 @@ jurisdictions:
   program: us-il:policies/income_tax/pilot_liability_pipeline
   output: us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability
   policyengine:
-    target: il_income_tax_before_refundable_credits
-    tolerance: 5.0
-    relative_tolerance: 0.02
-  status: blocked
-  evidence: us-il/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: il_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: ready
+  evidence: RuleSpec accepts completed-return Illinois taxable income and investment-credit recapture boundaries and imports the statutory 4.95% rate. Independent RuleSpec review and a full certified-Populace probe confirmed both boundaries are upstream of il_income_tax_before_non_refundable_credits for all 2,332 positive-weight routed Illinois tax units, with no differences above the $1 tolerance.
   inputs:
-  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_allowable_exemption_count
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_filing_status_joint
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_supplied_base_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_supplied_income_tax_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_supplied_personal_exemption
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: 35 ILCS 5/201 imposes the individual tax on Illinois net income, and the reviewed RuleSpec module declares completed-return Illinois taxable income as an upstream boundary. PolicyEngine il_taxable_income is a direct upstream dependency of the distinct comparison target il_income_tax_before_non_refundable_credits; rulespec-us#958 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: il_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_recapture_of_investment_credit
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: 35 ILCS 5/201 requires applicable investment-credit recapture to increase the tax, and the reviewed RuleSpec module declares the completed-return recapture amount as an upstream boundary. PolicyEngine recapture_of_investment_credit is a direct upstream dependency of the distinct comparison target il_income_tax_before_non_refundable_credits; rulespec-us#958 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: recapture_of_investment_credit
+    policyengine_relationship: upstream
   relations: []
 - state: MA
   fips: '25'
@@ -257,36 +245,18 @@ jurisdictions:
   program: us-oh:policies/income_tax/pilot_liability_pipeline
   output: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability
   policyengine:
-    target: oh_income_tax_before_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-oh/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: oh_income_tax_before_non_refundable_credits
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec applies Ohio Revised Code section 5747.02's 2026 schedule to completed-return Ohio taxable income. Independent legal and semantic review plus a full certified-Populace run covered all 2,144 positive-weight routed Ohio tax units and found zero differences above $1 and zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.345000001, maximum relative difference was 0.00000614497, and weighted MAE was $0.00120563774.
   inputs:
-  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_excess_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_exemption_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_first_bracket_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_no_tax_threshold
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_personal_exemption
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Ohio Revised Code section 5747.02 applies the individual schedule to Ohio taxable income. PolicyEngine oh_taxable_income is a direct upstream dependency of the distinct oh_income_tax_before_non_refundable_credits target; rulespec-us#975 and the full-Populace review verified this completed-return boundary.
+    policyengine_variable: oh_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: UT
   fips: '49'
@@ -316,55 +286,24 @@ jurisdictions:
   output: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
   policyengine:
     target: va_income_tax_before_non_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-va/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec applies Virginia's statutory schedule to completed-return Virginia taxable income when the upstream filing requirement is met. Independent legal and semantic review plus a full certified-Populace run covered all 1,710 positive-weight routed Virginia tax units and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.86.
   inputs:
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_3
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_4
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_deductions
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_exemptions
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Virginia Code section 58.1-320 applies the individual schedule to Virginia taxable income. PolicyEngine va_taxable_income is a direct upstream dependency of the distinct va_income_tax_before_non_refundable_credits target; rulespec-us#968 and the full-Populace review verified this completed-return boundary.
+    policyengine_variable: va_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_must_file
+    source_kind: derived
+    status: ready
+    evidence: Virginia Code section 58.1-321 supplies the no-tax/no-return applicability branch. PolicyEngine va_must_file is directly upstream of the comparison target but declares a float value type and emits exact 0.0/1.0 values; the reviewed transform converts only those two representations to the RuleSpec Boolean and fails closed on any other value.
+    policyengine_variable: va_must_file
+    policyengine_relationship: upstream
+    policyengine_transform: zero_one_to_boolean
   relations: []
 - state: NE
   fips: '31'
@@ -427,37 +366,75 @@ jurisdictions:
   program: us-de:policies/income_tax/pilot_liability_pipeline
   output: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
   policyengine:
-    target: de_income_tax_before_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-de/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: de_income_tax_before_non_refundable_credits_unit
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: >-
+    RuleSpec applies Delaware's complete section 1102(a)(14) schedule to both
+    separate-return and combined-return taxable-income candidates, then uses
+    PolicyEngine's strict lower-pre-credit-tax branch selector. Independent
+    legal and semantic review plus a full certified-Populace run covered all
+    936 positive-weight Delaware tax units, including 124 separate-branch and
+    812 combined-branch selections. It found zero differences outside $0.01
+    absolute or 1e-7 relative tolerance; maximum absolute error was
+    $0.231999999844 and weighted MAE was $0.0000864010142.
   inputs:
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_nonrefundable_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  relations: []
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_separate_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      PolicyEngine de_taxable_income_indv is the Person-grain completed-return
+      taxable-income candidate used by the separate-return schedule and is a
+      distinct ancestor of the TaxUnit comparison target.
+    policyengine_variable: de_taxable_income_indv
+    policyengine_relationship: upstream
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_taxpayer_is_included
+    source_kind: derived
+    status: ready
+    evidence: >-
+      The reviewed Boolean-OR transform derives this Person-grain inclusion
+      predicate from the exact upstream PolicyEngine is_tax_unit_head and
+      is_tax_unit_spouse roles after validating Boolean type, no dual role,
+      selected-unit maximum cardinality, Person identity and order, and every
+      TaxUnit link. Zero-filer units are valid and aggregate to zero.
+    policyengine_variables:
+    - is_tax_unit_head
+    - is_tax_unit_spouse
+    policyengine_relationship: upstream
+    policyengine_transform: person_filer_role_or
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_combined_taxable_income
+    source_kind: derived
+    status: ready
+    evidence: >-
+      PolicyEngine de_taxable_income_joint is Person-grain and assigns the
+      completed combined taxable income to the filing-unit representative. The
+      reviewed transform validates every Person identity and TaxUnit link before
+      summing the exact array to TaxUnit grain.
+    policyengine_variable: de_taxable_income_joint
+    policyengine_relationship: upstream
+    policyengine_transform: person_sum_to_tax_unit
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_files_separately
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      PolicyEngine de_files_separately is the direct upstream strict selector:
+      true only when aggregate individual pre-credit schedule tax is less than
+      combined pre-credit schedule tax, with ties selecting combined.
+    policyengine_variable: de_files_separately
+    policyengine_relationship: upstream
+  relations:
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#relation.de_pit_pilot_taxpayer_of_tax_unit
+    source_kind: raw_populace
+    status: ready
+    evidence: >-
+      The relation links every Person in each selected TaxUnit using the
+      certified raw person_tax_unit_id column; the separate inclusion predicate
+      controls sum_where without changing raw relation membership. The pinned
+      engine currently lowers sum_where with related Person in runtime tuple
+      slot 0 and current TaxUnit in slot 1, so the adapter emits (Person,
+      TaxUnit). Preserving RuleSpec argument labels in engine relation lowering
+      is tracked as a follow-up.
 - state: MD
   fips: '24'
   taxsim_state_code: 21
@@ -465,11 +442,21 @@ jurisdictions:
   program: us-md:policies/income_tax/pilot_liability_pipeline
   output: us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability
   policyengine:
-    target: md_income_tax_before_refundable_credits
+    target: md_income_tax_before_credits
     tolerance: 1.0
     relative_tolerance: 0.0
   status: blocked
-  evidence: us-md/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  evidence: >-
+    The legally matching state-tax core target is md_income_tax_before_credits;
+    md_income_tax_before_refundable_credits subtracts nonrefundable credits that
+    are nonzero for 190 routed units. An exact official-law probe over all 1,090
+    positive-weight Maryland tax units found that PolicyEngine-US 1.752.2 gates
+    the 2% capital-gains surtax on Maryland AGI rather than the statutory federal
+    AGI threshold. Two material units therefore omit $3,796.19 and $832.36, and
+    PolicyEngine also documents unimplemented Form 502CG exclusions. Supplying
+    the target's surtax subcomponent would be circular. Promotion is additionally
+    blocked because the certified Maryland statute recovery is a navigation/File
+    Not Found shell and current Form 502CG authority is not ingested.
   inputs:
   - slot: us-md:policies/income_tax/pilot_liability_pipeline#input.md_pit_pilot_adjusted_gross_income
     source_kind: blocked
@@ -507,7 +494,17 @@ jurisdictions:
     tolerance: 1.0
     relative_tolerance: 0.0
   status: blocked
-  evidence: us-me/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  evidence: >-
+    Maine Revenue Services' final 2026 rate schedule, revised May 20, 2026,
+    publishes filing-status thresholds that PolicyEngine-US 1.752.2 has not
+    adopted; PolicyEngine carries forward the 2025 main-bracket thresholds even
+    though its surcharge is current. An exact official-schedule probe over all
+    578 positive-weight routed Maine tax units found 312 differences over $1
+    and outside $0.01 absolute or 1e-7 relative tolerance, with maximum absolute
+    difference $23.973 and weighted MAE $4.208704. Before-credits and
+    before-refundable comparisons were identical, isolating the schedule
+    vintage. The official 2026 schedule is also absent from axiom-corpus, so
+    promotion remains blocked pending corpus ingestion and an updated oracle.
   inputs:
   - slot: us-me:policies/income_tax/pilot_liability_pipeline#input.me_pit_pilot_adjusted_gross_income
     source_kind: blocked
@@ -580,35 +577,76 @@ jurisdictions:
   output: us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability
   policyengine:
     target: ct_income_tax_before_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ct/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: >-
+    RuleSpec encodes all five 2026 Connecticut filing-status schedules, the
+    low-rate phaseout, all three recapture tiers, personal credit, alternative
+    minimum tax addition, and the ordered property-tax and stillborn
+    nonrefundable-credit caps. Independent legal and semantic review plus a
+    full certified-Populace run covered all 951 positive-weight Connecticut tax
+    units (weight 1,974,906.441571426) and found zero differences outside $0.01
+    absolute or 1e-7 relative tolerance; the maximum absolute difference was
+    $0.4592000003904104 and weighted MAE was $0.00014073563312685011.
   inputs:
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Connecticut General Statutes section 12-700 applies the schedules to completed-return Connecticut taxable income. PolicyEngine ct_taxable_income is a direct upstream dependency of the distinct ct_income_tax_before_refundable_credits target.
+    policyengine_variable: ct_taxable_income
+    policyengine_relationship: upstream
   - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_nonrefundable_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Section 12-700 uses Connecticut adjusted gross income for the low-rate phaseout and recapture tiers. PolicyEngine ct_agi is a direct upstream dependency of the comparison target.
+    policyengine_variable: ct_agi
+    policyengine_relationship: upstream
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_filing_status_joint_or_surviving_spouse
+    source_kind: derived
+    status: ready
+    evidence: The reviewed strict transform accepts only the five canonical filing statuses and is true exactly for JOINT or SURVIVING_SPOUSE, which share the statutory schedule.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_or_surviving_spouse
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_filing_status_head_of_household
+    source_kind: derived
+    status: ready
+    evidence: The reviewed strict transform accepts only the five canonical filing statuses and is true exactly for HEAD_OF_HOUSEHOLD.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_head_of_household
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_filing_status_separate
+    source_kind: derived
+    status: ready
+    evidence: The reviewed strict transform accepts only the five canonical filing statuses and is true exactly for SEPARATE.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_separate
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_personal_credit_rate
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: PolicyEngine ct_personal_credit_rate is the independently computed section 12-703 rate used upstream of the distinct comparison target.
+    policyengine_variable: ct_personal_credit_rate
+    policyengine_relationship: upstream
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_alternative_minimum_tax
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: PolicyEngine ct_amt is the independently computed section 12-700a alternative-minimum-tax addition used upstream of the distinct comparison target.
+    policyengine_variable: ct_amt
+    policyengine_relationship: upstream
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_property_tax_credit_potential
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: PolicyEngine ct_property_tax_credit_potential is the section 12-704c credit before the shared liability cap, which RuleSpec applies in statutory order.
+    policyengine_variable: ct_property_tax_credit_potential
+    policyengine_relationship: upstream
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_stillborn_credit
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: PolicyEngine ct_stillborn_credit is the section 12-704i credit before the shared remaining-liability cap, which RuleSpec applies after the property-tax credit.
+    policyengine_variable: ct_stillborn_credit
+    policyengine_relationship: upstream
   relations: []
 - state: AL
   fips: '01'
@@ -617,36 +655,25 @@ jurisdictions:
   program: us-al:policies/income_tax/pilot_liability_pipeline
   output: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
   policyengine:
-    target: al_income_tax_before_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-al/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: al_income_tax_before_non_refundable_credits
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec applies Alabama Code section 40-18-5 to completed-return Alabama taxable income, selecting the statutory joint schedule for joint and surviving-spouse filers. Independent legal and semantic review plus a full certified-Populace run covered all 1,632 positive-weight routed Alabama tax units and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.20.
   inputs:
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_excess_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_exemption_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_first_bracket_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_no_tax_threshold
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_personal_exemption
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Alabama Code section 40-18-5 applies the individual schedule to Alabama taxable income. PolicyEngine al_taxable_income is a direct upstream dependency of the distinct al_income_tax_before_non_refundable_credits target; rulespec-us#971 and the full-Populace review verified this completed-return boundary.
+    policyengine_variable: al_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_joint_schedule_applies
+    source_kind: derived
+    status: ready
+    evidence: Section 40-18-5 supplies the wider schedule for joint returns; PolicyEngine maps its surviving-spouse status to that schedule as well. The reviewed transform accepts only the five canonical filing-status labels and maps exactly JOINT and SURVIVING_SPOUSE to true.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_or_surviving_spouse
   relations: []
 - state: ID
   fips: '16'
@@ -731,36 +758,18 @@ jurisdictions:
   program: us-az:policies/income_tax/pilot_liability_pipeline
   output: us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability
   policyengine:
-    target: az_income_tax
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-az/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: az_income_tax_before_non_refundable_credits
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec applies the official 2026 Arizona 2.5 percent rate to completed-return Arizona taxable income. Independent legal and semantic review plus a full certified-Populace run covered all 1,585 positive-weight routed Arizona tax units and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.20.
   inputs:
-  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_nonrefundable_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Arizona's official 2026 Form 140ES applies the 2.5 percent rate to Arizona taxable income. PolicyEngine az_taxable_income is a direct upstream dependency of the distinct az_income_tax_before_non_refundable_credits target; rulespec-us#967 and the full-Populace review verified this completed-return boundary.
+    policyengine_variable: az_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: GA
   fips: '13'
@@ -770,35 +779,17 @@ jurisdictions:
   output: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
   policyengine:
     target: ga_income_tax_before_non_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ga/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec accepts one completed-return Georgia taxable-income boundary and imports the statutory 4.99% rate. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of ga_income_tax_before_non_refundable_credits for all 2,187 positive-weight routed Georgia tax units, with zero mismatches at $0.01 absolute or 1e-7 relative tolerance.
   inputs:
-  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_nonrefundable_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: O.C.G.A. 48-7-20 imposes tax on Georgia taxable net income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine ga_taxable_income is a direct upstream dependency of the distinct comparison target ga_income_tax_before_non_refundable_credits; rulespec-us#957 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: ga_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: MI
   fips: '26'
@@ -810,33 +801,15 @@ jurisdictions:
     target: mi_income_tax_before_non_refundable_credits
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-mi/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: RuleSpec accepts one completed-return Michigan taxable-income boundary and imports Michigan Treasury's official 4.25% rate determination for 2026, with MCL 206.51 recorded as the statutory cross-check. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of mi_income_tax_before_non_refundable_credits for all 1,788 positive-weight routed Michigan tax units, with no differences above the $1 tolerance.
   inputs:
-  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_nonrefundable_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_personal_exemptions
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: MCL 206.51 imposes the individual tax on Michigan taxable income and Michigan Treasury supplies the final annual rate. The reviewed RuleSpec module declares completed-return taxable income as its sole upstream boundary. PolicyEngine mi_taxable_income is a direct upstream dependency of the distinct comparison target mi_income_tax_before_non_refundable_credits; rulespec-us#963 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: mi_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: NC
   fips: '37'
@@ -848,33 +821,15 @@ jurisdictions:
     target: nc_income_tax_before_credits
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-nc/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: RuleSpec accepts one completed-return North Carolina taxable-income boundary and imports the statutory 3.99% rate for 2026. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of nc_income_tax_before_credits for all 2,169 positive-weight routed North Carolina tax units, with no differences above the $1 tolerance.
   inputs:
-  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_nonrefundable_credit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_standard_deduction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: N.C. Gen. Stat. 105-153.7 imposes tax on North Carolina taxable income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine nc_taxable_income is a direct upstream dependency of the distinct comparison target nc_income_tax_before_credits; rulespec-us#959 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: nc_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: DC
   fips: '11'
@@ -954,29 +909,44 @@ jurisdictions:
     target: ia_income_tax_before_credits
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ia/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: RuleSpec implements the complete 2026 regular-versus-alternate before-credit selector using reviewed completed-return Iowa taxable and modified income, two source-stated statutory rates, alternate-tax eligibility, and the statutory age-65 floor branch. Independent review and a full certified-Populace run covered all 976 positive-weight routed Iowa tax units, selected the alternate branch exactly once, and found no differences above the $1 tolerance; the maximum absolute difference was $0.3440000005066395.
   inputs:
-  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_taxable_income_subtraction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Iowa Code section 422.5 imposes the regular tax on taxable income. The reviewed RuleSpec accepts completed-return Iowa taxable income, and PolicyEngine ia_taxable_income_consolidated is a direct upstream dependency of ia_income_tax_before_credits for 2026; rulespec-us#964 and the full-Populace review verified this exact boundary.
+    policyengine_variable: ia_taxable_income_consolidated
+    policyengine_relationship: upstream
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_modified_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Iowa Code section 422.5 applies the alternate rate to modified income above the applicable statutory floor. PolicyEngine ia_modified_income is a direct upstream dependency of the distinct comparison target through ia_alternate_tax_consolidated; rulespec-us#964 and the full-Populace review verified this boundary.
+    policyengine_variable: ia_modified_income
+    policyengine_relationship: upstream
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_regular_tax_rate
+    source_kind: statutory_constant
+    status: ready
+    evidence: Iowa Code section 422.5 states the 2026 regular individual rate as three and eight-tenths percent. The reviewed RuleSpec supplies 0.038 because the pinned numeric-grounding validator does not convert that mixed word-form percentage into a literal.
+    constant_value: 0.038
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_alternate_tax_rate
+    source_kind: statutory_constant
+    status: ready
+    evidence: Iowa Code section 422.5 states the alternate individual rate as four and three-tenths percent. The reviewed RuleSpec supplies 0.043 from that primary authority.
+    constant_value: 0.043
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_alternate_tax_eligible
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: PolicyEngine ia_alternate_tax_eligible is the direct upstream selector used by ia_income_tax_consolidated to choose the lesser regular or alternate tax. It is distinct from the comparison target and was reviewed across the complete routed Iowa population.
+    policyengine_variable: ia_alternate_tax_eligible
+    policyengine_relationship: upstream
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_head_or_spouse_age_65_or_older
+    source_kind: derived
+    status: ready
+    evidence: Iowa Code section 422.5 applies the higher alternate-tax income floor when the head or spouse is at least age 65. The projector derives this Boolean only by testing the upstream PolicyEngine greater_age_head_spouse value against that source-backed threshold; the full-Populace review exercised the complete branch.
+    policyengine_variable: greater_age_head_spouse
+    policyengine_relationship: upstream
+    policyengine_transform: greater_than_or_equal_65
   relations: []
 - state: IN
   fips: '18'
@@ -985,32 +955,18 @@ jurisdictions:
   program: us-in:policies/income_tax/pilot_liability_pipeline
   output: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
   policyengine:
-    target: in_income_tax_before_refundable_credits
+    target: in_agi_tax
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-in/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: RuleSpec accepts one completed-return Indiana adjusted-gross-income boundary and imports the statutory 2.95% state rate for 2026. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of in_agi_tax for all 1,292 positive-weight routed Indiana tax units, with no differences above the $1 tolerance. County tax and credits are outside both sides of this comparison.
   inputs:
-  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_taxable_income_subtraction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_indiana_adjusted_gross_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: IC 6-3-2-1 imposes the state tax on Indiana adjusted gross income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine in_agi is a direct upstream dependency of the distinct comparison target in_agi_tax; rulespec-us#960 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: in_agi
+    policyengine_relationship: upstream
   relations: []
 - state: LA
   fips: '22'
@@ -1020,31 +976,17 @@ jurisdictions:
   output: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
   policyengine:
     target: la_income_tax_before_non_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-la/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec accepts one completed-return Louisiana taxable-income boundary and imports the statutory 3% rate for 2026. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of la_income_tax_before_non_refundable_credits for all 1,847 positive-weight routed Louisiana tax units, with zero mismatches at $0.01 absolute or 1e-7 relative tolerance.
   inputs:
-  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_taxable_income_subtraction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_louisiana_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: La. Rev. Stat. 47:32(A) applies the individual rate to Louisiana taxable income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine la_taxable_income is a direct upstream dependency of the distinct comparison target la_income_tax_before_non_refundable_credits; rulespec-us#962 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: la_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: MT
   fips: '30'
@@ -1053,32 +995,42 @@ jurisdictions:
   program: us-mt:policies/income_tax/pilot_liability_pipeline
   output: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
   policyengine:
-    target: mt_income_tax
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-mt/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    target: mt_income_tax_before_non_refundable_credits_joint
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec composes the complete temporary MCA 15-30-2103 ordinary-income and net-long-term-capital-gain schedules for every filing status in 2026. Independent legal and semantic review plus a full certified-Populace probe covered all 1,171 positive-weight routed Montana tax units (weight 564,739.72936) and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.2914082035 and maximum relative difference was 8.98e-8. The exact reviewed RuleSpec module and fixture hashes are 3a99ecb11dad12dda75499431d6d354522537b404dbeb6e3f2b8c9c2dd1e76ff and ec58dce99abe254aaceb8ec33ba7e1e0ebdf54158480aeffe299860b87b12009, merged in rulespec-us#973.
   inputs:
-  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_floor_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_floor_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_rate_1
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_rate_2
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_state_taxable_income
+    source_kind: derived
+    status: ready
+    evidence: MCA 15-30-2103 applies its schedules to completed-return Montana taxable income. PolicyEngine mt_taxable_income_joint is a Person-entity upstream boundary whose values are nonzero on the applicable filer and are summed to the TaxUnit by this narrowly allowlisted transform. The 2026 same-return separate-filing optimization is inoperative, and the full-Populace probe reviewed the exact aggregation against the distinct mt_income_tax_before_non_refundable_credits_joint target. The final mt_income_tax variable is intentionally excluded because it subtracts refundable credits outside this schedule-only RuleSpec output.
+    policyengine_variable: mt_taxable_income_joint
+    policyengine_relationship: upstream
+    policyengine_transform: person_sum_to_tax_unit
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_section_1222_net_long_term_capital_gain
+    source_kind: derived
+    status: ready
+    evidence: MCA 15-30-2103(a) incorporates IRC section 1222 net long-term capital gain. PolicyEngine's reviewed Montana path sums Person long_term_capital_gains and short_term_capital_gains to the TaxUnit, then computes max(0, min(LTCG, LTCG + STCG)); the projector implements only that exact two-source transform after verifying Person identity, ordering, cardinality, and TaxUnit links.
+    policyengine_variables:
+    - long_term_capital_gains
+    - short_term_capital_gains
+    policyengine_relationship: upstream
+    policyengine_transform: person_sums_to_net_long_term_capital_gain
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_filing_status_joint_or_surviving_spouse
+    source_kind: derived
+    status: ready
+    evidence: MCA 15-30-2103(1)(a) shares the $95,000 threshold between joint returns and surviving spouses. The reviewed transform accepts only the five canonical PolicyEngine filing-status labels and is true exactly for JOINT or SURVIVING_SPOUSE.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_or_surviving_spouse
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_filing_status_head_of_household
+    source_kind: derived
+    status: ready
+    evidence: MCA 15-30-2103(1)(b) provides the distinct $71,250 head-of-household threshold. The reviewed transform accepts only the five canonical PolicyEngine filing-status labels and is true exactly for HEAD_OF_HOUSEHOLD, remaining mutually exclusive with the joint-or-surviving-spouse flag.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_head_of_household
   relations: []
 - state: NM
   fips: '35'
@@ -1088,27 +1040,31 @@ jurisdictions:
   output: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
   policyengine:
     target: nm_income_tax_before_non_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-nm/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec applies the complete NMSA 7-2-7(A)-(C) ordinary schedules to completed-return New Mexico taxable income, selecting among the joint/head/surviving, single, and married-separate schedules from the canonical filing status. Independent legal and semantic review plus two full certified-Populace runs covered all 1,475 positive-weight routed New Mexico tax units and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.52. Subsection D remains explicitly deferred because the distinct comparison target excludes it, the required underlying lump-sum amount is unavailable, and federal Form 4972 tax was zero throughout the population.
   inputs:
-  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: NMSA 7-2-7 applies the schedules to New Mexico taxable income, and the reviewed RuleSpec declares that completed-return amount as its upstream boundary. PolicyEngine nm_taxable_income is upstream of the distinct nm_income_tax_before_non_refundable_credits target; the exhaustive projection and independent repeat review verified this exact relationship.
+    policyengine_variable: nm_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_filing_status_married_separate
+    source_kind: derived
+    status: ready
+    evidence: NMSA 7-2-7(C) provides the married-separate schedule. The reviewed transform accepts only the five canonical PolicyEngine filing-status labels and is true exactly for SEPARATE.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_separate
+  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_filing_status_joint_head_or_surviving
+    source_kind: derived
+    status: ready
+    evidence: NMSA 7-2-7(A) groups joint, head-of-household, and surviving-spouse filers. The reviewed transform accepts only the five canonical labels and is true exactly for JOINT, HEAD_OF_HOUSEHOLD, and SURVIVING_SPOUSE.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_surviving_spouse_or_head
   relations: []
 - state: OK
   fips: '40'
@@ -1118,27 +1074,24 @@ jurisdictions:
   output: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
   policyengine:
     target: ok_income_tax_before_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ok/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec applies Oklahoma's enacted four-band 2026 schedule to completed-return Oklahoma taxable income, selecting the statutory doubled-width schedule for joint, surviving-spouse, and head-of-household filers. Independent legal and semantic review plus a full certified-Populace run covered all 1,292 positive-weight routed Oklahoma tax units and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.46.
   inputs:
-  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Oklahoma Statutes title 68, section 2355(D), applies the individual schedule to Oklahoma taxable income. PolicyEngine ok_taxable_income is a direct upstream dependency of the distinct ok_income_tax_before_credits target; rulespec-us#970 and the full-Populace review verified this completed-return boundary.
+    policyengine_variable: ok_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_filing_status_uses_wide_schedule
+    source_kind: derived
+    status: ready
+    evidence: Section 2355(D) doubles the schedule widths for joint, surviving-spouse, and head-of-household filers. PolicyEngine filing_status is upstream of the comparison target; the reviewed transform accepts only the five canonical filing-status labels and maps exactly those three labels to the wide schedule.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_surviving_spouse_or_head
   relations: []
 - state: OR
   fips: '41'
@@ -1213,26 +1166,53 @@ jurisdictions:
   policyengine:
     target: nj_main_income_tax
     tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-nj/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: >-
+    RuleSpec encodes the complete source-stated 2026 New Jersey subsection
+    a(7) and b(7) schedules, including the subsection (c) nonresident-alien
+    wide-schedule exception and the statutory $0.50 discontinuity in the
+    $70,000-$80,000 wide band. The certified Populace person table exposes
+    immigration_status_str, and all 3,056 people linked to the 1,693 New Jersey
+    tax units are exactly CITIZEN. The runtime projector fails closed if that
+    field is missing, if a selected New Jersey tax unit has no linked person,
+    or if any linked person is not exactly CITIZEN. Thus subsection (c) is
+    absent from this certified comparison population rather than silently
+    mapped to a five-value filing label. The two reviewed runtime boundaries are
+    completed-return New Jersey taxable income and a strict filing-status
+    classification; no tax result is fed back as an input. Independent legal,
+    semantic, proof, fixture, and signed-manifest review is clean at RuleSpec
+    commit 9c13e5713acf1afd9a05d911a106fbbfc57005d3. The full certified-Populace
+    run covered all 1,693 positive-weight New Jersey tax units (weight
+    5,155,329.3294595). The only absolute residual above $1 was $1.94 on about
+    $37 million of tax and had relative error 5.24e-8, consistent with
+    PolicyEngine floating precision; zero units fall outside the explicit
+    $1 absolute or 1e-7 relative campaign tolerance.
   inputs:
-  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      N.J.S. 54A:2-1 applies the schedules to completed-return New Jersey
+      taxable income. PolicyEngine nj_taxable_income is a distinct TaxUnit
+      upstream boundary of nj_main_income_tax and is projected without a
+      transform.
+    policyengine_variable: nj_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_filing_status_joint_head_or_surviving
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Subsection a(7) shares the wide schedule across joint, head-of-household,
+      and surviving-spouse returns. After the separate certified-person
+      assertion proves that every linked New Jersey person is exactly CITIZEN,
+      the reviewed transform accepts only the five canonical PolicyEngine
+      filing-status labels and returns true exactly for those three statuses;
+      single and separate returns use subsection b(7). It does not represent or
+      infer the subsection (c) nonresident-alien exception.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_surviving_spouse_or_head
   relations: []
 - state: SC
   fips: '45'
@@ -1242,27 +1222,17 @@ jurisdictions:
   output: us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability
   policyengine:
     target: sc_income_tax_before_non_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-sc/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: RuleSpec applies South Carolina's enacted 2026 two-bracket schedule to completed-return South Carolina taxable income. Independent legal and semantic review plus a full certified-Populace run covered all 1,457 positive-weight routed South Carolina tax units and found zero differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum absolute difference was $0.376.
   inputs:
-  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: South Carolina Code section 12-6-510(C)(1) applies the enacted schedule to South Carolina taxable income. PolicyEngine sc_taxable_income is a direct upstream dependency of the distinct sc_income_tax_before_non_refundable_credits target; rulespec-us#966 and the full-Populace review verified this completed-return boundary.
+    policyengine_variable: sc_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: KS
   fips: '20'
@@ -1274,25 +1244,21 @@ jurisdictions:
     target: ks_income_tax_before_credits
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-ks/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: RuleSpec applies the official 2026 K-40ES joint or nonjoint schedule to completed-return Kansas taxable income. Independent legal, dependency, and semantic review plus a full certified-Populace run covered all 989 positive-weight routed Kansas tax units and found zero differences above the $1 tolerance; the maximum absolute difference was $0.9008000008761883 and no positive schedule result was suppressed by PolicyEngine's separate ks_agi gate.
   inputs:
-  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: K.S.A. 79-32,110 imposes tax on Kansas taxable income, and the official 2026 K-40ES computes the current schedule from that amount. PolicyEngine ks_taxable_income is a direct upstream dependency of the distinct ks_income_tax_before_credits target; rulespec-us#965 and the full-Populace review verified this exact boundary.
+    policyengine_variable: ks_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_filing_status_joint
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: The official 2026 K-40ES publishes separate married-filing-jointly and all-other-filer schedules. PolicyEngine tax_unit_is_joint is the upstream Boolean derived from filing status and selects the same branch without reusing the comparison target.
+    policyengine_variable: tax_unit_is_joint
+    policyengine_relationship: upstream
   relations: []
 - state: ND
   fips: '38'
@@ -1305,7 +1271,7 @@ jurisdictions:
     tolerance: 1.0
     relative_tolerance: 0.0
   status: blocked
-  evidence: us-nd/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  evidence: The Tax Commissioner's final 2026 section 57-38-30.3 schedules use indexed thresholds that PolicyEngine-US 1.752.2 has not adopted; it carries forward 2025 thresholds. Across all 996 positive-weight North Dakota tax units, an exact official schedule differs from nd_income_tax_before_credits by more than $1 on 416 units, with maximum absolute difference $72.97 and weighted MAE $9.323944. Encoding stale oracle thresholds or supplying active brackets would be legally incorrect or circular, so projection remains blocked pending an updated oracle.
   inputs:
   - slot: us-nd:policies/income_tax/pilot_liability_pipeline#input.nd_pit_pilot_supplied_bracket_base
     source_kind: blocked
@@ -1334,25 +1300,15 @@ jurisdictions:
     target: pa_income_tax_before_forgiveness
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-pa/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: RuleSpec accepts one completed-return Pennsylvania adjusted-taxable-income boundary and imports the statute-backed 3.07% rate. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of pa_income_tax_before_forgiveness for all 2,457 positive-weight routed Pennsylvania tax units, with no differences above the $1 tolerance.
   inputs:
-  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Tax Reform Code section 302 imposes tax on resident income, and the reviewed RuleSpec module declares completed-return Pennsylvania adjusted taxable income as its sole upstream boundary. PolicyEngine pa_adjusted_taxable_income is a direct upstream dependency of the distinct comparison target pa_income_tax_before_forgiveness; rulespec-us#961 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: pa_adjusted_taxable_income
+    policyengine_relationship: upstream
   relations: []
 - state: MO
   fips: '29'
@@ -1429,7 +1385,15 @@ jurisdictions:
     tolerance: 1.0
     relative_tolerance: 0.0
   status: blocked
-  evidence: us-ms/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  evidence: >-
+    A full certified-Populace probe found that PolicyEngine applies
+    Mississippi's 2026 zero band and 4% schedule to each person's taxable
+    income before aggregating to the TaxUnit target. Aggregate
+    ms_taxable_income therefore loses the number of $10,000 zero bands: 118 of
+    1,497 routed units differed by more than $1, with a $400.0007 maximum
+    residual. Promotion requires person-level taxable-income inputs and
+    filing/entity relationships; the current four-input TaxUnit pilot remains
+    blocked.
   inputs:
   - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_bracket_base
     source_kind: blocked
@@ -1470,31 +1434,32 @@ jurisdictions:
   output: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
   policyengine:
     target: wv_income_tax_before_non_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-wv/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: >-
+    RuleSpec applies West Virginia's enacted section 11-21-4J five-band 2026
+    schedule to completed-return West Virginia taxable income, using the
+    statutory half-width schedule only for married-separate filers. Independent
+    legal and semantic review plus a full certified-Populace run covered all
+    1,608 positive-weight routed West Virginia tax units and found zero
+    differences outside $0.01 absolute or 1e-7 relative tolerance; the maximum
+    absolute difference was $0.2224. The filing-status boundary is material:
+    omitting it creates 13 differences over $1 and a maximum residual of $398.75.
   inputs:
-  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_section_4h_schedule_tax
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: W. Va. Code section 11-21-4J applies the 2026 schedules to West Virginia taxable income. PolicyEngine wv_taxable_income is a direct upstream dependency of the distinct wv_income_tax_before_non_refundable_credits target; the full-Populace run and independent review verified this completed-return boundary.
+    policyengine_variable: wv_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_filing_status_is_separate
+    source_kind: derived
+    status: ready
+    evidence: Section 11-21-4J(b) applies the half-width schedule only to married individuals filing separate returns. The reviewed transform accepts only the five canonical filing-status labels and is true exactly for SEPARATE.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_separate
   relations: []
 - state: VT
   fips: '50'
@@ -1504,48 +1469,39 @@ jurisdictions:
   output: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
   policyengine:
     target: vt_income_tax_before_non_refundable_credits
-    tolerance: 1.0
-    relative_tolerance: 0.0
-  status: blocked
-  evidence: us-vt/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+  status: ready
+  evidence: >-
+    RuleSpec accepts completed-return TaxUnit-level Vermont normal income tax
+    and independently applies 32 V.S.A. section 5822(a)(6)'s strict federal-AGI
+    threshold and three-percent minimum. The certified corpus does not contain
+    the Commissioner's official 2026 indexed normal-tax tables, so that normal
+    tax remains an explicit non-circular upstream boundary. A reviewed runtime
+    assertion fails closed unless PolicyEngine us_govt_interest is exactly zero
+    for every selected Vermont tax unit, because PolicyEngine subtracts that
+    form-based amount in vt_amt while the source-backed RuleSpec does not. The
+    raw certified tables expose no government-interest field; under pinned
+    PolicyEngine-US 1.752.2, the upstream variable evaluates exactly zero for
+    all 922 positive-weight Vermont tax units. The assertion only narrows model
+    scope and is never supplied as an input or used to select a tax result.
+    Independent review and the full certified-Populace run found one
+    minimum-tax winner, a maximum $0.0001171875 residual, and zero differences
+    outside $0.01 absolute or 1e-7 relative tolerance.
   inputs:
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_federal_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_minimum_tax_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_minimum_tax_threshold
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_taxable_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_taxpayer_is_included
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  relations:
-  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#relation.vt_pit_pilot_taxpayer_of_tax_unit
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_normal_income_tax
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: PolicyEngine vt_normal_income_tax is the distinct completed-return normal-tax ancestor of vt_income_tax_before_non_refundable_credits; the certified corpus lacks official 2026 indexed tables needed to reconstruct it independently.
+    policyengine_variable: vt_normal_income_tax
+    policyengine_relationship: upstream
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_federal_adjusted_gross_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Section 5822(a)(6) applies its minimum to federal adjusted gross income. PolicyEngine adjusted_gross_income is the direct TaxUnit ancestor used by vt_amt and is projected without transformation.
+    policyengine_variable: adjusted_gross_income
+    policyengine_relationship: upstream
+  relations: []
 - state: WI
   fips: '55'
   taxsim_state_code: 50
