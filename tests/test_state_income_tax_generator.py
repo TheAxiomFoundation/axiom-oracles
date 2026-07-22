@@ -7,6 +7,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 
 def _load_generator():
     path = (
@@ -93,6 +95,111 @@ def test_axiom_liabilities_ignores_non_grid_boundary_fixtures(tmp_path):
         ("NY", "married", 60_000): 2040.7,
         ("NY", "married", 120_000): 5280.7,
         ("NY", "married", 300_000): 15612.6,
+    }
+
+
+def test_axiom_liabilities_extracts_only_mississippi_canonical_grid(tmp_path):
+    generator = _load_generator()
+    output = (
+        "us-ms:policies/income_tax/pilot_liability_pipeline"
+        "#ms_pit_pilot_income_tax_liability"
+    )
+    fixture_path = (
+        tmp_path
+        / "us-ms"
+        / "policies"
+        / "income_tax"
+        / "pilot_liability_pipeline.test.yaml"
+    )
+    fixture_path.parent.mkdir(parents=True)
+
+    boundary_cases = [
+        {
+            "name": name,
+            "input": {},
+            "output": {output: index},
+        }
+        for index, name in enumerate(
+            [
+                "individual_candidate_negative_income_normalizes_to_zero",
+                "joint_candidate_negative_income_normalizes_to_zero",
+                "individual_candidate_one_dollar_below_zero_tax_ceiling",
+                "joint_candidate_at_zero_tax_ceiling",
+                "individual_candidate_one_dollar_above_zero_tax_ceiling",
+                "joint_candidate_above_zero_tax_ceiling",
+                "relation_aggregates_both_candidate_sets",
+                "strict_lower_separate_total_selects_separate_branch",
+                "lower_joint_total_selects_joint_branch",
+                "equal_totals_choose_joint_branch",
+            ]
+        )
+    ]
+    grid_values = {
+        "single_30000": 468,
+        "single_60000": 1668,
+        "single_150000": 5268,
+        "joint_60000": 1336,
+        "joint_120000": 3736,
+        "joint_300000": 10936,
+    }
+    grid_cases = [
+        {"name": name, "input": {}, "output": {output: value}}
+        for name, value in grid_values.items()
+    ]
+    fixture_path.write_text(json.dumps(boundary_cases + grid_cases))
+
+    generator.RULESPEC_US = tmp_path
+    generator._STATES = ("MS",)
+
+    assert generator._STRICT_GRID_FIXTURE_STATES == frozenset({"MS", "NY"})
+    assert generator._axiom_liabilities() == {
+        ("MS", "single", 30_000): 468.0,
+        ("MS", "single", 60_000): 1668.0,
+        ("MS", "single", 150_000): 5268.0,
+        ("MS", "married", 60_000): 1336.0,
+        ("MS", "married", 120_000): 3736.0,
+        ("MS", "married", 300_000): 10936.0,
+    }
+
+
+@pytest.mark.parametrize("state", ["MS", "NY"])
+def test_strict_grid_states_ignore_noncanonical_agi_fixture(tmp_path, state):
+    generator = _load_generator()
+    output = generator._LIABILITY_OUTPUT[state]
+    fixture_path = (
+        tmp_path
+        / f"us-{state.lower()}"
+        / "policies"
+        / "income_tax"
+        / "pilot_liability_pipeline.test.yaml"
+    )
+    fixture_path.parent.mkdir(parents=True)
+    agi_input = (
+        f"us-{state.lower()}:policies/income_tax/pilot_liability_pipeline#"
+        "input.adjusted_gross_income"
+    )
+    fixture_path.write_text(
+        json.dumps(
+            [
+                {
+                    "name": "noncanonical_boundary_with_agi",
+                    "input": {agi_input: 99_999},
+                    "output": {output: 999_999},
+                },
+                {
+                    "name": "single_30000",
+                    "input": {agi_input: 99_999},
+                    "output": {output: 123},
+                },
+            ]
+        )
+    )
+
+    generator.RULESPEC_US = tmp_path
+    generator._STATES = (state,)
+
+    assert generator._axiom_liabilities() == {
+        (state, "single", 30_000): 123.0,
     }
 
 

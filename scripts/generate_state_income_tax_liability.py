@@ -276,6 +276,12 @@ _POPULACE_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",
 }
 
+# These comprehensive RuleSpec suites contain boundary/relation cases in
+# addition to the six canonical liability-grid fixtures. For these states only,
+# accept strict ``(single|married|joint)_<income>`` names and skip everything
+# else. Other states retain the legacy AGI/suffix extraction behavior.
+_STRICT_GRID_FIXTURE_STATES = frozenset({"MS", "NY"})
+
 
 @dataclass
 class Case:
@@ -344,22 +350,23 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
                 None,
             )
             grid_name = re.fullmatch(r"(single|married|joint)_(\d+)", name)
-            if state == "NY" and agi_key is None and grid_name is None:
+            strict_grid_fixtures = state in _STRICT_GRID_FIXTURE_STATES
+            if strict_grid_fixtures and grid_name is None:
                 # Comprehensive boundary suites may contain many more cases
                 # than the six standard comparison-grid fixtures. Only names
                 # that explicitly bind a filing family and employment-income
-                # case belong to New York's rate-only report.
+                # case belong to these reports.
                 continue
             # Preserve the existing adjusted-gross-income and fixture-suffix
-            # mapping for every other state. New York's rate-only pilot accepts
-            # completed-return taxable income, so its strict fixture name pins
-            # the wage grid case instead.
+            # mapping for every other state. The strict-grid pilots accept
+            # completed-return taxable-income boundaries, so their fixture
+            # names pin the wage grid case instead.
             agi = (
-                int(round(float(inputs[agi_key])))
-                if agi_key is not None
+                int(grid_name.group(2))
+                if strict_grid_fixtures
                 else (
-                    int(grid_name.group(2))
-                    if state == "NY"
+                    int(round(float(inputs[agi_key])))
+                    if agi_key is not None
                     else int(name.rsplit("_", 1)[-1])
                 )
             )

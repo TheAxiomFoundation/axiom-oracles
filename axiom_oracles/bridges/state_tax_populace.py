@@ -132,16 +132,16 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "#ny_pit_pilot_main_income_tax"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 167
-EXPECTED_EXPLICIT_RELATION_COUNT = 1
+EXPECTED_EXPLICIT_INPUT_COUNT = 165
+EXPECTED_EXPLICIT_RELATION_COUNT = 2
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "7eddbfcbfd25cd37c9ccf18201874d1e326915f1e03921fbdfe1a831959eeb97"
+    "3ab73541eeaa1c7d412b9c83dee3da47cad8d301b764344db6915d7bd33fd8e8"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
     "9e742bb9a85c1065d4336ab734c6bf3f1b9ea99588a98d0277c7612ed60cc52e"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "d9d0f3147bab5f9d693bd31c864c62f799d28c021214828eb52f997e3f7edb30"
+    "b49f68c8018d1e106cedc889a1dff2cc498efbf2d010a87b0b641122326652ba"
 )
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
@@ -285,6 +285,18 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "us-mi:policies/income_tax/pilot_liability_pipeline#input."
             "mi_pit_pilot_state_taxable_income",
             "mi_taxable_income",
+        ),
+        (
+            "MS",
+            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
+            "ms_pit_pilot_supplied_taxable_income_indiv",
+            "ms_taxable_income_indiv",
+        ),
+        (
+            "MS",
+            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
+            "ms_pit_pilot_supplied_taxable_income_joint",
+            "ms_taxable_income_joint",
         ),
         (
             "NC",

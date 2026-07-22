@@ -106,6 +106,14 @@ _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
             "de_pit_pilot_taxpayer_is_included",
         }
     ),
+    "MS": frozenset(
+        {
+            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
+            "ms_pit_pilot_supplied_taxable_income_indiv",
+            "us-ms:policies/income_tax/pilot_liability_pipeline#input."
+            "ms_pit_pilot_supplied_taxable_income_joint",
+        }
+    ),
 }
 
 # A relation is emitted only when its complete state/legal ID is declared and
@@ -121,7 +129,17 @@ _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE = {
         "us-de:policies/income_tax/pilot_liability_pipeline#relation."
         "de_pit_pilot_taxpayer_of_tax_unit": ("Person", "TaxUnit"),
     },
+    "MS": {
+        "us-ms:policies/income_tax/pilot_liability_pipeline#relation."
+        "ms_pit_pilot_person_of_tax_unit": ("Person", "TaxUnit"),
+    },
 }
+
+# Mississippi's source-backed schedule applies to every related Person's two
+# completed-return taxable-income candidates. Unlike the staged DE/DC modules,
+# it has no filer-role inclusion predicate: zero/nonfiling Person candidates
+# remain exact zero inputs and relation membership is the certified raw link.
+_REVIEWED_ALL_PERSON_RELATION_STATES = frozenset({"MS"})
 
 # Exact upstream PolicyEngine Person roles used to identify filers for the
 # staged DE/DC separate-return candidates. Raw Person-to-TaxUnit links remain
@@ -1217,22 +1235,32 @@ def _state_request(
         )
         if declared_relations:
             filer_slot = _REVIEWED_PERSON_FILER_SLOT_BY_STATE.get(state)
-            if filer_slot is None or filer_slot not in projected_inputs:
+            if (
+                filer_slot is None
+                and state not in _REVIEWED_ALL_PERSON_RELATION_STATES
+            ):
                 raise StateTaxPopulationRoutingError(
                     f"{state}: declared Person inputs/relations require the exact "
                     "reviewed taxpayer-inclusion input"
                 )
-            inclusion_values = projected_inputs[filer_slot]
-            for tax_unit_id, person_ids in persons_by_tax_unit.items():
-                for person_id in person_ids:
-                    if person_id not in inclusion_values:
-                        raise StateTaxPopulationRoutingError(
-                            f"{state}: projected Person input {filer_slot!r} omitted "
-                            f"person_id {person_id}"
-                        )
-                    _strict_boolean(
-                        inclusion_values[person_id], label=f"{state}:{filer_slot}"
+            if filer_slot is not None:
+                if filer_slot not in projected_inputs:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: declared Person inputs/relations require the exact "
+                        "reviewed taxpayer-inclusion input"
                     )
+                inclusion_values = projected_inputs[filer_slot]
+                for tax_unit_id, person_ids in persons_by_tax_unit.items():
+                    for person_id in person_ids:
+                        if person_id not in inclusion_values:
+                            raise StateTaxPopulationRoutingError(
+                                f"{state}: projected Person input {filer_slot!r} "
+                                f"omitted person_id {person_id}"
+                            )
+                        _strict_boolean(
+                            inclusion_values[person_id],
+                            label=f"{state}:{filer_slot}",
+                        )
     inputs: list[dict[str, Any]] = []
     if projected_inputs:
         from .tax_populace import input_record
