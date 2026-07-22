@@ -160,6 +160,7 @@ def test_parent_concepts_expand_components_when_requested() -> None:
         Concepts.EMPLOYEE_MEDICARE,
         Concepts.EMPLOYER_OASDI,
         Concepts.EMPLOYER_MEDICARE,
+        Concepts.EMPLOYEE_FICA,
     ]
 
 

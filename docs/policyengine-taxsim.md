@@ -51,7 +51,31 @@ intersection from `axiom_oracles/config/concept_mappings.yaml`:
 | Canonical concept | PolicyEngine | TAXSIM | Tolerance |
 | --- | --- | --- | ---: |
 | `us:tax/federal-income-tax#liability` | `income_tax` | `fiitax` | $15 |
+| `us:tax/federal-income-tax#agi` | `adjusted_gross_income` | `v10` | $5 |
+| `us:tax/federal-income-tax#cdcc` | `cdcc` | `v24` | $5 |
+| `us:tax/payroll#employee_fica` | employee FICA + SE tax (summed) | `tfica` | $5 |
 | `us:tax/state-income-tax#liability` | `state_income_tax` | `siitax` | $15 |
+
+## Law-Year Support Of The Pinned Binary
+
+The pinned policyengine-taxsim 2.30.0 binary (see
+`axiom_oracles/adapters/taxsim/taxsim_pins.json`; `cdate-20260521`) accepts
+law years through 2026, and TAXSIM comparisons now default to the 2026
+validation year (`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). Scope of
+its 2026 model, verified empirically against the binary:
+
+- **Modeled at 2026**: the OBBBA federal rate schedule and standard
+  deduction, childless EITC, FICA/SECA (`tfica`), AGI (`v10`).
+- **Missing at 2026** (fine at 2024/2025): the qualifying-child credit
+  machinery. The CTC collapses to the $500 ODC path, and ACTC, CDCC, and
+  EITC-with-children all return zero. 2025 models all of them, including the
+  OBBBA $2,200/child CTC. A 2026 comparison of child-credit concepts must
+  treat TAXSIM zeros as an NBER gap, not evidence.
+- **Projected at 2026**: state modules extrapolate many parameters
+  (fractional-dollar deductions/credits in the `idtl=2` detail) and in some
+  states retain un-enacted rates (e.g. KY 4.0% vs enacted 3.5%, NC 4.25% vs
+  3.99%, GA 5.19% vs 4.99%). The state income-tax liability suites
+  disposition each such residual per case.
 
 ## Reproduce The Smoke Test
 

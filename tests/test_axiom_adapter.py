@@ -806,7 +806,16 @@ def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
 
     assert isinstance(runner, AxiomRulesRunner)
     assert runner.program_imports
-    assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
+    # Every composition drops the generated `self_employment_income` shim
+    # (the encoded us:statutes/26/1402/b now defines the statutory rule of
+    # that name) and the us:statutes/26/1411 import (the upstream 911/a vs
+    # 911/a/1 duplicate-rule encoding); see the carve-outs in cli.py.
+    assert runner.program_rules == tuple(
+        rule
+        for rule in US_TAX_ORACLE_PROGRAM_RULES
+        if rule["name"] != "self_employment_income"
+    )
+    assert "us:statutes/26/1411" not in runner.program_imports
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     assert runner.prune_unsupported_inputs
     assert (

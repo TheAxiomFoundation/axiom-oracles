@@ -1691,6 +1691,7 @@ concepts:
       - us:tax/payroll#employee_medicare
       - us:tax/payroll#employer_oasdi
       - us:tax/payroll#employer_medicare
+      - us:tax/payroll#employee_fica
     targets:
       axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
@@ -1705,6 +1706,7 @@ concepts:
     parent: us:tax/federal-income-tax#liability
     targets:
       policyengine: adjusted_gross_income
+      taxsim: v10
       taxcalc: c00100
 
   us:tax/federal-income-tax#standard_deduction:
@@ -1749,7 +1751,13 @@ concepts:
       # `taxbc`. AMT is excluded because `taxbc` excludes it too (Tax-Calculator
       # adds `c09600` separately); the AMT concept maps `taxcalc: c09600` alone.
       policyengine: [income_tax_main_rates, capital_gains_tax]
-      taxsim: v19
+      # TAXSIM's v28 is federal tax before credits WITH the capital-gains
+      # preferential-rate worksheet and WITHOUT NIIT (verified: fiitax =
+      # v28 - credits + niit on the pinned 2.30.0 binary), matching this
+      # concept's taxbc scope. v19 is the schedule tax on taxable income
+      # with NO preferential rates — mapping it here overstated TAXSIM by
+      # the full ordinary-vs-preferential spread on capital-gains units.
+      taxsim: v28
       taxcalc: taxbc
 
   us:tax/federal-income-tax#nonrefundable_credits:
@@ -1792,9 +1800,15 @@ concepts:
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
+    # TAXSIM's v24 is the child-care credit in the idtl=2 decomposition,
+    # verified against the pinned 2.30.0 binary at 2024/2025. Known gap: the
+    # binary's 2026 law year does not model CDCC (v24 is always zero at 2026,
+    # alongside the rest of the qualifying-child credit machinery), so a 2026
+    # comparison reads TAXSIM zeros as an NBER gap, not a validation signal.
     targets:
       axiom: us:statutes/26/21#cdcc
       policyengine: cdcc
+      taxsim: v24
 
   us:tax/federal-income-tax#aotc:
     description: American Opportunity Credit
@@ -1867,6 +1881,32 @@ concepts:
     targets:
       axiom: us:statutes/26/3111/b#hospital_insurance_employer_tax
       policyengine: employer_medicare_tax
+
+  us:tax/payroll#employee_fica:
+    description: Employee-side FICA plus self-employment tax (TAXSIM tfica scope)
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    # TAXSIM's `tfica` is the taxpayer's own payroll burden: the employee half
+    # of wage FICA (6.2 OASDI + 1.45 HI; the 0.9 additional Medicare tax is
+    # reported separately in `addmed`) PLUS the full section 1401 SECA on
+    # self-employment income (a self-employed filer pays both halves).
+    # Verified empirically against the pinned TAXSIM-35 2.30.0 binary:
+    # wages-only units return 7.65 per cent of wages, mixed units return
+    # employee wage FICA + 15.3 per cent of 92.35 per cent of SE income.
+    # Both engine targets are summed lists mirroring exactly that scope.
+    targets:
+      axiom:
+        - us:statutes/26/3101/a#oasdi_wage_tax
+        - us:statutes/26/3101/b/1#hospital_insurance_wage_tax
+        - us:statutes/26/1401/a#old_age_survivors_and_disability_insurance_tax
+        - us:statutes/26/1401/b/1#self_employment_income_tax
+      policyengine:
+        - employee_social_security_tax
+        - employee_medicare_tax
+        - self_employment_tax
+      taxsim: tfica
 
   us:tax/state-income-tax#liability:
     description: State income tax liability
