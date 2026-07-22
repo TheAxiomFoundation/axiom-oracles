@@ -343,6 +343,31 @@ class Concepts:
         "uk:regulations/ssi/2019/193/pilot_best_start_foods_oracle_pipeline"
         "#uk_bsf_pilot_annual_entitlement"
     )
+    # Stable semantic contracts for Germany's direct EUROMOD↔GETTSIM worker
+    # baseline. These concepts deliberately name the common household amounts,
+    # rather than either engine's variable, so a composed rulespec-de target can
+    # attach later without changing the comparison history.
+    DE_EMPLOYEE_HEALTH_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_health_insurance_contribution_monthly"
+    )
+    DE_EMPLOYEE_PENSION_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_pension_insurance_contribution_monthly"
+    )
+    DE_EMPLOYEE_UNEMPLOYMENT_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_unemployment_insurance_contribution_monthly"
+    )
+    DE_EMPLOYEE_LONG_TERM_CARE_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_long_term_care_insurance_contribution_monthly"
+    )
+    DE_INCOME_TAX_INCLUDING_SOLIDARITY_SURCHARGE_ANNUAL = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#income_tax_including_solidarity_surcharge_annual"
+    )
+    DE_KINDERGELD_MONTHLY = "de:policies/worker_dual_oracle_baseline#kindergeld_monthly"
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

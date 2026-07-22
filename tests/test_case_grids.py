@@ -58,14 +58,20 @@ def test_every_grid_file_parses_and_validates() -> None:
 def test_expected_jurisdictions_present() -> None:
     jurisdictions = {grid.jurisdiction for grid in load_grids()}
     # us and be are extracted from suites on main; uk ships ahead of the UKMOD
-    # suites landing (its equivalence check is guarded below). dk pins the
-    # Denmark EUROMOD suite's grid so removing it cannot pass silently.
-    assert {"us", "be", "dk"} <= jurisdictions
+    # suites landing (its equivalence check is guarded below). de and dk pin the
+    # German dual-oracle and Denmark EUROMOD grids respectively.
+    assert {"us", "be", "de", "dk"} <= jurisdictions
 
 
 @pytest.mark.parametrize(
     "jurisdiction,expected_sets,expected_cases",
-    [("us", 2, 44), ("be", 30, 128), ("uk", 26, 143), ("dk", 1, 7)],
+    [
+        ("us", 2, 44),
+        ("be", 30, 128),
+        ("de", 1, 13),
+        ("uk", 26, 143),
+        ("dk", 1, 7),
+    ],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
     grid = load_grid(jurisdiction)
@@ -108,8 +114,12 @@ def _suite_jurisdiction(suite_name: str) -> str:
     locales = {case.locale for case in cases}
     if locales == {"BE"}:
         return "be"
+    if locales == {"CA-ON"}:
+        return "ca"
     if locales == {"DK"}:
         return "dk"
+    if locales == {"DE"}:
+        return "de"
     if locales == {"UK"}:
         return "uk"
     if locales <= {"US-NY-NYC", "US-NY", "US"}:

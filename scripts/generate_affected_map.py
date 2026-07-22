@@ -135,14 +135,20 @@ def repos_for_registry_config(config: dict) -> set[str]:
         if slug:
             repos.add(slug)
 
-    concepts = params.get("concepts") or (
-        [params["concept"]] if params.get("concept") else []
-    )
-    for concept in concepts:
-        prefix = _concept_prefix(str(concept))
-        slug = _repo_from_prefix(prefix) if prefix else None
-        if slug:
-            repos.add(slug)
+    # Direct oracle-to-oracle baselines use durable concept ids to name the
+    # compared amounts, but they do not execute the jurisdiction's RuleSpec.
+    # Treating those ids as dependencies would make the affected-rerun selector
+    # rerun (and merely re-emit) the baseline whenever rulespec-de moves, while
+    # its report correctly carries no rulespec provenance.
+    if runner.get("type") != "gettsim-synthetic-compare":
+        concepts = params.get("concepts") or (
+            [params["concept"]] if params.get("concept") else []
+        )
+        for concept in concepts:
+            prefix = _concept_prefix(str(concept))
+            slug = _repo_from_prefix(prefix) if prefix else None
+            if slug:
+                repos.add(slug)
 
     # The encoder SNAP lane (axiom-encode-snap-ecps-compare) names its state as
     # `jurisdiction: us-ca` and runs the state's axiom-programs SNAP spec over
@@ -199,6 +205,12 @@ def parameter_suite_entries(config: dict) -> list[dict]:
         entries.append(
             {
                 "suite": suite["suite"],
+                # Parameter suites are run by scripts/run_parameter_comparisons.py
+                # (needs a local rulespec-us checkout + PolicyEngine), not by
+                # scripts/run_comparison.py — there is no registry name the CI
+                # rerun matrix could dispatch, so `name` is null and the
+                # selector must leave these to the manual parameter lane.
+                "name": None,
                 "report": f"axiom-policyengine-{suite['suite']}.json",
                 "repos": sorted(repos),
                 "source": "comparisons/parameter-oracles.yaml",
@@ -229,6 +241,12 @@ def build_map() -> dict:
         entries.append(
             {
                 "suite": suite,
+                # The run_comparison.py registry name — what the CI rerun
+                # matrix must dispatch. Often equal to `suite`, but not always
+                # (e.g. dashboard suite `uk-benefit-cap` runs under registry
+                # name `uk-benefit-cap-ukmod`); dispatching the dashboard
+                # suite key crashes the leg with "unknown comparison".
+                "name": config["name"],
                 "report": report,
                 "repos": sorted(repos_for_registry_config(config)),
                 "source": f"comparisons/{path.name}",
@@ -243,7 +261,10 @@ def build_map() -> dict:
             "Maps each comparison suite to the rulespec repos its concepts "
             "exercise. The affected-rerun workflow reruns only suites whose "
             "affected repos have advanced past the SHA their report last ran "
-            "against (report provenance.rulespecs)."
+            "against (report provenance.rulespecs). `suite` keys the dashboard "
+            "report; `name` is the run_comparison.py registry name the rerun "
+            "matrix dispatches (null = not CI-runnable, e.g. parameter suites "
+            "run by the manual parameter lane)."
         ),
         "owner": RULESPEC_OWNER,
         "suites": entries,

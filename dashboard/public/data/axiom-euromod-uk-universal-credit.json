@@ -23,300 +23,6 @@
     }
   ],
   "case_count": 19,
-  "concepts": [
-    {
-      "category": "benefits",
-      "comparison": "amount",
-      "components": [],
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "id": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "parent": null,
-      "priority": "high",
-      "relative_tolerance": 0,
-      "tolerance": 1
-    }
-  ],
-  "engines": {
-    "left": "euromod",
-    "right": "axiom"
-  },
-  "errors": [],
-  "locales": [
-    "UK"
-  ],
-  "mismatches": [
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-owner",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": -666.97,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-correction-zeroes-couple-owner"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 666.97,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-single-2child-renter",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": 95.72000000000003,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "benefit-cap-not-applied-single-2child"
-      },
-      "kind": "amount_difference",
-      "left": 1930.72,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1835.0,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-2child-owner",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": -1322.79,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-correction-zeroes-couple-2child-owner"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1322.79,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-2child-renter",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": 387.78999999999996,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "benefit-cap-not-applied-couple-2child-renter"
-      },
-      "kind": "amount_difference",
-      "left": 2222.79,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1835.0,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-3child-renter",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": 791.73,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "benefit-cap-not-applied-couple-3child-renter"
-      },
-      "kind": "amount_difference",
-      "left": 2626.73,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1835.0,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-2child-renter-earn0",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": 387.78999999999996,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "benefit-cap-not-applied-couple-2child-renter-earn0"
-      },
-      "kind": "amount_difference",
-      "left": 2222.79,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1835.0,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-2child-renter-earn15000",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": -1801.325,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-correction-zeroes-earn15000"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1801.325,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-2child-renter-earn30000",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": -1306.3250000000003,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-correction-zeroes-earn30000"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 1306.3250000000003,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-couple-2child-renter-earn45000",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": -11.728095238095534,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "net-earnings-taper-nic-rounding-earn45000"
-      },
-      "kind": "amount_difference",
-      "left": 799.5969047619046,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 811.3250000000002,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-single-owner-capital0",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": -424.9,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "takeup-correction-zeroes-single-owner-capital0"
-      },
-      "kind": "amount_difference",
-      "left": 0.0,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 424.9,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "uk-uc-single-owner-capital16000",
-      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
-      "description": "UK Universal Credit household award (hypothetical benefit unit)",
-      "difference": 251.29999999999998,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "capital-upper-limit-boundary-16000"
-      },
-      "kind": "amount_difference",
-      "left": 251.29999999999998,
-      "parent": null,
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": "household-universal-credit",
-      "tolerance": 1,
-      "yearly_earned_income": null
-    }
-  ],
-  "population": "synthetic",
-  "schema_version": "axiom.comparison_report.v2.1",
-  "scope": null,
-  "suite": "uk-universal-credit",
-  "summary": {
-    "comparison_count": 19,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
-        "explained_residual": 2,
-        "unexplained": 0,
-        "upstream_engine_gap": 9
-      },
-      "dispositions_file": "dispositions/uk-universal-credit.yaml",
-      "expired_entries": [],
-      "explained_rate": 100,
-      "orphaned_entries": [],
-      "raw_match_rate": 42.105263,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 0
-    },
-    "error_count": 0,
-    "errors_by_engine": [],
-    "match_count": 8,
-    "mismatch_count": 11,
-    "mismatches_by_concept": [
-      {
-        "count": 11,
-        "value": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount"
-      }
-    ],
-    "mismatches_by_kind": [
-      {
-        "count": 11,
-        "value": "amount_difference"
-      }
-    ],
-    "mismatches_by_scenario": [
-      {
-        "count": 11,
-        "value": "household-universal-credit"
-      }
-    ],
-    "weighted": {
-      "comparison_weight": 19,
-      "match_rate": 42.105263,
-      "match_weight": 8,
-      "mismatch_weight": 11
-    }
-  },
   "cases": [
     {
       "case_id": "uk-uc-single-owner",
@@ -3009,5 +2715,326 @@
       "right_engine": "axiom",
       "right_errors": []
     }
-  ]
+  ],
+  "concepts": [
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "id": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-owner",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": -666.97,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-correction-zeroes-couple-owner"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 666.97,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-single-2child-renter",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": 95.72000000000003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "benefit-cap-not-applied-single-2child"
+      },
+      "kind": "amount_difference",
+      "left": 1930.72,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1835.0,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-2child-owner",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": -1322.79,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-correction-zeroes-couple-2child-owner"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1322.79,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-2child-renter",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": 387.78999999999996,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "benefit-cap-not-applied-couple-2child-renter"
+      },
+      "kind": "amount_difference",
+      "left": 2222.79,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1835.0,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-3child-renter",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": 791.73,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "benefit-cap-not-applied-couple-3child-renter"
+      },
+      "kind": "amount_difference",
+      "left": 2626.73,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1835.0,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-2child-renter-earn0",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": 387.78999999999996,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "benefit-cap-not-applied-couple-2child-renter-earn0"
+      },
+      "kind": "amount_difference",
+      "left": 2222.79,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1835.0,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-2child-renter-earn15000",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": -1801.325,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-correction-zeroes-earn15000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1801.325,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-2child-renter-earn30000",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": -1306.3250000000003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-correction-zeroes-earn30000"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1306.3250000000003,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-couple-2child-renter-earn45000",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": -11.728095238095534,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "net-earnings-taper-nic-rounding-earn45000"
+      },
+      "kind": "amount_difference",
+      "left": 799.5969047619046,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 811.3250000000002,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-single-owner-capital0",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": -424.9,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "takeup-correction-zeroes-single-owner-capital0"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 424.9,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "uk-uc-single-owner-capital16000",
+      "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
+      "description": "UK Universal Credit household award (hypothetical benefit unit)",
+      "difference": 251.29999999999998,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "capital-upper-limit-boundary-16000"
+      },
+      "kind": "amount_difference",
+      "left": 251.29999999999998,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": "household-universal-credit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "e5e40d40353f8459da4e46a9feae7279c2fecccc",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-22T04:08:26Z",
+    "generated_by": "scripts/run_comparison.py::uk-universal-credit-ukmod",
+    "oracle": {
+      "euromod_country": "UK",
+      "euromod_dataset": "training_data",
+      "euromod_release": "B2026.03",
+      "euromod_system": "UK_2026",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "uk-universal-credit",
+  "summary": {
+    "comparison_count": 19,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 2,
+        "unexplained": 0,
+        "upstream_engine_gap": 9
+      },
+      "dispositions_file": "dispositions/uk-universal-credit.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 42.105263,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 8,
+    "mismatch_count": 11,
+    "mismatches_by_concept": [
+      {
+        "count": 11,
+        "value": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 11,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 11,
+        "value": "household-universal-credit"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 19,
+      "match_rate": 42.105263,
+      "match_weight": 8,
+      "mismatch_weight": 11
+    }
+  }
 }

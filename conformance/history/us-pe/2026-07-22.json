@@ -1,0 +1,13 @@
+{
+  "schema": "axiom_oracles.conformance_snapshot.v1",
+  "date": "2026-07-22",
+  "jurisdiction": "us-pe",
+  "oracle": "policyengine-us_1.767.3/us",
+  "policies_in_scope": 137,
+  "covered": 69,
+  "covered_pct": 50.365,
+  "excluded": 11,
+  "unexplained_total": 0,
+  "axiom_attributed_open": 0,
+  "conformant": false
+}

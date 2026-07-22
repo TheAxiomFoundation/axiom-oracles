@@ -23,12 +23,116 @@ targets:
     scope:
       type: country
       geoid: BE
+  gettsim:
+    scope:
+      type: country
+      geoid: DE
   accessnyc:
     scope:
       type: census_place
       geoid: "3651000"
 
 concepts:
+  de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly:
+    description: Germany employee health-insurance contribution, monthly (including the average Zusatzbeitrag in the health leg)
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: &de_country_scope
+      type: country
+      geoid: DE
+    targets:
+      euromod:
+        name: tsceehl_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.kranken.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly:
+    description: Germany employee pension-insurance contribution, monthly
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tsceepi_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.rente.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly:
+    description: Germany employee unemployment-insurance contribution, monthly
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tsceeui_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.arbeitslosen.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly:
+    description: Germany employee long-term-care-insurance contribution, monthly
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tsceeci_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.pflege.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual:
+    description: Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tin_s
+        scope: *de_country_scope
+      gettsim:
+        name:
+          - einkommensteuer.betrag_y_sn
+          - solidaritätszuschlag.betrag_y_sn
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#kindergeld_monthly:
+    description: Germany Kindergeld paid to the household recipient, monthly
+    category: benefits
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: bch00_s
+        scope: *de_country_scope
+      gettsim:
+        name: kindergeld.betrag_m
+        scope: *de_country_scope
+
   be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding:
     description: Belgium worker PIT before withholding
     category: tax
@@ -2556,4 +2660,366 @@ concepts:
           type: country
           geoid: US
       policyengine: nc_income_tax_before_credits
+      taxsim: siitax
+  us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability:
+    description: District of Columbia individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-DC]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: dc_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: dc_income_tax_before_credits
+      taxsim: siitax
+  us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability:
+    description: Hawaii individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-HI]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: hi_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: hi_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability:
+    description: Iowa individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-IA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ia_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ia_income_tax_before_credits
+      taxsim: siitax
+  us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability:
+    description: Indiana individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-IN]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: in_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: in_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability:
+    description: Louisiana individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-LA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: la_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: la_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability:
+    description: Montana individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MT]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: mt_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: mt_income_tax
+      taxsim: siitax
+  us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability:
+    description: New Mexico individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-NM]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: nm_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: nm_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability:
+    description: Oklahoma individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-OK]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ok_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ok_income_tax_before_credits
+      taxsim: siitax
+  us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability:
+    description: Oregon individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-OR]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: or_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: or_income_tax_before_credits
+      taxsim: siitax
+  us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability:
+    description: Rhode Island individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-RI]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ri_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ri_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability:
+    description: Wisconsin individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-WI]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: wi_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: wi_income_tax_before_credits
+      taxsim: siitax
+  us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability:
+    description: Washington RCW 82.87 capital-gains tax liability (individual core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-WA]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: wa_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: wa_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability:
+    description: New Jersey gross income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-NJ]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: nj_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: nj_main_income_tax
+      taxsim: siitax
+  us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability:
+    description: South Carolina individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: sc_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability:
+    description: Kansas individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-KS]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ks_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: ks_income_tax_before_credits
+      taxsim: siitax
+  us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability:
+    description: North Dakota individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-ND]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: nd_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: nd_income_tax_before_credits
+      taxsim: siitax
+  us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability:
+    description: Pennsylvania personal income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-PA]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: pa_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: pa_income_tax_before_forgiveness
+      taxsim: siitax
+  us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability:
+    description: Missouri individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MO]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: mo_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: mo_income_tax_before_credits
+      taxsim: siitax
+  us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability:
+    description: Arkansas individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-AR]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ar_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: ar_income_tax_before_non_refundable_credits_unit
+      taxsim: siitax
+  us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability:
+    description: Mississippi individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MS]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ms_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: ms_income_tax_before_credits_unit
+      taxsim: siitax
+  us-nh:policies/income_tax/pilot_liability_pipeline#nh_pit_pilot_income_tax_liability:
+    description: New Hampshire Chapter 77 repeal-result liability (no tax imposed after repeal, not an active zero-rate schedule)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-NH]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: nh_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: nh_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
+    description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-WV]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: wv_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: wv_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability:
+    description: Vermont individual income tax liability (current indexed section 5822 schedule and three-percent federal-AGI minimum)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-VT]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: vt_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: vt_income_tax_before_non_refundable_credits
       taxsim: siitax

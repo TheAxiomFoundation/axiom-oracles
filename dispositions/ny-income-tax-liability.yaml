@@ -1,0 +1,53 @@
+schema: axiom_oracles.dispositions.v1
+suite: ny-income-tax-liability
+updated: "2026-07-21"
+# New York composed liability pipeline vs PolicyEngine (2026) and TAXSIM (2024)
+# on the six-case grid. The pipeline matches PolicyEngine ny_income_tax to the
+# cent on all six cases (it shares the DTF-indexed brackets, standard deduction,
+# and the section 601(d) supplemental recapture), so the PolicyEngine leg needs
+# no disposition. Against TAXSIM's 2024 law year, the two low-income cases fall
+# within tolerance and the four higher cases carry an indexation-and-law vintage
+# residual dispositioned below: New York enacted rate reductions for 2026 under
+# Chapter 59 of the Laws of 2025, and the section 601(d) supplemental tax-table-
+# benefit recapture is applied on 2024 brackets in the TAXSIM run.
+entries:
+  - id: ny-taxsim-2024-rate-vintage-married-60k
+    concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
+    case_id: ny-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        For the married 60,000-dollar filer the 2026 pipeline reports 2040.80 and
+        TAXSIM 2024 reports 2084.75, a 43.95-dollar gap. There is no supplemental
+        recapture at this income, so the residual is purely the 2024-versus-2026
+        marginal-rate difference on the 43,950-dollar taxable base from the
+        Chapter 59 of the Laws of 2025 rate reductions.
+      arithmetic:
+        - expression: "2040.80 - 2084.75"
+          equals: -43.95
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 2040.8
+      right: 2084.75
+  - id: ny-taxsim-2024-rate-vintage-single-30k
+    concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
+    case_id: ny-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        For the single 30,000-dollar filer the 2026 pipeline reports 1023.00 and
+        TAXSIM 2024 reports 1045.00, a 22.00-dollar gap. There is no supplemental
+        recapture at this income, so the residual is purely the 2024-versus-2026
+        marginal-rate difference on the 22,000-dollar taxable base from the
+        Chapter 59 of the Laws of 2025 rate reductions.
+      arithmetic:
+        - expression: "1023.00 - 1045.00"
+          equals: -22.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 1023.0
+      right: 1045.0

@@ -50,7 +50,14 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 | `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v1`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), the query entity, the supplied-input surface, and the engine→input bridge — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated
-snapshots by `scripts/conformance_burndown.py`.
+snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
+regenerates the dispositions merge (and its EUROMOD-BE coverage rollup),
+appends the daily snapshot, and regenerates the scoreboard, detail, and
+burn-down atomically with every report refresh it commits
+(`scripts/commit_refreshed_report.sh`), so these derived artifacts can never
+lag a bot-pushed report. The ratchet is the exception: it is never re-pinned
+by the bot — advance it deliberately with `uv run
+scripts/conformance_ratchet.py` after a genuine improvement.
 
 ## Universe facts are generated, not hand-invented
 
@@ -264,8 +271,9 @@ Every gate has negative tests in `tests/test_conformance.py` proving it can fail
 The scoreboard/detail are derived from the committed comparison reports, so
 anything that refreshes a report must regenerate them in the same change or the
 freshness gate reds main. Interactive PRs do this by hand; the automated
-**affected-rerun** bot does it via a post-matrix `reconcile` job (see
-`comparisons/README.md` → *Affected-comparison map + rerun*, and the regression
-guard in `tests/test_affected_rerun_reconcile.py`). Both trace back to the
+**affected-rerun** bot does it per matrix leg via
+`scripts/commit_refreshed_report.sh` (see `comparisons/README.md` →
+*Affected-comparison map + rerun*, and the behavioral tests in
+`tests/test_commit_refreshed_report.py`). Both trace back to the
 2026-07-14 incident (#282), where four income-tax report refreshes redded main
 for every open PR until the scoreboard was regenerated manually.

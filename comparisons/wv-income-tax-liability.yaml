@@ -1,0 +1,25 @@
+name: wv-income-tax-liability
+title: West Virginia income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed West Virginia 2026 section 11-21-4J ordinary resident
+  wage-earner income-tax pipeline in Axiom RuleSpec against PolicyEngine
+  (wv_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at
+  its latest supported law year, 2024, on the standard six-case grid. The
+  RuleSpec separately preserves the statutory switch to section 11-21-4H from
+  2027.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: WV
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-wv-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-wv-income-tax-liability.json
+  suite: wv-income-tax-liability

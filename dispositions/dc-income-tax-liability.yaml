@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: dc-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: dc-taxsim-2024-single-30000
+    concept: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+    case_id: dc-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies the 2026 District of Columbia indexed bracket and deduction schedule, while the pinned TAXSIM leg applies 2024 law. The exact residual is therefore the documented law-vintage difference, not an Axiom-versus-PolicyEngine mismatch.
+      arithmetic:
+        - expression: "682 - 722.4"
+          equals: -40.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 682
+      right: 722.4
+  - id: dc-taxsim-2024-single-60000
+    concept: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+    case_id: dc-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies the 2026 District of Columbia indexed bracket and deduction schedule, while the pinned TAXSIM leg applies 2024 law. The exact residual is therefore the documented law-vintage difference, not an Axiom-versus-PolicyEngine mismatch.
+      arithmetic:
+        - expression: "2505.5 - 2551"
+          equals: -45.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2505.5
+      right: 2551
+  - id: dc-taxsim-2024-single-150000
+    concept: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+    case_id: dc-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies the 2026 District of Columbia indexed bracket and deduction schedule, while the pinned TAXSIM leg applies 2024 law. The exact residual is therefore the documented law-vintage difference, not an Axiom-versus-PolicyEngine mismatch.
+      arithmetic:
+        - expression: "9849.5 - 9909"
+          equals: -59.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 9849.5
+      right: 9909
+  - id: dc-taxsim-2024-married-60000
+    concept: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+    case_id: dc-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies the 2026 District of Columbia indexed bracket and deduction schedule, while the pinned TAXSIM leg applies 2024 law. The exact residual is therefore the documented law-vintage difference, not an Axiom-versus-PolicyEngine mismatch.
+      arithmetic:
+        - expression: "1561 - 1648"
+          equals: -87
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1561
+      right: 1648
+  - id: dc-taxsim-2024-married-120000
+    concept: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+    case_id: dc-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies the 2026 District of Columbia indexed bracket and deduction schedule, while the pinned TAXSIM leg applies 2024 law. The exact residual is therefore the documented law-vintage difference, not an Axiom-versus-PolicyEngine mismatch.
+      arithmetic:
+        - expression: "5994.75 - 6118"
+          equals: -123.25
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5994.75
+      right: 6118
+  - id: dc-taxsim-2024-married-300000
+    concept: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+    case_id: dc-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies the 2026 District of Columbia indexed bracket and deduction schedule, while the pinned TAXSIM leg applies 2024 law. The exact residual is therefore the documented law-vintage difference, not an Axiom-versus-PolicyEngine mismatch.
+      arithmetic:
+        - expression: "21439.875 - 21574"
+          equals: -134.12
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 21439.875
+      right: 21574

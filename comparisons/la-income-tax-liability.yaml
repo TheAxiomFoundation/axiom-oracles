@@ -1,0 +1,22 @@
+name: la-income-tax-liability
+title: Louisiana income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Louisiana resident wage-earner income-tax pipeline in
+  Axiom RuleSpec against PolicyEngine (la_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
+  (siitax) at its latest supported law year, 2024, on the standard six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: LA
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-la-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-la-income-tax-liability.json
+  suite: la-income-tax-liability

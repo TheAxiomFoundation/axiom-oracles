@@ -92,7 +92,8 @@ policies:
     output_vars:
       - ar_income_tax
     in_scope: true
-    suite: null
+    suite: ar-income-tax-liability
+    note: Covered by ar-income-tax-liability — Arkansas ordinary resident wage-earner core under Act 2 of 2026; the source-grounded Axiom pipeline matches PolicyEngine ar_income_tax_before_non_refundable_credits_unit within $1 on all six cases, while TAXSIM residuals are dispositioned as 2024 law-vintage and final-liability-scope differences.
   - id: us-pe:ar_tea
     oracle_policy_name: ar_tea
     oracle_policy_type: rules
@@ -239,7 +240,8 @@ policies:
     output_vars:
       - dc_income_tax
     in_scope: true
-    suite: null
+    suite: dc-income-tax-liability
+    note: Covered by dc-income-tax-liability — District of Columbia resident wage-earner core; the Axiom pipeline matches PolicyEngine dc_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:dc_tanf
     oracle_policy_name: dc_tanf
     oracle_policy_type: rules
@@ -407,7 +409,8 @@ policies:
     output_vars:
       - hi_income_tax
     in_scope: true
-    suite: null
+    suite: hi-income-tax-liability
+    note: Covered by hi-income-tax-liability — Hawaii resident wage-earner core; the Axiom pipeline matches PolicyEngine hi_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:hi_tanf
     oracle_policy_name: hi_tanf
     oracle_policy_type: rules
@@ -435,7 +438,8 @@ policies:
     output_vars:
       - ia_income_tax
     in_scope: true
-    suite: null
+    suite: ia-income-tax-liability
+    note: Covered by ia-income-tax-liability — Iowa resident wage-earner core; the Axiom pipeline matches PolicyEngine ia_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:id_income_tax
     oracle_policy_name: id_income_tax
     oracle_policy_type: rules
@@ -477,7 +481,8 @@ policies:
     output_vars:
       - in_income_tax
     in_scope: true
-    suite: null
+    suite: in-income-tax-liability
+    note: Covered by in-income-tax-liability — Indiana zero-529-credit resident wage-earner core; the Axiom pipeline matches PolicyEngine in_income_tax_before_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:in_tanf
     oracle_policy_name: in_tanf
     oracle_policy_type: rules
@@ -516,7 +521,8 @@ policies:
     output_vars:
       - ks_income_tax
     in_scope: true
-    suite: null
+    suite: ks-income-tax-liability
+    note: Covered by ks-income-tax-liability — Kansas resident wage-earner core; the source-grounded Axiom schedule matches PolicyEngine ks_income_tax_before_credits within one cent on all six 2026 cases, while TAXSIM residuals are fully dispositioned as 2024 law-vintage differences.
   - id: us-pe:ks_tanf
     oracle_policy_name: ks_tanf
     oracle_policy_type: rules
@@ -557,7 +563,8 @@ policies:
     output_vars:
       - la_income_tax
     in_scope: true
-    suite: null
+    suite: la-income-tax-liability
+    note: Covered by la-income-tax-liability — Louisiana resident wage-earner core; the Axiom pipeline matches PolicyEngine la_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:lifetime_learning_credit
     oracle_policy_name: lifetime_learning_credit
     oracle_policy_type: rules
@@ -658,7 +665,8 @@ policies:
     output_vars:
       - mo_income_tax
     in_scope: true
-    suite: null
+    suite: mo-income-tax-liability
+    note: Covered by mo-income-tax-liability — Missouri ordinary resident wage-earner core under the official 2026 schedule; the Axiom pipeline matches PolicyEngine mo_income_tax_before_credits within $1 on all six cases, while all TAXSIM residuals are dispositioned as 2024 law-vintage differences.
   - id: us-pe:mo_tanf
     oracle_policy_name: mo_tanf
     oracle_policy_type: rules
@@ -672,7 +680,8 @@ policies:
     output_vars:
       - ms_income_tax
     in_scope: true
-    suite: null
+    suite: ms-income-tax-liability
+    note: Covered by ms-income-tax-liability — Mississippi ordinary resident wage-earner core under section 27-7-5; the Axiom pipeline matches PolicyEngine ms_income_tax_before_credits_unit on all six 2026 cases, while TAXSIM residuals are dispositioned as the 2024 4.7-percent rate vintage.
   - id: us-pe:ms_tanf
     oracle_policy_name: ms_tanf
     oracle_policy_type: rules
@@ -686,7 +695,8 @@ policies:
     output_vars:
       - mt_income_tax
     in_scope: true
-    suite: null
+    suite: mt-income-tax-liability
+    note: Covered by mt-income-tax-liability — Montana ordinary-income resident wage-earner core; the Axiom pipeline matches PolicyEngine mt_income_tax on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:mt_tanf
     oracle_policy_name: mt_tanf
     oracle_policy_type: rules
@@ -715,7 +725,8 @@ policies:
     output_vars:
       - nd_income_tax
     in_scope: true
-    suite: null
+    suite: nd-income-tax-liability
+    note: Covered by nd-income-tax-liability — North Dakota resident wage-earner core using the Tax Commissioner's official 2026 indexed schedule; TAXSIM 2024 residuals and the repository-certified PolicyEngine-US 1.752.2 comparison pin's stale 2025 thresholds are fully dispositioned with zero unexplained differences.
   - id: us-pe:nd_tanf
     oracle_policy_name: nd_tanf
     oracle_policy_type: rules
@@ -772,14 +783,16 @@ policies:
     output_vars:
       - nh_income_tax
     in_scope: true
-    suite: null
+    suite: nh-income-tax-liability
+    note: Covered by nh-income-tax-liability — RSA Chapter 77 was repealed in its entirety effective January 1, 2025, so the 2026 result is no imposed Chapter 77 tax, not an operative zero-percent schedule. Axiom, PolicyEngine, and pinned TAXSIM 2024 return zero on all six wage-only grid cases; the TAXSIM agreement is observational because its 2024 Chapter 77 tax applied only to interest and dividends.
   - id: us-pe:nj_income_tax
     oracle_policy_name: nj_income_tax
     oracle_policy_type: rules
     output_vars:
       - nj_income_tax
     in_scope: true
-    suite: null
+    suite: nj-income-tax-liability
+    note: Covered by nj-income-tax-liability — New Jersey resident wage-earner core; the Axiom pipeline matches PolicyEngine nj_main_income_tax and pinned TAXSIM 2024 on all six 2026 grid cases.
   - id: us-pe:nj_wfnj
     oracle_policy_name: nj_wfnj
     oracle_policy_type: rules
@@ -793,7 +806,8 @@ policies:
     output_vars:
       - nm_income_tax
     in_scope: true
-    suite: null
+    suite: nm-income-tax-liability
+    note: Covered by nm-income-tax-liability — New Mexico resident wage-earner core; the Axiom pipeline matches PolicyEngine nm_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:nm_works
     oracle_policy_name: nm_works
     oracle_policy_type: rules
@@ -851,7 +865,8 @@ policies:
     output_vars:
       - ok_income_tax
     in_scope: true
-    suite: null
+    suite: ok-income-tax-liability
+    note: Covered by ok-income-tax-liability — Oklahoma resident wage-earner core; the Axiom pipeline matches PolicyEngine ok_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:ok_tanf
     oracle_policy_name: ok_tanf
     oracle_policy_type: rules
@@ -865,7 +880,8 @@ policies:
     output_vars:
       - or_income_tax
     in_scope: true
-    suite: null
+    suite: or-income-tax-liability
+    note: Covered by or-income-tax-liability — Oregon resident wage-earner core; the Axiom pipeline matches PolicyEngine or_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:or_tanf
     oracle_policy_name: or_tanf
     oracle_policy_type: rules
@@ -879,7 +895,8 @@ policies:
     output_vars:
       - pa_income_tax
     in_scope: true
-    suite: null
+    suite: pa-income-tax-liability
+    note: Covered by pa-income-tax-liability — Pennsylvania ordinary resident wage-earner core; the source-grounded Axiom pipeline matches PolicyEngine pa_income_tax_before_forgiveness and pinned TAXSIM 2024 on all six cases.
   - id: us-pe:pa_tanf
     oracle_policy_name: pa_tanf
     oracle_policy_type: rules
@@ -934,7 +951,8 @@ policies:
     output_vars:
       - ri_income_tax
     in_scope: true
-    suite: null
+    suite: ri-income-tax-liability
+    note: Covered by ri-income-tax-liability — Rhode Island resident wage-earner core; the Axiom pipeline matches PolicyEngine ri_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:ri_works
     oracle_policy_name: ri_works
     oracle_policy_type: rules
@@ -962,7 +980,8 @@ policies:
     output_vars:
       - sc_income_tax
     in_scope: true
-    suite: null
+    suite: sc-income-tax-liability
+    note: Covered by sc-income-tax-liability — South Carolina resident wage-earner core; the Axiom pipeline matches PolicyEngine sc_income_tax_before_non_refundable_credits on all six 2026 cases, while the TAXSIM residuals are fully dispositioned as the 2024-versus-Act-110-of-2026 law-vintage difference.
   - id: us-pe:sc_tanf
     oracle_policy_name: sc_tanf
     oracle_policy_type: rules
@@ -1126,7 +1145,8 @@ policies:
     output_vars:
       - vt_income_tax
     in_scope: true
-    suite: null
+    suite: vt-income-tax-liability
+    note: Covered by vt-income-tax-liability — the Axiom 2026 sections 5811/5822/5823 resident wage-earner pipeline matches PolicyEngine vt_income_tax_before_non_refundable_credits on all six cases. It applies the current annually indexed four-rate schedule and, only when federal AGI exceeds $150,000, the greater of schedule tax or the three-percent federal-AGI minimum. Pinned TAXSIM 2024 indexation-vintage residuals are dispositioned from its detailed state calculation and the official 2024 Vermont booklet and rate schedules.
   - id: us-pe:vt_reach_up
     oracle_policy_name: vt_reach_up
     oracle_policy_type: rules
@@ -1140,7 +1160,8 @@ policies:
     output_vars:
       - wa_income_tax
     in_scope: true
-    suite: null
+    suite: wa-income-tax-liability
+    note: Covered by wa-income-tax-liability — Washington RCW 82.87 long-term-capital-gains core; the Axiom pipeline matches PolicyEngine wa_income_tax_before_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
   - id: us-pe:wa_tanf
     oracle_policy_name: wa_tanf
     oracle_policy_type: rules
@@ -1155,7 +1176,8 @@ policies:
     output_vars:
       - wi_income_tax
     in_scope: true
-    suite: null
+    suite: wi-income-tax-liability
+    note: Covered by wi-income-tax-liability — Wisconsin resident wage-earner core; the source-grounded Axiom schedule applies the post-2024 statutory bases, actual CPI-U indexing, and required $10 rounding. It is within $1 of PolicyEngine wi_income_tax_before_credits on 2/6 cases; four exact residuals expose PolicyEngine's stale/unrounded 2026 bracket projection and are dispositioned as upstream oracle gaps. TAXSIM residuals are separately dispositioned as 2024 law-vintage differences.
   - id: us-pe:wi_works
     oracle_policy_name: wi_works
     oracle_policy_type: rules
@@ -1186,7 +1208,8 @@ policies:
     output_vars:
       - wv_income_tax
     in_scope: true
-    suite: null
+    suite: wv-income-tax-liability
+    note: Covered by wv-income-tax-liability — the Axiom 2026 section 11-21-4J schedule matches PolicyEngine wv_income_tax_before_non_refundable_credits on all six resident wage-earner cases; pinned TAXSIM 2024 rate-vintage residuals are dispositioned from the official 2024 instructions. The RuleSpec boundary switches to a supplied section 11-21-4H result beginning in 2027 rather than carrying the 4J schedule forward.
   - id: us-pe:wv_works
     oracle_policy_name: wv_works
     oracle_policy_type: rules

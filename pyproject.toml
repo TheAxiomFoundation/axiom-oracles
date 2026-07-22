@@ -12,6 +12,8 @@ packages = ["axiom_oracles"]
 [tool.hatch.build.targets.wheel.force-include]
 "grids/us.yaml" = "grids/us.yaml"
 "grids/be.yaml" = "grids/be.yaml"
+"grids/de.yaml" = "grids/de.yaml"
+"grids/ca.yaml" = "grids/ca.yaml"
 "grids/uk.yaml" = "grids/uk.yaml"
 "grids/README.md" = "grids/README.md"
 
@@ -50,9 +52,37 @@ taxcalc = [
 accessnyc-python = [
   "pydantic>=2.11",
 ]
+# GETTSIM (German Taxes and Transfers SIMulator) — the second, independent
+# German comparison oracle in the dual-oracle lane (rulespec-de#1). Pure Python,
+# date-parameterized, deterministic; imported lazily by the adapter, so the extra
+# is only needed to run German comparisons. NB: the PyPI distribution is
+# ``gettsim==1.2`` even though ``gettsim.__version__`` reports "1.2.1" (the
+# ttsim-backend engine version); pin the distribution. See
+# docs/gettsim-oracle-playbook.md.
+gettsim = [
+  "gettsim==1.2",
+]
 
 [project.scripts]
 axiom-oracles = "axiom_oracles.cli:cli"
+
+[tool.uv]
+# GETTSIM's ttsim-backend transitively conflicts with the PolicyEngine
+# dependency tree (the ``policyengine`` and ``policyengine-taxsim`` extras), so
+# the two cannot resolve into one environment. Declaring them conflicting lets
+# ``uv lock`` resolve each in its own fork; nothing ever installs both at once —
+# the adapter imports GETTSIM lazily and CI only syncs ``[dev]``. Run German
+# comparisons in a dedicated venv: ``uv sync --extra gettsim`` (Python 3.13).
+conflicts = [
+  [
+    { extra = "gettsim" },
+    { extra = "policyengine" },
+  ],
+  [
+    { extra = "gettsim" },
+    { extra = "taxsim" },
+  ],
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

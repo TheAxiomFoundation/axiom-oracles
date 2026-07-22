@@ -1,0 +1,174 @@
+schema: axiom_oracles.dispositions.v1
+suite: wi-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: wi-taxsim-2024-single-30000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom leg applies Wisconsin's source-grounded post-2024 bracket structure with the 2026 statutory CPI-U indexing and $10 rounding, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      upstream_url: https://www.revenue.wi.gov/WisconsinTaxBulletin/230-07-31-WTB.pdf
+      arithmetic:
+        - expression: "595.76665234375 - 635.92"
+          equals: -40.15
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 595.76665234375
+      right: 635.92
+  - id: wi-taxsim-2024-single-60000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom leg applies Wisconsin's source-grounded post-2024 bracket structure with the 2026 statutory CPI-U indexing and $10 rounding, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      upstream_url: https://www.revenue.wi.gov/WisconsinTaxBulletin/230-07-31-WTB.pdf
+      arithmetic:
+        - expression: "2074.16665234375 - 2315.39"
+          equals: -241.22
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2074.16665234375
+      right: 2315.39
+  - id: wi-taxsim-2024-single-150000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom leg applies Wisconsin's source-grounded post-2024 bracket structure with the 2026 statutory CPI-U indexing and $10 rounding, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      upstream_url: https://www.revenue.wi.gov/WisconsinTaxBulletin/230-07-31-WTB.pdf
+      arithmetic:
+        - expression: "7309.36 - 7526.26"
+          equals: -216.9
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 7309.36
+      right: 7526.26
+  - id: wi-policyengine-2026-single-150000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-single-150000
+    kind: policyengine_amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Wis. Stat. 71.06(1r), (2)(k), and (2e)(bm)-(c) require the post-2024 bracket bases to be indexed by the August 2024-to-August 2025 CPI-U change and rounded to the nearest $10. The source-grounded Axiom schedule does so; PolicyEngine 2026 projects stale middle bases and unrounded floors. This exact residual is an upstream oracle gap, not an Axiom encoding gap.
+      upstream_url: https://www.bls.gov/news.release/archives/cpi_09112025.htm
+      arithmetic:
+        - expression: "7309.36 - 7307.18701171875"
+          equals: 2.17
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 7309.36
+      right: 7307.18701171875
+  - id: wi-taxsim-2024-married-60000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom leg applies Wisconsin's source-grounded post-2024 bracket structure with the 2026 statutory CPI-U indexing and $10 rounding, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      upstream_url: https://www.revenue.wi.gov/WisconsinTaxBulletin/230-07-31-WTB.pdf
+      arithmetic:
+        - expression: "1538.213140625 - 1632.79"
+          equals: -94.58
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1538.213140625
+      right: 1632.79
+  - id: wi-policyengine-2026-married-60000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-married-60000
+    kind: policyengine_amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Wis. Stat. 71.06(1r), (2)(k), and (2e)(bm)-(c) require the post-2024 bracket bases to be indexed by the August 2024-to-August 2025 CPI-U change and rounded to the nearest $10. The source-grounded Axiom schedule does so; PolicyEngine 2026 projects stale middle bases and unrounded floors. This exact residual is an upstream oracle gap, not an Axiom encoding gap.
+      upstream_url: https://www.bls.gov/news.release/archives/cpi_09112025.htm
+      arithmetic:
+        - expression: "1538.213140625 - 1539.3494873046875"
+          equals: -1.14
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1538.213140625
+      right: 1539.3494873046875
+  - id: wi-taxsim-2024-married-120000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom leg applies Wisconsin's source-grounded post-2024 bracket structure with the 2026 statutory CPI-U indexing and $10 rounding, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      upstream_url: https://www.revenue.wi.gov/WisconsinTaxBulletin/230-07-31-WTB.pdf
+      arithmetic:
+        - expression: "5075.54240625 - 5441.73"
+          equals: -366.19
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5075.54240625
+      right: 5441.73
+  - id: wi-policyengine-2026-married-120000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-married-120000
+    kind: policyengine_amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Wis. Stat. 71.06(1r), (2)(k), and (2e)(bm)-(c) require the post-2024 bracket bases to be indexed by the August 2024-to-August 2025 CPI-U change and rounded to the nearest $10. The source-grounded Axiom schedule does so; PolicyEngine 2026 projects stale middle bases and unrounded floors. This exact residual is an upstream oracle gap, not an Axiom encoding gap.
+      upstream_url: https://www.bls.gov/news.release/archives/cpi_09112025.htm
+      arithmetic:
+        - expression: "5075.54240625 - 5072.58447265625"
+          equals: 2.96
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5075.54240625
+      right: 5072.58447265625
+  - id: wi-taxsim-2024-married-300000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom leg applies Wisconsin's source-grounded post-2024 bracket structure with the 2026 statutory CPI-U indexing and $10 rounding, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      upstream_url: https://www.revenue.wi.gov/WisconsinTaxBulletin/230-07-31-WTB.pdf
+      arithmetic:
+        - expression: "15021.11 - 15310.28"
+          equals: -289.17
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 15021.11
+      right: 15310.28
+  - id: wi-policyengine-2026-married-300000
+    concept: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+    case_id: wi-married-300000
+    kind: policyengine_amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Wis. Stat. 71.06(1r), (2)(k), and (2e)(bm)-(c) require the post-2024 bracket bases to be indexed by the August 2024-to-August 2025 CPI-U change and rounded to the nearest $10. The source-grounded Axiom schedule does so; PolicyEngine 2026 projects stale middle bases and unrounded floors. This exact residual is an upstream oracle gap, not an Axiom encoding gap.
+      upstream_url: https://www.bls.gov/news.release/archives/cpi_09112025.htm
+      arithmetic:
+        - expression: "15021.11 - 15018.15234375"
+          equals: 2.96
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 15021.11
+      right: 15018.15234375

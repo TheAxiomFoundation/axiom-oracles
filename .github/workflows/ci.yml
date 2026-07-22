@@ -32,6 +32,9 @@ jobs:
       - name: Validate per-rule verification KPI data
         run: uv run scripts/check_rule_verification.py
 
+      - name: Validate state-tax Populace projection contract
+        run: uv run scripts/check_state_tax_populace_contract.py
+
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check
 
@@ -74,3 +77,30 @@ jobs:
 
       - name: Build package
         run: uv build
+
+  # The GETTSIM adapter's live oracle tests skip when the optional dependency
+  # is absent, and the dev sync above cannot install it (the gettsim extra is
+  # a declared uv conflict fork against the policyengine/taxsim extras). This
+  # job syncs the locked gettsim fork so the statute-pinned live expectations
+  # actually gate merges — a broken adapter must not ride in on skips.
+  gettsim-live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package with the locked gettsim fork
+        run: uv sync --extra gettsim --extra dev
+
+      - name: Ensure the live tests cannot silently skip
+        run: uv run python -c "import gettsim; print('gettsim', gettsim.__version__)"
+
+      - name: GETTSIM live oracle tests
+        run: uv run pytest -q tests/test_gettsim_adapter.py

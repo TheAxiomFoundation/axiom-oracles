@@ -1,5 +1,109 @@
 {
   "case_count": 6,
+  "cases": [
+    {
+      "axiom": 356.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -28.75,
+        "match": false
+      },
+      "case_id": "az-single-30000",
+      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 356.25,
+      "taxsim_2024": 385.0
+    },
+    {
+      "axiom": 1106.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -28.75,
+        "match": false
+      },
+      "case_id": "az-single-60000",
+      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1106.25,
+      "taxsim_2024": 1135.0
+    },
+    {
+      "axiom": 3356.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -28.75,
+        "match": false
+      },
+      "case_id": "az-single-150000",
+      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 3356.25,
+      "taxsim_2024": 3385.0
+    },
+    {
+      "axiom": 712.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -57.5,
+        "match": false
+      },
+      "case_id": "az-married-60000",
+      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 712.5,
+      "taxsim_2024": 770.0
+    },
+    {
+      "axiom": 2212.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -57.5,
+        "match": false
+      },
+      "case_id": "az-married-120000",
+      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 2212.5,
+      "taxsim_2024": 2270.0
+    },
+    {
+      "axiom": 6712.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -57.5,
+        "match": false
+      },
+      "case_id": "az-married-300000",
+      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 6712.5,
+      "taxsim_2024": 6770.0
+    }
+  ],
   "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-az:policies/income_tax/pilot_liability_pipeline",
@@ -10,10 +114,10 @@
     {
       "case_id": "az-single-30000",
       "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "difference": 11.810000000000002,
+      "difference": -28.75,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "az-taxsim-2026-federal-deduction-projection-single-30000"
+        "id": "az-taxsim-2024-standard-deduction-indexation-single-30000"
       },
       "engines": [
         "axiom",
@@ -22,16 +126,16 @@
       "kind": "amount_difference",
       "left": 356.25,
       "left_engine": "axiom",
-      "right": 344.44,
+      "right": 385.0,
       "right_engine": "taxsim"
     },
     {
       "case_id": "az-single-60000",
       "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "difference": 11.809999999999945,
+      "difference": -28.75,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "az-taxsim-2026-federal-deduction-projection-single-60000"
+        "id": "az-taxsim-2024-standard-deduction-indexation-single-60000"
       },
       "engines": [
         "axiom",
@@ -40,16 +144,16 @@
       "kind": "amount_difference",
       "left": 1106.25,
       "left_engine": "axiom",
-      "right": 1094.44,
+      "right": 1135.0,
       "right_engine": "taxsim"
     },
     {
       "case_id": "az-single-150000",
       "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "difference": 11.809999999999945,
+      "difference": -28.75,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "az-taxsim-2026-federal-deduction-projection-single-150000"
+        "id": "az-taxsim-2024-standard-deduction-indexation-single-150000"
       },
       "engines": [
         "axiom",
@@ -58,16 +162,16 @@
       "kind": "amount_difference",
       "left": 3356.25,
       "left_engine": "axiom",
-      "right": 3344.44,
+      "right": 3385.0,
       "right_engine": "taxsim"
     },
     {
       "case_id": "az-married-60000",
       "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "difference": 23.629999999999995,
+      "difference": -57.5,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "az-taxsim-2026-federal-deduction-projection-married-60000"
+        "id": "az-taxsim-2024-standard-deduction-indexation-married-60000"
       },
       "engines": [
         "axiom",
@@ -76,16 +180,16 @@
       "kind": "amount_difference",
       "left": 712.5,
       "left_engine": "axiom",
-      "right": 688.87,
+      "right": 770.0,
       "right_engine": "taxsim"
     },
     {
       "case_id": "az-married-120000",
       "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "difference": 23.63000000000011,
+      "difference": -57.5,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "az-taxsim-2026-federal-deduction-projection-married-120000"
+        "id": "az-taxsim-2024-standard-deduction-indexation-married-120000"
       },
       "engines": [
         "axiom",
@@ -94,16 +198,16 @@
       "kind": "amount_difference",
       "left": 2212.5,
       "left_engine": "axiom",
-      "right": 2188.87,
+      "right": 2270.0,
       "right_engine": "taxsim"
     },
     {
       "case_id": "az-married-300000",
       "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "difference": 23.63000000000011,
+      "difference": -57.5,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "az-taxsim-2026-federal-deduction-projection-married-300000"
+        "id": "az-taxsim-2024-standard-deduction-indexation-married-300000"
       },
       "engines": [
         "axiom",
@@ -112,23 +216,30 @@
       "kind": "amount_difference",
       "left": 6712.5,
       "left_engine": "axiom",
-      "right": 6688.87,
+      "right": 6770.0,
       "right_engine": "taxsim"
     }
   ],
   "population": "case-grid",
   "provenance": {
-    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "generated": "2026-07-21",
-    "generator": "scripts/generate_state_income_tax_liability.py",
-    "note": "axiom-vs-PolicyEngine matches every case at the 2026 validation year; the mismatches array carries the axiom-vs-TAXSIM-2026 residuals, whose semantic scope differences (siitax nets credits/rebates) are dispositioned."
+    "engine": {},
+    "generated_at": "2026-07-22T03:58:39Z",
+    "generated_by": "scripts/run_comparison.py::az-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
   "suite": "az-income-tax-liability",
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_2026_match_rate": 0.0,
-    "comparison_count": 6,
+    "axiom_vs_taxsim_2024_match_rate": 0.0,
+    "comparison_count": 12,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -141,123 +252,19 @@
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 0,
+      "raw_match_rate": 50,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
-    "match_count": 0,
+    "match_count": 6,
     "mismatch_count": 6,
     "policyengine_matches": 6,
-    "taxsim_2026_matches": 0
+    "taxsim_2024_matches": 0
   },
-  "taxsim_law_year": 2026,
+  "taxsim_law_year": 2024,
   "tolerance": {
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026,
-  "cases": [
-    {
-      "axiom": 356.25,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2026": {
-        "difference": 11.810000000000002,
-        "match": false
-      },
-      "case_id": "az-single-30000",
-      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 356.25,
-      "taxsim_2026": 344.44
-    },
-    {
-      "axiom": 1106.25,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2026": {
-        "difference": 11.809999999999945,
-        "match": false
-      },
-      "case_id": "az-single-60000",
-      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 1106.25,
-      "taxsim_2026": 1094.44
-    },
-    {
-      "axiom": 3356.25,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2026": {
-        "difference": 11.809999999999945,
-        "match": false
-      },
-      "case_id": "az-single-150000",
-      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 3356.25,
-      "taxsim_2026": 3344.44
-    },
-    {
-      "axiom": 712.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2026": {
-        "difference": 23.629999999999995,
-        "match": false
-      },
-      "case_id": "az-married-60000",
-      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 712.5,
-      "taxsim_2026": 688.87
-    },
-    {
-      "axiom": 2212.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2026": {
-        "difference": 23.63000000000011,
-        "match": false
-      },
-      "case_id": "az-married-120000",
-      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 2212.5,
-      "taxsim_2026": 2188.87
-    },
-    {
-      "axiom": 6712.5,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim_2026": {
-        "difference": 23.63000000000011,
-        "match": false
-      },
-      "case_id": "az-married-300000",
-      "concept": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 6712.5,
-      "taxsim_2026": 6688.87
-    }
-  ]
+  "validation_year": 2026
 }

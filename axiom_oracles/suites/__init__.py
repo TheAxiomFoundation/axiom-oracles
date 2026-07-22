@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from .be_birth_leave import be_birth_leave_cases
+from .ca_cra_family_benefits import ca_cra_family_benefit_cases
+from .ca_cra_pdoc import ca_cra_pdoc_cases
 from .be_social_assistance import (
     be_elderly_income_support_cases,
     be_social_assistance_cases,
@@ -43,6 +45,7 @@ from .be_worker import (
     be_worker_tax_income_list_cases,
 )
 from .dk_child_youth_benefit import dk_child_youth_benefit_cases
+from .de_worker import de_worker_dual_oracle_cases
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
 from .uk_income_tax import (
@@ -85,6 +88,8 @@ from .uk_worker import (
 
 def available_suites() -> tuple[str, ...]:
     return (
+        "ca-cra-family-benefits",
+        "ca-cra-pdoc",
         "nyc-basic",
         "nyc-synthetic",
         "be-worker-pit",
@@ -118,6 +123,7 @@ def available_suites() -> tuple[str, ...]:
         "be-unemployment",
         "be-pensioner-contributions",
         "dk-child-youth-benefit",
+        "de-worker-dual-oracle",
         "uk-worker-pit",
         "uk-personal-allowance",
         "uk-worker-nic",
@@ -148,6 +154,10 @@ def available_suites() -> tuple[str, ...]:
 
 
 def load_suite(name: str):
+    if name == "ca-cra-family-benefits":
+        return ca_cra_family_benefit_cases()
+    if name == "ca-cra-pdoc":
+        return ca_cra_pdoc_cases()
     if name == "nyc-basic":
         return nyc_basic_cases()
     if name == "nyc-synthetic":
@@ -214,6 +224,8 @@ def load_suite(name: str):
         return be_pensioner_contributions_cases()
     if name == "dk-child-youth-benefit":
         return dk_child_youth_benefit_cases()
+    if name == "de-worker-dual-oracle":
+        return de_worker_dual_oracle_cases()
     if name == "uk-worker-pit":
         return uk_worker_pit_cases()
     if name == "uk-personal-allowance":
@@ -273,6 +285,8 @@ __all__ = [
     "available_suites",
     "be_article_51_forfait_cases",
     "be_birth_leave_cases",
+    "ca_cra_family_benefit_cases",
+    "ca_cra_pdoc_cases",
     "be_capital_income_tax_cases",
     "be_elderly_income_support_cases",
     "be_employer_ssc_cases",
@@ -301,6 +315,7 @@ __all__ = [
     "be_worker_ssc_cases",
     "be_worker_tax_income_list_cases",
     "dk_child_youth_benefit_cases",
+    "de_worker_dual_oracle_cases",
     "load_suite",
     "nyc_basic_cases",
     "nyc_synthetic_cases",

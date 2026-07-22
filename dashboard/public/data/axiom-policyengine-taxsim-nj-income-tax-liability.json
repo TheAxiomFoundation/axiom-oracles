@@ -1,0 +1,161 @@
+{
+  "case_count": 6,
+  "cases": [
+    {
+      "axiom": 437.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nj-single-30000",
+      "concept": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 437.5,
+      "taxsim_2024": 437.5
+    },
+    {
+      "axiom": 1767.25,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nj-single-60000",
+      "concept": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1767.25,
+      "taxsim_2024": 1767.25
+    },
+    {
+      "axiom": 7365.05,
+      "axiom_vs_policyengine": {
+        "difference": 0.00019531250018189894,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nj-single-150000",
+      "concept": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 7365.0498046875,
+      "taxsim_2024": 7365.05
+    },
+    {
+      "axiom": 1001.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nj-married-60000",
+      "concept": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1001.0,
+      "taxsim_2024": 1001.0
+    },
+    {
+      "axiom": 3744.5,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nj-married-120000",
+      "concept": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 3744.5,
+      "taxsim_2024": 3744.5
+    },
+    {
+      "axiom": 14940.1,
+      "axiom_vs_policyengine": {
+        "difference": 0.0003906250003637979,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nj-married-300000",
+      "concept": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 14940.099609375,
+      "taxsim_2024": 14940.1
+    }
+  ],
+  "concept": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-nj:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "nj_main_income_tax",
+    "taxsim": "siitax"
+  },
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-22T04:01:13Z",
+    "generated_by": "scripts/run_comparison.py::nj-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "nj-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_2024_match_rate": 100.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 12,
+    "mismatch_count": 0,
+    "policyengine_matches": 6,
+    "taxsim_2024_matches": 6
+  },
+  "taxsim_law_year": 2024,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

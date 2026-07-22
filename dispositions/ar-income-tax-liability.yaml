@@ -1,0 +1,124 @@
+schema: axiom_oracles.dispositions.v1
+suite: ar-income-tax-liability
+updated: "2026-07-16"
+entries:
+  - id: ar-taxsim-2024-single-30000
+    concept: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+    case_id: ar-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom applies the Act 2 of 2026 pre-credit schedule to 2026 completed-
+        return taxable income. The pinned TAXSIM siitax leg applies Arkansas's
+        2024 indexed schedule, deduction, and final-liability credit scope.
+      upstream_url: https://www.dfa.arkansas.gov/wp-content/uploads/2024_AR1000F_and_AR1000NR_Instructions.pdf
+      arithmetic:
+        - expression: "0.039 * (30000 - 2410) - 409.86 - 29"
+          equals: 637.15
+          tolerance: 0.02
+        - expression: "650.3 - 637.15"
+          equals: 13.15
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 650.3, right: 637.15}
+  - id: ar-taxsim-2024-single-60000
+    concept: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+    case_id: ar-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom applies the Act 2 of 2026 pre-credit schedule to 2026 completed-
+        return taxable income. The pinned TAXSIM siitax leg applies Arkansas's
+        2024 indexed schedule, deduction, and final-liability credit scope.
+      upstream_url: https://www.dfa.arkansas.gov/wp-content/uploads/2024_AR1000F_and_AR1000NR_Instructions.pdf
+      arithmetic:
+        - expression: "0.039 * (60000 - 2410) - 409.86 - 29"
+          equals: 1807.15
+          tolerance: 0.02
+        - expression: "1760.3 - 1807.15"
+          equals: -46.85
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 1760.3, right: 1807.15}
+  - id: ar-taxsim-2024-single-150000
+    concept: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+    case_id: ar-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom applies the Act 2 of 2026 pre-credit schedule to 2026 completed-
+        return taxable income. The pinned TAXSIM siitax leg applies Arkansas's
+        2024 indexed schedule, deduction, and final-liability credit scope.
+      upstream_url: https://www.dfa.arkansas.gov/wp-content/uploads/2024_AR1000F_and_AR1000NR_Instructions.pdf
+      arithmetic:
+        - expression: "0.039 * (150000 - 2410) - 87.4 - 29"
+          equals: 5639.61
+          tolerance: 0.02
+        - expression: "5377.6 - 5639.61"
+          equals: -262.01
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 5377.6, right: 5639.61}
+  - id: ar-taxsim-2024-married-60000
+    concept: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+    case_id: ar-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom applies the Act 2 of 2026 pre-credit schedule to 2026 completed-
+        return taxable income. The pinned TAXSIM siitax leg applies Arkansas's
+        2024 indexed schedule, deduction, and final-liability credit scope.
+      upstream_url: https://www.dfa.arkansas.gov/wp-content/uploads/2024_AR1000F_and_AR1000NR_Instructions.pdf
+      arithmetic:
+        - expression: "0.039 * (60000 - 4820) - 409.86 - 58 - 60"
+          equals: 1624.16
+          tolerance: 0.02
+        - expression: "1667.8 - 1624.16"
+          equals: 43.64
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 1667.8, right: 1624.16}
+  - id: ar-taxsim-2024-married-120000
+    concept: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+    case_id: ar-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom applies the Act 2 of 2026 pre-credit schedule to 2026 completed-
+        return taxable income. The pinned TAXSIM siitax leg applies Arkansas's
+        2024 indexed schedule, deduction, and final-liability credit scope.
+      upstream_url: https://www.dfa.arkansas.gov/wp-content/uploads/2024_AR1000F_and_AR1000NR_Instructions.pdf
+      arithmetic:
+        - expression: "0.039 * (120000 - 4820) - 87.4 - 58 - 60"
+          equals: 4286.62
+          tolerance: 0.02
+        - expression: "4175.1 - 4286.62"
+          equals: -111.52
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 4175.1, right: 4286.62}
+  - id: ar-taxsim-2024-married-300000
+    concept: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+    case_id: ar-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom applies the Act 2 of 2026 pre-credit schedule to 2026 completed-
+        return taxable income. The pinned TAXSIM siitax leg applies Arkansas's
+        2024 indexed schedule, deduction, and final-liability credit scope.
+      upstream_url: https://www.dfa.arkansas.gov/wp-content/uploads/2024_AR1000F_and_AR1000NR_Instructions.pdf
+      arithmetic:
+        - expression: "0.039 * (300000 - 4820) - 87.4 - 58 - 60"
+          equals: 11306.62
+          tolerance: 0.02
+        - expression: "10835.1 - 11306.62"
+          equals: -471.52
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned: {left: 10835.1, right: 11306.62}

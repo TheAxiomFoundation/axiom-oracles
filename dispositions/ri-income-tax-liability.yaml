@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: ri-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: ri-taxsim-2024-single-30000
+    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+    case_id: ri-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Rhode Island's 2026 inflation-adjusted table and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+      arithmetic:
+        - expression: "521.25 - 543.75"
+          equals: -22.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 521.25
+      right: 543.75
+  - id: ri-taxsim-2024-single-60000
+    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+    case_id: ri-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Rhode Island's 2026 inflation-adjusted table and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+      arithmetic:
+        - expression: "1646.25 - 1668.75"
+          equals: -22.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1646.25
+      right: 1668.75
+  - id: ri-taxsim-2024-single-150000
+    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+    case_id: ri-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Rhode Island's 2026 inflation-adjusted table and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+      arithmetic:
+        - expression: "5561.25 - 5614.13"
+          equals: -52.88
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5561.25
+      right: 5614.13
+  - id: ri-taxsim-2024-married-60000
+    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+    case_id: ri-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Rhode Island's 2026 inflation-adjusted table and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+      arithmetic:
+        - expression: "1042.5 - 1085.63"
+          equals: -43.13
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1042.5
+      right: 1085.63
+  - id: ri-taxsim-2024-married-120000
+    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+    case_id: ri-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Rhode Island's 2026 inflation-adjusted table and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+      arithmetic:
+        - expression: "3371.5 - 3450.51"
+          equals: -79.01
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 3371.5
+      right: 3450.51
+  - id: ri-taxsim-2024-married-300000
+    concept: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+    case_id: ri-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Rhode Island's 2026 inflation-adjusted table and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+      arithmetic:
+        - expression: "14918.54 - 15012.36"
+          equals: -93.82
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 14918.54
+      right: 15012.36

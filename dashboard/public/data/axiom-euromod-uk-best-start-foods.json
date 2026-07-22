@@ -242,10 +242,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "e5e40d40353f8459da4e46a9feae7279c2fecccc",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T23:05:07Z",
+    "generated_at": "2026-07-22T04:05:44Z",
     "generated_by": "scripts/run_comparison.py::uk-best-start-foods-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -257,10 +257,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "0ce171c919cbb8a40adf921f7fce02b3fb15738d"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

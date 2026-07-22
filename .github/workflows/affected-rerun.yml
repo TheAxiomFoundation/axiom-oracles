@@ -11,13 +11,27 @@ name: Affected suite rerun
 #   report provenance.rulespecs     the SHA each report last ran against
 #   scripts/select_affected_suites  diffs current repo HEADs vs those SHAs
 #
+# Each matrix job commits its refreshed report via
+# scripts/commit_refreshed_report.sh, which atomically regenerates every
+# derived, CI-validated artifact (dispositioned reports + the EUROMOD-BE
+# coverage rollup, conformance scoreboard + detail + history snapshot,
+# burn-down, freshness), self-checks the tree against ci.yml's
+# staleness gates, and rebuilds the commit from scratch on the current tip on
+# every push attempt so concurrent sibling pushes can't leave main stale or
+# conflicted. The ratchet (conformance/ratchet.yaml) is never re-pinned from
+# this bot path — re-pinning after a genuine improvement stays a deliberate
+# human action, and a genuine regression is MEANT to fail ci.yml's ratchet
+# gate on main.
+#
 # See scripts/select_affected_suites.py and comparisons/README.md.
 
 on:
   workflow_dispatch:
     inputs:
       force_all:
-        description: "Rerun every mapped suite regardless of freshness"
+        description: >-
+          Rerun every CI-runnable mapped suite regardless of freshness
+          (manual parameter suites are reported, not dispatched)
         required: false
         default: "false"
   repository_dispatch:
@@ -90,25 +104,35 @@ jobs:
 
       - name: Select stale-affected suites
         id: select
+        # One code path for both modes: the selector validates the map's
+        # dispatch names (registry name or explicit null — anything else
+        # fails loudly), dedups, and emits matrix/count/manual_count/manual
+        # as $GITHUB_OUTPUT lines. Dispatching dashboard suite keys or
+        # parameter-lane names crashed ~50 legs/run with "unknown comparison".
         run: |
+          args=(--heads-json heads.json --format github)
           if [ "${{ inputs.force_all }}" = "true" ]; then
-            matrix=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          m = json.loads(Path("comparisons/affected_map.json").read_text())
-          names = [e["suite"] for e in m["suites"] if e.get("repos")]
-          print(json.dumps({"include": [{"name": n} for n in names]}))
-          PY
-          )
-          else
-            matrix=$(python3 scripts/select_affected_suites.py \
-              --heads-json heads.json --format matrix)
+            args+=(--force-all)
           fi
-          count=$(python3 -c "import json,sys; print(len(json.loads(sys.argv[1])['include']))" "$matrix")
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-          echo "count=$count" >> "$GITHUB_OUTPUT"
-          echo "Selected $count suite(s) to rerun:" >> "$GITHUB_STEP_SUMMARY"
-          python3 -c "import json,sys; [print('-',x['name']) for x in json.loads(sys.argv[1])['include']]" "$matrix" >> "$GITHUB_STEP_SUMMARY" || true
+          python3 scripts/select_affected_suites.py "${args[@]}" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize selection
+        run: |
+          count='${{ steps.select.outputs.count }}'
+          manual_count='${{ steps.select.outputs.manual_count }}'
+          {
+            echo "Selected $count CI-runnable suite(s) to rerun:"
+            python3 -c "import json,sys; [print('-', x['name']) for x in json.loads(sys.argv[1])['include']]" \
+              '${{ steps.select.outputs.matrix }}' || true
+            if [ "$manual_count" != "0" ]; then
+              echo ""
+              echo "$manual_count stale suite(s) have no CI-runnable registry name and await the manual parameter lane (scripts/run_parameter_comparisons.py):"
+              for s in ${{ steps.select.outputs.manual }}; do echo "- $s"; done
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$manual_count" != "0" ]; then
+            echo "::warning::$manual_count stale parameter suite(s) need the manual lane: ${{ steps.select.outputs.manual }}"
+          fi
 
   rerun:
     needs: select
@@ -127,7 +151,7 @@ jobs:
           path: axiom-oracles
           # Pin the default branch explicitly so the commit step pushes to a
           # real branch (schedule/repository_dispatch would otherwise leave a
-          # detached HEAD, breaking the pull/push below).
+          # detached HEAD, breaking the fetch/reset/push in the commit script).
           ref: ${{ github.event.repository.default_branch }}
 
       - name: Checkout axiom-encode
@@ -193,157 +217,12 @@ jobs:
           ln -sfn "$AXIOM_RULES_REPO" "$HOME/axiom-rules"
           python3 scripts/run_comparison.py ${{ matrix.name }} --summary
 
-      - name: Refresh freshness data
+      - name: Commit refreshed report + derived conformance artifacts
         working-directory: axiom-oracles
+        # Regenerates freshness + scoreboard/detail/history/burn-down with the
+        # report, self-checks against ci.yml's staleness gates, and retries by
+        # rebuilding on the current tip (never rebasing) across sibling pushes.
+        # Fails loudly if the push never lands.
         run: |
-          python3 scripts/check_vacuous_gate.py || true
-
-      - name: Commit refreshed report
-        working-directory: axiom-oracles
-        run: |
-          if git diff --quiet -- dashboard/public/data/; then
-            echo "no report changes for ${{ matrix.name }}"
-            exit 0
-          fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard/public/data/
-          git commit -m "data: refresh ${{ matrix.name }} (affected rerun $(date +%Y-%m-%d))"
-          # Serialize commits across the matrix: rebase onto any sibling push.
-          branch="${{ github.event.repository.default_branch }}"
-          for attempt in 1 2 3 4 5; do
-            git pull --rebase origin "$branch" && \
-              git push origin "HEAD:$branch" && break || sleep $((RANDOM % 10 + 5))
-          done
-
-  # ---------------------------------------------------------------------------
-  # Reconcile the report-derived aggregates ONCE, after every affected suite has
-  # pushed its refreshed report.
-  #
-  # Why a separate job and not per-leg: the `rerun` matrix above commits raw
-  # comparison reports (dashboard/public/data/<suite>.json), but the conformance
-  # scoreboard + per-policy detail and the freshness registry are computed from
-  # the WHOLE committed report set. A matrix leg only ever sees a partial view
-  # (its own refresh plus whichever siblings happened to land first), so
-  # regenerating those aggregates inside a leg would race — the last push would
-  # win with a partial-view aggregate. Doing it here, once, on the post-matrix
-  # tip, is the only place the full report set is visible.
-  #
-  # Why it matters: without this, a refreshed report leaves
-  # conformance/scoreboard.json + conformance/detail/<jur>.json (and their
-  # dashboard mirrors) stale, and CI's `conformance_scoreboard.py --check` gate
-  # reds main for EVERY open PR until someone regenerates by hand. That is
-  # exactly what happened on 2026-07-14 — the il/ky/oh/va income-tax refreshes
-  # turned main red and were fixed reactively in #282. This job makes that fix
-  # systemic. It mirrors the post-matrix `rule-coverage` commit job in
-  # comparisons.yml.
-  reconcile:
-    needs: [select, rerun]
-    # Run whenever the matrix ran at all: even if some legs failed (rerun is a
-    # fail-fast:false matrix, so one bad leg fails the whole job), the legs that
-    # succeeded may have pushed reports that now need reconciling — hence
-    # always(). Still gated on select having actually selected ≥1 suite.
-    if: always() && needs.select.result == 'success' && needs.select.outputs.count != '0'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout axiom-oracles (default branch)
-        uses: actions/checkout@v4
-        with:
-          # Pin the default branch so we start from the post-matrix tip and can
-          # push the reconciled aggregates back to a real branch.
-          ref: ${{ github.event.repository.default_branch }}
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.14"
-
-      - uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
-
-      - name: Install axiom-oracles (dev extras only)
-        # The aggregate generators read committed JSON/YAML only — no rules
-        # engine, no PolicyEngine, no populace artifact — so the same light dev
-        # env CI uses for the --check gates is exactly enough here.
-        run: uv sync --extra dev
-
-      - name: Regenerate report-derived aggregates and push
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          branch="${{ github.event.repository.default_branch }}"
-          # Every committed artifact CI derives from the reports (the euromod-be
-          # rollup lives outside dashboard/public/data, so list it explicitly).
-          paths=(
-            conformance/
-            dashboard/public/data/
-            axiom_oracles/data/euromod_be_coverage.json
-          )
-          # The exact report-derived CI gates (same semantics main enforces):
-          # check_vacuous_gate ignores only the volatile top-level freshness
-          # timestamp — per-suite report timestamps still count.
-          report_derived_gates() {
-            uv run scripts/apply_dispositions.py --check \
-              && uv run scripts/conformance_scoreboard.py --check \
-              && uv run scripts/check_vacuous_gate.py --check \
-              && uv run scripts/conformance_burndown.py --check
-          }
-          for attempt in 1 2 3 4 5; do
-            # Regenerate against the freshest tip, so the aggregates we push
-            # provably match the reports at the commit we push onto — no
-            # rebase-stale window.
-            git fetch --quiet origin "$branch"
-            git reset --quiet --hard "origin/$branch"
-            # If the committed aggregates already pass the gates at this tip,
-            # main is green — stop without churning a no-op commit (a bare
-            # top-level freshness-timestamp bump never lands here).
-            if report_derived_gates; then
-              echo "aggregates already consistent with the refreshed reports"
-              exit 0
-            fi
-            # Something is stale — regenerate every report-derived aggregate.
-            # Order matters: apply_dispositions rewrites the reports (idempotently
-            # — run_comparison.py already merged them at generation time), so it
-            # runs first; freshness + scoreboard then read the merged reports;
-            # the burn-down reads the committed history. check_vacuous_gate exits
-            # non-zero on config-schema problems even in write mode; tolerate it
-            # here so the post-regen validation below decides what that means.
-            uv run scripts/apply_dispositions.py       # reports + euromod-be coverage rollup
-            uv run scripts/check_vacuous_gate.py || true  # dashboard/public/data/freshness.json
-            uv run scripts/conformance_scoreboard.py   # conformance/{scoreboard,detail/*}.json (+ mirrors)
-            uv run scripts/conformance_burndown.py     # dashboard/public/data/conformance_burndown.json
-            # Only push a tree that actually greens the gates. If regeneration
-            # did NOT fix them, the red is not derivation lag (e.g. a schema
-            # error in a comparison config) — pushing would only add a noise
-            # commit on top of a main that stays red for the same reason. Fail
-            # here instead, loudly, with nothing pushed.
-            if ! report_derived_gates; then
-              echo "regenerated aggregates still fail the gates — not derivation" \
-                   "lag; refusing to push (fix the underlying error on main)" >&2
-              exit 1
-            fi
-            git add "${paths[@]}"
-            git commit -m "data: reconcile conformance aggregates (affected rerun $(date +%Y-%m-%d))"
-            if git push origin "HEAD:$branch"; then
-              exit 0
-            fi
-            echo "attempt $attempt: push rejected (sibling landed); retrying"
-            sleep $((RANDOM % 10 + 5))
-          done
-          echo "reconcile failed to push after retries" >&2
-          exit 1
-
-      - name: Verify the derived-artifact gates are green
-        # After reconcile, the artifact-consistency gates MUST pass — if they
-        # don't, the reconcile didn't do its job and we want a loud failure here
-        # rather than a red main for the next PR. (A genuine conformance
-        # regression is caught separately by the ratchet gate in main CI, which
-        # is a real signal for a human and intentionally not auto-fixed here.)
-        run: |
-          uv run scripts/apply_dispositions.py --check
-          uv run scripts/conformance_scoreboard.py --check
-          uv run scripts/check_vacuous_gate.py --check
-          uv run scripts/conformance_burndown.py --check
+          scripts/commit_refreshed_report.sh "${{ matrix.name }}" \
+            "${{ github.event.repository.default_branch }}"

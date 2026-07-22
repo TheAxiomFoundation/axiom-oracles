@@ -1,0 +1,1666 @@
+schema_version: axiom.state_tax_populace_contract.v1
+validation_year: 2026
+population:
+  country: us
+  year: 2024
+  repo_id: policyengine/populace-us
+  filename: populace_us_2024.h5
+  revision: populace-us-2024-f0af251-703bd81a565c-20260620T201958Z
+  sha256: 16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f
+  built_with: 1.729.0
+population_scope:
+  unit: tax_unit
+  geography_source: household_state_fips
+  residency_model: household_state_as_full_year_residence
+  inclusion: all_positive_weight_routed_tax_units
+  filtered_slices_allowed: false
+  evidence: >-
+    The certified Populace artifact supplies current household state but not a
+    full residency history. This campaign explicitly models household state as
+    full-year residence and includes every positive-weight routed tax unit;
+    filtered slices remain forbidden until stable source-backed predicates are
+    implemented and independently reviewed.
+registry_source: scripts/generate_state_income_tax_liability.py
+jurisdictions:
+- state: CA
+  fips: '06'
+  taxsim_state_code: 5
+  jurisdiction: us-ca
+  program: us-ca:policies/income_tax/pilot_liability_pipeline
+  output: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
+  policyengine:
+    target: ca_income_tax_before_refundable_credits
+    tolerance: 5.0
+    relative_tolerance: 0.02
+  status: blocked
+  evidence: us-ca/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_5
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_floor_6
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_5
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_bracket_rate_6
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_personal_exemption_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ca:policies/income_tax/pilot_liability_pipeline#input.ca_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: NY
+  fips: '36'
+  taxsim_state_code: 33
+  jurisdiction: us-ny
+  program: us-ny:policies/income_tax/pilot_liability_pipeline
+  output: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
+  policyengine:
+    target: ny_income_tax
+    tolerance: 5.0
+    relative_tolerance: 0.02
+  status: blocked
+  evidence: us-ny/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_5
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_floor_6
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_5
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_bracket_rate_6
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ny:policies/income_tax/pilot_liability_pipeline#input.ny_pit_pilot_supplied_supplemental_recapture
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: IL
+  fips: '17'
+  taxsim_state_code: 14
+  jurisdiction: us-il
+  program: us-il:policies/income_tax/pilot_liability_pipeline
+  output: us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability
+  policyengine:
+    target: il_income_tax_before_refundable_credits
+    tolerance: 5.0
+    relative_tolerance: 0.02
+  status: blocked
+  evidence: us-il/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_allowable_exemption_count
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_filing_status_joint
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_supplied_base_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_supplied_income_tax_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-il:policies/income_tax/pilot_liability_pipeline#input.il_pit_pilot_supplied_personal_exemption
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: MA
+  fips: '25'
+  taxsim_state_code: 22
+  jurisdiction: us-ma
+  program: us-ma:policies/income_tax/pilot_liability_pipeline
+  output: us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability
+  policyengine:
+    target: ma_income_tax
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ma/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ma:policies/income_tax/pilot_liability_pipeline#input.ma_pit_pilot_filing_status_head_of_household
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ma:policies/income_tax/pilot_liability_pipeline#input.ma_pit_pilot_filing_status_joint
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ma:policies/income_tax/pilot_liability_pipeline#input.ma_pit_pilot_part_b_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ma:policies/income_tax/pilot_liability_pipeline#input.ma_pit_pilot_supplied_fica_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ma:policies/income_tax/pilot_liability_pipeline#input.ma_pit_pilot_supplied_indexed_surtax_threshold
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ma:policies/income_tax/pilot_liability_pipeline#input.ma_pit_pilot_supplied_part_b_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ma:policies/income_tax/pilot_liability_pipeline#input.ma_pit_pilot_supplied_surtax_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: OH
+  fips: '39'
+  taxsim_state_code: 36
+  jurisdiction: us-oh
+  program: us-oh:policies/income_tax/pilot_liability_pipeline
+  output: us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability
+  policyengine:
+    target: oh_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-oh/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_excess_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_exemption_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_first_bracket_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_no_tax_threshold
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-oh:policies/income_tax/pilot_liability_pipeline#input.oh_pit_pilot_supplied_personal_exemption
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: UT
+  fips: '49'
+  taxsim_state_code: 45
+  jurisdiction: us-ut
+  program: us-ut:policies/income_tax/pilot_liability_pipeline
+  output: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+  policyengine:
+    target: ut_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: ready
+  evidence: RuleSpec accepts one completed-return Utah taxable-income boundary and imports the statutory 4.45% rate. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of ut_income_tax_before_credits for all 1,251 positive-weight routed Utah tax units, with no differences above the $1 tolerance.
+  inputs:
+  - slot: us-ut:policies/income_tax/pilot_liability_pipeline#input.ut_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: Utah Code 59-10-104 imposes tax on state taxable income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine ut_taxable_income is a direct upstream dependency of the distinct comparison target ut_income_tax_before_credits; rulespec-us#955 and the full-Populace probe reviewed this exact relationship.
+    policyengine_variable: ut_taxable_income
+    policyengine_relationship: upstream
+  relations: []
+- state: VA
+  fips: '51'
+  taxsim_state_code: 47
+  jurisdiction: us-va
+  program: us-va:policies/income_tax/pilot_liability_pipeline
+  output: us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability
+  policyengine:
+    target: va_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-va/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_floor_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_bracket_rate_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_deductions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-va:policies/income_tax/pilot_liability_pipeline#input.va_pit_pilot_supplied_exemptions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: NE
+  fips: '31'
+  taxsim_state_code: 28
+  jurisdiction: us-ne
+  program: us-ne:policies/income_tax/pilot_liability_pipeline
+  output: us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability
+  policyengine:
+    target: ne_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ne/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_floor_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_floor_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_floor_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_floor_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_rate_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_rate_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_rate_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_bracket_rate_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ne:policies/income_tax/pilot_liability_pipeline#input.ne_pit_pilot_supplied_deductions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: DE
+  fips: '10'
+  taxsim_state_code: 8
+  jurisdiction: us-de
+  program: us-de:policies/income_tax/pilot_liability_pipeline
+  output: us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability
+  policyengine:
+    target: de_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-de/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-de:policies/income_tax/pilot_liability_pipeline#input.de_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: MD
+  fips: '24'
+  taxsim_state_code: 21
+  jurisdiction: us-md
+  program: us-md:policies/income_tax/pilot_liability_pipeline
+  output: us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability
+  policyengine:
+    target: md_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-md/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-md:policies/income_tax/pilot_liability_pipeline#input.md_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-md:policies/income_tax/pilot_liability_pipeline#input.md_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-md:policies/income_tax/pilot_liability_pipeline#input.md_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-md:policies/income_tax/pilot_liability_pipeline#input.md_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-md:policies/income_tax/pilot_liability_pipeline#input.md_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-md:policies/income_tax/pilot_liability_pipeline#input.md_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: ME
+  fips: '23'
+  taxsim_state_code: 20
+  jurisdiction: us-me
+  program: us-me:policies/income_tax/pilot_liability_pipeline
+  output: us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability
+  policyengine:
+    target: me_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-me/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-me:policies/income_tax/pilot_liability_pipeline#input.me_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-me:policies/income_tax/pilot_liability_pipeline#input.me_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-me:policies/income_tax/pilot_liability_pipeline#input.me_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-me:policies/income_tax/pilot_liability_pipeline#input.me_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-me:policies/income_tax/pilot_liability_pipeline#input.me_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-me:policies/income_tax/pilot_liability_pipeline#input.me_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: MN
+  fips: '27'
+  taxsim_state_code: 24
+  jurisdiction: us-mn
+  program: us-mn:policies/income_tax/pilot_liability_pipeline
+  output: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
+  policyengine:
+    target: mn_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-mn/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-mn:policies/income_tax/pilot_liability_pipeline#input.mn_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mn:policies/income_tax/pilot_liability_pipeline#input.mn_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mn:policies/income_tax/pilot_liability_pipeline#input.mn_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mn:policies/income_tax/pilot_liability_pipeline#input.mn_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mn:policies/income_tax/pilot_liability_pipeline#input.mn_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mn:policies/income_tax/pilot_liability_pipeline#input.mn_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: CT
+  fips: 09
+  taxsim_state_code: 7
+  jurisdiction: us-ct
+  program: us-ct:policies/income_tax/pilot_liability_pipeline
+  output: us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability
+  policyengine:
+    target: ct_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ct/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ct:policies/income_tax/pilot_liability_pipeline#input.ct_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: AL
+  fips: '01'
+  taxsim_state_code: 1
+  jurisdiction: us-al
+  program: us-al:policies/income_tax/pilot_liability_pipeline
+  output: us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability
+  policyengine:
+    target: al_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-al/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_excess_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_exemption_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_first_bracket_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_no_tax_threshold
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-al:policies/income_tax/pilot_liability_pipeline#input.al_pit_pilot_supplied_personal_exemption
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: ID
+  fips: '16'
+  taxsim_state_code: 13
+  jurisdiction: us-id
+  program: us-id:policies/income_tax/pilot_liability_pipeline
+  output: us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability
+  policyengine:
+    target: id_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-id/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-id:policies/income_tax/pilot_liability_pipeline#input.id_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-id:policies/income_tax/pilot_liability_pipeline#input.id_pit_pilot_supplied_excess_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-id:policies/income_tax/pilot_liability_pipeline#input.id_pit_pilot_supplied_exemption_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-id:policies/income_tax/pilot_liability_pipeline#input.id_pit_pilot_supplied_first_bracket_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-id:policies/income_tax/pilot_liability_pipeline#input.id_pit_pilot_supplied_no_tax_threshold
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-id:policies/income_tax/pilot_liability_pipeline#input.id_pit_pilot_supplied_personal_exemption
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: KY
+  fips: '21'
+  taxsim_state_code: 18
+  jurisdiction: us-ky
+  program: us-ky:policies/income_tax/pilot_liability_pipeline
+  output: us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability
+  policyengine:
+    target: ky_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ky/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_excess_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_exemption_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_first_bracket_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_no_tax_threshold
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ky:policies/income_tax/pilot_liability_pipeline#input.ky_pit_pilot_supplied_personal_exemption
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: AZ
+  fips: '04'
+  taxsim_state_code: 3
+  jurisdiction: us-az
+  program: us-az:policies/income_tax/pilot_liability_pipeline
+  output: us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability
+  policyengine:
+    target: az_income_tax
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-az/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-az:policies/income_tax/pilot_liability_pipeline#input.az_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: GA
+  fips: '13'
+  taxsim_state_code: 11
+  jurisdiction: us-ga
+  program: us-ga:policies/income_tax/pilot_liability_pipeline
+  output: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+  policyengine:
+    target: ga_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ga/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ga:policies/income_tax/pilot_liability_pipeline#input.ga_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: MI
+  fips: '26'
+  taxsim_state_code: 23
+  jurisdiction: us-mi
+  program: us-mi:policies/income_tax/pilot_liability_pipeline
+  output: us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability
+  policyengine:
+    target: mi_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-mi/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mi:policies/income_tax/pilot_liability_pipeline#input.mi_pit_pilot_supplied_personal_exemptions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: NC
+  fips: '37'
+  taxsim_state_code: 34
+  jurisdiction: us-nc
+  program: us-nc:policies/income_tax/pilot_liability_pipeline
+  output: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+  policyengine:
+    target: nc_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-nc/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_nonrefundable_credit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: DC
+  fips: '11'
+  taxsim_state_code: 9
+  jurisdiction: us-dc
+  program: us-dc:policies/income_tax/pilot_liability_pipeline
+  output: us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability
+  policyengine:
+    target: dc_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-dc/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-dc:policies/income_tax/pilot_liability_pipeline#input.dc_pit_pilot_supplied_taxable_income_subtraction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: HI
+  fips: '15'
+  taxsim_state_code: 12
+  jurisdiction: us-hi
+  program: us-hi:policies/income_tax/pilot_liability_pipeline
+  output: us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability
+  policyengine:
+    target: hi_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-hi/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_taxable_income_subtraction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: IA
+  fips: '19'
+  taxsim_state_code: 16
+  jurisdiction: us-ia
+  program: us-ia:policies/income_tax/pilot_liability_pipeline
+  output: us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability
+  policyengine:
+    target: ia_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ia/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ia:policies/income_tax/pilot_liability_pipeline#input.ia_pit_pilot_supplied_taxable_income_subtraction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: IN
+  fips: '18'
+  taxsim_state_code: 15
+  jurisdiction: us-in
+  program: us-in:policies/income_tax/pilot_liability_pipeline
+  output: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+  policyengine:
+    target: in_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-in/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-in:policies/income_tax/pilot_liability_pipeline#input.in_pit_pilot_supplied_taxable_income_subtraction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: LA
+  fips: '22'
+  taxsim_state_code: 19
+  jurisdiction: us-la
+  program: us-la:policies/income_tax/pilot_liability_pipeline
+  output: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
+  policyengine:
+    target: la_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-la/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-la:policies/income_tax/pilot_liability_pipeline#input.la_pit_pilot_supplied_taxable_income_subtraction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: MT
+  fips: '30'
+  taxsim_state_code: 27
+  jurisdiction: us-mt
+  program: us-mt:policies/income_tax/pilot_liability_pipeline
+  output: us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability
+  policyengine:
+    target: mt_income_tax
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-mt/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_floor_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_floor_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_rate_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_bracket_rate_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mt:policies/income_tax/pilot_liability_pipeline#input.mt_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: NM
+  fips: '35'
+  taxsim_state_code: 32
+  jurisdiction: us-nm
+  program: us-nm:policies/income_tax/pilot_liability_pipeline
+  output: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
+  policyengine:
+    target: nm_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-nm/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nm:policies/income_tax/pilot_liability_pipeline#input.nm_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: OK
+  fips: '40'
+  taxsim_state_code: 37
+  jurisdiction: us-ok
+  program: us-ok:policies/income_tax/pilot_liability_pipeline
+  output: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
+  policyengine:
+    target: ok_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ok/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ok:policies/income_tax/pilot_liability_pipeline#input.ok_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: OR
+  fips: '41'
+  taxsim_state_code: 38
+  jurisdiction: us-or
+  program: us-or:policies/income_tax/pilot_liability_pipeline
+  output: us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability
+  policyengine:
+    target: or_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-or/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-or:policies/income_tax/pilot_liability_pipeline#input.or_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-or:policies/income_tax/pilot_liability_pipeline#input.or_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-or:policies/income_tax/pilot_liability_pipeline#input.or_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-or:policies/income_tax/pilot_liability_pipeline#input.or_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: RI
+  fips: '44'
+  taxsim_state_code: 40
+  jurisdiction: us-ri
+  program: us-ri:policies/income_tax/pilot_liability_pipeline
+  output: us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability
+  policyengine:
+    target: ri_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ri/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ri:policies/income_tax/pilot_liability_pipeline#input.ri_pit_pilot_modified_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ri:policies/income_tax/pilot_liability_pipeline#input.ri_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ri:policies/income_tax/pilot_liability_pipeline#input.ri_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ri:policies/income_tax/pilot_liability_pipeline#input.ri_pit_pilot_supplied_deductions_and_exemptions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ri:policies/income_tax/pilot_liability_pipeline#input.ri_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: NJ
+  fips: '34'
+  taxsim_state_code: 31
+  jurisdiction: us-nj
+  program: us-nj:policies/income_tax/pilot_liability_pipeline
+  output: us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability
+  policyengine:
+    target: nj_main_income_tax
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-nj/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nj:policies/income_tax/pilot_liability_pipeline#input.nj_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: SC
+  fips: '45'
+  taxsim_state_code: 41
+  jurisdiction: us-sc
+  program: us-sc:policies/income_tax/pilot_liability_pipeline
+  output: us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability
+  policyengine:
+    target: sc_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-sc/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-sc:policies/income_tax/pilot_liability_pipeline#input.sc_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: KS
+  fips: '20'
+  taxsim_state_code: 17
+  jurisdiction: us-ks
+  program: us-ks:policies/income_tax/pilot_liability_pipeline
+  output: us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability
+  policyengine:
+    target: ks_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ks/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ks:policies/income_tax/pilot_liability_pipeline#input.ks_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: ND
+  fips: '38'
+  taxsim_state_code: 35
+  jurisdiction: us-nd
+  program: us-nd:policies/income_tax/pilot_liability_pipeline
+  output: us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability
+  policyengine:
+    target: nd_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-nd/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-nd:policies/income_tax/pilot_liability_pipeline#input.nd_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nd:policies/income_tax/pilot_liability_pipeline#input.nd_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nd:policies/income_tax/pilot_liability_pipeline#input.nd_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-nd:policies/income_tax/pilot_liability_pipeline#input.nd_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: PA
+  fips: '42'
+  taxsim_state_code: 39
+  jurisdiction: us-pa
+  program: us-pa:policies/income_tax/pilot_liability_pipeline
+  output: us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability
+  policyengine:
+    target: pa_income_tax_before_forgiveness
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-pa/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-pa:policies/income_tax/pilot_liability_pipeline#input.pa_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: MO
+  fips: '29'
+  taxsim_state_code: 26
+  jurisdiction: us-mo
+  program: us-mo:policies/income_tax/pilot_liability_pipeline
+  output: us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability
+  policyengine:
+    target: mo_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-mo/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-mo:policies/income_tax/pilot_liability_pipeline#input.mo_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mo:policies/income_tax/pilot_liability_pipeline#input.mo_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mo:policies/income_tax/pilot_liability_pipeline#input.mo_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-mo:policies/income_tax/pilot_liability_pipeline#input.mo_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: AR
+  fips: '05'
+  taxsim_state_code: 4
+  jurisdiction: us-ar
+  program: us-ar:policies/income_tax/pilot_liability_pipeline
+  output: us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_liability
+  policyengine:
+    target: ar_income_tax_before_non_refundable_credits_unit
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ar/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_bracket_adjustment
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ar:policies/income_tax/pilot_liability_pipeline#input.ar_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: MS
+  fips: '28'
+  taxsim_state_code: 25
+  jurisdiction: us-ms
+  program: us-ms:policies/income_tax/pilot_liability_pipeline
+  output: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability
+  policyengine:
+    target: ms_income_tax_before_credits_unit
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-ms/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-ms:policies/income_tax/pilot_liability_pipeline#input.ms_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: NH
+  fips: '33'
+  taxsim_state_code: 30
+  jurisdiction: us-nh
+  program: us-nh:policies/income_tax/pilot_liability_pipeline
+  output: us-nh:policies/income_tax/pilot_liability_pipeline#nh_pit_pilot_income_tax_liability
+  policyengine:
+    target: nh_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: ready
+  evidence: us-nh/policies/income_tax/pilot_liability_pipeline.test.yaml proves the 2026 repeal-result pipeline has no runtime inputs.
+  inputs: []
+  relations: []
+- state: WV
+  fips: '54'
+  taxsim_state_code: 49
+  jurisdiction: us-wv
+  program: us-wv:policies/income_tax/pilot_liability_pipeline
+  output: us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability
+  policyengine:
+    target: wv_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-wv/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_section_4h_schedule_tax
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wv:policies/income_tax/pilot_liability_pipeline#input.wv_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: VT
+  fips: '50'
+  taxsim_state_code: 46
+  jurisdiction: us-vt
+  program: us-vt:policies/income_tax/pilot_liability_pipeline
+  output: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
+  policyengine:
+    target: vt_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-vt/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_bracket_base
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_bracket_floor
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_federal_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_marginal_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_minimum_tax_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_minimum_tax_threshold
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#input.vt_pit_pilot_taxpayer_is_included
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations:
+  - slot: us-vt:policies/income_tax/pilot_liability_pipeline#relation.vt_pit_pilot_taxpayer_of_tax_unit
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+- state: WI
+  fips: '55'
+  taxsim_state_code: 50
+  jurisdiction: us-wi
+  program: us-wi:policies/income_tax/pilot_liability_pipeline
+  output: us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability
+  policyengine:
+    target: wi_income_tax_before_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-wi/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_floor_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_floor_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_floor_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_floor_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_rate_1
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_rate_2
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_rate_3
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_bracket_rate_4
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wi:policies/income_tax/pilot_liability_pipeline#input.wi_pit_pilot_supplied_taxable_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: WA
+  fips: '53'
+  taxsim_state_code: 48
+  jurisdiction: us-wa
+  program: us-wa:policies/income_tax/pilot_liability_pipeline
+  output: us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability
+  policyengine:
+    target: wa_income_tax_before_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-wa/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-wa:policies/income_tax/pilot_liability_pipeline#input.wa_pit_pilot_supplied_additional_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wa:policies/income_tax/pilot_liability_pipeline#input.wa_pit_pilot_supplied_additional_threshold
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wa:policies/income_tax/pilot_liability_pipeline#input.wa_pit_pilot_supplied_base_rate
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wa:policies/income_tax/pilot_liability_pipeline#input.wa_pit_pilot_supplied_charitable_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wa:policies/income_tax/pilot_liability_pipeline#input.wa_pit_pilot_supplied_standard_deduction
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-wa:policies/income_tax/pilot_liability_pipeline#input.wa_pit_pilot_supplied_washington_capital_gains
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
+- state: CO
+  fips: 08
+  taxsim_state_code: 6
+  jurisdiction: us-co
+  program: us-co:policies/income_tax/pilot_liability_pipeline
+  output: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
+  policyengine:
+    target: co_income_tax_before_non_refundable_credits
+    tolerance: 1.0
+    relative_tolerance: 0.0
+  status: blocked
+  evidence: us-co/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  inputs:
+  - slot: us-co:policies/income_tax/pilot_liability_pipeline#input.co_pit_pilot_adjusted_gross_income
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-co:policies/income_tax/pilot_liability_pipeline#input.co_pit_pilot_supplied_additions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-co:policies/income_tax/pilot_liability_pipeline#input.co_pit_pilot_supplied_federal_deductions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  - slot: us-co:policies/income_tax/pilot_liability_pipeline#input.co_pit_pilot_supplied_subtractions
+    source_kind: blocked
+    status: blocked
+    evidence: See jurisdiction evidence.
+  relations: []
