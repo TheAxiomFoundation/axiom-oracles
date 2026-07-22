@@ -2629,7 +2629,7 @@ concepts:
       policyengine: dc_income_tax_before_credits
       taxsim: siitax
   us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability:
-    description: Hawaii individual income tax liability (ordinary resident wage-earner core)
+    description: Hawaii 2026 individual income tax before nonrefundable credits under the complete HRS 235-51(a)-(c) schedules and the subsection (f) computation from completed Form N-11 worksheet line 10
     category: tax
     comparison: amount
     tolerance: 1

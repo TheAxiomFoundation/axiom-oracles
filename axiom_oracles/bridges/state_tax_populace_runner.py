@@ -635,6 +635,13 @@ def calculate_policyengine_projection_inputs(
                 or ((slot.policyengine_variable,) if slot.policyengine_variable else ())
             )
         }
+        person_variables.update(
+            variable
+            for slot in jurisdiction.inputs
+            if slot.policyengine_transform
+            == "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10"
+            for variable in slot.policyengine_variables[1:]
+        )
         person_sums: dict[str, list[float]] = {}
         if person_variables:
             person_sums = _reviewed_person_sums(
@@ -744,6 +751,35 @@ def calculate_policyengine_projection_inputs(
                     )
                     for long_value, short_value in zip(
                         long_term, short_term, strict=True
+                    )
+                ]
+            elif (
+                slot.policyengine_transform
+                == "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10"
+            ):
+                if len(source_variables) != 2:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: completed capital-gains worksheet transform "
+                        "requires TaxUnit net gain and Person long-term gain"
+                    )
+                net_values = _array_values(
+                    sim.calculate(source_variables[0], period=year)
+                )
+                long_term_values = person_sums[source_variables[1]]
+                if len(net_values) != len(tax_unit_ids):
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: PolicyEngine boundary {source_variables[0]!r} "
+                        f"returned {len(net_values)} rows for {len(tax_unit_ids)} "
+                        "tax units"
+                    )
+                projected = [
+                    _apply_projection_transform(
+                        (net_value, long_term_value),
+                        transform=slot.policyengine_transform,
+                        label=slot.slot,
+                    )
+                    for net_value, long_term_value in zip(
+                        net_values, long_term_values, strict=True
                     )
                 ]
             else:
@@ -1341,6 +1377,23 @@ def _apply_projection_transform(
         long_term = _finite_number(value[0], label=f"{label}:long_term")
         short_term = _finite_number(value[1], label=f"{label}:short_term")
         return max(0.0, min(long_term, long_term + short_term))
+    if (
+        transform
+        == "tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10"
+    ):
+        if not isinstance(value, tuple) or len(value) != 2:
+            raise StateTaxPopulationRoutingError(
+                f"{label}: completed capital-gains worksheet transform requires "
+                "exact (TaxUnit net gain, Person-summed long-term gain) values"
+            )
+        net_gain = _finite_number(value[0], label=f"{label}:net_capital_gain")
+        long_term = _finite_number(
+            value[1], label=f"{label}:long_term_capital_gains"
+        )
+        # PolicyEngine does not model the intervening Hawaii adjustments or
+        # Form N-158 subtraction.  Clamp its modeled line-8 proxy to the
+        # completed-return line-10 boundary's fail-closed nonnegative domain.
+        return max(0.0, min(net_gain, long_term))
     if transform in {
         "filing_status_is_separate",
         "filing_status_joint_or_surviving_spouse",

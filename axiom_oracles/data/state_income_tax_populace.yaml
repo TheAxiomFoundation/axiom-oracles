@@ -875,29 +875,38 @@ jurisdictions:
     target: hi_income_tax_before_non_refundable_credits
     tolerance: 1.0
     relative_tolerance: 0.0
-  status: blocked
-  evidence: us-hi/policies/income_tax/pilot_liability_pipeline.test.yaml is a bounded grid only; full-Populace sources are not certified.
+  status: ready
+  evidence: HRS section 235-51 supplies the complete 2026 individual schedules and capital-gain alternative, while the official Form N-11 instructions define the completed worksheet line-10 boundary after Hawaii gain adjustments and any Form N-158 subtraction. Independent statutory reconstruction and full certified-Populace review covered all 1,519 positive-weight routed Hawaii TaxUnits, all five filing statuses, every regular schedule band, and every subsection (f) min/max/final-selector branch. PolicyEngine does not model the intervening Hawaii adjustments or Form N-158, so its reviewed proxy clamps the lesser of net capital gain and the strict Person-summed long-term gain to zero. No unit exceeded the source-faithful $1 tolerance; maximum absolute difference was $0.7903125007.
   inputs:
-  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_adjusted_gross_income
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_bracket_base
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_bracket_floor
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_marginal_rate
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
-  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_supplied_taxable_income_subtraction
-    source_kind: blocked
-    status: blocked
-    evidence: See jurisdiction evidence.
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_state_taxable_income
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: HRS section 235-51 applies the regular schedules and subsection (f) alternative to Hawaii taxable income. PolicyEngine hi_taxable_income is a direct upstream dependency of the distinct hi_income_tax_before_non_refundable_credits target, and the reviewed RuleSpec accepts that completed-return amount without reconstructing deductions or exemptions.
+    policyengine_variable: hi_taxable_income
+    policyengine_relationship: upstream
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_filing_status_joint_or_surviving_spouse
+    source_kind: derived
+    status: ready
+    evidence: HRS section 235-51(a) uses one schedule for joint returns and surviving spouses. The reviewed strict transform derives that classification from the upstream PolicyEngine filing_status enum and rejects noncanonical values.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_or_surviving_spouse
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_filing_status_head_of_household
+    source_kind: derived
+    status: ready
+    evidence: HRS section 235-51(b) supplies the head-of-household schedule. The reviewed strict transform derives that classification from the same upstream filing_status enum; single and married-separate filers fall through to section 235-51(c).
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_head_of_household
+  - slot: us-hi:policies/income_tax/pilot_liability_pipeline#input.hi_pit_pilot_capital_gains_worksheet_line_10
+    source_kind: derived
+    status: ready
+    evidence: Official Form N-11 worksheet line 10 is the completed-return boundary after the line-8 lesser-of, line-9 Form N-158 subtraction, and nonpositive stop rule. PolicyEngine does not model the Hawaii adjustments or Form N-158, so the reviewed oracle proxy uses max(0, min(TaxUnit net_capital_gain, strict Person-summed long_term_capital_gains)). The state-specific projector validates certified Person identity, order, cardinality, and every Person-to-TaxUnit link before aggregation; both sources are upstream of the distinct tax target and no tax result is fed back.
+    policyengine_variables:
+    - net_capital_gain
+    - long_term_capital_gains
+    policyengine_relationship: upstream
+    policyengine_transform: tax_unit_net_and_person_sum_to_capital_gains_worksheet_line_10
   relations: []
 - state: IA
   fips: '19'

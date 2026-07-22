@@ -1,9 +1,11 @@
 name: hi-income-tax-liability
 title: Hawaii income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares the composed Hawaii resident wage-earner income-tax pipeline in
-  Axiom RuleSpec against PolicyEngine (hi_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
-  (siitax) at its latest supported law year, 2024, on the standard six-case grid.
+  Compares Hawaii's complete 2026 HRS 235-51 individual schedules and the
+  subsection (f) computation from completed Form N-11 capital-gains worksheet
+  line 10 in Axiom RuleSpec against PolicyEngine
+  (hi_income_tax_before_non_refundable_credits), plus TAXSIM (siitax) at its
+  latest supported law year, 2024, on the standard grid.
 
 runner:
   type: state-income-tax-liability-grid

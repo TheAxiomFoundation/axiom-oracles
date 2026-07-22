@@ -13,9 +13,9 @@ hand-computed cases. Forty-three modules are intentionally narrow pilots and New
 Hampshire is a grounded repeal-to-zero module. The initial pilots exposed 255
 explicit caller-supplied inputs; reviewed promotions for Georgia, Iowa, Illinois,
 Indiana, Kansas, Louisiana, Michigan, North Carolina, Pennsylvania, South
-Carolina, Utah, Virginia, Arizona, Oklahoma, Alabama, Connecticut, Delaware, New
-Mexico, West Virginia, Montana, Ohio, New Jersey, and Vermont reduce the current
-contract to 184 inputs and one explicit relation. Most
+Carolina, Utah, Virginia, Arizona, Oklahoma, Alabama, Connecticut, Delaware,
+Hawaii, New Mexico, West Virginia, Montana, Ohio, New Jersey, and Vermont reduce
+the current contract to 183 inputs and one explicit relation. Most
 remaining inputs are completed-return boundaries or schedule values, including
 adjusted or taxable income, deductions, exemptions, credits, bracket selection,
 recapture, and state-specific capital-gain facts.
@@ -75,7 +75,7 @@ routed tax unit. Filtered slices are forbidden by the v1 contract until stable,
 source-backed exclusion predicates and per-reason ledgers are implemented and
 independently reviewed.
 
-Delaware and Montana are the current ready-state projections that cross a
+Delaware, Hawaii, and Montana are the current ready-state projections that cross a
 PolicyEngine entity boundary. Delaware validates certified Person identity,
 order, cardinality, and every TaxUnit link before projecting separate taxable
 income at Person grain, summing the combined taxable-income candidate to
@@ -93,6 +93,14 @@ members and unknown tax-unit links, and only then sums the allowlisted Montana
 taxable-income, long-term-gain, and short-term-gain arrays to TaxUnit. The net
 long-term amount is reconstructed as `max(0, min(sum(LTCG), sum(LTCG) +
 sum(STCG)))`; no generic Person-to-TaxUnit transform is exposed.
+Hawaii uses the same fail-closed Person identity and membership projector only
+for the source-required sum of `long_term_capital_gains`; taxable income, net
+capital gain, and filing status remain TaxUnit-grain upstream boundaries. The
+RuleSpec accepts completed Form N-11 capital-gains worksheet line 10 after
+Hawaii adjustments and any Form N-158 subtraction. PolicyEngine does not model
+those intervening amounts, so the reviewed oracle proxy supplies
+`max(0, min(net_capital_gain, sum(long_term_capital_gains)))` and fails closed
+on identity, membership, or nonfinite-value drift.
 
 ## National denominator
 
@@ -139,7 +147,8 @@ uv run --extra policyengine scripts/audit_state_tax_populace.py \
 ```
 
 Execute all currently ready states (Alabama, Arizona, Connecticut, Delaware,
-Georgia, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan, Montana, New Mexico, North
+Georgia, Hawaii, Iowa, Illinois, Indiana, Kansas, Louisiana, Michigan, Montana,
+New Mexico, North
 Carolina, New Hampshire, New Jersey, Ohio, Oklahoma, Pennsylvania, South
 Carolina, Utah, Virginia, Vermont, and West Virginia; later states remain blocked
 until their source-backed projection contracts land):
