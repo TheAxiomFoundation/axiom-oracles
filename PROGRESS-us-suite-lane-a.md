@@ -32,6 +32,34 @@ empirically against the binary:
   AGI↔v10, CDCC↔v24 (with the 2026 gap note), and the summed
   `us:tax/payroll#employee_fica`↔tfica scope.
 
+## Done: axiom↔TAXSIM intersection lane + triage (2026-07-22)
+
+New `co-tax-intersection-taxsim` suite: all 10 shared axiom/TAXSIM concepts
+over the full 1,201-unit certified Colorado ECPS population. First run
+9,470/12,010 match (78.9%), zero axiom execution errors; the state slice
+reproduces `co-state-income-tax-taxsim` exactly. Unblocking the dormant
+full-federal bridge required: excluding 26/1411 everywhere
+(axiom-encode#1213, 911/a vs 911/a/1 duplicate rule), dropping the bridge
+`self_employment_income` shim in favor of encoded 1402/b, aggregation-only
+supply of the 1402/b tax-unit leaves, and correcting the
+tax_before_credits mapping v19→v28.
+
+Triage state (dispositions/co-tax-intersection-taxsim.yaml, 837/2,540 rows
+classified with verified arithmetic):
+- upstream_engine_gap: CTC (205, TAXSIM v22 = 500×depx exactly) and EITC
+  (49, v25=0 with children) — the 2026 child-credit machinery gap.
+- explained_residual: standard deduction (20, exact 63(f) $2,050/$1,650
+  increments; TAXSIM input has no blindness column) and liability rows
+  that decompose into component classes − niit − addmed within $15 (265).
+- axiom_encoding_gap: uncapped OASDI (198 rows, axiom = flat 7.65% of
+  wages with no 3121(a)(1) cap — axiom-encode#1214) and the SECA-chain
+  rows (100, pending pull-one-case).
+- Raw, fingerprinted in axiom-oracles#304 with pull-one-case
+  instructions: AMT axiom-high (64 rows, 63/64 with large LTCG, median
+  $24k), tax-before-credits continuum (521), taxable income (197),
+  liability residual (365), state liability (530, same TABOR/credit
+  mechanisms as the dedicated suite).
+
 ## Done: OH (Ohio)
 
 - rulespec-us: `us-oh/policies/income_tax/pilot_liability_pipeline` (separate PR,

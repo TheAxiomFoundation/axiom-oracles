@@ -17,11 +17,20 @@
 #
 # Known Axiom-side scope carve-out: the composed program excludes
 # us:statutes/26/1411 (NIIT) until the upstream duplicate-rule encoding is
-# fixed (911/a and 911/a/1 both define
+# fixed (axiom-encode#1213: 911/a and 911/a/1 both define
 # foreign_earned_income_excluded_from_gross_income; see
 # _tax_oracle_imports_for_concepts in axiom_oracles/cli.py). TAXSIM's fiitax
 # includes NIIT, so units above the 1411 thresholds carry a liability
 # residual equal to TAXSIM's own `niit` output column.
+#
+# Residual bookkeeping: the mechanically verified classes are dispositioned
+# in dispositions/co-tax-intersection-taxsim.yaml (TAXSIM 2026 child-credit
+# gap, 63(f) aged/blind increments, uncapped-OASDI encoding gap
+# axiom-encode#1214, composite liability rows). The four classes still
+# fingerprinted but not pinned — AMT axiom-high with capital gains, SECA
+# drift, the tax-before-credits continuum, taxable income — are tracked
+# with pull-one-case instructions in axiom-oracles#304 and stay raw here
+# on purpose.
 
 name: co-tax-intersection-taxsim
 title: Shared tax concepts — Axiom vs TAXSIM
