@@ -58,11 +58,13 @@ policies:
       - al_income_tax
     in_scope: true
     suite: al-income-tax-liability
-    note: 'Covered by al-income-tax-liability — the Alabama composed liability pipeline (rulespec-us
-      us-al/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US al_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
-      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the section 40-18-15(a)(1) federal-income-tax
-      deduction vintage, not a PE mismatch). al_income_tax equals the before-refundable value on this grid.'
+    note: >-
+      Covered by al-income-tax-liability. The grid and certified full-Populace
+      campaign compare al_income_tax_before_non_refundable_credits; all 1,632
+      positive-weight routed Alabama tax units also have exact equality with
+      final al_income_tax in PolicyEngine-US 1.752.2. Both downstream aggregates,
+      al_non_refundable_credits and al_refundable_credits, are structurally empty
+      in that pinned 2026 model, and the schedule target is nonnegative.
   - id: us-pe:al_tanf
     oracle_policy_name: al_tanf
     oracle_policy_type: rules
@@ -107,14 +109,12 @@ policies:
     output_vars:
       - az_income_tax
     in_scope: true
-    suite: az-income-tax-liability
-    note: 'Covered by az-income-tax-liability — the Arizona composed liability pipeline (rulespec-us
-      us-az/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US az_income_tax to the cent on every grid case (the A.R.S. 43-1011 flat 2.5% tax on Arizona
-      taxable income = AGI less the 43-1041 standard deduction). az_income_tax equals
-      az_income_tax_before_refundable_credits on this childless grid (no refundable credits active). The
-      report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 2024-to-2026 standard-deduction
-      indexation vintage, not a PE mismatch.'
+    suite: null
+    note: >-
+      The az-income-tax-liability grid and full-Populace campaign validate only
+      az_income_tax_before_non_refundable_credits. Final az_income_tax also applies
+      charitable-contribution, dependent, family, increased-excise-tax, and
+      property-tax credits; 499 of 1,585 routed units differ from the narrow target.
   - id: us-pe:az_tanf
     oracle_policy_name: az_tanf
     oracle_policy_type: rules
@@ -216,8 +216,11 @@ policies:
     output_vars:
       - ct_income_tax
     in_scope: true
-    suite: ct-income-tax-liability
-    note: "Covered by ct-income-tax-liability — the Connecticut composed liability pipeline (rulespec-us us-ct/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US ct_income_tax_before_refundable_credits to the cent on every grid case (the supplied credit nets the section 12-703 personal credit and the section 12-700(b) three-per-cent phase-out recapture). The report low top-line match_count is the axiom-vs-TAXSIM-2024 vintage, not a PE mismatch."
+    suite: null
+    note: >-
+      The ct-income-tax-liability grid and full-Populace campaign validate only
+      ct_income_tax_before_refundable_credits. Final ct_income_tax additionally
+      subtracts refundable ct_eitc; 90 of 951 routed units differ from the narrow target.
   - id: us-pe:ct_tfa
     oracle_policy_name: ct_tfa
     oracle_policy_type: rules
@@ -256,8 +259,12 @@ policies:
     output_vars:
       - de_income_tax
     in_scope: true
-    suite: de-income-tax-liability
-    note: "Covered by de-income-tax-liability — the Delaware composed liability pipeline (rulespec-us us-de/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US de_income_tax_before_refundable_credits to the cent on every grid case and also matches TAXSIM-2024 (Delaware fixes its section 1102 brackets and the 3,250/6,500 standard deduction, unchanged 2024-to-2026), so the suite is 6/6 on both legs. de_income_tax nets the refundable EITC, which this section 1102/1110 core excludes."
+    suite: null
+    note: >-
+      The de-income-tax-liability grid and full-Populace campaign validate only
+      de_income_tax_before_non_refundable_credits_unit. Final de_income_tax also
+      applies personal, aged-personal, child-care, nonrefundable-EITC, and
+      refundable-EITC credits; 839 of 936 routed units differ from the narrow target.
   - id: us-pe:de_tanf
     oracle_policy_name: de_tanf
     oracle_policy_type: rules
@@ -387,8 +394,12 @@ policies:
     output_vars:
       - ga_income_tax
     in_scope: true
-    suite: ga-income-tax-liability
-    note: 'Covered by ga-income-tax-liability — the Georgia composed liability pipeline (rulespec-us us-ga/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US ga_income_tax_before_non_refundable_credits to the cent on every grid case (the O.C.G.A. 48-7-20 flat 4.99% tax on Georgia taxable net income = AGI less the 48-7-27 standard deduction). It equals the final ga_income_tax on this childless grid (no credits active). The report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg — the 5.39-to-4.99 rate step-down plus the HB463 deduction vintage — not a PE mismatch.'
+    suite: null
+    note: >-
+      The ga-income-tax-liability grid and full-Populace campaign validate only
+      ga_income_tax_before_non_refundable_credits. Final ga_income_tax also applies
+      child-care, low-income, child, and itemizer credits; 670 of 2,187 routed
+      units differ from the narrow target.
   - id: us-pe:ga_tanf
     oracle_policy_name: ga_tanf
     oracle_policy_type: rules
@@ -410,8 +421,12 @@ policies:
     output_vars:
       - hi_income_tax
     in_scope: true
-    suite: hi-income-tax-liability
-    note: Covered by hi-income-tax-liability — Hawaii resident wage-earner core; the Axiom pipeline matches PolicyEngine hi_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: >-
+      The hi-income-tax-liability grid and full-Populace campaign validate only
+      hi_income_tax_before_non_refundable_credits. Final hi_income_tax additionally
+      subtracts the food-excise, child-care, low-income-renter, and EITC refundable
+      credits; 583 of 1,519 routed units differ from the narrow target.
   - id: us-pe:hi_tanf
     oracle_policy_name: hi_tanf
     oracle_policy_type: rules
@@ -439,8 +454,12 @@ policies:
     output_vars:
       - ia_income_tax
     in_scope: true
-    suite: ia-income-tax-liability
-    note: Covered by ia-income-tax-liability — Iowa resident wage-earner core; the Axiom pipeline matches PolicyEngine ia_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: >-
+      The ia-income-tax-liability grid and full-Populace campaign validate only
+      ia_income_tax_before_credits. Final ia_income_tax also applies the exemption
+      credit, tax-exempt and reduced-tax alternatives, and refundable CDCC and EITC;
+      795 of 976 routed units differ from the narrow target.
   - id: us-pe:id_income_tax
     oracle_policy_name: id_income_tax
     oracle_policy_type: rules
@@ -464,9 +483,13 @@ policies:
     output_vars:
       - il_income_tax
     in_scope: true
-    suite: il-income-tax-liability
-    note: Covered by il-income-tax-liability — the Illinois composed liability pipeline vs PE-2026 (3-way
-      grid incl. TAXSIM); axiom matches PE-US on every case.
+    suite: null
+    note: >-
+      The il-income-tax-liability grid and full-Populace campaign validate only
+      il_income_tax_before_non_refundable_credits. Final il_income_tax also applies
+      property-tax and K-12-expense credits plus pass-through withholding,
+      pass-through-entity, EITC, and child-tax refundable credits; 855 of 2,332
+      routed units differ from the narrow target.
   - id: us-pe:il_tanf
     oracle_policy_name: il_tanf
     oracle_policy_type: rules
@@ -480,8 +503,12 @@ policies:
     output_vars:
       - in_income_tax
     in_scope: true
-    suite: in-income-tax-liability
-    note: Covered by in-income-tax-liability — Indiana zero-529-credit resident wage-earner core; the Axiom pipeline matches PolicyEngine in_income_tax_before_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: >-
+      The in-income-tax-liability grid and full-Populace campaign validate only
+      in_agi_tax. Final in_income_tax additionally applies the 529-plan credit,
+      refundable EITC, and unified elderly credit; 207 of 1,292 routed units
+      differ from the narrow target.
   - id: us-pe:in_tanf
     oracle_policy_name: in_tanf
     oracle_policy_type: rules
@@ -520,8 +547,12 @@ policies:
     output_vars:
       - ks_income_tax
     in_scope: true
-    suite: ks-income-tax-liability
-    note: Covered by ks-income-tax-liability — Kansas resident wage-earner core; the source-grounded Axiom schedule matches PolicyEngine ks_income_tax_before_credits within one cent on all six 2026 cases, while TAXSIM residuals are fully dispositioned as 2024 law-vintage differences.
+    suite: null
+    note: >-
+      The ks-income-tax-liability grid and full-Populace campaign validate only
+      ks_income_tax_before_credits. Final ks_income_tax additionally applies CDCC,
+      nonrefundable EITC, and refundable EITC; 115 of 989 routed units differ
+      from the narrow target.
   - id: us-pe:ks_tanf
     oracle_policy_name: ks_tanf
     oracle_policy_type: rules
@@ -560,8 +591,12 @@ policies:
     output_vars:
       - la_income_tax
     in_scope: true
-    suite: la-income-tax-liability
-    note: Covered by la-income-tax-liability — Louisiana resident wage-earner core; the Axiom pipeline matches PolicyEngine la_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: >-
+      The la-income-tax-liability grid and full-Populace campaign validate only
+      la_income_tax_before_non_refundable_credits. Final la_income_tax additionally
+      applies nonrefundable CDCC, refundable CDCC, and EITC; 305 of 1,847 routed
+      units differ from the narrow target.
   - id: us-pe:lifetime_learning_credit
     oracle_policy_name: lifetime_learning_credit
     oracle_policy_type: rules
@@ -646,8 +681,12 @@ policies:
     output_vars:
       - mi_income_tax
     in_scope: true
-    suite: mi-income-tax-liability
-    note: 'Covered by mi-income-tax-liability — the Michigan composed liability pipeline (rulespec-us us-mi/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US mi_income_tax_before_non_refundable_credits to the cent on every grid case (the MCL 206.51(1) flat 4.25% tax on Michigan taxable income = AGI less the 206.30 personal exemptions). It equals the final mi_income_tax on this childless grid (no credits active). The report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg — the 5,600-to-5,950 exemption indexation at the same flat rate — not a PE mismatch.'
+    suite: null
+    note: >-
+      The mi-income-tax-liability grid and full-Populace campaign validate only
+      mi_income_tax_before_non_refundable_credits. Final mi_income_tax additionally
+      subtracts EITC, home-heating, and homestead-property-tax refundable credits;
+      381 of 1,788 routed units differ from the narrow target.
   - id: us-pe:mn_income_tax
     oracle_policy_name: mn_income_tax
     oracle_policy_type: rules
@@ -704,8 +743,13 @@ policies:
     output_vars:
       - mt_income_tax
     in_scope: true
-    suite: mt-income-tax-liability
-    note: Covered by mt-income-tax-liability — Montana ordinary-income resident wage-earner core; the Axiom pipeline matches PolicyEngine mt_income_tax on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: >-
+      The mt-income-tax-liability grid and full-Populace campaign validate only
+      mt_income_tax_before_non_refundable_credits_joint. Final mt_income_tax selects
+      Person-grain separate liability when mt_files_separately and subtracts EITC
+      and the elderly-homeowner-or-renter credit in both filing branches; 153 of
+      1,171 routed units differ from the narrow target.
   - id: us-pe:mt_tanf
     oracle_policy_name: mt_tanf
     oracle_policy_type: rules
@@ -720,7 +764,13 @@ policies:
       - nc_income_tax
     in_scope: true
     suite: nc-income-tax-liability
-    note: 'Covered by nc-income-tax-liability — the North Carolina composed liability pipeline (rulespec-us us-nc/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US nc_income_tax_before_credits to the cent on every grid case (the G.S. 105-153.7 flat 3.99% tax on North Carolina taxable income = AGI less the 105-153.5(a) standard deduction). It equals the final nc_income_tax on this childless grid (no credits active). The report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg — the scheduled 4.5-to-3.99 rate step-down on an unchanged deduction — not a PE mismatch.'
+    note: >-
+      Covered by nc-income-tax-liability. The grid and certified full-Populace
+      campaign compare nc_income_tax_before_credits; all 2,169 positive-weight
+      routed North Carolina tax units also have exact equality with final
+      nc_income_tax in PolicyEngine-US 1.752.2. The only listed downstream credit
+      is the repealed nc_ctc, whose schedule amounts have been zero since 2018;
+      PolicyEngine models no refundable North Carolina income-tax credit in 2026.
   - id: us-pe:nc_tanf
     oracle_policy_name: nc_tanf
     oracle_policy_type: rules
@@ -798,8 +848,12 @@ policies:
     output_vars:
       - nj_income_tax
     in_scope: true
-    suite: nj-income-tax-liability
-    note: Covered by nj-income-tax-liability — New Jersey resident wage-earner core; the Axiom pipeline matches PolicyEngine nj_main_income_tax and pinned TAXSIM 2024 on all six 2026 grid cases.
+    suite: null
+    note: >-
+      The nj-income-tax-liability grid and full-Populace campaign validate only
+      nj_main_income_tax. Final nj_income_tax also applies the AGI filing-threshold
+      zero-tax branch and property-tax, EITC, CDCC, and child-tax refundable
+      credits; 314 of 1,693 routed units differ from the narrow target.
   - id: us-pe:nj_wfnj
     oracle_policy_name: nj_wfnj
     oracle_policy_type: rules
@@ -813,8 +867,13 @@ policies:
     output_vars:
       - nm_income_tax
     in_scope: true
-    suite: nm-income-tax-liability
-    note: Covered by nm-income-tax-liability — New Mexico resident wage-earner core; the Axiom pipeline matches PolicyEngine nm_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: >-
+      The nm-income-tax-liability grid and full-Populace campaign validate only
+      nm_income_tax_before_non_refundable_credits. Final nm_income_tax additionally
+      subtracts CDCC, CTC, medical-expense, EITC, low-income-comprehensive, and
+      property-tax refundable credits; 674 of 1,475 routed units differ from the
+      narrow target.
   - id: us-pe:nm_works
     oracle_policy_name: nm_works
     oracle_policy_type: rules
@@ -851,13 +910,12 @@ policies:
     output_vars:
       - oh_income_tax
     in_scope: true
-    suite: oh-income-tax-liability
-    note: 'Covered by oh-income-tax-liability — the Ohio composed liability pipeline (rulespec-us
-      us-oh/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US oh_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
-      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the Ohio 2024-to-2026 schedule vintage, not a
-      PE mismatch). oh_income_tax nets the Ohio refundable credits, which are zero for these childless
-      wage cases.'
+    suite: null
+    note: >-
+      The oh-income-tax-liability grid and full-Populace campaign validate only
+      oh_income_tax_before_non_refundable_credits. Final oh_income_tax additionally
+      applies EITC, CDCC, senior, retirement, non-public-school, exemption, and
+      joint-filing credits; 481 of 2,144 routed units differ from the narrow target.
   - id: us-pe:oh_owf
     oracle_policy_name: oh_owf
     oracle_policy_type: rules
@@ -871,8 +929,12 @@ policies:
     output_vars:
       - ok_income_tax
     in_scope: true
-    suite: ok-income-tax-liability
-    note: Covered by ok-income-tax-liability — Oklahoma resident wage-earner core; the Axiom pipeline matches PolicyEngine ok_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: >-
+      The ok-income-tax-liability grid and full-Populace campaign validate only
+      ok_income_tax_before_credits. Final ok_income_tax additionally applies the
+      child-care-or-child-tax credit plus refundable property-tax, sales-tax, and
+      EITC branches; 396 of 1,292 routed units differ from the narrow target.
   - id: us-pe:ok_tanf
     oracle_policy_name: ok_tanf
     oracle_policy_type: rules
@@ -903,8 +965,12 @@ policies:
     output_vars:
       - pa_income_tax
     in_scope: true
-    suite: pa-income-tax-liability
-    note: Covered by pa-income-tax-liability — Pennsylvania ordinary resident wage-earner core; the source-grounded Axiom pipeline matches PolicyEngine pa_income_tax_before_forgiveness and pinned TAXSIM 2024 on all six cases.
+    suite: null
+    note: >-
+      The pa-income-tax-liability grid and full-Populace campaign validate only
+      pa_income_tax_before_forgiveness. Final pa_income_tax additionally applies
+      pa_tax_forgiveness_amount and refundable CDCC and EITC; 496 of 2,457 routed
+      units differ from the narrow target.
   - id: us-pe:pa_tanf
     oracle_policy_name: pa_tanf
     oracle_policy_type: rules
@@ -991,8 +1057,12 @@ policies:
     output_vars:
       - sc_income_tax
     in_scope: true
-    suite: sc-income-tax-liability
-    note: Covered by sc-income-tax-liability — South Carolina resident wage-earner core; the Axiom pipeline matches PolicyEngine sc_income_tax_before_non_refundable_credits on all six 2026 cases, while the TAXSIM residuals are fully dispositioned as the 2024-versus-Act-110-of-2026 law-vintage difference.
+    suite: null
+    note: >-
+      The sc-income-tax-liability grid and full-Populace campaign validate only
+      sc_income_tax_before_non_refundable_credits. Final sc_income_tax additionally
+      applies CDCC, EITC, two-wage-earner, and refundable tuition credits; 184 of
+      1,457 routed units differ from the narrow target.
   - id: us-pe:sc_tanf
     oracle_policy_name: sc_tanf
     oracle_policy_type: rules
@@ -1123,26 +1193,25 @@ policies:
     output_vars:
       - ut_income_tax
     in_scope: true
-    suite: ut-income-tax-liability
-    note: 'Covered by ut-income-tax-liability — the Utah composed liability pipeline (rulespec-us
-      us-ut/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US ut_income_tax_before_credits (the pure 59-10-104 flat tax) exactly on every grid case. The
-      report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg (the 4.55-to-4.45 rate vintage
-      plus TAXSIM''s inclusion of the 59-10-1018 taxpayer credit this before-credits core excludes), not
-      a PE mismatch.'
+    suite: null
+    note: >-
+      The ut-income-tax-liability grid and full-Populace campaign validate only
+      ut_income_tax_before_credits. Final ut_income_tax also applies the taxpayer
+      credit, tax-exempt branch, EITC, retirement, Social Security, at-home-parent,
+      child, military-retirement, and 529-plan credits; 872 of 1,251 routed units
+      differ from the narrow target.
   - id: us-pe:va_income_tax
     oracle_policy_name: va_income_tax
     oracle_policy_type: rules
     output_vars:
       - va_income_tax
     in_scope: true
-    suite: va-income-tax-liability
-    note: 'Covered by va-income-tax-liability — the Virginia composed liability pipeline (rulespec-us
-      us-va/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US va_income_tax_before_non_refundable_credits exactly on every grid case (the report''s low
-      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 2024-to-2026 standard-deduction vintage,
-      not a PE mismatch). va_income_tax equals the before-non-refundable value for these childless wage
-      cases (no VA credits).'
+    suite: null
+    note: >-
+      The va-income-tax-liability grid and full-Populace campaign validate only
+      va_income_tax_before_non_refundable_credits. Final va_income_tax additionally
+      applies nonrefundable EITC, the spouse-tax adjustment, and refundable EITC;
+      419 of 1,710 routed units differ from the narrow target.
   - id: us-pe:va_tanf
     oracle_policy_name: va_tanf
     oracle_policy_type: rules
@@ -1156,8 +1225,13 @@ policies:
     output_vars:
       - vt_income_tax
     in_scope: true
-    suite: vt-income-tax-liability
-    note: Covered by vt-income-tax-liability — the Axiom 2026 sections 5811/5822/5823 resident wage-earner pipeline matches PolicyEngine vt_income_tax_before_non_refundable_credits on all six cases. It applies the current annually indexed four-rate schedule and, only when federal AGI exceeds $150,000, the greater of schedule tax or the three-percent federal-AGI minimum. Pinned TAXSIM 2024 indexation-vintage residuals are dispositioned from its detailed state calculation and the official 2024 Vermont booklet and rate schedules.
+    suite: null
+    note: >-
+      The vt-income-tax-liability grid and full-Populace campaign validate only
+      vt_income_tax_before_non_refundable_credits. Final vt_income_tax additionally
+      applies charitable and 529-plan credits, adds child-care contributions, and
+      subtracts refundable EITC, CDCC, CTC, and veteran credits; 437 of 922 routed
+      units differ from the narrow target.
   - id: us-pe:vt_reach_up
     oracle_policy_name: vt_reach_up
     oracle_policy_type: rules
@@ -1225,8 +1299,13 @@ policies:
     output_vars:
       - wv_income_tax
     in_scope: true
-    suite: wv-income-tax-liability
-    note: Covered by wv-income-tax-liability — the Axiom 2026 section 11-21-4J schedule matches PolicyEngine wv_income_tax_before_non_refundable_credits on all six resident wage-earner cases; pinned TAXSIM 2024 rate-vintage residuals are dispositioned from the official 2024 instructions. The RuleSpec boundary switches to a supplied section 11-21-4H result beginning in 2027 rather than carrying the 4J schedule forward.
+    suite: null
+    note: >-
+      The wv-income-tax-liability grid and full-Populace campaign validate only
+      wv_income_tax_before_non_refundable_credits. Final wv_income_tax additionally
+      applies low-income-family and CDCC credits plus refundable state-CTC and
+      homestead-excess-property-tax credits; 217 of 1,608 routed units differ from
+      the narrow target.
   - id: us-pe:wv_works
     oracle_policy_name: wv_works
     oracle_policy_type: rules
