@@ -565,52 +565,37 @@ def test_us_pe_state_programs_are_per_state():
 def test_us_pe_covered_programs_name_a_live_pe_suite():
     """Every covered us-pe program points at a live PolicyEngine-US suite that
     runs vs PE-2026 — the day-one registrations (federal income tax + payroll via
-    fiit-ecps, SSI, SNAP, Medicaid categorical, CA/IL/MA/OH state income
-    tax, and the per-state TANF suites)."""
+    fiit-ecps, SSI, SNAP, Medicaid categorical, reviewed state income-tax
+    comparisons, and the per-state TANF suites)."""
     universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
     live_pe_suites = {
         "fiit-ecps",
         "ssi-ecps",
         "ca-snap-ecps",
         "medicaid-magi-co-ecps",
-        "ca-income-tax-liability",
         "il-income-tax-liability",
-        "ma-income-tax-liability",
         "oh-income-tax-liability",
         "va-income-tax-liability",
         "ut-income-tax-liability",
         "al-income-tax-liability",
-        "id-income-tax-liability",
-        "ky-income-tax-liability",
-        "ne-income-tax-liability",
         "de-income-tax-liability",
-        "md-income-tax-liability",
-        "me-income-tax-liability",
-        "mn-income-tax-liability",
-        "mo-income-tax-liability",
         "ct-income-tax-liability",
         "az-income-tax-liability",
         "ga-income-tax-liability",
         "mi-income-tax-liability",
         "nc-income-tax-liability",
-        "dc-income-tax-liability",
         "hi-income-tax-liability",
         "ia-income-tax-liability",
         "in-income-tax-liability",
         "ks-income-tax-liability",
         "la-income-tax-liability",
         "mt-income-tax-liability",
-        "nd-income-tax-liability",
         "nm-income-tax-liability",
         "nj-income-tax-liability",
         "ok-income-tax-liability",
-        "or-income-tax-liability",
         "pa-income-tax-liability",
         "ms-income-tax-liability",
-        "ri-income-tax-liability",
         "sc-income-tax-liability",
-        "wa-income-tax-liability",
-        "wi-income-tax-liability",
         "wv-income-tax-liability",
         "vt-income-tax-liability",
         "al-tanf-ecps",
@@ -632,12 +617,10 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert by_name[program].suite == "fiit-ecps", program
     # SNAP is one national row registered to its canonical (largest) suite.
     assert by_name["snap"].suite == "ca-snap-ecps"
-    # State income tax: CA/IL/MA use composed grids. Colorado's reviewed
-    # population comparison stops before section 39-22-627 and credits, while
-    # New York's grid stops at section 601 main tax; neither covers its generated
-    # final state income-tax universe row.
+    # State income-tax coverage counts only a comparison that proves the final
+    # public variable. These blocked grids exercise useful narrower components,
+    # but none proves the corresponding final liability.
     assert by_name["co_income_tax"].suite is None
-    assert by_name["ca_income_tax"].suite == "ca-income-tax-liability"
     assert by_name["ny_income_tax"].suite is None
     nh_income_tax = by_name["nh_income_tax"]
     assert nh_income_tax.in_scope is False
@@ -645,6 +628,28 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert nh_income_tax.suite is None
     assert nh_income_tax.note
     assert "probe_us_nh_repealed_income_tax.py" in nh_income_tax.note
+    narrow_state_targets = {
+        "ca_income_tax": "ca_income_tax_before_refundable_credits",
+        "dc_income_tax": "dc_income_tax_before_credits",
+        "id_income_tax": "id_income_tax_before_refundable_credits",
+        "ky_income_tax": "ky_income_tax_before_refundable_credits",
+        "ma_income_tax": "ma_income_tax",
+        "md_income_tax": "md_income_tax_before_credits",
+        "me_income_tax": "me_income_tax_before_refundable_credits",
+        "mn_income_tax": "mn_income_tax_before_refundable_credits",
+        "mo_income_tax": "mo_income_tax_before_credits",
+        "nd_income_tax": "nd_income_tax_before_credits",
+        "ne_income_tax": "ne_income_tax_before_credits",
+        "or_income_tax": "or_income_tax_before_credits",
+        "ri_income_tax": "ri_income_tax_before_non_refundable_credits",
+        "wa_income_tax": "wa_income_tax_before_refundable_credits",
+        "wi_income_tax": "wi_income_tax_before_credits",
+    }
+    for final_variable, compared_surface in narrow_state_targets.items():
+        row = by_name[final_variable]
+        assert row.in_scope is True, final_variable
+        assert row.suite is None, final_variable
+        assert compared_surface in row.note, final_variable
     # Per-state TANF suites bind their state's variable (incl. renamed ones).
     assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
 
