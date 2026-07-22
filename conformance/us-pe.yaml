@@ -139,11 +139,11 @@ policies:
     output_vars:
       - ca_income_tax
     in_scope: true
-    suite: ca-income-tax-liability
-    note: 'Covered by ca-income-tax-liability — the California composed liability pipeline (rulespec-us
-      #556-#561) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US to the cent on every grid case (the
-      report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg, a law-year difference, not a
-      PE mismatch).'
+    suite: null
+    note: 'The ca-income-tax-liability suite is a six-case ordinary resident single/joint grid against
+      ca_income_tax_before_refundable_credits. It does not cover refundable credits, and its RuleSpec
+      slice also excludes the high-rate, head-of-household, AMT, and mental-health-tax branches, so it
+      does not establish final ca_income_tax liability.'
   - id: us-pe:ca_tanf
     oracle_policy_name: ca_tanf
     oracle_policy_type: rules
@@ -239,8 +239,10 @@ policies:
     output_vars:
       - dc_income_tax
     in_scope: true
-    suite: dc-income-tax-liability
-    note: Covered by dc-income-tax-liability — District of Columbia resident wage-earner core; the Axiom pipeline matches PolicyEngine dc_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: 'The dc-income-tax-liability suite is a six-case ordinary resident wage-earner grid against
+      dc_income_tax_before_credits. It does not cover nonrefundable or refundable credits or establish
+      the full-population filing-method branches required for final dc_income_tax liability.'
   - id: us-pe:dc_tanf
     oracle_policy_name: dc_tanf
     oracle_policy_type: rules
@@ -445,12 +447,10 @@ policies:
     output_vars:
       - id_income_tax
     in_scope: true
-    suite: id-income-tax-liability
-    note: 'Covered by id-income-tax-liability — the Idaho composed liability pipeline (rulespec-us
-      us-id/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US id_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
-      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 5.695-to-5.3 per cent rate-step vintage,
-      not a PE mismatch). id_income_tax nets the refundable grocery credit, excluded by the 63-3024 core.'
+    suite: null
+    note: 'The id-income-tax-liability suite is a six-case childless wage-earner grid against
+      id_income_tax_before_refundable_credits. It excludes the refundable grocery credit and does not
+      establish the public-benefit-fund and refundable-credit adjustments in final id_income_tax.'
   - id: us-pe:id_tafi
     oracle_policy_name: id_tafi
     oracle_policy_type: rules
@@ -536,12 +536,10 @@ policies:
     output_vars:
       - ky_income_tax
     in_scope: true
-    suite: ky-income-tax-liability
-    note: 'Covered by ky-income-tax-liability — the Kentucky composed liability pipeline (rulespec-us
-      us-ky/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US ky_income_tax_before_refundable_credits to the cent on every grid case (the report''s low
-      top-line match_count is the axiom-vs-TAXSIM-2024 leg, the 4.0-to-3.5 per cent rate-step plus
-      standard-deduction vintage, not a PE mismatch). ky_income_tax nets the family-size credit.'
+    suite: null
+    note: 'The ky-income-tax-liability suite is a six-case childless wage-earner grid against
+      ky_income_tax_before_refundable_credits. Its slice assumes the family-size and other credits are
+      inactive and does not cover refundable credits, so it does not establish final ky_income_tax.'
   - id: us-pe:ky_ktap
     oracle_policy_name: ky_ktap
     oracle_policy_type: rules
@@ -577,9 +575,11 @@ policies:
     output_vars:
       - ma_income_tax
     in_scope: true
-    suite: ma-income-tax-liability
-    note: Covered by ma-income-tax-liability — the Massachusetts composed liability pipeline vs PE-2026
-      (3-way grid incl. TAXSIM); axiom matches PE-US on every case.
+    suite: null
+    note: 'The ma-income-tax-liability suite compares only a six-case Part B resident wage-earner and
+      surtax grid against ma_income_tax. It assumes Part A and Part C income, additional deductions and
+      exemptions, and credits are absent and has no certified full-Populace projection, so it does not
+      establish final ma_income_tax liability.'
   - id: us-pe:ma_tafdc
     oracle_policy_name: ma_tafdc
     oracle_policy_type: rules
@@ -593,8 +593,11 @@ policies:
     output_vars:
       - md_income_tax
     in_scope: true
-    suite: md-income-tax-liability
-    note: "Covered by md-income-tax-liability — the Maryland composed liability pipeline (rulespec-us us-md/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US md_income_tax_before_refundable_credits (the STATE tax; the county income tax is a separate PE variable, excluded) to the cent on every grid case. The report low top-line match_count is the axiom-vs-TAXSIM-2024 leg — the 700-dollar-per-filer 2024-to-2026 standard-deduction vintage, TAXSIM adding no county tax here — not a PE mismatch."
+    suite: null
+    note: 'The md-income-tax-liability suite is a six-case resident wage-earner grid; the legally
+      matching campaign target is md_income_tax_before_credits. It excludes all credits, and the
+      full-Populace capital-gains-surtax comparison has unresolved oracle-law differences, so it does
+      not establish final md_income_tax.'
   - id: us-pe:md_tca
     oracle_policy_name: md_tca
     oracle_policy_type: rules
@@ -608,8 +611,11 @@ policies:
     output_vars:
       - me_income_tax
     in_scope: true
-    suite: me-income-tax-liability
-    note: "Covered by me-income-tax-liability — the Maine composed liability pipeline (rulespec-us us-me/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US me_income_tax_before_refundable_credits to the cent on every grid case. The report low top-line match_count is the axiom-vs-TAXSIM-2024 leg — the section 5111 bracket and section 5124-C standard-deduction indexation vintage — not a PE mismatch."
+    suite: null
+    note: 'The me-income-tax-liability suite is a six-case resident wage-earner grid against
+      me_income_tax_before_refundable_credits. It excludes refundable credits, and the official 2026
+      main schedule disagrees with the pinned oracle on the full population, so it does not establish
+      final me_income_tax.'
   - id: us-pe:me_tanf
     oracle_policy_name: me_tanf
     oracle_policy_type: rules
@@ -648,8 +654,10 @@ policies:
     output_vars:
       - mn_income_tax
     in_scope: true
-    suite: mn-income-tax-liability
-    note: "Covered by mn-income-tax-liability — the Minnesota composed liability pipeline (rulespec-us us-mn/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches PE-US mn_income_tax_before_refundable_credits to the cent on every grid case (the top married case carries the section 290.091 alternative minimum tax). The report low top-line match_count is the axiom-vs-TAXSIM-2024 subdivision-2d indexation vintage, not a PE mismatch."
+    suite: null
+    note: 'The mn-income-tax-liability suite is a six-case childless wage-earner grid against
+      mn_income_tax_before_refundable_credits. It excludes working-family and other refundable credits
+      and has no certified full-Populace projection, so it does not establish final mn_income_tax.'
   - id: us-pe:mn_mfip
     oracle_policy_name: mn_mfip
     oracle_policy_type: rules
@@ -664,8 +672,10 @@ policies:
     output_vars:
       - mo_income_tax
     in_scope: true
-    suite: mo-income-tax-liability
-    note: Covered by mo-income-tax-liability — Missouri ordinary resident wage-earner core under the official 2026 schedule; the Axiom pipeline matches PolicyEngine mo_income_tax_before_credits within $1 on all six cases, while all TAXSIM residuals are dispositioned as 2024 law-vintage differences.
+    suite: null
+    note: 'The mo-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
+      against mo_income_tax_before_credits. It excludes nonrefundable and refundable credits and has no
+      certified full-Populace projection, so it does not establish final mo_income_tax.'
   - id: us-pe:mo_tanf
     oracle_policy_name: mo_tanf
     oracle_policy_type: rules
@@ -724,8 +734,10 @@ policies:
     output_vars:
       - nd_income_tax
     in_scope: true
-    suite: nd-income-tax-liability
-    note: Covered by nd-income-tax-liability — North Dakota resident wage-earner core using the Tax Commissioner's official 2026 indexed schedule; TAXSIM 2024 residuals and the repository-certified PolicyEngine-US 1.752.2 comparison pin's stale 2025 thresholds are fully dispositioned with zero unexplained differences.
+    suite: null
+    note: 'The nd-income-tax-liability suite is a six-case official-schedule grid against
+      nd_income_tax_before_credits. It excludes all credits, and the pinned oracle uses stale 2025
+      thresholds on the full population, so it does not establish final nd_income_tax.'
   - id: us-pe:nd_tanf
     oracle_policy_name: nd_tanf
     oracle_policy_type: rules
@@ -746,15 +758,11 @@ policies:
     output_vars:
       - ne_income_tax
     in_scope: true
-    suite: ne-income-tax-liability
-    note: 'Covered by ne-income-tax-liability — the Nebraska composed liability pipeline (rulespec-us
-      us-ne/policies/income_tax/pilot_liability_pipeline) run 3-way vs PE-2026 and TAXSIM; axiom matches
-      PE-US ne_income_tax_before_credits (the pure 77-2715.03 four-bracket tax on Nebraska taxable income)
-      exactly on every grid case. The report''s low top-line match_count is the axiom-vs-TAXSIM-2024 leg
-      (the L.B. 754 top-rate compression and indexation vintage plus TAXSIM''s netting of the 77-2716.01
-      personal exemption credit this before-credits core excludes), not a PE mismatch. ne_income_tax
-      equals the before-credits value less the personal exemption credit and any refundable credits, none
-      active for these childless wage cases beyond the exemption credit.'
+    suite: null
+    note: 'The ne-income-tax-liability suite is a six-case single/joint schedule grid against
+      ne_income_tax_before_credits. It excludes the personal-exemption and other nonrefundable credits,
+      the federal-liability adjustment, and refundable credits, so it does not establish final
+      ne_income_tax.'
   - id: us-pe:net_investment_income_tax
     oracle_policy_name: net_investment_income_tax
     oracle_policy_type: rules
@@ -878,8 +886,10 @@ policies:
     output_vars:
       - or_income_tax
     in_scope: true
-    suite: or-income-tax-liability
-    note: Covered by or-income-tax-liability — Oregon resident wage-earner core; the Axiom pipeline matches PolicyEngine or_income_tax_before_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: 'The or-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
+      against or_income_tax_before_credits. It excludes nonrefundable and refundable credits and has no
+      certified full-Populace projection, so it does not establish final or_income_tax.'
   - id: us-pe:or_tanf
     oracle_policy_name: or_tanf
     oracle_policy_type: rules
@@ -949,8 +959,11 @@ policies:
     output_vars:
       - ri_income_tax
     in_scope: true
-    suite: ri-income-tax-liability
-    note: Covered by ri-income-tax-liability — Rhode Island resident wage-earner core; the Axiom pipeline matches PolicyEngine ri_income_tax_before_non_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: 'The ri-income-tax-liability suite is a six-case full-year resident wage-earner schedule grid
+      against ri_income_tax_before_non_refundable_credits. It excludes nonrefundable and refundable
+      credits and has no certified full-Populace projection, so it does not establish final
+      ri_income_tax.'
   - id: us-pe:ri_works
     oracle_policy_name: ri_works
     oracle_policy_type: rules
@@ -1158,8 +1171,11 @@ policies:
     output_vars:
       - wa_income_tax
     in_scope: true
-    suite: wa-income-tax-liability
-    note: Covered by wa-income-tax-liability — Washington RCW 82.87 long-term-capital-gains core; the Axiom pipeline matches PolicyEngine wa_income_tax_before_refundable_credits on all six 2026 cases, while TAXSIM residuals are separately dispositioned as 2024 vintage or scope differences.
+    suite: null
+    note: 'The wa-income-tax-liability suite is a six-case RCW 82.87 capital-gains grid against
+      wa_income_tax_before_refundable_credits. It excludes refundable credits and does not certify the
+      full-population asset-sourcing and loss-carryforward surface, so it does not establish final
+      wa_income_tax.'
   - id: us-pe:wa_tanf
     oracle_policy_name: wa_tanf
     oracle_policy_type: rules
@@ -1174,8 +1190,11 @@ policies:
     output_vars:
       - wi_income_tax
     in_scope: true
-    suite: wi-income-tax-liability
-    note: Covered by wi-income-tax-liability — Wisconsin resident wage-earner core; the source-grounded Axiom schedule applies the post-2024 statutory bases, actual CPI-U indexing, and required $10 rounding. It is within $1 of PolicyEngine wi_income_tax_before_credits on 2/6 cases; four exact residuals expose PolicyEngine's stale/unrounded 2026 bracket projection and are dispositioned as upstream oracle gaps. TAXSIM residuals are separately dispositioned as 2024 law-vintage differences.
+    suite: null
+    note: 'The wi-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid
+      against wi_income_tax_before_credits. It excludes credits and the retirement-income-exclusion
+      alternative, and the pinned oracle has stale or unrounded 2026 brackets, so it does not establish
+      final wi_income_tax.'
   - id: us-pe:wi_works
     oracle_policy_name: wi_works
     oracle_policy_type: rules
