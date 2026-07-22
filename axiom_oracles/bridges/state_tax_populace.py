@@ -77,8 +77,8 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
     }
 )
 
-# The personal-income-tax campaign covers the 43 states with a modeled PIT
-# surface plus DC.  States without an applicable broad PIT surface are absent.
+# The personal-income-tax campaign covers the 42 states with an operative 2026
+# PIT surface plus DC.  States without an applicable broad PIT surface are absent.
 EXPECTED_STATE_FIPS = {
     "AL": "01",
     "AR": "05",
@@ -108,7 +108,6 @@ EXPECTED_STATE_FIPS = {
     "NC": "37",
     "ND": "38",
     "NE": "31",
-    "NH": "33",
     "NJ": "34",
     "NM": "35",
     "NY": "36",
@@ -138,7 +137,7 @@ EXPECTED_SLOT_INVENTORY_SHA256 = (
     "16968a1ffe1c4c57db7dda305922b5a716b12c7461403ffb0a59e5abb3d7fd4a"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "750cb289782394ed2dd0a30e0666de4a9a1f47fbe48388d65d525251d29cb77b"
+    "eeef93306ecfd103fd00d370a2eeb67b08b2a54fe1b9a0d09f4b1ba58a644c02"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
     "eda4cec2643c87422ce31bb78954bda117bd41c8b40a681934035137baf5679a"
@@ -809,7 +808,7 @@ def validate_state_tax_populace_contract(
     extra_states = sorted(state_set - EXPECTED_STATE_CODES)
     if len(jurisdictions) != len(EXPECTED_STATE_CODES):
         errors.append(
-            "contract must declare exactly 44 PIT/DC jurisdictions; "
+            "contract must declare exactly 43 current-law PIT/DC jurisdictions; "
             f"found {len(jurisdictions)}"
         )
     if missing_states:

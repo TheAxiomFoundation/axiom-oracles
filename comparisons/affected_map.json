@@ -732,15 +732,6 @@
       "source": "comparisons/ne-income-tax-liability.yaml"
     },
     {
-      "suite": "nh-income-tax-liability",
-      "name": "nh-income-tax-liability",
-      "report": "axiom-policyengine-taxsim-nh-income-tax-liability.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-us"
-      ],
-      "source": "comparisons/nh-income-tax-liability.yaml"
-    },
-    {
       "suite": "nj-income-tax-liability",
       "name": "nj-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nj-income-tax-liability.json",

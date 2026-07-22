@@ -34,13 +34,13 @@ def _first_input(document: dict) -> tuple[dict, dict]:
 def test_packaged_contract_has_exact_campaign_inventory() -> None:
     contract = load_state_tax_populace_contract()
 
-    assert len(contract.jurisdictions) == 44
+    assert len(contract.jurisdictions) == 43
     assert set(contract.by_state()) == EXPECTED_STATE_CODES
     assert sum(len(item.inputs) for item in contract.jurisdictions) == 162
     assert sum(len(item.relations) for item in contract.jurisdictions) == 2
-    assert len({item.program for item in contract.jurisdictions}) == 44
-    assert len({item.output for item in contract.jurisdictions}) == 44
-    assert len({item.policyengine_target for item in contract.jurisdictions}) == 44
+    assert len({item.program for item in contract.jurisdictions}) == 43
+    assert len({item.output for item in contract.jurisdictions}) == 43
+    assert len({item.policyengine_target for item in contract.jurisdictions}) == 43
 
 
 @pytest.mark.parametrize(
@@ -119,8 +119,8 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
     summary = readiness_summary(contract)
 
     assert summary == {
-        "jurisdiction_count": 44,
-        "ready_count": 29,
+        "jurisdiction_count": 43,
+        "ready_count": 28,
         "blocked_count": 15,
         "ready_states": [
             "AL",
@@ -140,7 +140,6 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             "MS",
             "MT",
             "NC",
-            "NH",
             "NJ",
             "NM",
             "NY",
@@ -173,7 +172,6 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
                 "MS",
                 "MT",
                 "NC",
-                "NH",
                 "NJ",
                 "NM",
                 "NY",
@@ -192,9 +190,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 63,
         "blocked_relation_count": 0,
     }
-    nh = contract.by_state()["NH"]
-    assert nh.inputs == ()
-    assert nh.relations == ()
+    assert "NH" not in contract.by_state()
     expected_boundaries = {
         "AL": ["al_taxable_income"],
         "AZ": ["az_taxable_income"],
@@ -442,7 +438,7 @@ def test_contract_rejects_missing_jurisdiction_evidence() -> None:
 def test_contract_rejects_missing_or_extra_pit_state() -> None:
     missing = _document()
     missing["jurisdictions"].pop()
-    with pytest.raises(StateTaxPopulaceContractError, match="exactly 44"):
+    with pytest.raises(StateTaxPopulaceContractError, match="exactly 43"):
         validate_state_tax_populace_contract(missing)
 
     extra = _document()
