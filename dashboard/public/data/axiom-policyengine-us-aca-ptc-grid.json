@@ -1,0 +1,280 @@
+{
+  "aggregates": [
+    {
+      "compared": 6,
+      "comparison": "amount",
+      "comparison_count": 6,
+      "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "left_positive_rate": 66.66666666666667,
+      "match_count": 6,
+      "match_rate": 100.0,
+      "matched": 6,
+      "mismatch_count": 0,
+      "mismatched": 0,
+      "right_positive_rate": 66.66666666666667
+    }
+  ],
+  "case_count": 6,
+  "cases": [
+    {
+      "axiom": 15979.3725,
+      "axiom_fixture_inputs": {
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_enrolled_premium": 17000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_slcsp_benchmark_premium": 18000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_coverage_month_count": 12,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_family_size": 4,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_household_magi": 48225,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_poverty_line_for_household": 32150
+      },
+      "case_id": "ptc-150fpl-family4",
+      "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "difference": 0.00042968749949068297,
+      "filing_status": "joint",
+      "inputs": {
+        "coverage_months": 12,
+        "enrolled_premium": 17000,
+        "fpl_percentage": 150,
+        "household_size": 4,
+        "magi": 48225,
+        "poverty_line": 32150,
+        "slcsp": 18000
+      },
+      "match": true,
+      "policyengine": 15979.3720703125,
+      "policyengine_components": {
+        "used_aca_ptc": 15979.3720703125
+      }
+    },
+    {
+      "axiom": 2697.85,
+      "axiom_fixture_inputs": {
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_enrolled_premium": 5800,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_slcsp_benchmark_premium": 6000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_coverage_month_count": 12,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_family_size": 1,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_household_magi": 39125,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_poverty_line_for_household": 15650
+      },
+      "case_id": "ptc-250fpl-single",
+      "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "difference": -9.765625009094947e-05,
+      "filing_status": "single",
+      "inputs": {
+        "coverage_months": 12,
+        "enrolled_premium": 5800,
+        "fpl_percentage": 250,
+        "household_size": 1,
+        "magi": 39125,
+        "poverty_line": 15650,
+        "slcsp": 6000
+      },
+      "match": true,
+      "policyengine": 2697.85009765625,
+      "policyengine_components": {
+        "used_aca_ptc": 2697.85009765625
+      }
+    },
+    {
+      "axiom": 7680.38,
+      "axiom_fixture_inputs": {
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_enrolled_premium": 15000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_slcsp_benchmark_premium": 14000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_coverage_month_count": 12,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_family_size": 2,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_household_magi": 63450,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_poverty_line_for_household": 21150
+      },
+      "case_id": "ptc-300fpl-joint",
+      "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "difference": -0.0008593749998908606,
+      "filing_status": "joint",
+      "inputs": {
+        "coverage_months": 12,
+        "enrolled_premium": 15000,
+        "fpl_percentage": 300,
+        "household_size": 2,
+        "magi": 63450,
+        "poverty_line": 21150,
+        "slcsp": 14000
+      },
+      "match": true,
+      "policyengine": 7680.380859375,
+      "policyengine_components": {
+        "used_aca_ptc": 7680.380859375
+      }
+    },
+    {
+      "axiom": 1576.788,
+      "axiom_fixture_inputs": {
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_enrolled_premium": 7000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_slcsp_benchmark_premium": 7500,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_coverage_month_count": 12,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_family_size": 1,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_household_magi": 59470,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_poverty_line_for_household": 15650
+      },
+      "case_id": "ptc-380fpl-single",
+      "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "difference": -8.593749998908606e-05,
+      "filing_status": "single",
+      "inputs": {
+        "coverage_months": 12,
+        "enrolled_premium": 7000,
+        "fpl_percentage": 380,
+        "household_size": 1,
+        "magi": 59470,
+        "poverty_line": 15650,
+        "slcsp": 7500
+      },
+      "match": true,
+      "policyengine": 1576.7880859375,
+      "policyengine_components": {
+        "used_aca_ptc": 1576.7880859375
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_enrolled_premium": 7000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_slcsp_benchmark_premium": 7500,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_coverage_month_count": 12,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_family_size": 1,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_household_magi": 64165,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_poverty_line_for_household": 15650
+      },
+      "case_id": "ptc-410fpl-single",
+      "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "coverage_months": 12,
+        "enrolled_premium": 7000,
+        "fpl_percentage": 410,
+        "household_size": 1,
+        "magi": 64165,
+        "poverty_line": 15650,
+        "slcsp": 7500
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "used_aca_ptc": 0.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_enrolled_premium": 4800,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_annual_slcsp_benchmark_premium": 5000,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_coverage_month_count": 12,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_family_size": 1,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_household_magi": 14867.5,
+        "us:policies/aca/ptc_pipeline#input.aca_ptc_poverty_line_for_household": 15650
+      },
+      "case_id": "ptc-95fpl-single",
+      "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "coverage_months": 12,
+        "enrolled_premium": 4800,
+        "fpl_percentage": 95,
+        "household_size": 1,
+        "magi": 14867.5,
+        "poverty_line": 15650,
+        "slcsp": 5000
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "used_aca_ptc": 0.0
+      }
+    }
+  ],
+  "concept": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "ACA Premium Tax Credit",
+      "id": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "fixture": "us/policies/aca/ptc_pipeline.test.yaml",
+      "module": "us:policies/aca/ptc_pipeline",
+      "output": "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit"
+    },
+    "policyengine": {
+      "boundary": "TaxUnit annual benchmark credit capped by enrolled marketplace premium for twelve months",
+      "outputs": [
+        "used_aca_ptc"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-23T04:23:30Z",
+    "generated_by": "scripts/run_comparison.py::us-aca-ptc-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "3474e8110eb703402a3d85465d05d08314befb95"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-aca-ptc-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "comparison_count": 6,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 6,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": {}
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

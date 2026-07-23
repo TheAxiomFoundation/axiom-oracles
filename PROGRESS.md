@@ -243,7 +243,8 @@ In progress on `fed-parity/federal-grid-suites`. The configurable
 `federal-tax-liability-grid` runner, all four PolicyEngine-US 1.767.3 legs, and
 the ACA PTC, NIIT, and SECA Axiom bindings are implemented. Those three landed
 RuleSpec fixtures pass strict case/period/input validation. Additional Medicare
-remains blocked on one companion-fixture contract correction.
+remains blocked on one companion-fixture contract correction. Real dashboard
+reports now exist for the three unblocked suites.
 
 ## Done
 
@@ -272,10 +273,14 @@ remains blocked on one companion-fixture contract correction.
   `amt-single-wage-se` and substitutes completed section-1402 income. The grid
   requires $150,000 Schedule C-style profit before PolicyEngine's 0.9235 factor,
   producing $346.725 rather than $450.
+- Ran the ACA PTC, NIIT, and SECA suites through the registry with the exact
+  cached PE stack and their landed RuleSpec companions. All three are 6/6
+  matches, contain nonzero matched cases, carry exact RuleSpec SHA/oracle
+  provenance, and have committed-dashboard candidates generated from the real
+  runner. No dispositions are needed.
 
 ## Next
 
-- Run and commit the three fully landed real comparison reports.
 - Integrate the Additional Medicare companion once its exact contract case is
   corrected; then run and commit its real report.
 - Adopt the four conformance rows only after all four reports exist, regenerate
