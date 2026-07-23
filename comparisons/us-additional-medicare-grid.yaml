@@ -2,13 +2,15 @@
 #
 # Axiom boundary: the RuleSpec composition combines the section 3101(b)(2)
 # wage leg and section 1401(b)(2) self-employment leg after reducing the latter
-# threshold by wages. Its runtime SE boundary is completed TaxUnit section
-# 1402(b) income. For the GRID-CONTRACT's Schedule C-style net-profit fact, the
-# companion must therefore supply the derived 0.9235 amount; the generator
-# validates that transformation case by case.
-# Code: rulespec-us@f41f5212
-# us/policies/income_tax/additional_medicare_tax_pipeline.yaml:17-38,54-57,
-# 77-148,150-183.
+# threshold by wages. Its runtime boundary relates the TaxUnit to Persons with
+# GRID-CONTRACT gross self-employment profit and each Person's wages. The
+# imported self-employment pipeline applies the section 1402(a)(12) 0.9235
+# adjustment and section 1402(b) floor/exclusions before aggregating the
+# completed income to TaxUnit. The generator validates those raw per-Person
+# inputs case by case.
+# Code: rulespec-us@613990fd
+# us/policies/income_tax/additional_medicare_tax_pipeline.yaml:17-65,198-340;
+# us/policies/income_tax/self_employment_tax_pipeline.yaml:96-231,347-385.
 #
 # PolicyEngine binding decision: compare `additional_medicare_tax` directly.
 # It is a TaxUnit Form 8959 total that applies the 0.9% rate to combined gross

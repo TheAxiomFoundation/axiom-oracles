@@ -321,12 +321,10 @@ Additional Medicare remains uncovered on the external fixture blocker.
 ## State
 
 In progress on `fed-parity/federal-grid-suites` from prior commit `7f4fa8b`.
-The rulespec lane reports that the Additional Medicare companion now exposes
-the required gross-self-employment-profit boundary without changing the
-combined output name. This lane must verify and run that fourth suite, adopt
-its live evidence, land exactly the two requested Tier-3 scope exclusions,
-and regenerate every conformance artifact and gate at the fixed snapshot date
-`2026-07-23`.
+The Additional Medicare validator and source-boundary documentation now match
+the fixed companion's per-Person gross-self-employment-profit relation. The
+next step is the real fourth-suite run, followed by adoption, the two requested
+Tier-3 exclusions, and full fixed-date regeneration.
 
 ## Done
 
@@ -334,13 +332,19 @@ and regenerate every conformance artifact and gate at the fixed snapshot date
 - Read the rulespec completion marker identifying the gross-SE boundary fix,
   unchanged combined output, and final rulespec commit
   `7d3dcd3b4dab9dcffc4bca872ab2500c51c8a60d`.
-- Began the required full review of the Tier-3 report and local schema,
-  conformance, probe, and regeneration conventions.
+- Read all 679 lines of the Tier-3 report.
+- Traced the new Additional Medicare fixture through its imported ordinary-SE
+  relation: the head receives the neutral grid's gross SE profit and wages, a
+  joint spouse receives zero profit and spouse wages, and the imported pipeline
+  performs the 0.9235 adjustment before TaxUnit aggregation.
+- Updated the strict Additional Medicare fixture validator to require that
+  exact related-Person surface and the pipeline-prefixed international-agreement
+  inputs; the prior flat completed-income boundary is rejected.
+- Updated the comparison's source-boundary citation and added a regression test
+  for the required gross-SE relation.
 
 ## Next
 
-- Verify the fixed companion fixture and update only the Additional Medicare
-  validator/binding surface required by that executable contract.
 - Run `us-additional-medicare-grid` for real with the pinned offline stack;
   commit its report and manifest registration.
 - Adopt the fourth live conformance row and guard it as a required live suite.

@@ -160,6 +160,74 @@ def test_payroll_and_niit_inputs_are_derived_from_contract_facts():
     assert "adjusted_gross_income" not in rental["tax_units"]["tax_unit"]
 
 
+def test_additional_medicare_fixture_validates_gross_se_person_boundary():
+    generator = _load_generator()
+    case = next(
+        case
+        for case in generator.POLICIES["additional_medicare_tax"].cases
+        if case.case_id == "amt-single-wage-se"
+    )
+    additional_module = (
+        "us:policies/income_tax/additional_medicare_tax_pipeline"
+    )
+    se_module = "us:policies/income_tax/self_employment_tax_pipeline"
+    relation = f"{se_module}#relation.self_employed_individual_of_tax_unit"
+    actual = {
+        "us:statutes/26/3101/b/2#input.filing_status": 0,
+        f"{additional_module}#input.wages": 100_000,
+        (
+            f"{additional_module}#input."
+            "international_social_security_agreement_under_section_233_in_effect"
+        ): False,
+        (
+            f"{additional_module}#input."
+            "self_employment_income_is_subject_exclusively_to_foreign_social_"
+            "security_laws_under_agreement"
+        ): False,
+        (
+            f"{additional_module}#input."
+            "self_employment_income_amount_subject_exclusively_to_foreign_"
+            "social_security_laws_under_agreement"
+        ): 0,
+        relation: [
+            {
+                f"{se_module}#input.gross_self_employment_profit": 150_000,
+                (
+                    "us:statutes/26/1402/b#input."
+                    "wages_paid_to_individual_during_taxable_year_for_section_1401_a"
+                ): 100_000,
+                (
+                    "us:statutes/26/1402/b#input."
+                    "individual_is_nonresident_alien"
+                ): False,
+                (
+                    "us:statutes/26/1402/b#input."
+                    "agreement_under_social_security_act_section_233_provides_"
+                    "for_individual"
+                ): False,
+                (
+                    "us:statutes/26/1402/b#input."
+                    "individual_is_not_united_states_citizen_and_resident_of_"
+                    "puerto_rico_virgin_islands_guam_or_american_samoa"
+                ): False,
+            }
+        ],
+    }
+
+    generator._validate_additional_medicare_fixture(case, actual)
+
+    stale_flat_fixture = dict(actual)
+    stale_flat_fixture.pop(relation)
+    stale_flat_fixture[
+        "us:statutes/26/1401#input.self_employment_income"
+    ] = 138_525
+    with pytest.raises(ValueError, match="must contain 1 Person input"):
+        generator._validate_additional_medicare_fixture(
+            case,
+            stale_flat_fixture,
+        )
+
+
 def test_axiom_fixture_is_resolved_only_from_supplied_roots(tmp_path):
     generator = _load_generator()
     original = generator.POLICIES["net_investment_income_tax"]

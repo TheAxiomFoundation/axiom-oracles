@@ -486,9 +486,6 @@ def _validate_additional_medicare_fixture(
     actual: Mapping[str, Any],
 ) -> None:
     pipeline = "us:policies/income_tax/additional_medicare_tax_pipeline"
-    completed_se_income = (
-        Decimal(str(case.inputs["self_employment_income"])) * Decimal("0.9235")
-    )
     status_codes = {"single": 0, "joint": 1, "separate": 2}
     _require_fixture_values(
         suite="us-additional-medicare-grid",
@@ -502,24 +499,28 @@ def _validate_additional_medicare_fixture(
                 Decimal(str(case.inputs["primary_wages"]))
                 + Decimal(str(case.inputs["spouse_wages"]))
             ),
-            "us:statutes/26/1401#input.self_employment_income": (
-                completed_se_income
-            ),
-            "us:statutes/26/1401#input."
+            f"{pipeline}#input."
             "international_social_security_agreement_under_section_233_in_effect": (
                 False
             ),
-            "us:statutes/26/1401#input."
+            f"{pipeline}#input."
             "self_employment_income_is_subject_exclusively_to_foreign_social_"
             "security_laws_under_agreement": False,
-            "us:statutes/26/1401#input."
+            f"{pipeline}#input."
             "self_employment_income_amount_subject_exclusively_to_foreign_"
             "social_security_laws_under_agreement": 0,
         },
     )
+    _validate_self_employment_relation(
+        suite="us-additional-medicare-grid",
+        case=case,
+        actual=actual,
+    )
 
 
-def _validate_self_employment_fixture(
+def _validate_self_employment_relation(
+    *,
+    suite: str,
     case: FederalCase,
     actual: Mapping[str, Any],
 ) -> None:
@@ -541,7 +542,7 @@ def _validate_self_employment_fixture(
         )
     if not isinstance(people, list) or len(people) != len(expected_people):
         raise ValueError(
-            f"us-seca-grid: fixture case {case.case_id!r} relation {relation!r} "
+            f"{suite}: fixture case {case.case_id!r} relation {relation!r} "
             f"must contain {len(expected_people)} Person input(s)"
         )
     profit_key = f"{module}#input.gross_self_employment_profit"
@@ -564,11 +565,11 @@ def _validate_self_employment_fixture(
     ):
         if not isinstance(person, dict):
             raise ValueError(
-                f"us-seca-grid: fixture case {case.case_id!r} Person {index} "
+                f"{suite}: fixture case {case.case_id!r} Person {index} "
                 "input is not a mapping"
             )
         _require_fixture_values(
-            suite="us-seca-grid",
+            suite=suite,
             case_id=case.case_id,
             actual=person,
             expected={
@@ -577,6 +578,17 @@ def _validate_self_employment_fixture(
                 **domestic_inputs,
             },
         )
+
+
+def _validate_self_employment_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    _validate_self_employment_relation(
+        suite="us-seca-grid",
+        case=case,
+        actual=actual,
+    )
 
 
 def _validate_niit_fixture(
