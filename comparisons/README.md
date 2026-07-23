@@ -141,13 +141,14 @@ Required runner keys: `axiom_rules_repo`. Required `parameters`: `left`,
 
 ### `federal-tax-liability-grid`
 
-Runs one six-case federal tax grid through
+Runs one reviewed federal tax case grid through
 `scripts/generate_federal_tax_liability.py`. The Axiom leg reads the selected
 policy's engine-verified RuleSpec companion fixture; the PolicyEngine leg builds
 fresh 2026 simulations under the config's explicit per-suite PE-US/core pins.
 Runs are policy-isolated and have no committed-report fallback, so one missing
 companion cannot couple the other policies and an unavailable oracle fails
-rather than replaying stale evidence.
+rather than replaying stale evidence. A policy may select all companion cases
+or an explicitly documented non-vacuous exact-input subset.
 
 Required `parameters`: `policy`, `rulespec_roots`,
 `policyengine_version: 4.18.9`, `policyengine_us_version: 1.767.3`, and

@@ -1,0 +1,67 @@
+# Federal qualified business income deduction — Axiom vs PolicyEngine-US,
+# tax year 2026.
+#
+# Axiom boundary: caller-resolved non-SSTB QBI, business W-2 wages and UBIA
+# for one aggregation group, REIT/PTP income, completed taxable income before
+# section 199A, net capital gain, and the distinct aggregate of QBI from active
+# qualified businesses. Revenue Procedure 2025-32 section 4.26 supplies the
+# 2026 thresholds ($201,750 single, $201,775 separate, $403,500 joint);
+# current section 199A(b)(3) widths are $75,000/$150,000. The compose also
+# applies the OBBBA section 199A(i) $400 minimum only when active-business QBI
+# reaches $1,000.
+# Sources:
+# https://www.irs.gov/pub/irs-drop/rp-25-32.pdf#page=21
+# https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
+# RuleSpec: rulespec-us@dc6602f2
+# us/policies/income_tax/
+# qualified_business_income_deduction_pipeline.yaml:15-59,82-314,316-391.
+#
+# PolicyEngine binding: `qualified_business_income_deduction`. PE-US 1.767.3
+# has the correct 2026 phase-out starts and lengths at
+# `gov.irs.deductions.qbi.phase_out.{start,length}` and the $400/$1,000 floor
+# at `gov.irs.deductions.qbi.deduction_floor.{in_effect,amount}`.
+# `qbid_amount` consumes the same completed QBI/wage/UBIA/TI/NCG boundary.
+# PE's final floor formula, however, keys the floor to all QBI and exposes no
+# separate active-business aggregate. `qbid-above-nowages` therefore remains
+# a real, disposition-carried upstream gap (Axiom 0, PE 400); the suite does
+# not alter the fixture or tolerance.
+# Code: policyengine-us@49d19b239a593dbac8920ac6fd80cfe33372343a
+# policyengine_us/parameters/gov/irs/deductions/qbi/phase_out/
+# {start,length}.yaml;
+# policyengine_us/parameters/gov/irs/deductions/qbi/deduction_floor/
+# {in_effect,amount}.yaml;
+# policyengine_us/variables/gov/irs/income/taxable_income/deductions/
+# qualified_business_income_deduction/qbid_amount.py:18-151;
+# .../qualified_business_income_deduction.py:15-35.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-qbid-grid --summary
+
+name: us-qbid-grid
+title: Federal qualified business income deduction — Axiom vs PolicyEngine
+description: >-
+  Compares the 2026 Axiom section 199A composition against PolicyEngine-US
+  on all 11 ground-truth QBI companion cases, carrying the known active-QBI
+  floor divergence through an evidence-backed disposition.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: qualified_business_income_deduction
+    period: "2026"
+    concept: >-
+      us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/wt-fed-credits
+
+artifacts:
+  report_basename: axiom-policyengine-us-qbid-grid
+
+dashboard:
+  filename: axiom-policyengine-us-qbid-grid.json
+  suite: us-qbid-grid

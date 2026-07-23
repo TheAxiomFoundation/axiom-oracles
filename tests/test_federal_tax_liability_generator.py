@@ -1,4 +1,4 @@
-"""Focused invariants for the four independent federal tax case grids."""
+"""Focused invariants for the independent federal tax case grids."""
 
 from __future__ import annotations
 
@@ -37,60 +37,113 @@ def _load_runner():
     return module
 
 
-def test_all_four_contract_grids_are_explicit_and_independent():
+def test_all_eight_contract_grids_are_explicit_and_independent():
     generator = _load_generator()
 
     assert set(generator.POLICIES) == {
         "aca_ptc",
         "additional_medicare_tax",
+        "elderly_disabled_credit",
+        "lifetime_learning_credit",
         "net_investment_income_tax",
+        "qualified_business_income_deduction",
+        "savers_credit",
         "self_employment_tax",
     }
     for key, config in generator.POLICIES.items():
         assert config.key == key
-        assert len(config.cases) == 6
-        assert len({case.case_id for case in config.cases}) == 6
+        assert len({case.case_id for case in config.cases}) == len(config.cases)
         assert config.tolerance == 0.01
         assert config.relative_tolerance == 0
 
-    assert [
-        case.case_id for case in generator.POLICIES["additional_medicare_tax"].cases
-    ] == [
-        "amt-single-150k",
-        "amt-single-250k",
-        "amt-joint-300k",
-        "amt-mfs-150k",
-        "amt-single-wage-se",
-        "amt-joint-450k",
-    ]
-    assert [
-        case.case_id for case in generator.POLICIES["self_employment_tax"].cases
-    ] == [
-        "seca-under-floor",
-        "seca-50k",
-        "seca-120k",
-        "seca-300k",
-        "seca-wage-mix",
-        "seca-joint-200k",
-    ]
-    assert [
-        case.case_id for case in generator.POLICIES["net_investment_income_tax"].cases
-    ] == [
-        "niit-under",
-        "niit-single-mixed",
-        "niit-joint-gains",
-        "niit-mfs",
-        "niit-inv-only",
-        "niit-rental",
-    ]
-    assert [case.case_id for case in generator.POLICIES["aca_ptc"].cases] == [
-        "ptc-150fpl-family4",
-        "ptc-250fpl-single",
-        "ptc-300fpl-joint",
-        "ptc-380fpl-single",
-        "ptc-410fpl-single",
-        "ptc-95fpl-single",
-    ]
+    expected_case_ids = {
+        "additional_medicare_tax": [
+            "amt-single-150k",
+            "amt-single-250k",
+            "amt-joint-300k",
+            "amt-mfs-150k",
+            "amt-single-wage-se",
+            "amt-joint-450k",
+        ],
+        "self_employment_tax": [
+            "seca-under-floor",
+            "seca-50k",
+            "seca-120k",
+            "seca-300k",
+            "seca-wage-mix",
+            "seca-joint-200k",
+        ],
+        "net_investment_income_tax": [
+            "niit-under",
+            "niit-single-mixed",
+            "niit-joint-gains",
+            "niit-mfs",
+            "niit-inv-only",
+            "niit-rental",
+        ],
+        "aca_ptc": [
+            "ptc-150fpl-family4",
+            "ptc-250fpl-single",
+            "ptc-300fpl-joint",
+            "ptc-380fpl-single",
+            "ptc-410fpl-single",
+            "ptc-95fpl-single",
+        ],
+        "qualified_business_income_deduction": [
+            "qbid-ti-limited",
+            "qbid-basic-100k",
+            "qbid-joint-150k",
+            "qbid-phasein",
+            "qbid-above-nowages",
+            "qbid-reit-only",
+            "qbid-zero",
+            "qbid-single-at-threshold",
+            "qbid-single-one-dollar-over-threshold",
+            "qbid-active-minimum",
+            "qbid-net-capital-gain-limit",
+        ],
+        "savers_credit": [
+            "savers-50pct",
+            "savers-20pct",
+            "savers-10pct",
+            "savers-over",
+            "savers-cap",
+            "savers-joint-both",
+            "savers-zero-contributions",
+            "savers-at-first-threshold",
+            "savers-one-over-first-threshold",
+            "savers-age-screen",
+            "savers-student-screen",
+            "savers-dependent-screen",
+        ],
+        "elderly_disabled_credit": [
+            "eld-basic",
+            "eld-agi-reduce",
+            "eld-joint-both",
+            "eld-zero-high-agi",
+            "eld-ss-wipes",
+            "eld-joint-one-65",
+            "eld-disabled-under-65",
+            "eld-at-agi-threshold",
+            "eld-two-dollars-over-agi-threshold",
+        ],
+        "lifetime_learning_credit": [
+            "llc-basic",
+            "llc-cap",
+            "llc-phaseout-mid",
+            "llc-over",
+            "llc-joint-mid",
+            "llc-small",
+            "llc-zero-expenses",
+            "llc-at-phaseout-start",
+            "llc-one-dollar-over-phaseout-start",
+            "llc-at-phaseout-end",
+            "llc-aggregate-cap",
+            "llc-liability-cap-diagnostic",
+        ],
+    }
+    for key, expected in expected_case_ids.items():
+        assert [case.case_id for case in generator.POLICIES[key].cases] == expected
 
 
 def test_policyengine_bindings_match_the_reviewed_output_boundaries():
@@ -107,6 +160,20 @@ def test_policyengine_bindings_match_the_reviewed_output_boundaries():
     )
     # Raw aca_ptc omits the enrolled-plan premium cap.
     assert generator.POLICIES["aca_ptc"].pe_output_variables == ("used_aca_ptc",)
+    assert generator.POLICIES[
+        "qualified_business_income_deduction"
+    ].pe_output_variables == ("qualified_business_income_deduction",)
+    # The public PE variables apply section 26 credit-order/liability caps.
+    assert generator.POLICIES["savers_credit"].pe_output_variables == (
+        "savers_credit_potential",
+    )
+    assert generator.POLICIES["elderly_disabled_credit"].pe_output_variables == (
+        "elderly_disabled_credit_potential",
+    )
+    # Both engines expose the LLC final, including its liability cap.
+    assert generator.POLICIES["lifetime_learning_credit"].pe_output_variables == (
+        "lifetime_learning_credit",
+    )
 
 
 def test_aca_grid_pins_prior_year_fpl_dollars_and_enrolled_premium():
@@ -160,6 +227,94 @@ def test_payroll_and_niit_inputs_are_derived_from_contract_facts():
     assert "adjusted_gross_income" not in rental["tax_units"]["tax_unit"]
 
 
+def test_qbid_grid_binds_correct_2026_band_and_active_business_diagnostic():
+    generator = _load_generator()
+    cases = {
+        case.case_id: case
+        for case in generator.POLICIES["qualified_business_income_deduction"].cases
+    }
+
+    phasein = cases["qbid-phasein"]
+    assert phasein.inputs["threshold"] == 201_750
+    assert phasein.inputs["taxable_income_before_qbid"] == 239_250
+    situation = generator._qbid_situation(phasein)
+    assert situation["people"]["head"]["qualified_business_income"][2026] == (200_000)
+    assert (
+        situation["tax_units"]["tax_unit"]["taxable_income_less_qbid"][2026] == 239_250
+    )
+
+    passive = cases["qbid-above-nowages"]
+    assert passive.inputs["qbi"] == 300_000
+    assert passive.inputs["active_business_qbi"] == 0
+    active = cases["qbid-active-minimum"]
+    assert active.inputs["active_business_qbi"] == 1_000
+
+
+def test_savers_grid_uses_completed_person_contributions_and_two_caps():
+    generator = _load_generator()
+    cases = {case.case_id: case for case in generator.POLICIES["savers_credit"].cases}
+    joint = cases["savers-joint-both"]
+    situation = generator._savers_credit_situation(joint)
+
+    assert joint.inputs["first_threshold"] == 48_500
+    assert joint.inputs["second_threshold"] == 52_500
+    assert joint.inputs["third_threshold"] == 80_500
+    assert (
+        situation["people"]["head"]["savers_credit_qualified_contributions"][2026]
+        == 2_000
+    )
+    assert (
+        situation["people"]["spouse"]["savers_credit_qualified_contributions"][2026]
+        == 2_000
+    )
+    assert situation["tax_units"]["tax_unit"]["adjusted_gross_income"][2026] == 38_000
+    assert generator.POLICIES["savers_credit"].pe_diagnostic_variables == (
+        "savers_credit",
+        "savers_credit_credit_limit",
+    )
+
+
+def test_elderly_disabled_grid_collapses_only_proven_disability_facts():
+    generator = _load_generator()
+    config = generator.POLICIES["elderly_disabled_credit"]
+    cases = {case.case_id: case for case in config.cases}
+
+    assert "eld-no-qualified-individual" not in cases
+    disabled = cases["eld-disabled-under-65"]
+    assert generator._collapsed_section_22_disability(disabled.inputs) is True
+    situation = generator._elderly_disabled_situation(disabled)
+    assert situation["people"]["head"]["retired_on_total_disability"][2026] is True
+    assert situation["people"]["head"]["total_disability_payments"][2026] == 2_000
+    assert situation["tax_units"]["tax_unit"]["tax_unit_social_security"][2026] == 0
+
+    basic = generator._elderly_disabled_situation(cases["eld-basic"])
+    assert basic["tax_units"]["tax_unit"]["tax_unit_social_security"][2026] == 2_000
+    assert basic["tax_units"]["tax_unit"]["tax_unit_taxable_social_security"][2026] == 0
+
+
+def test_llc_grid_binds_explicit_status_and_liability_capped_final():
+    generator = _load_generator()
+    cases = {
+        case.case_id: case
+        for case in generator.POLICIES["lifetime_learning_credit"].cases
+    }
+    diagnostic = generator._llc_situation(cases["llc-liability-cap-diagnostic"])
+    tax_unit = diagnostic["tax_units"]["tax_unit"]
+
+    assert tax_unit["filing_status"][2026] == "SINGLE"
+    assert tax_unit["income_tax_before_credits"][2026] == 500
+    assert (
+        diagnostic["people"]["student1"]["qualified_tuition_expenses"][2026] == 10_000
+    )
+    assert diagnostic["people"]["student1"]["is_tax_unit_dependent"][2026] is True
+
+    aggregate = generator._llc_situation(cases["llc-aggregate-cap"])
+    assert {name for name in aggregate["people"] if name.startswith("student")} == {
+        "student1",
+        "student2",
+    }
+
+
 def test_additional_medicare_fixture_validates_gross_se_person_boundary():
     generator = _load_generator()
     case = next(
@@ -167,9 +322,7 @@ def test_additional_medicare_fixture_validates_gross_se_person_boundary():
         for case in generator.POLICIES["additional_medicare_tax"].cases
         if case.case_id == "amt-single-wage-se"
     )
-    additional_module = (
-        "us:policies/income_tax/additional_medicare_tax_pipeline"
-    )
+    additional_module = "us:policies/income_tax/additional_medicare_tax_pipeline"
     se_module = "us:policies/income_tax/self_employment_tax_pipeline"
     relation = f"{se_module}#relation.self_employed_individual_of_tax_unit"
     actual = {
@@ -196,10 +349,7 @@ def test_additional_medicare_fixture_validates_gross_se_person_boundary():
                     "us:statutes/26/1402/b#input."
                     "wages_paid_to_individual_during_taxable_year_for_section_1401_a"
                 ): 100_000,
-                (
-                    "us:statutes/26/1402/b#input."
-                    "individual_is_nonresident_alien"
-                ): False,
+                ("us:statutes/26/1402/b#input.individual_is_nonresident_alien"): False,
                 (
                     "us:statutes/26/1402/b#input."
                     "agreement_under_social_security_act_section_233_provides_"
@@ -218,9 +368,7 @@ def test_additional_medicare_fixture_validates_gross_se_person_boundary():
 
     stale_flat_fixture = dict(actual)
     stale_flat_fixture.pop(relation)
-    stale_flat_fixture[
-        "us:statutes/26/1401#input.self_employment_income"
-    ] = 138_525
+    stale_flat_fixture["us:statutes/26/1401#input.self_employment_income"] = 138_525
     with pytest.raises(ValueError, match="must contain 1 Person input"):
         generator._validate_additional_medicare_fixture(
             case,

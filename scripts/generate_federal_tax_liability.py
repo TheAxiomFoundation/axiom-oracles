@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate one federal tax-liability case-grid report.
 
-Each invocation selects exactly one policy.  The selected policy's six-case
-grid is evaluated independently:
+Each invocation selects exactly one policy.  The selected policy's reviewed
+case grid is evaluated independently:
 
 * ``axiom`` reads the expected value from that policy's engine-verified
   RuleSpec companion fixture; and
@@ -44,7 +44,7 @@ class FederalCase:
 
     case_id: str
     filing_status: str
-    inputs: Mapping[str, float | int | str]
+    inputs: Mapping[str, Any]
 
 
 @dataclass(frozen=True)
@@ -61,9 +61,9 @@ class PolicyConfig:
     pe_boundary: str
     cases: tuple[FederalCase, ...]
     pe_situation: Callable[[FederalCase], dict[str, Any]]
-    fixture_input_validator: Callable[
-        [FederalCase, Mapping[str, Any]], None
-    ]
+    fixture_input_validator: Callable[[FederalCase, Mapping[str, Any]], None]
+    pe_diagnostic_variables: tuple[str, ...] = ()
+    pe_parameter_validator: Callable[[Any], None] | None = None
     tolerance: float = 0.01
     relative_tolerance: float = 0.0
 
@@ -71,7 +71,7 @@ class PolicyConfig:
 def _case(
     case_id: str,
     filing_status: str,
-    **inputs: float | int | str,
+    **inputs: Any,
 ) -> FederalCase:
     return FederalCase(case_id, filing_status, inputs)
 
@@ -305,6 +305,439 @@ _ACA_PTC_CASES = (
 )
 
 
+# GRID-CONTRACT P5 plus the companion's five boundary diagnostics.  The
+# current-law 2026 thresholds and widths are those published in Revenue
+# Procedure 2025-32, section 4.26.  The Axiom boundary separately carries
+# active-business QBI for the section 199A(i) minimum; PolicyEngine-US does not
+# expose that narrower fact, which the `qbid-above-nowages` case diagnoses.
+def _qbid_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    qbi: float,
+    w2_wages: float,
+    taxable_income_before_qbid: float,
+    reit_dividends: float = 0,
+    ptp_income: float = 0,
+    ubia: float = 0,
+    active_business_qbi: float = 0,
+    net_capital_gain: float = 0,
+) -> FederalCase:
+    threshold = {
+        "single": 201_750,
+        "joint": 403_500,
+        "separate": 201_775,
+    }[filing_status]
+    return _case(
+        case_id,
+        filing_status,
+        qbi=qbi,
+        w2_wages=w2_wages,
+        ubia=ubia,
+        reit_dividends=reit_dividends,
+        ptp_income=ptp_income,
+        taxable_income_before_qbid=taxable_income_before_qbid,
+        threshold=threshold,
+        active_business_qbi=active_business_qbi,
+        net_capital_gain=net_capital_gain,
+    )
+
+
+_QBID_CASES = (
+    _qbid_case(
+        "qbid-ti-limited",
+        "single",
+        qbi=80_000,
+        w2_wages=40_000,
+        taxable_income_before_qbid=60_000,
+    ),
+    _qbid_case(
+        "qbid-basic-100k",
+        "single",
+        qbi=100_000,
+        w2_wages=50_000,
+        taxable_income_before_qbid=150_000,
+    ),
+    _qbid_case(
+        "qbid-joint-150k",
+        "joint",
+        qbi=150_000,
+        w2_wages=60_000,
+        taxable_income_before_qbid=250_000,
+    ),
+    _qbid_case(
+        "qbid-phasein",
+        "single",
+        qbi=200_000,
+        w2_wages=30_000,
+        taxable_income_before_qbid=239_250,
+    ),
+    _qbid_case(
+        "qbid-above-nowages",
+        "single",
+        qbi=300_000,
+        w2_wages=0,
+        taxable_income_before_qbid=276_751,
+    ),
+    _qbid_case(
+        "qbid-reit-only",
+        "joint",
+        qbi=0,
+        w2_wages=0,
+        reit_dividends=20_000,
+        taxable_income_before_qbid=100_000,
+    ),
+    _qbid_case(
+        "qbid-zero",
+        "single",
+        qbi=0,
+        w2_wages=0,
+        taxable_income_before_qbid=0,
+    ),
+    _qbid_case(
+        "qbid-single-at-threshold",
+        "single",
+        qbi=150_000,
+        w2_wages=0,
+        taxable_income_before_qbid=201_750,
+    ),
+    _qbid_case(
+        "qbid-single-one-dollar-over-threshold",
+        "single",
+        qbi=150_000,
+        w2_wages=0,
+        taxable_income_before_qbid=201_751,
+    ),
+    _qbid_case(
+        "qbid-active-minimum",
+        "single",
+        qbi=1_000,
+        w2_wages=0,
+        taxable_income_before_qbid=10_000,
+        active_business_qbi=1_000,
+    ),
+    _qbid_case(
+        "qbid-net-capital-gain-limit",
+        "single",
+        qbi=100_000,
+        w2_wages=50_000,
+        taxable_income_before_qbid=100_000,
+        net_capital_gain=30_000,
+    ),
+)
+
+
+# GRID-CONTRACT P6 plus six eligibility/boundary diagnostics.  The selected PE
+# potential variable is the companion's pre-section-26 statutory boundary; the
+# separately calculated public variable is retained only as a diagnostic.
+def _savers_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    adjusted_gross_income: float,
+    primary_contributions: float,
+    spouse_contributions: float = 0,
+    primary_age: int = 30,
+    primary_is_student: bool = False,
+    primary_is_dependent: bool = False,
+) -> FederalCase:
+    thresholds = {
+        "single": (24_250, 26_250, 40_250),
+        "joint": (48_500, 52_500, 80_500),
+    }[filing_status]
+    return _case(
+        case_id,
+        filing_status,
+        adjusted_gross_income=adjusted_gross_income,
+        primary_contributions=primary_contributions,
+        spouse_contributions=spouse_contributions,
+        primary_age=primary_age,
+        primary_is_student=primary_is_student,
+        primary_is_dependent=primary_is_dependent,
+        spouse_age=30,
+        spouse_is_student=False,
+        spouse_is_dependent=False,
+        first_threshold=thresholds[0],
+        second_threshold=thresholds[1],
+        third_threshold=thresholds[2],
+    )
+
+
+_SAVERS_CREDIT_CASES = (
+    _savers_case(
+        "savers-50pct",
+        "single",
+        adjusted_gross_income=20_000,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "savers-20pct",
+        "single",
+        adjusted_gross_income=25_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "savers-10pct",
+        "single",
+        adjusted_gross_income=33_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "savers-over",
+        "single",
+        adjusted_gross_income=40_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "savers-cap",
+        "single",
+        adjusted_gross_income=20_000,
+        primary_contributions=5_000,
+    ),
+    _savers_case(
+        "savers-joint-both",
+        "joint",
+        adjusted_gross_income=38_000,
+        primary_contributions=2_000,
+        spouse_contributions=2_000,
+    ),
+    _savers_case(
+        "savers-zero-contributions",
+        "single",
+        adjusted_gross_income=0,
+        primary_contributions=0,
+    ),
+    _savers_case(
+        "savers-at-first-threshold",
+        "single",
+        adjusted_gross_income=24_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "savers-one-over-first-threshold",
+        "single",
+        adjusted_gross_income=24_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "savers-age-screen",
+        "single",
+        adjusted_gross_income=20_000,
+        primary_contributions=2_000,
+        primary_age=17,
+    ),
+    _savers_case(
+        "savers-student-screen",
+        "single",
+        adjusted_gross_income=20_000,
+        primary_contributions=2_000,
+        primary_is_student=True,
+    ),
+    _savers_case(
+        "savers-dependent-screen",
+        "single",
+        adjusted_gross_income=20_000,
+        primary_contributions=2_000,
+        primary_is_dependent=True,
+    ),
+)
+
+
+# GRID-CONTRACT P7 plus three expressible companion diagnostics.  PolicyEngine
+# exposes a collapsed `retired_on_total_disability` fact; the fixture validator
+# proves every predicate needed to derive that fact before the PE situation
+# sets it.  The empty-relation `eld-no-qualified-individual` diagnostic is
+# intentionally omitted because a PE TaxUnit must contain a Person and no
+# exact age/disability facts exist for that invented member.
+def _elderly_disabled_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    adjusted_gross_income: float,
+    nontaxable_social_security: float,
+    primary_age: int = 66,
+    spouse_age: int | None = None,
+    primary_is_disabled: bool = False,
+    primary_disability_income: float = 0,
+) -> FederalCase:
+    return _case(
+        case_id,
+        filing_status,
+        adjusted_gross_income=adjusted_gross_income,
+        nontaxable_social_security=nontaxable_social_security,
+        primary_age=primary_age,
+        spouse_age=spouse_age,
+        primary_retired_on_disability=primary_is_disabled,
+        primary_unable_substantial_gainful_activity=primary_is_disabled,
+        primary_medically_determinable_impairment=primary_is_disabled,
+        primary_impairment_expected_to_result_in_death=False,
+        primary_impairment_duration_months=12 if primary_is_disabled else 0,
+        primary_disability_proof_furnished=primary_is_disabled,
+        primary_disability_income=primary_disability_income,
+    )
+
+
+_ELDERLY_DISABLED_CASES = (
+    _elderly_disabled_case(
+        "eld-basic",
+        "single",
+        adjusted_gross_income=8_000,
+        nontaxable_social_security=2_000,
+    ),
+    _elderly_disabled_case(
+        "eld-agi-reduce",
+        "single",
+        adjusted_gross_income=12_000,
+        nontaxable_social_security=0,
+    ),
+    _elderly_disabled_case(
+        "eld-joint-both",
+        "joint",
+        adjusted_gross_income=15_000,
+        nontaxable_social_security=3_000,
+        spouse_age=66,
+    ),
+    _elderly_disabled_case(
+        "eld-zero-high-agi",
+        "single",
+        adjusted_gross_income=30_000,
+        nontaxable_social_security=0,
+    ),
+    _elderly_disabled_case(
+        "eld-ss-wipes",
+        "single",
+        adjusted_gross_income=8_000,
+        nontaxable_social_security=6_000,
+    ),
+    _elderly_disabled_case(
+        "eld-joint-one-65",
+        "joint",
+        adjusted_gross_income=12_000,
+        nontaxable_social_security=1_000,
+        spouse_age=60,
+    ),
+    _elderly_disabled_case(
+        "eld-disabled-under-65",
+        "single",
+        adjusted_gross_income=0,
+        nontaxable_social_security=0,
+        primary_age=60,
+        primary_is_disabled=True,
+        primary_disability_income=2_000,
+    ),
+    _elderly_disabled_case(
+        "eld-at-agi-threshold",
+        "single",
+        adjusted_gross_income=7_500,
+        nontaxable_social_security=0,
+    ),
+    _elderly_disabled_case(
+        "eld-two-dollars-over-agi-threshold",
+        "single",
+        adjusted_gross_income=7_502,
+        nontaxable_social_security=0,
+    ),
+)
+
+
+# GRID-CONTRACT P8 plus six companion diagnostics, including the separately
+# identified liability-cap case.  Unlike the other two nonrefundable credits,
+# the Axiom compose exposes the same final boundary as PE, so all twelve
+# companion cases are directly comparable.
+def _llc_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    modified_adjusted_gross_income: float,
+    qualified_expenses: tuple[float, ...],
+    income_tax_before_credits: float = 10_000,
+) -> FederalCase:
+    return _case(
+        case_id,
+        filing_status,
+        modified_adjusted_gross_income=modified_adjusted_gross_income,
+        qualified_expenses=qualified_expenses,
+        income_tax_before_credits=income_tax_before_credits,
+    )
+
+
+_LLC_CASES = (
+    _llc_case(
+        "llc-basic",
+        "single",
+        modified_adjusted_gross_income=50_000,
+        qualified_expenses=(4_000,),
+    ),
+    _llc_case(
+        "llc-cap",
+        "single",
+        modified_adjusted_gross_income=50_000,
+        qualified_expenses=(15_000,),
+    ),
+    _llc_case(
+        "llc-phaseout-mid",
+        "single",
+        modified_adjusted_gross_income=85_000,
+        qualified_expenses=(10_000,),
+    ),
+    _llc_case(
+        "llc-over",
+        "single",
+        modified_adjusted_gross_income=90_001,
+        qualified_expenses=(10_000,),
+    ),
+    _llc_case(
+        "llc-joint-mid",
+        "joint",
+        modified_adjusted_gross_income=170_000,
+        qualified_expenses=(8_000,),
+    ),
+    _llc_case(
+        "llc-small",
+        "joint",
+        modified_adjusted_gross_income=100_000,
+        qualified_expenses=(900,),
+    ),
+    _llc_case(
+        "llc-zero-expenses",
+        "single",
+        modified_adjusted_gross_income=50_000,
+        qualified_expenses=(0,),
+    ),
+    _llc_case(
+        "llc-at-phaseout-start",
+        "single",
+        modified_adjusted_gross_income=80_000,
+        qualified_expenses=(10_000,),
+    ),
+    _llc_case(
+        "llc-one-dollar-over-phaseout-start",
+        "single",
+        modified_adjusted_gross_income=80_001,
+        qualified_expenses=(10_000,),
+    ),
+    _llc_case(
+        "llc-at-phaseout-end",
+        "single",
+        modified_adjusted_gross_income=90_000,
+        qualified_expenses=(10_000,),
+    ),
+    _llc_case(
+        "llc-aggregate-cap",
+        "single",
+        modified_adjusted_gross_income=50_000,
+        qualified_expenses=(6_000, 6_000),
+    ),
+    _llc_case(
+        "llc-liability-cap-diagnostic",
+        "single",
+        modified_adjusted_gross_income=50_000,
+        qualified_expenses=(10_000,),
+        income_tax_before_credits=500,
+    ),
+)
+
+
 def _person(
     *,
     age: int = 40,
@@ -321,8 +754,8 @@ def _person(
 def _tax_situation(
     case: FederalCase,
     *,
-    primary_inputs: Mapping[str, float | int],
-    spouse_inputs: Mapping[str, float | int] | None = None,
+    primary_inputs: Mapping[str, Any],
+    spouse_inputs: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build one tax unit while deriving filing status from relationships."""
     head_inputs: dict[str, float | int | str | bool] = dict(primary_inputs)
@@ -418,6 +851,166 @@ def _aca_ptc_situation(case: FederalCase) -> dict[str, Any]:
     }
 
 
+def _qbid_situation(case: FederalCase) -> dict[str, Any]:
+    inputs = case.inputs
+    situation = _tax_situation(
+        case,
+        primary_inputs={
+            # These are the same caller-resolved one-aggregation-group facts
+            # consumed by the Axiom compose, rather than raw Schedule C facts.
+            "qualified_business_income": inputs["qbi"],
+            "w2_wages_from_qualified_business": inputs["w2_wages"],
+            "unadjusted_basis_qualified_property": inputs["ubia"],
+            "qualified_reit_and_ptp_income": (
+                inputs["reit_dividends"] + inputs["ptp_income"]
+            ),
+            "business_is_sstb": False,
+        },
+        spouse_inputs={},
+    )
+    tax_unit = situation["tax_units"]["tax_unit"]
+    tax_unit["taxable_income_less_qbid"] = {
+        VALIDATION_YEAR: inputs["taxable_income_before_qbid"]
+    }
+    tax_unit["adjusted_net_capital_gain"] = {
+        VALIDATION_YEAR: inputs["net_capital_gain"]
+    }
+    return situation
+
+
+def _savers_credit_situation(case: FederalCase) -> dict[str, Any]:
+    inputs = case.inputs
+    primary = {
+        # The companion boundary is already net of testing-period
+        # distributions and statutory exceptions.
+        "savers_credit_qualified_contributions": inputs["primary_contributions"],
+        "is_full_time_student": inputs["primary_is_student"],
+        "claimed_as_dependent_on_another_return": inputs["primary_is_dependent"],
+    }
+    spouse = {
+        "savers_credit_qualified_contributions": inputs["spouse_contributions"],
+        "is_full_time_student": inputs["spouse_is_student"],
+        "claimed_as_dependent_on_another_return": inputs["spouse_is_dependent"],
+    }
+    situation = _tax_situation(
+        case,
+        primary_inputs=primary,
+        spouse_inputs=spouse,
+    )
+    situation["people"]["head"]["age"] = {VALIDATION_YEAR: inputs["primary_age"]}
+    if case.filing_status == "joint":
+        situation["people"]["spouse"]["age"] = {VALIDATION_YEAR: inputs["spouse_age"]}
+    tax_unit = situation["tax_units"]["tax_unit"]
+    tax_unit["adjusted_gross_income"] = {
+        VALIDATION_YEAR: inputs["adjusted_gross_income"]
+    }
+    return situation
+
+
+def _collapsed_section_22_disability(inputs: Mapping[str, Any]) -> bool:
+    return bool(
+        inputs["primary_retired_on_disability"]
+        and inputs["primary_unable_substantial_gainful_activity"]
+        and inputs["primary_medically_determinable_impairment"]
+        and (
+            inputs["primary_impairment_expected_to_result_in_death"]
+            or inputs["primary_impairment_duration_months"] >= 12
+        )
+        and inputs["primary_disability_proof_furnished"]
+    )
+
+
+def _elderly_disabled_situation(case: FederalCase) -> dict[str, Any]:
+    inputs = case.inputs
+    primary = {
+        "retired_on_total_disability": _collapsed_section_22_disability(inputs),
+        "total_disability_payments": inputs["primary_disability_income"],
+    }
+    spouse = {
+        "retired_on_total_disability": False,
+        "total_disability_payments": 0,
+    }
+    situation = _tax_situation(
+        case,
+        primary_inputs=primary,
+        spouse_inputs=spouse,
+    )
+    situation["people"]["head"]["age"] = {VALIDATION_YEAR: inputs["primary_age"]}
+    if case.filing_status == "joint":
+        situation["people"]["spouse"]["age"] = {VALIDATION_YEAR: inputs["spouse_age"]}
+    tax_unit = situation["tax_units"]["tax_unit"]
+    tax_unit["adjusted_gross_income"] = {
+        VALIDATION_YEAR: inputs["adjusted_gross_income"]
+    }
+    # The companion supplies the excluded portion directly.  PE derives the
+    # same non-taxable amount as total benefits less this explicit zero.
+    tax_unit["tax_unit_social_security"] = {
+        VALIDATION_YEAR: inputs["nontaxable_social_security"]
+    }
+    tax_unit["tax_unit_taxable_social_security"] = {VALIDATION_YEAR: 0}
+    return situation
+
+
+def _llc_situation(case: FederalCase) -> dict[str, Any]:
+    inputs = case.inputs
+    people: dict[str, dict[str, dict[int, Any]]] = {
+        "head": _person(age=40),
+    }
+    members = ["head"]
+    if case.filing_status == "joint":
+        people["spouse"] = _person(age=40)
+        members.append("spouse")
+    for index, expenses in enumerate(inputs["qualified_expenses"], start=1):
+        name = f"student{index}"
+        people[name] = _person(
+            age=20,
+            qualified_tuition_expenses=expenses,
+            is_tax_unit_dependent=True,
+            attends_eligible_educational_institution_for_lifetime_learning_credit=(
+                True
+            ),
+            has_lifetime_learning_credit_1098_t_or_exception=True,
+            meets_lifetime_learning_credit_identification_requirements=True,
+            # The companion explicitly denies every AOTC election/qualification
+            # path, so this collapsed PE fact is false.
+            is_eligible_for_american_opportunity_credit=False,
+        )
+        members.append(name)
+    filing_status = "JOINT" if case.filing_status == "joint" else "SINGLE"
+    return {
+        "people": people,
+        "tax_units": {
+            "tax_unit": {
+                "members": members,
+                "filing_status": {VALIDATION_YEAR: filing_status},
+                "adjusted_gross_income": {
+                    VALIDATION_YEAR: inputs["modified_adjusted_gross_income"]
+                },
+                "income_tax_before_credits": {
+                    VALIDATION_YEAR: inputs["income_tax_before_credits"]
+                },
+                "foreign_tax_credit": {VALIDATION_YEAR: 0},
+                "cdcc": {VALIDATION_YEAR: 0},
+                "non_refundable_american_opportunity_credit": {VALIDATION_YEAR: 0},
+                "filer_meets_lifetime_learning_credit_identification_requirements": {
+                    VALIDATION_YEAR: True
+                },
+                "is_nonresident_alien_for_lifetime_learning_credit": {
+                    VALIDATION_YEAR: False
+                },
+            }
+        },
+        "families": {"family": {"members": members}},
+        "spm_units": {"spm_unit": {"members": members}},
+        "households": {
+            "household": {
+                "members": members,
+                "state_code": {VALIDATION_YEAR: "TX"},
+            }
+        },
+    }
+
+
 def _same_scalar(actual: Any, expected: Any) -> bool:
     if isinstance(actual, bool) or isinstance(expected, bool):
         return actual is expected
@@ -468,15 +1061,11 @@ def _validate_aca_ptc_fixture(
             f"{module}#input.aca_ptc_household_magi": inputs["magi"],
             f"{module}#input.aca_ptc_family_size": inputs["household_size"],
             f"{module}#input.aca_ptc_poverty_line_for_household": poverty_line,
-            f"{module}#input.aca_ptc_annual_slcsp_benchmark_premium": inputs[
-                "slcsp"
-            ],
+            f"{module}#input.aca_ptc_annual_slcsp_benchmark_premium": inputs["slcsp"],
             f"{module}#input.aca_ptc_annual_enrolled_premium": inputs[
                 "enrolled_premium"
             ],
-            f"{module}#input.aca_ptc_coverage_month_count": inputs[
-                "coverage_months"
-            ],
+            f"{module}#input.aca_ptc_coverage_month_count": inputs["coverage_months"],
         },
     )
 
@@ -619,8 +1208,7 @@ def _validate_niit_fixture(
         "self_employment_income_subject_to_1401_b",
     )
     section_911_zero_inputs = (
-        "us:statutes/26/911/a/1#input."
-        "elected_foreign_earned_income_exclusion_amount",
+        "us:statutes/26/911/a/1#input.elected_foreign_earned_income_exclusion_amount",
         "us:statutes/26/911/d/6#input."
         "deduction_under_subtitle_before_section_911_double_benefit_denial",
         "us:statutes/26/911/d/6#input."
@@ -659,18 +1247,525 @@ def _validate_niit_fixture(
     )
 
 
+def _validate_qbid_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    inputs = case.inputs
+    statute = "us:statutes/26/199A#input."
+    capital_gain = "us:statutes/26/1/h#input."
+    pipeline = (
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input."
+    )
+    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    _require_fixture_values(
+        suite="us-qbid-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected={
+            (f"{pipeline}qualified_business_income_threshold_amount_2026"): inputs[
+                "threshold"
+            ],
+            f"{statute}filing_status": status_codes[case.filing_status],
+            f"{statute}qualified_trade_or_business_w2_wages": inputs["w2_wages"],
+            f"{statute}qualified_trade_or_business_unadjusted_basis": inputs["ubia"],
+            f"{statute}qualified_business_income": inputs["qbi"],
+            f"{statute}taxable_income_computed_without_section_199A": inputs[
+                "taxable_income_before_qbid"
+            ],
+            f"{statute}qualified_reit_dividends": inputs["reit_dividends"],
+            f"{statute}qualified_publicly_traded_partnership_income": inputs[
+                "ptp_income"
+            ],
+            (
+                f"{statute}"
+                "aggregate_qualified_business_income_from_active_qualified_"
+                "trades_or_businesses"
+            ): inputs["active_business_qbi"],
+            (
+                f"{statute}"
+                "qualified_business_income_allocable_to_qualified_"
+                "cooperative_payments"
+            ): 0,
+            (f"{statute}w2_wages_allocable_to_qualified_cooperative_payments"): 0,
+            f"{statute}taxpayer_is_corporation": False,
+            f"{statute}minimum_deduction_cost_of_living_adjustment": 0,
+            f"{statute}qualified_production_activities_income": 0,
+            (
+                f"{statute}"
+                "taxpayer_is_specified_agricultural_or_horticultural_"
+                "cooperative"
+            ): False,
+            f"{statute}cooperative_w2_wages": 0,
+            (
+                f"{capital_gain}"
+                "net_capital_gain_taken_into_account_as_investment_income_"
+                "under_section_163_d_4_B_iii"
+            ): 0,
+            f"{capital_gain}long_term_capital_gains": inputs["net_capital_gain"],
+            f"{capital_gain}short_term_capital_gains": 0,
+            f"{capital_gain}qualified_dividend_income": 0,
+        },
+    )
+
+
+def _validate_savers_credit_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    inputs = case.inputs
+    prefix = "us:policies/income_tax/savers_credit_pipeline#input."
+    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    _require_fixture_values(
+        suite="us-savers-credit-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected={
+            f"{prefix}section_911_excluded_income": 0,
+            f"{prefix}section_931_excluded_income": 0,
+            f"{prefix}section_933_excluded_income": 0,
+            f"{prefix}filing_status": status_codes[case.filing_status],
+            f"{prefix}adjusted_gross_income": inputs["adjusted_gross_income"],
+            f"{prefix}savers_credit_first_threshold_2026": inputs["first_threshold"],
+            f"{prefix}savers_credit_second_threshold_2026": inputs["second_threshold"],
+            f"{prefix}savers_credit_third_threshold_2026": inputs["third_threshold"],
+            f"{prefix}primary_age_at_close_of_taxable_year": inputs["primary_age"],
+            f"{prefix}primary_is_student_under_section_152_f_2": inputs[
+                "primary_is_student"
+            ],
+            (
+                f"{prefix}primary_may_be_claimed_as_dependent_by_another_taxpayer"
+            ): inputs["primary_is_dependent"],
+            f"{prefix}spouse_age_at_close_of_taxable_year": inputs["spouse_age"],
+            f"{prefix}spouse_is_student_under_section_152_f_2": inputs[
+                "spouse_is_student"
+            ],
+            (f"{prefix}spouse_may_be_claimed_as_dependent_by_another_taxpayer"): inputs[
+                "spouse_is_dependent"
+            ],
+            (f"{prefix}primary_qualified_retirement_savings_contributions"): inputs[
+                "primary_contributions"
+            ],
+            (f"{prefix}spouse_qualified_retirement_savings_contributions"): inputs[
+                "spouse_contributions"
+            ],
+        },
+    )
+
+
+def _section_22_fixture_person(
+    inputs: Mapping[str, Any],
+    *,
+    spouse: bool,
+) -> dict[str, Any]:
+    prefix = "us:statutes/26/22#input."
+    if spouse:
+        return {
+            f"{prefix}age": inputs["spouse_age"],
+            f"{prefix}retired_on_disability_before_year_end": False,
+            f"{prefix}unable_to_engage_substantial_gainful_activity": False,
+            f"{prefix}medically_determinable_impairment": False,
+            f"{prefix}impairment_expected_to_result_in_death": False,
+            f"{prefix}impairment_duration_months": 0,
+            f"{prefix}disability_proof_furnished": False,
+            f"{prefix}section_22_disability_income": 0,
+        }
+    return {
+        f"{prefix}age": inputs["primary_age"],
+        f"{prefix}retired_on_disability_before_year_end": inputs[
+            "primary_retired_on_disability"
+        ],
+        f"{prefix}unable_to_engage_substantial_gainful_activity": inputs[
+            "primary_unable_substantial_gainful_activity"
+        ],
+        f"{prefix}medically_determinable_impairment": inputs[
+            "primary_medically_determinable_impairment"
+        ],
+        f"{prefix}impairment_expected_to_result_in_death": inputs[
+            "primary_impairment_expected_to_result_in_death"
+        ],
+        f"{prefix}impairment_duration_months": inputs[
+            "primary_impairment_duration_months"
+        ],
+        f"{prefix}disability_proof_furnished": inputs[
+            "primary_disability_proof_furnished"
+        ],
+        f"{prefix}section_22_disability_income": inputs["primary_disability_income"],
+    }
+
+
+def _validate_elderly_disabled_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    inputs = case.inputs
+    prefix = "us:statutes/26/22#input."
+    relation = "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit"
+    payment_relation = "us:statutes/26/22#relation.section_22_payment_of_tax_unit"
+    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    _require_fixture_values(
+        suite="us-elderly-disabled-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected={
+            f"{prefix}filing_status": status_codes[case.filing_status],
+            f"{prefix}adjusted_gross_income": inputs["adjusted_gross_income"],
+            (
+                f"{prefix}social_security_title_ii_benefits_excluded_from_gross_income"
+            ): inputs["nontaxable_social_security"],
+            (f"{prefix}railroad_retirement_act_benefits_excluded_from_gross_income"): 0,
+            (
+                f"{prefix}"
+                "veterans_affairs_pension_annuity_or_disability_benefits_"
+                "excluded_from_gross_income"
+            ): 0,
+            (
+                f"{prefix}"
+                "other_non_title_pension_annuity_or_disability_benefits_"
+                "excluded_from_gross_income"
+            ): 0,
+            (f"{prefix}workers_compensation_treated_as_social_security_benefit"): 0,
+            f"{prefix}married_at_close_of_taxable_year": (
+                case.filing_status == "joint"
+            ),
+            f"{prefix}spouses_lived_apart_all_year": False,
+            f"{prefix}is_nonresident_alien": False,
+            payment_relation: [],
+        },
+    )
+    people = actual.get(relation)
+    expected_people = [_section_22_fixture_person(inputs, spouse=False)]
+    if case.filing_status == "joint":
+        expected_people.append(_section_22_fixture_person(inputs, spouse=True))
+    if not isinstance(people, list) or len(people) != len(expected_people):
+        raise ValueError(
+            f"us-elderly-disabled-grid: fixture case {case.case_id!r} "
+            f"relation {relation!r} must contain {len(expected_people)} "
+            "Person input(s)"
+        )
+    for person, expected_person in zip(
+        people,
+        expected_people,
+        strict=True,
+    ):
+        if not isinstance(person, dict):
+            raise ValueError(
+                f"us-elderly-disabled-grid: fixture case {case.case_id!r} "
+                "has a non-mapping Person input"
+            )
+        _require_fixture_values(
+            suite="us-elderly-disabled-grid",
+            case_id=case.case_id,
+            actual=person,
+            expected=expected_person,
+        )
+
+
+def _validate_llc_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    inputs = case.inputs
+    prefix = "us:statutes/26/25A#input."
+    relation = "us:statutes/26/25A#relation.education_credit_member_of_tax_unit"
+    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    _require_fixture_values(
+        suite="us-llc-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected={
+            f"{prefix}filing_status": status_codes[case.filing_status],
+            f"{prefix}modified_adjusted_gross_income": inputs[
+                "modified_adjusted_gross_income"
+            ],
+            f"{prefix}income_tax_before_credits": inputs["income_tax_before_credits"],
+            f"{prefix}foreign_tax_credit": 0,
+            f"{prefix}cdcc": 0,
+            f"{prefix}taxpayer_is_section_1_g_child": False,
+            f"{prefix}is_nonresident_alien": False,
+            f"{prefix}section_6013_resident_alien_election": False,
+        },
+    )
+    people = actual.get(relation)
+    expenses = inputs["qualified_expenses"]
+    if not isinstance(people, list) or len(people) != len(expenses):
+        raise ValueError(
+            f"us-llc-grid: fixture case {case.case_id!r} relation "
+            f"{relation!r} must contain {len(expenses)} Person input(s)"
+        )
+    common_person = {
+        f"{prefix}excludable_educational_assistance": 0,
+        f"{prefix}is_tax_unit_dependent": True,
+        f"{prefix}is_taxpayer": False,
+        f"{prefix}is_spouse": False,
+        f"{prefix}meets_higher_education_act_student_requirements": False,
+        f"{prefix}at_least_half_time_student": False,
+        f"{prefix}aotc_prior_year_election_count": 0,
+        (f"{prefix}completed_first_four_years_postsecondary_before_year"): False,
+        f"{prefix}has_felony_drug_conviction": False,
+        f"{prefix}aotc_election_in_effect": False,
+        f"{prefix}education_credit_election_in_effect": True,
+        (f"{prefix}education_credit_identification_requirements_met"): True,
+        (f"{prefix}institution_employer_identification_number_included"): False,
+        f"{prefix}payee_statement_received": True,
+        f"{prefix}aotc_disallowance_period_applies": False,
+    }
+    for person, amount in zip(people, expenses, strict=True):
+        if not isinstance(person, dict):
+            raise ValueError(
+                f"us-llc-grid: fixture case {case.case_id!r} has a "
+                "non-mapping Person input"
+            )
+        _require_fixture_values(
+            suite="us-llc-grid",
+            case_id=case.case_id,
+            actual=person,
+            expected={
+                **common_person,
+                f"{prefix}qualified_tuition_and_related_expenses": amount,
+            },
+        )
+
+
+def _verify_parameter_values(
+    label: str,
+    actual: Mapping[str, Any],
+    expected: Mapping[str, Any],
+) -> None:
+    for key, expected_value in expected.items():
+        if key not in actual or not _same_scalar(actual[key], expected_value):
+            raise ValueError(
+                f"{label}: PolicyEngine 2026 parameter {key!r} is "
+                f"{actual.get(key)!r}; expected {expected_value!r}"
+            )
+
+
+def _verify_qbid_pe_parameters(tax_benefit_system: Any) -> None:
+    p = tax_benefit_system.parameters("2026-01-01").gov.irs.deductions.qbi
+    _verify_parameter_values(
+        "us-qbid-grid",
+        {
+            "phase_out.start.SINGLE": p.phase_out.start.SINGLE,
+            "phase_out.start.JOINT": p.phase_out.start.JOINT,
+            "phase_out.start.SEPARATE": p.phase_out.start.SEPARATE,
+            "phase_out.length.SINGLE": p.phase_out.length.SINGLE,
+            "phase_out.length.JOINT": p.phase_out.length.JOINT,
+            "deduction_floor.in_effect": p.deduction_floor.in_effect,
+            "deduction_floor.amount@999": float(p.deduction_floor.amount.calc(999)),
+            "deduction_floor.amount@1000": float(p.deduction_floor.amount.calc(1_000)),
+        },
+        {
+            "phase_out.start.SINGLE": 201_750,
+            "phase_out.start.JOINT": 403_500,
+            "phase_out.start.SEPARATE": 201_775,
+            "phase_out.length.SINGLE": 75_000,
+            "phase_out.length.JOINT": 150_000,
+            "deduction_floor.in_effect": True,
+            "deduction_floor.amount@999": 0,
+            "deduction_floor.amount@1000": 400,
+        },
+    )
+
+
+def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
+    p = tax_benefit_system.parameters("2026-01-01").gov.irs.credits.retirement_saving
+    # ParameterScale thresholds switch at their boundary.  Checking just below
+    # and at each published value proves the exact stored breakpoints while
+    # leaving the inclusive-maximum truth case to surface as a real mismatch.
+    _verify_parameter_values(
+        "us-savers-credit-grid",
+        {
+            "rate.joint@48499.99": float(p.rate.joint.calc(48_499.99)),
+            "rate.joint@48500": float(p.rate.joint.calc(48_500)),
+            "rate.joint@52500": float(p.rate.joint.calc(52_500)),
+            "rate.joint@80500": float(p.rate.joint.calc(80_500)),
+            "rate.threshold_adjustment.JOINT": (p.rate.threshold_adjustment.JOINT),
+            "rate.threshold_adjustment.SINGLE": (p.rate.threshold_adjustment.SINGLE),
+            "contributions_cap": p.contributions_cap,
+        },
+        {
+            "rate.joint@48499.99": 0.5,
+            "rate.joint@48500": 0.2,
+            "rate.joint@52500": 0.1,
+            "rate.joint@80500": 0,
+            "rate.threshold_adjustment.JOINT": 1,
+            "rate.threshold_adjustment.SINGLE": 0.5,
+            "contributions_cap": 2_000,
+        },
+    )
+
+
+def _verify_elderly_disabled_pe_parameters(
+    tax_benefit_system: Any,
+) -> None:
+    p = tax_benefit_system.parameters("2026-01-01").gov.irs.credits.elderly_or_disabled
+    _verify_parameter_values(
+        "us-elderly-disabled-grid",
+        {
+            "age": p.age,
+            "amount.one_qualified": p.amount.one_qualified,
+            "amount.two_qualified": p.amount.two_qualified,
+            "amount.separate": p.amount.separate,
+            "phase_out.threshold.SINGLE": p.phase_out.threshold.SINGLE,
+            "phase_out.threshold.JOINT": p.phase_out.threshold.JOINT,
+            "phase_out.rate": p.phase_out.rate,
+            "rate": p.rate,
+        },
+        {
+            "age": 65,
+            "amount.one_qualified": 5_000,
+            "amount.two_qualified": 7_500,
+            "amount.separate": 3_750,
+            "phase_out.threshold.SINGLE": 7_500,
+            "phase_out.threshold.JOINT": 10_000,
+            "phase_out.rate": 0.5,
+            "rate": 0.15,
+        },
+    )
+
+
+def _verify_llc_pe_parameters(tax_benefit_system: Any) -> None:
+    p = tax_benefit_system.parameters(
+        "2026-01-01"
+    ).gov.irs.credits.education.lifetime_learning_credit
+    _verify_parameter_values(
+        "us-llc-grid",
+        {
+            "phase_out.start.single": p.phase_out.start.single,
+            "phase_out.start.joint": p.phase_out.start.joint,
+            "phase_out.length.single": p.phase_out.length.single,
+            "phase_out.length.joint": p.phase_out.length.joint,
+            "expense_limit": p.expense_limit,
+            "rate": p.rate,
+            "abolition": p.abolition,
+        },
+        {
+            "phase_out.start.single": 80_000,
+            "phase_out.start.joint": 160_000,
+            "phase_out.length.single": 10_000,
+            "phase_out.length.joint": 20_000,
+            "expense_limit": 10_000,
+            "rate": 0.2,
+            "abolition": False,
+        },
+    )
+
+
 # The RuleSpec paths and output names below are completed by the companion
 # RuleSpec lanes.  Keeping them in this one registry makes each run select and
 # read only one fixture; a missing companion cannot prevent another policy from
 # running.
 POLICIES: dict[str, PolicyConfig] = {
+    "qualified_business_income_deduction": PolicyConfig(
+        key="qualified_business_income_deduction",
+        suite="us-qbid-grid",
+        title="Qualified business income deduction",
+        axiom_module_ref=(
+            "us:policies/income_tax/qualified_business_income_deduction_pipeline"
+        ),
+        fixture_path=Path(
+            "us/policies/income_tax/"
+            "qualified_business_income_deduction_pipeline.test.yaml"
+        ),
+        axiom_output=(
+            "us:policies/income_tax/"
+            "qualified_business_income_deduction_pipeline"
+            "#federal_qualified_business_income_deduction"
+        ),
+        pe_output_variables=("qualified_business_income_deduction",),
+        pe_boundary=(
+            "TaxUnit section 199A deduction over caller-resolved QBI, wages, "
+            "UBIA, REIT/PTP income, taxable income, and net capital gain"
+        ),
+        cases=_QBID_CASES,
+        pe_situation=_qbid_situation,
+        fixture_input_validator=_validate_qbid_fixture,
+        pe_parameter_validator=_verify_qbid_pe_parameters,
+    ),
+    "savers_credit": PolicyConfig(
+        key="savers_credit",
+        suite="us-savers-credit-grid",
+        title="Saver's credit before section 26",
+        axiom_module_ref=("us:policies/income_tax/savers_credit_pipeline"),
+        fixture_path=Path("us/policies/income_tax/savers_credit_pipeline.test.yaml"),
+        axiom_output=(
+            "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit"
+        ),
+        # The public PE variable applies the nonrefundable credit limit.
+        # `savers_credit_potential` is its statutory pre-section-26 input and
+        # therefore matches the Axiom companion boundary.
+        pe_output_variables=("savers_credit_potential",),
+        pe_boundary=(
+            "TaxUnit statutory section 25B amount before section 26, summed "
+            "from separately capped eligible Persons"
+        ),
+        cases=_SAVERS_CREDIT_CASES,
+        pe_situation=_savers_credit_situation,
+        fixture_input_validator=_validate_savers_credit_fixture,
+        pe_diagnostic_variables=(
+            "savers_credit",
+            "savers_credit_credit_limit",
+        ),
+        pe_parameter_validator=_verify_savers_pe_parameters,
+    ),
+    "elderly_disabled_credit": PolicyConfig(
+        key="elderly_disabled_credit",
+        suite="us-elderly-disabled-grid",
+        title="Credit for the elderly or disabled before section 26",
+        axiom_module_ref=("us:policies/income_tax/elderly_disabled_credit_pipeline"),
+        fixture_path=Path(
+            "us/policies/income_tax/elderly_disabled_credit_pipeline.test.yaml"
+        ),
+        axiom_output=(
+            "us:policies/income_tax/elderly_disabled_credit_pipeline"
+            "#federal_elderly_disabled_credit"
+        ),
+        # The public PE variable applies the nonrefundable credit limit.
+        pe_output_variables=("elderly_disabled_credit_potential",),
+        pe_boundary=(
+            "TaxUnit statutory section 22 amount before section 26, including "
+            "aged and collapsed permanent-total-disability branches"
+        ),
+        cases=_ELDERLY_DISABLED_CASES,
+        pe_situation=_elderly_disabled_situation,
+        fixture_input_validator=_validate_elderly_disabled_fixture,
+        pe_diagnostic_variables=(
+            "elderly_disabled_credit",
+            "elderly_disabled_credit_credit_limit",
+        ),
+        pe_parameter_validator=_verify_elderly_disabled_pe_parameters,
+    ),
+    "lifetime_learning_credit": PolicyConfig(
+        key="lifetime_learning_credit",
+        suite="us-llc-grid",
+        title="Lifetime Learning Credit",
+        axiom_module_ref=("us:policies/income_tax/lifetime_learning_credit_pipeline"),
+        fixture_path=Path(
+            "us/policies/income_tax/lifetime_learning_credit_pipeline.test.yaml"
+        ),
+        axiom_output=(
+            "us:policies/income_tax/lifetime_learning_credit_pipeline"
+            "#federal_lifetime_learning_credit"
+        ),
+        pe_output_variables=("lifetime_learning_credit",),
+        pe_boundary=(
+            "TaxUnit section 25A(c) amount after the section 26 liability "
+            "limit; the diagnostic case binds that limit"
+        ),
+        cases=_LLC_CASES,
+        pe_situation=_llc_situation,
+        fixture_input_validator=_validate_llc_fixture,
+        pe_diagnostic_variables=(
+            "lifetime_learning_credit_potential",
+            "lifetime_learning_credit_credit_limit",
+        ),
+        pe_parameter_validator=_verify_llc_pe_parameters,
+    ),
     "additional_medicare_tax": PolicyConfig(
         key="additional_medicare_tax",
         suite="us-additional-medicare-grid",
         title="Additional Medicare Tax",
-        axiom_module_ref=(
-            "us:policies/income_tax/additional_medicare_tax_pipeline"
-        ),
+        axiom_module_ref=("us:policies/income_tax/additional_medicare_tax_pipeline"),
         fixture_path=Path(
             "us/policies/income_tax/additional_medicare_tax_pipeline.test.yaml"
         ),
@@ -711,9 +1806,7 @@ POLICIES: dict[str, PolicyConfig] = {
         key="net_investment_income_tax",
         suite="us-niit-grid",
         title="Net Investment Income Tax",
-        axiom_module_ref=(
-            "us:policies/income_tax/net_investment_income_tax_pipeline"
-        ),
+        axiom_module_ref=("us:policies/income_tax/net_investment_income_tax_pipeline"),
         fixture_path=Path(
             "us/policies/income_tax/net_investment_income_tax_pipeline.test.yaml"
         ),
@@ -736,9 +1829,7 @@ POLICIES: dict[str, PolicyConfig] = {
         title="ACA Premium Tax Credit",
         axiom_module_ref="us:policies/aca/ptc_pipeline",
         fixture_path=Path("us/policies/aca/ptc_pipeline.test.yaml"),
-        axiom_output=(
-            "us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit"
-        ),
+        axiom_output=("us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit"),
         # `aca_ptc` omits the enrolled-premium cap.  `used_aca_ptc` applies it
         # and therefore matches the section 36B / GRID-CONTRACT output boundary.
         pe_output_variables=("used_aca_ptc",),
@@ -837,8 +1928,12 @@ def _policyengine_values(
 
     totals: dict[str, float] = {}
     components: dict[str, dict[str, float]] = {}
+    parameters_verified = False
     for case in config.cases:
         simulation = Simulation(situation=config.pe_situation(case))
+        if config.pe_parameter_validator is not None and not parameters_verified:
+            config.pe_parameter_validator(simulation.tax_benefit_system)
+            parameters_verified = True
         if config.key == "aca_ptc":
             actual_fpg = sum(
                 float(value)
@@ -867,11 +1962,19 @@ def _policyengine_values(
                     f"{actual_fraction}; expected {expected_fraction}"
                 )
         case_components: dict[str, float] = {}
-        for variable in config.pe_output_variables:
+        variables = dict.fromkeys(
+            (
+                *config.pe_output_variables,
+                *config.pe_diagnostic_variables,
+            )
+        )
+        for variable in variables:
             values = simulation.calculate(variable, VALIDATION_YEAR)
             case_components[variable] = sum(float(value) for value in values)
         components[case.case_id] = case_components
-        totals[case.case_id] = sum(case_components.values())
+        totals[case.case_id] = sum(
+            case_components[variable] for variable in config.pe_output_variables
+        )
     return totals, components
 
 
@@ -990,6 +2093,7 @@ def _build_report(
             },
             "policyengine": {
                 "outputs": list(config.pe_output_variables),
+                "diagnostic_outputs": list(config.pe_diagnostic_variables),
                 "boundary": config.pe_boundary,
             },
         },
