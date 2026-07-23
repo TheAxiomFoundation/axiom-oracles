@@ -246,7 +246,9 @@ and SECA landed fixtures pass strict case/period/input validation. Additional
 Medicare remains blocked on one companion-fixture contract correction, which
 the fourth binding now rejects explicitly. Real dashboard reports exist for
 the three unblocked suites, and those three conformance rows now point to their
-live evidence. Additional Medicare remains uncovered.
+live evidence. Regenerated conformance coverage is 30/136 (up from 27/136) with
+zero unexplained and zero Axiom-attributed gaps. Additional Medicare remains
+uncovered.
 
 ## Done
 
@@ -290,13 +292,22 @@ live evidence. Additional Medicare remains uncovered.
   and the live-suite guard. ACA's note records the downstream `used_aca_ptc`
   cap-aligned binding; NIIT records the no-section-911 AGI/MAGI boundary; SECA
   records the Person-to-TaxUnit sum and exclusion of Additional Medicare Tax.
+- Regenerated in the mandated order: US grids, final live comparisons,
+  affected map, vacuous/freshness data, the fixed-date 2026-07-23 scoreboard
+  snapshots, ratchet, and burndown. The three adopted rows raise us-pe coverage
+  from 27/136 to 30/136; Additional Medicare remains among the 106 uncovered
+  policies.
+- The complete deterministic battery passes: all generated `--check` gates,
+  comparison listing, rule verification, state-tax Populace contract, and
+  `ruff check .`; full pytest reports 1,682 passed and 33 skipped; offline
+  `uv build` produced both sdist and wheel.
 
 ## Next
 
 - Integrate the Additional Medicare companion once its exact contract case is
   corrected; then run and commit its real report.
 - Adopt its remaining conformance row only after that report exists.
-- Regenerate artifacts in the mandated order for the three evidence-backed
-  adoptions, then run the full deterministic check/build battery and record the
-  fourth-suite blocker separately.
+- Rerun the Additional Medicare suite, adopt that row, and repeat the mandated
+  generated-artifact sequence to reach the intended 31/136 once the companion
+  fixture lands.
 - Write the required build summary with per-case results and command outcomes.

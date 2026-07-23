@@ -226,7 +226,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T04:23:30Z",
+    "generated_at": "2026-07-23T04:33:21Z",
     "generated_by": "scripts/run_comparison.py::us-aca-ptc-grid",
     "oracle": {
       "name": "policyengine",
@@ -237,7 +237,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "3474e8110eb703402a3d85465d05d08314befb95"
+        "sha": "e9a8e0d71ed5d9ec0c0a6351d26a1205d9614616"
       }
     ],
     "run_kind": "manual",

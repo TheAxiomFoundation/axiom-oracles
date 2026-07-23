@@ -1279,6 +1279,42 @@
       "source": "comparisons/uk-worker-pit-ukmod.yaml"
     },
     {
+      "suite": "us-aca-ptc-grid",
+      "name": "us-aca-ptc-grid",
+      "report": "axiom-policyengine-us-aca-ptc-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-aca-ptc-grid.yaml"
+    },
+    {
+      "suite": "us-additional-medicare-grid",
+      "name": "us-additional-medicare-grid",
+      "report": "axiom-policyengine-us-additional-medicare-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-additional-medicare-grid.yaml"
+    },
+    {
+      "suite": "us-niit-grid",
+      "name": "us-niit-grid",
+      "report": "axiom-policyengine-us-niit-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-niit-grid.yaml"
+    },
+    {
+      "suite": "us-seca-grid",
+      "name": "us-seca-grid",
+      "report": "axiom-policyengine-us-seca-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-seca-grid.yaml"
+    },
+    {
       "suite": "ut-income-tax-liability",
       "name": "ut-income-tax-liability",
       "report": "axiom-policyengine-taxsim-ut-income-tax-liability.json",

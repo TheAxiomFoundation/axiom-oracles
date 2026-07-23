@@ -35,8 +35,11 @@ ratchets:
   # targets that differ from final liability on the certified population.
   # Alabama and North Carolina remain covered because their 2026 downstream
   # branches are provably zero and target-to-final equality is population-complete.
-  # Verified post-reclassification totals: 27 covered, 109 uncovered, 136 in scope.
-  covered_min: 27
+  # Federal ACA PTC, NIIT, and ordinary SECA now add three non-vacuous 2026
+  # PolicyEngine-US 1.767.3 grids. Verified totals: 30 covered, 106 uncovered,
+  # 136 in scope. Additional Medicare remains uncovered pending its exact P1
+  # companion fixture.
+  covered_min: 30
   unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 136
