@@ -139,6 +139,27 @@ missing.
 Required runner keys: `axiom_rules_repo`. Required `parameters`: `left`,
 `right`, `concept`, `period`, `sample_size`, `population`.
 
+### `federal-tax-liability-grid`
+
+Runs one six-case federal tax grid through
+`scripts/generate_federal_tax_liability.py`. The Axiom leg reads the selected
+policy's engine-verified RuleSpec companion fixture; the PolicyEngine leg builds
+fresh 2026 simulations under the config's explicit per-suite PE-US/core pins.
+Runs are policy-isolated and have no committed-report fallback, so one missing
+companion cannot couple the other policies and an unavailable oracle fails
+rather than replaying stale evidence.
+
+Required `parameters`: `policy`, `rulespec_roots`,
+`policyengine_version: 4.18.9`, `policyengine_us_version: 1.767.3`, and
+`policyengine_core_version: 3.30.3`. The federal runner rejects missing or
+different pins so these suites cannot silently fall back to the older default
+oracle universe. Optional `parameters`: `python` (defaults to `3.13`). The
+roots are passed to the generator explicitly; it never assumes a fixed sibling
+RuleSpec checkout. Configs using development-worktree roots should also declare
+the canonical `rulespec_remote` so the affected-rerun map retains the
+`rulespec-us` dependency and CI can clone it when the development root is
+absent.
+
 ### `snap-qc-compare`
 
 Replays USDA SNAP Quality Control public-use reviews through the Axiom RuleSpec

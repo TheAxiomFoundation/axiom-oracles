@@ -239,11 +239,11 @@ residual), #229 (small-suite grounding).
 
 ## State
 
-In progress on `fed-parity/federal-grid-suites`. Building a configurable
-`federal-tax-liability-grid` runner and four PolicyEngine-US 1.767.3 comparison
-suites for ACA PTC, NIIT, SECA, and Additional Medicare Tax. The generic
-machinery and all four PE legs are implemented locally; RuleSpec companion
-paths/output keys are pending from the two parallel lanes.
+In progress on `fed-parity/federal-grid-suites`. The configurable
+`federal-tax-liability-grid` runner, all four PolicyEngine-US 1.767.3 legs, and
+the ACA PTC, NIIT, and SECA Axiom bindings are implemented. Those three landed
+RuleSpec fixtures pass strict case/period/input validation. Additional Medicare
+remains blocked on one companion-fixture contract correction.
 
 ## Done
 
@@ -259,15 +259,26 @@ paths/output keys are pending from the two parallel lanes.
   wage and SE income; `self_employment_tax` excludes the 0.9% additional tax
   and is summed from Person to TaxUnit; NIIT derives AGI from the prescribed
   income inputs; ACA binds `used_aca_ptc` so the enrolled-premium cap is present.
-- Added local generator/runner tests; the isolated test run passes 8/8 and the
-  changed files pass `ruff check`.
+- Added policy-isolated generator/runner machinery with required exact PE pins,
+  configurable RuleSpec roots plus remote fallback, strict fixture
+  case/period/input checks, canonical v2 aggregates, and a non-vacuous guard.
+- Bound the landed ACA PTC (`dd48de7f`), SECA (`a1aa8c35`), and NIIT
+  (`9173e7bd`) companions and added their comparison configs with source-boundary
+  citations.
+- Verified the exact Axiom fixture values and input shapes for all 18 landed
+  contract cases. The focused runner/generator/affected-map/vacuous-gate tests
+  pass 84/84 and the changed Python files pass `ruff check`.
+- Flagged the Additional Medicare fixture mismatch: its current companion omits
+  `amt-single-wage-se` and substitutes completed section-1402 income. The grid
+  requires $150,000 Schedule C-style profit before PolicyEngine's 0.9235 factor,
+  producing $346.725 rather than $450.
 
 ## Next
 
-- Inspect the companion RuleSpec fixture locations and schemas as they land.
-- Complete the generator's RuleSpec module/output registry and four comparison
-  configurations with configurable `rulespec_roots`.
-- Run all four real comparisons, disposition genuine residuals if any, adopt the
-  four conformance rows, regenerate artifacts in the mandated order, and run the
-  full deterministic check/build battery.
+- Run and commit the three fully landed real comparison reports.
+- Integrate the Additional Medicare companion once its exact contract case is
+  corrected; then run and commit its real report.
+- Adopt the four conformance rows only after all four reports exist, regenerate
+  artifacts in the mandated order, and run the full deterministic check/build
+  battery.
 - Write the required build summary with per-case results and command outcomes.

@@ -1,0 +1,57 @@
+# Federal ACA premium tax credit — Axiom vs PolicyEngine-US, tax year 2026.
+#
+# Axiom boundary: the narrow RuleSpec pipeline accepts completed household
+# MAGI, prior-year household FPL, annual SLCSP and enrolled-plan premiums, and
+# exactly 12 coverage months. It annualizes the monthly assistance amount and
+# gates the annual credit on its full-year/applicable-taxpayer predicates.
+# Code: rulespec-us@dd48de7f
+# us/policies/aca/ptc_pipeline.yaml:28-51,552-599,600-634.
+#
+# PolicyEngine binding decision: compare `used_aca_ptc`, not raw `aca_ptc`.
+# Raw `aca_ptc` is annual SLCSP minus MAGI times the required contribution
+# percentage, but does not cap the result at the enrolled-plan premium;
+# `used_aca_ptc` applies exactly that cap. `slcsp` is the benchmark variable
+# (monthly definition, aggregated for the annual calculation), `aca_magi` is
+# annual, and this grid sets annual `pays_aca_premium` true for every member,
+# representing all 12 contract months. PolicyEngine computes the FPL fraction
+# from prior-year FPL. Code: policyengine-us@49d19b239a593dbac8920ac6fd80cfe33372343a
+# policyengine_us/variables/gov/aca/ptc/aca_ptc.py:4-28;
+# .../gov/aca/ptc/used_aca_ptc.py:4-15;
+# .../gov/aca/slspc/slcsp.py:4-10;
+# .../gov/aca/eligibility/aca_magi.py:4-9;
+# .../gov/aca/eligibility/aca_magi_fraction.py:4-22;
+# .../gov/aca/eligibility/pays_aca_premium.py:4-21.
+#
+# The exact suite stack is PolicyEngine 4.18.9, PE-US 1.767.3 and core 3.30.3:
+# PE-US matches the conformance universe label and includes the 2026
+# OBBBA-era ACA parameters; this is the known-good Python 3.13 import pair.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-aca-ptc-grid --summary
+
+name: us-aca-ptc-grid
+title: Federal ACA premium tax credit — Axiom vs PolicyEngine
+description: >-
+  Compares the full-year 2026 Axiom ACA PTC composition against
+  PolicyEngine-US used_aca_ptc on the six exact GRID-CONTRACT P4 cases.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: aca_ptc
+    period: "2026"
+    concept: us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/wt-fed-ptc
+
+artifacts:
+  report_basename: axiom-policyengine-us-aca-ptc-grid
+
+dashboard:
+  filename: axiom-policyengine-us-aca-ptc-grid.json
+  suite: us-aca-ptc-grid

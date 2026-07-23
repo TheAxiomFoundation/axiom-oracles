@@ -860,6 +860,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
+    elif runner_type == "federal-tax-liability-grid":
+        pins = _resolve_pe_oracle_pins(params)
+        oracle = {
+            "name": "policyengine",
+            "policyengine_package": pins[0],
+            "policyengine_us": pins[1].split("==", 1)[-1],
+            "policyengine_core": pins[2].split("==", 1)[-1],
+        }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
     elif runner_type == "euromod-synthetic-compare":
@@ -2131,6 +2139,81 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     output.write_text(source.read_text())
 
 
+def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
+    """Run one independent federal RuleSpec-fixture vs PolicyEngine case grid.
+
+    Unlike the legacy all-state generator, this wrapper selects exactly one
+    policy and has no committed-report fallback: a missing fixture or an
+    unavailable PolicyEngine wheel fails the run instead of replaying evidence.
+    The RuleSpec roots come from the comparison YAML and are passed explicitly
+    to the generator, eliminating the state generator's fixed-sibling flaw.
+    """
+    params = runner["parameters"]
+    required_pins = {
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+    }
+    incorrect_pins = {
+        key: params.get(key)
+        for key, expected in required_pins.items()
+        if params.get(key) != expected
+    }
+    if incorrect_pins:
+        expected = ", ".join(
+            f"{key}={version}" for key, version in required_pins.items()
+        )
+        raise SystemExit(
+            "federal-tax-liability-grid requires the reviewed 2026 oracle "
+            f"stack ({expected}); received {incorrect_pins}"
+        )
+    raw_roots = params.get("rulespec_roots") or []
+    if not isinstance(raw_roots, list) or not raw_roots:
+        raise SystemExit(
+            "federal-tax-liability-grid requires runner.parameters.rulespec_roots"
+        )
+    roots = [
+        expanded
+        for raw_root in raw_roots
+        if (expanded := _expand_path(str(raw_root))).exists()
+    ]
+    if not roots:
+        remote = params.get("rulespec_remote")
+        if not remote:
+            attempted = ", ".join(str(_expand_path(root)) for root in raw_roots)
+            raise SystemExit(
+                "rulespec_roots: no configured path exists "
+                f"({attempted}) and no rulespec_remote fallback is declared"
+            )
+        roots = [_ensure_rulespec_us_checkout(str(remote))]
+        # The config object is shared with the outer provenance stamper. Record
+        # the checkout that actually ran so it stamps the clone's exact SHA,
+        # rather than the missing development-worktree path.
+        params["rulespec_roots"] = [str(roots[0])]
+    pins = _resolve_pe_oracle_pins(params)
+    generator = REPO_ROOT / "scripts" / "generate_federal_tax_liability.py"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        str(params.get("python", "3.13")),
+        "--no-project",
+        *(arg for pin in pins for arg in ("--with", pin)),
+        "python",
+        str(generator),
+        "--policy",
+        str(params["policy"]),
+        *(
+            arg
+            for root in roots
+            for arg in ("--rulespec-root", str(root))
+        ),
+        "--output",
+        str(output),
+    ]
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+
+
 def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     """Council Tax Reduction grid: rulespec-uk pension-age scheme vs PolicyEngine-UK.
 
@@ -2677,6 +2760,7 @@ RUNNERS = {
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
+    "federal-tax-liability-grid": _run_federal_tax_liability_grid,
     "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
     "snap-qc-compare": _run_snap_qc_compare,
     "spsm-ca-compare": _run_spsm_ca_compare,
