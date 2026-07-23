@@ -19,9 +19,11 @@ policies:
     output_vars:
       - aca_ptc
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-US computes the ACA premium tax credit (IRC 36B); no PE-backed PTC comparison
-      suite runs yet.
+    suite: us-aca-ptc-grid
+    note: 'The us-aca-ptc-grid suite compares six full-year 2026 IRC 36B cases.
+      It binds PE-US used_aca_ptc rather than raw aca_ptc so the compared
+      boundary includes the enrolled-plan premium cap present in Axiom. The
+      committed report is 6/6 within one cent and includes nonzero cases.'
   - id: us-pe:acp
     oracle_policy_name: acp
     oracle_policy_type: rules
@@ -819,7 +821,12 @@ policies:
     output_vars:
       - net_investment_income_tax
     in_scope: true
-    suite: null
+    suite: us-niit-grid
+    note: 'The us-niit-grid suite compares six 2026 individual section 1411
+      cases against PE-US net_investment_income_tax, including status
+      thresholds, mixed investment income, gains, and passive rent. With no
+      section 911 amounts, both legs use AGI equal to NIIT MAGI; the committed
+      report is 6/6 with nonzero cases.'
   - id: us-pe:new_clean_vehicle_credit
     oracle_policy_name: new_clean_vehicle_credit
     oracle_policy_type: rules
@@ -1083,9 +1090,12 @@ policies:
     output_vars:
       - self_employment_tax
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-US computes SECA (self-employment tax); fiit-ecps compares employee/employer
-      OASDI+Medicare but not the SECA surface.
+    suite: us-seca-grid
+    note: 'The us-seca-grid suite compares six 2026 ordinary SECA cases,
+      including the $400 floor, OASDI cap and wage coordination, against PE-US
+      self_employment_tax summed from Person to TaxUnit. Both boundaries include
+      OASDI plus ordinary Medicare and exclude the separate 0.9% Additional
+      Medicare Tax; the committed report is 6/6 with nonzero cases.'
   - id: us-pe:snap
     oracle_policy_name: snap
     oracle_policy_type: rules

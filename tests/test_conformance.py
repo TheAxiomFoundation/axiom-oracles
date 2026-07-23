@@ -588,6 +588,9 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "mn-tanf-ecps",
         "ny-tanf-ecps",
         "wa-tanf-ecps",
+        "us-aca-ptc-grid",
+        "us-niit-grid",
+        "us-seca-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
@@ -597,6 +600,9 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert by_name[program].suite == "fiit-ecps", program
     # SNAP is one national row registered to its canonical (largest) suite.
     assert by_name["snap"].suite == "ca-snap-ecps"
+    assert by_name["aca_ptc"].suite == "us-aca-ptc-grid"
+    assert by_name["net_investment_income_tax"].suite == "us-niit-grid"
+    assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final
     # public variable. These blocked grids exercise useful narrower components,
     # but none proves the corresponding final liability.

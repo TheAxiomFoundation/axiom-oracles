@@ -245,7 +245,8 @@ all four comparison configs/Axiom bindings are implemented. The ACA PTC, NIIT,
 and SECA landed fixtures pass strict case/period/input validation. Additional
 Medicare remains blocked on one companion-fixture contract correction, which
 the fourth binding now rejects explicitly. Real dashboard reports exist for
-the three unblocked suites.
+the three unblocked suites, and those three conformance rows now point to their
+live evidence. Additional Medicare remains uncovered.
 
 ## Done
 
@@ -285,12 +286,17 @@ the three unblocked suites.
   substituted case ID. The generator now also asserts ACA's 12-month boundary
   and verifies PE's derived prior-year FPL and MAGI/FPL fraction. Focused
   generator tests pass 10/10 under the exact cached PE stack.
+- Adopted the three independently complete reports in `conformance/us-pe.yaml`
+  and the live-suite guard. ACA's note records the downstream `used_aca_ptc`
+  cap-aligned binding; NIIT records the no-section-911 AGI/MAGI boundary; SECA
+  records the Person-to-TaxUnit sum and exclusion of Additional Medicare Tax.
 
 ## Next
 
 - Integrate the Additional Medicare companion once its exact contract case is
   corrected; then run and commit its real report.
-- Adopt the four conformance rows only after all four reports exist, regenerate
-  artifacts in the mandated order, and run the full deterministic check/build
-  battery.
+- Adopt its remaining conformance row only after that report exists.
+- Regenerate artifacts in the mandated order for the three evidence-backed
+  adoptions, then run the full deterministic check/build battery and record the
+  fourth-suite blocker separately.
 - Write the required build summary with per-case results and command outcomes.
