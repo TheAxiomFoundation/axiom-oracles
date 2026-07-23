@@ -174,11 +174,17 @@ def test_report_compacts_generated_axiom_metadata() -> None:
 
 def test_small_suite_default_keeps_full_evidence() -> None:
     # include_inputs=None resolves by suite size; one case is well under the
-    # limit, so the report keeps raw inputs and matched values.
+    # limit, so the report keeps matched values as evidence. The axiom
+    # engine's internal projected input-record dump is ALWAYS summarized to
+    # a count, even in full-evidence mode: those records run ~2 MB per
+    # generic-projector SNAP household (a 1,854-case report reached 3.9 GB
+    # before the strip became unconditional) and are reproducible from the
+    # projector. Full evidence = matched values + household summary +
+    # engine input specs, not engine internals.
     report = _metadata_fixture_report(include_inputs=None)
 
     case = report["cases"][0]
-    assert case["metadata"]["axiom_input_records"] == [{"name": "large"}]
+    assert "axiom_input_records" not in case["metadata"]
     assert case["metadata"]["axiom_input_records_count"] == 1
     assert case["matches"] == [
         {"concept": "us:test#income_tax", "left": 0, "right": 0}
