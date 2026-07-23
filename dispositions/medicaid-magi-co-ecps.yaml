@@ -1,0 +1,34 @@
+# Auto-characterized from the committed report; see axiom-oracles#229.
+schema: axiom_oracles.dispositions.v1
+suite: medicaid-magi-co-ecps
+updated: '2026-07-08'
+entries:
+- id: medicaid-magi-co-ecps-adult_eligible-composed-vs-pe-bridge
+  concept: us:regulations/42-cfr/435#adult_eligible
+  case_selector:
+    case_id_prefix: ecps-
+  disposition: bridge_artifact
+  evidence:
+    mechanism: '42 CFR 435 MAGI category/threshold eligibility determination vs PolicyEngine: 45 adult_eligible
+      mismatches (7 axiom>PE, 7 PE=0, 38 axiom=0; max |diff| 1). Structural bridge/projection + composed-slice
+      divergence between Axiom''s composed state program and PE''s full model, not a rulespec statutory-encoding
+      defect. Representative: ecps-49624 axiom=False PE=True; ecps-49677 axiom=False PE=True; ecps-49721
+      axiom=False PE=True. Per-suite grounding: axiom-oracles#229.'
+    sources:
+    - PROGRESS.md
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
+  expires_on_source_change: true
+- id: medicaid-magi-co-ecps-older_child_eligible-composed-vs-pe-bridge
+  concept: us:regulations/42-cfr/435#older_child_eligible
+  case_selector:
+    case_id_prefix: ecps-
+  disposition: bridge_artifact
+  evidence:
+    mechanism: '42 CFR 435 MAGI category/threshold eligibility determination vs PolicyEngine: 1 older_child_eligible
+      mismatches (1 axiom>PE, 1 PE=0, 0 axiom=0; max |diff| 1). Structural bridge/projection + composed-slice
+      divergence between Axiom''s composed state program and PE''s full model, not a rulespec statutory-encoding
+      defect. Representative: ecps-49732 axiom=True PE=False. Per-suite grounding: axiom-oracles#229.'
+    sources:
+    - PROGRESS.md
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
+  expires_on_source_change: true

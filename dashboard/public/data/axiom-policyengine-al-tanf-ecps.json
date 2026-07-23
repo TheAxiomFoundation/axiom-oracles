@@ -1,0 +1,118 @@
+{
+  "aggregates": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1444,
+      "comparison_weight": 2466056.199342,
+      "components": [],
+      "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
+      "description": "AL TANF (Family Assistance) benefit (annualized)",
+      "left_weighted_sum": 131788551.550018,
+      "match_rate": 100,
+      "match_weight": 2466056.199342,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 131836109.236438,
+      "weighted_difference": -47557.686421,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 1444,
+  "cases": [],
+  "concepts": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AL TANF (Family Assistance) benefit (annualized)",
+      "id": "us-al:policies/dhr/tanf#al_tanf_benefit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 25
+    }
+  ],
+  "dashboard_truncation": {
+    "shown_case_rows": 0,
+    "shown_mismatches": 0,
+    "total_case_rows": 1444,
+    "total_mismatches": 0
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [],
+  "mismatches": [],
+  "population": "enhanced-cps",
+  "provenance": {
+    "dataset": {
+      "population": "enhanced-cps",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-08T10:49:39Z",
+    "generated_by": "scripts/run_comparison.py::al-tanf-ecps",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.752.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us-al",
+        "sha": null
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "US",
+    "type": "country"
+  },
+  "suite": "al-tanf-ecps",
+  "summary": {
+    "comparison_count": 1444,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 1444,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "stored_mismatch_example_count": 0,
+    "weighted": {
+      "comparison_weight": 2466056.199342,
+      "match_rate": 100,
+      "match_weight": 2466056.199342,
+      "mismatch_weight": 0
+    }
+  }
+}

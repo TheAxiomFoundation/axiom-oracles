@@ -1,0 +1,23 @@
+name: pa-income-tax-liability
+title: Pennsylvania income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Pennsylvania ordinary resident wage-earner personal
+  income-tax pipeline in Axiom RuleSpec against PolicyEngine
+  (pa_income_tax_before_forgiveness) at 2026 and TAXSIM (siitax) at its latest
+  supported law year, 2024, on the standard six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: PA
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-pa-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-pa-income-tax-liability.json
+  suite: pa-income-tax-liability

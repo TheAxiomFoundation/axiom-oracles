@@ -43,6 +43,11 @@ from .comparison.report import (
     ComparisonReportAccumulator,
     build_comparison_report,
 )
+from .conformance.compositions import (
+    AXIOM_RULESPEC_ROOT_ENV,
+    load_composition,
+    rulespec_imports_for_concepts,
+)
 from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
@@ -55,7 +60,16 @@ NYC_BENEFITS_DATASET_URL = (
     "$select=program_code&$limit=5000"
 )
 DEFAULT_PERIOD = "2026-05"
-TAXSIM_DEFAULT_PERIOD = "2024"
+# The pinned policyengine-taxsim 2.30.0 binary (see adapters/taxsim/
+# taxsim_pins.json) models law year 2026 rate schedules, the OBBBA standard
+# deduction, childless EITC, and FICA/SECA, so TAXSIM comparisons default to
+# the same 2026 validation year as every other lane. Known 2026 gap, verified
+# empirically against the pinned binary: the qualifying-child credit machinery
+# is absent at 2026 — CTC collapses to the $500 ODC path, and ACTC, CDCC, and
+# EITC-with-children return zero (2025 models all of them, including the OBBBA
+# $2,200 CTC). Comparisons of child-credit concepts at 2026 must treat TAXSIM
+# zeros as an NBER gap, not evidence.
+TAXSIM_DEFAULT_PERIOD = "2026"
 MAX_CONSOLE_MISMATCHES = 50
 EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY = "euromod_to_axiom_input_bridge"
 
@@ -90,14 +104,52 @@ def _needs_axiom_tax_itemization_choice(concept_ids: tuple[str, ...]) -> bool:
 
 
 def _rulespec_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:
-    imports: list[str] = []
-    for concept_id in concept_ids:
-        module_ref = str(concept_id).split("#", maxsplit=1)[0]
-        if ":" not in module_ref or not module_ref:
-            continue
-        if module_ref not in imports:
-            imports.append(module_ref)
-    return tuple(imports)
+    # Single-sourced with the recorded per-suite compositions so the committed
+    # record (conformance/compositions/<jur>.yaml) describes exactly the
+    # import-set this runner builds.
+    return rulespec_imports_for_concepts(concept_ids)
+
+
+def _echo_resolved_axiom_composition(
+    suite_name: str,
+    engines: set[str],
+    axiom_program: Path | None,
+) -> None:
+    """Surface the recorded runnable program the axiom leg composes.
+
+    When ``--axiom-program`` is omitted, the axiom leg builds its program from
+    the suite's output concepts. If the suite has a committed composition record
+    (``conformance/compositions/<jur>.yaml``, axiom-oracles#185) this echoes the
+    resolved program modules so the run is reproducible outside the harness, and
+    — when ``AXIOM_RULESPEC_ROOT`` names a checkout — resolves them to concrete
+    files and flags any that are missing. Never fails a run: a suite with no
+    record (US/UK-PE suites) or an unset root is silent/soft. Backward
+    compatible: passing ``--axiom-program`` skips this entirely.
+    """
+
+    if "axiom" not in engines or axiom_program is not None:
+        return
+    try:
+        composition = load_composition(suite_name)
+    except Exception:  # pragma: no cover - never let surfacing fail a run
+        return
+    if composition is None:
+        return
+    rels = ", ".join(composition.paths)
+    suffix = ""
+    root = os.environ.get(AXIOM_RULESPEC_ROOT_ENV)
+    if root:
+        resolved = composition.resolve(root)
+        suffix = f"; root {resolved.root}"
+        missing = resolved.missing_paths()
+        if missing:
+            suffix += "; WARNING missing " + ", ".join(str(p) for p in missing)
+    click.echo(
+        f"Resolved '{composition.suite}' composition from conformance record: "
+        f"{len(composition.imports)} module(s) [{rels}] as {composition.entity}"
+        f"{suffix}.",
+        err=True,
+    )
 
 
 @click.group()
@@ -299,7 +351,7 @@ def sanity_check(
     default=None,
     show_default="auto",
     help=(
-        "Validation period. Defaults to 2024 for TAXSIM comparisons and "
+        "Validation period. Defaults to 2026 for TAXSIM comparisons and "
         "2026-05 otherwise."
     ),
 )
@@ -462,6 +514,9 @@ def compare(
         period = _resolve_period(period, left, right)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
+        _echo_resolved_axiom_composition(
+            report_suite or suite_name, {left, right}, axiom_program
+        )
         cases = _load_population_cases(
             population=population,
             suite_name=suite_name,
@@ -1182,25 +1237,44 @@ def _parse_euromod_switches(
 
 
 def _tax_oracle_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:
-    if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
-        return tuple(
-            import_ref
-            for import_ref in US_TAX_ORACLE_IMPORTS
-            if import_ref != "us:statutes/26/1411"
-        )
-    return US_TAX_ORACLE_IMPORTS
+    del concept_ids
+    # us:statutes/26/1411 (NIIT) is excluded from every composition until the
+    # upstream duplicate-rule encoding is fixed: 1411 imports
+    # us:statutes/26/911/a/1#foreign_earned_income_excluded_from_gross_income
+    # (the child fragment) while 26/25B and 26/32 transitively reach
+    # us:statutes/26/151 -> us:statutes/26/911/a, and BOTH 911/a and 911/a/1
+    # define that rule name, so any closure containing 1411 plus either module
+    # fails `axiom-rules-engine compile` with "duplicate derived rule". The
+    # parent/fragment double definition is an axiom-encode artifact (the
+    # parent should import the fragment's rule, not redefine it). Consequence
+    # while excluded: the composed federal liability omits NIIT, and TAXSIM's
+    # fiitax includes it (verified against the pinned 2.30.0 binary: fiitax =
+    # v28 - credits + niit), so units with investment income above the 1411
+    # thresholds carry a residual equal to TAXSIM's own `niit` output column.
+    return tuple(
+        import_ref
+        for import_ref in US_TAX_ORACLE_IMPORTS
+        if import_ref != "us:statutes/26/1411"
+    )
 
 
 def _tax_oracle_program_rules_for_concepts(
     concept_ids: tuple[str, ...],
 ) -> tuple[dict, ...]:
-    if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
-        return tuple(
-            rule
-            for rule in US_TAX_ORACLE_PROGRAM_RULES
-            if rule.get("name") != "self_employment_income"
-        )
-    return US_TAX_ORACLE_PROGRAM_RULES
+    del concept_ids
+    # The bridge's generated `self_employment_income` shim
+    # (max(0, net_earnings_from_self_employment)) predates the encoded
+    # us:statutes/26/1402/b, which now defines the statutory rule of the same
+    # name (with the $400 inclusion threshold and nonresident-alien
+    # exception) and is pulled in transitively by the 1401/164(f) imports —
+    # composing both fails `axiom-rules-engine compile` with "duplicate
+    # derived rule". Bridge references resolve to the encoded 1402(b) rule,
+    # which is the faithful one; the shim is dropped for every concept set.
+    return tuple(
+        rule
+        for rule in US_TAX_ORACLE_PROGRAM_RULES
+        if rule.get("name") != "self_employment_income"
+    )
 
 
 def _filter_for_accessnyc_mode(

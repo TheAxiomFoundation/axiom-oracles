@@ -47,9 +47,17 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 | `detail/<jur>.json` | Per-policy drill-down (covered/uncovered/excluded, raw + explained rates). Mirrored to `dashboard/public/data/conformance_detail_<jur>.json`. | `scripts/conformance_scoreboard.py` |
 | `history/<jur>/<YYYY-MM-DD>.json` | Dated scoreboard snapshots — the burn-down source of truth (survives rebases). | `scripts/conformance_scoreboard.py --snapshot` |
 | `ratchet.yaml` | Monotonic floors/ceilings: `covered` may only rise; `unexplained`/`axiom_attributed_open` may only fall. | `scripts/conformance_ratchet.py` |
+| `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v1`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), the query entity, the supplied-input surface, and the engine→input bridge — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated
-snapshots by `scripts/conformance_burndown.py`.
+snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
+regenerates the dispositions merge (and its EUROMOD-BE coverage rollup),
+appends the daily snapshot, and regenerates the scoreboard, detail, and
+burn-down atomically with every report refresh it commits
+(`scripts/commit_refreshed_report.sh`), so these derived artifacts can never
+lag a bot-pushed report. The ratchet is the exception: it is never re-pinned
+by the bot — advance it deliberately with `uv run
+scripts/conformance_ratchet.py` after a genuine improvement.
 
 ## Universe facts are generated, not hand-invented
 
@@ -77,6 +85,26 @@ oracle's own model spine — **never from memory**:
   in-scope with a `rate_only` comparability note. The header pins the exact
   `policyengine-uk` version from the checkout's `pyproject.toml`. Backs the
   committed `uk-pe` universe (a distinct oracle from the UKMOD-backed `uk`).
+* **PolicyEngine-US** uses the same `PolicyEngineUniverseBackend` with
+  `PE_US_PROGRAM_SPINE` and `include_adds_subtracts=True`. PE-US is far larger, so
+  the spine follows a deterministic rule biased to PE-US's own module tree
+  (`policyengine_us/variables/gov`): one row per program instrument at the
+  granularity of the household-facing output variable PE computes — federal income
+  tax decomposed into its component surfaces + each credit in
+  `gov.irs.credits.refundable`/`non_refundable`; payroll & SECA; each member of the
+  `gov.household.household_benefits` parameter list + the `household_health_benefits`
+  expansion (SNAP, SSI, Medicaid, ACA PTC …); and **per-state** rows for each
+  `<state>_income_tax` (44 states) and each `STATE_TANF_VARIABLES` member (51 state
+  cash-assistance programs). The per-state/national split is the rule following PE's
+  tree, not a coverage choice: SNAP/SSI are single national variables (one row);
+  income tax and TANF are per-state variables (per-state rows). Because PE-US
+  composes many aggregates from an `adds`/`subtracts` variable list rather than a
+  `def formula`, the backend treats those as computed rules surfaces; only genuine
+  reported passthroughs (`social_security`, `unemployment_compensation`, …) are
+  excluded `input_carrying` (the reform-only `basic_income` lever is `technical`).
+  The header pins `policyengine-us` from the checkout's `pyproject.toml`, or the
+  installed distribution metadata for a pip-installed tree. Backs the committed
+  `us-pe` universe.
 
 The generator overwrites the **facts** (`output_vars`, `oracle_policy_type`,
 `internal_only_vars`) and **preserves the decisions** (`in_scope`,
@@ -171,14 +199,81 @@ naming the exact invariant, if any regressed:
 The denominator (`policies_in_scope`) is recorded, not ratcheted: when the oracle
 model legitimately adds an in-scope policy, coverage is read against the new base.
 
+## Recorded program compositions
+
+A covered row names a *suite*, but the suite name alone does not say which
+runnable Axiom program produced the covered comparison report. For the
+EUROMOD-synthetic lane that program is assembled implicitly at run time:
+`_run_euromod_synthetic_compare` invokes `cli compare euromod axiom --suite <name>`
+with **no `--axiom-program`**, and the runner derives the RuleSpec import-set
+from the `module#name` prefixes of the suite's output concepts
+(`rulespec_imports_for_concepts`), compiles a generated program that imports
+those modules, and resolves them against `AXIOM_RULESPEC_REPO_ROOTS`. Nothing
+consumable recorded that program, so the verdict could not be reproduced outside
+the harness and a population run could not reuse the identical program without
+re-deriving it.
+
+`conformance/compositions/<jur>.yaml` records it. For every covered suite it
+captures the exact program the harness composes — the same import-set the CLI
+builds, its repo-relative files in the rulespec checkout, the query entity, the
+supplied-input boundaries, and the engine→input **bridge** (the supplied
+defaults *beyond* the suite's own `axiom_inputs`; e.g. EUROMOD `yem` overriding
+the Article-89 professional-income boundary). It is generated from the suites,
+never hand-authored:
+
+```bash
+uv run scripts/generate_conformance_compositions.py be          # write
+uv run scripts/generate_conformance_compositions.py --all --check # CI: fail on drift
+```
+
+Because the record is derived by the same `rulespec_imports_for_concepts` the
+runner uses, the `--check` gate and `tests/test_conformance.py`
+(`test_recorded_imports_match_the_cli_runner_derivation`) tie it to the real run
+path — it cannot describe a program the harness would not compile.
+
+**Most BE compositions are a single top-level module** (it transitively imports
+its own stages); only `be-worker-ssc` spans two (`employee_contributions` +
+`work_bonus`, its three outputs). One caveat the record makes explicit and
+honest: **`be-marital-quotient` is *not* front-chained** with the SSC / Article-51
+forfait / work-bonus stages. It runs the lone `couple_pit_oracle_pipeline`
+module as a `TaxUnit`, and its 3/3 residual against EUROMOD `tin_s` (raw match 0)
+is carried entirely by dispositions (`dispositions/be-marital-quotient.yaml`,
+each classed `explained_residual` — the omitted SSC + forfait base reduction, and
+at 30k the refundable work-bonus credit), **not** by a wider program. The
+record therefore describes what actually runs, not an idealised composition that
+would make the raw numbers match.
+
+### CLI convenience
+
+`compare euromod axiom --suite <name>` (no `--axiom-program`) already composes
+the program from the suite's concepts. When `AXIOM_RULESPEC_ROOT` names a
+rulespec checkout — one repo (`…/rulespec-be`) or the workspace holding the
+`rulespec-<country>` checkouts — the runner resolves the modules against it, and
+the compare command echoes the resolved composition (its modules, files, and
+entity) so the run is reproducible. Passing `--axiom-program` still overrides
+everything; suites with no record (US / UK-PE lanes) fall through unchanged.
+
 ## CI gates
 
 Wired in `.github/workflows/ci.yml`, following the repo's existing gate patterns:
 
 * **Universe drift** — regenerate == committed (no-op clean when the model
   checkout is absent; the committed universe stands alone).
+* **Composition drift** — regenerate == committed (derived from the suites, so
+  it always bites: a covered suite whose program composition changed must
+  refresh `conformance/compositions/<jur>.yaml`).
 * **Scoreboard freshness** — regenerated scoreboard + detail == committed copies.
 * **Ratchets** — no monotonic invariant regressed.
 * **Burn-down freshness** — regenerated series == committed.
 
 Every gate has negative tests in `tests/test_conformance.py` proving it can fail.
+
+The scoreboard/detail are derived from the committed comparison reports, so
+anything that refreshes a report must regenerate them in the same change or the
+freshness gate reds main. Interactive PRs do this by hand; the automated
+**affected-rerun** bot does it per matrix leg via
+`scripts/commit_refreshed_report.sh` (see `comparisons/README.md` →
+*Affected-comparison map + rerun*, and the behavioral tests in
+`tests/test_commit_refreshed_report.py`). Both trace back to the
+2026-07-14 incident (#282), where four income-tax report refreshes redded main
+for every open PR until the scoreboard was regenerated manually.

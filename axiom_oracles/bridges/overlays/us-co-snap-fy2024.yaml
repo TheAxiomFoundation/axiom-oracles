@@ -1,0 +1,69 @@
+schema: axiom_oracles.rulespec_overlay.v1
+name: us-co-snap-fy2024
+program: us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml
+notes: >-
+  Compile-time overlay that replays the Colorado SNAP benefit composition
+  against fiscal year 2024 federal parameters. The rulespec-us monorepo ships
+  the composition wired to the FY 2026 cost-of-living (COLA) parameter set, so
+  this overlay rewrites the three USDA cola module ids (fy-2026-cola ->
+  fy-2024-cola) across the composition and every module that imports them, then
+  patches the four Colorado standard-utility-allowance amounts down to their
+  FY 2024 values. The overlay is materialized as a single self-contained
+  rulespec root (a real copy of the us and us-co prefix trees with the rewrites
+  and patches applied) and compiled with that root alone: the engine unions
+  module ids across repo roots rather than shadowing, so a sparse overlay
+  fronting the monorepo would compile both cola vintages and abort with a
+  duplicate-rule error. This is a stopgap: once
+  TheAxiomFoundation/rulespec-us#759 lands the parameter-set inversion (a
+  program selects its cola set by period rather than by hardcoded module id),
+  the fiscal year becomes a run-time choice and this overlay retires. The
+  copy-then-patch discipline follows the EUROMOD platform patcher precedent in
+  axiom_oracles/adapters/euromod/_runner.py, which patches policy switches and
+  DefConst values into a copy of the model tree because the source model must
+  never be mutated in place.
+module_id_rewrites:
+  # Full module ids (not a bare substring): every one of the 195
+  # occurrences across the rewrite files is a canonical id in an import
+  # or proof target, and full ids can never rewrite prose that merely
+  # mentions a fiscal year.
+  us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
+  us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
+  us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
+rewrite_files:
+  - us/statutes/7/2017/a.yaml
+  - us/regulations/7-cfr/273/8.yaml
+  - us/regulations/7-cfr/273/9.yaml
+  - us/regulations/7-cfr/273/10.yaml
+  - us-co/regulations/10-ccr-2506-1/4.206.yaml
+  - us-co/regulations/10-ccr-2506-1/4.207.2.yaml
+  - us-co/regulations/10-ccr-2506-1/4.207.3.yaml
+  - us-co/regulations/10-ccr-2506-1/4.305.2.yaml
+  - us-co/regulations/10-ccr-2506-1/4.401.yaml
+  - us-co/regulations/10-ccr-2506-1/4.401.1.yaml
+  - us-co/regulations/10-ccr-2506-1/4.401.2.yaml
+  - us-co/regulations/10-ccr-2506-1/4.407.1.yaml
+  - us-co/regulations/10-ccr-2506-1/4.407.3.yaml
+  - us-co/regulations/10-ccr-2506-1/4.408.yaml
+  - us-co/regulations/10-ccr-2506-1/4.408.2.yaml
+  - us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml
+parameter_patches:
+  - file: us-co/regulations/10-ccr-2506-1/4.407.31.yaml
+    rule: colorado_snap_heating_cooling_utility_allowance_amount
+    from: "594"
+    to: "560"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-co/regulations/10-ccr-2506-1/4.407.31.yaml
+    rule: colorado_snap_basic_utility_allowance_amount
+    from: "377"
+    to: "356"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-co/regulations/10-ccr-2506-1/4.407.31.yaml
+    rule: colorado_snap_one_utility_allowance_amount
+    from: "71"
+    to: "67"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-co/regulations/10-ccr-2506-1/4.407.31.yaml
+    rule: colorado_snap_telephone_utility_allowance_amount
+    from: "97"
+    to: "91"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183

@@ -541,6 +541,325 @@ case_sets:
         kind: person
         age: 4
         relation: Child
+  uk-child-winter-heating-payment:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/child-winter-heating-payment#child_winter_heating_assistance_payable_value
+    cases:
+    - id: uk-cwha-scotland-disabled-child10
+      period: '2026-04-06'
+      scenario: scotland-child-winter-heating-payment
+      parameters:
+        child_age: 10
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 10
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+  uk-contribution-based-jsa:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount
+    cases:
+    - id: uk-jsa-contributory-under25
+      period: '2026-04-06'
+      scenario: contribution-based-jsa
+      parameters:
+        claimant_age: 22
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: claimant
+        kind: person
+        age: 22
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 0.0
+    - id: uk-jsa-contributory-25plus
+      period: '2026-04-06'
+      scenario: contribution-based-jsa
+      parameters:
+        claimant_age: 40
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: claimant
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 0.0
+  uk-ctr:
+    locale: UK
+    outputs:
+    - uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount
+    cases:
+    - id: ctr-eng-pa-birmingham-couple-gc
+      period: '2026'
+      scenario: england-pension-age-full-award-guarantee-credit
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: england-pension-age-prescribed
+        local_authority_name: Birmingham
+        local_authority_gss_code: E08000025
+        local_authority_postcode: B1 1BB
+        council_tax_band: C
+        annual_council_tax_liability: 1800.0
+        tenure: owner
+        monthly_rent: 0.0
+        capital: 2000.0
+        couple: true
+        pension_age: true
+        claimant_employment_income: 0.0
+        claimant_state_pension: 8000.0
+        claimant_private_pension: 0.0
+        partner_employment_income: 0.0
+        partner_state_pension: 6000.0
+        partner_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+      - id: partner
+        kind: person
+        age: 68
+        relation: Spouse
+    - id: ctr-eng-pa-cornwall-single-taper
+      period: '2026'
+      scenario: england-pension-age-taper-interior
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: england-pension-age-prescribed
+        local_authority_name: Cornwall
+        local_authority_gss_code: E06000052
+        local_authority_postcode: TR1 1EN
+        council_tax_band: D
+        annual_council_tax_liability: 2000.0
+        tenure: owner
+        monthly_rent: 0.0
+        capital: 5000.0
+        couple: false
+        pension_age: true
+        claimant_employment_income: 8000.0
+        claimant_state_pension: 9000.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+    - id: ctr-sco-wa-glasgow-single-earner
+      period: '2026'
+      scenario: scotland-working-age-national
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: Scotland
+        ctr_scheme: scotland-working-age-national
+        local_authority_name: Glasgow City
+        local_authority_gss_code: S12000049
+        local_authority_postcode: G1 1XW
+        council_tax_band: B
+        annual_council_tax_liability: 1300.0
+        tenure: private_rent
+        monthly_rent: 583.33
+        capital: 1000.0
+        couple: false
+        pension_age: false
+        claimant_employment_income: 11000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: ctr-wal-wa-cardiff-couple-2kids
+      period: '2026'
+      scenario: wales-working-age-national
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: Wales
+        ctr_scheme: wales-working-age-national
+        local_authority_name: Cardiff
+        local_authority_gss_code: W06000015
+        local_authority_postcode: CF10 1EP
+        council_tax_band: C
+        annual_council_tax_liability: 1500.0
+        tenure: social_rent
+        monthly_rent: 500.0
+        capital: 500.0
+        couple: true
+        pension_age: false
+        claimant_employment_income: 22000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+        partner_employment_income: 0.0
+        partner_state_pension: 0.0
+        partner_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+      - id: partner
+        kind: person
+        age: 35
+        relation: Spouse
+      - id: child-0
+        kind: person
+        age: 5
+        relation: Child
+      - id: child-1
+        kind: person
+        age: 3
+        relation: Child
+    - id: ctr-eng-wa-kingston-single-earner
+      period: '2026'
+      scenario: kingston-working-age-local-supported
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: kingston-upon-thames-working-age-local
+        local_authority_name: Kingston upon Thames
+        local_authority_gss_code: E09000021
+        local_authority_postcode: KT1 1EU
+        council_tax_band: D
+        annual_council_tax_liability: 2171.0
+        tenure: private_rent
+        monthly_rent: 900.0
+        capital: 3000.0
+        couple: false
+        pension_age: false
+        claimant_employment_income: 11000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: ctr-eng-pa-kingston-single
+      period: '2026'
+      scenario: kingston-pension-age-routes-to-national
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: england-pension-age-prescribed
+        local_authority_name: Kingston upon Thames
+        local_authority_gss_code: E09000021
+        local_authority_postcode: KT1 1EU
+        council_tax_band: D
+        annual_council_tax_liability: 2171.0
+        tenure: owner
+        monthly_rent: 0.0
+        capital: 4000.0
+        couple: false
+        pension_age: true
+        claimant_employment_income: 0.0
+        claimant_state_pension: 9000.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+    - id: ctr-eng-wa-manchester-single-earner
+      period: '2026'
+      scenario: manchester-working-age-local-unsupported
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: manchester-working-age-local
+        local_authority_name: Manchester
+        local_authority_gss_code: E08000003
+        local_authority_postcode: M1 1AE
+        council_tax_band: B
+        annual_council_tax_liability: 1600.0
+        tenure: private_rent
+        monthly_rent: 700.0
+        capital: 3000.0
+        couple: false
+        pension_age: false
+        claimant_employment_income: 11000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: ctr-eng-wa-birmingham-couple-1kid
+      period: '2026'
+      scenario: birmingham-working-age-local-unsupported
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: birmingham-working-age-local
+        local_authority_name: Birmingham
+        local_authority_gss_code: E08000025
+        local_authority_postcode: B1 1BB
+        council_tax_band: B
+        annual_council_tax_liability: 1400.0
+        tenure: social_rent
+        monthly_rent: 500.0
+        capital: 2000.0
+        couple: true
+        pension_age: false
+        claimant_employment_income: 16000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+        partner_employment_income: 0.0
+        partner_state_pension: 0.0
+        partner_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+      - id: partner
+        kind: person
+        age: 33
+        relation: Spouse
+      - id: child-0
+        kind: person
+        age: 8
+        relation: Child
   uk-employer-nic:
     locale: UK
     entity: Person
@@ -729,167 +1048,6 @@ case_sets:
       facts:
         living_renting: true
         rent_paid: 7800.0
-        yearly_earned_income: 0.0
-    - id: uk-hb-single-renter-earn0
-      period: 2026-04
-      scenario: household-housing-benefit
-      parameters:
-        couple: false
-        head_age: 40
-        monthly_rent: 550.0
-        head_annual_earnings: 0.0
-        number_of_non_dependants: 0
-        non_dependant_gross_weekly_income: 0.0
-        pension_age: false
-        euromod_policy_switch_overrides:
-        - - BTA_uk
-          - false
-        - - random_uk
-          - false
-      entities:
-      - id: head
-        kind: person
-        age: 40
-        relation: HeadOfHousehold
-        yearly_earned_income: 0.0
-      facts:
-        living_renting: true
-        rent_paid: 6600.0
-        yearly_earned_income: 0.0
-    - id: uk-hb-single-renter-earn6000
-      period: 2026-04
-      scenario: household-housing-benefit
-      parameters:
-        couple: false
-        head_age: 40
-        monthly_rent: 550.0
-        head_annual_earnings: 6000.0
-        number_of_non_dependants: 0
-        non_dependant_gross_weekly_income: 0.0
-        pension_age: false
-        euromod_policy_switch_overrides:
-        - - BTA_uk
-          - false
-        - - random_uk
-          - false
-      entities:
-      - id: head
-        kind: person
-        age: 40
-        relation: HeadOfHousehold
-        yearly_earned_income: 6000.0
-      facts:
-        living_renting: true
-        rent_paid: 6600.0
-        yearly_earned_income: 6000.0
-    - id: uk-hb-single-renter-earn10000
-      period: 2026-04
-      scenario: household-housing-benefit
-      parameters:
-        couple: false
-        head_age: 40
-        monthly_rent: 550.0
-        head_annual_earnings: 10000.0
-        number_of_non_dependants: 0
-        non_dependant_gross_weekly_income: 0.0
-        pension_age: false
-        euromod_policy_switch_overrides:
-        - - BTA_uk
-          - false
-        - - random_uk
-          - false
-      entities:
-      - id: head
-        kind: person
-        age: 40
-        relation: HeadOfHousehold
-        yearly_earned_income: 10000.0
-      facts:
-        living_renting: true
-        rent_paid: 6600.0
-        yearly_earned_income: 10000.0
-    - id: uk-hb-single-renter-earn14000
-      period: 2026-04
-      scenario: household-housing-benefit
-      parameters:
-        couple: false
-        head_age: 40
-        monthly_rent: 550.0
-        head_annual_earnings: 14000.0
-        number_of_non_dependants: 0
-        non_dependant_gross_weekly_income: 0.0
-        pension_age: false
-        euromod_policy_switch_overrides:
-        - - BTA_uk
-          - false
-        - - random_uk
-          - false
-      entities:
-      - id: head
-        kind: person
-        age: 40
-        relation: HeadOfHousehold
-        yearly_earned_income: 14000.0
-      facts:
-        living_renting: true
-        rent_paid: 6600.0
-        yearly_earned_income: 14000.0
-    - id: uk-hb-single-renter-earn18000
-      period: 2026-04
-      scenario: household-housing-benefit
-      parameters:
-        couple: false
-        head_age: 40
-        monthly_rent: 550.0
-        head_annual_earnings: 18000.0
-        number_of_non_dependants: 0
-        non_dependant_gross_weekly_income: 0.0
-        pension_age: false
-        euromod_policy_switch_overrides:
-        - - BTA_uk
-          - false
-        - - random_uk
-          - false
-      entities:
-      - id: head
-        kind: person
-        age: 40
-        relation: HeadOfHousehold
-        yearly_earned_income: 18000.0
-      facts:
-        living_renting: true
-        rent_paid: 6600.0
-        yearly_earned_income: 18000.0
-    - id: uk-hb-couple-renter-1nondep
-      period: 2026-04
-      scenario: household-housing-benefit
-      parameters:
-        couple: true
-        head_age: 40
-        monthly_rent: 750.0
-        head_annual_earnings: 0.0
-        number_of_non_dependants: 1
-        non_dependant_gross_weekly_income: 300.0
-        pension_age: false
-        euromod_policy_switch_overrides:
-        - - BTA_uk
-          - false
-        - - random_uk
-          - false
-      entities:
-      - id: head
-        kind: person
-        age: 40
-        relation: HeadOfHousehold
-        yearly_earned_income: 0.0
-      - id: partner
-        kind: person
-        age: 38
-        relation: Spouse
-        yearly_earned_income: 0.0
-      facts:
-        living_renting: true
-        rent_paid: 9000.0
         yearly_earned_income: 0.0
     - id: uk-hb-single-pension-age-renter
       period: 2026-04
@@ -1663,6 +1821,169 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 150000.0
+  uk-scottish-carer-supplement:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/scottish-carer-supplement#scottish_carer_supplement_annual_amount
+    cases:
+    - id: uk-scs-scotland-carer
+      period: '2026-04-06'
+      scenario: scotland-scottish-carer-supplement
+      parameters:
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+      entities:
+      - id: carer
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 0.0
+  uk-scottish-child-payment:
+    locale: UK
+    entity: Family
+    entity_id: benefit_unit
+    outputs:
+    - uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount
+    cases:
+    - id: uk-scp-scotland-child4-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 4
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 4
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+    - id: uk-scp-scotland-child7-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 7
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 7
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+    - id: uk-scp-scotland-child15-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 15
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 15
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
+    - id: uk-scp-scotland-child16-uc
+      period: 2026-04
+      scenario: scotland-scottish-child-payment
+      parameters:
+        child_age: 16
+        on_qualifying_benefit: true
+        euromod_policy_switch_overrides:
+        - - BTA_uk
+          - false
+        - - random_uk
+          - false
+        euromod_constant_overrides:
+        - - $UCtransition
+          - '0'
+        - - $SCPTUu6y
+          - '1.0'
+        - - $SCPTU6to15y
+          - '1.0'
+        - - $ISTUChild
+          - '1.0'
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 4800.0
+      - id: child
+        kind: person
+        age: 16
+        relation: Child
+        yearly_earned_income: 0.0
+      facts:
+        yearly_earned_income: 4800.0
   uk-self-employed-nic:
     locale: UK
     entity: Person

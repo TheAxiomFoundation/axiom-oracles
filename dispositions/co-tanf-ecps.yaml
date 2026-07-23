@@ -1,0 +1,20 @@
+# Auto-characterized from the committed report; see axiom-oracles#229.
+schema: axiom_oracles.dispositions.v1
+suite: co-tanf-ecps
+updated: '2026-07-08'
+entries:
+- id: co-tanf-ecps-co_tanf_benefit-composed-vs-pe-bridge
+  concept: us-co:policies/cdhs/colorado-works#co_tanf_benefit
+  case_selector:
+    case_id_prefix: ecps-
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Composed CO Colorado Works benefit vs PolicyEngine: 3 co_tanf_benefit mismatches (2 axiom>PE,
+      2 PE=0, 0 axiom=0; max |diff| 3408). Structural bridge/projection + composed-slice divergence between
+      Axiom''s composed state program and PE''s full model, not a rulespec statutory-encoding defect.
+      Representative: ecps-49844 axiom=3408.0 PE=0.0; ecps-50122 axiom=9444.0 PE=11242.8486328125; ecps-50123
+      axiom=2040.0 PE=0.0. Per-suite grounding: axiom-oracles#229.'
+    sources:
+    - PROGRESS.md
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
+  expires_on_source_change: true

@@ -19,29 +19,44 @@ policies:
     output_vars:
       - attendance_allowance
     in_scope: true
-    suite: null
+    suite: uk-attendance-allowance-pe
     comparability: rate_only
-    note: rates-given-category — PE-UK applies the AA rate table over a frozen aa_category FRS input.
-      In-scope uncovered — the rate params are compared in the matrix but no AA program surface runs in
-      either PE suite yet (matrix row 14 → SSCBA 1992 s.64-67).
+    note: 'rates-given-category — PE-UK applies the AA rate table (gov.dwp.attendance_allowance.higher
+      114.60, .lower 76.70 per week, annualised over WEEKS_IN_YEAR = 52) over a frozen aa_category FRS
+      input. Covered by the uk-attendance-allowance-pe case-grid suite: the encoded SI 2026/148 Schedule
+      1 Part III weekly rates (uk/policies/attendance_allowance_composed_amount_pipeline.yaml) are applied
+      over the same supplied award category and annualised over the same 52 weeks; the award category
+      is a frozen input on both engines, so the grid binds the rate schedule (higher £5,959.20, lower
+      £3,988.40, none £0 — all 3 cases match to the penny), not the SSCBA 1992 s.64-66 needs assessment
+      (matrix row 14 → SSCBA 1992 s.64-67).'
   - id: uk-pe:business_rates
     oracle_policy_name: business_rates
     oracle_policy_type: rules
     output_vars:
       - business_rates
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes business_rates but rulespec has not encoded it and no suite
-      runs (matrix row 7 → LGFA 1988 Pt III multiplier + reliefs).
+    suite: uk-business-rates
+    note: Covered by the uk-business-rates case-grid suite. PE-UK does not compute an individual ratepayer's
+      bill (the LGFA 1988 Pt III multiplier and reliefs); its business_rates is a distributional incidence
+      model — shareholding times the total non-domestic rates revenue across England, Scotland, Wales
+      and Northern Ireland. The rulespec module (uk/policies/govuk/business-rates.yaml, LGFA 1988 s.43
+      enabling authority) restates that product with both quantities as supplied inputs, so the surfaces
+      are commensurable; all 6 cases match to the penny in relative terms, residuals being PE float32
+      artifacts on the large revenue magnitude (matrix row 7 → LGFA 1988 Pt III).
   - id: uk-pe:capital_gains_tax
     oracle_policy_name: capital_gains_tax
     oracle_policy_type: rules
     output_vars:
       - capital_gains_tax
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes capital_gains_tax but rulespec has not encoded it and no
-      suite runs (matrix row 9 → TCGA 1992; FA rate schedule).
+    suite: uk-capital-gains-tax
+    note: Covered by the uk-capital-gains-tax case-grid suite. The rulespec module (uk/policies/govuk/capital-gains-tax.yaml,
+      TCGA 1992 s.1H/1I/1K) reproduces PE-UK's capital_gains_tax band split — annual exempt amount £3,000
+      (s.1K) deducted from chargeable gains, then charged at the s.1H basic 18% rate within the unused
+      basic rate band and 24% above (PE's higher and additional CGT rates are both 24%). capital_gains,
+      taxable income (adjusted_net_income less allowances) and the basic rate limit are supplied inputs
+      on both sides, so the surfaces are commensurable; all 6 cases match to the penny, residuals sub-0.01
+      (PE float32) inside tolerance (matrix row 9 → TCGA 1992; FA rate schedule).
   - id: uk-pe:carer_support_payment
     oracle_policy_name: carer_support_payment
     oracle_policy_type: reported_ceiling
@@ -106,17 +121,16 @@ policies:
     suite: uk-council-tax-reduction
     note: 'Covered by the uk-council-tax-reduction case-grid suite. council_tax_reduction gained a formula
       in PE-UK 2.89.2 (#1769 national core + #1771 Kingston, both merged), resolving the matrix ambiguity
-      at HEAD 45eb181c where the variable was absent. The suite compares PE-UK''s England pension-age path
-      (gov.local_authorities.england.council_tax_reduction.pensioners: max-support 1, capital limit 16000,
-      withdrawal 0.20) against the rulespec SI 2012/2885 England pension-age scheme
-      (uk/policies/govuk/council-tax-reduction.yaml) on a synthetic pensioner grid, bridging PE''s own
-      applicable amount / applicable income / non-dependant deductions / council_tax liability / savings
-      into the rulespec supplied inputs (the uk-pension-credit bridge pattern). council_tax is a supplied
-      input on both sides, so the schemes are commensurable; all 11 cases match to the penny (the taper
-      interior, the capital screen, single and couple), residuals sub-0.001 (PE float32), inside tolerance.
-      The England pension-age income test does not inherit the #1794 Housing Benefit earnings-disregard
-      defect — council_tax_reduction_applicable_income applies no earnings disregard. matrix row 29 → LGFA
-      1992 s.13A + Sch.1A; SI 2012/2885.'
+      at HEAD 45eb181c where the variable was absent. The suite compares PE-UK''s England pension-age
+      path (gov.local_authorities.england.council_tax_reduction.pensioners: max-support 1, capital limit
+      16000, withdrawal 0.20) against the rulespec SI 2012/2885 England pension-age scheme (uk/policies/govuk/council-tax-reduction.yaml)
+      on a synthetic pensioner grid, bridging PE''s own applicable amount / applicable income / non-dependant
+      deductions / council_tax liability / savings into the rulespec supplied inputs (the uk-pension-credit
+      bridge pattern). council_tax is a supplied input on both sides, so the schemes are commensurable;
+      all 11 cases match to the penny (the taper interior, the capital screen, single and couple), residuals
+      sub-0.001 (PE float32), inside tolerance. The England pension-age income test does not inherit the
+      #1794 Housing Benefit earnings-disregard defect — council_tax_reduction_applicable_income applies
+      no earnings disregard. matrix row 29 → LGFA 1992 s.13A + Sch.1A; SI 2012/2885.'
   - id: uk-pe:dla
     oracle_policy_name: dla
     oracle_policy_type: rate_from_category
@@ -159,9 +173,12 @@ policies:
     output_vars:
       - fuel_duty
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes fuel_duty but rulespec has not encoded it and no suite runs
-      (matrix row 10 → HODA 1979 rates).
+    suite: uk-fuel-duty
+    note: Covered by the uk-fuel-duty case-grid suite. The module grounds the HODA 1979 s.6(1A) standing
+      rate (£0.5795/litre) and subtracts a supplied temporary Budget-resolution reduction (the 5p cut
+      extension, not carried into the consolidated s.6(1A) text) and the rural relief, so both engines
+      apply PolicyEngine's in-force 2026 effective rate to the same supplied litres; matches penny-exact
+      (matrix row 10 → HODA 1979 s.6).
   - id: uk-pe:housing_benefit
     oracle_policy_name: housing_benefit
     oracle_policy_type: rules
@@ -198,23 +215,33 @@ policies:
       - land_and_buildings_transaction_tax
       - land_transaction_tax
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes the Scottish LBTT and Welsh LTT transaction taxes but rulespec
-      has not encoded them and no suite runs (matrix row 31 → LTT(S)A 2013 / LTTA(W) 2017).
+    suite: uk-lbtt-ltt
+    note: Covered by the uk-lbtt-ltt case-grid suite. The rulespec modules (uk/policies/govuk/lbtt.yaml,
+      SSI 2015/126 + LBTT(S)A 2013 Sch 2A; uk/policies/govuk/ltt.yaml, WSI 2018/128 + LTT(W)A 2017 s.24)
+      reproduce PE-UK's land_and_buildings_transaction_tax and land_transaction_tax band splits on the
+      supplied main and additional residential purchase prices. LBTT main-home purchases match to the penny;
+      the LBTT Additional Dwelling Supplement (PE-UK 6% vs the statutory 8% from 5 December 2024) and the
+      stale Welsh LTT primary and higher-rate scales are dispositioned as upstream PolicyEngine staleness
+      (matrix row 31 → LBTT(S)A 2013 / LTT(W)A 2017; PolicyEngine-UK #1795, #1796).
   - id: uk-pe:legacy_means_tested
     oracle_policy_name: legacy_means_tested
     oracle_policy_type: rules
     output_vars:
       - jsa_income
       - income_support
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - working_tax_credit
       - child_tax_credit
-    suite: null
-    note: In-scope uncovered — PE-UK computes income_support and applies a tariff screen to jsa_income;
-      WTC/CTC are reported inputs. All £0 in 2026 under UC migration; only tariff/rate helpers are compared,
-      no final award surface runs (matrix row 30).
+    exclusion_reason: oracle_models_repealed_law
+    note: 'EXCLUDED oracle_models_repealed_law. PolicyEngine-UK 2.89.2 deactivates the legacy means-tested
+      benefits for 2026 under Universal Credit migration: gov.dwp.income_support.active and gov.dwp.JSA.income.active
+      are both False for 2026 (both True in 2018), so income_support and jsa_income compute structurally
+      0 for every household — verified live: a lone parent with no earnings renting from the council gets
+      income_support=0 and jsa_income=0 while universal_credit=14,746 fires. Only the applicable-amount/tariff
+      helpers (income_support_applicable_amount; WTC/CTC reported inputs) run; no award surface produces
+      a non-zero value, so the only achievable comparison is vacuous (0==0). Parallels the UK tax-credits
+      repeal case (matrix row 30).'
   - id: uk-pe:marriage_allowance
     oracle_policy_name: marriage_allowance
     oracle_policy_type: rules
@@ -302,11 +329,25 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - state_pension
-    in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes state_pension (basic+new+additional) from accrual rules,
-      but no final suite runs; the state-pension bridge surface was removed when rulespec re-grounded
-      to accrual basis (matrix row 4 → Pensions Act 2014).
+    in_scope: false
+    exclusion_reason: input_carrying
+    note: 'PE-UK carries the State Pension as an uprated reported amount, not an accrual computation,
+      so there is no commensurable statutory surface. The top-level state_pension formula sums basic_state_pension
+      + additional_state_pension + new_state_pension and applies an uprating factor (so the generator''s
+      shallow kind heuristic, reading only the summing top-level formula, labels it rules); but each component
+      is a state_pension_reported passthrough. basic_state_pension and new_state_pension read the FRS-reported
+      gross State Pension (state_pension_reported), take its share of the data-year flat maximum (share
+      = min(reported, max_data) / max_data) and re-base that share onto the period maximum; additional_state_pension
+      is the reported amount above the flat ceiling, uprated. None reads a National Insurance qualifying-years
+      record — the award is the reported amount, uprated and bucketed by magnitude and state_pension_type.
+      The rulespec encoding (uk/policies/govuk/state-pension.yaml) instead computes entitlement from qualifying
+      years (new: full_new_state_pension_weekly_rate × min(1, qualifying_years/35), Pensions Act 2014
+      s.3; basic: category-A basic rate × min(1, qualifying_years/30), SSCBA 1992 s.44; weekly rates from
+      SI 2026/148). The two surfaces are not commensurable: PE consumes a reported money amount, rulespec
+      a qualifying-years count, with no mapping between them, so the only achievable agreement is by construction
+      (feeding both the "full" case), which is vacuous. Same reported-carry class as sda (SSCBA 1992 s.68
+      — reads sda_reported × max rate) and esa_income; corrects the prior note''s "from accrual rules"
+      — PE does not model accrual (matrix row 4 → Pensions Act 2014; SSCBA 1992 s.44).'
   - id: uk-pe:student_loan_repayments
     oracle_policy_name: student_loan_repayments
     oracle_policy_type: rules
@@ -321,10 +362,18 @@ policies:
     output_vars:
       - tax_free_childcare
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes tax_free_childcare but only the top-up rate/ceiling params
-      are compared; no final payment surface runs, and PE frames the rate as 20% vs statute 25% (matrix
-      row 27 → Childcare Payments Act 2014).
+    suite: uk-tax-free-childcare-pe
+    note: 'Covered by the uk-tax-free-childcare-pe case-grid suite. PE-UK computes tax_free_childcare
+      as min(eligible_childcare_expense * rate / (1 - rate), cap) with rate 0.20, which grosses up to
+      25% of the qualifying payment — the same top-up as Childcare Payments Act 2014 s.1 ("the amount
+      of the top-up payment is 25% of the amount of the qualifying payment"), resolving the prior "20%
+      vs 25%" framing: they are the same top-up on different bases (25% of the parent payment = 20% of
+      the total account). The suite compares the rulespec CPA 2014 s.1 top-up (uk/policies/tax_free_childcare_composed_top_up_pipeline.yaml)
+      against PE over a supplied qualifying childcare payment on an eligible household; the grid stays
+      below the £8,000 payment at which the £2,000 per-child cap binds, so PE''s min(..., cap) reduces
+      to the uncapped 25% top-up and all 3 cases match to the penny (£2,000 → £500, £4,000 → £1,000, £6,000
+      → £1,500). The per-child entitlement-period cap is a separate parameter not yet in corpus and is
+      a documented scope boundary (matrix row 27 → Childcare Payments Act 2014).'
   - id: uk-pe:tv_licence
     oracle_policy_name: tv_licence
     oracle_policy_type: rules
@@ -332,9 +381,11 @@ policies:
       - tv_licence
       - free_tv_licence_value
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes tv_licence and free_tv_licence_value but only the fee parameter
-      is compared; no over-75/concession final surface runs (matrix row 34 → uksi/2004/692).
+    suite: uk-tv-licence
+    note: Covered by the uk-tv-licence case-grid suite. The module grounds the SI 2004/692 Schedule 1
+      fee (£180 for 2026-27) and the Communications Act 2003 s.365 concession structure (over-75 free
+      for Pension Credit claimants, blind 50 per cent); both tv_licence and free_tv_licence_value match
+      PolicyEngine penny-exact (matrix row 34 → uksi/2004/692).
   - id: uk-pe:universal_credit
     oracle_policy_name: universal_credit
     oracle_policy_type: rules
@@ -348,16 +399,25 @@ policies:
     output_vars:
       - vat
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes vat (output/input/net) but no PE VAT oracle surface runs;
-      rulespec has a rate-only shell. The largest indirect-tax gap (matrix row 1 → VATA 1994 Sch.7A-9).
+    suite: uk-vat
+    note: Covered by the uk-vat case-grid suite. The module encodes VATA 1994 s.2(1) standard rate (20
+      per cent) and s.29A reduced rate (5 per cent) applied to the supplied full/reduced consumption split
+      and grossed by the microdata coverage factor; matches PolicyEngine vat penny-exact (matrix row 1
+      → VATA 1994 s.2/s.29A).
   - id: uk-pe:winter_fuel_allowance
     oracle_policy_name: winter_fuel_allowance
     oracle_policy_type: rules
     output_vars:
       - winter_fuel_allowance
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-UK computes winter_fuel_allowance (2024 PC-only restriction, zeroed
-      in Scotland) but only rate params are compared; no final WFA program surface runs (matrix row 24
-      → uksi/2025/969; Scotland PAWHP separate).
+    suite: uk-winter-fuel-payment-pe
+    note: Covered by the uk-winter-fuel-payment-pe case-grid suite. PE-UK 2.89.2 computes winter_fuel_allowance
+      from the SI 2025/969 standard amounts (gov.dwp.winter_fuel_payment.amount.lower 200, .higher 300,
+      higher_age_requirement 80) under the 2024/25 means test (eligibility.require_benefits true from
+      2024, taxable_income_test.maximum_taxable_income 35000 from 2025), zeroed in Scotland. The suite
+      compares this against the rulespec SI 2025/969 reg 3(1)/3(4) England-and-Wales award pipeline (uk/policies/winter_fuel_payment_composed_award_pipeline.yaml),
+      supplying the state-pension-age, 80+ and income-below-recovery-threshold judgments to the pipeline
+      from the same age/income facts PolicyEngine reads; all 7 cases match to the penny (the 200/300 age
+      tiers, the household non-per-member allocation for couples, the 35000 income-recovery withdrawal,
+      and the state-pension-age gate). Scotland's devolved PAWHP is outside the pipeline's scope and not
+      placed (matrix row 24 → uksi/2025/969; Scotland PAWHP separate).

@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: hi-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: hi-taxsim-2024-single-30000
+    concept: us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability
+    case_id: hi-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "657.984 - 1278.26"
+          equals: -620.28
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 657.984
+      right: 1278.26
+  - id: hi-taxsim-2024-single-60000
+    concept: us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability
+    case_id: hi-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "2756.256 - 3746.22"
+          equals: -989.96
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2756.256
+      right: 3746.22
+  - id: hi-taxsim-2024-single-150000
+    concept: us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability
+    case_id: hi-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "9506.8222 - 11171.22"
+          equals: -1664.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 9506.8222
+      right: 11171.22
+  - id: hi-taxsim-2024-married-60000
+    concept: us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability
+    case_id: hi-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "1315.968 - 2776.51"
+          equals: -1460.54
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1315.968
+      right: 2776.51
+  - id: hi-taxsim-2024-married-120000
+    concept: us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability
+    case_id: hi-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "5512.512 - 7492.44"
+          equals: -1979.93
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5512.512
+      right: 7492.44
+  - id: hi-taxsim-2024-married-300000
+    concept: us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability
+    case_id: hi-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "19076.7022 - 22342.44"
+          equals: -3265.74
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 19076.7022
+      right: 22342.44

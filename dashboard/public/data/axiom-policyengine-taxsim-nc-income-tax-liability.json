@@ -1,0 +1,270 @@
+{
+  "case_count": 6,
+  "cases": [
+    {
+      "axiom": 688.275,
+      "axiom_vs_policyengine": {
+        "difference": -2.4414062522737368e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -87.97500000000002,
+        "match": false
+      },
+      "case_id": "nc-single-30000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 688.2750244140625,
+      "taxsim_2024": 776.25
+    },
+    {
+      "axiom": 1885.275,
+      "axiom_vs_policyengine": {
+        "difference": -2.441406240905053e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -240.9749999999999,
+        "match": false
+      },
+      "case_id": "nc-single-60000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1885.2750244140625,
+      "taxsim_2024": 2126.25
+    },
+    {
+      "axiom": 5476.275,
+      "axiom_vs_policyengine": {
+        "difference": -0.0003906250003637979,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -699.9750000000004,
+        "match": false
+      },
+      "case_id": "nc-single-150000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 5476.275390625,
+      "taxsim_2024": 6176.25
+    },
+    {
+      "axiom": 1376.55,
+      "axiom_vs_policyengine": {
+        "difference": -4.8828125045474735e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -175.95000000000005,
+        "match": false
+      },
+      "case_id": "nc-married-60000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1376.550048828125,
+      "taxsim_2024": 1552.5
+    },
+    {
+      "axiom": 3770.55,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812481810106e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -481.9499999999998,
+        "match": false
+      },
+      "case_id": "nc-married-120000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 3770.550048828125,
+      "taxsim_2024": 4252.5
+    },
+    {
+      "axiom": 10952.55,
+      "axiom_vs_policyengine": {
+        "difference": -0.0007812500007275958,
+        "match": true
+      },
+      "axiom_vs_taxsim_2024": {
+        "difference": -1399.9500000000007,
+        "match": false
+      },
+      "case_id": "nc-married-300000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 10952.55078125,
+      "taxsim_2024": 12352.5
+    }
+  ],
+  "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-nc:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "nc_income_tax_before_credits",
+    "taxsim": "siitax"
+  },
+  "mismatches": [
+    {
+      "case_id": "nc-single-30000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "difference": -87.97500000000002,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nc-taxsim-2024-rate-stepdown-vintage-single-30000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 688.275,
+      "left_engine": "axiom",
+      "right": 776.25,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "nc-single-60000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "difference": -240.9749999999999,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nc-taxsim-2024-rate-stepdown-vintage-single-60000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1885.275,
+      "left_engine": "axiom",
+      "right": 2126.25,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "nc-single-150000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "difference": -699.9750000000004,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nc-taxsim-2024-rate-stepdown-vintage-single-150000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 5476.275,
+      "left_engine": "axiom",
+      "right": 6176.25,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "nc-married-60000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "difference": -175.95000000000005,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nc-taxsim-2024-rate-stepdown-vintage-married-60000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1376.55,
+      "left_engine": "axiom",
+      "right": 1552.5,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "nc-married-120000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "difference": -481.9499999999998,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nc-taxsim-2024-rate-stepdown-vintage-married-120000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 3770.55,
+      "left_engine": "axiom",
+      "right": 4252.5,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "nc-married-300000",
+      "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+      "difference": -1399.9500000000007,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "nc-taxsim-2024-rate-stepdown-vintage-married-300000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 10952.55,
+      "left_engine": "axiom",
+      "right": 12352.5,
+      "right_engine": "taxsim"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-22T19:52:53Z",
+    "generated_by": "scripts/run_comparison.py::nc-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "nc-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_2024_match_rate": 0.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 6,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/nc-income-tax-liability.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 50,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 6,
+    "mismatch_count": 6,
+    "policyengine_matches": 6,
+    "taxsim_2024_matches": 0
+  },
+  "taxsim_law_year": 2024,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

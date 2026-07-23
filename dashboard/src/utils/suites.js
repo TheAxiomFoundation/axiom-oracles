@@ -34,6 +34,7 @@ export const JURISDICTION_LABELS = {
   US: "Federal (US)",
   UK: "United Kingdom",
   BE: "Belgium",
+  DEU: "Germany",
   CAN: "Canada",
   NYC: "New York City",
 };
@@ -58,6 +59,7 @@ export const FAMILY_LABELS = {
   energy_rebates: "IRA home energy rebates",
   head_start: "Head Start",
   lifeline: "Lifeline (phone / broadband subsidy)",
+  csfp: "CSFP (commodity supplemental food)",
   other_federal: "Other federal provisions",
   universal_credit: "Universal Credit",
   uk_tax_benefits: "UK tax & benefits",
@@ -71,6 +73,7 @@ export const FAMILY_LABELS = {
   be_unemployment: "Belgium unemployment benefits",
   be_study_allowance: "Belgium study allowance",
   be_disposable_income: "Belgium disposable income",
+  de_worker_tax_contributions: "Germany worker tax and social insurance",
   canada_personal_income_tax: "Canada personal income tax",
   canada_family_benefits: "Canada family and disability benefits",
 };
@@ -283,6 +286,38 @@ const SUITE_OVERRIDES = {
     region: "us",
     kind: "parameter",
     order: 290,
+  },
+  "csfp-parameters": {
+    family: "csfp",
+    jurisdiction: "US",
+    label: "CSFP income limit",
+    region: "us",
+    kind: "parameter",
+    order: 291,
+  },
+  "hi-income-tax-parameters": {
+    family: "state_income_tax",
+    jurisdiction: "HI",
+    label: "Hawaii income tax amounts",
+    region: "us",
+    kind: "parameter",
+    order: 118,
+  },
+  "ia-income-tax-parameters": {
+    family: "state_income_tax",
+    jurisdiction: "IA",
+    label: "Iowa income tax exemption credits",
+    region: "us",
+    kind: "parameter",
+    order: 119,
+  },
+  "irs-adjustment-parameters": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Federal IRC adjustment/deduction amounts",
+    region: "us",
+    kind: "parameter",
+    order: 11,
   },
   "co-state-income-tax-taxsim": {
     family: "state_income_tax",
@@ -764,6 +799,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 343,
   },
+  "de-worker-dual-oracle": {
+    family: "de_worker_tax_contributions",
+    jurisdiction: "DEU",
+    label: "Germany worker tax and social insurance",
+    region: "de",
+    kind: "household",
+    order: 600,
+  },
   "nyc-income-tax-gap": {
     family: "nyc_income_tax",
     jurisdiction: "NYC",
@@ -823,7 +866,9 @@ export function suiteMeta(suite) {
         ? "be"
         : slug.startsWith("ca-")
           ? "ca"
-          : "us",
+          : slug.startsWith("de-")
+            ? "de"
+            : "us",
     kind: "household",
     order: 500,
   };

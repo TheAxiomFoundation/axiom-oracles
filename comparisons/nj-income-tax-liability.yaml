@@ -1,0 +1,23 @@
+name: nj-income-tax-liability
+title: New Jersey gross income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed New Jersey ordinary resident wage-earner gross-income-tax
+  pipeline in Axiom RuleSpec against PolicyEngine (nj_main_income_tax) at 2026
+  and TAXSIM (siitax) at its latest supported law year, 2024, on the standard
+  six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: NJ
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-nj-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-nj-income-tax-liability.json
+  suite: nj-income-tax-liability

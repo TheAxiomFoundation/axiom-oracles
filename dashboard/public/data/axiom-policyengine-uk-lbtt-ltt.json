@@ -1,0 +1,369 @@
+{
+  "case_count": 12,
+  "cases": [
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "lbtt-main-below-nil-rate-band",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "country": "SCOTLAND",
+      "main_residential_property_purchased": 100000,
+      "policyengine": 0.0,
+      "scenario": "main-home-below-nil-rate-band"
+    },
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 1100.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "lbtt-main-two-percent-band",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "country": "SCOTLAND",
+      "main_residential_property_purchased": 200000,
+      "policyengine": 1100.0,
+      "scenario": "main-home-in-two-percent-band"
+    },
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 4600.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "lbtt-main-spanning-two-and-five",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "country": "SCOTLAND",
+      "main_residential_property_purchased": 300000,
+      "policyengine": 4600.0,
+      "scenario": "main-home-spanning-two-and-five-percent-bands"
+    },
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 23350.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "lbtt-main-into-ten-percent-band",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "country": "SCOTLAND",
+      "main_residential_property_purchased": 500000,
+      "policyengine": 23350.0,
+      "scenario": "main-home-into-ten-percent-band"
+    },
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 54350.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "lbtt-main-top-band",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "country": "SCOTLAND",
+      "main_residential_property_purchased": 800000,
+      "policyengine": 54350.0,
+      "scenario": "main-home-in-top-band"
+    },
+    {
+      "additional_residential_property_purchased": 300000,
+      "axiom": 28600.0,
+      "axiom_vs_policyengine": {
+        "difference": 6000.0,
+        "match": false
+      },
+      "case_id": "lbtt-additional-dwelling",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "country": "SCOTLAND",
+      "main_residential_property_purchased": 0,
+      "policyengine": 22600.0,
+      "scenario": "additional-dwelling-supplement"
+    },
+    {
+      "additional_residential_property_purchased": 250000,
+      "axiom": 26700.0,
+      "axiom_vs_policyengine": {
+        "difference": 5000.0,
+        "match": false
+      },
+      "case_id": "lbtt-main-plus-additional",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "country": "SCOTLAND",
+      "main_residential_property_purchased": 300000,
+      "policyengine": 21700.0,
+      "scenario": "main-plus-additional-dwelling"
+    },
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "ltt-main-below-nil-rate-band",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "country": "WALES",
+      "main_residential_property_purchased": 100000,
+      "policyengine": 0.0,
+      "scenario": "main-home-below-nil-rate-band"
+    },
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 4500.0,
+      "axiom_vs_policyengine": {
+        "difference": -450.0,
+        "match": false
+      },
+      "case_id": "ltt-main-six-percent-band",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "country": "WALES",
+      "main_residential_property_purchased": 300000,
+      "policyengine": 4950.0,
+      "scenario": "main-home-in-six-percent-band"
+    },
+    {
+      "additional_residential_property_purchased": 0,
+      "axiom": 41750.0,
+      "axiom_vs_policyengine": {
+        "difference": 550.0,
+        "match": false
+      },
+      "case_id": "ltt-main-into-ten-percent-band",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "country": "WALES",
+      "main_residential_property_purchased": 800000,
+      "policyengine": 41200.0,
+      "scenario": "main-home-into-ten-percent-band"
+    },
+    {
+      "additional_residential_property_purchased": 300000,
+      "axiom": 19950.0,
+      "axiom_vs_policyengine": {
+        "difference": 3000.0,
+        "match": false
+      },
+      "case_id": "ltt-additional-higher-rates",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "country": "WALES",
+      "main_residential_property_purchased": 0,
+      "policyengine": 16950.0,
+      "scenario": "additional-dwelling-higher-rates"
+    },
+    {
+      "additional_residential_property_purchased": 300000,
+      "axiom": 30450.0,
+      "axiom_vs_policyengine": {
+        "difference": 3550.0,
+        "match": false
+      },
+      "case_id": "ltt-main-plus-additional",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "country": "WALES",
+      "main_residential_property_purchased": 400000,
+      "policyengine": 26900.0,
+      "scenario": "main-plus-additional-dwelling"
+    }
+  ],
+  "concept": "uk-lbtt-ltt",
+  "engines": {
+    "axiom": "uk:policies/govuk/{lbtt,ltt} devolved transaction tax",
+    "policyengine": "land_and_buildings_transaction_tax, land_transaction_tax"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [
+    {
+      "case_id": "lbtt-additional-dwelling",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "difference": 6000.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "lbtt-ads-surcharge-stale-6pct-vs-8pct"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 28600.0,
+      "left_engine": "axiom",
+      "right": 22600.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "lbtt-main-plus-additional",
+      "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+      "difference": 5000.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "lbtt-ads-surcharge-stale-on-mixed-purchase"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 26700.0,
+      "left_engine": "axiom",
+      "right": 21700.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ltt-main-six-percent-band",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "difference": -450.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ltt-primary-scale-stale-2022-threshold"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 4500.0,
+      "left_engine": "axiom",
+      "right": 4950.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ltt-main-into-ten-percent-band",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "difference": 550.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ltt-primary-scale-stale-high-value"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 41750.0,
+      "left_engine": "axiom",
+      "right": 41200.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ltt-additional-higher-rates",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "difference": 3000.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ltt-higher-rate-scale-stale-2024-uplift"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 19950.0,
+      "left_engine": "axiom",
+      "right": 16950.0,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ltt-main-plus-additional",
+      "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+      "difference": 3550.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "ltt-both-scales-stale-on-mixed-purchase"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 30450.0,
+      "left_engine": "axiom",
+      "right": 26900.0,
+      "right_engine": "policyengine"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-22T19:57:32Z",
+    "generated_by": "scripts/run_comparison.py::uk-lbtt-ltt",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_uk": "2.89.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "UK",
+    "type": "country"
+  },
+  "suite": "uk-lbtt-ltt",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 50.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 6
+      },
+      "dispositions_file": "dispositions/uk-lbtt-ltt.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 50,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 6,
+    "mismatch_count": 6,
+    "mismatches_by_concept": [
+      {
+        "count": 2,
+        "value": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax"
+      },
+      {
+        "count": 4,
+        "value": "uk:policies/govuk/ltt#land_transaction_tax"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 6,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [],
+    "policyengine_matches": 6,
+    "weighted": {
+      "comparison_weight": 12,
+      "match_rate": 50.0,
+      "match_weight": 6,
+      "mismatch_weight": 6
+    }
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 2e-07
+  },
+  "validation_year": 2026
+}

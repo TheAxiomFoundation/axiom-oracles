@@ -2,6 +2,9 @@ import importlib.util
 import json
 import subprocess
 from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
 
 
 def load_run_comparison_module():
@@ -252,6 +255,254 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
         "axiom_ny_snap_residual_130_percent_categorical_path_satisfied"
     ]
     assert report["cases"][0]["metadata"]["pe_standard_deduction"] == 209
+
+
+def test_snap_qc_runner_registered_and_reemits_committed_report(monkeypatch, tmp_path):
+    """The snap-qc-compare runner is registered and, when the replay cannot run
+    here (no engine binary / dated rulespec / QC file, or the bridge is mid-build),
+    re-emits the committed dashboard report — the euromod graceful-skip contract.
+    No engine or data is needed, exactly as the runner promises."""
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison.RUNNERS["snap-qc-compare"] is (
+        run_comparison._run_snap_qc_compare
+    )
+
+    dashboard_dir = tmp_path / "dashboard-data"
+    dashboard_dir.mkdir()
+    committed = dashboard_dir / "axiom-snapqc-co-snap.json"
+    committed.write_text('{"schema_version": "axiom.comparison_report.v2"}')
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard_dir)
+    # Force the skip path without touching the engine, rulespec, or QC file.
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "forced skip"
+    )
+
+    output = tmp_path / "report.json"
+    run_comparison._run_snap_qc_compare(
+        {
+            "parameters": {
+                "jurisdiction": "us-co",
+                "fiscal_year": 2024,
+                "sample_size": 0,
+                "dashboard_filename": "axiom-snapqc-co-snap.json",
+            }
+        },
+        output,
+    )
+
+    assert output.read_text() == committed.read_text()
+
+
+def test_snap_qc_runner_writes_v2_shell_when_no_committed_report(monkeypatch, tmp_path):
+    """With nothing committed yet, the skip path writes a valid empty v2 report
+    recording the skip reason, so the weekly matrix never crashes on a first run."""
+    run_comparison = load_run_comparison_module()
+
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path / "empty")
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "no engine here"
+    )
+
+    output = tmp_path / "report.json"
+    run_comparison._run_snap_qc_compare(
+        {"parameters": {"suite": "co-snap-qc", "dashboard_filename": "missing.json"}},
+        output,
+    )
+
+    report = json.loads(output.read_text())
+    assert report["schema_version"] == "axiom.comparison_report.v2"
+    assert report["suite"] == "co-snap-qc"
+    assert report["case_count"] == 0
+    assert report["errors"] == ["skipped: no engine here"]
+
+
+def test_gettsim_synthetic_runner_registered_and_reemits_committed_report(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison.RUNNERS["gettsim-synthetic-compare"] is (
+        run_comparison._run_gettsim_synthetic_compare
+    )
+
+    dashboard_dir = tmp_path / "dashboard-data"
+    dashboard_dir.mkdir()
+    committed = dashboard_dir / "euromod-gettsim-de-worker-dual-oracle.json"
+    committed.write_text('{"schema_version": "axiom.comparison_report.v2.1"}')
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard_dir)
+    monkeypatch.setattr(
+        run_comparison,
+        "_gettsim_synthetic_skip_reason",
+        lambda _params: ("forced skip", None),
+    )
+
+    output = tmp_path / "report.json"
+    run_comparison._run_gettsim_synthetic_compare(
+        {
+            "parameters": {
+                "suite": "de-worker-dual-oracle",
+                "dashboard_filename": committed.name,
+            }
+        },
+        output,
+    )
+
+    assert output.read_text() == committed.read_text()
+
+
+def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_path):
+    from axiom_oracles.adapters.euromod import EuromodPlatformRunner
+    from axiom_oracles.adapters.gettsim import GettsimRunner
+    from axiom_oracles.core.results import EngineResult
+
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setenv("EUROMOD_PYTHON", "/fake/euromod-python")
+    monkeypatch.setattr(
+        run_comparison,
+        "_gettsim_synthetic_skip_reason",
+        lambda _params: (None, tmp_path),
+    )
+
+    def fake_euromod_run(self, cases, variables):
+        assert len(cases) == 1
+        assert self.extra_columns == ("drgn1",)
+        assert set(variables) == {
+            "tsceehl_s",
+            "tsceepi_s",
+            "tsceeui_s",
+            "tsceeci_s",
+            "tin_s",
+            "bch00_s",
+        }
+        return [
+            EngineResult(
+                engine="euromod",
+                household_id=cases[0].case_id,
+                values={variable: 0.0 for variable in variables},
+            )
+        ]
+
+    def fake_gettsim_run(_self, _case, targets):
+        aliases = {
+            leaf
+            for branch in targets.values()
+            for leaf in _target_aliases(branch)
+        }
+        return SimpleNamespace(values={alias: [0.0] for alias in aliases})
+
+    monkeypatch.setattr(EuromodPlatformRunner, "run_cases", fake_euromod_run)
+    monkeypatch.setattr(GettsimRunner, "run_case", fake_gettsim_run)
+    monkeypatch.setattr(
+        GettsimRunner,
+        "run_metadata",
+        lambda _self: {
+            "engine": "gettsim",
+            "gettsim_version": "1.2.1",
+            "policy_date_str": "2025-06-30",
+            "rounding": True,
+        },
+    )
+
+    output = tmp_path / "report.json"
+    run_comparison._run_gettsim_synthetic_compare(
+        {
+            "parameters": {
+                "suite": "de-worker-dual-oracle",
+                "sample_size": 1,
+                "euromod_extra_columns": ["drgn1"],
+            }
+        },
+        output,
+    )
+
+    report = json.loads(output.read_text())
+    assert report["engines"] == {"left": "euromod", "right": "gettsim"}
+    assert report["case_count"] == 1
+    assert report["summary"]["comparison_count"] == 6
+    assert report["summary"]["mismatch_count"] == 0
+    assert report["summary"]["error_count"] == 0
+    assert report["engine_metadata"]["euromod"]["extra_columns"] == ["drgn1"]
+    assert report["engine_metadata"]["gettsim"]["gettsim_version"] == "1.2.1"
+
+
+def test_gettsim_synthetic_first_run_shell_attributes_unavailable_engine(tmp_path):
+    run_comparison = load_run_comparison_module()
+    run_comparison.DASHBOARD_DATA_DIR = tmp_path / "missing-dashboard"
+    params = {
+        "suite": "de-worker-dual-oracle",
+        "dashboard_filename": "missing.json",
+    }
+
+    euromod_output = tmp_path / "euromod-missing.json"
+    run_comparison._reemit_gettsim_synthetic_report(
+        params, euromod_output, "EUROMOD_PYTHON unset"
+    )
+    euromod_report = json.loads(euromod_output.read_text())
+    assert euromod_report["errors"] == [
+        {
+            "case_id": None,
+            "side": "left",
+            "engine": "euromod",
+            "error": "skipped: EUROMOD_PYTHON unset",
+        }
+    ]
+    assert euromod_report["summary"]["errors_by_engine"] == [
+        {"value": "euromod", "count": 1}
+    ]
+
+    gettsim_output = tmp_path / "gettsim-missing.json"
+    run_comparison._reemit_gettsim_synthetic_report(
+        params, gettsim_output, "GETTSIM unavailable (not installed)"
+    )
+    gettsim_report = json.loads(gettsim_output.read_text())
+    assert gettsim_report["errors"][0]["side"] == "right"
+    assert gettsim_report["errors"][0]["engine"] == "gettsim"
+
+
+def test_gettsim_synthetic_runtime_regression_fails_loudly(monkeypatch, tmp_path):
+    from axiom_oracles.adapters import gettsim as gettsim_adapter
+    from axiom_oracles.adapters.gettsim import GettsimAdapterError
+
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setenv("EUROMOD_PYTHON", "/fake/euromod-python")
+
+    def fail_version_check():
+        raise GettsimAdapterError("unsupported installed version")
+
+    monkeypatch.setattr(gettsim_adapter, "gettsim_version", fail_version_check)
+
+    with pytest.raises(GettsimAdapterError, match="unsupported installed version"):
+        run_comparison._gettsim_synthetic_skip_reason(
+            {"euromod_model_root": str(tmp_path)}
+        )
+
+
+def _target_aliases(branch):
+    if isinstance(branch, str):
+        return [branch]
+    return [alias for child in branch.values() for alias in _target_aliases(child)]
+
+
+def test_de_dual_oracle_registry_config_shape() -> None:
+    config = yaml.safe_load(
+        (COMPARISONS_DIR / "de-worker-dual-oracle.yaml").read_text()
+    )
+    params = config["runner"]["parameters"]
+
+    assert config["runner"]["type"] == "gettsim-synthetic-compare"
+    assert params["suite"] == "de-worker-dual-oracle"
+    assert params["euromod_country"] == "DE"
+    assert params["euromod_system"] == "DE_2025"
+    assert params["euromod_dataset"] == "DE_2024_b1_2015_03_e2"
+    assert params["euromod_template_dataset"] == "DE_training_data"
+    assert params["euromod_extra_columns"] == ["drgn1"]
+    assert params["gettsim_policy_date"] == "2025-06-30"
+    assert params["gettsim_version"] == "1.2.1"
+    assert len(params["concepts"]) == 6
+    assert config["dashboard"]["filename"] == (
+        "euromod-gettsim-de-worker-dual-oracle.json"
+    )
 
 
 def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):

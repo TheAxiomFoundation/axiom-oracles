@@ -211,21 +211,21 @@ policies:
       - brduc_s), each capped at the relevant award and gated by the reg-80A annual limits (single GBP
       14,753 / couple-or-lone-parent GBP 22,020, London GBP 16,967 / 25,323) via amount#2/#4. bcap_uk
       writes brd_s/brduc_s/bsadi02_s but does NOT write back into bsauc_s or bho_s: UKMOD reports the
-      UNCAPPED award and carries the cap effect only in the separate reduction outputs (verified: no
-      bcap_uk function outputs bsauc_s in UK_2026). The uk-benefit-cap suite covers the UC reduction
-      output brduc_s against the composed UC pilot''s uc_pilot_benefit_cap_reduction (the direct analog
-      of the reg-80A/81 reduction: rulespec-uk uk/regulations/uksi/2013/376/80A and /81, applied inside
-      universal_credit_composed_award_pipeline). It matches 7/7 on the single-no-child cases (UKMOD''s cap
-      base il_bencap equals bsauc_s when child benefit is nil, to a <= GBP 0.17/month weekly-rounding
-      residual absorbed by the GBP 1 tolerance) and the nil-reduction cases (earnings-exempt, and the
-      couple-no-child unit that matches no UKMOD UC-cap branch — i_bcap_AmtCap covers only
-      couple/lone-parent-with-child and single-no-child). The grid is deliberately single-no-child: a
-      with-children unit would diverge because UKMOD''s il_bencap sums bsauc_s + child benefit (bch_s) +
-      other welfare while the single-benefit UC pilot base is UC-only, so the pilot reduction would be
-      smaller by exactly the monthly child benefit. That is a known Axiom cap-base scope boundary (the
-      UC-only pilot does not add non-UC welfare to the reg-81 excess), not a defect in the reg-80A/81
-      reduction the pilot encodes, so it is documented here rather than compared. brd_s (the legacy-benefit
-      reduction) likewise stays uncovered — the Axiom UC pilot is UC-only. Runs on the x64 UKMOD runtime.'
+      UNCAPPED award and carries the cap effect only in the separate reduction outputs (verified: no bcap_uk
+      function outputs bsauc_s in UK_2026). The uk-benefit-cap suite covers the UC reduction output brduc_s
+      against the composed UC pilot''s uc_pilot_benefit_cap_reduction (the direct analog of the reg-80A/81
+      reduction: rulespec-uk uk/regulations/uksi/2013/376/80A and /81, applied inside universal_credit_composed_award_pipeline).
+      It matches 7/7 on the single-no-child cases (UKMOD''s cap base il_bencap equals bsauc_s when child
+      benefit is nil, to a <= GBP 0.17/month weekly-rounding residual absorbed by the GBP 1 tolerance)
+      and the nil-reduction cases (earnings-exempt, and the couple-no-child unit that matches no UKMOD
+      UC-cap branch — i_bcap_AmtCap covers only couple/lone-parent-with-child and single-no-child). The
+      grid is deliberately single-no-child: a with-children unit would diverge because UKMOD''s il_bencap
+      sums bsauc_s + child benefit (bch_s) + other welfare while the single-benefit UC pilot base is UC-only,
+      so the pilot reduction would be smaller by exactly the monthly child benefit. That is a known Axiom
+      cap-base scope boundary (the UC-only pilot does not add non-UC welfare to the reg-81 excess), not
+      a defect in the reg-80A/81 reduction the pilot encodes, so it is documented here rather than compared.
+      brd_s (the legacy-benefit reduction) likewise stays uncovered — the Axiom UC pilot is UC-only. Runs
+      on the x64 UKMOD runtime.'
   - id: uk:bch_uk
     oracle_policy_name: bch_uk
     oracle_policy_type: ben
@@ -250,7 +250,7 @@ policies:
     oracle_policy_type: ben
     output_vars:
       - bched01_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bched01a
       - i_bched01b
@@ -259,40 +259,46 @@ policies:
       - i_UC_means_earned_adj
       - n/a
       - sel2_s
-    suite: null
-    note: 'BEN: Free School Meals (UKMOD comment "BEN: Free School Meals"), not a Child Benefit education-age
-      extension despite the bch* prefix. bched01_s is a passported, means-tested devolved benefit: eligibility
-      passports off receipt of other means-tested awards (bsa_s, bunmt_s, bsadi_s, bfamt_s/bwkmt_s with
-      il_TC_means thresholds, bsauc_s with i_UC_means_earned_adj, boamtmm_s) crossed with primary/secondary
-      age bands and region (drgn1=12 Scotland, drgn1=13 NI), valued at $BFSMprim / $BFSMsec and scaled
-      by the take-up factors $BFSMPrUnTakeUp/$BFSMPrMtTakeUp/$BFSMScMtTakeUp. Not encoded in Axiom (no
-      FSM pipeline in rulespec-uk), and the synthetic UK grids run drgn1=2, so no current case activates
-      it. Groundability assessment (this-wave): FSM is not a standalone statutory rate-and-threshold rule
-      that grounds cleanly like the Scottish Child Payment — it is a passported service (Education (Scotland)
-      Act 1980 s.53-55 powers; devolved Scottish/NI administration) whose eligibility is derived from
-      receipt of the upstream means-tested benefits and whose rate is set administratively and take-up-scaled.
-      Encoding it therefore requires the upstream benefits (UC/IS/JSA/ESA/HB/PC) encoded first plus a
-      non-standard derived-entitlement layer, not a self-contained corpus ingest. Uncovered; the honest
-      build path is a passported surface (region/passporting inputs) layered on those upstream awards,
-      not encoder-first from a single statute. Out of scope for the child-benefit + benefit-cap lane.'
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'BEN: Free School Meals (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child
+      Benefit education-age extension despite the bch* prefix. bched01_s is a passported, means-tested
+      devolved benefit: eligibility passports off receipt of other means-tested awards (bsa_s, bunmt_s,
+      bsadi_s, bfamt_s/bwkmt_s with il_TC_means thresholds, bsauc_s with i_UC_means_earned_adj, boamtmm_s)
+      crossed with primary/secondary age bands and region (drgn1=12 Scotland, drgn1=13 NI), valued at
+      $BFSMprim / $BFSMsec and scaled by the take-up factors $BFSMPrUnTakeUp/$BFSMPrMtTakeUp/$BFSMScMtTakeUp.
+      Not encoded in Axiom (no FSM pipeline in rulespec-uk), and the synthetic UK grids run drgn1=2, so
+      no current case activates it. Groundability assessment (this-wave): FSM is not a standalone statutory
+      rate-and-threshold rule that grounds cleanly like the Scottish Child Payment — it is a passported
+      service (Education (Scotland) Act 1980 s.53-55 powers; devolved Scottish/NI administration) whose
+      eligibility is derived from receipt of the upstream means-tested benefits and whose rate is set
+      administratively and take-up-scaled. Encoding it therefore requires the upstream benefits (UC/IS/JSA/ESA/HB/PC)
+      encoded first plus a non-standard derived-entitlement layer, not a self-contained corpus ingest.
+      Exclusion basis (verified 2026-07-07 against primary sources): s.53 of the Education (Scotland)
+      Act 1980 imposes an IN-KIND duty to "provide ... a school lunch, free of charge" (s.53(2)) with
+      NO monetary amount — FSM pays no cash, so UKMOD''s bched01_s is a modelled per-meal cost-equivalent,
+      not a legislated cash award. The qualifying-income thresholds ARE statutory (e.g. the UC net-earnings
+      limit raised to GBP 995/month from 1 April 2026 by SSI 2025/44 amending the 1980 Act), but no benefit
+      AMOUNT exists in statute for Axiom (which encodes statutory monetary rules) to compare — so it is
+      not comparable from statute.'
   - id: uk:bched02_uk
     oracle_policy_name: bched02_uk
     oracle_policy_type: ben
     output_vars:
       - bched02_s
-    in_scope: true
-    suite: null
-    note: 'BEN: School Clothing Grant (UKMOD comment "BEN: School Clothing Grant"), not a Child Benefit
-      education-age extension despite the bch* prefix. bched02_s passports off the same means-tested awards
-      as bched01_uk (bsa_s/bunmt_s/bsadi_s/bfamt_s/bwkmt_s/bsauc_s/boamtmm_s) for dependent children aged
-      12-18 (dec!=6, dec!=0) at the secondary grant rate $BScSCGsec. A passported devolved payment, not
-      encoded in Axiom; the synthetic UK grids run drgn1=2 so no current case activates it. Groundability
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'BEN: School Clothing Grant (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child
+      Benefit education-age extension despite the bch* prefix. bched02_s passports off the same means-tested
+      awards as bched01_uk (bsa_s/bunmt_s/bsadi_s/bfamt_s/bwkmt_s/bsauc_s/boamtmm_s) for dependent children
+      aged 12-18 (dec!=6, dec!=0) at the secondary grant rate $BScSCGsec. A passported devolved payment,
+      not encoded in Axiom; the synthetic UK grids run drgn1=2 so no current case activates it. Groundability
       assessment (this-wave): like FSM (bched01_uk), the School Clothing Grant is a passported, take-up-scaled,
-      administratively-set Scottish service, not a clean standalone statutory rate — it grounds only on
-      top of the upstream means-tested awards it passports off, so it needs those encoded first plus a
-      derived-entitlement layer, not encoder-first from a single statute. Uncovered; the honest build
-      path is a passported surface on those upstream awards. Out of scope for the child-benefit + benefit-cap
-      lane.'
+      administratively-set Scottish service, not a clean standalone statutory rate. Exclusion basis (verified
+      2026-07-07 against primary sources): s.54 of the Education (Scotland) Act 1980 confers the clothing-provision
+      duty with NO monetary amount; the "national minimum" school clothing grant (GBP 120 primary / GBP
+      150 secondary) is a Scottish Government-COSLA administrative agreement, NOT fixed in any SSI, and
+      each of the 32 local authorities sets its own amount above that floor. So bched02_s pays an administratively-set,
+      LA-varying figure with no statutory basis for Axiom to encode — not comparable from statute.'
   - id: uk:bchht_uk
     oracle_policy_name: bchht_uk
     oracle_policy_type: ben
@@ -304,7 +310,7 @@ policies:
       - i_bdisc01
       - i_bdiscwa00
       - i_bdiscwa01
-    suite: null
+    suite: uk-child-winter-heating-payment
     note: 'BEN: Child Winter Heating Assistance (Scotland) (UKMOD comment "BEN: Child Winter Heating Assistance
       (Scotland)"), not a Child Benefit household/HICBC test component despite the bch* prefix. bchht_s
       is a devolved Scottish disability payment: paid at $SCWHA to a child under 18 in Scotland (drgn1=12)
@@ -334,7 +340,7 @@ policies:
     output_vars:
       - bchmt_s
     in_scope: true
-    suite: null
+    suite: uk-scottish-child-payment
     note: 'BEN: Scottish Child Payment (UKMOD comment "BEN: Child Payment (Scotland)"), not a Child Benefit
       means-test variant despite the bch* prefix (distinct from the excluded bchmt01_uk SCP bridging scheme).
       bchmt_s is a devolved Scotland-only (drgn1=12) means-tested payment: eligibility passports off il_bchmt
@@ -379,7 +385,7 @@ policies:
     in_scope: true
     internal_only_vars:
       - i_bcrdi
-    suite: null
+    suite: uk-scottish-carer-supplement
     note: 'BEN: Scottish Carer''s Allowance Supplement (from Sept 2018). The UK_2026 policy is switch=on
       and computes a distinct payable instrument bcrdicm_s = the flat weekly supplement $CASupW, gated
       on being a Carer''s Allowance recipient in Scotland (Elig_Cond (bcrdi>0) & (drgn1=12)); it then
@@ -492,27 +498,29 @@ policies:
     oracle_policy_type: ben
     output_vars:
       - bhosc01_s
-    in_scope: true
-    suite: null
-    note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. Verdict: scoped out
-      (not encoded), a modelled policy assumption rather than a statutory formula. The UK_2026 policy
-      is switch=on and computes a distinct payable bhosc01_s: for a Scottish social renter (amrtn=5 &
-      drgn1=12 & dhr=1) subject to the bedroom tax it pays back the size-criteria reduction (14% of (xhcrt
-      + xhcsc) for one excess room, 25% for more), gated on being on HB (bho_s>0) or UC (bsauc_s>0), plus
-      a benefit-cap top-up limited to housing costs xhc_hbai. UKMOD models this as if formulaic, but the
-      underlying instrument is not: DHPs rest on the Discretionary Financial Assistance Regulations 2001
-      (SI 2001/1167) reg 2(2), which gives the relevant authority a discretion "as to whether or not to
-      make discretionary housing payments in a particular case; and as to the amount of the payments"
-      — no statutory formula, percentage, or cap. Administered by the 32 Scottish local authorities and
-      demand-led/budget-capped (the Scottish Government funds full bedroom-tax mitigation as a policy
-      commitment, not a statutory entitlement to a fixed amount). The only statutory numbers UKMOD uses
-      here (14%/25%) are the HB/UC size-criteria percentages, already encoded where they ARE statutory:
-      rulespec-uk uk/regulations/uksi/2013/376/schedule/4/paragraph/36 (Universal Credit under-occupancy:
+    in_scope: false
+    exclusion_reason: oracle_models_nonstatutory_amount
+    note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. EXCLUDED oracle_models_nonstatutory_amount.
+      Verdict: scoped out (not encoded), a modelled policy assumption rather than a statutory formula.
+      The UK_2026 policy is switch=on and computes a distinct payable bhosc01_s: for a Scottish social
+      renter (amrtn=5 & drgn1=12 & dhr=1) subject to the bedroom tax it pays back the size-criteria reduction
+      (14% of (xhcrt + xhcsc) for one excess room, 25% for more), gated on being on HB (bho_s>0) or UC
+      (bsauc_s>0), plus a benefit-cap top-up limited to housing costs xhc_hbai. UKMOD models this as if
+      formulaic, but the underlying instrument is not: DHPs rest on the Discretionary Financial Assistance
+      Regulations 2001 (SI 2001/1167) reg 2(2), which gives the relevant authority a discretion "as to
+      whether or not to make discretionary housing payments in a particular case; and as to the amount
+      of the payments" — no statutory formula, percentage, or cap. Administered by the 32 Scottish local
+      authorities and demand-led/budget-capped (the Scottish Government funds full bedroom-tax mitigation
+      as a policy commitment, not a statutory entitlement to a fixed amount). The only statutory numbers
+      UKMOD uses here (14%/25%) are the HB/UC size-criteria percentages, already encoded where they ARE
+      statutory: rulespec-uk uk/regulations/uksi/2013/376/schedule/4/paragraph/36 (Universal Credit under-occupancy:
       0.14 one excess bedroom, 0.25 two or more). So encoding "pay back 14%/25% of eligible rent" as if
       a Scottish statutory formula would misrepresent a discretionary, LA-administered, budget-capped
-      payment (and the corpus carries no DHP source to ground it). Kept in scope as a real UKMOD surface
-      but classified not-comparable-from-statute; the size-criteria percentages it references are already
-      covered on the UC side (evidence: UK.xml UK_2026 bhosc01_uk function body; SI 2001/1167 reg 2(2)).'
+      payment (and the corpus carries no DHP source to ground it). Excluded as a real UKMOD surface whose
+      paid amount is not comparable from statute; the size-criteria percentages it references are already
+      covered on the UC side. Probe: bhosc01_s stayed 0 on the synthetic Scottish social-renter case even
+      with excess bedrooms supplied (the UC/HB passport did not fire), so no gradable surface activates
+      either (evidence: UK.xml UK_2026 bhosc01_uk function body; SI 2001/1167 reg 2(2)).'
   - id: uk:bmact_uk
     oracle_policy_name: bmact_uk
     oracle_policy_type: ben
@@ -713,17 +721,17 @@ policies:
       (drgn1!=12) and Scotland (drgn1=12, $WFASc/$WFAAdd80Sc) branches from 2025, then allocated across
       pension-age members. It reflects the 2024/25 means-testing reform: every BenCalc comp_Cond now carries
       il_toty < amount#3 ($WFCBThresh, GBP 35,000/year) so the payment is withdrawn above the income claw-back
-      threshold — the policy is no longer a universal pensioner payment. The uk-winter-fuel suite covers it
-      for England and Wales against the composed rulespec-uk winter_fuel_payment_composed_award_pipeline
-      (Social Fund Winter Fuel Payment Regulations 2025 (SI 2025/969) reg 3: GBP 200 under-80, GBP 300 at-80,
-      matching UKMOD''s $WFA 200 + $WFAAdd80 100), on a pensioner grid crossing the under-80/80+ tiers and
-      the GBP 35,000 recovery threshold, matching boaht_s exactly (7/7): the award is a household amount that
-      does not scale with the pension-age member count (verified: couple both under-80 = GBP 200, couple one
-      80+ = GBP 300; UKMOD allocates it per member and the adapter sums and annualizes), and Winter Fuel does
-      not draw UKMOD''s stochastic take-up correction, so the surface is a clean deterministic comparable.
-      Scotland (drgn1=12, $WFASc 211 / $WFAAdd80Sc giving GBP 211/317) runs a higher devolved instrument
-      (Pension Age Winter Heating Payment, not SI 2025/969) that Axiom does not encode, so it is out of scope
-      for this England-and-Wales surface. Runs on the x64 UKMOD runtime.'
+      threshold — the policy is no longer a universal pensioner payment. The uk-winter-fuel suite covers
+      it for England and Wales against the composed rulespec-uk winter_fuel_payment_composed_award_pipeline
+      (Social Fund Winter Fuel Payment Regulations 2025 (SI 2025/969) reg 3: GBP 200 under-80, GBP 300
+      at-80, matching UKMOD''s $WFA 200 + $WFAAdd80 100), on a pensioner grid crossing the under-80/80+
+      tiers and the GBP 35,000 recovery threshold, matching boaht_s exactly (7/7): the award is a household
+      amount that does not scale with the pension-age member count (verified: couple both under-80 = GBP
+      200, couple one 80+ = GBP 300; UKMOD allocates it per member and the adapter sums and annualizes),
+      and Winter Fuel does not draw UKMOD''s stochastic take-up correction, so the surface is a clean
+      deterministic comparable. Scotland (drgn1=12, $WFASc 211 / $WFAAdd80Sc giving GBP 211/317) runs
+      a higher devolved instrument (Pension Age Winter Heating Payment, not SI 2025/969) that Axiom does
+      not encode, so it is out of scope for this England-and-Wales surface. Runs on the x64 UKMOD runtime.'
   - id: uk:bpact_uk
     oracle_policy_name: bpact_uk
     oracle_policy_type: ben
@@ -825,7 +833,7 @@ policies:
       - bsadi01_s
       - bsadi_s
       - bsa_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bsadi_EligSevDisPremium
       - i_bsadi_EligCarerPremium
@@ -849,33 +857,21 @@ policies:
       - i_bsadi_turtob
       - i_bsadi_s_ftu
       - i_bsadi_probtu
-    suite: null
-    note: 'BEN: Social Assistance (income-related Employment and Support Allowance). PROBE-ADJUDICATED
-      (live UKMOD_PUBLIC_B2026.03/UK_2026 on this Mac, x86_64/coreclr, euromod 0.2.18): the policy is
-      switch=on and SIMULATES the full ir-ESA entitlement bsadi_s from statute — NOT a design-zero exclusion.
-      With the limited-capability-for-work input supplied and the UC-transition constant $UCtransition
-      set to 0 (Full Legacy Benefits) and take-up pinned, bsadi_s fires nonzero: ddipd=1 (WRAG) -> 6,961.07/yr
-      (bsadi01_s WRAG component 1,978.82); ddipd=3 (Support) -> 7,607.64/yr (bsadi00_s Support 2,625.39);
-      ddipd=0 -> 0 (falls back to Income Support bsa_s 4,982.25). It is a genuine benefit-unit comparable
-      surface (applicable amount i_bsadi_PersAllow + SDP/carer/EDP premiums, LCW gate, il_IS_means means
-      deduction, housing-cost non-dependant deductions, Support/WRAG components $ESAsup/$ESAwra). THREE
-      barriers to a live UKMOD suite on the registration-free demo data, all evidenced: (1) the LCW eligibility
-      gate reads ((ddipd>0)|(ddipd00>0)|((ddi02>=9)&(ddi02<=14))) and ddipd/ddipd00/ddi02 are pure data
-      inputs ABSENT from the 365-column training_data schema (the _runner.py template overlay drops non-header
-      columns) — ir-ESA cannot fire from statute on stock demo data (data-exercisability limit, like the
-      PC savings-credit; a patched schema supplying ddipd exercises it, verified above); (2) the UC-transition
-      (i_rand_uc<=$UCtransition; $UCtransition=0.06 baseline per DefConst, 0=LBA/1=UCA) plus the fully-random
-      take-up ($ISTUChild=0.89/$ISTUNochild=0.83) can zero a hypothetical award away from entitlement
-      (clean pre-transition value = i_bsadi_noUC) — dispositions upstream_engine_gap per or#168/or#170;
-      (3) UK_2026 applies a FROZEN applicable amount ($ISSing25=73.10/wk vs the current statutory ESA
-      Regs 2008 SI 2008/794 Sch 4 single-25+/main-phase 97.75/wk, corpus 2026-04-06 in force; UKMOD across
-      systems 73.10(x4 incl UK_2026)..92.05,95.55,97.55.. = UK_2026 frozen ~2015 vintage), so an Axiom
-      pipeline at current statutory rates would diverge from UKMOD by the freeze. Income-related ESA remains
-      a LIVE legacy benefit in current law (closing to new claims via UC managed migration; existing awards
-      continue). rulespec-uk does not yet encode ir-ESA. Statutory provisions ingested to axiom-corpus
-      (2026-07-06-uk-esa-income-related: SI 2008/794 regs 67-68 + Sch 4). Next-wave: composed applicable-amount
-      pipeline graded vs UKMOD via a patched (ddipd-carrying) schema, with the frozen-rate divergence
-      dispositioned (evidence: UK.xml UK_2026 bsadi_uk function body; live probe 2026-07-06).'
+    exclusion_reason: oracle_dataset_lacks_input
+    note: 'BEN: Social Assistance (income-related Employment and Support Allowance). EXCLUDED oracle_dataset_lacks_input.
+      The ir-ESA phase selector ddipd / ddipd00 (0 = Income Support fallback, 1 = Work-Related Activity
+      Group, 3 = Support Group) — the input that activates the ESA-specific components bsadi01_s (WRAG)
+      and bsadi00_s (Support) — is ABSENT from the registration-free training_data column schema (364
+      columns; ddipd, ddipd00, ddi02 and the bfapl-class LCW/LCWRA inputs all absent). The euromod adapter
+      builds each synthetic household from a template of the dataset header columns and skips any key
+      not in the header, so ddipd cannot be supplied even synthetically; the ir-ESA WRAG/Support surface
+      can never be exercised on the registration-free dataset (ddipd defaults to 0, routing bsadi_s to
+      its Income Support fallback). PROBE (scripts/probe_uk_repealed_and_missing_input.py, live UKMOD_PUBLIC_B2026.03/UK_2026):
+      a disabled single adult with the admissible disability indicators set (ddi=1, bdisc>0) but no ddipd
+      returns bsadi_s=0, bsadi01_s=0, bsadi00_s=0. Same class as EUROMOD BE bfapl (lpb column absent,
+      oracles#160). The wave-2 note reported bsadi firing WRAG/Support after supplying ddipd, which the
+      schema-bounded adapter cannot do; ir-ESA remains extant law (unlike repealed tax credits), so the
+      block is the missing dataset input, not repeal.'
   - id: uk:bsaec_uk
     oracle_policy_name: bsaec_uk
     oracle_policy_type: ben
@@ -939,7 +935,7 @@ policies:
     in_scope: true
     internal_only_vars:
       - i_bunct_IncDisregard
-    suite: null
+    suite: uk-contribution-based-jsa
     note: 'BEN: Contributory unemployment benefit (contribution-based Jobseeker''s Allowance). The UK_2026
       policy is switch=on and, once eligible, computes a distinct payable bunct_s from statute (age-banded
       rate $JSARate1824/$JSARate withdrawn pound-for-pound against the pension/earnings disregard base
@@ -969,7 +965,7 @@ policies:
       - bfamt_s
       - bwkmt_s
       - bfamttm_s
-    in_scope: true
+    in_scope: false
     internal_only_vars:
       - i_bwkmt_bfamt_Disab
       - i_bwkmt_ChildCare
@@ -1002,28 +998,19 @@ policies:
       - i_bwkmt_probtrback
       - i_bwkmt_probtr
       - i_bwkmt_yesUC
-    suite: null
-    note: 'BEN: Tax credits (Working Tax Credit and Child Tax Credit). PROBE-ADJUDICATED (live UKMOD_PUBLIC_B2026.03/UK_2026
-      on this Mac): the policy is switch=on and SIMULATES the full legacy tax-credit entitlements from
-      statute — NOT a design-zero exclusion of the UKMOD row. With les=2 (employed) + lhw01 populated
-      + $UCtransition=0 + take-up pinned, the surfaces fire nonzero: single childless 30h -> WTC bwkmt_s
-      3,145.95/yr (30-hour element bwkmtcm_s 1,070); lone parent 30h + 1 child -> WTC 5,780.95 + CTC bfamt_s
-      3,650 (CTC responds to child age: 3,650 age5 -> 4,195 age10); lone parent 16h -> WTC 5,205 (no 30h
-      element, correct). WTC (basic/lone-parent/couple/30h/disability + 70%-of-xcc childcare) and CTC
-      (family + per-child + disability, two-child limit) are jointly income-tested; the shared withdrawal
-      (rate 0.41, threshold $WTCCTCThresh1) is applied to WTC FIRST then CTC (i_bwkmt_bfamt_withdrawnAmt).
-      BUT: (1) THE BENEFIT IS ABOLISHED IN CURRENT LAW — Working Tax Credit and Child Tax Credit ENDED
-      5 April 2025 (gov.uk/tax-credits-have-ended; HoC Library CBP-9984); PolicyEngine encodes gov.dwp.tax_credits.active=false
-      from 2025-04-06 and pays 0 in 2026 by design. UKMOD UK_2026 models a FROZEN CLOSING LEGACY STOCK,
-      a counterfactual, not current law: $WTCBasic=1,960/yr vs the unrepealed-but-closed SI 2002/2005
-      Sch 2 basic 2,435 (corpus 2026-04-06) and the PE-projected 2,542. (2) take-up (switch-type fully-random,
-      $WTCCTCTULP=0.96 etc.) + UC-transition zero hypothetical awards (clean pre-transition i_bwkmt_noUC/i_bfamt_noUC)
-      — dispositions per or#168/or#170. Because the programme no longer pays ongoing awards, NO net-new
-      statutory pipeline is encoded (it would encode dead law and grade a frozen UKMOD counterfactual);
-      the row stays in-scope (UKMOD simulates it) with this probe evidence. Statutory rate provisions
-      ingested to axiom-corpus anyway (2026-07-06-uk-tax-credits-rates: SI 2002/2005 Sch 2, SI 2002/2007
-      regs 7-8, SI 2002/2008 regs 7-8) for provenance. Evidence: UK.xml UK_2026 bwkmt_bfamt_uk function
-      body; live probe 2026-07-06.'
+    exclusion_reason: oracle_models_repealed_law
+    note: 'BEN: Tax credits (Working Tax Credit and Child Tax Credit). EXCLUDED oracle_models_repealed_law.
+      Tax credits ended 5 April 2025 (GOV.UK www.gov.uk/tax-credits-have-ended) — abolished from the 2025-26
+      tax year, no new claims and no payments after 5 April 2025; the caseload migrated to Universal Credit
+      / Pension Credit. UKMOD UK_2026 retains bwkmt_bfamt_uk (switch=on, outputs bwkmt_s/bfamt_s/bwkmtcm_s/bfamttm_s/ydg04_s)
+      but gates entitlement through the same Universal-Credit transition as Housing Benefit (''taker of
+      ben bef 1st obs trans'' — new claims routed to UC), so on the registration-free training_data no
+      synthetic case is a pre-transition legacy tax-credit claimant. PROBE (scripts/probe_uk_repealed_and_missing_input.py,
+      live UKMOD_PUBLIC_B2026.03/UK_2026): single childless 30h (les=2 and les=3) and a lone parent with
+      one child at 35h all return bwkmt_s=0 and bfamt_s=0 with the WTC/CTC take-up rates pinned to 1.0
+      and $UCtransition=0 (the wave-2 note''s nonzero figures are not reproducible on UK_2026). Because
+      WTC/CTC are repealed, rulespec-uk encodes no current-law tax-credit surface by design, so no dataset
+      input would make this comparable — the exclusion is oracle_models_repealed_law, distinct from oracle_dataset_lacks_input.'
   - id: uk:cjrs_uk
     oracle_policy_name: cjrs_uk
     oracle_policy_type: ben

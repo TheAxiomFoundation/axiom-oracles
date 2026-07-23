@@ -1,0 +1,35 @@
+# Fuel duty — rulespec-uk HODA 1979 s.6 module vs PolicyEngine-UK on a synthetic
+# household grid. The Axiom side grounds the s.6(1A) standing rate £0.5795 and
+# subtracts a supplied temporary Budget-resolution reduction (the 5p cut
+# extension, not in the consolidated s.6(1A) text) and the rural relief, so both
+# engines apply PolicyEngine's in-force effective rate (£0.5345 for 2026) to the
+# same supplied litres. The grid matches to the penny.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-fuel-duty
+
+name: uk-fuel-duty
+title: UK fuel duty — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded fuel duty module (rulespec-uk uk/policies/govuk/fuel-duty.yaml,
+  Hydrocarbon Oil Duties Act 1979 s.6) against PolicyEngine-UK fuel_duty (2.89.2) at
+  the 2026 validation year on a synthetic household grid crossing petrol-only,
+  diesel-only, combined, and rural-relief cases. The effective per-litre rate, the
+  rural relief rate, the relief-area flag, and the litres are supplied on both engines.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-fuel-duty-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-fuel-duty
+
+dashboard:
+  filename: axiom-policyengine-uk-fuel-duty.json
+  suite: uk-fuel-duty

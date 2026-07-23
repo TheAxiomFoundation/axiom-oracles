@@ -37,6 +37,7 @@ from axiom_oracles.conformance.schema import (  # noqa: E402
 from axiom_oracles.conformance.universe import (  # noqa: E402
     EuromodUniverseBackend,
     PE_UK_PROGRAM_SPINE,
+    PE_US_PROGRAM_SPINE,
     PolicyEngineUniverseBackend,
     _is_queryable_output,
     propose_scope,
@@ -130,6 +131,24 @@ def test_oracle_dataset_lacks_input_requires_a_note():
     )
     # With a note naming the absent input it validates.
     assert replace(row, note="lpb input absent from BE HHoT schema; see #160").validate() == []
+
+
+def test_oracle_models_repealed_law_requires_a_note():
+    row = UniversePolicy(
+        id="us-pe:nh_income_tax",
+        oracle_policy_name="nh_income_tax",
+        output_vars=("nh_income_tax",),
+        in_scope=False,
+        exclusion_reason="oracle_models_repealed_law",
+    )
+    assert any(
+        "oracle_models_repealed_law requires a `note`" in problem
+        for problem in row.validate()
+    )
+    assert replace(
+        row,
+        note="RSA Chapter 77 repealed; see the positive-I&D PolicyEngine probe.",
+    ).validate() == []
 
 
 def test_oracle_dataset_lacks_input_keeps_the_observable_output_var():
@@ -280,7 +299,7 @@ def test_propose_scope_defaults_are_conservative():
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("jurisdiction", ["uk", "be", "uk-pe"])
+@pytest.mark.parametrize("jurisdiction", ["uk", "be", "uk-pe", "us-pe"])
 def test_committed_universe_parses_and_validates(jurisdiction):
     path = CONFORMANCE_DIR / f"{jurisdiction}.yaml"
     universe = parse_universe(path)
@@ -330,6 +349,26 @@ def test_be_universe_excludes_bfapl_dataset_lacks_input_with_probe_pointer():
     assert bfapl.note is not None
     assert "lpb" in bfapl.note
     assert "rulespec-be#86" in bfapl.note
+
+
+def test_uk_universe_excludes_nonstatutory_amount_rows():
+    """bhosc01 (discretionary DHP), bched02 (administrative clothing-grant minimum)
+    and bched01 (in-kind Free School Meals) each compute a payable ``_s`` output
+    whose monetary value has no statutory basis, so they are excluded as
+    oracle_models_nonstatutory_amount with the governing instrument in the note and
+    the observable output surface retained (the reason's defining property)."""
+    universe = parse_universe(CONFORMANCE_DIR / "uk.yaml")
+    by_name = universe.by_name()
+    for name, out_var, source_marker in (
+        ("bhosc01_uk", "bhosc01_s", "2001/1167"),
+        ("bched02_uk", "bched02_s", "s.54"),
+        ("bched01_uk", "bched01_s", "s.53"),
+    ):
+        row = by_name[name]
+        assert row.in_scope is False, name
+        assert row.exclusion_reason == "oracle_models_nonstatutory_amount", name
+        assert out_var in row.output_vars, name
+        assert row.note is not None and source_marker in row.note, name
 
 
 # ---------------------------------------------------------------------------
@@ -399,13 +438,24 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
     Two are population EFRS suites (uk-tax-benefits-efrs, uk-universal-credit-efrs);
     uk-council-tax-reduction is a synthetic pensioner case-grid comparing the
     SI 2012/2885 England pension-age scheme against PE-UK's council_tax_reduction
-    (present from 2.89.2).
+    (present from 2.89.2); uk-winter-fuel-payment-pe is a synthetic pensioner
+    case-grid comparing the SI 2025/969 England-and-Wales Winter Fuel award pipeline
+    against PE-UK's winter_fuel_allowance (the 2024/25 means-tested restriction).
     """
     universe = parse_universe(CONFORMANCE_DIR / "uk-pe.yaml")
     live_pe_suites = {
         "uk-tax-benefits-efrs",
         "uk-universal-credit-efrs",
         "uk-council-tax-reduction",
+        "uk-winter-fuel-payment-pe",
+        "uk-capital-gains-tax",
+        "uk-business-rates",
+        "uk-attendance-allowance-pe",
+        "uk-tax-free-childcare-pe",
+        "uk-vat",
+        "uk-fuel-duty",
+        "uk-tv-licence",
+        "uk-lbtt-ltt",
     }
     covered_suites = {
         p.suite for p in universe.in_scope() if p.suite is not None
@@ -430,6 +480,200 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         }, program
     # Council Tax Reduction is covered by its case-grid suite.
     assert by_name["council_tax_reduction"].suite == "uk-council-tax-reduction"
+    # Winter Fuel Payment is covered by its case-grid suite.
+    assert (
+        by_name["winter_fuel_allowance"].suite == "uk-winter-fuel-payment-pe"
+    )
+    # Attendance Allowance is covered by its rate-only case-grid suite.
+    assert (
+        by_name["attendance_allowance"].suite == "uk-attendance-allowance-pe"
+    )
+    # Tax-Free Childcare is covered by its below-cap top-up case-grid suite.
+    assert (
+        by_name["tax_free_childcare"].suite == "uk-tax-free-childcare-pe"
+    )
+
+
+# ---------------------------------------------------------------------------
+# us-pe universe (PolicyEngine-US backed, per-state granularity)
+# ---------------------------------------------------------------------------
+
+
+def test_us_pe_spine_is_well_formed():
+    """The committed US grouping (row set / badge denominator) is deterministic:
+    unique program names, each keyed on at least one output variable."""
+    names = [p.name for p in PE_US_PROGRAM_SPINE]
+    assert len(names) == len(set(names)), "duplicate program names in the spine"
+    assert all(p.outputs for p in PE_US_PROGRAM_SPINE)
+    # The spine is large and honest (per-state income tax + TANF dominate).
+    assert len(PE_US_PROGRAM_SPINE) >= 100
+
+
+def test_us_pe_universe_is_policyengine_backed_and_version_pinned():
+    """us-pe is scoped to one pinned policyengine-us release, not a floating
+    latest (the header pins from the enumerated checkout)."""
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    assert universe.jurisdiction == "us-pe"
+    assert universe.oracle.backend == "policyengine"
+    assert universe.oracle.model == "policyengine-us"
+    assert universe.oracle.release not in {"", "TODO", "checkout"}
+    assert universe.oracle.release[0].isdigit()
+    assert universe.validate() == []
+
+
+def test_us_pe_input_carried_programs_are_excluded():
+    """Reported income PE-US only carries (no statutory computation) is excluded
+    input_carrying; the reform-only basic_income lever is technical — the PE-US
+    analogue of the uk-pe reported-passthrough exclusions."""
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    by_name = universe.by_name()
+    for program in (
+        "social_security",
+        "unemployment_compensation",
+        "child_support_received",
+        "workers_compensation",
+        "educational_assistance",
+        "financial_assistance",
+        "survivor_benefits",
+    ):
+        row = by_name[program]
+        assert row.in_scope is False, program
+        assert row.exclusion_reason == "input_carrying", program
+    assert by_name["basic_income"].exclusion_reason == "technical"
+
+
+def test_us_pe_state_programs_are_per_state():
+    """State income tax and TANF are one row PER STATE — mirroring PE-US's own
+    per-state variable tree (<state>_income_tax, STATE_TANF_VARIABLES), not
+    collapsed to a single national row. SNAP/SSI stay national (one PE variable)."""
+    import re
+
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    by_name = universe.by_name()
+    # Per-state income tax rows are keyed <2-letter-state>_income_tax.
+    state_iit = [n for n in by_name if re.fullmatch(r"[a-z]{2}_income_tax", n)]
+    assert len(state_iit) == 44  # states PE computes an income tax for
+    # A representative sample of per-state TANF programs (varied names).
+    for tanf in ("ca_tanf", "ny_tanf", "mn_mfip", "ak_atap", "ma_tafdc", "wy_power"):
+        assert tanf in by_name, tanf
+        assert by_name[tanf].in_scope is True
+    # SNAP and SSI are single national rows keyed on their national variable.
+    assert "snap" in by_name["snap"].output_vars
+    assert "ssi" in by_name["ssi"].output_vars
+
+
+def test_us_pe_covered_programs_name_a_live_pe_suite():
+    """Every covered us-pe program points at a live PolicyEngine-US suite that
+    runs vs PE-2026 — the day-one registrations (federal income tax + payroll via
+    fiit-ecps, SSI, SNAP, Medicaid categorical, reviewed state income-tax
+    comparisons, and the per-state TANF suites)."""
+    import re
+
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    live_pe_suites = {
+        "fiit-ecps",
+        "ssi-ecps",
+        "ca-snap-ecps",
+        "medicaid-magi-co-ecps",
+        "al-income-tax-liability",
+        "nc-income-tax-liability",
+        "ms-income-tax-liability",
+        "al-tanf-ecps",
+        "ga-tanf-ecps",
+        "de-tanf-ecps",
+        "az-tanf-ecps",
+        "ca-tanf-ecps",
+        "co-tanf-ecps",
+        "ks-tanf-ecps",
+        "mn-tanf-ecps",
+        "ny-tanf-ecps",
+        "wa-tanf-ecps",
+    }
+    covered = {p.suite for p in universe.in_scope() if p.suite is not None}
+    assert covered <= live_pe_suites
+    by_name = universe.by_name()
+    # Federal income tax + payroll ride the fiit-ecps bridge.
+    for program in ("income_tax", "eitc", "ctc", "employee_social_security_tax"):
+        assert by_name[program].suite == "fiit-ecps", program
+    # SNAP is one national row registered to its canonical (largest) suite.
+    assert by_name["snap"].suite == "ca-snap-ecps"
+    # State income-tax coverage counts only a comparison that proves the final
+    # public variable. These blocked grids exercise useful narrower components,
+    # but none proves the corresponding final liability.
+    assert by_name["co_income_tax"].suite is None
+    assert by_name["ny_income_tax"].suite is None
+    nh_income_tax = by_name["nh_income_tax"]
+    assert nh_income_tax.in_scope is False
+    assert nh_income_tax.exclusion_reason == "oracle_models_repealed_law"
+    assert nh_income_tax.suite is None
+    assert nh_income_tax.note
+    assert "probe_us_nh_repealed_income_tax.py" in nh_income_tax.note
+    narrow_state_targets = {
+        "az_income_tax": "az_income_tax_before_non_refundable_credits",
+        "ca_income_tax": "ca_income_tax_before_refundable_credits",
+        "ct_income_tax": "ct_income_tax_before_refundable_credits",
+        "dc_income_tax": "dc_income_tax_before_credits",
+        "de_income_tax": "de_income_tax_before_non_refundable_credits_unit",
+        "ga_income_tax": "ga_income_tax_before_non_refundable_credits",
+        "hi_income_tax": "hi_income_tax_before_non_refundable_credits",
+        "ia_income_tax": "ia_income_tax_before_credits",
+        "id_income_tax": "id_income_tax_before_refundable_credits",
+        "il_income_tax": "il_income_tax_before_non_refundable_credits",
+        "in_income_tax": "in_agi_tax",
+        "ks_income_tax": "ks_income_tax_before_credits",
+        "ky_income_tax": "ky_income_tax_before_refundable_credits",
+        "la_income_tax": "la_income_tax_before_non_refundable_credits",
+        "ma_income_tax": "ma_income_tax",
+        "md_income_tax": "md_income_tax_before_credits",
+        "me_income_tax": "me_income_tax_before_refundable_credits",
+        "mi_income_tax": "mi_income_tax_before_non_refundable_credits",
+        "mn_income_tax": "mn_income_tax_before_refundable_credits",
+        "mo_income_tax": "mo_income_tax_before_credits",
+        "mt_income_tax": "mt_income_tax_before_non_refundable_credits_joint",
+        "nd_income_tax": "nd_income_tax_before_credits",
+        "ne_income_tax": "ne_income_tax_before_credits",
+        "nj_income_tax": "nj_main_income_tax",
+        "nm_income_tax": "nm_income_tax_before_non_refundable_credits",
+        "oh_income_tax": "oh_income_tax_before_non_refundable_credits",
+        "ok_income_tax": "ok_income_tax_before_credits",
+        "or_income_tax": "or_income_tax_before_credits",
+        "pa_income_tax": "pa_income_tax_before_forgiveness",
+        "ri_income_tax": "ri_income_tax_before_non_refundable_credits",
+        "sc_income_tax": "sc_income_tax_before_non_refundable_credits",
+        "ut_income_tax": "ut_income_tax_before_credits",
+        "va_income_tax": "va_income_tax_before_non_refundable_credits",
+        "vt_income_tax": "vt_income_tax_before_non_refundable_credits",
+        "wa_income_tax": "wa_income_tax_before_refundable_credits",
+        "wi_income_tax": "wi_income_tax_before_credits",
+        "wv_income_tax": "wv_income_tax_before_non_refundable_credits",
+    }
+    for final_variable, compared_surface in narrow_state_targets.items():
+        row = by_name[final_variable]
+        assert row.in_scope is True, final_variable
+        assert row.suite is None, final_variable
+        assert compared_surface in row.note, final_variable
+    # Alabama and North Carolina are the two reviewed 2026 exceptions: their
+    # narrower targets are provably identical to the generated final variables
+    # over every positive-weight routed Populace tax unit.
+    final_equivalent_state_targets = {
+        "al_income_tax": ("al_income_tax_before_non_refundable_credits", "1,632"),
+        "nc_income_tax": ("nc_income_tax_before_credits", "2,169"),
+    }
+    for final_variable, (compared_surface, population_count) in (
+        final_equivalent_state_targets.items()
+    ):
+        row = by_name[final_variable]
+        assert row.suite == f"{final_variable[:2]}-income-tax-liability"
+        assert compared_surface in row.note
+        assert population_count in row.note
+    covered_state_income_taxes = {
+        variable
+        for variable, row in by_name.items()
+        if re.fullmatch(r"[a-z]{2}_income_tax", variable) and row.suite is not None
+    }
+    assert covered_state_income_taxes == set(final_equivalent_state_targets)
+    # Per-state TANF suites bind their state's variable (incl. renamed ones).
+    assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
 
 
 def test_serialize_is_stable_roundtrip():
@@ -558,6 +802,109 @@ def test_policyengine_backend_raises_on_missing_spine_variable():
     )
     with pytest.raises(ValueError, match="not found in the pinned checkout"):
         backend.raw_policies()
+
+
+class _FakeVarIndex:
+    """A stand-in variable index for kind-classification unit tests."""
+
+    def __init__(self, *, formulas=(), composes=(), sources=None):
+        self._f = set(formulas)
+        self._c = set(composes)
+        self._s = sources or {}
+
+    def has_formula(self, name):
+        return name in self._f
+
+    def has_adds_or_subtracts(self, name):
+        return name in self._c
+
+    def formula_source(self, name):
+        return self._s.get(name, "")
+
+
+def test_pe_variable_kind_treats_adds_subtracts_as_computed_only_when_enabled():
+    """PE-US composes surfaces (state income taxes, standard_deduction, medicaid)
+    from an adds/subtracts list, not a def formula. With the PE-US flag those are
+    computed (rules); without it (PE-UK default) a no-formula variable stays a
+    pure input, so PE-UK's committed facts are unchanged by this backend."""
+    from axiom_oracles.conformance.universe import (
+        PE_KIND_INPUT,
+        PE_KIND_RULES,
+        _pe_variable_kind,
+    )
+
+    composed = _FakeVarIndex(composes=["ca_income_tax"])
+    assert (
+        _pe_variable_kind("ca_income_tax", composed, include_adds_subtracts=True)
+        == PE_KIND_RULES
+    )
+    assert (
+        _pe_variable_kind("ca_income_tax", composed, include_adds_subtracts=False)
+        == PE_KIND_INPUT
+    )
+    # A def-formula surface is rules regardless of the flag.
+    formula = _FakeVarIndex(formulas=["snap"], sources={"snap": "def formula(): 0"})
+    assert (
+        _pe_variable_kind("snap", formula, include_adds_subtracts=True)
+        == PE_KIND_RULES
+    )
+    # A bare input is a pure input under both.
+    empty = _FakeVarIndex()
+    assert (
+        _pe_variable_kind("child_support_received", empty, include_adds_subtracts=True)
+        == PE_KIND_INPUT
+    )
+
+
+def _policyengine_us_checkout():
+    import policyengine_us  # type: ignore
+
+    return Path(policyengine_us.__file__).resolve().parents[1]
+
+
+def _importable_pe_us_matches_pin() -> bool:
+    """True only when policyengine_us is importable AND its version equals the
+    committed us-pe universe's pinned release (same version-gating the drift
+    --check applies — the spine is pinned to that exact release)."""
+    import importlib.util
+
+    if importlib.util.find_spec("policyengine_us") is None:
+        return False
+    try:
+        pinned = parse_universe(CONFORMANCE_DIR / "us-pe.yaml").oracle.release
+        present = PolicyEngineUniverseBackend(
+            checkout=_policyengine_us_checkout(), package="policyengine_us"
+        ).pinned_version()
+    except Exception:
+        return False
+    return present == pinned
+
+
+@pytest.mark.skipif(
+    not _importable_pe_us_matches_pin(),
+    reason="importable policyengine_us version does not match the pinned us-pe release",
+)
+def test_policyengine_us_backend_reads_composed_surfaces_from_code():
+    """Against the pinned checkout the US backend reads composed (adds/subtracts)
+    surfaces as computed and reported inputs as internal — facts, not memory."""
+    backend = PolicyEngineUniverseBackend(
+        checkout=_policyengine_us_checkout(),
+        package="policyengine_us",
+        spine=PE_US_PROGRAM_SPINE,
+        include_adds_subtracts=True,
+    )
+    by_name = {p.name: p for p in backend.raw_policies()}
+    assert len(by_name) == len(PE_US_PROGRAM_SPINE)
+    # A compose-based state income tax is a computed (queryable) rules surface.
+    assert by_name["ca_income_tax"].policy_type == "rules"
+    assert "ca_income_tax" in by_name["ca_income_tax"].queryable_outputs
+    # snap is a def-formula rules surface.
+    assert by_name["snap"].policy_type == "rules"
+    # Reported passthroughs carry no queryable surface (internal-only evidence).
+    assert by_name["child_support_received"].queryable_outputs == ()
+    assert "child_support_received" in by_name["child_support_received"].internal_outputs
+    # The pinned version is read from the checkout (pyproject or installed metadata).
+    assert backend.pinned_version()[0].isdigit()
 
 
 # ---------------------------------------------------------------------------
@@ -959,4 +1306,188 @@ def test_burndown_check_fails_on_mutated_commit():
         rc = _run_check(bd)
     finally:
         bd.OUTPUT_PATH.write_text(original)
+    assert rc == 1
+
+
+# ---------------------------------------------------------------------------
+# Per-suite runnable-program compositions (axiom-oracles#185)
+# ---------------------------------------------------------------------------
+
+from axiom_oracles.conformance.compositions import (  # noqa: E402
+    AXIOM_RULESPEC_ROOT_ENV,
+    build_compositions_document,
+    composition_for_suite,
+    compositions_path,
+    load_composition,
+    parse as parse_compositions,
+    repo_relative_program_path,
+    resolve_suite_program,
+    rulespec_imports_for_concepts,
+    serialize as serialize_compositions,
+)
+
+BE_COMPOSITIONS_PATH = CONFORMANCE_DIR / "compositions" / "be.yaml"
+
+
+def _covered_be_suites() -> dict[str, str]:
+    """suite -> universe policy id for every in-scope, suite-named BE row."""
+    universe = parse_universe(CONFORMANCE_DIR / "be.yaml")
+    return {p.suite: p.id for p in universe.in_scope() if p.suite is not None}
+
+
+def test_be_compositions_record_covers_exactly_the_covered_suites():
+    """The record enumerates every covered BE suite — no more, no fewer."""
+    document = parse_compositions(BE_COMPOSITIONS_PATH)
+    assert {c.suite for c in document.compositions} == set(_covered_be_suites())
+
+
+def test_be_compositions_record_is_fresh():
+    """POSITIVE gate: committed record == a fresh regeneration, byte for byte."""
+    fresh = serialize_compositions(build_compositions_document("be"))
+    assert BE_COMPOSITIONS_PATH.read_text() == fresh
+
+
+def test_recorded_imports_match_the_cli_runner_derivation():
+    """Anti-drift tie: each recorded import-set is exactly what the CLI runner
+    composes for that suite when --axiom-program is omitted.
+
+    ``_build_runner`` derives ``program_imports`` from the suite's output
+    concepts via the same :func:`rulespec_imports_for_concepts`, so the record
+    describes the real run path — it cannot name a program the harness would
+    not compile.
+    """
+    document = parse_compositions(BE_COMPOSITIONS_PATH)
+    for composition in document.compositions:
+        live = composition_for_suite(composition.suite)
+        assert composition.imports == live.imports, composition.suite
+        assert composition.imports == rulespec_imports_for_concepts(
+            composition.outputs
+        ), composition.suite
+        assert composition.target == composition.imports[0], composition.suite
+        assert composition.entity == live.entity, composition.suite
+        assert composition.entity_id == live.entity_id, composition.suite
+
+
+def test_recorded_paths_are_repo_relative_to_the_imports():
+    """Every recorded program file is the import's monorepo path (…​.yaml)."""
+    document = parse_compositions(BE_COMPOSITIONS_PATH)
+    for composition in document.compositions:
+        assert len(composition.paths) == len(composition.imports), composition.suite
+        for module_ref, path in zip(composition.imports, composition.paths):
+            assert path == repo_relative_program_path(module_ref)
+            assert path.startswith("rulespec-be/")
+            assert path.endswith(".yaml")
+
+
+def test_marital_quotient_is_the_lone_couple_module_not_front_chained():
+    """The archaeology finding, pinned: be-marital-quotient runs the single
+    ``couple_pit_oracle_pipeline`` module as a TaxUnit — it is NOT front-chained
+    with the SSC/forfait/work-bonus stages. Its EUROMOD residual is carried by
+    dispositions (dispositions/be-marital-quotient.yaml), not by a wider
+    program. This guards against a future edit that silently widens the slice
+    and quietly changes what "covered" means for this policy.
+    """
+    composition = load_composition("be-marital-quotient")
+    assert composition is not None
+    assert composition.entity == "TaxUnit"
+    assert composition.imports == (
+        "be:statutes/income_tax/individual/couple_pit_oracle_pipeline",
+    )
+    # No employee-SSC / forfait / work-bonus module is chained in front.
+    joined = " ".join(composition.imports)
+    assert "employee_contributions" not in joined
+    assert "work_bonus" not in joined
+    # The engine post-uprating gross is bridged onto the Article 89 boundary —
+    # the supplied default beyond the suite's own axiom_inputs.
+    assert composition.input_bridge == {
+        "yem": (
+            "be:statutes/income_tax/individual/joint_assessment"
+            "#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions",
+        )
+    }
+
+
+def test_worker_ssc_composition_spans_two_modules():
+    """be-worker-ssc is the one multi-module composition: its three outputs span
+    employee_contributions and work_bonus."""
+    composition = load_composition("be-worker-ssc")
+    assert composition is not None
+    assert composition.imports == (
+        "be:regulations/social_security/workers/employee_contributions",
+        "be:regulations/social_security/workers/work_bonus",
+    )
+    assert len(composition.paths) == 2
+
+
+def test_resolve_suite_program_normalizes_a_rulespec_checkout_root(tmp_path):
+    """resolve() lifts a rulespec-* checkout path to the workspace root that
+    modules resolve against, and binds the single-module program to a file."""
+    workspace = tmp_path
+    checkout = workspace / "rulespec-be"
+    module_rel = (
+        "be/statutes/income_tax/individual/couple_pit_oracle_pipeline.yaml"
+    )
+    target = checkout / module_rel
+    target.parent.mkdir(parents=True)
+    target.write_text("format: rulespec/v1\n")
+
+    composition = load_composition("be-marital-quotient")
+    # Pointing straight at the checkout resolves to its parent workspace.
+    resolved = composition.resolve(checkout)
+    assert resolved.root == workspace
+    assert resolved.single_program_path == target
+    assert resolved.missing_paths() == ()
+    # Pointing at the workspace directly resolves identically.
+    assert composition.resolve(workspace).root == workspace
+
+
+def test_resolve_suite_program_reads_env_and_falls_back(monkeypatch):
+    """resolve_suite_program uses AXIOM_RULESPEC_ROOT; None for unknown suite or
+    unset root (the caller then falls back to live concept-derivation)."""
+    monkeypatch.setenv(AXIOM_RULESPEC_ROOT_ENV, str(Path.home() / "TheAxiomFoundation"))
+    assert resolve_suite_program("uk-universal-credit") is None  # no BE record
+    monkeypatch.delenv(AXIOM_RULESPEC_ROOT_ENV, raising=False)
+    assert resolve_suite_program("be-marital-quotient") is None  # no root
+
+
+def test_multi_module_composition_has_no_single_program_path(tmp_path):
+    """A 2-module composition offers no single --axiom-program file; callers use
+    the import-set the harness composes."""
+    workspace = tmp_path
+    composition = load_composition("be-worker-ssc")
+    resolved = composition.resolve(workspace)
+    assert resolved.single_program_path is None
+    assert len(resolved.program_paths) == 2
+
+
+def _run_compositions_check(module) -> int:
+    import sys
+
+    argv = sys.argv
+    sys.argv = ["prog", "--all", "--check"]
+    try:
+        return module.main()
+    finally:
+        sys.argv = argv
+
+
+def test_compositions_check_passes_on_committed():
+    """POSITIVE: the committed record passes --check."""
+    gen = _load_script("generate_conformance_compositions.py")
+    assert _run_compositions_check(gen) == 0
+
+
+def test_compositions_check_fails_on_mutated_commit():
+    """NEGATIVE: mutating the committed record must fail --check (the gate bites)."""
+    gen = _load_script("generate_conformance_compositions.py")
+    path = compositions_path("be")
+    original = path.read_text()
+    # Flip a query entity — a lie about what the harness runs.
+    tampered = original.replace("entity: TaxUnit", "entity: Household", 1)
+    assert tampered != original
+    path.write_text(tampered)
+    try:
+        rc = _run_compositions_check(gen)
+    finally:
+        path.write_text(original)
     assert rc == 1

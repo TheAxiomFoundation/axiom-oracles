@@ -1,0 +1,23 @@
+name: nd-income-tax-liability
+title: North Dakota income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed North Dakota ordinary resident wage-earner income-tax
+  pipeline in Axiom RuleSpec against PolicyEngine (nd_income_tax_before_credits)
+  at 2026 and TAXSIM (siitax) at its latest supported law year, 2024, on the
+  standard six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: ND
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-nd-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-nd-income-tax-liability.json
+  suite: nd-income-tax-liability

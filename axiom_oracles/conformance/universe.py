@@ -420,8 +420,241 @@ PE_UK_PROGRAM_SPINE: tuple[PolicyEngineProgram, ...] = (
 )
 
 
-def _pe_variable_kind(name: str, index: "PolicyEngineVariableIndex") -> str:
-    """Read one PE-UK variable's simulation kind from its formula, or pure input.
+#: The PolicyEngine-US program spine — the committed *grouping* (the row set /
+#: badge denominator). Like :data:`PE_UK_PROGRAM_SPINE` it is the stable list; the
+#: checkout's code is ground truth for every scored fact (variable existence,
+#: computed-or-input, kind) and the drift ``--check`` fails if the committed
+#: universe diverges. PE-US is far larger than PE-UK, so the grouping follows a
+#: DETERMINISTIC RULE, biased to PE-US's own module organization, so a new program
+#: lands as a new row without a judgement call:
+#:
+#:   One row per PE-US program instrument PE simulates for the validation year, at
+#:   the granularity of the household-facing output variable PE computes, taken
+#:   from PE-US's own module tree (``policyengine_us/variables/gov``):
+#:
+#:   1. Federal income tax → one row per distinct component surface PE computes
+#:      (final ``income_tax``, ``income_tax_before_refundable_credits``,
+#:      ``taxable_income``, the deduction paths — ``standard_deduction``,
+#:      ``itemized_taxable_income_deductions``, ``salt_deduction``,
+#:      ``qualified_business_income_deduction`` — and the add-on schedules
+#:      ``alternative_minimum_tax``, ``net_investment_income_tax``,
+#:      ``capital_gains_tax``), plus one row per credit in PE-US's own
+#:      ``gov.irs.credits.refundable`` + ``gov.irs.credits.non_refundable``
+#:      parameter lists (deduped to the household credit surface: ``eitc``,
+#:      ``ctc``, ``cdcc``, ``american_opportunity_credit`` …).
+#:   2. Payroll & SECA → one row per contribution surface (employee/employer
+#:      OASDI + Medicare, additional Medicare, self-employment tax).
+#:   3. Federal benefit & health programs → one row per member of PE-US's
+#:      ``gov.household.household_benefits`` parameter list and the
+#:      ``household_health_benefits`` expansion (``ssi``, ``snap``, ``wic`` …,
+#:      ``medicaid``, ``aca_ptc``, ``chip``).
+#:   4. State-computed programs (per-state, mirroring PE-US's per-state variable
+#:      tree) → one row per ``<state>_income_tax`` PE computes (44 states with an
+#:      income tax) and one row per member of ``STATE_TANF_VARIABLES`` (51 state
+#:      cash-assistance programs — CalWORKs, MFIP, TFA …). SNAP/SSI stay a single
+#:      national row because PE computes each as one national variable; TANF and
+#:      income tax are per-state because PE computes them as per-state variables.
+#:      That asymmetry is the rule following PE's own tree, not a coverage choice.
+#:
+#: In-scope iff PE carries the primary output with a computed surface (a
+#: ``def formula`` OR an ``adds``/``subtracts`` composition). Pure microdata
+#: passthroughs PE only *carries* (reported ``social_security``,
+#: ``unemployment_compensation``, ``child_support_received``, …, and the
+#: reform-lever ``basic_income``) are rows too, excluded ``input_carrying`` /
+#: ``technical`` — the PE-US analogue of PE-UK's 8 reported-passthrough
+#: exclusions. Sourced by enumerating PE-US's ``variables/gov`` surface against
+#: those PE-native parameter lists; NOT a hand-curated wish-list.
+PE_US_PROGRAM_SPINE: tuple[PolicyEngineProgram, ...] = (
+    # Federal income tax — structural surfaces (10)
+    PolicyEngineProgram("income_tax", ("income_tax",)),
+    PolicyEngineProgram(
+        "income_tax_before_refundable_credits",
+        ("income_tax_before_refundable_credits",),
+    ),
+    PolicyEngineProgram("taxable_income", ("taxable_income",)),
+    PolicyEngineProgram("standard_deduction", ("standard_deduction",)),
+    PolicyEngineProgram(
+        "itemized_taxable_income_deductions",
+        ("itemized_taxable_income_deductions",),
+    ),
+    PolicyEngineProgram("salt_deduction", ("salt_deduction",)),
+    PolicyEngineProgram(
+        "qualified_business_income_deduction",
+        ("qualified_business_income_deduction",),
+    ),
+    PolicyEngineProgram("alternative_minimum_tax", ("alternative_minimum_tax",)),
+    PolicyEngineProgram("net_investment_income_tax", ("net_investment_income_tax",)),
+    PolicyEngineProgram("capital_gains_tax", ("capital_gains_tax",)),
+    # Federal income tax — credits (gov.irs.credits.refundable/non_refundable) (13)
+    PolicyEngineProgram("eitc", ("eitc",)),
+    PolicyEngineProgram("ctc", ("ctc",)),
+    PolicyEngineProgram("cdcc", ("cdcc",)),
+    PolicyEngineProgram("american_opportunity_credit", ("american_opportunity_credit",)),
+    PolicyEngineProgram("lifetime_learning_credit", ("lifetime_learning_credit",)),
+    PolicyEngineProgram("savers_credit", ("savers_credit",)),
+    PolicyEngineProgram("elderly_disabled_credit", ("elderly_disabled_credit",)),
+    PolicyEngineProgram("recovery_rebate_credit", ("recovery_rebate_credit",)),
+    PolicyEngineProgram(
+        "residential_clean_energy_credit", ("residential_clean_energy_credit",)
+    ),
+    PolicyEngineProgram(
+        "energy_efficient_home_improvement_credit",
+        ("energy_efficient_home_improvement_credit",),
+    ),
+    PolicyEngineProgram("foreign_tax_credit", ("foreign_tax_credit",)),
+    PolicyEngineProgram("new_clean_vehicle_credit", ("new_clean_vehicle_credit",)),
+    PolicyEngineProgram("used_clean_vehicle_credit", ("used_clean_vehicle_credit",)),
+    # Payroll & SECA (6)
+    PolicyEngineProgram("employee_social_security_tax", ("employee_social_security_tax",)),
+    PolicyEngineProgram("employer_social_security_tax", ("employer_social_security_tax",)),
+    PolicyEngineProgram("employee_medicare_tax", ("employee_medicare_tax",)),
+    PolicyEngineProgram("employer_medicare_tax", ("employer_medicare_tax",)),
+    PolicyEngineProgram("additional_medicare_tax", ("additional_medicare_tax",)),
+    PolicyEngineProgram("self_employment_tax", ("self_employment_tax",)),
+    # Federal benefit & health programs (gov.household.household_benefits) (16)
+    PolicyEngineProgram("ssi", ("ssi",)),
+    PolicyEngineProgram("snap", ("snap",)),
+    PolicyEngineProgram("wic", ("wic",)),
+    PolicyEngineProgram("free_school_meals", ("free_school_meals",)),
+    PolicyEngineProgram("reduced_price_school_meals", ("reduced_price_school_meals",)),
+    PolicyEngineProgram("acp", ("acp",)),
+    PolicyEngineProgram("ebb", ("ebb",)),
+    PolicyEngineProgram("head_start", ("head_start",)),
+    PolicyEngineProgram("early_head_start", ("early_head_start",)),
+    PolicyEngineProgram(
+        "spm_unit_capped_housing_subsidy", ("spm_unit_capped_housing_subsidy",)
+    ),
+    PolicyEngineProgram(
+        "commodity_supplemental_food_program",
+        ("commodity_supplemental_food_program",),
+    ),
+    PolicyEngineProgram(
+        "high_efficiency_electric_home_rebate",
+        ("high_efficiency_electric_home_rebate",),
+    ),
+    PolicyEngineProgram(
+        "residential_efficiency_electrification_rebate",
+        ("residential_efficiency_electrification_rebate",),
+    ),
+    PolicyEngineProgram("medicaid", ("medicaid",)),
+    PolicyEngineProgram("aca_ptc", ("aca_ptc",)),
+    PolicyEngineProgram("chip", ("chip",)),
+    # Carried microdata passthroughs — reported income PE sums but does not
+    # compute from statute (rows, excluded input_carrying / technical) (8)
+    PolicyEngineProgram("social_security", ("social_security",)),
+    PolicyEngineProgram("unemployment_compensation", ("unemployment_compensation",)),
+    PolicyEngineProgram("child_support_received", ("child_support_received",)),
+    PolicyEngineProgram("workers_compensation", ("workers_compensation",)),
+    PolicyEngineProgram("educational_assistance", ("educational_assistance",)),
+    PolicyEngineProgram("financial_assistance", ("financial_assistance",)),
+    PolicyEngineProgram("survivor_benefits", ("survivor_benefits",)),
+    PolicyEngineProgram("basic_income", ("basic_income",)),
+    # State income tax — one row per state PE computes (<state>_income_tax) (44)
+    PolicyEngineProgram("al_income_tax", ("al_income_tax",)),
+    PolicyEngineProgram("ar_income_tax", ("ar_income_tax",)),
+    PolicyEngineProgram("az_income_tax", ("az_income_tax",)),
+    PolicyEngineProgram("ca_income_tax", ("ca_income_tax",)),
+    PolicyEngineProgram("co_income_tax", ("co_income_tax",)),
+    PolicyEngineProgram("ct_income_tax", ("ct_income_tax",)),
+    PolicyEngineProgram("dc_income_tax", ("dc_income_tax",)),
+    PolicyEngineProgram("de_income_tax", ("de_income_tax",)),
+    PolicyEngineProgram("ga_income_tax", ("ga_income_tax",)),
+    PolicyEngineProgram("hi_income_tax", ("hi_income_tax",)),
+    PolicyEngineProgram("ia_income_tax", ("ia_income_tax",)),
+    PolicyEngineProgram("id_income_tax", ("id_income_tax",)),
+    PolicyEngineProgram("il_income_tax", ("il_income_tax",)),
+    PolicyEngineProgram("in_income_tax", ("in_income_tax",)),
+    PolicyEngineProgram("ks_income_tax", ("ks_income_tax",)),
+    PolicyEngineProgram("ky_income_tax", ("ky_income_tax",)),
+    PolicyEngineProgram("la_income_tax", ("la_income_tax",)),
+    PolicyEngineProgram("ma_income_tax", ("ma_income_tax",)),
+    PolicyEngineProgram("md_income_tax", ("md_income_tax",)),
+    PolicyEngineProgram("me_income_tax", ("me_income_tax",)),
+    PolicyEngineProgram("mi_income_tax", ("mi_income_tax",)),
+    PolicyEngineProgram("mn_income_tax", ("mn_income_tax",)),
+    PolicyEngineProgram("mo_income_tax", ("mo_income_tax",)),
+    PolicyEngineProgram("ms_income_tax", ("ms_income_tax",)),
+    PolicyEngineProgram("mt_income_tax", ("mt_income_tax",)),
+    PolicyEngineProgram("nc_income_tax", ("nc_income_tax",)),
+    PolicyEngineProgram("nd_income_tax", ("nd_income_tax",)),
+    PolicyEngineProgram("ne_income_tax", ("ne_income_tax",)),
+    PolicyEngineProgram("nh_income_tax", ("nh_income_tax",)),
+    PolicyEngineProgram("nj_income_tax", ("nj_income_tax",)),
+    PolicyEngineProgram("nm_income_tax", ("nm_income_tax",)),
+    PolicyEngineProgram("ny_income_tax", ("ny_income_tax",)),
+    PolicyEngineProgram("oh_income_tax", ("oh_income_tax",)),
+    PolicyEngineProgram("ok_income_tax", ("ok_income_tax",)),
+    PolicyEngineProgram("or_income_tax", ("or_income_tax",)),
+    PolicyEngineProgram("pa_income_tax", ("pa_income_tax",)),
+    PolicyEngineProgram("ri_income_tax", ("ri_income_tax",)),
+    PolicyEngineProgram("sc_income_tax", ("sc_income_tax",)),
+    PolicyEngineProgram("ut_income_tax", ("ut_income_tax",)),
+    PolicyEngineProgram("va_income_tax", ("va_income_tax",)),
+    PolicyEngineProgram("vt_income_tax", ("vt_income_tax",)),
+    PolicyEngineProgram("wa_income_tax", ("wa_income_tax",)),
+    PolicyEngineProgram("wi_income_tax", ("wi_income_tax",)),
+    PolicyEngineProgram("wv_income_tax", ("wv_income_tax",)),
+    # State TANF / cash assistance — one row per STATE_TANF_VARIABLES member (51)
+    PolicyEngineProgram("al_tanf", ("al_tanf",)),
+    PolicyEngineProgram("az_tanf", ("az_tanf",)),
+    PolicyEngineProgram("ca_tanf", ("ca_tanf",)),
+    PolicyEngineProgram("co_tanf", ("co_tanf",)),
+    PolicyEngineProgram("dc_tanf", ("dc_tanf",)),
+    PolicyEngineProgram("de_tanf", ("de_tanf",)),
+    PolicyEngineProgram("ga_tanf", ("ga_tanf",)),
+    PolicyEngineProgram("hi_tanf", ("hi_tanf",)),
+    PolicyEngineProgram("il_tanf", ("il_tanf",)),
+    PolicyEngineProgram("in_tanf", ("in_tanf",)),
+    PolicyEngineProgram("ks_tanf", ("ks_tanf",)),
+    PolicyEngineProgram("me_tanf", ("me_tanf",)),
+    PolicyEngineProgram("mo_tanf", ("mo_tanf",)),
+    PolicyEngineProgram("ms_tanf", ("ms_tanf",)),
+    PolicyEngineProgram("mt_tanf", ("mt_tanf",)),
+    PolicyEngineProgram("nc_tanf", ("nc_tanf",)),
+    PolicyEngineProgram("nd_tanf", ("nd_tanf",)),
+    PolicyEngineProgram("nv_tanf", ("nv_tanf",)),
+    PolicyEngineProgram("ny_tanf", ("ny_tanf",)),
+    PolicyEngineProgram("ok_tanf", ("ok_tanf",)),
+    PolicyEngineProgram("or_tanf", ("or_tanf",)),
+    PolicyEngineProgram("pa_tanf", ("pa_tanf",)),
+    PolicyEngineProgram("sc_tanf", ("sc_tanf",)),
+    PolicyEngineProgram("sd_tanf", ("sd_tanf",)),
+    PolicyEngineProgram("tx_tanf", ("tx_tanf",)),
+    PolicyEngineProgram("va_tanf", ("va_tanf",)),
+    PolicyEngineProgram("wa_tanf", ("wa_tanf",)),
+    PolicyEngineProgram("ak_atap", ("ak_atap",)),
+    PolicyEngineProgram("ar_tea", ("ar_tea",)),
+    PolicyEngineProgram("ct_tfa", ("ct_tfa",)),
+    PolicyEngineProgram("fl_tca", ("fl_tca",)),
+    PolicyEngineProgram("ia_fip", ("ia_fip",)),
+    PolicyEngineProgram("id_tafi", ("id_tafi",)),
+    PolicyEngineProgram("ky_ktap", ("ky_ktap",)),
+    PolicyEngineProgram("la_fitap", ("la_fitap",)),
+    PolicyEngineProgram("ma_tafdc", ("ma_tafdc",)),
+    PolicyEngineProgram("md_tca", ("md_tca",)),
+    PolicyEngineProgram("mi_fip", ("mi_fip",)),
+    PolicyEngineProgram("mn_mfip", ("mn_mfip",)),
+    PolicyEngineProgram("ne_adc", ("ne_adc",)),
+    PolicyEngineProgram("nh_fanf", ("nh_fanf",)),
+    PolicyEngineProgram("nj_wfnj", ("nj_wfnj",)),
+    PolicyEngineProgram("nm_works", ("nm_works",)),
+    PolicyEngineProgram("oh_owf", ("oh_owf",)),
+    PolicyEngineProgram("ri_works", ("ri_works",)),
+    PolicyEngineProgram("tn_ff", ("tn_ff",)),
+    PolicyEngineProgram("ut_fep", ("ut_fep",)),
+    PolicyEngineProgram("vt_reach_up", ("vt_reach_up",)),
+    PolicyEngineProgram("wi_works", ("wi_works",)),
+    PolicyEngineProgram("wv_works", ("wv_works",)),
+    PolicyEngineProgram("wy_power", ("wy_power",)),
+)
+
+
+def _pe_variable_kind(
+    name: str,
+    index: "PolicyEngineVariableIndex",
+    include_adds_subtracts: bool = False,
+) -> str:
+    """Read one PE variable's simulation kind from its formula, or pure input.
 
     The kind is derived from the formula source the way the coverage matrix
     classifies it: a formula that reads a ``*_reported`` amount is a
@@ -429,8 +662,19 @@ def _pe_variable_kind(name: str, index: "PolicyEngineVariableIndex") -> str:
     a rate-from-category surface; any other formula is a rules engine; no formula
     is a pure microdata input. A conservative textual test on the formula body,
     matching the matrix's own method (grep of the formula source).
+
+    ``include_adds_subtracts`` extends the "PE simulates it" test to the
+    PolicyEngine-US convention where an aggregate surface is composed from an
+    ``adds``/``subtracts`` variable list rather than a ``def formula`` (e.g.
+    ``income_tax_before_credits``, ``standard_deduction``, every
+    ``<state>_income_tax``). A variable with no ``def formula`` but a non-empty
+    ``adds``/``subtracts`` list IS computed — a rules surface — so it must not be
+    misread as a pure input. PE-US carries no ``*_reported``/``*_category``
+    frozen-input surfaces, so composed variables classify as ``rules``.
     """
     if not index.has_formula(name):
+        if include_adds_subtracts and index.has_adds_or_subtracts(name):
+            return PE_KIND_RULES
         return PE_KIND_INPUT
     source = index.formula_source(name)
     if "_reported" in source:
@@ -456,6 +700,9 @@ class PolicyEngineVariableIndex:
         self.package = package
         self._formula_source: dict[str, str] = {}
         self._has_formula: dict[str, bool] = {}
+        #: PE-US composes many surfaces from an ``adds``/``subtracts`` variable
+        #: list instead of a ``def formula`` — those are computed, not inputs.
+        self._adds_or_subtracts: dict[str, bool] = {}
         self._variables: set[str] = set()
         self._loaded = False
 
@@ -491,6 +738,9 @@ class PolicyEngineVariableIndex:
                 formulas = getattr(variable, "formulas", None)
                 has_formula = bool(formulas) and len(formulas) > 0
                 self._has_formula[var_name] = has_formula
+                self._adds_or_subtracts[var_name] = bool(
+                    getattr(variable, "adds", None)
+                ) or bool(getattr(variable, "subtracts", None))
                 if has_formula:
                     sources: list[str] = []
                     for formula in formulas.values():
@@ -513,6 +763,10 @@ class PolicyEngineVariableIndex:
     def has_formula(self, name: str) -> bool:
         self._load()
         return self._has_formula.get(name, False)
+
+    def has_adds_or_subtracts(self, name: str) -> bool:
+        self._load()
+        return self._adds_or_subtracts.get(name, False)
 
     def formula_source(self, name: str) -> str:
         self._load()
@@ -552,35 +806,61 @@ class PolicyEngineUniverseBackend:
         checkout: str | Path,
         package: str = "policyengine_uk",
         spine: tuple[PolicyEngineProgram, ...] = PE_UK_PROGRAM_SPINE,
+        include_adds_subtracts: bool = False,
     ) -> None:
         self.checkout = Path(checkout).expanduser()
         self.package = package
         self.spine = spine
+        #: Treat ``adds``/``subtracts``-composed variables as computed surfaces
+        #: (the PE-US aggregate convention). Off for PE-UK, whose surfaces are
+        #: ``def formula`` and whose input-carriers are genuine pure inputs.
+        self.include_adds_subtracts = include_adds_subtracts
         self._index = PolicyEngineVariableIndex(self.checkout, package)
 
-    def pinned_version(self) -> str:
-        """Read the pinned package version from the checkout's ``pyproject.toml``.
+    def _is_computed(self, name: str) -> bool:
+        """A variable PE simulates: a ``def formula`` or (PE-US) an ``adds``/
+        ``subtracts`` composition. Bare inputs are not computed."""
+        if self._index.has_formula(name):
+            return True
+        return self.include_adds_subtracts and self._index.has_adds_or_subtracts(
+            name
+        )
 
-        A fact from the checkout, not memory — it stamps the universe header so a
-        conformance claim is scoped to ``policyengine-uk@<version>``, never a
-        floating latest.
+    def pinned_version(self) -> str:
+        """Pin the exact package version enumerated — a fact from the checkout.
+
+        Reads the checkout's ``pyproject.toml`` (the source-tree case, e.g.
+        ``policyengine-uk`` at ``2.89.2``). When the checkout is a pip-installed
+        package tree with no ``pyproject.toml`` at its root (the CI-friendly
+        ``pip install policyengine-us==<v>`` case), fall back to the installed
+        distribution metadata. Either way the header is scoped to
+        ``policyengine-*@<version>``, never a floating latest.
         """
         pyproject = self.checkout / "pyproject.toml"
-        if not pyproject.exists():
-            raise FileNotFoundError(
-                f"pyproject.toml not found at {pyproject}; cannot pin the "
-                "policyengine-uk version for the universe header."
+        if pyproject.exists():
+            for line in pyproject.read_text().splitlines():
+                stripped = line.strip()
+                if stripped.startswith("version"):
+                    # version = "2.89.2"
+                    _, _, rhs = stripped.partition("=")
+                    return rhs.strip().strip('"').strip("'")
+            raise ValueError(
+                f"no `version = \"…\"` line in {pyproject}; cannot pin the "
+                f"{self.package} version."
             )
-        for line in pyproject.read_text().splitlines():
-            stripped = line.strip()
-            if stripped.startswith("version"):
-                # version = "2.89.2"
-                _, _, rhs = stripped.partition("=")
-                return rhs.strip().strip('"').strip("'")
-        raise ValueError(
-            f"no `version = \"…\"` line in {pyproject}; cannot pin the "
-            "policyengine-uk version."
-        )
+        # No pyproject at the checkout root: use the installed distribution's
+        # metadata (dist name = package with underscores → hyphens).
+        import importlib.metadata as _metadata
+
+        dist = self.package.replace("_", "-")
+        try:
+            return _metadata.version(dist)
+        except _metadata.PackageNotFoundError as exc:
+            raise FileNotFoundError(
+                f"pyproject.toml not found at {pyproject} and distribution "
+                f"{dist!r} is not installed; cannot pin the {self.package} "
+                "version for the universe header."
+            ) from exc
 
     def raw_policies(self) -> list[RawPolicy]:
         """Enumerate every program in the spine with its code-derived output facts."""
@@ -593,18 +873,21 @@ class PolicyEngineUniverseBackend:
                 # the drift check forces a spine review rather than silently
                 # dropping the program's surface.
                 raise ValueError(
-                    f"PolicyEngine-UK program {program.name!r}: spine output "
+                    f"{self.package} program {program.name!r}: spine output "
                     f"variable(s) {missing} not found in the pinned checkout's "
                     "tax-benefit system. The model renamed or removed them — "
-                    "update PE_UK_PROGRAM_SPINE (a scope review) and regenerate."
+                    "update the program spine (a scope review) and regenerate."
                 )
-            queryable = [v for v in present if self._index.has_formula(v)]
-            internal = [v for v in present if not self._index.has_formula(v)]
+            queryable = [v for v in present if self._is_computed(v)]
+            internal = [v for v in present if not self._is_computed(v)]
             # Program kind = the kind of its primary COMPUTED output (first bound
             # output that carries a formula), else pure input. rules dominates
             # rate/reported when a program mixes surfaces (its statutory engine is
             # what a full comparison binds to).
-            kinds = [_pe_variable_kind(v, self._index) for v in queryable]
+            kinds = [
+                _pe_variable_kind(v, self._index, self.include_adds_subtracts)
+                for v in queryable
+            ]
             if PE_KIND_RULES in kinds:
                 policy_type = PE_KIND_RULES
             elif PE_KIND_RATE in kinds:

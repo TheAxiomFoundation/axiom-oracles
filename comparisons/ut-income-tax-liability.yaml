@@ -1,0 +1,39 @@
+# Utah composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
+# on a modest case grid. The Axiom side is the composed rulespec-us pipeline
+# us-ut/policies/income_tax/pilot_liability_pipeline, evaluated through the axiom
+# rules engine (its liabilities are the engine-verified companion-test fixtures).
+# Utah is a single flat rate (Utah Code 59-10-104(2): 4.45% for 2026 under
+# H.B. 106 of 2025) on Utah taxable income, before the 59-10-1018 taxpayer credit.
+#
+# PolicyEngine runs at the 2026 validation year against ut_income_tax_before_credits
+# (the pure flat tax). TAXSIM runs at its latest supported law year (2024); the
+# 2024-to-2026 rate vintage and TAXSIM's inclusion of the taxpayer credit are
+# recorded in dispositions/ut-income-tax-liability.yaml rather than absorbed by
+# tolerance.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py ut-income-tax-liability
+
+name: ut-income-tax-liability
+title: Utah income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Utah income-tax liability pipeline encoded in Axiom
+  RuleSpec (us-ut/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (ut_income_tax_before_credits) at 2026 and TAXSIM (siitax) at 2024
+  on a modest grid of single and married filers.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: UT
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ut-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ut-income-tax-liability.json
+  suite: ut-income-tax-liability

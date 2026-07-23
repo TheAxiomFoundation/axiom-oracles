@@ -1,0 +1,59 @@
+schema: axiom_oracles.dispositions.v1
+suite: uk-contribution-based-jsa
+updated: "2026-07-07"
+# The rulespec-uk contribution-based JSA (SI 1996/207 reg 79, uprated for 2026-27
+# by SI 2026/148) and UKMOD bunct_s agree on the WEEKLY statutory rate exactly
+# (75.65/week under 25, 95.55/week for 25 or over). The only difference on both
+# qualifying cases is the ANNUALIZATION CONVENTION: UKMOD annualizes the weekly
+# rate at 365/7 = 52.142857 weeks/year, while the pipeline uses
+# contribution_based_jsa_weeks_in_year = 52. Neither is an encoding error — it is
+# a period-conversion convention (the same one dispositioned for the Scottish
+# Child Payment suite), so the residual is dispositioned explained_residual.
+entries:
+  - id: weeks-convention-residual-under25
+    concept: uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount
+    case_id: uk-jsa-contributory-under25
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Identical weekly contribution-based JSA rate (75.65/week for an under-25
+        claimant) on both engines; the 10.81/year difference is only the
+        annualization convention — UKMOD uses 365/7 weeks/year, the pipeline uses
+        52.
+      arithmetic:
+        - expression: "75.65 * 365 / 7"
+          equals: 3944.607142857143
+        - expression: "75.65 * 52"
+          equals: 3933.80
+        - expression: "3944.607142857143 - 3933.80"
+          equals: 10.807142857143
+      sources:
+        - axiom_oracles/suites/uk_contribution_based_jsa.py
+    expires_on_source_change: true
+    pinned:
+      left: 3944.607142857144
+      right: 3933.8
+  - id: weeks-convention-residual-25plus
+    concept: uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount
+    case_id: uk-jsa-contributory-25plus
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Identical weekly contribution-based JSA rate (95.55/week for a 25-or-over
+        claimant) on both engines; the 13.65/year difference is only the
+        annualization convention (UKMOD 365/7 vs the pipeline's 52 weeks/year).
+      arithmetic:
+        - expression: "95.55 * 365 / 7"
+          equals: 4982.25
+        - expression: "95.55 * 52"
+          equals: 4968.60
+        - expression: "4982.25 - 4968.60"
+          equals: 13.65
+      sources:
+        - axiom_oracles/suites/uk_contribution_based_jsa.py
+    expires_on_source_change: true
+    pinned:
+      left: 4982.250000000001
+      right: 4968.6

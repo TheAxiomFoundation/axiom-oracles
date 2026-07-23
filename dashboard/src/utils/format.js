@@ -69,6 +69,7 @@ export function engineLabel(name) {
     prd: "PRD",
     euromod: "EUROMOD",
     taxcalc: "Tax-Calculator",
+    gettsim: "GETTSIM",
   };
   return labels[name] || name;
 }

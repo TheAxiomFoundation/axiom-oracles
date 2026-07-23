@@ -8800,6 +8800,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -840.0315625000003,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 12463.32,
       "parent": null,
@@ -8816,6 +8821,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -11619.979296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 4357.8,
       "parent": null,
@@ -8832,6 +8842,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -972.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 18936.0,
       "parent": null,
@@ -8848,6 +8863,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10608.0,
       "parent": null,
@@ -8864,6 +8884,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8880,6 +8905,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -8822.3212890625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8896,6 +8926,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -14100.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8912,6 +8947,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -14100.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8928,6 +8968,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13380.0,
       "parent": null,
@@ -8944,6 +8989,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -2199.24,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8960.76,
       "parent": null,
@@ -8960,6 +9010,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -19908.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -8976,6 +9031,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 118.78703125000175,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 17101.08,
       "parent": null,
@@ -8992,6 +9052,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1459.08,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1459.08,
       "parent": null,
@@ -9008,6 +9073,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 548.52,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 548.52,
       "parent": null,
@@ -9024,6 +9094,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -19908.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9040,6 +9115,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -551.9929687500007,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8194.8,
       "parent": null,
@@ -9056,6 +9136,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -4691.9341406250005,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 538.56,
       "parent": null,
@@ -9072,6 +9157,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2181.6,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2181.6,
       "parent": null,
@@ -9088,6 +9178,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -5094.537109375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9104,6 +9199,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 4375.08,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 4375.08,
       "parent": null,
@@ -9120,6 +9220,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10608.0,
       "parent": null,
@@ -9136,6 +9241,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9152,6 +9262,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 7774.92,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7774.92,
       "parent": null,
@@ -9168,6 +9283,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -8808.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9184,6 +9304,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 5883.12,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 5883.12,
       "parent": null,
@@ -9200,6 +9325,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1640.28,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1640.28,
       "parent": null,
@@ -9216,6 +9346,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0180078124995,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8593.44,
       "parent": null,
@@ -9232,6 +9367,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 9518.52,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9518.52,
       "parent": null,
@@ -9248,6 +9388,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -840.0546093749999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9190.92,
       "parent": null,
@@ -9264,6 +9409,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10608.0,
       "parent": null,
@@ -9280,6 +9430,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 11590.92,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 11590.92,
       "parent": null,
@@ -9296,6 +9451,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9442187500008,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 11969.88,
       "parent": null,
@@ -9312,6 +9472,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3433.44,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3433.44,
       "parent": null,
@@ -9328,6 +9493,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2733.6,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2733.6,
       "parent": null,
@@ -9344,6 +9514,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 4375.08,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 4375.08,
       "parent": null,
@@ -9360,6 +9535,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 7706.64,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7706.64,
       "parent": null,
@@ -9376,6 +9556,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9848828125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2951.52,
       "parent": null,
@@ -9392,6 +9577,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 619.08,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 619.08,
       "parent": null,
@@ -9408,6 +9598,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -840.0640624999996,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 12603.6,
       "parent": null,
@@ -9424,6 +9619,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -2155.15234375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10350.0,
       "parent": null,
@@ -9440,6 +9640,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -551.9957812499997,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10582.68,
       "parent": null,
@@ -9456,6 +9661,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1459.08,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1459.08,
       "parent": null,
@@ -9472,6 +9682,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -839.9901562499999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7486.92,
       "parent": null,
@@ -9488,6 +9703,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 11160.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 11160.0,
       "parent": null,
@@ -9504,6 +9724,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16990.849609375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9520,6 +9745,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 765.24,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 765.24,
       "parent": null,
@@ -9536,6 +9766,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -3304.7265625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9552,6 +9787,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 4650.84,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 4650.84,
       "parent": null,
@@ -9568,6 +9808,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 10401.84,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10401.84,
       "parent": null,
@@ -9584,6 +9829,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9600,6 +9850,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -13956.1103515625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9616,6 +9871,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0130078125003,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13207.32,
       "parent": null,
@@ -9632,6 +9892,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13380.0,
       "parent": null,
@@ -9648,6 +9913,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -972.0097265625009,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8322.96,
       "parent": null,
@@ -9664,6 +9934,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -839.9794140624999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8818.92,
       "parent": null,
@@ -9680,6 +9955,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -972.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 18936.0,
       "parent": null,
@@ -9696,6 +9976,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2802.72,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2802.72,
       "parent": null,
@@ -9712,6 +9997,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9728,6 +10018,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -5313.2748046875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6497.4,
       "parent": null,
@@ -9744,6 +10039,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9883203125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6902.04,
       "parent": null,
@@ -9760,6 +10060,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -839.9847265624994,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13206.36,
       "parent": null,
@@ -9776,6 +10081,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -1127.9442968750009,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8445.96,
       "parent": null,
@@ -9792,6 +10102,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -2168.929804687499,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10905.12,
       "parent": null,
@@ -9808,6 +10123,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -12956.1943359375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9824,6 +10144,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13380.0,
       "parent": null,
@@ -9840,6 +10165,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0273046875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6909.96,
       "parent": null,
@@ -9856,6 +10186,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -14100.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9872,6 +10207,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1422.5258593750004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 16988.52,
       "parent": null,
@@ -9888,6 +10228,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16733.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9904,6 +10249,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -14100.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9920,6 +10270,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -9987.146484375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9936,6 +10291,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2534.4,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2534.4,
       "parent": null,
@@ -9952,6 +10312,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -8039.40234375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -9968,6 +10333,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3344.16,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3344.16,
       "parent": null,
@@ -9984,6 +10354,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -11160.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10000,6 +10375,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0096093749999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9012.84,
       "parent": null,
@@ -10016,6 +10396,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 16070.16,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 16070.16,
       "parent": null,
@@ -10032,6 +10417,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 33.72,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 33.72,
       "parent": null,
@@ -10048,6 +10438,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 998.4,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 998.4,
       "parent": null,
@@ -10064,6 +10459,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -11160.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10080,6 +10480,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 5971.56,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 5971.56,
       "parent": null,
@@ -10096,6 +10501,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3722.04,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3722.04,
       "parent": null,
@@ -10112,6 +10522,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 4191.24,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 4191.24,
       "parent": null,
@@ -10128,6 +10543,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13380.0,
       "parent": null,
@@ -10144,6 +10564,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -1127.9605468749996,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8412.6,
       "parent": null,
@@ -10160,6 +10585,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2268.72,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2268.72,
       "parent": null,
@@ -10176,6 +10606,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10192,6 +10627,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 6201.12,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6201.12,
       "parent": null,
@@ -10208,6 +10648,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 4038.04296875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 11160.0,
       "parent": null,
@@ -10224,6 +10669,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10240,6 +10690,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -839.9689843750002,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9912.24,
       "parent": null,
@@ -10256,6 +10711,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -972.0148046875001,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 14336.16,
       "parent": null,
@@ -10272,6 +10732,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 183.24,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 183.24,
       "parent": null,
@@ -10288,6 +10753,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -840.0116406249999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3982.92,
       "parent": null,
@@ -10304,6 +10774,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0511328124994,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10545.36,
       "parent": null,
@@ -10320,6 +10795,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9585546875005,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8233.56,
       "parent": null,
@@ -10336,6 +10816,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -13441.34765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10352,6 +10837,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -7862.9765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10368,6 +10858,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10608.0,
       "parent": null,
@@ -10384,6 +10879,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -2994.4072265625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10400,6 +10900,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1200.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1200.0,
       "parent": null,
@@ -10416,6 +10921,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 18469.54078125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 24462.24,
       "parent": null,
@@ -10432,6 +10942,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 18934.8,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 18934.8,
       "parent": null,
@@ -10448,6 +10963,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0349999999999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6069.84,
       "parent": null,
@@ -10464,6 +10984,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -15157.92,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1834.08,
       "parent": null,
@@ -10480,6 +11005,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3273.72,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3273.72,
       "parent": null,
@@ -10496,6 +11026,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3268.32,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3268.32,
       "parent": null,
@@ -10512,6 +11047,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2181.6,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2181.6,
       "parent": null,
@@ -10528,6 +11068,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -6925.6259765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10544,6 +11089,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -551.9627929687504,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7292.4,
       "parent": null,
@@ -10560,6 +11110,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -720.0452734374994,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8778.36,
       "parent": null,
@@ -10576,6 +11131,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10608.0,
       "parent": null,
@@ -10592,6 +11152,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -971.9644531250015,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 18402.6,
       "parent": null,
@@ -10608,6 +11173,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1896.6,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1896.6,
       "parent": null,
@@ -10624,6 +11194,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10640,6 +11215,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -10386.7587890625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10656,6 +11236,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -972.0955468749999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 11829.84,
       "parent": null,
@@ -10672,6 +11257,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2735.16,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2735.16,
       "parent": null,
@@ -10688,6 +11278,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -12370.6948046875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1977.48,
       "parent": null,
@@ -10704,6 +11299,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 580.32,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 580.32,
       "parent": null,
@@ -10720,6 +11320,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1459.08,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1459.08,
       "parent": null,
@@ -10736,6 +11341,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3121.8,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3121.8,
       "parent": null,
@@ -10752,6 +11362,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2676.96,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2676.96,
       "parent": null,
@@ -10768,6 +11383,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9461718750008,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13355.88,
       "parent": null,
@@ -10784,6 +11404,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 68.04,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 68.04,
       "parent": null,
@@ -10800,6 +11425,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2325.12,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2325.12,
       "parent": null,
@@ -10816,6 +11446,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1824.48,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1824.48,
       "parent": null,
@@ -10832,6 +11467,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -19908.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10848,6 +11488,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -839.9990624999991,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 14990.04,
       "parent": null,
@@ -10864,6 +11509,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 25740.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 25740.0,
       "parent": null,
@@ -10880,6 +11530,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1300.32,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1300.32,
       "parent": null,
@@ -10896,6 +11551,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3352.32,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3352.32,
       "parent": null,
@@ -10912,6 +11572,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -840.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 16152.0,
       "parent": null,
@@ -10928,6 +11593,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -7544.2602734375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3137.52,
       "parent": null,
@@ -10944,6 +11614,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -11160.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -10960,6 +11635,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 12627.087500000001,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 21731.4,
       "parent": null,
@@ -10976,6 +11656,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -839.9242187500004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6083.4,
       "parent": null,
@@ -10992,6 +11677,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -16992.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11008,6 +11698,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -12844.38671875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11024,6 +11719,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -551.9530859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 5031.96,
       "parent": null,
@@ -11040,6 +11740,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 4298.88,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 4298.88,
       "parent": null,
@@ -11056,6 +11761,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -11134.1865234375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11072,6 +11782,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2473.68,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2473.68,
       "parent": null,
@@ -11088,6 +11803,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -468.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8340.0,
       "parent": null,
@@ -11104,6 +11824,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1641.84,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1641.84,
       "parent": null,
@@ -11120,6 +11845,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -243.71999999999935,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13856.28,
       "parent": null,
@@ -11136,6 +11866,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 415.92,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 415.92,
       "parent": null,
@@ -11152,6 +11887,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 9817.44,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9817.44,
       "parent": null,
@@ -11168,6 +11908,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -9850.68,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 4249.32,
       "parent": null,
@@ -11184,6 +11929,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1205.28,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1205.28,
       "parent": null,
@@ -11200,6 +11950,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9401171875002,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3889.68,
       "parent": null,
@@ -11216,6 +11971,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9555468750004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9810.48,
       "parent": null,
@@ -11232,6 +11992,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 14741.88,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 14741.88,
       "parent": null,
@@ -11248,6 +12013,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.986328125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 8109.0,
       "parent": null,
@@ -11264,6 +12034,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1295.76,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1295.76,
       "parent": null,
@@ -11280,6 +12055,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -7756.7451171875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11296,6 +12076,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -18987.36328125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11312,6 +12097,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2127.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2127.0,
       "parent": null,
@@ -11328,6 +12118,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -719.9599999999991,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 13373.04,
       "parent": null,
@@ -11344,6 +12139,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -840.0526171874999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 7178.88,
       "parent": null,
@@ -11360,6 +12160,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -792.0581249999996,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 11180.52,
       "parent": null,
@@ -11376,6 +12181,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -14100.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11392,6 +12202,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 589.68,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 589.68,
       "parent": null,
@@ -11408,6 +12223,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3647.16,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3647.16,
       "parent": null,
@@ -11424,6 +12244,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -7729.1962890625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -11440,6 +12265,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2278.68,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2278.68,
       "parent": null,
@@ -11456,6 +12286,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2044.92,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2044.92,
       "parent": null,
@@ -11472,6 +12307,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 3584.0531640624995,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 14035.56,
       "parent": null,
@@ -11488,6 +12328,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 910.08,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 910.08,
       "parent": null,
@@ -11504,6 +12349,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1464.48,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1464.48,
       "parent": null,
@@ -11520,6 +12370,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -840.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 16152.0,
       "parent": null,
@@ -11536,6 +12391,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 2493.12,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2493.12,
       "parent": null,
@@ -11552,6 +12412,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -1127.9514843750003,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 20344.32,
       "parent": null,
@@ -11568,6 +12433,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10608.0,
       "parent": null,
@@ -11584,6 +12454,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": -552.0457421874999,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 9456.84,
       "parent": null,
@@ -11600,6 +12475,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 1127.04,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 1127.04,
       "parent": null,
@@ -11616,6 +12496,11 @@
       "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
       "description": "CA CalWORKs benefit (annualized)",
       "difference": 653.88,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 653.88,
       "parent": null,
@@ -11664,18 +12549,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 177,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/ca-tanf-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 97.507393,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 97.507393,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 177
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

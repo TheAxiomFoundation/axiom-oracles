@@ -1,4 +1,35 @@
 mappings:
+  # Welfare Reform Act 2012 sections 6, 7 and 39 (Universal Credit) —
+  # statutory entitlement mechanics and definitions with no comparable
+  # PolicyEngine UK oracle variable. PolicyEngine models the final
+  # universal_credit award, not these intermediate section conditions.
+  # Classification sweep draining the rulespec-uk oracle-coverage pending
+  # declarations for the WRA 2012 bulk batch (rulespec-uk#101).
+  - legal_id: uk:statutes/ukpga/2012/5/6#maximum_prescribed_period_under_subsection_1_b_or_c_days
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 6 maximum prescribed period (in days) for the subsection (1)(b)/(c) capital-and-period condition; an administrative time-limit parameter with no comparable PolicyEngine UK oracle variable, since PolicyEngine models the final universal_credit award rather than the statutory prescribed-period mechanic.
+  - legal_id: uk:statutes/ukpga/2012/5/6#prescribed_period_under_subsection_1_b_or_c_is_within_statutory_limit
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 6 boolean check that the prescribed period falls within the statutory limit; an intermediate eligibility condition with no comparable PolicyEngine UK oracle variable, since PolicyEngine computes the universal_credit award rather than this section-6 period test.
+  - legal_id: uk:statutes/ukpga/2012/5/6#universal_credit_entitlement_precluded_by_section_6
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 6 preclusion flag (whether Universal Credit entitlement is precluded by the subsection (1) conditions); PolicyEngine UK computes the universal_credit award amount, not this intermediate statutory preclusion condition, so there is no comparable oracle variable.
+  - legal_id: uk:statutes/ukpga/2012/5/7#universal_credit_payable_for_complete_assessment_period
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 7 rule that Universal Credit is payable in respect of each complete assessment period; a statutory payment-period mechanic with no comparable PolicyEngine UK oracle variable, since PolicyEngine models the universal_credit award amount rather than the assessment-period accrual rule.
+  - legal_id: uk:statutes/ukpga/2012/5/39#couple
+    country: uk
+    program: universal_credit
+    mapping_type: not_comparable
+    rationale: Section 39 statutory definition of "couple" for Universal Credit; a definitional helper with no comparable PolicyEngine UK oracle variable, since PolicyEngine derives benefit-unit couple status from household structure rather than exposing this section-39 definition as an oracle output.
   - legal_id: uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount
     country: uk
     program: council_tax_reduction
@@ -2391,6 +2422,260 @@ mappings:
     mapping_type: not_comparable
     rationale: SSCBA 1992 s.13(1) elective Class 3 weekly contribution amount when the contributor chooses to pay. PolicyEngine UK's ni_class_3 is a frozen microdata input with no rules formula, so there is no PolicyEngine rules value to compare; UKMOD does not model voluntary Class 3. No oracle available.
 
+  # Capital gains tax band split (TCGA 1992 s.1H/1I/1K), matching the
+  # PolicyEngine-UK capital_gains_tax surface. The final capital_gains_tax
+  # output is the comparable Person-level annual charge; the annual exempt
+  # amount, the 18%/24% rates and the band-split intermediates are internal.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax
+    country: uk
+    program: capital_gains_tax
+    mapping_type: direct_variable
+    policyengine_variable: capital_gains_tax
+    entity: person
+    period: year
+    unit: GBP
+    comparison: money
+    rationale: Same annual individual capital gains tax charge as PolicyEngine UK's capital_gains_tax variable — the annual exempt amount (TCGA 1992 s.1K, £3,000) deducted from chargeable gains, then charged at the s.1H basic 18% rate within the unused basic rate band and 24% above (PolicyEngine's higher and additional CGT rates are both 24%). Taxable income and the basic rate limit are supplied inputs on both sides.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_annual_exempt_amount
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal parameter (TCGA 1992 s.1K annual exempt amount, £3,000); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_basic_rate
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal parameter (TCGA 1992 s.1H basic CGT rate, 18%); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_higher_rate
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal parameter (TCGA 1992 s.1H higher CGT rate, 24%); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_chargeable_gains
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (chargeable gains floored at zero, from the supplied capital_gains input); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_gains_after_annual_exempt_amount
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (chargeable gains less the annual exempt amount); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_unused_basic_rate_band
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (the individual's unused basic rate band after taxable income, s.1I); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_basic_rate_gains
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (gains charged at the basic rate, s.1I); the compared surface is the final capital_gains_tax charge.
+  - legal_id: uk:policies/govuk/capital-gains-tax#capital_gains_tax_higher_rate_gains
+    country: uk
+    program: capital_gains_tax
+    mapping_type: not_comparable
+    rationale: Internal derived value (the higher rate excess above the basic rate band, s.1I); the compared surface is the final capital_gains_tax charge.
+  # Business rates household incidence proxy (LGFA 1988 s.43 enabling
+  # authority). PolicyEngine-UK models the incidence as shareholding times the
+  # total non-domestic rates revenue across the four nations; the rulespec
+  # module restates that product. Both quantities are supplied inputs.
+  - legal_id: uk:policies/govuk/business-rates#business_rates
+    country: uk
+    program: business_rates
+    mapping_type: direct_variable
+    policyengine_variable: business_rates
+    entity: household
+    period: year
+    unit: GBP
+    rationale: Same household business rates incidence as PolicyEngine UK's business_rates variable — the household's shareholding times the total non-domestic rates revenue raised across England, Scotland, Wales and Northern Ireland (LGFA 1988 s.43 creates the liability being distributed). Shareholding and the total revenue are supplied inputs on both engines.
+  # Scotland Land and Buildings Transaction Tax (rulespec-uk uk/policies/govuk/lbtt.yaml,
+  # SSI 2015/126 + LBTT(S)A 2013 Sch 2A) and Wales Land Transaction Tax (uk/policies/govuk/ltt.yaml,
+  # WSI 2018/128 + LTT(W)A 2017 s.24) vs PolicyEngine-UK land_and_buildings_transaction_tax and
+  # land_transaction_tax. Covered by the uk-lbtt-ltt case-grid suite.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_nil_rate_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_two_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_five_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_ten_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_two_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_five_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_ten_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_residential_twelve_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_additional_dwelling_supplement_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_main_residence_charge
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal derived component of the marginal-band split; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_additional_residence_standard_charge
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal derived component of the marginal-band split; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#lbtt_additional_dwelling_supplement
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal derived component of the marginal-band split; the compared surface is the final land_and_buildings_transaction_tax charge.
+  - legal_id: uk:policies/govuk/lbtt#land_and_buildings_transaction_tax
+    country: uk
+    program: lbtt_ltt
+    mapping_type: direct_variable
+    policyengine_variable: land_and_buildings_transaction_tax
+    entity: household
+    period: year
+    unit: GBP
+    rationale: Same total residential LBTT charge as PolicyEngine UK's land_and_buildings_transaction_tax variable — the SSI 2015/126 marginal band schedule on the main-home purchase plus the additional-dwelling standard charge and the LBTT(S)A 2013 Sch 2A Additional Dwelling Supplement (8% from 5 December 2024). The main and additional residential purchase prices are supplied inputs on both engines; the additional-dwelling divergence is the stale PolicyEngine 6% surcharge, dispositioned upstream (PolicyEngine-UK #1795).
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_nil_rate_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_six_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_seven_point_five_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_ten_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_six_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_seven_point_five_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_ten_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_residential_twelve_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_five_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_eight_point_five_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_ten_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_twelve_point_five_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_fifteen_percent_upper_limit
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-threshold parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_five_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_eight_point_five_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_ten_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_twelve_point_five_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_fifteen_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_seventeen_percent_rate
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal band-rate parameter from the relevant consideration table; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_main_residence_charge
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal derived component of the marginal-band split; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#ltt_higher_rates_charge
+    country: uk
+    program: lbtt_ltt
+    mapping_type: not_comparable
+    rationale: Internal derived component of the marginal-band split; the compared surface is the final land_transaction_tax charge.
+  - legal_id: uk:policies/govuk/ltt#land_transaction_tax
+    country: uk
+    program: lbtt_ltt
+    mapping_type: direct_variable
+    policyengine_variable: land_transaction_tax
+    entity: household
+    period: year
+    unit: GBP
+    rationale: Same total residential LTT charge as PolicyEngine UK's land_transaction_tax variable — the WSI 2018/128 primary band schedule on the main-home purchase plus the higher-rate schedule on the additional dwelling (LTT(W)A 2017 s.24). The main and additional residential purchase prices are supplied inputs on both engines; the divergences are the stale PolicyEngine Welsh rate/threshold vintage, dispositioned upstream (PolicyEngine-UK #1796).
 
 prefixes:
   - legal_id_prefix: uk:policies/govuk/council-tax-reduction#
@@ -2398,6 +2683,40 @@ prefixes:
     program: council_tax_reduction
     mapping_type: not_comparable
     rationale: Council Tax Reduction helper outputs expose source-law scheme selection, capital, excess-income, taper, and simulated-award mechanics; PolicyEngine UK exposes the final household council_tax_reduction variable rather than these helpers one-to-one.
+
+  # Regulation-layer Council Tax Reduction award spines (rulespec-uk#140 lanes
+  # A/B/C, batches CTR-ENP/CTR-SC/CTR-WA). Each incoming spine is dominated by
+  # means-test intermediates PolicyEngine UK does not expose one-to-one: PE
+  # applies a hard capital cliff (savings <= capital_limit) rather than the
+  # Schedule tariff-income taper, and derives the applicable amount from Housing
+  # Benefit allowance parameters (gov.dwp.housing_benefit.allowances) rather than
+  # a CTR Schedule-2 applicable-amount table. The final household
+  # council_tax_reduction award is the single comparable CTR surface (mapped
+  # exactly above via direct_variable, taking precedence over these prefixes);
+  # every reg-layer intermediate — including the scheme rate/limit parameters,
+  # which axiom-oracles keeps not_comparable so the final award carries the
+  # comparison (see test_council_tax_reduction_policy_surface_is_classified) —
+  # absorbs here. See axiom-oracles#78 and rulespec-uk#101 (pending drain).
+  - legal_id_prefix: uk:regulations/uksi/2012/2885/
+    country: uk
+    program: council_tax_reduction
+    mapping_type: not_comparable
+    rationale: England pension-age Council Tax Reduction prescribed-requirements spine (SI 2012/2885, batch CTR-ENP) — regulation and Schedule intermediates for the prescribed classes, applicable amounts, capital calculation and disregards, income disregards, and the Schedule 3 alternative-maximum (second-adult rebate) table. PolicyEngine UK's only comparable CTR surface is the final household council_tax_reduction award (mapped exactly); it applies a hard capital cliff rather than the Schedule 1 tariff-income taper and builds the applicable amount from Housing Benefit allowances rather than a CTR Schedule 2 table, and the England pension-age rate/limit parameters (gov.local_authorities.england.council_tax_reduction.pensioners.*) drive that award rather than being one-to-one comparable outputs, so these reg-layer intermediates have no one-to-one PolicyEngine oracle surface.
+  - legal_id_prefix: uk:regulations/ssi/2021/249/
+    country: uk
+    program: council_tax_reduction
+    mapping_type: not_comparable
+    rationale: Scottish national Council Tax Reduction consolidated-scheme spine (SSI 2021/249, batch CTR-SC) — regulation and Schedule intermediates for entitlement, applicable amounts, income and capital, and non-dependant deductions. PolicyEngine UK's only comparable CTR surface is the final household council_tax_reduction award; its Scotland scheme parameters (gov.local_authorities.scotland.council_tax_reduction.*) drive that award but are not one-to-one comparable outputs, and PE applies a hard capital cliff rather than a tariff-income taper and builds the applicable amount from Housing Benefit allowances, so these reg-layer intermediates have no one-to-one PolicyEngine oracle surface.
+  - legal_id_prefix: uk:regulations/ssi/2012/319/
+    country: uk
+    program: council_tax_reduction
+    mapping_type: not_comparable
+    rationale: Scottish Council Tax Reduction 2012 scheme spine (SSI 2012/319, batch CTR-SC) — the pre-2021 reduction regulations (income, capital, non-dependant deductions and applicable-amount mechanics) that the 2021 consolidation carries forward. PolicyEngine UK models the current Scotland scheme through the final council_tax_reduction award and gov.local_authorities.scotland.council_tax_reduction.* parameters, not these individual reg-layer intermediates, so they have no one-to-one PolicyEngine oracle surface.
+  - legal_id_prefix: uk:regulations/wsi/2013/3029/
+    country: uk
+    program: council_tax_reduction
+    mapping_type: not_comparable
+    rationale: Welsh Council Tax Reduction scheme spine (WSI 2013/3029, batch CTR-WA) — regulation and Schedule intermediates for entitlement, applicable amounts, income and capital, and daily-taper mechanics across both age groups. PolicyEngine UK's only comparable CTR surface is the final household council_tax_reduction award; its Wales scheme parameters (gov.local_authorities.wales.council_tax_reduction.*) drive that award but are not one-to-one comparable outputs, and PE applies a hard capital cliff rather than the Schedule tariff-income taper and builds the applicable amount from Housing Benefit allowances; the Welsh scheme's second-adult rebate has no PolicyEngine analogue, so these reg-layer intermediates have no one-to-one PolicyEngine oracle surface.
 
   - legal_id_prefix: uk:policies/govuk/vat#
     country: uk
@@ -2421,7 +2740,8 @@ prefixes:
     country: uk
     program: council_tax_reduction
     mapping_type: not_comparable
-    rationale: Kingston upon Thames Council Tax Reduction outputs are jurisdiction-specific local-scheme RuleSpec surfaces; the released PolicyEngine UK oracle does not yet expose this draft local CTR scheme one-to-one.
+    candidate_priority: P2
+    rationale: PolicyEngine UK (2.89.2, PolicyEngine/policyengine-uk#1771) now models the Kingston upon Thames working-age Council Tax Reduction scheme via the kingston_upon_thames_council_tax_reduction variable, so this is comparable in principle. It stays not_comparable pending a per-local-authority input adapter in the oracle harness (setting local_authority = KINGSTON_UPON_THAMES to select the scheme) and a Kingston case-grid; reclassify to comparable once that lands.
 
   - legal_id_prefix: uk:statutes/ukpga/2007/3/35#
     country: uk
@@ -2968,12 +3288,14 @@ prefixes:
     program: tax
     mapping_type: not_comparable
     rationale: Regulation 10 outputs are the National Insurance earnings limits and thresholds; PolicyEngine UK carries these in its parameter tree rather than as simulated variables, and parameter-level comparisons are not yet registered.
-  # Council-level schemes are outside PolicyEngine-UK's model; exact
-  # mappings take precedence. Added for rulespec-uk#43.
+  # Kingston upon Thames local-scheme jurisdiction; exact mappings take
+  # precedence. Added for rulespec-uk#43; rationale refreshed for the
+  # PolicyEngine-UK 2.89.2 CTR wave (rulespec-uk#140).
   - legal_id_prefix: "uk-kingston-upon-thames:"
     country: uk
     mapping_type: not_comparable
-    rationale: PolicyEngine-UK does not model council-level Council Tax Reduction schemes; Kingston upon Thames CTR is grounded to the council's published scheme document.
+    candidate_priority: P3
+    rationale: PolicyEngine UK (2.89.2, PolicyEngine/policyengine-uk#1771) now models the Kingston upon Thames working-age Council Tax Reduction scheme via kingston_upon_thames_council_tax_reduction, so the earlier "does not model council-level schemes" rationale is stale. Kingston outputs stay not_comparable pending a per-local-authority input adapter in the oracle harness (local_authority = KINGSTON_UPON_THAMES) and a Kingston case-grid; reclassify to comparable once that lands.
 
   # Composed single-employee UKMOD oracle pilot pipelines. These wire the
   # supplied s10/s23 and s8 stage boundaries from gross employment income so

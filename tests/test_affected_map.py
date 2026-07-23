@@ -6,6 +6,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 SCRIPTS = Path(__file__).parents[1] / "scripts"
 
 
@@ -84,6 +86,27 @@ def test_concept_prefix_maps_to_repo():
     assert "TheAxiomFoundation/rulespec-us-co" in repos
 
 
+def test_direct_oracle_baseline_has_no_rulespec_dependency():
+    """A EUROMOD↔GETTSIM baseline names DE concepts but runs no RuleSpec."""
+
+    gam = _load("generate_affected_map.py")
+    repos = gam.repos_for_registry_config(
+        {
+            "name": "de-worker-dual-oracle",
+            "runner": {
+                "type": "gettsim-synthetic-compare",
+                "parameters": {
+                    "concepts": [
+                        "de:policies/worker_dual_oracle_baseline#kindergeld_monthly"
+                    ],
+                },
+            },
+        }
+    )
+
+    assert repos == set()
+
+
 def test_snap_encoder_lane_adds_state_and_federal():
     gam = _load("generate_affected_map.py")
     repos = gam.repos_for_registry_config(
@@ -145,9 +168,13 @@ def test_parameter_suite_entries_use_file_prefix():
 
 AFF_MAP = {
     "suites": [
-        {"suite": "s1", "repos": ["owner/rulespec-us"]},
-        {"suite": "s2", "repos": ["owner/rulespec-us", "owner/rulespec-us-co"]},
-        {"suite": "no-repos", "repos": []},
+        {"suite": "s1", "name": "s1", "repos": ["owner/rulespec-us"]},
+        {
+            "suite": "s2",
+            "name": "s2",
+            "repos": ["owner/rulespec-us", "owner/rulespec-us-co"],
+        },
+        {"suite": "no-repos", "name": "no-repos", "repos": []},
     ]
 }
 
@@ -199,3 +226,143 @@ def test_selector_unknown_head_does_not_force_rerun():
     reports = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "aaa"}])}
     selected = sel.select(AFF_MAP, {}, reports)  # no heads at all
     assert not any(s["suite"] == "s1" for s in selected)
+
+
+# --- runnable names: what the rerun matrix may dispatch ----------------------
+#
+# The 2026-07-20/21 affected reruns crashed ~50 matrix legs with "unknown
+# comparison": the matrix dispatched dashboard suite keys (uk-benefit-cap) and
+# parameter-lane suite names (ssi-parameters), neither of which
+# run_comparison.py knows. The map now records each entry's registry `name`
+# (null = not CI-runnable) and the selector dispatches exactly those.
+
+
+def test_map_registry_entries_carry_their_registry_name():
+    gen = _load("generate_affected_map.py")
+    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
+    # Dashboard suite key and registry name differ for the ukmod suites —
+    # dispatching the suite key is exactly the "unknown comparison" crash.
+    assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
+    # Parameter suites have no registry runner: run_parameter_comparisons.py
+    # (manual lane) owns them, so the map must mark them non-dispatchable.
+    assert entries["ssi-parameters"]["name"] is None
+    assert all("name" in e for e in entries.values())
+
+
+def test_selector_decisions_carry_the_registry_name():
+    sel = _load("select_affected_suites.py")
+    amap = {
+        "suites": [
+            {
+                "suite": "uk-benefit-cap",
+                "name": "uk-benefit-cap-ukmod",
+                "repos": ["owner/rulespec-uk"],
+            }
+        ]
+    }
+    selected = sel.select(amap, {"owner/rulespec-uk": "bbb"}, {})
+    assert selected[0]["name"] == "uk-benefit-cap-ukmod"
+
+
+def test_runnable_names_dispatches_registry_names_not_suite_keys():
+    sel = _load("select_affected_suites.py")
+    selected = [
+        {"suite": "uk-benefit-cap", "name": "uk-benefit-cap-ukmod"},
+        {"suite": "s1", "name": "s1"},
+        {"suite": "ssi-parameters", "name": None},  # manual parameter lane
+        {"suite": "s1-again", "name": "s1"},  # duplicate runner
+    ]
+    assert sel.runnable_names(selected) == ["uk-benefit-cap-ukmod", "s1"]
+    assert sel.manual_suites(selected) == ["ssi-parameters"]
+
+
+@pytest.mark.parametrize(
+    "bad_entry",
+    [
+        {"suite": "drifted", "repos": ["o/r"]},  # name key missing entirely
+        {"suite": "empty", "name": "", "repos": ["o/r"]},
+        {"suite": "blank", "name": "   ", "repos": ["o/r"]},
+        {"suite": "zero", "name": 0, "repos": ["o/r"]},
+        {"suite": "false", "name": False, "repos": ["o/r"]},
+        {"suite": "number", "name": 123, "repos": ["o/r"]},
+        {"suite": "list", "name": ["x"], "repos": ["o/r"]},
+    ],
+)
+def test_selection_fails_loudly_on_malformed_name(bad_entry):
+    """NEGATIVE: only an explicit JSON null means "manual lane". A missing or
+    malformed `name` is map drift — silently skipping it would shrink the
+    matrix while looking green, so both selection paths must fail loudly."""
+    sel = _load("select_affected_suites.py")
+    amap = {"suites": [bad_entry]}
+    with pytest.raises(SystemExit, match="regenerate"):
+        sel.select(amap, {}, {})
+    with pytest.raises(SystemExit, match="regenerate"):
+        sel.force_all_selection(amap)
+
+
+def test_force_all_matches_normal_dispatch_rules():
+    """force_all selects every repo-bearing entry — same validation, same
+    null-name manual routing, same dedup — so the workflow's two paths cannot
+    drift (the old inline force_all branch dispatched raw suite keys)."""
+    sel = _load("select_affected_suites.py")
+    amap = {
+        "suites": [
+            {"suite": "uk-x", "name": "uk-x-ukmod", "repos": ["o/uk"]},
+            {"suite": "manual", "name": None, "repos": ["o/us"]},
+            {"suite": "plain", "name": "plain", "repos": ["o/us"]},
+            {"suite": "unmapped", "name": "unmapped", "repos": []},
+        ]
+    }
+    selected = sel.force_all_selection(amap)
+    assert [d["suite"] for d in selected] == ["uk-x", "manual", "plain"]
+    assert all(d["reason"] == "force_all" for d in selected)
+    assert sel.runnable_names(selected) == ["uk-x-ukmod", "plain"]
+    assert sel.manual_suites(selected) == ["manual"]
+
+
+def test_github_format_emits_output_lines(monkeypatch, capsys):
+    """The workflow consumes the selector via --format github: one
+    $GITHUB_OUTPUT line per key, matrix JSON single-line, manual accounting
+    present."""
+    sel = _load("select_affected_suites.py")
+    monkeypatch.setattr(
+        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
+    )
+    assert sel.main() == 0
+    out = capsys.readouterr().out.splitlines()
+    keys = dict(line.split("=", 1) for line in out if "=" in line)
+    matrix = json.loads(keys["matrix"])
+    assert int(keys["count"]) == len(matrix["include"]) > 0
+    assert int(keys["manual_count"]) == len(keys["manual"].split())
+    assert "ssi-parameters" in keys["manual"]
+
+
+def test_every_runnable_map_name_resolves_in_the_registry():
+    """EXHAUSTIVE: every non-null name in a fresh build_map() must load
+    through run_comparison.py's real resolver (config file exists, internal
+    name matches, runner registered) — the invariant whose violation crashed
+    ~50 matrix legs per run. Also pins uniqueness: duplicate registry names
+    across map entries would silently collapse into one leg."""
+    gen = _load("generate_affected_map.py")
+    rc = _load("run_comparison.py")
+    entries = gen.build_map()["suites"]
+
+    names = [e["name"] for e in entries if e["name"] is not None]
+    assert len(names) == len(set(names)), "duplicate registry names in the map"
+    suites = [e["suite"] for e in entries]
+    assert len(suites) == len(set(suites)), "duplicate suite keys in the map"
+
+    for name in names:
+        config = rc._load_comparison(name)  # raises on unknown comparison
+        assert config["name"] == name, (
+            f"{name}: config file stem and internal name diverge"
+        )
+        assert config["runner"]["type"] in rc.RUNNERS, (
+            f"{name}: runner type {config['runner']['type']!r} not registered"
+        )
+
+    for entry in entries:
+        if entry["name"] is None:
+            assert entry["source"] == "comparisons/parameter-oracles.yaml", (
+                f"{entry['suite']}: only parameter suites may be non-runnable"
+            )

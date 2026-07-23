@@ -1,0 +1,43 @@
+name: uk-contribution-based-jsa-ukmod
+title: UK contribution-based JSA — Axiom vs UKMOD
+description: >-
+  Compares the contribution-based (contributory) jobseeker's allowance encoded in
+  Axiom RuleSpec (rulespec-uk uk/policies/govuk/contribution-based-jobseekers-allowance,
+  the Jobseeker's Allowance Regulations 1996 (SI 1996/207) regulation 79(1) as
+  uprated for 2026-27 by the Social Security Benefits Up-rating Order 2026 (SI
+  2026/148): the age-related weekly amount, GBP 75.65/week under 25 and GBP
+  95.55/week for 25 or over, annualised over 52 weeks) against CeMPA's UKMOD
+  bunct_s on single unemployed claimants. Each case is an unemployed claimant
+  (les=5) receiving a contributory award (bunct) who satisfies the contribution
+  weeks (liwwh); the grid runs an under-25 and a 25-or-over claimant. The weekly
+  statutory rate is identical (75.65 / 95.55); the only residual is the
+  annualisation convention (UKMOD 365/7 weeks/year vs the pipeline's 52),
+  dispositioned explained_residual. UKMOD take-up is disabled through
+  euromod_policy_switch_overrides (BTA_uk / random_uk = false) so the award fires
+  deterministically. UKMOD runs the registration-free public model
+  (UKMOD_PUBLIC_B2026.03, system UK_2026, dataset training_data). This suite runs
+  where the x64 UKMOD runtime and model checkout are available and is regenerated
+  by scripts/regenerate_euromod_uk.sh; on runners without them it re-emits the
+  committed dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-contribution-based-jsa
+    population: synthetic
+    sample_size: 0
+    period: 2026-04-06
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-contribution-based-jsa.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-contribution-based-jsa
+
+dashboard:
+  filename: axiom-euromod-uk-contribution-based-jsa.json
+  suite: uk-contribution-based-jsa

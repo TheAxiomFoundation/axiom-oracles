@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.euromod_issues.v1",
-  "updated_at": "2026-07-06",
+  "updated_at": "2026-07-12",
   "purpose": "Track EUROMOD-platform issues and workarounds that affect household-level Axiom oracle comparisons. Statutory encoding gaps belong in coverage inventories and comparison reports, not in this ledger.",
   "entries": [
     {
@@ -1120,6 +1120,112 @@
       "workaround": {
         "description": "Resolved in the adapter: the worker subprocess loads the model once and runs each household as its own engine run, so every case consumes the solo draw sequence exactly like the single-household runs that anchored the suite — results are independent of batch size, order, and composition (regression: tests/test_euromod_adapter.py::TestBatchPositionIsolation hermetically, plus the live six-case single-batch anchors test; live rerun matches all six anchors with every household at draw 0.283072). comparison_batch_size pins are no longer needed for engine-run isolation. The residual fragility (solo correctness riding on draw #1 = 0.283 sitting below the 0.31 take-up rate) is closed too: the adapter now supports constant overrides — the worker patches the named DefConst parameter values into the system XML on the model overlay, because the euromod connector's constantsToOverwrite kwarg silently ignores DefConst constants (verified live: the kwarg at take-up 0.0 changed nothing, the overlay at 0.0 zeroes every bed_s) — and the be-study-allowance comparison pins $bed_FlTakeUp/$bed_FrTakeUp to 1.0, so the engine output is the statutory allowance for any draw. Upstream enhancement filed: household-keyed draws — rand as a function of (seed, idhh, draw counter) instead of a shared positional stream — would make batched runs composition-invariant at any scale (ec-jrc#15; reference implementation validated on UKMOD B1.02 and submitted as ec-jrc PR #16)."
       }
+    },
+    {
+      "id": "ukmod-hb-bho-uc-transition",
+      "jurisdiction": "UK",
+      "system": "UK_2026",
+      "status": "observed_local",
+      "classification": "euromod_model_transition_issue",
+      "upstream_url": null,
+      "summary": "UKMOD's Housing Benefit output bho_s is deterministically zeroed for a WORKING-AGE benefit unit by the Universal-Credit transition inside bho_uk (the i_bho_noUC / i_bho_yesUC split). The bho_uk model comment states the intent verbatim: 'ensure new benefit claims are to UC only and not to the legacy benefits'. A hypothetical working-age renter is treated as a new claim, routed to Universal Credit, and its legacy bho_s is forced to zero — UKMOD would instead pay the Universal Credit housing element (compared separately in the uk-universal-credit suite). This is NOT the stochastic take-up draw that zeros the Universal Credit and Pension Credit awards: it is deterministic. Verified live on UKMOD_PUBLIC_B2026.03 (system UK_2026, dataset training_data): every working-age renter with a positive statutory Housing Benefit entitlement returns bho_s = 0.0, and the zeroed set is IDENTICAL across repeated runs (single under-25 renter, single renter, and couple renter all return 0.0 on both of two consecutive full-suite runs), unlike i_rand_tu which varies by row position. Pinning the three HB take-up rates $HBTUWAWork / $HBTUWANowork / $HBTUPen to 1.0 via euromod_constant_overrides does not restore a working-age award, confirming the take-up draw is not the cause. Pension-age Housing Benefit is not subject to the transition (it remains a live legacy benefit): the single and couple pension-age no-earnings cases pay bho_s and match the composed rulespec-uk Housing Benefit entitlement to the penny. So the Axiom encoding is correct (it computes the full statutory Housing Benefit entitlement the HB Regulations 2006 confer) and the working-age zeros are a UKMOD-side current-law caseload-routing behaviour, not an Axiom encoding gap.",
+      "observed_with": {
+        "model_root": "UKMOD_PUBLIC_B2026.03",
+        "country": "UK",
+        "system": "UK_2026",
+        "dataset": "training_data",
+        "output": "bho_s"
+      },
+      "attempted_switches": {
+        "BTA_uk_off": "No effect: the adapter policy-switch override sets BTA_uk off, but the working-age zero is the UC transition (i_bho_noUC / i_bho_yesUC), not the take-up draw, so the award still zeros.",
+        "random_uk_off": "No effect for the same reason (the suite runs with random_uk off and the working-age zeros persist deterministically).",
+        "HB_takeup_rates_pinned_to_1": "No effect on the working-age zero: euromod_constant_overrides pins $HBTUWAWork / $HBTUWANowork / $HBTUPen to 1.0, which forces 100% take-up, yet the working-age award stays zero — isolating the cause to the UC transition rather than take-up.",
+        "UCtransition_zero": "Setting $UCtransition=0 does not restore a working-age legacy award either (bho_s stays 0.0) and perturbs UKMOD's assessed HB means ymn01_s that the suite bridges into both engines, so it is not used; the working-age closure is structural for UK_2026."
+      },
+      "workaround": {
+        "description": "Compare the composed rulespec-uk Housing Benefit entitlement against the executed bho_s and grade the parity on the PENSION-AGE population, where UKMOD Housing Benefit stays live and both engines pay it (single and couple pension-age no-earnings renters match to the penny — the maximum-benefit path). The three working-age renter cases, which UKMOD deterministically zeros via the UC transition, are dispositioned upstream_engine_gap in dispositions/uk-housing-benefit.yaml with the full statutory entitlement pinned as the Axiom value (single under-25 6000.00, single 6600.00, couple 7800.00). The disposition is stable because the zero is deterministic, unlike the Pension Credit and Universal Credit take-up zeros whose realization is a stochastic draw."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-dk-2025-bfachnm-pre2022-spousal-taper",
+      "jurisdiction": "DK",
+      "system": "DK_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_schedule_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/18",
+      "summary": "The Danish child and youth benefit taper policy bfachnm_dk retains a pre-2022 spousal income test in DK_2022 through DK_2025: for cohabiting and married recipients the boerne- og ungeydelsesloven § 1 a reduction is driven off a partner/couple income basis rather than the post-2022 individualized taper (each recipient tapered on their own mellemskat basis with the § 1 a ligedeling apportionment). The divergence appears only for couples; single-recipient (single-parent) households are unaffected because there is no partner income to test.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "DK",
+        "system": "DK_2025",
+        "dataset": "DK_training_data",
+        "policy": "bfachnm_dk",
+        "suite": "dk-child-youth-benefit"
+      },
+      "affected_systems": [
+        "DK_2022",
+        "DK_2023",
+        "DK_2024",
+        "DK_2025"
+      ],
+      "workaround": {
+        "description": "Restrict the graded dk-child-youth-benefit grid to single-parent, one-child households, where the pre-2022 spousal test and the current single-recipient § 1 a taper coincide. The Axiom pipeline models the single-recipient taper only; the § 1 a couple apportionment is future work and is excluded from the graded surface."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-dk-2023-bfachnm-supplement-600-vs-660",
+      "jurisdiction": "DK",
+      "system": "DK_2023",
+      "status": "upstream_filed",
+      "classification": "euromod_model_parameter_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/19",
+      "summary": "For 2023 the boerne- og ungeydelsesloven § 1, stk. 3 adds a one-off uplift of 660 kr. 'samlet' (combined) across the stk. 1-2 amounts. EUROMOD DK_2023 applies a 600 kr. supplement instead of the statutory 660 kr., so the DK_2023 bfachnm_s exceeds the un-supplemented amount by 600 rather than 660 (observed: a single-parent age-5 case at 300000 income returns 15624 annual, 600 above the 15024 base rather than 660). DK_2025 does not apply the 2023 supplement, so this suite's DK_2025 grid is unaffected.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "DK",
+        "system": "DK_2023",
+        "dataset": "DK_training_data",
+        "policy": "bfachnm_dk"
+      },
+      "affected_systems": [
+        "DK_2023"
+      ],
+      "workaround": {
+        "description": "Grade the suite against DK_2025 (the current validation system), which carries no 2023 one-off supplement, and record the DK_2023 600-vs-660 discrepancy here. Do not encode the 2023 supplement into the per-person derivation: the statute leaves the 660 kr. combined uplift unallocated across the stk. 1-2 amounts (rulespec-dk boerne-og-ungeydelse-satser exceptional_2023_benefit_increase is grounded but not applied), and 2023 predates the repo's 2026 validation year."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-dk-bfachnm-taper-pension-grossup-absent",
+      "jurisdiction": "DK",
+      "system": "DK_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_schedule_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/20",
+      "summary": "The boerne- og ungeydelsesloven § 1 a, stk. 4-5 reduces the taper income basis by the recipient's qualifying retirement contributions (aldersforsikring, aldersopsparing and supplerende engangssum per pensionsbeskatningslovens §§ 10 A, 12 A and 29 A), capped at the § 16, stk. 1 grundbeloeb and grossed up by dividing by 0,6. EUROMOD's bfachnm_dk taper does not apply this pension deduction/gross-up, so it tapers on the un-reduced mellemskat basis. The divergence appears only when a recipient has qualifying age-savings contributions; this suite sets those contributions to 0, so the income basis equals the mellemskat basis on both sides and the DK_2025 grid is unaffected.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "DK",
+        "system": "DK_2025",
+        "dataset": "DK_training_data",
+        "policy": "bfachnm_dk"
+      },
+      "affected_systems": [
+        "DK_2022",
+        "DK_2023",
+        "DK_2024",
+        "DK_2025"
+      ],
+      "workaround": {
+        "description": "Set qualifying retirement contributions to 0 in the dk-child-youth-benefit grid so the § 1 a, stk. 4-5 gross-up cap never binds and the income basis equals the mellemskat basis on both engines. The Axiom side keeps the § 1 a, stk. 4-5 deduction (rulespec-dk boerne-og-ungeydelse-indkomstaftrapning grossed_up_qualifying_retirement_contributions) so a future contributions-bearing case would expose the EUROMOD gap."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
     }
   ]
 }

@@ -1,0 +1,23 @@
+name: sc-income-tax-liability
+title: South Carolina income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed South Carolina ordinary resident wage-earner income-tax
+  pipeline in Axiom RuleSpec against PolicyEngine
+  (sc_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at
+  its latest supported law year, 2024, on the standard six-case grid.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: SC
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-sc-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-sc-income-tax-liability.json
+  suite: sc-income-tax-liability

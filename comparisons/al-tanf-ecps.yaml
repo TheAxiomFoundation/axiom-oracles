@@ -1,0 +1,39 @@
+# Alabama TANF -- Axiom vs PolicyEngine on Enhanced CPS, Alabama households.
+
+name: al-tanf-ecps
+title: Alabama TANF -- Axiom vs PolicyEngine
+description: >-
+  Compares the monthly Alabama Family Assistance benefit from the composed
+  us-al/tanf program (2024 State Plan Attachment E payment-standard chart and
+  Appendix N Section 2 20%-earned-income / nearest-dollar / $10-minimum-grant
+  computation) against PolicyEngine's al_tanf on Enhanced CPS households in
+  Alabama. Refresh the rulespec root after pulling ~/rulespec-us with:
+  rsync -a --delete --exclude .axiom ~/rulespec-us/us-al/ ~/.axiom-oracles/roots/rulespec-us-al/
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    suite: al-tanf-ecps
+    concepts:
+      - us-al:policies/dhr/tanf#al_tanf_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    jurisdiction_fips: "01"
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-oracles/programs/us-al/tanf/fy-2026.yaml
+    axiom_composed_program: /tmp/al-tanf-composed.yaml
+    axiom_compiled_program: /tmp/al-tanf-compiled.json
+    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    rulespec_roots:
+      - $HOME/.axiom-oracles/roots/rulespec-us-al
+
+artifacts:
+  report_basename: axiom-policyengine-al-tanf-ecps
+
+dashboard:
+  filename: axiom-policyengine-al-tanf-ecps.json
+  suite: al-tanf-ecps

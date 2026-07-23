@@ -18,7 +18,7 @@ title: Illinois income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Illinois income-tax liability pipeline encoded in Axiom
   RuleSpec (us-il/policies/income_tax/pilot_liability_pipeline) against
-  PolicyEngine (il_income_tax_before_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
+  PolicyEngine (il_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at 2024 on a modest grid of
   single and married filers crossing the state's brackets.
 
 runner:

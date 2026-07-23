@@ -9149,12 +9149,7 @@ def test_policyengine_coverage_classifies_arizona_snap_composition_outputs(
         / "policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml",
         """format: rulespec/v1
 rules:
-  - name: snap_gross_monthly_income
-    kind: derived
-    versions:
-      - effective_from: '2025-10-01'
-        formula: earned_income + unearned_income
-  - name: snap_net_income
+  - name: na_net_income
     kind: derived
     versions:
       - effective_from: '2025-10-01'
@@ -9164,17 +9159,12 @@ rules:
     versions:
       - effective_from: '2025-10-01'
         formula: income_eligible and resource_eligible
-  - name: snap_maximum_allotment
-    kind: derived
-    versions:
-      - effective_from: '2025-10-01'
-        formula: thrift_food_plan_amount
   - name: snap_excess_shelter_deduction
     kind: derived
     versions:
       - effective_from: '2025-10-01'
         formula: shelter_deduction
-  - name: snap_regular_month_allotment
+  - name: na_regular_month_allotment
     kind: derived
     versions:
       - effective_from: '2025-10-01'
@@ -9189,30 +9179,27 @@ rules:
   period: 2026-01
   input: {}
   output:
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_gross_monthly_income: 2000
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_net_income: 1200
+    us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income: 2000
+    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#na_net_income: 1200
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_eligible: holds
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_maximum_allotment: 768
     us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_excess_shelter_deduction: 350
-    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_regular_month_allotment: 408
+    us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#na_regular_month_allotment: 408
 """,
     )
 
     coverage = build_policyengine_coverage_report(tmp_path, program="snap")
 
-    assert coverage["status_counts"] == {"known_not_comparable": 6}
+    assert coverage["status_counts"] == {"known_not_comparable": 4}
     composition_items = {
         item["rule_name"]: item
         for item in coverage["items"]
         if item["file"].endswith("fy-2026-benefit-calculation.yaml")
     }
     assert set(composition_items) == {
-        "snap_gross_monthly_income",
-        "snap_net_income",
+        "na_net_income",
         "snap_eligible",
-        "snap_maximum_allotment",
         "snap_excess_shelter_deduction",
-        "snap_regular_month_allotment",
+        "na_regular_month_allotment",
     }
     assert {item["status"] for item in composition_items.values()} == {
         "known_not_comparable"
@@ -9220,11 +9207,7 @@ rules:
     assert {item["candidate_priority"] for item in composition_items.values()} == {"P4"}
     assert {item["tested"] for item in composition_items.values()} == {True}
     assert (
-        composition_items["snap_gross_monthly_income"]["policyengine_variable"]
-        == "snap_gross_income"
-    )
-    assert (
-        composition_items["snap_net_income"]["policyengine_variable"]
+        composition_items["na_net_income"]["policyengine_variable"]
         == "snap_net_income"
     )
     assert (
@@ -9232,17 +9215,63 @@ rules:
         == "is_snap_eligible"
     )
     assert (
-        composition_items["snap_maximum_allotment"]["policyengine_variable"]
-        == "snap_max_allotment"
-    )
-    assert (
         composition_items["snap_excess_shelter_deduction"]["policyengine_variable"]
         == "snap_excess_shelter_expense_deduction"
     )
     assert (
-        composition_items["snap_regular_month_allotment"]["policyengine_variable"]
+        composition_items["na_regular_month_allotment"]["policyengine_variable"]
         == "snap"
     )
+
+
+def test_policyengine_registry_classifies_snap_fy2024_cola_outputs():
+    registry = load_policyengine_registry()
+
+    standard = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
+        country="us",
+    )
+    assert standard is not None
+    assert standard.mapping_type == "direct_variable"
+    assert standard.policyengine_variable == "snap_standard_deduction"
+
+    standard_table = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/deductions"
+        "#snap_standard_deduction_48_states_dc_table",
+        country="us",
+    )
+    assert standard_table is not None
+    assert standard_table.mapping_type == "parameter_value"
+    assert (
+        standard_table.policyengine_parameter
+        == "gov.usda.snap.income.deductions.standard.CONTIGUOUS_US"
+    )
+    assert standard_table.parameter_key_input == "household_size"
+
+    maximum_allotment = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
+        "#snap_maximum_allotment",
+        country="us",
+    )
+    assert maximum_allotment is not None
+    assert maximum_allotment.mapping_type == "direct_variable"
+    assert maximum_allotment.policyengine_variable == "snap_max_allotment"
+
+    asset_selector = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/deductions#snap_asset_limit",
+        country="us",
+    )
+    assert asset_selector is not None
+    assert asset_selector.mapping_type == "not_comparable"
+    assert asset_selector.policyengine_variable == "snap_asset_limit"
+
+    additional_member_helper = registry.mapping_for_legal_id(
+        "us:policies/usda/snap/fy-2024-cola/income-eligibility-standards"
+        "#snap_net_income_limit_100_percent_fpl_48_states_dc_additional_member",
+        country="us",
+    )
+    assert additional_member_helper is not None
+    assert additional_member_helper.mapping_type == "not_comparable"
 
 
 def test_policyengine_coverage_classifies_arizona_snap_utility_eligibility(

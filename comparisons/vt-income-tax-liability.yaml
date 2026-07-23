@@ -1,0 +1,27 @@
+name: vt-income-tax-liability
+title: Vermont income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Vermont ordinary full-year resident wage-earner
+  pipeline in Axiom RuleSpec against PolicyEngine
+  (vt_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at
+  its latest supported law year, 2024, on the standard six-case grid. The
+  pipeline accepts completed current-year normal tax as an upstream boundary
+  because the certified corpus lacks the official 2026 indexed tables, then
+  independently applies the greater-of three-percent federal-AGI minimum when
+  AGI exceeds $150,000.
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: VT
+    period: "2026"
+    taxsim_law_year: 2024
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-vt-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-vt-income-tax-liability.json
+  suite: vt-income-tax-liability

@@ -1,0 +1,38 @@
+schema: axiom_oracles.dispositions.v1
+suite: uk-scottish-carer-supplement
+updated: "2026-07-07"
+# The rulespec-uk Scottish Carer Supplement (SSI 2023/302 reg 16(1A), the
+# corpus-grounded GBP 11.70/week top-up) and UKMOD bcrdicm_s agree to within a
+# small annualisation residual. The pipeline uses
+# scottish_carer_supplement_weeks_in_year = 52 (11.70 * 52 = 608.40); UKMOD
+# reports 609.55, which is its weekly Scottish Carer Supplement rate annualised
+# at 365/7 = 52.142857 weeks/year (609.55 = 11.69 * 365/7). The 1.15/year
+# residual (0.19%) is the annualisation convention plus a marginal weekly-rate
+# rounding (11.69 vs the corpus 11.70), not an encoding gap, so it is
+# dispositioned explained_residual.
+entries:
+  - id: annualisation-residual-carer
+    concept: uk:policies/govuk/scottish-carer-supplement#scottish_carer_supplement_annual_amount
+    case_id: uk-scs-scotland-carer
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The pipeline annualises the corpus-grounded 11.70/week Scottish Carer
+        Supplement over 52 weeks (608.40); UKMOD reports 609.55, its weekly rate
+        annualised at 365/7 weeks/year. The 1.15/year residual is the
+        annualisation convention plus a marginal weekly-rate rounding difference,
+        not an encoding gap.
+      arithmetic:
+        - expression: "11.70 * 52"
+          equals: 608.40
+        - expression: "11.69 * 365 / 7"
+          equals: 609.5464285714286
+        - expression: "609.55 - 608.40"
+          equals: 1.15
+      sources:
+        - axiom_oracles/suites/uk_scottish_carer_supplement.py
+    expires_on_source_change: true
+    pinned:
+      left: 609.55
+      right: 608.4

@@ -77,7 +77,7 @@ const ORACLE_IDENTITY = {
   },
 };
 
-const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE" };
+const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE" };
 
 /**
  * The unit of counting is the household case: one household compared once,

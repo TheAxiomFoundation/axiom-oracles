@@ -516,12 +516,18 @@ mappings:
     scope: person
     source: { kind: derived, transform: ssi_couple_countable_income }
 
-  # Resources: ECPS carries no asset data (CASH_ON_HAND is a stub 0), and
-  # PolicyEngine's ECPS SSI faces the same absence, so both sides are
-  # effectively resource-unconstrained.
+  # Resources (42 USC 1382b(a) countable resources, net of the statutory
+  # exclusions). The certified populace-us artifact DOES carry SSI countable
+  # resources: PolicyEngine reads them and screens the 1382(a)(1)(B) limit
+  # ($2,000 individual / $3,000 couple), so Axiom must screen the same value.
+  # Projected from PolicyEngine's person-level ssi_countable_resources (see
+  # populace_us.py::_PERSON_NON_WAGE_VARIABLES); defaults to 0 when absent (no
+  # resources -> screen passes), matching PE. The prior { constant: 0 } wiring
+  # left Axiom resource-unconstrained and awarded SSI over the limit
+  # (axiom-oracles#227).
   - match: { kind: suffix, value: resources_other_than_excluded_pursuant_to_section_1382b_a }
     scope: person
-    source: { kind: constant, value: 0 }
+    source: { kind: fact, name: SSI_COUNTABLE_RESOURCES, default: 0 }
 
   # Self-support plans and work expenses: not observable in ECPS.
   - match: { kind: suffix, value: individual_has_commissioner_approved_plan_for_achieving_self_support }
@@ -1474,3 +1480,154 @@ mappings:
   - match: { kind: suffix, value: tanf_case_reopened_in_month_following_effective_date_of_closure }
     scope: household
     source: { kind: constant, value: false }
+
+  # ---------------------------------------------------------------------
+  # GA TANF (us-ga/tanf program) — DFCS PAMMS 1525/1605/1615/appendix-a slice.
+  # The benefit leaf (1605 block-14) already encodes Steps 11-13:
+  # min(max(standard_of_need - net_countable_income, 0), family_maximum). This
+  # block projects its budgeting free-inputs from ECPS. Gross countable income
+  # is the AU's included earned + unearned income; the 1615 standard $250 work
+  # deduction is projected at household scope as min(monthly AU earned, 250)
+  # (allowable_earned_income_deductions), exact for the 0-/1-earner units that
+  # dominate the caseload. Deemed/allocated non-member income and the
+  # SON-trial-budget applicant path are not observable in ECPS and take inert
+  # constants (steady-state recipient month); the demographic gate
+  # (household_has_minor_or_pregnant_member) is shared above.
+  # ---------------------------------------------------------------------
+
+  # au_size is declared Count in the program spec (integer chart key); it binds to
+  # this AU member count. hh_size returns len(people) as an integer.
+  - match: { kind: exact, value: assistance_unit_member_count }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+
+  - match: { kind: exact, value: assistance_unit_included_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+  - match: { kind: exact, value: income_deemed_from_non_assistance_unit_members }
+    scope: household
+    source: { kind: constant, value: 0 }
+  - match: { kind: exact, value: income_allocated_to_non_assistance_unit_members }
+    scope: household
+    source: { kind: constant, value: 0 }
+
+  - match: { kind: exact, value: son_trial_budget_is_necessary }
+    scope: household
+    source: { kind: constant, value: false }
+
+  # 1605 block-4 net_countable_income = gross_countable - allowable_earned_income_deductions.
+  # PolicyEngine's ga_tanf earned disregard is the PAMMS 1615 standard $250 work
+  # deduction per employed individual (min(earned, 250) each). Projected here at
+  # household scope as min(monthly AU earned income, 250) via monthly_rate_plus_flat
+  # (rate 0, flat 250, capped at the income): exact for the 0- and 1-earner units
+  # that dominate the caseload; a rare multi-earner unit understates the total by
+  # capping at one $250 rather than one per earner (dispositioned).
+  - match: { kind: exact, value: allowable_earned_income_deductions }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_rate_plus_flat
+      rate: 0
+      flat: 250
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
+  # ---------------------------------------------------------------------
+  # DE TANF (us-de/tanf program) -- 16 DE Admin. Code 4007/4008 slice.
+  # The 4008 grant leaf reproduces PolicyEngine de_tanf:
+  # min(payment_standard, 0.5 * max(standard_of_need - countable_income, 0)),
+  # gated by the 185%-of-standard-of-need gross-income test and the $90 applicant
+  # net-income test. This block projects its free inputs from ECPS at household
+  # scope. number_people_in_budget reuses assistance_unit_member_count (hh_size)
+  # via the program-spec Count declaration; unearned_income reuses the shared
+  # monthly-unearned projection above; the demographic gate
+  # (household_has_minor_or_pregnant_member) is shared. Deemed income, the
+  # dependent-care deduction, and the $50 child-support disregard are not
+  # observable in ECPS and take the values below (steady-state recipient month).
+  # ---------------------------------------------------------------------
+
+  # Delaware standard of need = 75% of the monthly federal poverty guideline.
+  # PE: spm_unit_fpg (annual, CONTIGUOUS_US 2026: 15,960 + 5,680*(size-1)) / 12
+  # * 0.75 = 997.50 + 355.00*(size-1). Projected here as the exact schedule by
+  # household size, with the constant per-additional-person increment for sizes
+  # beyond the tabulated eight.
+  - match: { kind: exact, value: applicable_tanf_standard_of_need }
+    scope: household
+    source:
+      kind: derived
+      transform: table_by_hh_size
+      max_size: 8
+      per_additional: 355.0
+      table:
+        1: 997.5
+        2: 1352.5
+        3: 1707.5
+        4: 2062.5
+        5: 2417.5
+        6: 2772.5
+        7: 3127.5
+        8: 3482.5
+
+  # PE de_tanf_gross_income = tanf_gross_earned + tanf_gross_unearned (monthly AU
+  # sum, pre-disregard), tested against 185% of the standard of need.
+  - match: { kind: exact, value: gross_income }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts:
+        - YEARLY_EARNED_INCOME
+        - SELF_EMPLOYMENT_INCOME
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
+
+  # PE add(spm_unit, tanf_gross_earned_income): monthly AU earned income.
+  - match: { kind: exact, value: total_wage_earner_earnings }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      aggregate: sum_over_people
+      from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
+  # The $90 work + $30 + 1/3 earned-income deduction is applied once at household
+  # scope (wage_earner_count = 1): exact for the 0- and 1-earner units that
+  # dominate the caseload; a rare multi-earner unit understates the deduction by
+  # granting one $90/$30 pass rather than one per earner (dispositioned). For a
+  # zero-earner unit the deduction floors at 0 against zero earnings, so the count
+  # is immaterial there.
+  - match: { kind: exact, value: wage_earner_count }
+    scope: household
+    source: { kind: constant, value: 1 }
+
+  # PE de_tanf benefit always applies the $30 + 1/3 disregard in the grant
+  # computation (de_tanf_countable_earned_income_person), so the applicability
+  # flag is always true here.
+  - match: { kind: exact, value: thirty_plus_one_third_disregard_applies }
+    scope: household
+    source: { kind: constant, value: true }
+
+  # PE de_tanf_dependent_care_deduction caps observed child-care spending by an
+  # age-tiered per-dependent maximum; child care is not observable in the ECPS
+  # slice feeding the composed program and only reduces countable EARNED income,
+  # so it takes 0 for the (predominantly unearned-income) TANF caseload.
+  - match: { kind: exact, value: child_care_expenses }
+    scope: household
+    source: { kind: constant, value: 0 }

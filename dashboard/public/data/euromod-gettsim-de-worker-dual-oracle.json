@@ -1,0 +1,1699 @@
+{
+  "aggregates": [
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly",
+      "description": "Germany employee health-insurance contribution, monthly (including the average Zusatzbeitrag in the health leg)",
+      "left_weighted_sum": 4727.326128,
+      "match_rate": 100,
+      "match_weight": 13,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 4727.326128,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly",
+      "description": "Germany employee pension-insurance contribution, monthly",
+      "left_weighted_sum": 6130.461001,
+      "match_rate": 100,
+      "match_weight": 13,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 6130.461001,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly",
+      "description": "Germany employee unemployment-insurance contribution, monthly",
+      "left_weighted_sum": 856.946161,
+      "match_rate": 100,
+      "match_weight": 13,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 856.946161,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
+      "description": "Germany employee long-term-care-insurance contribution, monthly",
+      "left_weighted_sum": 1263.790166,
+      "match_rate": 92.307692,
+      "match_weight": 12,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1264.859896,
+      "weighted_difference": -1.06973,
+      "weighted_match_rate": 92.307692
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "left_weighted_sum": 170830.397649,
+      "match_rate": 15.384615,
+      "match_weight": 2,
+      "mismatch_count": 11,
+      "mismatch_weight": 11,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 175678.56992,
+      "weighted_difference": -4848.172271,
+      "weighted_match_rate": 15.384615
+    },
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+      "description": "Germany Kindergeld paid to the household recipient, monthly",
+      "left_weighted_sum": 765,
+      "match_rate": 100,
+      "match_weight": 13,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 765,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 13,
+  "cases": [
+    {
+      "case_id": "single-w-500",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 500.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 544.6428571428571
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            6000.0
+          ],
+          "yearly_earned_income_total": 6000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          500.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 6000.0
+      },
+      "mismatches": [],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-1200",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 1200.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 1307.142857142857
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            14400.0
+          ],
+          "yearly_earned_income_total": 14400.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          1200.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 14400.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
+          "description": "Germany employee long-term-care-insurance contribution, monthly",
+          "difference": -1.0697295884447975,
+          "kind": "amount_difference",
+          "left": 24.968737633557577,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 26.038467222002375,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-2500",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 2500.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 2723.2142857142853
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            30000.0
+          ],
+          "yearly_earned_income_total": 30000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          2500.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 30000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -19.509076323175577,
+          "kind": "amount_difference",
+          "left": 2882.4909236768244,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 2902.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-4000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 4000.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 4357.142857142857
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            48000.0
+          ],
+          "yearly_earned_income_total": 48000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          4000.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 48000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -45.365299209664954,
+          "kind": "amount_difference",
+          "left": 7470.634700790335,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 7516.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-5500",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 5500.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 5991.071428571428
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            66000.0
+          ],
+          "yearly_earned_income_total": 66000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          5500.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 66000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -71.10802779657024,
+          "kind": "amount_difference",
+          "left": 13159.89197220343,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 13231.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-7500",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 7500.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 8169.642857142857
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            90000.0
+          ],
+          "yearly_earned_income_total": 90000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          7500.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 90000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -88.35008550000202,
+          "kind": "amount_difference",
+          "left": 23285.789914499997,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 23374.14,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-9000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 9000.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 9803.571428571428
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            108000.0
+          ],
+          "yearly_earned_income_total": 108000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          9000.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 108000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -88.35008550000566,
+          "kind": "amount_difference",
+          "left": 32500.754914499994,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 32589.105,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-w-12000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 12000.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 13071.42857142857
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            144000.0
+          ],
+          "yearly_earned_income_total": 144000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          12000.0
+        ],
+        "region": "west",
+        "scenario": "single-worker-west",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 144000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -83.29691750001803,
+          "kind": "amount_difference",
+          "left": 50256.02800249998,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 50339.32492,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "single-e-4000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 4,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 4000.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 4357.142857142857
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            48000.0
+          ],
+          "yearly_earned_income_total": 48000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          4000.0
+        ],
+        "region": "east",
+        "scenario": "single-worker-east",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 48000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -45.365299209664954,
+          "kind": "amount_difference",
+          "left": 7470.634700790335,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 7516.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "couple-8000-0",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 2,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 8000.0,
+            "yemmy": 12
+          },
+          {
+            "dag": 34,
+            "dec": 0,
+            "dgn": 2,
+            "dms": 2,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "lcs": 0,
+            "les": 1,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0.0,
+            "yemmy": 0
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einkommensteuer__gemeinsam_veranlagt": true,
+              "einnahmen__bruttolohn_m": 8714.285714285714
+            },
+            {
+              "alter": 34,
+              "einkommensteuer__gemeinsam_veranlagt": true
+            }
+          ],
+          "spouse_pairs": [
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            34
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            96000.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 96000.0
+        },
+        "joint_assessment": true,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          8000.0,
+          0.0
+        ],
+        "region": "west",
+        "scenario": "married-couple-one-earner",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 96000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -50.459672631266585,
+          "kind": "amount_difference",
+          "left": 16958.540327368733,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 17009.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "couple-4000-2000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 2,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 102,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 4000.0,
+            "yemmy": 12
+          },
+          {
+            "dag": 34,
+            "dec": 0,
+            "dgn": 2,
+            "dms": 2,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 101,
+            "idperson": 102,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 2000.0,
+            "yemmy": 12
+          }
+        ],
+        "gettsim_case": {
+          "persons": [
+            {
+              "einkommensteuer__gemeinsam_veranlagt": true,
+              "einnahmen__bruttolohn_m": 4357.142857142857
+            },
+            {
+              "alter": 34,
+              "einkommensteuer__gemeinsam_veranlagt": true,
+              "einnahmen__bruttolohn_m": 2178.5714285714284
+            }
+          ],
+          "spouse_pairs": [
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            34
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            48000.0,
+            24000.0
+          ],
+          "yearly_earned_income_total": 72000.0
+        },
+        "joint_assessment": true,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          4000.0,
+          2000.0
+        ],
+        "region": "west",
+        "scenario": "married-couple-two-earner",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 72000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -55.20936102047199,
+          "kind": "amount_difference",
+          "left": 8631.790638979528,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 8687.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "parent-1child-4000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [
+          2015
+        ],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 4000.0,
+            "yemmy": 12
+          },
+          {
+            "dag": 10,
+            "dec": 1,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 102,
+            "lcs": 0,
+            "les": 6,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0.0,
+            "yemmy": 0
+          }
+        ],
+        "gettsim_case": {
+          "kindergeld_recipients": {
+            "1": 0
+          },
+          "parents": {
+            "1": [
+              0,
+              null
+            ]
+          },
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 4357.142857142857,
+              "familie__alleinerziehend": true,
+              "sozialversicherung__pflege__beitrag__hat_kinder": true
+            },
+            {
+              "geburtsjahr": 2015
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            10
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            48000.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 48000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          4000.0
+        ],
+        "region": "west",
+        "scenario": "single-parent-one-child",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 48000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -1476.1670323265307,
+          "kind": "amount_difference",
+          "left": 4797.832967673469,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6274.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "parent-2children-4000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 83.33333333333334,
+      "metadata": {
+        "child_birth_years": [
+          2015,
+          2018
+        ],
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dec": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "lcs": 0,
+            "les": 3,
+            "lhw": 40,
+            "liwmy": 12,
+            "liwwh": 40,
+            "yem": 4000.0,
+            "yemmy": 12
+          },
+          {
+            "dag": 10,
+            "dec": 1,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 102,
+            "lcs": 0,
+            "les": 6,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0.0,
+            "yemmy": 0
+          },
+          {
+            "dag": 7,
+            "dec": 1,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 9,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idmother": 101,
+            "idpartner": 0,
+            "idperson": 103,
+            "lcs": 0,
+            "les": 6,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "yem": 0.0,
+            "yemmy": 0
+          }
+        ],
+        "gettsim_case": {
+          "kindergeld_recipients": {
+            "1": 0,
+            "2": 0
+          },
+          "parents": {
+            "1": [
+              0,
+              null
+            ],
+            "2": [
+              0,
+              null
+            ]
+          },
+          "persons": [
+            {
+              "einnahmen__bruttolohn_m": 4357.142857142857,
+              "familie__alleinerziehend": true,
+              "sozialversicherung__pflege__beitrag__hat_kinder": true
+            },
+            {
+              "geburtsjahr": 2015
+            },
+            {
+              "geburtsjahr": 2018
+            }
+          ]
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            7
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            48000.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 48000.0
+        },
+        "joint_assessment": false,
+        "locale": "DE",
+        "nominal_monthly_earnings": [
+          4000.0
+        ],
+        "region": "west",
+        "scenario": "single-parent-two-children",
+        "scope": {
+          "geoid": "DE",
+          "type": "country"
+        },
+        "yearly_earned_income": 48000.0
+      },
+      "mismatches": [
+        {
+          "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+          "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+          "difference": -2824.991413750204,
+          "kind": "amount_difference",
+          "left": 3416.008586249796,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 6241.0,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "gettsim",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "components": [],
+      "description": "Germany employee health-insurance contribution, monthly (including the average Zusatzbeitrag in the health leg)",
+      "id": "de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    },
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "components": [],
+      "description": "Germany employee pension-insurance contribution, monthly",
+      "id": "de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    },
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "components": [],
+      "description": "Germany employee unemployment-insurance contribution, monthly",
+      "id": "de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    },
+    {
+      "category": "contributions",
+      "comparison": "amount",
+      "components": [],
+      "description": "Germany employee long-term-care-insurance contribution, monthly",
+      "id": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "id": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    },
+    {
+      "category": "benefits",
+      "comparison": "amount",
+      "components": [],
+      "description": "Germany Kindergeld paid to the household recipient, monthly",
+      "id": "de:policies/worker_dual_oracle_baseline#kindergeld_monthly",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_metadata": {
+    "euromod": {
+      "country": "DE",
+      "dataset": "DE_2024_b1_2015_03_e2",
+      "extra_columns": [
+        "drgn1"
+      ],
+      "system": "DE_2025",
+      "template_dataset": "DE_training_data"
+    },
+    "gettsim": {
+      "engine": "gettsim",
+      "gettsim_version": "1.2.1",
+      "policy_date_str": "2025-06-30",
+      "rounding": true
+    }
+  },
+  "engines": {
+    "left": "euromod",
+    "right": "gettsim"
+  },
+  "errors": [],
+  "locales": [
+    "DE"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "single-w-1200",
+      "concept": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
+      "description": "Germany employee long-term-care-insurance contribution, monthly",
+      "difference": -1.0697295884447975,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "gettsim-midijob-childless-care-surcharge-base",
+        "linked_issue": "https://github.com/ttsim-dev/gettsim/issues/1215"
+      },
+      "kind": "amount_difference",
+      "left": 24.968737633557577,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 26.038467222002375,
+      "scenario": "single-worker-west",
+      "tolerance": 0.01,
+      "yearly_earned_income": 14400.0
+    },
+    {
+      "ages": null,
+      "case_id": "single-w-2500",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -19.509076323175577,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 2882.4909236768244,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 2902.0,
+      "scenario": "single-worker-west",
+      "tolerance": 0.01,
+      "yearly_earned_income": 30000.0
+    },
+    {
+      "ages": null,
+      "case_id": "single-w-4000",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -45.365299209664954,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 7470.634700790335,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 7516.0,
+      "scenario": "single-worker-west",
+      "tolerance": 0.01,
+      "yearly_earned_income": 48000.0
+    },
+    {
+      "ages": null,
+      "case_id": "single-w-5500",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -71.10802779657024,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 13159.89197220343,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 13231.0,
+      "scenario": "single-worker-west",
+      "tolerance": 0.01,
+      "yearly_earned_income": 66000.0
+    },
+    {
+      "ages": null,
+      "case_id": "single-w-7500",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -88.35008550000202,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 23285.789914499997,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 23374.14,
+      "scenario": "single-worker-west",
+      "tolerance": 0.01,
+      "yearly_earned_income": 90000.0
+    },
+    {
+      "ages": null,
+      "case_id": "single-w-9000",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -88.35008550000566,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 32500.754914499994,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 32589.105,
+      "scenario": "single-worker-west",
+      "tolerance": 0.01,
+      "yearly_earned_income": 108000.0
+    },
+    {
+      "ages": null,
+      "case_id": "single-w-12000",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -83.29691750001803,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 50256.02800249998,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 50339.32492,
+      "scenario": "single-worker-west",
+      "tolerance": 0.01,
+      "yearly_earned_income": 144000.0
+    },
+    {
+      "ages": null,
+      "case_id": "single-e-4000",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -45.365299209664954,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 7470.634700790335,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 7516.0,
+      "scenario": "single-worker-east",
+      "tolerance": 0.01,
+      "yearly_earned_income": 48000.0
+    },
+    {
+      "ages": null,
+      "case_id": "couple-8000-0",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -50.459672631266585,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 16958.540327368733,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 17009.0,
+      "scenario": "married-couple-one-earner",
+      "tolerance": 0.01,
+      "yearly_earned_income": 96000.0
+    },
+    {
+      "ages": null,
+      "case_id": "couple-4000-2000",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -55.20936102047199,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+      },
+      "kind": "amount_difference",
+      "left": 8631.790638979528,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 8687.0,
+      "scenario": "married-couple-two-earner",
+      "tolerance": 0.01,
+      "yearly_earned_income": 72000.0
+    },
+    {
+      "ages": null,
+      "case_id": "parent-1child-4000",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -1476.1670323265307,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-child-allowance-without-kindergeld-addback",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/22"
+      },
+      "kind": "amount_difference",
+      "left": 4797.832967673469,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6274.0,
+      "scenario": "single-parent-one-child",
+      "tolerance": 0.01,
+      "yearly_earned_income": 48000.0
+    },
+    {
+      "ages": null,
+      "case_id": "parent-2children-4000",
+      "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+      "description": "Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)",
+      "difference": -2824.991413750204,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-child-allowance-without-kindergeld-addback",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/22"
+      },
+      "kind": "amount_difference",
+      "left": 3416.008586249796,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 6241.0,
+      "scenario": "single-parent-two-children",
+      "tolerance": 0.01,
+      "yearly_earned_income": 48000.0
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {},
+    "generated_at": "2026-07-21T16:34:57Z",
+    "generated_by": "scripts/run_comparison.py::de-worker-dual-oracle",
+    "oracle": {
+      "euromod_country": "DE",
+      "euromod_dataset": "DE_2024_b1_2015_03_e2",
+      "euromod_release": "J2.0+",
+      "euromod_system": "DE_2025",
+      "gettsim_policy_date": "2025-06-30",
+      "gettsim_version": "1.2.1",
+      "name": "euromod-gettsim"
+    },
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "DE",
+    "type": "country"
+  },
+  "suite": "de-worker-dual-oracle",
+  "summary": {
+    "comparison_count": 78,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 12
+      },
+      "dispositions_file": "dispositions/de-worker-dual-oracle.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 84.615385,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 66,
+    "mismatch_count": 12,
+    "mismatches_by_concept": [
+      {
+        "count": 11,
+        "value": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual"
+      },
+      {
+        "count": 1,
+        "value": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 12,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 7,
+        "value": "single-worker-west"
+      },
+      {
+        "count": 1,
+        "value": "married-couple-one-earner"
+      },
+      {
+        "count": 1,
+        "value": "married-couple-two-earner"
+      },
+      {
+        "count": 1,
+        "value": "single-parent-one-child"
+      },
+      {
+        "count": 1,
+        "value": "single-parent-two-children"
+      },
+      {
+        "count": 1,
+        "value": "single-worker-east"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 78,
+      "match_rate": 84.615385,
+      "match_weight": 66,
+      "mismatch_weight": 12
+    }
+  }
+}

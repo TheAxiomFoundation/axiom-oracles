@@ -29746,6 +29746,11 @@
       "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
       "description": "KS TANF maximum benefit standard (annualized)",
       "difference": 1020.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ks-tanf-ecps-ks_tanf_maximum_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3708.0,
       "parent": null,
@@ -29762,6 +29767,11 @@
       "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
       "description": "KS TANF maximum benefit standard (annualized)",
       "difference": 1020.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ks-tanf-ecps-ks_tanf_maximum_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 3708.0,
       "parent": null,
@@ -29778,6 +29788,11 @@
       "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
       "description": "KS TANF maximum benefit standard (annualized)",
       "difference": 2688.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ks-tanf-ecps-ks_tanf_maximum_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 2688.0,
       "parent": null,
@@ -29794,6 +29809,11 @@
       "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
       "description": "KS TANF maximum benefit standard (annualized)",
       "difference": 816.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ks-tanf-ecps-ks_tanf_maximum_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 5448.0,
       "parent": null,
@@ -29810,6 +29830,11 @@
       "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
       "description": "KS TANF maximum benefit standard (annualized)",
       "difference": 816.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ks-tanf-ecps-ks_tanf_maximum_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 5448.0,
       "parent": null,
@@ -29826,6 +29851,11 @@
       "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
       "description": "KS TANF maximum benefit standard (annualized)",
       "difference": 732.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ks-tanf-ecps-ks_tanf_maximum_benefit-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 6180.0,
       "parent": null,
@@ -29874,18 +29904,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 6,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/ks-tanf-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.303136,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 99.303136,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 6
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

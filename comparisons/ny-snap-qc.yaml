@@ -1,0 +1,44 @@
+name: ny-snap-qc
+title: New York SNAP — Axiom vs USDA SNAP QC administrative data
+description: >-
+  Replays New York SNAP Quality Control public-use reviews (FY2024, 847
+  in-scope NY active-case reviews including the 107 NYSCAP units, which follow
+  the regular benefit determination) through the Axiom RuleSpec SNAP
+  composition and compares the constructed benefit (FSBEN) and its stage
+  intermediates — gross income, standard deduction, excess-shelter deduction,
+  net income, and maximum allotment — against the QC file's own recomputed
+  values. FSBEN is FNS/Mathematica's Minimodel recomputation from edited,
+  internally consistent inputs, so this is admin-grade benefit-computation
+  parity. The oracle validates the benefit calculation, not the eligibility
+  screening: eligibility gates are fed the composition's passing defaults, and
+  every in-scope FY2024 New York row is categorically eligible, projected
+  through the 18 NYCRR 387.14(a)(5) public-assistance path. New York publishes
+  three regional SUA schedules (New York City, Nassau/Suffolk, rest of state);
+  the public file carries no sub-state geography, so the region is inferred
+  from the QC-applied UTIL amount, which is authoritative over SUA1. FY2024
+  law is evaluated through a sparse compile-time overlay (fy-2026 SNAP COLA
+  module ids rewritten to fy-2024-cola plus seven New York SUA amount patches)
+  at the nominal period 2026-01, because the chain is snapshot-dated
+  2025-10-01 and true-period FY2024 evaluation is impossible today
+  (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the
+  overlay). This suite runs where the axiom-rules-engine binary, a rulespec-us
+  checkout with the fy-2024-cola modules, and the downloaded QC public-use
+  file all exist; on runners without them the registry re-emits the committed
+  dashboard report.
+documentation: docs/snap-qc-oracle-playbook.md
+
+runner:
+  type: snap-qc-compare
+  parameters:
+    jurisdiction: us-ny
+    fiscal_year: 2024
+    sample_size: 0
+    stage_tolerance: 0
+    dashboard_filename: axiom-snapqc-ny-snap.json
+
+artifacts:
+  report_basename: axiom-snapqc-ny-snap
+
+dashboard:
+  filename: axiom-snapqc-ny-snap.json
+  suite: ny-snap-qc

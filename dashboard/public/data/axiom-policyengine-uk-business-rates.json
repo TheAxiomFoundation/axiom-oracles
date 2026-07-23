@@ -1,0 +1,156 @@
+{
+  "case_count": 6,
+  "cases": [
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "br-zero-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "policyengine": 0.0,
+      "scenario": "no-corporate-shareholding",
+      "shareholding": 0.0,
+      "total_revenue": 31732499000.0
+    },
+    {
+      "axiom": 31732.498919883143,
+      "axiom_vs_policyengine": {
+        "difference": 0.0008730081426620018,
+        "match": true
+      },
+      "case_id": "br-tiny-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "policyengine": 31732.498046875,
+      "scenario": "very-small-shareholding",
+      "shareholding": 9.999999974752427e-07,
+      "total_revenue": 31732499000.0
+    },
+    {
+      "axiom": 317324.9819836965,
+      "axiom_vs_policyengine": {
+        "difference": 0.013233696518000215,
+        "match": true
+      },
+      "case_id": "br-small-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "policyengine": 317324.96875,
+      "scenario": "small-shareholding",
+      "shareholding": 9.999999747378752e-06,
+      "total_revenue": 31732499000.0
+    },
+    {
+      "axiom": 3173249.819836965,
+      "axiom_vs_policyengine": {
+        "difference": 0.06983696483075619,
+        "match": true
+      },
+      "case_id": "br-mid-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "policyengine": 3173249.75,
+      "scenario": "mid-shareholding",
+      "shareholding": 9.999999747378752e-05,
+      "total_revenue": 31732499000.0
+    },
+    {
+      "axiom": 15866250.253606414,
+      "axiom_vs_policyengine": {
+        "difference": 0.25360641442239285,
+        "match": true
+      },
+      "case_id": "br-large-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "policyengine": 15866250.0,
+      "scenario": "large-shareholding",
+      "shareholding": 0.0005000000237487257,
+      "total_revenue": 31732499000.0
+    },
+    {
+      "axiom": 31732500.507212825,
+      "axiom_vs_policyengine": {
+        "difference": 0.5072128251194954,
+        "match": true
+      },
+      "case_id": "br-larger-shareholding",
+      "concept": "uk:policies/govuk/business-rates#business_rates",
+      "policyengine": 31732500.0,
+      "scenario": "larger-shareholding",
+      "shareholding": 0.0010000000474974513,
+      "total_revenue": 31732499000.0
+    }
+  ],
+  "concept": "uk:policies/govuk/business-rates#business_rates",
+  "engines": {
+    "axiom": "uk:policies/govuk/business-rates#business_rates",
+    "policyengine": "business_rates"
+  },
+  "errors": [],
+  "locales": [
+    "UK"
+  ],
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-22T19:54:03Z",
+    "generated_by": "scripts/run_comparison.py::uk-business-rates",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_uk": "2.89.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-uk",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "UK",
+    "type": "country"
+  },
+  "suite": "uk-business-rates",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "comparison_count": 6,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 6,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "policyengine_matches": 6,
+    "weighted": {
+      "comparison_weight": 6,
+      "match_rate": 100.0,
+      "match_weight": 6,
+      "mismatch_weight": 0
+    }
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 2e-07
+  },
+  "validation_year": 2026
+}

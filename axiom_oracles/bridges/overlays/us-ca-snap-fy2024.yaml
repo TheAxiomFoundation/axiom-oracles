@@ -1,0 +1,39 @@
+schema: axiom_oracles.rulespec_overlay.v1
+name: us-ca-snap-fy2024
+program: us-ca/policies/cdss/snap/fy-2026-benefit-calculation.yaml
+notes: >-
+  Compile-time overlay that replays the California CalFresh benefit
+  composition against fiscal year 2024 federal parameters. The rulespec-us
+  monorepo ships the composition wired to the FY 2026 cost-of-living (COLA)
+  parameter set, so this overlay rewrites the three USDA cola module ids
+  (fy-2026-cola -> fy-2024-cola) across the composition and every module that
+  imports them, then patches the single California standard-utility-allowance
+  amount down to its FY 2024 value (596 dollars; QC technical documentation
+  Table F.7, PDF page 183 — California also lists a 158-dollar limited and a
+  19-dollar telephone allowance, but the encoded California chain carries only
+  the heating/cooling SUA, so QC units on the other tiers ride their applied
+  UTIL amount as an incurred shelter cost instead). The overlay is
+  materialized as a single self-contained rulespec root and compiled with that
+  root alone, for the same union-not-shadowing engine reason recorded in the
+  us-co-snap-fy2024 spec. This is a stopgap: once
+  TheAxiomFoundation/rulespec-us#759 lands the parameter-set inversion, the
+  fiscal year becomes a run-time choice and this overlay retires.
+module_id_rewrites:
+  # Full module ids (not a bare substring): every occurrence across the
+  # rewrite files is a canonical id in an import or proof target, and full
+  # ids can never rewrite prose that merely mentions a fiscal year.
+  us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
+  us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
+  us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
+rewrite_files:
+  - us/policies/usda/snap/state-plan-composition.yaml
+  - us/statutes/7/2017/a.yaml
+  - us/regulations/7-cfr/273/8.yaml
+  - us/regulations/7-cfr/273/9.yaml
+  - us/regulations/7-cfr/273/10.yaml
+parameter_patches:
+  - file: us-ca/policies/cdss/snap/standard-utility-allowance.yaml
+    rule: snap_standard_utility_allowance_amount
+    from: "663"
+    to: "596"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183

@@ -63,6 +63,51 @@ CONFORMANCE_SCHEMA_VERSION = "axiom_oracles.conformance.v1"
 #:   dataset schema, so ``bfapl_s`` stays 0 for every synthetic case (probe
 #:   lineage: rulespec-be#86, axiom-oracles#150/#158, axiom-oracles#160). Requires
 #:   a ``note`` recording the absent input and the probe evidence pointer.
+#: - ``oracle_models_repealed_law``: the oracle retains a policy for a benefit or
+#:   tax REPEALED before the validation period, so there is no current-law
+#:   instrument for Axiom (which encodes current law) to compare. The policy is
+#:   switch=on and runs, but produces no payable/current output for synthetic
+#:   cases in the validation period — typically because it is gated (through the
+#:   UKMOD Universal-Credit transition or a legacy-claimant receipt input) to a
+#:   pre-repeal population that no longer exists. Distinct from
+#:   ``oracle_dataset_lacks_input`` (there a dataset column WOULD make it
+#:   comparable; here no dataset fix can, because the instrument itself is
+#:   repealed and Axiom has no current-law surface for it by design) and from
+#:   ``technical`` (a real instrument, not scaffolding). Requires a ``note``
+#:   recording the repeal with a citation AND probe evidence that the oracle
+#:   produces no current output. Canonical case: UK ``bwkmt_bfamt`` Working Tax
+#:   Credit / Child Tax Credit — tax credits ended 5 April 2025 (GOV.UK
+#:   www.gov.uk/tax-credits-have-ended), and UKMOD UK_2026 returns
+#:   ``bwkmt_s``/``bfamt_s`` = 0 across a synthetic earnings/hours/labour-status
+#:   sweep with take-up pinned and the UC transition disabled (probe:
+#:   scripts/probe_uk_repealed_and_missing_input.py).
+#: - ``oracle_models_nonstatutory_amount``: the oracle computes a payable ``_s``
+#:   output, but the MONETARY value it pays has no basis in statute or regulation
+#:   for Axiom (which encodes statutory monetary rules) to compare — the amount is
+#:   (a) DISCRETIONARY (legislation confers a power to pay with no formula, rate,
+#:   or cap), (b) an ADMINISTRATIVE figure set outside legislation (e.g. an
+#:   intergovernmental "national minimum" that each authority may vary), or (c) a
+#:   modelled COST-EQUIVALENT the oracle imputes for an IN-KIND entitlement that
+#:   pays no cash. The oracle models the value as if formulaic, but encoding that
+#:   figure as a statutory rule would misrepresent a non-statutory instrument, and
+#:   the corpus carries no source to ground it. Distinct from
+#:   ``extension_not_available`` (there the compute content is simply absent from
+#:   the public release) and ``oracle_models_repealed_law`` (a real current/past
+#:   statutory instrument, just repealed). Requires a ``note`` recording the
+#:   governing instrument and why its amount is non-statutory. Canonical UK cases:
+#:   ``bhosc01`` Scottish Discretionary Housing Payments — SI 2001/1167 reg 2(2)
+#:   gives the authority a pure discretion "as to whether or not to make
+#:   discretionary housing payments ... and as to the amount", no statutory
+#:   formula (the 14%/25% UKMOD applies are the HB/UC size-criteria percentages,
+#:   already covered on the UC side); ``bched02`` Scottish School Clothing Grant —
+#:   the "national minimum" (£120 primary / £150 secondary) is a Scottish
+#:   Government-COSLA administrative agreement, not fixed in any SSI, and each of
+#:   the 32 councils sets its own amount (Education (Scotland) Act 1980 s.54
+#:   confers the clothing duty with no figure); ``bched01`` Scottish Free School
+#:   Meals — s.53 of the 1980 Act imposes an IN-KIND duty to "provide ... a school
+#:   lunch, free of charge" with no monetary amount, so UKMOD's ``bched01_s`` is a
+#:   modelled per-meal cost-equivalent, not a legislated cash benefit (the
+#:   eligibility thresholds are statutory but no award amount is).
 EXCLUSION_REASONS: tuple[str, ...] = (
     "input_carrying",
     "technical",
@@ -71,6 +116,8 @@ EXCLUSION_REASONS: tuple[str, ...] = (
     "unobservable_boundary",
     "extension_not_available",
     "oracle_dataset_lacks_input",
+    "oracle_models_repealed_law",
+    "oracle_models_nonstatutory_amount",
 )
 
 ExclusionReason = Literal[
@@ -81,6 +128,8 @@ ExclusionReason = Literal[
     "unobservable_boundary",
     "extension_not_available",
     "oracle_dataset_lacks_input",
+    "oracle_models_repealed_law",
+    "oracle_models_nonstatutory_amount",
 ]
 
 #: Comparability of an *in-scope* policy's output surface — how faithfully a
@@ -193,6 +242,11 @@ class UniversePolicy:
                 problems.append(
                     f"{self.id}: oracle_dataset_lacks_input requires a `note` naming "
                     "the absent activating input and the probe evidence pointer"
+                )
+            if self.exclusion_reason == "oracle_models_repealed_law" and not self.note:
+                problems.append(
+                    f"{self.id}: oracle_models_repealed_law requires a `note` "
+                    "recording the repeal citation and probe evidence pointer"
                 )
             # comparability is an in-scope concept; an excluded row must not carry
             # a non-default value (it would be meaningless).

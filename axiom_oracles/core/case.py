@@ -89,6 +89,12 @@ class Concepts:
     RENTAL_INCOME = "axiom:income/person#rental_income"
     SELF_EMPLOYMENT_INCOME = "axiom:income/person#self_employment_income"
 
+    # Resources (person-level stock). SSI countable resources — 42 USC 1382b(a)
+    # resources net of the statutory exclusions — feed the 1382(a)(1)(B) resource
+    # screen ($2,000 individual / $3,000 couple). PolicyEngine populates this from
+    # the certified populace-us artifact, so Axiom must screen the same value.
+    SSI_COUNTABLE_RESOURCES = "axiom:resources/person#ssi_countable_resources"
+
     # Itemization / household-level inputs (annual)
     PROPERTY_TAX_PAID = "axiom:housing/household#property_tax_paid"
     MORTGAGE_INTEREST_PAID = "axiom:housing/household#mortgage_interest_paid"
@@ -216,6 +222,44 @@ class Concepts:
         "uk:policies/housing_benefit_composed_entitlement_pipeline"
         "#hb_pilot_entitlement"
     )
+    # Scottish Child Payment (rulespec-uk uk/policies/govuk/scottish-child-payment,
+    # SSI 2020/351) — the devolved weekly payment for a qualifying child under 16
+    # whose applicant or partner receives a qualifying means-tested benefit, paid
+    # per child at the flat weekly rate. The per-child annual amount
+    # (scottish_child_payment_annual_amount) grades against UKMOD's benefit-unit
+    # Scottish Child Payment output bchmt_s on single-child Scotland cases.
+    UK_HOUSEHOLD_SCOTTISH_CHILD_PAYMENT_AWARD = (
+        "uk:policies/govuk/scottish-child-payment"
+        "#scottish_child_payment_annual_amount"
+    )
+    # Child Winter Heating Payment (rulespec-uk
+    # uk/policies/govuk/child-winter-heating-payment, SSI 2020/352) — the devolved
+    # flat annual payment for a severely disabled child or young person in
+    # Scotland on the high-rate care passport. The statutory payable value
+    # (child_winter_heating_assistance_payable_value) grades against UKMOD's
+    # bchht_s at an exact GBP 265.50/year.
+    UK_HOUSEHOLD_CHILD_WINTER_HEATING_PAYMENT_AWARD = (
+        "uk:policies/govuk/child-winter-heating-payment"
+        "#child_winter_heating_assistance_payable_value"
+    )
+    # Contribution-based JSA (rulespec-uk
+    # uk/policies/govuk/contribution-based-jobseekers-allowance, SI 1996/207 reg 79)
+    # — the reserved, UK-wide age-related weekly amount annualised over 52 weeks.
+    # The annual amount (contribution_based_jsa_annual_amount) grades against
+    # UKMOD's bunct_s (u25 3944.61, 25+ 4982.25; 365/7-vs-52 residual).
+    UK_HOUSEHOLD_CONTRIBUTION_BASED_JSA_AWARD = (
+        "uk:policies/govuk/contribution-based-jobseekers-allowance"
+        "#contribution_based_jsa_annual_amount"
+    )
+    # Scottish Carer Supplement (rulespec-uk
+    # uk/policies/govuk/scottish-carer-supplement, SSI 2023/302 reg 16(1A)) — the
+    # devolved carer top-up (GBP 11.70/week) annualised over 52 weeks. The annual
+    # amount (scottish_carer_supplement_annual_amount) grades against UKMOD's
+    # bcrdicm_s (609.55; small annualisation residual).
+    UK_HOUSEHOLD_SCOTTISH_CARER_SUPPLEMENT_AWARD = (
+        "uk:policies/govuk/scottish-carer-supplement"
+        "#scottish_carer_supplement_annual_amount"
+    )
     # Composed savings-and-dividend income tax pipeline (rulespec-uk) that wires
     # the section 12/12A/12B/13/13A stage boundaries from gross earned, savings,
     # and dividend income, so an end-to-end UKMOD tin_s comparison can run for
@@ -299,6 +343,31 @@ class Concepts:
         "uk:regulations/ssi/2019/193/pilot_best_start_foods_oracle_pipeline"
         "#uk_bsf_pilot_annual_entitlement"
     )
+    # Stable semantic contracts for Germany's direct EUROMOD↔GETTSIM worker
+    # baseline. These concepts deliberately name the common household amounts,
+    # rather than either engine's variable, so a composed rulespec-de target can
+    # attach later without changing the comparison history.
+    DE_EMPLOYEE_HEALTH_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_health_insurance_contribution_monthly"
+    )
+    DE_EMPLOYEE_PENSION_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_pension_insurance_contribution_monthly"
+    )
+    DE_EMPLOYEE_UNEMPLOYMENT_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_unemployment_insurance_contribution_monthly"
+    )
+    DE_EMPLOYEE_LONG_TERM_CARE_INSURANCE_CONTRIBUTION_MONTHLY = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#employee_long_term_care_insurance_contribution_monthly"
+    )
+    DE_INCOME_TAX_INCLUDING_SOLIDARITY_SURCHARGE_ANNUAL = (
+        "de:policies/worker_dual_oracle_baseline"
+        "#income_tax_including_solidarity_surcharge_annual"
+    )
+    DE_KINDERGELD_MONTHLY = "de:policies/worker_dual_oracle_baseline#kindergeld_monthly"
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"
@@ -449,7 +518,25 @@ class Concepts:
         "#belgium_capital_income_separate_tax"
     )
 
+    # Composed Denmark børne- og ungeydelse pipeline (rulespec-dk) that wires the
+    # § 1 age-band base amount (after the § 1, stk. 3 CPI regulation and the
+    # 12/24-krone rounding) and the § 1 a income taper from a supplied recipient
+    # income basis and current-year bundfradrag, so an end-to-end EUROMOD DK_2025
+    # comparison (child and youth benefit bfachnm_s) can run. Single-recipient
+    # scope: one recipient receives the full amount and the § 1 a taper runs on
+    # that recipient's own income basis. The § 1 a couple apportionment
+    # (ligedeling of the combined benefit and the separate per-parent taper) is
+    # out of scope, so the graded grid is single-parent households — which also
+    # sidesteps the pre-2022 spousal taper EUROMOD keeps in DK_2022-DK_2025
+    # (euromod_issues.json euromod-dk-2025-bfachnm-pre2022-spousal-taper).
+    DK_CHILD_YOUTH_BENEFIT = (
+        "dk:statutes/composed/boerne-og-ungeydelse-pipeline"
+        "#single_recipient_annual_child_youth_benefit"
+    )
+
     EMPLOYEE_OASDI = "us:tax/payroll#employee_oasdi"
     EMPLOYEE_MEDICARE = "us:tax/payroll#employee_medicare"
     EMPLOYER_OASDI = "us:tax/payroll#employer_oasdi"
     EMPLOYER_MEDICARE = "us:tax/payroll#employer_medicare"
+    # Employee-side FICA plus SECA — the scope of TAXSIM's `tfica` column.
+    EMPLOYEE_FICA = "us:tax/payroll#employee_fica"

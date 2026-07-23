@@ -11,13 +11,27 @@ name: Affected suite rerun
 #   report provenance.rulespecs     the SHA each report last ran against
 #   scripts/select_affected_suites  diffs current repo HEADs vs those SHAs
 #
+# Each matrix job commits its refreshed report via
+# scripts/commit_refreshed_report.sh, which atomically regenerates every
+# derived, CI-validated artifact (dispositioned reports + the EUROMOD-BE
+# coverage rollup, conformance scoreboard + detail + history snapshot,
+# burn-down, freshness), self-checks the tree against ci.yml's
+# staleness gates, and rebuilds the commit from scratch on the current tip on
+# every push attempt so concurrent sibling pushes can't leave main stale or
+# conflicted. The ratchet (conformance/ratchet.yaml) is never re-pinned from
+# this bot path — re-pinning after a genuine improvement stays a deliberate
+# human action, and a genuine regression is MEANT to fail ci.yml's ratchet
+# gate on main.
+#
 # See scripts/select_affected_suites.py and comparisons/README.md.
 
 on:
   workflow_dispatch:
     inputs:
       force_all:
-        description: "Rerun every mapped suite regardless of freshness"
+        description: >-
+          Rerun every CI-runnable mapped suite regardless of freshness
+          (manual parameter suites are reported, not dispatched)
         required: false
         default: "false"
   repository_dispatch:
@@ -90,25 +104,35 @@ jobs:
 
       - name: Select stale-affected suites
         id: select
+        # One code path for both modes: the selector validates the map's
+        # dispatch names (registry name or explicit null — anything else
+        # fails loudly), dedups, and emits matrix/count/manual_count/manual
+        # as $GITHUB_OUTPUT lines. Dispatching dashboard suite keys or
+        # parameter-lane names crashed ~50 legs/run with "unknown comparison".
         run: |
+          args=(--heads-json heads.json --format github)
           if [ "${{ inputs.force_all }}" = "true" ]; then
-            matrix=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          m = json.loads(Path("comparisons/affected_map.json").read_text())
-          names = [e["suite"] for e in m["suites"] if e.get("repos")]
-          print(json.dumps({"include": [{"name": n} for n in names]}))
-          PY
-          )
-          else
-            matrix=$(python3 scripts/select_affected_suites.py \
-              --heads-json heads.json --format matrix)
+            args+=(--force-all)
           fi
-          count=$(python3 -c "import json,sys; print(len(json.loads(sys.argv[1])['include']))" "$matrix")
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-          echo "count=$count" >> "$GITHUB_OUTPUT"
-          echo "Selected $count suite(s) to rerun:" >> "$GITHUB_STEP_SUMMARY"
-          python3 -c "import json,sys; [print('-',x['name']) for x in json.loads(sys.argv[1])['include']]" "$matrix" >> "$GITHUB_STEP_SUMMARY" || true
+          python3 scripts/select_affected_suites.py "${args[@]}" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize selection
+        run: |
+          count='${{ steps.select.outputs.count }}'
+          manual_count='${{ steps.select.outputs.manual_count }}'
+          {
+            echo "Selected $count CI-runnable suite(s) to rerun:"
+            python3 -c "import json,sys; [print('-', x['name']) for x in json.loads(sys.argv[1])['include']]" \
+              '${{ steps.select.outputs.matrix }}' || true
+            if [ "$manual_count" != "0" ]; then
+              echo ""
+              echo "$manual_count stale suite(s) have no CI-runnable registry name and await the manual parameter lane (scripts/run_parameter_comparisons.py):"
+              for s in ${{ steps.select.outputs.manual }}; do echo "- $s"; done
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$manual_count" != "0" ]; then
+            echo "::warning::$manual_count stale parameter suite(s) need the manual lane: ${{ steps.select.outputs.manual }}"
+          fi
 
   rerun:
     needs: select
@@ -127,7 +151,7 @@ jobs:
           path: axiom-oracles
           # Pin the default branch explicitly so the commit step pushes to a
           # real branch (schedule/repository_dispatch would otherwise leave a
-          # detached HEAD, breaking the pull/push below).
+          # detached HEAD, breaking the fetch/reset/push in the commit script).
           ref: ${{ github.event.repository.default_branch }}
 
       - name: Checkout axiom-encode
@@ -193,25 +217,12 @@ jobs:
           ln -sfn "$AXIOM_RULES_REPO" "$HOME/axiom-rules"
           python3 scripts/run_comparison.py ${{ matrix.name }} --summary
 
-      - name: Refresh freshness data
+      - name: Commit refreshed report + derived conformance artifacts
         working-directory: axiom-oracles
+        # Regenerates freshness + scoreboard/detail/history/burn-down with the
+        # report, self-checks against ci.yml's staleness gates, and retries by
+        # rebuilding on the current tip (never rebasing) across sibling pushes.
+        # Fails loudly if the push never lands.
         run: |
-          python3 scripts/check_vacuous_gate.py || true
-
-      - name: Commit refreshed report
-        working-directory: axiom-oracles
-        run: |
-          if git diff --quiet -- dashboard/public/data/; then
-            echo "no report changes for ${{ matrix.name }}"
-            exit 0
-          fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard/public/data/
-          git commit -m "data: refresh ${{ matrix.name }} (affected rerun $(date +%Y-%m-%d))"
-          # Serialize commits across the matrix: rebase onto any sibling push.
-          branch="${{ github.event.repository.default_branch }}"
-          for attempt in 1 2 3 4 5; do
-            git pull --rebase origin "$branch" && \
-              git push origin "HEAD:$branch" && break || sleep $((RANDOM % 10 + 5))
-          done
+          scripts/commit_refreshed_report.sh "${{ matrix.name }}" \
+            "${{ github.event.repository.default_branch }}"

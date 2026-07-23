@@ -36,6 +36,11 @@ for name in \
   uk-winter-fuel-ukmod \
   uk-child-benefit-ukmod \
   uk-housing-benefit-ukmod \
+  uk-personal-allowance-ukmod \
+  uk-scottish-child-payment-ukmod \
+  uk-child-winter-heating-payment-ukmod \
+  uk-contribution-based-jsa-ukmod \
+  uk-scottish-carer-supplement-ukmod \
   uk-income-tax-savings-ukmod \
   uk-income-tax-dividend-ukmod \
   uk-income-tax-mixed-ukmod; do

@@ -1,0 +1,44 @@
+name: ca-snap-qc
+title: California CalFresh — Axiom vs USDA SNAP QC administrative data
+description: >-
+  Replays California SNAP Quality Control public-use reviews (FY2024, 883 CA
+  active-case reviews) through the Axiom RuleSpec CalFresh composition and
+  compares the constructed benefit (FSBEN) and its stage intermediates —
+  gross income, standard deduction, excess-shelter deduction, net income, and
+  maximum allotment — against the QC file's own recomputed values. FSBEN is
+  FNS/Mathematica's Minimodel recomputation from edited, internally consistent
+  inputs, so this is admin-grade benefit-computation parity. The oracle
+  validates the benefit calculation, not the eligibility screening:
+  eligibility gates are fed the composition's passing defaults, and every
+  FY2024 California row is categorically eligible, projected through the
+  federal resource-exemption flag. The encoded CalFresh chain carries only the
+  heating/cooling standard utility allowance, so limited- and telephone-tier
+  QC units ride their applied UTIL amount as an incurred shelter cost, which
+  reproduces the file's arithmetic; California is a standard-medical-deduction
+  demonstration state, which the applied-deduction medical feed already
+  handles. FY2024 law is evaluated through a sparse compile-time overlay
+  (fy-2026 SNAP COLA module ids rewritten to fy-2024-cola plus the California
+  SUA amount patch) at the nominal period 2026-01, because the chain is
+  snapshot-dated 2025-10-01 and true-period FY2024 evaluation is impossible
+  today (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the
+  overlay). This suite runs where the axiom-rules-engine binary, a rulespec-us
+  checkout with the fy-2024-cola modules, and the downloaded QC public-use
+  file all exist; on runners without them the registry re-emits the committed
+  dashboard report.
+documentation: docs/snap-qc-oracle-playbook.md
+
+runner:
+  type: snap-qc-compare
+  parameters:
+    jurisdiction: us-ca
+    fiscal_year: 2024
+    sample_size: 0
+    stage_tolerance: 0
+    dashboard_filename: axiom-snapqc-ca-snap.json
+
+artifacts:
+  report_basename: axiom-snapqc-ca-snap
+
+dashboard:
+  filename: axiom-snapqc-ca-snap.json
+  suite: ca-snap-qc

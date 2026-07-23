@@ -58,13 +58,20 @@ def test_every_grid_file_parses_and_validates() -> None:
 def test_expected_jurisdictions_present() -> None:
     jurisdictions = {grid.jurisdiction for grid in load_grids()}
     # us and be are extracted from suites on main; uk ships ahead of the UKMOD
-    # suites landing (its equivalence check is guarded below).
-    assert {"us", "be"} <= jurisdictions
+    # suites landing (its equivalence check is guarded below). de and dk pin the
+    # German dual-oracle and Denmark EUROMOD grids respectively.
+    assert {"us", "be", "de", "dk"} <= jurisdictions
 
 
 @pytest.mark.parametrize(
     "jurisdiction,expected_sets,expected_cases",
-    [("us", 2, 44), ("be", 30, 128), ("uk", 21, 133)],
+    [
+        ("us", 2, 44),
+        ("be", 30, 128),
+        ("de", 1, 13),
+        ("uk", 26, 143),
+        ("dk", 1, 7),
+    ],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
     grid = load_grid(jurisdiction)
@@ -107,6 +114,12 @@ def _suite_jurisdiction(suite_name: str) -> str:
     locales = {case.locale for case in cases}
     if locales == {"BE"}:
         return "be"
+    if locales == {"CA-ON"}:
+        return "ca"
+    if locales == {"DK"}:
+        return "dk"
+    if locales == {"DE"}:
+        return "de"
     if locales == {"UK"}:
         return "uk"
     if locales <= {"US-NY-NYC", "US-NY", "US"}:
@@ -529,3 +542,29 @@ def test_suggested_case_ids_are_below_above_pairs() -> None:
         for case_set in payload["case_sets"].values():
             sides = [case["probe"]["side"] for case in case_set["cases"]]
             assert sides.count("below") == sides.count("above")
+
+
+# ---------------------------------------------------------------------------
+# Denmark suite/mapping pins (Sol pre-merge audit): the dk suite, its case
+# count, and its Axiom<->EUROMOD concept mapping must not silently disappear.
+# ---------------------------------------------------------------------------
+
+
+def test_dk_child_youth_benefit_suite_pinned() -> None:
+    assert "dk-child-youth-benefit" in available_suites()
+    cases = load_suite("dk-child-youth-benefit")
+    assert len(cases) == 7
+    assert {case.locale for case in cases} == {"DK"}
+
+
+def test_dk_child_youth_benefit_mapping_pinned() -> None:
+    from axiom_oracles.comparison.mappings import mappings_by_concept
+    from axiom_oracles.core.case import Concepts
+
+    mapping = mappings_by_concept().get(Concepts.DK_CHILD_YOUTH_BENEFIT)
+    assert mapping is not None, "dk child/youth benefit concept mapping missing"
+    assert mapping.target_for_engine("euromod") == "bfachnm_s"
+    assert (
+        mapping.target_for_engine("axiom")
+        == "single_recipient_annual_child_youth_benefit"
+    )

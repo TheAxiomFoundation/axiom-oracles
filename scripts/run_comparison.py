@@ -664,6 +664,20 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             rulespec_paths.append(
                 str(Path(str(roots)) / f"rulespec-{str(country).lower()}")
             )
+    # The SNAP QC lane resolves its rulespec checkout inside the bridge (env
+    # fallback and workspace default), so read the root it actually ran
+    # against off the just-written report — otherwise the affected-rerun
+    # staleness check has no SHA to diff for this suite.
+    if runner_type == "snap-qc-compare" and not rulespec_paths:
+        try:
+            report_provenance = (
+                json.loads(output.read_text()).get("summary", {}).get("provenance", {})
+            )
+            ran_against = report_provenance.get("rulespec_root")
+            if ran_against:
+                rulespec_paths.append(str(ran_against))
+        except Exception:  # provenance must annotate, never fail a run
+            pass
     rulespecs = rulespec_provenance(rulespec_paths)
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
@@ -689,10 +703,16 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     if runner_type == "axiom-encode-tax-ecps-compare":
         oracle = {
             "name": "policyengine",
-            "policyengine_package": "policyengine==4.11.0"
-            if params.get("pinned", True)
-            else "policyengine",
-            "policyengine_us": "1.729.0" if params.get("pinned", True) else None,
+            "policyengine_package": (
+                f"policyengine=={params.get('policyengine_version', '4.11.0')}"
+                if params.get("pinned", True)
+                else "policyengine"
+            ),
+            "policyengine_us": (
+                params.get("policyengine_us_version", "1.729.0")
+                if params.get("pinned", True)
+                else None
+            ),
         }
     elif runner_type == "axiom-encode-uk-efrs-compare":
         oracle = {
@@ -704,12 +724,43 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type == "uk-capital-gains-tax-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
+    elif runner_type == "uk-business-rates-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
+    elif runner_type == "uk-lbtt-ltt-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
+    elif runner_type == "uk-winter-fuel-payment-pe-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
+    elif runner_type == "uk-attendance-allowance-pe-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
+    elif runner_type == "uk-tax-free-childcare-pe-grid":
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
+        }
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
+        pins = _resolve_pe_oracle_pins(params)
         oracle = {
             "name": params.get("right", "policyengine"),
-            "policyengine_package": _PE_ORACLE_PINS[0],
-            "policyengine_us": _PE_ORACLE_PINS[1].split("==", 1)[-1],
+            "policyengine_package": pins[0],
+            "policyengine_us": pins[1].split("==", 1)[-1],
         }
         # Pin the Tax-Calculator engine version when it is a participant, so a
         # taxcalc-vs-policyengine report records both engine stacks it compared
@@ -733,6 +784,38 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "euromod_system": params.get("euromod_system"),
             "euromod_dataset": params.get("euromod_dataset"),
         }
+    elif runner_type == "gettsim-synthetic-compare":
+        # The Germany lane is a direct pair: record both independent oracle
+        # stacks in the oracle block; there is intentionally no Axiom engine
+        # identity for this baseline report.
+        oracle = {
+            "name": "euromod-gettsim",
+            "euromod_release": _euromod_release_from_model_root(
+                params.get("euromod_model_root")
+            ),
+            "euromod_country": params.get("euromod_country"),
+            "euromod_system": params.get("euromod_system"),
+            "euromod_dataset": params.get("euromod_dataset"),
+            "gettsim_version": params.get("gettsim_version", "1.2.1"),
+            "gettsim_policy_date": params.get(
+                "gettsim_policy_date", "2025-06-30"
+            ),
+        }
+    elif runner_type == "snap-qc-compare":
+        # The USDA SNAP QC public-use file is the oracle; its identity is the
+        # pinned posting for the fiscal year (immutable, sha256-verified by the
+        # loader). The bridge's own summary.provenance carries the richer
+        # overlay/engine identity for the run.
+        oracle = {"name": "snap-qc", "fiscal_year": params.get("fiscal_year")}
+        try:
+            from axiom_oracles.populations.snap_qc import SNAP_QC_PINS
+
+            pin = SNAP_QC_PINS.get(int(params.get("fiscal_year", 0)))
+            if pin is not None:
+                oracle["url"] = pin.url
+                oracle["sha256"] = pin.sha256
+        except Exception:  # provenance must annotate, never fail a run
+            pass
 
     # Dataset identity — reuse the pinned-populace identity (#80/#952) when the
     # report carries one.
@@ -861,14 +944,24 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # fail hard. Keeping the PE meta-package at 4.11.0 (the oracle baseline used
     # by the other runners) with an explicit newer -us is why the runner passes
     # --allow-policyengine-us-version to the harness.
+    # Oracle PE stack. The pinned versions default to the model version the
+    # certified Populace artifact was built with (1.729.0), but a comparison can
+    # override them to validate against a newer certified oracle — the us-pe
+    # universe pins policyengine-us 1.767.3, which carries the #8614 partnership
+    # self-employment split absent from 1.729.0's eitc_earned_income. The harness
+    # still runs against the pinned Populace inputs (--allow-policyengine-us-version
+    # bypasses the build_with gate), so only the PE computation vintage moves.
+    pe_meta = params.get("policyengine_version", "4.11.0")
+    pe_us = params.get("policyengine_us_version", "1.729.0")
+    pe_core = params.get("policyengine_core_version", "3.26.11")
     pe_pins = (
         [
             "--with",
-            "policyengine==4.11.0",
+            f"policyengine=={pe_meta}",
             "--with",
-            "policyengine-us==1.729.0",
+            f"policyengine-us=={pe_us}",
             "--with",
-            "policyengine-core==3.26.11",
+            f"policyengine-core=={pe_core}",
         ]
         if pinned
         else [
@@ -1245,6 +1338,25 @@ _PE_ORACLE_PINS = (
     "policyengine-core==3.28.0",
 )
 
+
+def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
+    """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
+
+    Defaults to ``_PE_ORACLE_PINS`` (the certified in-repo pair) so every other
+    suite is unaffected; a comparison that must validate against a newer oracle
+    (e.g. ssi-ecps against the us-pe universe pin policyengine-us 1.767.3) sets
+    ``policyengine_version`` / ``policyengine_us_version`` /
+    ``policyengine_core_version`` in its config.
+    """
+    meta = params.get("policyengine_version")
+    us = params.get("policyengine_us_version")
+    core = params.get("policyengine_core_version")
+    return (
+        f"policyengine=={meta}" if meta else _PE_ORACLE_PINS[0],
+        f"policyengine-us=={us}" if us else _PE_ORACLE_PINS[1],
+        f"policyengine-core=={core}" if core else _PE_ORACLE_PINS[2],
+    )
+
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
 # need to bypass certification, but the shim keeps policyengine.us import
@@ -1324,6 +1436,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
+    pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
     # Axiom side, so it needs neither a built engine binary nor a composed
@@ -1348,7 +1461,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
+        *(arg for pin in pe_pins for arg in ("--with", pin)),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
         *(arg for pin in taxsim_pins for arg in ("--with", pin)),
         "python",
@@ -1623,6 +1736,219 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
+def _gettsim_synthetic_skip_reason(
+    params: dict,
+) -> tuple[str | None, Path | None]:
+    """Return the unavailable-runtime reason and resolved DE model root."""
+
+    model_root_raw = params.get("euromod_model_root") or os.environ.get(
+        "EUROMOD_MODEL_ROOT_DE", ""
+    )
+    model_root = _expand_path(model_root_raw) if model_root_raw else None
+    if model_root is None or not model_root.exists():
+        return "EUROMOD model root unavailable", model_root
+    if not os.environ.get("EUROMOD_PYTHON"):
+        return "EUROMOD_PYTHON unset", model_root
+
+    from axiom_oracles.adapters.gettsim import (
+        GettsimNotInstalledError,
+        gettsim_version,
+    )
+
+    try:
+        gettsim_version()
+    except GettsimNotInstalledError as exc:
+        return f"GETTSIM unavailable ({type(exc).__name__}: {exc})", model_root
+    return None, model_root
+
+
+def _reemit_gettsim_synthetic_report(
+    params: dict,
+    output: Path,
+    reason: str,
+) -> None:
+    """Re-emit the committed direct-oracle report on engine-less runners."""
+
+    dashboard_filename = str(params.get("dashboard_filename", ""))
+    committed = DASHBOARD_DATA_DIR / dashboard_filename
+    print(
+        f"Germany dual-oracle engines not runnable here ({reason}); "
+        "re-emitting the committed dashboard report."
+    )
+    if dashboard_filename and committed.exists():
+        output.write_text(committed.read_text())
+        return
+
+    euromod_unavailable = reason.startswith("EUROMOD")
+    unavailable_side = "left" if euromod_unavailable else "right"
+    unavailable_engine = "euromod" if euromod_unavailable else "gettsim"
+    error = {
+        "case_id": None,
+        "side": unavailable_side,
+        "engine": unavailable_engine,
+        "error": f"skipped: {reason}",
+    }
+    output.write_text(
+        json.dumps(
+            {
+                "schema_version": "axiom.comparison_report.v2",
+                "suite": params.get("suite", "de-worker-dual-oracle"),
+                "population": "synthetic",
+                "engines": {"left": "euromod", "right": "gettsim"},
+                "locales": ["DE"],
+                "scope": {"type": "country", "geoid": "DE"},
+                "concepts": [],
+                "case_count": 0,
+                "summary": {
+                    "match_count": 0,
+                    "mismatch_count": 0,
+                    "comparison_count": 0,
+                    "weighted": {
+                        "comparison_weight": 0,
+                        "match_weight": 0,
+                        "mismatch_weight": 0,
+                        "match_rate": 0,
+                    },
+                    "mismatches_by_concept": [],
+                    "mismatches_by_kind": [],
+                    "mismatches_by_scenario": [],
+                    "error_count": 1,
+                    "errors_by_engine": [
+                        {"value": unavailable_engine, "count": 1}
+                    ],
+                },
+                "aggregates": [],
+                "mismatches": [],
+                "errors": [error],
+                "cases": [],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
+    )
+
+
+def _run_gettsim_synthetic_compare(runner: dict, output: Path) -> None:
+    """Direct EUROMOD DE_2025 ↔ GETTSIM synthetic household comparison.
+
+    The host interpreter supplies GETTSIM; EUROMOD continues to execute through
+    the existing x64 ``EUROMOD_PYTHON`` subprocess adapter. Like the established
+    EUROMOD synthetic runner, an engine-less CI host re-emits the committed
+    dashboard report rather than turning optional local runtimes into failures.
+    """
+
+    from axiom_oracles.adapters.euromod import EuromodPlatformRunner
+    from axiom_oracles.adapters.gettsim import GettsimCase, GettsimRunner
+    from axiom_oracles.comparison.comparator import Comparator
+    from axiom_oracles.comparison.mappings import comparable_mappings
+    from axiom_oracles.comparison.report import build_comparison_report
+    from axiom_oracles.core.results import EngineResult
+    from axiom_oracles.suites import load_suite
+    from axiom_oracles.suites.de_worker import (
+        DE_GETTSIM_TARGETS,
+        reduce_gettsim_household_values,
+    )
+
+    params = runner["parameters"]
+    skip_reason, model_root = _gettsim_synthetic_skip_reason(params)
+    if skip_reason is not None or model_root is None:
+        _reemit_gettsim_synthetic_report(
+            params,
+            output,
+            skip_reason or "EUROMOD model root unavailable",
+        )
+        return
+
+    cases = load_suite(str(params["suite"]))
+    sample_size = int(params.get("sample_size", 0) or 0)
+    if sample_size > 0:
+        cases = cases[:sample_size]
+    locales = {case.locale for case in cases if case.locale}
+    scope = cases[0].scope if cases else None
+    selected_concepts = set(params.get("concepts") or ()) or {
+        output_id for case in cases for output_id in case.outputs
+    }
+    mappings = comparable_mappings(
+        "euromod",
+        "gettsim",
+        locales=locales,
+        scope=scope,
+        concepts=selected_concepts,
+    )
+    if not mappings:
+        raise RuntimeError("Germany dual-oracle suite selected no comparable mappings")
+
+    euromod_variables = list(
+        dict.fromkeys(
+            target
+            for mapping in mappings
+            for target in [mapping.target_for_engine("euromod")]
+            if isinstance(target, str)
+        )
+    )
+    euromod = EuromodPlatformRunner(
+        model_root=model_root,
+        country=str(params.get("euromod_country", "DE")),
+        system=str(params.get("euromod_system", "DE_2025")),
+        dataset=str(params.get("euromod_dataset", "DE_2024_b1_2015_03_e2")),
+        template_dataset=str(
+            params.get("euromod_template_dataset", "DE_training_data")
+        ),
+        extra_columns=tuple(params.get("euromod_extra_columns") or ("drgn1",)),
+        python_executable=os.environ["EUROMOD_PYTHON"],
+    )
+    euromod_results = euromod.run_cases(cases, variables=euromod_variables)
+
+    gettsim = GettsimRunner(
+        policy_date_str=str(params.get("gettsim_policy_date", "2025-06-30")),
+    )
+    gettsim_results: list[EngineResult] = []
+    for case in cases:
+        try:
+            gettsim_case = GettsimCase.from_mapping(case.metadata["gettsim_case"])
+            raw = gettsim.run_case(gettsim_case, DE_GETTSIM_TARGETS)
+            gettsim_results.append(
+                EngineResult(
+                    engine="gettsim",
+                    household_id=case.case_id,
+                    values=reduce_gettsim_household_values(raw.values),
+                    raw=raw,
+                )
+            )
+        except Exception as exc:
+            gettsim_results.append(
+                EngineResult(
+                    engine="gettsim",
+                    household_id=case.case_id,
+                    values={},
+                    errors=(f"{type(exc).__name__}: {exc}",),
+                )
+            )
+
+    comparisons = Comparator(mappings).compare(euromod_results, gettsim_results)
+    report = build_comparison_report(
+        suite_name=str(params["suite"]),
+        population="synthetic",
+        locales=locales,
+        scope=scope,
+        cases=cases,
+        mappings=mappings,
+        comparisons=comparisons,
+    )
+    report["engine_metadata"] = {
+        "euromod": {
+            "country": euromod.country,
+            "system": euromod.system,
+            "dataset": euromod.dataset,
+            "template_dataset": euromod.template_dataset,
+            "extra_columns": list(euromod.extra_columns),
+        },
+        "gettsim": gettsim.run_metadata(),
+    }
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+
+
 def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     """Composed state income-tax liability grid: pipeline vs PolicyEngine + TAXSIM.
 
@@ -1702,14 +2028,502 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     output.write_text(committed.read_text())
 
 
+def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
+    """Capital Gains Tax grid: rulespec-uk band split vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_capital_gains_tax.py, which runs a synthetic
+    individual grid through PolicyEngine-UK 2.89.2's ``capital_gains_tax`` and the
+    encoded TCGA 1992 s.1H/1I/1K band split (evaluated through the axiom rules
+    engine over PolicyEngine's own capital_gains, taxable income and basic rate
+    limit), then writes one v2 report. On a runner without a PolicyEngine-UK
+    environment or a built axiom rules engine, the committed dashboard report is
+    reused, exactly like the Council Tax Reduction grid.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_capital_gains_tax.py"
+    basename = "axiom-policyengine-uk-capital-gains-tax"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"CGT grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
+    """Business rates grid: rulespec-uk incidence wrapper vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_business_rates.py, which runs a synthetic
+    household grid through PolicyEngine-UK 2.89.2's ``business_rates`` and the
+    encoded LGFA 1988 s.43 incidence proxy (evaluated through the axiom rules
+    engine over PolicyEngine's own shareholding and the held-forward total
+    non-domestic rates revenue), then writes one v2 report. On a runner without a
+    PolicyEngine-UK environment or a built axiom rules engine, the committed
+    dashboard report is reused, exactly like the Council Tax Reduction grid.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_business_rates.py"
+    basename = "axiom-policyengine-uk-business-rates"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"Business rates grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
+    """Devolved transaction tax grid: rulespec-uk band splits vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_lbtt_ltt.py, which runs a synthetic
+    household grid through PolicyEngine-UK 2.89.2's
+    ``land_and_buildings_transaction_tax`` (Scotland) and ``land_transaction_tax``
+    (Wales) and the encoded SSI 2015/126 + LBTT(S)A 2013 Sch 2A and WSI 2018/128
+    + LTT(W)A 2017 band splits (evaluated through the axiom rules engine over the
+    supplied main and additional residential purchase prices), then writes one v2
+    report. On a runner without a PolicyEngine-UK environment or a built axiom
+    rules engine, the committed dashboard report is reused, exactly like the
+    Capital Gains Tax grid.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_lbtt_ltt.py"
+    basename = "axiom-policyengine-uk-lbtt-ltt"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"LBTT/LTT grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
+    """Winter Fuel Payment grid: rulespec-uk SI 2025/969 pipeline vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_winter_fuel_payment_pe.py, which runs a
+    synthetic England pensioner-household grid through PolicyEngine-UK 2.89.2's
+    ``winter_fuel_allowance`` and the encoded SI 2025/969 reg 3 award pipeline
+    (evaluated through the axiom rules engine over the state-pension-age, 80+ and
+    income-below-recovery-threshold judgments the same age/income facts imply),
+    then writes one v2 report. On a runner without a PolicyEngine-UK environment
+    or a built axiom rules engine, the committed dashboard report is reused,
+    exactly like the Council Tax Reduction grid.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_winter_fuel_payment_pe.py"
+    basename = "axiom-policyengine-uk-winter-fuel-payment-pe"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"Winter Fuel grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
+    """Attendance Allowance rate grid: rulespec-uk SI 2026/148 rates vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_attendance_allowance_pe.py, which runs a
+    synthetic care-category grid through PolicyEngine-UK 2.89.2's
+    ``attendance_allowance`` and the encoded SI 2026/148 Schedule 1 Part III weekly
+    rates (evaluated through the axiom rules engine over the awarded-category
+    judgments and annualised over PE's WEEKS_IN_YEAR), then writes one v2 report.
+    On a runner without a PolicyEngine-UK environment or a built axiom rules engine,
+    the committed dashboard report is reused, exactly like the Council Tax Reduction
+    and Winter Fuel Payment grids.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_attendance_allowance_pe.py"
+    basename = "axiom-policyengine-uk-attendance-allowance-pe"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"Attendance Allowance grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
+    """Tax-Free Childcare grid: rulespec-uk CPA 2014 s.1 top-up vs PolicyEngine-UK.
+
+    Delegates to scripts/generate_uk_tax_free_childcare_pe.py, which runs a
+    synthetic eligible-household grid (below the per-child cap) through
+    PolicyEngine-UK 2.89.2's ``tax_free_childcare`` and the encoded CPA 2014 s.1
+    25%-of-qualifying-payment top-up, then writes one v2 report. On a runner
+    without a PolicyEngine-UK environment or a built axiom rules engine, the
+    committed dashboard report is reused, exactly like the other UK case grids.
+    """
+    del runner
+    generator = REPO_ROOT / "scripts" / "generate_uk_tax_free_childcare_pe.py"
+    basename = "axiom-policyengine-uk-tax-free-childcare-pe"
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"Tax-Free Childcare grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_pe_grid(
+    generator_basename: str, report_basename: str, output: Path
+) -> None:
+    """Shared runner for the UK PolicyEngine case-grid comparisons.
+
+    Delegates to the named generator, which runs a synthetic household grid
+    through PolicyEngine-UK 2.89.2 and the encoded rulespec module (evaluated
+    through the axiom rules engine) and writes one v2 report. On a runner
+    without a PolicyEngine-UK environment or a built axiom rules engine, the
+    committed dashboard report is reused, exactly like the council-tax-reduction
+    grid.
+    """
+    generator = REPO_ROOT / "scripts" / generator_basename
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{report_basename}.json"
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        "policyengine-uk==2.89.2",
+        "python",
+        str(generator),
+    ]
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        print(f"{report_basename} grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_vat_grid(runner: dict, output: Path) -> None:
+    del runner
+    _run_uk_pe_grid("generate_uk_vat.py", "axiom-policyengine-uk-vat", output)
+
+
+def _run_uk_fuel_duty_grid(runner: dict, output: Path) -> None:
+    del runner
+    _run_uk_pe_grid(
+        "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output
+    )
+
+
+def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
+    del runner
+    _run_uk_pe_grid(
+        "generate_uk_tv_licence.py", "axiom-policyengine-uk-tv-licence", output
+    )
+
+
+def _snap_qc_optional_path(raw: str | Path | None) -> Path | None:
+    """Expand a config path value, or return None when it is unset."""
+    return _expand_path(raw) if raw else None
+
+
+def _snap_qc_cola_marker_reason(rulespec_root: Path, fiscal_year: int) -> str | None:
+    """Confirm ``rulespec_root`` carries the target-year SNAP COLA modules.
+
+    The overlay compiles the CO SNAP composition with its COLA module ids
+    rewritten from the in-repo fy-2026 vintage to ``fy-<year>-cola``, so the base
+    checkout must actually define that vintage under
+    ``us/policies/usda/snap/fy-<year>-cola/``. A plain rulespec-us checkout (or an
+    un-rebased clone) carries only fy-2026 and is skipped — the common CI case.
+    ``fy-2024-cola`` currently lives on the branch tracked by
+    TheAxiomFoundation/rulespec-us#759, which retires the overlay once it lands.
+    """
+    if not rulespec_root.exists():
+        return f"rulespec root not found at {rulespec_root}"
+    cola_dir = (
+        rulespec_root / "us" / "policies" / "usda" / "snap" / f"fy-{fiscal_year}-cola"
+    )
+    if cola_dir.is_dir() and any(cola_dir.glob("*.yaml")):
+        return None
+    return (
+        f"rulespec checkout at {rulespec_root} has no "
+        f"fy-{fiscal_year}-cola SNAP COLA modules"
+    )
+
+
+def _snap_qc_skip_reason(runner: dict, params: dict, fiscal_year: int) -> str | None:
+    """Return why the SNAP QC replay cannot run here, or None if it can.
+
+    The replay needs the built ``axiom-rules-engine`` binary, a rulespec-us
+    checkout whose SNAP COLA modules are dated for ``fiscal_year`` (the overlay
+    base), and the downloaded QC public-use file. Any probe failure — including
+    the bridge module still being mid-build — counts as "not runnable" so the
+    runner degrades to the committed-report re-emit rather than raising, exactly
+    like the EUROMOD runner on a bare CI machine.
+    """
+    # The bridge and its snap_populace dependency may lack optional deps or still
+    # be mid-build; a failed import means "skip", never a hard error.
+    try:
+        from axiom_oracles.bridges import snap_populace
+        from axiom_oracles.bridges.snap_qc_compare import (  # noqa: F401
+            run_snap_qc_comparison,
+        )
+    except ImportError as exc:
+        return f"snap_qc_compare bridge unavailable ({exc})"
+
+    # QC public-use file. Resolution mirrors populations/snap_qc.load_qc_units:
+    # explicit data_dir, then AXIOM_SNAP_QC_DATA_DIR, then the default cache dir.
+    data_dir = _expand_path(
+        params.get("data_dir")
+        or os.environ.get("AXIOM_SNAP_QC_DATA_DIR")
+        or (Path.home() / ".cache" / "axiom-oracles" / "snap-qc")
+    )
+    qc_file = data_dir / f"qc_pub_fy{fiscal_year}.csv"
+    if not qc_file.exists():
+        return f"QC public-use file not found at {qc_file}"
+
+    # Engine binary + rulespec checkout, resolved with the same snap_populace
+    # helpers the bridge uses so this precondition matches what the bridge would
+    # attempt. Resolution must degrade, never crash the runner.
+    try:
+        workspace_root = snap_populace.resolve_workspace_root(
+            _snap_qc_optional_path(
+                runner.get("workspace_root") or params.get("workspace_root")
+            )
+        )
+        axiom_binary = snap_populace.resolve_axiom_binary(
+            workspace_root,
+            _snap_qc_optional_path(
+                runner.get("axiom_binary")
+                or params.get("axiom_binary")
+                or os.environ.get("AXIOM_SNAP_QC_AXIOM_BINARY")
+            ),
+        )
+    except Exception as exc:  # probe must degrade, never raise
+        return f"engine resolution failed ({exc})"
+    if not axiom_binary.exists():
+        return f"axiom-rules-engine binary not built at {axiom_binary}"
+
+    rulespec_root = _snap_qc_optional_path(
+        runner.get("rulespec_root")
+        or params.get("rulespec_root")
+        or os.environ.get("AXIOM_SNAP_QC_RULESPEC_ROOT")
+    ) or (workspace_root / "rulespec-us")
+    return _snap_qc_cola_marker_reason(rulespec_root, fiscal_year)
+
+
+def _reemit_snap_qc_committed_report(
+    runner: dict, params: dict, output: Path, reason: str
+) -> None:
+    """Re-emit the committed dashboard report as the run output (graceful skip).
+
+    Mirrors ``_run_euromod_synthetic_compare``: when the replay cannot run here,
+    reuse the committed dashboard JSON so the weekly matrix stays green and the
+    dashboard copy is idempotent. Falls back to an empty v2 report shell when no
+    committed report exists yet (the first run before numbers are checked in).
+    """
+    dashboard_filename = runner.get("dashboard_filename") or params.get(
+        "dashboard_filename", ""
+    )
+    print(
+        f"SNAP QC replay not runnable here ({reason}); re-emitting the committed "
+        "dashboard report. Regenerate locally where the engine binary, the "
+        "fiscal-year rulespec checkout, and the QC public-use file all exist."
+    )
+    committed = (
+        DASHBOARD_DATA_DIR / dashboard_filename if dashboard_filename else None
+    )
+    if committed is not None and committed.exists():
+        output.write_text(committed.read_text())
+        return
+    output.write_text(
+        json.dumps(
+            {
+                "schema_version": "axiom.comparison_report.v2",
+                "suite": params.get("suite", "co-snap-qc"),
+                "population": "snap-qc",
+                "case_count": 0,
+                "engines": {"left": "snap-qc", "right": "axiom"},
+                "aggregates": [],
+                "cases": [],
+                "mismatches": [],
+                "concepts": [],
+                "errors": [f"skipped: {reason}"],
+                "locales": [],
+                "scope": None,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+def _run_snap_qc_compare(runner: dict, output: Path) -> None:
+    """SNAP QC administrative-data replay vs Axiom RuleSpec (in-process).
+
+    Replays the USDA SNAP Quality Control public-use microdata through the Axiom
+    SNAP composition and compares the constructed benefit (FSBEN) and stage
+    intermediates via ``axiom_oracles.bridges.snap_qc_compare``. Unlike the
+    ``axiom-encode`` runners this calls the bridge in-process — the oracle lives
+    in this repo, so there is no encoder CLI to shell out to.
+
+    The replay needs three things a shared CI runner does not carry: the built
+    ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
+    are dated for the target fiscal year (the overlay base), and the downloaded
+    QC public-use file. When any is absent — or the bridge is still mid-build —
+    this runner **skips gracefully**, re-emitting the committed dashboard report
+    so the weekly matrix stays green and the dashboard copy is idempotent, exactly
+    like ``_run_euromod_synthetic_compare``. Regenerate the committed numbers
+    locally where all three exist.
+    """
+    params = runner["parameters"]
+    fiscal_year = int(params.get("fiscal_year", 2024))
+    jurisdiction = str(params.get("jurisdiction", "us-co"))
+
+    skip_reason = _snap_qc_skip_reason(runner, params, fiscal_year)
+    if skip_reason is not None:
+        _reemit_snap_qc_committed_report(runner, params, output, skip_reason)
+        return
+
+    # Imported here (not at module scope) so the script stays importable while
+    # the bridge is mid-build; the skip path above already caught an ImportError.
+    from axiom_oracles.bridges.snap_qc_compare import run_snap_qc_comparison
+
+    raw_sample = params.get("sample_size")
+    sample_size = None if raw_sample in (None, 0, "0") else int(raw_sample)
+
+    report = run_snap_qc_comparison(
+        fiscal_year=fiscal_year,
+        jurisdiction=jurisdiction,
+        sample_size=sample_size,
+        months=params.get("months"),
+        tolerance=float(params.get("tolerance", 0.0)),
+        stage_tolerance=float(params.get("stage_tolerance", 1.0)),
+        workspace_root=_snap_qc_optional_path(
+            runner.get("workspace_root") or params.get("workspace_root")
+        ),
+        # The AXIOM_SNAP_QC_RULESPEC_ROOT / AXIOM_SNAP_QC_AXIOM_BINARY env
+        # fallbacks live inside run_snap_qc_comparison itself (next to the
+        # loader's AXIOM_SNAP_QC_DATA_DIR); only explicit config values are
+        # threaded from here.
+        rulespec_root=_snap_qc_optional_path(
+            runner.get("rulespec_root") or params.get("rulespec_root")
+        ),
+        axiom_binary=_snap_qc_optional_path(
+            runner.get("axiom_binary") or params.get("axiom_binary")
+        ),
+        data_dir=_snap_qc_optional_path(params.get("data_dir")),
+        include_special_programs=bool(params.get("include_special_programs", False)),
+        keep_overlay=bool(params.get("keep_overlay", False)),
+    )
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
     "axiom-oracles-compare": _run_axiom_oracles_compare,
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
+    "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
+    "snap-qc-compare": _run_snap_qc_compare,
     "state-income-tax-liability-grid": _run_state_income_tax_liability_grid,
     "uk-council-tax-reduction-grid": _run_uk_council_tax_reduction_grid,
+    "uk-capital-gains-tax-grid": _run_uk_capital_gains_tax_grid,
+    "uk-business-rates-grid": _run_uk_business_rates_grid,
+    "uk-lbtt-ltt-grid": _run_uk_lbtt_ltt_grid,
+    "uk-winter-fuel-payment-pe-grid": _run_uk_winter_fuel_payment_pe_grid,
+    "uk-attendance-allowance-pe-grid": _run_uk_attendance_allowance_pe_grid,
+    "uk-tax-free-childcare-pe-grid": _run_uk_tax_free_childcare_pe_grid,
+    "uk-vat-grid": _run_uk_vat_grid,
+    "uk-fuel-duty-grid": _run_uk_fuel_duty_grid,
+    "uk-tv-licence-grid": _run_uk_tv_licence_grid,
 }
 
 
@@ -1839,6 +2653,12 @@ def _print_summary(output: Path) -> None:
     elif "case_count" in data:
         cc = data.get("case_count", 0)
         mm = sum(len(c.get("mismatches", []) or []) for c in data.get("cases", []))
+        if not mm:
+            # Reports whose case rows carry no per-case mismatch lists (the
+            # SNAP QC bridge) count mismatches at the summary/top level.
+            mm = (data.get("summary") or {}).get(
+                "mismatch_count", len(data.get("mismatches") or [])
+            )
         print(f"Cases:             {cc}")
         print(f"Mismatch entries:  {mm}")
         agg = data.get("aggregates") or []
@@ -2803,6 +3623,15 @@ def _slim_report_for_dashboard(report: dict) -> dict:
         "total_case_rows": len(cases),
         "shown_case_rows": len(slim["cases"]),
     }
+    # When a dispositioned report is trimmed, record how many example mismatch
+    # rows survive so scripts/apply_dispositions.py --check recognizes it as a
+    # premerged-slim report (v2.1) and keeps the full-run summary.dispositioned
+    # block instead of re-merging dispositions against the truncated examples
+    # (which would undercount classified rows). See dispositions._is_premerged_...
+    summary = report.get("summary")
+    if isinstance(summary, dict) and isinstance(summary.get("dispositioned"), dict):
+        slim["summary"] = dict(summary)
+        slim["summary"]["stored_mismatch_example_count"] = len(kept_mismatches)
     return slim
 
 

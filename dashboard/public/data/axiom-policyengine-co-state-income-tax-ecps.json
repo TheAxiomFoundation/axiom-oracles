@@ -131759,6 +131759,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -1106.75,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -5617.75,
       "parent": null,
@@ -131775,6 +131780,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 122.7828369140625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131791,6 +131801,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 166.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131807,6 +131822,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 104.54777526855469,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131823,6 +131843,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 130.06788635253906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131839,6 +131864,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 60.05418505859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -5.8153828125,
       "parent": null,
@@ -131855,6 +131885,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 59.393746810913086,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -4.295912307739258,
       "parent": null,
@@ -131871,6 +131906,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 41.81911087036133,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131887,6 +131927,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 130.06788635253906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131903,6 +131948,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 38.910808593750005,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -490.7038154296875,
       "parent": null,
@@ -131919,6 +131969,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 166.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131935,6 +131990,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 168.76386718750018,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -4085.28203125,
       "parent": null,
@@ -131951,6 +132011,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 88.3010482788086,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131967,6 +132032,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.3724443359375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -86.47705822753906,
       "parent": null,
@@ -131983,6 +132053,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 156.74847412109375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -131999,6 +132074,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 33.45528793334961,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132015,6 +132095,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 146.36688232421875,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132031,6 +132116,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 20.90955352783203,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132047,6 +132137,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 164.60194396972656,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132063,6 +132158,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 160.4200439453125,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132079,6 +132179,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 39.14460191917419,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 34.18240175437927,
       "parent": null,
@@ -132095,6 +132200,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 370.4387919517558,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 10783.552073201756,
       "parent": null,
@@ -132111,6 +132221,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 88.3010482788086,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132127,6 +132242,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 59.83400590133667,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -5.308892658233643,
       "parent": null,
@@ -132143,6 +132263,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 166.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132159,6 +132284,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 121.27542114257812,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132175,6 +132305,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 41.81911087036133,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -19.0,
       "parent": null,
@@ -132191,6 +132326,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 18.235056640625004,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 90.3959453125,
       "parent": null,
@@ -132207,6 +132347,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": 60.05418505859375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -5.8153828125,
       "parent": null,
@@ -132223,6 +132368,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -881.0284195739746,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": -2658.754615863037,
       "parent": null,
@@ -132239,6 +132389,11 @@
       "concept": "us:tax/state-income-tax#liability",
       "description": "State income tax liability",
       "difference": -59.714379882811045,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+      },
       "kind": "amount_difference",
       "left": 17578.53562011719,
       "parent": null,
@@ -132281,18 +132436,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 31,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/co-state-income-tax-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 97.418818,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 97.418818,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 31
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

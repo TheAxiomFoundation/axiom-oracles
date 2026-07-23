@@ -1,0 +1,39 @@
+name: co-snap-qc
+title: Colorado SNAP — Axiom vs USDA SNAP QC administrative data
+description: >-
+  Replays Colorado SNAP Quality Control public-use reviews (FY2024, 856 CO
+  active-case reviews) through the Axiom RuleSpec SNAP composition and compares
+  the constructed benefit (FSBEN) and its stage intermediates — gross income,
+  standard/earned-income/medical/dependent-care/child-support/excess-shelter
+  deductions, net income, income screens, and maximum allotment — against the QC
+  file's own recomputed values. FSBEN is FNS/Mathematica's Minimodel recomputation
+  from edited, internally consistent inputs, so this is admin-grade benefit-computation
+  parity, the US analogue of the BEAMM full-admin-returns PIT check. The oracle
+  validates the benefit calculation, not the eligibility screening: the public file
+  contains only complete, eligible, internally consistent active-case reviews, so
+  eligibility gates are fed the composition's passing defaults. FY2024 law is
+  evaluated through a sparse compile-time overlay (fy-2026 SNAP COLA module ids
+  rewritten to fy-2024-cola plus four Colorado SUA amount patches) at the nominal
+  period 2026-01, because the entire federal-regulation and Colorado-manual chain
+  is snapshot-dated 2025-10-01 and true-period FY2024 evaluation is impossible today
+  (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the overlay).
+  This suite runs where the axiom-rules-engine binary, a rulespec-us checkout with
+  the fy-2024-cola modules, and the downloaded QC public-use file all exist; on
+  runners without them the registry re-emits the committed dashboard report.
+documentation: docs/snap-qc-oracle-playbook.md
+
+runner:
+  type: snap-qc-compare
+  parameters:
+    jurisdiction: us-co
+    fiscal_year: 2024
+    sample_size: 0
+    stage_tolerance: 0
+    dashboard_filename: axiom-snapqc-co-snap.json
+
+artifacts:
+  report_basename: axiom-snapqc-co-snap
+
+dashboard:
+  filename: axiom-snapqc-co-snap.json
+  suite: co-snap-qc

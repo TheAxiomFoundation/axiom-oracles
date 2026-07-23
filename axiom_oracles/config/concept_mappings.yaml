@@ -23,12 +23,116 @@ targets:
     scope:
       type: country
       geoid: BE
+  gettsim:
+    scope:
+      type: country
+      geoid: DE
   accessnyc:
     scope:
       type: census_place
       geoid: "3651000"
 
 concepts:
+  de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly:
+    description: Germany employee health-insurance contribution, monthly (including the average Zusatzbeitrag in the health leg)
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: &de_country_scope
+      type: country
+      geoid: DE
+    targets:
+      euromod:
+        name: tsceehl_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.kranken.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly:
+    description: Germany employee pension-insurance contribution, monthly
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tsceepi_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.rente.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly:
+    description: Germany employee unemployment-insurance contribution, monthly
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tsceeui_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.arbeitslosen.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly:
+    description: Germany employee long-term-care-insurance contribution, monthly
+    category: contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tsceeci_s
+        scope: *de_country_scope
+      gettsim:
+        name: sozialversicherung.pflege.beitrag.betrag_versicherter_m
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual:
+    description: Germany annual income tax including the solidarity surcharge (EUROMOD tin_s convention)
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: tin_s
+        scope: *de_country_scope
+      gettsim:
+        name:
+          - einkommensteuer.betrag_y_sn
+          - solidaritätszuschlag.betrag_y_sn
+        scope: *de_country_scope
+
+  de:policies/worker_dual_oracle_baseline#kindergeld_monthly:
+    description: Germany Kindergeld paid to the household recipient, monthly
+    category: benefits
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      euromod:
+        name: bch00_s
+        scope: *de_country_scope
+      gettsim:
+        name: kindergeld.betrag_m
+        scope: *de_country_scope
+
   be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding:
     description: Belgium worker PIT before withholding
     category: tax
@@ -279,6 +383,29 @@ concepts:
         scope:
           type: country
           geoid: BE
+
+  dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit:
+    description: Denmark child and youth benefit (single recipient)
+    category: benefits
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [DK]
+    scope:
+      type: country
+      geoid: DK
+    targets:
+      axiom:
+        name: single_recipient_annual_child_youth_benefit
+        scope:
+          type: country
+          geoid: DK
+      euromod:
+        name: bfachnm_s
+        scope:
+          type: country
+          geoid: DK
 
   be:statutes/property_tax/gross_withholding_and_supplied_centimes#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes:
     description: Belgium immovable withholding gross tax with supplied local centimes
@@ -1313,6 +1440,134 @@ concepts:
           type: country
           geoid: UK
 
+  uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount:
+    description: UK Scottish Child Payment award (single-child Scotland benefit unit)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the Scottish Child Payment per child (SSI 2020/351): a
+    # weekly amount for a qualifying child under 16 whose applicant or partner
+    # receives a qualifying means-tested benefit. UKMOD returns the same payment
+    # as bchmt_s (bchmt_uk), passporting off il_bchmt (the qualifying awards) for
+    # a Scotland benefit unit (drgn1=12) and take-up-adjusted by the i_rand_tu
+    # draw against $SCPTUu6y / $SCPTU6to15y, which for hypothetical benefit units
+    # can zero the reported award away from the entitlement. The grid is
+    # single-child so the per-child pipeline amount equals the benefit-unit
+    # bchmt_s. UKMOD bchmt_s is monthly; the adapter annualizes it (×12) so the
+    # comparison is annual-to-annual against the pipeline's annual amount. The
+    # weekly statutory rate is identical (28.20); the residual is only the
+    # annualization convention (UKMOD 365/7 vs the pipeline's 52 weeks/year),
+    # dispositioned explained_residual. An absolute tolerance to the pound
+    # catches structural encoding gaps; take-up-driven zeroing is classified as a
+    # UKMOD-side artefact rather than absorbed by tolerance.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: scottish_child_payment_annual_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bchmt_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:policies/govuk/child-winter-heating-payment#child_winter_heating_assistance_payable_value:
+    description: UK Child Winter Heating Payment award (disabled-child Scotland benefit unit)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the Child Winter Heating Payment statutory payable value
+    # (SSI 2020/352 reg 10): a flat GBP 265.50/year for a severely disabled child
+    # or young person in Scotland on the high-rate care passport. UKMOD returns the
+    # same payment as bchht_s (bchht_uk) for a qualifying disabled child in a
+    # Scotland benefit unit (drgn1=12) whose disability input carries the high-rate
+    # care passport (bdisc). The payment is a flat annual amount on both engines
+    # (no weekly annualisation), so the values match exactly at 265.50. An absolute
+    # tolerance to the pound catches structural encoding gaps.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: child_winter_heating_assistance_payable_value
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bchht_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount:
+    description: UK contribution-based JSA award (single unemployed claimant)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the reserved, UK-wide contribution-based JSA age-related
+    # weekly amount (SI 1996/207 reg 79, as uprated for 2026-27 by SI 2026/148):
+    # GBP 75.65/week under 25 and GBP 95.55/week for 25 or over, annualised over 52
+    # weeks. UKMOD returns the same award as bunct_s (bunct_uk) for an unemployed
+    # claimant (les=5) on a contributory award (bunct) satisfying the contribution
+    # weeks (liwwh). The weekly statutory rate is identical; the residual is only
+    # the annualisation convention (UKMOD 365/7 vs the pipeline's 52 weeks/year),
+    # dispositioned explained_residual. An absolute tolerance to the pound catches
+    # structural encoding gaps.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: contribution_based_jsa_annual_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bunct_s
+        scope:
+          type: country
+          geoid: UK
+
+  uk:policies/govuk/scottish-carer-supplement#scottish_carer_supplement_annual_amount:
+    description: UK Scottish Carer Supplement award (single Scotland carer)
+    category: benefits
+    comparison: amount
+    # rulespec-uk encodes the devolved Scottish Carer Supplement top-up (SSI
+    # 2023/302 reg 16(1A)): GBP 11.70/week, annualised over 52 weeks (608.40/year),
+    # excluding the separate GBP 86.45 base Carer Support Payment. UKMOD returns the
+    # supplement as bcrdicm_s (bcrdicm_uk) for a carer in a Scotland benefit unit
+    # (drgn1=12) on the underlying carer award (bcrdi). The residual is only a small
+    # annualisation/uprating-timing difference (UKMOD 609.55 vs the pipeline's
+    # 608.40), dispositioned explained_residual. An absolute tolerance to the pound
+    # catches structural encoding gaps.
+    tolerance: 1
+    priority: high
+    locales: [UK]
+    scope:
+      type: country
+      geoid: UK
+    targets:
+      axiom:
+        name: scottish_carer_supplement_annual_amount
+        scope:
+          type: country
+          geoid: UK
+      euromod:
+        name: bcrdicm_s
+        scope:
+          type: country
+          geoid: UK
+
   uk:statutes/social_security/workers/pilot_worker_employer_secondary_nic_pipeline#uk_nic_pilot_er_secondary_class_1_contribution:
     description: UK employer secondary Class 1 National Insurance contribution (single employment)
     category: social_contributions
@@ -1436,6 +1691,7 @@ concepts:
       - us:tax/payroll#employee_medicare
       - us:tax/payroll#employer_oasdi
       - us:tax/payroll#employer_medicare
+      - us:tax/payroll#employee_fica
     targets:
       axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
@@ -1450,6 +1706,7 @@ concepts:
     parent: us:tax/federal-income-tax#liability
     targets:
       policyengine: adjusted_gross_income
+      taxsim: v10
       taxcalc: c00100
 
   us:tax/federal-income-tax#standard_deduction:
@@ -1494,7 +1751,13 @@ concepts:
       # `taxbc`. AMT is excluded because `taxbc` excludes it too (Tax-Calculator
       # adds `c09600` separately); the AMT concept maps `taxcalc: c09600` alone.
       policyengine: [income_tax_main_rates, capital_gains_tax]
-      taxsim: v19
+      # TAXSIM's v28 is federal tax before credits WITH the capital-gains
+      # preferential-rate worksheet and WITHOUT NIIT (verified: fiitax =
+      # v28 - credits + niit on the pinned 2.30.0 binary), matching this
+      # concept's taxbc scope. v19 is the schedule tax on taxable income
+      # with NO preferential rates — mapping it here overstated TAXSIM by
+      # the full ordinary-vs-preferential spread on capital-gains units.
+      taxsim: v28
       taxcalc: taxbc
 
   us:tax/federal-income-tax#nonrefundable_credits:
@@ -1537,9 +1800,15 @@ concepts:
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
+    # TAXSIM's v24 is the child-care credit in the idtl=2 decomposition,
+    # verified against the pinned 2.30.0 binary at 2024/2025. Known gap: the
+    # binary's 2026 law year does not model CDCC (v24 is always zero at 2026,
+    # alongside the rest of the qualifying-child credit machinery), so a 2026
+    # comparison reads TAXSIM zeros as an NBER gap, not a validation signal.
     targets:
       axiom: us:statutes/26/21#cdcc
       policyengine: cdcc
+      taxsim: v24
 
   us:tax/federal-income-tax#aotc:
     description: American Opportunity Credit
@@ -1612,6 +1881,32 @@ concepts:
     targets:
       axiom: us:statutes/26/3111/b#hospital_insurance_employer_tax
       policyengine: employer_medicare_tax
+
+  us:tax/payroll#employee_fica:
+    description: Employee-side FICA plus self-employment tax (TAXSIM tfica scope)
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    # TAXSIM's `tfica` is the taxpayer's own payroll burden: the employee half
+    # of wage FICA (6.2 OASDI + 1.45 HI; the 0.9 additional Medicare tax is
+    # reported separately in `addmed`) PLUS the full section 1401 SECA on
+    # self-employment income (a self-employed filer pays both halves).
+    # Verified empirically against the pinned TAXSIM-35 2.30.0 binary:
+    # wages-only units return 7.65 per cent of wages, mixed units return
+    # employee wage FICA + 15.3 per cent of 92.35 per cent of SE income.
+    # Both engine targets are summed lists mirroring exactly that scope.
+    targets:
+      axiom:
+        - us:statutes/26/3101/a#oasdi_wage_tax
+        - us:statutes/26/3101/b/1#hospital_insurance_wage_tax
+        - us:statutes/26/1401/a#old_age_survivors_and_disability_insurance_tax
+        - us:statutes/26/1401/b/1#self_employment_income_tax
+      policyengine:
+        - employee_social_security_tax
+        - employee_medicare_tax
+        - self_employment_tax
+      taxsim: tfica
 
   us:tax/state-income-tax#liability:
     description: State income tax liability
@@ -1692,6 +1987,36 @@ concepts:
     targets:
       axiom: wa_tanf_annual_benefit
       policyengine: wa_tanf
+
+  us-al:policies/dhr/tanf#al_tanf_benefit:
+    description: AL TANF (Family Assistance) benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: al_tanf_annual_benefit
+      policyengine: al_tanf
+
+  us-ga:policies/dfcs/tanf#ga_tanf_benefit:
+    description: GA TANF benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: ga_tanf_annual_benefit
+      policyengine: ga_tanf
+
+  us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit:
+    description: DE TANF benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: de_tanf_annual_benefit
+      policyengine: de_tanf
 
   us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit:
     description: KS TANF maximum benefit standard (annualized)
@@ -1859,7 +2184,7 @@ concepts:
     description: Illinois individual income tax liability (flat 4.95 per cent on base income after the standard exemption)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine il_income_tax_before_refundable_credits, the
+    # Compared against PolicyEngine il_income_tax_before_non_refundable_credits, the
     # exact statutory analog of this core (4.95 per cent on base income after the
     # standard exemption); the pipeline reproduces it to the cent across the
     # grid. PolicyEngine's final il_income_tax additionally adds the use tax and
@@ -1880,7 +2205,7 @@ concepts:
         scope:
           type: country
           geoid: US
-      policyengine: il_income_tax_before_refundable_credits
+      policyengine: il_income_tax_before_non_refundable_credits
       taxsim: siitax
 
   us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability:
@@ -1906,17 +2231,16 @@ concepts:
       policyengine: ma_income_tax
       taxsim: siitax
 
-  us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability:
-    description: New York personal income tax liability (resident; Tax Law s.601 bracket tax plus the s.601(d) supplemental recapture)
+  us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax:
+    description: New York 2026 Tax Law section 601 main income tax before supplemental tax and credits
     category: tax
     comparison: amount
-    # PolicyEngine ny_income_tax at 2026 and this pipeline share the DTF-indexed
-    # brackets and standard deduction and the section 601(d) supplemental
-    # recapture, so they reproduce to the dollar; TAXSIM's 2024 law year differs
-    # by the bracket indexation between 2024 and 2026. Dispositioned in
-    # dispositions/ny-income-tax-liability.yaml.
-    tolerance: 5
-    relative_tolerance: 0.02
+    # The statute publishes rounded cumulative bracket bases while PolicyEngine
+    # represents the same schedules as continuous marginal scales. The reviewed
+    # full-Populace difference is at most $2.12. Supplemental tax and credits are
+    # deliberately outside this mapping.
+    tolerance: 2.25
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-NY]
     scope:
@@ -1924,9 +2248,776 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ny_pit_pilot_income_tax_liability
+        name: ny_pit_pilot_main_income_tax
         scope:
           type: country
           geoid: US
-      policyengine: ny_income_tax
+      policyengine: ny_main_income_tax
+      taxsim: siitax
+
+  us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability:
+    description: Ohio nonbusiness income tax liability before nonrefundable credits (section 5747.02 tax-year-2026 schedule on completed-return Ohio taxable nonbusiness income)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine oh_income_tax_before_non_refundable_credits,
+    # the exact section 5747.02 schedule-tax analog before credits. Against TAXSIM 2024
+    # every case diverges by the Ohio 2024-to-2026 schedule vintage (the House
+    # Bill 33 base-amount indexation and the pre-2025 3.5 per cent top rate above
+    # 100,000), dispositioned in dispositions/oh-income-tax-liability.yaml. The
+    # tight absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-OH]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: oh_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: oh_income_tax_before_non_refundable_credits
+      taxsim: siitax
+
+  us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability:
+    description: Virginia individual income tax liability (resident wage earner; Va. Code 58.1-320 four-bracket progressive tax on Virginia taxable income)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine va_income_tax_before_non_refundable_credits,
+    # the exact 58.1-320 bracket-tax analog on Virginia taxable income; on the
+    # childless grid it equals the final va_income_tax (no VA credits) and the
+    # pipeline reproduces it exactly (Virginia brackets are statutory fixed, so
+    # no indexation rounding). Against TAXSIM 2024 every case diverges by a
+    # constant per-filer standard-deduction vintage (the 2024-to-2026 58.1-322.03
+    # increase), dispositioned in dispositions/va-income-tax-liability.yaml. The
+    # tight absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-VA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: va_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: va_income_tax_before_non_refundable_credits
+      taxsim: siitax
+
+  us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability:
+    description: Utah individual income tax liability (resident wage earner; Utah Code 59-10-104 flat 4.45 per cent on Utah taxable income, before the 59-10-1018 taxpayer credit)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ut_income_tax_before_credits, the pure
+    # 59-10-104 flat tax; the pipeline reproduces it exactly. The before-
+    # non-refundable variable nets the phased-out 59-10-1018 taxpayer credit that
+    # this flat core excludes. Against TAXSIM 2024 every case diverges by the
+    # 4.55-vs-4.45 rate vintage plus TAXSIM's inclusion of the taxpayer credit,
+    # dispositioned in dispositions/ut-income-tax-liability.yaml. The tight
+    # absolute tolerance catches structural rate errors.
+    tolerance: 1
+    priority: high
+    locales: [US-UT]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ut_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ut_income_tax_before_credits
+      taxsim: siitax
+
+  us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability:
+    description: Alabama income tax liability (resident wage earner; the section 40-18-5 graduated tax (2/4/5 per cent) on Alabama taxable income (Alabama AGI less the section 40-18-15 deductions and the section 40-18-19 exemptions))
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine al_income_tax_before_non_refundable_credits,
+    # the exact section 40-18-5 schedule-tax analog before credits.
+    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
+    # dispositioned in dispositions/al-income-tax-liability.yaml. The tight
+    # absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-AL]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: al_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: al_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability:
+    description: Idaho income tax liability (resident wage earner; the section 63-3024 tax (5.3 per cent) on Idaho taxable income above the indexed filing-status no-tax threshold)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine id_income_tax_before_refundable_credits, the exact statutory analog of
+    # this core; the pipeline reproduces it to a hundredth of a cent across the
+    # grid (the residual is PolicyEngine's float32 rounding). id_income_tax additionally nets the refundable Idaho grocery credit, which the 63-3024 core excludes.
+    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
+    # dispositioned in dispositions/id-income-tax-liability.yaml. The tight
+    # absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-ID]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: id_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: id_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability:
+    description: Kentucky income tax liability (resident wage earner; the section 141.020 flat tax (3.5 per cent) on Kentucky taxable income (Kentucky AGI less the section 141.081 standard deduction))
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ky_income_tax_before_refundable_credits, the exact statutory analog of
+    # this core; the pipeline reproduces it to a hundredth of a cent across the
+    # grid (the residual is PolicyEngine's float32 rounding). ky_income_tax nets the refundable/family-size credits, which the 141.020 flat core excludes.
+    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
+    # dispositioned in dispositions/ky-income-tax-liability.yaml. The tight
+    # absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-KY]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ky_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ky_income_tax_before_refundable_credits
+      taxsim: siitax
+
+
+  us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability:
+    description: Nebraska individual income tax liability (resident wage earner; Neb. Rev. Stat. 77-2715.03 four-bracket progressive tax on Nebraska taxable income, before the 77-2716.01 personal exemption credit)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ne_income_tax_before_credits, the pure
+    # 77-2715.03 four-bracket tax on Nebraska taxable income (AGI less the
+    # 77-2716.01 standard deduction); the pipeline reproduces it exactly. The
+    # before-refundable variable nets the 77-2716.01 personal exemption credit (a
+    # post-tax nonrefundable credit) that this before-credits core excludes.
+    # Against TAXSIM 2024 every case diverges by the L.B. 754 top-rate compression
+    # and inflation-indexation vintage plus TAXSIM's netting of the personal
+    # exemption credit, dispositioned in dispositions/ne-income-tax-liability.yaml.
+    # The tight absolute tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-NE]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ne_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ne_income_tax_before_credits
+      taxsim: siitax
+  us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability:
+    description: Delaware section 1102(a)(14) schedule tax before nonrefundable credits, selecting between aggregate separate-return and combined-return taxable-income candidates
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine's unit-level tax before nonrefundable credits,
+    # the exact analog of the encoded schedule and strict lower-pre-credit-tax
+    # branch selector. Later Delaware targets subtract credits outside this core.
+    tolerance: 1
+    priority: high
+    locales: [US-DE]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: de_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: de_income_tax_before_non_refundable_credits_unit
+      taxsim: siitax
+  us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability:
+    description: Maryland STATE income tax liability (resident wage earner; the section 10-105 graduated state tax on Maryland taxable income; the county income tax is a separate PolicyEngine variable, excluded)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine md_income_tax_before_credits, the state schedule
+    # tax before credits (county income tax is a separate variable). The pipeline
+    # reproduces it to the cent across the childless grid. Against TAXSIM 2024 every case diverges by the
+    # 700-dollar-per-filer standard-deduction vintage (TAXSIM adds no county tax here),
+    # dispositioned in dispositions/md-income-tax-liability.yaml. The tight absolute
+    # tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-MD]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: md_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: md_income_tax_before_credits
+      taxsim: siitax
+  us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability:
+    description: Maine income tax liability (resident wage earner; the indexed section 5111 graduated tax on Maine taxable income (AGI less the section 5124-C standard deduction and section 5126-A exemption))
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine me_income_tax_before_refundable_credits, the exact
+    # statutory analog of this core; the pipeline reproduces it to the cent across the
+    # grid (the residual is PolicyEngine's float32 rounding). Against TAXSIM 2024 every
+    # case diverges by the section 5111/5124-C indexation vintage, dispositioned in
+    # dispositions/me-income-tax-liability.yaml. The tight absolute tolerance catches
+    # structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-ME]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: me_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: me_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability:
+    description: Minnesota income tax liability (resident wage earner; the indexed section 290.06 subd. 2c graduated tax; the top married case carries the section 290.091 alternative minimum tax)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine mn_income_tax_before_refundable_credits, the exact
+    # statutory analog of this core; the pipeline reproduces it to the cent across the
+    # grid (the top married case carries the section 290.091 alternative minimum tax).
+    # Against TAXSIM 2024 every case diverges by the subdivision-2d indexation vintage,
+    # dispositioned in dispositions/mn-income-tax-liability.yaml. The tight absolute
+    # tolerance catches structural bracket errors.
+    tolerance: 1
+    priority: high
+    locales: [US-MN]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: mn_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: mn_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability:
+    description: Connecticut income tax liability before refundable credits (complete section 12-700 schedules, phaseout and recapture, personal credit, AMT, and ordered property-tax/stillborn nonrefundable credits)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ct_income_tax_before_refundable_credits, the
+    # exact analog of the complete encoded schedule, phaseout/recapture, personal
+    # credit, AMT, and ordered nonrefundable-credit pipeline. Against TAXSIM 2024,
+    # differences from the 2024-to-2026 indexation and credit scope are
+    # dispositioned rather than absorbed into the national contract tolerance.
+    tolerance: 1
+    priority: high
+    locales: [US-CT]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ct_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ct_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability:
+    description: Colorado C.R.S. section 39-22-104(1.7)(c) individual-income base tax before section 39-22-627 temporary rate adjustments and all credits
+    category: tax
+    comparison: amount
+    # At 2026, PolicyEngine's before-non-refundable-credits target has no active
+    # section 39-22-627 reduction and uses the same completed Colorado
+    # taxable-income boundary and 4.4 per cent base rate. The reviewed
+    # full-Populace residual is float precision only: every case is within $0.01
+    # absolute or 1e-7 relative tolerance. TAXSIM's siitax is broader and remains
+    # separately dispositioned.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-CO]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: co_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: co_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability:
+    description: Arizona individual income tax liability (resident wage earner; the A.R.S. 43-1011 flat 2.5 per cent tax on Arizona taxable income = AGI less the section 43-1041 standard deduction)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine az_income_tax, which equals
+    # az_income_tax_before_refundable_credits on this childless grid (no refundable
+    # credits active); the pipeline reproduces it to the cent across the grid.
+    # Against TAXSIM 2024 every case diverges by the flat rate on the 2024-to-2026
+    # standard-deduction indexation (Arizona was already flat 2.5 per cent in 2024),
+    # dispositioned in dispositions/az-income-tax-liability.yaml. The tight absolute
+    # tolerance catches structural errors without absorbing the vintage.
+    tolerance: 1
+    priority: high
+    locales: [US-AZ]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: az_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: az_income_tax
+      taxsim: siitax
+  us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability:
+    description: Georgia individual income tax liability (resident wage earner; the O.C.G.A. 48-7-20 flat 4.99 per cent tax on Georgia taxable net income = AGI less the section 48-7-27 standard deduction)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ga_income_tax_before_non_refundable_credits,
+    # the exact 48-7-20 flat-tax analog (equals the final ga_income_tax on this
+    # childless grid — no 48-7-29 / low-income / CDCC credits active); the
+    # pipeline reproduces it to the cent across the grid. Against TAXSIM 2024
+    # every case diverges by the 5.39-to-4.99 rate step-down plus the HB463
+    # standard-deduction vintage, dispositioned in
+    # dispositions/ga-income-tax-liability.yaml.
+    tolerance: 1
+    priority: high
+    locales: [US-GA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ga_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ga_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability:
+    description: Michigan individual income tax liability (resident wage earner; the MCL 206.51(1) flat 4.25 per cent tax on Michigan taxable income = AGI less the section 206.30 personal exemptions)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine mi_income_tax_before_non_refundable_credits,
+    # the exact MCL 206.51 flat-tax analog (equals the final mi_income_tax on
+    # this childless grid — no homestead/heating/EITC credits active); the
+    # pipeline reproduces it to the cent across the grid. Against TAXSIM 2024
+    # every case diverges by the flat rate on the 2024-to-2026 personal-exemption
+    # indexation (5,600 to 5,950 per person; same 4.25 per cent rate both
+    # years), dispositioned in dispositions/mi-income-tax-liability.yaml.
+    tolerance: 1
+    priority: high
+    locales: [US-MI]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: mi_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: mi_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability:
+    description: North Carolina individual income tax liability (resident wage earner; the G.S. 105-153.7 flat 3.99 per cent tax on North Carolina taxable income = AGI less the section 105-153.5(a) standard deduction)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine nc_income_tax_before_credits, the exact
+    # 105-153.7 flat-tax analog (equals the final nc_income_tax on this
+    # childless grid — no child deduction or 105-153.10 credits active); the
+    # pipeline reproduces it to the cent across the grid. Against TAXSIM 2024
+    # every case diverges by the scheduled 4.5-to-3.99 rate step-down on an
+    # unchanged standard deduction, dispositioned in
+    # dispositions/nc-income-tax-liability.yaml.
+    tolerance: 1
+    priority: high
+    locales: [US-NC]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: nc_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: nc_income_tax_before_credits
+      taxsim: siitax
+  us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability:
+    description: District of Columbia individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-DC]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: dc_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: dc_income_tax_before_credits
+      taxsim: siitax
+  us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability:
+    description: Hawaii 2026 individual income tax before nonrefundable credits under the complete HRS 235-51(a)-(c) schedules and the subsection (f) computation from completed Form N-11 worksheet line 10
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-HI]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: hi_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: hi_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability:
+    description: Iowa individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-IA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ia_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ia_income_tax_before_credits
+      taxsim: siitax
+  us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability:
+    description: Indiana individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-IN]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: in_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: in_agi_tax
+      taxsim: siitax
+  us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability:
+    description: Louisiana individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-LA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: la_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: la_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability:
+    description: Montana individual income tax liability (complete 2026 ordinary and net-long-term-capital-gain schedules)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MT]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: mt_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: mt_income_tax_before_non_refundable_credits_joint
+      taxsim: siitax
+  us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability:
+    description: New Mexico individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-NM]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: nm_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: nm_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability:
+    description: Oklahoma individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-OK]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ok_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ok_income_tax_before_credits
+      taxsim: siitax
+  us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability:
+    description: Oregon individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-OR]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: or_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: or_income_tax_before_credits
+      taxsim: siitax
+  us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability:
+    description: Rhode Island individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-RI]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ri_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ri_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability:
+    description: Wisconsin individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-WI]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: wi_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: wi_income_tax_before_credits
+      taxsim: siitax
+  us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability:
+    description: Washington RCW 82.87 capital-gains tax liability (individual core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-WA]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: wa_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: wa_income_tax_before_refundable_credits
+      taxsim: siitax
+  us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability:
+    description: New Jersey gross income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-NJ]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: nj_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: nj_main_income_tax
+      taxsim: siitax
+  us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability:
+    description: South Carolina individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-SC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: sc_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: sc_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability:
+    description: Kansas individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-KS]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ks_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: ks_income_tax_before_credits
+      taxsim: siitax
+  us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability:
+    description: North Dakota individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-ND]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: nd_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: nd_income_tax_before_credits
+      taxsim: siitax
+  us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability:
+    description: Pennsylvania personal income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-PA]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: pa_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: pa_income_tax_before_forgiveness
+      taxsim: siitax
+  us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability:
+    description: Missouri individual income tax liability (ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MO]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: mo_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: mo_income_tax_before_credits
+      taxsim: siitax
+  us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv:
+    description: Arkansas Act 2 individual schedule component before nonrefundable credits, summed from Person to TaxUnit only for Populace comparison accounting
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [US-AR]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
+        scope: {type: country, geoid: US}
+      policyengine: ar_income_tax_before_non_refundable_credits_indiv
+  us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability:
+    description: Mississippi section 27-7-5 schedule tax before credits, after the lower separate-or-joint candidate comparison
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MS]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ms_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: ms_income_tax_before_credits_unit
+      taxsim: siitax
+  us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
+    description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-WV]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: wv_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: wv_income_tax_before_non_refundable_credits
+      taxsim: siitax
+  us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability:
+    description: Vermont individual income tax liability before nonrefundable credits (completed current-year normal-tax boundary and independently encoded section 5822 three-percent federal-AGI minimum)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-VT]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: vt_pit_pilot_income_tax_liability
+        scope: {type: country, geoid: US}
+      policyengine: vt_income_tax_before_non_refundable_credits
       taxsim: siitax
