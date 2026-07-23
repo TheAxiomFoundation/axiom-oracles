@@ -362,8 +362,19 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - energy_efficient_home_improvement_credit
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: oracle_models_repealed_law
+    note: >-
+      Lapsed before the 2026 validation year: IRC 25C(i), as amended by the One
+      Big Beautiful Bill Act, Pub. L. No. 119-21, sec. 70505 (2025), provides
+      that the credit does not apply to property placed in service after
+      2025-12-31. PolicyEngine-US 1.767.3 sets
+      gov.irs.credits.energy_efficient_home_improvement.in_effect to false
+      throughout 2026, so energy_efficient_home_improvement_credit is 0 even
+      with employment_income 200000 and heat_pump_expenditures 50000; the
+      otherwise computed capped component is 2000 and the tax-liability limit is
+      36734 (probe evidence: scripts/probe_us_ira_2026.py). Axiom encodes current
+      law and has no live 2026 section 25C surface to compare.
   - id: us-pe:financial_assistance
     oracle_policy_name: financial_assistance
     oracle_policy_type: pure_input
@@ -1128,8 +1139,20 @@ policies:
     oracle_policy_type: rules
     output_vars:
       - spm_unit_capped_housing_subsidy
-    in_scope: true
-    suite: null
+    in_scope: false
+    exclusion_reason: technical
+    note: >-
+      Technical SPM resource-accounting construct, not a statutory housing
+      benefit: PolicyEngine-US 1.767.3 computes min(housing_assistance,
+      max(spm_unit_spm_threshold_housing_portion - hud_ttp, 0)). The
+      housing-assistance and tenant-payment operands are modeled HUD amounts,
+      but the outer cap comes from Census SPM thresholds, tenure housing shares,
+      and geographic adjustment rather than a statutory payment parameter;
+      forcing housing_assistance 30000, the SPM housing portion 17720, and
+      hud_ttp 10000 returns 7720 (probe evidence:
+      scripts/probe_us_ira_2026.py). Validate Section 8 or HAP against hud_hap,
+      or against housing_assistance with take-up pinned, and exclude this SPM
+      post-processing row as technical.
   - id: us-pe:ssi
     oracle_policy_name: ssi
     oracle_policy_type: rules

@@ -687,6 +687,38 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
 
 
+def test_us_pe_tier3_scope_decisions_are_evidence_backed():
+    universe = parse_universe(CONFORMANCE_DIR / "us-pe.yaml")
+    by_name = universe.by_name()
+
+    credit_25c = by_name["energy_efficient_home_improvement_credit"]
+    assert credit_25c.in_scope is False
+    assert credit_25c.exclusion_reason == "oracle_models_repealed_law"
+    assert credit_25c.suite is None
+    assert credit_25c.note
+    assert "scripts/probe_us_ira_2026.py" in credit_25c.note
+
+    spm_cap = by_name["spm_unit_capped_housing_subsidy"]
+    assert spm_cap.in_scope is False
+    assert spm_cap.exclusion_reason == "technical"
+    assert spm_cap.suite is None
+    assert spm_cap.note
+    assert "hud_hap" in spm_cap.note
+    assert "scripts/probe_us_ira_2026.py" in spm_cap.note
+
+    held_rows = (
+        "residential_clean_energy_credit",
+        "new_clean_vehicle_credit",
+        "used_clean_vehicle_credit",
+        "high_efficiency_electric_home_rebate",
+        "residential_efficiency_electrification_rebate",
+    )
+    for name in held_rows:
+        assert by_name[name].in_scope is True
+        assert by_name[name].exclusion_reason is None
+        assert by_name[name].suite is None
+
+
 def test_serialize_is_stable_roundtrip():
     universe = parse_universe(CONFORMANCE_DIR / "uk.yaml")
     once = serialize(universe)
