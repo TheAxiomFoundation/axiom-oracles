@@ -372,6 +372,10 @@ def _niit_situation(case: FederalCase) -> dict[str, Any]:
 
 def _aca_ptc_situation(case: FederalCase) -> dict[str, Any]:
     inputs = case.inputs
+    if inputs["coverage_months"] != 12:
+        raise ValueError(
+            f"{case.case_id}: ACA PTC grid requires exactly 12 coverage months"
+        )
     size = int(inputs["household_size"])
     people: dict[str, dict[str, dict[int, float | int | str | bool]]] = {}
     members: list[str] = []
@@ -473,6 +477,44 @@ def _validate_aca_ptc_fixture(
             f"{module}#input.aca_ptc_coverage_month_count": inputs[
                 "coverage_months"
             ],
+        },
+    )
+
+
+def _validate_additional_medicare_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    pipeline = "us:policies/income_tax/additional_medicare_tax_pipeline"
+    completed_se_income = (
+        Decimal(str(case.inputs["self_employment_income"])) * Decimal("0.9235")
+    )
+    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    _require_fixture_values(
+        suite="us-additional-medicare-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected={
+            "us:statutes/26/3101/b/2#input.filing_status": status_codes[
+                case.filing_status
+            ],
+            f"{pipeline}#input.wages": (
+                Decimal(str(case.inputs["primary_wages"]))
+                + Decimal(str(case.inputs["spouse_wages"]))
+            ),
+            "us:statutes/26/1401#input.self_employment_income": (
+                completed_se_income
+            ),
+            "us:statutes/26/1401#input."
+            "international_social_security_agreement_under_section_233_in_effect": (
+                False
+            ),
+            "us:statutes/26/1401#input."
+            "self_employment_income_is_subject_exclusively_to_foreign_social_"
+            "security_laws_under_agreement": False,
+            "us:statutes/26/1401#input."
+            "self_employment_income_amount_subject_exclusively_to_foreign_"
+            "social_security_laws_under_agreement": 0,
         },
     )
 
@@ -614,16 +656,23 @@ POLICIES: dict[str, PolicyConfig] = {
         key="additional_medicare_tax",
         suite="us-additional-medicare-grid",
         title="Additional Medicare Tax",
-        axiom_module_ref="PENDING",
-        fixture_path=Path("PENDING"),
-        axiom_output="PENDING#additional_medicare_tax",
+        axiom_module_ref=(
+            "us:policies/income_tax/additional_medicare_tax_pipeline"
+        ),
+        fixture_path=Path(
+            "us/policies/income_tax/additional_medicare_tax_pipeline.test.yaml"
+        ),
+        axiom_output=(
+            "us:policies/income_tax/additional_medicare_tax_pipeline"
+            "#federal_additional_medicare_tax"
+        ),
         pe_output_variables=("additional_medicare_tax",),
         pe_boundary=(
             "TaxUnit Form 8959 total over wage and taxable self-employment income"
         ),
         cases=_ADDITIONAL_MEDICARE_CASES,
         pe_situation=_payroll_situation,
-        fixture_input_validator=lambda _case, _actual: None,
+        fixture_input_validator=_validate_additional_medicare_fixture,
     ),
     "self_employment_tax": PolicyConfig(
         key="self_employment_tax",
@@ -778,6 +827,33 @@ def _policyengine_values(
     components: dict[str, dict[str, float]] = {}
     for case in config.cases:
         simulation = Simulation(situation=config.pe_situation(case))
+        if config.key == "aca_ptc":
+            actual_fpg = sum(
+                float(value)
+                for value in simulation.calculate(
+                    "tax_unit_fpg",
+                    VALIDATION_YEAR - 1,
+                )
+            )
+            expected_fpg = float(case.inputs["poverty_line"])
+            if abs(actual_fpg - expected_fpg) > config.tolerance:
+                raise ValueError(
+                    f"{case.case_id}: PolicyEngine prior-year FPL is "
+                    f"{actual_fpg}; expected {expected_fpg}"
+                )
+            actual_fraction = sum(
+                float(value)
+                for value in simulation.calculate(
+                    "aca_magi_fraction",
+                    VALIDATION_YEAR,
+                )
+            )
+            expected_fraction = float(case.inputs["fpl_percentage"]) / 100
+            if abs(actual_fraction - expected_fraction) > 0.000001:
+                raise ValueError(
+                    f"{case.case_id}: PolicyEngine ACA MAGI/FPL fraction is "
+                    f"{actual_fraction}; expected {expected_fraction}"
+                )
         case_components: dict[str, float] = {}
         for variable in config.pe_output_variables:
             values = simulation.calculate(variable, VALIDATION_YEAR)

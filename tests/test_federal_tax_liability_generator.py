@@ -124,6 +124,14 @@ def test_aca_grid_pins_prior_year_fpl_dollars_and_enrolled_premium():
     assert tax_unit["aca_magi"][2026] == 39_125
     assert tax_unit["slcsp"][2026] == 6_000
     assert tax_unit["selected_marketplace_plan_premium_proxy"][2026] == 5_800
+    invalid_inputs = dict(cases["ptc-250fpl-single"].inputs)
+    invalid_inputs["coverage_months"] = 11
+    invalid_case = replace(
+        cases["ptc-250fpl-single"],
+        inputs=invalid_inputs,
+    )
+    with pytest.raises(ValueError, match="exactly 12 coverage months"):
+        generator._aca_ptc_situation(invalid_case)
 
 
 def test_payroll_and_niit_inputs_are_derived_from_contract_facts():

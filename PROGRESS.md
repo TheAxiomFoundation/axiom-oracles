@@ -241,10 +241,11 @@ residual), #229 (small-suite grounding).
 
 In progress on `fed-parity/federal-grid-suites`. The configurable
 `federal-tax-liability-grid` runner, all four PolicyEngine-US 1.767.3 legs, and
-the ACA PTC, NIIT, and SECA Axiom bindings are implemented. Those three landed
-RuleSpec fixtures pass strict case/period/input validation. Additional Medicare
-remains blocked on one companion-fixture contract correction. Real dashboard
-reports now exist for the three unblocked suites.
+all four comparison configs/Axiom bindings are implemented. The ACA PTC, NIIT,
+and SECA landed fixtures pass strict case/period/input validation. Additional
+Medicare remains blocked on one companion-fixture contract correction, which
+the fourth binding now rejects explicitly. Real dashboard reports exist for
+the three unblocked suites.
 
 ## Done
 
@@ -278,6 +279,12 @@ reports now exist for the three unblocked suites.
   matches, contain nonzero matched cases, carry exact RuleSpec SHA/oracle
   provenance, and have committed-dashboard candidates generated from the real
   runner. No dispositions are needed.
+- Added the fourth comparison config and exact Additional Medicare fixture
+  validator. It requires the companion's completed section-1402(b) input to be
+  0.9235 times the GRID-CONTRACT net-profit fact and rejects the current
+  substituted case ID. The generator now also asserts ACA's 12-month boundary
+  and verifies PE's derived prior-year FPL and MAGI/FPL fraction. Focused
+  generator tests pass 10/10 under the exact cached PE stack.
 
 ## Next
 
