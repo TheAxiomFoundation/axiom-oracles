@@ -86,6 +86,15 @@
       "source": "comparisons/az-snap-ecps.yaml"
     },
     {
+      "suite": "az-snap-prd",
+      "name": "az-snap-prd",
+      "report": "axiom-prd-az-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/az-snap-prd.yaml"
+    },
+    {
       "suite": "az-snap-qc",
       "name": "az-snap-qc",
       "report": "axiom-snapqc-az-snap.json",
@@ -224,6 +233,15 @@
       "source": "comparisons/ca-snap-ecps.yaml"
     },
     {
+      "suite": "ca-snap-prd",
+      "name": "ca-snap-prd",
+      "report": "axiom-prd-ca-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ca-snap-prd.yaml"
+    },
+    {
       "suite": "ca-snap-qc",
       "name": "ca-snap-qc",
       "report": "axiom-snapqc-ca-snap.json",
@@ -260,6 +278,15 @@
         "TheAxiomFoundation/rulespec-us-co"
       ],
       "source": "comparisons/co-snap-ecps.yaml"
+    },
+    {
+      "suite": "co-snap-prd",
+      "name": "co-snap-prd",
+      "report": "axiom-prd-co-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/co-snap-prd.yaml"
     },
     {
       "suite": "co-snap-qc",
@@ -396,6 +423,15 @@
       "source": "comparisons/fl-snap-ecps.yaml"
     },
     {
+      "suite": "fl-snap-prd",
+      "name": "fl-snap-prd",
+      "report": "axiom-prd-fl-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/fl-snap-prd.yaml"
+    },
+    {
       "suite": "fl-tca-standards",
       "name": null,
       "report": "axiom-policyengine-fl-tca-standards.json",
@@ -430,6 +466,15 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ga-snap-ecps.yaml"
+    },
+    {
+      "suite": "ga-snap-prd",
+      "name": "ga-snap-prd",
+      "report": "axiom-prd-ga-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ga-snap-prd.yaml"
     },
     {
       "suite": "ga-snap-qc",
@@ -596,6 +641,15 @@
       "source": "comparisons/ma-snap-ecps.yaml"
     },
     {
+      "suite": "ma-snap-prd",
+      "name": "ma-snap-prd",
+      "report": "axiom-prd-ma-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ma-snap-prd.yaml"
+    },
+    {
       "suite": "md-income-tax-liability",
       "name": "md-income-tax-liability",
       "report": "axiom-policyengine-taxsim-md-income-tax-liability.json",
@@ -732,6 +786,15 @@
       "source": "comparisons/nc-snap-ecps.yaml"
     },
     {
+      "suite": "nc-snap-prd",
+      "name": "nc-snap-prd",
+      "report": "axiom-prd-nc-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/nc-snap-prd.yaml"
+    },
+    {
       "suite": "nd-income-tax-liability",
       "name": "nd-income-tax-liability",
       "report": "axiom-policyengine-taxsim-nd-income-tax-liability.json",
@@ -785,6 +848,15 @@
         "TheAxiomFoundation/rulespec-us-ny"
       ],
       "source": "comparisons/ny-snap-ecps.yaml"
+    },
+    {
+      "suite": "ny-snap-prd",
+      "name": "ny-snap-prd",
+      "report": "axiom-prd-ny-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/ny-snap-prd.yaml"
     },
     {
       "suite": "ny-snap-qc",
@@ -897,6 +969,15 @@
       "source": "comparisons/sc-snap-ecps.yaml"
     },
     {
+      "suite": "sc-snap-prd",
+      "name": "sc-snap-prd",
+      "report": "axiom-prd-sc-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/sc-snap-prd.yaml"
+    },
+    {
       "suite": "ssi-ecps",
       "name": "ssi-ecps",
       "report": "axiom-policyengine-ssi-ecps.json",
@@ -931,6 +1012,15 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/tn-snap-ecps.yaml"
+    },
+    {
+      "suite": "tn-snap-prd",
+      "name": "tn-snap-prd",
+      "report": "axiom-prd-tn-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/tn-snap-prd.yaml"
     },
     {
       "suite": "tx-snap-qc",
