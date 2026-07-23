@@ -1,0 +1,25 @@
+{
+  "schema_version": "axiom-oracles/prd-pin/v1",
+  "description": "Pinned identity of the Atlanta Fed Policy Rules Database oracle path. The adapter drives the PRD R package through the local policyengine-prd emulator (PolicyEngine/prd-comparison), whose Household schema is projected from thin Axiom cases and whose PRDRunner shells out to Rscript. Neither piece is vendored here; this file pins what an oracle number produced against PRD was computed with.",
+  "emulator": {
+    "package": "policyengine-prd",
+    "repo": "https://github.com/PolicyEngine/prd-comparison",
+    "commit": "ca5796b5107254655490c43b5d36c58d7e53af31",
+    "committed": "2026-07-05T17:28:46-04:00",
+    "note": "Installed editable from a local checkout (~/policyengine-prd); not on PyPI. The runner imports policyengine_prd.PRDRunner."
+  },
+  "r_package": {
+    "package": "PRD",
+    "version": "0.1.0",
+    "upstream": "Federal Reserve Bank of Atlanta Policy Rules Database (policy-rules-database 2.0.0 source tree)",
+    "requires": "R >= 4.0 with the PRD package installed; the adapter invokes Rscript."
+  },
+  "rule_years": {
+    "max_genuine": 2025,
+    "note": "Verified empirically: ruleYear 2026 returns the 2025 parameter vintage unchanged (e.g. CO SNAP household-of-2 value.snap 6432 = 12 x $536 FY2025 maximum at both 2025 and 2026), so 2026-period comparisons read PRD as its latest 2025 vintage and disposition the FY-vintage residuals."
+  },
+  "output_conventions": {
+    "period": "Annual sums per ruleYear; the adapter normalizes month-defined benefit columns (value.snap, value.tanf, value.ssi, ...) to one month when the comparison period is a month.",
+    "identity": "hhid preserved through create_synthetic_families and generate_expenses_benefits."
+  }
+}

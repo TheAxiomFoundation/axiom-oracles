@@ -1,0 +1,162 @@
+schema: axiom_oracles.dispositions.v1
+suite: co-snap-prd
+updated: '2026-07-23'
+entries:
+- id: prd-fy2025-cola-vintage-on-paying-rows
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-49606
+    - ecps-49613
+    - ecps-49623
+    - ecps-49630
+    - ecps-49640
+    - ecps-49649
+    - ecps-49657
+    - ecps-49659
+    - ecps-49670
+    - ecps-49673
+    - ecps-49679
+    - ecps-49680
+    - ecps-49696
+    - ecps-49703
+    - ecps-49704
+    - ecps-49714
+    - ecps-49722
+    - ecps-49724
+    - ecps-49731
+    - ecps-49750
+    - ecps-49769
+    - ecps-49774
+    - ecps-49775
+    - ecps-49787
+    - ecps-49789
+    - ecps-49795
+    - ecps-49804
+    - ecps-49809
+    - ecps-49813
+    - ecps-49822
+    - ecps-49823
+    - ecps-49844
+    - ecps-49853
+    - ecps-49857
+    - ecps-49863
+    - ecps-49868
+    - ecps-49881
+    - ecps-49894
+    - ecps-49900
+    - ecps-49912
+    - ecps-49921
+    - ecps-49931
+    - ecps-49937
+    - ecps-49960
+    - ecps-49987
+    - ecps-49991
+    - ecps-50002
+    - ecps-50017
+    - ecps-50023
+    - ecps-50032
+    - ecps-50036
+    - ecps-50038
+    - ecps-50048
+    - ecps-50053
+    - ecps-50091
+    - ecps-50093
+    - ecps-50106
+    - ecps-50107
+    - ecps-50119
+    - ecps-50144
+    - ecps-50158
+    - ecps-50165
+    - ecps-50174
+    - ecps-50177
+    - ecps-50206
+    - ecps-50210
+    - ecps-50222
+    - ecps-50223
+    - ecps-50226
+    - ecps-50229
+    - ecps-50237
+    - ecps-50247
+    - ecps-50248
+    - ecps-50254
+    - ecps-50259
+    - ecps-50266
+    - ecps-50269
+    - ecps-50270
+    - ecps-50278
+    - ecps-50281
+    - ecps-50285
+    - ecps-50314
+    - ecps-50345
+    - ecps-50347
+    - ecps-50354
+    - ecps-50364
+    - ecps-50371
+    - ecps-50372
+    - ecps-50377
+    - ecps-50379
+    - ecps-50383
+    - ecps-50384
+    - ecps-50386
+    - ecps-50393
+    - ecps-50395
+    - ecps-50397
+    - ecps-50401
+    - ecps-50403
+    - ecps-50405
+    - ecps-50411
+    - ecps-50412
+    - ecps-50419
+    - ecps-50425
+    - ecps-50438
+    - ecps-50442
+    - ecps-50447
+    - ecps-50448
+    - ecps-50452
+    - ecps-65374
+    - ecps-65430
+    - ecps-65888
+    - ecps-66081
+    - ecps-66364
+    - ecps-66678
+    - ecps-67379
+    - ecps-67463
+    - ecps-67885
+    - ecps-68100
+    - ecps-68497
+    - ecps-68860
+    - ecps-69192
+    - ecps-69216
+    - ecps-69556
+    - ecps-69583
+    - ecps-69595
+    - ecps-69678
+    - ecps-69759
+    - ecps-70237
+    - ecps-71775
+    - ecps-71953
+    - ecps-72091
+    - ecps-72431
+    - ecps-72628
+    - ecps-72632
+    - ecps-73467
+    - ecps-74632
+    - ecps-74652
+    - ecps-74671
+    - ecps-75093
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      The pinned PRD package resolves rule years through 2025 (a 2026 request
+      returns the 2025 vintage unchanged; verified in
+      adapters/prd/prd_pins.json), so on rows where both engines pay, PRD
+      applies the FY2025 maximum allotments and deduction amounts while the
+      axiom fy-2026 program applies the FY2026 COLA (for example $536 vs $546
+      for a household of two). Every selected row has both engines paying and
+      an axiom-minus-PRD residual of at most $30 per month, the COLA band
+      across the grid's household sizes. Law-year vintage, not a rules
+      disagreement.
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
+  expires_on_source_change: true

@@ -653,10 +653,18 @@ def compare(
                 except RuntimeError as exc:
                     raise click.ClickException(str(exc)) from exc
 
-                accumulator.add_batch(
-                    accumulator_cases,
-                    comparator.compare(left_results, right_results),
+                batch_comparisons = comparator.compare(
+                    left_results, right_results
                 )
+                if os.environ.get("AXIOM_ORACLES_DEBUG_BATCHES"):
+                    click.echo(
+                        f"[debug] prepared={len(prepared_cases)} "
+                        f"left_results={len(left_results)} "
+                        f"right_results={len(right_results)} "
+                        f"comparisons={len(batch_comparisons)}",
+                        err=True,
+                    )
+                accumulator.add_batch(accumulator_cases, batch_comparisons)
 
             if not accumulator.case_count:
                 raise click.ClickException(
@@ -959,6 +967,10 @@ def _prepare_cases_for_engines(
         prepared = attach_taxsim_inputs(prepared)
     if "taxcalc" in engines:
         prepared = attach_taxcalc_inputs(prepared)
+    if "prd" in engines:
+        from .adapters.prd import attach_prd_inputs
+
+        prepared = attach_prd_inputs(prepared)
     if (
         "axiom" in engines
         and axiom_program is None

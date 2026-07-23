@@ -247,7 +247,125 @@ def test_prd_package_runner_wraps_external_prd_households() -> None:
     )
 
     assert passed_households == [prd_household]
-    assert passed_programs == ["value.snap"]
+    # Concept targets name output columns; the runner translates them to the
+    # R package's program selectors before invoking PRD.
+    assert passed_programs == ["SNAP"]
     assert results[0].engine == "prd"
     assert results[0].household_id == "case-1"
     assert results[0].values == {"value.snap": 120}
+
+
+def test_prd_package_runner_normalizes_annual_benefits_to_month_periods() -> None:
+    class FakePrdRunner:
+        def run_households(self, households, programs=None):
+            del households, programs
+            return [
+                {"hhid": "case-1", "value.snap": 6432.0, "tax.income.state": 238.0}
+            ]
+
+    case = Case(
+        case_id="case-1",
+        period="2026-01",
+        metadata={"prd_household": object()},
+    )
+
+    results = PrdPackageRunner(runner=FakePrdRunner()).run_cases([case])
+
+    # PRD emits annual sums; month-period comparisons read one month for
+    # month-defined benefit columns, mirroring the PolicyEngine convention.
+    assert results[0].values["value.snap"] == 536.0
+    # Non-benefit columns pass through untouched.
+    assert results[0].values["tax.income.state"] == 238.0
+
+
+def test_prd_package_runner_joins_hhid_rows_back_to_case_ids() -> None:
+    class FakeHousehold:
+        def __init__(self, household_id):
+            self.household_id = household_id
+
+    class FakePrdRunner:
+        def run_households(self, households, programs=None):
+            del households, programs
+            # One row per person, household values repeated on every member
+            # row, float hhids — the shape the R package actually returns.
+            return [
+                {"hhid": 1.0, "value.snap": 6432.0},
+                {"hhid": 2.0, "value.snap": 5851.0},
+                {"hhid": 2.0, "value.snap": 5851.0},
+                {"hhid": 2.0, "value.snap": 5851.0},
+            ]
+
+    cases = [
+        Case(
+            case_id="ecps-77",
+            period="2026-01",
+            metadata={"prd_household": FakeHousehold(1)},
+        ),
+        Case(
+            case_id="ecps-99",
+            period="2026-01",
+            metadata={"prd_household": FakeHousehold(2)},
+        ),
+    ]
+
+    results = PrdPackageRunner(runner=FakePrdRunner()).run_cases(cases)
+
+    assert [result.household_id for result in results] == ["ecps-77", "ecps-99"]
+    assert results[0].values["value.snap"] == 536.0
+    assert results[1].values["value.snap"] == pytest_approx(5851.0 / 12)
+
+
+def pytest_approx(value):
+    import pytest
+
+    return pytest.approx(value)
+
+
+def test_prd_projection_builds_emulator_household_from_thin_case() -> None:
+    import pytest
+
+    pytest.importorskip("policyengine_prd.core.household")
+    from axiom_oracles.adapters.prd import attach_prd_inputs
+    from axiom_oracles.core.case import Entity
+
+    case = Case(
+        case_id="ecps-1",
+        period="2026-01",
+        metadata={"state_fips": "01"},
+        entities=(
+            Entity(
+                entity_id="p1",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 30,
+                    Concepts.YEARLY_EARNED_INCOME: 20000,
+                    Concepts.HOUSEHOLD_RELATION: "head",
+                },
+            ),
+            Entity(
+                entity_id="p2",
+                kind="person",
+                facts={Concepts.PERSON_AGE: 4},
+            ),
+        ),
+    )
+
+    (prepared,) = attach_prd_inputs([case])
+    spec = prepared.metadata["prd_household"]
+    # The projected spec is a plain JSON-serializable mapping (comparison
+    # reports serialize case metadata); the runner builds the emulator
+    # object from it lazily.
+    import json
+
+    json.dumps(spec)
+    assert spec["state_fips"] == 1
+    assert spec["year"] == 2026
+    assert [m["age"] for m in spec["members"]] == [30, 4]
+    assert spec["is_married"] is False
+
+    from axiom_oracles.adapters.prd.projection import build_emulator_household
+
+    household = build_emulator_household(spec)
+    assert household.state_fips == 1
+    assert household.ages == [30, 4]
+    assert household.total_earned_income == 20000

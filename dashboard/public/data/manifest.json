@@ -176,6 +176,17 @@
     "axiom-policyengine-taxsim-wv-income-tax-liability.json",
     "axiom-policyengine-taxsim-vt-income-tax-liability.json",
     "axiom-policyengine-taxsim-co-income-tax-liability.json",
-    "euromod-gettsim-de-worker-dual-oracle.json"
+    "euromod-gettsim-de-worker-dual-oracle.json",
+    "axiom-prd-al-snap-ecps.json",
+    "axiom-prd-co-snap-ecps.json",
+    "axiom-prd-fl-snap-ecps.json",
+    "axiom-prd-ga-snap-ecps.json",
+    "axiom-prd-ma-snap-ecps.json",
+    "axiom-prd-az-snap-ecps.json",
+    "axiom-prd-nc-snap-ecps.json",
+    "axiom-prd-ny-snap-ecps.json",
+    "axiom-prd-ca-snap-ecps.json",
+    "axiom-prd-sc-snap-ecps.json",
+    "axiom-prd-tn-snap-ecps.json"
   ]
 }

@@ -1,0 +1,58 @@
+# South Carolina SNAP — Axiom vs the Atlanta Fed Policy Rules Database on Enhanced CPS.
+#
+# Third oracle for the SNAP lane: the PRD R package (pinned identity in
+# axiom_oracles/adapters/prd/prd_pins.json), driven through the local
+# policyengine-prd emulator's Household schema and compared against the same
+# composed axiom-programs/us-sc/snap/fy-2026 spec the sc-snap-ecps
+# PolicyEngine suite validates. Where axiom and PolicyEngine disagree, PRD
+# breaks the tie.
+#
+# Known scope facts, verified against the pinned stack:
+# - PRD resolves rule years through 2025; a 2026 request returns the 2025
+#   parameter vintage unchanged, so residuals carry the FY2025-to-FY2026
+#   COLA vintage on top of any model difference and are dispositioned, not
+#   absorbed by tolerance.
+# - PRD emits annual sums; the adapter normalizes value.snap to one month
+#   for the month-period comparison, mirroring the PolicyEngine convention.
+# - PRD models SNAP at its state-representative county (it selects one
+#   county per state), while axiom evaluates the state encoding directly.
+#
+# Requires locally: R with the PRD package installed, and the
+# policyengine-prd emulator checkout (prd_emulator_repo).
+
+name: sc-snap-prd
+title: South Carolina SNAP — Axiom vs Atlanta Fed PRD
+description: >-
+  Compares South Carolina SNAP benefit amounts from the composed
+  axiom-programs/us-sc/snap/fy-2026 spec against the Atlanta Fed Policy
+  Rules Database (value.snap, monthly-normalized) on Enhanced CPS
+  households filtered to South Carolina, as an independent third oracle beside
+  PolicyEngine.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: prd
+    concepts:
+      - us:statutes/7/2014/u#snap_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/rulespec-us/programs/us-sc/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/sc-snap-composed.yaml
+    axiom_compiled_program: /tmp/sc-snap-compiled.json
+    axiom_rulespec_repo_roots: $HOME
+    prd_emulator_repo: $HOME/policyengine-prd
+    rulespec_roots:
+      - $HOME/rulespec-us
+    jurisdiction_fips: "45"
+
+artifacts:
+  report_basename: axiom-prd-sc-snap-ecps
+
+dashboard:
+  filename: axiom-prd-sc-snap-ecps.json
+  suite: sc-snap-prd

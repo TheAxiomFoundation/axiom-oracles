@@ -1,0 +1,330 @@
+schema: axiom_oracles.dispositions.v1
+suite: nc-snap-prd
+updated: '2026-07-23'
+entries:
+- id: prd-input-interface-receives-no-unearned-income
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-27136
+    - ecps-27144
+    - ecps-27153
+    - ecps-27167
+    - ecps-27184
+    - ecps-27185
+    - ecps-27186
+    - ecps-27194
+    - ecps-27216
+    - ecps-27224
+    - ecps-27228
+    - ecps-27232
+    - ecps-27244
+    - ecps-27248
+    - ecps-27260
+    - ecps-27271
+    - ecps-27277
+    - ecps-27282
+    - ecps-27283
+    - ecps-27290
+    - ecps-27291
+    - ecps-27294
+    - ecps-27295
+    - ecps-27296
+    - ecps-27308
+    - ecps-27310
+    - ecps-27311
+    - ecps-27315
+    - ecps-27335
+    - ecps-27359
+    - ecps-27361
+    - ecps-27368
+    - ecps-27376
+    - ecps-27379
+    - ecps-27381
+    - ecps-27387
+    - ecps-27401
+    - ecps-27414
+    - ecps-27416
+    - ecps-27418
+    - ecps-27419
+    - ecps-27420
+    - ecps-27423
+    - ecps-27425
+    - ecps-27429
+    - ecps-27431
+    - ecps-27432
+    - ecps-27437
+    - ecps-27438
+    - ecps-27449
+    - ecps-27454
+    - ecps-27459
+    - ecps-27461
+    - ecps-27463
+    - ecps-27464
+    - ecps-27468
+    - ecps-27471
+    - ecps-27479
+    - ecps-27488
+    - ecps-27489
+    - ecps-27492
+    - ecps-27498
+    - ecps-27502
+    - ecps-27504
+    - ecps-27511
+    - ecps-27512
+    - ecps-27522
+    - ecps-27524
+    - ecps-27525
+    - ecps-27528
+    - ecps-27532
+    - ecps-27535
+    - ecps-27538
+    - ecps-27547
+    - ecps-27569
+    - ecps-27581
+    - ecps-27595
+    - ecps-27602
+    - ecps-27607
+    - ecps-27618
+    - ecps-27629
+    - ecps-27637
+    - ecps-27642
+    - ecps-27644
+    - ecps-27646
+    - ecps-27659
+    - ecps-27667
+    - ecps-27690
+    - ecps-27691
+    - ecps-27715
+    - ecps-27750
+    - ecps-27763
+    - ecps-27793
+    - ecps-27795
+    - ecps-27797
+    - ecps-27817
+    - ecps-27818
+    - ecps-27823
+    - ecps-27849
+    - ecps-27850
+    - ecps-27851
+    - ecps-27852
+    - ecps-27855
+    - ecps-27862
+    - ecps-27866
+    - ecps-27870
+    - ecps-27891
+    - ecps-27893
+    - ecps-27911
+    - ecps-27924
+    - ecps-27933
+    - ecps-27938
+    - ecps-27948
+    - ecps-27952
+    - ecps-27960
+    - ecps-27964
+    - ecps-27974
+    - ecps-27982
+    - ecps-27990
+    - ecps-27997
+    - ecps-27998
+    - ecps-27999
+    - ecps-28009
+    - ecps-28015
+    - ecps-28027
+    - ecps-28033
+    - ecps-28034
+    - ecps-28035
+    - ecps-28036
+    - ecps-28054
+    - ecps-28055
+    - ecps-28091
+    - ecps-28108
+    - ecps-28114
+    - ecps-28130
+    - ecps-28139
+    - ecps-28151
+    - ecps-28154
+    - ecps-28157
+    - ecps-28158
+    - ecps-28165
+    - ecps-28176
+    - ecps-28182
+    - ecps-28192
+    - ecps-28198
+    - ecps-28202
+    - ecps-28204
+    - ecps-28210
+    - ecps-28218
+    - ecps-28219
+    - ecps-28231
+    - ecps-28253
+    - ecps-28265
+    - ecps-28266
+    - ecps-28275
+    - ecps-28286
+    - ecps-28287
+    - ecps-28294
+    - ecps-28321
+    - ecps-28327
+    - ecps-28329
+    - ecps-28330
+    - ecps-28331
+    - ecps-28343
+    - ecps-28368
+    - ecps-28384
+    - ecps-28396
+    - ecps-28409
+    - ecps-28427
+    - ecps-28428
+    - ecps-28429
+    - ecps-28431
+    - ecps-28455
+    - ecps-28474
+    - ecps-28477
+    - ecps-28483
+    - ecps-28498
+    - ecps-28500
+    - ecps-28504
+    - ecps-28517
+    - ecps-28550
+    - ecps-28558
+    - ecps-28588
+    - ecps-28610
+    - ecps-28619
+    - ecps-28633
+    - ecps-28634
+    - ecps-28661
+    - ecps-64818
+    - ecps-64879
+    - ecps-64902
+    - ecps-64944
+    - ecps-65124
+    - ecps-65125
+    - ecps-65140
+    - ecps-65303
+    - ecps-65864
+    - ecps-65919
+    - ecps-65926
+    - ecps-66045
+    - ecps-66170
+    - ecps-66350
+    - ecps-66359
+    - ecps-66558
+    - ecps-66564
+    - ecps-66639
+    - ecps-66760
+    - ecps-67152
+    - ecps-67293
+    - ecps-67312
+    - ecps-67455
+    - ecps-67519
+    - ecps-67557
+    - ecps-67605
+    - ecps-67763
+    - ecps-67860
+    - ecps-68257
+    - ecps-68337
+    - ecps-68640
+    - ecps-68936
+    - ecps-68963
+    - ecps-69053
+    - ecps-69162
+    - ecps-69211
+    - ecps-69409
+    - ecps-69413
+    - ecps-69682
+    - ecps-69795
+    - ecps-70045
+    - ecps-70126
+    - ecps-70161
+    - ecps-70172
+    - ecps-70192
+    - ecps-70361
+    - ecps-70864
+    - ecps-70976
+    - ecps-71108
+    - ecps-71269
+    - ecps-71333
+    - ecps-71407
+    - ecps-72315
+    - ecps-72430
+    - ecps-72804
+    - ecps-72999
+    - ecps-73026
+    - ecps-73539
+    - ecps-73611
+    - ecps-73702
+    - ecps-74189
+    - ecps-74350
+    - ecps-74921
+    - ecps-74975
+    - ecps-74995
+    - ecps-75038
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: |-
+      PRD's create_synthetic_families interface has no general unearned-income
+      slot and the policyengine-prd emulator forwards neither
+      social_security_income nor investment_income (PolicyEngine/prd-
+      comparison#142), so households whose ECPS income is Social Security or
+      investment project into PRD as zero-income and receive exactly the
+      FY2025 maximum allotment for their household size, while the axiom leg
+      sees the full income and computes zero. Every selected row has projected
+      earned income under $100, positive unearned income in the embedded
+      prd_household spec, and a PRD value equal to the FY2025 maximum for its
+      size. Input-interface scope, not a rules disagreement.
+    arithmetic:
+    - expression: '536.0'
+      equals: 536.0
+      tolerance: 0.5
+    - expression: '536.0'
+      equals: 536.0
+      tolerance: 0.5
+    - expression: '292.0'
+      equals: 292.0
+      tolerance: 0.5
+  linked_issue: https://github.com/PolicyEngine/prd-comparison/issues/142
+  expires_on_source_change: true
+- id: prd-fy2025-cola-vintage-on-paying-rows
+  concept: us:statutes/7/2014/u#snap_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-27158
+    - ecps-27171
+    - ecps-27223
+    - ecps-27266
+    - ecps-27344
+    - ecps-27451
+    - ecps-27537
+    - ecps-27628
+    - ecps-27660
+    - ecps-27735
+    - ecps-27798
+    - ecps-27802
+    - ecps-27877
+    - ecps-27957
+    - ecps-27981
+    - ecps-28096
+    - ecps-28105
+    - ecps-28181
+    - ecps-28292
+    - ecps-28421
+    - ecps-28496
+    - ecps-28646
+    - ecps-74116
+  disposition: explained_residual
+  evidence:
+    mechanism: |-
+      The pinned PRD package resolves rule years through 2025 (a 2026 request
+      returns the 2025 vintage unchanged; verified in
+      adapters/prd/prd_pins.json), so on rows where both engines pay, PRD
+      applies the FY2025 maximum allotments and deduction amounts while the
+      axiom fy-2026 program applies the FY2026 COLA (for example $536 vs $546
+      for a household of two). Every selected row has both engines paying and
+      an axiom-minus-PRD residual of at most $30 per month, the COLA band
+      across the grid's household sizes. Law-year vintage, not a rules
+      disagreement.
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
+  expires_on_source_change: true

@@ -397,7 +397,15 @@ def _case_report_metadata(
 ) -> dict:
     if case is None:
         return {}
+    del include_inputs
     metadata = dict(case.metadata)
+    # Always summarized, even in full-evidence mode: these are the axiom
+    # engine's internal projected input-record dump (thousands of verbose
+    # records per case for generic-projector suites — ~2 MB per SNAP
+    # household, which turned an 1,854-case report into 3.9 GB). Full
+    # household evidence means the matched values, the household summary,
+    # and the engine input specs (taxsim_input, prd_household); the record
+    # dump is reproducible from the projector and stays out of reports.
     stripped = {
         "axiom_input_records",
         "axiom_input_record_overlays",
@@ -406,7 +414,7 @@ def _case_report_metadata(
     compact = {
         key: value
         for key, value in metadata.items()
-        if include_inputs or key not in stripped
+        if key not in stripped
     }
     for key in stripped:
         value = metadata.get(key)
