@@ -3,14 +3,14 @@ title: District of Columbia income tax liability — Axiom vs PolicyEngine and T
 description: >-
   Compares the composed District of Columbia resident wage-earner income-tax pipeline in
   Axiom RuleSpec against PolicyEngine (dc_income_tax_before_credits) at 2026 and TAXSIM
-  (siitax) at its latest supported law year, 2024, on the standard six-case grid.
+  (siitax) at 2026 on the standard six-case grid.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: DC
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

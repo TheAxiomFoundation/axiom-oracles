@@ -1,0 +1,31 @@
+{
+ "suite": "uk-scottish-carer-supplement",
+ "updated": "2026-07-07",
+ "entries": [
+  {
+   "id": "annualisation-residual-carer",
+   "concept": "uk:policies/govuk/scottish-carer-supplement#scottish_carer_supplement_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The pipeline annualises the corpus-grounded 11.70/week Scottish Carer Supplement over 52 weeks (608.40); UKMOD reports 609.55, its weekly rate annualised at 365/7 weeks/year. The 1.15/year residual is the annualisation convention plus a marginal weekly-rate rounding difference, not an encoding gap.",
+   "cases": [
+    "uk-scs-scotland-carer"
+   ],
+   "arithmetic": [
+    {
+     "expression": "11.70 * 52",
+     "equals": 608.4
+    },
+    {
+     "expression": "11.69 * 365 / 7",
+     "equals": 609.5464285714286
+    },
+    {
+     "expression": "609.55 - 608.40",
+     "equals": 1.15
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

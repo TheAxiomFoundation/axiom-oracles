@@ -3,14 +3,14 @@ title: Washington capital-gains income tax liability — Axiom vs PolicyEngine a
 description: >-
   Compares the composed Washington RCW 82.87 capital-gains tax pipeline in
   Axiom RuleSpec against PolicyEngine (wa_income_tax_before_refundable_credits)
-  at 2026 and TAXSIM (siitax) at 2024 on a six-case long-term-gains grid.
+  at 2026 and TAXSIM (siitax) at 2026 on a six-case long-term-gains grid.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: WA
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

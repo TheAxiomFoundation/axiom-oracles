@@ -1,0 +1,17 @@
+{
+ "suite": "mt-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-mt:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "mt_income_tax",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-mt-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

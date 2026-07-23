@@ -5,14 +5,14 @@ description: >-
   subsection (f) computation from completed Form N-11 capital-gains worksheet
   line 10 in Axiom RuleSpec against PolicyEngine
   (hi_income_tax_before_non_refundable_credits), plus TAXSIM (siitax) at its
-  latest supported law year, 2024, on the standard grid.
+  2026 validation year on the standard grid.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: HI
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

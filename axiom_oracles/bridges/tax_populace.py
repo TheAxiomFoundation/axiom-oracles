@@ -13,6 +13,7 @@ import copy
 import json
 import math
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -2599,22 +2600,91 @@ def run_axiom_program(
     env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(deduped_roots)
     compile_program = _canonical_rulespec_compile_path(program, rulespec_root)
     with tempfile.TemporaryDirectory(prefix="axiom-tax-populace-") as tmpdir:
+        # The engine CLI requires an explicit --rulespec-root naming a
+        # canonical rulespec-<country> checkout whose top level holds ONLY
+        # jurisdiction directories (the env var above is read by the Python
+        # adapter layer, never by the binary). Upstream rulespec-us also
+        # carries root-level programs/ (compositions), which the engine
+        # forbids — so stage a filtered copy of just the jurisdiction
+        # directories and compile against that.
+        engine_root = Path(rulespec_root)
+        country = engine_root.name.removeprefix("rulespec-").split("-")[0]
+        forbidden = ("legislation", "policies", "programs", "regulations", "statutes")
+        try:
+            relative = Path(program).resolve().relative_to(engine_root.resolve())
+        except ValueError:
+            relative = None
+        program_jurisdiction = (
+            relative.parts[0]
+            if relative is not None
+            and relative.parts
+            and (
+                relative.parts[0] == country
+                or relative.parts[0].startswith(f"{country}-")
+            )
+            else None
+        )
+        # Monorepo layout only (rulespec-us with us-xx jurisdiction subdirs):
+        # when the root also carries top-level content dirs the engine
+        # forbids (upstream rulespec-us keeps programs/ compositions there),
+        # stage a copy of just the program's own jurisdiction and compile
+        # against that. Unrelated jurisdictions may carry files the engine
+        # rejects and must not poison this compile; a program that genuinely
+        # imports beyond its jurisdiction fails loudly on the unresolved
+        # import. Single-country roots (rulespec-uk/statutes/...) never
+        # stage — their content dirs at root are the canonical layout. The
+        # engine also rejects alias paths (macOS /var -> /private/var), so
+        # stage under the resolved tempdir.
+        if program_jurisdiction is not None and any(
+            (engine_root / d).exists() for d in forbidden
+        ):
+            staged = Path(tmpdir).resolve() / engine_root.name
+            staged.mkdir()
+            shutil.copytree(
+                engine_root / program_jurisdiction,
+                staged / program_jurisdiction,
+                symlinks=True,
+            )
+            compile_program = staged / relative
+            engine_root = staged
         artifact = Path(tmpdir) / f"{program.stem}.json"
+        # Newer engines take explicit, repeatable --rulespec-root flags and
+        # ignore AXIOM_RULESPEC_REPO_ROOTS; older engines only read the env
+        # var and reject the flag. When a staged root exists, point the env
+        # at it first so old engines resolve through it too; otherwise keep
+        # the alias-first ordering established above.
+        if engine_root != Path(rulespec_root):
+            env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
+                [str(engine_root), *deduped_roots]
+            )
+        base_cmd = [
+            str(binary),
+            "compile",
+            "--program",
+            str(compile_program),
+            "--output",
+            str(artifact),
+        ]
         compile_result = subprocess.run(
-            [
-                str(binary),
-                "compile",
-                "--program",
-                str(compile_program),
-                "--output",
-                str(artifact),
-            ],
+            base_cmd[:4] + ["--rulespec-root", str(engine_root)] + base_cmd[4:],
             capture_output=True,
             text=True,
             cwd=str(axiom_rules_path),
             env=env,
             timeout=60,
         )
+        if (
+            compile_result.returncode != 0
+            and "unknown compile argument" in (compile_result.stderr or "")
+        ):
+            compile_result = subprocess.run(
+                base_cmd,
+                capture_output=True,
+                text=True,
+                cwd=str(axiom_rules_path),
+                env=env,
+                timeout=60,
+            )
         if compile_result.returncode != 0:
             raise SystemExit(
                 compile_result.stderr.strip() or compile_result.stdout.strip()

@@ -1,0 +1,16 @@
+{
+ "suite": "ks-tanf-ecps",
+ "updated": "2026-07-08",
+ "entries": [
+  {
+   "id": "ks-tanf-ecps-ks_tanf_maximum_benefit-composed-vs-pe-bridge",
+   "concept": "us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit",
+   "kind": null,
+   "disposition": "bridge_artifact",
+   "mechanism": "KS KEESM payment standard / household-size vs PolicyEngine: 6 ks_tanf_maximum_benefit mismatches (6 axiom>PE, 1 PE=0, 0 axiom=0; max |diff| 2688). Structural bridge/projection + composed-slice divergence between Axiom's composed state program and PE's full model, not a rulespec statutory-encoding defect. Representative: ecps-21176 axiom=3708.0 PE=2688.0; ecps-21219 axiom=3708.0 PE=2688.0; ecps-21221 axiom=2688.0 PE=0.0. Per-suite grounding: axiom-oracles#229.",
+   "cases": [],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+  }
+ ]
+}

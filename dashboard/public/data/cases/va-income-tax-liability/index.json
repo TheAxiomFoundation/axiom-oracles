@@ -1,0 +1,17 @@
+{
+ "suite": "va-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-va:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "va_income_tax_before_non_refundable_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-va-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

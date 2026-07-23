@@ -1,0 +1,16 @@
+{
+ "suite": "ca-tanf-ecps",
+ "updated": "2026-07-08",
+ "entries": [
+  {
+   "id": "ca-tanf-ecps-ca_tanf_benefit-composed-vs-pe-bridge",
+   "concept": "us-ca:policies/cdss/calworks#ca_tanf_benefit",
+   "kind": null,
+   "disposition": "bridge_artifact",
+   "mechanism": "Composed CalWORKs grant/needs standard + earned-income disregards vs PolicyEngine: 177 ca_tanf_benefit mismatches (72 axiom>PE, 66 PE=0, 39 axiom=0; max |diff| 25740). Structural bridge/projection + composed-slice divergence between Axiom's composed state program and PE's full model, not a rulespec statutory-encoding defect. Representative: ecps-56922 axiom=12463.32 PE=13303.3515625; ecps-56934 axiom=4357.8 PE=15977.779296875; ecps-56940 axiom=18936.0 PE=19908.0. Per-suite grounding: axiom-oracles#229.",
+   "cases": [],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+  }
+ ]
+}

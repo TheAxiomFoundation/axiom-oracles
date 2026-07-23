@@ -1,0 +1,108 @@
+{
+ "suite": "nm-income-tax-liability",
+ "updated": "2026-07-15",
+ "entries": [
+  {
+   "id": "nm-taxsim-2024-single-30000",
+   "concept": "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "nm-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "319.3 - 381.3",
+     "equals": -62
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nm-taxsim-2024-single-60000",
+   "concept": "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "nm-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1654.3 - 1945.1",
+     "equals": -290.8
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nm-taxsim-2024-single-150000",
+   "concept": "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "nm-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "6019.1 - 6355.1",
+     "equals": -336
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nm-taxsim-2024-married-60000",
+   "concept": "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "nm-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "784.4 - 1101.2",
+     "equals": -316.8
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nm-taxsim-2024-married-120000",
+   "concept": "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "nm-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "3515.6 - 4041.2",
+     "equals": -525.6
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nm-taxsim-2024-married-300000",
+   "concept": "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "nm-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "12311.2 - 12861.2",
+     "equals": -550
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

@@ -1,0 +1,81 @@
+{
+ "suite": "uk-scottish-child-payment",
+ "updated": "2026-07-07",
+ "entries": [
+  {
+   "id": "weeks-convention-residual-child4",
+   "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Identical weekly Scottish Child Payment rate (28.20/week) on both engines; the 4.03/year difference is only the annualization convention \u2014 UKMOD uses 365/7 weeks/year, the pipeline uses 52.",
+   "cases": [
+    "uk-scp-scotland-child4-uc"
+   ],
+   "arithmetic": [
+    {
+     "expression": "28.20 * 365 / 7",
+     "equals": 1470.4285714285716
+    },
+    {
+     "expression": "28.20 * 52",
+     "equals": 1466.4
+    },
+    {
+     "expression": "1470.4285714285716 - 1466.40",
+     "equals": 4.0285714285716
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "weeks-convention-residual-child7",
+   "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Identical weekly Scottish Child Payment rate (28.20/week); the 4.03/year difference is only the annualization convention (UKMOD 365/7 vs the pipeline's 52 weeks/year).",
+   "cases": [
+    "uk-scp-scotland-child7-uc"
+   ],
+   "arithmetic": [
+    {
+     "expression": "28.20 * 365 / 7",
+     "equals": 1470.4285714285716
+    },
+    {
+     "expression": "28.20 * 52",
+     "equals": 1466.4
+    },
+    {
+     "expression": "1470.4285714285716 - 1466.40",
+     "equals": 4.0285714285716
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "weeks-convention-residual-child15",
+   "concept": "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Identical weekly Scottish Child Payment rate (28.20/week); the 4.03/year difference is only the annualization convention (UKMOD 365/7 vs the pipeline's 52 weeks/year).",
+   "cases": [
+    "uk-scp-scotland-child15-uc"
+   ],
+   "arithmetic": [
+    {
+     "expression": "28.20 * 365 / 7",
+     "equals": 1470.4285714285716
+    },
+    {
+     "expression": "28.20 * 52",
+     "equals": 1466.4
+    },
+    {
+     "expression": "1470.4285714285716 - 1466.40",
+     "equals": 4.0285714285716
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

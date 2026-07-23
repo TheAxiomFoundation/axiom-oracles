@@ -1,0 +1,56 @@
+{
+ "suite": "de-worker-dual-oracle",
+ "updated": "2026-07-21",
+ "entries": [
+  {
+   "id": "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag",
+   "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD DE_2025 omits the EStG \u00a710(1) no. 3 sentence 4 four-percent health-insurance deduction haircut and the \u00a710c 36 EUR lump-sum allowance. GETTSIM applies the statute-consistent deduction chain, so EUROMOD minus GETTSIM annual income tax (including Soli) ranges from -19.51 EUR at the 2,500 EUR/month case to -88.35 EUR around the social- insurance caps.",
+   "cases": [
+    "single-w-2500",
+    "single-w-4000",
+    "single-w-5500",
+    "single-w-7500",
+    "single-w-9000",
+    "single-w-12000",
+    "single-e-4000",
+    "couple-8000-0",
+    "couple-4000-2000"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/21"
+  },
+  {
+   "id": "euromod-child-allowance-without-kindergeld-addback",
+   "concept": "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD DE_2025 deducts the EStG \u00a732(6) child allowances and also pays full Kindergeld without the \u00a731 sentence 4 add-back in the favorable- treatment comparison. GETTSIM applies the statute-consistent add-back; EUROMOD minus GETTSIM is -1,476.17 EUR for one child and -2,824.99 EUR for two children at the 4,000 EUR/month seed.",
+   "cases": [
+    "parent-1child-4000",
+    "parent-2children-4000"
+   ],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/22"
+  },
+  {
+   "id": "gettsim-midijob-childless-care-surcharge-base",
+   "concept": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "GETTSIM applies the childless Pflegeversicherung surcharge to the total reduced Midijob contribution base instead of the SGB IV \u00a720(2a) sentence 6 employee base. EUROMOD follows the statutory employee-base rule, yielding EUROMOD minus GETTSIM = -1.06973 EUR/month.",
+   "cases": [
+    "single-w-1200"
+   ],
+   "arithmetic": [
+    {
+     "expression": "24.968737633557577 - 26.038467222002375",
+     "equals": -1.069729588444798
+    }
+   ],
+   "linked_issue": "https://github.com/ttsim-dev/gettsim/issues/1215"
+  }
+ ]
+}
