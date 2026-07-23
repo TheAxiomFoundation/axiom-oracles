@@ -1,202 +1,105 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-income-tax-liability
-updated: '2026-07-19'
+updated: "2026-07-23"
+# Colorado composed base-tax pipeline vs PolicyEngine and TAXSIM, both at
+# 2026. PolicyEngine matches to the cent on all six cases; every TAXSIM
+# residual is the documented scope wedge between the before-credit
+# 39-22-104(1.7)(c) core and siitax's final-liability model (TABOR-style
+# refund, 39-22-627 adjustments).
 entries:
-- id: co-taxsim-2024-vintage-single-30000
-  concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
-  case_id: co-single-30000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      TAXSIM runs at its latest 2024 law year and its siitax is final
-      liability net of credits, while the suite's Axiom/PolicyEngine side is the
-      2026 tax before non-refundable credits, so the residual decomposes into
-      three verified factors from TAXSIM's own detail output. First, TAXSIM's
-      before-credit tax staxbc is exactly 4.25 per cent (the SB 24-228
-      TABOR-triggered temporary 2024 rate) of wages minus the 14600 dollar 2024
-      federal standard deduction, i.e. 654.5. Second, siitax nets TAXSIM's
-      modeled 2024 TABOR sales-tax refund of 177.0 (exactly the 177-dollar
-      first-tier statutory refund for the 30,000-dollar single case; an
-      income-interpolated approximation of the section 39-22-2003 tiered refund
-      elsewhere, doubling for joint filers), giving siitax = staxbc - 177.0
-      = 477.5 exactly. Third, the pipeline computes 2026 law: 4.40 per cent
-      of wages minus the 2026 OBBBA-era standard deduction. Vintage plus
-      concept difference, not a pipeline defect; the pipeline matches
-      PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 654.5 - 177.0
-      equals: 477.5
-      tolerance: 0.01
-    - expression: 611.6 - 477.5
-      equals: 134.1
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 611.6
-    right: 477.5
-- id: co-taxsim-2024-vintage-single-60000
-  concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
-  case_id: co-single-60000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      TAXSIM runs at its latest 2024 law year and its siitax is final
-      liability net of credits, while the suite's Axiom/PolicyEngine side is the
-      2026 tax before non-refundable credits, so the residual decomposes into
-      three verified factors from TAXSIM's own detail output. First, TAXSIM's
-      before-credit tax staxbc is exactly 4.25 per cent (the SB 24-228
-      TABOR-triggered temporary 2024 rate) of wages minus the 14600 dollar 2024
-      federal standard deduction, i.e. 1929.5. Second, siitax nets TAXSIM's
-      modeled 2024 TABOR sales-tax refund of 185.48 (exactly the 177-dollar
-      first-tier statutory refund for the 30,000-dollar single case; an
-      income-interpolated approximation of the section 39-22-2003 tiered refund
-      elsewhere, doubling for joint filers), giving siitax = staxbc - 185.48
-      = 1744.02 exactly. Third, the pipeline computes 2026 law: 4.40 per cent
-      of wages minus the 2026 OBBBA-era standard deduction. Vintage plus
-      concept difference, not a pipeline defect; the pipeline matches
-      PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 1929.5 - 185.48
-      equals: 1744.02
-      tolerance: 0.01
-    - expression: 1931.6 - 1744.02
-      equals: 187.58
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 1931.6
-    right: 1744.02
-- id: co-taxsim-2024-vintage-single-150000
-  concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
-  case_id: co-single-150000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      TAXSIM runs at its latest 2024 law year and its siitax is final
-      liability net of credits, while the suite's Axiom/PolicyEngine side is the
-      2026 tax before non-refundable credits, so the residual decomposes into
-      three verified factors from TAXSIM's own detail output. First, TAXSIM's
-      before-credit tax staxbc is exactly 4.25 per cent (the SB 24-228
-      TABOR-triggered temporary 2024 rate) of wages minus the 14600 dollar 2024
-      federal standard deduction, i.e. 5754.5. Second, siitax nets TAXSIM's
-      modeled 2024 TABOR sales-tax refund of 267.3 (exactly the 177-dollar
-      first-tier statutory refund for the 30,000-dollar single case; an
-      income-interpolated approximation of the section 39-22-2003 tiered refund
-      elsewhere, doubling for joint filers), giving siitax = staxbc - 267.3
-      = 5487.2 exactly. Third, the pipeline computes 2026 law: 4.40 per cent
-      of wages minus the 2026 OBBBA-era standard deduction. Vintage plus
-      concept difference, not a pipeline defect; the pipeline matches
-      PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 5754.5 - 267.3
-      equals: 5487.2
-      tolerance: 0.01
-    - expression: 5891.6 - 5487.2
-      equals: 404.4
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 5891.6
-    right: 5487.2
-- id: co-taxsim-2024-vintage-married-60000
-  concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
-  case_id: co-married-60000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      TAXSIM runs at its latest 2024 law year and its siitax is final
-      liability net of credits, while the suite's Axiom/PolicyEngine side is the
-      2026 tax before non-refundable credits, so the residual decomposes into
-      three verified factors from TAXSIM's own detail output. First, TAXSIM's
-      before-credit tax staxbc is exactly 4.25 per cent (the SB 24-228
-      TABOR-triggered temporary 2024 rate) of wages minus the 29200 dollar 2024
-      federal standard deduction, i.e. 1309.0. Second, siitax nets TAXSIM's
-      modeled 2024 TABOR sales-tax refund of 370.96 (exactly the 177-dollar
-      first-tier statutory refund for the 30,000-dollar single case; an
-      income-interpolated approximation of the section 39-22-2003 tiered refund
-      elsewhere, doubling for joint filers), giving siitax = staxbc - 370.96
-      = 938.04 exactly. Third, the pipeline computes 2026 law: 4.40 per cent
-      of wages minus the 2026 OBBBA-era standard deduction. Vintage plus
-      concept difference, not a pipeline defect; the pipeline matches
-      PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 1309.0 - 370.96
-      equals: 938.04
-      tolerance: 0.01
-    - expression: 1223.2 - 938.04
-      equals: 285.16
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 1223.2
-    right: 938.04
-- id: co-taxsim-2024-vintage-married-120000
-  concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
-  case_id: co-married-120000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      TAXSIM runs at its latest 2024 law year and its siitax is final
-      liability net of credits, while the suite's Axiom/PolicyEngine side is the
-      2026 tax before non-refundable credits, so the residual decomposes into
-      three verified factors from TAXSIM's own detail output. First, TAXSIM's
-      before-credit tax staxbc is exactly 4.25 per cent (the SB 24-228
-      TABOR-triggered temporary 2024 rate) of wages minus the 29200 dollar 2024
-      federal standard deduction, i.e. 3859.0. Second, siitax nets TAXSIM's
-      modeled 2024 TABOR sales-tax refund of 498.2 (exactly the 177-dollar
-      first-tier statutory refund for the 30,000-dollar single case; an
-      income-interpolated approximation of the section 39-22-2003 tiered refund
-      elsewhere, doubling for joint filers), giving siitax = staxbc - 498.2
-      = 3360.8 exactly. Third, the pipeline computes 2026 law: 4.40 per cent
-      of wages minus the 2026 OBBBA-era standard deduction. Vintage plus
-      concept difference, not a pipeline defect; the pipeline matches
-      PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 3859.0 - 498.2
-      equals: 3360.8
-      tolerance: 0.01
-    - expression: 3863.2 - 3360.8
-      equals: 502.4
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 3863.2
-    right: 3360.8
-- id: co-taxsim-2024-vintage-married-300000
-  concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
-  case_id: co-married-300000
-  kind: amount_difference
-  disposition: explained_residual
-  evidence:
-    mechanism: |-
-      TAXSIM runs at its latest 2024 law year and its siitax is final
-      liability net of credits, while the suite's Axiom/PolicyEngine side is the
-      2026 tax before non-refundable credits, so the residual decomposes into
-      three verified factors from TAXSIM's own detail output. First, TAXSIM's
-      before-credit tax staxbc is exactly 4.25 per cent (the SB 24-228
-      TABOR-triggered temporary 2024 rate) of wages minus the 29200 dollar 2024
-      federal standard deduction, i.e. 12070.0. Second, siitax nets TAXSIM's
-      modeled 2024 TABOR sales-tax refund of 698.43 (exactly the 177-dollar
-      first-tier statutory refund for the 30,000-dollar single case; an
-      income-interpolated approximation of the section 39-22-2003 tiered refund
-      elsewhere, doubling for joint filers), giving siitax = staxbc - 698.43
-      = 11371.57 exactly. Third, the pipeline computes 2026 law: 4.40 per cent
-      of wages minus the 2026 OBBBA-era standard deduction. Vintage plus
-      concept difference, not a pipeline defect; the pipeline matches
-      PolicyEngine at 2026 to the cent on every grid case.
-    arithmetic:
-    - expression: 12070.0 - 698.43
-      equals: 11371.57
-      tolerance: 0.01
-    - expression: 11783.2 - 11371.57
-      equals: 411.63
-      tolerance: 0.01
-  expires_on_source_change: true
-  pinned:
-    left: 11783.2
-    right: 11371.57
+  - id: co-taxsim-2026-scope-single-30000
+    concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
+    case_id: co-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Both legs run at 2026 law. The Axiom target is the flat 4.40 percent section 39-22-104(1.7)(c) base tax on completed Colorado taxable income, scoped before section 39-22-627 temporary rate adjustments and all credits; TAXSIM's siitax models final Colorado liability including its smooth TABOR-style refund estimate and any 627 adjustment. The residual is that documented scope wedge, pinned per case.
+      arithmetic:
+        - expression: "591.0 - 611.6"
+          equals: -20.6
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 611.6
+      right: 591.0
+  - id: co-taxsim-2026-scope-single-60000
+    concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
+    case_id: co-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Both legs run at 2026 law. The Axiom target is the flat 4.40 percent section 39-22-104(1.7)(c) base tax on completed Colorado taxable income, scoped before section 39-22-627 temporary rate adjustments and all credits; TAXSIM's siitax models final Colorado liability including its smooth TABOR-style refund estimate and any 627 adjustment. The residual is that documented scope wedge, pinned per case.
+      arithmetic:
+        - expression: "1910.53 - 1931.6"
+          equals: -21.07
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1931.6
+      right: 1910.53
+  - id: co-taxsim-2026-scope-single-150000
+    concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
+    case_id: co-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Both legs run at 2026 law. The Axiom target is the flat 4.40 percent section 39-22-104(1.7)(c) base tax on completed Colorado taxable income, scoped before section 39-22-627 temporary rate adjustments and all credits; TAXSIM's siitax models final Colorado liability including its smooth TABOR-style refund estimate and any 627 adjustment. The residual is that documented scope wedge, pinned per case.
+      arithmetic:
+        - expression: "5862.6 - 5891.6"
+          equals: -29.0
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5891.6
+      right: 5862.6
+  - id: co-taxsim-2026-scope-married-60000
+    concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
+    case_id: co-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Both legs run at 2026 law. The Axiom target is the flat 4.40 percent section 39-22-104(1.7)(c) base tax on completed Colorado taxable income, scoped before section 39-22-627 temporary rate adjustments and all credits; TAXSIM's siitax models final Colorado liability including its smooth TABOR-style refund estimate and any 627 adjustment. The residual is that documented scope wedge, pinned per case.
+      arithmetic:
+        - expression: "1181.06 - 1223.2"
+          equals: -42.14
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1223.2
+      right: 1181.06
+  - id: co-taxsim-2026-scope-married-120000
+    concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
+    case_id: co-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Both legs run at 2026 law. The Axiom target is the flat 4.40 percent section 39-22-104(1.7)(c) base tax on completed Colorado taxable income, scoped before section 39-22-627 temporary rate adjustments and all credits; TAXSIM's siitax models final Colorado liability including its smooth TABOR-style refund estimate and any 627 adjustment. The residual is that documented scope wedge, pinned per case.
+      arithmetic:
+        - expression: "3808.83 - 3863.2"
+          equals: -54.37
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 3863.2
+      right: 3808.83
+  - id: co-taxsim-2026-scope-married-300000
+    concept: us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability
+    case_id: co-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Both legs run at 2026 law. The Axiom target is the flat 4.40 percent section 39-22-104(1.7)(c) base tax on completed Colorado taxable income, scoped before section 39-22-627 temporary rate adjustments and all credits; TAXSIM's siitax models final Colorado liability including its smooth TABOR-style refund estimate and any 627 adjustment. The residual is that documented scope wedge, pinned per case.
+      arithmetic:
+        - expression: "11706.89 - 11783.2"
+          equals: -76.31
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 11783.2
+      right: 11706.89

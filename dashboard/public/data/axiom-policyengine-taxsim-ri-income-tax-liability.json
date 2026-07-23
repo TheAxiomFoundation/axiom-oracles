@@ -228,14 +228,7 @@
         "upstream_engine_gap": 0
       },
       "dispositions_file": "dispositions/ri-income-tax-liability.yaml",
-      "expired_entries": [
-        "ri-taxsim-2024-single-30000",
-        "ri-taxsim-2024-single-60000",
-        "ri-taxsim-2024-single-150000",
-        "ri-taxsim-2024-married-60000",
-        "ri-taxsim-2024-married-120000",
-        "ri-taxsim-2024-married-300000"
-      ],
+      "expired_entries": [],
       "explained_rate": 0,
       "orphaned_entries": [],
       "raw_match_rate": 0,

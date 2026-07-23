@@ -132,11 +132,7 @@
         "upstream_engine_gap": 3
       },
       "dispositions_file": "dispositions/nd-income-tax-liability.yaml",
-      "expired_entries": [
-        "nd-taxsim-2024-single-150000",
-        "nd-taxsim-2024-married-120000",
-        "nd-taxsim-2024-married-300000"
-      ],
+      "expired_entries": [],
       "explained_rate": 75,
       "orphaned_entries": [],
       "raw_match_rate": 50,

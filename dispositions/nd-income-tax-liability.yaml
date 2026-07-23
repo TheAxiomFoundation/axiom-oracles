@@ -2,22 +2,6 @@ schema: axiom_oracles.dispositions.v1
 suite: nd-income-tax-liability
 updated: "2026-07-16"
 entries:
-  - id: nd-taxsim-2024-single-150000
-    concept: us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability
-    case_id: nd-single-150000
-    kind: amount_difference
-    disposition: explained_residual
-    evidence:
-      mechanism: >-
-        Axiom applies North Dakota's official 2026 indexed rate schedule under
-        N.D.C.C. 57-38-30.3(1)(g); the pinned TAXSIM leg applies 2024 law.
-      upstream_url: https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf
-      arithmetic:
-        - expression: "1644.3375 - 1721.01"
-          equals: -76.6725
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned: {left: 1644.3375, right: 1721.01}
   - id: nd-policyengine-2026-single-150000
     concept: us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability
     case_id: nd-single-150000
@@ -35,22 +19,6 @@ entries:
           tolerance: 0.02
     expires_on_source_change: true
     pinned: {left: 1644.3375, right: 1665.7874755859375}
-  - id: nd-taxsim-2024-married-120000
-    concept: us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability
-    case_id: nd-married-120000
-    kind: amount_difference
-    disposition: explained_residual
-    evidence:
-      mechanism: >-
-        Axiom applies North Dakota's official 2026 indexed rate schedule under
-        N.D.C.C. 57-38-30.3(1)(g); the pinned TAXSIM leg applies 2024 law.
-      upstream_url: https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf
-      arithmetic:
-        - expression: "97.5 - 234.16"
-          equals: -136.66
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned: {left: 97.5, right: 234.16}
   - id: nd-policyengine-2026-married-120000
     concept: us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability
     case_id: nd-married-120000
@@ -68,22 +36,6 @@ entries:
           tolerance: 0.02
     expires_on_source_change: true
     pinned: {left: 97.5, right: 133.08749389648438}
-  - id: nd-taxsim-2024-married-300000
-    concept: us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability
-    case_id: nd-married-300000
-    kind: amount_difference
-    disposition: explained_residual
-    evidence:
-      mechanism: >-
-        Axiom applies North Dakota's official 2026 indexed rate schedule under
-        N.D.C.C. 57-38-30.3(1)(g); the pinned TAXSIM leg applies 2024 law.
-      upstream_url: https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf
-      arithmetic:
-        - expression: "3607.5 - 3744.16"
-          equals: -136.66
-          tolerance: 0.02
-    expires_on_source_change: true
-    pinned: {left: 3607.5, right: 3744.16}
   - id: nd-policyengine-2026-married-300000
     concept: us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability
     case_id: nd-married-300000

@@ -11,6 +11,10 @@
       "case_id": "co-single-30000",
       "concept": "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability",
       "difference": 20.600000000000023,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "co-taxsim-2026-scope-single-30000"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -25,6 +29,10 @@
       "case_id": "co-single-60000",
       "concept": "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability",
       "difference": 21.069999999999936,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "co-taxsim-2026-scope-single-60000"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -39,6 +47,10 @@
       "case_id": "co-single-150000",
       "concept": "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability",
       "difference": 29.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "co-taxsim-2026-scope-single-150000"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -53,6 +65,10 @@
       "case_id": "co-married-60000",
       "concept": "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability",
       "difference": 42.1400000000001,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "co-taxsim-2026-scope-married-60000"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -67,6 +83,10 @@
       "case_id": "co-married-120000",
       "concept": "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability",
       "difference": 54.36999999999989,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "co-taxsim-2026-scope-married-120000"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -81,6 +101,10 @@
       "case_id": "co-married-300000",
       "concept": "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability",
       "difference": 76.31000000000131,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "co-taxsim-2026-scope-married-300000"
+      },
       "engines": [
         "axiom",
         "taxsim"
@@ -115,24 +139,17 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 6,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
       "dispositions_file": "dispositions/co-income-tax-liability.yaml",
-      "expired_entries": [
-        "co-taxsim-2024-vintage-single-30000",
-        "co-taxsim-2024-vintage-single-60000",
-        "co-taxsim-2024-vintage-single-150000",
-        "co-taxsim-2024-vintage-married-60000",
-        "co-taxsim-2024-vintage-married-120000",
-        "co-taxsim-2024-vintage-married-300000"
-      ],
-      "explained_rate": 50,
+      "expired_entries": [],
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 50,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 6
+      "unexplained_count": 0
     },
     "match_count": 6,
     "mismatch_count": 6,

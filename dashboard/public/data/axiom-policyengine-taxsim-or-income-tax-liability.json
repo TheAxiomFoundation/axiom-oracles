@@ -228,14 +228,7 @@
         "upstream_engine_gap": 0
       },
       "dispositions_file": "dispositions/or-income-tax-liability.yaml",
-      "expired_entries": [
-        "or-taxsim-2024-single-30000",
-        "or-taxsim-2024-single-60000",
-        "or-taxsim-2024-single-150000",
-        "or-taxsim-2024-married-60000",
-        "or-taxsim-2024-married-120000",
-        "or-taxsim-2024-married-300000"
-      ],
+      "expired_entries": [],
       "explained_rate": 0,
       "orphaned_entries": [],
       "raw_match_rate": 0,

@@ -833,6 +833,28 @@ const SUITE_OVERRIDES = {
   },
 };
 
+// State-tax Populace campaign — one suite per ready state, projected from
+// reports/state-tax-populace-campaign-*.json by
+// scripts/emit_populace_campaign_artifacts.py. Each groups into its
+// state's income-tax program page beside the six-case grid suite; the
+// campaign is the full pinned US Populace (every routed tax unit), so it
+// leads the grid in ordering.
+const POPULACE_CAMPAIGN_STATES = [
+  "AL", "AR", "AZ", "CO", "CT", "DE", "GA", "HI", "IA", "IL", "IN", "KS",
+  "LA", "MI", "MS", "MT", "NC", "NJ", "NM", "NY", "OH", "OK", "PA", "SC",
+  "UT", "VA", "VT", "WV",
+];
+for (const st of POPULACE_CAMPAIGN_STATES) {
+  SUITE_OVERRIDES[`${st.toLowerCase()}-income-tax-populace`] = {
+    family: "state_income_tax",
+    jurisdiction: st,
+    label: `${US_STATE_NAMES[st]} income tax — full Populace`,
+    region: "us",
+    kind: "household",
+    order: 90,
+  };
+}
+
 const SNAP_SUITE_RE = /^([a-z]{2})-snap-ecps$/;
 
 /** Resolve display + grouping metadata for a suite slug. */
