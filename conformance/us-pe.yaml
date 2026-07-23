@@ -43,9 +43,14 @@ policies:
     output_vars:
       - additional_medicare_tax
     in_scope: true
-    suite: null
-    note: In-scope uncovered — PE-US computes the 0.9% Additional Medicare Tax; not in the fiit-ecps payroll
-      concept set.
+    suite: us-additional-medicare-grid
+    note: 'The us-additional-medicare-grid suite compares six tax-year 2026
+      Form 8959 cases spanning single, joint, and married-filing-separately wage
+      and self-employment boundaries. It binds PE-US additional_medicare_tax to
+      Axiom''s combined wage and self-employment output; the Axiom fixture
+      supplies per-Person gross SE profit and derives the section 1402(a)(12)
+      adjustment before TaxUnit aggregation. The committed report is 6/6 within
+      one cent and includes nonzero wage and self-employment cases.'
   - id: us-pe:ak_atap
     oracle_policy_name: ak_atap
     oracle_policy_type: rules

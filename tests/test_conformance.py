@@ -589,6 +589,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "ny-tanf-ecps",
         "wa-tanf-ecps",
         "us-aca-ptc-grid",
+        "us-additional-medicare-grid",
         "us-niit-grid",
         "us-seca-grid",
     }
@@ -601,6 +602,10 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     # SNAP is one national row registered to its canonical (largest) suite.
     assert by_name["snap"].suite == "ca-snap-ecps"
     assert by_name["aca_ptc"].suite == "us-aca-ptc-grid"
+    assert (
+        by_name["additional_medicare_tax"].suite
+        == "us-additional-medicare-grid"
+    )
     assert by_name["net_investment_income_tax"].suite == "us-niit-grid"
     assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final
