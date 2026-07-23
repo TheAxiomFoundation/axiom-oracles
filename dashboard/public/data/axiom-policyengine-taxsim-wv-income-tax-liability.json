@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T14:42:06Z",
+    "generated_at": "2026-07-23T20:00:17Z",
     "generated_by": "scripts/run_comparison.py::wv-income-tax-liability",
     "rulespecs": [
       {
