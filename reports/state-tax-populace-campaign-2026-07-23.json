@@ -1,0 +1,1162 @@
+{
+  "comparison": {
+    "compared_count": 45297,
+    "mismatch_count": 0,
+    "mismatches": [],
+    "ready_state_count": 28,
+    "sample_size_per_state": 0,
+    "schema_version": "axiom.state_tax_populace_ready_comparison.v1",
+    "states": {
+      "AL": {
+        "compared_count": 1632,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.20000000018626451,
+        "max_relative_difference": 5.137768677318344e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability",
+        "policyengine_target": "al_income_tax_before_non_refundable_credits",
+        "program": "us-al:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 2571800.23285324,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "AR": {
+        "compared_count": 1475,
+        "comparison_aggregation": "person_sum_to_tax_unit",
+        "max_absolute_difference": 0.0800000000745058,
+        "max_relative_difference": 5.766488640852711e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv",
+        "policyengine_target": "ar_income_tax_before_non_refundable_credits_indiv",
+        "program": "us-ar:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 1453018.637271964,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "AZ": {
+        "compared_count": 1585,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.20000000018626451,
+        "max_relative_difference": 4.7615748572245235e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability",
+        "policyengine_target": "az_income_tax_before_non_refundable_credits",
+        "program": "us-az:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 3845608.9544030246,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "CO": {
+        "compared_count": 1201,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.3839999996125698,
+        "max_relative_difference": 6.477266933428238e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability",
+        "policyengine_target": "co_income_tax_before_non_refundable_credits",
+        "program": "us-co:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 3072763.1901944624,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "CT": {
+        "compared_count": 951,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.4592000003904104,
+        "max_relative_difference": 3.6972412397573344e-07,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability",
+        "policyengine_target": "ct_income_tax_before_refundable_credits",
+        "program": "us-ct:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 1974906.4415714233,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "DE": {
+        "compared_count": 936,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.2319999998435378,
+        "max_relative_difference": 7.766944017661336e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability",
+        "policyengine_target": "de_income_tax_before_non_refundable_credits_unit",
+        "program": "us-de:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 538740.5832625218,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "GA": {
+        "compared_count": 2187,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 1.0399999991059303,
+        "max_relative_difference": 7.434085777329925e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability",
+        "policyengine_target": "ga_income_tax_before_non_refundable_credits",
+        "program": "us-ga:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 5641274.800103522,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "HI": {
+        "compared_count": 1519,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.7903125006705523,
+        "max_relative_difference": 0.0029058629126775403,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability",
+        "policyengine_target": "hi_income_tax_before_non_refundable_credits",
+        "program": "us-hi:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 795295.9443316361,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "IA": {
+        "compared_count": 976,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.3440000005066395,
+        "max_relative_difference": 5.619773801207627e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability",
+        "policyengine_target": "ia_income_tax_before_credits",
+        "program": "us-ia:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 1616996.9448974673,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "IL": {
+        "compared_count": 2332,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.5040000006556511,
+        "max_relative_difference": 6.194346176670438e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability",
+        "policyengine_target": "il_income_tax_before_non_refundable_credits",
+        "program": "us-il:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 6667687.646877527,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "IN": {
+        "compared_count": 1292,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.5360000003129244,
+        "max_relative_difference": 6.20757569790865e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability",
+        "policyengine_target": "in_agi_tax",
+        "program": "us-in:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 3461584.0903258915,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "KS": {
+        "compared_count": 989,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.9008000008761883,
+        "max_relative_difference": 3.208160854591692e-06,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability",
+        "policyengine_target": "ks_income_tax_before_credits",
+        "program": "us-ks:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 1490131.9738689465,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "LA": {
+        "compared_count": 1847,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.3399999998509884,
+        "max_relative_difference": 8.025092099166733e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability",
+        "policyengine_target": "la_income_tax_before_non_refundable_credits",
+        "program": "us-la:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 2263654.906231249,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "MI": {
+        "compared_count": 1788,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.7199999988079071,
+        "max_relative_difference": 6.60315376671648e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability",
+        "policyengine_target": "mi_income_tax_before_non_refundable_credits",
+        "program": "us-mi:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 5291516.012534572,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "MS": {
+        "compared_count": 1497,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.40000000037252903,
+        "max_relative_difference": 7.960035314611283e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability",
+        "policyengine_target": "ms_income_tax_before_credits_unit",
+        "program": "us-ms:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 1510460.1098995125,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "MT": {
+        "compared_count": 1171,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.2914082035422325,
+        "max_relative_difference": 8.977572697967781e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability",
+        "policyengine_target": "mt_income_tax_before_non_refundable_credits_joint",
+        "program": "us-mt:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 564739.7293636125,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "NC": {
+        "compared_count": 2169,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.49919999949634075,
+        "max_relative_difference": 8.525859611954734e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+        "policyengine_target": "nc_income_tax_before_credits",
+        "program": "us-nc:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 5338585.218401721,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "NJ": {
+        "compared_count": 1693,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 1.9399999976158142,
+        "max_relative_difference": 0.00038288053324178346,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability",
+        "policyengine_target": "nj_main_income_tax",
+        "program": "us-nj:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 5155329.329459494,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "NM": {
+        "compared_count": 1475,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.5199999995529652,
+        "max_relative_difference": 5.63842806246047e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability",
+        "policyengine_target": "nm_income_tax_before_non_refundable_credits",
+        "program": "us-nm:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 1128605.5325388513,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "NY": {
+        "compared_count": 3741,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 2.119999997317791,
+        "max_relative_difference": 0.0014843370420287716,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax",
+        "policyengine_target": "ny_main_income_tax",
+        "program": "us-ny:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 2.25,
+        "weighted_compared_tax_units": 10690765.874736872,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "OH": {
+        "compared_count": 2144,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.34500000067055225,
+        "max_relative_difference": 6.14496567641612e-06,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability",
+        "policyengine_target": "oh_income_tax_before_non_refundable_credits",
+        "program": "us-oh:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 6507869.022278498,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "OK": {
+        "compared_count": 1292,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.46000000089406967,
+        "max_relative_difference": 5.692069032073562e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
+        "policyengine_target": "ok_income_tax_before_credits",
+        "program": "us-ok:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 1997014.2823715578,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "PA": {
+        "compared_count": 2457,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.4159999992698431,
+        "max_relative_difference": 5.849609322881476e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability",
+        "policyengine_target": "pa_income_tax_before_forgiveness",
+        "program": "us-pa:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 6582908.299291571,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "SC": {
+        "compared_count": 1457,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.3760000001639128,
+        "max_relative_difference": 5.8766230123716413e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability",
+        "policyengine_target": "sc_income_tax_before_non_refundable_credits",
+        "program": "us-sc:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 2628413.320707301,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "UT": {
+        "compared_count": 1251,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.5679999999701977,
+        "max_relative_difference": 7.462164045106234e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability",
+        "policyengine_target": "ut_income_tax_before_credits",
+        "program": "us-ut:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 0.0,
+        "tolerance": 1.0,
+        "weighted_compared_tax_units": 1618502.5562431642,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "VA": {
+        "compared_count": 1710,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.8599999994039536,
+        "max_relative_difference": 5.706511277338764e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability",
+        "policyengine_target": "va_income_tax_before_non_refundable_credits",
+        "program": "us-va:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 4622741.544735673,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "VT": {
+        "compared_count": 922,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.00011718750010913936,
+        "max_relative_difference": 2.5131484810375347e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability",
+        "policyengine_target": "vt_income_tax_before_non_refundable_credits",
+        "program": "us-vt:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 366584.60669295734,
+        "weighted_mismatch_tax_units": 0.0
+      },
+      "WV": {
+        "compared_count": 1608,
+        "comparison_aggregation": "tax_unit",
+        "max_absolute_difference": 0.22240000031888485,
+        "max_relative_difference": 5.795049835570319e-08,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "output": "us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability",
+        "policyengine_target": "wv_income_tax_before_non_refundable_credits",
+        "program": "us-wv:policies/income_tax/pilot_liability_pipeline",
+        "relative_tolerance": 1e-07,
+        "tolerance": 0.01,
+        "weighted_compared_tax_units": 884015.7707309467,
+        "weighted_mismatch_tax_units": 0.0
+      }
+    },
+    "validation_year": 2026
+  },
+  "dataset_identity": {
+    "built_with": "1.729.0",
+    "country": "us",
+    "path": "/Users/pavelmakarchuk/.cache/huggingface/hub/datasets--policyengine--populace-us/snapshots/d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5",
+    "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+    "sha256": "16be6338f9d0",
+    "source": "pinned"
+  },
+  "requested_states": [],
+  "routing": {
+    "blocked_projection_count": 25262,
+    "eligible_ready_count": 45297,
+    "errored_count": 0,
+    "excluded_count": 42222,
+    "non_applicable_count": 16960,
+    "population_scope": {
+      "filtered_slices_allowed": false,
+      "geography_source": "household_state_fips",
+      "inclusion": "all_positive_weight_routed_tax_units",
+      "residency_model": "household_state_as_full_year_residence",
+      "unit": "tax_unit"
+    },
+    "positive_weight_count": 87519,
+    "sample_size_per_state": 0,
+    "schema_version": "axiom.state_tax_populace_routing_report.v1",
+    "selected_ready_count": 45297,
+    "state_count": 51,
+    "states": {
+      "AK": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 825
+        },
+        "fips": "02",
+        "positive_weight_count": 825,
+        "selected_count": 0,
+        "tax_unit_count": 825,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 383551.85039129766
+        },
+        "weighted_tax_units": 383551.85039129766
+      },
+      "AL": {
+        "dispositions": {
+          "ready": 1632
+        },
+        "fips": "01",
+        "positive_weight_count": 1632,
+        "selected_count": 1632,
+        "tax_unit_count": 1632,
+        "weighted_dispositions": {
+          "ready": 2571800.232853239
+        },
+        "weighted_tax_units": 2571800.232853239
+      },
+      "AR": {
+        "dispositions": {
+          "ready": 1475
+        },
+        "fips": "05",
+        "positive_weight_count": 1475,
+        "selected_count": 1475,
+        "tax_unit_count": 1475,
+        "weighted_dispositions": {
+          "ready": 1453018.6372719596
+        },
+        "weighted_tax_units": 1453018.6372719596
+      },
+      "AZ": {
+        "dispositions": {
+          "ready": 1585
+        },
+        "fips": "04",
+        "positive_weight_count": 1585,
+        "selected_count": 1585,
+        "tax_unit_count": 1585,
+        "weighted_dispositions": {
+          "ready": 3845608.9544030298
+        },
+        "weighted_tax_units": 3845608.9544030298
+      },
+      "CA": {
+        "dispositions": {
+          "blocked_projection": 8883
+        },
+        "fips": "06",
+        "positive_weight_count": 8883,
+        "selected_count": 0,
+        "tax_unit_count": 8883,
+        "weighted_dispositions": {
+          "blocked_projection": 20283184.623890057
+        },
+        "weighted_tax_units": 20283184.623890057
+      },
+      "CO": {
+        "dispositions": {
+          "ready": 1201
+        },
+        "fips": "08",
+        "positive_weight_count": 1201,
+        "selected_count": 1201,
+        "tax_unit_count": 1201,
+        "weighted_dispositions": {
+          "ready": 3072763.1901944624
+        },
+        "weighted_tax_units": 3072763.1901944624
+      },
+      "CT": {
+        "dispositions": {
+          "ready": 951
+        },
+        "fips": "09",
+        "positive_weight_count": 951,
+        "selected_count": 951,
+        "tax_unit_count": 951,
+        "weighted_dispositions": {
+          "ready": 1974906.441571426
+        },
+        "weighted_tax_units": 1974906.441571426
+      },
+      "DC": {
+        "dispositions": {
+          "blocked_projection": 1362
+        },
+        "fips": "11",
+        "positive_weight_count": 1362,
+        "selected_count": 0,
+        "tax_unit_count": 1362,
+        "weighted_dispositions": {
+          "blocked_projection": 405037.2357816481
+        },
+        "weighted_tax_units": 405037.2357816481
+      },
+      "DE": {
+        "dispositions": {
+          "ready": 936
+        },
+        "fips": "10",
+        "positive_weight_count": 936,
+        "selected_count": 936,
+        "tax_unit_count": 936,
+        "weighted_dispositions": {
+          "ready": 538740.583262522
+        },
+        "weighted_tax_units": 538740.583262522
+      },
+      "FL": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 4631
+        },
+        "fips": "12",
+        "positive_weight_count": 4631,
+        "selected_count": 0,
+        "tax_unit_count": 4631,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 13082091.806562569
+        },
+        "weighted_tax_units": 13082091.806562569
+      },
+      "GA": {
+        "dispositions": {
+          "ready": 2187
+        },
+        "fips": "13",
+        "positive_weight_count": 2187,
+        "selected_count": 2187,
+        "tax_unit_count": 2187,
+        "weighted_dispositions": {
+          "ready": 5641274.800103513
+        },
+        "weighted_tax_units": 5641274.800103513
+      },
+      "HI": {
+        "dispositions": {
+          "ready": 1519
+        },
+        "fips": "15",
+        "positive_weight_count": 1519,
+        "selected_count": 1519,
+        "tax_unit_count": 1519,
+        "weighted_dispositions": {
+          "ready": 795295.9443316367
+        },
+        "weighted_tax_units": 795295.9443316367
+      },
+      "IA": {
+        "dispositions": {
+          "ready": 976
+        },
+        "fips": "19",
+        "positive_weight_count": 976,
+        "selected_count": 976,
+        "tax_unit_count": 976,
+        "weighted_dispositions": {
+          "ready": 1616996.9448974675
+        },
+        "weighted_tax_units": 1616996.9448974675
+      },
+      "ID": {
+        "dispositions": {
+          "blocked_projection": 1266
+        },
+        "fips": "16",
+        "positive_weight_count": 1266,
+        "selected_count": 0,
+        "tax_unit_count": 1266,
+        "weighted_dispositions": {
+          "blocked_projection": 991716.5369259712
+        },
+        "weighted_tax_units": 991716.5369259712
+      },
+      "IL": {
+        "dispositions": {
+          "ready": 2332
+        },
+        "fips": "17",
+        "positive_weight_count": 2332,
+        "selected_count": 2332,
+        "tax_unit_count": 2332,
+        "weighted_dispositions": {
+          "ready": 6667687.646877515
+        },
+        "weighted_tax_units": 6667687.646877515
+      },
+      "IN": {
+        "dispositions": {
+          "ready": 1292
+        },
+        "fips": "18",
+        "positive_weight_count": 1292,
+        "selected_count": 1292,
+        "tax_unit_count": 1292,
+        "weighted_dispositions": {
+          "ready": 3461584.0903258924
+        },
+        "weighted_tax_units": 3461584.0903258924
+      },
+      "KS": {
+        "dispositions": {
+          "ready": 989
+        },
+        "fips": "20",
+        "positive_weight_count": 989,
+        "selected_count": 989,
+        "tax_unit_count": 989,
+        "weighted_dispositions": {
+          "ready": 1490131.9738689465
+        },
+        "weighted_tax_units": 1490131.9738689465
+      },
+      "KY": {
+        "dispositions": {
+          "blocked_projection": 891
+        },
+        "fips": "21",
+        "positive_weight_count": 891,
+        "selected_count": 0,
+        "tax_unit_count": 891,
+        "weighted_dispositions": {
+          "blocked_projection": 2345188.746109797
+        },
+        "weighted_tax_units": 2345188.746109797
+      },
+      "LA": {
+        "dispositions": {
+          "ready": 1847
+        },
+        "fips": "22",
+        "positive_weight_count": 1847,
+        "selected_count": 1847,
+        "tax_unit_count": 1847,
+        "weighted_dispositions": {
+          "ready": 2263654.9062312446
+        },
+        "weighted_tax_units": 2263654.9062312446
+      },
+      "MA": {
+        "dispositions": {
+          "blocked_projection": 1963
+        },
+        "fips": "25",
+        "positive_weight_count": 1963,
+        "selected_count": 0,
+        "tax_unit_count": 1963,
+        "weighted_dispositions": {
+          "blocked_projection": 3989894.2873458173
+        },
+        "weighted_tax_units": 3989894.2873458173
+      },
+      "MD": {
+        "dispositions": {
+          "blocked_projection": 1090
+        },
+        "fips": "24",
+        "positive_weight_count": 1090,
+        "selected_count": 0,
+        "tax_unit_count": 1090,
+        "weighted_dispositions": {
+          "blocked_projection": 3290308.9840909736
+        },
+        "weighted_tax_units": 3290308.9840909736
+      },
+      "ME": {
+        "dispositions": {
+          "blocked_projection": 578
+        },
+        "fips": "23",
+        "positive_weight_count": 578,
+        "selected_count": 0,
+        "tax_unit_count": 578,
+        "weighted_dispositions": {
+          "blocked_projection": 745515.0595726102
+        },
+        "weighted_tax_units": 745515.0595726102
+      },
+      "MI": {
+        "dispositions": {
+          "ready": 1788
+        },
+        "fips": "26",
+        "positive_weight_count": 1788,
+        "selected_count": 1788,
+        "tax_unit_count": 1788,
+        "weighted_dispositions": {
+          "ready": 5291516.012534578
+        },
+        "weighted_tax_units": 5291516.012534578
+      },
+      "MN": {
+        "dispositions": {
+          "blocked_projection": 1117
+        },
+        "fips": "27",
+        "positive_weight_count": 1117,
+        "selected_count": 0,
+        "tax_unit_count": 1117,
+        "weighted_dispositions": {
+          "blocked_projection": 3008704.416042891
+        },
+        "weighted_tax_units": 3008704.416042891
+      },
+      "MO": {
+        "dispositions": {
+          "blocked_projection": 1240
+        },
+        "fips": "29",
+        "positive_weight_count": 1240,
+        "selected_count": 0,
+        "tax_unit_count": 1240,
+        "weighted_dispositions": {
+          "blocked_projection": 3181199.4234609925
+        },
+        "weighted_tax_units": 3181199.4234609925
+      },
+      "MS": {
+        "dispositions": {
+          "ready": 1497
+        },
+        "fips": "28",
+        "positive_weight_count": 1497,
+        "selected_count": 1497,
+        "tax_unit_count": 1497,
+        "weighted_dispositions": {
+          "ready": 1510460.1098995148
+        },
+        "weighted_tax_units": 1510460.1098995148
+      },
+      "MT": {
+        "dispositions": {
+          "ready": 1171
+        },
+        "fips": "30",
+        "positive_weight_count": 1171,
+        "selected_count": 1171,
+        "tax_unit_count": 1171,
+        "weighted_dispositions": {
+          "ready": 564739.7293636122
+        },
+        "weighted_tax_units": 564739.7293636122
+      },
+      "NC": {
+        "dispositions": {
+          "ready": 2169
+        },
+        "fips": "37",
+        "positive_weight_count": 2169,
+        "selected_count": 2169,
+        "tax_unit_count": 2169,
+        "weighted_dispositions": {
+          "ready": 5338585.218401729
+        },
+        "weighted_tax_units": 5338585.218401729
+      },
+      "ND": {
+        "dispositions": {
+          "blocked_projection": 996
+        },
+        "fips": "38",
+        "positive_weight_count": 996,
+        "selected_count": 0,
+        "tax_unit_count": 996,
+        "weighted_dispositions": {
+          "blocked_projection": 396416.85114826047
+        },
+        "weighted_tax_units": 396416.85114826047
+      },
+      "NE": {
+        "dispositions": {
+          "blocked_projection": 979
+        },
+        "fips": "31",
+        "positive_weight_count": 979,
+        "selected_count": 0,
+        "tax_unit_count": 979,
+        "weighted_dispositions": {
+          "blocked_projection": 940834.8098938828
+        },
+        "weighted_tax_units": 940834.8098938828
+      },
+      "NH": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 895
+        },
+        "fips": "33",
+        "positive_weight_count": 895,
+        "selected_count": 0,
+        "tax_unit_count": 895,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 756676.8144718978
+        },
+        "weighted_tax_units": 756676.8144718978
+      },
+      "NJ": {
+        "dispositions": {
+          "ready": 1693
+        },
+        "fips": "34",
+        "positive_weight_count": 1693,
+        "selected_count": 1693,
+        "tax_unit_count": 1693,
+        "weighted_dispositions": {
+          "ready": 5155329.329459501
+        },
+        "weighted_tax_units": 5155329.329459501
+      },
+      "NM": {
+        "dispositions": {
+          "ready": 1475
+        },
+        "fips": "35",
+        "positive_weight_count": 1475,
+        "selected_count": 1475,
+        "tax_unit_count": 1475,
+        "weighted_dispositions": {
+          "ready": 1128605.532538854
+        },
+        "weighted_tax_units": 1128605.532538854
+      },
+      "NV": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 1301
+        },
+        "fips": "32",
+        "positive_weight_count": 1301,
+        "selected_count": 0,
+        "tax_unit_count": 1301,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 1714357.6721695035
+        },
+        "weighted_tax_units": 1714357.6721695035
+      },
+      "NY": {
+        "dispositions": {
+          "ready": 3741
+        },
+        "fips": "36",
+        "positive_weight_count": 3741,
+        "selected_count": 3741,
+        "tax_unit_count": 3741,
+        "weighted_dispositions": {
+          "ready": 10690765.874736903
+        },
+        "weighted_tax_units": 10690765.874736903
+      },
+      "OH": {
+        "dispositions": {
+          "ready": 2144
+        },
+        "fips": "39",
+        "positive_weight_count": 2144,
+        "selected_count": 2144,
+        "tax_unit_count": 2144,
+        "weighted_dispositions": {
+          "ready": 6507869.022278502
+        },
+        "weighted_tax_units": 6507869.022278502
+      },
+      "OK": {
+        "dispositions": {
+          "ready": 1292
+        },
+        "fips": "40",
+        "positive_weight_count": 1292,
+        "selected_count": 1292,
+        "tax_unit_count": 1292,
+        "weighted_dispositions": {
+          "ready": 1997014.2823715585
+        },
+        "weighted_tax_units": 1997014.2823715585
+      },
+      "OR": {
+        "dispositions": {
+          "blocked_projection": 1292
+        },
+        "fips": "41",
+        "positive_weight_count": 1292,
+        "selected_count": 0,
+        "tax_unit_count": 1292,
+        "weighted_dispositions": {
+          "blocked_projection": 2324636.0028911824
+        },
+        "weighted_tax_units": 2324636.0028911824
+      },
+      "PA": {
+        "dispositions": {
+          "ready": 2457
+        },
+        "fips": "42",
+        "positive_weight_count": 2457,
+        "selected_count": 2457,
+        "tax_unit_count": 2457,
+        "weighted_dispositions": {
+          "ready": 6582908.299291572
+        },
+        "weighted_tax_units": 6582908.299291572
+      },
+      "RI": {
+        "dispositions": {
+          "blocked_projection": 762
+        },
+        "fips": "44",
+        "positive_weight_count": 762,
+        "selected_count": 0,
+        "tax_unit_count": 762,
+        "weighted_dispositions": {
+          "blocked_projection": 625277.5000901642
+        },
+        "weighted_tax_units": 625277.5000901642
+      },
+      "SC": {
+        "dispositions": {
+          "ready": 1457
+        },
+        "fips": "45",
+        "positive_weight_count": 1457,
+        "selected_count": 1457,
+        "tax_unit_count": 1457,
+        "weighted_dispositions": {
+          "ready": 2628413.3207073035
+        },
+        "weighted_tax_units": 2628413.3207073035
+      },
+      "SD": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 808
+        },
+        "fips": "46",
+        "positive_weight_count": 808,
+        "selected_count": 0,
+        "tax_unit_count": 808,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 473556.44292734336
+        },
+        "weighted_tax_units": 473556.44292734336
+      },
+      "TN": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 1635
+        },
+        "fips": "47",
+        "positive_weight_count": 1635,
+        "selected_count": 0,
+        "tax_unit_count": 1635,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 4060744.31945435
+        },
+        "weighted_tax_units": 4060744.31945435
+      },
+      "TX": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 5968
+        },
+        "fips": "48",
+        "positive_weight_count": 5968,
+        "selected_count": 0,
+        "tax_unit_count": 5968,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 15869028.140573395
+        },
+        "weighted_tax_units": 15869028.140573395
+      },
+      "UT": {
+        "dispositions": {
+          "ready": 1251
+        },
+        "fips": "49",
+        "positive_weight_count": 1251,
+        "selected_count": 1251,
+        "tax_unit_count": 1251,
+        "weighted_dispositions": {
+          "ready": 1618502.5562431684
+        },
+        "weighted_tax_units": 1618502.5562431684
+      },
+      "VA": {
+        "dispositions": {
+          "ready": 1710
+        },
+        "fips": "51",
+        "positive_weight_count": 1710,
+        "selected_count": 1710,
+        "tax_unit_count": 1710,
+        "weighted_dispositions": {
+          "ready": 4622741.54473568
+        },
+        "weighted_tax_units": 4622741.54473568
+      },
+      "VT": {
+        "dispositions": {
+          "ready": 922
+        },
+        "fips": "50",
+        "positive_weight_count": 922,
+        "selected_count": 922,
+        "tax_unit_count": 922,
+        "weighted_dispositions": {
+          "ready": 366584.6066929572
+        },
+        "weighted_tax_units": 366584.6066929572
+      },
+      "WA": {
+        "dispositions": {
+          "blocked_projection": 1691
+        },
+        "fips": "53",
+        "positive_weight_count": 1691,
+        "selected_count": 0,
+        "tax_unit_count": 1691,
+        "weighted_dispositions": {
+          "blocked_projection": 3950359.935528512
+        },
+        "weighted_tax_units": 3950359.935528512
+      },
+      "WI": {
+        "dispositions": {
+          "blocked_projection": 1152
+        },
+        "fips": "55",
+        "positive_weight_count": 1152,
+        "selected_count": 0,
+        "tax_unit_count": 1152,
+        "weighted_dispositions": {
+          "blocked_projection": 3149663.160704391
+        },
+        "weighted_tax_units": 3149663.160704391
+      },
+      "WV": {
+        "dispositions": {
+          "ready": 1608
+        },
+        "fips": "54",
+        "positive_weight_count": 1608,
+        "selected_count": 1608,
+        "tax_unit_count": 1608,
+        "weighted_dispositions": {
+          "ready": 884015.7707309449
+        },
+        "weighted_tax_units": 884015.7707309449
+      },
+      "WY": {
+        "dispositions": {
+          "not_applicable_no_broad_pit": 897
+        },
+        "fips": "56",
+        "positive_weight_count": 897,
+        "selected_count": 0,
+        "tax_unit_count": 897,
+        "weighted_dispositions": {
+          "not_applicable_no_broad_pit": 286333.6379342895
+        },
+        "weighted_tax_units": 286333.6379342895
+      }
+    },
+    "tax_unit_count": 87519,
+    "unknown_geography": {
+      "dispositions": {},
+      "fips": null,
+      "positive_weight_count": 0,
+      "selected_count": 0,
+      "tax_unit_count": 0,
+      "weighted_dispositions": {},
+      "weighted_tax_units": 0.0
+    },
+    "weighted_dispositions": {
+      "blocked_projection": 49627937.57347716,
+      "not_applicable_no_broad_pit": 36626340.684484586,
+      "ready": 90281515.55617918
+    },
+    "weighted_eligible_ready_tax_units": 90281515.55617918,
+    "weighted_excluded_tax_units": 86254278.25796175,
+    "weighted_tax_units": 176535793.81414092
+  },
+  "runtime_provenance": {
+    "axiom_engine": {
+      "commit": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
+      "executable_sha256": "a181a6f1aedc16ca27f553ef54006a390919b85d7cb1efc435bc65f41aeaeef0",
+      "repository": "TheAxiomFoundation/axiom-rules-engine",
+      "working_tree": "clean"
+    },
+    "packages": {
+      "policyengine": "4.18.9",
+      "policyengine-us": "1.752.2"
+    },
+    "rulespec": {
+      "commit": "ca2d424fcb85ce8c3a8f4706113331710f114460",
+      "repository": "TheAxiomFoundation/rulespec-us",
+      "working_tree": "clean"
+    }
+  },
+  "schema_version": "axiom.state_tax_populace_campaign_report.v1"
+}
