@@ -36,8 +36,19 @@ def spsm_install_root() -> Path | None:
     if env:
         path = Path(env).expanduser()
         return path if path.is_dir() else None
-    default = Path.home() / ".wine" / "drive_c" / "SPSM"
-    return default if default.is_dir() else None
+    defaults = (
+        Path.home()
+        / ".wine"
+        / "drive_c"
+        / "Program Files (x86)"
+        / "StatCan"
+        / "SPSDM34.0",
+        Path.home() / ".wine" / "drive_c" / "SPSM",
+    )
+    for default in defaults:
+        if default.is_dir():
+            return default
+    return None
 
 
 def _wine_binary() -> str:
@@ -101,30 +112,80 @@ class SpsmRunner:
             )
         return self.install_root
 
-    def model_executable(self) -> Path:
+    def _windows_env(self) -> dict[str, str]:
+        """Environment for the Wine process: SPSM/SPSD as Windows paths.
+
+        The model resolves ``$spsd``/``$spsm`` aliases in its dialogue from
+        these variables (How to Run the SPSM, s.1.4)."""
+
         root = self.require_install()
-        for name in ("spsm.exe", "SPSM.exe", "bin/spsm.exe"):
-            candidate = root / name
-            if candidate.exists():
-                return candidate
-        raise RuntimeError(
-            f"SPSD/M install at {root} has no spsm.exe; expected the "
-            "standard model executable from the v34 installer."
-        )
+        prefix_c = None
+        for parent in root.parents:
+            if parent.name == "drive_c":
+                prefix_c = parent
+                break
+        if prefix_c is None:
+            raise RuntimeError(
+                f"SPSD/M install at {root} is not inside a Wine prefix "
+                "drive_c; set SPSM_HOME to the installed SPSDM34.0 tree."
+            )
+        rel = root.relative_to(prefix_c)
+        win_root = "C:\\" + str(rel).replace("/", "\\")
+        env = dict(os.environ)
+        env["SPSM"] = f"{win_root}\\spsm"
+        env["SPSD"] = f"{win_root}\\spsd"
+        env.setdefault("SPSMLANG", "E")
+        env.setdefault("WINEDEBUG", "-all")
+        return env
 
-    def run_control_file(
+    def batch_dialogue(
         self,
-        control_file: Path,
         *,
-        cwd: Path | None = None,
-    ) -> subprocess.CompletedProcess:
-        """Run one SPSM batch simulation from a control-parameter file."""
+        control_file: str,
+        output_name: str,
+        sample: float | None = None,
+        includes: tuple[str, ...] = (),
+    ) -> str:
+        """Build the '#'-delimited batch dialogue string.
 
-        executable = self.model_executable()
-        command = [self.wine_binary, str(executable), str(control_file)]
+        Mirrors the documented SPSM batch facility: control-parameter file,
+        output name, optional control-parameter edits (sample fraction and
+        ``read`` includes such as a case-output ``.cpi``), then 'N' answers
+        to the adjustment/tax-parameter/glass prompts.
+        """
+
+        parts = [control_file, output_name]
+        edits: list[str] = []
+        if sample is not None:
+            edits += ["SAMPLEREQ", f"{sample:g}"]
+        for include in includes:
+            edits += ["read", include]
+        if edits:
+            parts += ["Y", *edits, "go"]
+        else:
+            parts += ["N"]
+        parts += ["N", "N", "N"]
+        return "#".join(parts)
+
+    def run_batch(
+        self,
+        dialogue: str,
+        *,
+        cwd: Path,
+    ) -> subprocess.CompletedProcess:
+        """Run one SPSM batch simulation from a dialogue string."""
+
+        root = self.require_install()
+        executable = root / "spsm" / "win32" / "spsm.exe"
+        if not executable.exists():
+            raise RuntimeError(
+                f"SPSD/M install at {root} has no spsm/win32/spsm.exe."
+            )
+        command = [self.wine_binary, str(executable), dialogue]
         return subprocess.run(
             command,
-            cwd=str(cwd) if cwd is not None else None,
+            cwd=str(cwd),
+            env=self._windows_env(),
             capture_output=True,
             text=True,
             timeout=self.timeout,
