@@ -241,7 +241,9 @@ residual), #229 (small-suite grounding).
 
 In progress on `fed-parity/federal-grid-suites`. Building a configurable
 `federal-tax-liability-grid` runner and four PolicyEngine-US 1.767.3 comparison
-suites for ACA PTC, NIIT, SECA, and Additional Medicare Tax.
+suites for ACA PTC, NIIT, SECA, and Additional Medicare Tax. The generic
+machinery and all four PE legs are implemented locally; RuleSpec companion
+paths/output keys are pending from the two parallel lanes.
 
 ## Done
 
@@ -249,12 +251,21 @@ suites for ACA PTC, NIIT, SECA, and Additional Medicare Tax.
   runner dispatch/pinning code, reference comparison/disposition, target
   conformance rows, live-suite gate, and conformance documentation.
 - Confirmed the branch starts at `origin/main` commit `d4666ae`.
+- Verified the exact PolicyEngine stack offline:
+  `policyengine==4.18.9`, `policyengine-us==1.767.3`, and
+  `policyengine-core==3.30.3`.
+- Verified source boundaries and ran all 24 contract cases through the actual
+  generator builders. Binding decisions: `additional_medicare_tax` includes
+  wage and SE income; `self_employment_tax` excludes the 0.9% additional tax
+  and is summed from Person to TaxUnit; NIIT derives AGI from the prescribed
+  income inputs; ACA binds `used_aca_ptc` so the enrolled-premium cap is present.
+- Added local generator/runner tests; the isolated test run passes 8/8 and the
+  changed files pass `ruff check`.
 
 ## Next
 
-- Verify PolicyEngine-US 1.767.3 variable boundaries and exact input surfaces.
 - Inspect the companion RuleSpec fixture locations and schemas as they land.
-- Implement and test the generator, runner dispatch, and four comparison
+- Complete the generator's RuleSpec module/output registry and four comparison
   configurations with configurable `rulespec_roots`.
 - Run all four real comparisons, disposition genuine residuals if any, adopt the
   four conformance rows, regenerate artifacts in the mandated order, and run the
