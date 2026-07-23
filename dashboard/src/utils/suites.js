@@ -834,6 +834,9 @@ const SUITE_OVERRIDES = {
 };
 
 const SNAP_SUITE_RE = /^([a-z]{2})-snap-ecps$/;
+// Atlanta Fed PRD triangulation lanes: same composed axiom SNAP program as
+// the PolicyEngine suite, compared against the PRD R package.
+const SNAP_PRD_SUITE_RE = /^([a-z]{2})-snap-prd$/;
 
 /** Resolve display + grouping metadata for a suite slug. */
 export function suiteMeta(suite) {
@@ -852,6 +855,21 @@ export function suiteMeta(suite) {
       region: "us",
       kind: "household",
       order: 100,
+    };
+  }
+
+  const snapPrd = slug.match(SNAP_PRD_SUITE_RE);
+  if (snapPrd) {
+    const abbr = snapPrd[1].toUpperCase();
+    const stateName = US_STATE_NAMES[abbr] || abbr;
+    return {
+      suite: slug,
+      family: "snap",
+      jurisdiction: abbr,
+      label: `${stateName} SNAP (vs PRD)`,
+      region: "us",
+      kind: "household",
+      order: 110,
     };
   }
 
