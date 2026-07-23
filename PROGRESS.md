@@ -313,3 +313,40 @@ Additional Medicare remains uncovered on the external fixture blocker.
 - Rerun the Additional Medicare suite, adopt that row, and repeat the mandated
   generated-artifact sequence to reach the intended 31/136 once the companion
   fixture lands.
+
+---
+
+# Follow-up — fourth federal suite + Tier-3 exclusions — 2026-07-23
+
+## State
+
+In progress on `fed-parity/federal-grid-suites` from prior commit `7f4fa8b`.
+The rulespec lane reports that the Additional Medicare companion now exposes
+the required gross-self-employment-profit boundary without changing the
+combined output name. This lane must verify and run that fourth suite, adopt
+its live evidence, land exactly the two requested Tier-3 scope exclusions,
+and regenerate every conformance artifact and gate at the fixed snapshot date
+`2026-07-23`.
+
+## Done
+
+- Confirmed the inherited worktree is clean and HEAD is `7f4fa8b`.
+- Read the rulespec completion marker identifying the gross-SE boundary fix,
+  unchanged combined output, and final rulespec commit
+  `7d3dcd3b4dab9dcffc4bca872ab2500c51c8a60d`.
+- Began the required full review of the Tier-3 report and local schema,
+  conformance, probe, and regeneration conventions.
+
+## Next
+
+- Verify the fixed companion fixture and update only the Additional Medicare
+  validator/binding surface required by that executable contract.
+- Run `us-additional-medicare-grid` for real with the pinned offline stack;
+  commit its report and manifest registration.
+- Adopt the fourth live conformance row and guard it as a required live suite.
+- Add and run the pinned PolicyEngine-US 1.767.3 evidence probe; land only the
+  25C repealed-law and SPM technical exclusions.
+- Regenerate the full mandated artifact sequence, re-pin the ratchet, and run
+  the complete deterministic test/build/check battery.
+- Append the requested scratchpad summary and write the completion marker with
+  per-case results, final coverage, files, gates, and commit SHAs.
