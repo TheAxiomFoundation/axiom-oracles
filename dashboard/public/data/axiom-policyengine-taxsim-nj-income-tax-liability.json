@@ -114,7 +114,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T09:06:41Z",
+    "generated_at": "2026-07-23T14:41:31Z",
     "generated_by": "scripts/run_comparison.py::nj-income-tax-liability",
     "rulespecs": [
       {
