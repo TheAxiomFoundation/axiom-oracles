@@ -5,12 +5,14 @@ from pathlib import Path
 
 # The SPSM case-output facility (ASCFLAG/ASCVARS, ASCSTYLE 1) writes one
 # labeled block per household, separated by dashed rules. Each line is
-# fixed-width: variable name (cols 0..9), English description (cols 10..50,
-# dot-padded or truncated), then one right-aligned integer value per
-# household member for person-level variables (a single value for
-# household-level ones). Values are annual dollars.
+# fixed-width: variable name (cols 0..9), an English description column
+# whose WIDTH DEPENDS ON THE VARIABLE LIST (dot-padded or truncated), then
+# one right-aligned value per household member in 8-character columns
+# (a single value for household-level variables). The value-column origin
+# is therefore derived per file from the ``hdseqhh`` row — its single
+# sequence number occupies exactly the last 8-character cell.
 _NAME_END = 10
-_VALUES_START = 51
+_VALUE_CELL = 8
 _RULE_PREFIX = "-----"
 
 
@@ -40,18 +42,17 @@ class SpsmHousehold:
 def parse_case_output(path: Path) -> list[SpsmHousehold]:
     """Parse an SPSM ``.prn`` case-output file into households."""
 
+    lines = path.read_text(errors="replace").splitlines()
+    values_start = _detect_values_start(lines)
     households: list[SpsmHousehold] = []
     current: SpsmHousehold | None = None
-    for raw_line in path.read_text(errors="replace").splitlines():
-        line = raw_line.rstrip("\n")
-        if not line.strip():
-            continue
-        if line.startswith(_RULE_PREFIX):
+    for line in lines:
+        if not line.strip() or line.startswith(_RULE_PREFIX):
             continue
         name = line[:_NAME_END].strip()
         if not name:
             continue
-        values = _parse_values(line)
+        values = _parse_values(line, values_start)
         if values is None:
             continue
         if name == "hdseqhh":
@@ -63,14 +64,28 @@ def parse_case_output(path: Path) -> list[SpsmHousehold]:
     return households
 
 
-def _parse_values(line: str) -> list[float] | None:
-    tail = line[_VALUES_START:].split()
-    if not tail:
+def _detect_values_start(lines: list[str]) -> int:
+    for line in lines:
+        if line.startswith("hdseqhh"):
+            return len(line.rstrip()) - _VALUE_CELL
+    raise ValueError(
+        "Not an SPSM case-output extract: no hdseqhh row found (include "
+        "hdseqhh in ASCVARS so household identity and column origin are "
+        "recoverable)."
+    )
+
+
+def _parse_values(line: str, values_start: int) -> list[float] | None:
+    tail = line[values_start:]
+    if not tail.strip():
         return None
     values: list[float] = []
-    for token in tail:
+    for offset in range(0, len(tail.rstrip()), _VALUE_CELL):
+        token = tail[offset : offset + _VALUE_CELL].strip()
+        if not token:
+            continue
         try:
             values.append(float(token))
         except ValueError:
             return None
-    return values
+    return values or None

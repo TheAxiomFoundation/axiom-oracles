@@ -1,0 +1,50 @@
+# Canada federal schedule tax — Axiom (rulespec-ca) vs Statistics Canada
+# SPSD/M over the full SPSD synthetic database.
+#
+# Both engines are driven from SPSM's own taxable income (imitax, line
+# 26000), isolating the 2025 T1 Step-5 Part A schedule: the encoded
+# ca:policies/cra/t1-2025/federal-tax-on-taxable-income module evaluated by
+# the axiom rules engine against SPSM's imfedtax (federal tax before
+# credits). The FTX schedule table in SPSM's ba25.mpr parameter file is
+# value-identical to the encoded worksheet (verified to the penny), so
+# residuals are post-schedule model machinery, not parameter disagreement:
+# the SPSM-above class is the T691 alternative minimum tax replacing
+# imfedtax (glass-box Atxcalc.cpp, T691 row 94), and the axiom-above class
+# is fingerprinted (family/pension recalculation suspected) in the raw
+# residual tracker.
+#
+# Licence (SPSD/M Licence Agreement v34): the extract is Database-derived
+# and never committed; this suite publishes aggregates only, with the s.4.1
+# attribution notice in report provenance. Reproducible by any SPSD/M
+# licensee from the committed dialogue + variable list + database
+# fingerprints (see docs/spsdm-oracle-design.md).
+#
+# Run locally (requires the licensed SPSD/M v34 install under Wine):
+#   uv run python scripts/generate_ca_federal_tax_spsm.py --run-spsm
+
+name: ca-federal-schedule-tax-spsm
+title: Canada federal schedule tax — Axiom vs SPSD/M
+description: >-
+  Compares the encoded 2025 T1 federal tax-on-taxable-income schedule
+  against Statistics Canada's SPSD/M (imfedtax) for every taxfiler in the
+  full SPSD synthetic database, both engines driven from SPSM's taxable
+  income. This analysis is based on Statistics Canada's Social Policy
+  Simulation Database and Model; the assumptions and calculations
+  underlying the simulation results were prepared by the Axiom Foundation
+  and the responsibility for the use and interpretation of these data is
+  entirely that of the author(s).
+
+runner:
+  type: script
+  script: scripts/generate_ca_federal_tax_spsm.py
+  requires:
+    - licensed SPSD/M v34.0 installation (SPSM_HOME)
+    - Wine (macOS) or native Windows
+    - rulespec-ca checkout at $HOME/rulespec-ca
+
+artifacts:
+  report_basename: axiom-spsm-ca-federal-schedule-tax
+
+dashboard:
+  filename: axiom-spsm-ca-federal-schedule-tax.json
+  suite: ca-federal-schedule-tax-spsm

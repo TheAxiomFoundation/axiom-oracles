@@ -1,0 +1,259 @@
+{
+  "case_count": 327970,
+  "concepts": [
+    {
+      "concept": "ca:policies/cra/t1-2025/federal-tax-on-taxable-income#federal_2025_t1_tax_on_taxable_income_line_76",
+      "description": "Federal tax on taxable income (2025 T1 Step 5 Part A) vs SPSM imfedtax, both driven from SPSM taxable income"
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "spsm"
+  },
+  "locales": [
+    "CA"
+  ],
+  "mismatches": [
+    {
+      "difference": 16916.11,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 206129.76,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 91454.77,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 3199.39,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 44536.98,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 45364.41,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 67649.35,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 12286.73,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 35131.57,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 26090.69,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 8517.73,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 12733.29,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 17878.35,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 27187.54,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 883.94,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2084.78,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 6809.3,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 26876.14,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2766.38,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 5572.05,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 6443.33,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2042.55,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 1504.69,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 6565.79,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 23784.88,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 13565.25,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 970.33,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 3982.24,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 1543.49,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 14081.41,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 31403.99,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 6688.52,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 22995.79,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 28.87,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 6921.35,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 26342.69,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2431.07,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 3980.48,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 64823.45,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 30450.42,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2797.57,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 16982.88,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2815.83,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 715.41,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 55392.27,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 10064.2,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 34326.97,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2503.67,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 2512.13,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 5964.35,
+      "kind": "axiom_above_spsm"
+    }
+  ],
+  "population": "spsd-synthetic-2022",
+  "provenance": {
+    "attribution": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s).",
+    "generated": "2026-07-23",
+    "generated_at": "2026-07-23T22:59:59Z",
+    "generator": "scripts/generate_ca_federal_tax_spsm.py",
+    "licence": "SPSD/M Licence Agreement v34; no Package contents are redistributed with this repository (s.3.1).",
+    "oracle": "spsm",
+    "oracle_run": {
+      "case_output_include": "axiom_fedtax.cpi",
+      "dialogue_control_file": "$spsd/ba25",
+      "input_fingerprints": [
+        {
+          "bytes": 13134,
+          "file": "ba25.cpr",
+          "sha256": "e342036bd75e3407f0d27cafedca04b74a977b40f77ff739adc492d4cf5b169d"
+        },
+        {
+          "bytes": 728124,
+          "file": "ba25.mpr",
+          "sha256": "c37d0c198ba057e8bf405c68558d0331154534400e146765d658e677ab865238"
+        }
+      ],
+      "sample": "full-database"
+    },
+    "privacy": "Aggregate results only: per-household extract rows are Database-derived (SPSD/M Licence s.3.1) and never leave the local reports/ directory."
+  },
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": {
+    "geoid": "CA",
+    "type": "country"
+  },
+  "suite": "ca-federal-schedule-tax-spsm",
+  "summary": {
+    "amt_class_count": 6415,
+    "comparison_count": 967396,
+    "match_count": 958555,
+    "match_rate": 99.09,
+    "mismatch_count": 8841,
+    "unclassified_count": 2426
+  }
+}
