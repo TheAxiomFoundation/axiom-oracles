@@ -40,6 +40,15 @@
       "source": "comparisons/al-snap-ecps.yaml"
     },
     {
+      "suite": "al-snap-prd",
+      "name": "al-snap-prd",
+      "report": "axiom-prd-al-snap-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/al-snap-prd.yaml"
+    },
+    {
       "suite": "al-tanf-ecps",
       "name": "al-tanf-ecps",
       "report": "axiom-policyengine-al-tanf-ecps.json",

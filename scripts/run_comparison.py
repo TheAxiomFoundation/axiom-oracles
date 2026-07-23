@@ -1453,6 +1453,16 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     taxsim_pins = (
         ("policyengine-taxsim==2.30.0",) if "taxsim" in engines else ()
     )
+    # The Atlanta Fed PRD runs through the local policyengine-prd emulator
+    # (not on PyPI; adapters/prd/prd_pins.json records the pinned checkout)
+    # which shells out to Rscript + the installed PRD R package.
+    prd_editables: tuple[str, ...] = ()
+    if "prd" in engines:
+        prd_repo = _resolve_path(
+            params.get("prd_emulator_repo", "$HOME/policyengine-prd"),
+            "prd_emulator_repo",
+        )
+        prd_editables = (str(prd_repo),)
     cmd = [
         "uv",
         "run",
@@ -1464,6 +1474,11 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         *(arg for pin in pe_pins for arg in ("--with", pin)),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
         *(arg for pin in taxsim_pins for arg in ("--with", pin)),
+        *(
+            arg
+            for path in prd_editables
+            for arg in ("--with-editable", path)
+        ),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
