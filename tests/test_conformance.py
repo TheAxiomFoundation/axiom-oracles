@@ -590,7 +590,11 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "wa-tanf-ecps",
         "us-aca-ptc-grid",
         "us-additional-medicare-grid",
+        "us-elderly-disabled-grid",
+        "us-llc-grid",
         "us-niit-grid",
+        "us-qbid-grid",
+        "us-savers-credit-grid",
         "us-seca-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
@@ -606,7 +610,17 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         by_name["additional_medicare_tax"].suite
         == "us-additional-medicare-grid"
     )
+    assert (
+        by_name["elderly_disabled_credit"].suite
+        == "us-elderly-disabled-grid"
+    )
+    assert by_name["lifetime_learning_credit"].suite == "us-llc-grid"
     assert by_name["net_investment_income_tax"].suite == "us-niit-grid"
+    assert (
+        by_name["qualified_business_income_deduction"].suite
+        == "us-qbid-grid"
+    )
+    assert by_name["savers_credit"].suite == "us-savers-credit-grid"
     assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final
     # public variable. These blocked grids exercise useful narrower components,

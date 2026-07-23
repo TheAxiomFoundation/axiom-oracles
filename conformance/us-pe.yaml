@@ -324,7 +324,14 @@ policies:
     output_vars:
       - elderly_disabled_credit
     in_scope: true
-    suite: null
+    suite: us-elderly-disabled-grid
+    note: 'The us-elderly-disabled-grid suite compares the statutory section
+      22 potential before the section 26 liability/credit-order cap on nine
+      exactly expressible 2026 companion cases. It covers aged and proven
+      permanent-total-disability branches plus Social Security and AGI
+      reductions; the empty-relation no-qualified-person diagnostic is omitted
+      because PE requires a TaxUnit member and the fixture supplies no facts
+      for one. The committed report is 9/9 within one cent.'
   - id: us-pe:employee_medicare_tax
     oracle_policy_name: employee_medicare_tax
     oracle_policy_type: rules
@@ -621,7 +628,13 @@ policies:
     output_vars:
       - lifetime_learning_credit
     in_scope: true
-    suite: null
+    suite: us-llc-grid
+    note: 'The us-llc-grid suite compares all 12 ground-truth section 25A(c)
+      companion cases against PE-US lifetime_learning_credit at the same final,
+      liability-capped boundary. It includes exact phaseout endpoints,
+      two-student aggregate expenses, and a diagnostic proving that a $2,000
+      potential is capped to $500. The committed report is 12/12 within one
+      cent.'
   - id: us-pe:ma_income_tax
     oracle_policy_name: ma_income_tax
     oracle_policy_type: rules
@@ -1007,7 +1020,14 @@ policies:
     output_vars:
       - qualified_business_income_deduction
     in_scope: true
-    suite: null
+    suite: us-qbid-grid
+    note: 'The us-qbid-grid suite compares 11 ground-truth 2026 section 199A
+      cases using the corrected $201,750/$403,500 thresholds and
+      $75,000/$150,000 phase-in widths. The committed report is 10/11 raw and
+      fully dispositioned: PE-US 1.767.3 applies its $400 floor to all QBI
+      because it lacks Axiom''s distinct active-business-QBI fact, producing
+      $400 instead of zero in qbid-above-nowages. There are no unexplained or
+      Axiom-owned divergences.'
   - id: us-pe:recovery_rebate_credit
     oracle_policy_name: recovery_rebate_credit
     oracle_policy_type: rules
@@ -1073,7 +1093,15 @@ policies:
     output_vars:
       - savers_credit
     in_scope: true
-    suite: null
+    suite: us-savers-credit-grid
+    note: 'The us-savers-credit-grid suite binds PE-US
+      savers_credit_potential to Axiom''s statutory pre-section-26 boundary on
+      all 12 companion cases; savers-joint-both proves the lawful $2,000 result
+      from separately capped spouses. The committed report is 11/12 raw and
+      fully dispositioned: PE Core treats the published $24,250 inclusive
+      first-tier maximum as the next bracket''s lower bound, returning $400
+      rather than $1,000 at equality. There are no unexplained or Axiom-owned
+      divergences.'
   - id: us-pe:sc_income_tax
     oracle_policy_name: sc_income_tax
     oracle_policy_type: rules
