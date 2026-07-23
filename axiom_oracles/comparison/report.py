@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -223,7 +224,10 @@ class ComparisonReportAccumulator:
             return
         with self._case_rows_path.open("a") as handle:
             for row in rows:
-                handle.write(json.dumps(row, sort_keys=True) + "\n")
+                handle.write(
+                    json.dumps(_finite(row), sort_keys=True, allow_nan=False)
+                    + "\n"
+                )
 
     def _stored_case_rows(self) -> list[dict]:
         return list(self._iter_case_rows())
@@ -747,11 +751,28 @@ def _clean_float(value: float) -> float:
     return rounded
 
 
+def _finite(value: object) -> object:
+    """Replace non-finite floats with null, recursively.
+
+    Python's json module happily emits bare ``NaN``/``Infinity`` — which the
+    browser's ``JSON.parse`` rejects, silently dropping the whole report from
+    the dashboard (the PRD R package returns ``nan`` premiums and NaN rows
+    for households it drops). Strict-JSON reports or nothing.
+    """
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    if isinstance(value, dict):
+        return {key: _finite(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_finite(item) for item in value]
+    return value
+
+
 def _top_level_json_entry(key: str, value: object) -> str:
     return f"  {json.dumps(key)}: {_indented_json(value, 2).lstrip()}"
 
 
 def _indented_json(value: object, spaces: int) -> str:
     prefix = " " * spaces
-    text = json.dumps(value, indent=2, sort_keys=True)
+    text = json.dumps(_finite(value), indent=2, sort_keys=True, allow_nan=False)
     return prefix + text.replace("\n", f"\n{prefix}")
