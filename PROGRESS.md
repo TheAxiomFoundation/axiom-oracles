@@ -247,8 +247,8 @@ Medicare remains blocked on one companion-fixture contract correction, which
 the fourth binding now rejects explicitly. Real dashboard reports exist for
 the three unblocked suites, and those three conformance rows now point to their
 live evidence. Regenerated conformance coverage is 30/136 (up from 27/136) with
-zero unexplained and zero Axiom-attributed gaps. Additional Medicare remains
-uncovered.
+zero unexplained and zero Axiom-attributed gaps. All available gates are green.
+Additional Medicare remains uncovered on the external fixture blocker.
 
 ## Done
 
@@ -301,6 +301,9 @@ uncovered.
   comparison listing, rule verification, state-tax Populace contract, and
   `ruff check .`; full pytest reports 1,682 passed and 33 skipped; offline
   `uv build` produced both sdist and wheel.
+- Wrote the required `build-suites-SUMMARY.md` with design/source citations,
+  all per-case results, gate outcomes, the +3 conformance delta, and the precise
+  fourth-suite handoff.
 
 ## Next
 
@@ -310,4 +313,3 @@ uncovered.
 - Rerun the Additional Medicare suite, adopt that row, and repeat the mandated
   generated-artifact sequence to reach the intended 31/136 once the companion
   fixture lands.
-- Write the required build summary with per-case results and command outcomes.
