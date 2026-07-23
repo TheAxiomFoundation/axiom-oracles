@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-22T19:53:00Z",
+    "generated_at": "2026-07-23T03:54:21Z",
     "generated_by": "scripts/run_comparison.py::ny-income-tax-liability",
     "rulespecs": [
       {
