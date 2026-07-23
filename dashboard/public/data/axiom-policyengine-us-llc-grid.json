@@ -1,0 +1,741 @@
+{
+  "aggregates": [
+    {
+      "compared": 12,
+      "comparison": "amount",
+      "comparison_count": 12,
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "left_positive_rate": 75.0,
+      "match_count": 12,
+      "match_rate": 100.0,
+      "matched": 12,
+      "mismatch_count": 0,
+      "mismatched": 0,
+      "right_positive_rate": 75.0
+    }
+  ],
+  "case_count": 12,
+  "cases": [
+    {
+      "axiom": 800.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 50000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 4000
+          }
+        ]
+      },
+      "case_id": "llc-basic",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 50000,
+        "qualified_expenses": [
+          4000
+        ]
+      },
+      "match": true,
+      "policyengine": 800.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 800.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 800.0
+      }
+    },
+    {
+      "axiom": 2000.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 50000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 15000
+          }
+        ]
+      },
+      "case_id": "llc-cap",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 50000,
+        "qualified_expenses": [
+          15000
+        ]
+      },
+      "match": true,
+      "policyengine": 2000.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 2000.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 2000.0
+      }
+    },
+    {
+      "axiom": 1000.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 85000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 10000
+          }
+        ]
+      },
+      "case_id": "llc-phaseout-mid",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 85000,
+        "qualified_expenses": [
+          10000
+        ]
+      },
+      "match": true,
+      "policyengine": 1000.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 1000.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 1000.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 90001,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 10000
+          }
+        ]
+      },
+      "case_id": "llc-over",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 90001,
+        "qualified_expenses": [
+          10000
+        ]
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 0.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 0.0
+      }
+    },
+    {
+      "axiom": 800.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 1,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 170000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 8000
+          }
+        ]
+      },
+      "case_id": "llc-joint-mid",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 170000,
+        "qualified_expenses": [
+          8000
+        ]
+      },
+      "match": true,
+      "policyengine": 800.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 800.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 800.0
+      }
+    },
+    {
+      "axiom": 180.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 1,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 100000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 900
+          }
+        ]
+      },
+      "case_id": "llc-small",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 100000,
+        "qualified_expenses": [
+          900
+        ]
+      },
+      "match": true,
+      "policyengine": 180.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 180.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 180.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 50000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 0
+          }
+        ]
+      },
+      "case_id": "llc-zero-expenses",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 50000,
+        "qualified_expenses": [
+          0
+        ]
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 0.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 0.0
+      }
+    },
+    {
+      "axiom": 2000.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 80000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 10000
+          }
+        ]
+      },
+      "case_id": "llc-at-phaseout-start",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 80000,
+        "qualified_expenses": [
+          10000
+        ]
+      },
+      "match": true,
+      "policyengine": 2000.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 2000.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 2000.0
+      }
+    },
+    {
+      "axiom": 1999.8,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 80001,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 10000
+          }
+        ]
+      },
+      "case_id": "llc-one-dollar-over-phaseout-start",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 7.324218745452526e-05,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 80001,
+        "qualified_expenses": [
+          10000
+        ]
+      },
+      "match": true,
+      "policyengine": 1999.7999267578125,
+      "policyengine_components": {
+        "lifetime_learning_credit": 1999.7999267578125,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 1999.7999267578125
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 90000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 10000
+          }
+        ]
+      },
+      "case_id": "llc-at-phaseout-end",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 90000,
+        "qualified_expenses": [
+          10000
+        ]
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 0.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 0.0
+      }
+    },
+    {
+      "axiom": 2000.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 10000,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 50000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 6000
+          },
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 6000
+          }
+        ]
+      },
+      "case_id": "llc-aggregate-cap",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 10000,
+        "modified_adjusted_gross_income": 50000,
+        "qualified_expenses": [
+          6000,
+          6000
+        ]
+      },
+      "match": true,
+      "policyengine": 2000.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 2000.0,
+        "lifetime_learning_credit_credit_limit": 10000.0,
+        "lifetime_learning_credit_potential": 2000.0
+      }
+    },
+    {
+      "axiom": 500.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/25A#input.cdcc": 0,
+        "us:statutes/26/25A#input.filing_status": 0,
+        "us:statutes/26/25A#input.foreign_tax_credit": 0,
+        "us:statutes/26/25A#input.income_tax_before_credits": 500,
+        "us:statutes/26/25A#input.is_nonresident_alien": false,
+        "us:statutes/26/25A#input.modified_adjusted_gross_income": 50000,
+        "us:statutes/26/25A#input.section_6013_resident_alien_election": false,
+        "us:statutes/26/25A#input.taxpayer_is_section_1_g_child": false,
+        "us:statutes/26/25A#relation.education_credit_member_of_tax_unit": [
+          {
+            "us:statutes/26/25A#input.aotc_disallowance_period_applies": false,
+            "us:statutes/26/25A#input.aotc_election_in_effect": false,
+            "us:statutes/26/25A#input.aotc_prior_year_election_count": 0,
+            "us:statutes/26/25A#input.at_least_half_time_student": false,
+            "us:statutes/26/25A#input.completed_first_four_years_postsecondary_before_year": false,
+            "us:statutes/26/25A#input.education_credit_election_in_effect": true,
+            "us:statutes/26/25A#input.education_credit_identification_requirements_met": true,
+            "us:statutes/26/25A#input.excludable_educational_assistance": 0,
+            "us:statutes/26/25A#input.has_felony_drug_conviction": false,
+            "us:statutes/26/25A#input.institution_employer_identification_number_included": false,
+            "us:statutes/26/25A#input.is_spouse": false,
+            "us:statutes/26/25A#input.is_tax_unit_dependent": true,
+            "us:statutes/26/25A#input.is_taxpayer": false,
+            "us:statutes/26/25A#input.meets_higher_education_act_student_requirements": false,
+            "us:statutes/26/25A#input.payee_statement_received": true,
+            "us:statutes/26/25A#input.qualified_tuition_and_related_expenses": 10000
+          }
+        ]
+      },
+      "case_id": "llc-liability-cap-diagnostic",
+      "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "income_tax_before_credits": 500,
+        "modified_adjusted_gross_income": 50000,
+        "qualified_expenses": [
+          10000
+        ]
+      },
+      "match": true,
+      "policyengine": 500.0,
+      "policyengine_components": {
+        "lifetime_learning_credit": 500.0,
+        "lifetime_learning_credit_credit_limit": 500.0,
+        "lifetime_learning_credit_potential": 2000.0
+      }
+    }
+  ],
+  "concept": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Lifetime Learning Credit",
+      "id": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "fixture": "us/policies/income_tax/lifetime_learning_credit_pipeline.test.yaml",
+      "module": "us:policies/income_tax/lifetime_learning_credit_pipeline",
+      "output": "us:policies/income_tax/lifetime_learning_credit_pipeline#federal_lifetime_learning_credit"
+    },
+    "policyengine": {
+      "boundary": "TaxUnit section 25A(c) amount after the section 26 liability limit; the diagnostic case binds that limit",
+      "diagnostic_outputs": [
+        "lifetime_learning_credit_potential",
+        "lifetime_learning_credit_credit_limit"
+      ],
+      "outputs": [
+        "lifetime_learning_credit"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-23T08:13:02Z",
+    "generated_by": "scripts/run_comparison.py::us-llc-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "dc6602f246f333902bd964271919902b638a6112"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-llc-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 12,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": {}
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

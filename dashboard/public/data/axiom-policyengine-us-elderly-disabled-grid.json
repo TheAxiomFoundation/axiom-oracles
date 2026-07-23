@@ -1,0 +1,598 @@
+{
+  "aggregates": [
+    {
+      "compared": 9,
+      "comparison": "amount",
+      "comparison_count": 9,
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "left_positive_rate": 77.77777777777777,
+      "match_count": 9,
+      "match_rate": 100.0,
+      "matched": 9,
+      "mismatch_count": 0,
+      "mismatched": 0,
+      "right_positive_rate": 77.77777777777777
+    }
+  ],
+  "case_count": 9,
+  "cases": [
+    {
+      "axiom": 412.5,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 8000,
+        "us:statutes/26/22#input.filing_status": 0,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": false,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 2000,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-basic",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": -3.0517578125e-05,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 8000,
+        "nontaxable_social_security": 2000,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": null
+      },
+      "match": true,
+      "policyengine": 412.5000305175781,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 412.5000305175781
+      }
+    },
+    {
+      "axiom": 412.5,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 12000,
+        "us:statutes/26/22#input.filing_status": 0,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": false,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-agi-reduce",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": -3.0517578125e-05,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 12000,
+        "nontaxable_social_security": 0,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": null
+      },
+      "match": true,
+      "policyengine": 412.5000305175781,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 412.5000305175781
+      }
+    },
+    {
+      "axiom": 300.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 15000,
+        "us:statutes/26/22#input.filing_status": 1,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": true,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 3000,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          },
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-joint-both",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 15000,
+        "nontaxable_social_security": 3000,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": 66
+      },
+      "match": true,
+      "policyengine": 300.0,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 300.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 30000,
+        "us:statutes/26/22#input.filing_status": 0,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": false,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-zero-high-agi",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 30000,
+        "nontaxable_social_security": 0,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": null
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 585.0,
+        "elderly_disabled_credit_potential": 0.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 8000,
+        "us:statutes/26/22#input.filing_status": 0,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": false,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 6000,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-ss-wipes",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 8000,
+        "nontaxable_social_security": 6000,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": null
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 0.0
+      }
+    },
+    {
+      "axiom": 450.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 12000,
+        "us:statutes/26/22#input.filing_status": 1,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": true,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 1000,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          },
+          {
+            "us:statutes/26/22#input.age": 60,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-joint-one-65",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": -3.0517578125e-05,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 12000,
+        "nontaxable_social_security": 1000,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": 60
+      },
+      "match": true,
+      "policyengine": 450.0000305175781,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 450.0000305175781
+      }
+    },
+    {
+      "axiom": 300.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 0,
+        "us:statutes/26/22#input.filing_status": 0,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": false,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 60,
+            "us:statutes/26/22#input.disability_proof_furnished": true,
+            "us:statutes/26/22#input.impairment_duration_months": 12,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": true,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": true,
+            "us:statutes/26/22#input.section_22_disability_income": 2000,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": true
+          }
+        ]
+      },
+      "case_id": "eld-disabled-under-65",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 0,
+        "nontaxable_social_security": 0,
+        "primary_age": 60,
+        "primary_disability_income": 2000,
+        "primary_disability_proof_furnished": true,
+        "primary_impairment_duration_months": 12,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": true,
+        "primary_retired_on_disability": true,
+        "primary_unable_substantial_gainful_activity": true,
+        "spouse_age": null
+      },
+      "match": true,
+      "policyengine": 300.0,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 300.0
+      }
+    },
+    {
+      "axiom": 750.0,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 7500,
+        "us:statutes/26/22#input.filing_status": 0,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": false,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-at-agi-threshold",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 7500,
+        "nontaxable_social_security": 0,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": null
+      },
+      "match": true,
+      "policyengine": 750.0,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 750.0
+      }
+    },
+    {
+      "axiom": 749.85,
+      "axiom_fixture_inputs": {
+        "us:statutes/26/22#input.adjusted_gross_income": 7502,
+        "us:statutes/26/22#input.filing_status": 0,
+        "us:statutes/26/22#input.is_nonresident_alien": false,
+        "us:statutes/26/22#input.married_at_close_of_taxable_year": false,
+        "us:statutes/26/22#input.other_non_title_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.railroad_retirement_act_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.social_security_title_ii_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.spouses_lived_apart_all_year": false,
+        "us:statutes/26/22#input.veterans_affairs_pension_annuity_or_disability_benefits_excluded_from_gross_income": 0,
+        "us:statutes/26/22#input.workers_compensation_treated_as_social_security_benefit": 0,
+        "us:statutes/26/22#relation.section_22_payment_of_tax_unit": [],
+        "us:statutes/26/22#relation.taxpayer_or_spouse_of_tax_unit": [
+          {
+            "us:statutes/26/22#input.age": 66,
+            "us:statutes/26/22#input.disability_proof_furnished": false,
+            "us:statutes/26/22#input.impairment_duration_months": 0,
+            "us:statutes/26/22#input.impairment_expected_to_result_in_death": false,
+            "us:statutes/26/22#input.medically_determinable_impairment": false,
+            "us:statutes/26/22#input.retired_on_disability_before_year_end": false,
+            "us:statutes/26/22#input.section_22_disability_income": 0,
+            "us:statutes/26/22#input.unable_to_engage_substantial_gainful_activity": false
+          }
+        ]
+      },
+      "case_id": "eld-two-dollars-over-agi-threshold",
+      "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "difference": -3.662109372726263e-05,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 7502,
+        "nontaxable_social_security": 0,
+        "primary_age": 66,
+        "primary_disability_income": 0,
+        "primary_disability_proof_furnished": false,
+        "primary_impairment_duration_months": 0,
+        "primary_impairment_expected_to_result_in_death": false,
+        "primary_medically_determinable_impairment": false,
+        "primary_retired_on_disability": false,
+        "primary_unable_substantial_gainful_activity": false,
+        "spouse_age": null
+      },
+      "match": true,
+      "policyengine": 749.8500366210938,
+      "policyengine_components": {
+        "elderly_disabled_credit": 0.0,
+        "elderly_disabled_credit_credit_limit": 0.0,
+        "elderly_disabled_credit_potential": 749.8500366210938
+      }
+    }
+  ],
+  "concept": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Credit for the elderly or disabled before section 26",
+      "id": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "fixture": "us/policies/income_tax/elderly_disabled_credit_pipeline.test.yaml",
+      "module": "us:policies/income_tax/elderly_disabled_credit_pipeline",
+      "output": "us:policies/income_tax/elderly_disabled_credit_pipeline#federal_elderly_disabled_credit"
+    },
+    "policyengine": {
+      "boundary": "TaxUnit statutory section 22 amount before section 26, including aged and collapsed permanent-total-disability branches",
+      "diagnostic_outputs": [
+        "elderly_disabled_credit",
+        "elderly_disabled_credit_credit_limit"
+      ],
+      "outputs": [
+        "elderly_disabled_credit_potential"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "mismatches": [],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-23T08:12:49Z",
+    "generated_by": "scripts/run_comparison.py::us-elderly-disabled-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "dc6602f246f333902bd964271919902b638a6112"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-elderly-disabled-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "comparison_count": 9,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 9,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": {}
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

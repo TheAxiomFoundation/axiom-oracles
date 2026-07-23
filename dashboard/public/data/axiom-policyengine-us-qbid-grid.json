@@ -1,0 +1,631 @@
+{
+  "aggregates": [
+    {
+      "compared": 11,
+      "comparison": "amount",
+      "comparison_count": 11,
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "left_positive_rate": 81.81818181818181,
+      "match_count": 10,
+      "match_rate": 90.9090909090909,
+      "matched": 10,
+      "mismatch_count": 1,
+      "mismatched": 1,
+      "right_positive_rate": 90.9090909090909
+    }
+  ],
+  "case_count": 11,
+  "cases": [
+    {
+      "axiom": 12000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750.0,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 80000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 40000,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 60000,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-ti-limited",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 80000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 60000,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 40000
+      },
+      "match": true,
+      "policyengine": 12000.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 12000.0
+      }
+    },
+    {
+      "axiom": 20000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 100000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 50000,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 150000,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-basic-100k",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 100000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 150000,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 50000
+      },
+      "match": true,
+      "policyengine": 20000.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 20000.0
+      }
+    },
+    {
+      "axiom": 30000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 403500,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 1,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 150000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 60000,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 250000,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-joint-150k",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 150000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 250000,
+        "threshold": 403500,
+        "ubia": 0,
+        "w2_wages": 60000
+      },
+      "match": true,
+      "policyengine": 30000.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 30000.0
+      }
+    },
+    {
+      "axiom": 27500.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 200000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 30000,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 239250,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-phasein",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 200000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 239250,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 30000
+      },
+      "match": true,
+      "policyengine": 27500.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 27500.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 300000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 0,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 276751,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-above-nowages",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": -400.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 300000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 276751,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 0
+      },
+      "match": false,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 400.0
+      }
+    },
+    {
+      "axiom": 4000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 403500,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 1,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 0,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 20000,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 0,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 100000,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-reit-only",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 0,
+        "reit_dividends": 20000,
+        "taxable_income_before_qbid": 100000,
+        "threshold": 403500,
+        "ubia": 0,
+        "w2_wages": 0
+      },
+      "match": true,
+      "policyengine": 4000.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 4000.0
+      }
+    },
+    {
+      "axiom": 0.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 0,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 0,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 0,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-zero",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 0,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 0,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 0
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 0.0
+      }
+    },
+    {
+      "axiom": 30000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 150000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 0,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 201750,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-single-at-threshold",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 150000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 201750,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 0
+      },
+      "match": true,
+      "policyengine": 30000.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 30000.0
+      }
+    },
+    {
+      "axiom": 29999.6,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 150000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 0,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 201751,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-single-one-dollar-over-threshold",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0003906249985448085,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 150000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 201751,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 0
+      },
+      "match": true,
+      "policyengine": 29999.599609375,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 29999.599609375
+      }
+    },
+    {
+      "axiom": 400.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 0,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 1000,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 1000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 0,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 10000,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-active-minimum",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 1000,
+        "net_capital_gain": 0,
+        "ptp_income": 0,
+        "qbi": 1000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 10000,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 0
+      },
+      "match": true,
+      "policyengine": 400.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 400.0
+      }
+    },
+    {
+      "axiom": 14000.0,
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/qualified_business_income_deduction_pipeline#input.qualified_business_income_threshold_amount_2026": 201750,
+        "us:statutes/26/1/h#input.long_term_capital_gains": 30000,
+        "us:statutes/26/1/h#input.net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
+        "us:statutes/26/1/h#input.qualified_dividend_income": 0,
+        "us:statutes/26/1/h#input.short_term_capital_gains": 0,
+        "us:statutes/26/199A#input.aggregate_qualified_business_income_from_active_qualified_trades_or_businesses": 0,
+        "us:statutes/26/199A#input.cooperative_w2_wages": 0,
+        "us:statutes/26/199A#input.filing_status": 0,
+        "us:statutes/26/199A#input.minimum_deduction_cost_of_living_adjustment": 0,
+        "us:statutes/26/199A#input.qualified_business_income": 100000,
+        "us:statutes/26/199A#input.qualified_business_income_allocable_to_qualified_cooperative_payments": 0,
+        "us:statutes/26/199A#input.qualified_production_activities_income": 0,
+        "us:statutes/26/199A#input.qualified_publicly_traded_partnership_income": 0,
+        "us:statutes/26/199A#input.qualified_reit_dividends": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_unadjusted_basis": 0,
+        "us:statutes/26/199A#input.qualified_trade_or_business_w2_wages": 50000,
+        "us:statutes/26/199A#input.taxable_income_computed_without_section_199A": 100000,
+        "us:statutes/26/199A#input.taxpayer_is_corporation": false,
+        "us:statutes/26/199A#input.taxpayer_is_specified_agricultural_or_horticultural_cooperative": false,
+        "us:statutes/26/199A#input.w2_wages_allocable_to_qualified_cooperative_payments": 0
+      },
+      "case_id": "qbid-net-capital-gain-limit",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "active_business_qbi": 0,
+        "net_capital_gain": 30000,
+        "ptp_income": 0,
+        "qbi": 100000,
+        "reit_dividends": 0,
+        "taxable_income_before_qbid": 100000,
+        "threshold": 201750,
+        "ubia": 0,
+        "w2_wages": 50000
+      },
+      "match": true,
+      "policyengine": 14000.0,
+      "policyengine_components": {
+        "qualified_business_income_deduction": 14000.0
+      }
+    }
+  ],
+  "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Qualified business income deduction",
+      "id": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "fixture": "us/policies/income_tax/qualified_business_income_deduction_pipeline.test.yaml",
+      "module": "us:policies/income_tax/qualified_business_income_deduction_pipeline",
+      "output": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction"
+    },
+    "policyengine": {
+      "boundary": "TaxUnit section 199A deduction over caller-resolved QBI, wages, UBIA, REIT/PTP income, taxable income, and net capital gain",
+      "diagnostic_outputs": [],
+      "outputs": [
+        "qualified_business_income_deduction"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "mismatches": [
+    {
+      "case_id": "qbid-above-nowages",
+      "concept": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction",
+      "difference": -400.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "qbid-floor-uses-all-qbi-instead-of-active-business-qbi"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.0,
+      "left_engine": "axiom",
+      "right": 400.0,
+      "right_engine": "policyengine"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-23T08:12:21Z",
+    "generated_by": "scripts/run_comparison.py::us-qbid-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "dc6602f246f333902bd964271919902b638a6112"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-qbid-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 90.9090909090909,
+    "comparison_count": 11,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 1
+      },
+      "dispositions_file": "dispositions/us-qbid-grid.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 90.909091,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 10,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": {}
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}
