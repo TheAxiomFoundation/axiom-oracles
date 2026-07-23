@@ -220,7 +220,7 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     cmd = calls[0]
     assert cmd[:3] == ["uv", "run", "--directory"]
     assert str(axiom_encode.resolve()) in cmd
-    assert "snap-ecps-compare" in cmd
+    assert "snap-populace-compare" in cmd
     assert "--sample-size" not in cmd
     assert "--axiom-binary" in cmd
 
@@ -233,9 +233,22 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     assert report["aggregates"][0]["comparison"] == "amount"
     assert report["aggregates"][1]["comparison"] == "eligibility"
     assert report["aggregates"][1]["matched"] == 1
-    assert len(report["cases"]) == 1
-    assert report["cases"][0]["metadata"]["axiom_ny_snap_categorically_eligible"]
-    assert report["cases"][0]["metadata"][
+    # Every row is a case now — matched concepts carry both engines'
+    # values as evidence, mismatching ones stay in `mismatches`.
+    assert len(report["cases"]) == 2
+    by_id = {c["case_id"]: c for c in report["cases"]}
+    matched = by_id["ecps-spm-101"]
+    assert matched["match_rate"] == 100.0
+    assert not matched["mismatches"]
+    assert {m["concept"] for m in matched["matches"]} == {
+        "us:statutes/7/2014/u#snap_benefit",
+        "us:statutes/7/2014/o#snap_eligible",
+    }
+    mismatched = by_id["ecps-spm-102"]
+    assert len(mismatched["mismatches"]) == 2
+    assert "matches" not in mismatched
+    assert mismatched["metadata"]["axiom_ny_snap_categorically_eligible"]
+    assert mismatched["metadata"][
         "axiom_ny_snap_residual_130_percent_categorical_path_satisfied"
     ]
     assert report["cases"][0]["metadata"]["pe_standard_deduction"] == 209

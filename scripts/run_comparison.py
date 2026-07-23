@@ -1156,7 +1156,12 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
 
 
 def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
-    """`axiom-encode snap-ecps-compare`, adapted from CSV to v2 JSON."""
+    """`axiom-encode snap-populace-compare`, adapted from CSV to v2 JSON.
+
+    The encoder renamed the subcommand from snap-ecps-compare in its
+    ECPS→Populace rename; the runner type keeps the old name so existing
+    suite YAMLs stay valid.
+    """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
     params = runner["parameters"]
     axiom_binary = None
@@ -1177,7 +1182,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
             "--with",
             "numpy",
             "axiom-encode",
-            "snap-ecps-compare",
+            "snap-populace-compare",
             "--jurisdiction",
             str(params.get("jurisdiction", "us-co")),
             "--year",
@@ -2493,19 +2498,19 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         1 for row in rows if _csv_bool(row.get("pe_snap_eligible"))
     )
 
+    # Every row becomes a case — matches carry both engines' values just
+    # like mismatches, so the report alone lets the dashboard show the
+    # evidence behind the agreement, not only the disagreements.
     cases: list[dict] = []
     flat_mismatches: list[dict] = []
-    mismatching_rows_by_spm = {
-        str(row.get("spm_unit_id") or "unknown"): row
-        for row in [*amount_mismatching_rows, *eligibility_mismatching_rows]
-    }
-    for spm_unit_id, row in mismatching_rows_by_spm.items():
+    for row in rows:
         spm_unit_id = str(row.get("spm_unit_id") or "unknown")
         case_id = f"ecps-spm-{spm_unit_id}"
         case_mismatches = []
+        case_matches = []
+        axiom_value = _csv_float(row.get("axiom_snap_allotment"))
+        pe_value = _csv_float(row.get("pe_snap"))
         if not _csv_bool(row.get("match")):
-            axiom_value = _csv_float(row.get("axiom_snap_allotment"))
-            pe_value = _csv_float(row.get("pe_snap"))
             difference = _csv_float(row.get("difference"), axiom_value - pe_value)
             mismatch = {
                 "case_id": case_id,
@@ -2521,6 +2526,14 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
+        else:
+            case_matches.append(
+                {
+                    "concept": amount_concept_id,
+                    "left": axiom_value,
+                    "right": pe_value,
+                }
+            )
         axiom_eligible = _csv_bool(row.get("axiom_snap_eligible"))
         pe_eligible = _csv_bool(row.get("pe_snap_eligible"))
         if axiom_eligible != pe_eligible:
@@ -2544,6 +2557,14 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
+        else:
+            case_matches.append(
+                {
+                    "concept": eligibility_concept_id,
+                    "left": axiom_eligible,
+                    "right": pe_eligible,
+                }
+            )
         case_match_rate = (
             (2 - len(case_mismatches)) / 2 * 100 if case_mismatches else 100.0
         )
@@ -2573,18 +2594,19 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         for key, value in row.items():
             if key.startswith(("axiom_", "pe_")) and key not in metadata:
                 metadata[key] = _csv_scalar(value)
-        cases.append(
-            {
-                "case_id": case_id,
-                "left_engine": "axiom",
-                "left_errors": [],
-                "match_rate": case_match_rate,
-                "metadata": metadata,
-                "mismatches": case_mismatches,
-                "right_engine": "policyengine",
-                "right_errors": [],
-            }
-        )
+        case = {
+            "case_id": case_id,
+            "left_engine": "axiom",
+            "left_errors": [],
+            "match_rate": case_match_rate,
+            "metadata": metadata,
+            "mismatches": case_mismatches,
+            "right_engine": "policyengine",
+            "right_errors": [],
+        }
+        if case_matches:
+            case["matches"] = case_matches
+        cases.append(case)
 
     amount_aggregate = {
         "category": "food",

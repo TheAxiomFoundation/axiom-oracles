@@ -928,7 +928,6 @@ export default function OraclesV2() {
             </section>
 
             <section className="v2-section">
-              <div className="mono v2-dossier-colhead">The oracles</div>
               <div className="v2-roster">
                 {oracles.map((oracle) => (
                   <OracleCard

@@ -116,21 +116,7 @@ function Triangulation({ runs, bySuite, onPick }) {
         </span>
       </div>
       <div className="tri-body">
-        <div className="tri-bar" aria-hidden="true">
-          {order.map(({ key, cls }) => {
-            const n = (buckets.get(key) || []).length;
-            if (!n) return null;
-            return (
-              <span
-                key={key}
-                className={`tri-seg ${cls}`}
-                style={{ flexGrow: n }}
-                title={`${n.toLocaleString()} cases`}
-              />
-            );
-          })}
-        </div>
-        <div className="tri-legend">
+        <div className="tri-grid">
           {order.map(({ key, label, cls }) => {
             const ids = buckets.get(key) || [];
             if (!ids.length) return null;
@@ -138,24 +124,25 @@ function Triangulation({ runs, bySuite, onPick }) {
               <button
                 key={key}
                 type="button"
-                className="tri-item"
+                className={`tri-box ${cls}`}
                 onClick={() => onPick(new Set(ids))}
                 title="Filter the households below to this bucket"
               >
-                <span className={`tri-swatch ${cls}`} />
-                {label}
-                <span className="mono tri-count">
-                  {ids.length.toLocaleString()} ·{" "}
-                  {formatPct((ids.length / joined) * 100, 1)}
+                <span className="tri-box-label">{label}</span>
+                <span className="mono tri-box-count">
+                  {ids.length.toLocaleString()}
+                  <span className="tri-box-share">
+                    {formatPct((ids.length / joined) * 100, 1)}
+                  </span>
                 </span>
               </button>
             );
           })}
-          <span className="tri-hint mono">
-            disagreeing with independent engines points at the encoding;
-            oracles disagreeing with each other lets it arbitrate
-          </span>
         </div>
+        <span className="tri-hint mono">
+          disagreeing with independent engines points at the encoding; oracles
+          disagreeing with each other lets it arbitrate
+        </span>
       </div>
     </section>
   );
@@ -344,7 +331,9 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
   const pageRows = rows.slice(page * PAGE, (page + 1) * PAGE);
   const inputsMissing =
     merged.length > 0 &&
-    merged.slice(0, 50).every((c) => !(c.h?.n || (c.h?.a || []).length));
+    merged
+      .slice(0, 50)
+      .every((c) => !(c.h?.n || (c.h?.a || []).length || (c.i || []).length));
 
   return (
     <>
@@ -376,6 +365,7 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
           )}
         </div>
 
+        {merged.length > 0 && (
         <div className="cx-filters">
           <select
             className="cx-select"
@@ -416,6 +406,7 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
             </button>
           )}
         </div>
+        )}
 
         {(partial || inputsMissing) && (
           <p className="v2-hh-note">
@@ -435,11 +426,20 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
         {anyLoading && merged.length === 0 ? (
           <p className="v2-empty">Loading household cases…</p>
         ) : merged.length === 0 ? (
-          <p className="v2-empty">
-            No per-household case artifacts in this scope yet — the
-            aggregate rates are the whole story until the harness records
-            them.
-          </p>
+          <div className="hh-empty">
+            <span className="mono hh-empty-glyph" aria-hidden="true">
+              ∅
+            </span>
+            <div className="hh-empty-title">
+              No per-household evidence yet
+            </div>
+            <p className="hh-empty-body">
+              This scope&apos;s runs report aggregate agreement only — the
+              harness hasn&apos;t recorded individual household cases. Once a
+              full run persists them, every compared household will be
+              browsable here.
+            </p>
+          </div>
         ) : rows.length === 0 ? (
           <p className="v2-empty">Nothing matches these filters.</p>
         ) : (

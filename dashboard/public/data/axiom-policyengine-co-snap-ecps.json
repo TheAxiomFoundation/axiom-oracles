@@ -9,20 +9,20 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 37944.0,
-      "match_count": 1072,
-      "match_rate": 100.0,
-      "match_weight": 1072,
-      "matched": 1072,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "left_weighted_sum": 37933.0,
+      "match_count": 1071,
+      "match_rate": 99.90671641791045,
+      "match_weight": 1071,
+      "matched": 1071,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
       "right_weighted_sum": 37996.938652,
-      "weighted_difference": -52.93865199999709,
-      "weighted_match_rate": 100.0
+      "weighted_difference": -63.93865199999709,
+      "weighted_match_rate": 99.90671641791045
     },
     {
       "category": "food",
@@ -53,7 +53,79 @@
     }
   ],
   "case_count": 1072,
-  "cases": [],
+  "cases": [
+    {
+      "case_id": "ecps-spm-50970",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:statutes/7/2014/o#snap_eligible",
+          "left": true,
+          "right": true
+        }
+      ],
+      "metadata": {
+        "axiom_gross_income": 774.427979,
+        "axiom_max_allotment": 298.0,
+        "axiom_net_income": 23.427979,
+        "axiom_shelter_deduction": 388.0,
+        "axiom_snap_allotment": 290.0,
+        "axiom_snap_eligible": true,
+        "axiom_snap_excess_shelter_deduction": 388.0,
+        "axiom_snap_gross_monthly_income": 774.427979,
+        "axiom_snap_individual_utility_allowance": 0.0,
+        "axiom_snap_limited_utility_allowance": 0.0,
+        "axiom_snap_maximum_allotment": 298.0,
+        "axiom_snap_net_income": 23.427979,
+        "axiom_snap_one_utility_allowance": 0.0,
+        "axiom_snap_regular_month_allotment": 290.0,
+        "axiom_snap_standard_utility_allowance": 594.0,
+        "axiom_utility_allowance": 594.0,
+        "case_unit": "spm_unit",
+        "dataset": "enhanced_cps",
+        "household_id": "49897",
+        "pe_child_support_deduction": 0.0,
+        "pe_dependent_care_deduction": 0.0,
+        "pe_earned_income_deduction": 154.885605,
+        "pe_gross_income": 774.427979,
+        "pe_has_usda_elderly_disabled": false,
+        "pe_housing_cost": 0.0,
+        "pe_max_allotment": 298.0,
+        "pe_medical_deduction": 0.0,
+        "pe_meets_snap_categorical_eligibility": true,
+        "pe_net_income": 21.813538,
+        "pe_net_income_before_shelter": 410.542359,
+        "pe_shelter_deduction": 388.728821,
+        "pe_snap": 291.700012,
+        "pe_snap_eligible": true,
+        "pe_snap_utility_allowance_type": "SUA",
+        "pe_standard_deduction": 209.0,
+        "pe_utility_allowance": 594.0,
+        "population": "enhanced-cps",
+        "spm_unit_id": "50970",
+        "state": "CO",
+        "suite": "us-co-snap-ecps"
+      },
+      "mismatches": [
+        {
+          "case_id": "ecps-spm-50970",
+          "concept": "us:statutes/7/2014/u#snap_benefit",
+          "description": "SNAP benefit amount",
+          "difference": -1.7000120000000152,
+          "kind": "amount_difference",
+          "left": 290.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 291.700012,
+          "tolerance": 1.5
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
   "concepts": [
     {
       "category": "food",
@@ -78,6 +150,12 @@
       "tolerance": 0
     }
   ],
+  "dashboard_truncation": {
+    "shown_case_rows": 1,
+    "shown_mismatches": 1,
+    "total_case_rows": 1072,
+    "total_mismatches": 1
+  },
   "engines": {
     "left": "axiom",
     "right": "policyengine"
@@ -86,14 +164,27 @@
   "locales": [
     "CO"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "case_id": "ecps-spm-50970",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -1.7000120000000152,
+      "kind": "amount_difference",
+      "left": 290.0,
+      "parent": null,
+      "relative_tolerance": 0,
+      "right": 291.700012,
+      "tolerance": 1.5
+    }
+  ],
   "population": "enhanced-cps",
   "provenance": {
     "engine": {
       "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T20:51:04Z",
+    "generated_at": "2026-07-23T02:41:56Z",
     "generated_by": "scripts/run_comparison.py::co-snap-ecps",
     "oracle": {
       "name": "policyengine",
@@ -120,24 +211,34 @@
       },
       "dispositions_file": null,
       "expired_entries": [],
-      "explained_rate": 100,
+      "explained_rate": 99.953358,
       "orphaned_entries": [],
-      "raw_match_rate": 100,
+      "raw_match_rate": 99.953358,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 0
+      "unexplained_count": 1
     },
     "error_count": 0,
     "errors_by_engine": {},
-    "match_count": 2144,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
+    "match_count": 2143,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "us:statutes/7/2014/u#snap_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
     "mismatches_by_scenario": {},
     "weighted": {
       "comparison_weight": 2144,
-      "match_rate": 100.0,
-      "match_weight": 2144,
-      "mismatch_weight": 0
+      "match_rate": 99.95335820895522,
+      "match_weight": 2143,
+      "mismatch_weight": 1
     }
   }
 }

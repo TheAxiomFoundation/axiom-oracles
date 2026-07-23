@@ -28,12 +28,13 @@ import DispositionNote from "./DispositionNote";
  *  1. The verdict ledger — one agreement bar per oracle run; the filled
  *     mass is the matched share, the gap is what the rest of the page
  *     explains.
- *  2. Coverage — what each side encodes, stated once for the program.
- *  3. Compared concepts — every value the engines were asked to agree
+ *  2. Compared concepts — every value the engines were asked to agree
  *     on, across all runs, one table.
- *  4. WhySection — every disagreement pattern with its known cause or
+ *  3. WhySection — every disagreement pattern with its known cause or
  *     disposition explanation inline.
- *  5. The handoff to level 3 — browse the households.
+ *  4. The handoff to level 3 — browse the households.
+ *  5. Provenance footnote — sources and measurement caveats, muted,
+ *     at the very end.
  */
 
 /** Render `backticked` spans in cause prose as inline code. */
@@ -62,9 +63,6 @@ const COVERAGE_STATUS_LABEL = {
 };
 
 function measurementNote(report, axiomProgram) {
-  if (report.suite === "co-snap-ecps") {
-    return "Measured by the encoder-backed CO SNAP report; the axiom-programs wrapper now has generic output/input mapping smoke-tested, but is not yet the dashboard comparison path.";
-  }
   if (axiomProgram?.status === "coverageOnly") {
     return "Coverage-only surface; not a measured alignment run.";
   }
@@ -84,20 +82,23 @@ function measurementNote(report, axiomProgram) {
 }
 
 /**
- * The verdict ledger — the page's signature. One row per oracle run:
- * who checked, over what population, and an agreement bar whose filled
- * mass IS the matched share (the visible gap is the disagreement the
- * why-section explains). Household runs lead; parameter probes follow.
+ * The verdict ledger — the page's signature. One box per oracle run,
+ * side by side when several oracles check the program: who checked,
+ * over what population, and the agreement rate as the focal figure.
+ * The card's edge and wash carry the verdict color; the disagreement
+ * figures under the rate are what the why-section explains. Household
+ * runs lead; parameter probes follow.
  */
-function VerdictRow({ report }) {
+function VerdictCard({ report }) {
   const meta = suiteMeta(report.suite);
   const metric = reportMetric(report);
   const near = nearMetric(report);
   const oracle = otherOracle(report);
-  const pct =
-    metric.rate == null ? 0 : Math.max(0, Math.min(100, metric.rate));
   return (
-    <div className="pp-verdict-row">
+    <article
+      className="pp-verdict-card"
+      style={{ "--verdict": rateColor(metric.rate) }}
+    >
       <div className="pp-verdict-who">
         <span className="pp-verdict-oracle">vs {engineLabel(oracle)}</span>
         <span className="mono pp-verdict-meta">
@@ -109,26 +110,11 @@ function VerdictRow({ report }) {
           {meta.kind === "parameter" && " · parameter check"}
         </span>
       </div>
-      <div
-        className="pp-verdict-bar"
-        role="img"
-        aria-label={`${formatAgreementRate(metric.rate, metric.mismatches)} agreement`}
-      >
-        <span
-          className="pp-verdict-fill"
-          style={{
-            width: `${pct}%`,
-            background: rateColor(metric.rate),
-          }}
-        />
+      <div className="mono pp-verdict-rate">
+        {formatAgreementRate(metric.rate, metric.mismatches)}
+        <span className="pp-verdict-rate-label">agree</span>
       </div>
-      <div className="pp-verdict-figures">
-        <span
-          className="mono pp-verdict-rate"
-          style={{ color: rateColor(metric.rate) }}
-        >
-          {formatAgreementRate(metric.rate, metric.mismatches)}
-        </span>
+      <div className="pp-verdict-subs">
         <span className="mono pp-verdict-sub">
           {metric.mismatches > 0
             ? `${metric.mismatches.toLocaleString()} of ${metric.total.toLocaleString()} checks disagree`
@@ -149,13 +135,15 @@ function VerdictRow({ report }) {
           </span>
         )}
       </div>
-    </div>
+    </article>
   );
 }
 
 /**
- * Coverage belongs to the program, not each run — Axiom's source chain,
- * the oracle's own claim, and how the measurement was taken, once.
+ * Provenance footnote — where Axiom's rules come from, what the oracle
+ * claims about its own coverage, and how the measurement was taken.
+ * Deliberately quiet: it qualifies the verdict, it doesn't compete with
+ * it, so it renders as muted lines at the end of the page.
  */
 function CoverageBlock({ programReports, coverageOverview }) {
   const first = programReports[0];
@@ -179,46 +167,33 @@ function CoverageBlock({ programReports, coverageOverview }) {
   ];
   if (!axiomProgram && !peProgram && !notes.length) return null;
   return (
-    <section className="card-flat">
-      <div className="section-head">
-        <div>
-          <div className="section-eyebrow">Coverage</div>
-          <div className="section-title">What each side encodes</div>
-        </div>
-      </div>
-      <div className="run-context pp-cov">
-        {axiomProgram && (
-          <div className="run-context-item">
-            <span className="mono run-context-label">Axiom</span>
-            <span>
-              {COVERAGE_STATUS_LABEL[axiomProgram.status] ||
-                axiomProgram.status}
-              {axiomProgram.source && (
-                <span className="mono run-context-source">
-                  {" "}
-                  · {axiomProgram.source}
-                </span>
-              )}
+    <div className="pp-provenance">
+      {axiomProgram && (
+        <p className="pp-provenance-line">
+          <span className="mono pp-provenance-label">Axiom</span>
+          {COVERAGE_STATUS_LABEL[axiomProgram.status] || axiomProgram.status}
+          {axiomProgram.source && (
+            <span className="mono pp-provenance-source">
+              {" "}
+              · {axiomProgram.source}
             </span>
-          </div>
-        )}
-        {peProgram && (
-          <div className="run-context-item">
-            <span className="mono run-context-label">PolicyEngine</span>
-            <span>
-              {COVERAGE_STATUS_LABEL[peProgram.status] || peProgram.status}
-              {peProgram.notes && <> — {peProgram.notes}</>}
-            </span>
-          </div>
-        )}
-        {notes.map((note, i) => (
-          <div key={i} className="run-context-item">
-            <span className="mono run-context-label">Measurement</span>
-            <span>{note}</span>
-          </div>
-        ))}
-      </div>
-    </section>
+          )}
+        </p>
+      )}
+      {peProgram && (
+        <p className="pp-provenance-line">
+          <span className="mono pp-provenance-label">PolicyEngine</span>
+          {COVERAGE_STATUS_LABEL[peProgram.status] || peProgram.status}
+          {peProgram.notes && <> — {peProgram.notes}</>}
+        </p>
+      )}
+      {notes.map((note, i) => (
+        <p key={i} className="pp-provenance-line">
+          <span className="mono pp-provenance-label">Measurement</span>
+          {note}
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -497,14 +472,9 @@ export default function ProgramPage({
 
       <div className="pp-verdicts">
         {orderedReports.map((report) => (
-          <VerdictRow key={report.suite} report={report} />
+          <VerdictCard key={report.suite} report={report} />
         ))}
       </div>
-
-      <CoverageBlock
-        programReports={programReports}
-        coverageOverview={coverageOverview}
-      />
 
       <ConceptTable programReports={orderedReports} />
 
@@ -523,6 +493,11 @@ export default function ProgramPage({
           households →
         </button>
       )}
+
+      <CoverageBlock
+        programReports={programReports}
+        coverageOverview={coverageOverview}
+      />
     </>
   );
 }

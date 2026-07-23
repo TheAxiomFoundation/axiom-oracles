@@ -86,6 +86,46 @@ def explained_lookup(report: dict | None) -> dict:
     return out
 
 
+# Compared-concept values ride in the case's mismatch/match rows already;
+# everything else axiom_*-prefixed in metadata is per-case evidence worth
+# showing (income intermediates, deduction amounts, eligibility-path flags).
+ENGINE_PAIR_SKIP = {"axiom_snap_eligible", "axiom_snap_allotment"}
+
+
+def engine_pair_records(metadata: dict) -> list[dict]:
+    """Fallback input panel from flat axiom_*/pe_* metadata columns.
+
+    The encoder-backed SNAP harness exports per-case intermediates
+    (gross/net income, shelter deduction, utility allowance) as metadata
+    instead of raw input records. Surface Axiom's value under the bare
+    name; when PolicyEngine's counterpart differs beyond rounding, show
+    it alongside.
+    """
+    out = []
+    for key in sorted(metadata):
+        if not key.startswith("axiom_") or key in ENGINE_PAIR_SKIP:
+            continue
+        # The snap_*-prefixed diagnostic columns duplicate the short-name
+        # intermediates (snap_gross_monthly_income == gross_income) and
+        # echo the compared allotment itself.
+        if key.startswith("axiom_snap_"):
+            continue
+        value = metadata[key]
+        if value is None or isinstance(value, str):
+            continue
+        name = key[len("axiom_") :]
+        out.append({"n": name, "v": value})
+        peer = metadata.get("pe_" + name)
+        numeric = isinstance(peer, (int, float)) and isinstance(
+            value, (int, float)
+        )
+        if peer is not None and (
+            abs(peer - value) >= 0.005 if numeric else peer != value
+        ):
+            out.append({"n": f"{name} (policyengine)", "v": peer})
+    return out
+
+
 def compact_case(case: dict, explained: dict) -> dict:
     hs = (case.get("metadata") or {}).get("household_summary") or {}
     ages = hs.get("ages") or []
@@ -101,12 +141,15 @@ def compact_case(case: dict, explained: dict) -> dict:
         if kind:
             row["e"] = kind
         mismatches.append(row)
+    earned = hs.get("yearly_earned_income_per_person")
     row = {
         "id": case.get("case_id"),
         "r": case.get("match_rate"),
         "h": {
             "n": hs.get("household_size") or len(ages) or None,
-            "e": round(sum(hs.get("yearly_earned_income_per_person") or [0])),
+            # None (not 0) when the harness never captured earnings — the
+            # UI renders "$0 / year" for 0, which asserts a fact we lack.
+            "e": round(sum(earned)) if earned else None,
             "a": ages,
         },
         "m": mismatches,
@@ -132,6 +175,10 @@ def compact_case(case: dict, explained: dict) -> dict:
         row["i"] = kept
         if dropped:
             row["i0"] = dropped
+    else:
+        synth = engine_pair_records(case.get("metadata") or {})
+        if synth:
+            row["i"] = synth
     matches = case.get("matches")
     if matches:
         row["v"] = [
@@ -178,7 +225,7 @@ def mismatch_only_rows(report: dict, explained: dict) -> list[dict]:
                 "r": None,
                 "h": {
                     "n": len(m["ages"]) or None,
-                    "e": round(m["earned"]) if m["earned"] else 0,
+                    "e": round(m["earned"]) if m["earned"] is not None else None,
                     "a": m["ages"],
                 },
                 "m": [],
