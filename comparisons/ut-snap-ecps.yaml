@@ -5,6 +5,13 @@ description: >-
   RuleSpec composition against PolicyEngine on the Enhanced CPS, filtered to
   Utah households.
 
+# Not CI-runnable (#296): the encoder's snap-populace-compare harness has no
+# us-ut jurisdiction config (bridges/snap_populace.py JURISDICTION_CONFIGS
+# covers az/ca/co/ga/md/ny/tx) — every dispatched leg fails on
+# `--jurisdiction: invalid choice`. Manual lane only until the harness grows
+# a Utah config (#336); drop this marker when it does.
+ci: manual
+
 runner:
   type: axiom-encode-snap-ecps-compare
   axiom_encode_repo: $HOME/axiom-encode

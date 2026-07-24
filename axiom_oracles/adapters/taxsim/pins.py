@@ -88,6 +88,16 @@ def installed_binary_path(system: str | None = None) -> Path | None:
     real_prefix = getattr(sys, "real_prefix", None)
     if real_prefix:
         candidates.append(Path(real_prefix) / subdir)
+    # uv's ephemeral `--with` overlay environments compose site-packages from
+    # several cached archives, and sys.prefix points at a temp build dir that
+    # carries no share/ tree at all — the wheel's data files land in the
+    # archive that holds its site-packages. Walk every site-packages entry on
+    # sys.path back to its env root (lib/pythonX.Y/site-packages → root) and
+    # look for the shared-data tree there (#296).
+    for entry in sys.path:
+        path = Path(entry)
+        if path.name == "site-packages" and len(path.parents) >= 3:
+            candidates.append(path.parents[2] / subdir)
 
     for candidate in candidates:
         if candidate.is_file():

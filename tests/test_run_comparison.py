@@ -49,35 +49,40 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
         run_comparison, "_ensure_rulespec_us_checkout", lambda _remote: rulespec
     )
 
-    def fake_run(cmd, *, check, stdout=None, cwd=None):
-        del check, cwd
+    def fake_run(cmd, *, check, stdout=None, cwd=None, capture_output=False, text=False):
+        del check, cwd, capture_output, text
         calls.append(cmd)
         if stdout is not None:
             stdout.write("{}")
-        return subprocess.CompletedProcess(cmd, 0)
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
 
-    run_comparison._run_axiom_encode_tax_ecps_compare(
-        {
-            "axiom_encode_repo": str(axiom_encode),
-            "axiom_rules_repo": str(axiom_rules),
-            "rulespec_remote": "https://example.test/rulespec-us.git",
-            "parameters": {
-                "sample_size": 1000,
-                "year": 2026,
-                "python": "3.13",
-                "surface": "all",
-                # No data_folder: Populace loads from the pinned HF cache, so the
-                # live fiit-ecps.yaml omits the key. Assert --data-folder is then
-                # not passed (and note passing a missing dir would SystemExit).
-                "pinned": True,
-            },
+    runner_config = {
+        "axiom_encode_repo": str(axiom_encode),
+        "axiom_rules_repo": str(axiom_rules),
+        "rulespec_remote": "https://example.test/rulespec-us.git",
+        "parameters": {
+            "sample_size": 1000,
+            "year": 2026,
+            "python": "3.13",
+            "surface": "all",
+            # No data_folder: Populace loads from the pinned HF cache, so the
+            # live fiit-ecps.yaml omits the key. Assert --data-folder is then
+            # not passed (and note passing a missing dir would SystemExit).
+            "pinned": True,
         },
-        output,
-    )
+    }
+    run_comparison._run_axiom_encode_tax_ecps_compare(runner_config, output)
 
-    cmd = calls[0]
+    cmd = calls[-1]
+    # The encoder renamed the subcommand in its ECPS→Populace rename; no
+    # `tax-ecps-compare` alias survives on axiom-encode main (#296).
+    assert "tax-populace-compare" in cmd
+    assert "tax-ecps-compare" not in cmd
+    # The runner records the temp clone's HEAD before deleting it so
+    # provenance can stamp a real rulespec-us SHA (None here: not a git repo).
+    assert "_cloned_rulespec_us_sha" in runner_config
     assert cmd[:4] == ["uv", "run", "--python", "3.13"]
     assert "--with-editable" in cmd
     assert str(axiom_encode.resolve()) in cmd
@@ -113,10 +118,11 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
         run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
     )
 
-    def fake_run(cmd, *, check, cwd=None, env=None):
-        del check, cwd, env
+    def fake_run(cmd, *, check=False, cwd=None, env=None, text=False,
+                 capture_output=False, stdout=None, timeout=None):
+        del check, cwd, env, text, capture_output, stdout, timeout
         calls.append(cmd)
-        return subprocess.CompletedProcess(cmd, 0)
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
 
@@ -155,14 +161,22 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
         "-o",
         str(composed.resolve()),
     ]
-    assert calls[1] == [
-        str(axiom_rules.resolve() / "target" / "release" / "axiom-rules-engine"),
-        "compile",
-        "--program",
-        str(composed.resolve()),
-        "--output",
-        str(compiled.resolve()),
+    # The engine compile carries explicit --rulespec-root flags now
+    # (post-hard-cut contract); rulespec-us-al is not a valid engine root
+    # (two-letter country checkouts only) and must not be passed (#296).
+    engine_cmd = calls[1]
+    assert engine_cmd[0] == str(
+        axiom_rules.resolve() / "target" / "release" / "axiom-rules-engine"
+    )
+    assert engine_cmd[1] == "compile"
+    assert engine_cmd[engine_cmd.index("--program") + 1] == str(composed.resolve())
+    assert engine_cmd[engine_cmd.index("--output") + 1] == str(compiled.resolve())
+    root_flags = [
+        engine_cmd[i + 1]
+        for i, tok in enumerate(engine_cmd)
+        if tok == "--rulespec-root"
     ]
+    assert root_flags == [str(rulespec_us.resolve())]
     assert calls[2][:4] == ["uv", "run", "--python", "3.14"]
     assert "--axiom-compiled-program" in calls[2]
     assert str(compiled.resolve()) in calls[2]
@@ -1218,3 +1232,182 @@ def test_uk_euromod_suites_evaluate_on_or_after_the_fiscal_boundary():
                 f"boundary; resolved start is {start.isoformat()}. Set "
                 f"period: '{year}-04-06'."
             )
+
+
+# --- provenance completion from the affected map (#296) ---------------------
+#
+# A `sha: null` entry for a mapped repo reads as "cannot prove fresh" to
+# select_affected_suites.py, which re-selects the suite every 6-hourly sweep
+# even right after a successful refresh — the encode snap/tax lanes and the
+# bare-$HOME-roots lanes all stamped exactly that. The completion helper fills
+# the gaps from the runner's own fresh-clone SHA or the supervised-layout
+# checkout, and never invents anything else.
+
+
+def _completion_fixture(monkeypatch, tmp_path, mapped_repos):
+    run_comparison = load_run_comparison_module()
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "affected_map.json").write_text(
+        json.dumps(
+            {
+                "suites": [
+                    {"suite": "demo-suite", "name": "demo", "repos": mapped_repos}
+                ]
+            }
+        )
+    )
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", comparisons)
+    config = {"name": "demo", "dashboard": {"suite": "demo-suite"}}
+    return run_comparison, config
+
+
+def test_completion_fills_missing_repo_from_convention_checkout(
+    monkeypatch, tmp_path
+):
+    rc, config = _completion_fixture(
+        monkeypatch, tmp_path, ["TheAxiomFoundation/rulespec-us-az"]
+    )
+    checkout = tmp_path / "rulespec-us-az"
+    checkout.mkdir()
+    import axiom_oracles.provenance as provenance
+
+    monkeypatch.setattr(
+        provenance, "resolve_rulespec_checkout", lambda slug: checkout
+    )
+    monkeypatch.setattr(rc, "_git_head_sha", lambda repo: "a" * 40)
+
+    completed = rc._complete_rulespecs_from_affected_map(config, {}, [])
+    assert completed == [
+        {"repo": "TheAxiomFoundation/rulespec-us-az", "sha": "a" * 40}
+    ]
+
+
+def test_completion_prefers_runner_clone_sha_for_rulespec_us(monkeypatch, tmp_path):
+    rc, config = _completion_fixture(
+        monkeypatch, tmp_path, ["TheAxiomFoundation/rulespec-us"]
+    )
+    import axiom_oracles.provenance as provenance
+
+    monkeypatch.setattr(
+        provenance,
+        "resolve_rulespec_checkout",
+        lambda slug: pytest.fail("clone SHA must win over convention lookup"),
+    )
+    runner = {"_cloned_rulespec_us_sha": "b" * 40}
+    # The fiit lane's remote fallback produced a sha-less entry; the clone SHA
+    # must fill it in place rather than duplicating the repo.
+    completed = rc._complete_rulespecs_from_affected_map(
+        config, runner, [{"repo": "TheAxiomFoundation/rulespec-us", "sha": None}]
+    )
+    assert completed == [{"repo": "TheAxiomFoundation/rulespec-us", "sha": "b" * 40}]
+
+
+def test_completion_never_overrides_declared_path_sha(monkeypatch, tmp_path):
+    rc, config = _completion_fixture(
+        monkeypatch, tmp_path, ["TheAxiomFoundation/rulespec-us"]
+    )
+    declared = [{"repo": "TheAxiomFoundation/rulespec-us", "sha": "c" * 40}]
+    completed = rc._complete_rulespecs_from_affected_map(
+        config, {"_cloned_rulespec_us_sha": "d" * 40}, list(declared)
+    )
+    assert completed == declared
+
+
+def test_completion_keeps_null_sha_when_nothing_resolves(monkeypatch, tmp_path):
+    """NEGATIVE: an unresolvable repo stays `sha: null` — the selector's
+    conservative "cannot prove fresh" reading must survive, not be papered
+    over with an invented SHA."""
+    rc, config = _completion_fixture(
+        monkeypatch, tmp_path, ["TheAxiomFoundation/rulespec-us-nv"]
+    )
+    import axiom_oracles.provenance as provenance
+
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
+    completed = rc._complete_rulespecs_from_affected_map(config, {}, [])
+    assert completed == [{"repo": "TheAxiomFoundation/rulespec-us-nv", "sha": None}]
+
+
+def test_completion_tolerates_missing_map(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", tmp_path / "nowhere")
+    entries = [{"repo": "TheAxiomFoundation/rulespec-us", "sha": None}]
+    assert (
+        run_comparison._complete_rulespecs_from_affected_map(
+            {"name": "demo"}, {}, entries
+        )
+        == entries
+    )
+
+
+def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
+    """taxcalc==6.7.1 cannot resolve on 3.14 (no numba wheel); the lane pins
+    `python: "3.13"` and the runner must pass it through to uv (#296)."""
+    run_comparison = load_run_comparison_module()
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_rules.mkdir()
+    calls = []
+
+    def fake_run(cmd, *, check, cwd=None, env=None, stdout=None,
+                 capture_output=False, text=False):
+        del check, cwd, env, capture_output, text
+        calls.append(cmd)
+        if stdout is not None:
+            stdout.write("{}")
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+
+    run_comparison._run_axiom_oracles_compare(
+        {
+            "axiom_rules_repo": str(axiom_rules),
+            "parameters": {
+                "left": "taxcalc",
+                "right": "policyengine",
+                "concept": "us:tax/federal-income-tax#liability",
+                "period": "2026",
+                "sample_size": 25,
+                "python": "3.13",
+            },
+        },
+        tmp_path / "out.json",
+    )
+    cmd = calls[-1]
+    assert cmd[:4] == ["uv", "run", "--python", "3.13"]
+    assert "taxcalc==6.7.1" in cmd
+    # The explicit numba floor keeps the resolver off the sdist-only numba
+    # 0.53.1 whose build fails on any current Python (#296).
+    assert "numba>=0.60" in cmd
+
+
+def test_completion_never_applies_to_skip_capable_lanes(monkeypatch, tmp_path):
+    """NEGATIVE: euromod/gettsim/snap-qc re-emit the committed report when
+    their model root or data is absent — stamping current rulespec SHAs onto a
+    re-emitted (not re-run) report would mark rules-stale numbers fresh, so
+    provenance completion is restricted to always-real runner types (#296)."""
+    run_comparison = load_run_comparison_module()
+    import axiom_oracles.provenance as provenance
+
+    monkeypatch.setattr(
+        provenance,
+        "resolve_rulespec_checkout",
+        lambda slug: pytest.fail("skip-capable lanes must not resolve checkouts"),
+    )
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "uk-benefit-cap"}))
+    config = {
+        "name": "uk-benefit-cap-ukmod",
+        "dashboard": {"suite": "uk-benefit-cap"},
+        "runner": {
+            "type": "euromod-synthetic-compare",
+            "parameters": {
+                "axiom_rulespec_repo_roots": str(tmp_path),
+                "euromod_country": "UK",
+            },
+        },
+    }
+    block = run_comparison._build_run_provenance(
+        config, "euromod-synthetic-compare", output
+    )
+    for entry in block.get("rulespecs", []):
+        assert entry.get("sha") is None

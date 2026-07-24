@@ -162,6 +162,39 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     return entries
 
 
+def resolve_rulespec_checkout(slug: str) -> Path | None:
+    """Locate a local checkout for a rulespec repo slug via layout conventions.
+
+    The comparison harnesses resolve rulespec repos from a small set of
+    supervised-layout locations (`~/TheAxiomFoundation/<name>`, a `~/<name>`
+    symlink, the `~/.axiom-oracles/roots/<name>` synced-roots dir, and the
+    `rulespec-uk-official` alias). This walks the same conventions so a
+    report's provenance can record the SHA of the checkout the run actually
+    resolved. Git-bearing candidates win over bare directories (an rsync'd
+    root without `.git` has no SHA to record); returns None when nothing
+    matches.
+    """
+    name = slug.split("/", 1)[-1]
+    candidate_names = [name] + [
+        alias for alias, target in _RULESPEC_DIR_ALIASES.items() if target == name
+    ]
+    home = Path.home()
+    candidates = []
+    for candidate_name in candidate_names:
+        candidates.extend(
+            [
+                home / "TheAxiomFoundation" / candidate_name,
+                home / candidate_name,
+                home / ".axiom-oracles" / "roots" / candidate_name,
+            ]
+        )
+    existing = [path for path in candidates if path.exists()]
+    for path in existing:
+        if _git_sha(path):
+            return path
+    return existing[0] if existing else None
+
+
 def canonical_rulespec_slug(name: str) -> str:
     """Canonicalize a rulespec repo name to its ``<OWNER>/<repo>`` slug.
 

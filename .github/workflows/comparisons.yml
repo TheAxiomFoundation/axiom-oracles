@@ -33,17 +33,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install PyYAML
+        run: pip install pyyaml
+
       - name: Build comparison matrix
         id: list
         env:
           ONLY: ${{ inputs.only }}
+        # Registry entries only (#299): skip `*.fixtures.yaml` sanity
+        # documents, non-registry kinds (parameter-oracles is a
+        # parameter-suite-list with no runner — run_comparison.py crashes on
+        # it), and suites declaring `ci: manual` (not CI-runnable; the
+        # affected-rerun selector leaves those to the manual lane for the
+        # same reason).
         run: |
           python3 - <<'PY'
           import json
           import os
           from pathlib import Path
+          import yaml
           only = os.environ.get("ONLY", "").strip()
-          names = sorted(p.stem for p in Path("comparisons").glob("*.yaml"))
+          names = []
+          for path in sorted(Path("comparisons").glob("*.yaml")):
+              if path.name.endswith(".fixtures.yaml"):
+                  continue
+              config = yaml.safe_load(path.read_text())
+              if not isinstance(config, dict) or "name" not in config:
+                  continue
+              if not (config.get("runner") or {}).get("type"):
+                  continue
+              if config.get("ci") == "manual":
+                  continue
+              names.append(path.stem)
           if only:
               names = [n for n in names if n == only]
               if not names:
@@ -129,6 +150,15 @@ jobs:
             }}
           restore-keys: |
             populace-hf-${{ runner.os }}-
+
+      - name: Materialize supervised workspace for this suite
+        # Same step as affected-rerun.yml: clones the suite's mapped rulespec
+        # repos into ~/TheAxiomFoundation and provides the supervised-layout
+        # conventions the harnesses resolve (#296, #300).
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: axiom-oracles
+        run: python3 scripts/materialize_ci_workspace.py ${{ matrix.name }}
 
       - name: Run comparison
         env:
