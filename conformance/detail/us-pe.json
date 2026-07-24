@@ -330,8 +330,8 @@
     {
       "id": "us-pe:chip",
       "oracle_policy_name": "chip",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -342,8 +342,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "In-scope uncovered \u2014 PE-US computes CHIP eligibility/value; only Medicaid MAGI categories have a live suite so far.",
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state separate-CHIP spending divided by enrollment, using calibration.gov.hhs.cms.chip.spending.separate_chip.total[state_code] and calibration.gov.hhs.cms.chip.enrollment.separate_chip[state_code], then gates it on chip_enrolled (eligibility plus take-up). This is a per-capita expenditure imputation, not a statutory amount formula; is_chip_eligible is compared separately.",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:co_income_tax",
@@ -384,8 +384,8 @@
     {
       "id": "us-pe:commodity_supplemental_food_program",
       "oracle_policy_name": "commodity_supplemental_food_program",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -396,8 +396,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value directly from gov.usda.csfp.amount, an administrative cost-per-participant parameter derived from program cost divided by participation, and gates it on commodity_supplemental_food_program_eligible. This is a food-package/caseload service-value imputation, not a statutory amount formula; commodity_supplemental_food_program_eligible is compared separately (rulespec-us PR #1008).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:ct_income_tax",
@@ -528,8 +528,8 @@
     {
       "id": "us-pe:early_head_start",
       "oracle_policy_name": "early_head_start",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -540,8 +540,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state Early Head Start spending per funded slot, gov.hhs.head_start.early_head_start.spending[state_code_str] / gov.hhs.head_start.early_head_start.enrollment[state_code_str] (zero for nonpositive enrollment), multiplied by takes_up_early_head_start_if_eligible. This is an administrative slot-cost imputation, not a statutory amount formula; is_early_head_start_eligible is compared separately (rulespec-us PR #1010).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:ebb",
@@ -762,8 +762,8 @@
     {
       "id": "us-pe:free_school_meals",
       "oracle_policy_name": "free_school_meals",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -774,8 +774,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the FREE branch of school_meal_tier: the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier] and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation, not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:ga_income_tax",
@@ -816,8 +816,8 @@
     {
       "id": "us-pe:head_start",
       "oracle_policy_name": "head_start",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -828,8 +828,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state Head Start spending per funded slot, gov.hhs.head_start.spending[state_code_str] / gov.hhs.head_start.enrollment[state_code_str] (zero for nonpositive enrollment), multiplied by takes_up_head_start_if_eligible. This is an administrative slot-cost imputation, not a statutory amount formula; is_head_start_eligible is compared separately (rulespec-us PR #1010).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:hi_income_tax",
@@ -2004,8 +2004,8 @@
     {
       "id": "us-pe:reduced_price_school_meals",
       "oracle_policy_name": "reduced_price_school_meals",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -2016,8 +2016,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the REDUCED branch of school_meal_tier: the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier] and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation, not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:residential_clean_energy_credit",
@@ -2580,8 +2580,8 @@
     {
       "id": "us-pe:wic",
       "oracle_policy_name": "wic",
-      "in_scope": true,
-      "exclusion_reason": null,
+      "in_scope": false,
+      "exclusion_reason": "oracle_models_nonstatutory_amount",
       "suite": null,
       "covered": false,
       "comparisons": null,
@@ -2592,8 +2592,8 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": null,
-      "status": "uncovered"
+      "note": "PolicyEngine-US 1.767.3 imputes this monthly Person value from the average food-package parameter gov.usda.wic.value[wic_food_package_str], adjusted with gov.usda.wic.cvb.current, gov.usda.wic.cvb.included_in_value, and gov.usda.wic.cvb.replaces_included_value, then gates it on is_wic_eligible and would_claim_wic (subject to gov.usda.wic.abolish_wic). This is a package-value imputation, not a statutory amount formula; is_wic_eligible is compared separately (rulespec-us PR #1010).",
+      "status": "excluded:oracle_models_nonstatutory_amount"
     },
     {
       "id": "us-pe:workers_compensation",
