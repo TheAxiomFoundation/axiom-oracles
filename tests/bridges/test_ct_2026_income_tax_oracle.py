@@ -12,7 +12,7 @@ MODULE = "us-ct:policies/income_tax/2026_resident_liability_source_hold"
 RULESPEC_RELATIVE_PATH = Path(
     "us-ct/policies/income_tax/2026_resident_liability_source_hold.yaml"
 )
-EXPECTED_OUTPUT_COUNT = 16
+EXPECTED_OUTPUT_COUNT = 17
 
 
 def _module_mappings():

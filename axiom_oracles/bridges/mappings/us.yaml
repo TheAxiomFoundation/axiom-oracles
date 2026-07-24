@@ -28712,6 +28712,13 @@ mappings:
     candidate_priority: P4
     rationale: This private Axiom parameter is the forty-percent statutory multiplier used by the bounded section 12-704e branch. PolicyEngine does not expose this exact source parameter as a standalone annual-return output for one-to-one comparison.
 
+  - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_refundable_eitc_qualifying_child_addition
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This private Axiom parameter is the statutory $250 addition used once when an eligible section 12-704e claimant has at least one federal qualifying child. PolicyEngine does not expose this exact source parameter as a standalone annual-return output for one-to-one comparison.
+
   - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_filing_status_is_valid
     country: us
     program: tax
@@ -28724,14 +28731,14 @@ mappings:
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: Axiom's domain gate requires full-year Connecticut residence, aligned federal and state filing units, one valid filing status, and a nonnegative supplied federal EITC. PolicyEngine exposes no one-to-one validation output for that interface contract.
+    rationale: Axiom's domain gate requires full-year Connecticut residence, aligned federal and state filing units, one valid filing status, a nonnegative supplied federal EITC, and a nonnegative integral federal qualifying-child count. PolicyEngine exposes no one-to-one validation output for that interface contract.
 
   - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_income_and_modification_source_hold_applies
     country: us
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: This typed hold records that the pinned corpus lacks the separately referenced 2026 Supplement and final CT-1040 modification materials needed for a complete operative income base. It is source-readiness metadata, not a Connecticut income variable modeled by PolicyEngine.
+    rationale: This typed hold records that the pinned corpus lacks final CT-1040 modification materials and a complete annual implementation inventory needed for a complete operative income base. It is source-readiness metadata, not a Connecticut income variable modeled by PolicyEngine.
 
   - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_deduction_and_exemption_source_hold_applies
     country: us
@@ -28766,7 +28773,7 @@ mappings:
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: This bounded Axiom branch multiplies a caller-supplied allowed federal EITC output by forty percent only when its explicit residency, alignment, and filing-status domain passes. PolicyEngine computes federal and Connecticut EITC from its own raw household facts and does not expose a result with the same supplied-output boundary and fail-closed domain behavior.
+    rationale: This bounded Axiom branch multiplies a supplied allowed federal EITC output by forty percent and adds $250 once when that positive credit has at least one raw federal qualifying child, only when its explicit residency, alignment, filing-status, and input-validity domain passes. PolicyEngine computes federal and Connecticut EITC from its own household facts and does not expose a result with the same federal-output boundary and fail-closed domain behavior.
 
   - legal_id: us-ct:policies/income_tax/2026_resident_liability_source_hold#ct_pit_2026_adjusted_gross_income
     country: us
