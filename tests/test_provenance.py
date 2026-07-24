@@ -305,3 +305,37 @@ def test_resolve_rulespec_checkout_walks_uk_official_alias(monkeypatch, tmp_path
     assert provenance.resolve_rulespec_checkout(
         "TheAxiomFoundation/rulespec-uk"
     ) == official
+
+
+def test_snap_qc_skip_reemit_never_resolves_recorded_root(tmp_path, monkeypatch):
+    """NEGATIVE (cross-family review): a snap-qc skip re-emits the committed
+    report; with the CI materializer cloning the recorded rulespec_root path
+    fresh at main HEAD, resolving that path would stamp the re-emitted numbers
+    as fresh. The re-emit marker must suppress the path resolution (#296)."""
+    run_comparison = _load_run_comparison()
+    checkout = tmp_path / "rulespec-us"
+    checkout.mkdir()
+    output = tmp_path / "r.json"
+    output.write_text(
+        json.dumps(
+            {
+                "suite": "az-snap-qc",
+                "summary": {"provenance": {"rulespec_root": str(checkout)}},
+            }
+        )
+    )
+    config = {
+        "name": "az-snap-qc",
+        "runner": {
+            "type": "snap-qc-compare",
+            "_reemitted_report": True,
+            "parameters": {"jurisdiction": "us-az", "fiscal_year": 2024},
+        },
+    }
+    block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
+    assert "rulespecs" not in block
+
+    # A real (non-re-emitted) run keeps the recorded-root resolution.
+    config["runner"].pop("_reemitted_report")
+    block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
+    assert block.get("rulespecs"), "real runs still record the root they used"

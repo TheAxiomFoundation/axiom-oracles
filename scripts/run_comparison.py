@@ -730,8 +730,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # The SNAP QC lane resolves its rulespec checkout inside the bridge (env
     # fallback and workspace default), so read the root it actually ran
     # against off the just-written report — otherwise the affected-rerun
-    # staleness check has no SHA to diff for this suite.
-    if runner_type == "snap-qc-compare" and not rulespec_paths:
+    # staleness check has no SHA to diff for this suite. NEVER for a skip
+    # re-emit: the recorded root is a path, and resolving it against a
+    # freshly materialized clone would stamp re-emitted numbers as fresh.
+    if (
+        runner_type == "snap-qc-compare"
+        and not rulespec_paths
+        and not runner.get("_reemitted_report")
+    ):
         try:
             report_provenance = (
                 json.loads(output.read_text()).get("summary", {}).get("provenance", {})
@@ -2591,6 +2597,11 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
 
     skip_reason = _snap_qc_skip_reason(runner, params, fiscal_year)
     if skip_reason is not None:
+        # Mark the re-emit so provenance never resolves the report-recorded
+        # rulespec_root PATH to its current SHA: with the CI workspace
+        # materializer cloning that path fresh at main HEAD, resolving it
+        # would stamp a skipped run's re-emitted numbers as fresh (#296).
+        runner["_reemitted_report"] = True
         _reemit_snap_qc_committed_report(runner, params, output, skip_reason)
         return
 

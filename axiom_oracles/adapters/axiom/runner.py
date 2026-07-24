@@ -797,12 +797,19 @@ def _output_aliases_from_artifact(
             # (compose output, the generated oracle bridge) carries BARE rule
             # ids, while the concept map requests the qualified
             # `module#name` form. When the artifact lacks the qualified id
-            # but holds the fragment's local name unambiguously, query the
-            # bare id and remap the result back (#296).
+            # but holds the fragment's local name as a BARE, originless rule
+            # (which by construction belongs to the program under execution),
+            # query the bare id and remap the result back. A same-named
+            # output qualified under a DIFFERENT module must never be
+            # substituted (#296).
             if output in all_ids:
                 continue
             local_name = output.rsplit("#", 1)[-1]
-            identifiers = local_to_ids.get(local_name, [])
+            identifiers = [
+                identifier
+                for identifier in local_to_ids.get(local_name, [])
+                if ":" not in identifier and "#" not in identifier
+            ]
             if len(identifiers) == 1:
                 aliases[output] = identifiers[0]
             continue

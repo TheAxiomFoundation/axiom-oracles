@@ -142,6 +142,29 @@ def build_plan(config: dict, repos: list[str], workspace: Path) -> list[dict]:
     if any("$HOME/axiom-oracles" in s for s in strings):
         _symlink(workspace / "axiom-oracles", REPO_ROOT)
 
+    # ``$HOME/axiom-programs`` — the org's declarative compose-spec repo
+    # (the UK efrs suites resolve their universal-credit program from it).
+    if any("$HOME/axiom-programs" in s for s in strings):
+        programs_dir = org_dir / "axiom-programs"
+        if not programs_dir.exists():
+            actions.append(
+                {
+                    "kind": "clone",
+                    "repo": "TheAxiomFoundation/axiom-programs",
+                    "dest": str(programs_dir),
+                }
+            )
+        _symlink(workspace / "axiom-programs", programs_dir)
+
+    # ``data_folder`` names a dataset CACHE the run itself populates — but the
+    # runner resolves it fatally before downloading, so materialize the empty
+    # directory when it lives under the workspace conventions.
+    data_folder = params.get("data_folder")
+    if isinstance(data_folder, str) and data_folder.startswith("$HOME/"):
+        resolved = workspace / data_folder[len("$HOME/") :]
+        if not resolved.exists():
+            actions.append({"kind": "mkdir", "path": str(resolved)})
+
     # Composed-program suites need the axiom-compose venv at the conventional
     # ``$HOME/axiom-compose/.venv/bin/axiom-compose`` (the runner's default;
     # suites may also name it explicitly via ``axiom_compose_binary``).
@@ -187,6 +210,10 @@ def execute(actions: list[dict]) -> None:
             link.parent.mkdir(parents=True, exist_ok=True)
             print(f"symlinking {link} -> {action['target']}")
             link.symlink_to(action["target"])
+        elif kind == "mkdir":
+            path = Path(action["path"])
+            print(f"creating {path}")
+            path.mkdir(parents=True, exist_ok=True)
         elif kind == "compose-venv":
             dest = Path(action["dest"])
             if not dest.exists():

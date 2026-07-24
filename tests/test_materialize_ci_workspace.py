@@ -123,7 +123,9 @@ def test_plan_is_empty_on_a_materialized_workspace(tmp_path):
 
 def test_plan_provides_uk_official_alias(tmp_path):
     """#300: the efrs suites resolve $HOME/rulespec-uk-official — the alias
-    points at the pristine rulespec-uk clone."""
+    points at the pristine rulespec-uk clone — plus the axiom-programs
+    compose-spec checkout and the dataset cache dir the runner resolves
+    fatally before populating."""
     mcw = _load()
     config = _real_config("uk-tax-benefits-efrs")
     repos = mcw.mapped_repos(_real_map(), "uk-tax-benefits-efrs")
@@ -132,6 +134,15 @@ def test_plan_provides_uk_official_alias(tmp_path):
     links = {a["link"]: a["target"] for a in actions if a["kind"] == "symlink"}
     assert links[str(tmp_path / "rulespec-uk-official")] == str(
         tmp_path / "TheAxiomFoundation" / "rulespec-uk"
+    )
+    cloned = {a["repo"] for a in actions if a["kind"] == "clone"}
+    assert "TheAxiomFoundation/axiom-programs" in cloned
+    assert links[str(tmp_path / "axiom-programs")] == str(
+        tmp_path / "TheAxiomFoundation" / "axiom-programs"
+    )
+    mkdirs = {a["path"] for a in actions if a["kind"] == "mkdir"}
+    assert (
+        str(tmp_path / "axiom-oracles" / ".axiom" / "policyengine-data") in mkdirs
     )
 
 

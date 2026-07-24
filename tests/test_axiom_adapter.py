@@ -994,8 +994,10 @@ def test_output_aliases_map_qualified_requests_to_bare_artifact_ids(tmp_path):
                         # Post-hard-cut engines emit generated rules with a
                         # bare name and NO id field at all.
                         {"name": "state_income_tax"},
-                        {"id": "dup_name", "name": "ambiguous"},
-                        {"id": "us:x/y#ambiguous", "name": "ambiguous"},
+                        # True ambiguity: two BARE program-owned candidates.
+                        {"id": "dup_a", "name": "ambiguous"},
+                        {"id": "dup_b", "name": "ambiguous"},
+                        {"id": "us:x/y#present", "name": "present"},
                     ]
                 }
             }
@@ -1005,13 +1007,38 @@ def test_output_aliases_map_qualified_requests_to_bare_artifact_ids(tmp_path):
         [
             "us:tax/oracle-bridge#state_income_tax",
             "us:tax/oracle-bridge#ambiguous",
-            "us:x/y#ambiguous",
+            "us:x/y#present",
         ],
         artifact,
     )
+    # The bare rule stands in for the missing qualified id; two bare
+    # candidates stay unaliased; an exactly-present qualified id needs none.
     assert aliases == {
         "us:tax/oracle-bridge#state_income_tax": "state_income_tax"
     }
+
+
+def test_qualified_requests_never_alias_to_another_modules_output(tmp_path):
+    """NEGATIVE (cross-family review): a request qualified under module A must
+    never be satisfied by a same-named output qualified under module B — only
+    a BARE, originless rule (which by construction belongs to the program
+    under execution) may stand in for a missing qualified id (#296)."""
+    from axiom_oracles.adapters.axiom.runner import _output_aliases_from_artifact
+
+    artifact = tmp_path / "program.compiled.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "derived": [
+                        {"id": "us:other/module-b#foo", "name": "foo"},
+                    ]
+                }
+            }
+        )
+    )
+    aliases = _output_aliases_from_artifact(["us:tax/module-a#foo"], artifact)
+    assert aliases == {}
 
 
 def test_candidate_selection_sees_remapped_bare_ids(tmp_path: Path) -> None:
