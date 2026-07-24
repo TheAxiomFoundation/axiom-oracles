@@ -1,93 +1,5 @@
 {
   "case_count": 6,
-  "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-  "engines": {
-    "axiom": "us-ca:policies/income_tax/pilot_liability_pipeline",
-    "policyengine": "ca_income_tax_before_refundable_credits",
-    "taxsim": "siitax"
-  },
-  "mismatches": [
-    {
-      "case_id": "ca-single-30000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": 41.00175341179943,
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 216.11175341179944,
-      "left_engine": "axiom",
-      "right": 175.11,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ca-married-60000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": 10.723506823598882,
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 432.2235068235989,
-      "left_engine": "axiom",
-      "right": 421.5,
-      "right_engine": "taxsim"
-    }
-  ],
-  "population": "case-grid",
-  "provenance": {
-    "generated_at": "2026-07-23T16:33:35Z",
-    "generated_by": "scripts/generate_state_income_tax_liability.py::ca-income-tax-liability",
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
-      }
-    ],
-    "run_kind": "manual",
-    "schema": "axiom_oracles.provenance.v1"
-  },
-  "schema_version": "axiom.comparison_report.v2.1",
-  "suite": "ca-income-tax-liability",
-  "summary": {
-    "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_match_rate": 66.67,
-    "comparison_count": 12,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
-        "explained_residual": 0,
-        "unexplained": 0,
-        "upstream_engine_gap": 0
-      },
-      "dispositions_file": "dispositions/ca-income-tax-liability.yaml",
-      "expired_entries": [
-        "ca-taxsim-2024-bracket-indexation-vintage",
-        "ca-taxsim-2024-bracket-indexation-vintage-single-60000",
-        "ca-taxsim-2024-bracket-indexation-vintage-single-150000",
-        "ca-taxsim-2024-bracket-indexation-vintage-married-60000",
-        "ca-taxsim-2024-bracket-indexation-vintage-married-120000"
-      ],
-      "explained_rate": 83.333333,
-      "orphaned_entries": [],
-      "raw_match_rate": 83.333333,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 2
-    },
-    "match_count": 10,
-    "mismatch_count": 2,
-    "policyengine_matches": 6,
-    "taxsim_matches": 4
-  },
-  "taxsim_law_year": 2026,
-  "tolerance": {
-    "absolute": 5.0,
-    "relative": 0.02
-  },
-  "validation_year": 2026,
   "cases": [
     {
       "axiom": 216.11175341179944,
@@ -191,5 +103,88 @@
       "policyengine": 19241.603515625,
       "taxsim": 19155.21
     }
-  ]
+  ],
+  "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-ca:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "ca_income_tax_before_refundable_credits",
+    "taxsim": "siitax"
+  },
+  "mismatches": [
+    {
+      "case_id": "ca-single-30000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "difference": 41.00175341179943,
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 216.11175341179944,
+      "left_engine": "axiom",
+      "right": 175.11,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ca-married-60000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "difference": 10.723506823598882,
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 432.2235068235989,
+      "left_engine": "axiom",
+      "right": 421.5,
+      "right_engine": "taxsim"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-24T09:02:43Z",
+    "generated_by": "scripts/run_comparison.py::ca-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": null
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "ca-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_match_rate": 66.67,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 83.333333,
+      "orphaned_entries": [],
+      "raw_match_rate": 83.333333,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 2
+    },
+    "match_count": 10,
+    "mismatch_count": 2,
+    "policyengine_matches": 6,
+    "taxsim_matches": 4
+  },
+  "taxsim_law_year": 2026,
+  "tolerance": {
+    "absolute": 5.0,
+    "relative": 0.02
+  },
+  "validation_year": 2026
 }

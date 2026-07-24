@@ -1,5 +1,109 @@
 {
   "case_count": 6,
+  "cases": [
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nd-single-30000",
+      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 0.0,
+      "taxsim": 0.0
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nd-single-60000",
+      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 0.0,
+      "taxsim": 0.0
+    },
+    {
+      "axiom": 1644.3375,
+      "axiom_vs_policyengine": {
+        "difference": -21.44997558593741,
+        "match": false
+      },
+      "axiom_vs_taxsim": {
+        "difference": 6.617500000000064,
+        "match": false
+      },
+      "case_id": "nd-single-150000",
+      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 1665.7874755859375,
+      "taxsim": 1637.72
+    },
+    {
+      "axiom": 0.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 0.0,
+        "match": true
+      },
+      "case_id": "nd-married-60000",
+      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 0.0,
+      "taxsim": 0.0
+    },
+    {
+      "axiom": 97.5,
+      "axiom_vs_policyengine": {
+        "difference": -35.587493896484375,
+        "match": false
+      },
+      "axiom_vs_taxsim": {
+        "difference": 12.150000000000006,
+        "match": false
+      },
+      "case_id": "nd-married-120000",
+      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 133.08749389648438,
+      "taxsim": 85.35
+    },
+    {
+      "axiom": 3607.5,
+      "axiom_vs_policyengine": {
+        "difference": -35.58740234375,
+        "match": false
+      },
+      "axiom_vs_taxsim": {
+        "difference": 12.150000000000091,
+        "match": false
+      },
+      "case_id": "nd-married-300000",
+      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 3643.08740234375,
+      "taxsim": 3595.35
+    }
+  ],
   "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-nd:policies/income_tax/pilot_liability_pipeline",
@@ -106,15 +210,16 @@
   ],
   "population": "case-grid",
   "provenance": {
-    "generated_at": "2026-07-23T16:33:35Z",
-    "generated_by": "scripts/generate_state_income_tax_liability.py::nd-income-tax-liability",
+    "engine": {},
+    "generated_at": "2026-07-24T09:02:57Z",
+    "generated_by": "scripts/run_comparison.py::nd-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -149,109 +254,5 @@
     "absolute": 1.0,
     "relative": 0.0
   },
-  "validation_year": 2026,
-  "cases": [
-    {
-      "axiom": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": 0.0,
-        "match": true
-      },
-      "case_id": "nd-single-30000",
-      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 0.0,
-      "taxsim": 0.0
-    },
-    {
-      "axiom": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": 0.0,
-        "match": true
-      },
-      "case_id": "nd-single-60000",
-      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 0.0,
-      "taxsim": 0.0
-    },
-    {
-      "axiom": 1644.3375,
-      "axiom_vs_policyengine": {
-        "difference": -21.44997558593741,
-        "match": false
-      },
-      "axiom_vs_taxsim": {
-        "difference": 6.617500000000064,
-        "match": false
-      },
-      "case_id": "nd-single-150000",
-      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 1665.7874755859375,
-      "taxsim": 1637.72
-    },
-    {
-      "axiom": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "axiom_vs_taxsim": {
-        "difference": 0.0,
-        "match": true
-      },
-      "case_id": "nd-married-60000",
-      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 0.0,
-      "taxsim": 0.0
-    },
-    {
-      "axiom": 97.5,
-      "axiom_vs_policyengine": {
-        "difference": -35.587493896484375,
-        "match": false
-      },
-      "axiom_vs_taxsim": {
-        "difference": 12.150000000000006,
-        "match": false
-      },
-      "case_id": "nd-married-120000",
-      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 133.08749389648438,
-      "taxsim": 85.35
-    },
-    {
-      "axiom": 3607.5,
-      "axiom_vs_policyengine": {
-        "difference": -35.58740234375,
-        "match": false
-      },
-      "axiom_vs_taxsim": {
-        "difference": 12.150000000000091,
-        "match": false
-      },
-      "case_id": "nd-married-300000",
-      "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 3643.08740234375,
-      "taxsim": 3595.35
-    }
-  ]
+  "validation_year": 2026
 }
