@@ -3,14 +3,14 @@ title: Indiana income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Indiana resident wage-earner income-tax pipeline in
   Axiom RuleSpec against PolicyEngine (in_agi_tax) at 2026 and TAXSIM
-  (siitax) at its latest supported law year, 2024, on the standard six-case grid.
+  (siitax) at 2026 on the standard six-case grid.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: IN
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

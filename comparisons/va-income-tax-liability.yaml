@@ -5,10 +5,8 @@
 # fixtures). Virginia is progressive (Va. Code 58.1-320: 2/3/5/5.75% at the
 # $3,000/$5,000/$17,000 floors, statutory fixed).
 #
-# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
-# supported law year (2024) because the pinned binary abandons 2026; the
-# 2024-to-2026 standard-deduction vintage is recorded in
-# dispositions/va-income-tax-liability.yaml rather than absorbed by tolerance.
+# PolicyEngine and TAXSIM both run at the 2026 validation year
+# (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
 #
 # Run locally:
 #   uv run python scripts/run_comparison.py va-income-tax-liability
@@ -19,7 +17,7 @@ description: >-
   Compares the composed Virginia income-tax liability pipeline encoded in Axiom
   RuleSpec (us-va/policies/income_tax/pilot_liability_pipeline) against
   PolicyEngine (va_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
-  (siitax) at 2024 on a modest grid of single and married filers crossing the
+  (siitax) at 2026 on a modest grid of single and married filers crossing the
   state's brackets.
 
 runner:
@@ -27,7 +25,7 @@ runner:
   parameters:
     state: VA
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

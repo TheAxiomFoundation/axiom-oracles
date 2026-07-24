@@ -2,99 +2,99 @@ schema: axiom_oracles.dispositions.v1
 suite: or-income-tax-liability
 updated: "2026-07-15"
 entries:
-  - id: or-taxsim-2024-single-30000
+  - id: or-pe-2026-uprating-single-30000
     concept: us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability
     case_id: or-single-30000
-    kind: amount_difference
-    disposition: explained_residual
+    kind: policyengine_amount_difference
+    disposition: axiom_encoding_gap
     evidence:
       mechanism: >-
-        The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+        The Axiom leg evaluates the fixtures' completed Oregon taxable income, whose baked-in indexed deduction/bracket vintage sits one indexation step behind PolicyEngine's 2026 projection — a constant $3.50 (single) / $6.00 (married) residual across the whole income grid. Oregon DOR's official 2026 indexed amounts (and the HB 3753 deduction change) are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
       arithmetic:
-        - expression: "1931.4375 - 1692.57"
-          equals: 238.87
+        - expression: "1931.4375 - 1927.9375"
+          equals: 3.5
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
-      left: 1931.4375
-      right: 1692.57
-  - id: or-taxsim-2024-single-60000
+      left: 1927.9375
+      right: 1931.4375
+  - id: or-pe-2026-uprating-single-60000
     concept: us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability
     case_id: or-single-60000
-    kind: amount_difference
-    disposition: explained_residual
+    kind: policyengine_amount_difference
+    disposition: axiom_encoding_gap
     evidence:
       mechanism: >-
-        The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+        The Axiom leg evaluates the fixtures' completed Oregon taxable income, whose baked-in indexed deduction/bracket vintage sits one indexation step behind PolicyEngine's 2026 projection — a constant $3.50 (single) / $6.00 (married) residual across the whole income grid. Oregon DOR's official 2026 indexed amounts (and the HB 3753 deduction change) are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
       arithmetic:
-        - expression: "4241.4375 - 4002.57"
-          equals: 238.87
+        - expression: "4241.4375 - 4237.9375"
+          equals: 3.5
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
-      left: 4241.4375
-      right: 4002.57
-  - id: or-taxsim-2024-single-150000
+      left: 4237.9375
+      right: 4241.4375
+  - id: or-pe-2026-uprating-single-150000
     concept: us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability
     case_id: or-single-150000
-    kind: amount_difference
-    disposition: explained_residual
+    kind: policyengine_amount_difference
+    disposition: axiom_encoding_gap
     evidence:
       mechanism: >-
-        The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+        The Axiom leg evaluates the fixtures' completed Oregon taxable income, whose baked-in indexed deduction/bracket vintage sits one indexation step behind PolicyEngine's 2026 projection — a constant $3.50 (single) / $6.00 (married) residual across the whole income grid. Oregon DOR's official 2026 indexed amounts (and the HB 3753 deduction change) are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
       arithmetic:
-        - expression: "12809.895 - 12838.79"
-          equals: -28.9
+        - expression: "12809.89453125 - 12806.395"
+          equals: 3.4995
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
-      left: 12809.895
-      right: 12838.79
-  - id: or-taxsim-2024-married-60000
+      left: 12806.395
+      right: 12809.89453125
+  - id: or-pe-2026-uprating-married-60000
     concept: us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability
     case_id: or-married-60000
-    kind: amount_difference
-    disposition: explained_residual
+    kind: policyengine_amount_difference
+    disposition: axiom_encoding_gap
     evidence:
       mechanism: >-
-        The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+        The Axiom leg evaluates the fixtures' completed Oregon taxable income, whose baked-in indexed deduction/bracket vintage sits one indexation step behind PolicyEngine's 2026 projection — a constant $3.50 (single) / $6.00 (married) residual across the whole income grid. Oregon DOR's official 2026 indexed amounts (and the HB 3753 deduction change) are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
       arithmetic:
-        - expression: "3862.4375 - 3385.13"
-          equals: 477.31
+        - expression: "3862.4375 - 3856.4375"
+          equals: 6.0
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
-      left: 3862.4375
-      right: 3385.13
-  - id: or-taxsim-2024-married-120000
+      left: 3856.4375
+      right: 3862.4375
+  - id: or-pe-2026-uprating-married-120000
     concept: us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability
     case_id: or-married-120000
-    kind: amount_difference
-    disposition: explained_residual
+    kind: policyengine_amount_difference
+    disposition: axiom_encoding_gap
     evidence:
       mechanism: >-
-        The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+        The Axiom leg evaluates the fixtures' completed Oregon taxable income, whose baked-in indexed deduction/bracket vintage sits one indexation step behind PolicyEngine's 2026 projection — a constant $3.50 (single) / $6.00 (married) residual across the whole income grid. Oregon DOR's official 2026 indexed amounts (and the HB 3753 deduction change) are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
       arithmetic:
-        - expression: "8604.0625 - 8196.06"
-          equals: 408
+        - expression: "8604.0625 - 8598.0625"
+          equals: 6.0
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
-      left: 8604.0625
-      right: 8196.06
-  - id: or-taxsim-2024-married-300000
+      left: 8598.0625
+      right: 8604.0625
+  - id: or-pe-2026-uprating-married-300000
     concept: us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability
     case_id: or-married-300000
-    kind: amount_difference
-    disposition: explained_residual
+    kind: policyengine_amount_difference
+    disposition: axiom_encoding_gap
     evidence:
       mechanism: >-
-        The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.
+        The Axiom leg evaluates the fixtures' completed Oregon taxable income, whose baked-in indexed deduction/bracket vintage sits one indexation step behind PolicyEngine's 2026 projection — a constant $3.50 (single) / $6.00 (married) residual across the whole income grid. Oregon DOR's official 2026 indexed amounts (and the HB 3753 deduction change) are not yet reflected by either side. Actionable upstream: regenerate the rulespec-us companion fixtures via the encoder once official 2026 amounts publish; not fixable in this repo.
       arithmetic:
-        - expression: "25619.295 - 25677.58"
-          equals: -58.29
+        - expression: "25619.294921875 - 25613.295"
+          equals: 5.9999
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
-      left: 25619.295
-      right: 25677.58
+      left: 25613.295
+      right: 25619.294921875

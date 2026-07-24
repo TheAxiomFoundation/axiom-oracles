@@ -1976,7 +1976,11 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         str(REPO_ROOT),
         *(arg for pin in _PE_ORACLE_PINS for arg in ("--with", pin)),
         "--with",
-        "policyengine-taxsim==2.21.2",
+        # Must match adapters/taxsim/taxsim_pins.json — the pinned identity
+        # every TAXSIM oracle number is reproducible against. 2.30.0 models
+        # 2026 law (incl. OBBBA); the old 2.21.2 here silently capped the
+        # grids at 2024 law.
+        "policyengine-taxsim==2.30.0",
         "python",
         str(generator),
     ]

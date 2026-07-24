@@ -1,0 +1,17 @@
+{
+ "suite": "ne-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-ne:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "ne_income_tax_before_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-ne-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

@@ -1,0 +1,17 @@
+{
+ "suite": "mo-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-mo:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "mo_income_tax_before_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-mo-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

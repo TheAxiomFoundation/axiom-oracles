@@ -1,0 +1,78 @@
+{
+ "suite": "fiit-ecps",
+ "updated": "2026-07-08",
+ "entries": [
+  {
+   "id": "eitc-earned-income-8614-partnership-scorp-split",
+   "concept": "us:tax/federal-income-tax#eitc",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "eitc_earned_income divergence from the partnership/S-corp earned-income input composition that PE-US #8614 (merged 2026-06-14) split and PE 1.729.0 predates. Axiom includes partnership net earnings from self-employment (26 USC 32(c)(2)(A)/1402(a): gross less one-half SE tax) and excludes the S-corp distributive share. Population: 16,660 rows, 10,008 axiom>PE (partnership) and 6,652 axiom<PE (S-corp) \u2014 both halves of the same #8614 split. Representative partnership unit ecps-tax_unit_154343 ($126,692 partnership, no other earnings): Axiom eitc_earned_income 117,741.43 vs PE 0.00.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "126692 - 0.5 * (126692 * 0.9235 * 0.153)",
+     "equals": 117741.43
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/pull/8614"
+  },
+  {
+   "id": "tax-before-credits-bracket-rounding",
+   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Bracket-boundary rounding between the two engines' rate applications. Verified across all 2,118 rows: |diff| <= $5.83, max relative diff 4.4e-4, both signs. Representative ecps-tax_unit_154369: Axiom 2,789,654.17 vs PE 2,789,660.00, a $5.83 difference on a $2.79M base.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "2789654.1703 - 2789660.0",
+     "equals": -5.8297
+    },
+    {
+     "expression": "5.8297 / 2789660.0",
+     "equals": 2.0897e-06
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "capital-gain-float-noise",
+   "concept": "us:tax/federal-income-tax#capital_gain",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "adjusted_net_capital_gain float noise. Verified across all 8 rows: |diff| <= $3.25 on values up to $8.37M (max relative diff 5.0e-7). Representative ecps-tax_unit_161790: Axiom 6,471,728.75 vs PE 6,471,732.00.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "6471728.7516 - 6471732.0",
+     "equals": -3.2484
+    },
+    {
+     "expression": "3.2484 / 6471732.0",
+     "equals": 5.02e-07
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ctc-excess-agi-increment-rounding",
+   "concept": "us:tax/federal-income-tax#ctc",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "26 USC 24(b) phaseout: the credit reduces by $50 per $1,000 (or fraction) of AGI over the threshold. All 5 rows are exactly +$50 = one $1,000 excess-AGI increment x 5%, a difference of one increment in how each engine rounds excess AGI up to the next $1,000. Representative ecps-tax_unit_154297: Axiom 13,929,800 vs PE 13,929,750.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "1000 * 0.05",
+     "equals": 50.0
+    },
+    {
+     "expression": "13929800 - 13929750",
+     "equals": 50.0
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

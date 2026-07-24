@@ -3,7 +3,7 @@ title: Missouri income tax liability — Axiom vs PolicyEngine and TAXSIM
 description: >-
   Compares the composed Missouri ordinary resident wage-earner income-tax
   pipeline in Axiom RuleSpec against PolicyEngine (mo_income_tax_before_credits)
-  at 2026 and TAXSIM (siitax) at its latest supported law year, 2024, on the
+  at 2026 and TAXSIM (siitax) at 2026 on the
   standard six-case grid.
 
 runner:
@@ -11,7 +11,7 @@ runner:
   parameters:
     state: MO
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

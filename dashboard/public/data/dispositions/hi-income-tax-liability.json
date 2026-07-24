@@ -1,0 +1,108 @@
+{
+ "suite": "hi-income-tax-liability",
+ "updated": "2026-07-15",
+ "entries": [
+  {
+   "id": "hi-taxsim-2024-single-30000",
+   "concept": "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "hi-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "657.984 - 1278.26",
+     "equals": -620.28
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "hi-taxsim-2024-single-60000",
+   "concept": "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "hi-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2756.256 - 3746.22",
+     "equals": -989.96
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "hi-taxsim-2024-single-150000",
+   "concept": "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "hi-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "9506.8222 - 11171.22",
+     "equals": -1664.4
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "hi-taxsim-2024-married-60000",
+   "concept": "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "hi-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1315.968 - 2776.51",
+     "equals": -1460.54
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "hi-taxsim-2024-married-120000",
+   "concept": "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "hi-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "5512.512 - 7492.44",
+     "equals": -1979.93
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "hi-taxsim-2024-married-300000",
+   "concept": "us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Hawaii's post-2024 rate-bracket and deduction changes at 2026, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.",
+   "cases": [
+    "hi-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "19076.7022 - 22342.44",
+     "equals": -3265.74
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

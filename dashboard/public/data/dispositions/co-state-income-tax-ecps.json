@@ -1,0 +1,16 @@
+{
+ "suite": "co-state-income-tax-ecps",
+ "updated": "2026-07-08",
+ "entries": [
+  {
+   "id": "co-state-income-tax-ecps-liability-composed-vs-pe-bridge",
+   "concept": "us:tax/state-income-tax#liability",
+   "kind": null,
+   "disposition": "bridge_artifact",
+   "mechanism": "Composed CO state income tax (refundable credits) vs PolicyEngine: 31 liability mismatches (28 axiom>PE, 0 PE=0, 0 axiom=0; max |diff| 1107). Structural bridge/projection + composed-slice divergence between Axiom's composed state program and PE's full model, not a rulespec statutory-encoding defect. Representative: ecps-tax-unit-135552 axiom=-5617.75 PE=-4511.0; ecps-tax-unit-58419 axiom=-19.0 PE=-141.7828369140625; ecps-tax-unit-58437 axiom=-19.0 PE=-185.0. Per-suite grounding: axiom-oracles#229.",
+   "cases": [],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/229"
+  }
+ ]
+}

@@ -52,7 +52,7 @@ REPORTS = REPO_ROOT / "reports"
 DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 
 VALIDATION_YEAR = 2026
-TAXSIM_YEAR = 2024  # pinned binary abandons 2026; latest available law year
+TAXSIM_YEAR = 2026  # policyengine-taxsim 2.30.0 models 2026 law incl. OBBBA
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
 _TAXSIM_STATE = {
@@ -360,15 +360,22 @@ def _axiom_liabilities() -> dict[tuple[str, str, int], float]:
             # mapping for every other state. The strict-grid pilots accept
             # completed-return taxable-income boundaries, so their fixture
             # names pin the wage grid case instead.
-            agi = (
-                int(grid_name.group(2))
-                if strict_grid_fixtures
-                else (
-                    int(round(float(inputs[agi_key])))
-                    if agi_key is not None
-                    else int(name.rsplit("_", 1)[-1])
+            try:
+                agi = (
+                    int(grid_name.group(2))
+                    if strict_grid_fixtures
+                    else (
+                        int(round(float(inputs[agi_key])))
+                        if agi_key is not None
+                        else int(name.rsplit("_", 1)[-1])
+                    )
                 )
-            )
+            except ValueError:
+                # Upstream boundary/regression fixtures whose names carry no
+                # wage-grid income (e.g. `single_retirement_income`) are not
+                # comparison-grid cases — skip them instead of aborting the
+                # whole state grid (which used to silently reuse stale data).
+                continue
             filing = (
                 "married"
                 if name.startswith("joint")
@@ -407,6 +414,32 @@ def _policyengine_liability(case: Case) -> float:
     return float(sim.calculate(_PE_VAR[case.state], year)[0])
 
 
+def _taxsim_binary() -> Path | None:
+    """Resolve the pinned TAXSIM binary explicitly.
+
+    policyengine-taxsim's own detection searches sys.prefix/share, which is
+    empty in ephemeral `uv run` environments (the wheel's data files don't
+    land there) — that failure used to silently cap these grids at stale
+    committed data. Fall back to the repo venv's share/, where the vetted
+    binary from the pinned wheel lives.
+    """
+    import platform
+
+    exe = {
+        "darwin": "taxsimtest-osx.exe",
+        "linux": "taxsimtest-linux.exe",
+        "windows": "taxsimtest-windows.exe",
+    }.get(platform.system().lower())
+    if exe is None:
+        return None
+    tail = Path("share") / "policyengine_taxsim" / "taxsimtest" / exe
+    for root in (Path(sys.prefix), REPO_ROOT / ".venv"):
+        candidate = root / tail
+        if candidate.exists():
+            return candidate
+    return None
+
+
 def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
     from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
     import pandas as pd
@@ -430,7 +463,7 @@ def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
             }
         )
     frame = pd.DataFrame(rows)
-    runner = TaxsimRunner(frame)
+    runner = TaxsimRunner(frame, taxsim_path=_taxsim_binary())
     try:
         result = runner.run(show_progress=False)
     except TypeError:
@@ -596,12 +629,12 @@ def _build_report(
                 income_key: case.wages,
                 "axiom": ax,
                 "policyengine": pe_v,
-                "taxsim_2024": ts_v,
+                "taxsim": ts_v,
                 "axiom_vs_policyengine": {
                     "difference": ax - pe_v,
                     "match": pe_ok,
                 },
-                "axiom_vs_taxsim_2024": {
+                "axiom_vs_taxsim": {
                     "difference": ax - ts_v,
                     "match": ts_ok,
                 },
@@ -660,9 +693,9 @@ def _build_report(
             "match_count": match_count,
             "mismatch_count": mismatch_count,
             "axiom_vs_policyengine_match_rate": round(100.0 * pe_matches / n, 2),
-            "axiom_vs_taxsim_2024_match_rate": round(100.0 * taxsim_matches / n, 2),
+            "axiom_vs_taxsim_match_rate": round(100.0 * taxsim_matches / n, 2),
             "policyengine_matches": pe_matches,
-            "taxsim_2024_matches": taxsim_matches,
+            "taxsim_matches": taxsim_matches,
         },
         "mismatches": mismatches,
         "cases": report_cases,
@@ -671,7 +704,7 @@ def _build_report(
             "generator": "scripts/generate_state_income_tax_liability.py",
             "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
             "note": (
-                "The mismatches array carries TAXSIM-2024 law-vintage residuals"
+                "The mismatches array carries TAXSIM law-vintage residuals"
                 " and any source-grounded Axiom-versus-PolicyEngine residuals;"
                 " each must be dispositioned without widening tolerance."
             ),
@@ -705,14 +738,41 @@ def _finalize_report(
 def main() -> int:
     cases = _grid()
     axiom = _axiom_liabilities()
-    pe = {case.case_id: _policyengine_liability(case) for case in cases}
-    taxsim = _taxsim_liabilities(cases)
+    # States whose reviewed RuleSpec has migrated its companion tests from the
+    # six-case wage grid to boundary fixtures can no longer seed the Axiom
+    # side of this report from fixtures. Skip them LOUDLY — the Populace
+    # campaign (scripts/run_state_tax_populace.py) is their validation path —
+    # instead of aborting the whole run, which used to silently freeze every
+    # state's committed grid data.
+    runnable = []
+    for state in _STATES:
+        missing = [
+            (filing, wages)
+            for case in cases
+            if case.state == state
+            for filing, wages in [(case.filing, int(case.wages))]
+            if (state, filing, wages) not in axiom
+        ]
+        if missing:
+            print(
+                f"{state}: SKIPPED — fixtures no longer carry the six-case "
+                f"grid ({len(missing)} of 6 cases missing); validated by the "
+                "Populace campaign instead"
+            )
+        else:
+            runnable.append(state)
+    pe = {
+        case.case_id: _policyengine_liability(case)
+        for case in cases
+        if case.state in runnable
+    }
+    taxsim = _taxsim_liabilities([c for c in cases if c.state in runnable])
     REPORTS.mkdir(exist_ok=True)
     DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     rulespecs = rulespec_provenance([RULESPEC_US])
-    for state in _STATES:
+    for state in runnable:
         report = _finalize_report(
             _build_report(state, cases, axiom, pe, taxsim),
             generated_at=generated_at,
@@ -726,8 +786,8 @@ def main() -> int:
         print(
             f"{state}: PE match {s['axiom_vs_policyengine_match_rate']}% "
             f"({s['policyengine_matches']}/{report['case_count']}), "
-            f"TAXSIM-2024 match {s['axiom_vs_taxsim_2024_match_rate']}% "
-            f"({s['taxsim_2024_matches']}/{report['case_count']})"
+            f"TAXSIM match {s['axiom_vs_taxsim_match_rate']}% "
+            f"({s['taxsim_matches']}/{report['case_count']})"
         )
     return 0
 

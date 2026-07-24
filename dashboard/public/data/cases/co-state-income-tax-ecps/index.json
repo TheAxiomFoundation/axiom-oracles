@@ -1,7 +1,7 @@
 {
  "suite": "co-state-income-tax-ecps",
- "count": 1201,
- "chunks": 3,
+ "count": 31,
+ "chunks": 1,
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
@@ -10,6 +10,7 @@
  "mismatch_concepts": [
   "us:tax/state-income-tax#liability"
  ],
- "source": "axiom-policyengine-co-state-income-tax-ecps-0-2026-07-21.json",
- "total_cases": 1201
+ "source": "axiom-policyengine-co-state-income-tax-ecps.json",
+ "total_cases": 1201,
+ "partial": "mismatch-only"
 }

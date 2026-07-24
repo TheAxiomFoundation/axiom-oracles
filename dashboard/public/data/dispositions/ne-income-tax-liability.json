@@ -1,0 +1,132 @@
+{
+ "suite": "ne-income-tax-liability",
+ "updated": "2026-07-08",
+ "entries": [
+  {
+   "id": "ne-taxsim-2024-vintage-credit-scope-single-30000",
+   "concept": "us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The 2026 pipeline reports 703.56; TAXSIM 2024 reports 552.97, a 150.59-dollar gap. TAXSIM's 2024 Nebraska siitax is the 2024 before-credit tax (718.97, applying the un-indexed 2024 brackets and the 2.46/3.51/5.01/ 5.84 per cent 2024 rates over the smaller 2024 standard deduction) less the 166-dollar 2024 section 77-2716.01 personal exemption credit: 718.97 - 166 = 552.97, reproducing TAXSIM exactly. The residual is the 2024-to-2026 rate-compression and indexation vintage (703.56 - 718.97 = -15.41) plus the 166-dollar exemption credit the before-credits core excludes. Not a pipeline defect; the pipeline matches PolicyEngine at 2026 exactly.",
+   "cases": [
+    "ne-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "703.56 - 552.97",
+     "equals": 150.59
+    },
+    {
+     "expression": "718.97 - 166.00",
+     "equals": 552.97
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ne-taxsim-2024-vintage-credit-scope-single-60000",
+   "concept": "us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The 2026 pipeline reports 2038.712; TAXSIM 2024 reports 2146.20. TAXSIM's 2024 siitax is the 2024 before-credit tax (2312.20) less the 166-dollar 2024 personal exemption credit: 2312.20 - 166 = 2146.20, reproducing TAXSIM exactly. The residual is the 2024-to-2026 vintage (2038.712 - 2312.20 = -273.488) plus the 166-dollar exemption credit the before-credits core excludes. Here the 2024 higher rates outweigh the credit, so the pipeline is below TAXSIM. Not a pipeline defect; the pipeline matches PolicyEngine at 2026 exactly.",
+   "cases": [
+    "ne-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2038.712 - 2146.20",
+     "equals": -107.488
+    },
+    {
+     "expression": "2312.20 - 166.00",
+     "equals": 2146.2
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ne-taxsim-2024-vintage-credit-scope-single-150000",
+   "concept": "us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The 2026 pipeline reports 6133.712; TAXSIM 2024 reports 7402.20. TAXSIM's 2024 siitax is the 2024 before-credit tax (7568.20) less the 166-dollar 2024 personal exemption credit: 7568.20 - 166 = 7402.20, reproducing TAXSIM exactly. At this income the L.B. 754 top-rate compression (5.84 to 4.55 per cent) dominates, so the 2024-to-2026 vintage (6133.712 - 7568.20 = -1434.488) plus the 166-dollar exemption credit is a large negative residual. Not a pipeline defect; the pipeline matches PolicyEngine at 2026 exactly.",
+   "cases": [
+    "ne-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "6133.712 - 7402.20",
+     "equals": -1268.488
+    },
+    {
+     "expression": "7568.20 - 166.00",
+     "equals": 7402.2
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ne-taxsim-2024-vintage-credit-scope-married-60000",
+   "concept": "us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The 2026 pipeline reports 1405.575; TAXSIM 2024 reports 1106.04. TAXSIM's 2024 siitax is the 2024 before-credit tax (1438.04) less the 332-dollar 2024 married personal exemption credit ($166 per filer): 1438.04 - 332 = 1106.04, reproducing TAXSIM exactly. The residual is the 2024-to-2026 vintage (1405.575 - 1438.04 = -32.465) plus the 332-dollar exemption credit the before-credits core excludes. Not a pipeline defect; the pipeline matches PolicyEngine at 2026 exactly.",
+   "cases": [
+    "ne-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1405.575 - 1106.04",
+     "equals": 299.535
+    },
+    {
+     "expression": "1438.04 - 332.00",
+     "equals": 1106.04
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ne-taxsim-2024-vintage-credit-scope-married-120000",
+   "concept": "us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The 2026 pipeline reports 4075.255; TAXSIM 2024 reports 4292.20. TAXSIM's 2024 siitax is the 2024 before-credit tax (4624.20) less the 332-dollar 2024 married personal exemption credit: 4624.20 - 332 = 4292.20, reproducing TAXSIM exactly. The residual is the 2024-to-2026 vintage (4075.255 - 4624.20 = -548.945) plus the 332-dollar exemption credit the before-credits core excludes. Not a pipeline defect; the pipeline matches PolicyEngine at 2026 exactly.",
+   "cases": [
+    "ne-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "4075.255 - 4292.20",
+     "equals": -216.945
+    },
+    {
+     "expression": "4624.20 - 332.00",
+     "equals": 4292.2
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ne-taxsim-2024-vintage-credit-scope-married-300000",
+   "concept": "us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The 2026 pipeline reports 12265.255; TAXSIM 2024 reports 14804.20. TAXSIM's 2024 siitax is the 2024 before-credit tax (15136.20) less the 332-dollar 2024 married personal exemption credit: 15136.20 - 332 = 14804.20, reproducing TAXSIM exactly. At this income the L.B. 754 top-rate compression dominates, so the 2024-to-2026 vintage (12265.255 - 15136.20 = -2870.945) plus the 332-dollar exemption credit is a large negative residual. Not a pipeline defect; the pipeline matches PolicyEngine at 2026 exactly.",
+   "cases": [
+    "ne-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "12265.255 - 14804.20",
+     "equals": -2538.945
+    },
+    {
+     "expression": "15136.20 - 332.00",
+     "equals": 14804.2
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

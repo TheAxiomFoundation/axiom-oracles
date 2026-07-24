@@ -1,0 +1,108 @@
+{
+ "suite": "in-income-tax-liability",
+ "updated": "2026-07-15",
+ "entries": [
+  {
+   "id": "in-taxsim-2024-single-30000",
+   "concept": "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "in-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "855.5 - 870",
+     "equals": -14.5
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "in-taxsim-2024-single-60000",
+   "concept": "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "in-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1740.5 - 1770",
+     "equals": -29.5
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "in-taxsim-2024-single-150000",
+   "concept": "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "in-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "4395.5 - 4470",
+     "equals": -74.5
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "in-taxsim-2024-married-60000",
+   "concept": "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "in-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1711 - 1740",
+     "equals": -29
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "in-taxsim-2024-married-120000",
+   "concept": "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "in-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "3481 - 3540",
+     "equals": -59
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "in-taxsim-2024-married-300000",
+   "concept": "us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "in-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "8791 - 8940",
+     "equals": -149
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

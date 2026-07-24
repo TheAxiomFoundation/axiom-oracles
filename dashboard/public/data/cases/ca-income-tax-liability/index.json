@@ -1,6 +1,6 @@
 {
  "suite": "ca-income-tax-liability",
- "count": 6,
+ "count": 2,
  "chunks": 1,
  "chunk_size": 500,
  "engines": {

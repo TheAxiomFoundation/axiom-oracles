@@ -1,0 +1,16 @@
+{
+ "suite": "ssi-ecps",
+ "updated": "2026-07-08",
+ "entries": [
+  {
+   "id": "ssi-v1-slice-eligibility-and-income-composition",
+   "concept": "us:statutes/42/1382#ssi_benefit",
+   "kind": null,
+   "disposition": "bridge_artifact",
+   "mechanism": "ssi-ecps bridge projection + v1-slice scope, not an Axiom statutory encoding defect. Two verified sub-classes (per-household PE correlation): (a) 1,768 households where Axiom awards but PE has no is_ssi_eligible member \u2014 the bridge feeds Axiom generic is_disabled/is_blind rather than PE's SSI-specific disability determination, and the v1 slice omits qualified-alien/institutional criteria; (b) 996 households where PE is eligible but benefit offsets to $0 on income while Axiom awards \u2014 the bridge's countable-income assembly diverges from PE ssi_countable_income. Representative: ecps-30 (axiom 17,880 / PE 0), ecps-42 (axiom 11,928 / PE 0), ecps-588 (axiom 1,384.90 / PE 1,504.90).",
+   "cases": [],
+   "arithmetic": [],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/228"
+  }
+ ]
+}

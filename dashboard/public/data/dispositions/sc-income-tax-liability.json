@@ -1,0 +1,108 @@
+{
+ "suite": "sc-income-tax-liability",
+ "updated": "2026-07-16",
+ "entries": [
+  {
+   "id": "sc-taxsim-2024-single-30000",
+   "concept": "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Axiom and PolicyEngine apply South Carolina Act 110 of 2026, which first applies to tax years beginning after 2025 and replaces the prior schedule with the 1.99% and 5.21% rates. The pinned TAXSIM leg applies 2024 law.",
+   "cases": [
+    "sc-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "298.5 - 358.0",
+     "equals": -59.5
+    }
+   ],
+   "linked_issue": "https://www.scstatehouse.gov/sess126_2025-2026/bills/4216.htm"
+  },
+  {
+   "id": "sc-taxsim-2024-single-60000",
+   "concept": "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Axiom and PolicyEngine apply South Carolina Act 110 of 2026, which first applies to tax years beginning after 2025 and replaces the prior schedule with the 1.99% and 5.21% rates. The pinned TAXSIM leg applies 2024 law.",
+   "cases": [
+    "sc-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1662.445 - 2136.8",
+     "equals": -474.355
+    }
+   ],
+   "linked_issue": "https://www.scstatehouse.gov/sess126_2025-2026/bills/4216.htm"
+  },
+  {
+   "id": "sc-taxsim-2024-single-150000",
+   "concept": "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Axiom and PolicyEngine apply South Carolina Act 110 of 2026, which first applies to tax years beginning after 2025 and replaces the prior schedule with the 1.99% and 5.21% rates. The pinned TAXSIM leg applies 2024 law.",
+   "cases": [
+    "sc-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "6849.0 - 7716.8",
+     "equals": -867.8
+    }
+   ],
+   "linked_issue": "https://www.scstatehouse.gov/sess126_2025-2026/bills/4216.htm"
+  },
+  {
+   "id": "sc-taxsim-2024-married-60000",
+   "concept": "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Axiom and PolicyEngine apply South Carolina Act 110 of 2026, which first applies to tax years beginning after 2025 and replaces the prior schedule with the 1.99% and 5.21% rates. The pinned TAXSIM leg applies 2024 law.",
+   "cases": [
+    "sc-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "597.0 - 1231.6",
+     "equals": -634.6
+    }
+   ],
+   "linked_issue": "https://www.scstatehouse.gov/sess126_2025-2026/bills/4216.htm"
+  },
+  {
+   "id": "sc-taxsim-2024-married-120000",
+   "concept": "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Axiom and PolicyEngine apply South Carolina Act 110 of 2026, which first applies to tax years beginning after 2025 and replaces the prior schedule with the 1.99% and 5.21% rates. The pinned TAXSIM leg applies 2024 law.",
+   "cases": [
+    "sc-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "4290.89 - 4951.6",
+     "equals": -660.71
+    }
+   ],
+   "linked_issue": "https://www.scstatehouse.gov/sess126_2025-2026/bills/4216.htm"
+  },
+  {
+   "id": "sc-taxsim-2024-married-300000",
+   "concept": "us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Axiom and PolicyEngine apply South Carolina Act 110 of 2026, which first applies to tax years beginning after 2025 and replaces the prior schedule with the 1.99% and 5.21% rates. The pinned TAXSIM leg applies 2024 law.",
+   "cases": [
+    "sc-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "14664.0 - 16111.6",
+     "equals": -1447.6
+    }
+   ],
+   "linked_issue": "https://www.scstatehouse.gov/sess126_2025-2026/bills/4216.htm"
+  }
+ ]
+}

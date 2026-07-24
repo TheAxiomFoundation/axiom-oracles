@@ -1,0 +1,17 @@
+{
+ "suite": "uk-lbtt-ltt",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "uk:policies/govuk/{lbtt,ltt} devolved transaction tax",
+  "policyengine": "land_and_buildings_transaction_tax, land_transaction_tax"
+ },
+ "mismatch_concepts": [
+  "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+  "uk:policies/govuk/ltt#land_transaction_tax"
+ ],
+ "source": "axiom-policyengine-uk-lbtt-ltt.json",
+ "total_cases": 12,
+ "partial": "mismatch-only"
+}

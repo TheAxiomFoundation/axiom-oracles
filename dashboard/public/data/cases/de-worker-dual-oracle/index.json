@@ -1,0 +1,17 @@
+{
+ "suite": "de-worker-dual-oracle",
+ "count": 12,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "gettsim"
+ },
+ "mismatch_concepts": [
+  "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
+  "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual"
+ ],
+ "source": "euromod-gettsim-de-worker-dual-oracle.json",
+ "total_cases": 13,
+ "partial": "mismatch-only"
+}

@@ -1,20 +1,5 @@
-# Georgia composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
-# on a modest case grid (single and married filers at incomes that cross the
-# state's brackets). The Axiom side is the composed rulespec-us pipeline
-# us-ga/policies/income_tax/pilot_liability_pipeline, evaluated through the
-# axiom rules engine (its liabilities are the engine-verified companion-test
-# fixtures). Georgia levies a single flat 4.99% rate (O.C.G.A. 48-7-20, 2026
-# schedule) on Georgia taxable net income (Georgia AGI less the section
-# 48-7-27 standard deduction, $15,000 single / $30,000 joint under HB463).
-#
-# PolicyEngine runs at the 2026 validation year. TAXSIM runs at its latest
-# supported law year (2024) because the pinned binary abandons 2026; the
-# 2024-to-2026 rate step-down (5.39% to 4.99%) and deduction vintage are
-# recorded in dispositions/ga-income-tax-liability.yaml rather than absorbed
-# by tolerance.
-#
-# Run locally:
-#   uv run python scripts/run_comparison.py ga-income-tax-liability
+# PolicyEngine and TAXSIM both run at the 2026 validation year
+# (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
 
 name: ga-income-tax-liability
 title: Georgia income tax liability — Axiom vs PolicyEngine and TAXSIM
@@ -22,14 +7,14 @@ description: >-
   Compares the composed Georgia income-tax liability pipeline encoded in Axiom
   RuleSpec (us-ga/policies/income_tax/pilot_liability_pipeline) against
   PolicyEngine (ga_income_tax_before_non_refundable_credits) at 2026 and
-  TAXSIM (siitax) at 2024 on a modest grid of single and married filers.
+  TAXSIM (siitax) at 2026 on a modest grid of single and married filers.
 
 runner:
   type: state-income-tax-liability-grid
   parameters:
     state: GA
     period: "2026"
-    taxsim_law_year: 2024
+    taxsim_law_year: 2026
     # Links this suite to the rulespec-us monorepo in the affected map
     # so a change to the composed pipeline triggers a re-run.
     rulespec_roots:

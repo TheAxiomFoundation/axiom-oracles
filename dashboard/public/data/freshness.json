@@ -26,8 +26,8 @@
     },
     {
       "suite": "al-income-tax-liability",
-      "generated_at": "2026-07-24T03:53:15Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:29:47Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
@@ -35,6 +35,14 @@
         "TheAxiomFoundation/rulespec-us": null
       },
       "unstamped": false
+    },
+    {
+      "suite": "al-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "al-snap-ecps",
@@ -71,6 +79,14 @@
       "unstamped": true
     },
     {
+      "suite": "ar-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "az-income-tax-liability",
       "generated_at": "2026-07-24T03:53:27Z",
       "run_kind": "affected-rerun",
@@ -81,6 +97,14 @@
         "TheAxiomFoundation/rulespec-us": null
       },
       "unstamped": false
+    },
+    {
+      "suite": "az-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "az-snap-ecps",
@@ -425,13 +449,13 @@
     },
     {
       "suite": "ca-income-tax-liability",
-      "generated_at": "2026-07-24T03:53:47Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -481,15 +505,23 @@
     },
     {
       "suite": "co-income-tax-liability",
-      "generated_at": "2026-07-24T03:53:15Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
+    },
+    {
+      "suite": "co-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "co-snap-ecps",
@@ -587,15 +619,23 @@
     },
     {
       "suite": "ct-income-tax-liability",
-      "generated_at": "2026-07-24T03:53:17Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
+    },
+    {
+      "suite": "ct-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "dc-income-tax-liability",
@@ -620,6 +660,14 @@
         "TheAxiomFoundation/rulespec-us": null
       },
       "unstamped": false
+    },
+    {
+      "suite": "de-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "de-tanf-ecps",
@@ -698,6 +746,14 @@
       "unstamped": false
     },
     {
+      "suite": "ga-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "ga-snap-ecps",
       "generated_at": "2026-07-14T12:19:38Z",
       "run_kind": "manual",
@@ -767,6 +823,14 @@
       "unstamped": true
     },
     {
+      "suite": "hi-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "ia-income-tax-liability",
       "generated_at": "2026-07-24T03:54:35Z",
       "run_kind": "affected-rerun",
@@ -789,14 +853,22 @@
       "unstamped": true
     },
     {
+      "suite": "ia-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "id-income-tax-liability",
-      "generated_at": "2026-07-24T03:54:31Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -813,6 +885,14 @@
       "unstamped": false
     },
     {
+      "suite": "il-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "in-income-tax-liability",
       "generated_at": "2026-07-24T03:53:25Z",
       "run_kind": "affected-rerun",
@@ -823,6 +903,14 @@
         "TheAxiomFoundation/rulespec-us": null
       },
       "unstamped": false
+    },
+    {
+      "suite": "in-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "irs-adjustment-parameters",
@@ -847,6 +935,14 @@
       "unstamped": false
     },
     {
+      "suite": "ks-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "ks-tanf-ecps",
       "generated_at": "2026-07-06T22:35:39Z",
       "run_kind": "manual",
@@ -861,13 +957,13 @@
     },
     {
       "suite": "ky-income-tax-liability",
-      "generated_at": "2026-07-24T03:55:01Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -884,6 +980,14 @@
       "unstamped": false
     },
     {
+      "suite": "la-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "lifeline-parameters",
       "generated_at": null,
       "run_kind": null,
@@ -895,13 +999,13 @@
     },
     {
       "suite": "ma-income-tax-liability",
-      "generated_at": "2026-07-24T03:54:11Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -919,13 +1023,13 @@
     },
     {
       "suite": "md-income-tax-liability",
-      "generated_at": "2026-07-24T03:53:49Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -954,13 +1058,13 @@
     },
     {
       "suite": "me-income-tax-liability",
-      "generated_at": "2026-07-24T03:54:41Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -1007,6 +1111,14 @@
       "unstamped": false
     },
     {
+      "suite": "mi-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "mi-ssp-payments",
       "generated_at": null,
       "run_kind": null,
@@ -1018,13 +1130,13 @@
     },
     {
       "suite": "mn-income-tax-liability",
-      "generated_at": "2026-07-24T03:54:17Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -1054,15 +1166,23 @@
     },
     {
       "suite": "ms-income-tax-liability",
-      "generated_at": "2026-07-24T03:53:27Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
+    },
+    {
+      "suite": "ms-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "mt-income-tax-liability",
@@ -1077,6 +1197,14 @@
       "unstamped": false
     },
     {
+      "suite": "mt-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "nc-income-tax-liability",
       "generated_at": "2026-07-24T03:54:36Z",
       "run_kind": "affected-rerun",
@@ -1087,6 +1215,14 @@
         "TheAxiomFoundation/rulespec-us": null
       },
       "unstamped": false
+    },
+    {
+      "suite": "nc-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "nc-snap-ecps",
@@ -1102,13 +1238,13 @@
     },
     {
       "suite": "nd-income-tax-liability",
-      "generated_at": "2026-07-24T03:54:23Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -1137,6 +1273,14 @@
       "unstamped": false
     },
     {
+      "suite": "nj-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "nm-income-tax-liability",
       "generated_at": "2026-07-24T03:54:15Z",
       "run_kind": "affected-rerun",
@@ -1149,16 +1293,32 @@
       "unstamped": false
     },
     {
+      "suite": "nm-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "ny-income-tax-liability",
-      "generated_at": "2026-07-24T03:57:46Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
+    },
+    {
+      "suite": "ny-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "ny-snap-ecps",
@@ -1243,6 +1403,14 @@
       "unstamped": false
     },
     {
+      "suite": "oh-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "ok-income-tax-liability",
       "generated_at": "2026-07-24T03:54:57Z",
       "run_kind": "affected-rerun",
@@ -1255,14 +1423,22 @@
       "unstamped": false
     },
     {
+      "suite": "ok-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "or-income-tax-liability",
-      "generated_at": "2026-07-24T03:55:24Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -1290,6 +1466,14 @@
       "unstamped": false
     },
     {
+      "suite": "pa-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "pell-parameters",
       "generated_at": null,
       "run_kind": null,
@@ -1301,13 +1485,13 @@
     },
     {
       "suite": "ri-income-tax-liability",
-      "generated_at": "2026-07-24T03:55:13Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -1322,6 +1506,14 @@
         "TheAxiomFoundation/rulespec-us": null
       },
       "unstamped": false
+    },
+    {
+      "suite": "sc-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     },
     {
       "suite": "sc-snap-ecps",
@@ -1863,6 +2055,14 @@
       "unstamped": false
     },
     {
+      "suite": "ut-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "ut-snap-ecps",
       "generated_at": null,
       "run_kind": null,
@@ -1886,6 +2086,14 @@
       "unstamped": false
     },
     {
+      "suite": "va-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "vt-income-tax-liability",
       "generated_at": "2026-07-24T03:57:29Z",
       "run_kind": "affected-rerun",
@@ -1898,14 +2106,22 @@
       "unstamped": false
     },
     {
+      "suite": "vt-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
+    },
+    {
       "suite": "wa-income-tax-liability",
-      "generated_at": "2026-07-24T03:56:35Z",
-      "run_kind": "affected-rerun",
+      "generated_at": "2026-07-23T16:33:35Z",
+      "run_kind": "manual",
       "affected_repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "ran_against": {
-        "TheAxiomFoundation/rulespec-us": null
+        "TheAxiomFoundation/rulespec-us": "c86b2f62511b7ff9d5351c98ca03b87e3cc41042"
       },
       "unstamped": false
     },
@@ -1954,6 +2170,14 @@
         "TheAxiomFoundation/rulespec-us": null
       },
       "unstamped": false
+    },
+    {
+      "suite": "wv-income-tax-populace",
+      "generated_at": null,
+      "run_kind": null,
+      "affected_repos": [],
+      "ran_against": {},
+      "unstamped": true
     }
   ],
   "executable_surfaces": [
