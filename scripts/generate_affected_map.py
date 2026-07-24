@@ -139,8 +139,21 @@ def repos_for_registry_config(config: dict) -> set[str]:
     # compared amounts, but they do not execute the jurisdiction's RuleSpec.
     # Treating those ids as dependencies would make the affected-rerun selector
     # rerun (and merely re-emit) the baseline whenever rulespec-de moves, while
-    # its report correctly carries no rulespec provenance.
-    if runner.get("type") != "gettsim-synthetic-compare":
+    # its report correctly carries no rulespec provenance. The same holds for
+    # an axiom-oracles-compare suite with no `axiom` side (e.g. the
+    # Tax-Calculator-vs-PolicyEngine triangulation): no rulespec executes, so
+    # rules movement cannot change its numbers (#296).
+    engines = {str(params.get("left", "")), str(params.get("right", ""))}
+    # Both sides must be declared to qualify — a config missing left/right
+    # keeps its concept-derived dependencies (over-rerunning is safe; silently
+    # unmapping a suite is not).
+    direct_oracle_pair = (
+        runner.get("type") == "axiom-oracles-compare"
+        and bool(params.get("left"))
+        and bool(params.get("right"))
+        and "axiom" not in engines
+    )
+    if runner.get("type") != "gettsim-synthetic-compare" and not direct_oracle_pair:
         concepts = params.get("concepts") or (
             [params["concept"]] if params.get("concept") else []
         )
@@ -246,7 +259,11 @@ def build_map() -> dict:
                 # (e.g. dashboard suite `uk-benefit-cap` runs under registry
                 # name `uk-benefit-cap-ukmod`); dispatching the dashboard
                 # suite key crashes the leg with "unknown comparison".
-                "name": config["name"],
+                # A suite declaring `ci: manual` cannot run in CI at all
+                # (e.g. or/ut SNAP: the encoder's snap-populace-compare has no
+                # jurisdiction config for them yet) — emit null so the
+                # selector and the weekly matrix leave it to the manual lane.
+                "name": None if config.get("ci") == "manual" else config["name"],
                 "report": report,
                 "repos": sorted(repos_for_registry_config(config)),
                 "source": f"comparisons/{path.name}",
@@ -263,8 +280,9 @@ def build_map() -> dict:
             "affected repos have advanced past the SHA their report last ran "
             "against (report provenance.rulespecs). `suite` keys the dashboard "
             "report; `name` is the run_comparison.py registry name the rerun "
-            "matrix dispatches (null = not CI-runnable, e.g. parameter suites "
-            "run by the manual parameter lane)."
+            "matrix dispatches (null = not CI-runnable: parameter suites run "
+            "by the manual parameter lane, and registry suites declaring "
+            "`ci: manual` in their YAML)."
         ),
         "owner": RULESPEC_OWNER,
         "suites": entries,

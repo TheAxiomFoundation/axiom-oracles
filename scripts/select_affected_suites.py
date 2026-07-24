@@ -11,8 +11,10 @@ Inputs:
 
 * ``comparisons/affected_map.json`` — suite → affected rulespec repos, plus
   each entry's ``name``: the ``run_comparison.py`` registry name the rerun
-  matrix must dispatch (explicit ``null`` = not CI-runnable; parameter suites
-  run only under the manual ``run_parameter_comparisons.py`` lane).
+  matrix must dispatch (explicit ``null`` = not CI-runnable: parameter suites
+  run only under the manual ``run_parameter_comparisons.py`` lane, and
+  registry suites declaring ``ci: manual`` in their YAML run only under a
+  supervised ``run_comparison.py`` invocation).
 * ``dashboard/public/data/<report>.json`` — each report's
   ``provenance.rulespecs`` (``[{repo, sha}]``) records the SHA it ran against.
 * current HEADs — a JSON map ``{"owner/repo": "<sha>"}`` passed via
@@ -190,9 +192,11 @@ def runnable_names(selected: list[dict]) -> list[str]:
     """The deduplicated registry names the rerun matrix can dispatch.
 
     Decisions whose map entry has an explicit null ``name`` (parameter suites
-    — run by the manual ``run_parameter_comparisons.py`` lane, not by
-    ``run_comparison.py``) are excluded: dispatching them crashes the matrix
-    leg with "unknown comparison". Malformed names never reach here —
+    run by the manual ``run_parameter_comparisons.py`` lane, and ``ci: manual``
+    registry suites run only under a supervised ``run_comparison.py``
+    invocation) are excluded: dispatching a parameter suite crashes the matrix
+    leg with "unknown comparison", and a ci-manual suite is one CI cannot
+    execute at all. Malformed names never reach here —
     ``_registry_name`` fails loudly during selection. Order follows first
     appearance.
     """

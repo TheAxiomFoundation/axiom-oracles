@@ -1,7 +1,8 @@
 # Federal Individual Income Tax — Axiom RuleSpec vs PolicyEngine, pinned Populace.
 #
-# Wraps `axiom-encode tax-populace-compare` (aka `tax-ecps-compare`; the two are
-# aliases for the same harness). The harness resolves the PolicyEngine oracle
+# Wraps `axiom-encode tax-populace-compare` (renamed from `tax-ecps-compare`
+# in the encoder's ECPS→Populace rename; no alias survives on axiom-encode
+# main — #296). The harness resolves the PolicyEngine oracle
 # population from the *pinned* Populace artifact by default (axiom-encode#952):
 # a fixed HF revision, sha256-verified, no `AXIOM_POPULACE_ALLOW_UNPINNED`. Its
 # `--json` output carries a `dataset_identity` block that this repo's dashboard
