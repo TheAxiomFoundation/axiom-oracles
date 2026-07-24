@@ -12,7 +12,7 @@ MODULE = "us-nv:policies/income_tax/2026_resident_zero_liability"
 RULESPEC_RELATIVE_PATH = Path(
     "us-nv/policies/income_tax/2026_resident_zero_liability.yaml"
 )
-EXPECTED_OUTPUT_COUNT = 10
+EXPECTED_OUTPUT_COUNT = 13
 
 
 def _module_mappings():
@@ -85,7 +85,7 @@ def test_nv_2026_exact_mappings_match_the_rulespec_output_set() -> None:
     assert set(_module_mappings()) == output_names
 
 
-def test_nv_2026_complete_zero_outputs_use_exact_tax_classifications() -> None:
+def test_nv_2026_bounded_outputs_use_exact_tax_classifications() -> None:
     mappings = _module_mappings()
     assert len(mappings) == EXPECTED_OUTPUT_COUNT
 
@@ -98,7 +98,7 @@ def test_nv_2026_complete_zero_outputs_use_exact_tax_classifications() -> None:
 
 
 @pytest.mark.parametrize("program", [None, "tax"])
-def test_nv_2026_complete_zero_outputs_remain_in_coverage(
+def test_nv_2026_bounded_outputs_remain_in_coverage(
     tmp_path: Path,
     program: str | None,
 ) -> None:
