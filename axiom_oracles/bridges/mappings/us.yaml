@@ -28472,6 +28472,108 @@ mappings:
     candidate_priority: P3
     rationale: The us/fiit program surfaces income tax before credits from the encoded section 1(j) and section 55 chain, but the program takes taxable income as a runtime input because upstream income assembly (sections 61-63) is not yet encoded. PolicyEngine computes income_tax_before_credits from fully modeled taxable income, so this program output is not comparable until the upstream chain is encoded.
 
+  # Maine's TY2026 resident annual-return interface is source held after the
+  # federal/raw-fact boundary. Exact entries retain all readiness judgments
+  # and fail-closed sentinels in tax-scoped coverage without treating those
+  # sentinels as substantive Maine tax calculations.
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_filing_status_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates that exactly one Maine individual filing-status schedule applies. PolicyEngine uses its own filing-status entity and exposes no one-to-one interface-validation output.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom validates full-year Maine residence, aligned federal and state filing units, filing status, and the federal-AGI boundary. This interface contract has no one-to-one PolicyEngine output.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the pinned corpus lacks the complete sections 5102 and 5122 transformation from federal outputs to Maine adjusted gross income. It is source-readiness metadata, not a substantive PolicyEngine income variable.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that published 2026 basic amounts do not complete Maine deduction, exemption, itemized-choice, and phaseout mechanics. PolicyEngine exposes modeled amounts rather than this source-readiness judgment.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold prevents the source-complete 2026 rate and surcharge pilot from being applied before Maine taxable income is constructed and records the incomplete specialty-tax surface. PolicyEngine exposes no analogous readiness predicate.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete 2026 nonrefundable and refundable credit eligibility, limitation, carryforward, and ordering surface is unavailable. PolicyEngine computes modeled credits and has no equivalent source-readiness variable.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's Maine income, deduction, exemption, tax, surtax, and credit source holds. It is a completion-state predicate rather than a tax result with a PolicyEngine analog.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_state_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while Maine adjusted-gross-income construction is source held. That fail-closed sentinel is not completed Maine AGI and cannot be compared to PolicyEngine's substantive modeled amount.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while complete Maine deduction and exemption mechanics are source held. That sentinel is not a substantive deduction or exemption result.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while Maine income, deduction, and exemption stages remain incomplete. It does not claim completed Maine taxable income.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_tax_before_credits_including_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero because Maine taxable income and the complete annual tax and surtax surface are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while annual tax and complete nonrefundable-credit authority and ordering are source held. It is not comparable to PolicyEngine's substantive after-credit result.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom deliberately returns zero while complete 2026 Maine refundable-credit eligibility, phaseouts, limitations, and ordering are source held. PolicyEngine's modeled credits are substantive outputs.
+
+  - legal_id: us-me:policies/income_tax/2026_resident_liability_source_hold#me_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual Maine income, deduction, tax, and credit chain remains source held. It must not be interpreted as zero Maine tax or compared to completed PolicyEngine liability.
+
   # Alabama's TY2026 resident module is a source-readiness surface. Its public
   # monetary stages fail closed until the missing annual income-base,
   # deduction, tax, surtax, credit, and ordering authority is pinned. Exact
