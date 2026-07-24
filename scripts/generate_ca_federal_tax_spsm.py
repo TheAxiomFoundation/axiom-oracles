@@ -275,6 +275,24 @@ def main() -> int:
                 ),
             }
         ],
+        # Standard aggregates row: the dashboard's oracle cards and program
+        # pages compute totals/rates from report.aggregates, and the
+        # front-page filter drops reports without it.
+        "aggregates": [
+            {
+                "concept": OUTPUT_REF,
+                "description": (
+                    "Federal tax on taxable income (2025 T1 Step 5 "
+                    "Part A) vs SPSM federal tax before credits"
+                ),
+                "category": "tax",
+                "comparison": "amount",
+                "comparison_count": n,
+                "match_count": matches,
+                "mismatch_count": n - matches,
+                "components": [],
+            }
+        ],
         "case_count": len(households),
         "summary": {
             "comparison_count": n,

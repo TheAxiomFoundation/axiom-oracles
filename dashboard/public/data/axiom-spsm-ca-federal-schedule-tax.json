@@ -1,4 +1,16 @@
 {
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 967396,
+      "components": [],
+      "concept": "ca:policies/cra/t1-2025/federal-tax-on-taxable-income#federal_2025_t1_tax_on_taxable_income_line_76",
+      "description": "Federal tax on taxable income (2025 T1 Step 5 Part A) vs SPSM federal tax before credits",
+      "match_count": 958555,
+      "mismatch_count": 8841
+    }
+  ],
   "case_count": 327970,
   "concepts": [
     {
@@ -219,7 +231,7 @@
   "provenance": {
     "attribution": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s).",
     "generated": "2026-07-23",
-    "generated_at": "2026-07-24T03:14:11Z",
+    "generated_at": "2026-07-24T03:38:17Z",
     "generator": "scripts/generate_ca_federal_tax_spsm.py",
     "licence": "SPSD/M Licence Agreement v34; no Package contents are redistributed with this repository (s.3.1).",
     "oracle": "spsm",
