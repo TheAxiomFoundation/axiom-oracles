@@ -30987,12 +30987,12 @@ mappings:
     candidate_priority: P4
     rationale: This completion-state predicate combines Axiom's modification, annual-rate, surtax, and credit source holds.
 
-  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_state_modifications
+  - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_state_income_after_modifications
     country: us
     program: tax
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: This zero is a fail-closed sentinel while the TY2026 Colorado modification chain is held, not a completed state-modification amount.
+    rationale: This zero is a fail-closed sentinel while the TY2026 Colorado modification chain is held, not completed state income after additions and subtractions.
 
   - legal_id: us-co:policies/income_tax/2026_full_year_resident_source_hold#co_pit_2026_taxable_income
     country: us
