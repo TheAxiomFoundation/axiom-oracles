@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T09:06:05Z",
+    "generated_at": "2026-07-23T19:54:05Z",
     "generated_by": "scripts/run_comparison.py::ga-income-tax-liability",
     "rulespecs": [
       {
