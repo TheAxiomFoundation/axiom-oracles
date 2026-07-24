@@ -30,30 +30,52 @@ export async function loadOracleData(basePath = "") {
     // fall back to default
   }
 
-  const reports = [];
-  for (const file of reportFiles) {
-    try {
-      const url = `${basePath}/data/${file}`;
-      const resp = await fetch(url);
-      if (resp.ok) {
-        const report = await resp.json();
-        report.file = file;
-        // Older generator runs wrote state SNAP reports with the legacy
-        // "nyc-synthetic" default suite even though the file is named for its
-        // real suite. Trust the filename for that one known-stale case so the
-        // report groups and labels correctly (e.g. fl-snap-ecps).
-        const fromFile = file.match(/^axiom-policyengine-([a-z]{2}-snap-ecps)\.json$/);
-        if (
-          fromFile &&
-          (!report.suite || report.suite === "nyc-synthetic") &&
-          report.suite !== fromFile[1]
-        ) {
-          report.suite = fromFile[1];
+  // Fast path: the precomputed overview bundle carries every report minus
+  // its per-case rows (which no overview surface reads — the household
+  // drill lazy-loads /data/cases/<suite>/ chunks) in a single fetch.
+  // Falls back to per-file loading when the bundle is absent.
+  let reports = [];
+  try {
+    const overviewResp = await fetch(`${basePath}/data/overview.json`);
+    if (overviewResp.ok) {
+      const overview = await overviewResp.json();
+      reports = overview.reports || [];
+    }
+  } catch {
+    // fall through to per-file loading
+  }
+
+  if (reports.length === 0) {
+    const settled = await Promise.all(
+      reportFiles.map(async (file) => {
+        try {
+          const resp = await fetch(`${basePath}/data/${file}`);
+          if (!resp.ok) return null;
+          const report = await resp.json();
+          report.file = file;
+          return report;
+        } catch {
+          return null;
         }
-        reports.push(report);
-      }
-    } catch {
-      // skip missing files
+      }),
+    );
+    reports = settled.filter(Boolean);
+  }
+
+  for (const report of reports) {
+    // Older generator runs wrote state SNAP reports with the legacy
+    // "nyc-synthetic" default suite even though the file is named for its
+    // real suite. Trust the filename for that one known-stale case so the
+    // report groups and labels correctly (e.g. fl-snap-ecps).
+    const fromFile = (report.file || "").match(
+      /^axiom-policyengine-([a-z]{2}-snap-ecps)\.json$/,
+    );
+    if (
+      fromFile &&
+      (!report.suite || report.suite === "nyc-synthetic") &&
+      report.suite !== fromFile[1]
+    ) {
+      report.suite = fromFile[1];
     }
   }
 

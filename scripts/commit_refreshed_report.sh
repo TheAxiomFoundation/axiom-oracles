@@ -101,6 +101,8 @@ regenerate_derived() {
   # from that history.
   "$PYTHON" scripts/conformance_scoreboard.py --snapshot
   "$PYTHON" scripts/conformance_burndown.py
+  # Front-page single-fetch bundle (every report minus per-case rows).
+  "$PYTHON" scripts/generate_dashboard_overview.py
 }
 
 verify_derived() {
@@ -113,7 +115,8 @@ verify_derived() {
   "$PYTHON" scripts/apply_dispositions.py --check &&
     "$PYTHON" scripts/check_vacuous_gate.py --check &&
     "$PYTHON" scripts/conformance_scoreboard.py --check &&
-    "$PYTHON" scripts/conformance_burndown.py --check
+    "$PYTHON" scripts/conformance_burndown.py --check &&
+    "$PYTHON" scripts/generate_dashboard_overview.py --check
 }
 
 # Collect this run's PRIVATE outputs — what run_comparison.py itself wrote

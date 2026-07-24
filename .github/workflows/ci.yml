@@ -52,6 +52,9 @@ jobs:
       - name: Vacuous-verification gate (oracle-backed + freshness)
         run: uv run scripts/check_vacuous_gate.py --check
 
+      - name: Dashboard overview bundle is current
+        run: uv run scripts/generate_dashboard_overview.py --check
+
       - name: Validate conformance universes (drift vs oracle model spine)
         # No-op-clean when the model checkouts are absent (the committed
         # universes stand alone); enforces determinism when they are present.
