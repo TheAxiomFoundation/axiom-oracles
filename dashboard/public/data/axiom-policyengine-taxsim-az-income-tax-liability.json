@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-23T19:54:02Z",
+    "generated_at": "2026-07-24T03:53:27Z",
     "generated_by": "scripts/run_comparison.py::az-income-tax-liability",
     "rulespecs": [
       {
