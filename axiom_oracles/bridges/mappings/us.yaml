@@ -30404,6 +30404,95 @@ mappings:
     candidate_priority: P4
     rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Texas liability output.
 
+  # Current official Wyoming sources state that Wyoming has no individual or
+  # state income tax. PolicyEngine has no active Wyoming individual-income-tax
+  # surface, so these bounded legal and source-hold outputs are exact
+  # tax-scoped non-comparables. Downstream zero values are fail-closed
+  # sentinels, not substantive claims of complete signed net liability.
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_individual_income_tax_absence_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the current State of Wyoming portal's affirmative statement that Wyoming has no individual income tax. PolicyEngine exposes no legal-authority applicability predicate for a state with no active individual-income-tax program.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_state_income_tax_absence_current_for_tax_year
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records that a May 2026 Wyoming Legislative Service Office report independently states that Wyoming has no state income tax. PolicyEngine exposes no source-currentness predicate for Wyoming authority.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of a Wyoming individual income tax for a resident. PolicyEngine has no active Wyoming individual-income-tax imposition variable.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Wyoming individual-income-tax deduction or exemption stage applies because no resident individual income tax is imposed. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output states that no Wyoming individual-income-tax surtax stage applies. PolicyEngine exposes no Wyoming individual-income-tax surtax-stage applicability variable.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_individual_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns exact zero before credits as the legal consequence of Wyoming's absence of an individual income tax. PolicyEngine has no active Wyoming before-credit individual-income-tax variable.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_nonrefundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete tax-year-2026 Wyoming nonrefundable-credit authority is not pinned. PolicyEngine exposes no source-completeness judgment for that legal surface.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_individual_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the nonrefundable-credit source hold remains active; it does not substantively assert a complete after-credit amount. PolicyEngine has no corresponding held Wyoming output.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_refundable_credit_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that the pinned no-income-tax sources do not prove the absence of independently refundable tax-year-2026 Wyoming credits. PolicyEngine exposes no corresponding source-completeness judgment.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_refundable_individual_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the refundable-credit source hold remains active; it does not substantively assert that Wyoming refundable credits equal zero. PolicyEngine has no corresponding held output.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_net_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed Axiom hold records that complete credit ordering and signed net-liability authority are not pinned. PolicyEngine exposes no one-to-one legal source-completeness judgment.
+
+  - legal_id: us-wy:policies/income_tax/2026_resident_zero_liability#wy_pit_2026_resident_net_individual_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Wyoming liability output.
+
   # Kansas's bounded TY2026 resident core has eight amount stages with aligned
   # PolicyEngine variables. Readiness judgments, literal parameters,
   # non-identical ordering intermediates, and fail-closed public sentinels are
