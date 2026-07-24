@@ -29829,6 +29829,109 @@ mappings:
     candidate_priority: P4
     rationale: Axiom returns a fail-closed zero sentinel while the net-liability source hold remains active; it does not substantively assert complete signed net liability. PolicyEngine exposes no corresponding held Nevada liability output.
 
+  # Indiana's TY2026 resident module is a source-readiness surface. Its
+  # monetary stages fail closed until final current-year income-base,
+  # deduction, tax, statewide surtax, credit, and ordering authority is
+  # pinned. Exact mappings prevent those zero sentinels from being treated as
+  # completed Indiana tax results.
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_input_domain_is_valid
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's input-domain gate requires a full-year Indiana resident return, aligned federal and Indiana filing units, and a nonnegative integer dependent count. PolicyEngine exposes no one-to-one validation output for that interface contract.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_current_law_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 Indiana codification and IT-40 annual-return materials are unavailable in the pinned corpus. It is source-readiness metadata rather than a substantive tax variable modeled by PolicyEngine.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_income_base_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete current-year Indiana adjusted-gross-income modification and conformity chain is unavailable. PolicyEngine computes modeled income and exposes no corresponding source-readiness judgment.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_deduction_and_exemption_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that final TY2026 Indiana deduction, exemption, and dependent schedule authority is unavailable. PolicyEngine's modeled deductions and exemptions are substantive results, not completion-state predicates.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_tax_and_surtax_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that taxable income and the complete TY2026 statewide individual tax, surtax, and specialty-tax surface are unavailable even though the regular 2.95 percent rate is known. It has no one-to-one PolicyEngine analog.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_credit_surface_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This typed hold records that the complete TY2026 Indiana nonrefundable and refundable credit surface, ordering, recapture, and carryforward rules are unavailable. PolicyEngine exposes no equivalent source-readiness predicate.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_complete_liability_source_hold_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This output combines Axiom's current-law, income, deduction, tax, statewide surtax, and credit source holds. It is a completion-state predicate rather than a completed Indiana liability result.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_indiana_adjusted_gross_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while the current-year Indiana income-base and conformity stage is source held. That sentinel is not a completed adjusted-gross-income amount comparable to PolicyEngine.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_deductions_and_exemptions
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Indiana deduction and exemption authority is source held. PolicyEngine's modeled deductions are substantive amounts, not readiness sentinels.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel because its current-year income, deduction, and exemption chain is incomplete. The value must not be compared to PolicyEngine's completed Indiana taxable income.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_tax_before_credits_including_statewide_surtaxes
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while taxable income and the final annual statewide tax, surtax, and specialty-tax surface are source held. PolicyEngine's before-credit tax is a substantive modeled result.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Indiana nonrefundable-credit authority and ordering are source held. It is not comparable to a completed PolicyEngine tax result.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_refundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom intentionally returns a zero sentinel while complete TY2026 Indiana refundable-credit authority, limitations, ordering, and recapture are source held. PolicyEngine's modeled refundable credits are substantive amounts.
+
+  - legal_id: us-in:policies/income_tax/2026_resident_liability_source_hold#in_pit_2026_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom's signed net-liability output is deliberately zero while the annual current-law, income, deduction, tax, statewide surtax, and credit chain remains source held; it must not be interpreted as zero Indiana tax or compared to completed PolicyEngine liability.
+
 
 prefixes:
   - legal_id_prefix: us-dc:statutes/4/4-205/49#
