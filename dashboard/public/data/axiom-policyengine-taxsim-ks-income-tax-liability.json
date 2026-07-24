@@ -223,7 +223,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-24T03:53:17Z",
+    "generated_at": "2026-07-24T09:04:12Z",
     "generated_by": "scripts/run_comparison.py::ks-income-tax-liability",
     "rulespecs": [
       {
