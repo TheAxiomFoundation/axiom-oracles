@@ -75,6 +75,7 @@ ASCVARS       -
 \timfedtax
 \timtaxcr
 \timbft
+\timamtdf
 \t-
 """
 
@@ -217,35 +218,42 @@ def main() -> int:
         prn = args.extract.expanduser()
 
     households = parse_case_output(prn)
-    rows: list[tuple[int, int, float, float]] = []
+    rows: list[tuple[int, int, float, float, float]] = []
     for household in households:
         taxable = household.values.get("imitax", [])
         fedtax = household.values.get("imfedtax", [])
+        amtdf = household.values.get("imamtdf", [])
         for member in range(len(fedtax)):
             ti = taxable[member] if member < len(taxable) else 0.0
-            rows.append((household.sequence, member, ti, fedtax[member]))
+            amt = amtdf[member] if member < len(amtdf) else 0.0
+            rows.append((household.sequence, member, ti, fedtax[member], amt))
 
     axiom_values = axiom_schedule_tax([row[2] for row in rows])
 
     matches = 0
     amt_class = 0
     other: list[dict] = []
-    for (seq, member, ti, spsm_value), axiom_value in zip(
+    for (seq, member, ti, spsm_value, amt_flag), axiom_value in zip(
         rows, axiom_values, strict=True
     ):
         diff = axiom_value - spsm_value
         if abs(diff) <= TOLERANCE:
             matches += 1
-        elif spsm_value > axiom_value + TOLERANCE:
-            # SPSM's imfedtax is replaced by the alternative minimum amount
-            # when AMT binds (glass-box Atxcalc.cpp: T691 row 94 writes
-            # netminamt into imfedtax), so SPSM-above-schedule rows are the
-            # AMT class. The magnitude alone is aggregate-safe to record.
+        elif amt_flag > 0:
+            # Whenever the T691 minimum-tax path runs, SPSM REPLACES
+            # imfedtax with netminamt — the minimum amount net of AMT
+            # credits (glass-box Atxcalc.cpp: "The federal tax is set to
+            # the net minimum amount", T691 row 94) — so for AMT filers
+            # the printed variable is no longer the schedule output in
+            # either direction. imamtdf ("difference due to minimum
+            # tax") > 0 identifies exactly those filers.
             amt_class += 1
         else:
             other.append(
                 {
-                    "kind": "axiom_above_spsm",
+                    "kind": "axiom_above_spsm"
+                    if diff > 0
+                    else "spsm_above_axiom",
                     "difference": round(diff, 2),
                 }
             )
@@ -272,7 +280,7 @@ def main() -> int:
             "comparison_count": n,
             "match_count": matches,
             "mismatch_count": n - matches,
-            "amt_class_count": amt_class,
+            "amt_overwrite_class_count": amt_class,
             "unclassified_count": len(other),
             "match_rate": round(100.0 * matches / n, 2) if n else 0,
         },

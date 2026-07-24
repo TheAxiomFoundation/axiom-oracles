@@ -75,6 +75,11 @@ const ORACLE_IDENTITY = {
     what: "The Atlanta Fed's Policy Rules Database of US safety-net program rules.",
     url: "https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database",
   },
+  spsm: {
+    org: "Statistics Canada",
+    what: "SPSD/M — Statistics Canada's Social Policy Simulation Database and Model, the reference Canadian tax–transfer microsimulation, run under licence over its synthetic database. Results carry the SPSD/M licence attribution; per-household evidence stays local.",
+    url: "https://www.statcan.gc.ca/en/microsimulation/spsdm/spsdm",
+  },
 };
 
 const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE" };

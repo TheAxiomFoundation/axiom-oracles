@@ -15,52 +15,8 @@
   ],
   "mismatches": [
     {
-      "difference": 16916.11,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 206129.76,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 91454.77,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 3199.39,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 44536.98,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 45364.41,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 67649.35,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 12286.73,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 35131.57,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 26090.69,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 8517.73,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 12733.29,
-      "kind": "axiom_above_spsm"
+      "difference": -3445242.15,
+      "kind": "spsm_above_axiom"
     },
     {
       "difference": 17878.35,
@@ -71,155 +27,199 @@
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 883.94,
+      "difference": -3714492.67,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -5487949.75,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4867585.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -324355.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 52545.63,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 2084.78,
+      "difference": -4157208.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -7513.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4756.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 20801.37,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 6809.3,
+      "difference": 33439.48,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 26876.14,
+      "difference": 1407259.43,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 2766.38,
+      "difference": 47230.12,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 5572.05,
+      "difference": -4332583.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4380.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 15005.25,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 6443.33,
+      "difference": 51722.76,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 2042.55,
+      "difference": 373013.27,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 1504.69,
+      "difference": 12290.97,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 6565.79,
+      "difference": 65050.84,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 23784.88,
+      "difference": -3556106.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -19109.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -58856.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -660.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -554.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -3703873.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -27124.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 104481.19,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 13565.25,
+      "difference": -7682970.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -2945.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -644.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -818.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -3426.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -5630479.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -19251.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -8164.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 37748.23,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 970.33,
+      "difference": 51839.91,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 3982.24,
+      "difference": -3339751.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -4261.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": -9088.0,
+      "kind": "spsm_above_axiom"
+    },
+    {
+      "difference": 436771.33,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 1543.49,
-      "kind": "axiom_above_spsm"
+      "difference": -6968081.0,
+      "kind": "spsm_above_axiom"
     },
     {
-      "difference": 14081.41,
-      "kind": "axiom_above_spsm"
+      "difference": -3821.0,
+      "kind": "spsm_above_axiom"
     },
     {
-      "difference": 31403.99,
-      "kind": "axiom_above_spsm"
+      "difference": -1334.0,
+      "kind": "spsm_above_axiom"
     },
     {
-      "difference": 6688.52,
-      "kind": "axiom_above_spsm"
+      "difference": -1634.0,
+      "kind": "spsm_above_axiom"
     },
     {
-      "difference": 22995.79,
-      "kind": "axiom_above_spsm"
+      "difference": -3653147.0,
+      "kind": "spsm_above_axiom"
     },
     {
-      "difference": 28.87,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 6921.35,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 26342.69,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 2431.07,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 3980.48,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 64823.45,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 30450.42,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 2797.57,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 16982.88,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 2815.83,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 715.41,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 55392.27,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 10064.2,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 34326.97,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 2503.67,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 2512.13,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 5964.35,
-      "kind": "axiom_above_spsm"
+      "difference": -6690.0,
+      "kind": "spsm_above_axiom"
     }
   ],
   "population": "spsd-synthetic-2022",
   "provenance": {
     "attribution": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s).",
     "generated": "2026-07-23",
-    "generated_at": "2026-07-23T22:59:59Z",
+    "generated_at": "2026-07-24T00:13:57Z",
     "generator": "scripts/generate_ca_federal_tax_spsm.py",
     "licence": "SPSD/M Licence Agreement v34; no Package contents are redistributed with this repository (s.3.1).",
     "oracle": "spsm",
@@ -249,11 +249,11 @@
   },
   "suite": "ca-federal-schedule-tax-spsm",
   "summary": {
-    "amt_class_count": 6415,
+    "amt_overwrite_class_count": 8588,
     "comparison_count": 967396,
     "match_count": 958555,
     "match_rate": 99.09,
     "mismatch_count": 8841,
-    "unclassified_count": 2426
+    "unclassified_count": 253
   }
 }
