@@ -15,6 +15,9 @@ class CanadaOfficialOracle:
     notes: str
 
 
+# Keep this inventory executable-only. Discovery pages, unavailable services,
+# formula fallbacks, and adapters without a RuleSpec comparison target belong
+# in documentation, not in the oracle registry.
 ORACLES = (
     CanadaOfficialOracle(
         "cra-child-family",
@@ -35,66 +38,6 @@ ORACLES = (
         "numeric",
         True,
         "Federal/provincial withholding, CPP/CPP2, EI, employer remittance, and net pay.",
-    ),
-    CanadaOfficialOracle(
-        "cra-gst-hst",
-        "GST/HST calculator",
-        "Canada Revenue Agency",
-        "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/charge-collect-which-rate/calculator.html",
-        "live_page_bundle",
-        "numeric",
-        True,
-        "The official page embeds its current rate table and deterministic calculator code.",
-    ),
-    CanadaOfficialOracle(
-        "rq-webras",
-        "WebRAS",
-        "Revenu Quebec",
-        "https://www.revenuquebec.ca/en/online-services/tools/webras/",
-        "official_formula_fallback",
-        "numeric",
-        False,
-        "The live UI is Cloudflare-gated; TP-1015.F-V formulas are the reproducible official surface.",
-    ),
-    CanadaOfficialOracle(
-        "esdc-ei-estimator",
-        "Canadian EI Benefits Estimator",
-        "Employment and Social Development Canada",
-        "https://estimateurae-eiestimator.service.canada.ca/",
-        "temporarily_unavailable",
-        "numeric",
-        False,
-        "The public step-three route currently returns HTTP 500; do not record guessed outputs.",
-    ),
-    CanadaOfficialOracle(
-        "esdc-retirement-calculator",
-        "Canadian Retirement Income Calculator",
-        "Employment and Social Development Canada",
-        "https://srv111.services.gc.ca/GeneralInformation/Index",
-        "session_bound_web_service",
-        "projection",
-        False,
-        "CPP/OAS projections depend on user assumptions and ASP.NET session state.",
-    ),
-    CanadaOfficialOracle(
-        "esdc-canada-disability-benefit",
-        "Canada Disability Benefit amount guidance",
-        "Employment and Social Development Canada",
-        "https://www.canada.ca/en/services/benefits/disability/canada-disability-benefit/amount.html",
-        "official_parameter_page",
-        "parameter",
-        False,
-        "Suitable for formula and parameter parity, not an independent executable engine.",
-    ),
-    CanadaOfficialOracle(
-        "canada-benefits-finder",
-        "Benefits Finder",
-        "Government of Canada",
-        "https://www.canada.ca/en/services/benefits/finder/tool.html",
-        "discovery_only",
-        "coverage",
-        False,
-        "Recommends programs but does not calculate statutory entitlement amounts.",
     ),
     CanadaOfficialOracle(
         "statcan-spsdm",
