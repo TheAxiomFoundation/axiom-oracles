@@ -29096,6 +29096,88 @@ mappings:
     candidate_priority: P4
     rationale: Axiom returns exact zero annual resident net individual income-tax liability before payments as the legal consequence of no imposed Florida individual income tax. PolicyEngine exposes no active Florida individual-income-tax liability variable.
 
+  # Tennessee's former Hall income tax has a permanent post-2020 zero rate,
+  # Revenue treats it as repealed and directs taxpayers not to file returns,
+  # and Tennessee has no tax on earned income. PolicyEngine therefore has no
+  # active Tennessee individual-income-tax surface. Exact entries keep every
+  # complete legal output in tax-scoped coverage without inventing an oracle.
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_hall_income_tax_zero_rate_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records the enacted permanent zero Hall-income-tax rate for tax years beginning on or after January 1, 2021. PolicyEngine exposes no active Tennessee individual-income-tax rate parameter.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_no_earned_income_tax_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records current Tennessee Revenue guidance that the state has no income tax on earned income. PolicyEngine exposes no corresponding legal-applicability predicate.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_hall_income_tax_return_required
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output records that Revenue directs taxpayers not to file Hall income-tax returns for periods beginning on or after January 1, 2021. PolicyEngine exposes no Tennessee filing-obligation predicate.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_individual_income_tax_imposed
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom boolean states the legal absence of an operative Tennessee resident individual income tax in 2026. PolicyEngine has no active Tennessee individual-income-tax imposition variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_deduction_and_exemption_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Tennessee individual income-tax deduction or exemption stage applies after repeal of the Hall tax. PolicyEngine exposes no corresponding non-applicability predicate.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_surtax_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Tennessee resident individual-income-tax surtax stage applies. PolicyEngine exposes no Tennessee surtax-stage applicability variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_credit_stage_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This Axiom output states that no Tennessee resident individual-income-tax credit-return stage applies. PolicyEngine exposes no Tennessee income-tax credit-stage applicability variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero before credits under Tennessee's enacted permanent zero Hall-tax rate and current repeal administration. PolicyEngine has no active Tennessee before-credit income-tax variable.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_income_tax_after_nonrefundable_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero after nonrefundable credits because no Tennessee resident individual-income-tax or credit-return stage applies. PolicyEngine has no corresponding Tennessee output.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_refundable_income_tax_credits
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero Tennessee refundable resident individual-income-tax credits because the Hall tax is repealed and no return is filed. PolicyEngine has no corresponding Tennessee income-tax credit output.
+
+  - legal_id: us-tn:policies/income_tax/2026_resident_zero_liability#tn_pit_2026_resident_net_income_tax_liability_before_payments
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: Axiom returns substantive zero annual resident net individual-income-tax liability before payments under Tennessee's permanent post-2020 zero rate and no-return administration. PolicyEngine exposes no active Tennessee individual-income-tax liability variable.
+
   # The District's TY2026 resident module intentionally stops after a bounded
   # adjusted-gross-income surface.  Its later annual stages are typed holds
   # and fail-closed sentinels until final D-40 materials are available.  Exact
