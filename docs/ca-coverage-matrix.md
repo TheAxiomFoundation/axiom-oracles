@@ -123,8 +123,9 @@ Canada validation should use:
 
 - official CRA, Revenu Quebec, and other primary-source examples and invariants
   for encoded RuleSpec modules;
-- SPSD/M when its licensed model and adapter are available, with its own
-  documented concept and residual boundary;
+- the registered SPSD/M v34.0 full-database federal schedule-tax suite, with
+  its documented concept and residual boundary, plus future SPSD/M suites only
+  after the same boundary review;
 - PolicyEngine only after a candidate output passes exact boundary, vintage,
   entity, period, unit, and numerical-parity review.
 

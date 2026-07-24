@@ -103,8 +103,8 @@ ORACLES = (
         "https://www.statcan.gc.ca/en/microsimulation/spsdm/spsdm",
         "licensed_local_model",
         "numeric",
-        False,
-        "Broad tax-transfer oracle pending delivery and local licensing setup.",
+        True,
+        "Licensed v34.0 adapter and reproducible full-database federal schedule-tax suite; execution requires a local SPSD/M installation and never redistributes Package data.",
     ),
 )
 

@@ -14,9 +14,14 @@ the machine-readable registry.
 | ESDC Canadian Retirement Income Calculator | Projection | Session-bound web service | Not yet automated. Results require CPP/OAS history and projection assumptions in an ASP.NET session. |
 | ESDC Canada Disability Benefit amount guidance | Parameter/formula | Official parameter page | Suitable for parameter and formula parity, but it is not an independent executable calculator. |
 | Government of Canada Benefits Finder | Coverage discovery | Discovery only | Suitable for finding candidate programs, not for validating statutory amounts. |
-| Statistics Canada SPSD/M | Broad numeric model | Licensed local model | Pending Statistics Canada delivery and local license setup. No redistribution or remote execution is assumed. |
+| Statistics Canada SPSD/M | Broad numeric model | Licensed local model | Implemented for the full-database 2025 federal schedule-tax comparison. The v34.0 adapter and reproducible aggregate report are registered; execution requires a local licensed installation, and no Package data is redistributed. |
 
 Official calculator results are comparison evidence only. They are not copied
 into RuleSpec parameters, formulas, or companion-test expectations. RuleSpec
 changes are generated from corpus sources and installed through signed
 `axiom-encode encode --apply` runs.
+
+The SPSD/M lane is similarly comparison-only. Its committed report contains
+aggregates and the required Statistics Canada attribution, while the licensed
+synthetic database and per-household extracts remain local. See
+`docs/spsdm-reproduction.md` for the executable runbook.
